@@ -14,7 +14,7 @@ public class Login extends AbstractFunction {
     }
     
     private final boolean login(String user, String secret, String sessionid) {
-        User user_ = (User)load(User.class, user);
+        User user_ = (User)load(User.class, user.toUpperCase());
         
         if (user_ == null)
             return false;
@@ -25,7 +25,6 @@ public class Login extends AbstractFunction {
             return false;
         
         sessions.put(sessionid, user_);
-        System.out.println(sessionid);
         
         return true;
     }
@@ -36,11 +35,13 @@ public class Login extends AbstractFunction {
     
     @Override
     public Object run(Message message) {
-        if (message.getId().equals("login"))
+        String id = message.getId();
+        
+        if (id.equals("login"))
             return login(message.getString("user"),
                     message.getString("secret"), message.getSessionid());
         
-        if (message.getId().equals("is_connected"))
+        if (id.equals("is_connected"))
             return isConnected(message.getSessionid());
         
         return null;
