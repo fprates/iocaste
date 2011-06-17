@@ -13,22 +13,6 @@ public abstract class IocasteServlet extends HttpServlet {
     private HttpServletResponse resp;
     
     /*
-     * Getters
-     */
-    
-    protected final String getValue(String name) {
-        return req.getParameter(name);
-    }
-    
-    /*
-     * Setters
-     */
-    
-    protected final void setValue(String name, String value) {
-        req.getSession().setAttribute(name, value);
-    }
-    
-    /*
      * Others
      */
     

@@ -8,6 +8,10 @@ public final class Iocaste extends AbstractServiceInterface {
         initService(servlet, "http://localhost:8080/iocaste-server/index.html");
     }
     
+    public Iocaste(IocasteModule module) throws IOException {
+        initService(module, "http://localhost:8080/iocaste-server/index.html");
+    }
+    
     public final boolean login(String user, String secret) throws Exception {
         Message message = new Message();
         
