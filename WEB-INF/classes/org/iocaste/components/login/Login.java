@@ -7,6 +7,7 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
 public class Login extends AbstractFunction {
+    private static final int USERNAME_MAX_LEN = 12;
     private Map<String, User> sessions;
     
     public Login() {
@@ -17,6 +18,9 @@ public class Login extends AbstractFunction {
     }
     
     private final boolean login(String user, String secret, String sessionid) {
+        if (user.length() > USERNAME_MAX_LEN)
+            return false;
+            
         User user_ = (User)load(User.class, user.toUpperCase());
         
         if (user_ == null)
