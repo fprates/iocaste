@@ -13,11 +13,15 @@ public class Login extends AbstractFunction {
     public Login() {
         sessions = new HashMap<String, User>();
         
-        export("login");
-        export("is_connected");
+        export("login", "login");
+        export("is_connected", "isConnected");
     }
     
-    private final boolean login(String user, String secret, String sessionid) {
+    public final boolean login(Message message) {
+        String user = message.getString("user");
+        String secret = message.getString("secret");
+        String sessionid = message.getString("sessionid");
+        
         if (user.length() > USERNAME_MAX_LEN)
             return false;
             
@@ -36,22 +40,8 @@ public class Login extends AbstractFunction {
         return true;
     }
     
-    private final boolean isConnected(String sessionid) {
-        return sessions.containsKey(sessionid);
-    }
-    
-    @Override
-    public Object run(Message message) {
-        String id = message.getId();
-        
-        if (id.equals("login"))
-            return login(message.getString("user"),
-                    message.getString("secret"), message.getSessionid());
-        
-        if (id.equals("is_connected"))
-            return isConnected(message.getSessionid());
-        
-        return null;
+    public final boolean isConnected(Message message) {
+        return sessions.containsKey(message.getString("sessionid"));
     }
 
 }

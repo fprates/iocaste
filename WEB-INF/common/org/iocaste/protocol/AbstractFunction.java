@@ -1,10 +1,11 @@
 package org.iocaste.protocol;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -13,24 +14,24 @@ import org.hibernate.SessionFactory;
 public abstract class AbstractFunction implements Function {
     private SessionFactory sessionFactory;
     private Map<String, String> queries;
-    private List<String> exports;
+    private Map<String, String> exports;
     
     public AbstractFunction() {
         queries = new HashMap<String, String>();
-        exports = new ArrayList<String>();
+        exports = new HashMap<String, String>();
     }
     
     protected final void addQuery(String queryname, String sqlquery) {
         queries.put(queryname, sqlquery);
     }
     
-    protected final void export(String method) {
-        exports.add(method);
+    protected final void export(String name, String method) {
+        exports.put(name, method);
     }
     
     @Override
-    public final List<String> getMethods() {
-        return exports;
+    public final Set<String> getMethods() {
+        return exports.keySet();
     }
     
     public final void setQueries(Map<String, String> queries) {
@@ -82,6 +83,10 @@ public abstract class AbstractFunction implements Function {
     }
     
     @Override
-    public abstract Object run(Message message);
+    public final Object run(Message message) throws Exception {
+        Method method = getClass().getMethod(exports.get(message.getId()), Message.class);
+        
+        return method.invoke(this, message);
+    }
 
 }
