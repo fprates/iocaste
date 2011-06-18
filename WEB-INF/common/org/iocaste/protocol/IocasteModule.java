@@ -20,7 +20,7 @@ public abstract class IocasteModule implements Module {
      */
     @Override
     public final Service serviceInstance(String url) throws Exception {
-        return new Service(req.getSession(false).getId(), url);
+        return new Service(req.getSession().getId(), url);
     }
     
 }
