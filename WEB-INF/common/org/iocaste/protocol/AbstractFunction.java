@@ -1,6 +1,7 @@
 package org.iocaste.protocol;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,13 +13,24 @@ import org.hibernate.SessionFactory;
 public abstract class AbstractFunction implements Function {
     private SessionFactory sessionFactory;
     private Map<String, String> queries;
+    private List<String> exports;
     
     public AbstractFunction() {
         queries = new HashMap<String, String>();
+        exports = new ArrayList<String>();
     }
     
     protected final void addQuery(String queryname, String sqlquery) {
         queries.put(queryname, sqlquery);
+    }
+    
+    protected final void export(String method) {
+        exports.add(method);
+    }
+    
+    @Override
+    public final List<String> getMethods() {
+        return exports;
     }
     
     public final void setQueries(Map<String, String> queries) {

@@ -11,6 +11,9 @@ public class Login extends AbstractFunction {
     
     public Login() {
         sessions = new HashMap<String, User>();
+        
+        export("login");
+        export("is_connected");
     }
     
     private final boolean login(String user, String secret, String sessionid) {

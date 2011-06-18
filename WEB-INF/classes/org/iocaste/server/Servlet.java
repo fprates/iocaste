@@ -9,10 +9,7 @@ public class Servlet extends ServerServlet {
     
     @Override
     public void config() {
-        Login login = new Login();
-        
-        addFunction("login", login);
-        addFunction("is_connected", login);
+        register(new Login());
         
         setUrl("http://localhost:8080/iocaste-server/index.html");
     }

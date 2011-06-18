@@ -41,13 +41,18 @@ public abstract class ServerServlet extends IocasteServlet {
         }
     }
     
-    protected final void addFunction(String name, Function function) {
+    private final void addFunction(String name, Function function) {
         functions.put(name, function);
         function.setSessionFactory(sessionFactory);
     }
     
     protected final void setUrl(String url) {
         this.url = url;
+    }
+    
+    protected void register(AbstractFunction function) {
+        for (String method : function.getMethods())
+            addFunction(method, function);
     }
     
     protected abstract void config();
