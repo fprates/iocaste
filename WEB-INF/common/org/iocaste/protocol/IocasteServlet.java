@@ -37,14 +37,24 @@ public abstract class IocasteServlet extends HttpServlet {
         }
     }
     
+    private final String getUrl() {
+        StringBuffer strbuf = new StringBuffer(req.getScheme())
+            .append("://").append(req.getServerName())
+            .append(req.getServerPort())
+            .append(req.getContextPath())
+            .append(req.getServletPath());
+        
+        return strbuf.toString();
+    }
+    
     protected abstract void entry() throws Exception;
     
     protected final void redirect(String url) throws IOException {
         resp.sendRedirect(url);
     }
     
-    protected final Service serviceInstance(String url) throws IOException {
-        return new Service(req.getSession().getId(), url);
+    protected final Service serviceInstance() throws IOException {
+        return new Service(req.getSession().getId(), getUrl());
     }
     
     protected final void configureStreams(Service service) throws IOException {

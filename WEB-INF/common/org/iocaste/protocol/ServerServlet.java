@@ -9,7 +9,6 @@ public abstract class ServerServlet extends IocasteServlet {
     private static final long serialVersionUID = 7408336035974886402L;
     private SessionFactory sessionFactory;
     private Map<String, Function> functions;
-    private String url;
     
     public ServerServlet() {
         functions = new HashMap<String, Function>();
@@ -21,7 +20,7 @@ public abstract class ServerServlet extends IocasteServlet {
     protected final void entry() throws Exception {
         Message message;
         Function function;
-        Service service = serviceInstance(url);
+        Service service = serviceInstance();
         
         configureStreams(service);
         
@@ -44,10 +43,6 @@ public abstract class ServerServlet extends IocasteServlet {
     private final void addFunction(String name, Function function) {
         functions.put(name, function);
         function.setSessionFactory(sessionFactory);
-    }
-    
-    protected final void setUrl(String url) {
-        this.url = url;
     }
     
     protected void register(AbstractFunction function) {

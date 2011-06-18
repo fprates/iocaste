@@ -10,7 +10,5 @@ public class Servlet extends ServerServlet {
     @Override
     public void config() {
         register(new Login());
-        
-        setUrl("http://localhost:8080/iocaste-server/index.html");
     }
 }
