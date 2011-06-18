@@ -1,19 +1,12 @@
 package org.iocaste.protocol;
 
-import java.io.IOException;
-
 public abstract class AbstractServiceInterface {
     private Service service;
     
     public AbstractServiceInterface() { }
     
-    protected final void initService(IocasteServlet servlet, String url)
-        throws IOException {
-        service = servlet.serviceInstance(url);
-    }
-    
-    protected final void initService(IocasteModule module, String url)
-        throws IOException {
+    protected final void initService(Module module, String url)
+        throws Exception {
         service = module.serviceInstance(url);
     }
 

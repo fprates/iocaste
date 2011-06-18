@@ -17,13 +17,15 @@ public abstract class IocasteServlet extends HttpServlet {
      */
     
     @Override
-    protected final void doGet(HttpServletRequest req, HttpServletResponse resp)
+    protected final void doGet(
+            HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         doPost(req, resp);
     }
 
     @Override
-    protected final void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected final void doPost(
+            HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         this.req = req;
         this.resp = resp;

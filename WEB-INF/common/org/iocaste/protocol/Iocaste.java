@@ -1,14 +1,8 @@
 package org.iocaste.protocol;
 
-import java.io.IOException;
-
 public final class Iocaste extends AbstractServiceInterface {
     
-    public Iocaste(IocasteServlet servlet) throws IOException {
-        initService(servlet, "http://localhost:8080/iocaste-server/index.html");
-    }
-    
-    public Iocaste(IocasteModule module) throws IOException {
+    public Iocaste(Module module) throws Exception {
         initService(module, "http://localhost:8080/iocaste-server/index.html");
     }
     
