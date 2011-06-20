@@ -1,28 +1,52 @@
 <project name="iocaste-server" default="compile">
-    <property name="targetdir" value="${basedir}/bin"/>
-    <property name="targetdir-classes" value="${basedir}/bin-classes"/>
-    <property name="targetdir-common" value="${basedir}/bin-common"/>
-	<property name="builddir" value="${basedir}/build"/>
+    <property name="builddir" value="${basedir}/build"/>
+    <property name="builddir-classes" value="${builddir}/WEB-INF/classes"/>
 
-	<target name="clean">
+    <target name="clean">
         <delete dir="${builddir}"/>
-	</target>
-		
+        <mkdir dir="${builddir}/WEB-INF/classes"/>
+    </target>
+        
     <target name="compile" depends="clean">
-        <copy todir="${builddir}">
-            <fileset dir="${targetdir}"/>
+        <!-- dependências -->
+        <path id="dependencies">
+            <fileset dir="${basedir}/lib/">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${basedir}/ext/">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+        
+        <!-- compilação iocaste-core-common -->
+        <javac srcdir="${basedir}/src/core-common"
+            destdir="${builddir-classes}" >
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <jar basedir="${builddir-classes}"
+            destfile="${basedir}/lib/iocaste-common.jar"/>
+        
+        <delete dir="${builddir-classes}"/>
+        <mkdir dir="${builddir-classes}"/>
+        
+        <!-- compilação iocaste-core -->
+        <javac srcdir="${basedir}/src/core" destdir="${builddir-classes}">
+            <classpath refid="dependencies"/>
+        	<includesfile />
+        </javac>
+    	
+    	<copy todir="${builddir-classes}">
+    		<fileset dir="${basedir}/src/core" excludes="**/*.java"/>
+    	</copy>
+        
+        <copy todir="${builddir}/WEB-INF/lib">
+            <fileset file="${basedir}/lib/*.jar"/>
         </copy>
-    	
-        <copy todir="${builddir}/WEB-INF/classes">
-        	<fileset dir="${targetdir-classes}"/>
-    	</copy>
-    	
-        <jar basedir="${targetdir-common}" destfile="${basedir}/lib/iocaste-common.jar"/>
-    	<copy todir="${builddir}/WEB-INF/lib">
-    		<fileset file="${basedir}/lib/*.jar"/>
-    	</copy>
-    	
-    	<war basedir="${builddir}" destfile="${basedir}/${ant.project.name}.war"/>
+        
+        <war basedir="${builddir}" destfile="${basedir}/${ant.project.name}.war">
+            <webinf dir="${basedir}/src/WEB-INF"/>
+        </war>
         <delete dir="${builddir}"/>
     </target>
 </project>
