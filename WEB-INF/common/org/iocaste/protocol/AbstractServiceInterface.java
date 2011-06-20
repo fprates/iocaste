@@ -5,8 +5,7 @@ public abstract class AbstractServiceInterface {
     
     public AbstractServiceInterface() { }
     
-    protected final void initService(Module module, String path)
-        throws Exception {
+    protected final void initService(Module module, String path) {
         service = module.serviceInstance(path);
     }
 

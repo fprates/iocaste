@@ -9,14 +9,14 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class Service {
-    private URL url;
     private InputStream is;
     private OutputStream os;
     private String sessionid;
+    private String urlname;
     
-    public Service(String sessionid, String urlname) throws IOException {
+    public Service(String sessionid, String urlname) {
         this.sessionid = sessionid;
-        url = new URL(urlname);
+        this.urlname = urlname;
     }
     
     public final void setInputStream(InputStream is) {
@@ -40,6 +40,7 @@ public class Service {
         Message response;
         ObjectOutputStream oos;
         ObjectInputStream ois;
+        URL url = new URL(urlname);
         URLConnection urlcon = url.openConnection();
         
         urlcon.setDoInput(true);

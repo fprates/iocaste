@@ -19,7 +19,7 @@ public abstract class IocasteModule implements Module {
      * @see org.iocaste.protocol.Module#serviceInstance(java.lang.String)
      */
     @Override
-    public final Service serviceInstance(String path) throws Exception {
+    public final Service serviceInstance(String path) {
         String url = new StringBuffer(req.getScheme()).append("://")
         .append(req.getServerName()).append(":")
         .append(req.getServerPort())

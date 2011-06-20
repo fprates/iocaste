@@ -2,7 +2,7 @@ package org.iocaste.protocol;
 
 public final class Iocaste extends AbstractServiceInterface {
     
-    public Iocaste(Module module) throws Exception {
+    public Iocaste(Module module) {
         initService(module, "/iocaste-server/index.html");
     }
     
