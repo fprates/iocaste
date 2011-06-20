@@ -3,7 +3,7 @@ package org.iocaste.protocol;
 public final class Iocaste extends AbstractServiceInterface {
     
     public Iocaste(Module module) throws Exception {
-        initService(module, "http://localhost:8080/iocaste-server/index.html");
+        initService(module, "/iocaste-server/index.html");
     }
     
     public final boolean login(String user, String secret) throws Exception {

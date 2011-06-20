@@ -5,9 +5,9 @@ public abstract class AbstractServiceInterface {
     
     public AbstractServiceInterface() { }
     
-    protected final void initService(Module module, String url)
+    protected final void initService(Module module, String path)
         throws Exception {
-        service = module.serviceInstance(url);
+        service = module.serviceInstance(path);
     }
 
     protected final Object call(Message message) throws Exception {

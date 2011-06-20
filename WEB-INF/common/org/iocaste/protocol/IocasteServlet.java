@@ -38,13 +38,13 @@ public abstract class IocasteServlet extends HttpServlet {
     }
     
     private final String getUrl() {
-        StringBuffer strbuf = new StringBuffer(req.getScheme())
-            .append("://").append(req.getServerName())
+        String url = new StringBuffer(req.getScheme()).append("://")
+            .append(req.getServerName()).append(":")
             .append(req.getServerPort())
             .append(req.getContextPath())
-            .append(req.getServletPath());
-        
-        return strbuf.toString();
+            .append(req.getServletPath()).toString();
+         
+        return url;
     }
     
     protected abstract void entry() throws Exception;
