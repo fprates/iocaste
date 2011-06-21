@@ -1,0 +1,20 @@
+<project name="shell-common" default="compile">
+    <target name="compile">
+        <!-- dependências -->
+        <path id="dependencies">
+            <fileset dir="${builddir}/core-common/lib"/>
+            <fileset dir="${basedir}/lib/"/>
+            <fileset dir="${basedir}/ext/"/>
+        </path>
+        
+        <!-- compilação -->
+    	<mkdir dir="${builddir}/${ant.project.name}/classes"/>
+        <javac srcdir="${basedir}/src/${ant.project.name}" 
+        	destdir="${builddir}/${ant.project.name}/classes">
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <jar basedir="${builddir}/${ant.project.name}/classes"
+        	destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
+    </target>
+</project>

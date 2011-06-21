@@ -1,0 +1,34 @@
+<project name="shell" default="compile">        
+    <target name="compile">
+        <!-- dependências -->
+        <path id="dependencies">
+            <fileset dir="${builddir}/core-common/lib"/>
+            <fileset dir="${builddir}/${ant.project.name}-common/lib"/>
+            <fileset dir="${basedir}/lib"/>
+            <fileset dir="${basedir}/ext"/>
+        </path>
+        
+        <!-- compilação -->
+        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
+        <javac srcdir="${basedir}/src/${ant.project.name}"
+            destdir="${builddir}/${ant.project.name}/classes">
+        	
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <copy todir="${builddir}/${ant.project.name}/classes">
+            <fileset dir="${basedir}/src/${ant.project.name}"
+            	excludes="**/*.java"/>
+        </copy>
+        
+        <!-- pacote .war -->
+        <war destfile="${basedir}/iocaste-shell.war">
+            <webinf dir="${basedir}/src/${ant.project.name}-web/WEB-INF"/>
+        	<fileset dir="${basedir}/src/${ant.project.name}-web/pages"/>
+            <lib dir="${builddir}/${ant.project.name}-common/lib"/>
+            <lib dir="${basedir}/lib"/>
+        	<lib dir="${builddir}/core-common/lib"/>
+            <classes dir="${builddir}/${ant.project.name}/classes"/>
+        </war>
+    </target>
+</project>
