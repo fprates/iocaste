@@ -72,7 +72,7 @@ public abstract class ServerServlet extends HttpServlet {
     protected final void entry() throws Exception {
         Message message;
         Function function;
-        Service service = serviceInstance();
+        Service service = new Service(req.getSession().getId(), getUrl());
         
         configureStreams(service);
         
@@ -104,10 +104,6 @@ public abstract class ServerServlet extends HttpServlet {
     }
     
     protected abstract void config();
-    
-    protected final Service serviceInstance() {
-        return new Service(req.getSession().getId(), getUrl());
-    }
     
     protected final void configureStreams(Service service) throws IOException {
         service.setInputStream(req.getInputStream());
