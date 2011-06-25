@@ -59,13 +59,27 @@ public abstract class ServerServlet extends HttpServlet {
     protected final void doPost(
             HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        Message message;
+        Function function;
+        Service service = new Service(req.getSession().getId(), getUrl());
+        
         this.req = req;
         this.resp = resp;
         
+        configureStreams(service);
+        
         try {
-            entry();
-        } catch (Exception e) {
+            message = service.getMessage();
+        } catch (ClassNotFoundException e) {
             throw new ServletException(e);
+        }
+        
+        try {
+            preRun(message);
+            function = functions.get(message.getId());
+            service.messageReturn(message, function.run(message));
+        } catch (Exception e) {
+            service.messageException(message, e);
         }
     }
 
@@ -83,30 +97,6 @@ public abstract class ServerServlet extends HttpServlet {
         
         if (!connected)
             throw new Exception("Invalid Session.");
-    }
-    
-    protected final void entry() throws Exception {
-        Message message;
-        Function function;
-        Service service = new Service(req.getSession().getId(), getUrl());
-        
-        configureStreams(service);
-        
-        try {
-            message = service.getMessage();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-        
-        try {
-            preRun(message);
-            function = functions.get(message.getId());
-            service.messageReturn(message, function.run(message));
-        } catch (Exception e) {
-            service.messageException(message, e);
-            return;
-        }
     }
     
     private final void addFunction(String name, Function function) {
