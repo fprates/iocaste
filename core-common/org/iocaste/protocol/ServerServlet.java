@@ -16,6 +16,8 @@ public abstract class ServerServlet extends IocasteServlet {
         config();
     }
 
+    protected void preRun(Message message) throws Exception { }
+    
     @Override
     protected final void entry() throws Exception {
         Message message;
@@ -30,8 +32,9 @@ public abstract class ServerServlet extends IocasteServlet {
             e.printStackTrace();
             return;
         }
-
+        
         try {
+            preRun(message);
             function = functions.get(message.getId());
             service.messageReturn(message, function.run(message));
         } catch (Exception e) {

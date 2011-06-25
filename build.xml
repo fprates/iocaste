@@ -1,5 +1,6 @@
 <project name="iocaste" default="compile">
     <property name="builddir" value="${basedir}/build"/>
+	<property name="debug.status" value="on"/>
 
     <target name="clean">
         <delete dir="${builddir}"/>

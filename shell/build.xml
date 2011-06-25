@@ -11,7 +11,7 @@
         <!-- compilação -->
         <mkdir dir="${builddir}/${ant.project.name}/classes"/>
         <javac srcdir="${basedir}/src/${ant.project.name}"
-            destdir="${builddir}/${ant.project.name}/classes">
+            destdir="${builddir}/${ant.project.name}/classes" debug="${debug.status}">
         	
             <classpath refid="dependencies"/>
         </javac>

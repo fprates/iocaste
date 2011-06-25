@@ -20,7 +20,7 @@ public class Login extends AbstractFunction {
     public final boolean login(Message message) {
         String user = message.getString("user");
         String secret = message.getString("secret");
-        String sessionid = message.getString("sessionid");
+        String sessionid = message.getSessionid();
         
         if (user.length() > USERNAME_MAX_LEN)
             return false;
