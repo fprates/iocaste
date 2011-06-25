@@ -1,9 +1,10 @@
 package org.iocaste.protocol;
 
 public final class Iocaste extends AbstractServiceInterface {
+    public static final String SERVERNAME = "/iocaste-server/index.html";
     
     public Iocaste(Module module) {
-        initService(module, "/iocaste-server/index.html");
+        initService(module, SERVERNAME);
     }
     
     public final boolean login(String user, String secret) throws Exception {

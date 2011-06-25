@@ -36,7 +36,8 @@ public class Service {
         return message;
     }
     
-    public final Object call(Message message) throws Exception {
+    public static final Object callServer(String urlname, Message message)
+            throws Exception {
         Message response;
         ObjectOutputStream oos;
         ObjectInputStream ois;
@@ -45,8 +46,6 @@ public class Service {
         
         urlcon.setDoInput(true);
         urlcon.setDoOutput(true);
-        
-        message.setSessionid(sessionid);
         
         oos = new ObjectOutputStream(urlcon.getOutputStream());
         oos.writeObject(message);
@@ -60,6 +59,12 @@ public class Service {
             throw new Exception(response.getException());
         
         return response.get("return");
+    }
+    
+    public final Object call(Message message) throws Exception {
+        message.setSessionid(sessionid);
+        
+        return callServer(urlname, message);
     }
     
     private final void messageSend(

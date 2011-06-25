@@ -30,14 +30,16 @@ public abstract class ServerServlet extends HttpServlet {
      * 
      */
     
+    private final String getServerName() {
+        return new StringBuffer(req.getScheme()).append("://")
+                .append(req.getServerName()).append(":")
+                .append(req.getServerPort()).toString();
+    }
+    
     private final String getUrl() {
-        String url = new StringBuffer(req.getScheme()).append("://")
-            .append(req.getServerName()).append(":")
-            .append(req.getServerPort())
+        return new StringBuffer(getServerName())
             .append(req.getContextPath())
             .append(req.getServletPath()).toString();
-        
-        return url;
     }
     
     /*
@@ -67,7 +69,21 @@ public abstract class ServerServlet extends HttpServlet {
         }
     }
 
-    protected void preRun(Message message) throws Exception { }
+    protected void preRun(Message message) throws Exception {
+        boolean connected;
+        Message test = new Message();
+        String url = new StringBuffer(getServerName())
+            .append(Iocaste.SERVERNAME).toString();
+        
+        test.setId("is_connected");
+        test.add("sessionid", message.getSessionid());
+        test.setSessionid(message.getSessionid());
+        
+        connected = (Boolean)Service.callServer(url, test);
+        
+        if (!connected)
+            throw new Exception("Invalid Session.");
+    }
     
     protected final void entry() throws Exception {
         Message message;
