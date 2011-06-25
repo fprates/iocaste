@@ -105,7 +105,7 @@ public abstract class ServerServlet extends HttpServlet {
     
     protected abstract void config();
     
-    protected final Service serviceInstance() throws IOException {
+    protected final Service serviceInstance() {
         return new Service(req.getSession().getId(), getUrl());
     }
     
