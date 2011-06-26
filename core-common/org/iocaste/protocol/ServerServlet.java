@@ -61,10 +61,12 @@ public abstract class ServerServlet extends HttpServlet {
             throws ServletException, IOException {
         Message message;
         Function function;
-        Service service = new Service(req.getSession().getId(), getUrl());
+        Service service;
         
         this.req = req;
         this.resp = resp;
+        
+        service = new Service(req.getSession().getId(), getUrl());
         
         configureStreams(service);
         
