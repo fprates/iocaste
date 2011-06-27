@@ -1,11 +1,11 @@
-<project name="shell" default="compile">
-	<property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
+<project name="template" default="compile">
+    <property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
 	
     <target name="compile">
         <mkdir dir="${builddir}/${ant.project.name}/web"/>
         <mkdir dir="${builddir}/${ant.project.name}/lib"/>
         <mkdir dir="${builddir}/${ant.project.name}/classes"/>
-
+    	
         <!-- dependências -->
         <path id="dependencies">
             <fileset dir="${builddir}/core/lib"/>
@@ -13,14 +13,14 @@
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
         </path>
-    	
+        
         <!-- substituições -->
         <copy todir="${builddir}/${ant.project.name}/web"
-        	file="${basedir}/src/${ant.project.name}/web/web.xml"/>
-    	
-    	<replace file="${builddir}/${ant.project.name}/web/web.xml"
-    		token="@server.class@" value="${server.class}"/>
-    	
+            file="${basedir}/src/${ant.project.name}/web/web.xml"/>
+        
+        <replace file="${builddir}/${ant.project.name}/web/web.xml"
+            token="@server.class@" value="${server.class}"/>
+        
         <!-- compilação lib -->
         <javac srcdir="${basedir}/src/${ant.project.name}" 
             destdir="${builddir}/${ant.project.name}/lib"
@@ -52,7 +52,7 @@
             	dir="${basedir}/src/${ant.project.name}/web/templates"/>
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
             <lib dir="${basedir}/lib" includes="*.jar"/>
-        	<lib dir="${builddir}/core/lib" includes="*.jar"/>
+            <lib dir="${builddir}/core/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
     </target>

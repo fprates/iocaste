@@ -1,4 +1,4 @@
-package org.iocaste.shell.server;
+package org.iocaste.shell;
 
 import java.io.Serializable;
 

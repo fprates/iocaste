@@ -13,6 +13,9 @@
     	<!-- shell -->
     	<ant antfile="${basedir}/src/shell/build.xml"/>
     	
+    	<!-- template -->
+        <!-- <ant antfile="${basedir}/src/app-template/build.xml"/> -->
+    	
     	<delete dir="${builddir}"/>
     </target>
 </project>

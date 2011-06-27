@@ -3,8 +3,8 @@
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
    version="2.5"> 
-    <description>iocaste shell</description>
-    <display-name>iocaste shell</display-name>
+    <description>Application Template</description>
+    <display-name>Iocaste Application</display-name>
     
     <servlet>
         <servlet-name>iocaste_server</servlet-name>
