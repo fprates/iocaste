@@ -1,33 +1,49 @@
 <project name="shell" default="compile">        
     <target name="compile">
         <!-- dependências -->
+        <mkdir dir="${builddir}/${ant.project.name}/lib"/>
+    	
         <path id="dependencies">
-            <fileset dir="${builddir}/core-common/lib"/>
-            <fileset dir="${builddir}/${ant.project.name}-common/lib"/>
+            <fileset dir="${builddir}/core/lib"/>
+            <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
         </path>
         
-        <!-- compilação -->
+        <!-- compilação lib -->
+        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
+        <javac srcdir="${basedir}/src/${ant.project.name}" 
+            destdir="${builddir}/${ant.project.name}/classes" debug="${debug.status}">
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <jar basedir="${builddir}/${ant.project.name}/classes"
+            destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
+        
+    	<delete dir="${builddir}/${ant.project.name}/classes"/>
+    	
+        <!-- compilação classes -->
         <mkdir dir="${builddir}/${ant.project.name}/classes"/>
         <javac srcdir="${basedir}/src/${ant.project.name}"
-            destdir="${builddir}/${ant.project.name}/classes" debug="${debug.status}">
+            destdir="${builddir}/${ant.project.name}/classes"
+        	debug="${debug.status}">
         	
             <classpath refid="dependencies"/>
         </javac>
         
         <copy todir="${builddir}/${ant.project.name}/classes">
-            <fileset dir="${basedir}/src/${ant.project.name}"
+            <fileset dir="${basedir}/src/${ant.project.name}/classes"
             	excludes="**/*.java"/>
         </copy>
         
         <!-- pacote .war -->
-        <war destfile="${basedir}/iocaste-shell.war">
-            <webinf dir="${basedir}/src/${ant.project.name}-web/WEB-INF"/>
-        	<fileset dir="${basedir}/src/${ant.project.name}-web/pages"/>
-            <lib dir="${builddir}/${ant.project.name}-common/lib"/>
+        <war destfile="${basedir}/iocaste-shell.war"
+            webxml="${basedir}/src/${ant.project.name}/web/web.xml">
+        	<fileset dir="${basedir}/src/${ant.project.name}/web/pages"/>
+            <webinf prefix="WEB-INF/templates" dir="${basedir}/src/${ant.project.name}/web/templates"/>
+            <lib dir="${builddir}/${ant.project.name}/lib"/>
             <lib dir="${basedir}/lib"/>
-        	<lib dir="${builddir}/core-common/lib"/>
+        	<lib dir="${builddir}/core/lib"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
     </target>

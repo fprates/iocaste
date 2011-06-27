@@ -1,28 +1,44 @@
 <project name="core" default="compile">        
     <target name="compile">
         <!-- dependências -->
+        <mkdir dir="${builddir}/${ant.project.name}/lib"/>
+            
         <path id="dependencies">
-        	<fileset dir="${builddir}/core-common/lib"/>
+            <fileset dir="${builddir}/core/lib"/>
             <fileset dir="${basedir}/lib/"/>
             <fileset dir="${basedir}/ext/"/>
         </path>
     	
-        <!-- compilação iocaste-core -->
+        <!-- compilação core/lib -->
         <mkdir dir="${builddir}/${ant.project.name}/classes"/>
-        <javac srcdir="${basedir}/src/${ant.project.name}"
-        	destdir="${builddir}/${ant.project.name}/classes" debug="${debug.status}">
+        <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
+            destdir="${builddir}/${ant.project.name}/classes"
+        	debug="${debug.status}">
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <jar basedir="${builddir}/${ant.project.name}/classes"
+            destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
+    	
+    	<delete dir="${builddir}/${ant.project.name}/classes"/>
+    	
+        <!-- compilação core/classes -->
+        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
+        <javac srcdir="${basedir}/src/${ant.project.name}/classes"
+        	destdir="${builddir}/${ant.project.name}/classes"
+        	debug="${debug.status}">
             <classpath refid="dependencies"/>
         </javac>
     	
     	<copy todir="${builddir}/${ant.project.name}/classes">
-    		<fileset dir="${basedir}/src/${ant.project.name}"
+    		<fileset dir="${basedir}/src/${ant.project.name}/classes"
     			excludes="**/*.java"/>
     	</copy>
     	
     	<!-- pacote .war -->
-        <war destfile="${basedir}/iocaste-server.war">
-            <webinf dir="${basedir}/src/${ant.project.name}-web/WEB-INF"/>
-        	<lib dir="${builddir}/${ant.project.name}-common/lib"/>
+        <war destfile="${basedir}/iocaste-server.war"
+        	webxml="${basedir}/src/${ant.project.name}/web/web.xml">
+        	<lib dir="${builddir}/${ant.project.name}/lib"/>
         	<lib dir="${basedir}/lib"/>
         	<classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
