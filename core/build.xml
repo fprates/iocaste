@@ -1,46 +1,59 @@
-<project name="core" default="compile">        
+<project name="core" default="compile">
+    <property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
+	
     <target name="compile">
-        <!-- dependências -->
+        <mkdir dir="${builddir}/${ant.project.name}/web"/>
         <mkdir dir="${builddir}/${ant.project.name}/lib"/>
-            
+        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
+    	
+        <!-- dependências -->
         <path id="dependencies">
             <fileset dir="${builddir}/core/lib"/>
-            <fileset dir="${basedir}/lib/"/>
-            <fileset dir="${basedir}/ext/"/>
+            <fileset dir="${builddir}/${ant.project.name}/lib"/>
+            <fileset dir="${basedir}/lib"/>
+            <fileset dir="${basedir}/ext"/>
         </path>
-    	
-        <!-- compilação core/lib -->
-        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
-        <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
-            destdir="${builddir}/${ant.project.name}/classes"
+        
+        <!-- substituições -->
+        <copy todir="${builddir}/${ant.project.name}/web"
+            file="${basedir}/src/${ant.project.name}/web/web.xml"/>
+        
+        <replace file="${builddir}/${ant.project.name}/web/web.xml"
+            token="@server.class@" value="${server.class}"/>
+        
+        <!-- compilação lib -->
+        <javac srcdir="${basedir}/src/${ant.project.name}" 
+            destdir="${builddir}/${ant.project.name}/lib"
         	debug="${debug.status}">
             <classpath refid="dependencies"/>
         </javac>
         
-        <jar basedir="${builddir}/${ant.project.name}/classes"
+        <jar basedir="${builddir}/${ant.project.name}/lib"
             destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
     	
-    	<delete dir="${builddir}/${ant.project.name}/classes"/>
-    	
-        <!-- compilação core/classes -->
-        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
-        <javac srcdir="${basedir}/src/${ant.project.name}/classes"
-        	destdir="${builddir}/${ant.project.name}/classes"
+        <!-- compilação classes -->
+        <javac srcdir="${basedir}/src/${ant.project.name}"
+            destdir="${builddir}/${ant.project.name}/classes"
         	debug="${debug.status}">
+        	
             <classpath refid="dependencies"/>
         </javac>
-    	
-    	<copy todir="${builddir}/${ant.project.name}/classes">
-    		<fileset dir="${basedir}/src/${ant.project.name}/classes"
-    			excludes="**/*.java"/>
-    	</copy>
-    	
-    	<!-- pacote .war -->
+        
+        <copy todir="${builddir}/${ant.project.name}/classes">
+            <fileset dir="${basedir}/src/${ant.project.name}/classes"
+            	excludes="**/*.java"/>
+        </copy>
+        
+        <!-- pacote .war -->
         <war destfile="${basedir}/iocaste-server.war"
-        	webxml="${basedir}/src/${ant.project.name}/web/web.xml">
-        	<lib dir="${builddir}/${ant.project.name}/lib"/>
-        	<lib dir="${basedir}/lib"/>
-        	<classes dir="${builddir}/${ant.project.name}/classes"/>
+            webxml="${builddir}/${ant.project.name}/web/web.xml">
+        	<fileset dir="${basedir}/src/${ant.project.name}/web/pages"/>
+            <webinf prefix="WEB-INF/templates"
+            	dir="${basedir}/src/${ant.project.name}/web/templates"/>
+            <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
+            <lib dir="${basedir}/lib" includes="*.jar"/>
+            <lib dir="${builddir}/core/lib" includes="*.jar"/>
+            <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
     </target>
 </project>

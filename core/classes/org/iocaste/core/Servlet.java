@@ -1,6 +1,5 @@
-package org.iocaste.server;
+package org.iocaste.core;
 
-import org.iocaste.components.login.Login;
 
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.ServerServlet;

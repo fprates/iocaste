@@ -1,4 +1,4 @@
-package org.iocaste.components.login;
+package org.iocaste.core;
 
 import java.io.Serializable;
 
