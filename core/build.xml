@@ -47,9 +47,6 @@
         <!-- pacote .war -->
         <war destfile="${basedir}/iocaste-server.war"
             webxml="${builddir}/${ant.project.name}/web/web.xml">
-        	<fileset dir="${basedir}/src/${ant.project.name}/web/pages"/>
-            <webinf prefix="WEB-INF/templates"
-            	dir="${basedir}/src/${ant.project.name}/web/templates"/>
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
             <lib dir="${basedir}/lib" includes="*.jar"/>
             <lib dir="${builddir}/core/lib" includes="*.jar"/>
