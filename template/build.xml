@@ -9,6 +9,7 @@
         <!-- dependências -->
         <path id="dependencies">
             <fileset dir="${builddir}/core/lib"/>
+            <fileset dir="${builddir}/shell/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
