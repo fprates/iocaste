@@ -12,9 +12,12 @@
     	
     	<!-- shell -->
     	<ant antfile="${basedir}/src/shell/build.xml"/>
+
+        <!-- infosis -->
+        <ant antfile="${basedir}/src/infosis/build.xml"/>
     	
     	<!-- template -->
-        <!-- <ant antfile="${basedir}/src/app-template/build.xml"/> -->
+        <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
     	
     	<delete dir="${builddir}"/>
     </target>

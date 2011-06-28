@@ -1,0 +1,59 @@
+<project name="infosis" default="compile">
+    <property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
+	
+    <target name="compile">
+        <mkdir dir="${builddir}/${ant.project.name}/web"/>
+        <mkdir dir="${builddir}/${ant.project.name}/lib"/>
+        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
+    	
+        <!-- dependências -->
+        <path id="dependencies">
+            <fileset dir="${builddir}/core/lib"/>
+            <fileset dir="${builddir}/${ant.project.name}/lib"/>
+            <fileset dir="${basedir}/lib"/>
+            <fileset dir="${basedir}/ext"/>
+        </path>
+        
+        <!-- substituições -->
+        <copy todir="${builddir}/${ant.project.name}/web"
+            file="${basedir}/src/${ant.project.name}/web/web.xml"/>
+        
+        <replace file="${builddir}/${ant.project.name}/web/web.xml"
+            token="@server.class@" value="${server.class}"/>
+        
+        <!-- compilação lib -->
+        <javac srcdir="${basedir}/src/${ant.project.name}" 
+            destdir="${builddir}/${ant.project.name}/lib"
+        	debug="${debug.status}">
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <jar basedir="${builddir}/${ant.project.name}/lib"
+            destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
+    	
+        <!-- compilação classes -->
+        <javac srcdir="${basedir}/src/${ant.project.name}"
+            destdir="${builddir}/${ant.project.name}/classes"
+        	debug="${debug.status}">
+        	
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <copy todir="${builddir}/${ant.project.name}/classes">
+            <fileset dir="${basedir}/src/${ant.project.name}/classes"
+            	excludes="**/*.java"/>
+        </copy>
+        
+        <!-- pacote .war -->
+        <war destfile="${basedir}/iocaste-${ant.project.name}.war"
+            webxml="${builddir}/${ant.project.name}/web/web.xml">
+        	<fileset dir="${basedir}/src/${ant.project.name}/web/pages"/>
+            <webinf prefix="WEB-INF/templates"
+            	dir="${basedir}/src/${ant.project.name}/web/templates"/>
+            <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
+            <lib dir="${basedir}/lib" includes="*.jar"/>
+            <lib dir="${builddir}/core/lib" includes="*.jar"/>
+            <classes dir="${builddir}/${ant.project.name}/classes"/>
+        </war>
+    </target>
+</project>

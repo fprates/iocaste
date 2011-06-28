@@ -13,7 +13,7 @@ create table shell001 (
 grant select, insert, update, delete on shell001 to iocastedb;
 \p permissions granted.
 
-insert into shell001 (aplic, ender) values ('task_selector', '/tasksel.jsp');
+insert into shell001 (aplic, ender) values ('infosis', '/iocaste-infosis/index.xhtml');
 \p initial configuration saved.
 
 commit work;
