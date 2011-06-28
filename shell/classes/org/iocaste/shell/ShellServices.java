@@ -1,6 +1,6 @@
 package org.iocaste.shell;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.protocol.AbstractFunction;
@@ -8,16 +8,10 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.TaskEntry;
 
 public class ShellServices extends AbstractFunction {
-    private List<TaskEntry> entries;
-    
     public ShellServices() {
-        entries = new LinkedList<TaskEntry>();
-        
-        entries.add(new TaskEntry("teste1.xhtml", "Teste1"));
-        entries.add(new TaskEntry("teste2.xhtml", "Teste2"));
-        
         export("get_app_url", "getAppUrl");
         export("get_task_entries", "getTaskEntries");
+        addQuery("tasks", "from Task");
     }
     
     /**
@@ -32,7 +26,17 @@ public class ShellServices extends AbstractFunction {
     }
     
     public final List<TaskEntry> getTaskEntries(Message message) {
-        return entries;
+        Task task;
+        List<TaskEntry> tasks = new ArrayList<TaskEntry>();
+        List<?> list = select("tasks", null);
+        
+        for (Object object : list) {
+            task = (Task)object;
+            tasks.add(new TaskEntry(
+                    task.getUrl().trim(), task.getAppName().trim()));
+        }
+        
+        return tasks;
     }
 
 }
