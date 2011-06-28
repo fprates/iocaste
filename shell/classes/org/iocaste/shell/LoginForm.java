@@ -68,7 +68,7 @@ public class LoginForm extends ClientForm {
         Iocaste iocaste = new Iocaste(this);
         
         if (iocaste.login(user, secret))
-            return getAppAddress("task_selector");
+            return "tasksel";
         else
             message(ERROR, "invalid.login");
         
