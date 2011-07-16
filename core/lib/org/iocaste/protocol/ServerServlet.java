@@ -62,6 +62,7 @@ public abstract class ServerServlet extends HttpServlet {
         Message message;
         Function function;
         Service service;
+        String functionid;
         
         this.req = req;
         this.resp = resp;
@@ -78,7 +79,12 @@ public abstract class ServerServlet extends HttpServlet {
         
         try {
             preRun(message);
-            function = functions.get(message.getId());
+            
+            functionid = message.getId();
+            if (functionid == null)
+                throw new Exception("Function \""+functionid+"\" not registered.");
+            
+            function = functions.get(functionid);
             service.messageReturn(message, function.run(message));
         } catch (Exception e) {
             service.messageException(message, e);
