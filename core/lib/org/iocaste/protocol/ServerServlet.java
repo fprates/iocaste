@@ -88,6 +88,8 @@ public abstract class ServerServlet extends HttpServlet {
             if (function == null)
                 throw new Exception("Function \""+functionid+"\" not registered.");
             
+            function.setServletContext(getServletContext());
+            
             service.messageReturn(message, function.run(message));
         } catch (Exception e) {
             service.messageException(message, e);
