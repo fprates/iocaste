@@ -1,9 +1,5 @@
 package org.iocaste.shell.common;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-
 import org.iocaste.protocol.IocasteModule;
 
 public abstract class ClientForm extends IocasteModule {
@@ -14,8 +10,6 @@ public abstract class ClientForm extends IocasteModule {
     private Shell shell;
     
     public ClientForm() {
-        setRequest((HttpServletRequest)FacesContext.
-                getCurrentInstance().getExternalContext().getRequest());
         shell = new Shell(this);
     }
     
@@ -43,8 +37,6 @@ public abstract class ClientForm extends IocasteModule {
      * @return
      */
     protected final void message(int type, String tag) {
-        FacesContext ctx = FacesContext.getCurrentInstance();
         
-        ctx.addMessage(null, new FacesMessage(tag));
     }
 }

@@ -1,13 +1,8 @@
 package org.iocaste.shell;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.ClientForm;
 
-@ManagedBean(name="login_form")
-@RequestScoped
 public class LoginForm extends ClientForm {
     private static final long serialVersionUID = 794315365771230508L;
     private String user;

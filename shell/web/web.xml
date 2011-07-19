@@ -36,17 +36,6 @@
         <url-pattern>/login.html</url-pattern>
     </servlet-mapping>
     
-    <servlet>
-        <servlet-name>jsf_servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    
-    <servlet-mapping>
-        <servlet-name>jsf_servlet</servlet-name>
-        <url-pattern>*.xhtml</url-pattern>
-    </servlet-mapping>
-    
     <listener>
         <listener-class>org.iocaste.protocol.HibernateListener</listener-class>
     </listener>
