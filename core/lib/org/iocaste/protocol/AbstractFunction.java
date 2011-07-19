@@ -84,7 +84,14 @@ public abstract class AbstractFunction implements Function {
     
     @Override
     public final Object run(Message message) throws Exception {
-        Method method = getClass().getMethod(exports.get(message.getId()), Message.class);
+        Method method;
+        String id = message.getId();
+        String methodname = exports.get(id);
+        
+        if (methodname == null)
+            throw new Exception("Method \""+id+"\" not implemented");
+        
+        method = getClass().getMethod(methodname, Message.class);
         
         return method.invoke(this, message);
     }

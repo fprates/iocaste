@@ -82,9 +82,12 @@ public abstract class ServerServlet extends HttpServlet {
             
             functionid = message.getId();
             if (functionid == null)
-                throw new Exception("Function \""+functionid+"\" not registered.");
+                throw new Exception("Function not specified.");
             
             function = functions.get(functionid);
+            if (function == null)
+                throw new Exception("Function \""+functionid+"\" not registered.");
+            
             service.messageReturn(message, function.run(message));
         } catch (Exception e) {
             service.messageException(message, e);

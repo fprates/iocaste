@@ -17,6 +17,26 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>page_renderer</servlet-name>
+        <servlet-class>org.iocaste.shell.common.PageRenderer</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>page_renderer</servlet-name>
+        <url-pattern>/index.html</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>login_view_servlet</servlet-name>
+        <servlet-class>org.iocaste.shell.LoginViewServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>login_view_servlet</servlet-name>
+        <url-pattern>/login.html</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>jsf_servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
@@ -39,6 +59,6 @@
     </resource-ref>
     
     <welcome-file-list>
-        <welcome-file>index.xhtml</welcome-file>
+        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 </web-app>
