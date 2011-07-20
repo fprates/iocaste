@@ -1,4 +1,4 @@
-package org.iocaste.shell;
+package org.iocaste.login;
 
 import java.io.BufferedReader;
 import java.io.IOException;

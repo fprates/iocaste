@@ -58,7 +58,7 @@ public class PageRenderer extends HttpServlet {
 
         if (url == null) {
             url = new StringBuffer(getServerName(req)).
-                    append("/iocaste-shell/login.html").toString();
+                    append("/iocaste-login/view.html").toString();
             page = "authentic.html";
         } else {
             url = new StringBuffer(getServerName(req)).

@@ -30,12 +30,20 @@ public abstract class ServerServlet extends HttpServlet {
      * 
      */
     
+    /**
+     * 
+     * @return
+     */
     private final String getServerName() {
         return new StringBuffer(req.getScheme()).append("://")
                 .append(req.getServerName()).append(":")
                 .append(req.getServerPort()).toString();
     }
     
+    /**
+     * 
+     * @return
+     */
     private final String getUrl() {
         return new StringBuffer(getServerName())
             .append(req.getContextPath())
@@ -117,7 +125,7 @@ public abstract class ServerServlet extends HttpServlet {
         function.setSessionFactory(sessionFactory);
     }
     
-    protected void register(AbstractFunction function) {
+    protected void register(Function function) {
         for (String method : function.getMethods())
             addFunction(method, function);
     }

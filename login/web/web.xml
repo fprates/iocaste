@@ -3,8 +3,8 @@
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
    version="2.5"> 
-    <description>iocaste shell</description>
-    <display-name>iocaste shell</display-name>
+    <description>Authentication application</description>
+    <display-name>Iocaste Authentication</display-name>
     
     <servlet>
         <servlet-name>iocaste_server</servlet-name>
@@ -17,13 +17,17 @@
     </servlet-mapping>
     
     <servlet>
-        <servlet-name>page_renderer</servlet-name>
-        <servlet-class>org.iocaste.shell.common.PageRenderer</servlet-class>
+        <servlet-name>view_servlet</servlet-name>
+        <servlet-class>org.iocaste.shell.common.ViewServlet</servlet-class>
+        <init-param>
+            <param-name>view_class</param-name>
+            <param-value>org.iocaste.login.LoginView</param-value>
+        </init-param>
     </servlet>
     
     <servlet-mapping>
-        <servlet-name>page_renderer</servlet-name>
-        <url-pattern>/index.html</url-pattern>
+        <servlet-name>view_servlet</servlet-name>
+        <url-pattern>/view.html</url-pattern>
     </servlet-mapping>
     
     <listener>
@@ -38,6 +42,6 @@
     </resource-ref>
     
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>

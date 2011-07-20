@@ -1,4 +1,4 @@
-package org.iocaste.shell;
+package org.iocaste.login;
 
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.ClientForm;

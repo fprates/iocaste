@@ -24,6 +24,7 @@
         
         <!-- Drop and re-create the database schema on startup -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
-        <!-- <mapping resource="META-INF/tasks.hbm.xml"/>  -->
+        
+        <!-- <mapping resource="META-INF/users.hbm.xml"/> -->
     </session-factory>
 </hibernate-configuration>
