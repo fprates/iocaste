@@ -17,16 +17,20 @@
     </servlet-mapping>
     
     <servlet>
-        <servlet-name>view_servlet</servlet-name>
-        <servlet-class>org.iocaste.shell.common.ViewServlet</servlet-class>
+        <servlet-name>iocaste_servlet</servlet-name>
+        <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
         <init-param>
-            <param-name>view_class</param-name>
+            <param-name>view</param-name>
             <param-value>org.iocaste.login.LoginView</param-value>
+        </init-param>
+        <init-param>
+            <param-name>controller</param-name>
+            <param-value>org.iocaste.login.LoginController</param-value>
         </init-param>
     </servlet>
     
     <servlet-mapping>
-        <servlet-name>view_servlet</servlet-name>
+        <servlet-name>iocaste_servlet</servlet-name>
         <url-pattern>/view.html</url-pattern>
     </servlet-mapping>
     

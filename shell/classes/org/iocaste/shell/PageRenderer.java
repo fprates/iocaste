@@ -22,17 +22,47 @@ public class PageRenderer extends HttpServlet {
         page = null;
     }
     
-    private final void callController(String action) {
-        System.out.println("Controller chamado.");
+    /**
+     * 
+     * @param req
+     * @param url
+     * @return
+     * @throws Exception
+     */
+    private final String callController(
+            HttpServletRequest req, String url) throws Exception {
+        String paramname;
+        Message message = new Message();
+        
+        message.setId("exec_action");
+        
+        for (Object obj : req.getParameterMap().keySet()) {
+            paramname = (String)obj;
+            message.add(paramname, req.getParameter(paramname));
+        }
+            
+        return (String)Service.callServer(url, message);
     }
     
+    /**
+     * 
+     * @param req
+     * @return
+     */
     private final String getServerName(HttpServletRequest req) {
         return new StringBuffer(req.getScheme()).append("://").
                 append(req.getServerName()).append(":").
                 append(req.getServerPort()).toString();
     }
     
-    private final String render(HttpServletResponse resp, String url, String page)
+    /**
+     * 
+     * @param resp
+     * @param url
+     * @param page
+     * @throws Exception
+     */
+    private final void render(HttpServletResponse resp, String url, String page)
             throws Exception {
         ViewData vdata;
         Message message = new Message();
@@ -44,8 +74,6 @@ public class PageRenderer extends HttpServlet {
         
         for (String line : vdata.getLines())
             writer.println(line);
-                
-        return vdata.getReturnUrl();
     }
     
     /* (non-Javadoc)
@@ -67,22 +95,28 @@ public class PageRenderer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        String url_ = null;
         String action = req.getParameter("action");
         
-        if (action != null)
-            callController(action);
+        try {
+            if (action != null)
+                url_ = callController(req, url);
+            
+            if (url_ != null)
+                url = new StringBuffer(getServerName(req)).
+                        append(url_).toString();
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
         
         if (url == null) {
             url = new StringBuffer(getServerName(req)).
                     append("/iocaste-login/view.html").toString();
             page = "authentic.html";
-        } else {
-            url = new StringBuffer(getServerName(req)).
-                    append(url).toString();
         }
         
         try {
-            url = render(resp, url, page);
+            render(resp, url, page);
         } catch (Exception e) {
             throw new ServletException(e);
         }
