@@ -1,4 +1,4 @@
-package org.iocaste.shell.common;
+package org.iocaste.shell;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,9 +10,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.shell.common.ViewData;
 
 public class PageRenderer extends HttpServlet {
     private static final long serialVersionUID = -8143025594178489781L;
+    private String url;
+    private String page;
+    
+    public PageRenderer() {
+        url = null;
+        page = null;
+    }
+    
+    private final void callController(String action) {
+        System.out.println("Controller chamado.");
+    }
     
     private final String getServerName(HttpServletRequest req) {
         return new StringBuffer(req.getScheme()).append("://").
@@ -20,7 +32,7 @@ public class PageRenderer extends HttpServlet {
                 append(req.getServerPort()).toString();
     }
     
-    private final void render(HttpServletResponse resp, String url, String page)
+    private final String render(HttpServletResponse resp, String url, String page)
             throws Exception {
         ViewData vdata;
         Message message = new Message();
@@ -32,6 +44,8 @@ public class PageRenderer extends HttpServlet {
         
         for (String line : vdata.getLines())
             writer.println(line);
+                
+        return vdata.getReturnUrl();
     }
     
     /* (non-Javadoc)
@@ -53,9 +67,11 @@ public class PageRenderer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String url = (String)req.getAttribute("url");
-        String page = (String)req.getAttribute("page");
-
+        String action = req.getParameter("action");
+        
+        if (action != null)
+            callController(action);
+        
         if (url == null) {
             url = new StringBuffer(getServerName(req)).
                     append("/iocaste-login/view.html").toString();
@@ -66,7 +82,7 @@ public class PageRenderer extends HttpServlet {
         }
         
         try {
-            render(resp, url, page);
+            url = render(resp, url, page);
         } catch (Exception e) {
             throw new ServletException(e);
         }

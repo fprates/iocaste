@@ -18,7 +18,7 @@
     
     <servlet>
         <servlet-name>page_renderer</servlet-name>
-        <servlet-class>org.iocaste.shell.common.PageRenderer</servlet-class>
+        <servlet-class>org.iocaste.shell.PageRenderer</servlet-class>
     </servlet>
     
     <servlet-mapping>
