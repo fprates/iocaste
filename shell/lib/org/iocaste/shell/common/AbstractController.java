@@ -10,7 +10,7 @@ public abstract class AbstractController extends AbstractFunction {
         export("exec_action", "execAction");
     }
     
-    public final String execAction(Message message) {
+    public final String execAction(Message message) throws Exception {
         this.message = message;
         
         return entry(message.getString("action"));
@@ -20,5 +20,5 @@ public abstract class AbstractController extends AbstractFunction {
         return message.getString(name);
     }
     
-    protected abstract String entry(String action);
+    protected abstract String entry(String action) throws Exception;
 }

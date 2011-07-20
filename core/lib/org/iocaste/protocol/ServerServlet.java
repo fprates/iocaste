@@ -56,6 +56,12 @@ public abstract class ServerServlet extends HttpServlet {
      * 
      */
     
+    /*
+     * (non-Javadoc)
+     * @see javax.servlet.http.HttpServlet#doGet(
+     *     javax.servlet.http.HttpServletRequest,
+     *     javax.servlet.http.HttpServletResponse)
+     */
     @Override
     protected final void doGet(
             HttpServletRequest req, HttpServletResponse resp)
@@ -63,6 +69,12 @@ public abstract class ServerServlet extends HttpServlet {
         doPost(req, resp);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see javax.servlet.http.HttpServlet#doPost(
+     *     javax.servlet.http.HttpServletRequest,
+     *     javax.servlet.http.HttpServletResponse)
+     */
     @Override
     protected final void doPost(
             HttpServletRequest req, HttpServletResponse resp)
@@ -75,7 +87,7 @@ public abstract class ServerServlet extends HttpServlet {
         this.req = req;
         this.resp = resp;
         
-        service = new Service(req.getSession().getId(), getUrl());
+        service = new Service(getUrl());
         
         configureStreams(service);
         
@@ -97,6 +109,7 @@ public abstract class ServerServlet extends HttpServlet {
                 throw new Exception("Function \""+functionid+"\" not registered.");
             
             function.setServletContext(getServletContext());
+            function.setServerName(getServerName());
             
             service.messageReturn(message, function.run(message));
         } catch (Exception e) {

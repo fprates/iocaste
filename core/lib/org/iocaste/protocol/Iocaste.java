@@ -7,6 +7,10 @@ public final class Iocaste extends AbstractServiceInterface {
         initService(module, SERVERNAME);
     }
     
+    public Iocaste(Function function) {
+        initService(function, SERVERNAME);
+    }
+    
     public final boolean login(String user, String secret) throws Exception {
         Message message = new Message();
         

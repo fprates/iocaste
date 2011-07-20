@@ -14,8 +14,7 @@ public class Service {
     private String sessionid;
     private String urlname;
     
-    public Service(String sessionid, String urlname) {
-        this.sessionid = sessionid;
+    public Service(String urlname) {
         this.urlname = urlname;
     }
     

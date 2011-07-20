@@ -9,6 +9,10 @@ public abstract class AbstractServiceInterface {
         service = module.serviceInstance(path);
     }
 
+    protected final void initService(Function function, String path) {
+        service = function.serviceInstance(path);
+    }
+    
     protected final Object call(Message message) throws Exception {
         return service.call(message);
     }

@@ -19,6 +19,7 @@ public abstract class AbstractFunction implements Function {
     private ServletContext context;
     private Map<String, String> queries;
     private Map<String, String> exports;
+    private String servername;
     
     public AbstractFunction() {
         queries = new HashMap<String, String>();
@@ -55,6 +56,15 @@ public abstract class AbstractFunction implements Function {
      */
     public final void setQueries(Map<String, String> queries) {
         this.queries = queries;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#setServerName(java.lang.String)
+     */
+    @Override
+    public final void setServerName(String servername) {
+        this.servername = servername;
     }
     
     /*
@@ -120,6 +130,24 @@ public abstract class AbstractFunction implements Function {
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#run(org.iocaste.protocol.Message)
+     */
+    @Override
+    public final Object run(Message message) throws Exception {
+        Method method;
+        String id = message.getId();
+        String methodname = exports.get(id);
+        
+        if (methodname == null)
+            throw new Exception("Method \""+id+"\" not implemented");
+        
+        method = getClass().getMethod(methodname, Message.class);
+        
+        return method.invoke(this, message);
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.eve.model.Model#select(java.lang.String, java.lang.Object[])
      */
     protected final List<?> select(String queryid, Object[] criteria) {
@@ -143,20 +171,13 @@ public abstract class AbstractFunction implements Function {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#run(org.iocaste.protocol.Message)
+     * @see org.iocaste.protocol.Function#serviceInstance(java.lang.String)
      */
     @Override
-    public final Object run(Message message) throws Exception {
-        Method method;
-        String id = message.getId();
-        String methodname = exports.get(id);
+    public final Service serviceInstance(String path) {
+        String url = new StringBuffer(servername).append(path).toString();
         
-        if (methodname == null)
-            throw new Exception("Method \""+id+"\" not implemented");
-        
-        method = getClass().getMethod(methodname, Message.class);
-        
-        return method.invoke(this, message);
+        return new Service(url);
     }
 
 }

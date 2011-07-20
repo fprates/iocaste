@@ -13,5 +13,9 @@ public interface Function {
     
     public abstract void setSessionFactory(SessionFactory sessionFactory);
     
+    public abstract void setServerName(String servername);
+    
     public abstract void setServletContext(ServletContext context);
+    
+    public abstract Service serviceInstance(String path);
 }
