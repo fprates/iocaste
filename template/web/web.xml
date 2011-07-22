@@ -16,6 +16,27 @@
         <url-pattern>/services.html</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>iocaste_servlet</servlet-name>
+        <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
+        <!--
+            put your View and Controller modules here
+        <init-param>
+            <param-name>view</param-name>
+            <param-value>org.iocaste.login.LoginView</param-value>
+        </init-param>
+        <init-param>
+            <param-name>controller</param-name>
+            <param-value>org.iocaste.login.LoginController</param-value>
+        </init-param>
+        -->
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>iocaste_servlet</servlet-name>
+        <url-pattern>/view.html</url-pattern>
+    </servlet-mapping>
+    
     <listener>
         <listener-class>org.iocaste.protocol.HibernateListener</listener-class>
     </listener>
