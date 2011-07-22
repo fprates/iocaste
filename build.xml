@@ -19,6 +19,9 @@
         <!-- infosis -->
         <ant antfile="${basedir}/src/infosis/build.xml"/>
     	
+        <!-- tasksel -->
+        <ant antfile="${basedir}/src/tasksel/build.xml"/>
+    	
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
     	
