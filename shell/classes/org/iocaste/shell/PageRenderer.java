@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.ViewData;
+
 
 public class PageRenderer extends HttpServlet {
     private static final long serialVersionUID = -8143025594178489781L;
@@ -29,7 +31,7 @@ public class PageRenderer extends HttpServlet {
      * @return
      * @throws Exception
      */
-    private final String callController(
+    private final ControlData callController(
             HttpServletRequest req, String url) throws Exception {
         String paramname;
         Message message = new Message();
@@ -41,7 +43,7 @@ public class PageRenderer extends HttpServlet {
             message.add(paramname, req.getParameter(paramname));
         }
             
-        return (String)Service.callServer(url, message);
+        return (ControlData)Service.callServer(url, message);
     }
     
     /**
@@ -95,16 +97,19 @@ public class PageRenderer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String url_ = null;
+        ControlData controldata;
         String action = req.getParameter("action");
         
         try {
-            if (action != null)
-                url_ = callController(req, url);
+            if (action != null) {
+                controldata = callController(req, url);
+                page = controldata.getPageRedirect();
+            }
             
-            if (url_ != null)
+            if (page != null)
                 url = new StringBuffer(getServerName(req)).
-                        append(url_).toString();
+                        append(page).toString();
+            
         } catch (Exception e) {
             throw new ServletException(e);
         }
