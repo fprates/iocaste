@@ -47,7 +47,6 @@
         <!-- pacote .war -->
         <war destfile="${basedir}/iocaste-${ant.project.name}.war"
             webxml="${builddir}/${ant.project.name}/web/web.xml">
-        	<fileset dir="${basedir}/src/${ant.project.name}/web/pages"/>
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
             <lib dir="${basedir}/lib" includes="*.jar"/>
         	<lib dir="${builddir}/core/lib" includes="*.jar"/>
