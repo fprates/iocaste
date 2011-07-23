@@ -17,10 +17,13 @@ public class Login extends AbstractFunction {
         export("is_connected", "isConnected");
     }
     
-    public final boolean login(Message message) {
+    public final boolean login(Message message) throws Exception {
         String user = message.getString("user");
         String secret = message.getString("secret");
         String sessionid = message.getSessionid();
+        
+        if (sessionid == null)
+            throw new Exception("Null session not allowed.");
         
         if (user.length() > USERNAME_MAX_LEN)
             return false;
