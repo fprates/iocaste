@@ -3,10 +3,6 @@ package org.iocaste.protocol;
 public final class Iocaste extends AbstractServiceInterface {
     public static final String SERVERNAME = "/iocaste-server/service.html";
     
-    public Iocaste(Module module) {
-        initService(module, SERVERNAME);
-    }
-    
     public Iocaste(Function function) {
         initService(function, SERVERNAME);
     }

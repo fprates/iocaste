@@ -1,23 +1,13 @@
 package org.iocaste.shell.common;
-import java.io.IOException;
+//import java.io.IOException;
 //import java.util.LinkedList;
 //import java.util.List;
 
 import org.iocaste.protocol.AbstractServiceInterface;
 //import org.iocaste.protocol.Message;
-import org.iocaste.protocol.Module;
 //import org.iocaste.tasksel.TaskEntry;
 
 public class Shell extends AbstractServiceInterface {
-    
-    /**
-     * 
-     * @param module
-     * @throws IOException
-     */
-    public Shell(Module module) {
-        initService(module, "/iocaste-shell/services.html");
-    }
 //    
 //    /**
 //     * Retorna a url de uma aplicação cadastrada

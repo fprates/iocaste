@@ -37,6 +37,7 @@ public class PageRenderer extends HttpServlet {
         Message message = new Message();
         
         message.setId("exec_action");
+        message.setSessionid(req.getSession().getId());
         
         for (Object obj : req.getParameterMap().keySet()) {
             paramname = (String)obj;
