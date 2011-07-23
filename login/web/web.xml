@@ -20,12 +20,8 @@
         <servlet-name>iocaste_servlet</servlet-name>
         <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
         <init-param>
-            <param-name>view</param-name>
-            <param-value>org.iocaste.login.LoginView</param-value>
-        </init-param>
-        <init-param>
-            <param-name>controller</param-name>
-            <param-value>org.iocaste.login.LoginController</param-value>
+            <param-name>form</param-name>
+            <param-value>org.iocaste.login.LoginForm</param-value>
         </init-param>
     </servlet>
     

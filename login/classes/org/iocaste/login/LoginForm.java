@@ -1,14 +1,14 @@
 package org.iocaste.login;
 
 import org.iocaste.protocol.Iocaste;
-import org.iocaste.shell.common.AbstractController;
+import org.iocaste.shell.common.AbstractForm;
 import org.iocaste.shell.common.MessageType;
 
-public class LoginController extends AbstractController {
+public class LoginForm extends AbstractForm {
 
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractController#entry(java.lang.String)
+     * @see org.iocaste.shell.common.AbstractForm#entry(java.lang.String)
      */
     @Override
     protected final void entry(String action) throws Exception {

@@ -45,17 +45,10 @@ public class IocasteServlet extends ServerServlet {
         if (initialized)
             return;
         
-        function = initFunction("view");
+        function = initFunction("form");
         
         if (function == null)
-            throw new Exception("Invalid view class.");
-        
-        register(function);
-        
-        function = initFunction("controller");
-        
-        if (function == null)
-            throw new Exception("Invalid controller class.");
+            throw new Exception("Invalid form class.");
         
         register(function);
     }

@@ -1,13 +1,18 @@
 package org.iocaste.shell.common;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
-public abstract class AbstractController extends AbstractFunction {
+public abstract class AbstractForm extends AbstractFunction {
     private Message message;
     private ControlData controldata;
-    
-    public AbstractController() {
+
+    public AbstractForm() {
+        export("get_view_data", "getViewData");
         export("exec_action", "execAction");
         controldata = new ControlData();
     }
@@ -34,6 +39,41 @@ public abstract class AbstractController extends AbstractFunction {
     protected final String getString(String name) {
         return message.getString(name);
     }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final ViewData getViewData(Message message) throws Exception {
+        String line;
+        InputStream is;
+        BufferedReader reader;
+        ViewData vdata;
+        String page = message.getString("page");
+        
+        if (page == null)
+            throw new Exception("Page not especified.");
+        
+        is = getResourceAsStream(page);
+        reader = new BufferedReader(new InputStreamReader(is));
+        vdata = new ViewData();
+        
+        while ((line = reader.readLine()) != null)
+            vdata.add(line);
+        
+        reader.close();
+        is.close();
+        
+        return vdata;
+    }
+    
+    /*
+     * 
+     * Others
+     * 
+     */
     
     /**
      * 
