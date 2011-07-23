@@ -2,26 +2,33 @@ package org.iocaste.shell;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.SessionFactory;
+import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.ViewData;
 
-
-public class PageRenderer extends HttpServlet {
+public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
-    private String url;
-    private String page;
+    private static final String LOGIN_APP = "iocaste-login";
+    private String sessionid;
+    private String servername;
+    private Map<String, String> apps;
     
     public PageRenderer() {
-        url = null;
-        page = null;
+        apps = new HashMap<String, String>();
     }
     
     /**
@@ -49,24 +56,13 @@ public class PageRenderer extends HttpServlet {
     
     /**
      * 
-     * @param req
-     * @return
-     */
-    private final String getServerName(HttpServletRequest req) {
-        return new StringBuffer(req.getScheme()).append("://").
-                append(req.getServerName()).append(":").
-                append(req.getServerPort()).toString();
-    }
-    
-    /**
-     * 
      * @param resp
      * @param url
      * @param page
      * @throws Exception
      */
-    private final void render(HttpServletResponse resp, String url, String page)
-            throws Exception {
+    private final void render(HttpServletResponse resp, String url,
+            String page) throws Exception {
         ViewData vdata;
         Message message = new Message();
         PrintWriter writer = resp.getWriter();
@@ -77,6 +73,54 @@ public class PageRenderer extends HttpServlet {
         
         for (String line : vdata.getLines())
             writer.println(line);
+    }
+    
+    private final String composeUrl(String app) {
+        return new StringBuffer(servername).append("/").
+                append(app).append("/view.html").toString();
+    }
+    
+    private final void entry(HttpServletRequest req, HttpServletResponse resp)
+            throws Exception {
+        String page;
+        ControlData controldata;
+        Iocaste iocaste = new Iocaste(this);
+        String action = req.getParameter("action");
+        String app = apps.get(sessionid);
+        
+        if ((!iocaste.isConnected()) && (app == null)) {
+            app = LOGIN_APP;
+            apps.put(sessionid, app);
+            
+            page = "authentic.html";
+        } else {
+            page = null;
+            
+            if (action != null) {
+                controldata = callController(req, composeUrl(app));
+                
+                app = controldata.getApp();
+                
+                if (app != null) {
+                    apps.remove(sessionid);
+                    apps.put(sessionid, app);
+                } else {
+                    app = apps.get(sessionid);
+                }
+                
+                if (!iocaste.isConnected()) {
+                    app = LOGIN_APP;
+                    page = "authentic.html";
+                    
+                    apps.remove(sessionid);
+                    apps.put(sessionid, app);
+                } else {
+                    page = controldata.getPage();
+                }
+            }
+        }
+        
+        render(resp, composeUrl(app), page);
     }
     
     /* (non-Javadoc)
@@ -98,36 +142,75 @@ public class PageRenderer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        ControlData controldata;
-        String url_ = url;
-        String action = req.getParameter("action");
+        sessionid = req.getSession().getId();
+        servername = new StringBuffer(req.getScheme()).append("://").
+                        append(req.getServerName()).append(":").
+                        append(req.getServerPort()).toString();
         
         try {
-            if (action != null) {
-                controldata = callController(req, url);
-                url_ = controldata.getApp();
-                page = controldata.getPage();
-            }
-            
-            if (url_ != null)
-                url = new StringBuffer(getServerName(req)).append("/").
-                        append(url_).append("/view.html").toString();
-            
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
-        
-        if (url == null) {
-            url = new StringBuffer(getServerName(req)).
-                    append("/iocaste-login/view.html").toString();
-            page = "authentic.html";
-        }
-        
-        try {
-            render(resp, url, page);
+            entry(req, resp);
         } catch (Exception e) {
             throw new ServletException(e);
         }
     }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#getMethods()
+     */
+    @Override
+    public Set<String> getMethods() {
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#run(org.iocaste.protocol.Message)
+     */
+    @Override
+    public Object run(Message message) throws Exception {
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#setSessionFactory(
+     *     org.hibernate.SessionFactory)
+     */
+    @Override
+    public void setSessionFactory(SessionFactory sessionFactory) { }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#setServerName(java.lang.String)
+     */
+    @Override
+    public void setServerName(String servername) { }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#setServletContext(
+     *     javax.servlet.ServletContext)
+     */
+    @Override
+    public void setServletContext(ServletContext context) { }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#serviceInstance(java.lang.String)
+     */
+    @Override
+    public Service serviceInstance(String path) {
+        String url = new StringBuffer(servername).append(path).toString();
+        
+        return new Service(sessionid, url);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#setSessionid(java.lang.String)
+     */
+    @Override
+    public void setSessionid(String sessionid) { }
 
 }
