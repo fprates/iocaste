@@ -1,4 +1,4 @@
-package org.iocaste.shell.common;
+package org.iocaste.tasksel;
 
 import java.io.Serializable;
 

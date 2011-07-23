@@ -4,15 +4,29 @@ import java.io.Serializable;
 
 public class ControlData implements Serializable {
     private static final long serialVersionUID = 6315170917055411682L;
+    private String app;
     private String messagetext;
-    private String pageredirect;
+    private String page;
     private MessageType messagetype;
+    
+    public ControlData() {
+        app = null;
+        page = null;
+    }
     
     /*
      * 
      * Getters
      * 
      */
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getApp() {
+        return app;
+    }
     
     /**
      * @return the messagetext
@@ -32,8 +46,8 @@ public class ControlData implements Serializable {
      * 
      * @return
      */
-    public final String getPageRedirect() {
-        return pageredirect;
+    public final String getPage() {
+        return page;
     }
     
     /*
@@ -60,7 +74,8 @@ public class ControlData implements Serializable {
      * 
      * @param pageredirect
      */
-    public final void setPageRedirect(String pageredirect) {
-        this.pageredirect = pageredirect;
+    public final void setPageRedirect(String app, String page) {
+        this.app = app;
+        this.page = page;
     }
 }

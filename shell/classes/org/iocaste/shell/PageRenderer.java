@@ -98,17 +98,19 @@ public class PageRenderer extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         ControlData controldata;
+        String url_ = url;
         String action = req.getParameter("action");
         
         try {
             if (action != null) {
                 controldata = callController(req, url);
-                page = controldata.getPageRedirect();
+                url_ = controldata.getApp();
+                page = controldata.getPage();
             }
             
-            if (page != null)
-                url = new StringBuffer(getServerName(req)).
-                        append(page).toString();
+            if (url_ != null)
+                url = new StringBuffer(getServerName(req)).append("/").
+                        append(url_).append("/view.html").toString();
             
         } catch (Exception e) {
             throw new ServletException(e);

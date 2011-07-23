@@ -62,7 +62,7 @@ public abstract class AbstractController extends AbstractFunction {
      * 
      * @param page
      */
-    protected final void redirect(String page) {
-        controldata.setPageRedirect(page);
+    protected final void redirect(String app, String page) {
+        controldata.setPageRedirect(app, page);
     }
 }

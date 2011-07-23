@@ -21,7 +21,7 @@
         <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
         <init-param>
             <param-name>view</param-name>
-            <param-value>org.iocaste.tasksel.TaslSelView</param-value>
+            <param-value>org.iocaste.tasksel.TaskSelView</param-value>
         </init-param>
         <init-param>
             <param-name>controller</param-name>

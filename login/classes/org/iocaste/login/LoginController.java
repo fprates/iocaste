@@ -17,7 +17,7 @@ public class LoginController extends AbstractController {
         String secret = getString("secret");
         
         if (iocaste.login(username, secret))
-            redirect("/iocaste-tasksel/view.html");
+            redirect("iocaste-tasksel", null);
         else
             message(MessageType.ERROR, "invalid.login");
     }
