@@ -17,6 +17,12 @@ public class Login extends AbstractFunction {
         export("is_connected", "isConnected");
     }
     
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
     public final boolean login(Message message) throws Exception {
         String user = message.getString("user");
         String secret = message.getString("secret");
@@ -43,8 +49,18 @@ public class Login extends AbstractFunction {
         return true;
     }
     
+    /**
+     * 
+     * @param message
+     * @return
+     */
     public final boolean isConnected(Message message) {
-        return sessions.containsKey(message.getString("sessionid"));
+        String sessionid = message.getSessionid();
+        
+        if (sessionid == null)
+            return false;
+        
+        return sessions.containsKey(sessionid);
     }
 
 }

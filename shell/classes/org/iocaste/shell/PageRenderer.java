@@ -159,7 +159,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @see org.iocaste.protocol.Function#getMethods()
      */
     @Override
-    public Set<String> getMethods() {
+    public final Set<String> getMethods() {
         return null;
     }
 
@@ -168,24 +168,24 @@ public class PageRenderer extends HttpServlet implements Function {
      * @see org.iocaste.protocol.Function#run(org.iocaste.protocol.Message)
      */
     @Override
-    public Object run(Message message) throws Exception {
+    public final Object run(Message message) throws Exception {
         return null;
     }
-
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#setSessionFactory(
      *     org.hibernate.SessionFactory)
      */
     @Override
-    public void setSessionFactory(SessionFactory sessionFactory) { }
+    public final void setSessionFactory(SessionFactory sessionFactory) { }
 
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#setServerName(java.lang.String)
      */
     @Override
-    public void setServerName(String servername) { }
+    public final void setServerName(String servername) { }
 
     /*
      * (non-Javadoc)
@@ -193,14 +193,14 @@ public class PageRenderer extends HttpServlet implements Function {
      *     javax.servlet.ServletContext)
      */
     @Override
-    public void setServletContext(ServletContext context) { }
+    public final void setServletContext(ServletContext context) { }
 
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#serviceInstance(java.lang.String)
      */
     @Override
-    public Service serviceInstance(String path) {
+    public final Service serviceInstance(String path) {
         String url = new StringBuffer(servername).append(path).toString();
         
         return new Service(sessionid, url);

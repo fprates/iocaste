@@ -15,22 +15,16 @@ public class Servlet extends ServerServlet {
     }
     
     /**
-     * Permite chamadas à login() mesmo sem sessão.
+     * Permite chamadas à login() e isConnected() mesmo sem sessão.
      * Para outras chamadas, verifica validade da sessão.
      */
     @Override
     public void preRun(Message message) throws Exception {
-        Message test;
-        
         if (message.getId().equals("login") ||
                 message.getId().equals("is_connected"))
             return;
         
-        test = new Message();
-        
-        test.add("sessionid", message.getSessionid());
-        
-        if (!login.isConnected(test))
+        if (!login.isConnected(message))
             throw new Exception("Invalid session.");
     }
 }

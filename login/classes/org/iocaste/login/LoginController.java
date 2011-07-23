@@ -12,9 +12,16 @@ public class LoginController extends AbstractController {
      */
     @Override
     protected final void entry(String action) throws Exception {
-        Iocaste iocaste = new Iocaste(this);
+        Iocaste iocaste;
         String username = getString("username");
         String secret = getString("secret");
+        String sessionid = getMessageSessionid();
+        
+        if (sessionid == null)
+            throw new Exception("Invalid session.");
+        
+        setSessionid(sessionid);
+        iocaste = new Iocaste(this);
         
         if (iocaste.login(username, secret))
             redirect("iocaste-tasksel", null);

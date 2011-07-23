@@ -20,6 +20,14 @@ public abstract class AbstractController extends AbstractFunction {
     
     /**
      * 
+     * @return
+     */
+    protected final String getMessageSessionid() {
+        return message.getSessionid();
+    }
+    
+    /**
+     * 
      * @param name
      * @return
      */
