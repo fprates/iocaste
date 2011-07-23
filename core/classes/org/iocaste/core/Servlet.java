@@ -22,7 +22,8 @@ public class Servlet extends ServerServlet {
     public void preRun(Message message) throws Exception {
         Message test;
         
-        if (message.getId().equals("login"))
+        if (message.getId().equals("login") ||
+                message.getId().equals("is_connected"))
             return;
         
         test = new Message();
