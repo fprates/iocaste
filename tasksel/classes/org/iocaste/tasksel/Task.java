@@ -1,4 +1,4 @@
-package org.iocaste.login;
+package org.iocaste.tasksel;
 
 import java.io.Serializable;
 
