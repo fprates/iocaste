@@ -83,11 +83,12 @@ public abstract class ServerServlet extends HttpServlet {
         Function function;
         Service service;
         String functionid;
+        String sessionid = req.getSession().getId();
         
         this.req = req;
         this.resp = resp;
         
-        service = new Service(getUrl());
+        service = new Service(sessionid, getUrl());
         
         configureStreams(service);
         
@@ -110,6 +111,7 @@ public abstract class ServerServlet extends HttpServlet {
             
             function.setServletContext(getServletContext());
             function.setServerName(getServerName());
+            function.setSessionid(sessionid);
             
             service.messageReturn(message, function.run(message));
         } catch (Exception e) {

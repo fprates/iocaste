@@ -18,4 +18,6 @@ public interface Function {
     public abstract void setServletContext(ServletContext context);
     
     public abstract Service serviceInstance(String path);
+    
+    public abstract void setSessionid(String sessionid);
 }

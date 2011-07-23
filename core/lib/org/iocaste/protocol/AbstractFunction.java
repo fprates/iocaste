@@ -20,6 +20,7 @@ public abstract class AbstractFunction implements Function {
     private Map<String, String> queries;
     private Map<String, String> exports;
     private String servername;
+    private String sessionid;
     
     public AbstractFunction() {
         queries = new HashMap<String, String>();
@@ -84,6 +85,11 @@ public abstract class AbstractFunction implements Function {
     @Override
     public final void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+    
+    @Override
+    public final void setSessionid(String sessionid) {
+        this.sessionid = sessionid;
     }
     
     /*
@@ -177,7 +183,7 @@ public abstract class AbstractFunction implements Function {
     public final Service serviceInstance(String path) {
         String url = new StringBuffer(servername).append(path).toString();
         
-        return new Service(url);
+        return new Service(sessionid, url);
     }
 
 }

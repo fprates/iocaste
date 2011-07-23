@@ -14,8 +14,9 @@ public class Service {
     private String sessionid;
     private String urlname;
     
-    public Service(String urlname) {
+    public Service(String sessionid, String urlname) {
         this.urlname = urlname;
+        this.sessionid = sessionid;
     }
     
     public final void setInputStream(InputStream is) {
