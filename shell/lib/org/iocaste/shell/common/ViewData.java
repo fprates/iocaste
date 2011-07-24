@@ -6,6 +6,7 @@ public class ViewData implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
     private String[] lines;
     private Container container;
+    private String title;
     
     /*
      * 
@@ -29,6 +30,14 @@ public class ViewData implements Serializable {
         return lines;
     }
     
+    /**
+     * 
+     * @return
+     */
+    public final String getTitle() {
+        return title;
+    }
+    
     /*
      * 
      * Setters
@@ -49,5 +58,13 @@ public class ViewData implements Serializable {
      */
     public final void setLines(String[] lines) {
         this.lines = lines;
+    }
+    
+    /**
+     * 
+     * @param title
+     */
+    public final void setTitle(String title) {
+        this.title = title;
     }
 }

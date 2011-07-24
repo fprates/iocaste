@@ -5,9 +5,12 @@ import org.iocaste.shell.common.AbstractForm;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.TextField;
+import org.iocaste.shell.common.ViewData;
 
 public class LoginForm extends AbstractForm {
     public LoginForm() {
+        ViewData view = new ViewData();
+        
         Form form = new Form();
         form.setAction("connect");
         
@@ -18,7 +21,10 @@ public class LoginForm extends AbstractForm {
         secret.setName("secret");
         secret.setPassword(true);
         
-        addView("authentic", form);
+        view.setTitle("authentic");
+        view.setContainer(form);
+        
+        addView("authentic", view);
     }
     
     /*

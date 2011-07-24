@@ -14,13 +14,13 @@ import org.iocaste.protocol.Message;
 public abstract class AbstractForm extends AbstractFunction {
     private Message message;
     private ControlData controldata;
-    private Map<String, Container> containers;
+    private Map<String, ViewData> views;
     
     public AbstractForm() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
         controldata = new ControlData();
-        containers = new HashMap<String, Container>();
+        views = new HashMap<String, ViewData>();
     }
     
     /*
@@ -57,13 +57,13 @@ public abstract class AbstractForm extends AbstractFunction {
         if (page == null)
             throw new Exception("Page not especified.");
         
+        vdata = views.get(page);
+        
+        if (vdata != null)
+            return vdata;
+        
         vdata = new ViewData();
         
-        if (containers.containsKey(page)) {
-            vdata.setContainer(containers.get(page));
-            return vdata;
-        }
-            
         is = getResourceAsStream(page);
         reader = new BufferedReader(new InputStreamReader(is));
         
@@ -90,8 +90,8 @@ public abstract class AbstractForm extends AbstractFunction {
      * 
      * @param container
      */
-    protected final void addView(String name, Container container) {
-        containers.put(name, container);
+    protected final void addView(String name, ViewData view) {
+        views.put(name, view);
     }
     
     /**

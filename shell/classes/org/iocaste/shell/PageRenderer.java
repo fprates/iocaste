@@ -80,7 +80,7 @@ public class PageRenderer extends HttpServlet implements Function {
         if (vdata.getContainer() == null)
             text = vdata.getLines();
         else
-            text = renderer.run(vdata.getContainer());
+            text = renderer.run(vdata);
 
         for (String line : text)
             writer.println(line);
