@@ -7,7 +7,7 @@ public class ControlData implements Serializable {
     private String app;
     private String messagetext;
     private String page;
-    private MessageType messagetype;
+    private Const messagetype;
     
     public ControlData() {
         app = null;
@@ -38,7 +38,7 @@ public class ControlData implements Serializable {
     /**
      * @return the messagetype
      */
-    public final MessageType getMessageType() {
+    public final Const getMessageType() {
         return messagetype;
     }
     
@@ -66,7 +66,7 @@ public class ControlData implements Serializable {
     /**
      * @param messagetype the messagetype to set
      */
-    public final void setMessageType(MessageType messagetype) {
+    public final void setMessageType(Const messagetype) {
         this.messagetype = messagetype;
     }
 

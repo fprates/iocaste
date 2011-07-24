@@ -3,6 +3,8 @@ package org.iocaste.shell.common;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
@@ -10,11 +12,13 @@ import org.iocaste.protocol.Message;
 public abstract class AbstractForm extends AbstractFunction {
     private Message message;
     private ControlData controldata;
-
+    private Map<String, Container> containers;
+    
     public AbstractForm() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
         controldata = new ControlData();
+        containers = new HashMap<String, Container>();
     }
     
     /*
@@ -50,9 +54,15 @@ public abstract class AbstractForm extends AbstractFunction {
         if (page == null)
             throw new Exception("Page not especified.");
         
+        vdata = new ViewData();
+        
+        if (containers.containsKey(page)) {
+            vdata.setContainer(containers.get(page));
+            return vdata;
+        }
+            
         is = getResourceAsStream(page);
         reader = new BufferedReader(new InputStreamReader(is));
-        vdata = new ViewData();
         
         while ((line = reader.readLine()) != null)
             vdata.add(line);
@@ -68,6 +78,14 @@ public abstract class AbstractForm extends AbstractFunction {
      * Others
      * 
      */
+    
+    /**
+     * 
+     * @param container
+     */
+    protected final void addView(String name, Container container) {
+        containers.put(name, container);
+    }
     
     /**
      * 
@@ -96,7 +114,7 @@ public abstract class AbstractForm extends AbstractFunction {
      * @param type
      * @param text
      */
-    protected final void message(MessageType type, String text) {
+    protected final void message(Const type, String text) {
         controldata.setMessageType(type);
         controldata.setMessageText(text);
     }

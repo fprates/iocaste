@@ -2,10 +2,25 @@ package org.iocaste.login;
 
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractForm;
-import org.iocaste.shell.common.MessageType;
+import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.TextField;
 
 public class LoginForm extends AbstractForm {
-
+    public LoginForm() {
+        Form form = new Form();
+        form.setSubmitText("conectar");
+        
+        TextField username = new TextField(form);
+        username.setName("username");
+        
+        TextField secret = new TextField(form);
+        secret.setName("secret");
+        secret.setPassword(true);
+        
+        addView("authentic", form);
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.AbstractForm#entry(java.lang.String)
@@ -19,7 +34,7 @@ public class LoginForm extends AbstractForm {
         if (iocaste.login(username, secret))
             redirect("iocaste-tasksel", null);
         else
-            message(MessageType.ERROR, "invalid.login");
+            message(Const.ERROR, "invalid.login");
     }
 
     

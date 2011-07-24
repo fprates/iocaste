@@ -17,6 +17,7 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.ViewData;
 
@@ -54,6 +55,10 @@ public class PageRenderer extends HttpServlet implements Function {
         return (ControlData)Service.callServer(url, message);
     }
     
+    private final void renderContainer(PrintWriter writer, Container container) {
+        
+    }
+    
     /**
      * 
      * @param resp
@@ -67,12 +72,20 @@ public class PageRenderer extends HttpServlet implements Function {
         Message message = new Message();
         PrintWriter writer = resp.getWriter();
         
+        resp.setCharacterEncoding("utf-8");
+        resp.setContentType("text/html");
+        
         message.setId("get_view_data");
         message.add("page", page);
         vdata = (ViewData)Service.callServer(url, message);
         
-        for (String line : vdata.getLines())
-            writer.println(line);
+        if (vdata.getContainer() == null)
+            for (String line : vdata.getLines())
+                writer.println(line);
+        else
+            renderContainer(writer, vdata.getContainer());
+                    
+        writer.close();
     }
     
     private final String composeUrl(String app) {
