@@ -130,6 +130,9 @@ public class PageRenderer extends HttpServlet implements Function {
                 } else {
                     page = controldata.getPage();
                 }
+            } else {
+                if (app.equals(LOGIN_APP))
+                    page = "authentic";
             }
         }
         
