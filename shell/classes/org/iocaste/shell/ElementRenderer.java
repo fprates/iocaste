@@ -6,7 +6,6 @@ import java.util.List;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
-//import org.iocaste.shell.common.FormItem;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
@@ -14,6 +13,11 @@ import org.iocaste.shell.common.ViewData;
 
 public class ElementRenderer {
     
+    /**
+     * 
+     * @param text
+     * @param element
+     */
     private final void renderElement(List<String> text, Element element) {
         switch (element.getType()) {
         case FORM:
@@ -39,11 +43,21 @@ public class ElementRenderer {
         }
     }
     
+    /**
+     * 
+     * @param text
+     * @param elements
+     */
     private final void renderElements(List<String> text, Element[] elements) {
         for (Element element : elements) 
             renderElement(text, element);
     }
     
+    /**
+     * 
+     * @param text
+     * @param container
+     */
     private final void renderContainer(List<String> text, Container container) {
         String line;
         Form form;
@@ -70,6 +84,11 @@ public class ElementRenderer {
         }
     }
     
+    /**
+     * 
+     * @param text
+     * @param item
+     */
     private final void renderTableItem(List<String> text, TableItem item) {
         text.add("<tr>");
         
@@ -82,11 +101,21 @@ public class ElementRenderer {
         text.add("</tr>");
     }
     
+    /**
+     * 
+     * @param text
+     * @param text_
+     */
     private final void renderText(List<String> text, Text text_) {
         text.add(new StringBuffer("<p>").append(text_.getText()).append("</p>")
                 .toString());
     }
     
+    /**
+     * 
+     * @param text
+     * @param textfield
+     */
     private final void renderTextField(List<String> text, TextField textfield) {
         String inputtext;
         
@@ -99,6 +128,11 @@ public class ElementRenderer {
                 .append("\">").toString());
     }
     
+    /**
+     * 
+     * @param text
+     * @param title
+     */
     private final void renderHeader(List<String> text, String title) {
         text.add("<head>");
         text.add(new StringBuffer("<title>").append(title)
@@ -106,6 +140,11 @@ public class ElementRenderer {
         text.add("</head>");
     }
     
+    /**
+     * 
+     * @param vdata
+     * @return
+     */
     public final String[] run(ViewData vdata) {
         List<String> text = new ArrayList<String>();
         
