@@ -25,14 +25,6 @@ public abstract class AbstractForm extends AbstractFunction {
     
     /**
      * 
-     * @return
-     */
-    protected final String getMessageSessionid() {
-        return message.getSessionid();
-    }
-    
-    /**
-     * 
      * @param name
      * @return
      */
@@ -52,6 +44,8 @@ public abstract class AbstractForm extends AbstractFunction {
         BufferedReader reader;
         ViewData vdata;
         String page = message.getString("page");
+        
+        setSessionid(message.getSessionid());
         
         if (page == null)
             throw new Exception("Page not especified.");
@@ -90,7 +84,8 @@ public abstract class AbstractForm extends AbstractFunction {
      */
     public final ControlData execAction(Message message) throws Exception {
         this.message = message;
-        
+
+        setSessionid(message.getSessionid());
         entry(message.getString("action"));
         
         return controldata;
