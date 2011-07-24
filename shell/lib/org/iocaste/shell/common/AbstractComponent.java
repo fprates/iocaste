@@ -6,7 +6,9 @@ public abstract class AbstractComponent extends AbstractElement implements Compo
     
     public AbstractComponent(Container container, Const type) {
         super(type);
-        container.add(this);
+        
+        if (container != null)
+            container.add(this);
     }
     
     @Override

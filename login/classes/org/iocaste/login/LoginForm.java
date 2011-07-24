@@ -4,22 +4,21 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractForm;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.TextField;
+import org.iocaste.shell.common.FormItem;
 import org.iocaste.shell.common.ViewData;
 
 public class LoginForm extends AbstractForm {
     public LoginForm() {
         ViewData view = new ViewData();
+        Form form = new Form(null);
+        FormItem secret;
         
-        Form form = new Form();
         form.setAction("connect");
+
+        new FormItem(form, "username");
         
-        TextField username = new TextField(form);
-        username.setName("username");
-        
-        TextField secret = new TextField(form);
-        secret.setName("secret");
-        secret.setPassword(true);
+        secret = new FormItem(form, "secret");
+        secret.setItemType(Const.PASSWORD);
         
         view.setTitle("authentic");
         view.setContainer(form);

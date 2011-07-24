@@ -1,0 +1,24 @@
+package org.iocaste.shell.common;
+
+public class TableItem extends AbstractComponent {
+    private static final long serialVersionUID = -1076760582954115701L;
+    private Element[] elements;
+    private int i;
+    
+    public TableItem(Table table) {
+        super(table, Const.TABLE_ITEM);
+        i = 0;
+        elements = new Element[table.getWidth()];
+    }
+    
+    public final void add(Element element) {
+        if (i == elements.length)
+            throw new RuntimeException("Item overflow for table.");
+        
+        elements[i++] = element;
+    }
+    
+    public final Element[] getElements() {
+        return elements;
+    }
+}

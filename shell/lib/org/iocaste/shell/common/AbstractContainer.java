@@ -7,10 +7,13 @@ public abstract class AbstractContainer
     extends AbstractElement implements Container {
     private static final long serialVersionUID = 8676224931708725226L;
     private List<Element> elements;
-    
-    public AbstractContainer(Const type) {
+
+    public AbstractContainer(Container container, Const type) {
         super(type);
         elements = new ArrayList<Element>();
+        
+        if (container != null)
+            container.add(this);
     }
     
     /**
