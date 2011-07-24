@@ -19,6 +19,9 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
+import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class PageRenderer extends HttpServlet implements Function {
@@ -55,8 +58,30 @@ public class PageRenderer extends HttpServlet implements Function {
         return (ControlData)Service.callServer(url, message);
     }
     
+    private final String renderForm(Form form) {
+        return null;
+    }
+    
+    private final String renderTextField(TextField textfield) {
+        return null;
+    }
+    
     private final void renderContainer(PrintWriter writer, Container container) {
+        Element[] elements = container.getElements();
         
+        for (Element element : elements) {
+            switch (element.getType()) {
+            case FORM:
+                writer.println(renderForm((Form)element));
+                
+                break;
+                
+            case TEXT_FIELD:
+                writer.println(renderTextField((TextField)element));
+                
+                break;
+            }
+        }
     }
     
     /**
