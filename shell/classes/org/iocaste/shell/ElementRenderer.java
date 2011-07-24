@@ -47,7 +47,15 @@ public class ElementRenderer {
     }
     
     private final String renderTextField(TextField textfield) {
-        return null;
+        String inputtext;
+        
+        if (textfield.getPassword())
+            inputtext = "<input type=\"text\" name=\"";
+        else
+            inputtext = "<input type=\"password\" name=\"";
+        
+        return new StringBuffer(inputtext).append(textfield.getName())
+                .append("\">").toString();
     }
     
     private final void renderHeader(List<String> text, String title) {
