@@ -5,11 +5,11 @@ import java.util.List;
 
 public abstract class AbstractContainer
     extends AbstractElement implements Container {
-    
+    private static final long serialVersionUID = 8676224931708725226L;
     private List<Element> elements;
     
-    public AbstractContainer() {
-        super(Const.FORM);
+    public AbstractContainer(Const type) {
+        super(type);
         elements = new ArrayList<Element>();
     }
     
@@ -24,7 +24,7 @@ public abstract class AbstractContainer
      * 
      */
     public final Element[] getElements() {
-        return (Element[])elements.toArray();
+        return elements.toArray(new Element[0]);
     }
 
 }

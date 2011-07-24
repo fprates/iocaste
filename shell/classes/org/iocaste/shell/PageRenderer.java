@@ -17,11 +17,7 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class PageRenderer extends HttpServlet implements Function {
@@ -30,9 +26,11 @@ public class PageRenderer extends HttpServlet implements Function {
     private String sessionid;
     private String servername;
     private Map<String, String> apps;
+    private ElementRenderer renderer;
     
     public PageRenderer() {
         apps = new HashMap<String, String>();
+        renderer = new ElementRenderer();
     }
     
     /**
@@ -58,32 +56,6 @@ public class PageRenderer extends HttpServlet implements Function {
         return (ControlData)Service.callServer(url, message);
     }
     
-    private final String renderForm(Form form) {
-        return null;
-    }
-    
-    private final String renderTextField(TextField textfield) {
-        return null;
-    }
-    
-    private final void renderContainer(PrintWriter writer, Container container) {
-        Element[] elements = container.getElements();
-        
-        for (Element element : elements) {
-            switch (element.getType()) {
-            case FORM:
-                writer.println(renderForm((Form)element));
-                
-                break;
-                
-            case TEXT_FIELD:
-                writer.println(renderTextField((TextField)element));
-                
-                break;
-            }
-        }
-    }
-    
     /**
      * 
      * @param resp
@@ -94,6 +66,7 @@ public class PageRenderer extends HttpServlet implements Function {
     private final void render(HttpServletResponse resp, String url,
             String page) throws Exception {
         ViewData vdata;
+        String[] text;
         Message message = new Message();
         PrintWriter writer = resp.getWriter();
         
@@ -105,11 +78,13 @@ public class PageRenderer extends HttpServlet implements Function {
         vdata = (ViewData)Service.callServer(url, message);
         
         if (vdata.getContainer() == null)
-            for (String line : vdata.getLines())
-                writer.println(line);
+            text = vdata.getLines();
         else
-            renderContainer(writer, vdata.getContainer());
-                    
+            text = renderer.run(vdata.getContainer());
+
+        for (String line : text)
+            writer.println(line);
+                
         writer.close();
     }
     
@@ -130,7 +105,7 @@ public class PageRenderer extends HttpServlet implements Function {
             app = LOGIN_APP;
             apps.put(sessionid, app);
             
-            page = "authentic.html";
+            page = "authentic";
         } else {
             page = null;
             
@@ -148,7 +123,7 @@ public class PageRenderer extends HttpServlet implements Function {
                 
                 if (!iocaste.isConnected()) {
                     app = LOGIN_APP;
-                    page = "authentic.html";
+                    page = "authentic";
                     
                     apps.remove(sessionid);
                     apps.put(sessionid, app);

@@ -1,6 +1,8 @@
 package org.iocaste.shell.common;
 
-public interface Element {
+import java.io.Serializable;
+
+public interface Element extends Serializable {
     
     public abstract Const getType();
 

@@ -1,6 +1,7 @@
 package org.iocaste.shell.common;
 
 public class TextField extends AbstractComponent {
+    private static final long serialVersionUID = 4027561075976606307L;
     private boolean password;
     
     public TextField(Container container) {

@@ -9,7 +9,7 @@ import org.iocaste.shell.common.TextField;
 public class LoginForm extends AbstractForm {
     public LoginForm() {
         Form form = new Form();
-        form.setSubmitText("conectar");
+        form.setAction("connect");
         
         TextField username = new TextField(form);
         username.setName("username");

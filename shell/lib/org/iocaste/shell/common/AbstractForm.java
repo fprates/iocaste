@@ -3,7 +3,9 @@ package org.iocaste.shell.common;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
@@ -47,6 +49,7 @@ public abstract class AbstractForm extends AbstractFunction {
         InputStream is;
         BufferedReader reader;
         ViewData vdata;
+        List<String> lines;
         String page = message.getString("page");
         
         setSessionid(message.getSessionid());
@@ -64,11 +67,15 @@ public abstract class AbstractForm extends AbstractFunction {
         is = getResourceAsStream(page);
         reader = new BufferedReader(new InputStreamReader(is));
         
+        lines = new ArrayList<String>();
+        
         while ((line = reader.readLine()) != null)
-            vdata.add(line);
+            lines.add(line);
         
         reader.close();
         is.close();
+        
+        vdata.setLines(lines.toArray(new String[0]));
         
         return vdata;
     }
