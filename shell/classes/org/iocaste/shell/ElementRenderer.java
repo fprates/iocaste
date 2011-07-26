@@ -7,6 +7,7 @@ import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
@@ -47,6 +48,11 @@ public class ElementRenderer {
             renderButton(text, (Button)element);
             
             break;
+            
+        case LINK:
+            renderLink(text, (Link)element);
+            
+            break;
         }
     }
     
@@ -60,6 +66,11 @@ public class ElementRenderer {
             renderElement(text, element);
     }
     
+    /**
+     * 
+     * @param text
+     * @param button
+     */
     private final void renderButton(List<String> text, Button button) {
         String inputtext;
         
@@ -111,7 +122,18 @@ public class ElementRenderer {
         }
         
     }
-    
+
+    /**
+     * 
+     * @param text
+     * @param link
+     */
+    private final void renderLink(List<String> text, Link link) {
+        text.add(new StringBuffer("<a href=\"index.html?action=")
+                .append(link.getAction()).append("\">").append(link.getText())
+                .append("</a>").toString());
+    }
+
     /**
      * 
      * @param text
