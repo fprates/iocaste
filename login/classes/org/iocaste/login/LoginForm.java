@@ -34,7 +34,7 @@ public class LoginForm extends AbstractForm {
         String secret = getString("secret");
         
         if (iocaste.login(username, secret))
-            redirect("iocaste-tasksel", null);
+            redirect("iocaste-tasksel", "main");
         else
             message(Const.ERROR, "invalid.login");
     }
