@@ -4,10 +4,14 @@ public class Form extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
     private String action;
     private Table table;
+    private Button button;
     
     public Form(Container container) {
         super(container, Const.FORM);
         table = new Table(this, 2);
+        
+        button = new Button(this);
+        button.setSubmit(true);
     }
     
     public final void addItem(FormItem item) {
@@ -21,11 +25,10 @@ public class Form extends AbstractContainer {
         return action;
     }
     
-    public final String getSubmitText() {
-        return action;
-    }
-    
     public final void setAction(String action) {
+        button.setName(action);
+        button.setText(action);
+        
         this.action = action;
     }
 }

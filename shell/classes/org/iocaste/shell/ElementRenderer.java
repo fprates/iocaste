@@ -3,6 +3,7 @@ package org.iocaste.shell;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
@@ -40,6 +41,11 @@ public class ElementRenderer {
             renderTextField(text, (TextField)element);
             
             break;
+            
+        case BUTTON:
+            renderButton(text, (Button)element);
+            
+            break;
         }
     }
     
@@ -53,6 +59,19 @@ public class ElementRenderer {
             renderElement(text, element);
     }
     
+    private final void renderButton(List<String> text, Button button) {
+        String inputtext;
+        
+        if (!button.isSubmit())
+            inputtext = "<input type=\"button\" name=\"";
+        else
+            inputtext = "<input type=\"submit\" name=\"";
+        
+        text.add(new StringBuffer(inputtext).append(button.getName())
+                .append("\" value=\"").append(button.getText())
+                .append("\"/>").toString());
+    }
+
     /**
      * 
      * @param text

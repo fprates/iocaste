@@ -1,0 +1,28 @@
+package org.iocaste.shell.common;
+
+public class Button extends AbstractComponent {
+    private static final long serialVersionUID = 2295137293981769652L;
+    private boolean submit;
+    private String text;
+    
+    public Button(Container container) {
+        super(container, Const.BUTTON);
+        submit = false;
+    }
+
+    public final String getText() {
+        return text;
+    }
+    
+    public final boolean isSubmit() {
+        return submit;
+    }
+    
+    public final void setSubmit(boolean submit) {
+        this.submit = submit;
+    }
+    
+    public final void setText(String text) {
+        this.text = text;
+    }
+}
