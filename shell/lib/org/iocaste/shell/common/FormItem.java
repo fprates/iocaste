@@ -2,36 +2,42 @@ package org.iocaste.shell.common;
 
 public class FormItem extends AbstractComponent {
     private static final long serialVersionUID = 3376883855229003535L;
-    private Const type;
     private Text text;
-    private TextField textfield;
+    private Component component;
     
-    public FormItem(Form form, String name) {
+    public FormItem(Form form, String name, Const type) {
         super(form, Const.FORM_ITEM);
         
         text = new Text(null);
         text.setName(name);
         text.setText(name);
         
-        textfield = new TextField(null);
-        textfield.setName(name);
+        switch (type) {
+        case TEXT_FIELD:
+        case PASSWORD:
+            component = new TextField(null);
+            component.setName(name);
+            
+            if (type == Const.TEXT_FIELD)
+                ((TextField)component).setPassword(false);
+            else
+                ((TextField)component).setPassword(true);
+            
+            break;
+        }
         
         form.addItem(this);
     }
-
-    public final Const getItemType() {
-        return type;
+    
+    /**
+     * 
+     * @return
+     */
+    public final Component getComponent() {
+        return component;
     }
     
     public final Text getText() {
         return text;
-    }
-    
-    public final TextField getTextField() {
-        return textfield;
-    }
-    
-    public final void setItemType(Const type) {
-        this.type = type;
     }
 }

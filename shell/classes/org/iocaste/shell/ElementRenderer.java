@@ -119,7 +119,7 @@ public class ElementRenderer {
     private final void renderTextField(List<String> text, TextField textfield) {
         String inputtext;
         
-        if (textfield.getPassword())
+        if (!textfield.getPassword())
             inputtext = "<input type=\"text\" name=\"";
         else
             inputtext = "<input type=\"password\" name=\"";

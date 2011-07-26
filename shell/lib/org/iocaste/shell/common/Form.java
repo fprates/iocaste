@@ -14,7 +14,7 @@ public class Form extends AbstractContainer {
         TableItem tableitem = new TableItem(table);
         
         tableitem.add(item.getText());
-        tableitem.add(item.getTextField());
+        tableitem.add(item.getComponent());
     }
     
     public final String getAction() {

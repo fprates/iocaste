@@ -11,14 +11,11 @@ public class LoginForm extends AbstractForm {
     public LoginForm() {
         ViewData view = new ViewData();
         Form form = new Form(null);
-        FormItem secret;
         
         form.setAction("connect");
-
-        new FormItem(form, "username");
         
-        secret = new FormItem(form, "secret");
-        secret.setItemType(Const.PASSWORD);
+        new FormItem(form, "username", Const.TEXT_FIELD);
+        new FormItem(form, "secret", Const.PASSWORD);
         
         view.setTitle("authentic");
         view.setContainer(form);
