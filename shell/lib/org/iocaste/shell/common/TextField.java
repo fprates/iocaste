@@ -13,7 +13,7 @@ public class TextField extends AbstractComponent {
      * 
      * @return
      */
-    public final boolean getPassword() {
+    public final boolean isPassword() {
         return password;
     }
     
