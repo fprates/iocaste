@@ -23,6 +23,7 @@ public class ElementRenderer {
         switch (element.getType()) {
         case FORM:
         case TABLE:
+        case STANDARD_CONTAINER:
             renderContainer(text, (Container)element);
             
             break;
@@ -100,7 +101,15 @@ public class ElementRenderer {
             text.add("</table>");
             
             break;
+            
+        case STANDARD_CONTAINER:
+            text.add("<div>");
+            renderElements(text, container.getElements());
+            text.add("</div>");
+            
+            break;
         }
+        
     }
     
     /**
