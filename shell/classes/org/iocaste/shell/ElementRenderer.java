@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
@@ -14,6 +15,12 @@ import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class ElementRenderer {
+    private String msgtext;
+    private Const msgtype;
+    
+    public final void setMessageType(Const msgtype) {
+        this.msgtype = msgtype;
+    }
     
     /**
      * 
@@ -192,6 +199,26 @@ public class ElementRenderer {
     
     /**
      * 
+     * @param text
+     */
+    private final void renderMessage(List<String> text) {
+        StringBuffer message;
+        
+        message = new StringBuffer("<div>");
+        
+        text.add("<div><p>");
+        switch (msgtype) {
+        case WARNING:
+            message.append("Aviso: ");
+        case ERROR:
+            message.append("Erro: ");
+        }
+        
+        text.add(message.append(msgtext).append("</p></div>").toString());
+    }
+
+    /**
+     * 
      * @param vdata
      * @return
      */
@@ -201,10 +228,25 @@ public class ElementRenderer {
         text.add("<html>");
         renderHeader(text, vdata.getTitle());
         text.add("<body>");
+
+        if (msgtext != null)
+            renderMessage(text);
+
         renderContainer(text, vdata.getContainer());
         text.add("</body>");
         text.add("</html>");
+
+        msgtext = null;
+        msgtype = Const.NONE;
         
         return text.toArray(new String[0]);
+    }
+    
+    /**
+     * 
+     * @param msgtext
+     */
+    public void setMessageText(String msgtext) {
+        this.msgtext = msgtext;
     }
 }

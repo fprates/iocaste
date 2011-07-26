@@ -113,6 +113,9 @@ public class PageRenderer extends HttpServlet implements Function {
                 controldata = callController(req, composeUrl(app));
                 
                 app = controldata.getApp();
+
+                renderer.setMessageText(controldata.getMessageText());
+                renderer.setMessageType(controldata.getMessageType());
                 
                 if (app != null) {
                     apps.remove(sessionid);
