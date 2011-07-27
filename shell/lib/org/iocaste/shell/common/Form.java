@@ -1,18 +1,18 @@
 package org.iocaste.shell.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Form extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
-    private String action;
+    private List<String> actions;
     private Table table;
-    private Button button;
     private MessageSource messages;
     
     public Form(Container container) {
         super(container, Const.FORM);
         table = new Table(this, 2);
-        
-        button = new Button(this);
-        button.setSubmit(true);
+        actions = new ArrayList<String>();
     }
     
     public final void addItem(FormItem item) {
@@ -23,11 +23,16 @@ public class Form extends AbstractContainer {
     }
     
     public final void build() {
+        Button button;
         TableItem item;
         Text text;
         
-        button.setName(action);
-        button.setText(getMessage(messages, action));
+        for (String action : actions) {
+            button = new Button(this);
+            button.setSubmit(true);
+            button.setName(action);
+            button.setText(getMessage(messages, action));
+        }
         
         for (Element line : table.getElements()) {
             item = (TableItem)line;
@@ -40,16 +45,16 @@ public class Form extends AbstractContainer {
         }
     }
     
-    public final String getAction() {
-        return action;
+    public final String[] getActions() {
+        return actions.toArray(new String[0]);
     }
     
     private final String getMessage(MessageSource message, String name) {
         return (messages == null)?name : messages.get(name, name);
     }
     
-    public final void setAction(String action) {
-        this.action = action;
+    public final void addAction(String action) {
+        actions.add(action);
     }
     
     /**

@@ -13,7 +13,8 @@ public class LoginForm extends AbstractForm {
         ViewData view = new ViewData();
         Form form = new Form(null);
         
-        form.setAction("connect");
+        form.addAction("connect");
+        form.addAction("change");
         form.setMessageSource(new MessageSource("/message.properties"));
         
         new FormItem(form, "username", Const.TEXT_FIELD);

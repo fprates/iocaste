@@ -113,7 +113,7 @@ public class ElementRenderer {
         
         text.add(new StringBuffer(inputtext).append(name).
                 append("\" value=\"").append(button.getText()).
-                append("\" onClick=\"formSubmit('").append(name).
+                append("\" onClick=\"defineAction('").append(name).
                 append("')\"/>").toString());
     }
 
