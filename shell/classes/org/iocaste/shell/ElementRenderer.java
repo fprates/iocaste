@@ -1,5 +1,9 @@
 package org.iocaste.shell;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +21,26 @@ import org.iocaste.shell.common.ViewData;
 public class ElementRenderer {
     private String msgtext;
     private Const msgtype;
+    private String[] script;
+    
+    public ElementRenderer() {
+        String line;
+        List<String> lines = new ArrayList<String>();
+        InputStream is = this.getClass().getResourceAsStream("/META-INF/shell.js");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        
+        try {
+            while ((line = reader.readLine()) != null)
+                lines.add(line);
+            
+            reader.close();
+            is.close();
+        } catch (IOException e) {
+            new RuntimeException(e);
+        }
+        
+        script = lines.toArray(new String[0]);
+    }
     
     public final void setMessageType(Const msgtype) {
         this.msgtype = msgtype;
@@ -80,15 +104,17 @@ public class ElementRenderer {
      */
     private final void renderButton(List<String> text, Button button) {
         String inputtext;
+        String name = button.getName();
         
         if (!button.isSubmit())
             inputtext = "<input type=\"button\" name=\"";
         else
             inputtext = "<input type=\"submit\" name=\"";
         
-        text.add(new StringBuffer(inputtext).append(button.getName())
-                .append("\" value=\"").append(button.getText())
-                .append("\"/>").toString());
+        text.add(new StringBuffer(inputtext).append(name).
+                append("\" value=\"").append(button.getText()).
+                append("\" onClick=\"formSubmit('").append(name).
+                append("')\"/>").toString());
     }
 
     /**
@@ -105,12 +131,12 @@ public class ElementRenderer {
             form = (Form)container;
             form.build();
             
-            line = new StringBuffer("<form method=\"post\" action=\"index.html?action=").
-                    append(form.getAction()).
+            line = new StringBuffer("<form method=\"post\" action=\"index.html").
                     append("\">").toString();
             
             text.add(line);
             renderElements(text, container.getElements());
+            text.add("<input type=\"hidden\" name=\"action\"/>");
             text.add("</form>");
             
             break;
@@ -138,9 +164,9 @@ public class ElementRenderer {
      * @param link
      */
     private final void renderLink(List<String> text, Link link) {
-        text.add(new StringBuffer("<a href=\"index.html?action=")
-                .append(link.getAction()).append("\">").append(link.getText())
-                .append("</a>").toString());
+        text.add(new StringBuffer("<a href=\"index.html?action=").
+                append(link.getAction()).append("\">").append(link.getText()).
+                append("</a>").toString());
     }
 
     /**
@@ -166,8 +192,8 @@ public class ElementRenderer {
      * @param text_
      */
     private final void renderText(List<String> text, Text text_) {
-        text.add(new StringBuffer("<p>").append(text_.getText()).append("</p>")
-                .toString());
+        text.add(new StringBuffer("<p>").append(text_.getText()).append("</p>").
+                toString());
     }
     
     /**
@@ -183,8 +209,15 @@ public class ElementRenderer {
         else
             inputtext = "<input type=\"password\" name=\"";
         
-        text.add(new StringBuffer(inputtext).append(textfield.getName())
-                .append("\">").toString());
+        text.add(new StringBuffer(inputtext).append(textfield.getName()).
+                append("\">").toString());
+    }
+    
+    private final void renderJavaScript(List<String> text, String[] script) {
+        text.add("<script type=\"text/javascript\">");
+        for (String line : script)
+            text.add(line);
+        text.add("</script>");
     }
     
     /**
@@ -194,8 +227,9 @@ public class ElementRenderer {
      */
     private final void renderHeader(List<String> text, String title) {
         text.add("<head>");
-        text.add(new StringBuffer("<title>").append(title)
-                .append("</title>").toString());
+        text.add(new StringBuffer("<title>").append(title).
+                append("</title>").toString());
+        renderJavaScript(text, script);
         text.add("</head>");
     }
     
