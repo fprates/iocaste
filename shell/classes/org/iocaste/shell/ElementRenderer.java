@@ -103,6 +103,8 @@ public class ElementRenderer {
         switch (container.getType()) {
         case FORM:
             form = (Form)container;
+            form.build();
+            
             line = new StringBuffer("<form method=\"post\" action=\"index.html?action=").
                     append(form.getAction()).
                     append("\">").toString();

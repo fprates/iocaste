@@ -5,6 +5,7 @@ import org.iocaste.shell.common.AbstractForm;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.FormItem;
+import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.ViewData;
 
 public class LoginForm extends AbstractForm {
@@ -13,6 +14,7 @@ public class LoginForm extends AbstractForm {
         Form form = new Form(null);
         
         form.setAction("connect");
+        form.setMessageSource(new MessageSource("/message.properties"));
         
         new FormItem(form, "username", Const.TEXT_FIELD);
         new FormItem(form, "secret", Const.PASSWORD);

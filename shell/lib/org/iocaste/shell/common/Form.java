@@ -5,6 +5,7 @@ public class Form extends AbstractContainer {
     private String action;
     private Table table;
     private Button button;
+    private MessageSource messages;
     
     public Form(Container container) {
         super(container, Const.FORM);
@@ -21,14 +22,41 @@ public class Form extends AbstractContainer {
         tableitem.add(item.getComponent());
     }
     
+    public final void build() {
+        TableItem item;
+        Text text;
+        
+        button.setName(action);
+        button.setText(getMessage(messages, action));
+        
+        for (Element line : table.getElements()) {
+            item = (TableItem)line;
+            
+            for (Element column : item.getElements()) {
+                text = (Text)column;
+                text.setText(getMessage(messages, text.getName()));
+                break;
+            }
+        }
+    }
+    
     public final String getAction() {
         return action;
     }
     
+    private final String getMessage(MessageSource message, String name) {
+        return (messages == null)?name : messages.get(name, name);
+    }
+    
     public final void setAction(String action) {
-        button.setName(action);
-        button.setText(action);
-        
         this.action = action;
+    }
+    
+    /**
+     * 
+     * @param messages
+     */
+    public final void setMessageSource(MessageSource messages) {
+        this.messages = messages;
     }
 }

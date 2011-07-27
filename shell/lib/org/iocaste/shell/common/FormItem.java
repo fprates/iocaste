@@ -10,7 +10,6 @@ public class FormItem extends AbstractComponent {
         
         text = new Text(null);
         text.setName(name);
-        text.setText(name);
         
         switch (type) {
         case TEXT_FIELD:
