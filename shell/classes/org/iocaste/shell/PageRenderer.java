@@ -152,6 +152,7 @@ public class PageRenderer extends HttpServlet implements Function {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        PagePos pagepos;
         sessionid = req.getSession().getId();
         servername = new StringBuffer(req.getScheme()).append("://").
                         append(req.getServerName()).append(":").
@@ -160,6 +161,13 @@ public class PageRenderer extends HttpServlet implements Function {
         try {
             entry(req, resp);
         } catch (Exception e) {
+            pagepos = apps.get(sessionid);
+            
+            if (pagepos != null) {
+                pagepos.app = LOGIN_APP;
+                pagepos.page = "authentic";
+            }
+            
             throw new ServletException(e);
         }
     }
