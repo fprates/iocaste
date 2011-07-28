@@ -108,10 +108,16 @@ public abstract class AbstractForm extends AbstractFunction {
      * @throws Exception
      */
     public final ControlData execAction(Message message) throws Exception {
-        this.message = message;
+        String action = message.getString("action");
 
         setSessionid(message.getSessionid());
-        entry(message.getString("action"));
+        
+        if (action == null)
+            return controldata;
+        
+        this.message = message;
+        
+        entry(action);
         
         return controldata;
     }

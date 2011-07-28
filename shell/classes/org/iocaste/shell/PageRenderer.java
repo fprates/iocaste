@@ -25,11 +25,11 @@ public class PageRenderer extends HttpServlet implements Function {
     private static final String LOGIN_APP = "iocaste-login";
     private String sessionid;
     private String servername;
-    private Map<String, String> apps;
+    private Map<String, PagePos> apps;
     private ElementRenderer renderer;
     
     public PageRenderer() {
-        apps = new HashMap<String, String>();
+        apps = new HashMap<String, PagePos>();
         renderer = new ElementRenderer();
     }
     
@@ -63,8 +63,8 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param page
      * @throws Exception
      */
-    private final void render(HttpServletResponse resp, String url,
-            String page) throws Exception {
+    private final void render(HttpServletResponse resp, PagePos pagepos)
+            throws Exception {
         ViewData vdata;
         String[] text;
         Message message = new Message();
@@ -74,8 +74,8 @@ public class PageRenderer extends HttpServlet implements Function {
         resp.setContentType("text/html");
         
         message.setId("get_view_data");
-        message.add("page", page);
-        vdata = (ViewData)Service.callServer(url, message);
+        message.add("page", pagepos.page);
+        vdata = (ViewData)Service.callServer(composeUrl(pagepos.app), message);
         
         if (vdata.getContainer() == null)
             text = vdata.getLines();
@@ -94,8 +94,8 @@ public class PageRenderer extends HttpServlet implements Function {
     }
     
     private final ControlData processController(Iocaste iocaste,
-            HttpServletRequest req, String app) throws Exception {
-        ControlData controldata = callController(req, composeUrl(app));
+            HttpServletRequest req, PagePos pagepos) throws Exception {
+        ControlData controldata = callController(req, composeUrl(pagepos.app));
         
         renderer.setMessageText(controldata.getMessageText());
         renderer.setMessageType(controldata.getMessageType());
@@ -105,36 +105,32 @@ public class PageRenderer extends HttpServlet implements Function {
     
     private final void entry(HttpServletRequest req, HttpServletResponse resp)
             throws Exception {
-        String page;
         ControlData controldata = null;
         Iocaste iocaste = new Iocaste(this);
-        String app = apps.get(sessionid);
+        PagePos pagepos = apps.get(sessionid);
         
         if (!iocaste.isConnected()) {
-            if (app == null) {
-                app = LOGIN_APP;
-                page = "authentic";
+            if (pagepos == null) {
+                pagepos = new PagePos();
+                apps.put(sessionid, pagepos);
             } else {
-                controldata = processController(iocaste, req, app);
+                controldata = processController(iocaste, req, pagepos);
             }
         } else {
-            controldata = processController(iocaste, req, app);
+            controldata = processController(iocaste, req, pagepos);
         }
         
         if (!iocaste.isConnected() || controldata == null) {
-            app = LOGIN_APP;
-            page = "authentic";
+            pagepos.app = LOGIN_APP;
+            pagepos.page = "authentic";
         } else {
-            app = controldata.getApp();
-            page = controldata.getPage();
+            if (controldata.getApp() != null) {
+                pagepos.app = controldata.getApp();
+                pagepos.page = controldata.getPage();
+            }
         }
         
-        if (apps.containsKey(sessionid))
-            apps.remove(sessionid);
-        
-        apps.put(sessionid, app);
-        
-        render(resp, composeUrl(app), page);
+        render(resp, pagepos);
     }
     
     /* (non-Javadoc)
@@ -227,4 +223,9 @@ public class PageRenderer extends HttpServlet implements Function {
     @Override
     public void setSessionid(String sessionid) { }
 
+}
+
+class PagePos {
+    public String app;
+    public String page;
 }
