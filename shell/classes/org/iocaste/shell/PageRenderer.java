@@ -93,51 +93,46 @@ public class PageRenderer extends HttpServlet implements Function {
                 append(app).append("/view.html").toString();
     }
     
+    private final ControlData processController(Iocaste iocaste,
+            HttpServletRequest req, String app) throws Exception {
+        ControlData controldata = callController(req, composeUrl(app));
+        
+        renderer.setMessageText(controldata.getMessageText());
+        renderer.setMessageType(controldata.getMessageType());
+        
+        return controldata;
+    }
+    
     private final void entry(HttpServletRequest req, HttpServletResponse resp)
             throws Exception {
         String page;
-        ControlData controldata;
+        ControlData controldata = null;
         Iocaste iocaste = new Iocaste(this);
-        String action = req.getParameter("action");
         String app = apps.get(sessionid);
         
-        if ((!iocaste.isConnected()) && (app == null)) {
+        if (!iocaste.isConnected()) {
+            if (app == null) {
+                app = LOGIN_APP;
+                page = "authentic";
+            } else {
+                controldata = processController(iocaste, req, app);
+            }
+        } else {
+            controldata = processController(iocaste, req, app);
+        }
+        
+        if (!iocaste.isConnected() || controldata == null) {
             app = LOGIN_APP;
-            apps.put(sessionid, app);
-            
             page = "authentic";
         } else {
-            page = null;
-            
-            if (action != null) {
-                controldata = callController(req, composeUrl(app));
-                
-                app = controldata.getApp();
-
-                renderer.setMessageText(controldata.getMessageText());
-                renderer.setMessageType(controldata.getMessageType());
-                
-                if (app != null) {
-                    apps.remove(sessionid);
-                    apps.put(sessionid, app);
-                } else {
-                    app = apps.get(sessionid);
-                }
-                
-                if (!iocaste.isConnected()) {
-                    app = LOGIN_APP;
-                    page = "authentic";
-                    
-                    apps.remove(sessionid);
-                    apps.put(sessionid, app);
-                } else {
-                    page = controldata.getPage();
-                }
-            } else {
-                if (app.equals(LOGIN_APP))
-                    page = "authentic";
-            }
+            app = controldata.getApp();
+            page = controldata.getPage();
         }
+        
+        if (apps.containsKey(sessionid))
+            apps.remove(sessionid);
+        
+        apps.put(sessionid, app);
         
         render(resp, composeUrl(app), page);
     }
