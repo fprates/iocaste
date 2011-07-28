@@ -1,4 +1,4 @@
-function defineAction(action) {
-	actionparam = document.getElementById("action");
-	actionparam.value = action;
+function defineAction(actionname) {
+	action = document.getElementById('action');
+	action.value = actionname;
 }

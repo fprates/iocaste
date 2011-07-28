@@ -123,7 +123,6 @@ public class ElementRenderer {
      * @param container
      */
     private final void renderContainer(List<String> text, Container container) {
-        String line;
         Form form;
         
         switch (container.getType()) {
@@ -131,12 +130,9 @@ public class ElementRenderer {
             form = (Form)container;
             form.build();
             
-            line = new StringBuffer("<form method=\"post\" action=\"index.html").
-                    append("\">").toString();
-            
-            text.add(line);
+            text.add("<form method=\"post\" action=\"index.html\">");
             renderElements(text, container.getElements());
-            text.add("<input type=\"hidden\" name=\"action\"/>");
+            text.add("<input type=\"hidden\" name=\"action\" id=\"action\"/>");
             text.add("</form>");
             
             break;
