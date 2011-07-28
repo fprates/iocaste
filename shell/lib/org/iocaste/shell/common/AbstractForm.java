@@ -88,7 +88,8 @@ public abstract class AbstractForm extends AbstractFunction {
     
     /**
      * 
-     * @param container
+     * @param name
+     * @param view
      */
     protected final void addView(String name, ViewData view) {
         views.put(name, view);
@@ -124,16 +125,20 @@ public abstract class AbstractForm extends AbstractFunction {
     
     /**
      * 
+     * @param messages
      * @param type
      * @param text
      */
-    protected final void message(Const type, String text) {
+    protected final void message(
+            MessageSource messages, Const type, String text) {
+        controldata.setMessageSource(messages);
         controldata.setMessageType(type);
         controldata.setMessageText(text);
     }
     
     /**
      * 
+     * @param app
      * @param page
      */
     protected final void redirect(String app, String page) {

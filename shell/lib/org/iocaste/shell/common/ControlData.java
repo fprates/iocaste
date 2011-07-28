@@ -8,6 +8,7 @@ public class ControlData implements Serializable {
     private String messagetext;
     private String page;
     private Const messagetype;
+    private MessageSource messages;
     
     public ControlData() {
         app = null;
@@ -50,6 +51,17 @@ public class ControlData implements Serializable {
         return page;
     }
     
+    /**
+     * 
+     * @return
+     */
+    public final String getTranslatedMessage() {
+        if (messages == null)
+            return messagetext;
+        else
+            return messages.get(messagetext, messagetext);
+    }
+    
     /*
      * 
      * Setters
@@ -61,6 +73,14 @@ public class ControlData implements Serializable {
      */
     public final void setMessageText(String messagetext) {
         this.messagetext = messagetext;
+    }
+
+    /**
+     * 
+     * @param messages
+     */
+    public final void setMessageSource(MessageSource messages) {
+        this.messages = messages;
     }
     
     /**

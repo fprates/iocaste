@@ -97,7 +97,7 @@ public class PageRenderer extends HttpServlet implements Function {
             HttpServletRequest req, PagePos pagepos) throws Exception {
         ControlData controldata = callController(req, composeUrl(pagepos.app));
         
-        renderer.setMessageText(controldata.getMessageText());
+        renderer.setMessageText(controldata.getTranslatedMessage());
         renderer.setMessageType(controldata.getMessageType());
         
         return controldata;

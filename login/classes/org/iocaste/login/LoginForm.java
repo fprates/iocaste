@@ -9,13 +9,17 @@ import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.ViewData;
 
 public class LoginForm extends AbstractForm {
+    private MessageSource messages;
+    
     public LoginForm() {
         ViewData view = new ViewData();
         Form form = new Form(null);
         
+        messages = new MessageSource("/message.properties");
+        
         form.addAction("connect");
         form.addAction("change");
-        form.setMessageSource(new MessageSource("/message.properties"));
+        form.setMessageSource(messages);
         
         new FormItem(form, "username", Const.TEXT_FIELD);
         new FormItem(form, "secret", Const.PASSWORD);
@@ -44,7 +48,7 @@ public class LoginForm extends AbstractForm {
         if (iocaste.login(username, secret))
             redirect("iocaste-tasksel", "main");
         else
-            message(Const.ERROR, "invalid.login");
+            message(messages, Const.ERROR, "invalid.login");
     }
 
     
