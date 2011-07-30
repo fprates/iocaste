@@ -19,8 +19,16 @@ public class Message implements Serializable {
         return values.get(name);
     }
     
+    public final boolean getBoolean(String name) {
+        return (Boolean)values.get(name);
+    }
+    
     public final byte getByte(String name) {
         return (Byte)values.get(name);
+    }
+    
+    public final char getChar(String name) {
+        return (Character)values.get(name);
     }
     
     public final double getDouble(String name) {
