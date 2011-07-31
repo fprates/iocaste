@@ -37,15 +37,16 @@ public class LoginForm extends AbstractForm {
     @Override
     protected final void entry(String action) throws Exception {
         Iocaste iocaste = new Iocaste(this);
-        String username = getString("username");
-        String secret = getString("secret");
+        Login login = new Login();
+        
+        importFromView(login);
         
         if (!action.equals("connect")) {
             redirect("iocaste-login", "authentic");
             return;
         }
         
-        if (iocaste.login(username, secret))
+        if (iocaste.login(login.getUsername(), login.getSecret()))
             redirect("iocaste-tasksel", "main");
         else
             message(messages, Const.ERROR, "invalid.login");
