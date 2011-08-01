@@ -7,16 +7,19 @@ public class FormItem extends AbstractInputComponent {
     
     public FormItem(Form form, String name, Const type) {
         super(form, Const.FORM_ITEM);
-        StringBuffer inputname = new StringBuffer(form.getName());
+        String inputname = new StringBuffer(form.getName()).
+                append(".").append(name).toString();
+        
+        setName(inputname);
         
         text = new Text(null);
-        text.setName(name);
+        text.setName(inputname);
         
         switch (type) {
         case TEXT_FIELD:
         case PASSWORD:
             component = new TextField(null);
-            component.setName(inputname.append(".").append(name).toString());
+            component.setName(inputname);
             
             if (type == Const.TEXT_FIELD)
                 ((TextField)component).setPassword(false);

@@ -177,6 +177,9 @@ public abstract class AbstractForm extends AbstractFunction {
         
         this.message = message;
         
+        for (String name : inputs.keySet())
+            inputs.get(name).setValue(message.getString(name));
+        
         entry(action);
         
         return controldata;
