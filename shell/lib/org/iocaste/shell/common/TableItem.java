@@ -21,4 +21,13 @@ public class TableItem extends AbstractComponent {
     public final Element[] getElements() {
         return elements;
     }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#isDataStorable()
+     */
+    @Override
+    public final boolean isDataStorable() {
+        return false;
+    }
 }

@@ -6,4 +6,7 @@ public interface Element extends Serializable {
     
     public abstract Const getType();
 
+    public abstract boolean isContainable();
+    
+    public abstract boolean isDataStorable();
 }

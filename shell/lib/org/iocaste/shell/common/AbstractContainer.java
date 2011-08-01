@@ -16,18 +16,39 @@ public abstract class AbstractContainer
             container.add(this);
     }
     
-    /**
-     * 
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#add(org.iocaste.shell.common.Element)
      */
+    @Override
     public final void add(Element element) {
         elements.add(element);
     }
     
-    /**
-     * 
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#getElements()
      */
+    @Override
     public final Element[] getElements() {
         return elements.toArray(new Element[0]);
     }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#isContainable()
+     */
+    @Override
+    public final boolean isContainable() {
+        return true;
+    }
 
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#isDataStorable()
+     */
+    @Override
+    public final boolean isDataStorable() {
+        return false;
+    }
 }

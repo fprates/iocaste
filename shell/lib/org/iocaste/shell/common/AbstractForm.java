@@ -16,12 +16,14 @@ public abstract class AbstractForm extends AbstractFunction {
     private Message message;
     private ControlData controldata;
     private Map<String, ViewData> views;
+    private Map<String, InputComponent> inputs;
     
     public AbstractForm() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
         controldata = new ControlData();
         views = new HashMap<String, ViewData>();
+        inputs = new HashMap<String, InputComponent>();
     }
     
     /*
@@ -84,6 +86,8 @@ public abstract class AbstractForm extends AbstractFunction {
      * @param view
      */
     protected final void addView(String name, ViewData view) {
+        registerInputs(view.getContainer());
+        
         views.put(name, view);
     }
     
@@ -198,5 +202,24 @@ public abstract class AbstractForm extends AbstractFunction {
      */
     protected final void redirect(String app, String page) {
         controldata.setPageRedirect(app, page);
+    }
+    
+    private final void registerInputs(Element element) {
+        Container container;
+        Component component;
+        
+        if (element.isContainable()) {
+            container = (Container)element;
+            for (Element element_ : container.getElements())
+                registerInputs(element_);
+            
+            return;
+        }
+        
+        if (element.isDataStorable()) {
+            component = (Component)element;
+            
+            inputs.put(component.getName(), (InputComponent)component);
+        }
     }
 }

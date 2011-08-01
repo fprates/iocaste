@@ -1,12 +1,13 @@
 package org.iocaste.shell.common;
 
-public class FormItem extends AbstractComponent {
+public class FormItem extends AbstractInputComponent {
     private static final long serialVersionUID = 3376883855229003535L;
     private Text text;
     private Component component;
     
     public FormItem(Form form, String name, Const type) {
         super(form, Const.FORM_ITEM);
+        StringBuffer inputname = new StringBuffer(form.getName());
         
         text = new Text(null);
         text.setName(name);
@@ -15,7 +16,7 @@ public class FormItem extends AbstractComponent {
         case TEXT_FIELD:
         case PASSWORD:
             component = new TextField(null);
-            component.setName(name);
+            component.setName(inputname.append(".").append(name).toString());
             
             if (type == Const.TEXT_FIELD)
                 ((TextField)component).setPassword(false);
@@ -36,6 +37,10 @@ public class FormItem extends AbstractComponent {
         return component;
     }
     
+    /**
+     * 
+     * @return
+     */
     public final Text getText() {
         return text;
     }

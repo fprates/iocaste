@@ -1,6 +1,6 @@
 package org.iocaste.shell.common;
 
-public class Button extends AbstractComponent {
+public class Button extends AbstractControlComponent {
     private static final long serialVersionUID = 2295137293981769652L;
     private boolean submit;
     private String text;

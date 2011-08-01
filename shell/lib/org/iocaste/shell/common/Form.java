@@ -8,11 +8,18 @@ public class Form extends AbstractContainer {
     private List<String> actions;
     private Table table;
     private MessageSource messages;
+    private String name;
     
-    public Form(Container container) {
+    public Form(Container container, String name) {
         super(container, Const.FORM);
+        this.name = name;
+        
         table = new Table(this, 2);
         actions = new ArrayList<String>();
+    }
+    
+    public final void addAction(String action) {
+        actions.add(action);
     }
     
     public final void addItem(FormItem item) {
@@ -53,8 +60,8 @@ public class Form extends AbstractContainer {
         return (messages == null)?name : messages.get(name, name);
     }
     
-    public final void addAction(String action) {
-        actions.add(action);
+    public final String getName() {
+        return name;
     }
     
     /**

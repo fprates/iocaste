@@ -12,6 +12,11 @@ public class Text extends AbstractComponent {
         return text;
     }
     
+    @Override
+    public final boolean isDataStorable() {
+        return false;
+    }
+    
     public final void setText(String text) {
         this.text = text;
     }

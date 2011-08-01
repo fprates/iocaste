@@ -13,7 +13,7 @@ public class LoginForm extends AbstractForm {
     
     public LoginForm() {
         ViewData view = new ViewData();
-        Form form = new Form(null);
+        Form form = new Form(null, "login");
         
         messages = new MessageSource("/message.properties");
         
