@@ -220,6 +220,7 @@ public class ElementRenderer {
      */
     private final void renderHeader(List<String> text, String title) {
         text.add("<head>");
+        text.add("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
         text.add(new StringBuffer("<title>").append(title).
                 append("</title>").toString());
         renderJavaScript(text, script);
