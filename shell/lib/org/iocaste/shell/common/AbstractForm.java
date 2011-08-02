@@ -3,6 +3,7 @@ package org.iocaste.shell.common;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,18 +92,12 @@ public abstract class AbstractForm extends AbstractFunction {
     
     /**
      * 
-     * @param action
-     * @throws Exception
-     */
-    protected abstract void entry(String action) throws Exception;
-    
-    /**
-     * 
      * @param message
      * @return
      * @throws Exception
      */
     public final ControlData execAction(Message message) throws Exception {
+        Method method;
         String action = message.getString("action");
 
         setSessionid(message.getSessionid());
@@ -110,10 +105,12 @@ public abstract class AbstractForm extends AbstractFunction {
         if (action == null)
             return controldata;
         
+        method = this.getClass().getMethod(action);
+        
         for (String name : inputs.keySet())
             inputs.get(name).setValue(message.getString(name));
         
-        entry(action);
+        method.invoke(this);
         
         return controldata;
     }

@@ -30,19 +30,9 @@ public class LoginForm extends AbstractForm {
         addView("authentic", view);
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractForm#entry(java.lang.String)
-     */
-    @Override
-    protected final void entry(String action) throws Exception {
+    public final void connect() throws Exception {
         Iocaste iocaste = new Iocaste(this);
         Login login = new Login();
-        
-        if (!action.equals("connect")) {
-            redirect("iocaste-login", "authentic");
-            return;
-        }
         
         form.exportTo(login);
         
@@ -51,6 +41,4 @@ public class LoginForm extends AbstractForm {
         else
             message(messages, Const.ERROR, "invalid.login");
     }
-
-    
 }

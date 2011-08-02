@@ -19,17 +19,11 @@ public class TaskSelForm extends AbstractForm {
         addView("main", main);
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractForm#entry(java.lang.String)
-     */
-    @Override
-    public final void entry(String action) {
-        if (action.equals("info"))
-            redirect("iocaste-infosis", "main");
-        
-        if (action.equals("office"))
-            redirect("iocaste-office", "main");
-        
+    public final void info() {
+        redirect("iocaste-infosis", "main");
+    }
+    
+    public final void office() {
+        redirect("iocaste-office", "main");
     }
 }

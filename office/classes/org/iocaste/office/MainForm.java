@@ -27,9 +27,11 @@ public class MainForm extends AbstractForm {
         addView("main", view);
     }
     
-    @Override
-    protected void entry(String action) throws Exception {
-        
+    public void send() {
+        System.out.println("office message");
+//        OfficeMessage message;
+//        
+//        if (action.equals("send"))
+//            saveMessage()
     }
-
 }
