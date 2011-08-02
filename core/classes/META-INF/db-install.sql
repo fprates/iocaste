@@ -8,7 +8,7 @@ create user iocastedb password initial;
 drop table users001 if exists;
 \p tables dropped.
 
-/* range numérico */
+/* usuários */
 create table users001 (
    uname char(12) primary key,
    secrt char(12)
