@@ -1,5 +1,6 @@
 package org.iocaste.office;
 
+import org.iocaste.office.common.Office;
 import org.iocaste.shell.common.AbstractForm;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -18,20 +19,20 @@ public class MainForm extends AbstractForm {
         form = new Form(main, "header");
         form.addAction("send");
         
-        new FormItem(form, "to", Const.TEXT_FIELD);
+        new FormItem(form, "receiver", Const.TEXT_FIELD);
         new FormItem(form, "subject", Const.TEXT_FIELD);
-        
         
         view.setContainer(main);
         
         addView("main", view);
     }
     
-    public void send() {
-        System.out.println("office message");
-//        OfficeMessage message;
-//        
-//        if (action.equals("send"))
-//            saveMessage()
+    public void send() throws Exception {
+        OfficeMessage message = new OfficeMessage();
+        Office office = new Office(this);
+        
+        form.exportTo(message);
+        
+        office.sendMessage(message);
     }
 }

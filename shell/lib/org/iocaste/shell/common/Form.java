@@ -59,7 +59,7 @@ public class Form extends AbstractContainer {
         }
     }
     
-    public final void exportTo(Object object) throws Exception {
+    public final void exportTo(Object object) throws RuntimeException {
         FormItem item;
         String formmethodname;
         String objmethodname;
@@ -93,7 +93,7 @@ public class Form extends AbstractContainer {
     
     private final void invokeCopy(
             Class<?> class_, Object object, Method method, InputComponent component)
-            throws Exception {
+            throws RuntimeException {
         String value = component.getValue();
         String typename = class_.getSimpleName();
         
@@ -140,7 +140,7 @@ public class Form extends AbstractContainer {
         } catch (Exception e) {
             value = new StringBuffer("Error loading parameter for ").
                     append(method.getName()).append(".").toString();
-            throw new Exception(value);
+            throw new RuntimeException(value, e);
         }
     }
     
