@@ -53,13 +53,6 @@ public class ElementRenderer {
      */
     private final void renderElement(List<String> text, Element element) {
         switch (element.getType()) {
-        case FORM:
-        case TABLE:
-        case STANDARD_CONTAINER:
-            renderContainer(text, (Container)element);
-            
-            break;
-            
         case TABLE_ITEM:
             renderTableItem(text, (TableItem)element);
             
@@ -84,6 +77,10 @@ public class ElementRenderer {
             renderLink(text, (Link)element);
             
             break;
+        
+        default:
+            if (element.isContainable())
+                renderContainer(text, (Container)element);
         }
     }
     
