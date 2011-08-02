@@ -8,6 +8,7 @@ public class Link extends AbstractControlComponent {
     public Link(Container container, String action) {
         super(container, Const.LINK);
         this.action = action;
+        text = action;
     }
 
     public final String getAction() {
