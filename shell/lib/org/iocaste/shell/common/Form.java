@@ -89,14 +89,12 @@ public class Form extends AbstractContainer {
                 break;
             }
         }
-        
-        
     }
     
     private final void invokeCopy(
-            Class<?> class_, Object object, Method method, FormItem item)
+            Class<?> class_, Object object, Method method, InputComponent component)
             throws Exception {
-        String value = item.getValue();
+        String value = component.getValue();
         String typename = class_.getSimpleName();
         
         try {
