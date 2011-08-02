@@ -27,6 +27,32 @@ public abstract class AbstractFunction implements Function {
         exports = new HashMap<String, String>();
     }
     
+    /**
+     * 
+     * @param queryname
+     * @param sqlquery
+     */
+    protected final void addQuery(String queryname, String sqlquery) {
+        queries.put(queryname, sqlquery);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param method
+     */
+    protected final void export(String name, String method) {
+        exports.put(name, method);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    protected final Session getHibernateSession() {
+        return sessionFactory.getCurrentSession();
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#getMethods()
@@ -45,11 +71,77 @@ public abstract class AbstractFunction implements Function {
         return context.getResourceAsStream(path);
     }
     
-    /*
+    /**
      * 
-     * Setters
-     * 
+     * @param class_
+     * @param object
+     * @return
      */
+    protected final Object load(Class<?> class_, Serializable object) {
+        Object result;
+        
+        Session session = sessionFactory.getCurrentSession();
+        
+        session.beginTransaction();
+        result = session.get(class_, object);
+        session.getTransaction().commit();
+        
+        return result;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#run(org.iocaste.protocol.Message)
+     */
+    @Override
+    public final Object run(Message message) throws Exception {
+        Method method;
+        String id = message.getId();
+        String methodname = exports.get(id);
+        
+        if (methodname == null)
+            throw new Exception("Method \""+id+"\" not implemented");
+        
+        method = getClass().getMethod(methodname, Message.class);
+        
+        return method.invoke(this, message);
+    }
+    
+    /**
+     * 
+     * @param queryid
+     * @param criteria
+     * @return
+     */
+    protected final List<?> select(String queryid, Object[] criteria) {
+        Query query;
+        List<?> results;
+        int id = 0;        
+        Session session = sessionFactory.getCurrentSession();
+        
+        session.beginTransaction();
+        query = session.createQuery(queries.get(queryid));
+        
+        if (criteria != null)
+            for (Object object : criteria)
+                query.setParameter(id++, object);
+        
+        results = query.list();
+        session.getTransaction().commit();
+        
+        return results;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#serviceInstance(java.lang.String)
+     */
+    @Override
+    public final Service serviceInstance(String path) {
+        String url = new StringBuffer(servername).append(path).toString();
+        
+        return new Service(sessionid, url);
+    }
     
     /**
      * 
@@ -90,100 +182,6 @@ public abstract class AbstractFunction implements Function {
     @Override
     public final void setSessionid(String sessionid) {
         this.sessionid = sessionid;
-    }
-    
-    /*
-     * 
-     * Others
-     * 
-     */
-    
-    /**
-     * 
-     * @param queryname
-     * @param sqlquery
-     */
-    protected final void addQuery(String queryname, String sqlquery) {
-        queries.put(queryname, sqlquery);
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param method
-     */
-    protected final void export(String name, String method) {
-        exports.put(name, method);
-    }
-    
-    /**
-     * 
-     * @param class_
-     * @param object
-     * @return
-     */
-    protected final Object load(Class<?> class_, Serializable object) {
-        Object result;
-        
-        Session session = sessionFactory.getCurrentSession();
-        
-        session.beginTransaction();
-        result = session.get(class_, object);
-        session.getTransaction().commit();
-        
-        return result;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#run(org.iocaste.protocol.Message)
-     */
-    @Override
-    public final Object run(Message message) throws Exception {
-        Method method;
-        String id = message.getId();
-        String methodname = exports.get(id);
-        
-        if (methodname == null)
-            throw new Exception("Method \""+id+"\" not implemented");
-        
-        method = getClass().getMethod(methodname, Message.class);
-        
-        return method.invoke(this, message);
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.eve.model.Model#select(java.lang.String, java.lang.Object[])
-     */
-    protected final List<?> select(String queryid, Object[] criteria) {
-        Query query;
-        List<?> results;
-        int id = 0;        
-        Session session = sessionFactory.getCurrentSession();
-        
-        session.beginTransaction();
-        query = session.createQuery(queries.get(queryid));
-        
-        if (criteria != null)
-            for (Object object : criteria)
-                query.setParameter(id++, object);
-        
-        results = query.list();
-        session.getTransaction().commit();
-        
-        return results;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#serviceInstance(java.lang.String)
-     */
-    @Override
-    public final Service serviceInstance(String path) {
-        String url = new StringBuffer(servername).append(path).toString();
-        
-        return new Service(sessionid, url);
     }
 
 }
