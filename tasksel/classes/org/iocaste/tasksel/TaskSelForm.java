@@ -10,9 +10,8 @@ public class TaskSelForm extends AbstractForm {
     public TaskSelForm() {
         ViewData main = new ViewData();
         StandardContainer container = new StandardContainer(null);
-        Link link = new Link(container, "info");
-        
-        link.setText("iocaste-infosis");
+        new Link(container, "info");
+        new Link(container, "office");
         
         main.setTitle("infosis-front");
         main.setContainer(container);
@@ -28,6 +27,9 @@ public class TaskSelForm extends AbstractForm {
     public final void entry(String action) {
         if (action.equals("info"))
             redirect("iocaste-infosis", "main");
+        
+        if (action.equals("office"))
+            redirect("iocaste-office", "main");
         
     }
 }
