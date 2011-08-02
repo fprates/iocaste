@@ -19,7 +19,6 @@ public class LoginForm extends AbstractForm {
 
         form = new Form(null, "login");
         form.addAction("connect");
-        form.addAction("change");
         form.setMessageSource(messages);
         
         new FormItem(form, "username", Const.TEXT_FIELD);
