@@ -4,12 +4,14 @@ public class FormItem extends AbstractInputComponent {
     private static final long serialVersionUID = 3376883855229003535L;
     private Text text;
     private Component component;
+    private String simplename;
     
     public FormItem(Form form, String name, Const type) {
         super(form, Const.FORM_ITEM);
         String inputname = new StringBuffer(form.getName()).
                 append(".").append(name).toString();
         
+        simplename = name;
         setName(inputname);
         
         text = new Text(null);
@@ -38,6 +40,14 @@ public class FormItem extends AbstractInputComponent {
      */
     public final Component getComponent() {
         return component;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getSimpleName() {
+        return simplename;
     }
     
     /**

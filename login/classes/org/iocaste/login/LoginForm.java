@@ -10,13 +10,14 @@ import org.iocaste.shell.common.ViewData;
 
 public class LoginForm extends AbstractForm {
     private MessageSource messages;
+    private Form form;
     
     public LoginForm() {
         ViewData view = new ViewData();
-        Form form = new Form(null, "login");
         
         messages = new MessageSource("/message.properties");
-        
+
+        form = new Form(null, "login");
         form.addAction("connect");
         form.addAction("change");
         form.setMessageSource(messages);
@@ -39,12 +40,12 @@ public class LoginForm extends AbstractForm {
         Iocaste iocaste = new Iocaste(this);
         Login login = new Login();
         
-        importFromView(login);
-        
         if (!action.equals("connect")) {
             redirect("iocaste-login", "authentic");
             return;
         }
+        
+        form.exportTo(login);
         
         if (iocaste.login(login.getUsername(), login.getSecret()))
             redirect("iocaste-tasksel", "main");

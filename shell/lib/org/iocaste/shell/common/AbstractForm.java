@@ -3,7 +3,6 @@ package org.iocaste.shell.common;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
 public abstract class AbstractForm extends AbstractFunction {
-    private Message message;
     private ControlData controldata;
     private Map<String, ViewData> views;
     private Map<String, InputComponent> inputs;
@@ -91,69 +89,6 @@ public abstract class AbstractForm extends AbstractFunction {
         views.put(name, view);
     }
     
-    private final void invokeCopy(Class<?> class_, Object object, Method method)
-            throws Exception {
-        String typename;
-        String paramname;
-        typename = class_.getSimpleName();
-        
-        paramname = method.getName().substring(3).toLowerCase();
-        
-        try {
-            if (typename.equals("String")) {
-                method.invoke(object, message.getString(paramname));
-                return;
-            }
-            
-            if (typename.equals("Integer")) {
-                method.invoke(object, message.getInt(paramname));
-                return;
-            }
-            
-            if (typename.equals("Boolean")) {
-                method.invoke(object, message.getBoolean(paramname));
-                return;
-            }
-            
-            if (typename.equals("Character")) {
-                method.invoke(object, message.getChar(paramname));
-                return;
-            }
-            
-            if (typename.equals("Short")) {
-                method.invoke(object, message.getShort(paramname));
-                return;
-            }
-            
-            if (typename.equals("Float")) {
-                method.invoke(object, message.getFloat(paramname));
-                return;
-            }
-            
-            if (typename.equals("Double")) {
-                method.invoke(object, message.getDouble(paramname));
-                return;
-            }
-            
-            if (typename.equals("Byte")) {
-                method.invoke(object, message.getByte(paramname));
-                return;
-            }
-        } catch (Exception e) {
-            throw new Exception("Error loading parameter "+paramname+".");
-        }
-    }
-    
-    protected final void importFromView(Object object) throws Exception {
-        for (Method method : object.getClass().getMethods()) {
-            if (!method.getName().startsWith("set"))
-                continue;
-            
-            for (Class<?> class_ : method.getParameterTypes())
-                invokeCopy(class_, object, method);
-        }
-    }
-    
     /**
      * 
      * @param action
@@ -174,8 +109,6 @@ public abstract class AbstractForm extends AbstractFunction {
         
         if (action == null)
             return controldata;
-        
-        this.message = message;
         
         for (String name : inputs.keySet())
             inputs.get(name).setValue(message.getString(name));
