@@ -139,6 +139,9 @@ public abstract class AbstractForm extends AbstractFunction {
         Container container;
         Component component;
         
+        if (element == null)
+            return;
+        
         if (element.isContainable()) {
             container = (Container)element;
             for (Element element_ : container.getElements())
