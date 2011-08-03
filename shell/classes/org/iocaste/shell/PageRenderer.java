@@ -82,8 +82,9 @@ public class PageRenderer extends HttpServlet implements Function {
         else
             text = renderer.run(vdata);
 
-        for (String line : text)
-            writer.println(line);
+        if (text != null)
+            for (String line : text)
+                writer.println(line);
                 
         writer.close();
     }
