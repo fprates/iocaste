@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
@@ -196,18 +197,30 @@ public class ElementRenderer {
      */
     private final void renderTextField(List<String> text, TextField textfield) {
         String inputtext;
+        String name = textfield.getName();
         
         if (!textfield.isPassword())
             inputtext = "<input type=\"text\" name=\"";
         else
             inputtext = "<input type=\"password\" name=\"";
         
-        text.add(new StringBuffer(inputtext).append(textfield.getName()).
-                append("\">").toString());
+        text.add(new StringBuffer(inputtext).append(name).
+                append("\" id=\"").append(name).append("\"/>").toString());
     }
     
-    private final void renderJavaScript(List<String> text, String[] script) {
+    private final void renderJavaScript(
+            List<String> text, ViewData vdata, String[] script) {
+        Component focus = vdata.getFocus();
+        
         text.add("<script type=\"text/javascript\">");
+        text.add("function initialize() {");
+        
+        if (focus != null)
+            text.add(new StringBuffer("document.getElementById('").
+                    append(focus.getName()).append("').focus();").toString());
+
+        text.add("}");
+        
         for (String line : script)
             text.add(line);
         text.add("</script>");
@@ -218,7 +231,9 @@ public class ElementRenderer {
      * @param text
      * @param title
      */
-    private final void renderHeader(List<String> text, String title) {
+    private final void renderHeader(List<String> text, ViewData vdata) {
+        String title = vdata.getTitle();
+        
         text.add("<head>");
         text.add("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
         
@@ -227,7 +242,7 @@ public class ElementRenderer {
         
         text.add(new StringBuffer("<title>").append(title).
                 append("</title>").toString());
-        renderJavaScript(text, script);
+        renderJavaScript(text, vdata, script);
         text.add("</head>");
     }
     
@@ -260,8 +275,8 @@ public class ElementRenderer {
         List<String> text = new ArrayList<String>();
         
         text.add("<html>");
-        renderHeader(text, vdata.getTitle());
-        text.add("<body>");
+        renderHeader(text, vdata);
+        text.add("<body onLoad=\"initialize()\">");
 
         if (msgtext != null)
             renderMessage(text);

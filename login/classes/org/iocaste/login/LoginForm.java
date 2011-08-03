@@ -21,7 +21,7 @@ public class LoginForm extends AbstractForm {
         form.addAction("connect");
         form.setMessageSource(messages);
         
-        new FormItem(form, "username", Const.TEXT_FIELD);
+        view.setFocus(new FormItem(form, "username", Const.TEXT_FIELD));
         new FormItem(form, "secret", Const.PASSWORD);
         
         view.setTitle("authentic");
