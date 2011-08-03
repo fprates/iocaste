@@ -25,6 +25,6 @@ public class Servlet extends ServerServlet {
      */
     @Override
     public void preRun(Message message) {
-        super(message);
+        super.preRun(message);
     }
 }
