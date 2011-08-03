@@ -23,6 +23,7 @@ public class ElementRenderer {
     private String msgtext;
     private Const msgtype;
     private String[] script;
+    private String username;
     
     public ElementRenderer() {
         String line;
@@ -266,6 +267,11 @@ public class ElementRenderer {
         text.add(message.append(msgtext).append("</p></div>").toString());
     }
 
+    private final void renderStatus(List<String> text) {
+        text.add(new StringBuffer("<p>").append(username).append("</p>").
+                toString());
+    }
+    
     /**
      * 
      * @param vdata
@@ -277,7 +283,9 @@ public class ElementRenderer {
         text.add("<html>");
         renderHeader(text, vdata);
         text.add("<body onLoad=\"initialize()\">");
-
+        
+        renderStatus(text);
+        
         if (msgtext != null)
             renderMessage(text);
 
@@ -297,5 +305,13 @@ public class ElementRenderer {
      */
     public void setMessageText(String msgtext) {
         this.msgtext = msgtext;
+    }
+    
+    /**
+     * 
+     * @param username
+     */
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

@@ -123,11 +123,15 @@ public class PageRenderer extends HttpServlet implements Function {
         if (!iocaste.isConnected() || controldata == null) {
             pagepos.app = LOGIN_APP;
             pagepos.page = "authentic";
+            
+            renderer.setUsername("Not connected");
         } else {
             if (controldata.getApp() != null) {
                 pagepos.app = controldata.getApp();
                 pagepos.page = controldata.getPage();
             }
+            
+            renderer.setUsername(iocaste.getUsername());
         }
         
         render(resp, pagepos);
