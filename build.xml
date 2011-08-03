@@ -12,6 +12,9 @@
     	
     	<!-- shell -->
     	<ant antfile="${basedir}/src/shell/build.xml"/>
+        
+        <!-- documents -->
+        <ant antfile="${basedir}/src/documents/build.xml"/>
     	
         <!-- login -->
         <ant antfile="${basedir}/src/login/build.xml"/>
