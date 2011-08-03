@@ -24,9 +24,11 @@ public class NumericRangeFunction extends AbstractFunction {
         if (ident == null)
             throw new Exception("Numeric range not especified.");
         
-        range = new NumericRange();
+        range = (NumericRange)load(NumericRange.class, ident);
         
-        load(NumericRange.class, range);
+        if (range == null)
+            throw new Exception("Range \""+ident+"\" not found.");
+        
         range.setCurrent(range.getCurrent()+1);
 
         session = getHibernateSession();
