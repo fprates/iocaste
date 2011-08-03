@@ -1,4 +1,8 @@
+function setValue(name, value) {
+	param = document.getElementById(name);
+	param.value = value;
+}
+
 function defineAction(actionname) {
-	action = document.getElementById('action');
-	action.value = actionname;
+	setValue('action', actionname);
 }

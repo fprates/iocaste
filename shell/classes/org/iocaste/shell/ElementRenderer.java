@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Component;
@@ -13,7 +14,9 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
@@ -46,54 +49,6 @@ public class ElementRenderer {
     
     public final void setMessageType(Const msgtype) {
         this.msgtype = msgtype;
-    }
-    
-    /**
-     * 
-     * @param text
-     * @param element
-     */
-    private final void renderElement(List<String> text, Element element) {
-        switch (element.getType()) {
-        case TABLE_ITEM:
-            renderTableItem(text, (TableItem)element);
-            
-            break;
-            
-        case TEXT:
-            renderText(text, (Text)element);
-            
-            break;
-            
-        case TEXT_FIELD:
-            renderTextField(text, (TextField)element);
-            
-            break;
-            
-        case BUTTON:
-            renderButton(text, (Button)element);
-            
-            break;
-            
-        case LINK:
-            renderLink(text, (Link)element);
-            
-            break;
-        
-        default:
-            if (element.isContainable())
-                renderContainer(text, (Container)element);
-        }
-    }
-    
-    /**
-     * 
-     * @param text
-     * @param elements
-     */
-    private final void renderElements(List<String> text, Element[] elements) {
-        for (Element element : elements) 
-            renderElement(text, element);
     }
     
     /**
@@ -152,6 +107,59 @@ public class ElementRenderer {
         }
         
     }
+    
+    /**
+     * 
+     * @param text
+     * @param element
+     */
+    private final void renderElement(List<String> text, Element element) {
+        switch (element.getType()) {
+        case TABLE_ITEM:
+            renderTableItem(text, (TableItem)element);
+            
+            break;
+            
+        case TEXT:
+            renderText(text, (Text)element);
+            
+            break;
+            
+        case TEXT_FIELD:
+            renderTextField(text, (TextField)element);
+            
+            break;
+            
+        case BUTTON:
+            renderButton(text, (Button)element);
+            
+            break;
+            
+        case LINK:
+            renderLink(text, (Link)element);
+            
+            break;
+        
+        case PARAMETER:
+            renderParameter(text, (Parameter)element);
+            
+            break;
+            
+        default:
+            if (element.isContainable())
+                renderContainer(text, (Container)element);
+        }
+    }
+    
+    /**
+     * 
+     * @param text
+     * @param elements
+     */
+    private final void renderElements(List<String> text, Element[] elements) {
+        for (Element element : elements) 
+            renderElement(text, element);
+    }
 
     /**
      * 
@@ -159,11 +167,38 @@ public class ElementRenderer {
      * @param link
      */
     private final void renderLink(List<String> text, Link link) {
-        text.add(new StringBuffer("<a href=\"index.html?action=").
-                append(link.getAction()).append("\">").append(link.getText()).
-                append("</a>").toString());
+        Component component;
+        Map<InputComponent, String> parameters;
+        StringBuffer sb = new StringBuffer();
+        
+        sb.append("<a href=\"index.html?action=").
+                append(link.getAction());
+        
+        parameters = link.getParametersMap();
+        
+        if (parameters.size() > 0) {
+            sb.append("\" onClick=\"");
+            
+            for (InputComponent icomponent : parameters.keySet()) {
+                component = (Component)icomponent;
+                sb.append("setValue('").append(component.getName());
+                sb.append("','").append(parameters.get(icomponent)).
+                        append("');");
+            }
+        }
+
+        sb.append("\">").append(link.getText()).append("</a>");
+        
+        text.add(sb.toString());
     }
 
+    private void renderParameter(List<String> text, Parameter parameter) {
+        String name = parameter.getName();
+        StringBuffer sb = new StringBuffer("<input type=\"hidden\" name=\"").
+                append(name).append("\" id=\"").append(name).append("\"/>");
+        text.add(sb.toString());
+    }
+    
     /**
      * 
      * @param text

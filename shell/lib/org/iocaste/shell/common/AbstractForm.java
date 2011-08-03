@@ -15,6 +15,7 @@ public abstract class AbstractForm extends AbstractFunction {
     public AbstractForm() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
+        
         controldata = new ControlData();
         views = new HashMap<String, ViewData>();
         inputs = new HashMap<String, InputComponent>();
@@ -73,11 +74,10 @@ public abstract class AbstractForm extends AbstractFunction {
         if (action == null)
             return controldata;
         
-        method = this.getClass().getMethod(action);
-        
         for (String name : inputs.keySet())
             inputs.get(name).setValue(message.getString(name));
         
+        method = this.getClass().getMethod(action);
         method.invoke(this);
         
         return controldata;
