@@ -19,13 +19,10 @@
     <servlet>
         <servlet-name>iocaste_servlet</servlet-name>
         <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
-        <!--
-            Form goes here
         <init-param>
             <param-name>form</param-name>
-            <param-value>your.package.xxxForm</param-value>
+            <param-value>org.template.TemplateForm</param-value>
         </init-param>
-        -->
     </servlet>
     
     <servlet-mapping>
