@@ -101,6 +101,8 @@ public abstract class AbstractFunction implements Function {
         
         if (methodname == null)
             throw new Exception("Method \""+id+"\" not implemented");
+
+        setSessionid(message.getSessionid());
         
         method = getClass().getMethod(methodname, Message.class);
         

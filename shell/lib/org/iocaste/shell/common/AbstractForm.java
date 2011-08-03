@@ -45,8 +45,6 @@ public abstract class AbstractForm extends AbstractFunction {
         List<String> lines;
         String page = message.getString("page");
         
-        setSessionid(message.getSessionid());
-        
         if (page == null)
             throw new Exception("Page not especified.");
         
