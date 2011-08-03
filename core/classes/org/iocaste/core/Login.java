@@ -15,6 +15,39 @@ public class Login extends AbstractFunction {
         
         export("login", "login");
         export("is_connected", "isConnected");
+        export("get_username", "getUsername");
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final boolean isConnected(Message message) {
+        String sessionid = message.getSessionid();
+        
+        if (sessionid == null)
+            return false;
+        
+        return sessions.containsKey(sessionid);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final String getUsername(Message message) throws Exception {
+        String sessionid = message.getSessionid();
+
+        if (sessionid == null)
+            throw new Exception("Null session not allowed.");
+        
+        if (!sessions.containsKey(sessionid))
+            return null;
+        
+        return sessions.get(sessionid).getName();
     }
     
     /**
@@ -47,20 +80,6 @@ public class Login extends AbstractFunction {
         sessions.put(sessionid, user_);
         
         return true;
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
-     */
-    public final boolean isConnected(Message message) {
-        String sessionid = message.getSessionid();
-        
-        if (sessionid == null)
-            return false;
-        
-        return sessions.containsKey(sessionid);
     }
 
 }
