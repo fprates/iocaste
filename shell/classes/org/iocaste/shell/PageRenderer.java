@@ -77,10 +77,7 @@ public class PageRenderer extends HttpServlet implements Function {
         message.add("page", pagepos.page);
         vdata = (ViewData)Service.callServer(composeUrl(pagepos.app), message);
         
-        if (vdata.getContainer() == null)
-            text = vdata.getLines();
-        else
-            text = renderer.run(vdata);
+        text = renderer.run(vdata);
 
         if (text != null)
             for (String line : text)

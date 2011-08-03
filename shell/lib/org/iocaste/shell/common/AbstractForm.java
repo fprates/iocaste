@@ -1,12 +1,7 @@
 package org.iocaste.shell.common;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
@@ -38,37 +33,12 @@ public abstract class AbstractForm extends AbstractFunction {
      * @throws Exception
      */
     public final ViewData getViewData(Message message) throws Exception {
-        String line;
-        InputStream is;
-        BufferedReader reader;
-        ViewData vdata;
-        List<String> lines;
         String page = message.getString("page");
         
         if (page == null)
             throw new Exception("Page not especified.");
         
-        vdata = views.get(page);
-        
-        if (vdata != null)
-            return vdata;
-        
-        vdata = new ViewData();
-        
-        is = getResourceAsStream(page);
-        reader = new BufferedReader(new InputStreamReader(is));
-        
-        lines = new ArrayList<String>();
-        
-        while ((line = reader.readLine()) != null)
-            lines.add(line);
-        
-        reader.close();
-        is.close();
-        
-        vdata.setLines(lines.toArray(new String[0]));
-        
-        return vdata;
+        return views.get(page);
     }
     
     /*

@@ -278,6 +278,7 @@ public class ElementRenderer {
      * @return
      */
     public final String[] run(ViewData vdata) {
+        Container container = vdata.getContainer();
         List<String> text = new ArrayList<String>();
         
         text.add("<html>");
@@ -289,7 +290,9 @@ public class ElementRenderer {
         if (msgtext != null)
             renderMessage(text);
 
-        renderContainer(text, vdata.getContainer());
+        if (container != null)
+            renderContainer(text, container);
+        
         text.add("</body>");
         text.add("</html>");
 

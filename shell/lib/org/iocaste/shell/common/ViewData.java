@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class ViewData implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
-    private String[] lines;
     private Container container;
     private String title;
     private Component focus;
@@ -35,14 +34,6 @@ public class ViewData implements Serializable {
      * 
      * @return
      */
-    public final String[] getLines() {
-        return lines;
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final String getTitle() {
         return title;
     }
@@ -67,14 +58,6 @@ public class ViewData implements Serializable {
      */
     public final void setFocus(Component focus) {
         this.focus = focus;
-    }
-    
-    /**
-     * 
-     * @param line
-     */
-    public final void setLines(String[] lines) {
-        this.lines = lines;
     }
     
     /**
