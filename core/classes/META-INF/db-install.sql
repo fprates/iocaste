@@ -6,7 +6,7 @@ create user iocastedb password initial;
 \p user generated.
 
 drop table users001 if exists;
-\p tables dropped.
+\p core tables dropped.
 
 /* usuários */
 create table users001 (
@@ -14,7 +14,7 @@ create table users001 (
    secrt char(12)
 );
 
-\p tables generated.
+\p core tables generated.
 
 grant select, insert, update, delete on users001 to iocastedb;
 \p permissions granted.
