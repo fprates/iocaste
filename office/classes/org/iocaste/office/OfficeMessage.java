@@ -4,10 +4,19 @@ import java.io.Serializable;
 
 public class OfficeMessage implements Serializable {
     private static final long serialVersionUID = -377510667026827656L;
+    private long id;
     private String sender;
     private String receiver;
     private String subject;
     private String text;
+    
+    /**
+     * 
+     * @return
+     */
+    public final long getId() {
+        return id;
+    }
     
     /**
      * @return the sender
@@ -35,6 +44,14 @@ public class OfficeMessage implements Serializable {
      */
     public final String getText() {
         return text;
+    }
+    
+    /**
+     * 
+     * @param id
+     */
+    public final void setId(long id) {
+        this.id = id;
     }
     
     /**

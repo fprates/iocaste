@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+                                   
+<hibernate-mapping package="org.iocaste.office">
+    <class name="OfficeMessage" table="OFFICE001">
+        <id name="id" column="IDENT"/>
+        <property name="sender" column="SENDR"/>
+        <property name="receiver" column="RECVR"/>
+        <property name="subject" column="SBJCT"/>
+    </class>
+</hibernate-mapping>
+                                   
