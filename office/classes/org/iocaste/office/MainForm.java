@@ -12,8 +12,13 @@ import org.iocaste.shell.common.ViewData;
 public class MainForm extends AbstractForm {
     private Form form;
     
-    public MainForm() {
-        ViewData view = new ViewData();
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractForm#buildViews()
+     */
+    @Override
+    protected void buildViews() {
+        ViewData view = getViewInstance("main");
         Container main = new StandardContainer(null);
         
         form = new Form(main, "header");
@@ -23,8 +28,6 @@ public class MainForm extends AbstractForm {
         new FormItem(form, "subject", Const.TEXT_FIELD);
         
         view.setContainer(main);
-        
-        addView("main", view);
     }
     
     public void send() throws Exception {
