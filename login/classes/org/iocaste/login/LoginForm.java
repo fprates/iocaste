@@ -12,8 +12,13 @@ public class LoginForm extends AbstractForm {
     private MessageSource messages;
     private Form form;
     
-    public LoginForm() {
-        ViewData view = new ViewData();
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractForm#buildViews()
+     */
+    @Override
+    protected final void buildViews() {
+        ViewData view = getViewInstance("authentic");
         
         messages = new MessageSource("/message.properties");
 
@@ -26,10 +31,12 @@ public class LoginForm extends AbstractForm {
         
         view.setTitle("authentic");
         view.setContainer(form);
-        
-        addView("authentic", view);
     }
     
+    /**
+     * 
+     * @throws Exception
+     */
     public final void connect() throws Exception {
         Iocaste iocaste = new Iocaste(this);
         Login login = new Login();
