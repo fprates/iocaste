@@ -306,6 +306,8 @@ public class ElementRenderer {
         Container container = vdata.getContainer();
         List<String> text = new ArrayList<String>();
         
+        text.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
+        		"\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
         text.add("<html>");
         renderHeader(text, vdata);
         text.add("<body onLoad=\"initialize()\">");
