@@ -19,13 +19,14 @@ public abstract class AbstractForm extends AbstractFunction {
         controldata = new ControlData();
         views = new HashMap<String, ViewData>();
         inputs = new HashMap<String, InputComponent>();
+        
+        buildViews();
+        
+        for (String name: views.keySet())
+            registerInputs(views.get(name).getContainer());
     }
     
-    /*
-     * 
-     * Getters
-     * 
-     */
+    protected abstract void buildViews();
     
     /**
      * 
@@ -42,22 +43,23 @@ public abstract class AbstractForm extends AbstractFunction {
         return views.get(page);
     }
     
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    protected final ViewData getViewInstance(String name) {
+        ViewData view = new ViewData();
+        
+        views.put(name, view);
+        
+        return view;
+    }
     /*
      * 
      * Others
      * 
      */
-    
-    /**
-     * 
-     * @param name
-     * @param view
-     */
-    protected final void addView(String name, ViewData view) {
-        registerInputs(view.getContainer());
-        
-        views.put(name, view);
-    }
     
     /**
      * 
