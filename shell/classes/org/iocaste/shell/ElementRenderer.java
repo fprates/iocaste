@@ -98,9 +98,6 @@ public class ElementRenderer {
             break;
         
         case MENU:
-            renderMenu(text, (Menu)container);
-            
-            break;
         case STANDARD_CONTAINER:
             text.add("<div>");
             renderElements(text, container.getElements());
@@ -191,17 +188,6 @@ public class ElementRenderer {
         sb.append("\">").append(link.getText()).append("</a>");
         
         text.add(sb.toString());
-    }
-
-    private void renderMenu(List<String> text, Menu menu) {
-        Parameter function = new Parameter(menu, menu.getAction());
-        
-        function.setName("function");
-        menu.setParameter(function);
-        text.add("<div>");
-        renderElements(text, menu.getElements());
-        text.add("</div>");
-        
     }
     
     private void renderMenuItem(List<String> text, MenuItem menuitem) {
