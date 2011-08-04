@@ -15,6 +15,8 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.Menu;
+import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
@@ -94,7 +96,11 @@ public class ElementRenderer {
             text.add("</table>");
             
             break;
+        
+        case MENU:
+            renderMenu(text, (Menu)container);
             
+            break;
         case STANDARD_CONTAINER:
             text.add("<div>");
             renderElements(text, container.getElements());
@@ -114,6 +120,11 @@ public class ElementRenderer {
         switch (element.getType()) {
         case TABLE_ITEM:
             renderTableItem(text, (TableItem)element);
+            
+            break;
+        
+        case MENU_ITEM:
+            renderMenuItem(text, (MenuItem)element);
             
             break;
             
@@ -182,6 +193,27 @@ public class ElementRenderer {
         text.add(sb.toString());
     }
 
+    private void renderMenu(List<String> text, Menu menu) {
+        Parameter function = new Parameter(menu, menu.getAction());
+        
+        function.setName("function");
+        menu.setParameter(function);
+        text.add("<div>");
+        renderElements(text, menu.getElements());
+        text.add("</div>");
+        
+    }
+    
+    private void renderMenuItem(List<String> text, MenuItem menuitem) {
+        Menu menu = (Menu)menuitem.getContainer();
+        Link link = new Link(null, menu.getAction());
+        
+        link.setText(menuitem.getText());
+        link.add(menu.getParameter(), menuitem.getFunction());
+        
+        renderLink(text, link);
+    }
+    
     private void renderParameter(List<String> text, Parameter parameter) {
         String name = parameter.getName();
         StringBuffer sb = new StringBuffer("<input type=\"hidden\" name=\"").
