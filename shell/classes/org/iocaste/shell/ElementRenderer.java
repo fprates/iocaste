@@ -14,7 +14,6 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.TableItem;
@@ -84,10 +83,8 @@ public class ElementRenderer {
             form = (Form)container;
             form.build();
             
-            text.add("<form method=\"post\" action=\"index.html\">");
             renderElements(text, container.getElements());
             text.add("<input type=\"hidden\" name=\"action\" id=\"action\"/>");
-            text.add("</form>");
             
             break;
             
@@ -167,8 +164,7 @@ public class ElementRenderer {
      * @param link
      */
     private final void renderLink(List<String> text, Link link) {
-        Component component;
-        Map<InputComponent, String> parameters;
+        Map<Parameter, String> parameters;
         StringBuffer sb = new StringBuffer();
         
         sb.append("<a href=\"index.html?action=").
@@ -176,16 +172,10 @@ public class ElementRenderer {
         
         parameters = link.getParametersMap();
         
-        if (parameters.size() > 0) {
-            sb.append("\" onClick=\"");
-            
-            for (InputComponent icomponent : parameters.keySet()) {
-                component = (Component)icomponent;
-                sb.append("setValue('").append(component.getName());
-                sb.append("','").append(parameters.get(icomponent)).
-                        append("');");
-            }
-        }
+        if (parameters.size() > 0)
+            for (Parameter parameter: parameters.keySet())
+                sb.append("&").append(parameter.getName()).append("=").
+                        append(parameters.get(parameter));
 
         sb.append("\">").append(link.getText()).append("</a>");
         
@@ -319,6 +309,7 @@ public class ElementRenderer {
         text.add("<html>");
         renderHeader(text, vdata);
         text.add("<body onLoad=\"initialize()\">");
+        text.add("<form id=\"main\" method=\"post\" action=\"index.html\">");
         
         renderStatus(text);
         
@@ -327,7 +318,8 @@ public class ElementRenderer {
 
         if (container != null)
             renderContainer(text, container);
-        
+
+        text.add("</form>");
         text.add("</body>");
         text.add("</html>");
 

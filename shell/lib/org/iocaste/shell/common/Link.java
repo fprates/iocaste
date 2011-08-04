@@ -7,24 +7,24 @@ public class Link extends AbstractControlComponent {
     private static final long serialVersionUID = 667738108271176995L;
     private String action;
     private String text;
-    private Map<InputComponent, String> values;
+    private Map<Parameter, String> values;
     
     public Link(Container container, String action) {
         super(container, Const.LINK);
         this.action = action;
         text = action;
-        values = new HashMap<InputComponent, String>();
+        values = new HashMap<Parameter, String>();
     }
 
-    public final void add(InputComponent component, String value) {
-        values.put(component, value);
+    public final void add(Parameter parameter, String value) {
+        values.put(parameter, value);
     }
     
     public final String getAction() {
         return action;
     }
     
-    public final Map<InputComponent, String> getParametersMap() {
+    public final Map<Parameter, String> getParametersMap() {
         return values;
     }
     
