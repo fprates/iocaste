@@ -1,45 +1,32 @@
 package org.iocaste.tasksel;
 
 import org.iocaste.shell.common.AbstractForm;
-import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.Parameter;
-import org.iocaste.shell.common.StandardContainer;
-import org.iocaste.shell.common.Table;
-import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.Menu;
+import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.ViewData;
 
 public class TaskSelForm extends AbstractForm {
-    private Parameter module;
+    private Menu menu;
     
-    public TaskSelForm() {
-        ViewData main = new ViewData();
-        StandardContainer container = new StandardContainer(null);
-        Table table = new Table(container, 1);
-        TableItem item1 = new TableItem(table);
-        TableItem item2 = new TableItem(table);
-        TableItem item3 = new TableItem(table);
-        Link info = new Link(null, "run");
-        Link office = new Link(null, "run");
-        Link coreutils = new Link(null, "run");
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractForm#buildViews()
+     */
+    @Override
+    protected final void buildViews() {
+        ViewData main = getViewInstance("main");
         
-        module = new Parameter(container, "module");
-        
-        info.add(module, "info");
-        office.add(module, "office");
-        coreutils.add(module, "coreutils");
-        
-        item1.add(info);
-        item2.add(office);
-        item3.add(coreutils);
+        menu = new Menu(null, "run");
+        new MenuItem(menu, "info", "info");
+        new MenuItem(menu, "office", "office");
+        new MenuItem(menu, "tools", "coreutils");
         
         main.setTitle("infosis-front");
-        main.setContainer(container);
-        
-        addView("main", main);
+        main.setContainer(menu);
     }
     
     public final void run() {
-        String action = module.getValue();
+        String action = menu.getParameter().getValue();
         
         if (action.equals("info"))
             redirect("iocaste-infosis", "main");
