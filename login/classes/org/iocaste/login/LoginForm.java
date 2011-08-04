@@ -19,16 +19,14 @@ public class LoginForm extends AbstractForm {
     @Override
     protected final void buildViews() {
         ViewData view = getViewInstance("authentic");
-        
-        messages = new MessageSource("/message.properties");
 
         form = new Form(null, "login");
         form.addAction("connect");
-        form.setMessageSource(messages);
         
         view.setFocus(new FormItem(form, "username", Const.TEXT_FIELD));
         new FormItem(form, "secret", Const.PASSWORD);
         
+        view.setMessages(new MessageSource("/message.properties"));
         view.setTitle("authentic");
         view.setContainer(form);
     }

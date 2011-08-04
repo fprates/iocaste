@@ -14,10 +14,13 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.FormItem;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
+import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
@@ -28,6 +31,7 @@ public class ElementRenderer {
     private Const msgtype;
     private String[] script;
     private String username;
+    private MessageSource messages;
     
     public ElementRenderer() {
         String line;
@@ -57,8 +61,9 @@ public class ElementRenderer {
      * @param text
      * @param button
      */
-    private final void renderButton(List<String> text, Button button) {
+    private final void renderButton(List<String> html, Button button) {
         String inputtext;
+        String text_ = button.getText();
         String name = button.getName();
         
         if (!button.isSubmit())
@@ -66,8 +71,8 @@ public class ElementRenderer {
         else
             inputtext = "<input type=\"submit\" name=\"";
         
-        text.add(new StringBuffer(inputtext).append(name).
-                append("\" value=\"").append(button.getText()).
+        html.add(new StringBuffer(inputtext).append(name).
+                append("\" value=\"").append(messages.get(text_, text_)).
                 append("\" onClick=\"defineAction('").append(name).
                 append("')\"/>").toString());
     }
@@ -77,31 +82,25 @@ public class ElementRenderer {
      * @param text
      * @param container
      */
-    private final void renderContainer(List<String> text, Container container) {
-        Form form;
-        
+    private final void renderContainer(List<String> html, Container container) {
         switch (container.getType()) {
         case FORM:
-            form = (Form)container;
-            form.build();
-            
-            renderElements(text, container.getElements());
-            text.add("<input type=\"hidden\" name=\"action\" id=\"action\"/>");
+            renderForm(html, (Form)container);
             
             break;
             
         case TABLE:
-            text.add("<table>");
-            renderElements(text, container.getElements());
-            text.add("</table>");
+            html.add("<table>");
+            renderElements(html, container.getElements());
+            html.add("</table>");
             
             break;
         
         case MENU:
         case STANDARD_CONTAINER:
-            text.add("<div>");
-            renderElements(text, container.getElements());
-            text.add("</div>");
+            html.add("<div>");
+            renderElements(html, container.getElements());
+            html.add("</div>");
             
             break;
         }
@@ -113,46 +112,46 @@ public class ElementRenderer {
      * @param text
      * @param element
      */
-    private final void renderElement(List<String> text, Element element) {
+    private final void renderElement(List<String> html, Element element) {
         switch (element.getType()) {
         case TABLE_ITEM:
-            renderTableItem(text, (TableItem)element);
+            renderTableItem(html, (TableItem)element);
             
             break;
         
         case MENU_ITEM:
-            renderMenuItem(text, (MenuItem)element);
+            renderMenuItem(html, (MenuItem)element);
             
             break;
             
         case TEXT:
-            renderText(text, (Text)element);
+            renderText(html, (Text)element);
             
             break;
             
         case TEXT_FIELD:
-            renderTextField(text, (TextField)element);
+            renderTextField(html, (TextField)element);
             
             break;
             
         case BUTTON:
-            renderButton(text, (Button)element);
+            renderButton(html, (Button)element);
             
             break;
             
         case LINK:
-            renderLink(text, (Link)element);
+            renderLink(html, (Link)element);
             
             break;
         
         case PARAMETER:
-            renderParameter(text, (Parameter)element);
+            renderParameter(html, (Parameter)element);
             
             break;
             
         default:
             if (element.isContainable())
-                renderContainer(text, (Container)element);
+                renderContainer(html, (Container)element);
         }
     }
     
@@ -161,17 +160,75 @@ public class ElementRenderer {
      * @param text
      * @param elements
      */
-    private final void renderElements(List<String> text, Element[] elements) {
+    private final void renderElements(List<String> html, Element[] elements) {
         for (Element element : elements) 
-            renderElement(text, element);
+            renderElement(html, element);
     }
 
+    private final void renderForm(List<String> html, Form form) {
+        Const type;
+        Text text;
+        Component component;
+        String inputname;
+        Button button;
+        FormItem formitem;
+        TableItem tableitem;
+        Table table = new Table(null, 2);
+        
+        for (Element element : form.getElements()) {
+            if (element.getType() != Const.FORM_ITEM) {
+                renderElement(html, element);
+                continue;
+            }
+            
+            tableitem = new TableItem(table);
+            formitem = (FormItem)element;
+            inputname = formitem.getName();
+            
+            text = new Text(null);
+            text.setName(inputname);
+            text.setText(messages.get(inputname, inputname));
+            
+            type = formitem.getComponentType();
+            
+            switch (type) {
+            case TEXT_FIELD:
+            case PASSWORD:
+                component = new TextField(null);
+                component.setName(inputname);
+                
+                if (type == Const.TEXT_FIELD)
+                    ((TextField)component).setPassword(false);
+                else
+                    ((TextField)component).setPassword(true);
+                
+                break;
+            default:
+                component = null;
+            }
+            
+            tableitem.add(text);
+            tableitem.add(component);
+        }
+                
+        renderContainer(html, table);
+        
+        for (String action : form.getActions()) {
+            button = new Button(form);
+            button.setSubmit(true);
+            button.setName(action);
+            button.setText(messages.get(action, action));
+            
+            renderButton(html, button);
+        }
+    }
+    
     /**
      * 
      * @param text
      * @param link
      */
-    private final void renderLink(List<String> text, Link link) {
+    private final void renderLink(List<String> html, Link link) {
         Map<Parameter, String> parameters;
         StringBuffer sb = new StringBuffer();
         
@@ -187,24 +244,24 @@ public class ElementRenderer {
 
         sb.append("\">").append(link.getText()).append("</a>");
         
-        text.add(sb.toString());
+        html.add(sb.toString());
     }
     
-    private void renderMenuItem(List<String> text, MenuItem menuitem) {
+    private void renderMenuItem(List<String> html, MenuItem menuitem) {
         Menu menu = (Menu)menuitem.getContainer();
         Link link = new Link(null, menu.getAction());
         
         link.setText(menuitem.getText());
         link.add(menu.getParameter(), menuitem.getFunction());
         
-        renderLink(text, link);
+        renderLink(html, link);
     }
     
-    private void renderParameter(List<String> text, Parameter parameter) {
+    private void renderParameter(List<String> html, Parameter parameter) {
         String name = parameter.getName();
         StringBuffer sb = new StringBuffer("<input type=\"hidden\" name=\"").
                 append(name).append("\" id=\"").append(name).append("\"/>");
-        text.add(sb.toString());
+        html.add(sb.toString());
     }
     
     /**
@@ -212,16 +269,16 @@ public class ElementRenderer {
      * @param text
      * @param item
      */
-    private final void renderTableItem(List<String> text, TableItem item) {
-        text.add("<tr>");
+    private final void renderTableItem(List<String> html, TableItem item) {
+        html.add("<tr>");
         
         for (Element element : item.getElements()) {
-            text.add("<td>");
-            renderElement(text, element);
-            text.add("</td>");
+            html.add("<td>");
+            renderElement(html, element);
+            html.add("</td>");
         }
         
-        text.add("</tr>");
+        html.add("</tr>");
     }
     
     /**
@@ -229,8 +286,10 @@ public class ElementRenderer {
      * @param text
      * @param text_
      */
-    private final void renderText(List<String> text, Text text_) {
-        text.add(new StringBuffer("<p>").append(text_.getText()).append("</p>").
+    private final void renderText(List<String> html, Text text_) {
+        String value = messages.get(text_.getText(), text_.getText());
+        
+        html.add(new StringBuffer("<p>").append(value).append("</p>").
                 toString());
     }
     
@@ -239,7 +298,7 @@ public class ElementRenderer {
      * @param text
      * @param textfield
      */
-    private final void renderTextField(List<String> text, TextField textfield) {
+    private final void renderTextField(List<String> html, TextField textfield) {
         String inputtext;
         String name = textfield.getName();
         
@@ -248,26 +307,26 @@ public class ElementRenderer {
         else
             inputtext = "<input type=\"password\" name=\"";
         
-        text.add(new StringBuffer(inputtext).append(name).
+        html.add(new StringBuffer(inputtext).append(name).
                 append("\" id=\"").append(name).append("\"/>").toString());
     }
     
     private final void renderJavaScript(
-            List<String> text, ViewData vdata, String[] script) {
+            List<String> html, ViewData vdata, String[] script) {
         Component focus = vdata.getFocus();
         
-        text.add("<script type=\"text/javascript\">");
-        text.add("function initialize() {");
+        html.add("<script type=\"text/javascript\">");
+        html.add("function initialize() {");
         
         if (focus != null)
-            text.add(new StringBuffer("document.getElementById('").
+            html.add(new StringBuffer("document.getElementById('").
                     append(focus.getName()).append("').focus();").toString());
 
-        text.add("}");
+        html.add("}");
         
         for (String line : script)
-            text.add(line);
-        text.add("</script>");
+            html.add(line);
+        html.add("</script>");
     }
     
     /**
@@ -275,31 +334,31 @@ public class ElementRenderer {
      * @param text
      * @param title
      */
-    private final void renderHeader(List<String> text, ViewData vdata) {
+    private final void renderHeader(List<String> html, ViewData vdata) {
         String title = vdata.getTitle();
         
-        text.add("<head>");
-        text.add("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
+        html.add("<head>");
+        html.add("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
         
         if (title == null)
             title = "Iocaste";
         
-        text.add(new StringBuffer("<title>").append(title).
+        html.add(new StringBuffer("<title>").append(title).
                 append("</title>").toString());
-        renderJavaScript(text, vdata, script);
-        text.add("</head>");
+        renderJavaScript(html, vdata, script);
+        html.add("</head>");
     }
     
     /**
      * 
      * @param text
      */
-    private final void renderMessage(List<String> text) {
+    private final void renderMessage(List<String> html) {
         StringBuffer message;
         
         message = new StringBuffer("<div>");
         
-        text.add("<div><p>");
+        html.add("<div><p>");
         switch (msgtype) {
         case WARNING:
             message.append("Aviso: ");
@@ -307,11 +366,11 @@ public class ElementRenderer {
             message.append("Erro: ");
         }
         
-        text.add(message.append(msgtext).append("</p></div>").toString());
+        html.add(message.append(msgtext).append("</p></div>").toString());
     }
 
-    private final void renderStatus(List<String> text) {
-        text.add(new StringBuffer("<p>").append(username).append("</p>").
+    private final void renderStatus(List<String> html) {
+        html.add(new StringBuffer("<p>").append(username).append("</p>").
                 toString());
     }
     
@@ -322,31 +381,33 @@ public class ElementRenderer {
      */
     public final String[] run(ViewData vdata) {
         Container container = vdata.getContainer();
-        List<String> text = new ArrayList<String>();
+        List<String> html = new ArrayList<String>();
         
-        text.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
+        messages = vdata.getMessages();
+        
+        html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
         		"\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
-        text.add("<html>");
-        renderHeader(text, vdata);
-        text.add("<body onLoad=\"initialize()\">");
-        text.add("<form id=\"main\" method=\"post\" action=\"index.html\">");
+        html.add("<html>");
+        renderHeader(html, vdata);
+        html.add("<body onLoad=\"initialize()\">");
+        html.add("<form id=\"main\" method=\"post\" action=\"index.html\">");
         
-        renderStatus(text);
+        renderStatus(html);
         
         if (msgtext != null)
-            renderMessage(text);
+            renderMessage(html);
 
         if (container != null)
-            renderContainer(text, container);
+            renderContainer(html, container);
 
-        text.add("</form>");
-        text.add("</body>");
-        text.add("</html>");
+        html.add("</form>");
+        html.add("</body>");
+        html.add("</html>");
 
         msgtext = null;
         msgtype = Const.NONE;
         
-        return text.toArray(new String[0]);
+        return html.toArray(new String[0]);
     }
     
     /**

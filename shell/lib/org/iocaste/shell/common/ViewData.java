@@ -7,6 +7,7 @@ public class ViewData implements Serializable {
     private Container container;
     private String title;
     private Component focus;
+    private MessageSource messages;
     
     /*
      * 
@@ -28,6 +29,14 @@ public class ViewData implements Serializable {
      */
     public final Component getFocus() {
         return focus;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final MessageSource getMessages() {
+        return messages;
     }
     
     /**
@@ -58,6 +67,14 @@ public class ViewData implements Serializable {
      */
     public final void setFocus(Component focus) {
         this.focus = focus;
+    }
+    
+    /**
+     * 
+     * @param messages
+     */
+    public final void setMessages(MessageSource messages) {
+        this.messages = messages;
     }
     
     /**
