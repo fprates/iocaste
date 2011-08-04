@@ -384,6 +384,8 @@ public class ElementRenderer {
         List<String> html = new ArrayList<String>();
         
         messages = vdata.getMessages();
+        if (messages == null)
+            messages = new MessageSource(null);
         
         html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
         		"\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");

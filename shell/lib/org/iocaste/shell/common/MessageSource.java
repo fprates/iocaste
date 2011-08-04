@@ -10,12 +10,17 @@ public class MessageSource implements Serializable {
     private Properties messages;
     
     public MessageSource(String path) throws RuntimeException {
-        InputStream is = getClass().getResourceAsStream(path);
+        InputStream is;
+        
+        messages = new Properties();
+        
+        if (path == null)
+            return;
+        
+        is = getClass().getResourceAsStream(path);
         
         if (is == null)
             throw new RuntimeException("Message file not found.");
-        
-        messages = new Properties();
         
         try {
             messages.load(is);
