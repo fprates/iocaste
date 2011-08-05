@@ -19,6 +19,7 @@ public class Login extends AbstractFunction {
         export("is_connected", "isConnected");
         export("get_username", "getUsername");
         export("create_user", "createUser");
+        export("disconnect", "disconnect");
     }
     
     /**
@@ -37,6 +38,16 @@ public class Login extends AbstractFunction {
         session.beginTransaction();
         session.save(user);
         session.getTransaction().commit();
+    }
+    
+    public final void disconnect(Message message) throws Exception {
+        String sessionid = message.getSessionid();
+
+        if (sessionid == null)
+            throw new Exception("Null session not allowed.");
+        
+        if (sessions.containsKey(sessionid))
+            sessions.remove(sessionid);
     }
     
     /**

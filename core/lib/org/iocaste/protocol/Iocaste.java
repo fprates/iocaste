@@ -25,6 +25,18 @@ public final class Iocaste extends AbstractServiceInterface {
     
     /**
      * 
+     * @throws Exception
+     */
+    public final void disconnect() throws Exception {
+        Message message = new Message();
+        
+        message.setId("disconnect");
+        
+        call(message);
+    }
+    
+    /**
+     * 
      * @return
      * @throws Exception
      */
