@@ -1,7 +1,5 @@
 package org.iocaste.coreutils;
 
-import java.sql.BatchUpdateException;
-
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.AbstractForm;
