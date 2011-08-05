@@ -2,9 +2,9 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
                                    
-<hibernate-mapping package="org.iocaste.core">
+<hibernate-mapping package="org.iocaste.protocol.user">
     <class name="User" table="USERS001">
-        <id name="name" column="UNAME"/>
+        <id name="username" column="UNAME"/>
         <property name="secret" column="SECRT"/>
     </class>
 </hibernate-mapping>

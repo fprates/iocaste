@@ -3,8 +3,10 @@ package org.iocaste.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hibernate.Session;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.user.User;
 
 public class Login extends AbstractFunction {
     private static final int USERNAME_MAX_LEN = 12;
@@ -16,6 +18,25 @@ public class Login extends AbstractFunction {
         export("login", "login");
         export("is_connected", "isConnected");
         export("get_username", "getUsername");
+        export("create_user", "createUser");
+    }
+    
+    /**
+     * 
+     * @param message
+     */
+    public final void createUser(Message message) throws Exception {
+        User user = (User)message.get("userdata");
+        Session session = getHibernateSession();
+        
+        if (user.getUsername() == null || user.getSecret() == null)
+            throw new Exception("Invalid username or password");
+        
+        user.setUsername(user.getUsername().toUpperCase());
+        
+        session.beginTransaction();
+        session.save(user);
+        session.getTransaction().commit();
     }
     
     /**
@@ -47,7 +68,7 @@ public class Login extends AbstractFunction {
         if (!sessions.containsKey(sessionid))
             return null;
         
-        return sessions.get(sessionid).getName();
+        return sessions.get(sessionid).getUsername();
     }
     
     /**

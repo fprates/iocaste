@@ -1,10 +1,26 @@
 package org.iocaste.protocol;
 
+import org.iocaste.protocol.user.User;
+
 public final class Iocaste extends AbstractServiceInterface {
     public static final String SERVERNAME = "/iocaste-server/service.html";
     
     public Iocaste(Function function) {
         initService(function, SERVERNAME);
+    }
+    
+    /**
+     * 
+     * @param userdata
+     * @throws Exception
+     */
+    public final void createUser(User user) throws Exception {
+        Message message = new Message();
+        
+        message.setId("create_user");
+        message.add("userdata", user);
+        
+        call(message);
     }
     
     /**
