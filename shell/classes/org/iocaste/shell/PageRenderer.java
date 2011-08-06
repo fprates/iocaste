@@ -65,7 +65,8 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param page
      * @throws Exception
      */
-    private final void render(HttpServletResponse resp, PagePos pagepos)
+    private final void render(
+            HttpServletRequest req, HttpServletResponse resp, PagePos pagepos)
             throws Exception {
         String[] text;
         Message message = new Message();
@@ -76,6 +77,8 @@ public class PageRenderer extends HttpServlet implements Function {
         
         message.setId("get_view_data");
         message.add("page", pagepos.page);
+        message.setSessionid(req.getSession().getId());
+        
         pagepos.view = (ViewData)Service.callServer(composeUrl(pagepos.app), message);
         
         text = renderer.run(pagepos.view);
@@ -155,7 +158,7 @@ public class PageRenderer extends HttpServlet implements Function {
             renderer.setUsername(iocaste.getUsername());
         }
         
-        render(resp, pagepos);
+        render(req, resp, pagepos);
     }
     
     /* (non-Javadoc)
