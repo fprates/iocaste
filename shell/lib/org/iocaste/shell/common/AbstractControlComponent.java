@@ -3,8 +3,8 @@ package org.iocaste.shell.common;
 public abstract class AbstractControlComponent extends AbstractComponent {
     private static final long serialVersionUID = -6444029817491608067L;
     
-    public AbstractControlComponent(Container container, Const type) {
-        super(container, type);
+    public AbstractControlComponent(Container container, Const type, String name) {
+        super(container, type, name);
     }
 
     /*

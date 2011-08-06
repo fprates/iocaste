@@ -4,8 +4,8 @@ public class TextField extends AbstractInputComponent {
     private static final long serialVersionUID = 4027561075976606307L;
     private boolean password;
     
-    public TextField(Container container) {
-        super(container, Const.TEXT_FIELD);
+    public TextField(Container container, String name) {
+        super(container, Const.TEXT_FIELD, name);
         password = false;
     }
     

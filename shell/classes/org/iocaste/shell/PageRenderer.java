@@ -41,11 +41,12 @@ public class PageRenderer extends HttpServlet implements Function {
      * @throws Exception
      */
     private final ControlData callController(
-            HttpServletRequest req, String url) throws Exception {
+            HttpServletRequest req, PagePos pagepos) throws Exception {
         String paramname;
         Message message = new Message();
         
         message.setId("exec_action");
+        message.add("view", pagepos.view);
         message.setSessionid(req.getSession().getId());
         
         for (Object obj : req.getParameterMap().keySet()) {
@@ -53,7 +54,8 @@ public class PageRenderer extends HttpServlet implements Function {
             message.add(paramname, req.getParameter(paramname));
         }
             
-        return (ControlData)Service.callServer(url, message);
+        return (ControlData)Service.callServer(
+                composeUrl(pagepos.app), message);
     }
     
     /**
@@ -65,7 +67,6 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void render(HttpServletResponse resp, PagePos pagepos)
             throws Exception {
-        ViewData vdata;
         String[] text;
         Message message = new Message();
         PrintWriter writer = resp.getWriter();
@@ -75,9 +76,9 @@ public class PageRenderer extends HttpServlet implements Function {
         
         message.setId("get_view_data");
         message.add("page", pagepos.page);
-        vdata = (ViewData)Service.callServer(composeUrl(pagepos.app), message);
+        pagepos.view = (ViewData)Service.callServer(composeUrl(pagepos.app), message);
         
-        text = renderer.run(vdata);
+        text = renderer.run(pagepos.view);
 
         if (text != null)
             for (String line : text)
@@ -86,14 +87,30 @@ public class PageRenderer extends HttpServlet implements Function {
         writer.close();
     }
     
+    /**
+     * 
+     * @param app
+     * @return
+     */
     private final String composeUrl(String app) {
         return new StringBuffer(servername).append("/").
                 append(app).append("/view.html").toString();
     }
     
+    /**
+     * 
+     * @param iocaste
+     * @param req
+     * @param pagepos
+     * @return
+     * @throws Exception
+     */
     private final ControlData processController(Iocaste iocaste,
             HttpServletRequest req, PagePos pagepos) throws Exception {
-        ControlData controldata = callController(req, composeUrl(pagepos.app));
+        ControlData controldata = callController(req, pagepos);
+        
+        if (controldata == null)
+            return null;
         
         renderer.setMessageText(controldata.getTranslatedMessage());
         renderer.setMessageType(controldata.getMessageType());
@@ -101,6 +118,12 @@ public class PageRenderer extends HttpServlet implements Function {
         return controldata;
     }
     
+    /**
+     * 
+     * @param req
+     * @param resp
+     * @throws Exception
+     */
     private final void entry(HttpServletRequest req, HttpServletResponse resp)
             throws Exception {
         ControlData controldata = null;
@@ -238,4 +261,5 @@ public class PageRenderer extends HttpServlet implements Function {
 class PagePos {
     public String app;
     public String page;
+    public ViewData view;
 }

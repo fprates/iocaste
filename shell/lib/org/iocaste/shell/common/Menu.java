@@ -6,10 +6,9 @@ public class Menu extends AbstractContainer {
     private Parameter parameter;
     
     public Menu(Container container, String action) {
-        super(container, Const.MENU);
+        super(container, Const.MENU, action);
         this.action = action;
-        parameter = new Parameter(this, action);
-        parameter.setName("function");
+        parameter = new Parameter(this, "function");
     }
     
     public final String getAction() {

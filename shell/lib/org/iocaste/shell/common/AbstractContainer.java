@@ -8,8 +8,8 @@ public abstract class AbstractContainer
     private static final long serialVersionUID = 8676224931708725226L;
     private List<Element> elements;
 
-    public AbstractContainer(Container container, Const type) {
-        super(type);
+    public AbstractContainer(Container container, Const type, String name) {
+        super(type, name);
         elements = new ArrayList<Element>();
         
         if (container != null)

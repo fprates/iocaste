@@ -1,6 +1,8 @@
 package org.iocaste.shell.common;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ViewData implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
@@ -8,6 +10,11 @@ public class ViewData implements Serializable {
     private String title;
     private Component focus;
     private MessageSource messages;
+    private Map<String, InputComponent> inputs;
+    
+    public ViewData() {
+        inputs = new HashMap<String, InputComponent>();
+    }
     
     /*
      * 
@@ -25,10 +32,50 @@ public class ViewData implements Serializable {
     
     /**
      * 
+     * @param container
+     * @param name
+     * @return
+     */
+    private Element findElement(Container container, String name) {
+        String name_ = container.getName();
+        
+        if (name_.equals(name))
+            return container;
+        
+        for (Element element : container.getElements()) {
+            name_= element.getName();
+            
+            if (name_ == null)
+                continue;
+            
+            if (name_.equals(name))
+                return element;
+            
+            if (element.isContainable())
+                return findElement(container, name);
+        }
+        
+        return null;
+    }
+    
+    public final Element getElement(String name) {
+        return findElement(container, name);
+    }
+    
+    /**
+     * 
      * @return
      */
     public final Component getFocus() {
         return focus;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Map<String, InputComponent> getInputs() {
+        return inputs;
     }
     
     /**

@@ -5,8 +5,8 @@ public class TableItem extends AbstractComponent {
     private Element[] elements;
     private int i;
     
-    public TableItem(Table table) {
-        super(table, Const.TABLE_ITEM);
+    public TableItem(Table table, String name) {
+        super(table, Const.TABLE_ITEM, name);
         i = 0;
         elements = new Element[table.getWidth()];
     }

@@ -6,15 +6,23 @@ public class MenuItem extends AbstractComponent {
     private String function;
     
     public MenuItem(Menu menu, String text, String function) {
-        super(menu, Const.MENU_ITEM);
+        super(menu, Const.MENU_ITEM, function);
         this.text = text;
         this.function = function;
     }
 
+    /**
+     * 
+     * @return
+     */
     public final String getFunction() {
         return function;
     }
     
+    /**
+     * 
+     * @return
+     */
     public final String getText() {
         return text;
     }

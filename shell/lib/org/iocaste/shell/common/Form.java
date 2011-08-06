@@ -13,12 +13,10 @@ import org.iocaste.documents.common.DocumentModelItem;
 public class Form extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
     private List<String> actions;
-    private String name;
     private Map<String, FormItem> itens;
     
     public Form(Container container, String name) {
-        super(container, Const.FORM);
-        this.name = name;
+        super(container, Const.FORM, name);
         
         new Parameter(this, "action");
         actions = new ArrayList<String>();
@@ -149,21 +147,12 @@ public class Form extends AbstractContainer {
     
     /**
      * 
-     * @return
-     */
-    public final String getName() {
-        return name;
-    }
-    
-    /**
-     * 
      * @param document
      */
     public final void importModel(DocumentModel document) {
         Set<DocumentModelItem> itens = document.getItens();
         
         for (DocumentModelItem item : itens)
-            new FormItem(this,
-                    item.getName(), Const.TEXT_FIELD);
+            new FormItem(this, Const.TEXT_FIELD, item.getName());
     }
 }

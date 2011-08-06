@@ -68,12 +68,6 @@ public class ControlData implements Serializable {
      * 
      */
     
-    /**
-     * @param messagetext the messagetext to set
-     */
-    public final void setMessageText(String messagetext) {
-        this.messagetext = messagetext;
-    }
 
     /**
      * 
@@ -84,17 +78,21 @@ public class ControlData implements Serializable {
     }
     
     /**
-     * @param messagetype the messagetype to set
+     * 
+     * @param messagetype
+     * @param messagetext
      */
-    public final void setMessageType(Const messagetype) {
+    public final void message(Const messagetype, String messagetext) {
         this.messagetype = messagetype;
+        this.messagetext = messagetext;
     }
 
     /**
      * 
-     * @param pageredirect
+     * @param app
+     * @param page
      */
-    public final void setPageRedirect(String app, String page) {
+    public final void redirect(String app, String page) {
         this.app = app;
         this.page = page;
     }

@@ -1,36 +1,16 @@
 package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
 public abstract class AbstractForm extends AbstractFunction {
-    private ControlData controldata;
-    private Map<String, ViewData> views;
-    private Map<String, InputComponent> inputs;
-    
     public AbstractForm() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
-        
-        controldata = new ControlData();
-        views = new HashMap<String, ViewData>();
-        inputs = new HashMap<String, InputComponent>();
-        
-        try {
-            buildViews();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        
-        for (String name: views.keySet())
-            registerInputs(views.get(name).getContainer());
     }
-    
-    protected abstract void buildViews() throws Exception;
     
     /**
      * 
@@ -39,26 +19,22 @@ public abstract class AbstractForm extends AbstractFunction {
      * @throws Exception
      */
     public final ViewData getViewData(Message message) throws Exception {
+        ViewData view;
+        Method method;
         String page = message.getString("page");
         
         if (page == null)
             throw new Exception("Page not especified.");
         
-        return views.get(page);
-    }
-    
-    /**
-     * 
-     * @param name
-     * @return
-     */
-    protected final ViewData getViewInstance(String name) {
-        ViewData view = new ViewData();
+        view = new ViewData();
+        method = this.getClass().getMethod(page, ViewData.class);
+        method.invoke(this, view);
         
-        views.put(name, view);
+        registerInputs(view.getInputs(), view.getContainer());
         
         return view;
     }
+    
     /*
      * 
      * Others
@@ -72,46 +48,39 @@ public abstract class AbstractForm extends AbstractFunction {
      * @throws Exception
      */
     public final ControlData execAction(Message message) throws Exception {
+        ControlData controldata;
         Method method;
+        ViewData view;
+        Map<String, InputComponent> inputs;
         String action = message.getString("action");
-
-        setSessionid(message.getSessionid());
         
         if (action == null)
-            return controldata;
+            return null;
+        
+        view = (ViewData)message.get("view");
+        if (view == null)
+            throw new Exception("Null view on action processing.");
+        
+        inputs = view.getInputs();
         
         for (String name : inputs.keySet())
             inputs.get(name).setValue(message.getString(name));
         
-        method = this.getClass().getMethod(action);
-        method.invoke(this);
+        controldata = new ControlData();
+        method = this.getClass().getMethod(
+                action, ControlData.class, ViewData.class);
+        method.invoke(this, controldata, view);
         
         return controldata;
     }
     
     /**
      * 
-     * @param messages
-     * @param type
-     * @param text
+     * @param inputs
+     * @param element
      */
-    protected final void message(
-            MessageSource messages, Const type, String text) {
-        controldata.setMessageSource(messages);
-        controldata.setMessageType(type);
-        controldata.setMessageText(text);
-    }
-    
-    /**
-     * 
-     * @param app
-     * @param page
-     */
-    protected final void redirect(String app, String page) {
-        controldata.setPageRedirect(app, page);
-    }
-    
-    private final void registerInputs(Element element) {
+    private final void registerInputs(
+            Map<String, InputComponent> inputs, Element element) {
         Container container;
         Component component;
         
@@ -121,7 +90,7 @@ public abstract class AbstractForm extends AbstractFunction {
         if (element.isContainable()) {
             container = (Container)element;
             for (Element element_ : container.getElements())
-                registerInputs(element_);
+                registerInputs(inputs, element_);
             
             return;
         }

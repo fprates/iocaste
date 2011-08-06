@@ -173,7 +173,7 @@ public class ElementRenderer {
         Button button;
         FormItem formitem;
         TableItem tableitem;
-        Table table = new Table(null, 2);
+        Table table = new Table(null, 2, null);
         
         for (Element element : form.getElements()) {
             if (element.getType() != Const.FORM_ITEM) {
@@ -181,12 +181,11 @@ public class ElementRenderer {
                 continue;
             }
             
-            tableitem = new TableItem(table);
+            tableitem = new TableItem(table, null);
             formitem = (FormItem)element;
             inputname = formitem.getName();
             
-            text = new Text(null);
-            text.setName(inputname);
+            text = new Text(null, inputname);
             text.setText(messages.get(inputname, inputname));
             
             type = formitem.getComponentType();
@@ -194,8 +193,7 @@ public class ElementRenderer {
             switch (type) {
             case TEXT_FIELD:
             case PASSWORD:
-                component = new TextField(null);
-                component.setName(inputname);
+                component = new TextField(null, inputname);
                 
                 if (type == Const.TEXT_FIELD)
                     ((TextField)component).setPassword(false);
@@ -214,9 +212,8 @@ public class ElementRenderer {
         renderContainer(html, table);
         
         for (String action : form.getActions()) {
-            button = new Button(form);
+            button = new Button(form, action);
             button.setSubmit(true);
-            button.setName(action);
             button.setText(messages.get(action, action));
             
             renderButton(html, button);
@@ -249,7 +246,7 @@ public class ElementRenderer {
     
     private void renderMenuItem(List<String> html, MenuItem menuitem) {
         Menu menu = (Menu)menuitem.getContainer();
-        Link link = new Link(null, menu.getAction());
+        Link link = new Link(null, null, menu.getAction());
         
         link.setText(menuitem.getText());
         link.add(menu.getParameter(), menuitem.getFunction());

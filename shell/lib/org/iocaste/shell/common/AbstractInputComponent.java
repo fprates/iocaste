@@ -5,8 +5,8 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private static final long serialVersionUID = 7276777605716326451L;
     private String value;
     
-    public AbstractInputComponent(Container container, Const type) {
-        super(container, type);
+    public AbstractInputComponent(Container container, Const type, String name) {
+        super(container, type, name);
     }
     
     /*

@@ -5,8 +5,8 @@ public class Button extends AbstractControlComponent {
     private boolean submit;
     private String text;
     
-    public Button(Container container) {
-        super(container, Const.BUTTON);
+    public Button(Container container, String name) {
+        super(container, Const.BUTTON, name);
         submit = false;
     }
 

@@ -9,8 +9,8 @@ public class Link extends AbstractControlComponent {
     private String text;
     private Map<Parameter, String> values;
     
-    public Link(Container container, String action) {
-        super(container, Const.LINK);
+    public Link(Container container, String name, String action) {
+        super(container, Const.LINK, name);
         this.action = action;
         text = action;
         values = new HashMap<Parameter, String>();
