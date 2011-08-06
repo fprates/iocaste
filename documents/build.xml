@@ -9,7 +9,6 @@
         <!-- dependências -->
         <path id="dependencies">
             <fileset dir="${builddir}/core/lib"/>
-            <fileset dir="${builddir}/shell/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
@@ -51,7 +50,6 @@
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
             <lib dir="${basedir}/lib" includes="*.jar"/>
             <lib dir="${builddir}/core/lib" includes="*.jar"/>
-            <lib dir="${builddir}/shell/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
     </target>
