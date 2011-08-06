@@ -1,7 +1,7 @@
 package org.iocaste.documents.common;
 
 public class DocumentModelItem implements Comparable<DocumentModelItem> {
-    private int item;
+    private String item;
     private String name;
     private DocumentModel document;
     
@@ -17,7 +17,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem> {
      * 
      * @return
      */
-    public final int getItem() {
+    public final String getItem() {
         return item;
     }
     
@@ -41,7 +41,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem> {
      * 
      * @param item
      */
-    public final void setItem(int item) {
+    public final void setItem(String item) {
         this.item = item;
     }
     
@@ -59,10 +59,18 @@ public class DocumentModelItem implements Comparable<DocumentModelItem> {
      */
     @Override
     public int compareTo(DocumentModelItem documentitem) {
+        int compare;
+        
         if (documentitem == this)
             return 0;
         
-        return item - documentitem.getItem();
+        compare = document.getName().compareTo(
+                documentitem.getDocumentModel().getName());
+        
+        if (compare != 0)
+            return compare;
+        
+        return item.compareTo(documentitem.getItem());
     }
 
 }

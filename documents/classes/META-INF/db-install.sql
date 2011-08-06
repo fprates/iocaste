@@ -16,9 +16,8 @@ create table docs001 (
 );
 
 create table docs002 (
-   posnr numeric(2) primary key,
-   docid char(12) foreign key references docs001(docid),
-   iname char(60)
+   iname char(60) primary key,
+   docid char(12) foreign key references docs001(docid)
 );
 
 \p document tables has been generated
