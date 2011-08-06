@@ -14,35 +14,35 @@ public class OfficeMessage implements Serializable {
      * 
      * @return
      */
-    public final long getId() {
+    public long getId() {
         return id;
     }
     
     /**
      * @return the sender
      */
-    public final String getSender() {
+    public String getSender() {
         return sender;
     }
     
     /**
      * @return the receiver
      */
-    public final String getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
     
     /**
      * @return the subject
      */
-    public final String getSubject() {
+    public String getSubject() {
         return subject;
     }
     
     /**
      * @return the text
      */
-    public final String getText() {
+    public String getText() {
         return text;
     }
     
@@ -50,35 +50,35 @@ public class OfficeMessage implements Serializable {
      * 
      * @param id
      */
-    public final void setId(long id) {
+    public void setId(long id) {
         this.id = id;
     }
     
     /**
      * @param sender the sender to set
      */
-    public final void setSender(String sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
     
     /**
      * @param receiver the receiver to set
      */
-    public final void setReceiver(String receiver) {
+    public void setReceiver(String receiver) {
         this.receiver = receiver;
     }
     
     /**
      * @param subject the subject to set
      */
-    public final void setSubject(String subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
     }
     
     /**
      * @param text the text to set
      */
-    public final void setText(String text) {
+    public void setText(String text) {
         this.text = text;
     }
 }
