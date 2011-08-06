@@ -6,6 +6,7 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.AbstractForm;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
@@ -13,55 +14,58 @@ import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.ViewData;
 
 public class MainForm extends AbstractForm {
-    private Form form;
-    private Menu mainMenu;
-    private MessageSource messages;
 
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractForm#buildViews()
+    /**
+     * 
+     * @param view
+     * @throws Exception
      */
-    @Override
-    protected final void buildViews() throws Exception {
-        DocumentModel document;
-        ViewData view = getViewInstance("main");
-        Documents documents = new Documents(this);
+    public final void main(ViewData view) throws Exception {
+        Menu mainMenu = new Menu(null, "run");
         
-        messages = new MessageSource("/messages.properties");
-        mainMenu = new Menu(null, "run");
         new MenuItem(mainMenu, "user.add", "add");
         new MenuItem(mainMenu, "user.change", "change");
+        view.setMessages(new MessageSource("/messages.properties"));
         view.setContainer(mainMenu);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void form(ViewData view) throws Exception {
+        Form form = new Form(null, "user");
+        Documents documents = new Documents(this);
+        DocumentModel document = documents.getModel("login");
         
-        view = getViewInstance("form");
-        
-        form = new Form(null, "user");
         form.addAction("save");
-
-        document = documents.getModel("login");
         form.importModel(document);
-//        view.setFocus(new FormItem(form, "username", Const.TEXT_FIELD));
-//        new FormItem(form, "secret", Const.PASSWORD);
         
-        view.setMessages(messages);
+        view.setMessages(new MessageSource("/messages.properties"));
         view.setContainer(form);
     }
     
     /**
      * 
+     * @param controldata
+     * @param view
      */
-    public final void run() {
-        String value = mainMenu.getParameter().getValue();
+    public final void run(ControlData controldata, ViewData view) {
+        Menu mainmenu= (Menu)view.getElement("run");
+        String value = mainmenu.getParameter().getValue();
         
         if (value.equals("add"))
-            redirect("iocaste-core-utils", "form");
+            controldata.redirect("iocaste-core-utils", "form");
     }
     
     /**
      * 
      * @throws Exception
      */
-    public final void save() throws Exception {
+    public final void save(ControlData controldata, ViewData view)
+            throws Exception {
+        Form form = (Form)view.getElement("user");
         Iocaste iocaste = new Iocaste(this);
         User user = new User();
         
@@ -70,7 +74,7 @@ public class MainForm extends AbstractForm {
         try {
             iocaste.createUser(user);
         } catch (Exception e) {
-            message(messages, Const.ERROR, "user.already.exists");
+            controldata.message(Const.ERROR, "user.already.exists");
         }
     }
 }

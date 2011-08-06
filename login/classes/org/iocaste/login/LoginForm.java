@@ -3,28 +3,24 @@ package org.iocaste.login;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractForm;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.FormItem;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.ViewData;
 
 public class LoginForm extends AbstractForm {
-    private MessageSource messages;
-    private Form form;
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractForm#buildViews()
+    /**
+     * 
+     * @param view
      */
-    @Override
-    protected final void buildViews() {
-        ViewData view = getViewInstance("authentic");
-
-        form = new Form(null, "login");
+    public final void authentic(ViewData view) {
+        Form form = new Form(null, "login");
         form.addAction("connect");
         
-        view.setFocus(new FormItem(form, "username", Const.TEXT_FIELD));
-        new FormItem(form, "secret", Const.PASSWORD);
+        view.setFocus(new FormItem(form, Const.TEXT_FIELD, "username"));
+        new FormItem(form, Const.PASSWORD, "secret");
         
         view.setMessages(new MessageSource("/message.properties"));
         view.setTitle("authentic");
@@ -33,17 +29,20 @@ public class LoginForm extends AbstractForm {
     
     /**
      * 
+     * @param controldata
+     * @param view
      * @throws Exception
      */
-    public final void connect() throws Exception {
+    public final void connect(ControlData controldata, ViewData view) throws Exception {
+        Form form = (Form)view.getElement("login");
         Iocaste iocaste = new Iocaste(this);
         Login login = new Login();
         
         form.exportTo(login);
         
         if (iocaste.login(login.getUsername(), login.getSecret()))
-            redirect("iocaste-tasksel", "main");
+            controldata.redirect("iocaste-tasksel", "main");
         else
-            message(messages, Const.ERROR, "invalid.login");
+            controldata.message(Const.ERROR, "invalid.login");
     }
 }

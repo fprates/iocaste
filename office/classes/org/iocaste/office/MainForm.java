@@ -3,34 +3,26 @@ package org.iocaste.office;
 import org.iocaste.office.common.Office;
 import org.iocaste.shell.common.AbstractForm;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.FormItem;
-import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.ViewData;
 
 public class MainForm extends AbstractForm {
-    private Form form;
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractForm#buildViews()
-     */
-    @Override
-    protected void buildViews() {
-        ViewData view = getViewInstance("main");
-        Container main = new StandardContainer(null);
+    public void main(ViewData view) {
+        Form form = new Form(null, "header");
         
-        form = new Form(main, "header");
         form.addAction("send");
         
-        new FormItem(form, "receiver", Const.TEXT_FIELD);
-        new FormItem(form, "subject", Const.TEXT_FIELD);
+        new FormItem(form, Const.TEXT_FIELD, "receiver");
+        new FormItem(form, Const.TEXT_FIELD, "subject");
         
-        view.setContainer(main);
+        view.setContainer(form);
     }
     
-    public void send() throws Exception {
+    public void send(ControlData controldata, ViewData view) throws Exception {
+        Form form = (Form)view.getElement("header");
         OfficeMessage message = new OfficeMessage();
         Office office = new Office(this);
         
