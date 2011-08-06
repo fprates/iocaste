@@ -4,7 +4,8 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.ServerServlet;
 
 public class Servlet extends ServerServlet {
-    
+    private static final long serialVersionUID = -4447612067637162915L;
+
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.ServerServlet#config()
@@ -24,7 +25,7 @@ public class Servlet extends ServerServlet {
      * rotinas customizadas de pré-processamento
      */
     @Override
-    public void preRun(Message message) {
+    public void preRun(Message message) throws Exception {
         super.preRun(message);
     }
 }
