@@ -1,6 +1,10 @@
 package org.iocaste.documents.common;
 
-public class DocumentModelItem implements Comparable<DocumentModelItem> {
+import java.io.Serializable;
+
+public class DocumentModelItem implements Comparable<DocumentModelItem>,
+            Serializable {
+    private static final long serialVersionUID = 7353680713818082301L;
     private String item;
     private String name;
     private DocumentModel document;
@@ -9,7 +13,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem> {
      * 
      * @return
      */
-    public final DocumentModel getDocumentModel() {
+    public DocumentModel getDocumentModel() {
         return document;
     }
     
@@ -17,7 +21,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem> {
      * 
      * @return
      */
-    public final String getItem() {
+    public String getItem() {
         return item;
     }
     
@@ -25,7 +29,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem> {
      * 
      * @return
      */
-    public final String getName() {
+    public String getName() {
         return name;
     }
     
@@ -33,7 +37,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem> {
      * 
      * @param document
      */
-    public final void setDocumentModel(DocumentModel document) {
+    public void setDocumentModel(DocumentModel document) {
         this.document = document;
     }
     
@@ -41,7 +45,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem> {
      * 
      * @param item
      */
-    public final void setItem(String item) {
+    public void setItem(String item) {
         this.item = item;
     }
     
@@ -49,7 +53,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem> {
      * 
      * @param name
      */
-    public final void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
     
@@ -64,8 +68,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem> {
         if (documentitem == this)
             return 0;
         
-        compare = document.getName().compareTo(
-                documentitem.getDocumentModel().getName());
+        compare = document.compareTo(documentitem.getDocumentModel());
         
         if (compare != 0)
             return compare;

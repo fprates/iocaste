@@ -15,7 +15,7 @@ public class Documents extends AbstractServiceInterface {
         Message message = new Message();
         
         message.setId("get_document_model");
-        message.add("name", name);
+        message.add("name", name.toUpperCase());
         
         return (DocumentModel)call(message);
     }

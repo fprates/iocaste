@@ -84,9 +84,8 @@ public class Form extends AbstractContainer {
      * @param component
      * @throws RuntimeException
      */
-    private final void invokeCopy(
-            Class<?> class_, Object object, Method method, InputComponent component)
-            throws RuntimeException {
+    private final void invokeCopy(Class<?> class_, Object object,
+            Method method, InputComponent component) throws RuntimeException {
         String value = component.getValue();
         String typename = class_.getSimpleName();
         

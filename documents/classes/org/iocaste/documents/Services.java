@@ -1,13 +1,31 @@
-package org.iocaste.documents.range;
+package org.iocaste.documents;
 
 import org.hibernate.Session;
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.range.NumericRange;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
-public class NumericRangeFunction extends AbstractFunction {
-
-    public NumericRangeFunction() {
+public class Services extends AbstractFunction {
+    
+    public Services() {
         export("get_next_number", "getNextNumber");
+        export("get_document_model", "getDocumentModel");
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final DocumentModel getDocumentModel(Message message) throws Exception {
+        String documentname = message.getString("name");
+        
+        if (documentname == null)
+            throw new Exception("Document model not especified.");
+        
+        return (DocumentModel)load(DocumentModel.class, documentname);
     }
     
     /**
