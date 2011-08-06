@@ -20,13 +20,17 @@ public abstract class AbstractForm extends AbstractFunction {
         views = new HashMap<String, ViewData>();
         inputs = new HashMap<String, InputComponent>();
         
-        buildViews();
+        try {
+            buildViews();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         
         for (String name: views.keySet())
             registerInputs(views.get(name).getContainer());
     }
     
-    protected abstract void buildViews();
+    protected abstract void buildViews() throws Exception;
     
     /**
      * 

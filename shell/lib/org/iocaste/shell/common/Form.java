@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 
 public class Form extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
@@ -143,7 +147,23 @@ public class Form extends AbstractContainer {
         return actions.toArray(new String[0]);
     }
     
+    /**
+     * 
+     * @return
+     */
     public final String getName() {
         return name;
+    }
+    
+    /**
+     * 
+     * @param document
+     */
+    public final void importModel(DocumentModel document) {
+        Set<DocumentModelItem> itens = document.getItens();
+        
+        for (DocumentModelItem item : itens)
+            new FormItem(this,
+                    item.getName(), Const.TEXT_FIELD);
     }
 }

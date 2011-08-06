@@ -1,7 +1,6 @@
 package org.iocaste.coreutils;
 
-import org.iocaste.coreutils.common.StandardDocument;
-import org.iocaste.documents.common.Document;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
@@ -11,7 +10,12 @@ public class Services extends AbstractFunction {
         export("get_document_model", "getDocumentModel");
     }
     
-    public final Document getDocumentModel(Message message) {
-        return new StandardDocument();
+    public final DocumentModel getDocumentModel(Message message) throws Exception {
+        String documentname = message.getString("name");
+        
+        if (documentname == null)
+            throw new Exception("Document model not especified.");
+        
+        return (DocumentModel)load(DocumentModel.class, documentname);
     }
 }

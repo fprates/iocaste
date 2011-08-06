@@ -9,12 +9,12 @@
     <target name="compile" depends="clean">
     	<!-- core -->
         <ant antfile="${basedir}/src/core/build.xml"/>
-    	
-    	<!-- shell -->
-    	<ant antfile="${basedir}/src/shell/build.xml"/>
         
         <!-- documents -->
         <ant antfile="${basedir}/src/documents/build.xml"/>
+        
+        <!-- shell -->
+        <ant antfile="${basedir}/src/shell/build.xml"/>
     	
         <!-- login -->
         <ant antfile="${basedir}/src/login/build.xml"/>

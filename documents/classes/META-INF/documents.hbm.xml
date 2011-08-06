@@ -1,11 +1,25 @@
 <?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
                                    
-<hibernate-mapping package="org.iocaste.documents.range">    
-    <class name="NumericRange" table="RANGE001">
+<hibernate-mapping>
+    <class name="org.iocaste.documents.range.NumericRange" table="RANGE001">
         <id name="range" column="IDENT"/>
         <property name="current" column="CRRNT"/>
+    </class>
+    
+    <class name="org.iocaste.documents.common.DocumentModel" table="DOCS001">
+        <id name="name" column="DOCID"/>
+        <set name="itens" inverse="true">
+            <key column="DOCID"/>
+            <one-to-many class="org.iocaste.documents.common.DocumentModelItem"/>
+        </set>
+    </class>
+    
+    <class name="org.iocaste.documents.common.DocumentModelItem" table="DOCS002">
+        <id name="item" column="POSNR"/>
+        <many-to-one name="documentModel" column="DOCID" not-null="true"/>
     </class>
 </hibernate-mapping>
                                    

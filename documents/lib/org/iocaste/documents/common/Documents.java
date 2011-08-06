@@ -11,13 +11,13 @@ public class Documents extends AbstractServiceInterface {
         initService(function, SERVERNAME);
     }
     
-    public final Document getModel(String name) throws Exception {
+    public final DocumentModel getModel(String name) throws Exception {
         Message message = new Message();
         
         message.setId("get_document_model");
         message.add("name", name);
         
-        return (Document)call(message);
+        return (DocumentModel)call(message);
     }
     
     /**

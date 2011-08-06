@@ -1,11 +1,12 @@
 package org.iocaste.coreutils;
 
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.AbstractForm;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.FormItem;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.MessageSource;
@@ -21,8 +22,10 @@ public class MainForm extends AbstractForm {
      * @see org.iocaste.shell.common.AbstractForm#buildViews()
      */
     @Override
-    protected final void buildViews() {
+    protected final void buildViews() throws Exception {
+        DocumentModel document;
         ViewData view = getViewInstance("main");
+        Documents documents = new Documents(this);
         
         messages = new MessageSource("/messages.properties");
         mainMenu = new Menu(null, "run");
@@ -34,8 +37,11 @@ public class MainForm extends AbstractForm {
         
         form = new Form(null, "user");
         form.addAction("save");
-        view.setFocus(new FormItem(form, "username", Const.TEXT_FIELD));
-        new FormItem(form, "secret", Const.PASSWORD);
+
+        document = documents.getModel("login");
+        form.importModel(document);
+//        view.setFocus(new FormItem(form, "username", Const.TEXT_FIELD));
+//        new FormItem(form, "secret", Const.PASSWORD);
         
         view.setMessages(messages);
         view.setContainer(form);
