@@ -35,9 +35,7 @@ public class Login extends AbstractFunction {
         
         user.setUsername(user.getUsername().toUpperCase());
         
-        session.beginTransaction();
         session.save(user);
-        session.getTransaction().commit();
     }
     
     public final void disconnect(Message message) throws Exception {

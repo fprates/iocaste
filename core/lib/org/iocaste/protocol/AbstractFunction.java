@@ -78,15 +78,9 @@ public abstract class AbstractFunction implements Function {
      * @return
      */
     protected final Object load(Class<?> class_, Serializable object) {
-        Object result;
-        
         Session session = sessionFactory.getCurrentSession();
         
-        session.beginTransaction();
-        result = session.get(class_, object);
-        session.getTransaction().commit();
-        
-        return result;
+        return session.get(class_, object);
     }
     
     /*
@@ -117,21 +111,16 @@ public abstract class AbstractFunction implements Function {
      */
     protected final List<?> select(String queryid, Object[] criteria) {
         Query query;
-        List<?> results;
         int id = 0;        
         Session session = sessionFactory.getCurrentSession();
         
-        session.beginTransaction();
         query = session.createQuery(queries.get(queryid));
         
         if (criteria != null)
             for (Object object : criteria)
                 query.setParameter(id++, object);
         
-        results = query.list();
-        session.getTransaction().commit();
-        
-        return results;
+        return query.list();
     }
     
     /*

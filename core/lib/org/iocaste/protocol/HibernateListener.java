@@ -4,7 +4,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 
 public class HibernateListener implements ServletContextListener {
     private static SessionFactory sessionFactory;
@@ -13,14 +12,24 @@ public class HibernateListener implements ServletContextListener {
         return sessionFactory;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see javax.servlet.ServletContextListener#contextDestroyed(
+     *     javax.servlet.ServletContextEvent)
+     */
     @Override
     public void contextDestroyed(ServletContextEvent arg0) {
         sessionFactory.close();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see javax.servlet.ServletContextListener#contextInitialized(
+     *     javax.servlet.ServletContextEvent)
+     */
     @Override
     public void contextInitialized(ServletContextEvent arg0) {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
+        sessionFactory = HibernateUtil.getSessionFactory();
     }
 
 }

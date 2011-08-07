@@ -23,7 +23,7 @@ public class Services extends AbstractFunction {
         String documentname = message.getString("name");
         
         if (documentname == null)
-            throw new Exception("Document model not especified.");
+            throw new Exception("Document model not specified.");
         
         return (DocumentModel)load(DocumentModel.class, documentname);
     }
@@ -40,7 +40,7 @@ public class Services extends AbstractFunction {
         String ident = message.getString("range");
         
         if (ident == null)
-            throw new Exception("Numeric range not especified.");
+            throw new Exception("Numeric range not specified.");
         
         range = (NumericRange)load(NumericRange.class, ident);
         
@@ -50,9 +50,7 @@ public class Services extends AbstractFunction {
         range.setCurrent(range.getCurrent()+1);
 
         session = getHibernateSession();
-        session.beginTransaction();
         session.update(range);
-        session.getTransaction().commit();
         
         return range.getCurrent();
     }

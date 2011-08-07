@@ -23,8 +23,6 @@ public class Services extends AbstractFunction {
         message_.setId(documents.getNextNumber("OFFICEMSGNR"));
         
         Session session = getHibernateSession();
-        session.beginTransaction();
         session.save(message_);
-        session.getTransaction().commit();
     }
 }
