@@ -10,14 +10,14 @@ public class NumericRange implements Serializable {
     /**
      * @return the range
      */
-    public final String getRange() {
+    public String getRange() {
         return range;
     }
     
     /**
      * @return the current
      */
-    public final long getCurrent() {
+    public long getCurrent() {
         return current;
     }
     
@@ -25,17 +25,14 @@ public class NumericRange implements Serializable {
      * 
      * @param range
      */
-    public final void setRange(String range) {
+    public void setRange(String range) {
         this.range = range;
     }
     
     /**
      * @param current the current to set
      */
-    public final void setCurrent(long current) {
+    public void setCurrent(long current) {
         this.current = current;
     }
-    
-    
-    
 }
