@@ -30,13 +30,6 @@ public class ControlData implements Serializable {
     }
     
     /**
-     * @return the messagetext
-     */
-    public final String getMessageText() {
-        return messagetext;
-    }
-    
-    /**
      * @return the messagetype
      */
     public final Const getMessageType() {
@@ -56,6 +49,9 @@ public class ControlData implements Serializable {
      * @return
      */
     public final String getTranslatedMessage() {
+        if (messagetext == null)
+            return null;
+        
         if (messages == null)
             return messagetext;
         else
@@ -73,7 +69,7 @@ public class ControlData implements Serializable {
      * 
      * @param messages
      */
-    public final void setMessageSource(MessageSource messages) {
+    public final void setMessages(MessageSource messages) {
         this.messages = messages;
     }
     

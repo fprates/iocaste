@@ -67,6 +67,8 @@ public abstract class AbstractForm extends AbstractFunction {
             inputs.get(name).setValue(message.getString(name));
         
         controldata = new ControlData();
+        controldata.setMessages(view.getMessages());
+        
         method = this.getClass().getMethod(
                 action, ControlData.class, ViewData.class);
         method.invoke(this, controldata, view);
