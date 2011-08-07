@@ -9,18 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.SessionFactory;
-
 public abstract class ServerServlet extends HttpServlet {
     private static final long serialVersionUID = 7408336035974886402L;
-    private SessionFactory sessionFactory;
     private Map<String, Function> functions;
     private HttpServletRequest req;
     private HttpServletResponse resp;
     
     public ServerServlet() {
         functions = new HashMap<String, Function>();
-        sessionFactory = HibernateListener.getSessionFactory();
         config();
     }
     
@@ -119,6 +115,11 @@ public abstract class ServerServlet extends HttpServlet {
         }
     }
 
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
     protected void preRun(Message message) throws Exception {
         boolean connected;
         Message test = new Message();
@@ -132,21 +133,37 @@ public abstract class ServerServlet extends HttpServlet {
         connected = (Boolean)Service.callServer(url, test);
         
         if (!connected)
-            throw new Exception("Invalid Session.");
+            throw new Exception("Invalid session.");
     }
     
+    /**
+     * 
+     * @param name
+     * @param function
+     */
     private final void addFunction(String name, Function function) {
         functions.put(name, function);
-        function.setSessionFactory(sessionFactory);
     }
     
+    /**
+     * 
+     * @param function
+     */
     protected void register(Function function) {
         for (String method : function.getMethods())
             addFunction(method, function);
     }
     
+    /**
+     * 
+     */
     protected abstract void config();
     
+    /**
+     * 
+     * @param service
+     * @throws IOException
+     */
     protected final void configureStreams(Service service) throws IOException {
         service.setInputStream(req.getInputStream());
         service.setOutputStream(resp.getOutputStream());

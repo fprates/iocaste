@@ -1,9 +1,11 @@
 package org.iocaste.documents;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.range.NumericRange;
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.protocol.Message;
 
 public class Services extends AbstractFunction {
@@ -20,12 +22,20 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final DocumentModel getDocumentModel(Message message) throws Exception {
+        DocumentModel document;
+        Session session;
         String documentname = message.getString("name");
         
         if (documentname == null)
             throw new Exception("Document model not specified.");
+
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        document = (DocumentModel)session.get(DocumentModel.class, documentname);
         
-        return (DocumentModel)load(DocumentModel.class, documentname);
+        Hibernate.initialize(document);
+        Hibernate.initialize(document.getItens());
+        
+        return document;
     }
     
     /**
@@ -41,15 +51,15 @@ public class Services extends AbstractFunction {
         
         if (ident == null)
             throw new Exception("Numeric range not specified.");
-        
-        range = (NumericRange)load(NumericRange.class, ident);
+
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
+        range = (NumericRange)session.get(NumericRange.class, ident);
         
         if (range == null)
             throw new Exception("Range \""+ident+"\" not found.");
         
         range.setCurrent(range.getCurrent()+1);
 
-        session = getHibernateSession();
         session.update(range);
         
         return range.getCurrent();

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.SessionFactory;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
@@ -217,14 +216,6 @@ public class PageRenderer extends HttpServlet implements Function {
     public final Object run(Message message) throws Exception {
         return null;
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#setSessionFactory(
-     *     org.hibernate.SessionFactory)
-     */
-    @Override
-    public final void setSessionFactory(SessionFactory sessionFactory) { }
 
     /*
      * (non-Javadoc)

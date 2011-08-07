@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.hibernate.Session;
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 
@@ -28,7 +29,7 @@ public class Login extends AbstractFunction {
      */
     public final void createUser(Message message) throws Exception {
         User user = (User)message.get("userdata");
-        Session session = getHibernateSession();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         
         if (user.getUsername() == null || user.getSecret() == null)
             throw new Exception("Invalid username or password");
@@ -90,6 +91,7 @@ public class Login extends AbstractFunction {
         String user = message.getString("user");
         String secret = message.getString("secret");
         String sessionid = message.getSessionid();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         
         if (sessionid == null)
             throw new Exception("Null session not allowed.");
@@ -97,7 +99,7 @@ public class Login extends AbstractFunction {
         if (user.length() > USERNAME_MAX_LEN)
             return false;
             
-        User user_ = (User)load(User.class, user.toUpperCase());
+        User user_ = (User)session.get(User.class, user.toUpperCase());
         
         if (user_ == null)
             return false;

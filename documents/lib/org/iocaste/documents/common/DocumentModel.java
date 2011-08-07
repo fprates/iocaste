@@ -42,6 +42,15 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
 
     /*
      * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     @Override

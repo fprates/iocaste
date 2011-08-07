@@ -1,21 +1,14 @@
 package org.iocaste.protocol;
 
 import java.io.InputStream;
-import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
 public abstract class AbstractFunction implements Function {
-    private SessionFactory sessionFactory;
     private ServletContext context;
     private Map<String, String> queries;
     private Map<String, String> exports;
@@ -45,14 +38,6 @@ public abstract class AbstractFunction implements Function {
         exports.put(name, method);
     }
     
-    /**
-     * 
-     * @return
-     */
-    protected final Session getHibernateSession() {
-        return sessionFactory.getCurrentSession();
-    }
-    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#getMethods()
@@ -69,18 +54,6 @@ public abstract class AbstractFunction implements Function {
      */
     public final InputStream getResourceAsStream(String path) {
         return context.getResourceAsStream(path);
-    }
-    
-    /**
-     * 
-     * @param class_
-     * @param object
-     * @return
-     */
-    protected final Object load(Class<?> class_, Serializable object) {
-        Session session = sessionFactory.getCurrentSession();
-        
-        return session.get(class_, object);
     }
     
     /*
@@ -101,26 +74,6 @@ public abstract class AbstractFunction implements Function {
         method = getClass().getMethod(methodname, Message.class);
         
         return method.invoke(this, message);
-    }
-    
-    /**
-     * 
-     * @param queryid
-     * @param criteria
-     * @return
-     */
-    protected final List<?> select(String queryid, Object[] criteria) {
-        Query query;
-        int id = 0;        
-        Session session = sessionFactory.getCurrentSession();
-        
-        query = session.createQuery(queries.get(queryid));
-        
-        if (criteria != null)
-            for (Object object : criteria)
-                query.setParameter(id++, object);
-        
-        return query.list();
     }
     
     /*
@@ -159,15 +112,6 @@ public abstract class AbstractFunction implements Function {
     @Override
     public final void setServletContext(ServletContext context) {
         this.context = context;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#setSessionFactory(org.hibernate.SessionFactory)
-     */
-    @Override
-    public final void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
     
     @Override

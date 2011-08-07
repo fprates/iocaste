@@ -3,6 +3,7 @@ package org.iocaste.office;
 import org.hibernate.Session;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.protocol.Message;
 
 public class Services extends AbstractFunction {
@@ -13,6 +14,7 @@ public class Services extends AbstractFunction {
     
     public final void sendMessage(Message message) throws Exception {
         Documents documents;
+        Session session;
         OfficeMessage message_ = (OfficeMessage)message.get("message");
         
         if (message_ == null)
@@ -22,7 +24,7 @@ public class Services extends AbstractFunction {
 
         message_.setId(documents.getNextNumber("OFFICEMSGNR"));
         
-        Session session = getHibernateSession();
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.save(message_);
     }
 }
