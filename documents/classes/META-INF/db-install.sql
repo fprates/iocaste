@@ -16,7 +16,7 @@ create table docs001 (
 );
 
 create table docs002 (
-   iname char(60) primary key,
+   iname char(12) primary key,
    docid char(12) foreign key references docs001(docid)
 );
 

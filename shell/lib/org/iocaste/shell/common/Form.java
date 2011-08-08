@@ -152,6 +152,6 @@ public class Form extends AbstractContainer {
         Set<DocumentModelItem> itens = document.getItens();
         
         for (DocumentModelItem item : itens)
-            new FormItem(this, Const.TEXT_FIELD, item.getName());
+            new FormItem(this, Const.TEXT_FIELD, item.getItem());
     }
 }

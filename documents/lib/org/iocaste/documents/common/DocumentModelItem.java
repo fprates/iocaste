@@ -6,7 +6,6 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
             Serializable {
     private static final long serialVersionUID = 7353680713818082301L;
     private String item;
-    private String name;
     private DocumentModel document;
     
     /**
@@ -27,14 +26,6 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     
     /**
      * 
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-    
-    /**
-     * 
      * @param document
      */
     public void setDocumentModel(DocumentModel document) {
@@ -49,12 +40,36 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
         this.item = item;
     }
     
-    /**
-     * 
-     * @param name
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-    public void setName(String name) {
-        this.name = name;
+    public boolean equals(Object object) {
+        DocumentModelItem documentitem;
+        
+        if (object == this)
+            return true;
+        
+        if (!(object instanceof DocumentModelItem))
+            return false;
+        
+        documentitem = (DocumentModelItem)object;
+        if (!documentitem.getDocumentModel().equals(document))
+            return false;
+        
+        if (!item.equals(documentitem.getItem()))
+            return false;
+        
+        return true;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return (11 * document.hashCode()) + item.hashCode();
     }
     
     /*
@@ -65,14 +80,14 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     public int compareTo(DocumentModelItem documentitem) {
         int compare;
         
-        if (documentitem == this)
+        if (documentitem.equals(this))
             return 0;
         
         compare = document.compareTo(documentitem.getDocumentModel());
         
         if (compare != 0)
             return compare;
-        
+
         return item.compareTo(documentitem.getItem());
     }
 
