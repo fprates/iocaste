@@ -227,10 +227,14 @@ public class ElementRenderer {
      */
     private final void renderLink(List<String> html, Link link) {
         Map<Parameter, String> parameters;
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb;
         
-        sb.append("<a href=\"index.html?action=").
-                append(link.getAction());
+        if (link.isAbsolute())
+            sb = new StringBuffer("<a href=\"");
+        else
+            sb = new StringBuffer("<a href=\"index.html?action=");
+        
+        sb.append(link.getAction());
         
         parameters = link.getParametersMap();
         
