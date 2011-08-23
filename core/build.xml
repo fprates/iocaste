@@ -29,7 +29,10 @@
         </javac>
         
         <jar basedir="${builddir}/${ant.project.name}/lib"
-            destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
+        	destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
+    	
+    	<copy todir="${basedir}/ext"
+    		file="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}"
