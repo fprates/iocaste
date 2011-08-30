@@ -4,8 +4,8 @@ drop table shell001 if exists;
 
 /* range numérico */
 create table shell001 (
-   aplic char(20) primary key,
-   ender char(255)
+   aplic varchar(20) primary key,
+   ender varchar(255)
 );
 
 \p tables generated.

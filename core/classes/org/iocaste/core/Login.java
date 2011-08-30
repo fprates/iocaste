@@ -104,8 +104,6 @@ public class Login extends AbstractFunction {
         if (user_ == null)
             return false;
         
-        user_.setSecret(user_.getSecret().trim());
-        
         if (!user_.getSecret().equals(secret))
             return false;
         

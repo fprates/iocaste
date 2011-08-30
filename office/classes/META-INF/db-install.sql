@@ -5,9 +5,9 @@ drop table office001 if exists;
 /* mensagem */
 create table office001 (
    ident numeric(12) primary key,
-   sendr char(12),
-   recvr char(12),
-   sbjct char(60)
+   sendr varchar(12),
+   recvr varchar(12),
+   sbjct varchar(60)
 );
 
 \p office tables generated.

@@ -10,8 +10,8 @@ drop table users001 if exists;
 
 /* usuários */
 create table users001 (
-   uname char(12) primary key,
-   secrt char(12)
+   uname varchar(12) primary key,
+   secrt varchar(12)
 );
 
 \p core tables generated.
