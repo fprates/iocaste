@@ -70,7 +70,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      */
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return (name == null)?0 : name.hashCode();
     }
     
     /*

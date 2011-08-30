@@ -69,6 +69,9 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      */
     @Override
     public int hashCode() {
+        if (item == null)
+            return 0;
+        
         return (11 * document.hashCode()) + item.hashCode();
     }
     
