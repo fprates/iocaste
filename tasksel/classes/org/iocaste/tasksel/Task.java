@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 public class Task implements Serializable {
     private static final long serialVersionUID = -4499449183954319356L;
-    private String appName;
-    private String url;
+    private String app;
+    private String name;
+    private String entry;
     
     /*
      * 
@@ -14,16 +15,25 @@ public class Task implements Serializable {
      */
     
     /**
-     * @return the appName
+     * 
+     * @return
      */
-    public String getAppName() {
-        return appName;
+    public String getApp() {
+        return app;
     }
+    
     /**
-     * @return the url
+     * @return the Name
      */
-    public String getUrl() {
-        return url;
+    public String getName() {
+        return name;
+    }
+    
+    /**
+     * @return the entry
+     */
+    public String getEntry() {
+        return entry;
     }
     
     /*
@@ -31,18 +41,27 @@ public class Task implements Serializable {
      * Setters
      * 
      */
+
+    /**
+     * 
+     * @param app
+     */
+    public void setApp(String app) {
+        this.app = app;
+    }
     
     /**
-     * @param appName the appName to set
+     * @param appName the name to set
      */
-    public void setAppName(String appName) {
-        this.appName = appName;
+    public void setName(String name) {
+        this.name = name;
     }
+    
     /**
-     * @param url the url to set
+     * @param url the entry to set
      */
-    public void setUrl(String url) {
-        this.url = url;
+    public void setEntry(String entry) {
+        this.entry = entry;
     }
     
     
