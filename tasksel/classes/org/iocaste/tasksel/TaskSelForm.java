@@ -1,8 +1,9 @@
 package org.iocaste.tasksel;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Session;
+import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.shell.common.AbstractForm;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Menu;
@@ -10,21 +11,13 @@ import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.ViewData;
 
 public class TaskSelForm extends AbstractForm {
-    private final Task taskInstance(String name, String app, String entry) {
-        Task task = new Task();
-        task.setName(name);
-        task.setApp(app);
-        task.setEntry(entry);
-        
-        return task;
-    }
     
+    @SuppressWarnings("unchecked")
     private final Task[] getTasks() {
-        List<Task> tasks = new ArrayList<Task>();
+        List<Task> tasks;
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         
-        tasks.add(taskInstance("infosis", "iocaste-infosis", "main"));
-        tasks.add(taskInstance("office", "iocaste-office", "main"));
-        tasks.add(taskInstance("tools", "iocaste-core-utils", "main"));
+        tasks = session.createQuery("from Task").list();
         
         return tasks.toArray(new Task[0]);
     }
