@@ -165,6 +165,11 @@ public class ElementRenderer {
             renderElement(html, element);
     }
 
+    /**
+     * 
+     * @param html
+     * @param form
+     */
     private final void renderForm(List<String> html, Form form) {
         Const type;
         Text text;
@@ -194,6 +199,7 @@ public class ElementRenderer {
             case TEXT_FIELD:
             case PASSWORD:
                 component = new TextField(null, inputname);
+                component.setStyleClass(formitem.getStyleClass());
                 
                 if (type == Const.TEXT_FIELD)
                     ((TextField)component).setPassword(false);
@@ -248,6 +254,11 @@ public class ElementRenderer {
         html.add(sb.toString());
     }
     
+    /**
+     * 
+     * @param html
+     * @param menuitem
+     */
     private void renderMenuItem(List<String> html, MenuItem menuitem) {
         Menu menu = (Menu)menuitem.getContainer();
         Link link = new Link(null, null, menu.getAction());
@@ -258,6 +269,11 @@ public class ElementRenderer {
         renderLink(html, link);
     }
     
+    /**
+     * 
+     * @param html
+     * @param parameter
+     */
     private void renderParameter(List<String> html, Parameter parameter) {
         String name = parameter.getName();
         StringBuffer sb = new StringBuffer("<input type=\"hidden\" name=\"").
@@ -309,9 +325,16 @@ public class ElementRenderer {
             inputtext = "<input type=\"password\" name=\"";
         
         html.add(new StringBuffer(inputtext).append(name).
+                append("\" class=\"").append(textfield.getStyleClass()).
                 append("\" id=\"").append(name).append("\"/>").toString());
     }
     
+    /**
+     * 
+     * @param html
+     * @param vdata
+     * @param script
+     */
     private final void renderJavaScript(
             List<String> html, ViewData vdata, String[] script) {
         Component focus = vdata.getFocus();
