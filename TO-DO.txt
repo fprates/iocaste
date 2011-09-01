@@ -1,0 +1,10 @@
+TO-DO
+
+Sem prioridade definida:
+
+- Suporte à CSS em componentes;
+- Upload de arquivos;
+- Suporte à scripts;
+- Implementação de pacotes de instalação e atualização;
+- Criptografia;
+- Melhoria no tracking de aplicação e telas;
