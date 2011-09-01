@@ -370,9 +370,39 @@ public class ElementRenderer {
         html.add(message.append(msgtext).append("</p></div>").toString());
     }
 
+    /**
+     * 
+     * @param html
+     */
     private final void renderStatus(List<String> html) {
         html.add(new StringBuffer("<p>").append(username).append("</p>").
                 toString());
+    }
+    
+    /**
+     * 
+     * @param html
+     * @param vdata
+     */
+    private final void renderStyleSheet(List<String> html, ViewData vdata) {
+        Map<String, String> properties;
+        Map<String, Map<String, String>> elements = vdata.getStyleSheet().getElements();
+        
+        html.add("<style type=\"text/css\">");
+        
+        for (String element : elements.keySet()) {
+            properties = elements.get(element);
+            html.add(element+" {");
+            
+            for (String property: properties.keySet())
+                html.add(new StringBuffer(property).append(": ").
+                        append(properties.get(property)).
+                        append(";").toString());
+            
+            html.add("}");
+        }
+        
+        html.add("</style>");
     }
     
     /**
@@ -391,6 +421,10 @@ public class ElementRenderer {
         html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
         		"\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
         html.add("<html>");
+        
+        if (vdata.getStyleSheet() != null)
+            renderStyleSheet(html, vdata);
+        
         renderHeader(html, vdata);
         html.add("<body onLoad=\"initialize()\">");
         html.add("<form id=\"main\" method=\"post\" action=\"index.html\">");

@@ -11,6 +11,7 @@ public class ViewData implements Serializable {
     private Component focus;
     private MessageSource messages;
     private Map<String, InputComponent> inputs;
+    private StyleSheet sheet;
     
     public ViewData() {
         inputs = new HashMap<String, InputComponent>();
@@ -28,34 +29,6 @@ public class ViewData implements Serializable {
      */
     public final Container getContainer() {
         return container;
-    }
-    
-    /**
-     * 
-     * @param container
-     * @param name
-     * @return
-     */
-    private Element findElement(Container container, String name) {
-        String name_ = container.getName();
-        
-        if (name_.equals(name))
-            return container;
-        
-        for (Element element : container.getElements()) {
-            name_= element.getName();
-            
-            if (name_ == null)
-                continue;
-            
-            if (name_.equals(name))
-                return element;
-            
-            if (element.isContainable())
-                return findElement(container, name);
-        }
-        
-        return null;
     }
     
     public final Element getElement(String name) {
@@ -84,6 +57,14 @@ public class ViewData implements Serializable {
      */
     public final MessageSource getMessages() {
         return messages;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final StyleSheet getStyleSheet() {
+        return sheet;
     }
     
     /**
@@ -126,9 +107,51 @@ public class ViewData implements Serializable {
     
     /**
      * 
+     * @param sheet
+     */
+    public final void setStyleSheet(StyleSheet sheet) {
+        this.sheet = sheet;
+    }
+    
+    /**
+     * 
      * @param title
      */
     public final void setTitle(String title) {
         this.title = title;
+    }
+    
+    /*
+     * 
+     * Others
+     * 
+     */
+    
+    /**
+     * 
+     * @param container
+     * @param name
+     * @return
+     */
+    private Element findElement(Container container, String name) {
+        String name_ = container.getName();
+        
+        if (name_.equals(name))
+            return container;
+        
+        for (Element element : container.getElements()) {
+            name_= element.getName();
+            
+            if (name_ == null)
+                continue;
+            
+            if (name_.equals(name))
+                return element;
+            
+            if (element.isContainable())
+                return findElement(container, name);
+        }
+        
+        return null;
     }
 }
