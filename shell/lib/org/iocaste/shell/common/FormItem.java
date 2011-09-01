@@ -11,7 +11,7 @@ public class FormItem extends AbstractInputComponent {
         
         simplename = name;
         this.type = type;
-        setStyleClass("inputform");
+        setStyleClass("form");
         
         form.addItem(this);
     }

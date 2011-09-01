@@ -192,6 +192,7 @@ public class ElementRenderer {
             
             text = new Text(null, inputname);
             text.setText(messages.get(inputname, inputname));
+            text.setStyleClass(formitem.getStyleClass());
             
             type = formitem.getComponentType();
             
@@ -306,8 +307,8 @@ public class ElementRenderer {
     private final void renderText(List<String> html, Text text_) {
         String value = messages.get(text_.getText(), text_.getText());
         
-        html.add(new StringBuffer("<p>").append(value).append("</p>").
-                toString());
+        html.add(new StringBuffer("<p class=\"").append(text_.getStyleClass()).
+                append("\">").append(value).append("</p>").toString());
     }
     
     /**
