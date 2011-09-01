@@ -72,6 +72,7 @@ public class ElementRenderer {
             inputtext = "<input type=\"submit\" name=\"";
         
         html.add(new StringBuffer(inputtext).append(name).
+                append("\" class=\"").append(button.getStyleClass()).
                 append("\" value=\"").append(messages.get(text_, text_)).
                 append("\" onClick=\"defineAction('").append(name).
                 append("')\"/>").toString());
@@ -222,6 +223,7 @@ public class ElementRenderer {
             button = new Button(form, action);
             button.setSubmit(true);
             button.setText(messages.get(action, action));
+            button.setStyleClass("submit");
             
             renderButton(html, button);
         }
