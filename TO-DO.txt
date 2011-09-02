@@ -2,7 +2,13 @@ TO-DO
 
 Sem prioridade definida:
 
-- Suporte à CSS em componentes;
+- Suporte à CSS em componentes:
+-- implementação de estruturas; [ok]
+-- gravação em tabela; [ok]
+-- armazenamento em buffer para evitar leituras em disco;
+-- associação de folha a usuarios;
+
+- Implementação de usuários, grupos e autorizações;
 - Upload de arquivos;
 - Suporte à scripts;
 - Implementação de pacotes de instalação e atualização;
