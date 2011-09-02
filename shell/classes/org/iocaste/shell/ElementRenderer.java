@@ -16,6 +16,7 @@ import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.FormItem;
 import org.iocaste.shell.common.Link;
@@ -56,6 +57,10 @@ public class ElementRenderer {
         script = lines.toArray(new String[0]);
     }
     
+    /**
+     * 
+     * @param msgtype
+     */
     public final void setMessageType(Const msgtype) {
         this.msgtype = msgtype;
     }
@@ -70,6 +75,9 @@ public class ElementRenderer {
         String text_ = button.getText();
         String name = button.getName();
         
+        if (text_ == null)
+            text_ = name;
+        
         if (!button.isSubmit())
             inputtext = "<input type=\"button\" name=\"";
         else
@@ -77,7 +85,7 @@ public class ElementRenderer {
         
         html.add(new StringBuffer(inputtext).append(name).
                 append("\" class=\"").append(button.getStyleClass()).
-                append("\" value=\"").append(messages.get(text_, text_)).
+                append("\" value=\"").append(messages.get(text_, name)).
                 append("\" onClick=\"defineAction('").append(name).
                 append("')\"/>").toString());
     }
@@ -130,6 +138,11 @@ public class ElementRenderer {
             
             break;
             
+        case FILE_ENTRY:
+            renderFileEntry(html, (FileEntry)element);
+            
+            break;
+            
         case TEXT:
             renderText(html, (Text)element);
             
@@ -171,6 +184,16 @@ public class ElementRenderer {
             renderElement(html, element);
     }
 
+    /**
+     * 
+     * @param html
+     * @param file
+     */
+    private final void renderFileEntry(List<String> html, FileEntry file) {
+        html.add(new StringBuffer("<input type=\"file\" name=\"").
+                append(file.getName()).append("\"/>").toString());
+    }
+    
     /**
      * 
      * @param html
@@ -412,6 +435,11 @@ public class ElementRenderer {
                 toString());
     }
     
+    /**
+     * 
+     * @param name
+     * @return
+     */
     private final Map<String, Map<String, String>> getStyleSheetElements(
             String name) {
         Style style;
