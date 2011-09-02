@@ -39,7 +39,8 @@ public class ElementRenderer {
     public ElementRenderer() {
         String line;
         List<String> lines = new ArrayList<String>();
-        InputStream is = this.getClass().getResourceAsStream("/META-INF/shell.js");
+        InputStream is = this.getClass().getResourceAsStream(
+                "/META-INF/shell.js");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         
         try {
@@ -86,7 +87,8 @@ public class ElementRenderer {
      * @param text
      * @param container
      */
-    private final void renderContainer(List<String> html, Container container) {
+    private final void renderContainer(
+            List<String> html, Container container) {
         switch (container.getType()) {
         case FORM:
             renderForm(html, (Form)container);
@@ -321,7 +323,8 @@ public class ElementRenderer {
      * @param text
      * @param textfield
      */
-    private final void renderTextField(List<String> html, TextField textfield) {
+    private final void renderTextField(
+            List<String> html, TextField textfield) {
         String inputtext;
         String name = textfield.getName();
         
@@ -368,7 +371,8 @@ public class ElementRenderer {
         String title = vdata.getTitle();
         
         html.add("<head>");
-        html.add("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
+        html.add("<meta http-equiv=\"Content-Type\" content=\"text/html;" +
+        		" charset=utf-8\"/>");
         
         if (title == null)
             title = "Iocaste";
