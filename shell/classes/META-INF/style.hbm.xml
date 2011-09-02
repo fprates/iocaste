@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+                                   
+<hibernate-mapping package="org.iocaste.shell">
+    <class name="Style" table="SHELL001">
+        <id name="name" column="SNAME"/>
+        <property name="index" column="SINDX"/>
+        <set name="elements" inverse="true">
+            <key column="SNAME"/>
+            <one-to-many class="StyleElement"/>
+        </set>
+    </class>
+    
+    <class name="StyleElement" table="SHELL002">
+        <id name="index" column="EINDX"/>
+        <many-to-one name="Style" column="SNAME" not-null="true"/>
+        <property name="name" column="ENAME"/>
+        <set name="properties" inverse="true">
+            <key column="EINDX"/>
+            <one-to-many class="StyleElementProperty"/>
+        </set>
+    </class>
+    
+    <class name="StyleElementProperty" table="SHELL003">
+        <id name="index" column="PINDX"/>
+        <many-to-one name="StyleElement" column="EINDX" not-null="true"/>
+        <property name="name" column="PNAME"/>
+        <property name="value" column="VALUE"/>
+    </class>
+</hibernate-mapping>
+                                   

@@ -11,7 +11,7 @@ public class ViewData implements Serializable {
     private Component focus;
     private MessageSource messages;
     private Map<String, InputComponent> inputs;
-    private StyleSheet sheet;
+    private String sheet;
     
     public ViewData() {
         inputs = new HashMap<String, InputComponent>();
@@ -63,7 +63,7 @@ public class ViewData implements Serializable {
      * 
      * @return
      */
-    public final StyleSheet getStyleSheet() {
+    public final String getStyleSheet() {
         return sheet;
     }
     
@@ -109,7 +109,7 @@ public class ViewData implements Serializable {
      * 
      * @param sheet
      */
-    public final void setStyleSheet(StyleSheet sheet) {
+    public final void setStyleSheet(String sheet) {
         this.sheet = sheet;
     }
     

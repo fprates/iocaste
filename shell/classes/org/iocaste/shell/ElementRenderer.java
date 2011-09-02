@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Session;
+import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
@@ -405,6 +408,31 @@ public class ElementRenderer {
                 toString());
     }
     
+    private final Map<String, Map<String, String>> getStyleSheetElements(
+            String name) {
+        Style style;
+        Map<String, Map<String, String>> elements =
+                new HashMap<String, Map<String, String>>();
+        Map<String, String> properties;
+        
+        Session session = HibernateUtil.getSessionFactory().
+                getCurrentSession();
+        
+        session.beginTransaction();
+        style = (Style)session.load(Style.class, name);
+        for (StyleElement element : style.getElements()) {
+            properties = new HashMap<String, String>();
+            elements.put(element.getName(), properties);
+            
+            for (StyleElementProperty property : element.getProperties())
+                properties.put(property.getName(), property.getValue());
+        }
+        
+        session.getTransaction().commit();
+        
+        return elements;
+    }
+    
     /**
      * 
      * @param html
@@ -412,7 +440,13 @@ public class ElementRenderer {
      */
     private final void renderStyleSheet(List<String> html, ViewData vdata) {
         Map<String, String> properties;
-        Map<String, Map<String, String>> elements = vdata.getStyleSheet().getElements();
+        Map<String, Map<String, String>> elements;
+        String sheet = vdata.getStyleSheet();
+        
+        if (sheet == null)
+            sheet = "DEFAULT";
+        
+        elements = getStyleSheetElements(sheet);
         
         html.add("<style type=\"text/css\">");
         
@@ -448,10 +482,9 @@ public class ElementRenderer {
         		"\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
         html.add("<html>");
         
-        if (vdata.getStyleSheet() != null)
-            renderStyleSheet(html, vdata);
-        
+        renderStyleSheet(html, vdata);
         renderHeader(html, vdata);
+        
         html.add("<body onLoad=\"initialize()\">");
         html.add("<form id=\"main\" method=\"post\" action=\"index.html\">");
         
