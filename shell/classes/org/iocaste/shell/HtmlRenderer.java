@@ -30,14 +30,14 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
-public class ElementRenderer {
+public class HtmlRenderer {
     private String msgtext;
     private Const msgtype;
     private String[] script;
     private String username;
     private MessageSource messages;
     
-    public ElementRenderer() {
+    public HtmlRenderer() {
         String line;
         List<String> lines = new ArrayList<String>();
         InputStream is = this.getClass().getResourceAsStream(

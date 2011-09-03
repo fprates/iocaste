@@ -25,11 +25,11 @@ public class PageRenderer extends HttpServlet implements Function {
     private String sessionid;
     private String servername;
     private Map<String, PagePos> apps;
-    private ElementRenderer renderer;
+    private HtmlRenderer renderer;
     
     public PageRenderer() {
         apps = new HashMap<String, PagePos>();
-        renderer = new ElementRenderer();
+        renderer = new HtmlRenderer();
     }
     
     /**
