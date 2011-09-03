@@ -266,6 +266,11 @@ public class ElementRenderer {
         Map<Parameter, String> parameters;
         StringBuffer sb;
         
+        if (!link.isEnabled()) {
+            html.add(link.getText());
+            return;
+        }
+        
         if (link.isAbsolute())
             sb = new StringBuffer("<a href=\"");
         else
@@ -431,7 +436,28 @@ public class ElementRenderer {
      * 
      * @param html
      */
-    private final void renderStatus(List<String> html) {
+    private final void renderNavigationBar(List<String> html, ViewData vdata) {
+        Map<String, Boolean> navbarstatus;
+        NavigationBar navbar = new NavigationBar();
+
+        navbar.addAction("home", "home");
+        navbar.addAction("back", "back");
+        navbar.addAction("help", "help");
+        
+        navbarstatus = vdata.getNavbarStatus();
+        
+        for (String name : navbarstatus.keySet())
+            navbar.setEnabled(name, navbarstatus.get(name));
+                
+        renderContainer(html, navbar);
+    }
+    
+    /**
+     * 
+     * @param html
+     */
+    private final void renderStatus(List<String> html, ViewData vdata) {
+        renderNavigationBar(html, vdata);
         html.add(new StringBuffer("<p>").append(username).append("</p>").
                 toString());
     }
@@ -520,7 +546,7 @@ public class ElementRenderer {
         html.add("<body onLoad=\"initialize()\">");
         html.add("<form id=\"main\" method=\"post\" action=\"index.html\">");
         
-        renderStatus(html);
+        renderStatus(html, vdata);
         
         if (msgtext != null)
             renderMessage(html);

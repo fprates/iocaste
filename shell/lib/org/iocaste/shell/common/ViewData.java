@@ -11,10 +11,12 @@ public class ViewData implements Serializable {
     private Component focus;
     private MessageSource messages;
     private Map<String, InputComponent> inputs;
+    private Map<String, Boolean> navbarstatus;
     private String sheet;
     
     public ViewData() {
         inputs = new HashMap<String, InputComponent>();
+        navbarstatus = new HashMap<String, Boolean>();
     }
     
     /*
@@ -31,6 +33,11 @@ public class ViewData implements Serializable {
         return container;
     }
     
+    /**
+     * 
+     * @param name
+     * @return
+     */
     public final Element getElement(String name) {
         return findElement(container, name);
     }
@@ -57,6 +64,14 @@ public class ViewData implements Serializable {
      */
     public final MessageSource getMessages() {
         return messages;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Map<String, Boolean> getNavbarStatus() {
+        return navbarstatus;
     }
     
     /**
@@ -103,6 +118,18 @@ public class ViewData implements Serializable {
      */
     public final void setMessages(MessageSource messages) {
         this.messages = messages;
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param enabled
+     */
+    public final void setNavbarActionEnabled(String name, boolean enabled) {
+        if (navbarstatus.containsKey(name))
+            navbarstatus.remove(name);
+        
+        navbarstatus.put(name, enabled);
     }
     
     /**
