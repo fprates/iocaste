@@ -403,6 +403,7 @@ public class ElementRenderer {
         html.add(new StringBuffer("<title>").append(title).
                 append("</title>").toString());
         renderJavaScript(html, vdata, script);
+        renderStyleSheet(html, vdata);
         html.add("</head>");
     }
     
@@ -514,7 +515,6 @@ public class ElementRenderer {
         		"\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
         html.add("<html>");
         
-        renderStyleSheet(html, vdata);
         renderHeader(html, vdata);
         
         html.add("<body onLoad=\"initialize()\">");
