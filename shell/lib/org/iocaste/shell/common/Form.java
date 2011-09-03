@@ -18,7 +18,6 @@ public class Form extends AbstractContainer {
     public Form(Container container, String name) {
         super(container, Const.FORM, name);
         
-        new Parameter(this, "action");
         actions = new ArrayList<String>();
         itens = new HashMap<String, FormItem>();
     }

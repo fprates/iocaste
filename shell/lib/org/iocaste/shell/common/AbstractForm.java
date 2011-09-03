@@ -30,6 +30,7 @@ public abstract class AbstractForm extends AbstractFunction {
         method = this.getClass().getMethod(page, ViewData.class);
         method.invoke(this, view);
         
+        new Parameter(view.getContainer(), "action");
         registerInputs(view.getInputs(), view.getContainer());
         
         return view;
