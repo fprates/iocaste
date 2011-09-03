@@ -8,7 +8,10 @@ Sem prioridade definida:
 -- armazenamento em buffer para evitar leituras em disco;
 -- associação de folha a usuarios;
 
-- Barra de navegação
+- Barra de navegação:
+-- implementação de barra de navegação; [ok]
+-- implementação de procedimentos padrão de navegação entre telas;
+
 - Implementação de usuários, grupos e autorizações;
 - Upload de arquivos;
 - Suporte à scripts;

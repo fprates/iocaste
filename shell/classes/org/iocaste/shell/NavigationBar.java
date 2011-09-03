@@ -22,7 +22,11 @@ public class NavigationBar extends StandardContainer {
      * @param action
      */
     public void addAction(String name, String action) {
-        bar.put(name, new Link(this, name, action));
+        Link link = new Link(this, name, action);
+        
+        link.setEnabled(false);
+        
+        bar.put(name, link);
     }
     
     /**

@@ -14,6 +14,13 @@ public abstract class AbstractForm extends AbstractFunction {
     
     /**
      * 
+     * @param controldata
+     * @param viewdata
+     */
+    public void back(ControlData controldata, ViewData viewdata) { }
+    
+    /**
+     * 
      * @param message
      * @return
      * @throws Exception
@@ -76,6 +83,21 @@ public abstract class AbstractForm extends AbstractFunction {
         
         return controldata;
     }
+    
+    /**
+     * 
+     * @param controldata
+     * @param view
+     */
+    public final void help(ControlData controldata, ViewData view) { }
+    
+    /**
+     * 
+     * @param controldata
+     * @param view
+     */
+    public void home(ControlData controldata, ViewData view) { }
+    
     
     /**
      * 
