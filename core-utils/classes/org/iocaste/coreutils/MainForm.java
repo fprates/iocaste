@@ -7,7 +7,7 @@ import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlData;
-import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.MessageSource;
@@ -35,7 +35,7 @@ public class MainForm extends AbstractPage {
      * @throws Exception
      */
     public final void form(ViewData view) throws Exception {
-        Form form = new Form(null, "user");
+        DataForm form = new DataForm(null, "user");
         Documents documents = new Documents(this);
         DocumentModel document = documents.getModel("login");
         
@@ -65,7 +65,7 @@ public class MainForm extends AbstractPage {
      */
     public final void save(ControlData controldata, ViewData view)
             throws Exception {
-        Form form = (Form)view.getElement("user");
+        DataForm form = (DataForm)view.getElement("user");
         Iocaste iocaste = new Iocaste(this);
         User user = new User();
         

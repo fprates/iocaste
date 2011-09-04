@@ -10,16 +10,16 @@ import java.util.Set;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 
-public class Form extends AbstractContainer {
+public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
     private List<String> actions;
-    private Map<String, FormItem> itens;
+    private Map<String, DataFormItem> itens;
     
-    public Form(Container container, String name) {
-        super(container, Const.FORM, name);
+    public DataForm(Container container, String name) {
+        super(container, Const.DATA_FORM, name);
         
         actions = new ArrayList<String>();
-        itens = new HashMap<String, FormItem>();
+        itens = new HashMap<String, DataFormItem>();
     }
     
     /**
@@ -34,7 +34,7 @@ public class Form extends AbstractContainer {
      * 
      * @param item
      */
-    public final void addItem(FormItem item) {
+    public final void addItem(DataFormItem item) {
         itens.put(item.getSimpleName(), item);
     }
     
@@ -44,7 +44,7 @@ public class Form extends AbstractContainer {
      * @throws RuntimeException
      */
     public final void exportTo(Object object) throws RuntimeException {
-        FormItem item;
+        DataFormItem item;
         String formmethodname;
         String objmethodname;
         Method method_;
@@ -151,6 +151,6 @@ public class Form extends AbstractContainer {
         Set<DocumentModelItem> itens = document.getItens();
         
         for (DocumentModelItem item : itens)
-            new FormItem(this, Const.TEXT_FIELD, item.getItem());
+            new DataFormItem(this, Const.TEXT_FIELD, item.getItem());
     }
 }

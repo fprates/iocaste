@@ -17,8 +17,8 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.FileEntry;
-import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.FormItem;
+import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.DataFormItem;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
@@ -98,8 +98,8 @@ public class HtmlRenderer {
     private final void renderContainer(
             List<String> html, Container container) {
         switch (container.getType()) {
-        case FORM:
-            renderForm(html, (Form)container);
+        case DATA_FORM:
+            renderDataForm(html, (DataForm)container);
             
             break;
             
@@ -199,24 +199,24 @@ public class HtmlRenderer {
      * @param html
      * @param form
      */
-    private final void renderForm(List<String> html, Form form) {
+    private final void renderDataForm(List<String> html, DataForm form) {
         Const type;
         Text text;
         Component component;
         String inputname;
         Button button;
-        FormItem formitem;
+        DataFormItem formitem;
         TableItem tableitem;
         Table table = new Table(null, 2, null);
         
         for (Element element : form.getElements()) {
-            if (element.getType() != Const.FORM_ITEM) {
+            if (element.getType() != Const.DATA_FORM_ITEM) {
                 renderElement(html, element);
                 continue;
             }
             
             tableitem = new TableItem(table, null);
-            formitem = (FormItem)element;
+            formitem = (DataFormItem)element;
             inputname = formitem.getName();
             
             text = new Text(null, inputname);
