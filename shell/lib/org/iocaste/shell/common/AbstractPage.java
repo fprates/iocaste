@@ -37,8 +37,8 @@ public abstract class AbstractPage extends AbstractFunction {
         method = this.getClass().getMethod(page, ViewData.class);
         method.invoke(this, view);
         
-        new Parameter(view.getContainer(), "action");
-        registerInputs(view.getInputs(), view.getContainer());
+        for (Container container : view.getContainers())
+            registerInputs(view.getInputs(), container);
         
         return view;
     }

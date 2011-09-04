@@ -19,6 +19,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataFormItem;
+import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
@@ -98,6 +99,11 @@ public class HtmlRenderer {
     private final void renderContainer(
             List<String> html, Container container) {
         switch (container.getType()) {
+        case FORM:
+            renderForm(html, (Form)container);
+            
+            break;
+            
         case DATA_FORM:
             renderDataForm(html, (DataForm)container);
             
@@ -119,6 +125,69 @@ public class HtmlRenderer {
             break;
         }
         
+    }
+    
+    /**
+     * 
+     * @param html
+     * @param form
+     */
+    private final void renderDataForm(List<String> html, DataForm form) {
+        Const type;
+        Text text;
+        Component component;
+        String inputname;
+        Button button;
+        DataFormItem formitem;
+        TableItem tableitem;
+        Table table = new Table(null, 2, null);
+        
+        for (Element element : form.getElements()) {
+            if (element.getType() != Const.DATA_FORM_ITEM) {
+                renderElement(html, element);
+                continue;
+            }
+            
+            tableitem = new TableItem(table, null);
+            formitem = (DataFormItem)element;
+            inputname = formitem.getName();
+            
+            text = new Text(null, inputname);
+            text.setText(messages.get(inputname, inputname));
+            text.setStyleClass(formitem.getStyleClass());
+            
+            type = formitem.getComponentType();
+            
+            switch (type) {
+            case TEXT_FIELD:
+            case PASSWORD:
+                component = new TextField(null, inputname);
+                component.setStyleClass(formitem.getStyleClass());
+                
+                if (type == Const.TEXT_FIELD)
+                    ((TextField)component).setPassword(false);
+                else
+                    ((TextField)component).setPassword(true);
+                
+                break;
+            default:
+                component = null;
+            }
+            
+            tableitem.add(text);
+            tableitem.add(component);
+        }
+                
+        renderContainer(html, table);
+        
+        for (String action : form.getActions()) {
+            button = new Button(form, action);
+            button.setSubmit(true);
+            button.setText(messages.get(action, action));
+            button.setStyleClass("submit");
+            
+            renderButton(html, button);
+        }
     }
     
     /**
@@ -193,68 +262,25 @@ public class HtmlRenderer {
         html.add(new StringBuffer("<input type=\"file\" name=\"").
                 append(file.getName()).append("\"/>").toString());
     }
-    
+
     /**
      * 
      * @param html
-     * @param form
+     * @param container
      */
-    private final void renderDataForm(List<String> html, DataForm form) {
-        Const type;
-        Text text;
-        Component component;
-        String inputname;
-        Button button;
-        DataFormItem formitem;
-        TableItem tableitem;
-        Table table = new Table(null, 2, null);
+    private final void renderForm(List<String> html, org.iocaste.shell.common.Form container) {
+        StringBuffer sb = new StringBuffer("<form method=\"post\" " +
+        		"action=\"index.html\" name=\"").append(container.getName());
+        String enctype = container.getEnctype();
         
-        for (Element element : form.getElements()) {
-            if (element.getType() != Const.DATA_FORM_ITEM) {
-                renderElement(html, element);
-                continue;
-            }
-            
-            tableitem = new TableItem(table, null);
-            formitem = (DataFormItem)element;
-            inputname = formitem.getName();
-            
-            text = new Text(null, inputname);
-            text.setText(messages.get(inputname, inputname));
-            text.setStyleClass(formitem.getStyleClass());
-            
-            type = formitem.getComponentType();
-            
-            switch (type) {
-            case TEXT_FIELD:
-            case PASSWORD:
-                component = new TextField(null, inputname);
-                component.setStyleClass(formitem.getStyleClass());
-                
-                if (type == Const.TEXT_FIELD)
-                    ((TextField)component).setPassword(false);
-                else
-                    ((TextField)component).setPassword(true);
-                
-                break;
-            default:
-                component = null;
-            }
-            
-            tableitem.add(text);
-            tableitem.add(component);
-        }
-                
-        renderContainer(html, table);
+        if (enctype != null)
+            sb.append("\" enctype=\"").append(enctype).append("\">");
+        else
+            sb.append("\">");
         
-        for (String action : form.getActions()) {
-            button = new Button(form, action);
-            button.setSubmit(true);
-            button.setText(messages.get(action, action));
-            button.setStyleClass("submit");
-            
-            renderButton(html, button);
-        }
+        html.add(sb.toString());
+        renderElements(html, container.getElements());
+        html.add("</form>");
     }
     
     /**
@@ -530,7 +556,6 @@ public class HtmlRenderer {
      * @return
      */
     public final String[] run(ViewData vdata) {
-        Container container = vdata.getContainer();
         List<String> html = new ArrayList<String>();
         
         messages = vdata.getMessages();
@@ -544,17 +569,15 @@ public class HtmlRenderer {
         renderHeader(html, vdata);
         
         html.add("<body onLoad=\"initialize()\">");
-        html.add("<form id=\"main\" method=\"post\" action=\"index.html\">");
         
         renderStatus(html, vdata);
         
         if (msgtext != null)
             renderMessage(html);
 
-        if (container != null)
+        for (Container container : vdata.getContainers())
             renderContainer(html, container);
 
-        html.add("</form>");
         html.add("</body>");
         html.add("</html>");
 

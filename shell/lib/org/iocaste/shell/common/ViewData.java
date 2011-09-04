@@ -1,22 +1,33 @@
 package org.iocaste.shell.common;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ViewData implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
-    private Container container;
     private String title;
     private Component focus;
     private MessageSource messages;
     private Map<String, InputComponent> inputs;
     private Map<String, Boolean> navbarstatus;
+    private List<Container> containers;
     private String sheet;
     
     public ViewData() {
         inputs = new HashMap<String, InputComponent>();
         navbarstatus = new HashMap<String, Boolean>();
+        containers = new ArrayList<Container>();
+    }
+    
+    /**
+     * 
+     * @param container
+     */
+    public final void addContainer(Container container) {
+        containers.add(container);
     }
     
     /*
@@ -29,8 +40,8 @@ public class ViewData implements Serializable {
      * 
      * @return
      */
-    public final Container getContainer() {
-        return container;
+    public final Container[] getContainers() {
+        return containers.toArray(new Container[0]);
     }
     
     /**
@@ -39,7 +50,15 @@ public class ViewData implements Serializable {
      * @return
      */
     public final Element getElement(String name) {
-        return findElement(container, name);
+        Element element = null;
+        
+        for (Container container : containers) {
+            element = findElement(container, name);
+            if (element != null)
+                break;
+        }
+        
+        return element;
     }
     
     /**
@@ -95,14 +114,6 @@ public class ViewData implements Serializable {
      * Setters
      * 
      */
-    
-    /**
-     * 
-     * @param container
-     */
-    public final void setContainer(Container container) {
-        this.container = container;
-    }
     
     /**
      * 
