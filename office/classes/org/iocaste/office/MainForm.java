@@ -1,14 +1,14 @@
 package org.iocaste.office;
 
 import org.iocaste.office.common.Office;
-import org.iocaste.shell.common.AbstractForm;
+import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.FormItem;
 import org.iocaste.shell.common.ViewData;
 
-public class MainForm extends AbstractForm {
+public class MainForm extends AbstractPage {
     
     public void main(ViewData view) {
         Form form = new Form(null, "header");

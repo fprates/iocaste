@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.iocaste.protocol.HibernateUtil;
-import org.iocaste.shell.common.AbstractForm;
+import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.ViewData;
 
-public class TaskSelForm extends AbstractForm {
+public class TaskSelForm extends AbstractPage {
     
     @SuppressWarnings("unchecked")
     private final Task[] getTasks() {

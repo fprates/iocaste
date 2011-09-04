@@ -4,7 +4,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
-import org.iocaste.shell.common.AbstractForm;
+import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Form;
@@ -13,7 +13,7 @@ import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.ViewData;
 
-public class MainForm extends AbstractForm {
+public class MainForm extends AbstractPage {
 
     /**
      * 
