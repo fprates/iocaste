@@ -6,8 +6,8 @@ import java.util.Map;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
-public abstract class AbstractForm extends AbstractFunction {
-    public AbstractForm() {
+public abstract class AbstractPage extends AbstractFunction {
+    public AbstractPage() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
     }
