@@ -6,8 +6,10 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.MessageSource;
@@ -21,12 +23,13 @@ public class MainForm extends AbstractPage {
      * @throws Exception
      */
     public final void main(ViewData view) throws Exception {
-        Menu mainMenu = new Menu(null, "run");
+        Container form = new Form(null, "main");
+        Menu mainMenu = new Menu(form, "run");
         
         new MenuItem(mainMenu, "user.add", "add");
         new MenuItem(mainMenu, "user.change", "change");
         view.setMessages(new MessageSource("/messages.properties"));
-        view.setContainer(mainMenu);
+        view.addContainer(form);
     }
     
     /**
@@ -35,15 +38,16 @@ public class MainForm extends AbstractPage {
      * @throws Exception
      */
     public final void form(ViewData view) throws Exception {
-        DataForm form = new DataForm(null, "user");
+        Container form = new Form(null, "main");
+        DataForm userform = new DataForm(form, "user");
         Documents documents = new Documents(this);
         DocumentModel document = documents.getModel("login");
         
-        form.addAction("save");
-        form.importModel(document);
+        userform.addAction("save");
+        userform.importModel(document);
         
         view.setMessages(new MessageSource("/messages.properties"));
-        view.setContainer(form);
+        view.addContainer(form);
     }
     
     /**

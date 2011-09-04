@@ -3,22 +3,25 @@ package org.iocaste.office;
 import org.iocaste.office.common.Office;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataFormItem;
+import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.ViewData;
 
 public class MainForm extends AbstractPage {
     
     public void main(ViewData view) {
-        DataForm form = new DataForm(null, "header");
+        Container form = new Form(null, "main");
+        DataForm headerform = new DataForm(form, "header");
         
-        form.addAction("send");
+        headerform.addAction("send");
         
-        new DataFormItem(form, Const.TEXT_FIELD, "receiver");
-        new DataFormItem(form, Const.TEXT_FIELD, "subject");
+        new DataFormItem(headerform, Const.TEXT_FIELD, "receiver");
+        new DataFormItem(headerform, Const.TEXT_FIELD, "subject");
         
-        view.setContainer(form);
+        view.addContainer(form);
     }
     
     public void send(ControlData controldata, ViewData view) throws Exception {

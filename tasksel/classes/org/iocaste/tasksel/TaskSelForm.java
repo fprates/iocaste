@@ -5,7 +5,9 @@ import java.util.List;
 import org.hibernate.Session;
 import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
+import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.ViewData;
@@ -27,14 +29,15 @@ public class TaskSelForm extends AbstractPage {
      * @param view
      */
     public final void main(ViewData view) {
-        Menu menu = new Menu(null, "run");
+        Container form = new Form(null, "main");
+        Menu menu = new Menu(form, "run");
         Task[] tasks = getTasks();
         
         for (Task task : tasks)
             new MenuItem(menu, task.getName(), task.getApp());
         
         view.setTitle("infosis-front");
-        view.setContainer(menu);
+        view.addContainer(form);
     }
     
     /**
