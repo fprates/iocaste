@@ -96,7 +96,7 @@ public class MainForm extends AbstractPage {
      * @param vdata
      */
     public final void upload(ControlData cdata, ViewData vdata) {
-        System.out.println(((FileEntry)vdata.getElement("file")).getValue());
+        cdata.message(Const.STATUS, "file.upload.sucessful");
     }
     
     /**
@@ -109,7 +109,7 @@ public class MainForm extends AbstractPage {
         FileEntry file = new FileEntry(form, "file");
         
         upload = new Button(form, "upload");
-        file.setDestiny("/home/francisco.prates/Download/apache-tomcat/webapps/iocaste-core-utils/WEB-INF/data/");
+        file.setDestiny(getRealPath("WEB-INF/data/"));
         form.setEnctype("multipart/form-data");
         upload.setSubmit(true);
         

@@ -52,6 +52,15 @@ public abstract class AbstractFunction implements Function {
      * @param path
      * @return
      */
+    public final String getRealPath(String path) {
+        return context.getRealPath(path);
+    }
+    
+    /**
+     * 
+     * @param path
+     * @return
+     */
     public final InputStream getResourceAsStream(String path) {
         return context.getResourceAsStream(path);
     }
@@ -114,6 +123,10 @@ public abstract class AbstractFunction implements Function {
         this.context = context;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#setSessionid(java.lang.String)
+     */
     @Override
     public final void setSessionid(String sessionid) {
         this.sessionid = sessionid;
