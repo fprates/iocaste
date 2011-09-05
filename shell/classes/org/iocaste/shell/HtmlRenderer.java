@@ -328,6 +328,15 @@ public class HtmlRenderer {
         link.setText(menuitem.getText());
         link.add(menu.getParameter(), menuitem.getFunction());
         
+        for (Element element: menu.getElements()) {
+            if (!(element instanceof Parameter) ||
+                    (element == menu.getParameter()))
+                continue;
+            
+            link.add((Parameter)element, menuitem.getParameter(
+                    element.getName()));
+        }
+                
         renderLink(html, link);
     }
     
