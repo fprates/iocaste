@@ -112,6 +112,8 @@ public abstract class ServerServlet extends HttpServlet {
             service.messageReturn(message, function.run(message));
         } catch (Exception e) {
             service.messageException(message, e);
+        } finally {
+            req.getSession().invalidate();
         }
     }
 
