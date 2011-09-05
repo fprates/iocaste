@@ -64,7 +64,11 @@ public class Message implements Serializable {
     }
     
     public final String getString(String name) {
-        return (String)values.get(name);
+        try {
+            return (String)values.get(name);
+        } catch (ClassCastException e) {
+            return ((String[])values.get(name))[0];
+        }
     }
     
     /*

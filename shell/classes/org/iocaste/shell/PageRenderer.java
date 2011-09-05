@@ -28,6 +28,7 @@ import org.iocaste.shell.common.ViewData;
 public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String LOGIN_APP = "iocaste-login";
+    private static final int MEMORY_THRESOLD = 512*1024; 
     private String sessionid;
     private String servername;
     private Map<String, PagePos> apps;
@@ -45,20 +46,16 @@ public class PageRenderer extends HttpServlet implements Function {
      * @return
      * @throws Exception
      */
-    private final ControlData callController(
-            HttpServletRequest req, PagePos pagepos) throws Exception {
-        String paramname;
+    private final ControlData callController(String sessionid,
+            Map<String, ?> parameters, PagePos pagepos) throws Exception {
         Message message = new Message();
         
         message.setId("exec_action");
         message.add("view", pagepos.view);
+        message.setSessionid(sessionid);
         
-        message.setSessionid(req.getSession().getId());
-        
-        for (Object obj : req.getParameterMap().keySet()) {
-            paramname = (String)obj;
-            message.add(paramname, req.getParameter(paramname));
-        }
+        for (String name : parameters.keySet())
+            message.add(name, parameters.get(name));
             
         return (ControlData)Service.callServer(
                 composeUrl(pagepos.app), message);
@@ -114,13 +111,17 @@ public class PageRenderer extends HttpServlet implements Function {
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     private final ControlData processController(Iocaste iocaste,
             HttpServletRequest req, PagePos pagepos) throws Exception {
+        Map<String, ?> parameters;
+        ControlData controldata;
         
-        if (ServletFileUpload.isMultipartContent(req))
-            processMultipartContent(req, pagepos);
-                
-        ControlData controldata = callController(req, pagepos);
+        parameters = (ServletFileUpload.isMultipartContent(req))?
+                processMultipartContent(req, pagepos) : req.getParameterMap();
+        
+        controldata = callController(
+                req.getSession().getId(), parameters, pagepos);
         
         if (controldata == null)
             return null;
@@ -138,33 +139,46 @@ public class PageRenderer extends HttpServlet implements Function {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    private final void processMultipartContent(HttpServletRequest req,
+    private final Map<String, ?> processMultipartContent(HttpServletRequest req,
             PagePos pagepos) throws Exception {
         DiskFileItemFactory factory;
         ServletFileUpload fileupload;
         List<FileItem> files;
         String path;
+        String fieldname;
+        String filename;
+        Map<String, String> parameters;
         
         factory = new DiskFileItemFactory();
-        factory.setSizeThreshold(512*1024);
+        factory.setSizeThreshold(MEMORY_THRESOLD);
         path = req.getSession().getServletContext().
                 getRealPath("WEB-INF/data");
         factory.setRepository(new File(path));
         fileupload = new ServletFileUpload(factory);
         files = fileupload.parseRequest(req);
         
+        parameters = new HashMap<String, String>();
+        
         for (Element element : pagepos.view.getMultipartElements()) {
             for (FileItem fileitem : files) {
-                if (fileitem.isFormField())
+                fieldname = fileitem.getFieldName();
+                
+                if (fileitem.isFormField()) {
+                    parameters.put(fieldname, fileitem.getString());
+                    continue;
+                }
+                
+                if (!fieldname.equals(element.getName()))
                     continue;
                 
-                if (!fileitem.getFieldName().equals(element.getName()))
-                    continue;
+                filename = fileitem.getName();
+                fileitem.write(new File(element.getDestiny(), filename));
                 
-                fileitem.write(new File(
-                        element.getDestiny(), fileitem.getName()));
+                parameters.put(fieldname, filename);
             }
         }
+        
+        return parameters;
     }
     
     /**
