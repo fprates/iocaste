@@ -7,4 +7,12 @@ public class FileEntry extends AbstractInputComponent {
         super(container, Const.FILE_ENTRY, name);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractElement#hasMultipartSupport()
+     */
+    @Override
+    public final boolean hasMultipartSupport() {
+        return true;
+    }
 }

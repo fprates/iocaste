@@ -5,11 +5,21 @@ public abstract class AbstractElement implements Element {
     private String name;
     private Const type;
     private String style;
+    private String destiny;
     
     public AbstractElement(Const type, String name) {
         this.type = type;
         this.name = name;
         style = "";
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#getDestiny()
+     */
+    @Override
+    public final String getDestiny() {
+        return destiny;
     }
     
     /*
@@ -37,6 +47,24 @@ public abstract class AbstractElement implements Element {
     @Override
     public final Const getType() {
         return type;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#hasMultipartSupport()
+     */
+    @Override
+    public boolean hasMultipartSupport() {
+        return false;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#setDestiny(java.lang.String)
+     */
+    @Override
+    public final void setDestiny(String destiny) {
+        this.destiny = destiny;
     }
     
     /*

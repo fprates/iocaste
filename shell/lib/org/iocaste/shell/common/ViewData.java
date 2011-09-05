@@ -13,6 +13,7 @@ public class ViewData implements Serializable {
     private MessageSource messages;
     private Map<String, InputComponent> inputs;
     private Map<String, Boolean> navbarstatus;
+    private List<Element> mpelements;
     private List<Container> containers;
     private String sheet;
     
@@ -20,6 +21,7 @@ public class ViewData implements Serializable {
         inputs = new HashMap<String, InputComponent>();
         navbarstatus = new HashMap<String, Boolean>();
         containers = new ArrayList<Container>();
+        mpelements = new ArrayList<Element>();
     }
     
     /**
@@ -30,11 +32,33 @@ public class ViewData implements Serializable {
         containers.add(container);
     }
     
-    /*
+    /**
      * 
-     * Getters
-     * 
+     * @param container
+     * @param name
+     * @return
      */
+    private Element findElement(Container container, String name) {
+        String name_ = container.getName();
+        
+        if (name_.equals(name))
+            return container;
+        
+        for (Element element : container.getElements()) {
+            name_= element.getName();
+            
+            if (name_ == null)
+                continue;
+            
+            if (name_.equals(name))
+                return element;
+            
+            if (element.isContainable())
+                return findElement(container, name);
+        }
+        
+        return null;
+    }
     
     /**
      * 
@@ -89,6 +113,14 @@ public class ViewData implements Serializable {
      * 
      * @return
      */
+    public final Element[] getMultipartElements() {
+        return mpelements.toArray(new Element[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final Map<String, Boolean> getNavbarStatus() {
         return navbarstatus;
     }
@@ -109,11 +141,13 @@ public class ViewData implements Serializable {
         return title;
     }
     
-    /*
+    /**
      * 
-     * Setters
-     * 
+     * @param element
      */
+    public final void addMultipartElement(Element element) {
+        mpelements.add(element);
+    }
     
     /**
      * 
@@ -157,39 +191,5 @@ public class ViewData implements Serializable {
      */
     public final void setTitle(String title) {
         this.title = title;
-    }
-    
-    /*
-     * 
-     * Others
-     * 
-     */
-    
-    /**
-     * 
-     * @param container
-     * @param name
-     * @return
-     */
-    private Element findElement(Container container, String name) {
-        String name_ = container.getName();
-        
-        if (name_.equals(name))
-            return container;
-        
-        for (Element element : container.getElements()) {
-            name_= element.getName();
-            
-            if (name_ == null)
-                continue;
-            
-            if (name_.equals(name))
-                return element;
-            
-            if (element.isContainable())
-                return findElement(container, name);
-        }
-        
-        return null;
     }
 }

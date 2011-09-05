@@ -38,7 +38,7 @@ public abstract class AbstractPage extends AbstractFunction {
         method.invoke(this, view);
         
         for (Container container : view.getContainers())
-            registerInputs(view.getInputs(), container);
+            registerInputs(view, container);
         
         return view;
     }
@@ -104,10 +104,10 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param inputs
      * @param element
      */
-    private final void registerInputs(
-            Map<String, InputComponent> inputs, Element element) {
+    private final void registerInputs(ViewData vdata, Element element) {
         Container container;
         Component component;
+        Map<String, InputComponent> inputs = vdata.getInputs();
         
         if (element == null)
             return;
@@ -115,7 +115,7 @@ public abstract class AbstractPage extends AbstractFunction {
         if (element.isContainable()) {
             container = (Container)element;
             for (Element element_ : container.getElements())
-                registerInputs(inputs, element_);
+                registerInputs(vdata, element_);
             
             return;
         }
@@ -125,5 +125,8 @@ public abstract class AbstractPage extends AbstractFunction {
             
             inputs.put(component.getName(), (InputComponent)component);
         }
+        
+        if (element.hasMultipartSupport())
+            vdata.addMultipartElement(element);
     }
 }

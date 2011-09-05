@@ -1,8 +1,10 @@
 package org.iocaste.shell;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,11 +14,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.ControlData;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.ViewData;
 
 public class PageRenderer extends HttpServlet implements Function {
@@ -46,6 +52,7 @@ public class PageRenderer extends HttpServlet implements Function {
         
         message.setId("exec_action");
         message.add("view", pagepos.view);
+        
         message.setSessionid(req.getSession().getId());
         
         for (Object obj : req.getParameterMap().keySet()) {
@@ -109,6 +116,10 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final ControlData processController(Iocaste iocaste,
             HttpServletRequest req, PagePos pagepos) throws Exception {
+        
+        if (ServletFileUpload.isMultipartContent(req))
+            processMultipartContent(req, pagepos);
+                
         ControlData controldata = callController(req, pagepos);
         
         if (controldata == null)
@@ -118,6 +129,42 @@ public class PageRenderer extends HttpServlet implements Function {
         renderer.setMessageType(controldata.getMessageType());
         
         return controldata;
+    }
+    
+    /**
+     * 
+     * @param req
+     * @param pagepos
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    private final void processMultipartContent(HttpServletRequest req,
+            PagePos pagepos) throws Exception {
+        DiskFileItemFactory factory;
+        ServletFileUpload fileupload;
+        List<FileItem> files;
+        String path;
+        
+        factory = new DiskFileItemFactory();
+        factory.setSizeThreshold(512*1024);
+        path = req.getSession().getServletContext().
+                getRealPath("WEB-INF/data");
+        factory.setRepository(new File(path));
+        fileupload = new ServletFileUpload(factory);
+        files = fileupload.parseRequest(req);
+        
+        for (Element element : pagepos.view.getMultipartElements()) {
+            for (FileItem fileitem : files) {
+                if (fileitem.isFormField())
+                    continue;
+                
+                if (!fileitem.getFieldName().equals(element.getName()))
+                    continue;
+                
+                fileitem.write(new File(
+                        element.getDestiny(), fileitem.getName()));
+            }
+        }
     }
     
     /**

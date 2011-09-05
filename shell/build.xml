@@ -51,6 +51,10 @@
         <!-- pacote .war -->
         <war destfile="${basedir}/iocaste-${ant.project.name}.war"
             webxml="${builddir}/${ant.project.name}/web/web.xml">
+            <webinf dir="${basedir}/src/${ant.project.name}/web/">
+                <exclude name="web.xml"/>
+                <include name="**/*"/> 
+            </webinf>
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
             <lib dir="${basedir}/lib" includes="*.jar"/>
         	<lib dir="${builddir}/core/lib" includes="*.jar"/>
