@@ -13,9 +13,20 @@ Sem prioridade definida:
 -- implementação de procedimentos padrão de navegação entre telas;
 
 - Implementação de usuários, grupos e autorizações;
+
 - Upload de arquivos;
+-- componente de tela e recepção do arquivo; [ok]
+
 - Suporte à scripts;
+
 - Implementação de pacotes de instalação e atualização;
+
 - Criptografia;
+
 - Melhoria no tracking de aplicação e telas;
+-- transportar dados da sessão para core;
+
 - Visão para atualização de tabelas;
+
+- Gerenciamento de memória:
+-- invalida sessão ao fim do processamento de ServerServlet; [ok]
