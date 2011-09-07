@@ -1,8 +1,8 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private static final long serialVersionUID = -4964159453586462503L;
@@ -10,7 +10,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private Set<DocumentModelItem> itens;
 
     public DocumentModel() {
-        itens = new TreeSet<DocumentModelItem>();
+        itens = new LinkedHashSet<DocumentModelItem>();
     }
     
     /**
