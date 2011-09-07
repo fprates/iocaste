@@ -1,7 +1,10 @@
 package org.iocaste.login;
 
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
@@ -17,17 +20,23 @@ public class LoginForm extends AbstractPage {
      * 
      * @param view
      */
-    public final void authentic(ViewData view) {
+    public final void authentic(ViewData vdata) throws Exception {
         Container form = new Form(null, "main");
         DataForm loginform = new DataForm(form, "login");
         
+        /*
+         * não podemos utilizar getModel() de Documents aqui para recuperar
+         * o modelo "login". ainda não estamos autenticados pelo iocaste.
+         */
+        loginform.setModel(modelInstance());
         loginform.addAction("connect");
-        view.setFocus(new DataFormItem(loginform, Const.TEXT_FIELD, "username"));
-        new DataFormItem(loginform, Const.PASSWORD, "secret");
         
-        view.setMessages(new MessageSource("/message.properties"));
-        view.setTitle("authentic");
-        view.addContainer(form);
+        vdata.setMessages(new MessageSource("/META-INF/message.properties"));
+        vdata.setTitle("authentic");
+        vdata.addContainer(form);
+        
+        vdata.setFocus((Component)vdata.getElement("login.username"));
+        ((DataFormItem)vdata.getElement("login.secret")).setSecret(true);
     }
     
     /**
@@ -47,5 +56,36 @@ public class LoginForm extends AbstractPage {
             controldata.redirect("iocaste-tasksel", "main");
         else
             controldata.message(Const.ERROR, "invalid.login");
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    private final DocumentModel modelInstance() {
+        DocumentModel model = new DocumentModel();
+        
+        model.setName("login");
+        modelItemInstance(model, "username");
+        modelItemInstance(model, "secret");
+        
+        return model;
+    }
+    
+    /**
+     * 
+     * @param model
+     * @param name
+     * @return
+     */
+    private final DocumentModelItem modelItemInstance(
+            DocumentModel model, String name) {
+        DocumentModelItem item = new DocumentModelItem();
+        
+        item.setDocumentModel(model);
+        item.setName(name);
+        model.add(item);
+        
+        return item;
     }
 }

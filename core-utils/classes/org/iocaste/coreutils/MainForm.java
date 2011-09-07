@@ -33,7 +33,7 @@ public class MainForm extends AbstractPage {
         new MenuItem(mainMenu, "user.add", "add");
         new MenuItem(mainMenu, "user.change", "change");
         
-        view.setMessages(new MessageSource("/messages.properties"));
+        view.setMessages(new MessageSource("/META-INF/messages.properties"));
         view.addContainer(form);
     }
     
@@ -49,9 +49,9 @@ public class MainForm extends AbstractPage {
         DocumentModel document = documents.getModel("login");
         
         userform.addAction("save");
-        userform.importModel(document);
+        userform.setModel(document);
         
-        view.setMessages(new MessageSource("/messages.properties"));
+        view.setMessages(new MessageSource("/META-INF/messages.properties"));
         view.addContainer(form);
     }
     

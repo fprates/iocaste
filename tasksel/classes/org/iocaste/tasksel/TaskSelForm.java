@@ -14,7 +14,9 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
+
 
 public class TaskSelForm extends AbstractPage {
     
@@ -33,9 +35,9 @@ public class TaskSelForm extends AbstractPage {
         dataform = new DataForm(container, "entry");
         dataform.addAction("save");
         
-        new DataFormItem(dataform, Const.TEXT_FIELD, "name");
-        new DataFormItem(dataform, Const.TEXT_FIELD, "app");
-        new DataFormItem(dataform, Const.TEXT_FIELD, "entry");
+        new DataFormItem(dataform, Const.TEXT_FIELD, "entry.name");
+        new DataFormItem(dataform, Const.TEXT_FIELD, "entry.app");
+        new DataFormItem(dataform, Const.TEXT_FIELD, "entry.point");
         
         vdata.addContainer(container);
         vdata.setTitle("add.tasksel.entry");
@@ -49,6 +51,18 @@ public class TaskSelForm extends AbstractPage {
         tasks = session.createQuery("from Task").list();
         
         return tasks.toArray(new Task[0]);
+    }
+    
+    private final void insertAppEntry(String app, String name, String entry) {
+        Task task = new Task();
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        
+        task.setApp(app);
+        task.setName(name);
+        task.setEntry(entry);
+        
+        session.beginTransaction();
+        session.save(task);
     }
     
     /**
@@ -75,9 +89,21 @@ public class TaskSelForm extends AbstractPage {
      * @param controldata
      * @param view
      */
-    public final void run(ControlData controldata, ViewData view) {
-        MenuItem mitem = ((Menu)view.getElement("run")).getSelectedItem();
+    public final void run(ControlData cdata, ViewData vdata) {
+        MenuItem mitem = ((Menu)vdata.getElement("run")).getSelectedItem();
         
-        controldata.redirect(mitem.getFunction(), mitem.getParameter("entry"));
+        cdata.redirect(mitem.getFunction(), mitem.getParameter("entry"));
+    }
+    
+    public final void save(ControlData cdata, ViewData vdata) {
+        String name = ((TextField)vdata.getElement("entry.name")).getValue();
+        String app = ((TextField)vdata.getElement("entry.app")).getValue();
+        String entry = ((TextField)vdata.getElement("entry.point")).getValue();
+        
+        if (name == null || app == null || entry == null)
+            cdata.message(Const.ERROR, "field.is.obligatory");
+        
+        insertAppEntry(name, app, entry);
+        cdata.message(Const.STATUS, "insert.entry.successful");
     }
 }
