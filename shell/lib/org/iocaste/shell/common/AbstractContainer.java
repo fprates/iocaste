@@ -27,6 +27,16 @@ public abstract class AbstractContainer
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#clear()
+     */
+    @Override
+    public final void clear() {
+        if (elements.size() > 0)
+            elements.clear();
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Container#getElements()
      */
     @Override

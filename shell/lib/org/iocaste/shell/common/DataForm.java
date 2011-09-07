@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -77,6 +76,14 @@ public class DataForm extends AbstractContainer {
     
     /**
      * 
+     * @return
+     */
+    public final String[] getActions() {
+        return actions.toArray(new String[0]);
+    }
+    
+    /**
+     * 
      * @param class_
      * @param object
      * @param method
@@ -137,20 +144,18 @@ public class DataForm extends AbstractContainer {
     
     /**
      * 
-     * @return
+     * @param model
      */
-    public final String[] getActions() {
-        return actions.toArray(new String[0]);
-    }
-    
-    /**
-     * 
-     * @param document
-     */
-    public final void importModel(DocumentModel document) {
-        Set<DocumentModelItem> itens = document.getItens();
+    public final void setModel(DocumentModel model) {
+        String name;
+        String formname = getName();
         
-        for (DocumentModelItem item : itens)
-            new DataFormItem(this, Const.TEXT_FIELD, item.getItem());
+        clear();
+        
+        for (DocumentModelItem item : model.getItens()) {
+            name = new StringBuffer(formname).append(".").
+                    append(item.getName()).toString();
+            new DataFormItem(this, Const.TEXT_FIELD, name);
+        }
     }
 }
