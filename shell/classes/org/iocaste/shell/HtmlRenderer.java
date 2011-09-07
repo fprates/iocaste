@@ -137,6 +137,7 @@ public class HtmlRenderer {
         Text text;
         Component component;
         String inputname;
+        String styleclass;
         Button button;
         DataFormItem formitem;
         TableItem tableitem;
@@ -151,12 +152,13 @@ public class HtmlRenderer {
             
             formitem = (DataFormItem)element;
             inputname = formitem.getName();
-            tableitem = new TableItem(table, new StringBuffer(table.getName()).
-                    append(inputname).toString());
+            tableitem = new TableItem(table, inputname);
+            styleclass = formitem.getStyleClass();
             
-            text = new Text(null, inputname);
+            text = new Text(null, new StringBuffer(inputname).
+                    append(".text").toString());
             text.setText(messages.get(inputname, inputname));
-            text.setStyleClass(formitem.getStyleClass());
+            text.setStyleClass(styleclass);
             
             type = formitem.getComponentType();
             
@@ -164,7 +166,7 @@ public class HtmlRenderer {
             case TEXT_FIELD:
             case PASSWORD:
                 component = new TextField(null, inputname);
-                component.setStyleClass(formitem.getStyleClass());
+                component.setStyleClass(styleclass);
                 
                 if (type == Const.TEXT_FIELD)
                     ((TextField)component).setPassword(false);

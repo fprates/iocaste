@@ -2,9 +2,7 @@ package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -12,13 +10,11 @@ import org.iocaste.documents.common.DocumentModelItem;
 public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
     private List<String> actions;
-    private Map<String, DataFormItem> itens;
     
     public DataForm(Container container, String name) {
         super(container, Const.DATA_FORM, name);
         
         actions = new ArrayList<String>();
-        itens = new HashMap<String, DataFormItem>();
     }
     
     /**
@@ -31,14 +27,6 @@ public class DataForm extends AbstractContainer {
     
     /**
      * 
-     * @param item
-     */
-    public final void addItem(DataFormItem item) {
-        itens.put(item.getSimpleName(), item);
-    }
-    
-    /**
-     * 
      * @param object
      * @throws RuntimeException
      */
@@ -46,11 +34,24 @@ public class DataForm extends AbstractContainer {
         DataFormItem item;
         String formmethodname;
         String objmethodname;
+        String name;
         Method method_;
+        DocumentModelItem modelitem;
         
-        for (String name: itens.keySet()) {
-            formmethodname = new StringBuffer("set").append(name).toString().
-                    toLowerCase();
+        for (Element element: getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            
+            item = (DataFormItem)element;
+            modelitem = item.getModelItem();
+
+            if (modelitem == null)
+                continue;
+            
+            name = modelitem.getName();
+            
+            formmethodname = new StringBuffer("set").
+                    append(name).toString().toLowerCase();
             method_ = null;
             
             for (Method method : object.getClass().getMethods()) {
@@ -65,8 +66,7 @@ public class DataForm extends AbstractContainer {
             
             if (method_ == null)
                 continue;
-        
-            item = itens.get(name);
+
             for (Class<?> class_ : method_.getParameterTypes()) {
                 invokeCopy(class_, object, method_, item);
                 break;
@@ -148,14 +148,17 @@ public class DataForm extends AbstractContainer {
      */
     public final void setModel(DocumentModel model) {
         String name;
+        DataFormItem formitem;
         String formname = getName();
         
         clear();
         
         for (DocumentModelItem item : model.getItens()) {
-            name = new StringBuffer(formname).append(".").
-                    append(item.getName()).toString();
-            new DataFormItem(this, Const.TEXT_FIELD, name);
+            name = item.getName();
+            formitem = new DataFormItem(this, Const.TEXT_FIELD,
+                    new StringBuffer(formname).append(".").append(name).
+                    toString());
+            formitem.setModelItem(item);
         }
     }
 }
