@@ -164,14 +164,9 @@ public class HtmlRenderer {
             
             switch (type) {
             case TEXT_FIELD:
-            case PASSWORD:
                 component = new TextField(null, inputname);
                 component.setStyleClass(styleclass);
-                
-                if (type == Const.TEXT_FIELD)
-                    ((TextField)component).setPassword(false);
-                else
-                    ((TextField)component).setPassword(true);
+                ((TextField)component).setPassword(formitem.isSecret());
                 
                 break;
             default:
