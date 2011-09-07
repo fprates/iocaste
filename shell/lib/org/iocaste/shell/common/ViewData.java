@@ -47,14 +47,11 @@ public class ViewData implements Serializable {
         for (Element element : container.getElements()) {
             name_= element.getName();
             
-            if (name_ == null)
-                continue;
-            
             if (name_.equals(name))
                 return element;
             
             if (element.isContainable())
-                return findElement(container, name);
+                return findElement((Container)element, name);
         }
         
         return null;
