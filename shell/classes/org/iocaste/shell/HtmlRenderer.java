@@ -140,7 +140,8 @@ public class HtmlRenderer {
         Button button;
         DataFormItem formitem;
         TableItem tableitem;
-        Table table = new Table(null, 2, null);
+        Table table = new Table(null, 2, new StringBuffer(form.getName()).
+                append(".table").toString());
         
         for (Element element : form.getElements()) {
             if (element.getType() != Const.DATA_FORM_ITEM) {
@@ -148,9 +149,10 @@ public class HtmlRenderer {
                 continue;
             }
             
-            tableitem = new TableItem(table, null);
             formitem = (DataFormItem)element;
             inputname = formitem.getName();
+            tableitem = new TableItem(table, new StringBuffer(table.getName()).
+                    append(inputname).toString());
             
             text = new Text(null, inputname);
             text.setText(messages.get(inputname, inputname));
@@ -323,7 +325,9 @@ public class HtmlRenderer {
      */
     private void renderMenuItem(List<String> html, MenuItem menuitem) {
         Menu menu = (Menu)menuitem.getContainer();
-        Link link = new Link(null, null, menu.getAction());
+        String name = new StringBuffer(menuitem.getName()).append(".link").
+                toString();
+        Link link = new Link(null, name, menu.getAction());
         
         link.setText(menuitem.getText());
         link.add(menu.getParameter(), menuitem.getFunction());
