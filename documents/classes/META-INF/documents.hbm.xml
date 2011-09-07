@@ -18,7 +18,7 @@
     </class>
     
     <class name="org.iocaste.documents.common.DocumentModelItem" table="DOCS002">
-        <id name="item" column="INAME"/>
+        <id name="name" column="INAME"/>
         <many-to-one name="documentModel" column="DOCID" not-null="true"/>
     </class>
 </hibernate-mapping>

@@ -15,34 +15,22 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     
     /**
      * 
-     * @return
+     * @param item
      */
-    public Set<DocumentModelItem> getItens() {
-        return itens;
+    public final void add(DocumentModelItem item) {
+        itens.add(item);
     }
     
-    /**
-     * 
-     * @return
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
-    public String getName() {
-        return name;
-    }
-    
-    /**
-     * 
-     * @param itens
-     */
-    public void setItens(Set<DocumentModelItem> itens) {
-        this.itens = itens;
-    }
-    
-    /**
-     * 
-     * @param name
-     */
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public int compareTo(DocumentModel document) {
+        if (document.equals(document))
+            return 0;
+        
+        return name.compareTo(document.getName());
     }
 
     /*
@@ -64,6 +52,22 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
         return name.equals(document.getName());
     }
     
+    /**
+     * 
+     * @return
+     */
+    public Set<DocumentModelItem> getItens() {
+        return itens;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public String getName() {
+        return name;
+    }
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#hashCode()
@@ -73,16 +77,20 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
         return (name == null)?0 : name.hashCode();
     }
     
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
+    /**
+     * 
+     * @param itens
      */
-    @Override
-    public int compareTo(DocumentModel document) {
-        if (document.equals(document))
-            return 0;
-        
-        return name.compareTo(document.getName());
+    protected void setItens(Set<DocumentModelItem> itens) {
+        this.itens = itens;
+    }
+    
+    /**
+     * 
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
     }
     
     

@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class DocumentModelItem implements Comparable<DocumentModelItem>,
             Serializable {
     private static final long serialVersionUID = 7353680713818082301L;
-    private String item;
+    private String name;
     private DocumentModel document;
     
     /**
@@ -20,8 +20,8 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * 
      * @return
      */
-    public String getItem() {
-        return item;
+    public String getName() {
+        return name;
     }
     
     /**
@@ -34,10 +34,10 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     
     /**
      * 
-     * @param item
+     * @param name
      */
-    public void setItem(String item) {
-        this.item = item;
+    public void setName(String name) {
+        this.name = name;
     }
     
     /*
@@ -57,7 +57,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
         if (!documentitem.getDocumentModel().equals(document))
             return false;
         
-        if (!item.equals(documentitem.getItem()))
+        if (!name.equals(documentitem.getName()))
             return false;
         
         return true;
@@ -69,10 +69,10 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      */
     @Override
     public int hashCode() {
-        if (item == null)
+        if (name == null)
             return 0;
         
-        return (11 * document.hashCode()) + item.hashCode();
+        return (11 * document.hashCode()) + name.hashCode();
     }
     
     /*
@@ -91,7 +91,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
         if (compare != 0)
             return compare;
 
-        return item.compareTo(documentitem.getItem());
+        return name.compareTo(documentitem.getName());
     }
 
 }
