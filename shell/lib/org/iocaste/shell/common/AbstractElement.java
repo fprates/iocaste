@@ -8,9 +8,45 @@ public abstract class AbstractElement implements Element {
     private String destiny;
     
     public AbstractElement(Const type, String name) {
+        if (name == null)
+            throw new RuntimeException("Component name is obligatory");
+        
         this.type = type;
         this.name = name;
         style = "";
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public final int compareTo(Element element) {
+        if (equals(element))
+            return 0;
+        
+        return name.compareTo(element.getName());
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public final boolean equals(Object object) {
+        AbstractElement element;
+        
+        if (object == this)
+            return true;
+        
+        if (!(object instanceof AbstractElement))
+            return false;
+        
+        element = (AbstractElement)object;
+        if (!name.equals(element.getName()))
+            return false;
+        
+        return true;
     }
     
     /*
@@ -47,6 +83,15 @@ public abstract class AbstractElement implements Element {
     @Override
     public final Const getType() {
         return type;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public final int hashCode() {
+        return name.hashCode();
     }
     
     /*

@@ -2,7 +2,7 @@ package org.iocaste.shell.common;
 
 import java.io.Serializable;
 
-public interface Element extends Serializable {
+public interface Element extends Comparable<Element>, Serializable {
     
     public abstract String getDestiny();
     

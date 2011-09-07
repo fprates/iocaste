@@ -1,16 +1,16 @@
 package org.iocaste.shell.common;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public abstract class AbstractContainer
     extends AbstractElement implements Container {
     private static final long serialVersionUID = 8676224931708725226L;
-    private List<Element> elements;
+    private Set<Element> elements;
 
     public AbstractContainer(Container container, Const type, String name) {
         super(type, name);
-        elements = new ArrayList<Element>();
+        elements = new LinkedHashSet<Element>();
         
         if (container != null)
             container.add(this);
