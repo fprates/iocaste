@@ -31,7 +31,7 @@ public class DataForm extends AbstractContainer {
      * @throws RuntimeException
      */
     public final void exportTo(Object object) throws RuntimeException {
-        DataFormItem item;
+        InputComponent item;
         String formmethodname;
         String objmethodname;
         String name;
@@ -42,7 +42,7 @@ public class DataForm extends AbstractContainer {
             if (!element.isDataStorable())
                 continue;
             
-            item = (DataFormItem)element;
+            item = (InputComponent)element;
             modelitem = item.getModelItem();
 
             if (modelitem == null)
