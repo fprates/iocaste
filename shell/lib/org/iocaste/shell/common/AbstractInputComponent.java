@@ -7,9 +7,12 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private static final long serialVersionUID = 7276777605716326451L;
     private String value;
     private DocumentModelItem modelitem;
+    private boolean obligatory;
     
     public AbstractInputComponent(Container container, Const type, String name) {
         super(container, type, name);
+        
+        obligatory = false;
     }
     
     /*
@@ -41,6 +44,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#isObligatory()
+     */
+    @Override
+    public final boolean isObligatory() {
+        return obligatory;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Component#setModelItem(
      *     org.iocaste.documents.common.DocumentModelItem)
      */
@@ -49,6 +61,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
         this.modelitem = modelitem;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setObligatory(boolean)
+     */
+    @Override
+    public final void setObligatory(boolean obligatory) {
+        this.obligatory = obligatory;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.DataComponent#setValue(java.lang.String)

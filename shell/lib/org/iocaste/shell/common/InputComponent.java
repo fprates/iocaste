@@ -10,5 +10,9 @@ public interface InputComponent {
 
     public abstract DocumentModelItem getModelItem();
     
+    public abstract boolean isObligatory();
+    
     public abstract void setModelItem(DocumentModelItem modelitem);
+    
+    public abstract void setObligatory(boolean obligatory);
 }

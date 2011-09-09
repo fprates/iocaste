@@ -3,6 +3,8 @@ package org.iocaste.shell.common;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
@@ -59,7 +61,9 @@ public abstract class AbstractPage extends AbstractFunction {
         ControlData controldata;
         Method method;
         ViewData view;
+        InputComponent input;
         Map<String, InputComponent> inputs;
+        String value;
         String action = message.getString("action");
         
         if (action == null)
@@ -69,13 +73,29 @@ public abstract class AbstractPage extends AbstractFunction {
         if (view == null)
             throw new Exception("Null view on action processing.");
         
-        inputs = view.getInputs();
-        
-        for (String name : inputs.keySet())
-            inputs.get(name).setValue(message.getString(name));
-        
         controldata = new ControlData();
         controldata.setMessages(view.getMessages());
+        
+        inputs = view.getInputs();
+        
+        for (String name : inputs.keySet()) {
+            input = inputs.get(name);
+            value = message.getString(name);
+            
+//            if (!isValueCompatible(input, value)) {
+//                controldata.message(Const.ERROR, "value.type.mismatch");
+//                
+//                return controldata;
+//            }
+            
+            if (input.isObligatory() && (isInitial(name, input, value))) {
+                controldata.message(Const.ERROR, "field.is.obligatory");
+                
+                return controldata;
+            }
+            
+            inputs.get(name).setValue(value);
+        }
         
         method = this.getClass().getMethod(
                 action, ControlData.class, ViewData.class);
@@ -98,6 +118,41 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public void home(ControlData controldata, ViewData view) { }
     
+    /**
+     * 
+     * @param input
+     * @param value
+     * @return
+     */
+    protected final boolean isInitial(String name, InputComponent input,
+            String value) throws Exception {
+        DataElement dataelement;
+        DocumentModelItem modelitem;
+        String test = value.trim();
+        
+        if (test.length() == 0)
+            return true;
+        
+        modelitem = input.getModelItem();
+        
+        if (modelitem == null)
+            throw new Exception(new StringBuffer("Data element for ").
+                    append(name).append(" not defined.").toString());
+            
+        dataelement = modelitem.getDataElement();
+        
+        switch (dataelement.getType()) {
+        case NUMC:
+            return (Long.parseLong(test) == 0)? true : false;
+            
+        default:
+            return false;
+        }
+    }
+    
+//    protected final boolean isValueCompatible(InputComponent input, String value) {
+//        
+//    }
     
     /**
      * 

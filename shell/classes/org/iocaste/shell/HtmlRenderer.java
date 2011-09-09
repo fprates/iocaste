@@ -60,10 +60,32 @@ public class HtmlRenderer {
     
     /**
      * 
-     * @param msgtype
+     * @param name
+     * @return
      */
-    public final void setMessageType(Const msgtype) {
-        this.msgtype = msgtype;
+    private final Map<String, Map<String, String>> getStyleSheetElements(
+            String name) {
+        Style style;
+        Map<String, Map<String, String>> elements =
+                new HashMap<String, Map<String, String>>();
+        Map<String, String> properties;
+        
+        Session session = HibernateUtil.getSessionFactory().
+                getCurrentSession();
+        
+        session.beginTransaction();
+        style = (Style)session.load(Style.class, name);
+        for (StyleElement element : style.getElements()) {
+            properties = new HashMap<String, String>();
+            elements.put(element.getName(), properties);
+            
+            for (StyleElementProperty property : element.getProperties())
+                properties.put(property.getName(), property.getValue());
+        }
+        
+        session.getTransaction().commit();
+        
+        return elements;
     }
     
     /**
@@ -135,7 +157,7 @@ public class HtmlRenderer {
     private final void renderDataForm(List<String> html, DataForm form) {
         Const type;
         Text text;
-        Component component;
+        TextField tfield;
         String inputname;
         String styleclass;
         Button button;
@@ -164,17 +186,18 @@ public class HtmlRenderer {
             
             switch (type) {
             case TEXT_FIELD:
-                component = new TextField(null, inputname);
-                component.setStyleClass(styleclass);
-                ((TextField)component).setPassword(formitem.isSecret());
+                tfield = new TextField(null, inputname);
+                tfield.setStyleClass(styleclass);
+                tfield.setObligatory(formitem.isObligatory());
+                tfield.setPassword(formitem.isSecret());
                 
                 break;
             default:
-                component = null;
+                tfield = null;
             }
             
             tableitem.add(text);
-            tableitem.add(component);
+            tableitem.add(tfield);
         }
                 
         renderContainer(html, table);
@@ -389,17 +412,22 @@ public class HtmlRenderer {
      */
     private final void renderTextField(
             List<String> html, TextField textfield) {
-        String inputtext;
+        StringBuffer inputtext;
         String name = textfield.getName();
         
         if (!textfield.isPassword())
-            inputtext = "<input type=\"text\" name=\"";
+            inputtext = new StringBuffer("<input type=\"text\" name=\"");
         else
-            inputtext = "<input type=\"password\" name=\"";
+            inputtext = new StringBuffer("<input type=\"password\" name=\"");
         
-        html.add(new StringBuffer(inputtext).append(name).
-                append("\" class=\"").append(textfield.getStyleClass()).
-                append("\" id=\"").append(name).append("\"/>").toString());
+        inputtext.append(name).append("\" class=\"").
+                append(textfield.getStyleClass()).append("\" id=\"").
+                append(name).append("\"/>");
+        
+        if (textfield.isObligatory())
+            inputtext.append("<span>*</span>");
+        
+        html.add(inputtext.toString());
     }
     
     /**
@@ -500,36 +528,6 @@ public class HtmlRenderer {
     
     /**
      * 
-     * @param name
-     * @return
-     */
-    private final Map<String, Map<String, String>> getStyleSheetElements(
-            String name) {
-        Style style;
-        Map<String, Map<String, String>> elements =
-                new HashMap<String, Map<String, String>>();
-        Map<String, String> properties;
-        
-        Session session = HibernateUtil.getSessionFactory().
-                getCurrentSession();
-        
-        session.beginTransaction();
-        style = (Style)session.load(Style.class, name);
-        for (StyleElement element : style.getElements()) {
-            properties = new HashMap<String, String>();
-            elements.put(element.getName(), properties);
-            
-            for (StyleElementProperty property : element.getProperties())
-                properties.put(property.getName(), property.getValue());
-        }
-        
-        session.getTransaction().commit();
-        
-        return elements;
-    }
-    
-    /**
-     * 
      * @param html
      * @param vdata
      */
@@ -603,6 +601,14 @@ public class HtmlRenderer {
      */
     public void setMessageText(String msgtext) {
         this.msgtext = msgtext;
+    }
+    
+    /**
+     * 
+     * @param msgtype
+     */
+    public final void setMessageType(Const msgtype) {
+        this.msgtype = msgtype;
     }
     
     /**
