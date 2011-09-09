@@ -7,6 +7,15 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     private static final long serialVersionUID = 7353680713818082301L;
     private String name;
     private DocumentModel document;
+    private DataElement dataelement;
+    
+    /**
+     * 
+     * @return
+     */
+    public DataElement getDataElement() {
+        return dataelement;
+    }
     
     /**
      * 
@@ -22,6 +31,14 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      */
     public String getName() {
         return name;
+    }
+    
+    /**
+     * 
+     * @param dataelement
+     */
+    public void setDataElement(DataElement dataelement) {
+        this.dataelement = dataelement;
     }
     
     /**
