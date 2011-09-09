@@ -10,11 +10,12 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataFormItem;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 
@@ -38,6 +39,13 @@ public class TaskSelForm extends AbstractPage {
         new DataFormItem(dataform, Const.TEXT_FIELD, "entry.name");
         new DataFormItem(dataform, Const.TEXT_FIELD, "entry.app");
         new DataFormItem(dataform, Const.TEXT_FIELD, "entry.point");
+        
+        for (Element element : dataform.getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            
+            ((InputComponent)element).setObligatory(true);
+        }
         
         vdata.addContainer(container);
         vdata.setTitle("add.tasksel.entry");
@@ -96,12 +104,9 @@ public class TaskSelForm extends AbstractPage {
     }
     
     public final void save(ControlData cdata, ViewData vdata) {
-        String name = ((TextField)vdata.getElement("entry.name")).getValue();
-        String app = ((TextField)vdata.getElement("entry.app")).getValue();
-        String entry = ((TextField)vdata.getElement("entry.point")).getValue();
-        
-        if (name == null || app == null || entry == null)
-            cdata.message(Const.ERROR, "field.is.obligatory");
+        String name = ((DataFormItem)vdata.getElement("entry.name")).getValue();
+        String app = ((DataFormItem)vdata.getElement("entry.app")).getValue();
+        String entry = ((DataFormItem)vdata.getElement("entry.point")).getValue();
         
         insertAppEntry(name, app, entry);
         cdata.message(Const.STATUS, "insert.entry.successful");

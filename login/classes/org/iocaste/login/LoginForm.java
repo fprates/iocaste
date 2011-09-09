@@ -1,5 +1,7 @@
 package org.iocaste.login;
 
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.Iocaste;
@@ -10,7 +12,9 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataFormItem;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.ViewData;
 
@@ -31,6 +35,10 @@ public class LoginForm extends AbstractPage {
         loginform.setModel(modelInstance());
         loginform.addAction("connect");
         
+        for (Element element : loginform.getElements())
+            if (element.isDataStorable())
+                ((InputComponent)element).setObligatory(true);
+                
         vdata.setMessages(new MessageSource("/META-INF/message.properties"));
         vdata.setTitle("authentic");
         vdata.addContainer(form);
@@ -45,7 +53,8 @@ public class LoginForm extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void connect(ControlData controldata, ViewData view) throws Exception {
+    public final void connect(ControlData controldata, ViewData view)
+            throws Exception {
         DataForm form = (DataForm)view.getElement("login");
         Iocaste iocaste = new Iocaste(this);
         Login login = new Login();
@@ -60,14 +69,38 @@ public class LoginForm extends AbstractPage {
     
     /**
      * 
+     * @param name
+     * @param datatype
+     * @param length
+     * @return
+     */
+    private final DataElement dataElementInstance(
+            String name, DataType datatype, int length) {
+        DataElement dataelement = new DataElement();
+        
+        dataelement.setName(name);
+        dataelement.setType(datatype);
+        dataelement.setLength(length);
+        dataelement.setDecimals(0);
+        
+        return dataelement;
+    }
+    
+    /**
+     * 
      * @return
      */
     private final DocumentModel modelInstance() {
+        DocumentModelItem item;
         DocumentModel model = new DocumentModel();
+        DataElement char12 = dataElementInstance("CHAR12", DataType.CHAR, 12);
         
         model.setName("login");
-        modelItemInstance(model, "username");
-        modelItemInstance(model, "secret");
+        item = modelItemInstance(model, "username");
+        item.setDataElement(char12);
+        
+        item = modelItemInstance(model, "secret");
+        item.setDataElement(char12);
         
         return model;
     }
