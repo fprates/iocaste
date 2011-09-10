@@ -80,6 +80,7 @@ public class PageRenderer extends HttpServlet implements Function {
         
         message.setId("get_view_data");
         message.add("page", pagepos.page);
+        message.add("view_data", pagepos.view);
         message.setSessionid(req.getSession().getId());
         
         pagepos.view = (ViewData)Service.callServer(composeUrl(pagepos.app), message);
@@ -126,6 +127,7 @@ public class PageRenderer extends HttpServlet implements Function {
         if (controldata == null)
             return null;
         
+        pagepos.view = controldata.getViewData();
         renderer.setMessageText(controldata.getTranslatedMessage());
         renderer.setMessageType(controldata.getMessageType());
         
@@ -205,6 +207,9 @@ public class PageRenderer extends HttpServlet implements Function {
         }
         
         if (!iocaste.isConnected() || controldata == null) {
+            if ((pagepos.app != null) && (!pagepos.app.equals(LOGIN_APP)))
+                pagepos.view = null;
+            
             pagepos.app = LOGIN_APP;
             pagepos.page = "authentic";
             
@@ -213,6 +218,7 @@ public class PageRenderer extends HttpServlet implements Function {
             if (controldata.getApp() != null) {
                 pagepos.app = controldata.getApp();
                 pagepos.page = controldata.getPage();
+                pagepos.view = null;
             }
             
             renderer.setUsername(iocaste.getUsername());

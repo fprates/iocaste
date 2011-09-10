@@ -191,6 +191,7 @@ public class HtmlRenderer {
                 tfield.setObligatory(formitem.isObligatory());
                 tfield.setPassword(formitem.isSecret());
                 tfield.setLength(formitem.getLength());
+                tfield.setValue(formitem.getValue());
                 
                 break;
             default:
@@ -204,7 +205,7 @@ public class HtmlRenderer {
         renderContainer(html, table);
         
         for (String action : form.getActions()) {
-            button = new Button(form, action);
+            button = new Button(null, action);
             button.setSubmit(true);
             button.setText(messages.get(action, action));
             button.setStyleClass("submit");
@@ -416,6 +417,10 @@ public class HtmlRenderer {
         StringBuffer inputtext;
         int length = textfield.getLength();
         String name = textfield.getName();
+        String value = textfield.getValue();
+        
+        if (value == null)
+            value = "";
         
         if (!textfield.isPassword())
             inputtext = new StringBuffer("<input type=\"text\" name=\"");
@@ -425,7 +430,8 @@ public class HtmlRenderer {
         inputtext.append(name).append("\" class=\"").
                 append(textfield.getStyleClass()).append("\" id=\"").
                 append(name).append("\" size=\"").append(length).
-                append("\" maxlength=\"").append(length).append("\"/>");
+                append("\" maxlength=\"").append(length).
+                append("\" value=\"").append(value).append("\"/>");
         
         if (textfield.isObligatory())
             inputtext.append("<span>*</span>");

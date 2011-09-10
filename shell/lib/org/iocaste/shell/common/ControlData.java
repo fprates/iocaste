@@ -9,17 +9,12 @@ public class ControlData implements Serializable {
     private String page;
     private Const messagetype;
     private MessageSource messages;
+    private ViewData view;
     
     public ControlData() {
         app = null;
         page = null;
     }
-    
-    /*
-     * 
-     * Getters
-     * 
-     */
     
     /**
      * 
@@ -58,19 +53,12 @@ public class ControlData implements Serializable {
             return messages.get(messagetext, messagetext);
     }
     
-    /*
-     * 
-     * Setters
-     * 
-     */
-    
-
     /**
      * 
-     * @param messages
+     * @return
      */
-    public final void setMessages(MessageSource messages) {
-        this.messages = messages;
+    public final ViewData getViewData() {
+        return view;
     }
     
     /**
@@ -91,5 +79,21 @@ public class ControlData implements Serializable {
     public final void redirect(String app, String page) {
         this.app = app;
         this.page = page;
+    }
+
+    /**
+     * 
+     * @param messages
+     */
+    public final void setMessages(MessageSource messages) {
+        this.messages = messages;
+    }
+    
+    /**
+     * 
+     * @param view
+     */
+    public final void setViewData(ViewData view) {
+        this.view = view;
     }
 }

@@ -28,14 +28,18 @@ public abstract class AbstractPage extends AbstractFunction {
      * @throws Exception
      */
     public final ViewData getViewData(Message message) throws Exception {
-        ViewData view;
         Method method;
         String page = message.getString("page");
+        ViewData view = (ViewData)message.get("view_data");
         
         if (page == null)
             throw new Exception("Page not especified.");
         
+        if (view != null)
+            return view;
+        
         view = new ViewData();
+        
         method = this.getClass().getMethod(page, ViewData.class);
         method.invoke(this, view);
         
@@ -64,6 +68,8 @@ public abstract class AbstractPage extends AbstractFunction {
         InputComponent input;
         Map<String, InputComponent> inputs;
         String value;
+        boolean einitial;
+        InputComponent einput;
         String action = message.getString("action");
         
         if (action == null)
@@ -75,8 +81,11 @@ public abstract class AbstractPage extends AbstractFunction {
         
         controldata = new ControlData();
         controldata.setMessages(view.getMessages());
+        controldata.setViewData(view);
         
         inputs = view.getInputs();
+        einitial = false;
+        einput = null;
         
         for (String name : inputs.keySet()) {
             input = inputs.get(name);
@@ -88,13 +97,21 @@ public abstract class AbstractPage extends AbstractFunction {
 //                return controldata;
 //            }
             
-            if (input.isObligatory() && (isInitial(name, input, value))) {
-                controldata.message(Const.ERROR, "field.is.obligatory");
-                
-                return controldata;
-            }
-            
             inputs.get(name).setValue(value);
+            
+            if (input.isObligatory() && (isInitial(name, input, value))) {
+                einput = input;
+                einitial = true;
+            }
+        }
+        
+        if (einput != null) {
+            view.setFocus((Component)einput);
+            
+            if (einitial)
+                controldata.message(Const.ERROR, "field.is.obligatory");
+            
+            return controldata;
         }
         
         method = this.getClass().getMethod(
