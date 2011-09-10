@@ -190,6 +190,7 @@ public class HtmlRenderer {
                 tfield.setStyleClass(styleclass);
                 tfield.setObligatory(formitem.isObligatory());
                 tfield.setPassword(formitem.isSecret());
+                tfield.setLength(formitem.getLength());
                 
                 break;
             default:
@@ -413,6 +414,7 @@ public class HtmlRenderer {
     private final void renderTextField(
             List<String> html, TextField textfield) {
         StringBuffer inputtext;
+        int length = textfield.getLength();
         String name = textfield.getName();
         
         if (!textfield.isPassword())
@@ -422,7 +424,8 @@ public class HtmlRenderer {
         
         inputtext.append(name).append("\" class=\"").
                 append(textfield.getStyleClass()).append("\" id=\"").
-                append(name).append("\"/>");
+                append(name).append("\" size=\"").append(length).
+                append("\" maxlength=\"").append(length).append("\"/>");
         
         if (textfield.isObligatory())
             inputtext.append("<span>*</span>");

@@ -8,11 +8,21 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private String value;
     private DocumentModelItem modelitem;
     private boolean obligatory;
+    private int length;
     
     public AbstractInputComponent(Container container, Const type, String name) {
         super(container, type, name);
         
         obligatory = false;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getLength()
+     */
+    @Override
+    public final int getLength() {
+        return length;
     }
     
     /*
@@ -53,12 +63,23 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setLength(int)
+     */
+    @Override
+    public final void setLength(int length) {
+        this.length = length;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Component#setModelItem(
      *     org.iocaste.documents.common.DocumentModelItem)
      */
     @Override
     public final void setModelItem(DocumentModelItem modelitem) {
         this.modelitem = modelitem;
+        
+        setLength(modelitem.getDataElement().getLength());
     }
 
     /*
