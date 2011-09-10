@@ -11,16 +11,18 @@ import org.iocaste.protocol.user.User;
 
 public class Login extends AbstractFunction {
     private static final int USERNAME_MAX_LEN = 12;
-    private Map<String, User> sessions;
+    private Map<String, Context> sessions;
     
     public Login() {
-        sessions = new HashMap<String, User>();
+        sessions = new HashMap<String, Context>();
         
         export("login", "login");
         export("is_connected", "isConnected");
         export("get_username", "getUsername");
         export("create_user", "createUser");
         export("disconnect", "disconnect");
+        export("get_context", "getContext");
+        export("set_context", "setContext");
     }
     
     /**
@@ -39,6 +41,11 @@ public class Login extends AbstractFunction {
         session.save(user);
     }
     
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
     public final void disconnect(Message message) throws Exception {
         String sessionid = message.getSessionid();
 
@@ -47,6 +54,37 @@ public class Login extends AbstractFunction {
         
         if (sessions.containsKey(sessionid))
             sessions.remove(sessionid);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final Object getContext(Message message) throws Exception {
+        String sessionid = message.getSessionid();
+        String contextid = message.getString("context_id");
+        
+        return sessions.get(sessionid).getObject(contextid);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final String getUsername(Message message) throws Exception {
+        String sessionid = message.getSessionid();
+
+        if (sessionid == null)
+            throw new Exception("Null session not allowed.");
+        
+        if (!sessions.containsKey(sessionid))
+            return null;
+        
+        return sessions.get(sessionid).getUser().getUsername();
     }
     
     /**
@@ -69,25 +107,8 @@ public class Login extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final String getUsername(Message message) throws Exception {
-        String sessionid = message.getSessionid();
-
-        if (sessionid == null)
-            throw new Exception("Null session not allowed.");
-        
-        if (!sessions.containsKey(sessionid))
-            return null;
-        
-        return sessions.get(sessionid).getUsername();
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
-     * @throws Exception
-     */
     public final boolean login(Message message) throws Exception {
+        Context context;
         String user = message.getString("user");
         String secret = message.getString("secret");
         String sessionid = message.getSessionid();
@@ -107,9 +128,24 @@ public class Login extends AbstractFunction {
         if (!user_.getSecret().equals(secret))
             return false;
         
-        sessions.put(sessionid, user_);
+        context = new Context();
+        context.setUser(user_);
+        
+        sessions.put(sessionid, context);
         
         return true;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void setContext(Message message) throws Exception {
+        String sessionid = message.getSessionid();
+        String contextid = message.getString("context_id");
+        
+        sessions.get(sessionid).setObject(contextid, message.get("object"));
     }
 
 }

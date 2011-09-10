@@ -37,15 +37,17 @@ public final class Iocaste extends AbstractServiceInterface {
     
     /**
      * 
+     * @param name
      * @return
      * @throws Exception
      */
-    public final boolean isConnected() throws Exception {
+    public final Object getContext(String name) throws Exception {
         Message message = new Message();
         
-        message.setId("is_connected");
+        message.setId("get_context");
+        message.add("context_id", name);
         
-        return (Boolean)call(message);
+        return call(message);
     }
     
     /**
@@ -63,6 +65,19 @@ public final class Iocaste extends AbstractServiceInterface {
     
     /**
      * 
+     * @return
+     * @throws Exception
+     */
+    public final boolean isConnected() throws Exception {
+        Message message = new Message();
+        
+        message.setId("is_connected");
+        
+        return (Boolean)call(message);
+    }
+    
+    /**
+     * 
      * @param user
      * @param secret
      * @return
@@ -76,5 +91,21 @@ public final class Iocaste extends AbstractServiceInterface {
         message.add("secret", secret);
         
         return (Boolean)call(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param object
+     * @throws Exception
+     */
+    public final void setContext(String name, Object object) throws Exception {
+        Message message = new Message();
+        
+        message.setId("set_context");
+        message.add("context_id", name);
+        message.add("object", object);
+        
+        call(message);
     }
 }
