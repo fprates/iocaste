@@ -72,18 +72,25 @@ public class PageRenderer extends HttpServlet implements Function {
             HttpServletRequest req, HttpServletResponse resp, PagePos pagepos)
             throws Exception {
         String[] text;
+        String appname;
+        String pagename;
         Message message = new Message();
         PrintWriter writer = resp.getWriter();
         
         resp.setCharacterEncoding("utf-8");
         resp.setContentType("text/html");
         
-        message.setId("get_view_data");
-        message.add("page", pagepos.page);
-        message.add("view_data", pagepos.view);
-        message.setSessionid(req.getSession().getId());
+        appname = (pagepos.view == null)? "" : pagepos.view.getAppName();
+        pagename = (pagepos.view == null)? "" : pagepos.view.getPageName();
         
-        pagepos.view = (ViewData)Service.callServer(composeUrl(pagepos.app), message);
+        if (!appname.equals(pagepos.app) || !pagename.equals(pagepos.page)) {
+            message.setId("get_view_data");
+            message.add("app", pagepos.app);
+            message.add("page", pagepos.page);
+            message.setSessionid(req.getSession().getId());
+            
+            pagepos.view = (ViewData)Service.callServer(composeUrl(pagepos.app), message);
+        }
         
         text = renderer.run(pagepos.view);
 
@@ -118,8 +125,19 @@ public class PageRenderer extends HttpServlet implements Function {
         Map<String, ?> parameters;
         ControlData controldata;
         
-        parameters = (ServletFileUpload.isMultipartContent(req))?
-                processMultipartContent(req, pagepos) : req.getParameterMap();
+        if (ServletFileUpload.isMultipartContent(req)) {
+            parameters = processMultipartContent(req, pagepos);
+            pagepos.pagetrack = (String)parameters.get("pagetrack");
+        } else {
+            parameters = new HashMap<String, String[]>();
+            parameters.putAll(req.getParameterMap());
+            
+            if (parameters.size() == 0)
+                return null;
+            
+            pagepos.pagetrack = ((String[])parameters.get("pagetrack"))[0];
+            parameters.remove("pagetrack");
+        }
         
         controldata = callController(
                 req.getSession().getId(), parameters, pagepos);
@@ -323,4 +341,5 @@ class PagePos {
     public String app;
     public String page;
     public ViewData view;
+    public String pagetrack;
 }

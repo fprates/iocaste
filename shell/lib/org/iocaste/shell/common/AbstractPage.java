@@ -29,16 +29,14 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public final ViewData getViewData(Message message) throws Exception {
         Method method;
+        ViewData view;
         String page = message.getString("page");
-        ViewData view = (ViewData)message.get("view_data");
+        String app = message.getString("app");
         
-        if (page == null)
+        if (app == null || page == null)
             throw new Exception("Page not especified.");
         
-        if (view != null)
-            return view;
-        
-        view = new ViewData();
+        view = new ViewData(app, page);
         
         method = this.getClass().getMethod(page, ViewData.class);
         method.invoke(this, view);

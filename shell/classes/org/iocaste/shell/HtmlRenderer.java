@@ -37,6 +37,7 @@ public class HtmlRenderer {
     private String[] script;
     private String username;
     private MessageSource messages;
+    private String appname;
     
     public HtmlRenderer() {
         String line;
@@ -292,7 +293,7 @@ public class HtmlRenderer {
      * @param html
      * @param container
      */
-    private final void renderForm(List<String> html, org.iocaste.shell.common.Form container) {
+    private final void renderForm(List<String> html, Form container) {
         StringBuffer sb = new StringBuffer("<form method=\"post\" " +
         		"action=\"index.html\" name=\"").append(container.getName());
         String enctype = container.getEnctype();
@@ -303,6 +304,9 @@ public class HtmlRenderer {
             sb.append("\">");
         
         html.add(sb.toString());
+        html.add(new StringBuffer(
+                "<input type=\"hidden\" name=\"pagetrack\" value=\"").
+                append(appname).append("\"/>").toString());
         renderElements(html, container.getElements());
         html.add("</form>");
     }
@@ -324,7 +328,8 @@ public class HtmlRenderer {
         if (link.isAbsolute())
             sb = new StringBuffer("<a href=\"");
         else
-            sb = new StringBuffer("<a href=\"index.html?action=");
+            sb = new StringBuffer("<a href=\"index.html?pagetrack=").
+                    append(appname).append("&action=");
         
         sb.append(link.getAction());
         
@@ -576,6 +581,8 @@ public class HtmlRenderer {
         List<String> html = new ArrayList<String>();
         
         messages = vdata.getMessages();
+        appname = vdata.getAppName();
+        
         if (messages == null)
             messages = new MessageSource(null);
         

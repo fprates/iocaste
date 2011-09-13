@@ -16,12 +16,16 @@ public class ViewData implements Serializable {
     private List<Element> mpelements;
     private List<Container> containers;
     private String sheet;
+    private String appname;
+    private String pagename;
     
-    public ViewData() {
+    public ViewData(String appname, String pagename) {
         inputs = new HashMap<String, InputComponent>();
         navbarstatus = new HashMap<String, Boolean>();
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<Element>();
+        this.appname = appname;
+        this.pagename = pagename;
     }
     
     /**
@@ -55,6 +59,14 @@ public class ViewData implements Serializable {
         }
         
         return null;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getAppName() {
+        return appname;
     }
     
     /**
@@ -120,6 +132,14 @@ public class ViewData implements Serializable {
      */
     public final Map<String, Boolean> getNavbarStatus() {
         return navbarstatus;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getPageName() {
+        return pagename;
     }
     
     /**
