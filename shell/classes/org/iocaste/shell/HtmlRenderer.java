@@ -37,7 +37,7 @@ public class HtmlRenderer {
     private String[] script;
     private String username;
     private MessageSource messages;
-    private String appname;
+    private String pagetrack;
     
     public HtmlRenderer() {
         String line;
@@ -306,7 +306,7 @@ public class HtmlRenderer {
         html.add(sb.toString());
         html.add(new StringBuffer(
                 "<input type=\"hidden\" name=\"pagetrack\" value=\"").
-                append(appname).append("\"/>").toString());
+                append(pagetrack).append("\"/>").toString());
         renderElements(html, container.getElements());
         html.add("</form>");
     }
@@ -329,7 +329,7 @@ public class HtmlRenderer {
             sb = new StringBuffer("<a href=\"");
         else
             sb = new StringBuffer("<a href=\"index.html?pagetrack=").
-                    append(appname).append("&action=");
+                    append(pagetrack).append("&action=");
         
         sb.append(link.getAction());
         
@@ -581,7 +581,8 @@ public class HtmlRenderer {
         List<String> html = new ArrayList<String>();
         
         messages = vdata.getMessages();
-        appname = vdata.getAppName();
+        pagetrack = new StringBuffer(vdata.getAppName()).append(".").
+                append(vdata.getPageName()).toString();
         
         if (messages == null)
             messages = new MessageSource(null);
