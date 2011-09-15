@@ -146,7 +146,10 @@ public class PageRenderer extends HttpServlet implements Function {
         
         pagepos.view = pagepos.control.getViewData();
         
-        if (pagepos.view != null) {
+        if (pagepos.control.getApp() != null) {
+            pagepos.app = pagepos.control.getApp();
+            pagepos.page = pagepos.control.getPage();
+        } else {
             pagepos.app = pagepos.view.getAppName();
             pagepos.page = pagepos.view.getPageName();
         }
