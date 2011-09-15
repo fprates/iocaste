@@ -144,15 +144,17 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagepos.control == null)
             return;
         
-        if (pagepos.control.getApp() != null) {
-            pagepos.app = pagepos.control.getApp();
-            pagepos.page = pagepos.control.getPage();
-            pagepos.view = pagepos.control.getViewData();
+        pagepos.view = pagepos.control.getViewData();
+        
+        if (pagepos.view != null) {
+            pagepos.app = pagepos.view.getAppName();
+            pagepos.page = pagepos.view.getPageName();
         }
         
         renderer.setMessageText(pagepos.control.getTranslatedMessage());
         renderer.setMessageType(pagepos.control.getMessageType());
-        renderer.setUsername(iocaste.getUsername());
+        renderer.setUsername((iocaste.isConnected())?
+                iocaste.getUsername():"Not connected");
     }
     
     /**
