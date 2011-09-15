@@ -120,10 +120,9 @@ public class PageRenderer extends HttpServlet implements Function {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    private final ControlData processController(Iocaste iocaste,
+    private final void processController(Iocaste iocaste,
             HttpServletRequest req, PagePos pagepos) throws Exception {
         Map<String, ?> parameters;
-        ControlData controldata;
         
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagepos);
@@ -133,23 +132,27 @@ public class PageRenderer extends HttpServlet implements Function {
             parameters.putAll(req.getParameterMap());
             
             if (parameters.size() == 0)
-                return null;
+                return;
             
             pagepos.pagetrack = ((String[])parameters.get("pagetrack"))[0];
             parameters.remove("pagetrack");
         }
-        
-        controldata = callController(
+
+        pagepos.control = callController(
                 req.getSession().getId(), parameters, pagepos);
         
-        if (controldata == null)
-            return null;
+        if (pagepos.control == null)
+            return;
         
-        pagepos.view = controldata.getViewData();
-        renderer.setMessageText(controldata.getTranslatedMessage());
-        renderer.setMessageType(controldata.getMessageType());
+        if (pagepos.control.getApp() != null) {
+            pagepos.app = pagepos.control.getApp();
+            pagepos.page = pagepos.control.getPage();
+            pagepos.view = pagepos.control.getViewData();
+        }
         
-        return controldata;
+        renderer.setMessageText(pagepos.control.getTranslatedMessage());
+        renderer.setMessageType(pagepos.control.getMessageType());
+        renderer.setUsername(iocaste.getUsername());
     }
     
     /**
@@ -209,37 +212,21 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void entry(HttpServletRequest req, HttpServletResponse resp)
             throws Exception {
-        ControlData controldata = null;
         Iocaste iocaste = new Iocaste(this);
         PagePos pagepos = apps.get(sessionid);
         
-        if (!iocaste.isConnected()) {
-            if (pagepos == null) {
-                pagepos = new PagePos();
-                apps.put(sessionid, pagepos);
-            } else {
-                controldata = processController(iocaste, req, pagepos);
-            }
-        } else {
-            controldata = processController(iocaste, req, pagepos);
+        if (pagepos == null) {
+            pagepos = new PagePos();
+            apps.put(sessionid, pagepos);
+            renderer.setUsername("Not connected");
         }
         
-        if (!iocaste.isConnected() || controldata == null) {
-            if ((pagepos.app != null) && (!pagepos.app.equals(LOGIN_APP)))
-                pagepos.view = null;
-            
+        processController(iocaste, req, pagepos);
+        
+        if (!iocaste.isConnected()) {
             pagepos.app = LOGIN_APP;
             pagepos.page = "authentic";
-            
             renderer.setUsername("Not connected");
-        } else {
-            if (controldata.getApp() != null) {
-                pagepos.app = controldata.getApp();
-                pagepos.page = controldata.getPage();
-                pagepos.view = null;
-            }
-            
-            renderer.setUsername(iocaste.getUsername());
         }
         
         render(req, resp, pagepos);
@@ -292,7 +279,7 @@ public class PageRenderer extends HttpServlet implements Function {
     public final Set<String> getMethods() {
         return null;
     }
-
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#run(org.iocaste.protocol.Message)
@@ -342,4 +329,5 @@ class PagePos {
     public String page;
     public ViewData view;
     public String pagetrack;
+    public ControlData control;
 }
