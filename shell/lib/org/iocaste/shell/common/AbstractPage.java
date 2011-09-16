@@ -97,7 +97,8 @@ public abstract class AbstractPage extends AbstractFunction {
             
             inputs.get(name).setValue(value);
             
-            if (input.isObligatory() && (isInitial(name, input, value))) {
+            if (input.isObligatory() && (isInitial(name, input, value)) &&
+                    (!einitial)) {
                 einput = input;
                 einitial = true;
             }
