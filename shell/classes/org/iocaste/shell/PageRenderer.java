@@ -239,6 +239,8 @@ public class PageRenderer extends HttpServlet implements Function {
         PageContext pagectx_;
         Map<String, ?> parameters;
         ControlData control;
+        String appname;
+        String pagename;
         
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagectx);
@@ -263,10 +265,18 @@ public class PageRenderer extends HttpServlet implements Function {
         renderer.setUsername((iocaste.isConnected())?
                 iocaste.getUsername():"Not connected");
         
-        pagectx_ = getPageContext(sessionid, control.getApp(), control.getPage());
+        appname = control.getApp();
+        if (appname == null)
+            appname = pagectx.getAppContext().getName();
+        
+        pagename = control.getPage();
+        if (pagename == null)
+            pagename = pagectx.getName();
+        
+        pagectx_ = getPageContext(sessionid, appname, pagename);
         
         if (pagectx_ == null)
-            pagectx_ = createPageContext(sessionid, control.getApp(), control.getPage());
+            pagectx_ = createPageContext(sessionid, appname, pagename);
         
         return pagectx_;
     }
