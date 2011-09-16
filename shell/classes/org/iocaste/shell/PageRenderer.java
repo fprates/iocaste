@@ -84,8 +84,7 @@ public class PageRenderer extends HttpServlet implements Function {
                 apps.get(sessionid) : new SessionContext();
         AppContext appctx = (sessionctx.contains(appname))?
                 sessionctx.getAppContext(appname) : new AppContext(appname);
-        PageContext pagectx = (appctx.contains(pagename))?
-                appctx.getPageContext(pagename) : new PageContext(pagename);
+        PageContext pagectx = new PageContext(pagename);
         
         pagectx.setAppContext(appctx);
         appctx.put(pagename, pagectx);
@@ -254,8 +253,7 @@ public class PageRenderer extends HttpServlet implements Function {
         if (parameters.containsKey("pagetrack"))
             parameters.remove("pagetrack");
             
-        control = callController(req.getSession().getId(), parameters,
-                pagectx);
+        control = callController(sessionid, parameters, pagectx);
         
         if (control == null)
             return pagectx;
@@ -276,12 +274,12 @@ public class PageRenderer extends HttpServlet implements Function {
     /**
      * 
      * @param req
-     * @param pagepos
+     * @param pagectx
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
     private final Map<String, ?> processMultipartContent(HttpServletRequest req,
-            PageContext pagepos) throws Exception {
+            PageContext pagectx) throws Exception {
         DiskFileItemFactory factory;
         ServletFileUpload fileupload;
         List<FileItem> files;
@@ -300,7 +298,7 @@ public class PageRenderer extends HttpServlet implements Function {
         files = fileupload.parseRequest(req);
         
         parameters = new HashMap<String, String>();
-        elements = pagepos.getViewData().getMultipartElements();
+        elements = pagectx.getViewData().getMultipartElements();
         
         for (Element element : elements) {
             for (FileItem fileitem : files) {
@@ -327,8 +325,7 @@ public class PageRenderer extends HttpServlet implements Function {
     /**
      * 
      * @param resp
-     * @param url
-     * @param page
+     * @param pagectx
      * @throws Exception
      */
     private final void render(HttpServletResponse resp, PageContext pagectx)
