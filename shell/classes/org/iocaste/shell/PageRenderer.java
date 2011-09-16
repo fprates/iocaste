@@ -31,11 +31,11 @@ public class PageRenderer extends HttpServlet implements Function {
     private static final int MEMORY_THRESOLD = 512*1024; 
     private String sessionid;
     private String servername;
-    private Map<String, PagePos> apps;
+    private Map<String, SessionContext> apps;
     private HtmlRenderer renderer;
     
     public PageRenderer() {
-        apps = new HashMap<String, PagePos>();
+        apps = new HashMap<String, SessionContext>();
         renderer = new HtmlRenderer();
     }
     
@@ -47,58 +47,18 @@ public class PageRenderer extends HttpServlet implements Function {
      * @throws Exception
      */
     private final ControlData callController(String sessionid,
-            Map<String, ?> parameters, PagePos pagepos) throws Exception {
+            Map<String, ?> parameters, PageContext pagectx) throws Exception {
         Message message = new Message();
         
         message.setId("exec_action");
-        message.add("view", pagepos.view);
+        message.add("view", pagectx.view);
         message.setSessionid(sessionid);
         
         for (String name : parameters.keySet())
             message.add(name, parameters.get(name));
             
         return (ControlData)Service.callServer(
-                composeUrl(pagepos.app), message);
-    }
-    
-    /**
-     * 
-     * @param resp
-     * @param url
-     * @param page
-     * @throws Exception
-     */
-    private final void render(
-            HttpServletRequest req, HttpServletResponse resp, PagePos pagepos)
-            throws Exception {
-        String[] text;
-        String appname;
-        String pagename;
-        Message message = new Message();
-        PrintWriter writer = resp.getWriter();
-        
-        resp.setCharacterEncoding("utf-8");
-        resp.setContentType("text/html");
-        
-        appname = (pagepos.view == null)? "" : pagepos.view.getAppName();
-        pagename = (pagepos.view == null)? "" : pagepos.view.getPageName();
-        
-        if (!appname.equals(pagepos.app) || !pagename.equals(pagepos.page)) {
-            message.setId("get_view_data");
-            message.add("app", pagepos.app);
-            message.add("page", pagepos.page);
-            message.setSessionid(req.getSession().getId());
-            
-            pagepos.view = (ViewData)Service.callServer(composeUrl(pagepos.app), message);
-        }
-        
-        text = renderer.run(pagepos.view);
-
-        if (text != null)
-            for (String line : text)
-                writer.println(line);
-                
-        writer.close();
+                composeUrl(pagectx.app), message);
     }
     
     /**
@@ -111,6 +71,144 @@ public class PageRenderer extends HttpServlet implements Function {
                 append(app).append("/view.html").toString();
     }
     
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServlet#doGet(
+     *     javax.servlet.http.HttpServletRequest,
+     *     javax.servlet.http.HttpServletResponse)
+     */
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        doPost(req, resp);
+    }
+
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServlet#doPost(
+     *     javax.servlet.http.HttpServletRequest,
+     *     javax.servlet.http.HttpServletResponse)
+     */
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        PageContext pagectx;
+        sessionid = req.getSession().getId();
+        servername = new StringBuffer(req.getScheme()).append("://").
+                        append(req.getServerName()).append(":").
+                        append(req.getServerPort()).toString();
+        
+        try {
+            entry(req, resp);
+        } catch (Exception e) {
+            try {
+                pagectx = getPageContext(req, apps.get(sessionid));
+            } catch (Exception page_ex) {
+                throw new ServletException(page_ex);
+            }
+            
+            if (pagectx != null) {
+                pagectx.app = LOGIN_APP;
+                pagectx.page = "authentic";
+            }
+            
+            throw new ServletException(e);
+        }
+    }
+    
+    /**
+     * 
+     * @param req
+     * @param resp
+     * @throws Exception
+     */
+    private final void entry(HttpServletRequest req, HttpServletResponse resp)
+            throws Exception {
+        PageContext pagectx;
+        AppContext appctx;
+        Iocaste iocaste = new Iocaste(this);
+        SessionContext sessionctx = apps.get(sessionid);
+        
+        if (sessionctx != null) {
+            pagectx = getPageContext(req, sessionctx);
+        } else {
+            pagectx = new PageContext();
+            appctx = new AppContext();
+            sessionctx = new SessionContext();
+            
+            appctx.put("authentic", pagectx);
+            sessionctx.put(LOGIN_APP, appctx);
+            apps.put(sessionid, sessionctx);
+            
+            renderer.setUsername("Not connected");
+        }
+        
+        processController(iocaste, req, pagectx);
+        
+        if (!iocaste.isConnected()) {
+            pagectx.app = LOGIN_APP;
+            pagectx.page = "authentic";
+            renderer.setUsername("Not connected");
+        }
+        
+        render(req, resp, pagectx);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#getMethods()
+     */
+    @Override
+    public final Set<String> getMethods() {
+        return null;
+    }
+    
+    /**
+     * 
+     * @param req
+     * @param sessionctx
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    private final PageContext getPageContext(HttpServletRequest req,
+            SessionContext sessionctx) throws Exception {
+        String[] pageparse;
+        ServletFileUpload fileupload;
+        List<FileItem> files;
+        String pagetrack = null;
+        
+        if (ServletFileUpload.isMultipartContent(req)) {
+            fileupload = new ServletFileUpload(new DiskFileItemFactory());
+            files = fileupload.parseRequest(req);
+            
+            if (files == null)
+                return null;
+            
+            for (FileItem fileitem : files) {
+                if (fileitem.isFormField()) {
+                    pagetrack = fileitem.getFieldName();
+                    
+                    if (!pagetrack.equals("pagetrack")) {
+                        pagetrack = null;
+                        continue;
+                    }
+                    
+                    break;
+                }
+                
+                if (pagetrack != null)
+                    break;
+            }
+        } else {
+            pagetrack = req.getParameter("pagetrack");
+        }
+        
+        if (pagetrack == null)
+            return null;
+        
+        pageparse = pagetrack.split("\\.", 2);
+        return sessionctx.getAppContext(pageparse[0]).
+                getPageContext(pageparse[1]);
+    }
+    
     /**
      * 
      * @param iocaste
@@ -121,12 +219,12 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     @SuppressWarnings("unchecked")
     private final void processController(Iocaste iocaste,
-            HttpServletRequest req, PagePos pagepos) throws Exception {
+            HttpServletRequest req, PageContext pagectx) throws Exception {
         Map<String, ?> parameters;
         
         if (ServletFileUpload.isMultipartContent(req)) {
-            parameters = processMultipartContent(req, pagepos);
-            pagepos.pagetrack = (String)parameters.get("pagetrack");
+            parameters = processMultipartContent(req, pagectx);
+            pagectx.pagetrack = (String)parameters.get("pagetrack");
         } else {
             parameters = new HashMap<String, String[]>();
             parameters.putAll(req.getParameterMap());
@@ -134,28 +232,28 @@ public class PageRenderer extends HttpServlet implements Function {
             if (parameters.size() == 0)
                 return;
             
-            pagepos.pagetrack = ((String[])parameters.get("pagetrack"))[0];
+            pagectx.pagetrack = ((String[])parameters.get("pagetrack"))[0];
             parameters.remove("pagetrack");
         }
 
-        pagepos.control = callController(
-                req.getSession().getId(), parameters, pagepos);
+        pagectx.control = callController(
+                req.getSession().getId(), parameters, pagectx);
         
-        if (pagepos.control == null)
+        if (pagectx.control == null)
             return;
         
-        pagepos.view = pagepos.control.getViewData();
+        pagectx.view = pagectx.control.getViewData();
         
-        if (pagepos.control.getApp() != null) {
-            pagepos.app = pagepos.control.getApp();
-            pagepos.page = pagepos.control.getPage();
+        if (pagectx.control.getApp() != null) {
+            pagectx.app = pagectx.control.getApp();
+            pagectx.page = pagectx.control.getPage();
         } else {
-            pagepos.app = pagepos.view.getAppName();
-            pagepos.page = pagepos.view.getPageName();
+            pagectx.app = pagectx.view.getAppName();
+            pagectx.page = pagectx.view.getPageName();
         }
         
-        renderer.setMessageText(pagepos.control.getTranslatedMessage());
-        renderer.setMessageType(pagepos.control.getMessageType());
+        renderer.setMessageText(pagectx.control.getTranslatedMessage());
+        renderer.setMessageType(pagectx.control.getMessageType());
         renderer.setUsername((iocaste.isConnected())?
                 iocaste.getUsername():"Not connected");
     }
@@ -168,7 +266,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     @SuppressWarnings("unchecked")
     private final Map<String, ?> processMultipartContent(HttpServletRequest req,
-            PagePos pagepos) throws Exception {
+            PageContext pagepos) throws Exception {
         DiskFileItemFactory factory;
         ServletFileUpload fileupload;
         List<FileItem> files;
@@ -211,78 +309,42 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
-     * @param req
      * @param resp
+     * @param url
+     * @param page
      * @throws Exception
      */
-    private final void entry(HttpServletRequest req, HttpServletResponse resp)
-            throws Exception {
-        Iocaste iocaste = new Iocaste(this);
-        PagePos pagepos = apps.get(sessionid);
+    private final void render(HttpServletRequest req, HttpServletResponse resp,
+            PageContext pagectx) throws Exception {
+        String[] text;
+        String appname;
+        String pagename;
+        Message message = new Message();
+        PrintWriter writer = resp.getWriter();
         
-        if (pagepos == null) {
-            pagepos = new PagePos();
-            apps.put(sessionid, pagepos);
-            renderer.setUsername("Not connected");
-        }
+        resp.setCharacterEncoding("utf-8");
+        resp.setContentType("text/html");
         
-        processController(iocaste, req, pagepos);
+        appname = (pagectx.view == null)? "" : pagectx.view.getAppName();
+        pagename = (pagectx.view == null)? "" : pagectx.view.getPageName();
         
-        if (!iocaste.isConnected()) {
-            pagepos.app = LOGIN_APP;
-            pagepos.page = "authentic";
-            renderer.setUsername("Not connected");
-        }
-        
-        render(req, resp, pagepos);
-    }
-    
-    /* (non-Javadoc)
-     * @see javax.servlet.http.HttpServlet#doGet(
-     *     javax.servlet.http.HttpServletRequest,
-     *     javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        doPost(req, resp);
-    }
-
-    /* (non-Javadoc)
-     * @see javax.servlet.http.HttpServlet#doPost(
-     *     javax.servlet.http.HttpServletRequest,
-     *     javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        PagePos pagepos;
-        sessionid = req.getSession().getId();
-        servername = new StringBuffer(req.getScheme()).append("://").
-                        append(req.getServerName()).append(":").
-                        append(req.getServerPort()).toString();
-        
-        try {
-            entry(req, resp);
-        } catch (Exception e) {
-            pagepos = apps.get(sessionid);
+        if (!appname.equals(pagectx.app) || !pagename.equals(pagectx.page)) {
+            message.setId("get_view_data");
+            message.add("app", pagectx.app);
+            message.add("page", pagectx.page);
+            message.setSessionid(req.getSession().getId());
             
-            if (pagepos != null) {
-                pagepos.app = LOGIN_APP;
-                pagepos.page = "authentic";
-            }
-            
-            throw new ServletException(e);
+            pagectx.view = (ViewData)Service.callServer(
+                    composeUrl(pagectx.app), message);
         }
-    }
+        
+        text = renderer.run(pagectx.view);
 
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#getMethods()
-     */
-    @Override
-    public final Set<String> getMethods() {
-        return null;
+        if (text != null)
+            for (String line : text)
+                writer.println(line);
+                
+        writer.close();
     }
     
     /*
@@ -292,6 +354,17 @@ public class PageRenderer extends HttpServlet implements Function {
     @Override
     public final Object run(Message message) throws Exception {
         return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#serviceInstance(java.lang.String)
+     */
+    @Override
+    public final Service serviceInstance(String path) {
+        String url = new StringBuffer(servername).append(path).toString();
+        
+        return new Service(sessionid, url);
     }
 
     /*
@@ -311,28 +384,9 @@ public class PageRenderer extends HttpServlet implements Function {
 
     /*
      * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#serviceInstance(java.lang.String)
-     */
-    @Override
-    public final Service serviceInstance(String path) {
-        String url = new StringBuffer(servername).append(path).toString();
-        
-        return new Service(sessionid, url);
-    }
-
-    /*
-     * (non-Javadoc)
      * @see org.iocaste.protocol.Function#setSessionid(java.lang.String)
      */
     @Override
     public void setSessionid(String sessionid) { }
 
-}
-
-class PagePos {
-    public String app;
-    public String page;
-    public ViewData view;
-    public String pagetrack;
-    public ControlData control;
 }
