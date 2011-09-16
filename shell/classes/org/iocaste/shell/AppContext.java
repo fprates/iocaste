@@ -5,9 +5,28 @@ import java.util.Map;
 
 public class AppContext {
     private Map<String, PageContext> pages;
-
-    public AppContext() {
+    private String name;
+    
+    public AppContext(String name) {
+        this.name = name;
         pages = new HashMap<String, PageContext>();
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final boolean contains(String name) {
+        return pages.containsKey(name);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getName() {
+        return name;
     }
     
     /**

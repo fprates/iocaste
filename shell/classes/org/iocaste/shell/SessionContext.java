@@ -15,6 +15,15 @@ public class SessionContext {
      * @param name
      * @return
      */
+    public final boolean contains(String name) {
+        return apps.containsKey(name);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
     public final AppContext getAppContext(String name) {
         return apps.get(name);
     }

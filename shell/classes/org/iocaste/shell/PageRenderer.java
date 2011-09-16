@@ -51,14 +51,14 @@ public class PageRenderer extends HttpServlet implements Function {
         Message message = new Message();
         
         message.setId("exec_action");
-        message.add("view", pagectx.view);
+        message.add("view", pagectx.getViewData());
         message.setSessionid(sessionid);
         
         for (String name : parameters.keySet())
             message.add(name, parameters.get(name));
             
         return (ControlData)Service.callServer(
-                composeUrl(pagectx.app), message);
+                composeUrl(pagectx.getAppContext().getName()), message);
     }
     
     /**
@@ -69,6 +69,31 @@ public class PageRenderer extends HttpServlet implements Function {
     private final String composeUrl(String app) {
         return new StringBuffer(servername).append("/").
                 append(app).append("/view.html").toString();
+    }
+    
+    /**
+     * 
+     * @param sessionid
+     * @param appname
+     * @param pagename
+     * @return
+     */
+    private final PageContext createPageContext(String sessionid,
+            String appname, String pagename) {
+        SessionContext sessionctx = (apps.containsKey(sessionid))?
+                apps.get(sessionid) : new SessionContext();
+        AppContext appctx = (sessionctx.contains(appname))?
+                sessionctx.getAppContext(appname) : new AppContext(appname);
+        PageContext pagectx = (appctx.contains(pagename))?
+                appctx.getPageContext(pagename) : new PageContext(pagename);
+        
+        pagectx.setAppContext(appctx);
+        appctx.put(pagename, pagectx);
+        sessionctx.put(appname, appctx);
+        
+        apps.put(sessionid, sessionctx);
+        
+        return pagectx;
     }
     
     /* (non-Javadoc)
@@ -90,7 +115,6 @@ public class PageRenderer extends HttpServlet implements Function {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        PageContext pagectx;
         sessionid = req.getSession().getId();
         servername = new StringBuffer(req.getScheme()).append("://").
                         append(req.getServerName()).append(":").
@@ -99,17 +123,6 @@ public class PageRenderer extends HttpServlet implements Function {
         try {
             entry(req, resp);
         } catch (Exception e) {
-            try {
-                pagectx = getPageContext(req, apps.get(sessionid));
-            } catch (Exception page_ex) {
-                throw new ServletException(page_ex);
-            }
-            
-            if (pagectx != null) {
-                pagectx.app = LOGIN_APP;
-                pagectx.page = "authentic";
-            }
-            
             throw new ServletException(e);
         }
     }
@@ -123,29 +136,19 @@ public class PageRenderer extends HttpServlet implements Function {
     private final void entry(HttpServletRequest req, HttpServletResponse resp)
             throws Exception {
         PageContext pagectx;
-        AppContext appctx;
         Iocaste iocaste = new Iocaste(this);
-        SessionContext sessionctx = apps.get(sessionid);
         
-        if (sessionctx != null) {
-            pagectx = getPageContext(req, sessionctx);
+        if (apps.containsKey(sessionid)) {
+            pagectx = getPageContext(req, sessionid);
         } else {
-            pagectx = new PageContext();
-            appctx = new AppContext();
-            sessionctx = new SessionContext();
-            
-            appctx.put("authentic", pagectx);
-            sessionctx.put(LOGIN_APP, appctx);
-            apps.put(sessionid, sessionctx);
-            
+            pagectx = createPageContext(sessionid, LOGIN_APP, "authentic");
             renderer.setUsername("Not connected");
         }
         
-        processController(iocaste, req, pagectx);
+        pagectx = processController(iocaste, req, pagectx);
         
         if (!iocaste.isConnected()) {
-            pagectx.app = LOGIN_APP;
-            pagectx.page = "authentic";
+            pagectx = getPageContext(sessionid, LOGIN_APP, "authentic");
             renderer.setUsername("Not connected");
         }
         
@@ -169,7 +172,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     @SuppressWarnings("unchecked")
     private final PageContext getPageContext(HttpServletRequest req,
-            SessionContext sessionctx) throws Exception {
+            String sessionid) throws Exception {
         String[] pageparse;
         ServletFileUpload fileupload;
         List<FileItem> files;
@@ -205,8 +208,22 @@ public class PageRenderer extends HttpServlet implements Function {
             return null;
         
         pageparse = pagetrack.split("\\.", 2);
-        return sessionctx.getAppContext(pageparse[0]).
-                getPageContext(pageparse[1]);
+        
+        return getPageContext(sessionid, pageparse[0], pageparse[1]);
+    }
+    
+    /**
+     * 
+     * @param sessionid
+     * @param appname
+     * @param pagename
+     * @return
+     */
+    private final PageContext getPageContext (String sessionid, String appname,
+            String pagename) {
+        AppContext appctx = apps.get(sessionid).getAppContext(appname);
+        
+        return (appctx == null)? null : appctx.getPageContext(pagename);
     }
     
     /**
@@ -218,44 +235,42 @@ public class PageRenderer extends HttpServlet implements Function {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    private final void processController(Iocaste iocaste,
+    private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
+        PageContext pagectx_;
         Map<String, ?> parameters;
+        ControlData control;
         
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagectx);
-            pagectx.pagetrack = (String)parameters.get("pagetrack");
         } else {
             parameters = new HashMap<String, String[]>();
             parameters.putAll(req.getParameterMap());
             
             if (parameters.size() == 0)
-                return;
-            
-            pagectx.pagetrack = ((String[])parameters.get("pagetrack"))[0];
-            parameters.remove("pagetrack");
+                return pagectx;
         }
 
-        pagectx.control = callController(
-                req.getSession().getId(), parameters, pagectx);
+        if (parameters.containsKey("pagetrack"))
+            parameters.remove("pagetrack");
+            
+        control = callController(req.getSession().getId(), parameters,
+                pagectx);
         
-        if (pagectx.control == null)
-            return;
+        if (control == null)
+            return pagectx;
         
-        pagectx.view = pagectx.control.getViewData();
-        
-        if (pagectx.control.getApp() != null) {
-            pagectx.app = pagectx.control.getApp();
-            pagectx.page = pagectx.control.getPage();
-        } else {
-            pagectx.app = pagectx.view.getAppName();
-            pagectx.page = pagectx.view.getPageName();
-        }
-        
-        renderer.setMessageText(pagectx.control.getTranslatedMessage());
-        renderer.setMessageType(pagectx.control.getMessageType());
+        renderer.setMessageText(control.getTranslatedMessage());
+        renderer.setMessageType(control.getMessageType());
         renderer.setUsername((iocaste.isConnected())?
                 iocaste.getUsername():"Not connected");
+        
+        pagectx_ = getPageContext(sessionid, control.getApp(), control.getPage());
+        
+        if (pagectx_ == null)
+            pagectx_ = createPageContext(sessionid, control.getApp(), control.getPage());
+        
+        return pagectx_;
     }
     
     /**
@@ -273,6 +288,7 @@ public class PageRenderer extends HttpServlet implements Function {
         String path;
         String fieldname;
         String filename;
+        Element[] elements;
         Map<String, String> parameters;
         
         factory = new DiskFileItemFactory();
@@ -284,8 +300,9 @@ public class PageRenderer extends HttpServlet implements Function {
         files = fileupload.parseRequest(req);
         
         parameters = new HashMap<String, String>();
+        elements = pagepos.getViewData().getMultipartElements();
         
-        for (Element element : pagepos.view.getMultipartElements()) {
+        for (Element element : elements) {
             for (FileItem fileitem : files) {
                 fieldname = fileitem.getFieldName();
                 
@@ -317,28 +334,26 @@ public class PageRenderer extends HttpServlet implements Function {
     private final void render(HttpServletRequest req, HttpServletResponse resp,
             PageContext pagectx) throws Exception {
         String[] text;
-        String appname;
-        String pagename;
+        AppContext appctx;
         Message message = new Message();
         PrintWriter writer = resp.getWriter();
         
         resp.setCharacterEncoding("utf-8");
         resp.setContentType("text/html");
         
-        appname = (pagectx.view == null)? "" : pagectx.view.getAppName();
-        pagename = (pagectx.view == null)? "" : pagectx.view.getPageName();
-        
-        if (!appname.equals(pagectx.app) || !pagename.equals(pagectx.page)) {
+        if (pagectx.getViewData() == null) {
+            appctx = pagectx.getAppContext();
+            
             message.setId("get_view_data");
-            message.add("app", pagectx.app);
-            message.add("page", pagectx.page);
+            message.add("app", appctx.getName());
+            message.add("page", pagectx.getName());
             message.setSessionid(req.getSession().getId());
             
-            pagectx.view = (ViewData)Service.callServer(
-                    composeUrl(pagectx.app), message);
+            pagectx.setViewData((ViewData)Service.callServer(
+                    composeUrl(appctx.getName()), message));
         }
         
-        text = renderer.run(pagectx.view);
+        text = renderer.run(pagectx.getViewData());
 
         if (text != null)
             for (String line : text)
