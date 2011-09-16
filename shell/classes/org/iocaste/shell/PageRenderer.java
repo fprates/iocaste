@@ -140,16 +140,16 @@ public class PageRenderer extends HttpServlet implements Function {
         
         if (apps.containsKey(sessionid)) {
             pagectx = getPageContext(req, sessionid);
+            
+            if (pagectx == null) {
+                pagectx = getPageContext(sessionid, LOGIN_APP, "authentic");
+                renderer.setUsername("not.connected");
+            }
+            
+            pagectx = processController(iocaste, req, pagectx);
         } else {
             pagectx = createPageContext(sessionid, LOGIN_APP, "authentic");
-            renderer.setUsername("Not connected");
-        }
-        
-        pagectx = processController(iocaste, req, pagectx);
-        
-        if (!iocaste.isConnected()) {
-            pagectx = getPageContext(sessionid, LOGIN_APP, "authentic");
-            renderer.setUsername("Not connected");
+            renderer.setUsername("not.connected");
         }
         
         render(req, resp, pagectx);
