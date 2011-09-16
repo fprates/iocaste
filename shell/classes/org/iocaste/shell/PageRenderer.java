@@ -152,7 +152,7 @@ public class PageRenderer extends HttpServlet implements Function {
             renderer.setUsername("not.connected");
         }
         
-        render(req, resp, pagectx);
+        render(resp, pagectx);
     }
 
     /*
@@ -331,8 +331,8 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param page
      * @throws Exception
      */
-    private final void render(HttpServletRequest req, HttpServletResponse resp,
-            PageContext pagectx) throws Exception {
+    private final void render(HttpServletResponse resp, PageContext pagectx)
+            throws Exception {
         String[] text;
         AppContext appctx;
         Message message = new Message();
@@ -347,7 +347,7 @@ public class PageRenderer extends HttpServlet implements Function {
             message.setId("get_view_data");
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
-            message.setSessionid(req.getSession().getId());
+            message.setSessionid(sessionid);
             
             pagectx.setViewData((ViewData)Service.callServer(
                     composeUrl(appctx.getName()), message));
