@@ -32,9 +32,13 @@ public class HibernateSessionRequestFilter implements Filter {
             FilterChain chain) throws IOException, ServletException {
         Session session = sessionfactory.getCurrentSession();
         
-        session.beginTransaction();
-        chain.doFilter(req, resp);
-        session.getTransaction().commit();
+        try {
+            session.beginTransaction();
+            chain.doFilter(req, resp);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        }
     }
 
     /*
