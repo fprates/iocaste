@@ -2,20 +2,38 @@
 <property name="builddir" value="${basedir}/build"/>
     <target name="compile">
     <delete dir="${builddir}"/>
-    <mkdir dir="${builddir}/apache-tomcat"/>
-    <mkdir dir="${builddir}/hsqldb"/>
-          
-    <copy todir="${builddir}" file="${basedir}/src/startup.sh"/>
-    <copy todir="${builddir}" file="${basedir}/src/startup.bat"/>
-    <copy todir="${builddir}/apache-tomcat">
+    <mkdir dir="${builddir}/iocaste/apache-tomcat"/>
+    <mkdir dir="${builddir}/iocaste/hsqldb"/>
+    
+    <copy todir="${builddir}/iocaste">
+          <fileset file="${basedir}/src/startup.sh"/>
+          <fileset file="${basedir}/src/startup.bat"/>
+          <fileset file="${basedir}/src/regendb.sh"/>
+          <fileset file="${basedir}/src/regendb.bat"/>
+    </copy>
+    <copy todir="${builddir}/iocaste/apache-tomcat">
           <fileset dir="${basedir}/apache-tomcat"/>
     </copy>
-    <copy todir="${builddir}/hsqldb">
+    <copy todir="${builddir}/iocaste/hsqldb">
           <fileset dir="${basedir}/hsqldb"/>
     </copy>
-    <copy todir="${builddir}/hsqldb/bin/" file="${basedir}/src/server.properties"/>
-          
+    <copy todir="${builddir}/iocaste/hsqldb/bin/" file="${basedir}/src/server.properties"/>
+    
     <zip basedir="${builddir}" destfile="${basedir}/iocaste.zip"/>
+    <tar longfile="gnu" destfile="${basedir}/iocaste.tar.gz" compression="gzip">
+          <tarfileset dir="${builddir}/iocaste" prefix="/iocaste" preserveLeadingSlashes="true" filemode="755">
+              <include name="*.sh"/>
+              <include name="apache-tomcat/bin/*.sh"/>
+          </tarfileset>
+          <tarfileset dir="${builddir}/iocaste" prefix="/iocaste" preserveLeadingSlashes="true">
+              <include name="**"/>
+              <exclude name="*.sh"/>
+              <exclude name="apache-tomcat/bin/*.sh"/>
+              <exclude name="apache-tomcat/bin/*.log"/>
+              <exclude name="apache-tomcat/logs/*"/>
+          </tarfileset>
+    </tar>
+    
     <delete dir="${builddir}"/>
     </target>
 </project>
