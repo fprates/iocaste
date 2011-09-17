@@ -2,11 +2,15 @@
 <property name="builddir" value="${basedir}/build"/>
     <target name="compile">
     <delete dir="${builddir}"/>
-    <mkdir dir="${builddir}"/>
-          <copy todir="${builddir}">
-                <fileset dir="${basedir}/apache-tomcat"/>
-                <fileset dir="${basedir}/hsqldb"/>
-          </copy>
+    <mkdir dir="${builddir}/apache-tomcat"/>
+    <mkdir dir="${builddir}/hsqldb"/>
+    <copy todir="${builddir}" file="${basedir}/src/startup.sh"/>
+    <copy todir="${builddir}/apache-tomcat">
+          <fileset dir="${basedir}/apache-tomcat"/>
+    </copy>
+    <copy todir="${builddir}/hsqldb">
+          <fileset dir="${basedir}/hsqldb"/>
+    </copy>
     <zip basedir="${builddir}" destfile="${basedir}/iocaste.zip"/>
     <delete dir="${builddir}"/>
     </target>
