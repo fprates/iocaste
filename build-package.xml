@@ -12,6 +12,10 @@
     <copy todir="${builddir}/iocaste/apache-tomcat">
           <fileset dir="${basedir}/apache-tomcat"/>
     </copy>
+    <copy todir="${builddir}/iocaste/apache-tomcat/conf">
+          <fileset file="${basedir}/src/tomcat-users.xml"/>
+          <fileset file="${basedir}/src/context.xml"/>
+    </copy>
     <copy todir="${builddir}/iocaste/hsqldb">
           <fileset dir="${basedir}/hsqldb"/>
     </copy>
