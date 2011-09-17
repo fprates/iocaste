@@ -1,0 +1,13 @@
+<project name="iocaste" default="compile">
+<property name="builddir" value="${basedir}/build"/>
+    <target name="compile">
+    <delete dir="${builddir}"/>
+    <mkdir dir="${builddir}"/>
+          <copy todir="${builddir}">
+                <fileset dir="${basedir}/apache-tomcat"/>
+                <fileset dir="${basedir}/hsqldb"/>
+          </copy>
+    <zip basedir="${builddir}" destfile="${basedir}/iocaste.zip"/>
+    <delete dir="${builddir}"/>
+    </target>
+</project>
