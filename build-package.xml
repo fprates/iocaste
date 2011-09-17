@@ -5,6 +5,7 @@
     <mkdir dir="${builddir}/apache-tomcat"/>
     <mkdir dir="${builddir}/hsqldb"/>
     <copy todir="${builddir}" file="${basedir}/src/startup.sh"/>
+    <copy todir="${builddir}" file="${basedir}/src/startup.bat"/>
     <copy todir="${builddir}/apache-tomcat">
           <fileset dir="${basedir}/apache-tomcat"/>
     </copy>
