@@ -4,6 +4,7 @@
     <delete dir="${builddir}"/>
     <mkdir dir="${builddir}/apache-tomcat"/>
     <mkdir dir="${builddir}/hsqldb"/>
+          
     <copy todir="${builddir}" file="${basedir}/src/startup.sh"/>
     <copy todir="${builddir}" file="${basedir}/src/startup.bat"/>
     <copy todir="${builddir}/apache-tomcat">
@@ -12,6 +13,8 @@
     <copy todir="${builddir}/hsqldb">
           <fileset dir="${basedir}/hsqldb"/>
     </copy>
+    <copy todir="${builddir}/hsqldb/bin/" file="${basedir}/src/server.properties"/>
+          
     <zip basedir="${builddir}" destfile="${basedir}/iocaste.zip"/>
     <delete dir="${builddir}"/>
     </target>
