@@ -25,11 +25,15 @@
     <delete dir="${builddir}"/>
     <mkdir dir="${builddir}/iocaste/apache-tomcat"/>
     <mkdir dir="${builddir}/iocaste/hsqldb"/>
+    <mkdir dir="${builddir}/iocaste/conf"/>
     
     <copy todir="${builddir}/iocaste">
           <fileset file="${basedir}/src/*.sh"/>
           <fileset file="${basedir}/src/*.bat"/>
           <fileset file="${basedir}/src/*.txt"/>
+    </copy>
+    <copy todir="${builddir}/iocaste/conf/">
+          <fileset file="${basedir}/src/sqltool.rc"/>
     </copy>
     <copy todir="${builddir}/iocaste/apache-tomcat">
           <fileset dir="${basedir}/apache-tomcat"/>
