@@ -1,0 +1,34 @@
+* Informações preliminares:
+    A instalação desse software só é automatizada para o sistema operacional
+linux (provavelmente com outros unix também funcione). Não há garantias que
+funcione com windows ou mac os x.
+    A instalação desse software acompanha a instalação prévia do banco de dados
+hsqldb e do container de servlets tomcat. Se houver um instalação anterior do
+hsqldb, está possivelmente será comprometida; enquanto que o tomcat desta
+instalação não está preparado para lidar com múltiplas instâncias em uma mesma
+máquina. Considere instalar esse software apenas se não houver instalação
+anterior de ambos os softwares, ou se os mesmos puderem ser desinstalados.
+Este manual considera arquivos de script do unix (.sh). Para windows, considere
+a extensão equivalente (.bat).
+    O mesmo para o pacote de instalação unix (iocaste.tar.gz). Para outros,
+considere o pacote equivalente (iocaste.zip).
+
+* Instalação:
+    No shell de sua escolha (para unix):
+$tar -zxvf iocaste.tar.gz
+$cd iocaste
+$./install.sh
+
+    Com isto:
+- o banco de dados hsqldb será executado;
+- o servidor de aplicações será executado;
+- as tabelas do programa serão inseridas no banco.
+
+* Testando:
+    Com seu navegador preferido, acesse http://localhost:8080/iocaste-shell.
+    Se a instalação procedeu com sucesso, a página de autenticação será
+exibida.
+    O usuário é "admin" (não case sensitive), e a senha é "iocaste" (case
+sensitive).
+
+    Copyright 2011 (c) Francisco de Assis Prates
