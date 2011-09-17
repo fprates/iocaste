@@ -6,6 +6,8 @@
     <mkdir dir="${builddir}/iocaste/hsqldb"/>
     
     <copy todir="${builddir}/iocaste">
+          <fileset file="${basedir}/src/install.sh"/>
+          <fileset file="${basedir}/src/install.bat"/>
           <fileset file="${basedir}/src/startup.sh"/>
           <fileset file="${basedir}/src/startup.bat"/>
           <fileset file="${basedir}/src/regendb.sh"/>

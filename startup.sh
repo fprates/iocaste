@@ -9,6 +9,6 @@ sleep 3s
 echo "done"
 echo "starting servlet container..."
 cd ../../apache-tomcat/bin/
-./catalina.sh jpda run
+./catalina.sh jpda start
 echo "done"
 cd $FROM

@@ -7,5 +7,5 @@ call java -Dsqlfile.charset=UTF-8 -cp ..\lib\hsqldb.jar org.hsqldb.server.Server
 echo "done"
 echo "starting servlet container..."
 cd ..\..\apache-tomcat\bin\
-call catalina.sh jpda run
+call catalina.sh jpda start
 echo "done"
