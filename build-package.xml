@@ -20,48 +20,53 @@
 -->
           
 <project name="iocaste" default="compile">
-<property name="builddir" value="${basedir}/build"/>
+    <property name="builddir" value="${basedir}/build"/>
     <target name="compile">
-    <delete dir="${builddir}"/>
-    <mkdir dir="${builddir}/iocaste/apache-tomcat"/>
-    <mkdir dir="${builddir}/iocaste/hsqldb"/>
-    <mkdir dir="${builddir}/iocaste/conf"/>
-    
-    <copy todir="${builddir}/iocaste">
-          <fileset file="${basedir}/src/*.sh"/>
-          <fileset file="${basedir}/src/*.bat"/>
-          <fileset file="${basedir}/src/*.txt"/>
-    </copy>
-    <copy todir="${builddir}/iocaste/conf/">
-          <fileset file="${basedir}/src/sqltool.rc"/>
-    </copy>
-    <copy todir="${builddir}/iocaste/apache-tomcat">
-          <fileset dir="${basedir}/apache-tomcat"/>
-    </copy>
-    <copy todir="${builddir}/iocaste/apache-tomcat/conf">
-          <fileset file="${basedir}/src/tomcat-users.xml"/>
-          <fileset file="${basedir}/src/context.xml"/>
-    </copy>
-    <copy todir="${builddir}/iocaste/hsqldb">
-          <fileset dir="${basedir}/hsqldb"/>
-    </copy>
-    <copy todir="${builddir}/iocaste/hsqldb/bin/" file="${basedir}/src/server.properties"/>
-    
-    <zip basedir="${builddir}" destfile="${basedir}/iocaste.zip"/>
-    <tar longfile="gnu" destfile="${basedir}/iocaste.tar.gz" compression="gzip">
-          <tarfileset dir="${builddir}/iocaste" prefix="/iocaste" preserveLeadingSlashes="true" filemode="755">
-              <include name="*.sh"/>
-              <include name="apache-tomcat/bin/*.sh"/>
-          </tarfileset>
-          <tarfileset dir="${builddir}/iocaste" prefix="/iocaste" preserveLeadingSlashes="true">
-              <include name="**"/>
-              <exclude name="*.sh"/>
-              <exclude name="apache-tomcat/bin/*.sh"/>
-              <exclude name="apache-tomcat/bin/*.log"/>
-              <exclude name="apache-tomcat/logs/*"/>
-          </tarfileset>
-    </tar>
-    
-    <delete dir="${builddir}"/>
+        <delete dir="${builddir}"/>
+        <mkdir dir="${builddir}/iocaste/apache-tomcat"/>
+        <mkdir dir="${builddir}/iocaste/hsqldb"/>
+        <mkdir dir="${builddir}/iocaste/conf"/>
+        <copy todir="${builddir}/iocaste">
+              <fileset file="${basedir}/src/*.sh"/>
+              <fileset file="${basedir}/src/*.bat"/>
+              <fileset file="${basedir}/src/*.txt"/>
+        </copy>
+        <copy todir="${builddir}/iocaste/conf/">
+              <fileset file="${basedir}/src/sqltool.rc"/>
+        </copy>
+    	
+        <copy todir="${builddir}/iocaste/apache-tomcat/conf/">
+              <fileset file="${basedir}/src/tomcat-users.xml"/>
+              <fileset file="${basedir}/src/context.xml"/>
+        </copy>
+
+        <copy todir="${builddir}/iocaste/apache-tomcat">
+              <fileset dir="${basedir}/apache-tomcat">
+                    <exclude name="${basedir}/src/tomcat-users.xml"/>
+                    <exclude name="${basedir}/src/context.xml"/>
+              </fileset>
+        </copy>
+
+        <copy todir="${builddir}/iocaste/hsqldb">
+              <fileset dir="${basedir}/hsqldb"/>
+        </copy>
+    	
+        <copy todir="${builddir}/iocaste/hsqldb/bin/" file="${basedir}/src/server.properties"/>
+    	
+        <zip basedir="${builddir}" destfile="${basedir}/iocaste.zip"/>
+        <tar longfile="gnu" destfile="${basedir}/iocaste.tar.gz" compression="gzip">
+              <tarfileset dir="${builddir}/iocaste" prefix="/iocaste" preserveLeadingSlashes="true" filemode="755">
+                  <include name="*.sh"/>
+                  <include name="apache-tomcat/bin/*.sh"/>
+              </tarfileset>
+              <tarfileset dir="${builddir}/iocaste" prefix="/iocaste" preserveLeadingSlashes="true">
+                  <include name="**"/>
+                  <exclude name="*.sh"/>
+              	  <exclude name="apache-tomcat/bin/*.sh"/>
+              	  <exclude name="apache-tomcat/bin/*.log"/>
+              	  <exclude name="apache-tomcat/logs/*"/>
+              </tarfileset>
+        </tar>
+        <delete dir="${builddir}"/>
     </target>
 </project>
