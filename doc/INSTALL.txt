@@ -14,6 +14,8 @@ a extensão equivalente (.bat).
 considere o pacote equivalente (iocaste.zip).
 
 * Instalação:
+    Configure a variável de ambiente "JAVA_HOME" com o caminho do Java
+Development Kit (JDK) ou "JRE_HOME" com o caminho do Java Runtime Environment.
     No shell de sua escolha (para unix):
 $tar -zxvf iocaste.tar.gz
 $cd iocaste
