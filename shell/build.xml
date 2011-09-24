@@ -1,5 +1,9 @@
 <project name="shell" default="compile">
 	<property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
+    <property name="warfilename" value="${basedir}/iocaste-${ant.project.name}.war"/>
+    
+    <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
+    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"/>
 	
     <target name="compile">
         <mkdir dir="${builddir}/${ant.project.name}/web"/>
@@ -49,7 +53,7 @@
         </copy>
         
         <!-- pacote .war -->
-        <war destfile="${basedir}/iocaste-${ant.project.name}.war"
+        <war destfile="${warfilename}"
             webxml="${builddir}/${ant.project.name}/web/web.xml">
             <webinf dir="${basedir}/src/${ant.project.name}/web/">
                 <exclude name="web.xml"/>
@@ -61,5 +65,10 @@
             <lib dir="${builddir}/documents/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
+
+        <undeploy url="${url}" username="${username}" password="${password}"
+            path="/iocaste-${ant.project.name}" failonerror="false"/>
+        <deploy url="${url}" username="${username}" password="${password}"
+            path="/iocaste-${ant.project.name}" war="file:${warfilename}"/>
     </target>
 </project>
