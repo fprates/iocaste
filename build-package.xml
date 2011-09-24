@@ -54,7 +54,10 @@
         </copy>
     	
         <copy todir="${builddir}/iocaste/hsqldb/bin/" file="${basedir}/src/server.properties"/>
-    	
+    	<copy todir="${builddir}/iocaste/scripts/">
+    	      <fileset dir="${basedir}/src/scripts/"/>
+    	</copy>
+    	      
         <zip basedir="${builddir}" destfile="${basedir}/iocaste.zip"/>
         <tar longfile="gnu" destfile="${basedir}/iocaste.tar.gz" compression="gzip">
               <tarfileset dir="${builddir}/iocaste" prefix="/iocaste" preserveLeadingSlashes="true" filemode="755">

@@ -5,7 +5,6 @@ FROM=$(pwd)
 echo "starting database manager..."
 cd hsqldb/bin/
 java -Dsqlfile.charset=UTF-8 -cp ../lib/hsqldb.jar org.hsqldb.server.Server &
-sleep 3s
 echo "done"
 echo "starting servlet container..."
 cd ../../apache-tomcat/bin/
