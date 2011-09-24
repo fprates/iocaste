@@ -39,7 +39,9 @@
               <fileset file="${basedir}/src/tomcat-users.xml"/>
               <fileset file="${basedir}/src/context.xml"/>
         </copy>
-
+        <copy todir="${builddir}/iocaste/apache-tomcat/webapps/">
+              <fileset file="${basedir}/*.war"/>
+        </copy>
         <copy todir="${builddir}/iocaste/apache-tomcat">
               <fileset dir="${basedir}/apache-tomcat">
                     <exclude name="${basedir}/src/tomcat-users.xml"/>
