@@ -26,6 +26,7 @@
         <mkdir dir="${builddir}/iocaste/apache-tomcat"/>
         <mkdir dir="${builddir}/iocaste/hsqldb"/>
         <mkdir dir="${builddir}/iocaste/conf"/>
+          
         <copy todir="${builddir}/iocaste">
               <fileset file="${basedir}/src/*.sh"/>
               <fileset file="${basedir}/src/*.bat"/>
@@ -34,7 +35,6 @@
         <copy todir="${builddir}/iocaste/conf/">
               <fileset file="${basedir}/src/sqltool.rc"/>
         </copy>
-    	
         <copy todir="${builddir}/iocaste/apache-tomcat/conf/">
               <fileset file="${basedir}/src/tomcat-users.xml"/>
               <fileset file="${basedir}/src/context.xml"/>
@@ -48,16 +48,17 @@
                     <exclude name="${basedir}/src/context.xml"/>
               </fileset>
         </copy>
-
         <copy todir="${builddir}/iocaste/hsqldb">
               <fileset dir="${basedir}/hsqldb"/>
         </copy>
-    	
         <copy todir="${builddir}/iocaste/hsqldb/bin/" file="${basedir}/src/server.properties"/>
     	<copy todir="${builddir}/iocaste/scripts/">
     	      <fileset dir="${basedir}/src/scripts/"/>
     	</copy>
-    	      
+    	<copy todir="${builddir}/iocaste/doc/">
+    	      <fileset file="${basedir}/src/doc/*.txt"/>
+    	</copy>
+    	            
         <zip basedir="${builddir}" destfile="${basedir}/iocaste.zip"/>
         <tar longfile="gnu" destfile="${basedir}/iocaste.tar.gz" compression="gzip">
               <tarfileset dir="${builddir}/iocaste" prefix="/iocaste" preserveLeadingSlashes="true" filemode="755">
