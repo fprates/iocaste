@@ -1,7 +1,33 @@
+/*
+    DocumentModelItem.java, implementação do item do modelo de documento
+    Copyright (C) 2011  Francisco de Assis Prates
+   
+    Este programa é software livre; você pode redistribuí-lo e/ou
+    modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+    publicada pela Free Software Foundation; tanto a versão 2 da
+    Licença como (a seu critério) qualquer versão mais nova.
+
+    Este programa é distribuído na expectativa de ser útil, mas SEM
+    QUALQUER GARANTIA; sem mesmo a garantia implícita de
+    COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+    PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+    detalhes.
+ 
+    Você deve ter recebido uma cópia da Licença Pública Geral GNU
+    junto com este programa; se não, escreva para a Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+    02111-1307, USA.
+ */
+
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
 
+/**
+ * Implementação do item do modelo de documento
+ * @author francisco.prates
+ *
+ */
 public class DocumentModelItem implements Comparable<DocumentModelItem>,
             Serializable {
     private static final long serialVersionUID = 7353680713818082301L;
@@ -10,48 +36,48 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     private DataElement dataelement;
     
     /**
-     * 
-     * @return
+     * Retorna elemento de dado corresponddente.
+     * @return elemento de dado
      */
     public DataElement getDataElement() {
         return dataelement;
     }
     
     /**
-     * 
-     * @return
+     * Retorna modelo de documento correspondente.
+     * @return modelo de documento
      */
     public DocumentModel getDocumentModel() {
         return document;
     }
     
     /**
-     * 
-     * @return
+     * Retorna nome do item.
+     * @return nome
      */
     public String getName() {
         return name;
     }
     
     /**
-     * 
-     * @param dataelement
+     * Define elemento de dado.
+     * @param elemento de dado
      */
     public void setDataElement(DataElement dataelement) {
         this.dataelement = dataelement;
     }
     
     /**
-     * 
-     * @param document
+     * Define modelo de documento.
+     * @param modelo de documento
      */
     public void setDocumentModel(DocumentModel document) {
         this.document = document;
     }
     
     /**
-     * 
-     * @param name
+     * Define nome do documento.
+     * @param nome
      */
     public void setName(String name) {
         this.name = name;
