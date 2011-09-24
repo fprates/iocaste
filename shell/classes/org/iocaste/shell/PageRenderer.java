@@ -185,19 +185,17 @@ public class PageRenderer extends HttpServlet implements Function {
                 return null;
             
             for (FileItem fileitem : files) {
-                if (fileitem.isFormField()) {
-                    pagetrack = fileitem.getFieldName();
-                    
-                    if (!pagetrack.equals("pagetrack")) {
-                        pagetrack = null;
-                        continue;
-                    }
-                    
-                    break;
-                }
+                pagetrack = null;
                 
-                if (pagetrack != null)
-                    break;
+                if (!fileitem.isFormField())
+                    continue;
+            
+                pagetrack = fileitem.getFieldName();
+                
+                if (!pagetrack.equals("pagetrack"))
+                    continue;
+                
+                break;
             }
         } else {
             pagetrack = req.getParameter("pagetrack");
