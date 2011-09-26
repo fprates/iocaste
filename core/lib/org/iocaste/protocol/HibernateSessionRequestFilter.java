@@ -37,7 +37,13 @@ public class HibernateSessionRequestFilter implements Filter {
             chain.doFilter(req, resp);
             session.getTransaction().commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            try {
+                session.getTransaction().rollback();
+            } catch (Exception etx) {
+                throw new ServletException(e);
+            }
+            
+            throw new ServletException(e);
         }
     }
 
