@@ -20,6 +20,14 @@
     <class name="org.iocaste.documents.common.DocumentModelItem" table="DOCS002">
         <id name="name" column="INAME"/>
         <many-to-one name="documentModel" column="DOCID" not-null="true"/>
+        <many-to-one name="dataElement" column="ENAME" not-null="true"/>
+    </class>
+    
+    <class name="org.iocaste.documents.common.DataElement" table="DOCS003">
+        <id name="name" column="ENAME"/>
+        <property name="decimals" column="DECIM"/>
+        <property name="length" column="LNGTH"/>
+<!--        <property name="type" column="ETYPE"/> -->
     </class>
 </hibernate-mapping>
                                    

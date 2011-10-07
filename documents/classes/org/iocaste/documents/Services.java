@@ -1,8 +1,11 @@
 package org.iocaste.documents;
 
+import java.util.Set;
+
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.range.NumericRange;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.HibernateUtil;
@@ -21,19 +24,29 @@ public class Services extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final DocumentModel getDocumentModel(Message message) throws Exception {
+    public final DocumentModel getDocumentModel(Message message)
+            throws Exception {
         DocumentModel document;
         Session session;
+        Set<DocumentModelItem> itens;
         String documentname = message.getString("name");
         
         if (documentname == null)
             throw new Exception("Document model not specified.");
 
         session = HibernateUtil.getSessionFactory().getCurrentSession();
-        document = (DocumentModel)session.get(DocumentModel.class, documentname);
+        document = (DocumentModel)session.get(
+                DocumentModel.class, documentname);
+        
+        if (document == null)
+            throw new Exception("Document not found.");
         
         Hibernate.initialize(document);
-        Hibernate.initialize(document.getItens());
+        itens = document.getItens();
+        Hibernate.initialize(itens);
+        
+        for (DocumentModelItem item : itens)
+            Hibernate.initialize(item.getDataElement());
         
         return document;
     }
