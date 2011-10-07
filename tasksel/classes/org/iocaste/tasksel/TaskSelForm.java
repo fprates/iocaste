@@ -3,6 +3,8 @@ package org.iocaste.tasksel;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
@@ -21,10 +23,17 @@ import org.iocaste.shell.common.ViewData;
 
 public class TaskSelForm extends AbstractPage {
     
-    public final void add(ViewData vdata) {
+    /**
+     * Visão para adição de programas
+     * @param vdata Visão
+     * @throws Exception
+     */
+    public final void add(ViewData vdata) throws Exception {
         DataForm dataform;
         Text text;
+        Documents documents = new Documents(this);
         Container container = new Form(null, "add_entry");
+        DocumentModel model = documents.getModel("task_entry");
         
         Task[] tasks = getTasks();
         
@@ -35,10 +44,7 @@ public class TaskSelForm extends AbstractPage {
         
         dataform = new DataForm(container, "entry");
         dataform.addAction("save");
-        
-        new DataFormItem(dataform, Const.TEXT_FIELD, "entry.name");
-        new DataFormItem(dataform, Const.TEXT_FIELD, "entry.app");
-        new DataFormItem(dataform, Const.TEXT_FIELD, "entry.point");
+        dataform.setModel(model);
         
         for (Element element : dataform.getElements()) {
             if (!element.isDataStorable())
@@ -74,8 +80,8 @@ public class TaskSelForm extends AbstractPage {
     }
     
     /**
-     * 
-     * @param view
+     * Visão geral de tarefas
+     * @param view Visão
      */
     public final void main(ViewData view) {
         MenuItem mitem;
@@ -93,7 +99,7 @@ public class TaskSelForm extends AbstractPage {
     }
     
     /**
-     * 
+     * Controlador geral de tarefas
      * @param controldata
      * @param view
      */
@@ -103,6 +109,11 @@ public class TaskSelForm extends AbstractPage {
         cdata.redirect(mitem.getFunction(), mitem.getParameter("entry"));
     }
     
+    /**
+     * Controlador de adição de tarefas
+     * @param cdata Controlador
+     * @param vdata Visão
+     */
     public final void save(ControlData cdata, ViewData vdata) {
         String name = ((DataFormItem)vdata.getElement("entry.name")).getValue();
         String app = ((DataFormItem)vdata.getElement("entry.app")).getValue();

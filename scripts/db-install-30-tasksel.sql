@@ -19,5 +19,16 @@ insert into task001 (tname, appli, entry) values ('office', 'iocaste-office', 'm
 insert into task001 (tname, appli, entry) values ('tools', 'iocaste-core-utils', 'main');
 insert into task001 (tname, appli, entry) values ('task_add', 'iocaste-tasksel', 'add');
 
+insert into docs001 (docid) values ('task_entry');
+
+insert into docs003 (ename, decim, lngth, etype) values ('entry_name', 0, 12, 0);
+insert into docs003 (ename, decim, lngth, etype) values ('entry_app', 0, 60, 0);
+insert into docs003 (ename, decim, lngth, etype) values ('entry_point', 0, 12, 0);
+
+insert into docs002 (iname, docid, ename) values ('entry', 'task_entry', 'entry_name');
+insert into docs002 (iname, docid, ename) values ('app', 'task_entry', 'entry_app');
+insert into docs002 (iname, docid, ename) values ('point', 'task_entry', 'entry_point');
+\p initial configuration saved.
+
 commit work;
 
