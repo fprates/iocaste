@@ -19,9 +19,9 @@ public class Services extends AbstractFunction {
     }
     
     /**
-     * 
-     * @param message
-     * @return
+     * Retorna modelo de documento especificado.
+     * @param mensagem
+     * @return modelo de documento
      * @throws Exception
      */
     public final DocumentModel getDocumentModel(Message message)
@@ -52,9 +52,9 @@ public class Services extends AbstractFunction {
     }
     
     /**
-     * 
-     * @param message
-     * @return
+     * Retorna próximo número do range
+     * @param messagem
+     * @return próximo número
      * @throws Exception
      */
     public final long getNextNumber(Message message) throws Exception {
