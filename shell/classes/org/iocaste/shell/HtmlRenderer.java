@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Component;
@@ -193,6 +194,7 @@ public class HtmlRenderer {
                 tfield.setPassword(formitem.isSecret());
                 tfield.setLength(formitem.getLength());
                 tfield.setValue(formitem.getValue());
+                tfield.setModelItem(formitem.getModelItem());
                 
                 break;
             default:
@@ -420,7 +422,9 @@ public class HtmlRenderer {
     private final void renderTextField(
             List<String> html, TextField textfield) {
         StringBuffer inputtext;
-        int length = textfield.getLength();
+        DocumentModelItem modelitem = textfield.getModelItem();
+        int length = (modelitem == null)?textfield.getLength():
+            modelitem.getDataElement().getLength();
         String name = textfield.getName();
         String value = textfield.getValue();
         

@@ -1,6 +1,5 @@
 package org.iocaste.shell.common;
 
-import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 
 public abstract class AbstractInputComponent extends AbstractComponent
@@ -78,12 +77,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
      */
     @Override
     public final void setModelItem(DocumentModelItem modelitem) {
-        DataElement dataelement = modelitem.getDataElement();
-        
         this.modelitem = modelitem;
-        
-        if (dataelement != null)
-            setLength(dataelement.getLength());
     }
 
     /*
