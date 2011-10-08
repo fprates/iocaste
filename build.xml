@@ -18,9 +18,6 @@
     	
         <!-- login -->
         <ant antfile="${basedir}/src/login/build.xml"/>
-
-    	<!-- core-utils -->
-    	<ant antfile="${basedir}/src/core-utils/build.xml"/>
     	
         <!-- infosis -->
         <ant antfile="${basedir}/src/infosis/build.xml"/>
