@@ -63,6 +63,7 @@
     	<undeploy url="${url}" username="${username}" password="${password}"
             path="/iocaste-${ant.project.name}" failonerror="false"/>
     	<deploy url="${url}" username="${username}" password="${password}"
-    		path="/iocaste-${ant.project.name}" war="file:${warfilename}"/>
+            path="/iocaste-${ant.project.name}" war="file:${warfilename}"
+            failonerror="false"/>
     </target>
 </project>
