@@ -1,3 +1,24 @@
+/*  
+    DataForm.java, implementação de formulário de dados.
+    Copyright (C) 2011  Francisco de Assis Prates
+   
+    Este programa é software livre; você pode redistribuí-lo e/ou
+    modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+    publicada pela Free Software Foundation; tanto a versão 2 da
+    Licença como (a seu critério) qualquer versão mais nova.
+
+    Este programa é distribuído na expectativa de ser útil, mas SEM
+    QUALQUER GARANTIA; sem mesmo a garantia implícita de
+    COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+    PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+    detalhes.
+ 
+    Você deve ter recebido uma cópia da Licença Pública Geral GNU
+    junto com este programa; se não, escreva para a Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+    02111-1307, USA.
+*/
+
 package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
@@ -7,6 +28,12 @@ import java.util.List;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 
+/**
+ * Implementação de formulário de dados.
+ * 
+ * @author Francisco de Assis Prates
+ *
+ */
 public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
     private List<String> actions;
@@ -18,19 +45,18 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
-     * 
-     * @param action
+     * Adiciona uma ação ao formulário.
+     * @param action ação
      */
     public final void addAction(String action) {
         actions.add(action);
     }
     
     /**
-     * 
-     * @param object
-     * @throws RuntimeException
+     * Exporta dados do formulário para um objeto.
+     * @param object objeto
      */
-    public final void exportTo(Object object) throws RuntimeException {
+    public final void exportTo(Object object) {
         InputComponent item;
         String formmethodname;
         String objmethodname;
@@ -75,8 +101,8 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
+     * Retorna ações associadas ao formulário.
+     * @return ações
      */
     public final String[] getActions() {
         return actions.toArray(new String[0]);
@@ -143,8 +169,8 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
-     * 
-     * @param model
+     * Atribui um modelo de documento ao formulário.
+     * @param model modelo de documento
      */
     public final void setModel(DocumentModel model) {
         String name;
