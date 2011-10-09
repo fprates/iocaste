@@ -6,7 +6,6 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
@@ -32,7 +31,7 @@ public class LoginForm extends AbstractPage {
          * não podemos utilizar getModel() de Documents aqui para recuperar
          * o modelo "login". ainda não estamos autenticados pelo iocaste.
          */
-        loginform.setModel(modelInstance());
+        loginform.importModel(modelInstance());
         loginform.addAction("connect");
         
         for (Element element : loginform.getElements())
@@ -42,8 +41,8 @@ public class LoginForm extends AbstractPage {
         vdata.setMessages(new MessageSource("/META-INF/message.properties"));
         vdata.setTitle("authentic");
         vdata.addContainer(form);
+        vdata.setFocus("login.username");
         
-        vdata.setFocus((Component)vdata.getElement("login.username"));
         ((DataFormItem)vdata.getElement("login.secret")).setSecret(true);
     }
     
