@@ -1,3 +1,24 @@
+/*  
+    ViewData.java, implementação de camada de visão.
+    Copyright (C) 2011  Francisco de Assis Prates
+   
+    Este programa é software livre; você pode redistribuí-lo e/ou
+    modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+    publicada pela Free Software Foundation; tanto a versão 2 da
+    Licença como (a seu critério) qualquer versão mais nova.
+
+    Este programa é distribuído na expectativa de ser útil, mas SEM
+    QUALQUER GARANTIA; sem mesmo a garantia implícita de
+    COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+    PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+    detalhes.
+ 
+    Você deve ter recebido uma cópia da Licença Pública Geral GNU
+    junto com este programa; se não, escreva para a Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+    02111-1307, USA.
+*/
+
 package org.iocaste.shell.common;
 
 import java.io.Serializable;
@@ -6,10 +27,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementação de camada de visão
+ * 
+ * @author Francisco Prates
+ *
+ */
 public class ViewData implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
     private String title;
-    private Component focus;
+    private String focus;
     private MessageSource messages;
     private Map<String, InputComponent> inputs;
     private Map<String, Boolean> navbarstatus;
@@ -29,18 +56,26 @@ public class ViewData implements Serializable {
     }
     
     /**
-     * 
-     * @param container
+     * Adiciona container à visão.
+     * @param container container
      */
     public final void addContainer(Container container) {
         containers.add(container);
     }
     
     /**
-     * 
-     * @param container
-     * @param name
-     * @return
+     * Adiciona elemento multipart.
+     * @param elemento
+     */
+    public final void addMultipartElement(Element element) {
+        mpelements.add(element);
+    }
+    
+    /**
+     * Retorna elemento de um container por nome.
+     * @param container container
+     * @param name nome do elemento
+     * @return Elemento
      */
     private Element findElement(Container container, String name) {
         String name_ = container.getName();
@@ -62,25 +97,25 @@ public class ViewData implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Retorna nome da aplicação.
+     * @return nome
      */
     public final String getAppName() {
         return appname;
     }
     
     /**
-     * 
-     * @return
+     * Retorna containers.
+     * @return array de containers
      */
     public final Container[] getContainers() {
         return containers.toArray(new Container[0]);
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna elemento por nome.
+     * @param name nome
+     * @return elemento
      */
     public final Element getElement(String name) {
         Element element = null;
@@ -95,97 +130,89 @@ public class ViewData implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Retorna nome do componente com foco.
+     * @return nome do componente
      */
-    public final Component getFocus() {
+    public final String getFocus() {
         return focus;
     }
     
     /**
-     * 
-     * @return
+     * Retorna mapa com componentes de entrada de dados.
+     * @return mapa de componentes.
      */
     public final Map<String, InputComponent> getInputs() {
         return inputs;
     }
     
     /**
-     * 
-     * @return
+     * Retorna fonte de mensagens.
+     * @return fonte de mensagens
      */
     public final MessageSource getMessages() {
         return messages;
     }
     
     /**
-     * 
-     * @return
+     * Retorna elementos multipart.
+     * @return elementos
      */
     public final Element[] getMultipartElements() {
         return mpelements.toArray(new Element[0]);
     }
     
     /**
-     * 
-     * @return
+     * Retorna status dos elementos da barra de navegação.
+     * @return status dos elementos
      */
     public final Map<String, Boolean> getNavbarStatus() {
         return navbarstatus;
     }
     
     /**
-     * 
-     * @return
+     * Retorna nome da página.
+     * @return nome
      */
     public final String getPageName() {
         return pagename;
     }
     
     /**
-     * 
-     * @return
+     * Retorna nome da folha de estilos.
+     * @return nome
      */
     public final String getStyleSheet() {
         return sheet;
     }
     
     /**
-     * 
-     * @return
+     * Retorna título da página.
+     * @return título
      */
     public final String getTitle() {
         return title;
     }
     
     /**
-     * 
-     * @param element
+     * Ajusta elemento com foco.
+     * @param focus nome do elemento
      */
-    public final void addMultipartElement(Element element) {
-        mpelements.add(element);
-    }
-    
-    /**
-     * 
-     * @param focus
-     */
-    public final void setFocus(Component focus) {
+    public final void setFocus(String focus) {
         this.focus = focus;
     }
     
     /**
-     * 
-     * @param messages
+     * Define fonte de mensagens.
+     * @param messages fonte de mensagens
      */
     public final void setMessages(MessageSource messages) {
         this.messages = messages;
     }
     
     /**
-     * 
-     * @param name
-     * @param enabled
+     * Habilita ação da barra de navegação.
+     * @param name nome da ação
+     * @param enabled true, para habilitar ação
      */
     public final void setNavbarActionEnabled(String name, boolean enabled) {
         if (navbarstatus.containsKey(name))
@@ -195,16 +222,16 @@ public class ViewData implements Serializable {
     }
     
     /**
-     * 
-     * @param sheet
+     * Ajusta nome da folha de estilos.
+     * @param sheet nome
      */
     public final void setStyleSheet(String sheet) {
         this.sheet = sheet;
     }
     
     /**
-     * 
-     * @param title
+     * Ajusta título da visão.
+     * @param title título
      */
     public final void setTitle(String title) {
         this.title = title;

@@ -13,7 +13,6 @@ import org.hibernate.Session;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.shell.common.Button;
-import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
@@ -456,14 +455,14 @@ public class HtmlRenderer {
      */
     private final void renderJavaScript(
             List<String> html, ViewData vdata, String[] script) {
-        Component focus = vdata.getFocus();
+        String focus = vdata.getFocus();
         
         html.add("<script type=\"text/javascript\">");
         html.add("function initialize() {");
         
         if (focus != null)
             html.add(new StringBuffer("document.getElementById('").
-                    append(focus.getName()).append("').focus();").toString());
+                    append(focus).append("').focus();").toString());
 
         html.add("}");
         

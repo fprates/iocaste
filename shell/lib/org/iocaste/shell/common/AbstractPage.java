@@ -105,7 +105,7 @@ public abstract class AbstractPage extends AbstractFunction {
         }
         
         if (einput != null) {
-            view.setFocus((Component)einput);
+            view.setFocus(((Component)einput).getName());
             
             if (einitial)
                 controldata.message(Const.ERROR, "field.is.obligatory");
@@ -185,6 +185,7 @@ public abstract class AbstractPage extends AbstractFunction {
         
         if (element.isContainable()) {
             container = (Container)element;
+            
             for (Element element_ : container.getElements())
                 registerInputs(vdata, element_);
             

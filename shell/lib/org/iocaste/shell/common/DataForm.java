@@ -25,7 +25,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 
 /**
@@ -50,6 +49,22 @@ public class DataForm extends AbstractContainer {
      */
     public final void addAction(String action) {
         actions.add(action);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#addModelItem(
+     *    java.lang.String, org.iocaste.documents.common.DocumentModelItem)
+     */
+    @Override
+    public final void addModelItem(String name, DocumentModelItem item) {
+        DataFormItem formitem;
+        String formname = getName();
+        
+        formitem = new DataFormItem(this, Const.TEXT_FIELD,
+                new StringBuffer(formname).append(".").append(name).
+                toString());
+        formitem.setModelItem(item);
     }
     
     /**
@@ -165,26 +180,6 @@ public class DataForm extends AbstractContainer {
             value = new StringBuffer("Error loading parameter for ").
                     append(method.getName()).append(".").toString();
             throw new RuntimeException(value, e);
-        }
-    }
-    
-    /**
-     * Atribui um modelo de documento ao formulário.
-     * @param model modelo de documento
-     */
-    public final void setModel(DocumentModel model) {
-        String name;
-        DataFormItem formitem;
-        String formname = getName();
-        
-        clear();
-        
-        for (DocumentModelItem item : model.getItens()) {
-            name = item.getName();
-            formitem = new DataFormItem(this, Const.TEXT_FIELD,
-                    new StringBuffer(formname).append(".").append(name).
-                    toString());
-            formitem.setModelItem(item);
         }
     }
 }

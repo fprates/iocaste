@@ -1,5 +1,5 @@
 /*  
-    Container.java, interface para container.
+    DataView.java, implementação de visão de manutenção de tabelas.
     Copyright (C) 2011  Francisco de Assis Prates
    
     Este programa é software livre; você pode redistribuí-lo e/ou
@@ -21,39 +21,16 @@
 
 package org.iocaste.shell.common;
 
-import org.iocaste.documents.common.DocumentModel;
-
 /**
- * Interface fundamental para containeres.
+ * Implementação de visão de manutenção de tabelas.
  * 
- * Se seu componente agrupa outros elementos, deveria contemplar
- * essa interface.
- * 
- * @author Francisco de Assis Prates
+ * @author francisco.prates
  *
  */
-public interface Container extends Element {
+public class DataView extends AbstractContainer {
+    private static final long serialVersionUID = -3746898860195865249L;
     
-    /**
-     * Adiciona elemento.
-     * @param elemento.
-     */
-    public abstract void add(Element element);
-    
-    /**
-     * Remove elementos.
-     */
-    public abstract void clear();
-    
-    /**
-     * Retorna array com elementos.
-     * @return elementos.
-     */
-    public abstract Element[] getElements();
-    
-    /**
-     * Importa características do modelo de documento.
-     * @param model modelo de documento
-     */
-    public abstract void importModel(DocumentModel model);
+    public DataView(Container container, String name) {
+        super(container, Const.DATA_VIEW, name);
+    }
 }

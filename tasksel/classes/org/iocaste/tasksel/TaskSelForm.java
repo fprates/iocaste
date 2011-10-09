@@ -44,7 +44,7 @@ public class TaskSelForm extends AbstractPage {
         
         dataform = new DataForm(container, "entry");
         dataform.addAction("save");
-        dataform.setModel(model);
+        dataform.importModel(model);
         
         for (Element element : dataform.getElements()) {
             if (!element.isDataStorable())

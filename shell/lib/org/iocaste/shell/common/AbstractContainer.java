@@ -24,6 +24,9 @@ package org.iocaste.shell.common;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
+
 /**
  * Implementação abstrata para containers.
  * 
@@ -48,12 +51,20 @@ public abstract class AbstractContainer
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Container#add(org.iocaste.shell.common.Element)
+     * @see org.iocaste.shell.common.Container#add(
+     *    org.iocaste.shell.common.Element)
      */
     @Override
     public final void add(Element element) {
         elements.add(element);
     }
+    
+    /**
+     * Adiciona item de modelo de documento.
+     * @param name nome do item
+     * @param item item do modelo de documento
+     */
+    protected void addModelItem(String name, DocumentModelItem item) { }
     
     /*
      * (non-Javadoc)
@@ -72,6 +83,20 @@ public abstract class AbstractContainer
     @Override
     public final Element[] getElements() {
         return elements.toArray(new Element[0]);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#importModel(
+     *    org.iocaste.documents.common.DocumentModel)
+     */
+    @Override
+    public final void importModel(DocumentModel model) {
+        clear();
+        
+        for (DocumentModelItem item : model.getItens())
+            addModelItem(item.getName(), item);
+        
     }
     
     /*
