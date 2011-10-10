@@ -9,11 +9,24 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private DocumentModelItem modelitem;
     private boolean obligatory;
     private int length;
+    private Const type;
+    private boolean secret;
     
-    public AbstractInputComponent(Container container, Const type, String name) {
+    public AbstractInputComponent(Container container, Const type,
+            Const type_, String name) {
         super(container, type, name);
-        
+
+        this.type = type_;
         obligatory = false;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getComponentType()
+     */
+    @Override
+    public final Const getComponentType() {
+        return type;
     }
     
     /*
@@ -63,6 +76,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#isSecret()
+     */
+    @Override
+    public final boolean isSecret() {
+        return secret;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#setLength(int)
      */
     @Override
@@ -87,6 +109,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setObligatory(boolean obligatory) {
         this.obligatory = obligatory;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setSecret(boolean)
+     */
+    @Override
+    public final void setSecret(boolean secret) {
+        this.secret = secret;
     }
     
     /*

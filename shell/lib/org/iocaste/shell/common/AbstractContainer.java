@@ -59,12 +59,20 @@ public abstract class AbstractContainer
         elements.add(element);
     }
     
-    /**
-     * Adiciona item de modelo de documento.
-     * @param name nome do item
-     * @param item item do modelo de documento
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#addModelItem(
+     *    java.lang.String, org.iocaste.documents.common.DocumentModelItem)
      */
-    protected void addModelItem(String name, DocumentModelItem item) { }
+    @Override
+    public final void addModelItem(String name, DocumentModelItem item) {
+        DataItem dataitem;
+        
+        dataitem = new DataItem(this, Const.TEXT_FIELD,
+                new StringBuffer(getName()).append(".").append(name).
+                toString());
+        dataitem.setModelItem(item);
+    }
     
     /*
      * (non-Javadoc)

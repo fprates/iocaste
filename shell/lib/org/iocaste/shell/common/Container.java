@@ -22,6 +22,7 @@
 package org.iocaste.shell.common;
 
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 
 /**
  * Interface fundamental para containeres.
@@ -39,6 +40,13 @@ public interface Container extends Element {
      * @param elemento.
      */
     public abstract void add(Element element);
+    
+    /**
+     * 
+     * @param name
+     * @param item
+     */
+    public abstract void addModelItem(String name, DocumentModelItem item);
     
     /**
      * Remove elementos.

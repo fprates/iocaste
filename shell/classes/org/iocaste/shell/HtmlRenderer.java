@@ -12,13 +12,15 @@ import java.util.Map;
 import org.hibernate.Session;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.HibernateUtil;
+import org.iocaste.shell.common.AbstractInputComponent;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataFormItem;
+import org.iocaste.shell.common.DataItem;
+import org.iocaste.shell.common.DataView;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Menu;
@@ -58,7 +60,26 @@ public class HtmlRenderer {
         
         script = lines.toArray(new String[0]);
     }
-    
+
+    private final Element createInputItem(AbstractInputComponent inputitem) {
+        TextField tfield;
+        
+        switch (inputitem.getComponentType()) {
+        case TEXT_FIELD:
+            tfield = new TextField(null, inputitem.getName());
+            tfield.setStyleClass(inputitem.getStyleClass());
+            tfield.setObligatory(inputitem.isObligatory());
+            tfield.setPassword(inputitem.isSecret());
+            tfield.setLength(inputitem.getLength());
+            tfield.setValue(inputitem.getValue());
+            tfield.setModelItem(inputitem.getModelItem());
+            
+            return tfield;
+        default:
+            return null;
+        }
+        
+    }
     /**
      * 
      * @param name
@@ -131,6 +152,11 @@ public class HtmlRenderer {
             renderDataForm(html, (DataForm)container);
             
             break;
+        
+        case DATA_VIEW:
+            renderDataView(html, (DataView)container);
+            
+            break;
             
         case TABLE:
             html.add("<table>");
@@ -156,54 +182,35 @@ public class HtmlRenderer {
      * @param form
      */
     private final void renderDataForm(List<String> html, DataForm form) {
-        Const type;
         Text text;
-        TextField tfield;
         String inputname;
         String styleclass;
         Button button;
-        DataFormItem formitem;
+        DataItem dataitem;
         TableItem tableitem;
         Table table = new Table(null, 2, new StringBuffer(form.getName()).
                 append(".table").toString());
         
         for (Element element : form.getElements()) {
-            if (element.getType() != Const.DATA_FORM_ITEM) {
+            if (element.getType() != Const.DATA_ITEM) {
                 renderElement(html, element);
                 continue;
             }
             
-            formitem = (DataFormItem)element;
-            inputname = formitem.getName();
-            tableitem = new TableItem(table, inputname);
-            styleclass = formitem.getStyleClass();
+            dataitem = (DataItem)element;
+            inputname = dataitem.getName();
+            styleclass = dataitem.getStyleClass();
             
             text = new Text(null, new StringBuffer(inputname).
                     append(".text").toString());
             text.setText(messages.get(inputname, inputname));
             text.setStyleClass(styleclass);
-            
-            type = formitem.getComponentType();
-            
-            switch (type) {
-            case TEXT_FIELD:
-                tfield = new TextField(null, inputname);
-                tfield.setStyleClass(styleclass);
-                tfield.setObligatory(formitem.isObligatory());
-                tfield.setPassword(formitem.isSecret());
-                tfield.setLength(formitem.getLength());
-                tfield.setValue(formitem.getValue());
-                tfield.setModelItem(formitem.getModelItem());
-                
-                break;
-            default:
-                tfield = null;
-            }
-            
+
+            tableitem = new TableItem(table, inputname);
             tableitem.add(text);
-            tableitem.add(tfield);
+            tableitem.add(createInputItem(dataitem));
         }
-                
+        
         renderContainer(html, table);
         
         for (String action : form.getActions()) {
@@ -214,6 +221,32 @@ public class HtmlRenderer {
             
             renderButton(html, button);
         }
+    }
+    
+    /**
+     * 
+     * @param html
+     * @param container
+     */
+    private final void renderDataView(List<String> html, DataView dataview) {
+        DataItem dataitem;
+        TableItem tableitem;
+        Element[] elements = dataview.getElements();
+        Table table = new Table(null, elements.length, new StringBuffer(
+                dataview.getName()).append(".table").toString());
+        
+        for (Element element : elements) {
+            if (element.getType() != Const.DATA_ITEM) {
+                renderElement(html, element);
+                continue;
+            }
+
+            dataitem = (DataItem)element;
+            tableitem = new TableItem(table, dataitem.getName());
+            tableitem.add(createInputItem(dataitem));
+        }
+        
+        renderContainer(html, table);
     }
     
     /**
@@ -576,9 +609,9 @@ public class HtmlRenderer {
     }
     
     /**
-     * 
-     * @param vdata
-     * @return
+     * Retorna visão renderizada.
+     * @param vdata dados da visão
+     * @return código html da visão
      */
     public final String[] run(ViewData vdata) {
         List<String> html = new ArrayList<String>();
@@ -616,15 +649,15 @@ public class HtmlRenderer {
     }
     
     /**
-     * 
-     * @param msgtext
+     * Ajusta texto da barra de mensagens.
+     * @param msgtext texto
      */
     public void setMessageText(String msgtext) {
         this.msgtext = msgtext;
     }
     
     /**
-     * 
+     * Ajusta tipo de mensagem da barra de mensagens.
      * @param msgtype
      */
     public final void setMessageType(Const msgtype) {
@@ -632,8 +665,8 @@ public class HtmlRenderer {
     }
     
     /**
-     * 
-     * @param username
+     * Ajusta nome do usuário
+     * @param username nome
      */
     public void setUsername(String username) {
         this.username = username;

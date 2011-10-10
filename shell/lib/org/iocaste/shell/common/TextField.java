@@ -5,7 +5,7 @@ public class TextField extends AbstractInputComponent {
     private boolean password;
     
     public TextField(Container container, String name) {
-        super(container, Const.TEXT_FIELD, name);
+        super(container, Const.TEXT_FIELD, null, name);
         password = false;
         setLength(20);
     }

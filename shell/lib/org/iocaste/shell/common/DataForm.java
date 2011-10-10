@@ -51,22 +51,6 @@ public class DataForm extends AbstractContainer {
         actions.add(action);
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Container#addModelItem(
-     *    java.lang.String, org.iocaste.documents.common.DocumentModelItem)
-     */
-    @Override
-    public final void addModelItem(String name, DocumentModelItem item) {
-        DataFormItem formitem;
-        String formname = getName();
-        
-        formitem = new DataFormItem(this, Const.TEXT_FIELD,
-                new StringBuffer(formname).append(".").append(name).
-                toString());
-        formitem.setModelItem(item);
-    }
-    
     /**
      * Exporta dados do formulário para um objeto.
      * @param object objeto
