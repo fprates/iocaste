@@ -61,6 +61,11 @@ public class HtmlRenderer {
         script = lines.toArray(new String[0]);
     }
 
+    /**
+     * 
+     * @param inputitem
+     * @return
+     */
     private final Element createInputItem(AbstractInputComponent inputitem) {
         TextField tfield;
         
@@ -78,8 +83,8 @@ public class HtmlRenderer {
         default:
             return null;
         }
-        
     }
+    
     /**
      * 
      * @param name
@@ -159,9 +164,7 @@ public class HtmlRenderer {
             break;
             
         case TABLE:
-            html.add("<table>");
-            renderElements(html, container.getElements());
-            html.add("</table>");
+            renderTable(html, (Table)container);
             
             break;
         
@@ -190,6 +193,8 @@ public class HtmlRenderer {
         TableItem tableitem;
         Table table = new Table(null, 2, new StringBuffer(form.getName()).
                 append(".table").toString());
+        
+        table.setHeader(false);
         
         for (Element element : form.getElements()) {
             if (element.getType() != Const.DATA_ITEM) {
@@ -229,11 +234,12 @@ public class HtmlRenderer {
      * @param container
      */
     private final void renderDataView(List<String> html, DataView dataview) {
-        DataItem dataitem;
         TableItem tableitem;
         Element[] elements = dataview.getElements();
         Table table = new Table(null, elements.length, new StringBuffer(
                 dataview.getName()).append(".table").toString());
+
+        tableitem = new TableItem(table, table.getName()+".1");
         
         for (Element element : elements) {
             if (element.getType() != Const.DATA_ITEM) {
@@ -241,9 +247,7 @@ public class HtmlRenderer {
                 continue;
             }
 
-            dataitem = (DataItem)element;
-            tableitem = new TableItem(table, dataitem.getName());
-            tableitem.add(createInputItem(dataitem));
+            tableitem.add(createInputItem((DataItem)element));
         }
         
         renderContainer(html, table);
@@ -415,6 +419,28 @@ public class HtmlRenderer {
         StringBuffer sb = new StringBuffer("<input type=\"hidden\" name=\"").
                 append(name).append("\" id=\"").append(name).append("\"/>");
         html.add(sb.toString());
+    }
+    
+    /**
+     * 
+     * @param html
+     * @param table
+     */
+    private void renderTable(List<String> html, Table table) {
+        html.add("<table>");
+        
+        if (table.hasHeader()) {
+            html.add("<tr>");
+            for (String name : table.getHeaderNames()) {
+                html.add("<th>");
+                html.add(name);
+                html.add("</th>");
+            }
+            html.add("</tr>");
+        }
+        
+        renderElements(html, table.getElements());
+        html.add("</table>");
     }
     
     /**
