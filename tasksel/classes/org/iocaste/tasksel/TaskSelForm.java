@@ -11,7 +11,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataFormItem;
+import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
@@ -115,9 +115,9 @@ public class TaskSelForm extends AbstractPage {
      * @param vdata Visão
      */
     public final void save(ControlData cdata, ViewData vdata) {
-        String name = ((DataFormItem)vdata.getElement("entry.name")).getValue();
-        String app = ((DataFormItem)vdata.getElement("entry.app")).getValue();
-        String entry = ((DataFormItem)vdata.getElement("entry.point")).getValue();
+        String name = ((DataItem)vdata.getElement("entry.name")).getValue();
+        String app = ((DataItem)vdata.getElement("entry.app")).getValue();
+        String entry = ((DataItem)vdata.getElement("entry.point")).getValue();
         
         insertAppEntry(name, app, entry);
         cdata.message(Const.STATUS, "insert.entry.successful");

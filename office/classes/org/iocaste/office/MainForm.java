@@ -6,7 +6,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataFormItem;
+import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.ViewData;
 
@@ -18,8 +18,8 @@ public class MainForm extends AbstractPage {
         
         headerform.addAction("send");
         
-        new DataFormItem(headerform, Const.TEXT_FIELD, "receiver");
-        new DataFormItem(headerform, Const.TEXT_FIELD, "subject");
+        new DataItem(headerform, Const.TEXT_FIELD, "receiver");
+        new DataItem(headerform, Const.TEXT_FIELD, "subject");
         
         view.addContainer(form);
     }

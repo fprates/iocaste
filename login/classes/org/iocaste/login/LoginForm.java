@@ -10,7 +10,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataFormItem;
+import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
@@ -43,7 +43,7 @@ public class LoginForm extends AbstractPage {
         vdata.addContainer(form);
         vdata.setFocus("login.username");
         
-        ((DataFormItem)vdata.getElement("login.secret")).setSecret(true);
+        ((DataItem)vdata.getElement("login.secret")).setSecret(true);
     }
     
     /**
