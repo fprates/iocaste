@@ -24,7 +24,7 @@ package org.iocaste.shell.common;
 /**
  * Implementação de visão de manutenção de tabelas.
  * 
- * @author francisco.prates
+ * @author Francisco Prates
  *
  */
 public class DataView extends AbstractContainer {
