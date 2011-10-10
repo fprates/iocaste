@@ -235,6 +235,7 @@ public class HtmlRenderer {
      */
     private final void renderDataView(List<String> html, DataView dataview) {
         TableItem tableitem;
+        int i = 0;
         Element[] elements = dataview.getElements();
         Table table = new Table(null, elements.length, new StringBuffer(
                 dataview.getName()).append(".table").toString());
@@ -246,7 +247,8 @@ public class HtmlRenderer {
                 renderElement(html, element);
                 continue;
             }
-
+            
+            table.setHeaderName(i++, element.getName());
             tableitem.add(createInputItem((DataItem)element));
         }
         
