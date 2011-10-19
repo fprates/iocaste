@@ -21,6 +21,7 @@
         <id name="name" column="INAME"/>
         <many-to-one name="documentModel" column="DOCID" not-null="true"/>
         <many-to-one name="dataElement" column="ENAME" not-null="true"/>
+        <property name="attributeName" column="ATTRB"/>
     </class>
     
     <class name="org.iocaste.documents.common.DataElement" table="DOCS003">

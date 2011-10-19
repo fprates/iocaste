@@ -28,7 +28,8 @@ create table docs003 (
 create table docs002 (
    iname varchar(12) primary key,
    docid varchar(12) foreign key references docs001(docid),
-   ename varchar(12)
+   ename varchar(12),
+   attrb varchar(64)
 );
 
 \p document tables has been generated

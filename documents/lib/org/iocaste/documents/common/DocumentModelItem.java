@@ -34,6 +34,17 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     private String name;
     private DocumentModel document;
     private DataElement dataelement;
+    private String attribname;
+    private String gettername;
+    private String settername;
+    
+    /**
+     * Retorna nome do atributo.
+     * @return nome do atributo
+     */
+    public String getAttributeName() {
+        return attribname;
+    }
     
     /**
      * Retorna elemento de dado corresponddente.
@@ -52,11 +63,47 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
+     * Retorna nome do método getter.
+     * @return nome do getter
+     */
+    public final String getGetterName() {
+        return gettername;
+    }
+    
+    /**
      * Retorna nome do item.
      * @return nome
      */
     public String getName() {
         return name;
+    }
+    
+    /**
+     * Retorna o nome do método setter.
+     * @return nome do setter
+     */
+    public final String getSetterName() {
+        return settername;
+    }
+    
+    /**
+     * Define nome do atributo.
+     * @param attribname nome do atributo
+     */
+    public void setAttributeName(String attribname) {
+        StringBuffer sb;
+        this.attribname = attribname;
+        
+        if (attribname == null) {
+            gettername = null;
+            settername = null;
+            return;
+        }
+        
+        sb = new StringBuffer("get").append(Character.toUpperCase(
+                attribname.charAt(0))).append(attribname.substring(1));
+        gettername = sb.toString();
+        settername = gettername.replaceFirst("get", "set");
     }
     
     /**
