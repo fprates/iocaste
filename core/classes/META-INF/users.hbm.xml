@@ -6,6 +6,8 @@
     <class name="User" table="USERS001">
         <id name="username" column="UNAME"/>
         <property name="secret" column="SECRT"/>
+        <property name="firstname" column="FNAME"/>
+        <property name="surname" column="SNAME"/>
     </class>
 </hibernate-mapping>
                                    

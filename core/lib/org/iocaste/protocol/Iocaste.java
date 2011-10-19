@@ -10,8 +10,8 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param userdata
+     * Criar usuário.
+     * @param userdata nome do usuário
      * @throws Exception
      */
     public final void createUser(User user) throws Exception {
@@ -24,7 +24,7 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
-     * 
+     * Desconecta usuário atual da sessão.
      * @throws Exception
      */
     public final void disconnect() throws Exception {
@@ -36,9 +36,9 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna objeto do contexto informado.
+     * @param name nome do contexto
+     * @return contexto
      * @throws Exception
      */
     public final Object getContext(String name) throws Exception {
@@ -51,7 +51,7 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
-     * 
+     * Retorna usuário da sessão.
      * @return
      * @throws Exception
      */
@@ -64,8 +64,21 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @return
+     * Retorna usuários.
+     * @return array de usuários
+     * @throws Exception
+     */
+    public final User[] getUsers() throws Exception {
+        Message message = new Message();
+        
+        message.setId("get_users");
+        
+        return (User[])call(message);
+    }
+    
+    /**
+     * Verifica se há usuário conectado a sessão atual.
+     * @return true, se usuário está conectado.
      * @throws Exception
      */
     public final boolean isConnected() throws Exception {
@@ -77,10 +90,10 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param user
-     * @param secret
-     * @return
+     * Conecta usuário à sessão.
+     * @param user nome do usuário
+     * @param secret senha
+     * @return true, se a conexão foi bem sucedida
      * @throws Exception
      */
     public final boolean login(String user, String secret) throws Exception {
@@ -94,9 +107,9 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param name
-     * @param object
+     * Armazena objeto em contexto identificado.
+     * @param name nome do contexto
+     * @param object objeto a ser armazenado
      * @throws Exception
      */
     public final void setContext(String name, Object object) throws Exception {

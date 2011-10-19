@@ -1,6 +1,7 @@
 package org.iocaste.core;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
@@ -23,6 +24,7 @@ public class Login extends AbstractFunction {
         export("disconnect", "disconnect");
         export("get_context", "getContext");
         export("set_context", "setContext");
+        export("get_users", "getUsers");
     }
     
     /**
@@ -85,6 +87,40 @@ public class Login extends AbstractFunction {
             return null;
         
         return sessions.get(sessionid).getUser().getUsername();
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final User[] getUsers(Message message) {
+        Object[] fields;
+        User[] users;
+        User user;
+        int t;
+        Session session = HibernateUtil.getSessionFactory().
+                getCurrentSession();
+        List<?> list = session.createQuery(
+                "select username, firstname, surname from User").list();
+        
+        t = list.size();
+        if (t == 0)
+            return null;
+        
+        users = new User[t];
+        t = 0;
+        for (Object object : list) {
+            fields = (Object[])object;
+            user = new User();
+            user.setUsername((String)fields[0]);
+            user.setFirstname((String)fields[1]);
+            user.setSurname((String)fields[2]);
+            users[t] = user;
+            t++;
+        }
+        
+        return users; 
     }
     
     /**

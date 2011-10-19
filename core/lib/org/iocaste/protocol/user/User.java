@@ -5,33 +5,71 @@ import java.io.Serializable;
 public class User implements Serializable {
     private static final long serialVersionUID = -6415620415288973044L;
     private String username;
+    private String firstname;
+    private String surname;
     private String secret;
     
     /**
-     * @return the name
+     * Nome real do usuário.
+     * @return
      */
-    public String getUsername() {
-        return username;
+    public String getFirstname() {
+        return firstname;
     }
     
     /**
-     * @return the secret
+     * Retorna senha criptografada.
+     * @return senha
      */
     public String getSecret() {
         return secret;
     }
     
     /**
-     * @param name the name to set
+     * Retorna sobrenome.
+     * @return sobrenome
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public String getSurname() {
+        return surname;
     }
     
     /**
-     * @param secret the secret to set
+     * Retorna nome do usuário.
+     * @return nome
+     */
+    public String getUsername() {
+        return username;
+    }
+    
+    /**
+     * Ajusta primeiro nome do usuário.
+     * @param firstname primeiro nome
+     */
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+    
+    /**
+     * Ajusta senha.
+     * @param secret senha
      */
     public void setSecret(String secret) {
         this.secret = secret;
+    }
+    
+    /**
+     * Ajusta sobrenome.
+     * @param surname sobrenome
+     */
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+    
+    /**
+     * Ajusta nome do usuário.
+     * @param name nome
+     */
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
