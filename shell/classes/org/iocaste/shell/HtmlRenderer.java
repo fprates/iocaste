@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.shell.common.AbstractInputComponent;
@@ -22,6 +24,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.DataView;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
@@ -66,12 +69,13 @@ public class HtmlRenderer {
      * @param inputitem
      * @return
      */
-    private final Element createInputItem(AbstractInputComponent inputitem) {
+    private final Element createInputItem(
+            AbstractInputComponent inputitem, String name) {
         TextField tfield;
         
         switch (inputitem.getComponentType()) {
         case TEXT_FIELD:
-            tfield = new TextField(null, inputitem.getName());
+            tfield = new TextField(null, name);
             tfield.setStyleClass(inputitem.getStyleClass());
             tfield.setObligatory(inputitem.isObligatory());
             tfield.setPassword(inputitem.isSecret());
@@ -113,6 +117,26 @@ public class HtmlRenderer {
         session.getTransaction().commit();
         
         return elements;
+    }
+    
+    /**
+     * 
+     * @param input
+     * @param object
+     */
+    private final void moveItemToInput(InputComponent input, Object object) {
+        Method method;
+        Object value;
+        DocumentModelItem modelitem = input.getModelItem();
+        
+        try {
+            method = object.getClass().getMethod(modelitem.getGetterName());
+            value = method.invoke(object, new Object[] {});
+            input.setValue((value == null)?"":value.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
     
     /**
@@ -213,7 +237,7 @@ public class HtmlRenderer {
 
             tableitem = new TableItem(table, inputname);
             tableitem.add(text);
-            tableitem.add(createInputItem(dataitem));
+            tableitem.add(createInputItem(dataitem, inputname));
         }
         
         renderContainer(html, table);
@@ -234,22 +258,44 @@ public class HtmlRenderer {
      * @param container
      */
     private final void renderDataView(List<String> html, DataView dataview) {
+        DataItem dataitem;
         TableItem tableitem;
+        String name;
+        StringBuffer sb;
+        Element tfield;
+        Element element;
         int i = 0;
         Element[] elements = dataview.getElements();
+        Object[] itens = dataview.getItens();
         Table table = new Table(null, elements.length, new StringBuffer(
                 dataview.getName()).append(".table").toString());
-
-        tableitem = new TableItem(table, table.getName()+".1");
+        DocumentModel model = dataview.getModel();
         
-        for (Element element : elements) {
-            if (element.getType() != Const.DATA_ITEM) {
-                renderElement(html, element);
-                continue;
+        for (Element element_ : elements)
+            table.setHeaderName(i++, element_.getName());
+        
+        for (int k = 0; k < dataview.getPageLines(); k++) {
+            sb = new StringBuffer(table.getName()).append(".").append(k);
+            name = sb.toString();
+            tableitem = new TableItem(table, name);
+
+            i = 0;
+            for (DocumentModelItem modelitem : model.getItens()) {
+                element = elements[i++];
+                if (element.getType() != Const.DATA_ITEM)
+                    continue;
+                
+                sb.setLength(0);
+                dataitem = (DataItem)element;
+                dataitem.setModelItem(modelitem);
+                
+                tfield = createInputItem(dataitem, sb.append(name).append(".").
+                        append(element.getName()).toString());
+                tableitem.add(tfield);
+                    
+                if (k < itens.length)
+                    moveItemToInput((InputComponent)tfield, itens[k]);
             }
-            
-            table.setHeaderName(i++, element.getName());
-            tableitem.add(createInputItem((DataItem)element));
         }
         
         renderContainer(html, table);
@@ -455,7 +501,8 @@ public class HtmlRenderer {
         
         for (Element element : item.getElements()) {
             html.add("<td>");
-            renderElement(html, element);
+            if (element != null)
+                renderElement(html, element);
             html.add("</td>");
         }
         

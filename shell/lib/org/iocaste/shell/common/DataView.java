@@ -29,8 +29,43 @@ package org.iocaste.shell.common;
  */
 public class DataView extends AbstractContainer {
     private static final long serialVersionUID = -3746898860195865249L;
+    private Object[] itens;
+    private int pagelines;
     
     public DataView(Container container, String name) {
         super(container, Const.DATA_VIEW, name);
+        pagelines = 0;
+    }
+    
+    /**
+     * Retorna entradas à serem exibidas.
+     * @return conjunto de entradas
+     */
+    public final Object[] getItens() {
+        return itens;
+    }
+    
+    /**
+     * Retorna quantidade de linhas por página.
+     * @return linhas por página
+     */
+    public final int getPageLines() {
+        return pagelines;
+    }
+    
+    /**
+     * Define entradas à serem exibidos.
+     * @param itens conjunto de entradas
+     */
+    public final void setItens(Object[] itens) {
+        this.itens = itens;
+    }
+    
+    /**
+     * Ajusta quantidade de linhas por página.
+     * @param pagelines número de linhas
+     */
+    public final void setPageLines(int pagelines) {
+        this.pagelines = pagelines;
     }
 }

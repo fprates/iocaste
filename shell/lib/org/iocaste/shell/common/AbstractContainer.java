@@ -40,6 +40,7 @@ public abstract class AbstractContainer
     extends AbstractElement implements Container {
     private static final long serialVersionUID = 8676224931708725226L;
     private Set<Element> elements;
+    private DocumentModel model;
 
     public AbstractContainer(Container container, Const type, String name) {
         super(type, name);
@@ -57,21 +58,6 @@ public abstract class AbstractContainer
     @Override
     public final void add(Element element) {
         elements.add(element);
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Container#addModelItem(
-     *    java.lang.String, org.iocaste.documents.common.DocumentModelItem)
-     */
-    @Override
-    public final void addModelItem(String name, DocumentModelItem item) {
-        DataItem dataitem;
-        
-        dataitem = new DataItem(this, Const.TEXT_FIELD,
-                new StringBuffer(getName()).append(".").append(name).
-                toString());
-        dataitem.setModelItem(item);
     }
     
     /*
@@ -95,16 +81,31 @@ public abstract class AbstractContainer
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#getModel()
+     */
+    @Override
+    public final DocumentModel getModel() {
+        return model;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Container#importModel(
      *    org.iocaste.documents.common.DocumentModel)
      */
     @Override
     public final void importModel(DocumentModel model) {
+        DataItem dataitem;
+        
         clear();
         
-        for (DocumentModelItem item : model.getItens())
-            addModelItem(item.getName(), item);
+        for (DocumentModelItem item : model.getItens()) {
+            dataitem = new DataItem(this, Const.TEXT_FIELD, new StringBuffer(
+                    getName()).append(".").append(item.getName()).toString());
+            dataitem.setModelItem(item);
+        }
         
+        this.model = model;
     }
     
     /*
