@@ -24,9 +24,6 @@
     	
         <!-- tasksel -->
         <ant antfile="${basedir}/src/tasksel/build.xml"/>
-        
-        <!-- office -->
-        <ant antfile="${basedir}/src/office/build.xml"/>
     	
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->

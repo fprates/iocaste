@@ -15,7 +15,6 @@ grant select, insert, update, delete on task001 to iocastedb;
 \p permissions granted.
 
 insert into task001 (tname, appli, entry) values ('infosis', 'iocaste-infosis', 'main');
-insert into task001 (tname, appli, entry) values ('office', 'iocaste-office', 'main');
 insert into task001 (tname, appli, entry) values ('task_add', 'iocaste-tasksel', 'add');
 
 insert into docs001 (docid) values ('task_entry');
