@@ -76,11 +76,23 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract boolean isDataStorable();
     
     /**
+     * Retorna true se elemento está habilitado.
+     * @return true, se habilitado
+     */
+    public abstract boolean isEnabled();
+    
+    /**
      * Se o componente suporta conteúdo multipart, ajusta
      * o caminho para gravação dos dados.
      * @param destiny caminho para gravação de dados.
      */
     public abstract void setDestiny(String destiny);
+    
+    /**
+     * Habilita funcionalidade do elemento.
+     * @param enabled true, para habilitar elemento
+     */
+    public abstract void setEnabled(boolean enabled);
     
     /**
      * Ajusta nome da classe CSS do elemento.

@@ -8,7 +8,6 @@ public class Link extends AbstractControlComponent {
     private String action;
     private String text;
     private boolean absolute;
-    private boolean enabled;
     private Map<Parameter, String> values;
     
     public Link(Container container, String name, String action) {
@@ -16,7 +15,6 @@ public class Link extends AbstractControlComponent {
         this.action = action;
         text = action;
         absolute = false;
-        enabled = true;
         values = new HashMap<Parameter, String>();
     }
 
@@ -26,10 +24,6 @@ public class Link extends AbstractControlComponent {
     
     public final String getAction() {
         return action;
-    }
-    
-    public final void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
     
     public final Map<Parameter, String> getParametersMap() {
@@ -42,10 +36,6 @@ public class Link extends AbstractControlComponent {
     
     public final boolean isAbsolute() {
         return absolute;
-    }
-    
-    public final boolean isEnabled() {
-        return enabled;
     }
     
     public final void setAbsolute(boolean absolute) {

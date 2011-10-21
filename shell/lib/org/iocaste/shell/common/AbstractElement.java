@@ -37,6 +37,7 @@ public abstract class AbstractElement implements Element {
     private Const type;
     private String style;
     private String destiny;
+    private boolean enabled;
     
     public AbstractElement(Const type, String name) {
         if (name == null)
@@ -45,6 +46,7 @@ public abstract class AbstractElement implements Element {
         this.type = type;
         this.name = name;
         style = "";
+        enabled = true;
     }
     
     /*
@@ -136,11 +138,29 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#isEnabled()
+     */
+    @Override
+    public final boolean isEnabled() {
+        return enabled;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#setDestiny(java.lang.String)
      */
     @Override
     public final void setDestiny(String destiny) {
         this.destiny = destiny;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#setEnabled(boolean)
+     */
+    @Override
+    public final void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
     
     /*

@@ -291,6 +291,8 @@ public class HtmlRenderer {
                 
                 tfield = createInputItem(dataitem, sb.append(name).append(".").
                         append(element.getName()).toString());
+                
+                tfield.setEnabled(!model.isKey(modelitem));
                 tableitem.add(tfield);
                     
                 if (k < itens.length)
@@ -546,8 +548,13 @@ public class HtmlRenderer {
         inputtext.append(name).append("\" class=\"").
                 append(textfield.getStyleClass()).append("\" id=\"").
                 append(name).append("\" size=\"").append(length).
-                append("\" maxlength=\"").append(length).
-                append("\" value=\"").append(value).append("\"/>");
+                append("\" maxlength=\"").append(length).append("\" value=\"").
+                append(value);
+        
+        if (textfield.isEnabled())
+            inputtext.append("\"/>");
+        else
+            inputtext.append("\" disabled=\"disabled\"/>");
         
         if (textfield.isObligatory())
             inputtext.append("<span>*</span>");
