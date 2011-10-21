@@ -22,6 +22,7 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -34,9 +35,11 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private static final long serialVersionUID = -4964159453586462503L;
     private String name;
     private Set<DocumentModelItem> itens;
+    private Set<DocumentModelItem> keys;
 
     public DocumentModel() {
         itens = new LinkedHashSet<DocumentModelItem>();
+        keys = new HashSet<DocumentModelItem>();
     }
     
     /**
@@ -87,6 +90,14 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
+     * Retorna itens chave do documento.
+     * @return chaves
+     */
+    public Set<DocumentModelItem> getKeys() {
+        return keys;
+    }
+    
+    /**
      * Retorna nome do documento.
      * @return nome
      */
@@ -101,6 +112,15 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     @Override
     public int hashCode() {
         return (name == null)?0 : name.hashCode();
+    }
+    
+    /**
+     * Retorna true se o item do modelo for campo chave.
+     * @param item item do modelo 
+     * @return true, se item é chave
+     */
+    public final boolean isKey(DocumentModelItem item) {
+        return keys.contains(item);
     }
     
     /**
