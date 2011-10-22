@@ -82,6 +82,12 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract boolean isEnabled();
     
     /**
+     * Retorna true se elemento é visível.
+     * @return true, se visível.
+     */
+    public abstract boolean isVisible();
+    
+    /**
      * Se o componente suporta conteúdo multipart, ajusta
      * o caminho para gravação dos dados.
      * @param destiny caminho para gravação de dados.
@@ -99,4 +105,10 @@ public interface Element extends Comparable<Element>, Serializable {
      * @param style nome da classe CSS.
      */
     public abstract void setStyleClass(String style);
+    
+    /**
+     * Ajusta visibilidade do elemento.
+     * @param visible true, para elemento visível.
+     */
+    public abstract void setVisible(boolean visible);
 }

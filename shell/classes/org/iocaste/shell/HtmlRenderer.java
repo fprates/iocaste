@@ -264,6 +264,7 @@ public class HtmlRenderer {
         StringBuffer sb;
         Element tfield;
         Element element;
+        boolean iskey;
         int i = 0;
         Element[] elements = dataview.getElements();
         Object[] itens = dataview.getItens();
@@ -292,9 +293,27 @@ public class HtmlRenderer {
                 tfield = createInputItem(dataitem, sb.append(name).append(".").
                         append(element.getName()).toString());
                 
-                tfield.setEnabled(!model.isKey(modelitem));
+                iskey = model.isKey(modelitem);
+                
+                if (iskey) {
+                    tfield.setEnabled(false);
+                    tfield.setVisible(true);
+                } else {
+                    tfield.setEnabled(true);
+                    switch (dataview.getMode()) {
+                    case SINGLE_VIEW:
+                        tfield.setVisible(true);
+                        break;
+                    case DETAIL_VIEW:
+                        tfield.setVisible(false);
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                
                 tableitem.add(tfield);
-                    
+                
                 if (k < itens.length)
                     moveItemToInput((InputComponent)tfield, itens[k]);
             }
@@ -309,6 +328,9 @@ public class HtmlRenderer {
      * @param element
      */
     private final void renderElement(List<String> html, Element element) {
+        if (!element.isVisible())
+            return;
+        
         switch (element.getType()) {
         case TABLE_ITEM:
             renderTableItem(html, (TableItem)element);

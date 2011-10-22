@@ -38,6 +38,7 @@ public abstract class AbstractElement implements Element {
     private String style;
     private String destiny;
     private boolean enabled;
+    private boolean visible;
     
     public AbstractElement(Const type, String name) {
         if (name == null)
@@ -47,6 +48,7 @@ public abstract class AbstractElement implements Element {
         this.name = name;
         style = "";
         enabled = true;
+        visible = true;
     }
     
     /*
@@ -147,6 +149,15 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#isVisible()
+     */
+    @Override
+    public final boolean isVisible() {
+        return visible;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#setDestiny(java.lang.String)
      */
     @Override
@@ -170,5 +181,14 @@ public abstract class AbstractElement implements Element {
     @Override
     public final void setStyleClass(String style) {
         this.style = style;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#setVisible(boolean)
+     */
+    @Override
+    public final void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

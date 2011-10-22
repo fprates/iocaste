@@ -31,6 +31,7 @@ public class DataView extends AbstractContainer {
     private static final long serialVersionUID = -3746898860195865249L;
     private Object[] itens;
     private int pagelines;
+    private Const mode;
     
     public DataView(Container container, String name) {
         super(container, Const.DATA_VIEW, name);
@@ -43,6 +44,14 @@ public class DataView extends AbstractContainer {
      */
     public final Object[] getItens() {
         return itens;
+    }
+    
+    /**
+     * Retorna modo de visão (simples ou detalhe).
+     * @return modo de visão.
+     */
+    public final Const getMode() {
+        return mode;
     }
     
     /**
@@ -59,6 +68,14 @@ public class DataView extends AbstractContainer {
      */
     public final void setItens(Object[] itens) {
         this.itens = itens;
+    }
+    
+    /**
+     * Ajusta modo de visão (simples ou detalhe).
+     * @param mode modo de visão
+     */
+    public final void setMode(Const mode) {
+        this.mode = mode;
     }
     
     /**
