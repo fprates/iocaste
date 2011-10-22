@@ -31,6 +31,7 @@ import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
@@ -264,7 +265,7 @@ public class HtmlRenderer {
         StringBuffer sb;
         Element tfield;
         Element element;
-        boolean iskey;
+        boolean key;
         int i = 0;
         Element[] elements = dataview.getElements();
         Object[] itens = dataview.getItens();
@@ -272,8 +273,16 @@ public class HtmlRenderer {
                 dataview.getName()).append(".table").toString());
         DocumentModel model = dataview.getModel();
         
-        for (Element element_ : elements)
-            table.setHeaderName(i++, element_.getName());
+        for (Element element_ : elements) {
+            name = element_.getName();
+            table.setHeaderName(i++, name);
+            if (element_.getType() != Const.DATA_ITEM)
+                continue;
+            
+            key = model.isKey(((DataItem)element_).getModelItem());
+            if (!key && (dataview.getMode() == Const.DETAIL_VIEW))
+                table.setVisibleColumn(i-1, false);
+        }
         
         for (int k = 0; k < dataview.getPageLines(); k++) {
             sb = new StringBuffer(table.getName()).append(".").append(k);
@@ -292,25 +301,7 @@ public class HtmlRenderer {
                 
                 tfield = createInputItem(dataitem, sb.append(name).append(".").
                         append(element.getName()).toString());
-                
-                iskey = model.isKey(modelitem);
-                
-                if (iskey) {
-                    tfield.setEnabled(false);
-                    tfield.setVisible(true);
-                } else {
-                    tfield.setEnabled(true);
-                    switch (dataview.getMode()) {
-                    case SINGLE_VIEW:
-                        tfield.setVisible(true);
-                        break;
-                    case DETAIL_VIEW:
-                        tfield.setVisible(false);
-                        break;
-                    default:
-                        break;
-                    }
-                }
+                tfield.setEnabled(!model.isKey(modelitem));
                 
                 tableitem.add(tfield);
                 
@@ -424,6 +415,52 @@ public class HtmlRenderer {
     /**
      * 
      * @param text
+     * @param title
+     */
+    private final void renderHeader(List<String> html, ViewData vdata) {
+        String title = vdata.getTitle();
+        
+        html.add("<head>");
+        html.add("<meta http-equiv=\"Content-Type\" content=\"text/html;" +
+                " charset=utf-8\"/>");
+        
+        if (title == null)
+            title = "Iocaste";
+        
+        html.add(new StringBuffer("<title>").append(title).
+                append("</title>").toString());
+        renderJavaScript(html, vdata, script);
+        renderStyleSheet(html, vdata);
+        html.add("</head>");
+    }
+    
+    /**
+     * 
+     * @param html
+     * @param vdata
+     * @param script
+     */
+    private final void renderJavaScript(
+            List<String> html, ViewData vdata, String[] script) {
+        String focus = vdata.getFocus();
+        
+        html.add("<script type=\"text/javascript\">");
+        html.add("function initialize() {");
+        
+        if (focus != null)
+            html.add(new StringBuffer("document.getElementById('").
+                    append(focus).append("').focus();").toString());
+
+        html.add("}");
+        
+        for (String line : script)
+            html.add(line);
+        html.add("</script>");
+    }
+    
+    /**
+     * 
+     * @param text
      * @param link
      */
     private final void renderLink(List<String> html, Link link) {
@@ -483,6 +520,46 @@ public class HtmlRenderer {
     
     /**
      * 
+     * @param text
+     */
+    private final void renderMessage(List<String> html) {
+        StringBuffer message;
+        
+        message = new StringBuffer("<div>");
+        
+        html.add("<div><p>");
+        switch (msgtype) {
+        case WARNING:
+            message.append("Aviso: ");
+        case ERROR:
+            message.append("Erro: ");
+        }
+        
+        html.add(message.append(msgtext).append("</p></div>").toString());
+    }
+
+    /**
+     * 
+     * @param html
+     */
+    private final void renderNavigationBar(List<String> html, ViewData vdata) {
+        Map<String, Boolean> navbarstatus;
+        NavigationBar navbar = new NavigationBar();
+
+        navbar.addAction("home", "home");
+        navbar.addAction("back", "back");
+        navbar.addAction("help", "help");
+        
+        navbarstatus = vdata.getNavbarStatus();
+        
+        for (String name : navbarstatus.keySet())
+            navbar.setEnabled(name, navbarstatus.get(name));
+                
+        renderContainer(html, navbar);
+    }
+    
+    /**
+     * 
      * @param html
      * @param parameter
      */
@@ -496,6 +573,48 @@ public class HtmlRenderer {
     /**
      * 
      * @param html
+     */
+    private final void renderStatus(List<String> html, ViewData vdata) {
+        renderNavigationBar(html, vdata);
+        html.add(new StringBuffer("<p>").append(username).append("</p>").
+                toString());
+    }
+    
+    /**
+     * 
+     * @param html
+     * @param vdata
+     */
+    private final void renderStyleSheet(List<String> html, ViewData vdata) {
+        Map<String, String> properties;
+        Map<String, Map<String, String>> elements;
+        String sheet = vdata.getStyleSheet();
+        
+        if (sheet == null)
+            sheet = "DEFAULT";
+        
+        elements = getStyleSheetElements(sheet);
+        
+        html.add("<style type=\"text/css\">");
+        
+        for (String element : elements.keySet()) {
+            properties = elements.get(element);
+            html.add(element+" {");
+            
+            for (String property: properties.keySet())
+                html.add(new StringBuffer(property).append(": ").
+                        append(properties.get(property)).
+                        append(";").toString());
+            
+            html.add("}");
+        }
+        
+        html.add("</style>");
+    }
+    
+    /**
+     * 
+     * @param html
      * @param table
      */
     private void renderTable(List<String> html, Table table) {
@@ -503,11 +622,16 @@ public class HtmlRenderer {
         
         if (table.hasHeader()) {
             html.add("<tr>");
-            for (String name : table.getHeaderNames()) {
+            
+            for (TableColumn column: table.getColumns()) {
+                if (!column.isVisible())
+                    continue;
+                
                 html.add("<th>");
-                html.add(name);
+                html.add(column.getName());
                 html.add("</th>");
             }
+            
             html.add("</tr>");
         }
         
@@ -521,12 +645,20 @@ public class HtmlRenderer {
      * @param item
      */
     private final void renderTableItem(List<String> html, TableItem item) {
+        TableColumn[] columns = ((Table)item.getContainer()).getColumns();
+        int i = 0;
+        
         html.add("<tr>");
         
         for (Element element : item.getElements()) {
+            if (!columns[i++].isVisible())
+                continue;
+            
             html.add("<td>");
+            
             if (element != null)
                 renderElement(html, element);
+            
             html.add("</td>");
         }
         
@@ -582,134 +714,6 @@ public class HtmlRenderer {
             inputtext.append("<span>*</span>");
         
         html.add(inputtext.toString());
-    }
-    
-    /**
-     * 
-     * @param html
-     * @param vdata
-     * @param script
-     */
-    private final void renderJavaScript(
-            List<String> html, ViewData vdata, String[] script) {
-        String focus = vdata.getFocus();
-        
-        html.add("<script type=\"text/javascript\">");
-        html.add("function initialize() {");
-        
-        if (focus != null)
-            html.add(new StringBuffer("document.getElementById('").
-                    append(focus).append("').focus();").toString());
-
-        html.add("}");
-        
-        for (String line : script)
-            html.add(line);
-        html.add("</script>");
-    }
-    
-    /**
-     * 
-     * @param text
-     * @param title
-     */
-    private final void renderHeader(List<String> html, ViewData vdata) {
-        String title = vdata.getTitle();
-        
-        html.add("<head>");
-        html.add("<meta http-equiv=\"Content-Type\" content=\"text/html;" +
-        		" charset=utf-8\"/>");
-        
-        if (title == null)
-            title = "Iocaste";
-        
-        html.add(new StringBuffer("<title>").append(title).
-                append("</title>").toString());
-        renderJavaScript(html, vdata, script);
-        renderStyleSheet(html, vdata);
-        html.add("</head>");
-    }
-    
-    /**
-     * 
-     * @param text
-     */
-    private final void renderMessage(List<String> html) {
-        StringBuffer message;
-        
-        message = new StringBuffer("<div>");
-        
-        html.add("<div><p>");
-        switch (msgtype) {
-        case WARNING:
-            message.append("Aviso: ");
-        case ERROR:
-            message.append("Erro: ");
-        }
-        
-        html.add(message.append(msgtext).append("</p></div>").toString());
-    }
-
-    /**
-     * 
-     * @param html
-     */
-    private final void renderNavigationBar(List<String> html, ViewData vdata) {
-        Map<String, Boolean> navbarstatus;
-        NavigationBar navbar = new NavigationBar();
-
-        navbar.addAction("home", "home");
-        navbar.addAction("back", "back");
-        navbar.addAction("help", "help");
-        
-        navbarstatus = vdata.getNavbarStatus();
-        
-        for (String name : navbarstatus.keySet())
-            navbar.setEnabled(name, navbarstatus.get(name));
-                
-        renderContainer(html, navbar);
-    }
-    
-    /**
-     * 
-     * @param html
-     */
-    private final void renderStatus(List<String> html, ViewData vdata) {
-        renderNavigationBar(html, vdata);
-        html.add(new StringBuffer("<p>").append(username).append("</p>").
-                toString());
-    }
-    
-    /**
-     * 
-     * @param html
-     * @param vdata
-     */
-    private final void renderStyleSheet(List<String> html, ViewData vdata) {
-        Map<String, String> properties;
-        Map<String, Map<String, String>> elements;
-        String sheet = vdata.getStyleSheet();
-        
-        if (sheet == null)
-            sheet = "DEFAULT";
-        
-        elements = getStyleSheetElements(sheet);
-        
-        html.add("<style type=\"text/css\">");
-        
-        for (String element : elements.keySet()) {
-            properties = elements.get(element);
-            html.add(element+" {");
-            
-            for (String property: properties.keySet())
-                html.add(new StringBuffer(property).append(": ").
-                        append(properties.get(property)).
-                        append(";").toString());
-            
-            html.add("}");
-        }
-        
-        html.add("</style>");
     }
     
     /**

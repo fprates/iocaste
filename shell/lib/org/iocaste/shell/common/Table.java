@@ -21,6 +21,9 @@
 
 package org.iocaste.shell.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Implementação de tabela html.
  * 
@@ -29,23 +32,31 @@ package org.iocaste.shell.common;
  */
 public class Table extends AbstractContainer {
     private static final long serialVersionUID = -245959547368570624L;
-    private String[] hdrnames;
     private int cols;
     private boolean header;
+    private List<TableColumn> columns;
     
     public Table(Container container, int cols, String name) {
         super(container, Const.TABLE, name);
+        TableColumn column;
+        
         this.cols = cols;
-        hdrnames = new String[cols];
         header = true;
+        columns = new ArrayList<TableColumn>();
+        for (int k = 0; k < cols; k++) {
+            column = new TableColumn();
+            column.setVisible(true);
+            
+            columns.add(column);
+        }
     }
     
     /**
      * Retorna títulos das colunas.
      * @return títulos
      */
-    public final String[] getHeaderNames() {
-        return hdrnames;
+    public final TableColumn[] getColumns() {
+        return columns.toArray(new TableColumn[0]);
     }
     
     /**
@@ -78,6 +89,17 @@ public class Table extends AbstractContainer {
      * @param name título
      */
     public final void setHeaderName(int col, String name) {
-        hdrnames[col] = name;
+        TableColumn column = columns.get(col);
+        column.setName(name);
+    }
+    
+    /**
+     * Ajusta visibilidade da coluna.
+     * @param col coluna
+     * @param visible true, para coluna visível
+     */
+    public final void setVisibleColumn(int col, boolean visible) {
+        TableColumn column = columns.get(col);
+        column.setVisible(visible);
     }
 }
