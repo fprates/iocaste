@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.range.NumericRange;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.HibernateUtil;
@@ -29,6 +30,7 @@ public class Services extends AbstractFunction {
         DocumentModel document;
         Session session;
         Set<DocumentModelItem> itens;
+        Set<DocumentModelKey> keys;
         String documentname = message.getString("name");
         
         if (documentname == null)
@@ -43,10 +45,15 @@ public class Services extends AbstractFunction {
         
         Hibernate.initialize(document);
         itens = document.getItens();
+        keys = document.getKeys();
         Hibernate.initialize(itens);
+        Hibernate.initialize(keys);
         
         for (DocumentModelItem item : itens)
             Hibernate.initialize(item.getDataElement());
+        
+        for (DocumentModelKey key : keys)
+            Hibernate.initialize(key.getModel());
         
         return document;
     }

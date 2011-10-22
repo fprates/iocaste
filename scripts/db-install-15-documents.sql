@@ -32,6 +32,11 @@ create table docs002 (
    attrb varchar(64)
 );
 
+/* chaves do documento */
+create table docs004 (
+   docid varchar(12) foreign key references docs001(docid),
+   iname varchar(12) foreign key references docs002(iname)
+);
 \p document tables has been generated
 
 grant select, insert, update, delete on range001 to iocastedb;
@@ -39,8 +44,6 @@ grant select, insert, update, delete on docs001 to iocastedb;
 grant select, insert, update, delete on docs002 to iocastedb;
 grant select, insert, update, delete on docs003 to iocastedb;
 \p permissions granted.
-
-insert into range001 (ident, crrnt) values ('OFFICEMSGNR', 0);
 
 commit work;
 

@@ -11,6 +11,10 @@
     
     <class name="org.iocaste.documents.common.DocumentModel" table="DOCS001">
         <id name="name" column="DOCID"/>
+        <set name="keys" inverse="true">
+            <key column="DOCID"/>
+            <one-to-many class="org.iocaste.documents.common.DocumentModelKey"/>
+        </set>
         <set name="itens" inverse="true">
             <key column="DOCID"/>
             <one-to-many class="org.iocaste.documents.common.DocumentModelItem"/>
@@ -29,6 +33,11 @@
         <property name="decimals" column="DECIM"/>
         <property name="length" column="LNGTH"/>
 <!--        <property name="type" column="ETYPE"/> -->
+    </class>
+    
+    <class name="org.iocaste.documents.common.DocumentModelKey" table="DOCS004">
+        <id name="modelItem" column="INAME"/>
+        <many-to-one name="model" column="DOCID" not-null="true"/>
     </class>
 </hibernate-mapping>
                                    

@@ -35,11 +35,11 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private static final long serialVersionUID = -4964159453586462503L;
     private String name;
     private Set<DocumentModelItem> itens;
-    private Set<DocumentModelItem> keys;
+    private Set<DocumentModelKey> keys;
 
     public DocumentModel() {
         itens = new LinkedHashSet<DocumentModelItem>();
-        keys = new HashSet<DocumentModelItem>();
+        keys = new HashSet<DocumentModelKey>();
     }
     
     /**
@@ -93,7 +93,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * Retorna itens chave do documento.
      * @return chaves
      */
-    public Set<DocumentModelItem> getKeys() {
+    public Set<DocumentModelKey> getKeys() {
         return keys;
     }
     
@@ -120,7 +120,11 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * @return true, se item é chave
      */
     public final boolean isKey(DocumentModelItem item) {
-        return keys.contains(item);
+        DocumentModelKey key = new DocumentModelKey();
+        key.setModel(this);
+        key.setModelItem(item.getName());
+        
+        return keys.contains(key);
     }
     
     /**
@@ -129,6 +133,14 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      */
     protected void setItens(Set<DocumentModelItem> itens) {
         this.itens = itens;
+    }
+    
+    /**
+     * Define chaves do documento.
+     * @param keys chaves
+     */
+    protected void setKeys(Set<DocumentModelKey> keys) {
+        this.keys = keys;
     }
     
     /**
