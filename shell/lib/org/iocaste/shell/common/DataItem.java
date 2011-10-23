@@ -7,5 +7,6 @@ public class DataItem extends AbstractInputComponent {
         super(container, Const.DATA_ITEM, type, name);
         
         setStyleClass("form");
+        setLength(20);
     }
 }
