@@ -27,38 +27,6 @@ public abstract class AbstractPage extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final ViewData getViewData(Message message) throws Exception {
-        Method method;
-        ViewData view;
-        String page = message.getString("page");
-        String app = message.getString("app");
-        
-        if (app == null || page == null)
-            throw new Exception("Page not especified.");
-        
-        view = new ViewData(app, page);
-        
-        method = this.getClass().getMethod(page, ViewData.class);
-        method.invoke(this, view);
-        
-        for (Container container : view.getContainers())
-            registerInputs(view, container);
-        
-        return view;
-    }
-    
-    /*
-     * 
-     * Others
-     * 
-     */
-    
-    /**
-     * 
-     * @param message
-     * @return
-     * @throws Exception
-     */
     public final ControlData execAction(Message message) throws Exception {
         ControlData controldata;
         Method method;
@@ -118,6 +86,32 @@ public abstract class AbstractPage extends AbstractFunction {
         method.invoke(this, controldata, view);
         
         return controldata;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final ViewData getViewData(Message message) throws Exception {
+        Method method;
+        ViewData view;
+        String page = message.getString("page");
+        String app = message.getString("app");
+        
+        if (app == null || page == null)
+            throw new Exception("Page not especified.");
+        
+        view = new ViewData(app, page);
+        
+        method = this.getClass().getMethod(page, ViewData.class);
+        method.invoke(this, view);
+        
+        for (Container container : view.getContainers())
+            registerInputs(view, container);
+        
+        return view;
     }
     
     /**
