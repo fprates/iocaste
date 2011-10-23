@@ -21,7 +21,6 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
-import org.iocaste.shell.common.DataView;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Menu;
@@ -201,11 +200,6 @@ public class HtmlRenderer {
             renderDataForm(html, (DataForm)container);
             
             break;
-        
-        case DATA_VIEW:
-            renderDataView(html, (DataView)container);
-            
-            break;
             
         case TABLE:
             renderTable(html, (Table)container);
@@ -270,15 +264,6 @@ public class HtmlRenderer {
             
             renderButton(html, button);
         }
-    }
-    
-    /**
-     * 
-     * @param html
-     * @param container
-     */
-    private final void renderDataView(List<String> html, DataView dataview) {
-        
     }
     
     /**
