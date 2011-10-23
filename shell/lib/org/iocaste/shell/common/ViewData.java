@@ -45,12 +45,14 @@ public class ViewData implements Serializable {
     private String sheet;
     private String appname;
     private String pagename;
+    private Map<String, Object> parameters;
     
     public ViewData(String appname, String pagename) {
         inputs = new HashMap<String, InputComponent>();
         navbarstatus = new HashMap<String, Boolean>();
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<Element>();
+        parameters = new HashMap<String, Object>();
         this.appname = appname;
         this.pagename = pagename;
     }
@@ -69,6 +71,15 @@ public class ViewData implements Serializable {
      */
     public final void addMultipartElement(Element element) {
         mpelements.add(element);
+    }
+    
+    /**
+     * Adiciona parâmetro à visão.
+     * @param name nome
+     * @param value valor
+     */
+    public final void addParameter(String name, Object value) {
+        parameters.put(name, value);
     }
     
     /**
@@ -175,6 +186,15 @@ public class ViewData implements Serializable {
      */
     public final String getPageName() {
         return pagename;
+    }
+    
+    /**
+     * Retorna valor do parâmetro da visão.
+     * @param name nome
+     * @return value valor
+     */
+    public final Object getParameter(String name) {
+        return parameters.get(name);
     }
     
     /**

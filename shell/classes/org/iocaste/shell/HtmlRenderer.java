@@ -4,18 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.shell.common.AbstractInputComponent;
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
@@ -24,7 +23,6 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.DataView;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
@@ -122,23 +120,35 @@ public class HtmlRenderer {
     
     /**
      * 
-     * @param input
-     * @param object
+     * @param tag
+     * @return
      */
-    private final void moveItemToInput(InputComponent input, Object object) {
-        Method method;
-        Object value;
-        DocumentModelItem modelitem = input.getModelItem();
+    private final String getText(String tag, String fail) {
+        if (tag == null)
+            return fail;
         
-        try {
-            method = object.getClass().getMethod(modelitem.getGetterName());
-            value = method.invoke(object, new Object[] {});
-            input.setValue((value == null)?"":value.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        return messages.get(tag, fail);
     }
+    
+//    /**
+//     * 
+//     * @param input
+//     * @param object
+//     */
+//    private final void moveItemToInput(InputComponent input, Object object) {
+//        Method method;
+//        Object value;
+//        DocumentModelItem modelitem = input.getModelItem();
+//        
+//        try {
+//            method = object.getClass().getMethod(modelitem.getGetterName());
+//            value = method.invoke(object, new Object[] {});
+//            input.setValue((value == null)?"":value.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
+//    }
     
     /**
      * 
@@ -160,11 +170,20 @@ public class HtmlRenderer {
         
         html.add(new StringBuffer(inputtext).append(name).
                 append("\" class=\"").append(button.getStyleClass()).
-                append("\" value=\"").append(messages.get(text_, name)).
+                append("\" value=\"").append(getText(text_, name)).
                 append("\" onClick=\"defineAction('").append(name).
                 append("')\"/>").toString());
     }
 
+    /**
+     * 
+     * @param html
+     * @param checkbox
+     */
+    private final void renderCheckBox(List<String> html, CheckBox checkbox) {
+        html.add("<input type=\"checkbox\"/>");
+    }
+    
     /**
      * 
      * @param text
@@ -233,7 +252,7 @@ public class HtmlRenderer {
             
             text = new Text(null, new StringBuffer(inputname).
                     append(".text").toString());
-            text.setText(messages.get(inputname, inputname));
+            text.setText(inputname);
             text.setStyleClass(styleclass);
 
             tableitem = new TableItem(table, inputname);
@@ -246,7 +265,7 @@ public class HtmlRenderer {
         for (String action : form.getActions()) {
             button = new Button(null, action);
             button.setSubmit(true);
-            button.setText(messages.get(action, action));
+            button.setText(getText(action, action));
             button.setStyleClass("submit");
             
             renderButton(html, button);
@@ -259,58 +278,7 @@ public class HtmlRenderer {
      * @param container
      */
     private final void renderDataView(List<String> html, DataView dataview) {
-        DataItem dataitem;
-        TableItem tableitem;
-        String name;
-        StringBuffer sb;
-        Element tfield;
-        Element element;
-        boolean key;
-        int i = 0;
-        Element[] elements = dataview.getElements();
-        Object[] itens = dataview.getItens();
-        Table table = new Table(null, elements.length, new StringBuffer(
-                dataview.getName()).append(".table").toString());
-        DocumentModel model = dataview.getModel();
         
-        for (Element element_ : elements) {
-            name = element_.getName();
-            table.setHeaderName(i++, name);
-            if (element_.getType() != Const.DATA_ITEM)
-                continue;
-            
-            key = model.isKey(((DataItem)element_).getModelItem());
-            if (!key && (dataview.getMode() == Const.DETAIL_VIEW))
-                table.setVisibleColumn(i-1, false);
-        }
-        
-        for (int k = 0; k < dataview.getPageLines(); k++) {
-            sb = new StringBuffer(table.getName()).append(".").append(k);
-            name = sb.toString();
-            tableitem = new TableItem(table, name);
-
-            i = 0;
-            for (DocumentModelItem modelitem : model.getItens()) {
-                element = elements[i++];
-                if (element.getType() != Const.DATA_ITEM)
-                    continue;
-                
-                sb.setLength(0);
-                dataitem = (DataItem)element;
-                dataitem.setModelItem(modelitem);
-                
-                tfield = createInputItem(dataitem, sb.append(name).append(".").
-                        append(element.getName()).toString());
-                tfield.setEnabled(!model.isKey(modelitem));
-                
-                tableitem.add(tfield);
-                
-                if (k < itens.length)
-                    moveItemToInput((InputComponent)tfield, itens[k]);
-            }
-        }
-        
-        renderContainer(html, table);
     }
     
     /**
@@ -323,6 +291,11 @@ public class HtmlRenderer {
             return;
         
         switch (element.getType()) {
+        case CHECKBOX:
+            renderCheckBox(html, (CheckBox)element);
+            
+            break;
+            
         case TABLE_ITEM:
             renderTableItem(html, (TableItem)element);
             
@@ -670,11 +643,10 @@ public class HtmlRenderer {
      * @param text
      * @param text_
      */
-    private final void renderText(List<String> html, Text text_) {
-        String value = messages.get(text_.getText(), text_.getText());
-        
-        html.add(new StringBuffer("<p class=\"").append(text_.getStyleClass()).
-                append("\">").append(value).append("</p>").toString());
+    private final void renderText(List<String> html, Text text) {
+        html.add(new StringBuffer("<p class=\"").append(text.getStyleClass()).
+                append("\">").append(getText(text.getText(), text.getName())).
+                append("</p>").toString());
     }
     
     /**
