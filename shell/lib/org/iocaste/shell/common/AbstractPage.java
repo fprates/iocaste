@@ -146,8 +146,7 @@ public abstract class AbstractPage extends AbstractFunction {
         modelitem = input.getModelItem();
         
         if (modelitem == null)
-            throw new Exception(new StringBuffer("Data element for ").
-                    append(name).append(" not defined.").toString());
+            return false;
             
         dataelement = modelitem.getDataElement();
         
