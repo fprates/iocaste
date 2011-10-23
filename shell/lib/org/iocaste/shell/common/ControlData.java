@@ -1,6 +1,8 @@
 package org.iocaste.shell.common;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ControlData implements Serializable {
     private static final long serialVersionUID = 6315170917055411682L;
@@ -10,10 +12,28 @@ public class ControlData implements Serializable {
     private Const messagetype;
     private MessageSource messages;
     private ViewData view;
+    private Map<String, Object> parameters;
     
     public ControlData() {
         app = null;
         page = null;
+        parameters = new HashMap<String, Object>();
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param value
+     */
+    public final void addParameter(String name, Object value) {
+        parameters.put(name, value);
+    }
+    
+    /**
+     * 
+     */
+    public final void clearParameters() {
+        parameters.clear();
     }
     
     /**
@@ -37,6 +57,14 @@ public class ControlData implements Serializable {
      */
     public final String getPage() {
         return page;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Map<String, Object> getParameters() {
+        return parameters;
     }
     
     /**

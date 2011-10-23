@@ -99,11 +99,14 @@ public abstract class AbstractPage extends AbstractFunction {
         ViewData view;
         String page = message.getString("page");
         String app = message.getString("app");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> parameters = (Map<String, Object>)message.get("parameters");
         
         if (app == null || page == null)
             throw new Exception("Page not especified.");
         
         view = new ViewData(app, page);
+        view.setParameters(parameters);
         
         method = this.getClass().getMethod(page, ViewData.class);
         method.invoke(this, view);

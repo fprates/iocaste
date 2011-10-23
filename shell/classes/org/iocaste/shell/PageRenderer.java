@@ -276,6 +276,8 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagectx_ == null)
             pagectx_ = createPageContext(sessionid, appname, pagename);
         
+        pagectx_.setControlData(control);
+        
         return pagectx_;
     }
     
@@ -340,6 +342,7 @@ public class PageRenderer extends HttpServlet implements Function {
             throws Exception {
         String[] text;
         AppContext appctx;
+        ControlData control;
         Message message = new Message();
         PrintWriter writer = resp.getWriter();
         
@@ -353,6 +356,10 @@ public class PageRenderer extends HttpServlet implements Function {
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
             message.setSessionid(sessionid);
+            
+            control = pagectx.getControlData();
+            if (control != null)
+                message.add("parameters", control.getParameters());
             
             pagectx.setViewData((ViewData)Service.callServer(
                     composeUrl(appctx.getName()), message));

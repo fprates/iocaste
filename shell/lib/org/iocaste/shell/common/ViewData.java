@@ -52,7 +52,6 @@ public class ViewData implements Serializable {
         navbarstatus = new HashMap<String, Boolean>();
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<Element>();
-        parameters = new HashMap<String, Object>();
         this.appname = appname;
         this.pagename = pagename;
     }
@@ -71,15 +70,6 @@ public class ViewData implements Serializable {
      */
     public final void addMultipartElement(Element element) {
         mpelements.add(element);
-    }
-    
-    /**
-     * Adiciona parâmetro à visão.
-     * @param name nome
-     * @param value valor
-     */
-    public final void addParameter(String name, Object value) {
-        parameters.put(name, value);
     }
     
     /**
@@ -239,6 +229,14 @@ public class ViewData implements Serializable {
             navbarstatus.remove(name);
         
         navbarstatus.put(name, enabled);
+    }
+    
+    /**
+     * 
+     * @param parameters
+     */
+    public final void setParameters(Map<String, Object> parameters) {
+        this.parameters = parameters;
     }
     
     /**
