@@ -6,6 +6,7 @@ public class TableColumn implements Serializable {
     private static final long serialVersionUID = -39703809895121317L;
     private boolean visible;
     private String name;
+    private boolean mark;
     
     /**
      * Retorna nome da coluna.
@@ -16,11 +17,27 @@ public class TableColumn implements Serializable {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final boolean isMark() {
+        return mark;
+    }
+    
+    /**
      * Retorna visibilidade da coluna.
      * @return true, se visível.
      */
     public final boolean isVisible() {
         return visible;
+    }
+    
+    /**
+     * 
+     * @param mark
+     */
+    public final void setMark(boolean mark) {
+        this.mark = mark;
     }
     
     /**

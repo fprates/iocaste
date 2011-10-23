@@ -94,7 +94,7 @@ public abstract class AbstractContainer
      *    org.iocaste.documents.common.DocumentModel)
      */
     @Override
-    public final void importModel(DocumentModel model) {
+    public void importModel(DocumentModel model) {
         DataItem dataitem;
         
         clear();

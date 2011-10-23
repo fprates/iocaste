@@ -618,13 +618,20 @@ public class HtmlRenderer {
      * @param item
      */
     private final void renderTableItem(List<String> html, TableItem item) {
-        TableColumn[] columns = ((Table)item.getContainer()).getColumns();
+        TableColumn column;
+        Table table = (Table)item.getContainer();
+        TableColumn[] columns = table.getColumns();
         int i = 0;
         
         html.add("<tr>");
         
         for (Element element : item.getElements()) {
-            if (!columns[i++].isVisible())
+            column = columns[i++];
+            
+            if (!column.isVisible())
+                continue;
+            
+            if (column.isMark() && !table.hasMark())
                 continue;
             
             html.add("<td>");

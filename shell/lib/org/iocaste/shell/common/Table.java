@@ -24,6 +24,8 @@ package org.iocaste.shell.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iocaste.documents.common.DocumentModel;
+
 /**
  * Implementação de tabela html.
  * 
@@ -34,21 +36,19 @@ public class Table extends AbstractContainer {
     private static final long serialVersionUID = -245959547368570624L;
     private int cols;
     private boolean header;
-    private List<TableColumn> columns;
+    private boolean mark;
+    private TableColumn[] columns;
     
     public Table(Container container, int cols, String name) {
         super(container, Const.TABLE, name);
-        TableColumn column;
-        
-        this.cols = cols;
+
         header = true;
-        columns = new ArrayList<TableColumn>();
-        for (int k = 0; k < cols; k++) {
-            column = new TableColumn();
-            column.setVisible(true);
-            
-            columns.add(column);
-        }
+        mark = false;
+        
+        if (cols == 0)
+            return;
+        
+        prepare(cols, null);
     }
     
     /**
@@ -56,7 +56,7 @@ public class Table extends AbstractContainer {
      * @return títulos
      */
     public final TableColumn[] getColumns() {
-        return columns.toArray(new TableColumn[0]);
+        return columns;
     }
     
     /**
@@ -76,6 +76,58 @@ public class Table extends AbstractContainer {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final boolean hasMark() {
+        return mark;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractContainer#importModel(
+     *     org.iocaste.documents.common.DocumentModel)
+     */
+    @Override
+    public final void importModel(DocumentModel model) {
+        super.importModel(model);
+        List<String> names = new ArrayList<String>();
+        Element[] elements = getElements();
+        
+        for (Element element : elements) {
+            if (element.getType() != Const.DATA_ITEM)
+                continue;
+            cols++;
+            names.add(element.getName());
+        }
+        
+        prepare(cols, names.toArray(new String[0]));
+    }
+    
+    /**
+     * 
+     * @param cols
+     */
+    private final void prepare(int cols, String[] names) {
+        TableColumn column;
+        
+        this.cols = cols + 1;
+        columns = new TableColumn[this.cols];
+        
+        for (int k = 0; k < this.cols; k++) {
+            column = new TableColumn();
+            column.setVisible(true);
+            column.setMark((k == 0)?true:false);
+            
+            columns[k] = column;
+            if (k == 0 || names == null)
+                continue;
+            
+            columns[k].setName(names[k-1]);
+        }
+    }
+    
+    /**
      * Ajusta status de exibição da header.
      * @param header true, exibe header
      */
@@ -89,8 +141,15 @@ public class Table extends AbstractContainer {
      * @param name título
      */
     public final void setHeaderName(int col, String name) {
-        TableColumn column = columns.get(col);
-        column.setName(name);
+        columns[col].setName(name);
+    }
+    
+    /**
+     * 
+     * @param mark
+     */
+    public final void setMark(boolean mark) {
+        this.mark = mark;
     }
     
     /**
@@ -99,7 +158,6 @@ public class Table extends AbstractContainer {
      * @param visible true, para coluna visível
      */
     public final void setVisibleColumn(int col, boolean visible) {
-        TableColumn column = columns.get(col);
-        column.setVisible(visible);
+        columns[col].setVisible(visible);
     }
 }
