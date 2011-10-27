@@ -12,10 +12,12 @@ import org.iocaste.protocol.user.User;
 
 public class Login extends AbstractFunction {
     private static final int USERNAME_MAX_LEN = 12;
-    private Map<String, Context> sessions;
+    private Map<String, UserContext> sessions;
+    private DBServices db;
     
     public Login() {
-        sessions = new HashMap<String, Context>();
+        sessions = new HashMap<String, UserContext>();
+        db = new DBServices();
         
         export("login", "login");
         export("is_connected", "isConnected");
@@ -25,6 +27,7 @@ public class Login extends AbstractFunction {
         export("get_context", "getContext");
         export("set_context", "setContext");
         export("get_users", "getUsers");
+        export("select", "select");
     }
     
     /**
@@ -144,7 +147,7 @@ public class Login extends AbstractFunction {
      * @throws Exception
      */
     public final boolean login(Message message) throws Exception {
-        Context context;
+        UserContext context;
         String user = message.getString("user");
         String secret = message.getString("secret");
         String sessionid = message.getSessionid();
@@ -164,12 +167,26 @@ public class Login extends AbstractFunction {
         if (!user_.getSecret().equals(secret))
             return false;
         
-        context = new Context();
+        context = new UserContext();
         context.setUser(user_);
+        context.setConnection(db.instance());
         
         sessions.put(sessionid, context);
         
         return true;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception 
+     */
+    public final Object[] select(Message message) throws Exception {
+        UserContext context = sessions.get(message.getSessionid());
+        
+        return db.select(context.getConnection(), message.getString("query"),
+                (Object[])message.get("criteria"));
     }
     
     /**

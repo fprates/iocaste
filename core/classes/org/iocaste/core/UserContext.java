@@ -1,16 +1,26 @@
 package org.iocaste.core;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.protocol.user.User;
 
-public class Context {
+public class UserContext {
     private Map<String, Object> objects;
     private User user;
+    private Connection connection;
     
-    public Context() {
+    public UserContext() {
         objects = new HashMap<String, Object>();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Connection getConnection() {
+        return connection;
     }
     
     /**
@@ -28,6 +38,14 @@ public class Context {
      */
     public final User getUser() {
         return user;
+    }
+    
+    /**
+     * 
+     * @param connection
+     */
+    public final void setConnection(Connection connection) {
+        this.connection = connection;
     }
     
     /**

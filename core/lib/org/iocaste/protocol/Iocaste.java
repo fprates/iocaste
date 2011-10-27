@@ -107,6 +107,24 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
+     * Seleciona itens de tabela através de query.
+     * @param query seleção
+     * @param criteria critérios da seleção
+     * @return resultados
+     * @throws Exception
+     */
+    public final Object[] select(String query, Object[] criteria) 
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("select");
+        message.add("query", query);
+        message.add("criteria", criteria);
+        
+        return (Object[])call(message);
+    }
+    
+    /**
      * Armazena objeto em contexto identificado.
      * @param name nome do contexto
      * @param object objeto a ser armazenado
