@@ -22,6 +22,8 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
+import java.sql.Time;
+import java.util.Date;
 
 /**
  * Implementação de elemento do dicionário de dados
@@ -33,8 +35,24 @@ public class DataElement implements Serializable {
     private String name;
     private int decimals;
     private int length;
-    private DataType type;
+    private int type;
     
+    public Class<?> getClassType() {
+        switch (type) {
+        case DataType.CHAR:
+            return String.class;
+        case DataType.DATE:
+            return Date.class;
+        case DataType.DEC:
+            return Double.class;
+        case DataType.NUMC:
+            return Integer.class;
+        case DataType.TIME:
+            return Time.class;
+        default:
+            return null;
+        }
+    }
     /**
      * Retorna quantidade de casas decimais.
      * @return quantidade
@@ -63,7 +81,7 @@ public class DataElement implements Serializable {
      * Retorna tipo do elemento.
      * @return tipo
      */
-    public DataType getType() {
+    public int getType() {
         return type;
     }
     
@@ -95,7 +113,7 @@ public class DataElement implements Serializable {
      * Define tipo do elemento.
      * @param type tipo
      */
-    public void setType(DataType type) {
+    public void setType(int type) {
         this.type = type;
     }
 }

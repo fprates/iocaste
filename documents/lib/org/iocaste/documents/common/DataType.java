@@ -26,6 +26,10 @@ package org.iocaste.documents.common;
  * @author Francisco Prates
  *
  */
-public enum DataType {
-    CHAR, DATE, DEC, NUMC, TIME
+public class DataType {
+    public static final int CHAR = 0;
+    public static final int DATE = 1;
+    public static final int DEC = 2;
+    public static final int NUMC = 3;
+    public static final int TIME = 4;
 }

@@ -155,12 +155,14 @@ public class Documents extends AbstractServiceInterface {
         
         for (Object object : lines) {
         	line = (Map<String, Object>)object;
-        	result = Class.forName(queryinfo.model.getClassName());
+        	result = Class.forName(queryinfo.model.getClassName()).
+        	            newInstance();
         	
         	for (DocumentModelItem modelitem : queryinfo.model.getItens()) {
         		value = line.get(modelitem.getTableFieldName());
         		method = result.getClass().getMethod(
-        				modelitem.getSetterName(), Object.class);
+        				modelitem.getSetterName(), modelitem.getDataElement().
+        				getClassType());
         		method.invoke(result, value);
         	}
         	

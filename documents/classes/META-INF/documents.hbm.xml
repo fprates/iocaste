@@ -34,7 +34,7 @@
         <id name="name" column="ENAME"/>
         <property name="decimals" column="DECIM"/>
         <property name="length" column="LNGTH"/>
-<!--        <property name="type" column="ETYPE"/> -->
+        <property name="type" column="ETYPE"/>
     </class>
     
     <class name="org.iocaste.documents.common.DocumentModelKey" table="DOCS004">
