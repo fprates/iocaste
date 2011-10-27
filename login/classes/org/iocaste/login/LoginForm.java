@@ -74,7 +74,7 @@ public class LoginForm extends AbstractPage {
      * @return
      */
     private final DataElement dataElementInstance(
-            String name, DataType datatype, int length) {
+            String name, int datatype, int length) {
         DataElement dataelement = new DataElement();
         
         dataelement.setName(name);

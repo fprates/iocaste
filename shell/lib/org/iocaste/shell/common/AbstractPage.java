@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
@@ -154,7 +155,7 @@ public abstract class AbstractPage extends AbstractFunction {
         dataelement = modelitem.getDataElement();
         
         switch (dataelement.getType()) {
-        case NUMC:
+        case DataType.NUMC:
             return (Long.parseLong(test) == 0)? true : false;
             
         default:
