@@ -12,7 +12,6 @@ import java.util.Map;
 import org.hibernate.Session;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.HibernateUtil;
-import org.iocaste.shell.common.AbstractInputComponent;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Const;
@@ -27,6 +26,7 @@ import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -60,31 +60,6 @@ public class HtmlRenderer {
         }
         
         script = lines.toArray(new String[0]);
-    }
-
-    /**
-     * 
-     * @param inputitem
-     * @return
-     */
-    private final Element createInputItem(
-            AbstractInputComponent inputitem, String name) {
-        TextField tfield;
-        
-        switch (inputitem.getComponentType()) {
-        case TEXT_FIELD:
-            tfield = new TextField(null, name);
-            tfield.setStyleClass(inputitem.getStyleClass());
-            tfield.setObligatory(inputitem.isObligatory());
-            tfield.setPassword(inputitem.isSecret());
-            tfield.setLength(inputitem.getLength());
-            tfield.setValue(inputitem.getValue());
-            tfield.setModelItem(inputitem.getModelItem());
-            
-            return tfield;
-        default:
-            return null;
-        }
     }
     
     /**
@@ -128,26 +103,6 @@ public class HtmlRenderer {
         
         return messages.get(tag, fail);
     }
-    
-//    /**
-//     * 
-//     * @param input
-//     * @param object
-//     */
-//    private final void moveItemToInput(InputComponent input, Object object) {
-//        Method method;
-//        Object value;
-//        DocumentModelItem modelitem = input.getModelItem();
-//        
-//        try {
-//            method = object.getClass().getMethod(modelitem.getGetterName());
-//            value = method.invoke(object, new Object[] {});
-//            input.setValue((value == null)?"":value.toString());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw new RuntimeException(e);
-//        }
-//    }
     
     /**
      * 
@@ -251,7 +206,7 @@ public class HtmlRenderer {
 
             tableitem = new TableItem(table, inputname);
             tableitem.add(text);
-            tableitem.add(createInputItem(dataitem, inputname));
+            tableitem.add(Shell.createInputItem(dataitem, inputname));
         }
         
         renderContainer(html, table);
