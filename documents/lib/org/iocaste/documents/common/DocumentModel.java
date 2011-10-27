@@ -34,6 +34,7 @@ import java.util.Set;
 public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private static final long serialVersionUID = -4964159453586462503L;
     private String name;
+    private String tablename;
     private Set<DocumentModelItem> itens;
     private Set<DocumentModelKey> keys;
 
@@ -105,6 +106,14 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
         return name;
     }
     
+    /**
+     * 
+     * @return
+     */
+    public String getTableName() {
+        return tablename;
+    }
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#hashCode()
@@ -151,5 +160,11 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
         this.name = name;
     }
     
-    
+    /**
+     * 
+     * @param tablename
+     */
+    public void setTableName(String tablename) {
+        this.tablename = tablename;
+    }
 }

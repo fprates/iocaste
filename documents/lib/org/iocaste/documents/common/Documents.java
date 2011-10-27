@@ -23,6 +23,7 @@ package org.iocaste.documents.common;
 
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 /**
@@ -33,8 +34,10 @@ import org.iocaste.protocol.Message;
 public class Documents extends AbstractServiceInterface {
     private static final String SERVERNAME =
             "/iocaste-documents/services.html";
+    private Function function;
     
     public Documents(Function function) {
+        this.function = function;
         initService(function, SERVERNAME);
     }
     
@@ -66,5 +69,62 @@ public class Documents extends AbstractServiceInterface {
         message.add("range", range);
         
         return (Long)call(message);
+    }
+    
+    /**
+     * 
+     * @param query
+     * @return
+     * @throws Exception 
+     */
+    public final Object[] select(String query, Object[] criteria) throws Exception {
+        String select[];
+        int t;
+        StringBuilder sb = new StringBuilder("select ");
+        Iocaste iocaste = new Iocaste(function);
+        String[] parsed = query.split(" ");
+        int pass = 0;
+        
+        for (String token : parsed) {
+            switch (pass) {
+            case 0:
+                if (token.equals("select")) {
+                    pass = 1;
+                    continue;
+                }
+                
+                if (token.equals("from")) {
+                    pass = 3;
+                    sb.append("* from ");
+                    continue;
+                }
+                
+                continue;
+            case 1:
+                select = token.split(",");
+                t = select.length;
+                
+                for (int i = 0; i < t; i++) {
+                    sb.append(select[i]);
+                    if (i == (t - 1))
+                        continue;
+                    sb.append(",");
+                }
+                
+                pass = 2;
+                continue;
+            case 2:
+                if (token.equals("from"))
+                    sb.append(" from ");
+                
+                pass = 3;
+                continue;
+            case 3:
+                sb.append(getModel(token).getTableName());
+                continue;
+            }
+        }
+        
+        return iocaste.select(sb.toString(), criteria);
     }
 }
