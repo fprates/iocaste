@@ -3,7 +3,9 @@ package org.iocaste.core;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.naming.Context;
@@ -43,23 +45,15 @@ public class DBServices {
      */
     public final Object[] select(Connection connection, 
             String query, Object[] criteria) throws Exception {
-        Object[] regs;
+        List<Map<String, Object>> lines;
         Map<String, Object> line;
         int cols;
-        int size;
         ResultSetMetaData metadata;
-        int k = 0;
         ResultSet results = null;
         
         try {
             results = connection.prepareStatement(query).executeQuery();
-            size = results.getFetchSize();
-            
-            if (size == 0)
-                return null;
-            
-            regs = new Object[size];
-            results.beforeFirst();
+            lines = new ArrayList<Map<String, Object>>();
             
             while (results.next()) {
                 metadata = results.getMetaData();
@@ -69,10 +63,10 @@ public class DBServices {
                 for (int i = 0; i < cols; i++)
                     line.put(metadata.getColumnName(i), results.getObject(i));
                 
-                regs[k++] = line;
+                lines.add(line);
             }
             
-            return regs;
+            return lines.toArray();
         } finally {
             results.close();
         }
