@@ -37,6 +37,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     private String attribname;
     private String gettername;
     private String settername;
+    private String fieldname;
     
     /**
      * Retorna nome do atributo.
@@ -87,6 +88,14 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
+     * 
+     * @return
+     */
+    public final String getTableFieldName() {
+    	return fieldname;
+    }
+    
+    /**
      * Define nome do atributo.
      * @param attribname nome do atributo
      */
@@ -128,6 +137,14 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      */
     public void setName(String name) {
         this.name = name;
+    }
+    
+    /**
+     * 
+     * @param fieldname
+     */
+    public void setTableFieldName(String fieldname) {
+    	this.fieldname = fieldname;
     }
     
     /*

@@ -21,6 +21,11 @@
 
 package org.iocaste.documents.common;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
@@ -71,19 +76,13 @@ public class Documents extends AbstractServiceInterface {
         return (Long)call(message);
     }
     
-    /**
-     * 
-     * @param query
-     * @return
-     * @throws Exception 
-     */
-    public final Object[] select(String query, Object[] criteria) throws Exception {
-        String select[];
+    private final QueryInfo reparseQuery(String query) throws Exception {
+        String[] select;
         int t;
-        StringBuilder sb = new StringBuilder("select ");
-        Iocaste iocaste = new Iocaste(function);
         String[] parsed = query.split(" ");
         int pass = 0;
+        StringBuilder sb = new StringBuilder("select ");
+        QueryInfo queryinfo = new QueryInfo();
         
         for (String token : parsed) {
             switch (pass) {
@@ -120,11 +119,64 @@ public class Documents extends AbstractServiceInterface {
                 pass = 3;
                 continue;
             case 3:
-                sb.append(getModel(token).getTableName());
+            	queryinfo.model = getModel(token);
+                sb.append(queryinfo.model.getTableName());
                 continue;
             }
         }
         
-        return iocaste.select(sb.toString(), criteria);
+        queryinfo.query = sb.toString();
+        
+        return queryinfo;
     }
+    
+    /**
+     * 
+     * @param query
+     * @return
+     * @throws Exception 
+     */
+	@SuppressWarnings("unchecked")
+	public final Object[] select(String query, Object[] criteria) throws Exception {
+        Object[] lines;
+        Map<String, Object> line;
+        Object value;
+        Object result;
+        Method method;
+        Iocaste iocaste = new Iocaste(function);
+        QueryInfo queryinfo = reparseQuery(query);
+        List<Object> results;
+        
+        if (queryinfo.query == null || queryinfo.model == null)
+        	return null;
+        
+        lines = iocaste.select(queryinfo.query, criteria);
+        results = new ArrayList<Object>();
+        
+        for (Object object : lines) {
+        	line = (Map<String, Object>)object;
+        	result = Class.forName(queryinfo.model.getClassName());
+        	
+        	for (DocumentModelItem modelitem : queryinfo.model.getItens()) {
+        		value = line.get(modelitem.getTableFieldName());
+        		method = result.getClass().getMethod(
+        				modelitem.getSetterName(), Object.class);
+        		method.invoke(result, value);
+        	}
+        	
+        	results.add(result);
+        }
+        
+        return results.toArray();
+    }
+}
+
+class QueryInfo {
+	public DocumentModel model;
+	public String query;
+	
+	public QueryInfo() {
+		model = null;
+		query = null;
+	}
 }

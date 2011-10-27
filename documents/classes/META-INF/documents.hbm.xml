@@ -12,6 +12,7 @@
     <class name="org.iocaste.documents.common.DocumentModel" table="DOCS001">
         <id name="name" column="DOCID"/>
         <property name="tableName" column="TNAME"/>
+        <property name="className" column="CLASS"/>
         <set name="keys" inverse="true">
             <key column="DOCID"/>
             <one-to-many class="org.iocaste.documents.common.DocumentModelKey"/>

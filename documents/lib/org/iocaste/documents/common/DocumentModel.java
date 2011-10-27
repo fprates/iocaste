@@ -35,9 +35,10 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private static final long serialVersionUID = -4964159453586462503L;
     private String name;
     private String tablename;
+    private String classname;
     private Set<DocumentModelItem> itens;
     private Set<DocumentModelKey> keys;
-
+    
     public DocumentModel() {
         itens = new LinkedHashSet<DocumentModelItem>();
         keys = new HashSet<DocumentModelKey>();
@@ -80,6 +81,14 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
         document = (DocumentModel)object;
         
         return name.equals(document.getName());
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getClassName() {
+    	return classname;
     }
     
     /**
@@ -134,6 +143,14 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
         key.setModelItem(item.getName());
         
         return keys.contains(key);
+    }
+    
+    /**
+     * 
+     * @param classname
+     */
+    public void setClassName(String classname) {
+    	this.classname = classname;
     }
     
     /**

@@ -14,7 +14,8 @@ create table range001 (
 /* documentos */
 create table docs001 (
    docid varchar(12) primary key,
-   tname varchar(12)
+   tname varchar(12),
+   class varchar(255)
 );
 
 /* elementos de dados */
