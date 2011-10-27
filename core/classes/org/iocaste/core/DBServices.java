@@ -60,7 +60,7 @@ public class DBServices {
                 cols = metadata.getColumnCount();
                 line = new HashMap<String, Object>();
                 
-                for (int i = 0; i < cols; i++)
+                for (int i = 1; i <= cols; i++)
                     line.put(metadata.getColumnName(i), results.getObject(i));
                 
                 lines.add(line);
