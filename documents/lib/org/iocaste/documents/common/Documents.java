@@ -80,9 +80,82 @@ public class Documents extends AbstractServiceInterface {
      * 
      * @param model
      * @param object
+     * @throws Exception 
      */
-    public final void modify(DocumentModel model, Object object) {
-        
+    public final void modify(DocumentModel model, Object object) 
+    		throws Exception {
+    	int type;
+    	Method method;
+    	Object value;
+    	String fieldname;
+    	boolean iskey;
+    	boolean setok = false;
+    	int k = 0;
+    	String tablename = model.getTableName();
+    	StringBuilder update = new StringBuilder("update ").
+    			append(tablename).append(" set ");
+    	StringBuilder insert = new StringBuilder("insert into ").
+    			append(tablename).append(" (");
+    	StringBuilder values = new StringBuilder(") values (");
+    	StringBuilder where = new StringBuilder(" where ");
+    	
+    	Iocaste iocaste = new Iocaste(function);
+    	
+        for (DocumentModelItem modelitem : model.getItens()) {
+        	iskey = model.isKey(modelitem);
+        	
+        	if (k++ > 0) {
+        		insert.append(", ");
+        		values.append(", ");
+        		if (iskey) {
+        			where.append(" and ");
+        			setok = false;
+        		} else {
+        			if (setok)
+        				update.append(", ");
+        			
+    				setok = true;
+        		}
+        	}
+        	
+        	method = object.getClass().getMethod(modelitem.getGetterName());
+        	
+        	fieldname = modelitem.getTableFieldName();
+        	insert.append(fieldname);
+        	
+        	if (iskey) {
+                where.append(fieldname).append("=");
+        	} else {
+                update.append(fieldname).append("=");
+        	}
+        	
+        	type = modelitem.getDataElement().getType();
+        	if (type == DataType.CHAR) {
+        		values.append("\"");
+        		if (iskey)
+        			where.append("\"");
+        		else
+            		update.append("\"");
+        	}
+        	
+        	value = method.invoke(object);
+        	values.append(value);
+    		if (iskey)
+    			where.append(value);
+    		else
+            	update.append(value);
+
+        	if (type == DataType.CHAR) {
+        		values.append("\"");
+        		if (iskey)
+        			where.append("\"");
+        		else
+            		update.append("\"");
+        	}
+        }
+        update.append(where);
+        insert.append(values).append(")");
+        iocaste.update(update.toString());
     }
     
     private final QueryInfo reparseQuery(String query) throws Exception {
