@@ -76,6 +76,15 @@ public class Documents extends AbstractServiceInterface {
         return (Long)call(message);
     }
     
+    /**
+     * 
+     * @param model
+     * @param object
+     */
+    public final void modify(DocumentModel model, Object object) {
+        
+    }
+    
     private final QueryInfo reparseQuery(String query) throws Exception {
         String[] select;
         int t;
