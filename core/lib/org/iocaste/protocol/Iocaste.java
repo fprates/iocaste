@@ -139,4 +139,18 @@ public final class Iocaste extends AbstractServiceInterface {
         
         call(message);
     }
+    
+    /**
+     * 
+     * @param query
+     * @throws Exception
+     */
+    public final void update(String query) throws Exception {
+    	Message message = new Message();
+    	
+    	message.setId("update");
+    	message.add("query", query);
+    	
+    	call(message);
+    }
 }
