@@ -16,6 +16,8 @@ public interface InputComponent {
     
     public abstract boolean isSecret();
     
+    public abstract Object getParsedValue();
+    
     public abstract void setLength(int length);
     
     public abstract void setModelItem(DocumentModelItem modelitem);

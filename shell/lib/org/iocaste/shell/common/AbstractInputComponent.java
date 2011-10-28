@@ -1,5 +1,6 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 
 public abstract class AbstractInputComponent extends AbstractComponent
@@ -81,6 +82,24 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final boolean isSecret() {
         return secret;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getParsedValue()
+     */
+    @Override
+    public final Object getParsedValue() {
+        switch (modelitem.getDataElement().getType()) {
+        case DataType.CHAR:
+            return value;
+        case DataType.DEC:
+            return Double.parseDouble(value);
+        case DataType.NUMC:
+            return Integer.parseInt(value);
+        default:
+            return null;
+        }
     }
     
     /*
