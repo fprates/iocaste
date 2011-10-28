@@ -28,6 +28,7 @@ public class Login extends AbstractFunction {
         export("set_context", "setContext");
         export("get_users", "getUsers");
         export("select", "select");
+        export("update", "update");
     }
     
     /**
@@ -199,6 +200,12 @@ public class Login extends AbstractFunction {
         String contextid = message.getString("context_id");
         
         sessions.get(sessionid).setObject(contextid, message.get("object"));
+    }
+    
+    public final int update(Message message) throws Exception {
+    	UserContext context = sessions.get(message.getSessionid());
+    	
+    	return db.update(context.getConnection(), message.getString("query"));
     }
 
 }

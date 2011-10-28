@@ -3,6 +3,7 @@ package org.iocaste.core;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,5 +71,16 @@ public class DBServices {
         } finally {
             results.close();
         }
+    }
+    
+    /**
+     * 
+     * @param connection
+     * @param query
+     * @throws SQLException
+     */
+    public final int update(Connection connection, String query) 
+    		throws SQLException {
+    	return connection.prepareStatement(query).executeUpdate(query);
     }
 }
