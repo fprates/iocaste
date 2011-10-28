@@ -131,11 +131,11 @@ public class Documents extends AbstractServiceInterface {
         	
         	type = modelitem.getDataElement().getType();
         	if (type == DataType.CHAR) {
-        		values.append("\"");
+        		values.append("'");
         		if (iskey)
-        			where.append("\"");
+        			where.append("'");
         		else
-            		update.append("\"");
+            		update.append("'");
         	}
         	
         	value = method.invoke(object);
@@ -146,11 +146,11 @@ public class Documents extends AbstractServiceInterface {
             	update.append(value);
 
         	if (type == DataType.CHAR) {
-        		values.append("\"");
+        		values.append("'");
         		if (iskey)
-        			where.append("\"");
+        			where.append("'");
         		else
-            		update.append("\"");
+            		update.append("'");
         	}
         }
         update.append(where);
