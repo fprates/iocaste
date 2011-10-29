@@ -199,14 +199,14 @@ public class HtmlRenderer {
             inputname = dataitem.getName();
             styleclass = dataitem.getStyleClass();
             
-            text = new Text(null, new StringBuffer(inputname).
+            text = new Text(table, new StringBuffer(inputname).
                     append(".text").toString());
             text.setText(inputname);
             text.setStyleClass(styleclass);
 
             tableitem = new TableItem(table, inputname);
             tableitem.add(text);
-            tableitem.add(Shell.createInputItem(dataitem, inputname));
+            tableitem.add(Shell.createInputItem(table, dataitem, inputname));
         }
         
         renderContainer(html, table);
@@ -548,7 +548,13 @@ public class HtmlRenderer {
             html.add("</tr>");
         }
         
-        renderElements(html, table.getElements());
+        for (Element element : table.getElements()) {
+            if (element.getType() != Const.TABLE_ITEM)
+                continue;
+            
+            renderElement(html, element);
+        }
+        
         html.add("</table>");
     }
     
@@ -559,13 +565,14 @@ public class HtmlRenderer {
      */
     private final void renderTableItem(List<String> html, TableItem item) {
         TableColumn column;
+        Element element;
         Table table = (Table)item.getContainer();
         TableColumn[] columns = table.getColumns();
         int i = 0;
         
         html.add("<tr>");
         
-        for (Element element : item.getElements()) {
+        for (String name: item.getElementNames()) {
             column = columns[i++];
             
             if (!column.isVisible())
@@ -576,6 +583,7 @@ public class HtmlRenderer {
             
             html.add("<td>");
             
+            element = table.getElement(name);
             if (element != null)
                 renderElement(html, element);
             

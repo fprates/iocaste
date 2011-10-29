@@ -11,13 +11,13 @@ public class Shell {
      * @param inputitem
      * @return
      */
-    public static final Element createInputItem(
+    public static final Element createInputItem(Container container,
             AbstractInputComponent inputitem, String name) {
         TextField tfield;
         
         switch (inputitem.getComponentType()) {
         case TEXT_FIELD:
-            tfield = new TextField(null, name);
+            tfield = new TextField(container, name);
             tfield.setStyleClass(inputitem.getStyleClass());
             tfield.setObligatory(inputitem.isObligatory());
             tfield.setPassword(inputitem.isSecret());

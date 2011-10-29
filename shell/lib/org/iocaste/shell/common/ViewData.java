@@ -38,7 +38,7 @@ public class ViewData implements Serializable {
     private String title;
     private String focus;
     private MessageSource messages;
-    private Map<String, InputComponent> inputs;
+    private List<String> inputs;
     private Map<String, Boolean> navbarstatus;
     private List<Element> mpelements;
     private List<Container> containers;
@@ -48,7 +48,7 @@ public class ViewData implements Serializable {
     private Map<String, Object> parameters;
     
     public ViewData(String appname, String pagename) {
-        inputs = new HashMap<String, InputComponent>();
+        inputs = new ArrayList<String>();
         navbarstatus = new HashMap<String, Boolean>();
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<Element>();
@@ -62,6 +62,14 @@ public class ViewData implements Serializable {
      */
     public final void addContainer(Container container) {
         containers.add(container);
+    }
+    
+    /**
+     * 
+     * @param name
+     */
+    public final void addInput(String name) {
+        inputs.add(name);
     }
     
     /**
@@ -142,8 +150,8 @@ public class ViewData implements Serializable {
      * Retorna mapa com componentes de entrada de dados.
      * @return mapa de componentes.
      */
-    public final Map<String, InputComponent> getInputs() {
-        return inputs;
+    public final String[] getInputs() {
+        return inputs.toArray(new String[0]);
     }
     
     /**

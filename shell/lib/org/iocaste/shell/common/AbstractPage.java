@@ -29,11 +29,12 @@ public abstract class AbstractPage extends AbstractFunction {
      * @throws Exception
      */
     public final ControlData execAction(Message message) throws Exception {
+        Element element;
         ControlData controldata;
         Method method;
         ViewData view;
         InputComponent input;
-        Map<String, InputComponent> inputs;
+        String[] inputs;
         String value;
         boolean einitial;
         InputComponent einput;
@@ -54,8 +55,12 @@ public abstract class AbstractPage extends AbstractFunction {
         einitial = false;
         einput = null;
         
-        for (String name : inputs.keySet()) {
-            input = inputs.get(name);
+        for (String name : inputs) {
+            element = view.getElement(name);
+            if (!element.isEnabled())
+                continue;
+            
+            input = (InputComponent)element;
             value = message.getString(name);
             
 //            if (!isValueCompatible(input, value)) {
@@ -64,8 +69,7 @@ public abstract class AbstractPage extends AbstractFunction {
 //                return controldata;
 //            }
             
-            inputs.get(name).setValue(value);
-            
+            input.setValue(value);
             if (input.isObligatory() && (isInitial(name, input, value)) &&
                     (!einitial)) {
                 einput = input;
@@ -174,8 +178,6 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     private final void registerInputs(ViewData vdata, Element element) {
         Container container;
-        Component component;
-        Map<String, InputComponent> inputs = vdata.getInputs();
         
         if (element == null)
             return;
@@ -189,11 +191,8 @@ public abstract class AbstractPage extends AbstractFunction {
             return;
         }
         
-        if (element.isDataStorable()) {
-            component = (Component)element;
-            
-            inputs.put(component.getName(), (InputComponent)component);
-        }
+        if (element.isDataStorable())
+            vdata.addInput(element.getName());
         
         if (element.hasMultipartSupport())
             vdata.addMultipartElement(element);

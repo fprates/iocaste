@@ -7,7 +7,7 @@ package org.iocaste.shell.common;
  */
 public class TableItem extends AbstractComponent {
     private static final long serialVersionUID = -1076760582954115701L;
-    private Element[] elements;
+    private String[] elements;
     private int i;
     
     public TableItem(Table table, String name) {
@@ -15,8 +15,9 @@ public class TableItem extends AbstractComponent {
         String name_ = new StringBuilder(name).append(".mark").toString();
         
         i = 1;
-        elements = new Element[table.getWidth()];
-        elements[0] = new CheckBox(null, name_);
+        elements = new String[table.getWidth()];
+        new CheckBox(table, name_);
+        elements[0] = name_;
     }
     
     /**
@@ -27,14 +28,14 @@ public class TableItem extends AbstractComponent {
         if (i == elements.length)
             throw new RuntimeException("Item overflow for table.");
         
-        elements[i++] = element;
+        elements[i++] = element.getName();
     }
     
     /**
      * 
      * @return
      */
-    public final Element[] getElements() {
+    public final String[] getElementNames() {
         return elements;
     }
     

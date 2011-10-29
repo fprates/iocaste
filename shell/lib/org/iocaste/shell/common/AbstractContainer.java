@@ -56,7 +56,7 @@ public abstract class AbstractContainer
      *    org.iocaste.shell.common.Element)
      */
     @Override
-    public final void add(Element element) {
+    public void add(Element element) {
         elements.add(element);
     }
     

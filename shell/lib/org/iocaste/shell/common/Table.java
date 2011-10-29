@@ -22,7 +22,9 @@
 package org.iocaste.shell.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 
@@ -38,17 +40,31 @@ public class Table extends AbstractContainer {
     private boolean header;
     private boolean mark;
     private TableColumn[] columns;
+    private Map<String, Element> cells;
     
     public Table(Container container, int cols, String name) {
         super(container, Const.TABLE, name);
 
         header = true;
         mark = false;
+        cells = new HashMap<String, Element>();
         
         if (cols == 0)
             return;
         
         prepare(cols, null);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractContainer#add(
+     *     org.iocaste.shell.common.Element)
+     */
+    @Override
+    public void add(Element element) {
+        super.add(element);
+        
+        cells.put(element.getName(), element);
     }
     
     /**
@@ -57,6 +73,15 @@ public class Table extends AbstractContainer {
      */
     public final TableColumn[] getColumns() {
         return columns;
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final Element getElement(String name) {
+        return cells.get(name);
     }
     
     /**
