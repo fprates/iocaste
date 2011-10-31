@@ -277,6 +277,7 @@ public class PageRenderer extends HttpServlet implements Function {
             pagectx_ = createPageContext(sessionid, appname, pagename);
         
         pagectx_.setControlData(control);
+        pagectx_.setReloadableView(control.isReloadableView());
         
         return pagectx_;
     }
@@ -351,7 +352,7 @@ public class PageRenderer extends HttpServlet implements Function {
         resp.setContentType("text/html");
         viewdata = pagectx.getViewData();
         
-        if (viewdata == null) {
+        if (viewdata == null || pagectx.isReloadableView()) {
             appctx = pagectx.getAppContext();
             
             message.setId("get_view_data");

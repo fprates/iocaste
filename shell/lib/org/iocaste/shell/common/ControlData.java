@@ -13,10 +13,12 @@ public class ControlData implements Serializable {
     private MessageSource messages;
     private ViewData view;
     private Map<String, Object> parameters;
+    private boolean reloadable;
     
     public ControlData() {
         app = null;
         page = null;
+        reloadable = false;
         parameters = new HashMap<String, Object>();
     }
     
@@ -91,6 +93,14 @@ public class ControlData implements Serializable {
     
     /**
      * 
+     * @return
+     */
+    public final boolean isReloadableView() {
+        return reloadable;
+    }
+    
+    /**
+     * 
      * @param messagetype
      * @param messagetext
      */
@@ -115,6 +125,14 @@ public class ControlData implements Serializable {
      */
     public final void setMessages(MessageSource messages) {
         this.messages = messages;
+    }
+
+    /**
+     * 
+     * @param reloadable
+     */
+    public final void setReloadableView(boolean reloadable) {
+        this.reloadable = reloadable;
     }
     
     /**

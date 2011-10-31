@@ -8,8 +8,10 @@ public class PageContext {
     private ControlData control;
     private AppContext appctx;
     private String name;
+    private boolean reloadable;
     
     public PageContext(String name) {
+        reloadable = false;
         this.name = name;
     }
     
@@ -47,6 +49,14 @@ public class PageContext {
     
     /**
      * 
+     * @return
+     */
+    public final boolean isReloadableView() {
+        return reloadable;
+    }
+    
+    /**
+     * 
      * @param appctx
      */
     public final void setAppContext(AppContext appctx) {
@@ -59,6 +69,14 @@ public class PageContext {
      */
     public final void setControlData(ControlData control) {
         this.control = control;
+    }
+    
+    /**
+     * 
+     * @param reloadable
+     */
+    public final void setReloadableView(boolean reloadable) {
+        this.reloadable = reloadable;
     }
     
     /**
