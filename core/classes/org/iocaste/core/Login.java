@@ -205,7 +205,8 @@ public class Login extends AbstractFunction {
     public final int update(Message message) throws Exception {
     	UserContext context = sessions.get(message.getSessionid());
     	
-    	return db.update(context.getConnection(), message.getString("query"));
+    	return db.update(context.getConnection(), message.getString("query"),
+    	        (Object[])message.get("criteria"));
     }
 
 }

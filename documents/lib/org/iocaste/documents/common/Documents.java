@@ -84,7 +84,6 @@ public class Documents extends AbstractServiceInterface {
      */
     public final void modify(DocumentModel model, Object object) 
     		throws Exception {
-    	int type;
     	Method method;
     	Object value;
     	String fieldname;
@@ -98,7 +97,9 @@ public class Documents extends AbstractServiceInterface {
     			append(tablename).append(" (");
     	StringBuilder values = new StringBuilder(") values (");
     	StringBuilder where = new StringBuilder(" where ");
-    	
+    	List<Object> criteria = new ArrayList<Object>();
+    	List<Object> set = new ArrayList<Object>();
+    	List<Object> into = new ArrayList<Object>();
     	Iocaste iocaste = new Iocaste(function);
     	
         for (DocumentModelItem modelitem : model.getItens()) {
@@ -123,39 +124,25 @@ public class Documents extends AbstractServiceInterface {
         	fieldname = modelitem.getTableFieldName();
         	insert.append(fieldname);
         	
+        	values.append("?");
         	if (iskey) {
-                where.append(fieldname).append("=");
+                where.append(fieldname).append("=?");
         	} else {
-                update.append(fieldname).append("=");
-        	}
-        	
-        	type = modelitem.getDataElement().getType();
-        	if (type == DataType.CHAR) {
-        		values.append("'");
-        		if (iskey)
-        			where.append("'");
-        		else
-            		update.append("'");
+                update.append(fieldname).append("=?");
         	}
         	
         	value = method.invoke(object);
-        	values.append(value);
+        	into.add(value);
     		if (iskey)
-    			where.append(value);
+    			criteria.add(value);
     		else
-            	update.append(value);
-
-        	if (type == DataType.CHAR) {
-        		values.append("'");
-        		if (iskey)
-        			where.append("'");
-        		else
-            		update.append("'");
-        	}
+            	set.add(value);
         }
+
+        set.addAll(criteria);
         update.append(where);
         insert.append(values).append(")");
-        iocaste.update(update.toString());
+        iocaste.update(update.toString(), set.toArray());
     }
     
     private final QueryInfo reparseQuery(String query) throws Exception {

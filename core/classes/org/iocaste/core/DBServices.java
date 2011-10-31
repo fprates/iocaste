@@ -1,6 +1,7 @@
 package org.iocaste.core;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -53,6 +54,8 @@ public class DBServices {
         ResultSet results = null;
         
         try {
+            System.err.println(query);
+            
             results = connection.prepareStatement(query).executeQuery();
             lines = new ArrayList<Map<String, Object>>();
             
@@ -79,8 +82,18 @@ public class DBServices {
      * @param query
      * @throws SQLException
      */
-    public final int update(Connection connection, String query) 
-    		throws SQLException {
-    	return connection.prepareStatement(query).executeUpdate(query);
+    public final int update(Connection connection, String query,
+            Object[] criteria) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement(query);
+        int i = 1;
+        
+        for (Object object : criteria)
+            ps.setObject(i++, object);
+        
+        System.err.println(query);
+        
+        ps.execute(query);
+        
+        return 0;
     }
 }
