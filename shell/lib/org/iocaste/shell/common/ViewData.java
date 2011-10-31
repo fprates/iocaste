@@ -80,6 +80,27 @@ public class ViewData implements Serializable {
         mpelements.add(element);
     }
     
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public final boolean equals(Object object) {
+    	ViewData viewdata;
+    	
+    	if (object == this)
+    		return true;
+    	
+    	if (!(object instanceof ViewData))
+    		return false;
+    	
+    	viewdata = (ViewData)object;
+    	if ((!appname.equals(viewdata.getAppName())) ||
+    			(!pagename.equals(viewdata.getPageName())))
+    		return false;
+    	
+    	return true;
+    }
+    
     /**
      * Retorna elemento de um container por nome.
      * @param container container

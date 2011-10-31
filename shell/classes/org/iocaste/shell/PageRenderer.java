@@ -342,14 +342,16 @@ public class PageRenderer extends HttpServlet implements Function {
             throws Exception {
         String[] text;
         AppContext appctx;
-        ControlData control;
+        ViewData viewdata;
         Message message = new Message();
         PrintWriter writer = resp.getWriter();
+        ControlData control = pagectx.getControlData();
         
         resp.setCharacterEncoding("utf-8");
         resp.setContentType("text/html");
+        viewdata = pagectx.getViewData();
         
-        if (pagectx.getViewData() == null) {
+        if (viewdata == null) {
             appctx = pagectx.getAppContext();
             
             message.setId("get_view_data");
@@ -357,15 +359,18 @@ public class PageRenderer extends HttpServlet implements Function {
             message.add("page", pagectx.getName());
             message.setSessionid(sessionid);
             
-            control = pagectx.getControlData();
             if (control != null)
                 message.add("parameters", control.getParameters());
             
-            pagectx.setViewData((ViewData)Service.callServer(
-                    composeUrl(appctx.getName()), message));
+            viewdata = (ViewData)Service.callServer(
+                    composeUrl(appctx.getName()), message);
+            pagectx.setViewData(viewdata);
         }
         
-        text = renderer.run(pagectx.getViewData());
+        if ((control != null) && (viewdata.equals(control.getViewData())))
+        	text = renderer.run(control.getViewData());
+        else
+        	text = renderer.run(pagectx.getViewData());
 
         if (text != null)
             for (String line : text)
