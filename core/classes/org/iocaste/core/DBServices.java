@@ -87,13 +87,11 @@ public class DBServices {
         PreparedStatement ps = connection.prepareStatement(query);
         int i = 1;
         
+        System.err.println(query);
+        
         for (Object object : criteria)
             ps.setObject(i++, object);
         
-        System.err.println(query);
-        
-        ps.execute(query);
-        
-        return 0;
+        return ps.executeUpdate();
     }
 }
