@@ -204,7 +204,7 @@ public class HtmlRenderer {
             text.setText(inputname);
             text.setStyleClass(styleclass);
 
-            tableitem = new TableItem(table, inputname);
+            tableitem = new TableItem(table);
             tableitem.add(text);
             tableitem.add(Shell.createInputItem(table, dataitem, inputname));
         }
@@ -531,6 +531,12 @@ public class HtmlRenderer {
      * @param table
      */
     private void renderTable(List<String> html, Table table) {
+        TableItem tableitem;
+        int iniline = table.getFirstItem();
+        int maxline = table.getMaxPageLines();
+        int length = table.getLength();
+        int lastline = iniline + ((length < maxline)? length : maxline);
+        
         html.add("<table>");
         
         if (table.hasHeader()) {
@@ -548,11 +554,9 @@ public class HtmlRenderer {
             html.add("</tr>");
         }
         
-        for (Element element : table.getElements()) {
-            if (element.getType() != Const.TABLE_ITEM)
-                continue;
-            
-            renderElement(html, element);
+        for (int i = iniline; i < lastline; i++) {
+            tableitem = table.getTableItem(i);
+            renderElement(html, tableitem);
         }
         
         html.add("</table>");
@@ -572,7 +576,7 @@ public class HtmlRenderer {
         
         html.add("<tr>");
         
-        for (String name: item.getElementNames()) {
+        for (String name : item.getElementNames()) {
             column = columns[i++];
             
             if (!column.isVisible())

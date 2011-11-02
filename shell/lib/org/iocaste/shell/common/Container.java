@@ -46,10 +46,23 @@ public interface Container extends Element {
     public abstract void clear();
     
     /**
+     * 
+     * @param name
+     * @return
+     */
+    public abstract Element getElement(String name);
+
+    /**
+     * 
+     * @return
+     */
+    public abstract Element[] getElements();
+    
+    /**
      * Retorna array com elementos.
      * @return elementos.
      */
-    public abstract Element[] getElements();
+    public abstract String[] getElementsNames();
 
     /**
      * Retorna modelo de documento importado.

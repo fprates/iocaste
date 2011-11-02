@@ -21,8 +21,8 @@
 
 package org.iocaste.shell.common;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -39,12 +39,12 @@ import org.iocaste.documents.common.DocumentModelItem;
 public abstract class AbstractContainer
     extends AbstractElement implements Container {
     private static final long serialVersionUID = 8676224931708725226L;
-    private Set<Element> elements;
+    private Map<String, Element> elements;
     private DocumentModel model;
 
     public AbstractContainer(Container container, Const type, String name) {
         super(type, name);
-        elements = new LinkedHashSet<Element>();
+        elements = new LinkedHashMap<String, Element>();
         
         if (container != null)
             container.add(this);
@@ -57,7 +57,7 @@ public abstract class AbstractContainer
      */
     @Override
     public void add(Element element) {
-        elements.add(element);
+        elements.put(element.getName(), element);
     }
     
     /*
@@ -72,11 +72,27 @@ public abstract class AbstractContainer
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#getElement(java.lang.String)
+     */
+    public final Element getElement(String name) {
+        return elements.get(name);
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Container#getElements()
      */
-    @Override
     public final Element[] getElements() {
-        return elements.toArray(new Element[0]);
+        return elements.values().toArray(new Element[0]);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#getElementsNames()
+     */
+    @Override
+    public final String[] getElementsNames() {
+        return elements.keySet().toArray(new String[0]);
     }
     
     /*
