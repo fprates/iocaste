@@ -60,34 +60,33 @@ public class DBServices {
         Map<String, Object> line;
         ResultSetMetaData metadata;
         PreparedStatement ps;
+        ResultSet results;
         int cols = 1;
-        ResultSet results = null;
         
-        try {
-            System.err.println(query);
-            
-            ps = connection.prepareStatement(query);
+        System.err.println(query);
+        
+        ps = connection.prepareStatement(query);
+        if (criteria != null)
             for (Object object : criteria)
                 ps.setObject(cols++, object);
+        
+        results = ps.executeQuery();
+        lines = new ArrayList<Map<String, Object>>();
+        
+        while (results.next()) {
+            metadata = results.getMetaData();
+            cols = metadata.getColumnCount();
+            line = new HashMap<String, Object>();
             
-            results = ps.executeQuery();
-            lines = new ArrayList<Map<String, Object>>();
+            for (int i = 1; i <= cols; i++)
+                line.put(metadata.getColumnName(i), results.getObject(i));
             
-            while (results.next()) {
-                metadata = results.getMetaData();
-                cols = metadata.getColumnCount();
-                line = new HashMap<String, Object>();
-                
-                for (int i = 1; i <= cols; i++)
-                    line.put(metadata.getColumnName(i), results.getObject(i));
-                
-                lines.add(line);
-            }
-            
-            return lines.toArray();
-        } finally {
-            results.close();
+            lines.add(line);
         }
+        
+        results.close();
+        
+        return lines.toArray();
     }
     
     /**
