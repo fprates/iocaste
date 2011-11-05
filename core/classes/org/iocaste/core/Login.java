@@ -177,6 +177,7 @@ public class Login extends AbstractFunction {
         UserContext context;
         Object[] lines;
         Map<String, Object> columns;
+        Connection connection;
         User user = null;
         String username = message.getString("user");
         String secret = message.getString("secret");
@@ -188,9 +189,13 @@ public class Login extends AbstractFunction {
         if (username.length() > USERNAME_MAX_LEN)
             return false;
 
-        lines = db.select(getDBConnection(sessionid),
+        connection = db.instance();
+        
+        lines = db.select(connection,
                 "select uname, secrt from users001 where uname = ?",
-                new Object[] {username});
+                new Object[] {username.toUpperCase()});
+        
+        connection.close();
         
         if (lines.length == 0)
             return false;

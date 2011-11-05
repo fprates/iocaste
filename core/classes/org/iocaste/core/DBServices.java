@@ -58,14 +58,19 @@ public class DBServices {
             String query, Object[] criteria) throws Exception {
         List<Map<String, Object>> lines;
         Map<String, Object> line;
-        int cols;
         ResultSetMetaData metadata;
+        PreparedStatement ps;
+        int cols = 1;
         ResultSet results = null;
         
         try {
             System.err.println(query);
             
-            results = connection.prepareStatement(query).executeQuery();
+            ps = connection.prepareStatement(query);
+            for (Object object : criteria)
+                ps.setObject(cols++, object);
+            
+            results = ps.executeQuery();
             lines = new ArrayList<Map<String, Object>>();
             
             while (results.next()) {
