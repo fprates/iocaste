@@ -1,5 +1,6 @@
 package org.iocaste.documents;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,9 +45,9 @@ public class Services extends AbstractFunction {
         columns = (Map<String, Object>)lines[0];
         element = new DataElement();
         element.setName(name);
-        element.setType((Integer)columns.get("ETYPE"));
-        element.setLength((Integer)columns.get("LNGTH"));
-        element.setDecimals((Integer)columns.get("DECIM"));
+        element.setType(((BigDecimal)columns.get("ETYPE")).intValue());
+        element.setLength(((BigDecimal)columns.get("LNGTH")).intValue());
+        element.setDecimals(((BigDecimal)columns.get("DECIM")).intValue());
         elements.put(name, element);
         
         return element;
