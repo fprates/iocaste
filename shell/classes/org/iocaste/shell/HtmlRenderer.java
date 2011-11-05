@@ -9,9 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Session;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Const;
@@ -69,25 +67,19 @@ public class HtmlRenderer {
      */
     private final Map<String, Map<String, String>> getStyleSheetElements(
             String name) {
-        Style style;
+//        Style style;
         Map<String, Map<String, String>> elements =
                 new HashMap<String, Map<String, String>>();
-        Map<String, String> properties;
-        
-        Session session = HibernateUtil.getSessionFactory().
-                getCurrentSession();
-        
-        session.beginTransaction();
-        style = (Style)session.load(Style.class, name);
-        for (StyleElement element : style.getElements()) {
-            properties = new HashMap<String, String>();
-            elements.put(element.getName(), properties);
-            
-            for (StyleElementProperty property : element.getProperties())
-                properties.put(property.getName(), property.getValue());
-        }
-        
-        session.getTransaction().commit();
+//        Map<String, String> properties;
+//        
+//        style = (Style)session.load(Style.class, name);
+//        for (StyleElement element : style.getElements()) {
+//            properties = new HashMap<String, String>();
+//            elements.put(element.getName(), properties);
+//            
+//            for (StyleElementProperty property : element.getProperties())
+//                properties.put(property.getName(), property.getValue());
+//        }
         
         return elements;
     }
