@@ -220,6 +220,9 @@ public class Documents extends AbstractServiceInterface {
         	return null;
         
         lines = iocaste.select(queryinfo.query, criteria);
+        if (lines.length == 0)
+            return null;
+        
         results = new ArrayList<Object>();
         
         for (Object object : lines) {
