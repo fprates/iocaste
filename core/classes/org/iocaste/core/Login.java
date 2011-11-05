@@ -27,6 +27,17 @@ public class Login extends AbstractFunction {
         export("get_users", "getUsers");
         export("select", "select");
         export("update", "update");
+        export("commit", "commit");
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void commit(Message message) throws Exception {
+        String sessionid = message.getSessionid();
+        db.commit(getDBConnection(sessionid));
     }
     
     /**

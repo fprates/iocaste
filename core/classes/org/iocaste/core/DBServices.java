@@ -31,6 +31,15 @@ public class DBServices {
     
     /**
      * 
+     * @param connection
+     * @throws SQLException 
+     */
+    public final void commit(Connection connection) throws SQLException {
+        connection.commit();
+    }
+    
+    /**
+     * 
      * @return
      * @throws Exception
      */

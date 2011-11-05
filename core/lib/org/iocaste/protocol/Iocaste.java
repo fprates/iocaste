@@ -10,6 +10,17 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
+     * Aplica commit work à uma transação de banco de dados.
+     * @throws Exception
+     */
+    public final void commit() throws Exception {
+        Message message = new Message();
+        
+        message.setId("commit");
+        call(message);
+    }
+    
+    /**
      * Criar usuário.
      * @param userdata nome do usuário
      * @throws Exception
