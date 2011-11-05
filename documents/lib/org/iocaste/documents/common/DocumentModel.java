@@ -45,11 +45,19 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
-     * Adiciona item ao documento
+     * Adiciona item ao documento.
      * @param item
      */
     public final void add(DocumentModelItem item) {
         itens.add(item);
+    }
+    
+    /**
+     * Adiciona chave ao documento.
+     * @param key
+     */
+    public final void addKey(DocumentModelKey key) {
+        keys.add(key);
     }
     
     /*
