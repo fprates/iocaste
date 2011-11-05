@@ -1,11 +1,7 @@
 package org.iocaste.tasksel;
 
-import java.util.List;
-
-import org.hibernate.Session;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -57,45 +53,53 @@ public class TaskSelForm extends AbstractPage {
         vdata.setTitle("add.tasksel.entry");
     }
     
-    @SuppressWarnings("unchecked")
-    private final Task[] getTasks() {
-        List<Task> tasks;
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+    /**
+     * 
+     * @return
+     * @throws Exception
+     */
+    private final Task[] getTasks() throws Exception {
+        Documents documents = new Documents(this);
         
-        tasks = session.createQuery("from Task").list();
-        
-        return tasks.toArray(new Task[0]);
+        return (Task[])documents.select("from task_entry", null);
     }
     
     private final void insertAppEntry(String app, String name, String entry) {
-        Task task = new Task();
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        
-        task.setApp(app);
-        task.setName(name);
-        task.setEntry(entry);
-        
-        session.beginTransaction();
-        session.save(task);
+//        Task task = new Task();
+//        Documents documents = new Documents(this);
+//        
+//        task.setApp(app);
+//        task.setName(name);
+//        task.setEntry(entry);
+//        
+//        documents.save(task);
     }
     
     /**
      * Visão geral de tarefas
      * @param view Visão
+     * @throws Exception 
      */
-    public final void main(ViewData view) {
+    public final void main(ViewData view) throws Exception {
         MenuItem mitem;
         Container form = new Form(null, "main");
-        Menu menu = new Menu(form, "run");
+        Menu menu;
         Task[] tasks = getTasks();
+        
+        view.setTitle("infosis-front");
+        view.addContainer(form);
+        
+        if (tasks == null) {
+            new Text(form, "no.entries");
+            return;
+        }
+        
+        menu = new Menu(form, "run");
         
         for (Task task : tasks) {
             mitem = new MenuItem(menu, task.getName(), task.getApp());
             mitem.putParameter("entry", task.getEntry());
         }
-        
-        view.setTitle("infosis-front");
-        view.addContainer(form);
     }
     
     /**
