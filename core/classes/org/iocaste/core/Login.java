@@ -1,12 +1,10 @@
 package org.iocaste.core;
 
+import java.sql.Connection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Session;
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.protocol.HibernateUtil;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 
@@ -37,14 +35,12 @@ public class Login extends AbstractFunction {
      */
     public final void createUser(Message message) throws Exception {
         User user = (User)message.get("userdata");
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         
         if (user.getUsername() == null || user.getSecret() == null)
             throw new Exception("Invalid username or password");
         
-        user.setUsername(user.getUsername().toUpperCase());
-        
-        session.save(user);
+        db.update(getDBConnection(message.getSessionid()),
+                "insert into users001(uname, secrt) values(?, ?)", null);
     }
     
     /**
@@ -77,6 +73,15 @@ public class Login extends AbstractFunction {
     
     /**
      * 
+     * @param sessionid
+     * @return
+     */
+    private final Connection getDBConnection(String sessionid) {
+        return sessions.get(sessionid).getConnection();
+    }
+    
+    /**
+     * 
      * @param message
      * @return
      * @throws Exception
@@ -95,33 +100,42 @@ public class Login extends AbstractFunction {
     
     /**
      * 
-     * @param message
+     * @param columns
      * @return
      */
-    public final User[] getUsers(Message message) {
-        Object[] fields;
-        User[] users;
-        User user;
-        int t;
-        Session session = HibernateUtil.getSessionFactory().
-                getCurrentSession();
-        List<?> list = session.createQuery(
-                "select username, firstname, surname from User").list();
+    private final User getUserFromColumns(Map<String, Object> columns) {
+        User user = new User();
+        user.setUsername((String)columns.get("UNAME"));
+        user.setFirstname((String)columns.get("FNAME"));
+        user.setSurname((String)columns.get("SNAME"));
         
-        t = list.size();
+        return user;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception 
+     */
+    @SuppressWarnings("unchecked")
+    public final User[] getUsers(Message message) throws Exception {
+        Map<String, Object> columns;
+        User[] users;
+        int t;
+        Object[] lines = db.select(getDBConnection(message.getSessionid()),
+                "select username, firstname, surname from User", null);
+        
+        t = lines.length;
         if (t == 0)
             return null;
         
         users = new User[t];
         t = 0;
-        for (Object object : list) {
-            fields = (Object[])object;
-            user = new User();
-            user.setUsername((String)fields[0]);
-            user.setFirstname((String)fields[1]);
-            user.setSurname((String)fields[2]);
-            users[t] = user;
-            t++;
+        
+        for (Object object : lines) {
+            columns = (Map<String, Object>)object;
+            users[t++] = getUserFromColumns(columns);
         }
         
         return users; 
@@ -147,29 +161,41 @@ public class Login extends AbstractFunction {
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     public final boolean login(Message message) throws Exception {
         UserContext context;
-        String user = message.getString("user");
+        Object[] lines;
+        Map<String, Object> columns;
+        User user = null;
+        String username = message.getString("user");
         String secret = message.getString("secret");
         String sessionid = message.getSessionid();
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         
         if (sessionid == null)
             throw new Exception("Null session not allowed.");
         
-        if (user.length() > USERNAME_MAX_LEN)
+        if (username.length() > USERNAME_MAX_LEN)
             return false;
-            
-        User user_ = (User)session.get(User.class, user.toUpperCase());
+
+        lines = db.select(getDBConnection(sessionid),
+                "select uname, secrt from users001 where uname = ?",
+                new Object[] {username});
         
-        if (user_ == null)
+        if (lines.length == 0)
             return false;
         
-        if (!user_.getSecret().equals(secret))
+        for (Object object : lines) {
+            columns = (Map<String, Object>)object;
+            user = getUserFromColumns(columns);
+            user.setSecret((String)columns.get("SECRT"));
+            break;
+        }
+        
+        if (!user.getSecret().equals(secret))
             return false;
         
         context = new UserContext();
-        context.setUser(user_);
+        context.setUser(user);
         context.setConnection(db.instance());
         
         sessions.put(sessionid, context);
