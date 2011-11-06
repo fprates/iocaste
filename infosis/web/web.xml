@@ -3,8 +3,8 @@
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
    version="2.5"> 
-    <description>Application Template</description>
-    <display-name>Iocaste Application</display-name>
+    <description>Iocaste System Information</description>
+    <display-name>Iocaste System Information</display-name>
     
     <servlet>
         <servlet-name>iocaste_server</servlet-name>
@@ -15,20 +15,6 @@
         <servlet-name>iocaste_server</servlet-name>
         <url-pattern>/services.html</url-pattern>
     </servlet-mapping>
-    
-    <listener>
-        <listener-class>org.iocaste.protocol.HibernateListener</listener-class>
-    </listener>
-    
-    <filter>
-        <filter-name>HibernateFilter</filter-name>
-        <filter-class>org.iocaste.protocol.HibernateSessionRequestFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>HibernateFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
     
     <resource-ref>
         <description>iocaste db access</description>
