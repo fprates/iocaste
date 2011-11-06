@@ -61,7 +61,7 @@ public class TaskSelForm extends AbstractPage {
     private final Task[] getTasks() throws Exception {
         Documents documents = new Documents(this);
         
-        return (Task[])documents.select("from task_entry", null);
+        return documents.select("from task_entry", null);
     }
     
     private final void insertAppEntry(String app, String name, String entry) {
