@@ -93,7 +93,7 @@ public class Services extends AbstractFunction {
             
             item = new DocumentModelItem();
             item.setDocumentModel(document);
-            item.setName(documentname);
+            item.setName((String)columns.get("INAME"));
             item.setAttributeName((String)columns.get("ATTRB"));
             item.setTableFieldName((String)columns.get("FNAME"));
             item.setDataElement(getDataElement(iocaste,
