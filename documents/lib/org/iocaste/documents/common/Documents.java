@@ -21,6 +21,7 @@
 
 package org.iocaste.documents.common;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -205,30 +206,31 @@ public class Documents extends AbstractServiceInterface {
      * @return
      * @throws Exception 
      */
-	@SuppressWarnings("unchecked")
-	public final Object[] select(String query, Object[] criteria) throws Exception {
+    @SuppressWarnings("unchecked")
+    public final <T> T[] select(String query, Object[] criteria) throws Exception {
         Object[] lines;
         Map<String, Object> line;
         Object value;
-        Object result;
+        T result;
         Method method;
+        Class<?> class_;
+        T[] results;
         Iocaste iocaste = new Iocaste(function);
         QueryInfo queryinfo = reparseQuery(query);
-        List<Object> results;
         
         if (queryinfo.query == null || queryinfo.model == null)
-        	return null;
+            return null;
         
         lines = iocaste.select(queryinfo.query, criteria);
         if (lines.length == 0)
             return null;
         
-        results = new ArrayList<Object>();
+        class_ = Class.forName(queryinfo.model.getClassName());
+        results = (T[])Array.newInstance(class_, lines.length);
         
-        for (Object object : lines) {
-        	line = (Map<String, Object>)object;
-        	result = Class.forName(queryinfo.model.getClassName()).
-        	            newInstance();
+        for (int i = 0; i < lines.length; i++) {
+        	line = (Map<String, Object>)lines[i];
+        	result = (T)class_.newInstance();
         	
         	for (DocumentModelItem modelitem : queryinfo.model.getItens()) {
         		value = line.get(modelitem.getTableFieldName());
@@ -238,10 +240,10 @@ public class Documents extends AbstractServiceInterface {
         		method.invoke(result, value);
         	}
         	
-        	results.add(result);
+        	results[i] = result;
         }
         
-        return results.toArray();
+        return results;
     }
 }
 
