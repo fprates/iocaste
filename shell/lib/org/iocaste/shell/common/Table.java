@@ -22,9 +22,7 @@
 package org.iocaste.shell.common;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 
@@ -40,14 +38,18 @@ public class Table extends AbstractContainer {
     private boolean header;
     private boolean mark;
     private TableColumn[] columns;
-    private Map<String, Element> cells;
+    private List<String> itens;
+    private int firstitem;
+    private int maxpagelines;
     
     public Table(Container container, int cols, String name) {
         super(container, Const.TABLE, name);
 
         header = true;
         mark = false;
-        cells = new HashMap<String, Element>();
+        firstitem = 0;
+        maxpagelines = 20;
+        itens = new ArrayList<String>();
         
         if (cols == 0)
             return;
@@ -64,7 +66,8 @@ public class Table extends AbstractContainer {
     public void add(Element element) {
         super.add(element);
         
-        cells.put(element.getName(), element);
+        if (element.getType() == Const.TABLE_ITEM)
+            itens.add(element.getName());
     }
     
     /**
@@ -77,11 +80,35 @@ public class Table extends AbstractContainer {
     
     /**
      * 
-     * @param name
      * @return
      */
-    public final Element getElement(String name) {
-        return cells.get(name);
+    public final int getFirstItem() {
+        return firstitem;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final int getLength() {
+        return itens.size();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final int getMaxPageLines() {
+        return maxpagelines;
+    }
+    
+    /**
+     * 
+     * @param index
+     * @return
+     */
+    public final TableItem getTableItem(int index) {
+        return (TableItem)getElement(itens.get(index));
     }
     
     /**
@@ -117,13 +144,13 @@ public class Table extends AbstractContainer {
     public final void importModel(DocumentModel model) {
         super.importModel(model);
         List<String> names = new ArrayList<String>();
-        Element[] elements = getElements();
+        String[] enames = getElementsNames();
         
-        for (Element element : elements) {
-            if (element.getType() != Const.DATA_ITEM)
+        for (String name: enames) {
+            if (getElement(name).getType() != Const.DATA_ITEM)
                 continue;
             cols++;
-            names.add(element.getName());
+            names.add(name);
         }
         
         prepare(cols, names.toArray(new String[0]));
@@ -153,6 +180,14 @@ public class Table extends AbstractContainer {
     }
     
     /**
+     * 
+     * @param firstitem
+     */
+    public final void setFirstItem(int firstitem) {
+        this.firstitem = firstitem;
+    }
+    
+    /**
      * Ajusta status de exibição da header.
      * @param header true, exibe header
      */
@@ -175,6 +210,14 @@ public class Table extends AbstractContainer {
      */
     public final void setMark(boolean mark) {
         this.mark = mark;
+    }
+    
+    /**
+     * 
+     * @param maxpagelines
+     */
+    public final void setMaxPageLines(int maxpagelines) {
+        this.maxpagelines = maxpagelines;
     }
     
     /**

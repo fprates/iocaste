@@ -31,6 +31,15 @@ public class DBServices {
     
     /**
      * 
+     * @param connection
+     * @throws SQLException 
+     */
+    public final void commit(Connection connection) throws SQLException {
+        connection.commit();
+    }
+    
+    /**
+     * 
      * @return
      * @throws Exception
      */
@@ -49,31 +58,35 @@ public class DBServices {
             String query, Object[] criteria) throws Exception {
         List<Map<String, Object>> lines;
         Map<String, Object> line;
-        int cols;
         ResultSetMetaData metadata;
-        ResultSet results = null;
+        PreparedStatement ps;
+        ResultSet results;
+        int cols = 1;
         
-        try {
-            System.err.println(query);
+        System.err.println(query);
+        
+        ps = connection.prepareStatement(query);
+        if (criteria != null)
+            for (Object object : criteria)
+                ps.setObject(cols++, object);
+        
+        results = ps.executeQuery();
+        lines = new ArrayList<Map<String, Object>>();
+        
+        while (results.next()) {
+            metadata = results.getMetaData();
+            cols = metadata.getColumnCount();
+            line = new HashMap<String, Object>();
             
-            results = connection.prepareStatement(query).executeQuery();
-            lines = new ArrayList<Map<String, Object>>();
+            for (int i = 1; i <= cols; i++)
+                line.put(metadata.getColumnName(i), results.getObject(i));
             
-            while (results.next()) {
-                metadata = results.getMetaData();
-                cols = metadata.getColumnCount();
-                line = new HashMap<String, Object>();
-                
-                for (int i = 1; i <= cols; i++)
-                    line.put(metadata.getColumnName(i), results.getObject(i));
-                
-                lines.add(line);
-            }
-            
-            return lines.toArray();
-        } finally {
-            results.close();
+            lines.add(line);
         }
+        
+        results.close();
+        
+        return lines.toArray();
     }
     
     /**

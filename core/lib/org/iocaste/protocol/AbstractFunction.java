@@ -10,23 +10,12 @@ import javax.servlet.ServletContext;
 
 public abstract class AbstractFunction implements Function {
     private ServletContext context;
-    private Map<String, String> queries;
     private Map<String, String> exports;
     private String servername;
     private String sessionid;
     
     public AbstractFunction() {
-        queries = new HashMap<String, String>();
         exports = new HashMap<String, String>();
-    }
-    
-    /**
-     * 
-     * @param queryname
-     * @param sqlquery
-     */
-    protected final void addQuery(String queryname, String sqlquery) {
-        queries.put(queryname, sqlquery);
     }
     
     /**
@@ -94,14 +83,6 @@ public abstract class AbstractFunction implements Function {
         String url = new StringBuffer(servername).append(path).toString();
         
         return new Service(sessionid, url);
-    }
-    
-    /**
-     * 
-     * @param queries
-     */
-    public final void setQueries(Map<String, String> queries) {
-        this.queries = queries;
     }
     
     /*

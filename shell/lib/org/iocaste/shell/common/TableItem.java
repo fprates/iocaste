@@ -10,9 +10,10 @@ public class TableItem extends AbstractComponent {
     private String[] elements;
     private int i;
     
-    public TableItem(Table table, String name) {
-        super(table, Const.TABLE_ITEM, name);
-        String name_ = new StringBuilder(name).append(".mark").toString();
+    public TableItem(Table table) {
+        super(table, Const.TABLE_ITEM, new StringBuilder(table.getName()).
+                append(".").append(table.getLength()).toString());
+        String name_ = new StringBuilder(getName()).append(".mark").toString();
         
         i = 1;
         elements = new String[table.getWidth()];

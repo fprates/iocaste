@@ -60,10 +60,12 @@ public class LoginForm extends AbstractPage {
         
         form.exportTo(login);
         
-        if (iocaste.login(login.getUsername(), login.getSecret()))
+        if (iocaste.login(login.getUsername(), login.getSecret())) {
+            controldata.setReloadableView(true);
             controldata.redirect("iocaste-tasksel", "main");
-        else
+        } else {
             controldata.message(Const.ERROR, "invalid.login");
+        }
     }
     
     /**
