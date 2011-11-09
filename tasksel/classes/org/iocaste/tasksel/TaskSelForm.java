@@ -2,6 +2,7 @@ package org.iocaste.tasksel;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -60,8 +61,13 @@ public class TaskSelForm extends AbstractPage {
      */
     private final Task[] getTasks() throws Exception {
         Documents documents = new Documents(this);
+        ExtendedObject[] objects =  documents.select("from task_entry", null);
+        Task[] tasks = new Task[objects.length];
         
-        return documents.select("from task_entry", null);
+        for (int i = 0; i < objects.length; i++)
+        	tasks[i] = objects[i].newInstance();
+        
+        return tasks;
     }
     
     private final void insertAppEntry(String app, String name, String entry) {
