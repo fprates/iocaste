@@ -95,6 +95,8 @@ public class LoginForm extends AbstractPage {
         DataElement char12 = dataElementInstance("CHAR12", DataType.CHAR, 12);
         
         model.setName("login");
+        model.setClassName(Login.class.getCanonicalName());
+        
         item = modelItemInstance(model, "username");
         item.setDataElement(char12);
         
@@ -116,6 +118,8 @@ public class LoginForm extends AbstractPage {
         
         item.setDocumentModel(model);
         item.setName(name);
+        item.setAttributeName(name);
+        
         model.add(item);
         
         return item;
