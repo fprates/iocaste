@@ -60,9 +60,14 @@ public class TaskSelForm extends AbstractPage {
      * @throws Exception
      */
     private final Task[] getTasks() throws Exception {
+        Task[] tasks;
         Documents documents = new Documents(this);
         ExtendedObject[] objects =  documents.select("from task_entry", null);
-        Task[] tasks = new Task[objects.length];
+        
+        if (objects == null)
+            return null;
+
+        tasks = new Task[objects.length];
         
         for (int i = 0; i < objects.length; i++)
         	tasks[i] = objects[i].newInstance();
