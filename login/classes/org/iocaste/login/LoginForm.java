@@ -56,9 +56,7 @@ public class LoginForm extends AbstractPage {
             throws Exception {
         DataForm form = (DataForm)view.getElement("login");
         Iocaste iocaste = new Iocaste(this);
-        Login login = new Login();
-        
-        form.exportTo(login);
+        Login login = form.getObject().newInstance();
         
         if (iocaste.login(login.getUsername(), login.getSecret())) {
             controldata.setReloadableView(true);
