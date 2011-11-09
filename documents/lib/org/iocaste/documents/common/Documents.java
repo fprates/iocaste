@@ -21,7 +21,6 @@
 
 package org.iocaste.documents.common;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -190,6 +189,9 @@ public class Documents extends AbstractServiceInterface {
                 continue;
             case 3:
             	queryinfo.model = getModel(token);
+            	if (queryinfo.model == null)
+            		throw new Exception("Document model not found.");
+            	
                 sb.append(queryinfo.model.getTableName());
                 continue;
             }
@@ -203,18 +205,18 @@ public class Documents extends AbstractServiceInterface {
     /**
      * 
      * @param query
+     * @param criteria
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public final <T> T[] select(String query, Object[] criteria) throws Exception {
+    public final ExtendedObject[] select(String query, Object[] criteria)
+    		throws Exception {
+        Object value;
         Object[] lines;
         Map<String, Object> line;
-        Object value;
-        T result;
-        Method method;
-        Class<?> class_;
-        T[] results;
+        ExtendedObject object;
+        ExtendedObject[] objects;
         Iocaste iocaste = new Iocaste(function);
         QueryInfo queryinfo = reparseQuery(query);
         
@@ -225,25 +227,21 @@ public class Documents extends AbstractServiceInterface {
         if (lines.length == 0)
             return null;
         
-        class_ = Class.forName(queryinfo.model.getClassName());
-        results = (T[])Array.newInstance(class_, lines.length);
+        objects = new ExtendedObject[lines.length];
         
         for (int i = 0; i < lines.length; i++) {
         	line = (Map<String, Object>)lines[i];
-        	result = (T)class_.newInstance();
+        	object = new ExtendedObject(queryinfo.model);
         	
         	for (DocumentModelItem modelitem : queryinfo.model.getItens()) {
         		value = line.get(modelitem.getTableFieldName());
-        		method = result.getClass().getMethod(
-        				modelitem.getSetterName(), modelitem.getDataElement().
-        				getClassType());
-        		method.invoke(result, value);
+        		object.setValue(modelitem, value);
         	}
         	
-        	results[i] = result;
+        	objects[i] = object;
         }
         
-        return results;
+        return objects;
     }
 }
 
