@@ -3,6 +3,7 @@ package org.iocaste.shell.common;
 import java.lang.reflect.Method;
 
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.ExtendedObject;
 
 public class Shell {
 
@@ -36,7 +37,21 @@ public class Shell {
      * @param input
      * @param object
      */
-    public final static void moveItemToInput(InputComponent input, Object object) {
+    public final static void moveExtendedToInput(
+    		InputComponent input, ExtendedObject object) {
+        Object value;
+        
+        value = object.getValue(input.getModelItem());
+        input.setValue((value == null)? "" : value.toString());
+    }
+    
+    /**
+     * 
+     * @param input
+     * @param object
+     */
+    public final static void moveItemToInput(
+    		InputComponent input, Object object) {
         Method method;
         Object value;
         DocumentModelItem modelitem = input.getModelItem();
@@ -44,9 +59,8 @@ public class Shell {
         try {
             method = object.getClass().getMethod(modelitem.getGetterName());
             value = method.invoke(object, new Object[] {});
-            input.setValue((value == null)?"":value.toString());
+            input.setValue((value == null)? "" : value.toString());
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
