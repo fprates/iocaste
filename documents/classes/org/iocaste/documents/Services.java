@@ -1,7 +1,9 @@
 package org.iocaste.documents;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
@@ -13,8 +15,10 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 public class Services extends AbstractFunction {
+    private Map<String, Map<String, String>> queries;
     
     public Services() {
+        queries = new HashMap<String, Map<String, String>>();
         export("get_next_number", "getNextNumber");
         export("get_document_model", "getDocumentModel");
     }
@@ -37,7 +41,8 @@ public class Services extends AbstractFunction {
         if (elements.containsKey(name))
             return elements.get(name);
         
-        lines = iocaste.select("select * from docs003 where ename = ?", new Object[] {name});
+        lines = iocaste.select("select * from docs003 where ename = ?",
+                new Object[] {name});
         
         if (lines.length == 0)
             return null;
@@ -114,6 +119,11 @@ public class Services extends AbstractFunction {
             document.addKey(key);
         }
         
+        if (!queries.containsKey(documentname))
+            parseQueries(document);
+        
+        document.setQueries(queries.get(documentname));
+        
         return document;
     }
     
@@ -142,9 +152,71 @@ public class Services extends AbstractFunction {
         
         columns = (Map<String, Object>)lines[0];
         current = ((Long)columns.get("CRRNT"))+1;
-        iocaste.update("update range001 set crrnt = ? where ident = ?", new Object[] {current, ident});
+        iocaste.update("update range001 set crrnt = ? where ident = ?",
+                new Object[] {current, ident});
         iocaste.commit();
         
         return current;
+    }
+    
+    /**
+     * 
+     * @param model
+     */
+    private void parseQueries(DocumentModel model) {
+        String fieldname;
+        boolean iskey;
+        boolean setok = false;
+        int k = 0;
+        String tablename = model.getTableName();
+        StringBuilder update = new StringBuilder("update ").
+                append(tablename).append(" set ");
+        StringBuilder insert = new StringBuilder("insert into ").
+                append(tablename).append(" (");
+        StringBuilder values = new StringBuilder(") values (");
+        StringBuilder where = new StringBuilder(" where ");
+        List<Object> criteria = new ArrayList<Object>();
+        List<Object> into = new ArrayList<Object>();
+        Map<String, String> queries = new HashMap<String, String>();
+        
+        for (DocumentModelItem modelitem : model.getItens()) {
+            iskey = model.isKey(modelitem);
+            
+            if (k++ > 0) {
+                insert.append(", ");
+                values.append(", ");
+                if (iskey) {
+                    where.append(" and ");
+                    setok = false;
+                } else {
+                    if (setok)
+                        update.append(", ");
+                    
+                    setok = true;
+                }
+            }
+            
+            fieldname = modelitem.getTableFieldName();
+            insert.append(fieldname);
+            
+            values.append("?");
+            if (iskey) {
+                where.append(fieldname).append("=?");
+            } else {
+                update.append(fieldname).append("=?");
+            }
+            
+            into.add("?");
+            if (iskey)
+                criteria.add("?");
+        }
+
+        update.append(where);
+        insert.append(values).append(")");
+        
+        queries.put("insert", insert.toString());
+        queries.put("update", update.toString());
+        
+        this.queries.put(model.getName(), queries);
     }
 }

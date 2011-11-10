@@ -22,8 +22,10 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -38,10 +40,12 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private String classname;
     private Set<DocumentModelItem> itens;
     private Set<DocumentModelKey> keys;
+    private Map<String, String> queries;
     
     public DocumentModel() {
         itens = new LinkedHashSet<DocumentModelItem>();
         keys = new HashSet<DocumentModelKey>();
+        queries = new HashMap<String, String>();
     }
     
     /**
@@ -125,6 +129,15 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     
     /**
      * 
+     * @param name
+     * @return
+     */
+    public final String getQuery(String name) {
+        return queries.get(name);
+    }
+    
+    /**
+     * 
      * @return
      */
     public String getTableName() {
@@ -183,6 +196,14 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+    
+    /**
+     * 
+     * @param queries
+     */
+    public final void setQueries(Map<String, String> queries) {
+        this.queries = queries;
     }
     
     /**
