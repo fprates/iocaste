@@ -103,6 +103,7 @@ public class Services extends AbstractFunction {
             item.setTableFieldName((String)columns.get("FNAME"));
             item.setDataElement(getDataElement(iocaste,
                     (String)columns.get("ENAME"), elements));
+            item.setIndex(((BigDecimal)columns.get("INDEX")).intValue());
             
             document.add(item);
         }
