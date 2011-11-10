@@ -21,10 +21,10 @@
 
 package org.iocaste.documents.common;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
@@ -82,69 +82,36 @@ public class Documents extends AbstractServiceInterface {
      * @param object
      * @throws Exception 
      */
-    public final void modify(DocumentModel model, Object object) 
-    		throws Exception {
-    	Method method;
+    public final void modify(ExtendedObject object) throws Exception {
     	Object value;
-    	String fieldname;
-    	boolean iskey;
-    	boolean setok = false;
-    	int k = 0;
-    	String tablename = model.getTableName();
-    	StringBuilder update = new StringBuilder("update ").
-    			append(tablename).append(" set ");
-    	StringBuilder insert = new StringBuilder("insert into ").
-    			append(tablename).append(" (");
-    	StringBuilder values = new StringBuilder(") values (");
-    	StringBuilder where = new StringBuilder(" where ");
+    	DocumentModel model = object.getModel();
+        Iocaste iocaste = new Iocaste(function);
     	List<Object> criteria = new ArrayList<Object>();
-    	List<Object> set = new ArrayList<Object>();
-    	List<Object> into = new ArrayList<Object>();
-    	Iocaste iocaste = new Iocaste(function);
+    	List<Object> uargs = new ArrayList<Object>();
+    	List<Object> iargs = new ArrayList<Object>();
     	
-        for (DocumentModelItem modelitem : model.getItens()) {
-        	iskey = model.isKey(modelitem);
+        for (DocumentModelItem item : model.getItens()) {
+        	value = object.getValue(item);
         	
-        	if (k++ > 0) {
-        		insert.append(", ");
-        		values.append(", ");
-        		if (iskey) {
-        			where.append(" and ");
-        			setok = false;
-        		} else {
-        			if (setok)
-        				update.append(", ");
-        			
-    				setok = true;
-        		}
-        	}
-        	
-        	method = object.getClass().getMethod(modelitem.getGetterName());
-        	
-        	fieldname = modelitem.getTableFieldName();
-        	insert.append(fieldname);
-        	
-        	values.append("?");
-        	if (iskey) {
-                where.append(fieldname).append("=?");
-        	} else {
-                update.append(fieldname).append("=?");
-        	}
-        	
-        	value = method.invoke(object);
-        	into.add(value);
-    		if (iskey)
+        	iargs.add(value);
+    		if (model.isKey(item))
     			criteria.add(value);
     		else
-            	set.add(value);
+            	uargs.add(value);
         }
-
-        set.addAll(criteria);
-        update.append(where);
-        insert.append(values).append(")");
-        iocaste.update(update.toString(), set.toArray());
+        
+        uargs.addAll(criteria);
+        
+        if (iocaste.update(model.getQuery("update"), uargs.toArray()) == 0)
+            iocaste.update(model.getQuery("insert"), iargs.toArray());
     }
     
+    /**
+     * 
+     * @param query
+     * @return
+     * @throws Exception
+     */
     private final QueryInfo reparseQuery(String query) throws Exception {
         String[] select;
         int t;
@@ -200,6 +167,27 @@ public class Documents extends AbstractServiceInterface {
         queryinfo.query = sb.toString();
         
         return queryinfo;
+    }
+    
+    /**
+     * 
+     * @param object
+     * @throws Exception 
+     */
+    public final void save(ExtendedObject object) throws Exception {
+        Object[] criteria;
+        Iocaste iocaste = new Iocaste(function);
+        DocumentModel model = object.getModel();
+        Set<DocumentModelItem> itens = model.getItens();
+        int i = itens.size();
+        
+        criteria = (i > 0)? new Object[i] : null;
+        
+        i = 0;
+        for (DocumentModelItem item : model.getItens())
+            criteria[i++] = object.getValue(item);
+        
+        iocaste.update(model.getQuery("insert"), criteria);
     }
     
     /**

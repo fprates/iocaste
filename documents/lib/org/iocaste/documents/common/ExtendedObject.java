@@ -17,6 +17,14 @@ public class ExtendedObject implements Serializable {
 	
 	/**
 	 * 
+	 * @return
+	 */
+	public final DocumentModel getModel() {
+	    return model;
+	}
+	
+	/**
+	 * 
 	 * @param item
 	 * @return
 	 */
