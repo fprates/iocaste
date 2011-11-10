@@ -176,8 +176,6 @@ public class Services extends AbstractFunction {
                 append(tablename).append(" (");
         StringBuilder values = new StringBuilder(") values (");
         StringBuilder where = new StringBuilder(" where ");
-        List<Object> criteria = new ArrayList<Object>();
-        List<Object> into = new ArrayList<Object>();
         Map<String, String> queries = new HashMap<String, String>();
         
         for (DocumentModelItem modelitem : model.getItens()) {
@@ -201,15 +199,10 @@ public class Services extends AbstractFunction {
             insert.append(fieldname);
             
             values.append("?");
-            if (iskey) {
-                where.append(fieldname).append("=?");
-            } else {
-                update.append(fieldname).append("=?");
-            }
-            
-            into.add("?");
             if (iskey)
-                criteria.add("?");
+                where.append(fieldname).append("=?");
+            else
+                update.append(fieldname).append("=?");
         }
 
         update.append(where);
