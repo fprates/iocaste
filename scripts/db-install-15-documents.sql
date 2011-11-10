@@ -31,6 +31,7 @@ create table docs003 (
 create table docs002 (
    iname varchar(12) primary key,
    docid varchar(12) foreign key references docs001(docid),
+   index numeric(3),
    fname varchar(12),
    ename varchar(36),
    attrb varchar(64)
