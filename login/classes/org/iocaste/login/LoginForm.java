@@ -97,10 +97,10 @@ public class LoginForm extends AbstractPage {
         model.setName("login");
         model.setClassName(Login.class.getCanonicalName());
         
-        item = modelItemInstance(model, "username");
+        item = modelItemInstance(model, "username", 0);
         item.setDataElement(char12);
         
-        item = modelItemInstance(model, "secret");
+        item = modelItemInstance(model, "secret", 1);
         item.setDataElement(char12);
         
         return model;
@@ -113,12 +113,13 @@ public class LoginForm extends AbstractPage {
      * @return
      */
     private final DocumentModelItem modelItemInstance(
-            DocumentModel model, String name) {
+            DocumentModel model, String name, int index) {
         DocumentModelItem item = new DocumentModelItem();
         
         item.setDocumentModel(model);
         item.setName(name);
         item.setAttributeName(name);
+        item.setIndex(index);
         
         model.add(item);
         
