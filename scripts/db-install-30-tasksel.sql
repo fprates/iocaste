@@ -31,9 +31,9 @@ insert into docs003 (ename, decim, lngth, etype) values ('entry_name', 0, 12, 0)
 insert into docs003 (ename, decim, lngth, etype) values ('entry_app', 0, 60, 0);
 insert into docs003 (ename, decim, lngth, etype) values ('entry_point', 0, 12, 0);
 
-insert into docs002 (iname, docid, fname, ename, attrb) values ('entry', 'task_entry', 'TNAME', 'entry_name', 'name');
-insert into docs002 (iname, docid, fname, ename, attrb) values ('app', 'task_entry', 'APPLI', 'entry_app', 'app');
-insert into docs002 (iname, docid, fname, ename, attrb) values ('point', 'task_entry', 'ENTRY', 'entry_point', 'entry');
+insert into docs002 (iname, docid, index, fname, ename, attrb) values ('entry', 'task_entry', 0, 'TNAME', 'entry_name', 'name');
+insert into docs002 (iname, docid, index, fname, ename, attrb) values ('app', 'task_entry', 1, 'APPLI', 'entry_app', 'app');
+insert into docs002 (iname, docid, index, fname, ename, attrb) values ('point', 'task_entry', 2, 'ENTRY', 'entry_point', 'entry');
 
 insert into docs004 (docid, iname) values ('task_entry', 'entry');
 
