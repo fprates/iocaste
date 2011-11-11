@@ -33,4 +33,6 @@ public class DataType {
     public static final int NUMC = 3;
     public static final int TIME = 4;
     public static final int BOOLEAN = 5;
+    public static final boolean UPPERCASE = true;
+    public static final boolean KEEPCASE = false;
 }
