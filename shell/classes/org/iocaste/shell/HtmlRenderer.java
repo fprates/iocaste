@@ -211,10 +211,11 @@ public class HtmlRenderer {
         renderContainer(html, table);
         
         for (String action : form.getActions()) {
-            button = new Button(null, action);
+            button = new Button(form, action);
             button.setSubmit(true);
             button.setText(getText(action, action));
             button.setStyleClass("submit");
+            button.setCancellable(form.isActionCancellable(action));
             
             renderButton(html, button);
         }

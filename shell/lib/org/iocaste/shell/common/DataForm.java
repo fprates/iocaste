@@ -21,8 +21,8 @@
 
 package org.iocaste.shell.common;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
 
@@ -34,13 +34,13 @@ import org.iocaste.documents.common.ExtendedObject;
  */
 public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
-    private List<String> actions;
+    private Map<String, ActionProperty> actions;
     private boolean keyrequired;
     
     public DataForm(Container container, String name) {
         super(container, Const.DATA_FORM, name);
         
-        actions = new ArrayList<String>();
+        actions = new LinkedHashMap<String, ActionProperty>();
         keyrequired = false;
     }
     
@@ -49,7 +49,21 @@ public class DataForm extends AbstractContainer {
      * @param action ação
      */
     public final void addAction(String action) {
-        actions.add(action);
+        ActionProperty property = new ActionProperty();
+        property.isCancellable = false;
+        
+        actions.put(action, property);
+    }
+    
+    /**
+     * 
+     * @param action
+     */
+    public final void addExitAction(String action) {
+        ActionProperty property = new ActionProperty();
+        property.isCancellable = true;
+        
+        actions.put(action, property);
     }
     
     /**
@@ -72,7 +86,7 @@ public class DataForm extends AbstractContainer {
      * @return ações
      */
     public final String[] getActions() {
-        return actions.toArray(new String[0]);
+        return actions.keySet().toArray(new String[0]);
     }
     
     /**
@@ -96,6 +110,15 @@ public class DataForm extends AbstractContainer {
     
     /**
      * 
+     * @param action
+     * @return
+     */
+    public final boolean isActionCancellable(String action) {
+        return actions.get(action).isCancellable;
+    }
+    
+    /**
+     * 
      * @return
      */
     public final boolean isKeyRequired() {
@@ -109,4 +132,8 @@ public class DataForm extends AbstractContainer {
     public final void setKeyRequired(boolean keyrequired) {
         this.keyrequired = keyrequired;
     }
+}
+
+class ActionProperty {
+    public boolean isCancellable;
 }
