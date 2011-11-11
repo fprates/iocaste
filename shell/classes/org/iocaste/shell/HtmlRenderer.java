@@ -174,7 +174,6 @@ public class HtmlRenderer {
         Text text;
         String inputname;
         String styleclass;
-        Button button;
         DataItem dataitem;
         TableItem tableitem;
         Table table = new Table(null, 2, new StringBuffer(form.getName()).
@@ -184,6 +183,9 @@ public class HtmlRenderer {
         table.setHeader(false);
         
         for (Element element : form.getElements()) {
+            if (element.isControlComponent())
+                continue;
+            
             if (element.getType() != Const.DATA_ITEM) {
                 renderElement(html, element);
                 continue;
@@ -210,15 +212,8 @@ public class HtmlRenderer {
         
         renderContainer(html, table);
         
-        for (String action : form.getActions()) {
-            button = new Button(form, action);
-            button.setSubmit(true);
-            button.setText(getText(action, action));
-            button.setStyleClass("submit");
-            button.setCancellable(form.isActionCancellable(action));
-            
-            renderButton(html, button);
-        }
+        for (String action : form.getActions())
+            renderButton(html, (Button)form.getElement(action));
     }
     
     /**

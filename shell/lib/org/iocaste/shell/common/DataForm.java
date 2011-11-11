@@ -21,8 +21,8 @@
 
 package org.iocaste.shell.common;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.iocaste.documents.common.ExtendedObject;
 
@@ -34,13 +34,13 @@ import org.iocaste.documents.common.ExtendedObject;
  */
 public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
-    private Map<String, ActionProperty> actions;
+    private List<String> actions;
     private boolean keyrequired;
     
     public DataForm(Container container, String name) {
         super(container, Const.DATA_FORM, name);
         
-        actions = new LinkedHashMap<String, ActionProperty>();
+        actions = new ArrayList<String>();
         keyrequired = false;
     }
     
@@ -49,10 +49,13 @@ public class DataForm extends AbstractContainer {
      * @param action ação
      */
     public final void addAction(String action) {
-        ActionProperty property = new ActionProperty();
-        property.isCancellable = false;
+        Button button = new Button(this, action);
         
-        actions.put(action, property);
+        button.setSubmit(true);
+        button.setStyleClass("submit");
+        button.setCancellable(false);
+        
+        actions.add(action);
     }
     
     /**
@@ -60,10 +63,13 @@ public class DataForm extends AbstractContainer {
      * @param action
      */
     public final void addExitAction(String action) {
-        ActionProperty property = new ActionProperty();
-        property.isCancellable = true;
+        Button button = new Button(this, action);
         
-        actions.put(action, property);
+        button.setSubmit(true);
+        button.setStyleClass("submit");
+        button.setCancellable(true);
+        
+        actions.add(action);
     }
     
     /**
@@ -86,7 +92,7 @@ public class DataForm extends AbstractContainer {
      * @return ações
      */
     public final String[] getActions() {
-        return actions.keySet().toArray(new String[0]);
+        return actions.toArray(new String[0]);
     }
     
     /**
@@ -110,15 +116,6 @@ public class DataForm extends AbstractContainer {
     
     /**
      * 
-     * @param action
-     * @return
-     */
-    public final boolean isActionCancellable(String action) {
-        return actions.get(action).isCancellable;
-    }
-    
-    /**
-     * 
      * @return
      */
     public final boolean isKeyRequired() {
@@ -132,8 +129,4 @@ public class DataForm extends AbstractContainer {
     public final void setKeyRequired(boolean keyrequired) {
         this.keyrequired = keyrequired;
     }
-}
-
-class ActionProperty {
-    public boolean isCancellable;
 }
