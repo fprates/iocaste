@@ -35,11 +35,13 @@ import org.iocaste.documents.common.ExtendedObject;
 public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
     private List<String> actions;
+    private boolean keyrequired;
     
     public DataForm(Container container, String name) {
         super(container, Const.DATA_FORM, name);
         
         actions = new ArrayList<String>();
+        keyrequired = false;
     }
     
     /**
@@ -75,5 +77,21 @@ public class DataForm extends AbstractContainer {
         }
     	
     	return object;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final boolean isKeyRequired() {
+        return keyrequired;
+    }
+    
+    /**
+     * 
+     * @param keyrequired
+     */
+    public final void setKeyRequired(boolean keyrequired) {
+        this.keyrequired = keyrequired;
     }
 }

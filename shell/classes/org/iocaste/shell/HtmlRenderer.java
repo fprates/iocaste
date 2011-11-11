@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
@@ -178,6 +179,7 @@ public class HtmlRenderer {
         TableItem tableitem;
         Table table = new Table(null, 2, new StringBuffer(form.getName()).
                 append(".table").toString());
+        DocumentModel model = form.getModel();
         
         table.setHeader(false);
         
@@ -198,6 +200,11 @@ public class HtmlRenderer {
 
             tableitem = new TableItem(table);
             tableitem.add(text);
+            
+            if (model != null && form.isKeyRequired() &&
+                    model.isKey(dataitem.getModelItem()))
+                dataitem.setObligatory(true);
+            
             tableitem.add(Shell.createInputItem(table, dataitem, inputname));
         }
         
