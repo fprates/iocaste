@@ -74,13 +74,14 @@ public class LoginForm extends AbstractPage {
      * @return
      */
     private final DataElement dataElementInstance(
-            String name, int datatype, int length) {
+            String name, int datatype, int length, boolean upcase) {
         DataElement dataelement = new DataElement();
         
         dataelement.setName(name);
         dataelement.setType(datatype);
         dataelement.setLength(length);
         dataelement.setDecimals(0);
+        dataelement.setUpcase(upcase);
         
         return dataelement;
     }
@@ -92,16 +93,17 @@ public class LoginForm extends AbstractPage {
     private final DocumentModel modelInstance() {
         DocumentModelItem item;
         DocumentModel model = new DocumentModel();
-        DataElement char12 = dataElementInstance("CHAR12", DataType.CHAR, 12);
         
         model.setName("login");
         model.setClassName(Login.class.getCanonicalName());
         
         item = modelItemInstance(model, "username", 0);
-        item.setDataElement(char12);
+        item.setDataElement(dataElementInstance(
+        		"CHAR12", DataType.CHAR, 12, DataType.UPPERCASE));
         
         item = modelItemInstance(model, "secret", 1);
-        item.setDataElement(char12);
+        item.setDataElement(dataElementInstance(
+        		"CHAR12", DataType.CHAR, 12, DataType.KEEPCASE));
         
         return model;
     }
