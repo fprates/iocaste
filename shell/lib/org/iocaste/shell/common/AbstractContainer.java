@@ -135,6 +135,14 @@ public abstract class AbstractContainer
 
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#isControlComponent()
+     */
+    public final boolean isControlComponent() {
+        return false;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#isDataStorable()
      */
     @Override

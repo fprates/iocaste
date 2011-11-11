@@ -59,6 +59,14 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#isControlComponent()
+     */
+    public final boolean isControlComponent() {
+        return false;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#isDataStorable()
      */
     @Override

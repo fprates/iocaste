@@ -29,17 +29,12 @@ public abstract class AbstractPage extends AbstractFunction {
      * @throws Exception
      */
     public final ControlData execAction(Message message) throws Exception {
-        Element element;
         ControlData controldata;
         Method method;
         ViewData view;
-        InputComponent input;
-        String[] inputs;
-        String value;
-        boolean einitial;
-        InputComponent einput;
-        DocumentModelItem modelitem;
+        ControlComponent control;
         String action = message.getString("action");
+        InputStatus status = new InputStatus();
         
         if (action == null)
             return null;
@@ -52,45 +47,15 @@ public abstract class AbstractPage extends AbstractFunction {
         controldata.setMessages(view.getMessages());
         controldata.setViewData(view);
         
-        inputs = view.getInputs();
-        einitial = false;
-        einput = null;
+        control = (ControlComponent)view.getElement(action);
         
-        for (String name : inputs) {
-            element = view.getElement(name);
-            if (!element.isEnabled())
-                continue;
-            
-            input = (InputComponent)element;
-            value = message.getString(name);
-            modelitem = input.getModelItem();
-            
-//            if (!isValueCompatible(input, value)) {
-//                controldata.message(Const.ERROR, "value.type.mismatch");
-//                
-//                return controldata;
-//            }
-            
-            input.setValue(value);
-            if (input.isObligatory() && (isInitial(name, input, value)) &&
-                    (!einitial)) {
-                einput = input;
-                einitial = true;
-                continue;
-            }
-            
-            if (value == null || modelitem == null ||
-            		modelitem.getDataElement() == null)
-            	continue;
-            
-            if (modelitem.getDataElement().isUpcase())
-            	input.setValue(value.toUpperCase());
-        }
+        if (!control.isCancellable())
+            status = processInputs(view, message);
         
-        if (einput != null) {
-            view.setFocus(((Component)einput).getName());
+        if (status.input != null) {
+            view.setFocus(((Component)status.input).getName());
             
-            if (einitial)
+            if (status.initial)
                 controldata.message(Const.ERROR, "field.is.obligatory");
             
             return controldata;
@@ -177,9 +142,60 @@ public abstract class AbstractPage extends AbstractFunction {
         }
     }
     
-//    protected final boolean isValueCompatible(InputComponent input, String value) {
+//    protected final boolean isValueCompatible(
+//            InputComponent input, String value) {
 //        
 //    }
+    
+    /**
+     * 
+     * @param view
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    private final InputStatus processInputs(ViewData view, Message message) 
+            throws Exception {
+        InputComponent input;
+        Element element;
+        String value;
+        DocumentModelItem modelitem;
+        String[] inputs = view.getInputs();
+        InputStatus status = new InputStatus();
+        
+        for (String name : inputs) {
+            element = view.getElement(name);
+            if (!element.isEnabled())
+                continue;
+            
+            input = (InputComponent)element;
+            value = message.getString(name);
+            modelitem = input.getModelItem();
+            
+//            if (!isValueCompatible(input, value)) {
+//                controldata.message(Const.ERROR, "value.type.mismatch");
+//                
+//                return controldata;
+//            }
+            
+            input.setValue(value);
+            if (input.isObligatory() && (isInitial(name, input, value)) &&
+                    (!status.initial)) {
+                status.input = input;
+                status.initial = true;
+                continue;
+            }
+            
+            if (value == null || modelitem == null ||
+                    modelitem.getDataElement() == null)
+                continue;
+            
+            if (modelitem.getDataElement().isUpcase())
+                input.setValue(value.toUpperCase());
+        }
+        
+        return status;
+    }
     
     /**
      * 
@@ -207,4 +223,9 @@ public abstract class AbstractPage extends AbstractFunction {
         if (element.hasMultipartSupport())
             vdata.addMultipartElement(element);
     }
+}
+
+class InputStatus {
+    public boolean initial = false;
+    public InputComponent input = null;
 }

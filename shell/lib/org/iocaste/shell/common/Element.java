@@ -70,6 +70,12 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract boolean isContainable();
     
     /**
+     * 
+     * @return
+     */
+    public abstract boolean isControlComponent();
+    
+    /**
      * Retorna true se elemento armazena conteúdo.
      * @return true, se armazena dados.
      */

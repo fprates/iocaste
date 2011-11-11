@@ -12,6 +12,19 @@ public class Text extends AbstractComponent {
         return text;
     }
     
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#isControlComponent()
+     */
+    @Override
+    public final boolean isControlComponent() {
+        return false;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#isDataStorable()
+     */
     @Override
     public final boolean isDataStorable() {
         return false;
