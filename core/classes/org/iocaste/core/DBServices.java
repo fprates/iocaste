@@ -93,10 +93,10 @@ public class DBServices {
      * 
      * @param connection
      * @param query
-     * @throws SQLException
+     * @throws Exception
      */
     public final int update(Connection connection, String query,
-            Object[] criteria) throws SQLException {
+            Object[] criteria) throws Exception {
         PreparedStatement ps = connection.prepareStatement(query);
         int i = 1;
         
@@ -105,6 +105,12 @@ public class DBServices {
         for (Object object : criteria)
             ps.setObject(i++, object);
         
-        return ps.executeUpdate();
+        try {            
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            return 0;
+        } finally {
+            ps.close();
+        }
     }
 }
