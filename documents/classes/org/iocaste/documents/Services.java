@@ -51,6 +51,8 @@ public class Services extends AbstractFunction {
         element.setType(((BigDecimal)columns.get("ETYPE")).intValue());
         element.setLength(((BigDecimal)columns.get("LNGTH")).intValue());
         element.setDecimals(((BigDecimal)columns.get("DECIM")).intValue());
+        element.setUpcase((Boolean)columns.get("UPCAS"));
+        
         elements.put(name, element);
         
         return element;

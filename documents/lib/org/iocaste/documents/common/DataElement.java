@@ -36,9 +36,12 @@ public class DataElement implements Serializable {
     private int decimals;
     private int length;
     private int type;
+    private boolean upcase;
     
     public Class<?> getClassType() {
         switch (type) {
+        case DataType.BOOLEAN:
+            return Boolean.class;
         case DataType.CHAR:
             return String.class;
         case DataType.DATE:
@@ -53,6 +56,7 @@ public class DataElement implements Serializable {
             return null;
         }
     }
+    
     /**
      * Retorna quantidade de casas decimais.
      * @return quantidade
@@ -86,6 +90,14 @@ public class DataElement implements Serializable {
     }
     
     /**
+     * 
+     * @return
+     */
+    public boolean isUpcase() {
+    	return upcase;
+    }
+    
+    /**
      * Define quantidade de casas decimais.
      * @param decimals quantidade
      */
@@ -115,5 +127,13 @@ public class DataElement implements Serializable {
      */
     public void setType(int type) {
         this.type = type;
+    }
+    
+    /**
+     * 
+     * @param upcase
+     */
+    public void setUpcase(boolean upcase) {
+    	this.upcase = upcase;
     }
 }

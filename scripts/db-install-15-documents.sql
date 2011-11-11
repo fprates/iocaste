@@ -24,7 +24,8 @@ create table docs003 (
    ename varchar(36) primary key,
    decim numeric(2),
    lngth numeric(4),
-   etype numeric(1)
+   etype numeric(1),
+   upcas bit
 );
 
 /* itens de documento */
