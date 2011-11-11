@@ -172,9 +172,10 @@ public class Documents extends AbstractServiceInterface {
     /**
      * 
      * @param object
-     * @throws Exception 
+     * @return
+     * @throws Exception
      */
-    public final void save(ExtendedObject object) throws Exception {
+    public final int save(ExtendedObject object) throws Exception {
         Object[] criteria;
         Iocaste iocaste = new Iocaste(function);
         DocumentModel model = object.getModel();
@@ -187,7 +188,7 @@ public class Documents extends AbstractServiceInterface {
         for (DocumentModelItem item : model.getItens())
             criteria[i++] = object.getValue(item);
         
-        iocaste.update(model.getQuery("insert"), criteria);
+        return iocaste.update(model.getQuery("insert"), criteria);
     }
     
     /**
