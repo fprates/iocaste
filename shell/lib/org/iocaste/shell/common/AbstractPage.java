@@ -32,6 +32,7 @@ public abstract class AbstractPage extends AbstractFunction {
         ControlData controldata;
         Method method;
         ViewData view;
+        Element element;
         ControlComponent control;
         String action = message.getString("action");
         InputStatus status = new InputStatus();
@@ -47,10 +48,15 @@ public abstract class AbstractPage extends AbstractFunction {
         controldata.setMessages(view.getMessages());
         controldata.setViewData(view);
         
-        control = (ControlComponent)view.getElement(action);
-        
-        if (!control.isCancellable())
+        element = view.getElement(action);
+        if (element.isControlComponent()) {
+            control = (ControlComponent)element;
+            
+            if (!control.isCancellable())
+                status = processInputs(view, message);
+        } else {
             status = processInputs(view, message);
+        }
         
         if (status.input != null) {
             view.setFocus(((Component)status.input).getName());
