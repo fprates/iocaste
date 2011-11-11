@@ -53,6 +53,21 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
+     * 
+     */
+    public final void clearInputs() {
+        InputComponent input;
+        
+        for (Element element : getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            
+            input = (InputComponent)element;
+            input.setValue(null);
+        }
+    }
+    
+    /**
      * Retorna ações associadas ao formulário.
      * @return ações
      */
