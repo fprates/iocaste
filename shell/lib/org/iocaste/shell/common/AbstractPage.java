@@ -38,6 +38,7 @@ public abstract class AbstractPage extends AbstractFunction {
         String value;
         boolean einitial;
         InputComponent einput;
+        DocumentModelItem modelitem;
         String action = message.getString("action");
         
         if (action == null)
@@ -62,6 +63,7 @@ public abstract class AbstractPage extends AbstractFunction {
             
             input = (InputComponent)element;
             value = message.getString(name);
+            modelitem = input.getModelItem();
             
 //            if (!isValueCompatible(input, value)) {
 //                controldata.message(Const.ERROR, "value.type.mismatch");
@@ -74,7 +76,15 @@ public abstract class AbstractPage extends AbstractFunction {
                     (!einitial)) {
                 einput = input;
                 einitial = true;
+                continue;
             }
+            
+            if (value == null || modelitem == null ||
+            		modelitem.getDataElement() == null)
+            	continue;
+            
+            if (modelitem.getDataElement().isUpcase())
+            	input.setValue(value.toUpperCase());
         }
         
         if (einput != null) {
