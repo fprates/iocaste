@@ -80,7 +80,8 @@ public abstract class AbstractPage extends AbstractFunction {
         String page = message.getString("page");
         String app = message.getString("app");
         @SuppressWarnings("unchecked")
-        Map<String, Object> parameters = (Map<String, Object>)message.get("parameters");
+        Map<String, Object> parameters =
+            (Map<String, Object>)message.get("parameters");
         
         if (app == null || page == null)
             throw new Exception("Page not especified.");
