@@ -27,9 +27,9 @@ delete from docs001 where docid='task_entry';
 
 insert into docs001 (docid, tname, class) values ('task_entry', 'task001', 'org.iocaste.tasksel.Task');
 
-insert into docs003 (ename, decim, lngth, etype) values ('entry_name', 0, 12, 0);
-insert into docs003 (ename, decim, lngth, etype) values ('entry_app', 0, 60, 0);
-insert into docs003 (ename, decim, lngth, etype) values ('entry_point', 0, 12, 0);
+insert into docs003 (ename, decim, lngth, etype, upcas) values ('entry_name', 0, 12, 0, 0);
+insert into docs003 (ename, decim, lngth, etype, upcas) values ('entry_app', 0, 60, 0, 0);
+insert into docs003 (ename, decim, lngth, etype, upcas) values ('entry_point', 0, 12, 0, 0);
 
 insert into docs002 (iname, docid, index, fname, ename, attrb) values ('entry', 'task_entry', 0, 'TNAME', 'entry_name', 'name');
 insert into docs002 (iname, docid, index, fname, ename, attrb) values ('app', 'task_entry', 1, 'APPLI', 'entry_app', 'app');
