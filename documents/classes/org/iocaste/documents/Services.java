@@ -175,7 +175,7 @@ public class Services extends AbstractFunction {
         StringBuilder insert = new StringBuilder("insert into ").
                 append(tablename).append(" (");
         StringBuilder delete = new StringBuilder("delete from ").
-                append(tablename).append(" where ");
+                append(tablename);
         StringBuilder values = new StringBuilder(") values (");
         StringBuilder where = new StringBuilder(" where ");
         Map<String, String> queries = new HashMap<String, String>();
