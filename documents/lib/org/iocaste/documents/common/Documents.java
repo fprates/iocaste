@@ -46,6 +46,19 @@ public class Documents extends AbstractServiceInterface {
         initService(function, SERVERNAME);
     }
     
+    public final int delete(ExtendedObject object) throws Exception {
+        int i = 0;
+        Iocaste iocaste = new Iocaste(function);
+        DocumentModel model = object.getModel();
+        Set<DocumentModelKey> keys = model.getKeys();
+        Object[] criteria = new Object[keys.size()];
+        
+        for (DocumentModelKey key : keys)
+            criteria[i++] = key.getModelItem();
+        
+        return iocaste.update(model.getQuery("delete"), criteria);
+    }
+    
     /**
      * Obtem instância do modelo de documento informado.
      * @param nome do modelo

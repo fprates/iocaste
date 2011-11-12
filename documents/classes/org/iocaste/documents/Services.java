@@ -174,6 +174,8 @@ public class Services extends AbstractFunction {
                 append(tablename).append(" set ");
         StringBuilder insert = new StringBuilder("insert into ").
                 append(tablename).append(" (");
+        StringBuilder delete = new StringBuilder("delete from ").
+                append(tablename).append(" where ");
         StringBuilder values = new StringBuilder(") values (");
         StringBuilder where = new StringBuilder(" where ");
         Map<String, String> queries = new HashMap<String, String>();
@@ -207,9 +209,11 @@ public class Services extends AbstractFunction {
 
         update.append(where);
         insert.append(values).append(")");
+        delete.append(where);
         
         queries.put("insert", insert.toString());
         queries.put("update", update.toString());
+        queries.put("delete", delete.toString());
         
         this.queries.put(model.getName(), queries);
     }
