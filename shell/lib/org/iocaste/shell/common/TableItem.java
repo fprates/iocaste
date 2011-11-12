@@ -40,12 +40,15 @@ public class TableItem extends AbstractComponent {
      * @return
      */
     public final ExtendedObject getObject() {
+        Element element;
         InputComponent input;
         DocumentModelItem modelitem;
         Table table = (Table)getContainer();
         ExtendedObject object = new ExtendedObject(table.getModel());
         
-        for (Element element : table.getElements()) {
+        for (String name: elements) {
+            element = table.getElement(name);
+            
             if (!element.isDataStorable())
                 continue;
             
