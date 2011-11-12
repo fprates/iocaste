@@ -149,4 +149,17 @@ public abstract class AbstractContainer
     public final boolean isDataStorable() {
         return false;
     }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#remove(
+     *     org.iocaste.shell.common.Element)
+     */
+    @Override
+    public void remove(Element element) {
+        if (element.isContainable())
+            ((Container)element).clear();
+        
+        elements.remove(element.getName());
+    }
 }

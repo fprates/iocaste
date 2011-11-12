@@ -179,6 +179,24 @@ public class Table extends AbstractContainer {
         }
     }
     
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractContainer#remove(
+     *     org.iocaste.shell.common.Element)
+     */
+    @Override
+    public final void remove(Element element) {
+        TableItem tableitem;
+        
+        if (element.getType() == Const.TABLE_ITEM) {
+            tableitem = (TableItem)element;
+            for (String name : tableitem.getElementNames())
+                super.remove(getElement(name));
+        }
+        
+        super.remove(element);
+    }
+    
     /**
      * 
      * @param firstitem

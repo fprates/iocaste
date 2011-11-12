@@ -1,5 +1,6 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 
 /**
@@ -40,6 +41,7 @@ public class TableItem extends AbstractComponent {
      */
     public final ExtendedObject getObject() {
         InputComponent input;
+        DocumentModelItem modelitem;
         Table table = (Table)getContainer();
         ExtendedObject object = new ExtendedObject(table.getModel());
         
@@ -48,7 +50,12 @@ public class TableItem extends AbstractComponent {
                 continue;
             
             input = (InputComponent)element;
-            object.setValue(input.getModelItem(), input.getValue());
+            modelitem = input.getModelItem();
+            
+            if (modelitem == null)
+                continue;
+            
+            object.setValue(modelitem, input.getValue());
         }
         
         return object;

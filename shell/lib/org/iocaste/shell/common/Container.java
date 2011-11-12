@@ -75,4 +75,10 @@ public interface Container extends Element {
      * @param model modelo de documento
      */
     public abstract void importModel(DocumentModel model);
+
+    /**
+     * 
+     * @param element
+     */
+    public abstract void remove(Element element);
 }
