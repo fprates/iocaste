@@ -59,9 +59,12 @@ public class ExtendedObject implements Serializable {
 	 * @param value
 	 */
 	public final void setValue(DocumentModelItem item, Object value) {
-		if (values.containsKey(item))
-			values.remove(item);
-		
-		values.put(item, value);
+	    if (!model.contains(item))
+	        return;
+	    
+	    if (values.containsKey(item))
+	        values.remove(item);
+	    
+	    values.put(item, value);
 	}
 }
