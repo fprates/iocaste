@@ -39,16 +39,29 @@ import org.iocaste.protocol.Message;
 public class Documents extends AbstractServiceInterface {
     private static final String SERVERNAME =
             "/iocaste-documents/services.html";
-    private Function function;
+    private Iocaste iocaste;
     
     public Documents(Function function) {
-        this.function = function;
+        iocaste = new Iocaste(function);
         initService(function, SERVERNAME);
     }
     
+    /**
+     * 
+     * @throws Exception
+     */
+    public final void commit() throws Exception {
+        iocaste.commit();
+    }
+    
+    /**
+     * 
+     * @param object
+     * @return
+     * @throws Exception
+     */
     public final int delete(ExtendedObject object) throws Exception {
         int i = 0;
-        Iocaste iocaste = new Iocaste(function);
         DocumentModel model = object.getModel();
         Set<DocumentModelKey> keys = model.getKeys();
         Object[] criteria = new Object[keys.size()];
@@ -99,7 +112,6 @@ public class Documents extends AbstractServiceInterface {
     public final void modify(ExtendedObject object) throws Exception {
     	Object value;
     	DocumentModel model = object.getModel();
-        Iocaste iocaste = new Iocaste(function);
     	List<Object> criteria = new ArrayList<Object>();
     	List<Object> uargs = new ArrayList<Object>();
     	List<Object> iargs = new ArrayList<Object>();
@@ -191,7 +203,6 @@ public class Documents extends AbstractServiceInterface {
      */
     public final int save(ExtendedObject object) throws Exception {
         Object[] criteria;
-        Iocaste iocaste = new Iocaste(function);
         DocumentModel model = object.getModel();
         Set<DocumentModelItem> itens = model.getItens();
         int i = itens.size();
@@ -220,7 +231,6 @@ public class Documents extends AbstractServiceInterface {
         Map<String, Object> line;
         ExtendedObject object;
         ExtendedObject[] objects;
-        Iocaste iocaste = new Iocaste(function);
         QueryInfo queryinfo = reparseQuery(query);
         
         if (queryinfo.query == null || queryinfo.model == null)
