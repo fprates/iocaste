@@ -108,6 +108,7 @@ public class ViewData implements Serializable {
      * @return Elemento
      */
     private Element findElement(Container container, String name) {
+        Element element_;
         String name_ = container.getName();
         
         if (name_.equals(name))
@@ -119,8 +120,13 @@ public class ViewData implements Serializable {
             if (name_.equals(name))
                 return element;
             
-            if (element.isContainable())
-                return findElement((Container)element, name);
+            if (element.isContainable()) {
+                element_ = findElement((Container)element, name);
+                if (element_ == null)
+                    continue;
+                
+                return element_;
+            }
         }
         
         return null;
