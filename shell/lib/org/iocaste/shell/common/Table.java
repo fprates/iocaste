@@ -192,6 +192,8 @@ public class Table extends AbstractContainer {
             tableitem = (TableItem)element;
             for (String name : tableitem.getElementNames())
                 super.remove(getElement(name));
+            
+            itens.remove(element.getName());
         }
         
         super.remove(element);
