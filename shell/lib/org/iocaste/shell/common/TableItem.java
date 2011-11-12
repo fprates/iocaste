@@ -1,5 +1,7 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.documents.common.ExtendedObject;
+
 /**
  * 
  * @author Francisco Prates
@@ -36,6 +38,26 @@ public class TableItem extends AbstractComponent {
      * 
      * @return
      */
+    public final ExtendedObject getObject() {
+        InputComponent input;
+        Table table = (Table)getContainer();
+        ExtendedObject object = new ExtendedObject(table.getModel());
+        
+        for (Element element : table.getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            
+            input = (InputComponent)element;
+            object.setValue(input.getModelItem(), input.getValue());
+        }
+        
+        return object;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final String[] getElementNames() {
         return elements;
     }
@@ -55,5 +77,16 @@ public class TableItem extends AbstractComponent {
     @Override
     public final boolean isDataStorable() {
         return false;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final boolean isSelected() {
+        Table table = (Table)getContainer();
+        CheckBox mark = (CheckBox)table.getElement(elements[0]);
+        
+        return mark.isSelected();
     }
 }
