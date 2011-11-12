@@ -128,7 +128,8 @@ public class HtmlRenderer {
      * @param checkbox
      */
     private final void renderCheckBox(List<String> html, CheckBox checkbox) {
-        html.add("<input type=\"checkbox\"/>");
+        html.add(new StringBuilder("<input type=\"checkbox\" name=\"").
+                append(checkbox.getName()).append("\"/>").toString());
     }
     
     /**

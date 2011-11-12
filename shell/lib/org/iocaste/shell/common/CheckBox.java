@@ -12,6 +12,9 @@ public class CheckBox extends AbstractInputComponent {
      * @return
      */
     public final boolean isSelected() {
-        return Boolean.parseBoolean(getValue());
+        if (getValue() == null)
+            return false;
+        
+        return (getValue().equals("on"))? true : false;
     }
 }
