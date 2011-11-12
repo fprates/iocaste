@@ -54,7 +54,8 @@ public class Documents extends AbstractServiceInterface {
         Object[] criteria = new Object[keys.size()];
         
         for (DocumentModelKey key : keys)
-            criteria[i++] = key.getModelItem();
+            criteria[i++] = object.getValue(model.
+                    getModelItem(key.getModelItemName()));
         
         return iocaste.update(model.getQuery("delete"), criteria);
     }

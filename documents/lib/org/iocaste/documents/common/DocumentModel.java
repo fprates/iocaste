@@ -133,6 +133,19 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
+     * 
+     * @param name
+     * @return
+     */
+    public final DocumentModelItem getModelItem(String name) {
+        for (DocumentModelItem item : itens)
+            if (item.getName().equals(name))
+                return item;
+        
+        return null;
+    }
+    
+    /**
      * Retorna nome do documento.
      * @return nome
      */

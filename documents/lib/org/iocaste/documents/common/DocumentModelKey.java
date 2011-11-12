@@ -22,7 +22,7 @@ public class DocumentModelKey implements Comparable<DocumentModelKey>, Serializa
         if (compare != 0)
             return compare;
         
-        compare = item.compareTo(modelkey.getModelItem());
+        compare = item.compareTo(modelkey.getModelItemName());
         if (compare != 0)
             return compare;
         
@@ -46,7 +46,7 @@ public class DocumentModelKey implements Comparable<DocumentModelKey>, Serializa
         if (!model.equals(modelkey.getModel()))
             return false;
         
-        if (!item.equals(modelkey.getModelItem()))
+        if (!item.equals(modelkey.getModelItemName()))
             return false;
         
         return true;
@@ -64,7 +64,7 @@ public class DocumentModelKey implements Comparable<DocumentModelKey>, Serializa
      * Retorna nome do item do modelo de documento.
      * @return nome do item
      */
-    public String getModelItem() {
+    public String getModelItemName() {
         return item;
     }
     
