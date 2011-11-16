@@ -6,7 +6,6 @@
     <description>iocaste shell</description>
     <display-name>iocaste shell</display-name>
     
-    <!-- 
     <servlet>
         <servlet-name>iocaste_server</servlet-name>
         <servlet-class>@server.class@</servlet-class>
@@ -16,7 +15,6 @@
         <servlet-name>iocaste_server</servlet-name>
         <url-pattern>/services.html</url-pattern>
     </servlet-mapping>
-     -->
      
     <servlet>
         <servlet-name>page_renderer</servlet-name>

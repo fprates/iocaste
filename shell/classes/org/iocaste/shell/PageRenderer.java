@@ -28,14 +28,14 @@ import org.iocaste.shell.common.ViewData;
 public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String LOGIN_APP = "iocaste-login";
-    private static final int MEMORY_THRESOLD = 512*1024; 
+    private static final int MEMORY_THRESOLD = 512*1024;
+    private static Map<String, SessionContext> apps =
+            new HashMap<String, SessionContext>();
     private String sessionid;
     private String servername;
-    private Map<String, SessionContext> apps;
     private HtmlRenderer renderer;
     
     public PageRenderer() {
-        apps = new HashMap<String, SessionContext>();
         renderer = new HtmlRenderer();
     }
     
@@ -221,6 +221,20 @@ public class PageRenderer extends HttpServlet implements Function {
         AppContext appctx = apps.get(sessionid).getAppContext(appname);
         
         return (appctx == null)? null : appctx.getPageContext(pagename);
+    }
+    
+    /**
+     * 
+     * @param sessionid
+     * @param appname
+     * @param pagename
+     * @return
+     */
+    public static final ViewData getView(String sessionid, String appname,
+            String pagename) {
+        AppContext appcontext = apps.get(sessionid).getAppContext(appname);
+        
+        return appcontext.getPageContext(pagename).getViewData();
     }
     
     /**

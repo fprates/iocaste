@@ -4,9 +4,17 @@ import java.lang.reflect.Method;
 
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.AbstractServiceInterface;
+import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Message;
 
-public class Shell {
-
+public class Shell extends AbstractServiceInterface {
+    private static final String SERVERNAME = "/iocaste-shell/services.html";
+    
+    public Shell(Function function) {
+        initService(function, SERVERNAME);
+    }
+    
     /**
      * 
      * @param inputitem
@@ -30,6 +38,23 @@ public class Shell {
         default:
             return null;
         }
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     * @throws Exception
+     */
+    public final ViewData getView(String appname, String pagename)
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("get_view");
+        message.add("app_name", appname);
+        message.add("page_name", pagename);
+        
+        return (ViewData)call(message);
     }
     
     /**

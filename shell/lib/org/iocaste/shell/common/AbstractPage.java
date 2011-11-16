@@ -10,6 +10,8 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
 public abstract class AbstractPage extends AbstractFunction {
+    private String appname;
+    
     public AbstractPage() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
@@ -67,11 +69,25 @@ public abstract class AbstractPage extends AbstractFunction {
             return controldata;
         }
         
+        appname = view.getAppName();
+        
         method = this.getClass().getMethod(
                 action, ControlData.class, ViewData.class);
         method.invoke(this, controldata, view);
         
         return controldata;
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     * @throws Exception 
+     */
+    protected final ViewData getView(String name) throws Exception {
+        Shell shell = new Shell(this);
+        
+        return shell.getView(appname, name);
     }
     
     /**
