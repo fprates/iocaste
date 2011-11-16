@@ -11,6 +11,7 @@ import org.iocaste.protocol.Message;
 
 public abstract class AbstractPage extends AbstractFunction {
     private String appname;
+    private Shell shell;
     
     public AbstractPage() {
         export("get_view_data", "getViewData");
@@ -70,6 +71,8 @@ public abstract class AbstractPage extends AbstractFunction {
         }
         
         appname = view.getAppName();
+        if (shell == null)
+            shell = new Shell(this);
         
         method = this.getClass().getMethod(
                 action, ControlData.class, ViewData.class);
@@ -85,8 +88,6 @@ public abstract class AbstractPage extends AbstractFunction {
      * @throws Exception 
      */
     protected final ViewData getView(String name) throws Exception {
-        Shell shell = new Shell(this);
-        
         return shell.getView(appname, name);
     }
     
@@ -245,6 +246,15 @@ public abstract class AbstractPage extends AbstractFunction {
         
         if (element.hasMultipartSupport())
             vdata.addMultipartElement(element);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    protected final void updateView(ViewData view) throws Exception {
+        shell.updateView(view);
     }
 }
 

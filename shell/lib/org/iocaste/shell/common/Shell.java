@@ -89,4 +89,18 @@ public class Shell extends AbstractServiceInterface {
             throw new RuntimeException(e);
         }
     }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void updateView(ViewData view) throws Exception {
+        Message message = new Message();
+        
+        message.setId("update_view");
+        message.add("view", view);
+        
+        call(message);
+    }
 }

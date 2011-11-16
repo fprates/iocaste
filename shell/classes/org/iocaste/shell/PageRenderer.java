@@ -435,5 +435,17 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     @Override
     public void setSessionid(String sessionid) { }
+    
+    /**
+     * 
+     * @param sessionid
+     * @param view
+     */
+    public static final void updateView(String sessionid, ViewData view) {
+        AppContext appcontext = apps.get(sessionid).
+                getAppContext(view.getAppName());
+        
+        appcontext.getPageContext(view.getPageName()).setViewData(view);
+    }
 
 }
