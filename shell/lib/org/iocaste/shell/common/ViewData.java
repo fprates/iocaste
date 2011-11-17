@@ -80,6 +80,13 @@ public class ViewData implements Serializable {
         mpelements.add(element);
     }
     
+    /**
+     * 
+     */
+    public final void clearInputs() {
+        inputs.clear();
+    }
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
