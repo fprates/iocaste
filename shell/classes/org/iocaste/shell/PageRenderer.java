@@ -29,6 +29,7 @@ public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String LOGIN_APP = "iocaste-login";
     private static final int MEMORY_THRESOLD = 512*1024;
+    private static final String NOT_CONNECTED = "not.connected";
     private static Map<String, SessionContext> apps =
             new HashMap<String, SessionContext>();
     private String sessionid;
@@ -142,13 +143,13 @@ public class PageRenderer extends HttpServlet implements Function {
             
             if (pagectx == null) {
                 pagectx = getPageContext(sessionid, LOGIN_APP, "authentic");
-                renderer.setUsername("not.connected");
+                renderer.setUsername(NOT_CONNECTED);
             }
             
             pagectx = processController(iocaste, req, pagectx);
         } else {
             pagectx = createPageContext(sessionid, LOGIN_APP, "authentic");
-            renderer.setUsername("not.connected");
+            renderer.setUsername(NOT_CONNECTED);
         }
         
         render(resp, pagectx);
@@ -275,7 +276,7 @@ public class PageRenderer extends HttpServlet implements Function {
         renderer.setMessageText(control.getTranslatedMessage());
         renderer.setMessageType(control.getMessageType());
         renderer.setUsername((iocaste.isConnected())?
-                iocaste.getUsername():"Not connected");
+                iocaste.getUsername():NOT_CONNECTED);
         
         appname = control.getApp();
         if (appname == null)
