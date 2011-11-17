@@ -9,6 +9,7 @@ public class Services extends AbstractFunction {
     public Services() {
         export("get_view", "getView");
         export("update_view", "updateView");
+        export("pop_page", "popPage");
     }
     
     /**
@@ -19,6 +20,16 @@ public class Services extends AbstractFunction {
     public final ViewData getView(Message message) {
         return PageRenderer.getView(message.getSessionid(),
                 message.getString("app_name"), message.getString("page_name"));
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final String popPage(Message message) {
+        return PageRenderer.popPage(message.getSessionid(),
+                message.getString("app_name"));
     }
     
     /**

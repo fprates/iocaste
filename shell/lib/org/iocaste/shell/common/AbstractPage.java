@@ -22,8 +22,12 @@ public abstract class AbstractPage extends AbstractFunction {
      * 
      * @param controldata
      * @param viewdata
+     * @throws Exception 
      */
-    public void back(ControlData controldata, ViewData viewdata) { }
+    public void back(ControlData controldata, ViewData viewdata)
+            throws Exception {
+        controldata.redirect(null, shell.popPage());
+    }
     
     /**
      * 

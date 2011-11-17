@@ -2,14 +2,17 @@ package org.iocaste.shell;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 public class AppContext {
     private Map<String, PageContext> pages;
     private String name;
+    private Stack<String> pagestack;
     
     public AppContext(String name) {
         this.name = name;
         pages = new HashMap<String, PageContext>();
+        pagestack = new Stack<String>();
     }
     
     /**
@@ -36,6 +39,22 @@ public class AppContext {
      */
     public final PageContext getPageContext(String name) {
         return pages.get(name);
+    }
+    
+    /**
+     * 
+     * @param name
+     */
+    public final void pushPage(String name) {
+        pagestack.push(name);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String popPage() {
+        return pagestack.pop();
     }
     
     /**

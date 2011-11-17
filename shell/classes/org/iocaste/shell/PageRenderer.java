@@ -238,6 +238,10 @@ public class PageRenderer extends HttpServlet implements Function {
         return appcontext.getPageContext(pagename).getViewData();
     }
     
+    public static String popPage(String sessionid, String appname) {
+        return apps.get(sessionid).getAppContext(appname).popPage();
+    }
+    
     /**
      * 
      * @param iocaste

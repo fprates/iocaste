@@ -108,7 +108,7 @@ public class ControlData implements Serializable {
         this.messagetype = messagetype;
         this.messagetext = messagetext;
     }
-
+    
     /**
      * 
      * @param app
