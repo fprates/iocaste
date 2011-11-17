@@ -260,6 +260,10 @@ public abstract class AbstractPage extends AbstractFunction {
      * @throws Exception
      */
     protected final void updateView(ViewData view) throws Exception {
+        view.clearInputs();
+        for (Container container : view.getContainers())
+            registerInputs(view, container);
+        
         shell.updateView(view);
     }
 }
