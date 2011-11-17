@@ -78,10 +78,6 @@ public abstract class AbstractPage extends AbstractFunction {
                 action, ControlData.class, ViewData.class);
         method.invoke(this, controldata, view);
         
-        view.clearInputs();
-        for (Container container : view.getContainers())
-            registerInputs(view, container);
-        
         updateView(view);
         
         return controldata;
