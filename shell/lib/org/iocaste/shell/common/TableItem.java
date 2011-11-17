@@ -99,4 +99,28 @@ public class TableItem extends AbstractComponent {
         
         return mark.isSelected();
     }
+    
+    /**
+     * 
+     * @param object
+     */
+    public final void setObject(ExtendedObject object) {
+        Element element;
+        InputComponent input;
+        DocumentModelItem modelitem;
+        Table table = (Table)getContainer();
+        
+        for (String name : elements) {
+            element = table.getElement(name);
+            if (!element.isDataStorable())
+                continue;
+            
+            input = (InputComponent)element;
+            modelitem = input.getModelItem();
+            if (modelitem == null)
+                continue;
+            
+            input.setValue(object.getValue(modelitem).toString());
+        }
+    }
 }
