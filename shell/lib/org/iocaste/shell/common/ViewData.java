@@ -46,12 +46,16 @@ public class ViewData implements Serializable {
     private String appname;
     private String pagename;
     private Map<String, Object> parameters;
+    private Container nbcontainer;
     
     public ViewData(String appname, String pagename) {
         inputs = new ArrayList<String>();
         navbarstatus = new HashMap<String, Boolean>();
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<Element>();
+        nbcontainer = new StandardContainer(null, "navbar");
+        containers.add(nbcontainer);
+        
         this.appname = appname;
         this.pagename = pagename;
     }
@@ -210,6 +214,10 @@ public class ViewData implements Serializable {
      */
     public final Map<String, Boolean> getNavbarStatus() {
         return navbarstatus;
+    }
+    
+    public final Container getNavBarContainer() {
+        return nbcontainer;
     }
     
     /**

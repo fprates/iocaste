@@ -426,45 +426,28 @@ public class HtmlRenderer {
                 
         renderLink(html, link);
     }
-    
-    /**
-     * 
-     * @param text
-     */
-    private final void renderMessage(List<String> html) {
-        StringBuffer message;
-        
-        message = new StringBuffer("<div>");
-        
-        html.add("<div><p>");
-        switch (msgtype) {
-        case WARNING:
-            message.append("Aviso: ");
-        case ERROR:
-            message.append("Erro: ");
-        }
-        
-        html.add(message.append(msgtext).append("</p></div>").toString());
-    }
 
     /**
      * 
      * @param html
      */
-    private final void renderNavigationBar(List<String> html, ViewData vdata) {
+    private final void configNavigationBar(List<String> html, ViewData vdata) {
+        NavigationBar navbar;
         Map<String, Boolean> navbarstatus;
-        NavigationBar navbar = new NavigationBar();
-
-        navbar.addAction("home", "home");
-        navbar.addAction("back", "back");
-        navbar.addAction("help", "help");
+        Container container = vdata.getNavBarContainer();
+        
+        container.clear();
+        navbar = new NavigationBar(container);
         
         navbarstatus = vdata.getNavbarStatus();
-        
         for (String name : navbarstatus.keySet())
             navbar.setEnabled(name, navbarstatus.get(name));
-                
-        renderContainer(html, navbar);
+//        
+//        html.add(new StringBuffer("<p>").append(username).append("</p>").
+//                toString());
+        
+        if (msgtext != null)
+            navbar.setMessage(msgtype, msgtext);
     }
     
     /**
@@ -477,16 +460,6 @@ public class HtmlRenderer {
         StringBuffer sb = new StringBuffer("<input type=\"hidden\" name=\"").
                 append(name).append("\" id=\"").append(name).append("\"/>");
         html.add(sb.toString());
-    }
-    
-    /**
-     * 
-     * @param html
-     */
-    private final void renderStatus(List<String> html, ViewData vdata) {
-        renderNavigationBar(html, vdata);
-        html.add(new StringBuffer("<p>").append(username).append("</p>").
-                toString());
     }
     
     /**
@@ -665,12 +638,9 @@ public class HtmlRenderer {
         renderHeader(html, vdata);
         
         html.add("<body onLoad=\"initialize()\">");
-        
-        renderStatus(html, vdata);
-        
-        if (msgtext != null)
-            renderMessage(html);
 
+
+        configNavigationBar(html, vdata);
         for (Container container : vdata.getContainers())
             renderContainer(html, container);
 
