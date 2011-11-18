@@ -105,6 +105,23 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * 
+     * @param appname
+     * @param pagename
+     * @throws Exception
+     */
+    public final void pushPage(String appname, String pagename)
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("push_page");
+        message.add("app_name", appname);
+        message.add("page_name", pagename);
+        
+        call(message);
+    }
+    
+    /**
+     * 
      * @param view
      * @throws Exception
      */
