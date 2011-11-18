@@ -10,6 +10,7 @@ public class Services extends AbstractFunction {
         export("get_view", "getView");
         export("update_view", "updateView");
         export("pop_page", "popPage");
+        export("push_page", "pushPage");
     }
     
     /**
@@ -29,6 +30,18 @@ public class Services extends AbstractFunction {
      */
     public final String[] popPage(Message message) {
         return PageRenderer.popPage(message.getSessionid());
+    }
+    
+    /**
+     * 
+     * @param message
+     */
+    public final void pushPage(Message message) {
+        String sessionid = message.getSessionid();
+        String appname = message.getString("app_name");
+        String pagename = message.getString("page_name");
+        
+        PageRenderer.pushPage(sessionid, appname, pagename);
     }
     
     /**

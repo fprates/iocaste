@@ -278,9 +278,6 @@ public class PageRenderer extends HttpServlet implements Function {
         if (parameters.containsKey("pagetrack"))
             parameters.remove("pagetrack");
         
-        pushPage(sessionid, pagectx.getAppContext().getName(),
-                pagectx.getName());
-        
         control = callController(sessionid, parameters, pagectx);
         
         if (control == null)
@@ -367,7 +364,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param appname
      * @param pagename
      */
-    private final void pushPage(String sessionid, String appname,
+    public static final void pushPage(String sessionid, String appname,
             String pagename) {
         apps.get(sessionid).pushPage(appname, pagename);
     }
