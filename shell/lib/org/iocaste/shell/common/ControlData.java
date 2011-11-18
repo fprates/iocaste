@@ -14,12 +14,14 @@ public class ControlData implements Serializable {
     private ViewData view;
     private Map<String, Object> parameters;
     private boolean reloadable;
+    private boolean pagecall;
     
     public ControlData() {
         app = null;
         page = null;
         reloadable = false;
         parameters = new HashMap<String, Object>();
+        pagecall = false;
     }
     
     /**
@@ -95,6 +97,14 @@ public class ControlData implements Serializable {
      * 
      * @return
      */
+    public final boolean hasPageCall() {
+        return pagecall;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final boolean isReloadableView() {
         return reloadable;
     }
@@ -117,6 +127,8 @@ public class ControlData implements Serializable {
     public final void redirect(String app, String page) {
         this.app = app;
         this.page = page;
+        
+        pagecall = true;
     }
 
     /**
