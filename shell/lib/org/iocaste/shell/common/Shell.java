@@ -95,12 +95,12 @@ public class Shell extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final String popPage() throws Exception {
+    public final String[] popPage() throws Exception {
         Message message = new Message();
         
         message.setId("pop_page");
         
-        return (String)call(message);
+        return (String[])call(message);
     }
     
     /**

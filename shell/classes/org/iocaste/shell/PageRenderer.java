@@ -238,8 +238,14 @@ public class PageRenderer extends HttpServlet implements Function {
         return appcontext.getPageContext(pagename).getViewData();
     }
     
-    public static String popPage(String sessionid, String appname) {
-        return apps.get(sessionid).getAppContext(appname).popPage();
+    /**
+     * 
+     * @param sessionid
+     * @param appname
+     * @return
+     */
+    public static final String[] popPage(String sessionid) {
+        return apps.get(sessionid).popPage();
     }
     
     /**
@@ -271,7 +277,10 @@ public class PageRenderer extends HttpServlet implements Function {
 
         if (parameters.containsKey("pagetrack"))
             parameters.remove("pagetrack");
-            
+        
+        pushPage(sessionid, pagectx.getAppContext().getName(),
+                pagectx.getName());
+        
         control = callController(sessionid, parameters, pagectx);
         
         if (control == null)
@@ -350,6 +359,17 @@ public class PageRenderer extends HttpServlet implements Function {
         }
         
         return parameters;
+    }
+    
+    /**
+     * 
+     * @param sessionid
+     * @param appname
+     * @param pagename
+     */
+    private final void pushPage(String sessionid, String appname,
+            String pagename) {
+        apps.get(sessionid).pushPage(appname, pagename);
     }
     
     /**

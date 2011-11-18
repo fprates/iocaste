@@ -27,9 +27,8 @@ public class Services extends AbstractFunction {
      * @param message
      * @return
      */
-    public final String popPage(Message message) {
-        return PageRenderer.popPage(message.getSessionid(),
-                message.getString("app_name"));
+    public final String[] popPage(Message message) {
+        return PageRenderer.popPage(message.getSessionid());
     }
     
     /**
