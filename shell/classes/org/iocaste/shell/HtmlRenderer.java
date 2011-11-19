@@ -60,6 +60,30 @@ public class HtmlRenderer {
         
         script = lines.toArray(new String[0]);
     }
+
+    /**
+     * 
+     * @param html
+     */
+    private final void configNavigationBar(List<String> html, ViewData vdata) {
+        NavigationBar navbar;
+        Text txtuname;
+        Map<String, Boolean> navbarstatus;
+        Container container = vdata.getNavBarContainer();
+        
+        container.clear();
+        navbar = new NavigationBar(container);
+        
+        navbarstatus = vdata.getNavbarStatus();
+        for (String name : navbarstatus.keySet())
+            navbar.setEnabled(name, navbarstatus.get(name));
+        
+        txtuname = new Text(navbar.getStatusArea(), "navbar.username");
+        txtuname.setText(username);
+        
+        navbar.setMessage((msgtype == null)? Const.STATUS : msgtype,
+                (msgtext == null)? "" : msgtext);
+    }
     
     /**
      * 
@@ -94,7 +118,7 @@ public class HtmlRenderer {
         if (tag == null)
             return fail;
         
-        return messages.get(tag, fail);
+        return messages.get(tag, tag);
     }
     
     /**
@@ -425,29 +449,6 @@ public class HtmlRenderer {
         }
                 
         renderLink(html, link);
-    }
-
-    /**
-     * 
-     * @param html
-     */
-    private final void configNavigationBar(List<String> html, ViewData vdata) {
-        NavigationBar navbar;
-        Map<String, Boolean> navbarstatus;
-        Container container = vdata.getNavBarContainer();
-        
-        container.clear();
-        navbar = new NavigationBar(container);
-        
-        navbarstatus = vdata.getNavbarStatus();
-        for (String name : navbarstatus.keySet())
-            navbar.setEnabled(name, navbarstatus.get(name));
-//        
-//        html.add(new StringBuffer("<p>").append(username).append("</p>").
-//                toString());
-        
-        if (msgtext != null)
-            navbar.setMessage(msgtype, msgtext);
     }
     
     /**

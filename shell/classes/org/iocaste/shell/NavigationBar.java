@@ -14,13 +14,11 @@ import org.iocaste.shell.common.Text;
 public class NavigationBar implements Serializable {
     private static final long serialVersionUID = -3075185426719189481L;
     private Map<String, Link> bar;
-    private Container container;
     private Container linkarea;
     private Container statusarea;
     private Text message;
     
     public NavigationBar(Container container) {
-        this.container = container;
         bar = new LinkedHashMap<String, Link>();
         linkarea = new StandardContainer(container, "navbar.linkarea");
         statusarea = new StandardContainer(container, "navbar.status");
@@ -71,10 +69,18 @@ public class NavigationBar implements Serializable {
     
     /**
      * 
+     * @return
+     */
+    public final Container getStatusArea() {
+        return statusarea;
+    }
+    
+    /**
+     * 
      * @param enabled
      * @param active
      */
-    public void setEnabled(String name, boolean enabled) {
+    public final void setEnabled(String name, boolean enabled) {
         bar.get(name).setEnabled(enabled);
     }
     
@@ -82,7 +88,7 @@ public class NavigationBar implements Serializable {
      * 
      * @param text
      */
-    public void setMessage(Const msgtype, String text) {
+    public final void setMessage(Const msgtype, String text) {
         message.setText(composeMessage(msgtype, text));
     }
 }
