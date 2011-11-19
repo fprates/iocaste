@@ -19,6 +19,7 @@ public class Services extends AbstractFunction {
         queries = new HashMap<String, Map<String, String>>();
         export("get_next_number", "getNextNumber");
         export("get_document_model", "getDocumentModel");
+        export("has_model", "hasModel");
     }
     
     /**
@@ -82,7 +83,7 @@ public class Services extends AbstractFunction {
         lines = iocaste.select("select * from docs001 where docid = ?",
                 new Object[] {documentname});
         if (lines.length == 0)
-            throw new Exception("Document not found.");
+            return null;
         
         columns = (Map<String, Object>)lines[0];
         document = new DocumentModel();
@@ -162,9 +163,31 @@ public class Services extends AbstractFunction {
     
     /**
      * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final boolean hasModel(Message message) throws Exception {
+        Object[] lines;
+        Iocaste iocaste;
+        String modelname = message.getString("model_name");
+        
+        if (modelname == null)
+            throw new Exception("Document model not specified.");
+
+        iocaste = new Iocaste(this);
+        
+        lines = iocaste.select("select docid from docs001 where docid = ?",
+                new Object[] {modelname});
+        
+        return (lines.length == 0)? false : true;
+    }
+    
+    /**
+     * 
      * @param model
      */
-    private void parseQueries(DocumentModel model) {
+    private final void parseQueries(DocumentModel model) {
         String fieldname;
         boolean iskey;
         boolean setok = false;
