@@ -8,6 +8,10 @@ public class Text extends AbstractComponent {
         super(container, Const.TEXT, name);
     }
     
+    /**
+     * Retorna texto do componente.
+     * @return
+     */
     public final String getText() {
         return text;
     }
@@ -30,6 +34,10 @@ public class Text extends AbstractComponent {
         return false;
     }
     
+    /**
+     * Define texto para o componente.
+     * @param text texto.
+     */
     public final void setText(String text) {
         this.text = text;
     }
