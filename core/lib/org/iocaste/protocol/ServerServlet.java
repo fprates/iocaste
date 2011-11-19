@@ -101,6 +101,11 @@ public abstract class ServerServlet extends HttpServlet {
             if (functionid == null)
                 throw new Exception("Function not specified.");
             
+            if (functionid.equals("return")) {
+                service.messageReturn(message, null);
+                return;
+            }
+            
             function = functions.get(functionid);
             if (function == null)
                 throw new Exception("Function \""+functionid+"\" not registered.");
