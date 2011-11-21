@@ -153,8 +153,14 @@ public abstract class ServerServlet extends HttpServlet {
      */
     protected void preRun(Message message) throws Exception {
         boolean connected;
-        Message test = new Message();
-        String url = new StringBuffer(getServerName())
+        Message test;
+        String url;
+        
+        if (isAuthorized(message))
+            return;
+        
+        test = new Message();
+        url = new StringBuffer(getServerName())
             .append(Iocaste.SERVERNAME).toString();
         
         test.setId("is_connected");
@@ -163,10 +169,7 @@ public abstract class ServerServlet extends HttpServlet {
         
         connected = (Boolean)Service.callServer(url, test);
         
-        if (connected)
-            return;
-        
-        if (!isAuthorized(message))
+        if (!connected)
             throw new InvalidSessionException();
     }
     

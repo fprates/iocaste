@@ -35,8 +35,7 @@ public abstract class AbstractServiceInterface {
             Map<String, Object> params) throws Exception {
         Message message = new Message();
         
-        message.setId("call_authorized");
-        message.add("function", function);
+        message.setId(function);
         message.add("params", params);
         
         return call(message);
