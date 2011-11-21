@@ -16,6 +16,17 @@ public abstract class AbstractFunction implements Function {
     
     public AbstractFunction() {
         exports = new HashMap<String, String>();
+        exports.put("call_authorized", "callAuthorized");
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final Object callAuthorized(Message message) throws Exception {
+        return null;
     }
     
     /**

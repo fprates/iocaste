@@ -14,9 +14,12 @@ public abstract class ServerServlet extends HttpServlet {
     private Map<String, Function> functions;
     private HttpServletRequest req;
     private HttpServletResponse resp;
+    private Map<String, Map<String, Object[]>> authorized;
     
     public ServerServlet() {
         functions = new HashMap<String, Function>();
+        authorized = new HashMap<String, Map<String, Object[]>>();
+        
         config();
     }
     
@@ -101,11 +104,6 @@ public abstract class ServerServlet extends HttpServlet {
             if (functionid == null)
                 throw new Exception("Function not specified.");
             
-            if (functionid.equals("return")) {
-                service.messageReturn(message, null);
-                return;
-            }
-            
             function = functions.get(functionid);
             if (function == null)
                 throw new Exception("Function \""+functionid+"\" not registered.");
@@ -125,6 +123,32 @@ public abstract class ServerServlet extends HttpServlet {
     /**
      * 
      * @param message
+     * @return
+     */
+    private final boolean isAuthorized(Message message) {
+        Map<String, Object[]> authparameters;
+        Map<String, Object> msgparameters;
+        String id = message.getId();
+        
+        if (!authorized.containsKey(id))
+            return false;
+
+        authparameters = authorized.get(id);
+        if (authparameters == null)
+            return true;
+        
+        msgparameters = message.getParameters();
+        for (String name : authparameters.keySet())
+            for (Object object : authparameters.get(name))
+                if (object.equals(msgparameters.get(name)))
+                    return true;
+        
+        return false;
+    }
+    
+    /**
+     * 
+     * @param message
      * @throws Exception
      */
     protected void preRun(Message message) throws Exception {
@@ -139,7 +163,10 @@ public abstract class ServerServlet extends HttpServlet {
         
         connected = (Boolean)Service.callServer(url, test);
         
-        if (!connected)
+        if (connected)
+            return;
+        
+        if (!isAuthorized(message))
             throw new InvalidSessionException();
     }
     
@@ -150,6 +177,16 @@ public abstract class ServerServlet extends HttpServlet {
      */
     private final void addFunction(String name, Function function) {
         functions.put(name, function);
+    }
+    
+    /**
+     * 
+     * @param function
+     * @param parameters
+     */
+    protected final void authorize(String function,
+            Map<String, Object[]> parameters) {
+        authorized.put(function, parameters);
     }
     
     /**

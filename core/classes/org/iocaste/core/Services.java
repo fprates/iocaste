@@ -28,6 +28,7 @@ public class Services extends AbstractFunction {
         export("select", "select");
         export("update", "update");
         export("commit", "commit");
+        export("call_authorized", "callAuthorized");
     }
     
     /**
