@@ -21,16 +21,6 @@ public abstract class AbstractFunction implements Function {
     
     /**
      * 
-     * @param message
-     * @return
-     * @throws Exception
-     */
-    public final Object callAuthorized(Message message) throws Exception {
-        return null;
-    }
-    
-    /**
-     * 
      * @param name
      * @param method
      */

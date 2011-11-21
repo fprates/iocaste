@@ -28,7 +28,30 @@ public class Services extends AbstractFunction {
         export("select", "select");
         export("update", "update");
         export("commit", "commit");
-        export("call_authorized", "callAuthorized");
+        export("checked_select", "checkedSelect");
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final Object[] checkedSelect(Message message) throws Exception {
+        Object[] results;
+        String columns = message.getString("columns");
+        String from = message.getString("from");
+        String where = message.getString("where");
+        Object[] criteria = (Object[])message.get("criteria");
+        String query = new StringBuilder("select").append(columns).
+                append(" from ").append(from).append(" where ").append(where).
+                toString();
+        Connection connection = db.instance();
+        
+        results = db.select(connection, query, criteria);
+        connection.close();
+        
+        return results;
     }
     
     /**
