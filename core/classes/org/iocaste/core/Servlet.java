@@ -6,11 +6,11 @@ import org.iocaste.protocol.ServerServlet;
 
 public class Servlet extends ServerServlet {
     private static final long serialVersionUID = -8569034003940826582L;
-    private Login login;
+    private Services login;
     
     @Override
     public void config() {
-        login = new Login();
+        login = new Services();
         register(login);
     }
     

@@ -8,12 +8,12 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 
-public class Login extends AbstractFunction {
+public class Services extends AbstractFunction {
     private static final int USERNAME_MAX_LEN = 12;
     private Map<String, UserContext> sessions;
     private DBServices db;
     
-    public Login() {
+    public Services() {
         sessions = new HashMap<String, UserContext>();
         db = new DBServices();
         
