@@ -4,6 +4,8 @@ package org.iocaste.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.protocol.InvalidSessionException;
+import org.iocaste.protocol.Message;
 import org.iocaste.protocol.ServerServlet;
 
 public class Servlet extends ServerServlet {
@@ -24,5 +26,18 @@ public class Servlet extends ServerServlet {
         parameters.put("from",
                 new String[] {"shell001", "shell002", "shell003"});
         authorize("checked_select", parameters);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.ServerServlet#preRun(
+     *     org.iocaste.protocol.Message)
+     */
+    protected final void preRun(Message message) throws Exception {
+        if (isAuthorized(message))
+            return;
+        
+        if (!services.isConnected(message))
+            throw new InvalidSessionException();
     }
 }
