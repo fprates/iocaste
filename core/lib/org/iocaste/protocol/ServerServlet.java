@@ -23,37 +23,39 @@ public abstract class ServerServlet extends HttpServlet {
         config();
     }
     
-    /*
-     * 
-     * Getters
-     * 
-     */
-    
     /**
      * 
-     * @return
+     * @param name
+     * @param function
      */
-    private final String getServerName() {
-        return new StringBuffer(req.getScheme()).append("://")
-                .append(req.getServerName()).append(":")
-                .append(req.getServerPort()).toString();
+    private final void addFunction(String name, Function function) {
+        functions.put(name, function);
     }
     
     /**
      * 
-     * @return
+     * @param function
+     * @param parameters
      */
-    private final String getUrl() {
-        return new StringBuffer(getServerName())
-            .append(req.getContextPath())
-            .append(req.getServletPath()).toString();
+    protected final void authorize(String function,
+            Map<String, Object[]> parameters) {
+        authorized.put(function, parameters);
     }
     
-    /*
-     * 
-     * Others
+    /**
      * 
      */
+    protected abstract void config();
+    
+    /**
+     * 
+     * @param service
+     * @throws IOException
+     */
+    protected final void configureStreams(Service service) throws IOException {
+        service.setInputStream(req.getInputStream());
+        service.setOutputStream(resp.getOutputStream());
+    }
     
     /*
      * (non-Javadoc)
@@ -119,13 +121,33 @@ public abstract class ServerServlet extends HttpServlet {
             req.getSession().invalidate();
         }
     }
+    
+    /**
+     * 
+     * @return
+     */
+    private final String getServerName() {
+        return new StringBuffer(req.getScheme()).append("://")
+                .append(req.getServerName()).append(":")
+                .append(req.getServerPort()).toString();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    private final String getUrl() {
+        return new StringBuffer(getServerName())
+            .append(req.getContextPath())
+            .append(req.getServletPath()).toString();
+    }
 
     /**
      * 
      * @param message
      * @return
      */
-    private final boolean isAuthorized(Message message) {
+    protected final boolean isAuthorized(Message message) {
         Map<String, Object[]> authparameters;
         Map<String, Object> msgparameters;
         String id = message.getId();
@@ -175,44 +197,10 @@ public abstract class ServerServlet extends HttpServlet {
     
     /**
      * 
-     * @param name
-     * @param function
-     */
-    private final void addFunction(String name, Function function) {
-        functions.put(name, function);
-    }
-    
-    /**
-     * 
-     * @param function
-     * @param parameters
-     */
-    protected final void authorize(String function,
-            Map<String, Object[]> parameters) {
-        authorized.put(function, parameters);
-    }
-    
-    /**
-     * 
      * @param function
      */
     protected void register(Function function) {
         for (String method : function.getMethods())
             addFunction(method, function);
-    }
-    
-    /**
-     * 
-     */
-    protected abstract void config();
-    
-    /**
-     * 
-     * @param service
-     * @throws IOException
-     */
-    protected final void configureStreams(Service service) throws IOException {
-        service.setInputStream(req.getInputStream());
-        service.setOutputStream(resp.getOutputStream());
     }
 }
