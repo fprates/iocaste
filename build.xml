@@ -24,7 +24,10 @@
     	
         <!-- tasksel -->
         <ant antfile="${basedir}/src/tasksel/build.xml"/>
-    	
+
+        <!-- external -->
+        <ant antfile="${basedir}/src/external/build.xml"/>
+        
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
     	
