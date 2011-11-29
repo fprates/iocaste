@@ -3,17 +3,15 @@ package org.iocaste.external;
 import com.sun.jna.Native;
 
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.StandardContainer;
-import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
+    private String fileseparator;
+    
+    public Main() {
+        fileseparator = System.getProperty("file.separator");
+    }
     
     /**
      * 
@@ -26,6 +24,21 @@ public class Main extends AbstractPage {
     
     /**
      * 
+     * @param libname
+     * @return
+     */
+    private String convertLibName(String path, String libname) {
+        String[] args = System.getProperty("os.name").split("\\s");
+        StringBuilder sb = new StringBuilder(path).append(fileseparator);
+        
+        if (args[0].toUpperCase().equals("WINDOWS"))
+            return sb.append(libname).append(".dll").toString();
+        
+        return sb.append("lib").append(libname).append(".so").toString();
+    }
+    
+    /**
+     * 
      * @param view
      */
     public void main(ViewData view) {
@@ -33,10 +46,11 @@ public class Main extends AbstractPage {
         ExternalInterface external;
 //        ExternalContainer econtainer;
         ExternalViewData eview;
-        String path = getRealPath("WEB-INF/external/");
-        String program = (String)view.getParameter("program");
+        String path = new StringBuilder(System.getProperty("user.home")).
+                append(fileseparator).append("iocaste-external").toString();
+        String program = convertLibName(path,
+                (String)view.getParameter("program"));
         
-        System.setProperty("jna.library.path", path);
         external = (ExternalInterface)Native.
                 loadLibrary(program, ExternalInterface.class);
         eview = external.init_view((String)view.getParameter("page"), path);
