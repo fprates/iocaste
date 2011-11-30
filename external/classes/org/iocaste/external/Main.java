@@ -67,10 +67,10 @@ public class Main extends AbstractPage {
                 progname, progpath, connector);
         Pointer eview = external.icst_ini_view(eprogram, page);
         
-//        for (int k = 0; k < external.icst_get_container_count(eview); k++) {
+        for (int k = 0; k < external.icst_get_container_count(eview); k++) {
 //            econtainer = external.get_container(k);
 //            view.addContainer(rebuildContainer(null, econtainer));
-//        }
+        }
     }
     
     /**

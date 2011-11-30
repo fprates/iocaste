@@ -7,8 +7,8 @@ public interface ExternalInterface extends Library {
 
 //    public Pointer icst_get_container(Pointer view, int index);
 //    
-//    public int icst_get_container_count(Pointer view);
-//    
+    public int icst_get_container_count(Pointer view);
+    
     public Pointer icst_ini_program(String name, String progpath,
             String icstpath);
     
