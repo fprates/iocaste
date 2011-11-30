@@ -1,6 +1,7 @@
 package org.iocaste.external;
 
 import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.ControlData;
@@ -8,9 +9,12 @@ import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
     private String fileseparator;
+    private String path;
     
     public Main() {
         fileseparator = System.getProperty("file.separator");
+        path = new StringBuilder(System.getProperty("user.home")).
+                append(fileseparator).append("iocaste-external").toString();
     }
     
     /**
@@ -39,39 +43,43 @@ public class Main extends AbstractPage {
     
     /**
      * 
+     * @param path
+     * @param view
+     * @return
+     */
+    private final ExternalInterface initExternalProgram(String connector) {
+        return (ExternalInterface)Native.loadLibrary(
+                connector, ExternalInterface.class);
+    }
+    
+    /**
+     * 
      * @param view
      */
     public void main(ViewData view) {
-//        Container container;
-        ExternalInterface external;
-//        ExternalContainer econtainer;
-        ExternalViewData eview;
-        String path = new StringBuilder(System.getProperty("user.home")).
-                append(fileseparator).append("iocaste-external").toString();
-        String program = convertLibName(path,
-                (String)view.getParameter("program"));
+//        Pointer econtainer;
+        String connector = convertLibName(path, "iocaste-connector");
+        ExternalInterface external = initExternalProgram(connector);
+        String progname = (String)view.getParameter("program");
+        String progpath = convertLibName(path, progname);
+        String page = (String)view.getParameter("page");
+        Pointer eprogram = external.icst_ini_program(
+                progname, progpath, connector);
+        Pointer eview = external.icst_ini_view(eprogram, page);
         
-        external = (ExternalInterface)Native.
-                loadLibrary(program, ExternalInterface.class);
-        eview = external.init_view((String)view.getParameter("page"), path);
-        
-        
-        eview = null;
-        external = null;
-//        
-//        container = rebuildContainer(null, econtainer);
-//        
-//        view.addContainer(container);
+//        for (int k = 0; k < external.icst_get_container_count(eview); k++) {
+//            econtainer = external.get_container(k);
+//            view.addContainer(rebuildContainer(null, econtainer));
+//        }
     }
-//    
-//    /**
-//     * 
-//     * @param master
-//     * @param econtainer
-//     * @return
-//     */
-//    private Container rebuildContainer(Container master,
-//            ExternalContainer econtainer) {
+    
+    /**
+     * 
+     * @param master
+     * @param econtainer
+     * @return
+     */
+//    private Container rebuildContainer(Container master, Pointer econtainer) {
 //        Container container;
 //        String name = econtainer.base.name;
 //        Const type = Const.valueOf(econtainer.base.type);
@@ -101,14 +109,15 @@ public class Main extends AbstractPage {
 //        }
 //        
 //        return container;
+//        return null;
 //    }
-//    
-//    /**
-//     * 
-//     * @param master
-//     * @param eelement
-//     * @return
-//     */
+    
+    /**
+     * 
+     * @param master
+     * @param eelement
+     * @return
+     */
 //    private Element rebuildElement(Container master,
 //            ExternalElement eelement) {
 //        Const type = Const.valueOf(eelement.type);
