@@ -256,11 +256,10 @@ public class PageRenderer extends HttpServlet implements Function {
      * @return
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
     private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
         PageContext pagectx_;
-        Map<String, ?> parameters;
+        Map<String, String[]> parameters;
         ControlData control;
         String appname;
         String pagename;
@@ -313,17 +312,17 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param pagectx
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
-    private final Map<String, ?> processMultipartContent(HttpServletRequest req,
+    private final Map<String, String[]> processMultipartContent(HttpServletRequest req,
             PageContext pagectx) throws Exception {
         DiskFileItemFactory factory;
         ServletFileUpload fileupload;
-        List<FileItem> files;
+        List<?> files;
         String path;
         String fieldname;
         String filename;
         Element[] elements;
-        Map<String, String> parameters;
+        FileItem fileitem;
+        Map<String, String[]> parameters;
         
         factory = new DiskFileItemFactory();
         factory.setSizeThreshold(MEMORY_THRESOLD);
@@ -333,15 +332,17 @@ public class PageRenderer extends HttpServlet implements Function {
         fileupload = new ServletFileUpload(factory);
         files = fileupload.parseRequest(req);
         
-        parameters = new HashMap<String, String>();
+        parameters = new HashMap<String, String[]>();
         elements = pagectx.getViewData().getMultipartElements();
         
         for (Element element : elements) {
-            for (FileItem fileitem : files) {
+            for (Object object : files) {
+            	fileitem = (FileItem)object;
                 fieldname = fileitem.getFieldName();
                 
                 if (fileitem.isFormField()) {
-                    parameters.put(fieldname, fileitem.getString());
+                    parameters.put(fieldname,
+                    		new String[] {fileitem.getString()});
                     continue;
                 }
                 
@@ -351,7 +352,7 @@ public class PageRenderer extends HttpServlet implements Function {
                 filename = fileitem.getName();
                 fileitem.write(new File(element.getDestiny(), filename));
                 
-                parameters.put(fieldname, filename);
+                parameters.put(fieldname, new String[] {filename});
             }
         }
         
