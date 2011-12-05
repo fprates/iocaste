@@ -1,9 +1,22 @@
 <project name="core" default="compile">
+	<path id="catalina-ant-classpath">
+	  <fileset dir="${basedir}/apache-tomcat/lib">
+	    <include name="catalina-ant.jar"/>
+	    <include name="tomcat-coyote.jar"/>
+	    <include name="tomcat-util.jar"/>
+	  </fileset>
+	  <fileset dir="${basedir}/apache-tomcat/bin">
+	    <include name="tomcat-juli.jar"/>
+	  </fileset>
+	</path>
+
     <property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
 	<property name="warfilename" value="${basedir}/iocaste-${ant.project.name}.war"/>
 	
-    <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
-    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"/>
+    <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"
+        classpathref="catalina-ant-classpath"/>
+    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" 
+        classpathref="catalina-ant-classpath"/>
 	
     <target name="compile">
         <mkdir dir="${builddir}/${ant.project.name}/web"/>
