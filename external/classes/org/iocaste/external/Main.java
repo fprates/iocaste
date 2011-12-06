@@ -57,7 +57,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public void main(ViewData view) {
-//        Pointer econtainer;
+        Pointer econtainer;
         String connector = convertLibName(path, "iocaste-connector");
         ExternalInterface external = initExternalProgram(connector);
         String progname = (String)view.getParameter("program");
@@ -66,11 +66,14 @@ public class Main extends AbstractPage {
         Pointer eprogram = external.icst_ini_program(
                 progname, progpath, connector);
         Pointer eview = external.icst_ini_view(eprogram, page);
+        Pointer itc = external.icst_get_container_iterator(eview);
         
-        for (int k = 0; k < external.icst_get_container_count(eview); k++) {
-//            econtainer = external.get_container(k);
+        while (external.icst_has_container(itc)) {
+            econtainer = external.icst_get_container(itc);
 //            view.addContainer(rebuildContainer(null, econtainer));
         }
+        
+        view.setTitle(external.icst_get_view_title(eview));
     }
     
     /**
