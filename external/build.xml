@@ -17,6 +17,7 @@
         	<fileset dir="${builddir}/documents/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
+            <fileset dir="${basedir}/lib-external"/>
             <fileset dir="${basedir}/ext"/>
         </path>
         
@@ -59,6 +60,7 @@
             </webinf>
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
             <lib dir="${basedir}/lib" includes="*.jar"/>
+            <lib dir="${basedir}/lib-external" includes="*.jar"/>
             <lib dir="${builddir}/core/lib" includes="*.jar"/>
             <lib dir="${builddir}/shell/lib" includes="*.jar"/>
         	<lib dir="${builddir}/documents/lib" includes="*.jar"/>
