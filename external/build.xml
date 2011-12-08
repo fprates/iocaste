@@ -35,9 +35,12 @@
             <classpath refid="dependencies"/>
         </javac>
         
-        <jar basedir="${builddir}/${ant.project.name}/lib"
-            destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
+        <jar basedir="${builddir}/${ant.project.name}/lib" destfile=
+            "${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
     	
+        <copy todir="${basedir}/ext" file=
+            "${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
+                  
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}"
             destdir="${builddir}/${ant.project.name}/classes"
