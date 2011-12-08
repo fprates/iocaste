@@ -9,6 +9,18 @@ public class ExternalViewData {
         this.name = name;
     }
     
+    public static final ExternalViewData build(
+            String name, ExternalElement[] containers) {
+        ExternalViewData view = new ExternalViewData(name);
+        
+        for (ExternalElement container : containers)
+            container.flush();
+        
+        view.setContainers(containers);
+        
+        return view;
+    }
+    
     public final ExternalElement[] getContainers() {
         return containers;
     }
