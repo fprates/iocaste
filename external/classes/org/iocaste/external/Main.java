@@ -9,6 +9,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
+import org.apache.axiom.om.OMText;
 import org.apache.axis2.Constants;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
@@ -18,6 +19,7 @@ import org.iocaste.external.service.ExternalViewData;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
+import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
@@ -86,16 +88,21 @@ public class Main extends AbstractPage {
     private final ExternalViewData extractExternalElements(int level,
             Object object, OMElement element) {
         OMNode node_;
+        OMText text;
         String elementname;
         ExternalElement econtainer;
+        ExternalElement eelement;
         ExternalViewData view;
-        List<String[]> eparameters = null;
+        Iterator<?> it, itv;
+        List<Object[]> eparameters = null;
         String title = null;
         String name = null;
         String type = null;
-        String[] parameters = null;
-        Iterator<?> it = element.getChildren();
+        Object[] parameters = null;
+        List<String> values = null;
         List<ExternalElement> containers = null;
+        
+        it = element.getChildren();
         
         /*
          * Estrutura do documento:
@@ -113,7 +120,7 @@ public class Main extends AbstractPage {
         
         switch (level) {
         case 2:
-            eparameters = new ArrayList<String[]>();
+            eparameters = new ArrayList<Object[]>();
             break;
         }
         
@@ -135,7 +142,7 @@ public class Main extends AbstractPage {
             }
             
             if (elementname.equals("elements")) {
-                parameters = new String[2];
+                parameters = new Object[3];
                 
                 extractExternalElements(3, parameters, element);
                 eparameters.add(parameters);
@@ -146,7 +153,7 @@ public class Main extends AbstractPage {
             if (elementname.equals("name")) {
                 switch (level) {
                 case 3:
-                    parameters = (String[])object;
+                    parameters = (Object[])object;
                     parameters[1] = element.getText();
                     
                     continue;
@@ -160,7 +167,7 @@ public class Main extends AbstractPage {
             if (elementname.equals("type")) {
                 switch (level) {
                 case 3:
-                    parameters = (String[])object;
+                    parameters = (Object[])object;
                     parameters[0] = element.getText();
                     
                     continue;
@@ -169,6 +176,26 @@ public class Main extends AbstractPage {
                     
                     break;
                 }
+            }
+            
+            if (elementname.equals("values")) {
+                values = new ArrayList<String>();
+                
+                itv = element.getChildren();
+                while (itv.hasNext()) {
+                    node_ = (OMNode)itv.next();
+                    
+                    if (node_.getType() != 4)
+                        continue;
+                    
+                    text = (OMText)node_;
+                    values.add(text.getText());
+                }
+                
+                parameters = (Object[])object;
+                parameters[2] = values;
+                
+                continue;
             }
             
             if (elementname.equals("title"))
@@ -182,10 +209,18 @@ public class Main extends AbstractPage {
         case 2:
             econtainer = new ExternalElement(null, type, name);
 
-            for (String[] parameters_ : eparameters)
-                new ExternalElement(
-                        econtainer, parameters_[0], parameters_[1]);
-
+            for (Object[] parameters_ : eparameters) {
+                eelement = new ExternalElement(econtainer,
+                        (String)parameters_[0], (String)parameters_[1]);
+                
+                if (parameters_[2] == null)
+                    continue;
+                
+                values = (List<String>)parameters_[2];
+                eelement.setValues(values.toArray(new String[0]));
+            }
+            
+            econtainer.flushOnlyElements();
             containers = (List<ExternalElement>)object;
             containers.add(econtainer);
             
@@ -194,9 +229,8 @@ public class Main extends AbstractPage {
         case 1:
             containers = (List<ExternalElement>)object;
             
-            view = ExternalViewData.build(name,
-                    containers.toArray(new ExternalElement[0]));
-            
+            view = new ExternalViewData(name);
+            view.setContainers(containers.toArray(new ExternalElement[0]));
             view.setTitle(title);
             
             return view;
@@ -250,37 +284,58 @@ public class Main extends AbstractPage {
     
     private final Element rebuildElement(Container container,
             ExternalElement eelement) {
+        String[] values;
+        String[] values_;
+        Component component = null;
+        Element element = null;
         String type = eelement.getType();
         String name = eelement.getName();
         
         if (type.equals("button"))
-            return new Button(container, name);
+            element = new Button(container, name);
         
         if (type.equals("check_box"))
-            return new CheckBox(container, name);
+            element = new CheckBox(container, name);
         
         if (type.equals("form"))
-            return new Form(container, name);
+            element = new Form(container, name);
         
         if (type.equals("data_form"))
-            return new DataForm(container, name);
+            element = new DataForm(container, name);
         
         if (type.equals("std_container"))
-            return new StandardContainer(container, name);
+            element = new StandardContainer(container, name);
         
         if (type.equals("table"))
-            return new Table(container, 0, name);
+            element = new Table(container, 0, name);
         
         if (type.equals("table_item"))
-            return new TableItem((Table)container);
+            element = new TableItem((Table)container);
         
         if (type.equals("text"))
-            return new Text(container, name);
+            element = new Text(container, name);
         
         if (type.equals("text_field"))
-            return new TextField(container, name);
+            element = new TextField(container, name);
+
+        if (element == null)
+            return null;
+
+        if (!element.isContainable())
+            component = (Component)element;
         
-        return null;
+        values = eelement.getValues();
+        if (values == null)
+            return element;
+        
+        for (String value : values) {
+            values_ = value.split(":");
+            
+            if (values_[0].equals("text") && component != null)
+                component.setText(values_[1]);
+        }
+        
+        return element;
     }
     
     private final void rebuildView(ExternalViewData eview, ViewData view) {
