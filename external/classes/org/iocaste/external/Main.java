@@ -231,8 +231,7 @@ public class Main extends AbstractPage {
      * @throws Exception 
      */
     public void main(ViewData view) throws Exception {
-//        String url = (String)view.getParameter("service");
-        String url = "http://localhost:8080/axis2/services/TestView";
+        String url = (String)view.getParameter("service");
         String page = (String)view.getParameter("view");
         ExternalViewData eview = callExternalView(url, page);
         
