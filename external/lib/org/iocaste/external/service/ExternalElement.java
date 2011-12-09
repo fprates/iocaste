@@ -31,7 +31,10 @@ public class ExternalElement {
     
     public final void flush() {
         int i = 0;
-        
+
+        for (ExternalElement element : contained)
+            element.flush();
+
         flushOnlyElements();
         values = new String[properties.size()];
         
@@ -41,9 +44,6 @@ public class ExternalElement {
     }
     
     public final void flushOnlyElements() {
-        for (ExternalElement element : contained)
-            element.flush();
-
         elements = contained.toArray(new ExternalElement[0]);
     }
     
