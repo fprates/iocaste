@@ -6,14 +6,13 @@ import java.util.Map;
 public class Link extends AbstractControlComponent {
     private static final long serialVersionUID = 667738108271176995L;
     private String action;
-    private String text;
     private boolean absolute;
     private Map<Parameter, String> values;
     
     public Link(Container container, String name, String action) {
         super(container, Const.LINK, name);
         this.action = action;
-        text = action;
+        setText(action);
         absolute = false;
         values = new HashMap<Parameter, String>();
     }
@@ -30,19 +29,11 @@ public class Link extends AbstractControlComponent {
         return values;
     }
     
-    public final String getText() {
-        return text;
-    }
-    
     public final boolean isAbsolute() {
         return absolute;
     }
     
     public final void setAbsolute(boolean absolute) {
         this.absolute = absolute;
-    }
-    
-    public final void setText(String text) {
-        this.text = text;
     }
 }

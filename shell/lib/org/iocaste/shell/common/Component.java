@@ -34,4 +34,8 @@ public interface Component extends Element {
      * @return container.
      */
     public abstract Container getContainer();
+    
+    public abstract String getText();
+    
+    public abstract void setText(String text);
 }

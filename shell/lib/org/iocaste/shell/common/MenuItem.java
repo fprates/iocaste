@@ -5,13 +5,13 @@ import java.util.Map;
 
 public class MenuItem extends AbstractComponent {
     private static final long serialVersionUID = -222037942601433072L;
-    private String text;
     private String function;
     private Map<String, String> parameters;
     
     public MenuItem(Menu menu, String text, String function) {
         super(menu, Const.MENU_ITEM, function);
-        this.text = text;
+        
+        setText(text);
         this.function = function;
         parameters = new HashMap<String, String>();
     }
@@ -31,14 +31,6 @@ public class MenuItem extends AbstractComponent {
      */
     public final String getParameter(String name) {
         return parameters.get(name);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final String getText() {
-        return text;
     }
     
     /*
