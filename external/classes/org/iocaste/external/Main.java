@@ -192,10 +192,16 @@ public class Main extends AbstractPage {
                     values.add(text.getText());
                 }
                 
-                parameters = (Object[])object;
-                parameters[2] = values;
-                
-                continue;
+                switch (level) {
+                case 3:
+                    parameters = (Object[])object;
+                    parameters[2] = values;
+                    
+                    continue;
+                    
+                default:
+                    break;
+                }
             }
             
             if (elementname.equals("title"))
@@ -230,6 +236,7 @@ public class Main extends AbstractPage {
             containers = (List<ExternalElement>)object;
             
             view = new ExternalViewData(name);
+            view.setValues(values.toArray(new String[0]));
             view.setContainers(containers.toArray(new ExternalElement[0]));
             view.setTitle(title);
             
@@ -339,9 +346,18 @@ public class Main extends AbstractPage {
     }
     
     private final void rebuildView(ExternalViewData eview, ViewData view) {
+        String[] values;
         view.setTitle(eview.getTitle());
         
         for (ExternalElement element : eview.getContainers()) 
             view.addContainer(rebuildContainer(null, element));
+        
+        for (String value : eview.getValues()) {
+            values = value.split(":");
+            
+            if (values[0].equals("navcontrol_enable"))
+                view.setNavbarActionEnabled(values[1],
+                        Boolean.parseBoolean(values[2]));
+        }
     }
 }
