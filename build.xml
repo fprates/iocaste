@@ -22,6 +22,9 @@
         <!-- infosis -->
 <!--        <ant antfile="${basedir}/src/infosis/build.xml"/> -->
     	
+        <!-- help -->
+        <ant antfile="${basedir}/src/help/build.xml"/>
+              
         <!-- tasksel -->
         <ant antfile="${basedir}/src/tasksel/build.xml"/>
 
