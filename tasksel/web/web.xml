@@ -21,7 +21,7 @@
         <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
         <init-param>
             <param-name>form</param-name>
-            <param-value>org.iocaste.tasksel.TaskSelForm</param-value>
+            <param-value>org.iocaste.tasksel.Main</param-value>
         </init-param>
     </servlet>
     
