@@ -84,8 +84,8 @@ public abstract class AbstractPage extends AbstractFunction {
                 action, ControlData.class, ViewData.class);
         method.invoke(this, controldata, view);
         
-        if (controldata.hasPageCall() &&
-                (control == null || !control.isCancellable()))
+        if (controldata.hasPageCall() && (control == null ||
+                !control.isCancellable() || control.isHelpControl()))
             shell.pushPage(view.getAppName(), view.getPageName());
         
         updateView(view);

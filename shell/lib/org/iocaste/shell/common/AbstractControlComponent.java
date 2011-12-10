@@ -34,10 +34,13 @@ public abstract class AbstractControlComponent extends AbstractComponent
         implements ControlComponent {
     private static final long serialVersionUID = -6444029817491608067L;
     private boolean cancellable;
+    private boolean helpcontrol;
     
     public AbstractControlComponent(
             Container container, Const type, String name) {
         super(container, type, name);
+        cancellable = false;
+        helpcontrol = false;
     }
 
     /*
@@ -67,9 +70,27 @@ public abstract class AbstractControlComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#isHelpControl()
+     */
+    @Override
+    public final boolean isHelpControl() {
+        return helpcontrol;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.ControlComponent#setCancellable(boolean)
      */
     public final void setCancellable(boolean cancellable) {
         this.cancellable = cancellable;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#setHelpControl(boolean)
+     */
+    @Override
+    public final void setHelpControl(boolean helpcontrol) {
+        this.helpcontrol = helpcontrol;
     }
 }

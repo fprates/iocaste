@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Text;
@@ -24,9 +23,11 @@ public class NavigationBar implements Serializable {
         statusarea = new StandardContainer(container, "navbar.status");
         message = new Text(container, "navbar.message");
         
-        addAction("home", "home", ControlComponent.CANCELLABLE);
-        addAction("back", "back", ControlComponent.CANCELLABLE);
-        addAction("help", "help", ControlComponent.CANCELLABLE);
+        addAction("home", "home");
+        addAction("back", "back");
+        addAction("help", "help");
+        
+        setHelpControl("help", true);
     }
 
     /**
@@ -34,11 +35,12 @@ public class NavigationBar implements Serializable {
      * @param name
      * @param action
      */
-    public void addAction(String name, String action, boolean cancellable) {
+    public void addAction(String name, String action) {
         Link link = new Link(linkarea, name, action);
         
         link.setEnabled(false);
-        link.setCancellable(cancellable);
+        link.setCancellable(true);
+        link.setHelpControl(false);
         
         bar.put(name, link);
     }
@@ -77,11 +79,29 @@ public class NavigationBar implements Serializable {
     
     /**
      * 
+     * @param name
+     * @param enabled
+     */
+    public final void setCancellable(String name, boolean cancellable) {
+        bar.get(name).setCancellable(cancellable);
+    }
+    
+    /**
+     * 
      * @param enabled
      * @param active
      */
     public final void setEnabled(String name, boolean enabled) {
         bar.get(name).setEnabled(enabled);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param helpcontrol
+     */
+    public final void setHelpControl(String name, boolean helpcontrol) {
+        bar.get(name).setHelpControl(helpcontrol);
     }
     
     /**
