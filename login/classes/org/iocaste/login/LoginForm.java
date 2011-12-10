@@ -64,6 +64,9 @@ public class LoginForm extends AbstractPage {
         } else {
             controldata.message(Const.ERROR, "invalid.login");
         }
+
+        ((DataItem)view.getElement("login.username")).setValue("");
+        ((DataItem)view.getElement("login.secret")).setValue("");
     }
     
     /**
