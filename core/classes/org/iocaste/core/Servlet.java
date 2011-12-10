@@ -34,6 +34,8 @@ public class Servlet extends ServerServlet {
      *     org.iocaste.protocol.Message)
      */
     protected final void preRun(Message message) throws Exception {
+        services.setHost(getServerName());
+        
         if (isAuthorized(message))
             return;
         

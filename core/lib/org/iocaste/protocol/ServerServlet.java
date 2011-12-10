@@ -126,7 +126,7 @@ public abstract class ServerServlet extends HttpServlet {
      * 
      * @return
      */
-    private final String getServerName() {
+    public final String getServerName() {
         return new StringBuffer(req.getScheme()).append("://")
                 .append(req.getServerName()).append(":")
                 .append(req.getServerPort()).toString();

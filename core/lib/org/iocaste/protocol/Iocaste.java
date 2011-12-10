@@ -61,6 +61,14 @@ public final class Iocaste extends AbstractServiceInterface {
         return call(message);
     }
     
+    public final String getHost() throws Exception {
+        Message message = new Message();
+        
+        message.setId("get_host");
+        
+        return (String)call(message);
+    }
+    
     /**
      * Retorna usuário da sessão.
      * @return

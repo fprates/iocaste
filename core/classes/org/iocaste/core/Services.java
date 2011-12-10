@@ -12,6 +12,7 @@ public class Services extends AbstractFunction {
     private static final int USERNAME_MAX_LEN = 12;
     private Map<String, UserContext> sessions;
     private DBServices db;
+    private String host;
     
     public Services() {
         sessions = new HashMap<String, UserContext>();
@@ -29,6 +30,7 @@ public class Services extends AbstractFunction {
         export("update", "update");
         export("commit", "commit");
         export("checked_select", "checkedSelect");
+        export("get_host", "getHost");
     }
     
     /**
@@ -113,6 +115,15 @@ public class Services extends AbstractFunction {
      */
     private final Connection getDBConnection(String sessionid) {
         return sessions.get(sessionid).getConnection();
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final String getHost(Message message) {
+        return host;
     }
     
     /**
@@ -268,6 +279,20 @@ public class Services extends AbstractFunction {
         sessions.get(sessionid).setObject(contextid, message.get("object"));
     }
     
+    /**
+     * 
+     * @param host
+     */
+    public final void setHost(String host) {
+        this.host = host;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
     public final int update(Message message) throws Exception {
     	UserContext context = sessions.get(message.getSessionid());
     	
