@@ -11,6 +11,18 @@ import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
     
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractPage#help(
+     *     org.iocaste.shell.common.ControlData,
+     *     org.iocaste.shell.common.ViewData)
+     */
+    @Override
+    public final void help(ControlData cdata, ViewData vdata) {
+        cdata.addParameter("topic", "tasksel-index");
+        cdata.redirect("iocaste-help", "view");
+    }
+    
     /**
      * Visão geral de tarefas
      * @param view Visão
@@ -50,7 +62,9 @@ public class Main extends AbstractPage {
         if (command.length() == 0)
             return;
         
+        dataitem.setValue("");
         parsed = command.split("\\s");
+        
         for (int i = 0; i < parsed.length; i++) {
             switch (i) {
             case 0:
