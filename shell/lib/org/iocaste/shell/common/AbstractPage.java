@@ -138,7 +138,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param controldata
      * @param view
      */
-    public final void help(ControlData controldata, ViewData view) { }
+    public void help(ControlData controldata, ViewData view) { }
     
     /**
      * 
