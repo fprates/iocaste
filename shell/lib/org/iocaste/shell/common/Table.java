@@ -208,13 +208,14 @@ public class Table extends AbstractContainer {
     public final void remove(Element element) {
         TableItem tableitem;
         
-        if (element.getType() == Const.TABLE_ITEM) {
-            tableitem = (TableItem)element;
-            for (String name : tableitem.getElementNames())
-                super.remove(getElement(name));
-            
-            itens.remove(element.getName());
-        }
+        if (element.getType() != Const.TABLE_ITEM)
+            return;
+        
+        tableitem = (TableItem)element;
+        for (String name : tableitem.getElementNames())
+            super.remove(getElement(name));
+        
+        itens.remove(element.getName());
         
         super.remove(element);
     }
