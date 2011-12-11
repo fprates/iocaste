@@ -33,6 +33,7 @@ public class Shell extends AbstractServiceInterface {
             tfield.setLength(inputitem.getLength());
             tfield.setValue(inputitem.getValue());
             tfield.setModelItem(inputitem.getModelItem());
+            tfield.setEnabled(inputitem.isEnabled());
             
             return tfield;
         default:
