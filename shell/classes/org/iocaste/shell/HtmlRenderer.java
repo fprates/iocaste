@@ -501,6 +501,7 @@ public class HtmlRenderer {
      * @param table
      */
     private void renderTable(List<String> html, Table table) {
+        String name;
         TableItem tableitem;
         int iniline = table.getFirstItem();
         int maxline = table.getMaxPageLines();
@@ -516,8 +517,10 @@ public class HtmlRenderer {
                 if (!column.isVisible())
                     continue;
                 
+                name = column.getName();
                 html.add("<th>");
-                html.add(column.getName());
+                if (name != null)
+                    html.add(name);
                 html.add("</th>");
             }
             
