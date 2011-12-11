@@ -51,8 +51,8 @@ public class Main extends AbstractPage {
         String[] parsed, values;
         DataItem dataitem = (DataItem)vdata.getElement("command");
         String command = dataitem.getValue();
+        String page = "main";
         String app = null;
-        String page = null;
         
         if (command == null)
             return;
@@ -71,10 +71,12 @@ public class Main extends AbstractPage {
             case 0:
                 app = parsed[i];
                 break;
-            case 1:
-                page = parsed[i];
-                break;
             default:
+                if (parsed[i].startsWith("@")) {
+                    page = parsed[i].substring(1);
+                    break;
+                }
+                
                 values = parsed[i].split("=");
                 if (values.length < 2)
                     break;
@@ -86,11 +88,6 @@ public class Main extends AbstractPage {
         
         if (app == null)
             return;
-        
-        if (page == null) {
-            cdata.message(Const.ERROR, "page.missing");
-            return;
-        }
         
         cdata.redirect(app, page);
     }
