@@ -32,6 +32,22 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
+     * @param cdata
+     * @param vdata
+     */
+    protected void beforeActionCall(ControlData cdata, ViewData vdata)
+            throws Exception {};
+    
+    /**
+     * 
+     * @param cdata
+     * @param vdata
+     */
+    protected void beforeValidation(ControlData cdata, ViewData vdata)
+            throws Exception {};
+    
+    /**
+     * 
      * @param message
      * @return
      * @throws Exception
@@ -56,6 +72,8 @@ public abstract class AbstractPage extends AbstractFunction {
         controldata.setMessages(view.getMessages());
         controldata.setViewData(view);
         
+        beforeValidation(controldata, view);
+        
         element = view.getElement(action);
         if (element.isControlComponent()) {
             control = (ControlComponent)element;
@@ -79,6 +97,8 @@ public abstract class AbstractPage extends AbstractFunction {
         appname = view.getAppName();
         if (shell == null)
             shell = new Shell(this);
+        
+        beforeActionCall(controldata, view);
         
         method = this.getClass().getMethod(
                 action, ControlData.class, ViewData.class);
