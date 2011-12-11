@@ -33,7 +33,7 @@ public class Main extends AbstractPage {
         DataForm dataform = new DataForm(form, "selector.dataform");
         DataItem dataitem = new DataItem(dataform, Const.TEXT_FIELD, "command");
         
-        dataitem.setLength(80);
+        dataitem.setLength(255);
         dataform.addAction("run");
         
         view.setNavbarActionEnabled("help", true);
@@ -48,7 +48,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void run(ControlData cdata, ViewData vdata) {
-        String[] parsed;
+        String[] parsed, values;
         DataItem dataitem = (DataItem)vdata.getElement("command");
         String command = dataitem.getValue();
         String app = null;
@@ -64,6 +64,7 @@ public class Main extends AbstractPage {
         
         dataitem.setValue("");
         parsed = command.split("\\s");
+        cdata.clearParameters();
         
         for (int i = 0; i < parsed.length; i++) {
             switch (i) {
@@ -74,6 +75,11 @@ public class Main extends AbstractPage {
                 page = parsed[i];
                 break;
             default:
+                values = parsed[i].split("=");
+                if (values.length < 2)
+                    break;
+                
+                cdata.addParameter(values[0], values[1]);
                 break;
             }
         }
