@@ -56,6 +56,20 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
+     * @param model
+     * @throws Exception
+     */
+    public final void createModel(DocumentModel model) throws Exception {
+        Message message = new Message();
+        
+        message.setId("create_model");
+        message.add("model", model);
+        
+        call(message);
+    }
+    
+    /**
+     * 
      * @param object
      * @return
      * @throws Exception

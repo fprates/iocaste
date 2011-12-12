@@ -20,6 +20,23 @@ public class Services extends AbstractFunction {
         export("get_next_number", "getNextNumber");
         export("get_document_model", "getDocumentModel");
         export("has_model", "hasModel");
+        export("create_model", "createModel");
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void createModel(Message message) throws Exception {
+        Iocaste iocaste = new Iocaste(this);
+        DocumentModel model = (DocumentModel)message.get("model");
+        String query = "insert into docs001 (" +
+        		"docid, tname, class) values (?, ?, ?)";
+        
+        iocaste.update(query, new Object[] {model.getName(),
+                                            model.getTableName(),
+                                            model.getClassName()});
     }
     
     /**
