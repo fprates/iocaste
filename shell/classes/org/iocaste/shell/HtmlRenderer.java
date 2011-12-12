@@ -442,10 +442,9 @@ public class HtmlRenderer {
         
         html.add(sb.toString());
         for (String option : list.getEntriesNames())
-            html.add(new StringBuilder("<option value=\"").append(option).
-                    append("\">").append(list.get(option)).append("<option/>").
-                    toString());
-        
+            html.add(new StringBuilder("<option value=\"").append(
+                    list.get(option)).append("\">").append(option).append(
+                            "</option>").toString());
         html.add("</select>");
     }
     
