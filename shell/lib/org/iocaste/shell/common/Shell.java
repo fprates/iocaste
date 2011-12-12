@@ -41,6 +41,34 @@ public class Shell extends AbstractServiceInterface {
         }
     }
     
+    public static final Element factory(Container container, Const type,
+            String name, Object[] args) {
+        switch (type) {
+        case CHECKBOX:
+            return new CheckBox(container, name);
+            
+        case DATA_ITEM:
+            return new DataItem(container, (Const)args[0], name);
+            
+        case FORM:
+            return new Form(container, name);
+            
+        case TABLE:
+            return new Table(container, (Integer)args[0], name);
+            
+        case TABLE_ITEM:
+            return new TableItem((Table)container);
+            
+        case TEXT:
+            return new Text(container, name);
+            
+        case TEXT_FIELD:
+            return new TextField(container, name);
+        default:
+            return null;
+        }
+    }
+    
     /**
      * 
      * @param name
