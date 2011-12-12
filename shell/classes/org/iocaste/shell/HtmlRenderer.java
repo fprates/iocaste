@@ -21,6 +21,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.MessageSource;
@@ -271,6 +272,11 @@ public class HtmlRenderer {
             
             break;
             
+        case LIST_BOX:
+            renderList(html, (ListBox)element);
+            
+            break;
+            
         case TEXT:
             renderText(html, (Text)element);
             
@@ -423,6 +429,24 @@ public class HtmlRenderer {
         sb.append("\">").append(link.getText()).append("</a>");
         
         html.add(sb.toString());
+    }
+    
+    /**
+     * 
+     * @param html
+     * @param list
+     */
+    private void renderList(List<String> html, ListBox list) {
+        StringBuilder sb = new StringBuilder("<select name=\"").
+                append(list.getName()).append("\">");
+        
+        html.add(sb.toString());
+        for (String option : list.getEntriesNames())
+            html.add(new StringBuilder("<option value=\"").append(option).
+                    append("\">").append(list.get(option)).append("<option/>").
+                    toString());
+        
+        html.add("</select>");
     }
     
     /**
