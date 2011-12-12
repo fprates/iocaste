@@ -132,6 +132,21 @@ public class Table extends AbstractContainer {
     }
     
     /**
+     * 
+     * @param item
+     * @param name
+     * @return
+     */
+    public String getValue(TableItem item, String name) {
+        Element element = getElement(item.getComplexName(name));
+        
+        if (!element.isDataStorable())
+            return null;
+        
+        return ((InputComponent)element).getValue();
+    }
+    
+    /**
      * Retorna quantidade de colunas.
      * @return quantidade
      */

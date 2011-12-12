@@ -67,6 +67,15 @@ public class TableItem extends AbstractComponent {
     
     /**
      * 
+     * @param name
+     * @return
+     */
+    public final String getComplexName(String name) {
+        return colmap.get(name);
+    }
+    
+    /**
+     * 
      * @return
      */
     public final ExtendedObject getObject() {
