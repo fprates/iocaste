@@ -44,14 +44,29 @@ public class Shell extends AbstractServiceInterface {
     public static final Element factory(Container container, Const type,
             String name, Object[] args) {
         switch (type) {
+        case BUTTON:
+            return new Button(container, name);
+            
         case CHECKBOX:
             return new CheckBox(container, name);
+            
+        case DATA_FORM:
+            return new DataForm(container, name);
             
         case DATA_ITEM:
             return new DataItem(container, (Const)args[0], name);
             
         case FORM:
             return new Form(container, name);
+        
+        case LINK:
+            return new Link(container, name, (String)args[0]);
+            
+        case LIST_BOX:
+            return new ListBox(container, name);
+            
+        case MENU:
+            return new Menu(container, name);
             
         case TABLE:
             return new Table(container, (Integer)args[0], name);
@@ -59,11 +74,15 @@ public class Shell extends AbstractServiceInterface {
         case TABLE_ITEM:
             return new TableItem((Table)container);
             
+        case STANDARD_CONTAINER:
+            return new StandardContainer(container, name);
+            
         case TEXT:
             return new Text(container, name);
             
         case TEXT_FIELD:
             return new TextField(container, name);
+            
         default:
             return null;
         }
