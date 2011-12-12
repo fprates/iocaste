@@ -116,6 +116,20 @@ public class DataForm extends AbstractContainer {
     
     /**
      * 
+     * @param name
+     * @return
+     */
+    public final String getValue(String name) {
+        Element element = getElement(name);
+        
+        if (element.getType() != Const.DATA_ITEM)
+            return null;
+        
+        return ((DataItem)element).getValue();
+    }
+    
+    /**
+     * 
      * @return
      */
     public final boolean isKeyRequired() {
