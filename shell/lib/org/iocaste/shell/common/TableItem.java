@@ -1,5 +1,8 @@
 package org.iocaste.shell.common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 
@@ -12,12 +15,16 @@ public class TableItem extends AbstractComponent {
     private static final long serialVersionUID = -1076760582954115701L;
     private String[] elements;
     private int i;
+    private Map<String, String> colmap;
+    private Table table;
     
     public TableItem(Table table) {
         super(table, Const.TABLE_ITEM, new StringBuilder(table.getName()).
                 append(".").append(table.getLength()).toString());
         String name_ = new StringBuilder(getName()).append(".mark").toString();
         
+        this.table = table;
+        colmap = new HashMap<String, String>();
         i = 1;
         elements = new String[table.getWidth()];
         new CheckBox(table, name_);
@@ -32,6 +39,29 @@ public class TableItem extends AbstractComponent {
         if (i == elements.length)
             throw new RuntimeException("Item overflow for table.");
         
+        elements[i++] = element.getName();
+    }
+    
+    /**
+     * 
+     * @param type
+     * @param name
+     */
+    public final void add(Const type, String name, Object[] args) {
+        String complexname;
+        Element element;
+        
+        if (i == elements.length)
+            throw new RuntimeException("Item overflow for table.");
+        
+        if (colmap.containsKey(name))
+            throw new RuntimeException("Column already exist for table item");
+        
+        complexname = new StringBuilder(name).append(".").append(
+                table.getLength() - 1).toString();
+        element = Shell.factory(table, type, complexname, args);
+
+        colmap.put(name, complexname);
         elements[i++] = element.getName();
     }
     
