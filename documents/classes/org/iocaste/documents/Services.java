@@ -3,8 +3,10 @@ package org.iocaste.documents;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -29,6 +31,10 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void createModel(Message message) throws Exception {
+        int size;
+        StringBuilder sb;
+        DataElement dataelement;
+        Set<DocumentModelItem> itens;
         Iocaste iocaste = new Iocaste(this);
         DocumentModel model = (DocumentModel)message.get("model");
         String query = "insert into docs001 (" +
@@ -37,6 +43,33 @@ public class Services extends AbstractFunction {
         iocaste.update(query, new Object[] {model.getName(),
                                             model.getTableName(),
                                             model.getClassName()});
+        
+        sb = new StringBuilder("create table ").append(model.getTableName()).
+                append(" (");
+        itens = model.getItens();
+        size = itens.size() - 1;
+        
+        for (DocumentModelItem item : itens) {
+            sb.append(item.getTableFieldName());
+            dataelement = item.getDataElement();
+            
+            switch (dataelement.getType()) {
+            case DataType.CHAR:
+                sb.append(" varchar(");
+                break;
+                
+            case DataType.NUMC:
+                sb.append(" numeric(");
+                break;
+            }
+            
+            sb.append(dataelement.getLength()).append(
+                    (item.getIndex() == size)? ")" : "),");
+        }
+        
+        query = sb.append(")").toString();
+        
+        iocaste.update(query, null);
     }
     
     /**
