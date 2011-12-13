@@ -102,8 +102,9 @@ public class DBServices {
         
         System.err.println(query);
         
-        for (Object object : criteria)
-            ps.setObject(i++, object);
+        if (criteria != null)
+            for (Object object : criteria)
+                ps.setObject(i++, object);
         
         try {            
             return ps.executeUpdate();
