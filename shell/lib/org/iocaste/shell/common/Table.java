@@ -181,6 +181,7 @@ public class Table extends AbstractContainer {
         List<String> names = new ArrayList<String>();
         String[] enames = getElementsNames();
         
+        cols = 0;
         for (String name: enames) {
             if (getElement(name).getType() != Const.DATA_ITEM)
                 continue;
