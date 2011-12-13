@@ -88,8 +88,14 @@ public abstract class AbstractPage extends AbstractFunction {
         if (status.input != null) {
             view.setFocus(((Component)status.input).getName());
             
-            if (status.initial)
+            switch (status.error) {
+            case InputStatus.INITIAL:
                 controldata.message(Const.ERROR, "field.is.obligatory");
+                break;
+            case InputStatus.MISMATCH:
+                controldata.message(Const.ERROR, "field.type.mismatch");
+                break;
+            }
             
             return controldata;
         }
@@ -177,31 +183,61 @@ public abstract class AbstractPage extends AbstractFunction {
             String value) throws Exception {
         DataElement dataelement;
         DocumentModelItem modelitem;
-        String test = value.trim();
+        String test;
         
+        if (value == null)
+            return true;
+        
+        test = value.trim();
         if (test.length() == 0)
             return true;
         
         modelitem = input.getModelItem();
-        
         if (modelitem == null)
             return false;
             
         dataelement = modelitem.getDataElement();
-        
         switch (dataelement.getType()) {
         case DataType.NUMC:
             return (Long.parseLong(test) == 0)? true : false;
+            
+        case DataType.DEC:
+            return (Double.parseDouble(test) == 0)? true : false;
             
         default:
             return false;
         }
     }
     
-//    protected final boolean isValueCompatible(
-//            InputComponent input, String value) {
-//        
-//    }
+    /**
+     * 
+     * @param input
+     * @param value
+     * @return
+     */
+    private final boolean isValueCompatible(InputComponent input,
+            String value) {
+        DataElement dataelement;
+        DocumentModelItem modelitem = input.getModelItem();
+        
+        if (modelitem == null)
+            return true;
+        
+        dataelement = modelitem.getDataElement();
+        switch (dataelement.getType()) {
+        case DataType.CHAR:
+            return true;
+            
+        case DataType.NUMC:
+            return input.getValue().matches("[0-9]+");
+            
+        case DataType.DEC:
+            return input.getValue().matches("[0-9\\.]+");
+            
+        default:
+            return false;
+        }
+    }
     
     /**
      * 
@@ -228,18 +264,20 @@ public abstract class AbstractPage extends AbstractFunction {
             value = message.getString(name);
             modelitem = input.getModelItem();
             
-//            if (!isValueCompatible(input, value)) {
-//                controldata.message(Const.ERROR, "value.type.mismatch");
-//                
-//                return controldata;
-//            }
-            
             input.setValue(value);
-            if (input.isObligatory() && (isInitial(name, input, value)) &&
-                    (!status.initial)) {
-                status.input = input;
-                status.initial = true;
-                continue;
+            if (status.error == 0) {
+                if (input.isObligatory() && isInitial(name, input, value)) {
+                    status.input = input;
+                    status.error = InputStatus.INITIAL;
+                    continue;
+                }
+                
+                if (!isInitial(name, input, value) && !isValueCompatible(
+                        input, value)) {
+                    status.input = input;
+                    status.error = InputStatus.MISMATCH;
+                    continue;
+                }
             }
             
             if (value == null || modelitem == null ||
@@ -295,6 +333,8 @@ public abstract class AbstractPage extends AbstractFunction {
 }
 
 class InputStatus {
-    public boolean initial = false;
+    public static final int INITIAL = 1;
+    public static final int MISMATCH = 2;
+    public int error = 0;
     public InputComponent input = null;
 }
