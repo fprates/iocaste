@@ -30,7 +30,7 @@ create table docs003 (
 
 /* itens de documento */
 create table docs002 (
-   iname varchar(12) primary key,
+   iname varchar(36) primary key,
    docid varchar(12) foreign key references docs001(docid),
    index numeric(3),
    fname varchar(12),
@@ -41,7 +41,7 @@ create table docs002 (
 /* chaves do documento */
 create table docs004 (
    docid varchar(12) foreign key references docs001(docid),
-   iname varchar(12) foreign key references docs002(iname)
+   iname varchar(36) foreign key references docs002(iname)
 );
 \p document tables has been generated
 
