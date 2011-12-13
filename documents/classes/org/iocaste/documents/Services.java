@@ -35,23 +35,38 @@ public class Services extends AbstractFunction {
         StringBuilder sb;
         DataElement dataelement;
         Set<DocumentModelItem> itens;
+        StringBuilder sbk = null;
         Iocaste iocaste = new Iocaste(this);
         DocumentModel model = (DocumentModel)message.get("model");
-        String query = "insert into docs001 (" +
+        String tname, query = "insert into docs001 (" +
         		"docid, tname, class) values (?, ?, ?)";
         
         iocaste.update(query, new Object[] {model.getName(),
                                             model.getTableName(),
                                             model.getClassName()});
+
+        query = "insert into docs002 (iname, docid, index, " +
+                "fname, ename, attrb) values (?, ?, ?, ?, ?, ?)";
+        
+        itens = model.getItens();
         
         sb = new StringBuilder("create table ").append(model.getTableName()).
                 append(" (");
-        itens = model.getItens();
+        
         size = itens.size() - 1;
         
         for (DocumentModelItem item : itens) {
-            sb.append(item.getTableFieldName());
             dataelement = item.getDataElement();
+            
+            iocaste.update(query, new Object[] {item.getName(),
+                    model.getName(),
+                    item.getIndex(),
+                    item.getTableFieldName(),
+                    dataelement.getName(),
+                    item.getAttributeName()});
+            
+            tname = item.getTableFieldName();
+            sb.append(tname);
             
             switch (dataelement.getType()) {
             case DataType.CHAR:
@@ -63,9 +78,21 @@ public class Services extends AbstractFunction {
                 break;
             }
             
+            if (model.isKey(item)) {
+                if (sbk == null)
+                    sbk = new StringBuilder(", primary key (");
+                else
+                    sbk.append(",");
+                
+                sbk.append(tname);
+            }
+            
             sb.append(dataelement.getLength()).append(
                     (item.getIndex() == size)? ")" : "),");
         }
+        
+        if (sbk != null)
+            sb.append(sbk).append(")");
         
         query = sb.append(")").toString();
         
