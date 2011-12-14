@@ -13,10 +13,14 @@ public class Services extends AbstractFunction {
     private Map<String, UserContext> sessions;
     private DBServices db;
     private String host;
+    private Map<String, String> properties;
     
     public Services() {
         sessions = new HashMap<String, UserContext>();
+        properties = new HashMap<String, String>();
         db = new DBServices();
+        
+        properties.put("db.user", "iocastedb");
         
         export("login", "login");
         export("is_connected", "isConnected");
@@ -31,6 +35,7 @@ public class Services extends AbstractFunction {
         export("commit", "commit");
         export("checked_select", "checkedSelect");
         export("get_host", "getHost");
+        export("get_system_parameter", "getSystemParameter");
     }
     
     /**
@@ -124,6 +129,17 @@ public class Services extends AbstractFunction {
      */
     public final String getHost(Message message) {
         return host;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final String getSystemParameter(Message message) {
+        String name = message.getString("parameter");
+        
+        return properties.get(name);
     }
     
     /**
