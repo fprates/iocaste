@@ -29,88 +29,12 @@ public class DocumentServices {
      */
     public final void createModel(DocumentModel model)
             throws Exception {
-        int size;
-        DataElement dataelement;
-        Set<DocumentModelItem> itens;
-        StringBuilder sb, sbk = null;
-        String dbuser, tname, query = "insert into docs001 (" +
-                "docid, tname, class) values (?, ?, ?)";
         Iocaste iocaste = new Iocaste(function);
         
-        iocaste.update(query, new Object[] {model.getName(),
-                                            model.getTableName(),
-                                            model.getClassName()});
-
-        query = "insert into docs002 (iname, docid, index, " +
-                "fname, ename, attrb) values (?, ?, ?, ?, ?, ?)";
-        
-        itens = model.getItens();
-        
-        sb = new StringBuilder("create table ").append(model.getTableName()).
-                append(" (");
-        
-        size = itens.size() - 1;
-        
-        for (DocumentModelItem item : itens) {
-            dataelement = item.getDataElement();
-            
-            tname = new StringBuilder(model.getName()).append(".").
-                    append(item.getName()).toString();
-            
-            iocaste.update(query, new Object[] {tname,
-                    model.getName(),
-                    item.getIndex(),
-                    item.getTableFieldName(),
-                    dataelement.getName(),
-                    item.getAttributeName()});
-            
-            tname = item.getTableFieldName();
-            sb.append(tname);
-            
-            switch (dataelement.getType()) {
-            case DataType.CHAR:
-                sb.append(" varchar(");
-                break;
-                
-            case DataType.NUMC:
-                sb.append(" numeric(");
-                break;
-            }
-            
-            if (model.isKey(item)) {
-                if (sbk == null)
-                    sbk = new StringBuilder(", primary key (");
-                else
-                    sbk.append(",");
-                
-                sbk.append(tname);
-            }
-            
-            sb.append(dataelement.getLength()).append(
-                    (item.getIndex() == size)? ")" : "),");
-        }
-        
-        if (sbk != null)
-            sb.append(sbk).append(")");
-        
-        query = sb.append(")").toString();
-        
-        iocaste.update(query, null);
-        
-        query = "insert into docs004(iname, docid) values (?, ?)";
-        for (DocumentModelKey key : model.getKeys()) {
-            tname = new StringBuilder(model.getName()).append(".").
-                    append(key.getModelItemName()).toString();
-            iocaste.update(query, new Object[] {tname,
-                    key.getModel().getName()});
-        }
-        
-        dbuser = iocaste.getSystemParameter("db.user");
-        query = new StringBuilder("grant select, insert, update, delete on ").
-                append(model.getTableName()).append(" to ").append(dbuser).
-                toString();
-        
-        iocaste.update(query, null);
+        saveDocumentHeader(iocaste, model);
+        saveDocumentItens(iocaste, model);
+        saveDocumentKeys(iocaste, model);
+        saveDataElements(iocaste, model);
     }
     
     /**
@@ -299,6 +223,11 @@ public class DocumentServices {
         this.queries.put(model.getName(), queries);
     }
     
+    /**
+     * 
+     * @param model
+     * @throws Exception
+     */
     public final void removeModel(DocumentModel model) throws Exception {
         Iocaste iocaste = new Iocaste(function);
         String name, query = "delete from docs004 where iname = ?";
@@ -323,5 +252,139 @@ public class DocumentServices {
                 toString();
         iocaste.update(query, null);
     }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param model
+     * @throws Exception
+     */
+    private final void saveDataElements(Iocaste iocaste, DocumentModel model) 
+            throws Exception {
+        DataElement dataelement;
+        Set<DocumentModelItem> itens = model.getItens();
+        String name, query = "insert into docs003(ename, decim, lngth, " +
+        		"etype, upcas) values(?, ?, ?, ?, ?)";
+        
+        for (DocumentModelItem item : itens) {
+            dataelement = item.getDataElement();
+            name = new StringBuilder(model.getName()).append(".").
+                    append(item.getName()).toString();
+            iocaste.update(query, new Object[] {name,
+                    dataelement.getDecimals(),
+                    dataelement.getLength(),
+                    dataelement.getType(),
+                    dataelement.isUpcase()});
+        }
+    }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param model
+     * @throws Exception
+     */
+    private final void saveDocumentHeader(Iocaste iocaste,
+            DocumentModel model) throws Exception {
+        String query = "insert into docs001 (docid, tname, class) " +
+        		"values (?, ?, ?)";
+        
+        iocaste.update(query, new Object[] {model.getName(),
+                                            model.getTableName(),
+                                            model.getClassName()});
+        
+    }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param model
+     * @throws Exception
+     */
+    private final void saveDocumentItens(Iocaste iocaste,
+            DocumentModel model) throws Exception {
+        DataElement dataelement;
+        int size;
+        StringBuilder sb, sbk = null;
+        String tname, query = "insert into docs002 (iname, docid, index, " +
+                "fname, ename, attrb) values (?, ?, ?, ?, ?, ?)";
+        Set<DocumentModelItem> itens = model.getItens();
+        
+        sb = new StringBuilder("create table ").append(model.getTableName()).
+                append(" (");
+        
+        size = itens.size() - 1;
+        
+        for (DocumentModelItem item : itens) {
+            dataelement = item.getDataElement();
+            
+            tname = new StringBuilder(model.getName()).append(".").
+                    append(item.getName()).toString();
+            
+            iocaste.update(query, new Object[] {tname,
+                    model.getName(),
+                    item.getIndex(),
+                    item.getTableFieldName(),
+                    dataelement.getName(),
+                    item.getAttributeName()});
+            
+            tname = item.getTableFieldName();
+            sb.append(tname);
+            
+            switch (dataelement.getType()) {
+            case DataType.CHAR:
+                sb.append(" varchar(");
+                break;
+                
+            case DataType.NUMC:
+                sb.append(" numeric(");
+                break;
+            }
+            
+            if (model.isKey(item)) {
+                if (sbk == null)
+                    sbk = new StringBuilder(", primary key (");
+                else
+                    sbk.append(",");
+                
+                sbk.append(tname);
+            }
+            
+            sb.append(dataelement.getLength()).append(
+                    (item.getIndex() == size)? ")" : "),");
+        }
+        
+        if (sbk != null)
+            sb.append(sbk).append(")");
+        
+        query = sb.append(")").toString();
+        
+        iocaste.update(query, null);
+    }
 
+    /**
+     * 
+     * @param iocaste
+     * @param model
+     * @throws Exception
+     */
+    private void saveDocumentKeys(Iocaste iocaste, DocumentModel model)
+            throws Exception {
+        String dbuser, name, query = "insert into docs004(iname, docid) " +
+        		"values (?, ?)";
+        
+        for (DocumentModelKey key : model.getKeys()) {
+            name = new StringBuilder(model.getName()).append(".").
+                    append(key.getModelItemName()).toString();
+            iocaste.update(query, new Object[] {name,
+                    key.getModel().getName()});
+        }
+        
+        dbuser = iocaste.getSystemParameter("db.user");
+        query = new StringBuilder("grant select, insert, update, delete on ").
+                append(model.getTableName()).append(" to ").append(dbuser).
+                toString();
+        
+        iocaste.update(query, null);
+    }
 }
