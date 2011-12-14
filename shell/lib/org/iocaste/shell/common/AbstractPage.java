@@ -220,7 +220,7 @@ public abstract class AbstractPage extends AbstractFunction {
         DataElement dataelement;
         DocumentModelItem modelitem = input.getModelItem();
         
-        if (modelitem == null)
+        if (value == null || modelitem == null)
             return true;
         
         dataelement = modelitem.getDataElement();
@@ -265,19 +265,16 @@ public abstract class AbstractPage extends AbstractFunction {
             modelitem = input.getModelItem();
             
             input.setValue(value);
-            if (status.error == 0) {
-                if (input.isObligatory() && isInitial(name, input, value)) {
-                    status.input = input;
-                    status.error = InputStatus.INITIAL;
-                    continue;
-                }
-                
-                if (!isInitial(name, input, value) && !isValueCompatible(
-                        input, value)) {
-                    status.input = input;
-                    status.error = InputStatus.MISMATCH;
-                    continue;
-                }
+            if (!isValueCompatible(input, value)) {
+                status.input = input;
+                status.error = InputStatus.MISMATCH;
+                continue;
+            }
+           
+            if (input.isObligatory() && isInitial(name, input, value)) {
+                status.input = input;
+                status.error = InputStatus.INITIAL;
+                continue;
             }
             
             if (value == null || modelitem == null ||
