@@ -32,10 +32,9 @@ public class Services extends AbstractFunction {
      */
     public final void createModel(Message message) throws Exception {
         int size;
-        StringBuilder sb;
+        StringBuilder sb, sbk = null;
         DataElement dataelement;
         Set<DocumentModelItem> itens;
-        StringBuilder sbk = null;
         Iocaste iocaste = new Iocaste(this);
         DocumentModel model = (DocumentModel)message.get("model");
         String tname, query = "insert into docs001 (" +
@@ -58,7 +57,10 @@ public class Services extends AbstractFunction {
         for (DocumentModelItem item : itens) {
             dataelement = item.getDataElement();
             
-            iocaste.update(query, new Object[] {item.getName(),
+            tname = new StringBuilder(model.getName()).append(".").
+                    append(item.getName()).toString();
+            
+            iocaste.update(query, new Object[] {tname,
                     model.getName(),
                     item.getIndex(),
                     item.getTableFieldName(),
@@ -146,6 +148,7 @@ public class Services extends AbstractFunction {
     public final DocumentModel getDocumentModel(Message message)
             throws Exception {
         Object[] lines;
+        String[] composed;
         Map<String, Object> columns;
         DocumentModelKey key;
         DocumentModelItem item;
@@ -173,10 +176,10 @@ public class Services extends AbstractFunction {
                 new Object[] {documentname});
         for (Object object : lines) {
             columns = (Map<String, Object>)object;
-            
+            composed = ((String)columns.get("INAME")).split("\\.");
             item = new DocumentModelItem();
             item.setDocumentModel(document);
-            item.setName((String)columns.get("INAME"));
+            item.setName(composed[1]);
             item.setAttributeName((String)columns.get("ATTRB"));
             item.setTableFieldName((String)columns.get("FNAME"));
             item.setDataElement(getDataElement(iocaste,
