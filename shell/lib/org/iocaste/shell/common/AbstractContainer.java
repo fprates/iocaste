@@ -116,8 +116,7 @@ public abstract class AbstractContainer
         clear();
         
         for (DocumentModelItem item : model.getItens()) {
-            dataitem = new DataItem(this, Const.TEXT_FIELD, new StringBuffer(
-                    getName()).append(".").append(item.getName()).toString());
+            dataitem = new DataItem(this, Const.TEXT_FIELD, item.getName());
             dataitem.setModelItem(item);
         }
         
