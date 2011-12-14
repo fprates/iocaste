@@ -163,6 +163,20 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
+     * @param name
+     * @throws Exception
+     */
+    public final void removeModel(String name) throws Exception {
+        Message message = new Message();
+        
+        message.setId("remove_model");
+        message.add("model_name", name);
+        
+        call(message);
+    }
+    
+    /**
+     * 
      * @param query
      * @return
      * @throws Exception
