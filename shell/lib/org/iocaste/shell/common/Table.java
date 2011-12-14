@@ -22,9 +22,13 @@
 package org.iocaste.shell.common;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 
 /**
  * Implementação de tabela html.
@@ -37,7 +41,7 @@ public class Table extends AbstractContainer {
     private int cols;
     private boolean header;
     private boolean mark;
-    private TableColumn[] columns;
+    private Map<String, TableColumn> columns;
     private List<String> itens;
     private int firstitem;
     private int maxpagelines;
@@ -50,11 +54,13 @@ public class Table extends AbstractContainer {
         firstitem = 0;
         maxpagelines = 20;
         itens = new ArrayList<String>();
+        columns = new LinkedHashMap<String, TableColumn>();
+        this.cols = cols;
         
         if (cols == 0)
             return;
         
-        prepare(cols, null);
+        prepare(null);
     }
     
     /*
@@ -71,11 +77,20 @@ public class Table extends AbstractContainer {
     }
     
     /**
+     * 
+     * @param name
+     * @return
+     */
+    public final TableColumn getColumn(String name) {
+        return columns.get(name);
+    }
+    
+    /**
      * Retorna títulos das colunas.
      * @return títulos
      */
     public final TableColumn[] getColumns() {
-        return columns;
+        return columns.values().toArray(new TableColumn[0]);
     }
     
     /**
@@ -185,34 +200,55 @@ public class Table extends AbstractContainer {
         for (String name: enames) {
             if (getElement(name).getType() != Const.DATA_ITEM)
                 continue;
-            cols++;
             names.add(name);
         }
         
-        prepare(cols, names.toArray(new String[0]));
+        prepare(model.getItens());
     }
     
     /**
      * 
      * @param cols
      */
-    private final void prepare(int cols, String[] names) {
+    private final void prepare(Set<DocumentModelItem> itens) {
+        String name;
         TableColumn column;
         
-        this.cols = cols + 1;
-        columns = new TableColumn[this.cols];
+        columns.clear();
         
-        for (int k = 0; k < this.cols; k++) {
+        column = new TableColumn();
+        column.setVisible(mark);
+        column.setMark(true);
+        column.setName("");
+        
+        columns.put("", column);
+        
+        if (itens == null) {
+            cols++;
+            for (int i = 1; i < cols; i++) {
+                column = new TableColumn();
+                column.setVisible(true);
+                column.setMark(false);
+                column.setName(Integer.toString(i));
+                columns.put(column.getName(), column);
+            }
+            
+            return;
+        }
+        
+        for (DocumentModelItem item : itens) {
+            name = item.getName();
+            
             column = new TableColumn();
             column.setVisible(true);
-            column.setMark((k == 0)?true:false);
+            column.setMark(false);
+            column.setName(item.getName());
+            column.setModelItem(item);
             
-            columns[k] = column;
-            if (k == 0 || names == null)
-                continue;
-            
-            columns[k].setName(names[k-1]);
+            columns.put(name, column);
         }
+        
+        cols = columns.size();
     }
     
     /*
@@ -258,6 +294,9 @@ public class Table extends AbstractContainer {
      * @param name título
      */
     public final void setHeaderName(int col, String name) {
+        TableColumn[] columns = this.columns.values().
+                toArray(new TableColumn[0]);
+        
         columns[col].setName(name);
     }
     
@@ -283,6 +322,9 @@ public class Table extends AbstractContainer {
      * @param visible true, para coluna visível
      */
     public final void setVisibleColumn(int col, boolean visible) {
+        TableColumn[] columns = this.columns.values().
+                toArray(new TableColumn[0]);
+        
         columns[col].setVisible(visible);
     }
 }

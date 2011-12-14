@@ -2,11 +2,22 @@ package org.iocaste.shell.common;
 
 import java.io.Serializable;
 
+import org.iocaste.documents.common.DocumentModelItem;
+
 public class TableColumn implements Serializable {
     private static final long serialVersionUID = -39703809895121317L;
     private boolean visible;
     private String name;
     private boolean mark;
+    private DocumentModelItem modelitem;
+    
+    /**
+     * 
+     * @return
+     */
+    public final DocumentModelItem getModelItem() {
+        return modelitem;
+    }
     
     /**
      * Retorna nome da coluna.
@@ -30,6 +41,14 @@ public class TableColumn implements Serializable {
      */
     public final boolean isVisible() {
         return visible;
+    }
+    
+    /**
+     * 
+     * @param modelitem
+     */
+    public final void setModelItem(DocumentModelItem modelitem) {
+        this.modelitem = modelitem;
     }
     
     /**

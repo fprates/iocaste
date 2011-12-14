@@ -50,6 +50,7 @@ public class TableItem extends AbstractComponent {
     public final void add(Const type, String name, Object[] args) {
         String complexname;
         Element element;
+        InputComponent input;
         
         if (i == elements.length)
             throw new RuntimeException("Item overflow for table.");
@@ -60,7 +61,11 @@ public class TableItem extends AbstractComponent {
         complexname = new StringBuilder(name).append(".").append(
                 table.getLength() - 1).toString();
         element = Shell.factory(table, type, complexname, args);
-
+        if (element.isDataStorable()) {
+            input = (InputComponent)element;
+            input.setModelItem(table.getColumn(name).getModelItem());
+        }
+            
         colmap.put(name, complexname);
         elements[i++] = element.getName();
     }
