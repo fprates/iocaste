@@ -41,9 +41,9 @@ public class LoginForm extends AbstractPage {
         vdata.setMessages(new MessageSource("/META-INF/message.properties"));
         vdata.setTitle("authentic");
         vdata.addContainer(form);
-        vdata.setFocus("login.username");
+        vdata.setFocus("username");
         
-        ((DataItem)vdata.getElement("login.secret")).setSecret(true);
+        ((DataItem)vdata.getElement("secret")).setSecret(true);
     }
     
     /**
@@ -65,8 +65,8 @@ public class LoginForm extends AbstractPage {
             controldata.message(Const.ERROR, "invalid.login");
         }
 
-        ((DataItem)view.getElement("login.username")).setValue("");
-        ((DataItem)view.getElement("login.secret")).setValue("");
+        ((DataItem)view.getElement("username")).setValue("");
+        ((DataItem)view.getElement("secret")).setValue("");
     }
     
     /**
