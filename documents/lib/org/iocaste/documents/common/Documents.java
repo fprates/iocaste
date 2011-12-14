@@ -290,7 +290,7 @@ public class Documents extends AbstractServiceInterface {
         	object = new ExtendedObject(queryinfo.model);
         	
         	for (DocumentModelItem modelitem : queryinfo.model.getItens()) {
-        		value = line.get(modelitem.getTableFieldName());
+        		value = line.get(modelitem.getTableFieldName().toUpperCase());
         		object.setValue(modelitem, value);
         	}
         	
