@@ -153,8 +153,15 @@ public class HtmlRenderer {
      * @param checkbox
      */
     private final void renderCheckBox(List<String> html, CheckBox checkbox) {
-        html.add(new StringBuilder("<input type=\"checkbox\" name=\"").
-                append(checkbox.getName()).append("\"/>").toString());
+        StringBuilder sb = new StringBuilder("<input type=\"checkbox\" " +
+        		"name=\"").append(checkbox.getName());
+        
+        if (checkbox.isSelected())
+            sb.append("\" checked=\"checked\"/>");
+        else
+            sb.append("\"/>");
+        
+        html.add(sb.toString());
     }
     
     /**
