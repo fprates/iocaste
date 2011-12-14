@@ -99,6 +99,14 @@ public class Services extends AbstractFunction {
         query = sb.append(")").toString();
         
         iocaste.update(query, null);
+        
+        query = "insert into docs004(iname, docid) values (?, ?)";
+        for (DocumentModelKey key : model.getKeys()) {
+            tname = new StringBuilder(model.getName()).append(".").
+                    append(key.getModelItemName()).toString();
+            iocaste.update(query, new Object[] {tname,
+                    key.getModel().getName()});
+        }
     }
     
     /**
