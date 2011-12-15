@@ -28,6 +28,7 @@ public abstract class AbstractPage extends AbstractFunction {
             throws Exception {
         String[] entry = shell.popPage();
         controldata.redirect(entry[0], entry[1]);
+        controldata.dontPushPage();
     }
     
     /**

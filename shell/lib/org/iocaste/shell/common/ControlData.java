@@ -42,6 +42,13 @@ public class ControlData implements Serializable {
     
     /**
      * 
+     */
+    public final void dontPushPage() {
+        pagecall = false;
+    }
+    
+    /**
+     * 
      * @return
      */
     public final String getApp() {
