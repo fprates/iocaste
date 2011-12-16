@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Const;
@@ -21,7 +20,6 @@ import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.Menu;
@@ -86,18 +84,6 @@ public class HtmlRenderer {
         
         navbar.setMessage((msgtype == null)? Const.STATUS : msgtype,
                 (msgtext == null)? "" : msgtext);
-    }
-
-    /**
-     * 
-     * @param input
-     * @return
-     */
-    private DataElement getDataElement(InputComponent input) {
-        DocumentModelItem modelitem = input.getModelItem();
-        
-        return (modelitem == null)? input.getDataElement() : 
-            modelitem.getDataElement();
     }
     
     /**
@@ -633,7 +619,7 @@ public class HtmlRenderer {
     private final void renderTextField(
             List<String> html, TextField textfield) {
         StringBuffer inputtext;
-        DataElement dataelement = getDataElement(textfield);
+        DataElement dataelement = Shell.getDataElement(textfield);
         int length = (dataelement == null)?textfield.getLength() :
             dataelement.getLength();
         String name = textfield.getName();

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
-import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
@@ -183,7 +182,6 @@ public abstract class AbstractPage extends AbstractFunction {
     protected final boolean isInitial(String name, InputComponent input,
             String value) throws Exception {
         DataElement dataelement;
-        DocumentModelItem modelitem;
         String test;
         
         if (value == null)
@@ -193,11 +191,7 @@ public abstract class AbstractPage extends AbstractFunction {
         if (test.length() == 0)
             return true;
         
-        modelitem = input.getModelItem();
-        if (modelitem == null)
-            dataelement = input.getDataElement();
-        else
-            dataelement = modelitem.getDataElement();
+        dataelement = Shell.getDataElement(input);
         
         if (dataelement == null)
             return false;
@@ -223,15 +217,11 @@ public abstract class AbstractPage extends AbstractFunction {
     private final boolean isValueCompatible(InputComponent input,
             String value) {
         DataElement dataelement;
-        DocumentModelItem modelitem = input.getModelItem();
         
         if (value == null)
             return true;
         
-        if (modelitem == null)
-            dataelement = input.getDataElement();
-        else
-            dataelement = modelitem.getDataElement();
+        dataelement = Shell.getDataElement(input);
         
         if (dataelement == null)
             return true;
@@ -263,7 +253,7 @@ public abstract class AbstractPage extends AbstractFunction {
         InputComponent input;
         Element element;
         String value;
-        DocumentModelItem modelitem;
+        DataElement dataelement;
         String[] inputs = view.getInputs();
         InputStatus status = new InputStatus();
         
@@ -274,7 +264,6 @@ public abstract class AbstractPage extends AbstractFunction {
             
             input = (InputComponent)element;
             value = message.getString(name);
-            modelitem = input.getModelItem();
             
             input.setValue(value);
             if (!isValueCompatible(input, value)) {
@@ -289,11 +278,12 @@ public abstract class AbstractPage extends AbstractFunction {
                 continue;
             }
             
-            if (value == null || modelitem == null ||
-                    modelitem.getDataElement() == null)
+            dataelement = Shell.getDataElement(input);
+            
+            if (value == null || dataelement == null)
                 continue;
             
-            if (modelitem.getDataElement().isUpcase())
+            if (dataelement.isUpcase())
                 input.setValue(value.toUpperCase());
         }
         

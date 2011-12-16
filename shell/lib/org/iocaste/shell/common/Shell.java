@@ -2,6 +2,7 @@ package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractServiceInterface;
@@ -86,6 +87,18 @@ public class Shell extends AbstractServiceInterface {
         default:
             return null;
         }
+    }
+
+    /**
+     * 
+     * @param input
+     * @return
+     */
+    public static final DataElement getDataElement(InputComponent input) {
+        DocumentModelItem modelitem = input.getModelItem();
+        
+        return (modelitem == null)? input.getDataElement() : 
+            modelitem.getDataElement();
     }
     
     /**
