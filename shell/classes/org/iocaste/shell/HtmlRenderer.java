@@ -686,22 +686,25 @@ public class HtmlRenderer {
         if (messages == null)
             messages = new MessageSource(null);
         
-        html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
-        		"\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
-        html.add("<html>");
+        if (!vdata.isHeadDisabled()) {
+            html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
+                    "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
+            html.add("<html>");
+            
+            renderHeader(html, vdata);
+            
+            html.add("<body onLoad=\"initialize()\">");
+            configNavigationBar(html, vdata);
+        }
         
-        renderHeader(html, vdata);
-        
-        html.add("<body onLoad=\"initialize()\">");
-
-
-        configNavigationBar(html, vdata);
         for (Container container : vdata.getContainers())
             renderContainer(html, container);
 
-        html.add("</body>");
-        html.add("</html>");
-
+        if (!vdata.isHeadDisabled()) {
+            html.add("</body>");
+            html.add("</html>");
+        }
+        
         msgtext = null;
         msgtype = Const.NONE;
         

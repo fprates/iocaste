@@ -47,6 +47,7 @@ public class ViewData implements Serializable {
     private String pagename;
     private Map<String, Object> parameters;
     private Container nbcontainer;
+    private boolean disabledhead;
     
     public ViewData(String appname, String pagename) {
         inputs = new ArrayList<String>();
@@ -55,6 +56,7 @@ public class ViewData implements Serializable {
         mpelements = new ArrayList<Element>();
         nbcontainer = new StandardContainer(null, "navbar");
         containers.add(nbcontainer);
+        disabledhead = false;
         
         this.appname = appname;
         this.pagename = pagename;
@@ -89,6 +91,13 @@ public class ViewData implements Serializable {
      */
     public final void clearInputs() {
         inputs.clear();
+    }
+    
+    /**
+     * 
+     */
+    public final void disableHead() {
+        disabledhead = true;
     }
     
     /*
@@ -251,6 +260,14 @@ public class ViewData implements Serializable {
      */
     public final String getTitle() {
         return title;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final boolean isHeadDisabled() {
+        return disabledhead;
     }
     
     /**

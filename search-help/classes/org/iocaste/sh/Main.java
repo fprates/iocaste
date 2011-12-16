@@ -14,7 +14,8 @@ public class Main extends AbstractPage {
         Text text = new Text(container, "text");
         
         text.setText("Aplicação Iocaste Template");
-        view.setTitle("iocaste-project-template");
+        
+        view.disableHead();
         view.addContainer(container);
     }
     
