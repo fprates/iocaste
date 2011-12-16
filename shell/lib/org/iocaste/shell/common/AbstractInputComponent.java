@@ -14,6 +14,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private Const type;
     private boolean secret;
     private DataElement dataelement;
+    private SearchHelp search;
     
     public AbstractInputComponent(Container container, Const type,
             Const type_, String name) {
@@ -79,10 +80,19 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getSearchHelp()
+     */
+    @Override
+    public final SearchHelp getSearchHelp() {
+        return search;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.DataComponent#getValue()
      */
     @Override
-    public String getValue() {
+    public final String getValue() {
         return value;
     }
     
@@ -157,6 +167,16 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setObligatory(boolean obligatory) {
         this.obligatory = obligatory;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setSearchHelp(
+     *     org.iocaste.shell.common.SearchHelp)
+     */
+    @Override
+    public final void setSearchHelp(SearchHelp search) {
+        this.search = search;
     }
     
     /*

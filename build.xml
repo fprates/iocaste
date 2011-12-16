@@ -16,6 +16,9 @@
         <!-- shell -->
         <ant antfile="${basedir}/src/shell/build.xml"/>
     	
+        <!-- search-help -->
+        <ant antfile="${basedir}/src/search-help/build.xml"/>
+        
         <!-- login -->
         <ant antfile="${basedir}/src/login/build.xml"/>
     	

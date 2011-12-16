@@ -26,6 +26,7 @@ import org.iocaste.shell.common.Menu;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
@@ -496,6 +497,21 @@ public class HtmlRenderer {
     /**
      * 
      * @param html
+     * @param sh
+     */
+    private final void renderSearchHelp(List<String> html, SearchHelp sh) {
+        String name = sh.getName();
+        StringBuilder sb = new StringBuilder("<input type=\"button\" " +
+                "value=\"?\" onClick=\"search('").append(name).
+                append("', '").append(pagetrack).append("')\">").
+                append("<div id=\"").append(name).append(".area\"></div>");
+        
+        html.add(sb.toString());
+    }
+    
+    /**
+     * 
+     * @param html
      * @param vdata
      */
     private final void renderStyleSheet(List<String> html, ViewData vdata) {
@@ -619,6 +635,7 @@ public class HtmlRenderer {
     private final void renderTextField(
             List<String> html, TextField textfield) {
         StringBuffer inputtext;
+        SearchHelp search;
         DataElement dataelement = Shell.getDataElement(textfield);
         int length = (dataelement == null)?textfield.getLength() :
             dataelement.getLength();
@@ -648,6 +665,10 @@ public class HtmlRenderer {
             inputtext.append("<span>*</span>");
         
         html.add(inputtext.toString());
+        
+        search = textfield.getSearchHelp();
+        if (search != null)
+            renderSearchHelp(html, search);
     }
     
     /**

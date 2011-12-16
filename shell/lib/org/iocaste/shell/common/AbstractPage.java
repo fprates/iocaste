@@ -105,6 +105,8 @@ public abstract class AbstractPage extends AbstractFunction {
             shell = new Shell(this);
         
         beforeActionCall(controldata, view);
+        if (element.getType() == Const.SEARCH_HELP)
+            action = "search";
         
         method = this.getClass().getMethod(
                 action, ControlData.class, ViewData.class);
@@ -315,6 +317,15 @@ public abstract class AbstractPage extends AbstractFunction {
         
         if (element.hasMultipartSupport())
             vdata.addMultipartElement(element);
+    }
+    
+    /**
+     * 
+     * @param cdata
+     * @param vdata
+     */
+    public final void search(ControlData cdata, ViewData vdata) {
+        cdata.redirect("iocaste-search-help", "main");
     }
     
     /**

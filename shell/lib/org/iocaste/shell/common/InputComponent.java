@@ -13,6 +13,8 @@ public interface InputComponent {
     
     public abstract DocumentModelItem getModelItem();
 
+    public abstract SearchHelp getSearchHelp();
+    
     public abstract String getValue();
     
     public abstract boolean isObligatory();
@@ -28,6 +30,8 @@ public interface InputComponent {
     public abstract void setModelItem(DocumentModelItem modelitem);
     
     public abstract void setObligatory(boolean obligatory);
+    
+    public abstract void setSearchHelp(SearchHelp search);
     
     public abstract void setSecret(boolean secret);
     

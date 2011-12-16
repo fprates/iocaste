@@ -35,6 +35,8 @@ public class Shell extends AbstractServiceInterface {
             tfield.setValue(inputitem.getValue());
             tfield.setModelItem(inputitem.getModelItem());
             tfield.setEnabled(inputitem.isEnabled());
+            tfield.setDataElement(inputitem.getDataElement());
+            tfield.setSearchHelp(inputitem.getSearchHelp());
             
             return tfield;
         default:
