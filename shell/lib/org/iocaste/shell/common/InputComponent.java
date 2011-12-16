@@ -1,10 +1,13 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 
 public interface InputComponent {
 
     public abstract Const getComponentType();
+    
+    public abstract DataElement getDataElement();
     
     public abstract int getLength();
     
@@ -17,6 +20,8 @@ public interface InputComponent {
     public abstract boolean isSecret();
     
     public abstract Object getParsedValue();
+    
+    public abstract void setDataElement(DataElement dataelement);
     
     public abstract void setLength(int length);
     

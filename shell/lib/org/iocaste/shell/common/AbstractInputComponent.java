@@ -1,5 +1,6 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 
@@ -12,6 +13,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private int length;
     private Const type;
     private boolean secret;
+    private DataElement dataelement;
     
     public AbstractInputComponent(Container container, Const type,
             Const type_, String name) {
@@ -32,6 +34,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getDataElement()
+     */
+    @Override
+    public final DataElement getDataElement() {
+        return dataelement;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#getLength()
      */
     @Override
@@ -46,6 +57,24 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final DocumentModelItem getModelItem() {
         return modelitem;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getParsedValue()
+     */
+    @Override
+    public final Object getParsedValue() {
+        switch (modelitem.getDataElement().getType()) {
+        case DataType.CHAR:
+            return value;
+        case DataType.DEC:
+            return Double.parseDouble(value);
+        case DataType.NUMC:
+            return Integer.parseInt(value);
+        default:
+            return null;
+        }
     }
     
     /*
@@ -94,20 +123,12 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.InputComponent#getParsedValue()
+     * @see org.iocaste.shell.common.InputComponent#setDataElement(
+     *     org.iocaste.documents.common.DataElement)
      */
     @Override
-    public final Object getParsedValue() {
-        switch (modelitem.getDataElement().getType()) {
-        case DataType.CHAR:
-            return value;
-        case DataType.DEC:
-            return Double.parseDouble(value);
-        case DataType.NUMC:
-            return Integer.parseInt(value);
-        default:
-            return null;
-        }
+    public final void setDataElement(DataElement dataelement) {
+        this.dataelement = dataelement;
     }
     
     /*

@@ -195,9 +195,13 @@ public abstract class AbstractPage extends AbstractFunction {
         
         modelitem = input.getModelItem();
         if (modelitem == null)
+            dataelement = input.getDataElement();
+        else
+            dataelement = modelitem.getDataElement();
+        
+        if (dataelement == null)
             return false;
-            
-        dataelement = modelitem.getDataElement();
+        
         switch (dataelement.getType()) {
         case DataType.NUMC:
             return (Long.parseLong(test) == 0)? true : false;
@@ -221,10 +225,17 @@ public abstract class AbstractPage extends AbstractFunction {
         DataElement dataelement;
         DocumentModelItem modelitem = input.getModelItem();
         
-        if (value == null || modelitem == null)
+        if (value == null)
             return true;
         
-        dataelement = modelitem.getDataElement();
+        if (modelitem == null)
+            dataelement = input.getDataElement();
+        else
+            dataelement = modelitem.getDataElement();
+        
+        if (dataelement == null)
+            return true;
+        
         switch (dataelement.getType()) {
         case DataType.CHAR:
             return true;
