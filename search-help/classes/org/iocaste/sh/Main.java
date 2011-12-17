@@ -1,10 +1,12 @@
 package org.iocaste.sh;
 
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.ViewData;
 
@@ -18,13 +20,17 @@ public class Main extends AbstractPage {
         // implemente ações como nesse exemplo
     }
     
-    public void main(ViewData vdata) {
+    private ExtendedObject[] getResultsFrom(SearchHelp sh) throws Exception {
+        Documents documents = new Documents(this);
+        return documents.select("from "+sh.getModelName(), null);
+    }
+    
+    public void main(ViewData vdata) throws Exception {
         Container container = new Form(null, "main");
-        ExtendedObject[] result =
-                (ExtendedObject[])vdata.getParameter("result");
+        SearchHelp sh = (SearchHelp)vdata.getParameter("sh");
         Table table = new Table(container, 0, "search.table");
         
-        table.importObject(result);
+        table.importObject(getResultsFrom(sh));
         
         vdata.disableHead();
         vdata.addContainer(container);

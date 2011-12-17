@@ -7,7 +7,6 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
-import org.iocaste.sh.common.Search;
 
 public abstract class AbstractPage extends AbstractFunction {
     private String appname;
@@ -106,7 +105,8 @@ public abstract class AbstractPage extends AbstractFunction {
             shell = new Shell(this);
         
         if (element.getType() == Const.SEARCH_HELP) {
-            processSearch(controldata, (SearchHelp)element);
+            controldata.addParameter("sh", element);
+            controldata.redirect("iocaste-search-help", "main");
             
             return controldata;
         }
@@ -295,15 +295,6 @@ public abstract class AbstractPage extends AbstractFunction {
         }
         
         return status;
-    }
-    
-    private final void processSearch(ControlData cdata, SearchHelp sh)
-            throws Exception {
-        Search search = new Search(this);
-        
-        cdata.clearParameters();
-        cdata.addParameter("result", search.getResults(sh));
-        cdata.redirect("iocaste-search-help", "main");
     }
     
     /**
