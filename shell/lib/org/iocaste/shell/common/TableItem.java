@@ -149,6 +149,7 @@ public class TableItem extends AbstractComponent {
      * @param object
      */
     public final void setObject(ExtendedObject object) {
+        Object value;
         Element element;
         InputComponent input;
         DocumentModelItem modelitem;
@@ -164,7 +165,8 @@ public class TableItem extends AbstractComponent {
             if (modelitem == null)
                 continue;
             
-            input.setValue(object.getValue(modelitem).toString());
+            value = object.getValue(modelitem);
+            input.setValue((value == null)?null : value.toString());
         }
     }
 }
