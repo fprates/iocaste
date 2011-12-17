@@ -29,7 +29,6 @@ import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.ExtendedObject;
 
 /**
  * Implementação de tabela html.
@@ -205,29 +204,6 @@ public class Table extends AbstractContainer {
         }
         
         prepare(model.getItens());
-    }
-    
-    /**
-     * 
-     * @param objects
-     */
-    public final void importObject(ExtendedObject[] objects) {
-        Element element;
-        TableItem tableitem;
-        String name;
-        importModel(objects[0].getModel());
-        
-        for (ExtendedObject object : objects) {
-            for (DocumentModelItem modelitem : object.getModel().getItens()) {
-                name = modelitem.getName();
-                
-                tableitem = new TableItem(this);
-                tableitem.add(Const.TEXT, name, null);
-                
-                element = getElement(tableitem.getComplexName(name));
-                ((Text)element).setText((String)object.getValue(modelitem));
-            }
-        }
     }
     
     /**
