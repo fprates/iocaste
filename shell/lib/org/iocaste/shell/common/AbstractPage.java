@@ -225,7 +225,7 @@ public abstract class AbstractPage extends AbstractFunction {
             String value) {
         DataElement dataelement;
         
-        if (value == null)
+        if (value == null || value.trim().length() == 0)
             return true;
         
         dataelement = Shell.getDataElement(input);
