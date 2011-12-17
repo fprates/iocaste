@@ -1,13 +1,18 @@
 package org.iocaste.sh;
 
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
@@ -26,11 +31,36 @@ public class Main extends AbstractPage {
     }
     
     public void main(ViewData vdata) throws Exception {
-        Container container = new Form(null, "main");
+        TableItem tableitem;
+        String name;
+        Text text;
         SearchHelp sh = (SearchHelp)vdata.getParameter("sh");
+        ExtendedObject[] result = getResultsFrom(sh);
+        DocumentModel model = result[0].getModel();
+        Container container = new Form(null, "main");
         Table table = new Table(container, 0, "search.table");
+        int i;
         
-        table.importObject(getResultsFrom(sh));
+        table.importModel(model);
+        
+        for (ExtendedObject object : result) {
+            tableitem = new TableItem(table);
+            i = 0;
+            
+            for (DocumentModelItem modelitem : model.getItens()) {
+                i++;
+                name = modelitem.getName();
+                
+                tableitem.add(Const.TEXT, name, null);
+                text = (Text)table.getElement(tableitem.getComplexName(name));
+                text.setText((String)object.getValue(modelitem));
+                
+                if (!sh.contains(name))
+                    table.setVisibleColumn(i, false);
+            }
+            
+            tableitem.setObject(object);
+        }
         
         vdata.disableHead();
         vdata.addContainer(container);

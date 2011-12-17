@@ -1,17 +1,17 @@
 package org.iocaste.shell.common;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class SearchHelp extends AbstractControlComponent {
     private static final long serialVersionUID = -1582634834243087782L;
     private String modelname;
-    private List<String> itemnames;
+    private Set<String> itemnames;
     
     public SearchHelp(Container container, String name) {
         super(container, Const.SEARCH_HELP, name);
         
-        itemnames = new ArrayList<String>();
+        itemnames = new LinkedHashSet<String>();
         setCancellable(true);
     }
 
@@ -19,8 +19,8 @@ public class SearchHelp extends AbstractControlComponent {
         itemnames.add(itemname);
     }
     
-    public final String[] getModelItensNames() {
-        return itemnames.toArray(new String[0]);
+    public final boolean contains(String name) {
+        return itemnames.contains(name);
     }
     
     public final String getModelName() {
