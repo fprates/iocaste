@@ -80,14 +80,15 @@ public abstract class AbstractPage extends AbstractFunction {
         if (element.isControlComponent()) {
             control = (ControlComponent)element;
             
-            if (!control.isCancellable())
+            if (!control.isCancellable()) {
                 status = processInputs(view, message.getParameters());
+                view = status.view;
+            }
         } else {
             control = null;
             status = processInputs(view, message.getParameters());
+            view = status.view;
         }
-        
-        view = status.view;
         
         if (status.input != null) {
             view.setFocus(((Component)status.input).getName());
