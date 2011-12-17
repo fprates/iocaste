@@ -52,5 +52,29 @@ grant select, insert, update, delete on docs003 to iocastedb;
 grant select, insert, update, delete on docs004 to iocastedb;
 \p permissions granted.
 
+insert into docs001(docid, tname, class) values('MODEL', 'DOCS001', 'org.iocaste.documents.common.DocumentModel');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODEL.NAME', 'MODEL', 0, 'DOCID', 'MODEL.NAME', 'name');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODEL.TABLE', 'MODEL', 1, 'TNAME', 'MODEL.TABLE', 'tableName');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODEL.CLASS', 'MODEL', 2, 'CLASS', 'MODEL.CLASS', 'className');
+insert into docs003(ename, decim, lngth, etype, upcas) values('MODEL.NAME', 0, 12, 0, 1);
+insert into docs003(ename, decim, lngth, etype, upcas) values('MODEL.TABLE', 0, 12, 0, 1);
+insert into docs003(ename, decim, lngth, etype, upcas) values('MODEL.CLASS', 0, 255, 0, 0);
+insert into docs004(iname, docid) values('MODEL.NAME', 'MODEL');
+
+insert into docs001(docid, tname, class) values('MODELITEM', 'DOCS002', 'org.iocaste.documents.common.DocumentModelItem');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.NAME', 'MODELITEM', 0, 'INAME', 'MODELITEM.NAME', 'name');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.MODEL', 'MODELITEM', 1, 'DOCID', 'MODEL.NAME', 'documentModel');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.INDEX', 'MODELITEM', 2, 'INDEX', 'MODELITEM.INDEX', 'index');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.FIELDNAME', 'MODELITEM', 3, 'FNAME', 'MODELITEM.FIELDNAME', 'tableFieldName');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.ELEMENT', 'MODELITEM', 4, 'ENAME', 'DATAELEMENT.NAME', 'dataElement');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.ATTRIB', 'MODELITEM', 5, 'ATTRB', 'MODELITEM.ATTRIB', 'attributeName');
+insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.NAME', 0, 24, 0, 1);
+insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.INDEX', 1, 3, 0, 0);
+insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.FIELDNAME', 0, 12, 0, 1);
+insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.ATTRIB', 0, 64, 0, 1);
+insert into docs004(iname, docid) values('MODELITEM.NAME', 'MODELITEM');
+
+insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.NAME', 0, 36, 0, 1);
+
 commit work;
 
