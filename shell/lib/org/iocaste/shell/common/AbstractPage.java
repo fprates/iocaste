@@ -3,12 +3,14 @@ package org.iocaste.shell.common;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.Service;
 
 public abstract class AbstractPage extends AbstractFunction {
+    public static final int EINITIAL = 1;
+    public static final int EMISMATCH = 2;
     private String appname;
     private Shell shell;
     
@@ -79,20 +81,22 @@ public abstract class AbstractPage extends AbstractFunction {
             control = (ControlComponent)element;
             
             if (!control.isCancellable())
-                status = processInputs(view, message);
+                status = processInputs(view, message.getParameters());
         } else {
             control = null;
-            status = processInputs(view, message);
+            status = processInputs(view, message.getParameters());
         }
+        
+        view = status.view;
         
         if (status.input != null) {
             view.setFocus(((Component)status.input).getName());
             
             switch (status.error) {
-            case InputStatus.INITIAL:
+            case EINITIAL:
                 controldata.message(Const.ERROR, "field.is.obligatory");
                 break;
-            case InputStatus.MISMATCH:
+            case EMISMATCH:
                 controldata.message(Const.ERROR, "field.type.mismatch");
                 break;
             }
@@ -182,117 +186,28 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
-     * @param input
-     * @param value
-     * @return
-     */
-    protected final boolean isInitial(String name, InputComponent input,
-            String value) throws Exception {
-        DataElement dataelement;
-        String test;
-        
-        if (value == null)
-            return true;
-        
-        test = value.trim();
-        if (test.length() == 0)
-            return true;
-        
-        dataelement = Shell.getDataElement(input);
-        
-        if (dataelement == null)
-            return false;
-        
-        switch (dataelement.getType()) {
-        case DataType.NUMC:
-            return (Long.parseLong(test) == 0)? true : false;
-            
-        case DataType.DEC:
-            return (Double.parseDouble(test) == 0)? true : false;
-            
-        default:
-            return false;
-        }
-    }
-    
-    /**
-     * 
-     * @param input
-     * @param value
-     * @return
-     */
-    private final boolean isValueCompatible(InputComponent input,
-            String value) {
-        DataElement dataelement;
-        
-        if (value == null || value.trim().length() == 0)
-            return true;
-        
-        dataelement = Shell.getDataElement(input);
-        
-        if (dataelement == null)
-            return true;
-        
-        switch (dataelement.getType()) {
-        case DataType.CHAR:
-            return true;
-            
-        case DataType.NUMC:
-            return input.getValue().matches("[0-9]+");
-            
-        case DataType.DEC:
-            return input.getValue().matches("[0-9\\.]+");
-            
-        default:
-            return false;
-        }
-    }
-    
-    /**
-     * 
      * @param view
      * @param message
      * @return
      * @throws Exception
      */
-    private final InputStatus processInputs(ViewData view, Message message) 
-            throws Exception {
-        InputComponent input;
-        Element element;
-        String value;
-        DataElement dataelement;
-        String[] inputs = view.getInputs();
+    private final InputStatus processInputs(ViewData view,
+            Map<String, Object> values) throws Exception {
+        Object[] result;
+        String 
+        servername = new StringBuffer(new Iocaste(this).getHost()).append(
+                Shell.SERVER_NAME).toString();
+        Message message = new Message();
         InputStatus status = new InputStatus();
         
-        for (String name : inputs) {
-            element = view.getElement(name);
-            if (!element.isEnabled())
-                continue;
-            
-            input = (InputComponent)element;
-            value = message.getString(name);
-            
-            input.setValue(value);
-            if (!isValueCompatible(input, value)) {
-                status.input = input;
-                status.error = InputStatus.MISMATCH;
-                continue;
-            }
-           
-            if (input.isObligatory() && isInitial(name, input, value)) {
-                status.input = input;
-                status.error = InputStatus.INITIAL;
-                continue;
-            }
-            
-            dataelement = Shell.getDataElement(input);
-            
-            if (value == null || dataelement == null)
-                continue;
-            
-            if (dataelement.isUpcase())
-                input.setValue(value.toUpperCase());
-        }
+        message.setId("process_inputs");
+        message.add("view", view);
+        message.add("values", values);
+        
+        result = (Object[])Service.callServer(servername, message);
+        status.input = (InputComponent)result[0];
+        status.error = (Integer)result[1];
+        status.view = (ViewData)result[2];
         
         return status;
     }
@@ -339,8 +254,7 @@ public abstract class AbstractPage extends AbstractFunction {
 }
 
 class InputStatus {
-    public static final int INITIAL = 1;
-    public static final int MISMATCH = 2;
     public int error = 0;
     public InputComponent input = null;
+    public ViewData view = null;
 }

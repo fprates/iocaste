@@ -10,10 +10,10 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
 
 public class Shell extends AbstractServiceInterface {
-    private static final String SERVERNAME = "/iocaste-shell/services.html";
+    public static final String SERVER_NAME = "/iocaste-shell/services.html";
     
     public Shell(Function function) {
-        initService(function, SERVERNAME);
+        initService(function, SERVER_NAME);
     }
     
     /**

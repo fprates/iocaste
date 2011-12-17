@@ -14,5 +14,6 @@ public class Servlet extends ServerServlet {
         register(new Services());
         
         authorize("update_view", null);
+        authorize("process_inputs", null);
     }
 }
