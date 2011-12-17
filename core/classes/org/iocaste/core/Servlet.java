@@ -26,6 +26,7 @@ public class Servlet extends ServerServlet {
         parameters.put("from",
                 new String[] {"shell001", "shell002", "shell003"});
         authorize("checked_select", parameters);
+        authorize("get_host", null);
     }
     
     /*
