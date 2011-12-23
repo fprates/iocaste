@@ -6,11 +6,11 @@ public interface ControlComponent {
     
     public abstract boolean isCancellable();
 
-    public abstract boolean isHelpControl();
+    public abstract boolean allowStacking();
     
     public abstract void setAction(String action);
     
     public abstract void setCancellable(boolean cancellable);
     
-    public abstract void setHelpControl(boolean helpcontrol);
+    public abstract void setAllowStacking(boolean stacking);
 }

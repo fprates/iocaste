@@ -14,6 +14,7 @@ public class SearchHelp extends AbstractControlComponent {
         
         itemnames = new LinkedHashSet<String>();
         setCancellable(true);
+        setAllowStacking(true);
     }
 
     /**

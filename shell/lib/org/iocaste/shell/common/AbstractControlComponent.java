@@ -33,14 +33,14 @@ package org.iocaste.shell.common;
 public abstract class AbstractControlComponent extends AbstractComponent
         implements ControlComponent {
     private static final long serialVersionUID = -6444029817491608067L;
-    private boolean cancellable, helpcontrol;
+    private boolean cancellable, stacking;
     private String action;
     
     public AbstractControlComponent(
             Container container, Const type, String name) {
         super(container, type, name);
         cancellable = false;
-        helpcontrol = false;
+        stacking = false;
         setAction(name);
     }
 
@@ -82,11 +82,11 @@ public abstract class AbstractControlComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.ControlComponent#isHelpControl()
+     * @see org.iocaste.shell.common.ControlComponent#allowStacking()
      */
     @Override
-    public final boolean isHelpControl() {
-        return helpcontrol;
+    public final boolean allowStacking() {
+        return stacking;
     }
     
     /*
@@ -107,13 +107,13 @@ public abstract class AbstractControlComponent extends AbstractComponent
     public final void setCancellable(boolean cancellable) {
         this.cancellable = cancellable;
     }
-    
+
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.ControlComponent#setHelpControl(boolean)
+     * @see org.iocaste.shell.common.ControlComponent#setAllowStacking(boolean)
      */
     @Override
-    public final void setHelpControl(boolean helpcontrol) {
-        this.helpcontrol = helpcontrol;
+    public final void setAllowStacking(boolean stacking) {
+        this.stacking = stacking;
     }
 }

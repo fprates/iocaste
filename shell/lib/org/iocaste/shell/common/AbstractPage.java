@@ -122,7 +122,7 @@ public abstract class AbstractPage extends AbstractFunction {
         }
         
         if (controldata.hasPageCall() && (control == null ||
-                !control.isCancellable() || control.isHelpControl()))
+                !control.isCancellable() || control.allowStacking()))
             shell.pushPage(view.getAppName(), view.getPageName());
         
         updateView(view);

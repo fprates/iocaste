@@ -40,7 +40,7 @@ public class NavigationBar implements Serializable {
         
         link.setEnabled(false);
         link.setCancellable(true);
-        link.setHelpControl(false);
+        link.setAllowStacking(false);
         
         bar.put(name, link);
     }
@@ -101,7 +101,7 @@ public class NavigationBar implements Serializable {
      * @param helpcontrol
      */
     public final void setHelpControl(String name, boolean helpcontrol) {
-        bar.get(name).setHelpControl(helpcontrol);
+        bar.get(name).setAllowStacking(helpcontrol);
     }
     
     /**
