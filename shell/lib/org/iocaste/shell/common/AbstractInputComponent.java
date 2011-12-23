@@ -177,7 +177,11 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setSearchHelp(SearchHelp search) {
         this.search = search;
-        search.setInput(this);
+        
+        if (search == null)
+            return;
+        
+        this.search.setInput(this);
     }
     
     /*
