@@ -5,11 +5,11 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
@@ -19,13 +19,16 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
-
-    public final void cancel(ControlData cdata, ViewData vdata) {
-        
-    }
     
-    public final void choose(ControlData cdata, ViewData vdata) {
-        // implemente ações como nesse exemplo
+    public final void choose(ControlData cdata, ViewData vdata) 
+            throws Exception {
+        SearchHelp sh = (SearchHelp)vdata.getParameter("sh");
+        Parameter value = (Parameter)vdata.getElement("value");
+        InputComponent input = sh.getInput();
+        
+        input.setValue(value.getValue());
+        updateView(sh.getView());
+        back(cdata, vdata);
     }
     
     private ExtendedObject[] getResultsFrom(SearchHelp sh) throws Exception {
@@ -60,10 +63,10 @@ public class Main extends AbstractPage {
                 export = sh.getExport();
                 
                 if (export != null && export.equals(name)) {
-                    tableitem.add(Const.LINK, name, new Object[] {"choose"});
+                    tableitem.add(Const.LINK, "choose", new Object[] {"choose"});
                     
                     link = (Link)table.getElement(
-                            tableitem.getComplexName(name));
+                            tableitem.getComplexName("choose"));
                     link.add(param, value);
                     link.setText(value);
                 } else {
@@ -81,9 +84,8 @@ public class Main extends AbstractPage {
             tableitem.setObject(object);
         }
         
-        new Button(container, "cancel");
-        
-        vdata.disableHead();
+        vdata.setNavbarActionEnabled("back", true);
+        vdata.setTitle(sh.getText());
         vdata.addContainer(container);
     }
 }
