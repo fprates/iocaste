@@ -60,10 +60,10 @@ public abstract class AbstractPage extends AbstractFunction {
         ViewData view;
         Element element;
         ControlComponent control;
-        String action = message.getString("action");
+        String action, controlname = message.getString("action");
         InputStatus status = new InputStatus();
         
-        if (action == null)
+        if (controlname == null)
             return null;
         
         view = (ViewData)message.get("view");
@@ -76,7 +76,7 @@ public abstract class AbstractPage extends AbstractFunction {
         
         beforeValidation(controldata, view);
         
-        element = view.getElement(action);
+        element = view.getElement(controlname);
         if (element.isControlComponent()) {
             control = (ControlComponent)element;
             
@@ -109,18 +109,17 @@ public abstract class AbstractPage extends AbstractFunction {
         if (shell == null)
             shell = new Shell(this);
         
+        beforeActionCall(controldata, view);
+        
         if (element.getType() == Const.SEARCH_HELP) {
             controldata.addParameter("sh", element);
             controldata.redirect("iocaste-search-help", "main");
-            
-            return controldata;
+        } else {
+            action = (control == null)?controlname : control.getAction();
+            method = this.getClass().getMethod(
+                    action, ControlData.class, ViewData.class);
+            method.invoke(this, controldata, view);
         }
-        
-        beforeActionCall(controldata, view);
-        
-        method = this.getClass().getMethod(
-                action, ControlData.class, ViewData.class);
-        method.invoke(this, controldata, view);
         
         if (controldata.hasPageCall() && (control == null ||
                 !control.isCancellable() || control.isHelpControl()))

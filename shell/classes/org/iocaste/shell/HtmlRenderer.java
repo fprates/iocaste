@@ -425,7 +425,7 @@ public class HtmlRenderer {
             sb = new StringBuffer("<a href=\"index.html?pagetrack=").
                     append(pagetrack).append("&action=");
         
-        sb.append(link.getAction());
+        sb.append(link.getName());
         
         parameters = link.getParametersMap();
         
@@ -500,13 +500,10 @@ public class HtmlRenderer {
      * @param sh
      */
     private final void renderSearchHelp(List<String> html, SearchHelp sh) {
-        String name = sh.getName();
-        StringBuilder sb = new StringBuilder("<input type=\"button\" " +
-                "value=\"?\" onClick=\"search('").append(name).
-                append("', '").append(pagetrack).append("')\">").
-                append("<div id=\"").append(name).append(".area\"></div>");
+        Button button = new Button(null, sh.getName());
         
-        html.add(sb.toString());
+        button.setText("?");
+        renderButton(html, button);
     }
     
     /**

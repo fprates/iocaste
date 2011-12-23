@@ -33,20 +33,31 @@ package org.iocaste.shell.common;
 public abstract class AbstractControlComponent extends AbstractComponent
         implements ControlComponent {
     private static final long serialVersionUID = -6444029817491608067L;
-    private boolean cancellable;
-    private boolean helpcontrol;
+    private boolean cancellable, helpcontrol;
+    private String action;
     
     public AbstractControlComponent(
             Container container, Const type, String name) {
         super(container, type, name);
         cancellable = false;
         helpcontrol = false;
+        setAction(name);
     }
 
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#getAction()
+     */
+    @Override
+    public final String getAction() {
+        return action;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.ControlComponent#isCancellable()
      */
+    @Override
     public final boolean isCancellable() {
         return cancellable;
     }
@@ -55,6 +66,7 @@ public abstract class AbstractControlComponent extends AbstractComponent
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#isControlComponent()
      */
+    @Override
     public final boolean isControlComponent() {
         return true;
     }
@@ -79,8 +91,19 @@ public abstract class AbstractControlComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#setAction(
+     *     java.lang.String)
+     */
+    @Override
+    public final void setAction(String action) {
+        this.action = action;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.ControlComponent#setCancellable(boolean)
      */
+    @Override
     public final void setCancellable(boolean cancellable) {
         this.cancellable = cancellable;
     }
