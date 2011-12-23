@@ -33,12 +33,10 @@ package org.iocaste.shell.common;
  */
 public abstract class AbstractElement implements Element {
     private static final long serialVersionUID = -4565295670850530184L;
-    private String name;
     private Const type;
-    private String style;
-    private String destiny;
-    private boolean enabled;
-    private boolean visible;
+    private String name, style, destiny;
+    private boolean enabled, visible;
+    private ViewData view;
     
     public AbstractElement(Const type, String name) {
         if (name == null)
@@ -122,6 +120,15 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#getView()
+     */
+    @Override
+    public final ViewData getView() {
+        return view;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -181,6 +188,16 @@ public abstract class AbstractElement implements Element {
     @Override
     public final void setStyleClass(String style) {
         this.style = style;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#setView(
+     *     org.iocaste.shell.common.ViewData)
+     */
+    @Override
+    public final void setView(ViewData view) {
+        this.view = view;
     }
     
     /*

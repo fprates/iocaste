@@ -57,6 +57,12 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract Const getType();
 
     /**
+     * 
+     * @return
+     */
+    public abstract ViewData getView();
+    
+    /**
      * Retorna true se for componente que suporta
      * conteúdo multipart.
      * @return true, se conteúdo multipart.
@@ -111,6 +117,12 @@ public interface Element extends Comparable<Element>, Serializable {
      * @param style nome da classe CSS.
      */
     public abstract void setStyleClass(String style);
+    
+    /**
+     * 
+     * @param view
+     */
+    public abstract void setView(ViewData view);
     
     /**
      * Ajusta visibilidade do elemento.

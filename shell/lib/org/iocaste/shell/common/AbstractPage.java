@@ -223,6 +223,8 @@ public abstract class AbstractPage extends AbstractFunction {
         if (element == null)
             return;
         
+        element.setView(vdata);
+        
         if (element.isContainable()) {
             container = (Container)element;
             
