@@ -5,9 +5,8 @@ import java.util.Set;
 
 public class SearchHelp extends AbstractControlComponent {
     private static final long serialVersionUID = -1582634834243087782L;
-    private String modelname, export;
+    private String modelname, export, inputname;
     private Set<String> itemnames;
-    private InputComponent input;
     
     public SearchHelp(Container container, String name) {
         super(container, Const.SEARCH_HELP, name);
@@ -46,8 +45,8 @@ public class SearchHelp extends AbstractControlComponent {
      * 
      * @return
      */
-    public final InputComponent getInput() {
-        return input;
+    public final String getInputName() {
+        return inputname;
     }
     
     /**
@@ -68,10 +67,10 @@ public class SearchHelp extends AbstractControlComponent {
     
     /**
      * 
-     * @param input
+     * @param inputname
      */
-    public final void setInput(InputComponent input) {
-        this.input = input;
+    public final void setInputName(String inputname) {
+        this.inputname = inputname;
     }
     
     /**

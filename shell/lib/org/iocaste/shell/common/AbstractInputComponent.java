@@ -181,7 +181,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
         if (search == null)
             return;
         
-        this.search.setInput(this);
+        this.search.setInputName(getName());
     }
     
     /*

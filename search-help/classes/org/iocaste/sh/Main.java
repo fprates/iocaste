@@ -24,10 +24,12 @@ public class Main extends AbstractPage {
             throws Exception {
         SearchHelp sh = (SearchHelp)vdata.getParameter("sh");
         Parameter value = (Parameter)vdata.getElement("value");
-        InputComponent input = sh.getInput();
+        ViewData view = sh.getView();
+        InputComponent input = (InputComponent)view.getElement(
+                sh.getInputName());
         
         input.setValue(value.getValue());
-        updateView(sh.getView());
+        updateView(view);
         back(cdata, vdata);
     }
     
