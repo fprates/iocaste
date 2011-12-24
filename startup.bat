@@ -7,6 +7,6 @@ start "hsqldb" java -Dsqlfile.charset=UTF-8 -cp ..\lib\hsqldb.jar org.hsqldb.ser
 echo "done"
 echo "starting servlet container..."
 cd ..\..\apache-tomcat\bin\
-start "tomcat" catalina.bat jpda start
+start "tomcat" catalina.bat jpda run
 echo "done"
 cd ..\..\
