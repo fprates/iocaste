@@ -88,6 +88,21 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
+     * 
+     * @param name
+     * @return
+     * @throws Exception
+     */
+    public final DataElement getDataElement(String name) throws Exception {
+        Message message = new Message();
+        
+        message.setId("get_data_element");
+        message.add("name", name);
+        
+        return (DataElement)call(message);
+    }
+    
+    /**
      * Obtem instância do modelo de documento informado.
      * @param nome do modelo
      * @return modelo de documento

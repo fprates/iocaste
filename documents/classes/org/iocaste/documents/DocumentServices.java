@@ -41,19 +41,15 @@ public class DocumentServices {
      * 
      * @param iocaste
      * @param name
-     * @param elements
      * @return
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    private final DataElement getDataElement(Iocaste iocaste, String name,
-            Map<String, DataElement> elements) throws Exception {
+    public final DataElement getDataElement(Iocaste iocaste, String name)
+            throws Exception {
         Object[] lines;
         DataElement element;
         Map<String, Object> columns;
-        
-        if (elements.containsKey(name))
-            return elements.get(name);
         
         lines = iocaste.select("select * from docs003 where ename = ?",
                 new Object[] {name});
@@ -68,8 +64,6 @@ public class DocumentServices {
         element.setLength(((BigDecimal)columns.get("LNGTH")).intValue());
         element.setDecimals(((BigDecimal)columns.get("DECIM")).intValue());
         element.setUpcase((Boolean)columns.get("UPCAS"));
-        
-        elements.put(name, element);
         
         return element;
     }
@@ -89,7 +83,6 @@ public class DocumentServices {
         DocumentModelKey key;
         DocumentModelItem item;
         DocumentModel document = null;
-        Map<String, DataElement> elements = new HashMap<String, DataElement>();
         Iocaste iocaste = new Iocaste(function);
         
         if (documentname == null)
@@ -117,8 +110,8 @@ public class DocumentServices {
             item.setName(composed[1]);
             item.setAttributeName((String)columns.get("ATTRB"));
             item.setTableFieldName((String)columns.get("FNAME"));
-            item.setDataElement(getDataElement(iocaste, (String)columns.get("ENAME"),
-                    elements));
+            item.setDataElement(getDataElement(iocaste,
+                    (String)columns.get("ENAME")));
             item.setIndex(((BigDecimal)columns.get("INDEX")).intValue());
             
             document.add(item);

@@ -2,6 +2,8 @@ package org.iocaste.documents;
 
 import java.util.Map;
 
+
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
@@ -13,6 +15,7 @@ public class Services extends AbstractFunction {
     public Services() {
         doc = new DocumentServices(this);
         
+        export("get_data_element", "getDataElement");
         export("get_next_number", "getNextNumber");
         export("get_document_model", "getDocumentModel");
         export("has_model", "hasModel");
@@ -29,6 +32,18 @@ public class Services extends AbstractFunction {
         DocumentModel model = (DocumentModel)message.get("model");
         
         doc.createModel(model);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception 
+     */
+    public final DataElement getDataElement(Message message) throws Exception {
+        String name = message.getString("name");
+        
+        return doc.getDataElement(new Iocaste(this), name);
     }
     
     /**
