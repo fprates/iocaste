@@ -14,12 +14,19 @@ import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
     
+    /**
+     * 
+     * @param cdata
+     * @param vdata
+     * @throws Exception
+     */
     public final void choose(ControlData cdata, ViewData vdata) 
             throws Exception {
         SearchHelp sh = (SearchHelp)vdata.getParameter("sh");
@@ -33,17 +40,28 @@ public class Main extends AbstractPage {
         back(cdata, vdata);
     }
     
+    /**
+     * 
+     * @param sh
+     * @return
+     * @throws Exception
+     */
     private ExtendedObject[] getResultsFrom(SearchHelp sh) throws Exception {
         Documents documents = new Documents(this);
         return documents.select("from "+sh.getModelName(), null);
     }
     
+    /**
+     * 
+     * @param vdata
+     * @throws Exception
+     */
     public void main(ViewData vdata) throws Exception {
+        TableColumn column;
         TableItem tableitem;
         String name, value, export;
         Text text;
         Link link;
-        int i;
         SearchHelp sh = (SearchHelp)vdata.getParameter("sh");
         ExtendedObject[] result = getResultsFrom(sh);
         DocumentModel model = result[0].getModel();
@@ -55,10 +73,8 @@ public class Main extends AbstractPage {
         
         for (ExtendedObject object : result) {
             tableitem = new TableItem(table);
-            i = 0;
             
             for (DocumentModelItem modelitem : model.getItens()) {
-                i++;
                 name = modelitem.getName();
                 value = (String)object.getValue(modelitem);
                 
@@ -79,8 +95,10 @@ public class Main extends AbstractPage {
                     text.setText(value);
                 }
                 
-                if (!sh.contains(name))
-                    table.setVisibleColumn(i, false);
+                if (!sh.contains(name)) {
+                    column = table.getColumn(name);
+                    column.setVisible(false);
+                }
             }
             
             tableitem.setObject(object);
