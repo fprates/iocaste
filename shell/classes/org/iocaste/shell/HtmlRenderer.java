@@ -604,6 +604,7 @@ public class HtmlRenderer {
             html.add("<td>");
             
             element = table.getElement(name);
+            
             if (element != null)
                 renderElement(html, element);
             
@@ -656,7 +657,7 @@ public class HtmlRenderer {
         if (textfield.isEnabled())
             inputtext.append("\"/>");
         else
-            inputtext.append("\" disabled=\"disabled\"/>");
+            inputtext.append("\" readonly=\"readonly\"/>");
         
         if (textfield.isObligatory())
             inputtext.append("<span>*</span>");
