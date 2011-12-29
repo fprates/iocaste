@@ -6,9 +6,13 @@ import org.iocaste.documents.common.DocumentModelItem;
 
 public class TableColumn implements Serializable {
     private static final long serialVersionUID = -39703809895121317L;
-    private boolean visible, mark, enabled;
+    private boolean visible, mark;
     private String name;
     private DocumentModelItem modelitem;
+    
+    public TableColumn() {
+        visible = true;
+    }
     
     /**
      * 
@@ -30,14 +34,6 @@ public class TableColumn implements Serializable {
      * 
      * @return
      */
-    public final boolean isEnabled() {
-        return enabled;
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final boolean isMark() {
         return mark;
     }
@@ -48,14 +44,6 @@ public class TableColumn implements Serializable {
      */
     public final boolean isVisible() {
         return visible;
-    }
-    
-    /**
-     * 
-     * @param enabled
-     */
-    public final void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
     
     /**

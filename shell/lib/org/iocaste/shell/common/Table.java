@@ -217,7 +217,6 @@ public class Table extends AbstractContainer {
         column.setVisible(mark);
         column.setMark(true);
         column.setName("");
-        column.setEnabled(true);
         
         columns.put("", column);
         
