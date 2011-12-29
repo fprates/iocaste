@@ -38,13 +38,10 @@ import org.iocaste.documents.common.DocumentModelItem;
  */
 public class Table extends AbstractContainer {
     private static final long serialVersionUID = -245959547368570624L;
-    private int cols;
-    private boolean header;
-    private boolean mark;
+    private boolean header, mark;
     private Map<String, TableColumn> columns;
     private List<String> itens;
-    private int firstitem;
-    private int maxpagelines;
+    private int cols, firstitem, maxpagelines;
     
     public Table(Container container, int cols, String name) {
         super(container, Const.TABLE, name);
@@ -220,6 +217,7 @@ public class Table extends AbstractContainer {
         column.setVisible(mark);
         column.setMark(true);
         column.setName("");
+        column.setEnabled(true);
         
         columns.put("", column);
         
@@ -289,18 +287,6 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * Ajusta título da coluna especificada.
-     * @param col coluna
-     * @param name título
-     */
-    public final void setHeaderName(int col, String name) {
-        TableColumn[] columns = this.columns.values().
-                toArray(new TableColumn[0]);
-        
-        columns[col].setName(name);
-    }
-    
-    /**
      * 
      * @param mark
      */
@@ -314,17 +300,5 @@ public class Table extends AbstractContainer {
      */
     public final void setMaxPageLines(int maxpagelines) {
         this.maxpagelines = maxpagelines;
-    }
-    
-    /**
-     * Ajusta visibilidade da coluna.
-     * @param col coluna
-     * @param visible true, para coluna visível
-     */
-    public final void setVisibleColumn(int col, boolean visible) {
-        TableColumn[] columns = this.columns.values().
-                toArray(new TableColumn[0]);
-        
-        columns[col].setVisible(visible);
     }
 }
