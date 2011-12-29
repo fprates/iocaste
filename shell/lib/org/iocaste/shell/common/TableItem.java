@@ -81,6 +81,23 @@ public class TableItem extends AbstractComponent {
     
     /**
      * 
+     * @param name
+     * @return
+     */
+    public final Element getElement(String name) {
+        return table.getElement(getComplexName(name));
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String[] getElementNames() {
+        return elements;
+    }
+    
+    /**
+     * 
      * @return
      */
     public final ExtendedObject getObject() {
@@ -106,14 +123,6 @@ public class TableItem extends AbstractComponent {
         }
         
         return object;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final String[] getElementNames() {
-        return elements;
     }
     
     /*
