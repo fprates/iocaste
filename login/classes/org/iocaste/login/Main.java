@@ -8,7 +8,6 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
@@ -17,7 +16,7 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.ViewData;
 
-public class LoginForm extends AbstractPage {
+public class Main extends AbstractPage {
     
     /**
      * 
@@ -48,21 +47,19 @@ public class LoginForm extends AbstractPage {
     
     /**
      * 
-     * @param controldata
      * @param view
      * @throws Exception
      */
-    public final void connect(ControlData controldata, ViewData view)
-            throws Exception {
+    public final void connect(ViewData view) throws Exception {
         DataForm form = (DataForm)view.getElement("login");
         Iocaste iocaste = new Iocaste(this);
         Login login = form.getObject().newInstance();
         
         if (iocaste.login(login.getUsername(), login.getSecret())) {
-            controldata.setReloadableView(true);
-            controldata.redirect("iocaste-tasksel", "main");
+            view.setReloadableView(true);
+            view.redirect("iocaste-tasksel", "main");
         } else {
-            controldata.message(Const.ERROR, "invalid.login");
+            view.message(Const.ERROR, "invalid.login");
         }
 
         ((DataItem)view.getElement("username")).setValue("");
