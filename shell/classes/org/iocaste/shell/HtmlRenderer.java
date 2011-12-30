@@ -38,7 +38,7 @@ import org.iocaste.shell.common.ViewData;
 public class HtmlRenderer {
     private String msgtext;
     private Const msgtype;
-    private String[] script;
+    private List<String> script;
     private String username;
     private MessageSource messages;
     private String pagetrack;
@@ -60,14 +60,14 @@ public class HtmlRenderer {
             new RuntimeException(e);
         }
         
-        script = lines.toArray(new String[0]);
+        script = lines;
     }
 
     /**
      * 
-     * @param html
+     * @param vdata
      */
-    private final void configNavigationBar(List<String> html, ViewData vdata) {
+    private final void configNavigationBar(ViewData vdata) {
         NavigationBar navbar;
         Text txtuname;
         Map<String, Boolean> navbarstatus;
@@ -114,6 +114,7 @@ public class HtmlRenderer {
     /**
      * 
      * @param tag
+     * @param fail
      * @return
      */
     private final String getText(String tag, String fail) {
@@ -125,74 +126,75 @@ public class HtmlRenderer {
     
     /**
      * 
-     * @param text
      * @param button
+     * @return
      */
-    private final void renderButton(List<String> html, Button button) {
-        String inputtext;
+    private final XMLElement renderButton(Button button) {
         String text_ = button.getText();
         String name = button.getName();
+        XMLElement buttontag= new XMLElement("input");
         
         if (text_ == null)
             text_ = name;
         
         if (!button.isSubmit())
-            inputtext = "<input type=\"button\" name=\"";
+            buttontag.add("type", "button");
         else
-            inputtext = "<input type=\"submit\" name=\"";
+            buttontag.add("type", "submit");
         
-        html.add(new StringBuffer(inputtext).append(name).
-                append("\" class=\"").append(button.getStyleClass()).
-                append("\" value=\"").append(getText(text_, name)).
-                append("\" onClick=\"defineAction('").append(name).
-                append("')\"/>").toString());
+        buttontag.add("name", name);
+        buttontag.add("class", button.getStyleClass());
+        buttontag.add("value", getText(text_, name));
+        buttontag.add("onClick", "defineAction('"+name+"')");
+        
+        return buttontag;
     }
 
     /**
      * 
-     * @param html
      * @param checkbox
+     * @return
      */
-    private final void renderCheckBox(List<String> html, CheckBox checkbox) {
-        StringBuilder sb = new StringBuilder("<input type=\"checkbox\" " +
-        		"name=\"").append(checkbox.getName());
+    private final XMLElement renderCheckBox(CheckBox checkbox) {
+        XMLElement cboxtag = new XMLElement("input");
+        
+        cboxtag.add("type", "checkbox");
+        cboxtag.add("name", checkbox.getName());
         
         if (checkbox.isSelected())
-            sb.append("\" checked=\"checked\"/>");
-        else
-            sb.append("\"/>");
+            cboxtag.add("checked", "checked");
         
-        html.add(sb.toString());
+        return cboxtag;
     }
     
     /**
      * 
-     * @param text
+     * @param tags
      * @param container
      */
-    private final void renderContainer(
-            List<String> html, Container container) {
+    private final void renderContainer(List<XMLElement> tags,
+            Container container) {
+        XMLElement divtag;
+        
         switch (container.getType()) {
         case FORM:
-            renderForm(html, (Form)container);
-            
+            tags.add(renderForm((Form)container));
             break;
             
         case DATA_FORM:
-            renderDataForm(html, (DataForm)container);
-            
+            tags.addAll(renderDataForm((DataForm)container));
             break;
             
         case TABLE:
-            renderTable(html, (Table)container);
-            
+            tags.add(renderTable((Table)container));
             break;
-        
+            
         case MENU:
         case STANDARD_CONTAINER:
-            html.add("<div>");
-            renderElements(html, container.getElements());
-            html.add("</div>");
+            divtag = new XMLElement("div");
+            divtag.addChildren(renderElements(container.getElements()));
+            
+            tags.add(divtag);
             
             break;
         }
@@ -201,10 +203,10 @@ public class HtmlRenderer {
     
     /**
      * 
-     * @param html
      * @param form
+     * @return
      */
-    private final void renderDataForm(List<String> html, DataForm form) {
+    private final List<XMLElement> renderDataForm(DataForm form) {
         Text text;
         String inputname;
         String styleclass;
@@ -213,6 +215,7 @@ public class HtmlRenderer {
         Table table = new Table(null, 2, new StringBuffer(form.getName()).
                 append(".table").toString());
         DocumentModel model = form.getModel();
+        List<XMLElement> tags = new ArrayList<XMLElement>();
         
         table.setHeader(false);
         
@@ -221,7 +224,7 @@ public class HtmlRenderer {
                 continue;
             
             if (element.getType() != Const.DATA_ITEM) {
-                renderElement(html, element);
+                renderElement(tags, element);
                 continue;
             }
             
@@ -244,185 +247,196 @@ public class HtmlRenderer {
             tableitem.add(Shell.createInputItem(table, dataitem, inputname));
         }
         
-        renderContainer(html, table);
+        renderContainer(tags, table);
         
         for (String action : form.getActions())
-            renderButton(html, (Button)form.getElement(action));
+            tags.add(renderButton((Button)form.getElement(action)));
+        
+        return tags;
     }
     
     /**
      * 
-     * @param text
+     * @param tags
      * @param element
      */
-    private final void renderElement(List<String> html, Element element) {
+    private final void renderElement(List<XMLElement> tags, Element element) {
         if (!element.isVisible())
             return;
         
         switch (element.getType()) {
         case CHECKBOX:
-            renderCheckBox(html, (CheckBox)element);
-            
+            tags.add(renderCheckBox((CheckBox)element));
             break;
             
         case TABLE_ITEM:
-            renderTableItem(html, (TableItem)element);
-            
+            tags.add(renderTableItem((TableItem)element));
             break;
         
         case MENU_ITEM:
-            renderMenuItem(html, (MenuItem)element);
-            
+            tags.add(renderMenuItem((MenuItem)element));
             break;
             
         case FILE_ENTRY:
-            renderFileEntry(html, (FileEntry)element);
-            
+            tags.add(renderFileEntry((FileEntry)element));
             break;
             
         case LIST_BOX:
-            renderList(html, (ListBox)element);
-            
+            tags.add(renderList((ListBox)element));
             break;
             
         case TEXT:
-            renderText(html, (Text)element);
-            
+            tags.add(renderText((Text)element));
             break;
             
         case TEXT_FIELD:
-            renderTextField(html, (TextField)element);
-            
+            tags.addAll(renderTextField((TextField)element));
             break;
             
         case BUTTON:
-            renderButton(html, (Button)element);
-            
+            tags.add(renderButton((Button)element));
             break;
             
         case LINK:
-            renderLink(html, (Link)element);
-            
+            tags.add(renderLink((Link)element));
             break;
         
         case PARAMETER:
-            renderParameter(html, (Parameter)element);
-            
+            tags.add(renderParameter((Parameter)element));
             break;
             
         default:
             if (element.isContainable())
-                renderContainer(html, (Container)element);
+                renderContainer(tags, (Container)element);
         }
     }
     
     /**
      * 
-     * @param text
      * @param elements
+     * @return
      */
-    private final void renderElements(List<String> html, Element[] elements) {
+    private final List<XMLElement> renderElements(Element[] elements) {
+        List<XMLElement> tags = new ArrayList<XMLElement>();
+        
         for (Element element : elements) 
-            renderElement(html, element);
+            renderElement(tags, element);
+        
+        return tags;
     }
 
     /**
      * 
-     * @param html
      * @param file
+     * @return
      */
-    private final void renderFileEntry(List<String> html, FileEntry file) {
-        html.add(new StringBuffer("<input type=\"file\" name=\"").
-                append(file.getName()).append("\"/>").toString());
+    private final XMLElement renderFileEntry(FileEntry file) {
+        XMLElement filetag = new XMLElement("input");
+        
+        filetag.add("type", "file");
+        filetag.add("name", file.getName());
+        
+        return filetag;
     }
 
     /**
      * 
-     * @param html
      * @param container
+     * @return
      */
-    private final void renderForm(List<String> html, Form container) {
-        StringBuffer sb = new StringBuffer("<form method=\"post\" " +
-        		"action=\"index.html\" name=\"").append(container.getName());
+    private final XMLElement renderForm(Form container) {
+        List<String> html_ = new ArrayList<String>();
+        XMLElement hiddentag, formtag = new XMLElement("form");
         String enctype = container.getEnctype();
         
+        formtag.add("method", "post");
+        formtag.add("action", "index.html");
+        formtag.add("name", container.getName());
+        
         if (enctype != null)
-            sb.append("\" enctype=\"").append(enctype).append("\">");
-        else
-            sb.append("\">");
+            formtag.add("enctype", enctype);
         
-        html.add(sb.toString());
-        html.add(new StringBuffer(
-                "<input type=\"hidden\" name=\"pagetrack\" value=\"").
-                append(pagetrack).append("\"/>").toString());
-        renderElements(html, container.getElements());
-        html.add("</form>");
+        hiddentag = new XMLElement("input");
+        hiddentag.add("type", "hidden");
+        hiddentag.add("name", "pagetrack");
+        hiddentag.add("value", pagetrack);
+        
+        formtag.addInner(hiddentag.toString());
+        formtag.addChildren(renderElements(container.getElements()));
+        formtag.addInner(html_);
+        
+        return formtag;
     }
     
     /**
      * 
-     * @param text
-     * @param title
-     */
-    private final void renderHeader(List<String> html, ViewData vdata) {
-        String title = vdata.getTitle();
-        
-        html.add("<head>");
-        html.add("<meta http-equiv=\"Content-Type\" content=\"text/html;" +
-                " charset=utf-8\"/>");
-        
-        if (title == null)
-            title = "Iocaste";
-        
-        html.add(new StringBuffer("<title>").append(title).
-                append("</title>").toString());
-        renderJavaScript(html, vdata, script);
-        renderStyleSheet(html, vdata);
-        html.add("</head>");
-    }
-    
-    /**
-     * 
-     * @param html
      * @param vdata
-     * @param script
+     * @return
      */
-    private final void renderJavaScript(
-            List<String> html, ViewData vdata, String[] script) {
-        String focus = vdata.getFocus();
+    private final XMLElement renderHeader(ViewData vdata) {
+        String title = vdata.getTitle();
+        XMLElement headtag = new XMLElement("head");
+        XMLElement metatag = new XMLElement("meta");
+        XMLElement titletag = new XMLElement("title");
         
-        html.add("<script type=\"text/javascript\">");
-        html.add("function initialize() {");
+        metatag.add("http-equiv", "Content-Type");
+        metatag.add("content", "text/html; charset=utf-8");
+        headtag.addChild(metatag);
+        
+        titletag.addInner((title == null)?"Iocaste" : title);
+        headtag.addChild(titletag);
+        
+        headtag.addChild(renderJavaScript(vdata));
+        headtag.addChild(renderStyleSheet(vdata));
+        
+        return headtag;
+    }
+    
+    /**
+     * 
+     * @param vdata
+     * @return
+     */
+    private final XMLElement renderJavaScript(ViewData vdata) {
+        String focus = vdata.getFocus();
+        XMLElement scripttag = new XMLElement("script");
+        
+        scripttag.add("type", "text/javascript");
+        scripttag.addInner("function initialize() {");
         
         if (focus != null)
-            html.add(new StringBuffer("document.getElementById('").
+            scripttag.addInner(new StringBuffer("document.getElementById('").
                     append(focus).append("').focus();").toString());
 
-        html.add("}");
+        scripttag.addInner("}");
+        scripttag.addInner(script);
         
-        for (String line : script)
-            html.add(line);
-        html.add("</script>");
+        return scripttag;
     }
     
     /**
      * 
-     * @param text
      * @param link
+     * @return
      */
-    private final void renderLink(List<String> html, Link link) {
+    private final XMLElement renderLink(Link link) {
         Map<Parameter, String> parameters;
         StringBuffer sb;
+        XMLElement atag;
         
         if (!link.isEnabled()) {
-            html.add(link.getText());
-            return;
+            atag = new XMLElement("span");
+            atag.addInner(link.getText());
+            
+            return atag;
         }
         
+        atag = new XMLElement("a");
+        
         if (link.isAbsolute())
-            sb = new StringBuffer("<a href=\"");
+            sb = new StringBuffer();
         else
-            sb = new StringBuffer("<a href=\"index.html?pagetrack=").
+            sb = new StringBuffer("index.html?pagetrack=").
                     append(pagetrack).append("&action=");
         
         sb.append(link.getName());
@@ -434,34 +448,39 @@ public class HtmlRenderer {
                 sb.append("&").append(parameter.getName()).append("=").
                         append(parameters.get(parameter));
 
-        sb.append("\">").append(link.getText()).append("</a>");
+        atag.add("href", sb.toString());
+        atag.addInner(link.getText());
         
-        html.add(sb.toString());
+        return atag;
     }
     
     /**
      * 
-     * @param html
      * @param list
+     * @return
      */
-    private void renderList(List<String> html, ListBox list) {
-        StringBuilder sb = new StringBuilder("<select name=\"").
-                append(list.getName()).append("\">");
+    private final XMLElement renderList(ListBox list) {
+        XMLElement optiontag = null, selecttag= new XMLElement("select");
         
-        html.add(sb.toString());
-        for (String option : list.getEntriesNames())
-            html.add(new StringBuilder("<option value=\"").append(
-                    list.get(option)).append("\">").append(option).append(
-                            "</option>").toString());
-        html.add("</select>");
+        selecttag.add("name", list.getName());
+        
+        for (String option : list.getEntriesNames()) {
+            optiontag = new XMLElement("option");
+            optiontag.add("value", list.get(option));
+            optiontag.addInner(option);
+            
+            selecttag.addChild(optiontag);
+        }
+        
+        return selecttag;
     }
     
     /**
      * 
-     * @param html
      * @param menuitem
+     * @return
      */
-    private void renderMenuItem(List<String> html, MenuItem menuitem) {
+    private final XMLElement renderMenuItem(MenuItem menuitem) {
         Menu menu = (Menu)menuitem.getContainer();
         String name = new StringBuffer(menuitem.getName()).append(".link").
                 toString();
@@ -471,7 +490,7 @@ public class HtmlRenderer {
         link.add(menu.getParameter(), menuitem.getFunction());
         
         for (Element element: menu.getElements()) {
-            if (!(element instanceof Parameter) ||
+            if ((element.getType() != Const.PARAMETER) ||
                     (element == menu.getParameter()))
                 continue;
             
@@ -479,118 +498,129 @@ public class HtmlRenderer {
                     element.getName()));
         }
                 
-        renderLink(html, link);
+        return renderLink(link);
     }
     
     /**
      * 
-     * @param html
      * @param parameter
+     * @return
      */
-    private void renderParameter(List<String> html, Parameter parameter) {
+    private final XMLElement renderParameter(Parameter parameter) {
+        XMLElement hiddentag = new XMLElement("input");
         String name = parameter.getName();
-        StringBuffer sb = new StringBuffer("<input type=\"hidden\" name=\"").
-                append(name).append("\" id=\"").append(name).append("\"/>");
-        html.add(sb.toString());
+        
+        hiddentag.add("type", "hidden");
+        hiddentag.add("name", name);
+        hiddentag.add("id", name);
+        
+        return hiddentag;
     }
     
     /**
      * 
-     * @param html
      * @param sh
+     * @return
      */
-    private final void renderSearchHelp(List<String> html, SearchHelp sh) {
+    private final XMLElement renderSearchHelp(SearchHelp sh) {
         Button button = new Button(null, sh.getName());
         
         button.setText("?");
-        renderButton(html, button);
+        
+        return renderButton(button);
     }
     
     /**
      * 
-     * @param html
      * @param vdata
+     * @return
      */
-    private final void renderStyleSheet(List<String> html, ViewData vdata) {
+    private final XMLElement renderStyleSheet(ViewData vdata) {
         Map<String, String> properties;
         Map<String, Map<String, String>> elements;
         String sheet = vdata.getStyleSheet();
+        XMLElement styletag = new XMLElement("style");
+        
+        styletag.add("type", "text/css");
         
         if (sheet == null)
             sheet = "DEFAULT";
         
         elements = getStyleSheetElements(sheet);
-        
-        html.add("<style type=\"text/css\">");
+        if (elements.size() == 0)
+            styletag.addInner("");
         
         for (String element : elements.keySet()) {
             properties = elements.get(element);
-            html.add(element+" {");
+            styletag.addInner(element+" {");
             
             for (String property: properties.keySet())
-                html.add(new StringBuffer(property).append(": ").
+                styletag.addInner(new StringBuffer(property).append(": ").
                         append(properties.get(property)).
                         append(";").toString());
             
-            html.add("}");
+            styletag.addInner("}");
         }
         
-        html.add("</style>");
+        return styletag;
     }
     
     /**
      * 
-     * @param html
      * @param table
+     * @return
      */
-    private void renderTable(List<String> html, Table table) {
+    private final XMLElement renderTable(Table table) {
         String name;
         TableItem tableitem;
         int iniline = table.getFirstItem();
         int maxline = table.getMaxPageLines();
         int length = table.getLength();
         int lastline = iniline + ((length < maxline)? length : maxline);
-        
-        html.add("<table>");
+        XMLElement trtag, thtag, tabletag = new XMLElement("table");
+        List<XMLElement> tags = new ArrayList<XMLElement>();
         
         if (table.hasHeader()) {
-            html.add("<tr>");
+            trtag = new XMLElement("tr");
             
             for (TableColumn column: table.getColumns()) {
                 if (!column.isVisible())
                     continue;
                 
+                thtag = new XMLElement("th");
                 name = column.getName();
-                html.add("<th>");
                 if (name != null)
-                    html.add(name);
-                html.add("</th>");
+                    thtag.addInner(name);
+                
+                trtag.addChild(thtag);
             }
             
-            html.add("</tr>");
+            tabletag.addChild(trtag);
         }
         
         for (int i = iniline; i < lastline; i++) {
             tableitem = table.getTableItem(i);
-            renderElement(html, tableitem);
+            tags.clear();
+            renderElement(tags, tableitem);
+            tabletag.addChildren(tags);
         }
         
-        html.add("</table>");
+        return tabletag;
     }
     
     /**
      * 
-     * @param text
      * @param item
+     * @return
      */
-    private final void renderTableItem(List<String> html, TableItem item) {
+    private final XMLElement renderTableItem(TableItem item) {
         TableColumn column;
         Element element;
         Table table = (Table)item.getContainer();
         TableColumn[] columns = table.getColumns();
         int i = 0;
-        
-        html.add("<tr>");
+        XMLElement tdtag, trtag = new XMLElement("tr");
+        List<XMLElement> tags = new ArrayList<XMLElement>();
         
         for (String name : item.getElementNames()) {
             column = columns[i++];
@@ -601,72 +631,80 @@ public class HtmlRenderer {
             if (column.isMark() && !table.hasMark())
                 continue;
             
-            html.add("<td>");
+            tdtag = new XMLElement("td");
             
             element = table.getElement(name);
+            if (element != null) {
+                tags.clear();
+                renderElement(tags, element);
+                tdtag.addChildren(tags);
+            }
             
-            if (element != null)
-                renderElement(html, element);
-            
-            html.add("</td>");
+            trtag.addChild(tdtag);
         }
         
-        html.add("</tr>");
+        return trtag;
     }
     
     /**
      * 
      * @param text
-     * @param text_
+     * @return
      */
-    private final void renderText(List<String> html, Text text) {
-        html.add(new StringBuffer("<p class=\"").append(text.getStyleClass()).
-                append("\">").append(getText(text.getText(), text.getName())).
-                append("</p>").toString());
+    private final XMLElement renderText(Text text) {
+        XMLElement ptag = new XMLElement("p");
+        
+        ptag.add("class", text.getStyleClass());
+        ptag.addInner(getText(text.getText(), text.getName()));
+        
+        return ptag;
     }
     
     /**
      * 
-     * @param text
      * @param textfield
+     * @return
      */
-    private final void renderTextField(
-            List<String> html, TextField textfield) {
-        StringBuffer inputtext;
+    private final List<XMLElement> renderTextField(TextField textfield) {
         SearchHelp search;
         DataElement dataelement = Shell.getDataElement(textfield);
         int length = (dataelement == null)?textfield.getLength() :
             dataelement.getLength();
-        String name = textfield.getName();
-        String value = textfield.getValue();
+        String name = textfield.getName(), value = textfield.getValue();
+        XMLElement spantag, inputtag = new XMLElement("input");
+        List<XMLElement> tags = new ArrayList<XMLElement>();
         
         if (value == null)
             value = "";
         
         if (!textfield.isPassword())
-            inputtext = new StringBuffer("<input type=\"text\" name=\"");
+            inputtag.add("type", "text");
         else
-            inputtext = new StringBuffer("<input type=\"password\" name=\"");
+            inputtag.add("type", "password");
         
-        inputtext.append(name).append("\" class=\"").
-                append(textfield.getStyleClass()).append("\" id=\"").
-                append(name).append("\" size=\"").append(length).
-                append("\" maxlength=\"").append(length).append("\" value=\"").
-                append(value);
+        inputtag.add("name", name);
+        inputtag.add("class", textfield.getStyleClass());
+        inputtag.add("id", name);
+        inputtag.add("size", Integer.toString(length));
+        inputtag.add("maxlength", Integer.toString(length));
+        inputtag.add("value", value);
         
-        if (textfield.isEnabled())
-            inputtext.append("\"/>");
-        else
-            inputtext.append("\" readonly=\"readonly\"/>");
+        if (!textfield.isEnabled())
+            inputtag.add("readonly", "readonly");
         
-        if (textfield.isObligatory())
-            inputtext.append("<span>*</span>");
+        if (textfield.isObligatory()) {
+            spantag = new XMLElement("span");
+            spantag.addInner("*");
+            tags.add(spantag);
+        }
         
-        html.add(inputtext.toString());
+        tags.add(inputtag);
         
         search = textfield.getSearchHelp();
         if (search != null)
-            renderSearchHelp(html, search);
+            tags.add(renderSearchHelp(search));
+        
+        return tags;
     }
     
     /**
@@ -676,6 +714,9 @@ public class HtmlRenderer {
      */
     public final String[] run(ViewData vdata) {
         List<String> html = new ArrayList<String>();
+        List<XMLElement> tags = new ArrayList<XMLElement>();
+        XMLElement htmltag = new XMLElement("html");
+        XMLElement bodytag = new XMLElement("body");
         
         messages = vdata.getMessages();
         pagetrack = new StringBuffer(vdata.getAppName()).append(".").
@@ -684,27 +725,23 @@ public class HtmlRenderer {
         if (messages == null)
             messages = new MessageSource(null);
         
-        if (!vdata.isHeadDisabled()) {
-            html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
-                    "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
-            html.add("<html>");
-            
-            renderHeader(html, vdata);
-            
-            html.add("<body onLoad=\"initialize()\">");
-            configNavigationBar(html, vdata);
-        }
+        html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
+                "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
+
+        bodytag.add("onLoad", "initialize()");
+        tags.add(renderHeader(vdata));
+        tags.add(bodytag);
+        
+        configNavigationBar(vdata);
         
         for (Container container : vdata.getContainers())
-            renderContainer(html, container);
-
-        if (!vdata.isHeadDisabled()) {
-            html.add("</body>");
-            html.add("</html>");
-        }
+            renderContainer(tags, container);
         
         msgtext = null;
         msgtype = Const.NONE;
+        
+        htmltag.addChildren(tags);
+        html.add(htmltag.toString());
         
         return html.toArray(new String[0]);
     }
