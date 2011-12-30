@@ -343,7 +343,6 @@ public class HtmlRenderer {
      * @return
      */
     private final XMLElement renderForm(Form container) {
-        List<String> html_ = new ArrayList<String>();
         XMLElement hiddentag, formtag = new XMLElement("form");
         String enctype = container.getEnctype();
         
@@ -361,7 +360,6 @@ public class HtmlRenderer {
         
         formtag.addInner(hiddentag.toString());
         formtag.addChildren(renderElements(container.getElements()));
-        formtag.addInner(html_);
         
         return formtag;
     }
@@ -379,11 +377,11 @@ public class HtmlRenderer {
         
         metatag.add("http-equiv", "Content-Type");
         metatag.add("content", "text/html; charset=utf-8");
-        headtag.addChild(metatag);
         
         titletag.addInner((title == null)?"Iocaste" : title);
+
+        headtag.addChild(metatag);
         headtag.addChild(titletag);
-        
         headtag.addChild(renderJavaScript(vdata));
         headtag.addChild(renderStyleSheet(vdata));
         
