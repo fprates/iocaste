@@ -25,11 +25,11 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param viewdata
      * @throws Exception 
      */
-    public void back(ControlData controldata, ViewData viewdata)
+    public void back(ViewData viewdata)
             throws Exception {
         String[] entry = shell.popPage();
-        controldata.redirect(entry[0], entry[1]);
-        controldata.dontPushPage();
+        viewdata.redirect(entry[0], entry[1]);
+        viewdata.dontPushPage();
     }
     
     /**
@@ -37,7 +37,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param cdata
      * @param vdata
      */
-    protected void beforeActionCall(ControlData cdata, ViewData vdata)
+    protected void beforeActionCall(ViewData vdata)
             throws Exception {};
     
     /**
@@ -45,7 +45,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param cdata
      * @param vdata
      */
-    protected void beforeValidation(ControlData cdata, ViewData vdata)
+    protected void beforeValidation(ViewData vdata)
             throws Exception {};
     
     /**
@@ -54,8 +54,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final ControlData execAction(Message message) throws Exception {
-        ControlData controldata;
+    public final ViewData execAction(Message message) throws Exception {
         Method method;
         ViewData view;
         Element element;
@@ -70,11 +69,7 @@ public abstract class AbstractPage extends AbstractFunction {
         if (view == null)
             throw new Exception("Null view on action processing.");
         
-        controldata = new ControlData();
-        controldata.setMessages(view.getMessages());
-        controldata.setViewData(view);
-        
-        beforeValidation(controldata, view);
+        beforeValidation(view);
         
         element = view.getElement(controlname);
         if (element.isControlComponent()) {
@@ -95,39 +90,38 @@ public abstract class AbstractPage extends AbstractFunction {
             
             switch (status.error) {
             case EINITIAL:
-                controldata.message(Const.ERROR, "field.is.obligatory");
+                view.message(Const.ERROR, "field.is.obligatory");
                 break;
             case EMISMATCH:
-                controldata.message(Const.ERROR, "field.type.mismatch");
+                view.message(Const.ERROR, "field.type.mismatch");
                 break;
             }
             
-            return controldata;
+            return view;
         }
         
         appname = view.getAppName();
         if (shell == null)
             shell = new Shell(this);
         
-        beforeActionCall(controldata, view);
+        beforeActionCall(view);
         
         if (element.getType() == Const.SEARCH_HELP) {
-            controldata.addParameter("sh", element);
-            controldata.redirect("iocaste-search-help", "main");
+            view.addParameter("sh", element);
+            view.redirect("iocaste-search-help", "main");
         } else {
             action = (control == null)?controlname : control.getAction();
-            method = this.getClass().getMethod(
-                    action, ControlData.class, ViewData.class);
-            method.invoke(this, controldata, view);
+            method = this.getClass().getMethod(action, ViewData.class);
+            method.invoke(this, view);
         }
         
-        if (controldata.hasPageCall() && (control == null ||
+        if (view.hasPageCall() && (control == null ||
                 !control.isCancellable() || control.allowStacking()))
             shell.pushPage(view.getAppName(), view.getPageName());
         
         updateView(view);
         
-        return controldata;
+        return view;
     }
     
     /**
@@ -151,15 +145,11 @@ public abstract class AbstractPage extends AbstractFunction {
         ViewData view;
         String page = message.getString("page");
         String app = message.getString("app");
-        @SuppressWarnings("unchecked")
-        Map<String, Object> parameters =
-            (Map<String, Object>)message.get("parameters");
         
         if (app == null || page == null)
             throw new Exception("Page not especified.");
         
         view = new ViewData(app, page);
-        view.setParameters(parameters);
         
         method = this.getClass().getMethod(page, ViewData.class);
         method.invoke(this, view);
@@ -172,17 +162,15 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
-     * @param controldata
      * @param view
      */
-    public void help(ControlData controldata, ViewData view) { }
+    public void help(ViewData view) { }
     
     /**
      * 
-     * @param controldata
      * @param view
      */
-    public void home(ControlData controldata, ViewData view) { }
+    public void home(ViewData view) { }
     
     /**
      * 

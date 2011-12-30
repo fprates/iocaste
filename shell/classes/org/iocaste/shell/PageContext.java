@@ -1,11 +1,9 @@
 package org.iocaste.shell;
 
-import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.ViewData;
 
 public class PageContext {
     private ViewData view;
-    private ControlData control;
     private AppContext appctx;
     private String name;
     private boolean reloadable;
@@ -21,14 +19,6 @@ public class PageContext {
      */
     public final AppContext getAppContext() {
         return appctx;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final ControlData getControlData() {
-        return control;
     }
     
     /**
@@ -61,14 +51,6 @@ public class PageContext {
      */
     public final void setAppContext(AppContext appctx) {
         this.appctx = appctx;
-    }
-    
-    /**
-     * 
-     * @param control
-     */
-    public final void setControlData(ControlData control) {
-        this.control = control;
     }
     
     /**

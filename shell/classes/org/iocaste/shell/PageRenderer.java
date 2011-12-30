@@ -21,7 +21,6 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
-import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.ViewData;
 
@@ -47,7 +46,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @return
      * @throws Exception
      */
-    private final ControlData callController(String sessionid,
+    private final ViewData callController(String sessionid,
             Map<String, ?> parameters, PageContext pagectx) throws Exception {
         Message message = new Message();
         
@@ -58,7 +57,7 @@ public class PageRenderer extends HttpServlet implements Function {
         for (String name : parameters.keySet())
             message.add(name, parameters.get(name));
             
-        return (ControlData)Service.callServer(
+        return (ViewData)Service.callServer(
                 composeUrl(pagectx.getAppContext().getName()), message);
     }
     
@@ -260,9 +259,8 @@ public class PageRenderer extends HttpServlet implements Function {
             HttpServletRequest req, PageContext pagectx) throws Exception {
         PageContext pagectx_;
         Map<String, String[]> parameters;
-        ControlData control;
-        String appname;
-        String pagename;
+        String appname, pagename;
+        ViewData view;
         
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagectx);
@@ -277,21 +275,18 @@ public class PageRenderer extends HttpServlet implements Function {
         if (parameters.containsKey("pagetrack"))
             parameters.remove("pagetrack");
         
-        control = callController(sessionid, parameters, pagectx);
+        view = callController(sessionid, parameters, pagectx);
         
-        if (control == null)
-            return pagectx;
-        
-        renderer.setMessageText(control.getTranslatedMessage());
-        renderer.setMessageType(control.getMessageType());
+        renderer.setMessageText(view.getTranslatedMessage());
+        renderer.setMessageType(view.getMessageType());
         renderer.setUsername((iocaste.isConnected())?
                 iocaste.getUsername():NOT_CONNECTED);
         
-        appname = control.getApp();
+        appname = view.getRedirectedApp();
         if (appname == null)
             appname = pagectx.getAppContext().getName();
         
-        pagename = control.getPage();
+        pagename = view.getRedirectedPage();
         if (pagename == null)
             pagename = pagectx.getName();
         
@@ -300,8 +295,7 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagectx_ == null)
             pagectx_ = createPageContext(sessionid, appname, pagename);
         
-        pagectx_.setControlData(control);
-        pagectx_.setReloadableView(control.isReloadableView());
+        pagectx_.setReloadableView(view.isReloadableView());
         
         return pagectx_;
     }
@@ -383,7 +377,6 @@ public class PageRenderer extends HttpServlet implements Function {
         ViewData viewdata;
         Message message = new Message();
         PrintWriter writer = resp.getWriter();
-        ControlData control = pagectx.getControlData();
         
         resp.setCharacterEncoding("utf-8");
         resp.setContentType("text/html");
@@ -397,18 +390,12 @@ public class PageRenderer extends HttpServlet implements Function {
             message.add("page", pagectx.getName());
             message.setSessionid(sessionid);
             
-            if (control != null)
-                message.add("parameters", control.getParameters());
-            
             viewdata = (ViewData)Service.callServer(
                     composeUrl(appctx.getName()), message);
             pagectx.setViewData(viewdata);
         }
         
-        if ((control != null) && (viewdata.equals(control.getViewData())))
-        	text = renderer.run(control.getViewData());
-        else
-        	text = renderer.run(pagectx.getViewData());
+        text = renderer.run(pagectx.getViewData());
 
         if (text != null)
             for (String line : text)

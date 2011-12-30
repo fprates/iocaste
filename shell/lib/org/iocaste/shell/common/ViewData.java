@@ -35,28 +35,31 @@ import java.util.Map;
  */
 public class ViewData implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
-    private String title;
-    private String focus;
+    private String title, focus, sheet, appname, pagename;
+    private String rapp, rpage, messagetext;
     private MessageSource messages;
     private List<String> inputs;
     private Map<String, Boolean> navbarstatus;
     private List<Element> mpelements;
     private List<Container> containers;
-    private String sheet;
-    private String appname;
-    private String pagename;
     private Map<String, Object> parameters;
     private Container nbcontainer;
-    private boolean disabledhead;
+    private boolean disabledhead, reloadable, pagecall;
+    private Const messagetype;
     
     public ViewData(String appname, String pagename) {
         inputs = new ArrayList<String>();
         navbarstatus = new HashMap<String, Boolean>();
+        parameters = new HashMap<String, Object>();
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<Element>();
         nbcontainer = new StandardContainer(null, "navbar");
         containers.add(nbcontainer);
         disabledhead = false;
+        reloadable = false;
+        rapp = null;
+        rpage = null;
+        pagecall = false;
         
         this.appname = appname;
         this.pagename = pagename;
@@ -88,6 +91,15 @@ public class ViewData implements Serializable {
     
     /**
      * 
+     * @param name
+     * @param value
+     */
+    public final void addParameter(String name, Object value) {
+        parameters.put(name, value);
+    }
+    
+    /**
+     * 
      */
     public final void clearInputs() {
         inputs.clear();
@@ -96,8 +108,22 @@ public class ViewData implements Serializable {
     /**
      * 
      */
+    public final void clearParameters() {
+        parameters.clear();
+    }
+    
+    /**
+     * 
+     */
     public final void disableHead() {
         disabledhead = true;
+    }
+    
+    /**
+     * 
+     */
+    public final void dontPushPage() {
+        pagecall = false;
     }
     
     /*
@@ -210,6 +236,13 @@ public class ViewData implements Serializable {
     }
     
     /**
+     * @return the messagetype
+     */
+    public final Const getMessageType() {
+        return messagetype;
+    }
+    
+    /**
      * Retorna elementos multipart.
      * @return elementos
      */
@@ -225,6 +258,10 @@ public class ViewData implements Serializable {
         return navbarstatus;
     }
     
+    /**
+     * 
+     * @return
+     */
     public final Container getNavBarContainer() {
         return nbcontainer;
     }
@@ -247,6 +284,22 @@ public class ViewData implements Serializable {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final String getRedirectedApp() {
+        return rapp;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getRedirectedPage() {
+        return rpage;
+    }
+    
+    /**
      * Retorna nome da folha de estilos.
      * @return nome
      */
@@ -266,8 +319,60 @@ public class ViewData implements Serializable {
      * 
      * @return
      */
+    public final String getTranslatedMessage() {
+        if (messagetext == null)
+            return null;
+        
+        if (messages == null)
+            return messagetext;
+        else
+            return messages.get(messagetext, messagetext);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final boolean hasPageCall() {
+        return pagecall;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final boolean isHeadDisabled() {
         return disabledhead;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final boolean isReloadableView() {
+        return reloadable;
+    }
+    
+    /**
+     * 
+     * @param messagetype
+     * @param messagetext
+     */
+    public final void message(Const messagetype, String messagetext) {
+        this.messagetype = messagetype;
+        this.messagetext = messagetext;
+    }
+    
+    /**
+     * 
+     * @param app
+     * @param page
+     */
+    public final void redirect(String app, String page) {
+        rapp = app;
+        rpage = page;
+        
+        pagecall = true;
     }
     
     /**
@@ -297,13 +402,13 @@ public class ViewData implements Serializable {
         
         navbarstatus.put(name, enabled);
     }
-    
+
     /**
      * 
-     * @param parameters
+     * @param reloadable
      */
-    public final void setParameters(Map<String, Object> parameters) {
-        this.parameters = parameters;
+    public final void setReloadableView(boolean reloadable) {
+        this.reloadable = reloadable;
     }
     
     /**
