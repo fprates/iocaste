@@ -21,7 +21,6 @@ import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
@@ -39,10 +38,9 @@ public class Main extends AbstractPage {
     
     /**
      * 
-     * @param controldata
      * @param view
      */
-    public final void action(ControlData controldata, ViewData view) {
+    public final void action(ViewData view) {
         
     }
     
