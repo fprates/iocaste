@@ -7,7 +7,6 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
@@ -23,11 +22,10 @@ public class Main extends AbstractPage {
     
     /**
      * 
-     * @param cdata
      * @param vdata
      * @throws Exception
      */
-    public final void choose(ControlData cdata, ViewData vdata) 
+    public final void choose(ViewData vdata) 
             throws Exception {
         SearchHelp sh = (SearchHelp)vdata.getParameter("sh");
         Parameter value = (Parameter)vdata.getElement("value");
@@ -37,7 +35,7 @@ public class Main extends AbstractPage {
         
         input.setValue(value.getValue());
         updateView(view);
-        back(cdata, vdata);
+        back(vdata);
     }
     
     /**
