@@ -3,7 +3,6 @@ package org.iocaste.tasksel;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.ControlData;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
@@ -14,13 +13,12 @@ public class Main extends AbstractPage {
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.AbstractPage#help(
-     *     org.iocaste.shell.common.ControlData,
      *     org.iocaste.shell.common.ViewData)
      */
     @Override
-    public final void help(ControlData cdata, ViewData vdata) {
-        cdata.addParameter("topic", "tasksel-index");
-        cdata.redirect("iocaste-help", "view");
+    public final void help(ViewData vdata) {
+        vdata.addParameter("topic", "tasksel-index");
+        vdata.redirect("iocaste-help", "view");
     }
     
     /**
@@ -44,10 +42,9 @@ public class Main extends AbstractPage {
     
     /**
      * Controlador geral de tarefas
-     * @param controldata
      * @param view
      */
-    public final void run(ControlData cdata, ViewData vdata) {
+    public final void run(ViewData vdata) {
         String[] parsed, values;
         DataItem dataitem = (DataItem)vdata.getElement("command");
         String command = dataitem.getValue();
@@ -64,7 +61,7 @@ public class Main extends AbstractPage {
         
         dataitem.setValue("");
         parsed = command.split("\\s");
-        cdata.clearParameters();
+        vdata.clearParameters();
         
         for (int i = 0; i < parsed.length; i++) {
             switch (i) {
@@ -81,7 +78,7 @@ public class Main extends AbstractPage {
                 if (values.length < 2)
                     break;
                 
-                cdata.addParameter(values[0], values[1]);
+                vdata.addParameter(values[0], values[1]);
                 break;
             }
         }
@@ -89,6 +86,6 @@ public class Main extends AbstractPage {
         if (app == null)
             return;
         
-        cdata.redirect(app, page);
+        vdata.redirect(app, page);
     }
 }
