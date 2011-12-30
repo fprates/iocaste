@@ -45,22 +45,20 @@ public class HtmlRenderer {
     
     public HtmlRenderer() {
         String line;
-        List<String> lines = new ArrayList<String>();
+        script = new ArrayList<String>();
         InputStream is = this.getClass().getResourceAsStream(
                 "/META-INF/shell.js");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         
         try {
             while ((line = reader.readLine()) != null)
-                lines.add(line);
+                script.add(line);
             
             reader.close();
             is.close();
         } catch (IOException e) {
             new RuntimeException(e);
         }
-        
-        script = lines;
     }
 
     /**
