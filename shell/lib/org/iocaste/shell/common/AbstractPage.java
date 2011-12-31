@@ -107,6 +107,7 @@ public abstract class AbstractPage extends AbstractFunction {
         beforeActionCall(view);
         
         if (element.getType() == Const.SEARCH_HELP) {
+            view.export("sh");
             view.addParameter("sh", element);
             view.redirect("iocaste-search-help", "main");
         } else {
@@ -145,11 +146,15 @@ public abstract class AbstractPage extends AbstractFunction {
         ViewData view;
         String page = message.getString("page");
         String app = message.getString("app");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> parameters = (Map<String, Object>)message.get("parameters");
         
         if (app == null || page == null)
             throw new Exception("Page not especified.");
         
         view = new ViewData(app, page);
+        for (String name : parameters.keySet())
+            view.addParameter(name, parameters.get(name));
         
         method = this.getClass().getMethod(page, ViewData.class);
         method.invoke(this, view);

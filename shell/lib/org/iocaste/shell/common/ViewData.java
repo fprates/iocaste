@@ -38,7 +38,7 @@ public class ViewData implements Serializable {
     private String title, focus, sheet, appname, pagename;
     private String rapp, rpage, messagetext;
     private MessageSource messages;
-    private List<String> inputs;
+    private List<String> inputs, exports;
     private Map<String, Boolean> navbarstatus;
     private List<Element> mpelements;
     private List<Container> containers;
@@ -49,6 +49,7 @@ public class ViewData implements Serializable {
     
     public ViewData(String appname, String pagename) {
         inputs = new ArrayList<String>();
+        exports = new ArrayList<String>();
         navbarstatus = new HashMap<String, Boolean>();
         parameters = new HashMap<String, Object>();
         containers = new ArrayList<Container>();
@@ -148,12 +149,20 @@ public class ViewData implements Serializable {
     }
     
     /**
+     * 
+     * @param parameter
+     */
+    public final void export(String parameter) {
+        exports.add(parameter);
+    }
+    
+    /**
      * Retorna elemento de um container por nome.
      * @param container container
      * @param name nome do elemento
      * @return Elemento
      */
-    private Element findElement(Container container, String name) {
+    private final Element findElement(Container container, String name) {
         Element element_;
         String name_ = container.getName();
         
@@ -209,6 +218,14 @@ public class ViewData implements Serializable {
         }
         
         return element;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String[] getExportable() {
+        return exports.toArray(new String[0]);
     }
     
     /**

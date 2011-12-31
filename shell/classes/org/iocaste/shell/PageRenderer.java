@@ -297,6 +297,10 @@ public class PageRenderer extends HttpServlet implements Function {
         
         pagectx_.setReloadableView(view.isReloadableView());
         
+        pagectx_.clearParameters();
+        for (String name : view.getExportable())
+            pagectx_.addParameter(name, view.getParameter(name));
+        
         return pagectx_;
     }
     
@@ -388,6 +392,7 @@ public class PageRenderer extends HttpServlet implements Function {
             message.setId("get_view_data");
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
+            message.add("parameters", pagectx.getParameters());
             message.setSessionid(sessionid);
             
             viewdata = (ViewData)Service.callServer(
