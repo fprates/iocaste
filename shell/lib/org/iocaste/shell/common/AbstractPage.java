@@ -107,8 +107,7 @@ public abstract class AbstractPage extends AbstractFunction {
         beforeActionCall(view);
         
         if (element.getType() == Const.SEARCH_HELP) {
-            view.export("sh");
-            view.addParameter("sh", element);
+            view.export("sh", element);
             view.redirect("iocaste-search-help", "main");
         } else {
             action = (control == null)?controlname : control.getAction();

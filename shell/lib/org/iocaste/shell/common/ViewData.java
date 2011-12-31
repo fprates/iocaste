@@ -150,10 +150,12 @@ public class ViewData implements Serializable {
     
     /**
      * 
-     * @param parameter
+     * @param name
+     * @param value
      */
-    public final void export(String parameter) {
-        exports.add(parameter);
+    public final void export(String name, Object value) {
+        exports.add(name);
+        addParameter(name, value);
     }
     
     /**
