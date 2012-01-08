@@ -57,13 +57,11 @@ public class ViewData implements Serializable {
         nbcontainer = new StandardContainer(null, "navbar");
         containers.add(nbcontainer);
         disabledhead = false;
-        reloadable = false;
-        rapp = null;
-        rpage = null;
-        pagecall = false;
         
         this.appname = appname;
         this.pagename = pagename;
+        
+        clearRedirect();
     }
     
     /**
@@ -111,6 +109,15 @@ public class ViewData implements Serializable {
      */
     public final void clearParameters() {
         parameters.clear();
+    }
+    
+    public final void clearRedirect() {
+        rapp = null;
+        rpage = null;
+        messagetext = null;
+        messagetype = null;
+        reloadable = false;
+        pagecall = false;
     }
     
     /**

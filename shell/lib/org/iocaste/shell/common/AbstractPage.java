@@ -69,6 +69,7 @@ public abstract class AbstractPage extends AbstractFunction {
         if (view == null)
             throw new Exception("Null view on action processing.");
         
+        view.clearRedirect();
         beforeValidation(view);
         
         element = view.getElement(controlname);
