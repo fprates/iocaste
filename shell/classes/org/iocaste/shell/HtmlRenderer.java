@@ -210,12 +210,15 @@ public class HtmlRenderer {
         String styleclass;
         DataItem dataitem;
         TableItem tableitem;
-        Table table = new Table(null, 2, new StringBuffer(form.getName()).
-                append(".table").toString());
+        String tablename = new StringBuffer(form.getName()).append(".table").
+                toString();
+        Table table = new Table(null, tablename);
         DocumentModel model = form.getModel();
         List<XMLElement> tags = new ArrayList<XMLElement>();
         
         table.setHeader(false);
+        table.addColumn("name");
+        table.addColumn("field");
         
         for (Element element : form.getElements()) {
             if (element.isControlComponent())
@@ -569,10 +572,6 @@ public class HtmlRenderer {
     private final XMLElement renderTable(Table table) {
         String name;
         TableItem tableitem;
-        int iniline = table.getFirstItem();
-        int maxline = table.getMaxPageLines();
-        int length = table.getLength();
-        int lastline = iniline + ((length < maxline)? length : maxline);
         XMLElement trtag, thtag, tabletag = new XMLElement("table");
         List<XMLElement> tags = new ArrayList<XMLElement>();
         
@@ -594,7 +593,7 @@ public class HtmlRenderer {
             tabletag.addChild(trtag);
         }
         
-        for (int i = iniline; i < lastline; i++) {
+        for (int i = 0; i < table.getLength(); i++) {
             tableitem = table.getTableItem(i);
             tags.clear();
             renderElement(tags, tableitem);

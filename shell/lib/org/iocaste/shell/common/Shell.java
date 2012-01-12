@@ -72,7 +72,7 @@ public class Shell extends AbstractServiceInterface {
             return new Menu(container, name);
             
         case TABLE:
-            return new Table(container, (Integer)args[0], name);
+            return new Table(container, name);
             
         case TABLE_ITEM:
             return new TableItem((Table)container);

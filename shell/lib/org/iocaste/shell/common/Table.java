@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -41,23 +40,21 @@ public class Table extends AbstractContainer {
     private boolean header, mark;
     private Map<String, TableColumn> columns;
     private List<String> itens;
-    private int cols, firstitem, maxpagelines;
     
-    public Table(Container container, int cols, String name) {
+    public Table(Container container, String name) {
         super(container, Const.TABLE, name);
-
+        TableColumn column = new TableColumn();
+        
         header = true;
         mark = false;
-        firstitem = 0;
-        maxpagelines = 20;
         itens = new ArrayList<String>();
         columns = new LinkedHashMap<String, TableColumn>();
-        this.cols = cols;
         
-        if (cols == 0)
-            return;
+        column.setName("");
+        column.setMark(true);
+        column.setVisible(true);
         
-        prepare(null);
+        columns.put(name, column);
     }
     
     /*
@@ -71,6 +68,20 @@ public class Table extends AbstractContainer {
         
         if (element.getType() == Const.TABLE_ITEM)
             itens.add(element.getName());
+    }
+    
+    public void addColumn(String name) {
+        TableColumn column;
+        
+        if (columns.containsKey(name))
+            throw new RuntimeException("Table column has already exists.");
+        
+        column = new TableColumn();
+        column.setName(name);
+        column.setMark(false);
+        column.setVisible(true);
+        
+        columns.put(name, column);
     }
     
     /**
@@ -94,24 +105,8 @@ public class Table extends AbstractContainer {
      * 
      * @return
      */
-    public final int getFirstItem() {
-        return firstitem;
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final int getLength() {
         return itens.size();
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final int getMaxPageLines() {
-        return maxpagelines;
     }
     
     /**
@@ -163,7 +158,7 @@ public class Table extends AbstractContainer {
      * @return quantidade
      */
     public final int getWidth() {
-        return cols;
+        return columns.size();
     }
     
     /**
@@ -189,63 +184,22 @@ public class Table extends AbstractContainer {
      */
     @Override
     public final void importModel(DocumentModel model) {
-        super.importModel(model);
-        List<String> names = new ArrayList<String>();
-        String[] enames = getElementsNames();
-        
-        cols = 0;
-        for (String name: enames) {
-            if (getElement(name).getType() != Const.DATA_ITEM)
-                continue;
-            names.add(name);
-        }
-        
-        prepare(model.getItens());
-    }
-    
-    /**
-     * 
-     * @param cols
-     */
-    private final void prepare(Set<DocumentModelItem> itens) {
-        String name;
         TableColumn column;
+        String name;
         
-        columns.clear();
-        
-        column = new TableColumn();
-        column.setVisible(mark);
-        column.setMark(true);
-        column.setName("");
-        
-        columns.put("", column);
-        
-        if (itens == null) {
-            cols++;
-            for (int i = 1; i < cols; i++) {
-                column = new TableColumn();
-                column.setVisible(true);
-                column.setMark(false);
-                column.setName(Integer.toString(i));
-                columns.put(column.getName(), column);
-            }
-            
-            return;
-        }
-        
-        for (DocumentModelItem item : itens) {
+        for (DocumentModelItem item : model.getItens()) {
             name = item.getName();
             
             column = new TableColumn();
-            column.setVisible(true);
+            column.setName(name);
             column.setMark(false);
-            column.setName(item.getName());
+            column.setVisible(true);
             column.setModelItem(item);
             
             columns.put(name, column);
         }
         
-        cols = columns.size();
+        super.importModel(model);
     }
     
     /*
@@ -270,14 +224,6 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * 
-     * @param firstitem
-     */
-    public final void setFirstItem(int firstitem) {
-        this.firstitem = firstitem;
-    }
-    
-    /**
      * Ajusta status de exibição da header.
      * @param header true, exibe header
      */
@@ -291,13 +237,5 @@ public class Table extends AbstractContainer {
      */
     public final void setMark(boolean mark) {
         this.mark = mark;
-    }
-    
-    /**
-     * 
-     * @param maxpagelines
-     */
-    public final void setMaxPageLines(int maxpagelines) {
-        this.maxpagelines = maxpagelines;
     }
 }

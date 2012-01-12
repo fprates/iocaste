@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.DocumentModelItem;
 
 /**
  * Implementação abstrata para containers.
@@ -111,15 +110,6 @@ public abstract class AbstractContainer
      */
     @Override
     public void importModel(DocumentModel model) {
-        DataItem dataitem;
-        
-        clear();
-        
-        for (DocumentModelItem item : model.getItens()) {
-            dataitem = new DataItem(this, Const.TEXT_FIELD, item.getName());
-            dataitem.setModelItem(item);
-        }
-        
         this.model = model;
     }
     

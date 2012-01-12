@@ -24,6 +24,8 @@ package org.iocaste.shell.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 
 /**
@@ -126,6 +128,19 @@ public class DataForm extends AbstractContainer {
             return null;
         
         return ((DataItem)element).getValue();
+    }
+    
+    public final void importModel(DocumentModel model) {
+        DataItem dataitem;
+        
+        clear();
+        
+        for (DocumentModelItem item : model.getItens()) {
+            dataitem = new DataItem(this, Const.TEXT_FIELD, item.getName());
+            dataitem.setModelItem(item);
+        }
+        
+        super.importModel(model);
     }
     
     /**

@@ -313,7 +313,7 @@ public class Main extends AbstractPage {
             element = new StandardContainer(container, name);
         
         if (type.equals("table"))
-            element = new Table(container, 0, name);
+            element = new Table(container, name);
         
         if (type.equals("table_item"))
             element = new TableItem((Table)container);

@@ -64,7 +64,7 @@ public class Main extends AbstractPage {
         ExtendedObject[] result = getResultsFrom(sh);
         DocumentModel model = result[0].getModel();
         Container container = new Form(null, "main");
-        Table table = new Table(container, 0, "search.table");
+        Table table = new Table(container, "search.table");
         Parameter param = new Parameter(container, "value");
         
         table.importModel(model);
