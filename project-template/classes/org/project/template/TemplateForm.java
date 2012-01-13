@@ -10,7 +10,7 @@ public class TemplateForm extends AbstractPage {
 
     public void main(ViewData view) {
         Container container = new Form(null, "main");
-        Text text = new Text(container, null);
+        Text text = new Text(container, "hello.world");
         
         text.setText("Aplicação Iocaste Template");
         view.setTitle("iocaste-project-template");
