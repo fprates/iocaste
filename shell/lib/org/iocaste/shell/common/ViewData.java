@@ -38,7 +38,7 @@ public class ViewData implements Serializable {
     private String title, focus, sheet, appname, pagename;
     private String rapp, rpage, messagetext;
     private MessageSource messages;
-    private List<String> inputs, exports;
+    private List<String> inputs, exports, lines;
     private Map<String, Boolean> navbarstatus;
     private List<Element> mpelements;
     private List<Container> containers;
@@ -50,6 +50,7 @@ public class ViewData implements Serializable {
     public ViewData(String appname, String pagename) {
         inputs = new ArrayList<String>();
         exports = new ArrayList<String>();
+        lines = new ArrayList<String>();
         navbarstatus = new HashMap<String, Boolean>();
         parameters = new HashMap<String, Object>();
         containers = new ArrayList<Container>();
@@ -111,6 +112,16 @@ public class ViewData implements Serializable {
         parameters.clear();
     }
     
+    /**
+     * 
+     */
+    public final void clearPrintLines() {
+        lines.clear();
+    }
+    
+    /**
+     * 
+     */
     public final void clearRedirect() {
         rapp = null;
         rpage = null;
@@ -313,6 +324,14 @@ public class ViewData implements Serializable {
      * 
      * @return
      */
+    public final String[] getPrintLines() {
+        return lines.toArray(new String[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final String getRedirectedApp() {
         return rapp;
     }
@@ -387,6 +406,14 @@ public class ViewData implements Serializable {
     public final void message(Const messagetype, String messagetext) {
         this.messagetype = messagetype;
         this.messagetext = messagetext;
+    }
+    
+    /**
+     * 
+     * @param line
+     */
+    public final void print(String line) {
+        lines.add(line);
     }
     
     /**

@@ -516,6 +516,14 @@ public class HtmlRenderer {
         return hiddentag;
     }
     
+    private final XMLElement renderPrintElement(String line) {
+        XMLElement ptag = new XMLElement("p");
+        
+        ptag.addInner(line);
+        
+        return ptag;
+    }
+    
     /**
      * 
      * @param sh
@@ -736,6 +744,11 @@ public class HtmlRenderer {
         msgtype = Const.NONE;
         
         htmltag.addChildren(tags);
+        for (String line : vdata.getPrintLines())
+            htmltag.addChild(renderPrintElement(line));
+        
+        vdata.clearPrintLines();
+        
         html.add(htmltag.toString());
         
         return html.toArray(new String[0]);
