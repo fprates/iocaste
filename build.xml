@@ -33,6 +33,9 @@
 
         <!-- external -->
         <ant antfile="${basedir}/src/external/build.xml"/>
+          
+        <!-- transport -->
+        <ant antfile="${basedir}/src/transport/build.xml"/>
         
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
