@@ -1,5 +1,6 @@
 package org.iocaste.tasksel;
 
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -44,8 +45,9 @@ public class Main extends AbstractPage {
      * Controlador geral de tarefas
      * @param view
      */
-    public final void run(ViewData vdata) {
+    public final void run(ViewData vdata) throws Exception {
         String[] parsed, values;
+        Iocaste iocaste;
         DataItem dataitem = (DataItem)vdata.getElement("command");
         String command = dataitem.getValue();
         String page = "main";
@@ -86,6 +88,10 @@ public class Main extends AbstractPage {
         if (app == null)
             return;
         
-        vdata.redirect(app, page);
+        iocaste = new Iocaste(this);
+        if (!iocaste.isAppEnabled(app))
+            vdata.message(Const.ERROR, "app.not.enabled");
+        else
+            vdata.redirect(app, page);
     }
 }
