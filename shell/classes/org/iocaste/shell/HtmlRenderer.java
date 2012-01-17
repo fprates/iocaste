@@ -590,6 +590,9 @@ public class HtmlRenderer {
                 if (!column.isVisible())
                     continue;
                 
+                if (column.isMark() && !table.hasMark())
+                    continue;
+                
                 thtag = new XMLElement("th");
                 name = column.getName();
                 if (name != null)
