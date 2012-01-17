@@ -23,7 +23,7 @@
         <ant antfile="${basedir}/src/login/build.xml"/>
     	
         <!-- infosis -->
-<!--        <ant antfile="${basedir}/src/infosis/build.xml"/> -->
+        <ant antfile="${basedir}/src/infosis/build.xml"/>
     	
         <!-- help -->
         <ant antfile="${basedir}/src/help/build.xml"/>

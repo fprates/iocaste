@@ -16,6 +16,20 @@
         <url-pattern>/services.html</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>iocaste_servlet</servlet-name>
+        <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
+        <init-param>
+            <param-name>form</param-name>
+            <param-value>org.iocaste.infosis.Main</param-value>
+        </init-param>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>iocaste_servlet</servlet-name>
+        <url-pattern>/view.html</url-pattern>
+    </servlet-mapping>
+    
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
