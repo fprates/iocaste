@@ -25,8 +25,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param viewdata
      * @throws Exception 
      */
-    public void back(ViewData viewdata)
-            throws Exception {
+    public void back(ViewData viewdata) throws Exception {
         String[] entry = shell.popPage();
         viewdata.redirect(entry[0], entry[1]);
         viewdata.dontPushPage();
@@ -37,16 +36,14 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param cdata
      * @param vdata
      */
-    protected void beforeActionCall(ViewData vdata)
-            throws Exception {};
+    protected void beforeActionCall(ViewData vdata) throws Exception {};
     
     /**
      * 
      * @param cdata
      * @param vdata
      */
-    protected void beforeValidation(ViewData vdata)
-            throws Exception {};
+    protected void beforeValidation(ViewData vdata) throws Exception {};
     
     /**
      * 
@@ -110,6 +107,7 @@ public abstract class AbstractPage extends AbstractFunction {
         if (element.getType() == Const.SEARCH_HELP) {
             view.export("sh", element);
             view.redirect("iocaste-search-help", "main");
+            view.setReloadableView(true);
         } else {
             action = (control == null)?controlname : control.getAction();
             method = this.getClass().getMethod(action, ViewData.class);
@@ -147,7 +145,8 @@ public abstract class AbstractPage extends AbstractFunction {
         String page = message.getString("page");
         String app = message.getString("app");
         @SuppressWarnings("unchecked")
-        Map<String, Object> parameters = (Map<String, Object>)message.get("parameters");
+        Map<String, Object> parameters =
+                (Map<String, Object>)message.get("parameters");
         
         if (app == null || page == null)
             throw new Exception("Page not especified.");
