@@ -89,9 +89,11 @@ public class Main extends AbstractPage {
             return;
         
         iocaste = new Iocaste(this);
-        if (!iocaste.isAppEnabled(app))
+        if (!iocaste.isAppEnabled(app)) {
             vdata.message(Const.ERROR, "app.not.enabled");
-        else
+        } else {
+            vdata.setReloadableView(true);
             vdata.redirect(app, page);
+        }
     }
 }
