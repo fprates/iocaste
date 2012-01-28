@@ -67,9 +67,10 @@ public class HtmlRenderer {
      */
     private final void configNavigationBar(ViewData vdata) {
         NavigationBar navbar;
-        Text txtuname;
+        Text txtuname, txttitle;
         Map<String, Boolean> navbarstatus;
         Container container = vdata.getNavBarContainer();
+        String title = vdata.getTitle();
         
         container.clear();
         navbar = new NavigationBar(container);
@@ -77,6 +78,10 @@ public class HtmlRenderer {
         navbarstatus = vdata.getNavbarStatus();
         for (String name : navbarstatus.keySet())
             navbar.setEnabled(name, navbarstatus.get(name));
+        
+        txttitle = new Text(navbar.getStatusArea(), "navbar.title");
+        txttitle.setText((title == null)?vdata.getAppName() : title);
+        txttitle.setTag("h1");
         
         txtuname = new Text(navbar.getStatusArea(), "navbar.username");
         txtuname.setText(username);
@@ -658,7 +663,7 @@ public class HtmlRenderer {
      * @return
      */
     private final XMLElement renderText(Text text) {
-        XMLElement ptag = new XMLElement("p");
+        XMLElement ptag = new XMLElement(text.getTag());
         
         ptag.add("class", text.getStyleClass());
         ptag.addInner(getText(text.getText(), text.getName()));
