@@ -38,7 +38,7 @@ public class Main extends AbstractPage {
         view.setNavbarActionEnabled("help", true);
         view.setFocus("command");
         view.addContainer(form);
-        view.setTitle("task.selector");
+        view.setTitle("task-selector");
     }
     
     /**
