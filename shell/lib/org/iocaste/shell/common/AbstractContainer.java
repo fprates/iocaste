@@ -81,7 +81,7 @@ public abstract class AbstractContainer
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Container#getElements()
      */
-    public final Element[] getElements() {
+    public Element[] getElements() {
         return elements.values().toArray(new Element[0]);
     }
     

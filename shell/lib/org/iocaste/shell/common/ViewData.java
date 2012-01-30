@@ -184,13 +184,13 @@ public class ViewData implements Serializable {
      */
     private final Element findElement(Container container, String name) {
         Element element_;
-        String name_ = container.getName();
+        String name_ = container.getHtmlName();
         
         if (name_.equals(name))
             return container;
         
         for (Element element : container.getElements()) {
-            name_= element.getName();
+            name_= element.getHtmlName();
             
             if (name_.equals(name))
                 return element;

@@ -274,10 +274,6 @@ public class HtmlRenderer {
         case CHECKBOX:
             tags.add(renderCheckBox((CheckBox)element));
             break;
-            
-        case TABLE_ITEM:
-            tags.add(renderTableItem((TableItem)element));
-            break;
         
         case MENU_ITEM:
             tags.add(renderMenuItem((MenuItem)element));
@@ -338,9 +334,11 @@ public class HtmlRenderer {
      */
     private final XMLElement renderFileEntry(FileEntry file) {
         XMLElement filetag = new XMLElement("input");
+        String name = file.getHtmlName();
         
         filetag.add("type", "file");
-        filetag.add("name", file.getName());
+        filetag.add("name", name);
+        filetag.add("id", name);
         
         return filetag;
     }
@@ -356,7 +354,7 @@ public class HtmlRenderer {
         
         formtag.add("method", "post");
         formtag.add("action", "index.html");
-        formtag.add("name", container.getName());
+        formtag.add("name", container.getHtmlName());
         
         if (enctype != null)
             formtag.add("enctype", enctype);
@@ -443,7 +441,7 @@ public class HtmlRenderer {
             sb = new StringBuffer("index.html?pagetrack=").
                     append(pagetrack).append("&action=");
         
-        sb.append(link.getName());
+        sb.append(link.getHtmlName());
         
         parameters = link.getParametersMap();
         
@@ -465,8 +463,10 @@ public class HtmlRenderer {
      */
     private final XMLElement renderList(ListBox list) {
         XMLElement optiontag = null, selecttag= new XMLElement("select");
+        String name = list.getHtmlName();
         
-        selecttag.add("name", list.getName());
+        selecttag.add("name", name);
+        selecttag.add("id", name);
         
         for (String option : list.getEntriesNames()) {
             optiontag = new XMLElement("option");
@@ -512,7 +512,7 @@ public class HtmlRenderer {
      */
     private final XMLElement renderParameter(Parameter parameter) {
         XMLElement hiddentag = new XMLElement("input");
-        String name = parameter.getName();
+        String name = parameter.getHtmlName();
         
         hiddentag.add("type", "hidden");
         hiddentag.add("name", name);
@@ -584,7 +584,6 @@ public class HtmlRenderer {
      */
     private final XMLElement renderTable(Table table) {
         String name;
-        TableItem tableitem;
         XMLElement trtag, thtag, tabletag = new XMLElement("table");
         List<XMLElement> tags = new ArrayList<XMLElement>();
         
@@ -609,10 +608,9 @@ public class HtmlRenderer {
             tabletag.addChild(trtag);
         }
         
-        for (int i = 0; i < table.getLength(); i++) {
-            tableitem = table.getTableItem(i);
+        for (TableItem item : table.getItens()) {
             tags.clear();
-            renderElement(tags, tableitem);
+            tags.add(renderTableItem(table, item));
             tabletag.addChildren(tags);
         }
         
@@ -624,16 +622,14 @@ public class HtmlRenderer {
      * @param item
      * @return
      */
-    private final XMLElement renderTableItem(TableItem item) {
+    private final XMLElement renderTableItem(Table table, TableItem item) {
         TableColumn column;
-        Element element;
-        Table table = (Table)item.getContainer();
         TableColumn[] columns = table.getColumns();
         int i = 0;
         XMLElement tdtag, trtag = new XMLElement("tr");
         List<XMLElement> tags = new ArrayList<XMLElement>();
         
-        for (String name : item.getElementNames()) {
+        for (Element element : item.getElements()) {
             column = columns[i++];
             
             if (!column.isVisible())
@@ -644,7 +640,6 @@ public class HtmlRenderer {
             
             tdtag = new XMLElement("td");
             
-            element = table.getElement(name);
             if (element != null) {
                 tags.clear();
                 renderElement(tags, element);
@@ -665,6 +660,7 @@ public class HtmlRenderer {
     private final XMLElement renderText(Text text) {
         XMLElement ptag = new XMLElement(text.getTag());
         
+        ptag.add("id", text.getHtmlName());
         ptag.add("class", text.getStyleClass());
         ptag.addInner(getText(text.getText(), text.getName()));
         
@@ -681,7 +677,7 @@ public class HtmlRenderer {
         DataElement dataelement = Shell.getDataElement(textfield);
         int length = (dataelement == null)?textfield.getLength() :
             dataelement.getLength();
-        String name = textfield.getName(), value = textfield.getValue();
+        String name = textfield.getHtmlName(), value = textfield.getValue();
         XMLElement spantag, inputtag = new XMLElement("input");
         List<XMLElement> tags = new ArrayList<XMLElement>();
         

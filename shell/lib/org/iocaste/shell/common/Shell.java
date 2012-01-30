@@ -74,9 +74,6 @@ public class Shell extends AbstractServiceInterface {
         case TABLE:
             return new Table(container, name);
             
-        case TABLE_ITEM:
-            return new TableItem((Table)container);
-            
         case STANDARD_CONTAINER:
             return new StandardContainer(container, name);
             

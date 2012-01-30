@@ -39,6 +39,12 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract String getDestiny();
     
     /**
+     * 
+     * @return
+     */
+    public abstract String getHtmlName();
+    
+    /**
      * Retorna nome do elemento.
      * @return nome do elemento.
      */
@@ -111,6 +117,12 @@ public interface Element extends Comparable<Element>, Serializable {
      * @param enabled true, para habilitar elemento
      */
     public abstract void setEnabled(boolean enabled);
+    
+    /**
+     * 
+     * @param name
+     */
+    public abstract void setHtmlName(String name);
     
     /**
      * Ajusta nome da classe CSS do elemento.

@@ -34,7 +34,7 @@ package org.iocaste.shell.common;
 public abstract class AbstractElement implements Element {
     private static final long serialVersionUID = -4565295670850530184L;
     private Const type;
-    private String name, style, destiny;
+    private String name, htmlname, style, destiny;
     private boolean enabled, visible;
     private ViewData view;
     
@@ -44,6 +44,7 @@ public abstract class AbstractElement implements Element {
         
         this.type = type;
         this.name = name;
+        htmlname = name;
         style = "";
         enabled = true;
         visible = true;
@@ -76,7 +77,7 @@ public abstract class AbstractElement implements Element {
             return false;
         
         element = (AbstractElement)object;
-        if (!name.equals(element.getName()))
+        if (!name.equals(element.getHtmlName()))
             return false;
         
         return true;
@@ -89,6 +90,15 @@ public abstract class AbstractElement implements Element {
     @Override
     public final String getDestiny() {
         return destiny;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#getHtmlName()
+     */
+    @Override
+    public final String getHtmlName() {
+        return htmlname;
     }
     
     /*
@@ -179,6 +189,15 @@ public abstract class AbstractElement implements Element {
     @Override
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#setHtmlName(java.lang.String)
+     */
+    @Override
+    public final void setHtmlName(String htmlname) {
+        this.htmlname = htmlname;
     }
     
     /*

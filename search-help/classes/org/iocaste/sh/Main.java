@@ -5,7 +5,6 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
@@ -79,17 +78,13 @@ public class Main extends AbstractPage {
                 export = sh.getExport();
                 
                 if (export != null && export.equals(name)) {
-                    tableitem.add(Const.LINK, "choose", new Object[] {"choose"});
-                    
-                    link = (Link)table.getElement(
-                            tableitem.getComplexName("choose"));
+                    link = new Link(table, "choose", "choose");
+                    tableitem.add(link);
                     link.add(param, value);
                     link.setText(value);
                 } else {
-                    tableitem.add(Const.TEXT, name, null);
-                    
-                    text = (Text)table.getElement(
-                            tableitem.getComplexName(name));
+                    text = new Text(table, name);
+                    tableitem.add(text);
                     text.setText(value);
                 }
                 

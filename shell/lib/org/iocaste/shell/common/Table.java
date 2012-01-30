@@ -39,7 +39,7 @@ public class Table extends AbstractContainer {
     private static final long serialVersionUID = -245959547368570624L;
     private boolean header, mark;
     private Map<String, TableColumn> columns;
-    private List<String> itens;
+    private List<TableItem> itens;
     
     public Table(Container container, String name) {
         super(container, Const.TABLE, name);
@@ -47,7 +47,7 @@ public class Table extends AbstractContainer {
         
         header = true;
         mark = false;
-        itens = new ArrayList<String>();
+        itens = new ArrayList<TableItem>();
         columns = new LinkedHashMap<String, TableColumn>();
         
         column.setName("");
@@ -63,13 +63,20 @@ public class Table extends AbstractContainer {
      *     org.iocaste.shell.common.Element)
      */
     @Override
-    public void add(Element element) {
-        super.add(element);
-        
-        if (element.getType() == Const.TABLE_ITEM)
-            itens.add(element.getName());
+    public final void add(Element element) { };
+    
+    /**
+     * 
+     * @param item
+     */
+    public final void add(TableItem item) {
+        itens.add(item);
     }
     
+    /**
+     * 
+     * @param name
+     */
     public void addColumn(String name) {
         TableColumn column;
         
@@ -101,12 +108,38 @@ public class Table extends AbstractContainer {
         return columns.values().toArray(new TableColumn[0]);
     }
     
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractContainer#getElements()
+     */
+    @Override
+    public final Element[] getElements() {
+        String linename, htmlname;
+        int t = 0, i = 0;
+        Element[] elements = new Element[itens.size() * columns.size()];
+        
+        for (TableItem item : itens) {
+            linename = new StringBuilder(getName()).append(".").append(i++).
+                    append(".").toString();
+            
+            for (Element element : item.getElements()) {
+                htmlname = new StringBuilder(linename).
+                        append(element.getName()).toString();
+                
+                element.setHtmlName(htmlname);
+                elements[t++] = element;
+            }
+        }
+        
+        return elements;
+    }
+    
     /**
      * 
      * @return
      */
-    public final int getLength() {
-        return itens.size();
+    public final TableItem[] getItens() {
+        return itens.toArray(new TableItem[0]);
     }
     
     /**
@@ -114,17 +147,11 @@ public class Table extends AbstractContainer {
      * @return
      */
     public final TableItem[] getSelected() {
-        TableItem item;
         List<TableItem> itens = new ArrayList<TableItem>();
         
-        for (Element element : getElements()) {
-            if (element.getType() != Const.TABLE_ITEM)
-                continue;
-            
-            item = (TableItem)element;
+        for (TableItem item : this.itens)
             if (item.isSelected())
                 itens.add(item);
-        }
         
         return itens.toArray(new TableItem[0]);
     }
@@ -135,30 +162,7 @@ public class Table extends AbstractContainer {
      * @return
      */
     public final TableItem getTableItem(int index) {
-        return (TableItem)getElement(itens.get(index));
-    }
-    
-    /**
-     * 
-     * @param item
-     * @param name
-     * @return
-     */
-    public String getValue(TableItem item, String name) {
-        Element element = getElement(item.getComplexName(name));
-        
-        if (!element.isDataStorable())
-            return null;
-        
-        return ((InputComponent)element).getValue();
-    }
-    
-    /**
-     * Retorna quantidade de colunas.
-     * @return quantidade
-     */
-    public final int getWidth() {
-        return columns.size();
+        return itens.get(index);
     }
     
     /**
@@ -202,25 +206,23 @@ public class Table extends AbstractContainer {
         super.importModel(model);
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractContainer#remove(
-     *     org.iocaste.shell.common.Element)
+    /**
+     * 
+     * @return
      */
-    @Override
-    public final void remove(Element element) {
-        TableItem tableitem;
+    public final int length() {
+        return itens.size();
+    }
+    
+    /**
+     * 
+     * @param item
+     */
+    public final void remove(TableItem item) {
+        for (Element element : item.getElements())
+            super.remove(element);
         
-        if (element.getType() != Const.TABLE_ITEM)
-            return;
-        
-        tableitem = (TableItem)element;
-        for (String name : tableitem.getElementNames())
-            super.remove(getElement(name));
-        
-        itens.remove(element.getName());
-        
-        super.remove(element);
+        itens.remove(item);
     }
     
     /**
@@ -237,5 +239,13 @@ public class Table extends AbstractContainer {
      */
     public final void setMark(boolean mark) {
         this.mark = mark;
+    }
+    
+    /**
+     * Retorna quantidade de colunas.
+     * @return quantidade
+     */
+    public final int width() {
+        return columns.size();
     }
 }
