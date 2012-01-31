@@ -1,6 +1,8 @@
 package org.iocaste.shell.common;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
@@ -12,16 +14,17 @@ import org.iocaste.documents.common.ExtendedObject;
  */
 public class TableItem implements Serializable {
     private static final long serialVersionUID = -1076760582954115701L;
-    private Element[] elements;
-    private int i;
+    private Map<String, Element> elements;
+    private TableColumn[] columns;
     private Table table;
     
     public TableItem(Table table) {
         table.add(this);
+        
         this.table = table;
-        i = 1;
-        elements = new Element[table.width()];
-        elements[0] = new CheckBox(table, "mark");
+        columns = table.getColumns();
+        elements = new LinkedHashMap<String, Element>();
+        elements.put("mark", new CheckBox(table, "mark"));
     }
     
     /**
@@ -29,27 +32,29 @@ public class TableItem implements Serializable {
      * @param element
      */
     public final void add(Element element) {
-        if (i == elements.length)
+        int i = elements.size();
+        
+        if (i == table.width())
             throw new RuntimeException("Item overflow for table.");
         
-        elements[i++] = element;
+        elements.put(columns[i].getName(), element);
     }
     
-//    /**
-//     * 
-//     * @param name
-//     * @return
-//     */
-//    public final Element getElement(String name) {
-//        return table.getElement(getComplexName(name));
-//    }
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final Element get(String name) {
+        return elements.get(name);
+    }
     
     /**
      * 
      * @return
      */
     public final Element[] getElements() {
-        return elements;
+        return elements.values().toArray(new Element[0]);
     }
     
     /**
@@ -57,11 +62,14 @@ public class TableItem implements Serializable {
      * @return
      */
     public final ExtendedObject getObject() {
+        Element element;
         InputComponent input;
         DocumentModelItem modelitem;
         ExtendedObject object = new ExtendedObject(table.getModel());
         
-        for (Element element : elements) {
+        for (String name : elements.keySet()) {
+            element = elements.get(name);
+            
             if (!element.isDataStorable())
                 continue;
             
@@ -82,7 +90,7 @@ public class TableItem implements Serializable {
      * @return
      */
     public final boolean isSelected() {
-        CheckBox mark = (CheckBox)elements[0];
+        CheckBox mark = (CheckBox)elements.get("mark");
         
         return mark.isSelected();
     }
@@ -92,11 +100,14 @@ public class TableItem implements Serializable {
      * @param object
      */
     public final void setObject(ExtendedObject object) {
+        Element element;
         Object value;
         InputComponent input;
         DocumentModelItem modelitem;
         
-        for (Element element : elements) {
+        for (String name : elements.keySet()) {
+            element = elements.get(name);
+            
             if (!element.isDataStorable())
                 continue;
             
