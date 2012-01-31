@@ -160,9 +160,11 @@ public class HtmlRenderer {
      */
     private final XMLElement renderCheckBox(CheckBox checkbox) {
         XMLElement cboxtag = new XMLElement("input");
+        String name = checkbox.getHtmlName();
         
         cboxtag.add("type", "checkbox");
-        cboxtag.add("name", checkbox.getName());
+        cboxtag.add("name", name);
+        cboxtag.add("id", name);
         
         if (checkbox.isSelected())
             cboxtag.add("checked", "checked");
