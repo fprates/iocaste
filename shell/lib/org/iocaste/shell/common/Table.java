@@ -219,9 +219,6 @@ public class Table extends AbstractContainer {
      * @param item
      */
     public final void remove(TableItem item) {
-        for (Element element : item.getElements())
-            super.remove(element);
-        
         itens.remove(item);
     }
     
