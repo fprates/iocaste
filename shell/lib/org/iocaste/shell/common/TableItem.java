@@ -89,6 +89,14 @@ public class TableItem implements Serializable {
      * 
      * @return
      */
+    public final Table getTable() {
+        return table;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final boolean isSelected() {
         CheckBox mark = (CheckBox)elements.get("mark");
         
