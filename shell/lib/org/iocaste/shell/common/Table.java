@@ -144,20 +144,6 @@ public class Table extends AbstractContainer {
     
     /**
      * 
-     * @return
-     */
-    public final TableItem[] getSelected() {
-        List<TableItem> itens = new ArrayList<TableItem>();
-        
-        for (TableItem item : this.itens)
-            if (item.isSelected())
-                itens.add(item);
-        
-        return itens.toArray(new TableItem[0]);
-    }
-    
-    /**
-     * 
      * @param index
      * @return
      */
