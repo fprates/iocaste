@@ -1,7 +1,9 @@
 package org.iocaste.documents;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +12,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 
@@ -35,6 +38,27 @@ public class DocumentServices {
         saveDocumentItens(iocaste, model);
         saveDocumentKeys(iocaste, model);
         saveDataElements(iocaste, model);
+    }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param object
+     * @return
+     * @throws Exception
+     */
+    public final int delete(Iocaste iocaste, ExtendedObject object)
+            throws Exception {
+        int i = 0;
+        DocumentModel model = object.getModel();
+        Set<DocumentModelKey> keys = model.getKeys();
+        Object[] criteria = new Object[keys.size()];
+        
+        for (DocumentModelKey key : keys)
+            criteria[i++] = object.getValue(model.
+                    getModelItem(key.getModelItemName()));
+        
+        return iocaste.update(model.getQuery("delete"), criteria);
     }
     
     /**
@@ -161,6 +185,36 @@ public class DocumentServices {
     
     /**
      * 
+     * @param iocaste
+     * @param object
+     * @throws Exception
+     */
+    public final void modify(Iocaste iocaste, ExtendedObject object)
+            throws Exception {
+        Object value;
+        DocumentModel model = object.getModel();
+        List<Object> criteria = new ArrayList<Object>();
+        List<Object> uargs = new ArrayList<Object>();
+        List<Object> iargs = new ArrayList<Object>();
+        
+        for (DocumentModelItem item : model.getItens()) {
+            value = object.getValue(item);
+            
+            iargs.add(value);
+            if (model.isKey(item))
+                criteria.add(value);
+            else
+                uargs.add(value);
+        }
+        
+        uargs.addAll(criteria);
+        
+        if (iocaste.update(model.getQuery("update"), uargs.toArray()) == 0)
+            iocaste.update(model.getQuery("insert"), iargs.toArray());
+    }
+    
+    /**
+     * 
      * @param model
      */
     private final void parseQueries(DocumentModel model) {
@@ -218,6 +272,67 @@ public class DocumentServices {
     
     /**
      * 
+     * @param query
+     * @return
+     * @throws Exception
+     */
+    public final QueryInfo parseQuery(String query) throws Exception {
+        String[] select, parsed = query.split(" ");
+        int t, pass = 0;
+        StringBuilder sb = new StringBuilder("select ");
+        QueryInfo queryinfo = new QueryInfo();
+        
+        for (String token : parsed) {
+            switch (pass) {
+            case 0:
+                if (token.equals("select")) {
+                    pass = 1;
+                    continue;
+                }
+                
+                if (token.equals("from")) {
+                    pass = 3;
+                    sb.append("* from ");
+                    continue;
+                }
+                
+                continue;
+            case 1:
+                select = token.split(",");
+                t = select.length;
+                
+                for (int i = 0; i < t; i++) {
+                    sb.append(select[i]);
+                    if (i == (t - 1))
+                        continue;
+                    sb.append(",");
+                }
+                
+                pass = 2;
+                continue;
+            case 2:
+                if (token.equals("from"))
+                    sb.append(" from ");
+                
+                pass = 3;
+                continue;
+            case 3:
+                queryinfo.model = getDocumentModel(token);
+                if (queryinfo.model == null)
+                    throw new Exception("Document model not found.");
+                
+                sb.append(queryinfo.model.getTableName());
+                continue;
+            }
+        }
+        
+        queryinfo.query = sb.toString();
+        
+        return queryinfo;
+    }
+    
+    /**
+     * 
      * @param model
      * @throws Exception
      */
@@ -244,6 +359,29 @@ public class DocumentServices {
         query = new StringBuilder("drop table ").append(model.getTableName()).
                 toString();
         iocaste.update(query, null);
+    }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param object
+     * @return
+     * @throws Exception
+     */
+    public final int save(Iocaste iocaste, ExtendedObject object)
+            throws Exception {
+        Object[] criteria;
+        DocumentModel model = object.getModel();
+        Set<DocumentModelItem> itens = model.getItens();
+        int i = itens.size();
+        
+        criteria = (i > 0)? new Object[i] : null;
+        
+        i = 0;
+        for (DocumentModelItem item : model.getItens())
+            criteria[i++] = object.getValue(item);
+        
+        return iocaste.update(model.getQuery("insert"), criteria);
     }
     
     /**
@@ -379,5 +517,47 @@ public class DocumentServices {
                 toString();
         
         iocaste.update(query, null);
+    }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param query
+     * @param criteria
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public final ExtendedObject[] select(Iocaste iocaste, String query,
+            Object[] criteria) throws Exception {
+        Object value;
+        Object[] lines;
+        Map<String, Object> line;
+        ExtendedObject object;
+        ExtendedObject[] objects;
+        QueryInfo queryinfo = parseQuery(query);
+        
+        if (queryinfo.query == null || queryinfo.model == null)
+            return null;
+        
+        lines = iocaste.select(queryinfo.query, criteria);
+        if (lines.length == 0)
+            return null;
+        
+        objects = new ExtendedObject[lines.length];
+        
+        for (int i = 0; i < lines.length; i++) {
+            line = (Map<String, Object>)lines[i];
+            object = new ExtendedObject(queryinfo.model);
+            
+            for (DocumentModelItem modelitem : queryinfo.model.getItens()) {
+                value = line.get(modelitem.getTableFieldName());
+                object.setValue(modelitem, value);
+            }
+            
+            objects[i] = object;
+        }
+        
+        return objects;
     }
 }

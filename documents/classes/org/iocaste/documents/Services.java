@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
@@ -21,6 +22,10 @@ public class Services extends AbstractFunction {
         export("has_model", "hasModel");
         export("create_model", "createModel");
         export("remove_model", "removeModel");
+        export("save", "save");
+        export("select", "select");
+        export("modify", "modify");
+        export("delete", "delete");
     }
     
     /**
@@ -32,6 +37,18 @@ public class Services extends AbstractFunction {
         DocumentModel model = (DocumentModel)message.get("model");
         
         doc.createModel(model);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void delete(Message message) throws Exception {
+        ExtendedObject object = (ExtendedObject)message.get("object");
+        Iocaste iocaste = new Iocaste(this);
+        
+        doc.delete(iocaste, object);
     }
     
     /**
@@ -108,10 +125,48 @@ public class Services extends AbstractFunction {
      * @param message
      * @throws Exception
      */
+    public final void modify(Message message) throws Exception {
+        Iocaste iocaste = new Iocaste(this);
+        ExtendedObject object = (ExtendedObject)message.get("object");
+        
+        doc.modify(iocaste, object);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
     public final void removeModel(Message message) throws Exception {
         String modelname = message.getString("model_name");
         DocumentModel model = doc.getDocumentModel(modelname);
         
         doc.removeModel(model);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final int save(Message message) throws Exception {
+        Iocaste iocaste = new Iocaste(this);
+        ExtendedObject object = (ExtendedObject)message.get("object");
+        
+        return doc.save(iocaste, object);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final ExtendedObject[] select(Message message) throws Exception {
+        String query = message.getString("query");
+        Object[] criteria = (Object[])message.get("criteria");
+        Iocaste iocaste = new Iocaste(this);
+        
+        return doc.select(iocaste, query, criteria);
     }
 }

@@ -21,11 +21,6 @@
 
 package org.iocaste.documents.common;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
@@ -39,10 +34,10 @@ import org.iocaste.protocol.Message;
 public class Documents extends AbstractServiceInterface {
     private static final String SERVERNAME =
             "/iocaste-documents/services.html";
-    private Iocaste iocaste;
+    Function function;
     
     public Documents(Function function) {
-        iocaste = new Iocaste(function);
+        this.function = function;
         initService(function, SERVERNAME);
     }
     
@@ -51,7 +46,7 @@ public class Documents extends AbstractServiceInterface {
      * @throws Exception
      */
     public final void commit() throws Exception {
-        iocaste.commit();
+        new Iocaste(function).commit();
     }
     
     /**
@@ -75,16 +70,12 @@ public class Documents extends AbstractServiceInterface {
      * @throws Exception
      */
     public final int delete(ExtendedObject object) throws Exception {
-        int i = 0;
-        DocumentModel model = object.getModel();
-        Set<DocumentModelKey> keys = model.getKeys();
-        Object[] criteria = new Object[keys.size()];
+        Message message = new Message();
         
-        for (DocumentModelKey key : keys)
-            criteria[i++] = object.getValue(model.
-                    getModelItem(key.getModelItemName()));
+        message.setId("delete");
+        message.add("object", object);
         
-        return iocaste.update(model.getQuery("delete"), criteria);
+        return (Integer)call(message);
     }
     
     /**
@@ -154,26 +145,12 @@ public class Documents extends AbstractServiceInterface {
      * @throws Exception 
      */
     public final void modify(ExtendedObject object) throws Exception {
-    	Object value;
-    	DocumentModel model = object.getModel();
-    	List<Object> criteria = new ArrayList<Object>();
-    	List<Object> uargs = new ArrayList<Object>();
-    	List<Object> iargs = new ArrayList<Object>();
-    	
-        for (DocumentModelItem item : model.getItens()) {
-        	value = object.getValue(item);
-        	
-        	iargs.add(value);
-    		if (model.isKey(item))
-    			criteria.add(value);
-    		else
-            	uargs.add(value);
-        }
+        Message message = new Message();
         
-        uargs.addAll(criteria);
+        message.setId("modify");
+        message.add("object", object);
         
-        if (iocaste.update(model.getQuery("update"), uargs.toArray()) == 0)
-            iocaste.update(model.getQuery("insert"), iargs.toArray());
+        call(message);
     }
     
     /**
@@ -192,86 +169,17 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
-     * @param query
-     * @return
-     * @throws Exception
-     */
-    private final QueryInfo reparseQuery(String query) throws Exception {
-        String[] select;
-        int t;
-        String[] parsed = query.split(" ");
-        int pass = 0;
-        StringBuilder sb = new StringBuilder("select ");
-        QueryInfo queryinfo = new QueryInfo();
-        
-        for (String token : parsed) {
-            switch (pass) {
-            case 0:
-                if (token.equals("select")) {
-                    pass = 1;
-                    continue;
-                }
-                
-                if (token.equals("from")) {
-                    pass = 3;
-                    sb.append("* from ");
-                    continue;
-                }
-                
-                continue;
-            case 1:
-                select = token.split(",");
-                t = select.length;
-                
-                for (int i = 0; i < t; i++) {
-                    sb.append(select[i]);
-                    if (i == (t - 1))
-                        continue;
-                    sb.append(",");
-                }
-                
-                pass = 2;
-                continue;
-            case 2:
-                if (token.equals("from"))
-                    sb.append(" from ");
-                
-                pass = 3;
-                continue;
-            case 3:
-            	queryinfo.model = getModel(token);
-            	if (queryinfo.model == null)
-            		throw new Exception("Document model not found.");
-            	
-                sb.append(queryinfo.model.getTableName());
-                continue;
-            }
-        }
-        
-        queryinfo.query = sb.toString();
-        
-        return queryinfo;
-    }
-    
-    /**
-     * 
      * @param object
      * @return
      * @throws Exception
      */
     public final int save(ExtendedObject object) throws Exception {
-        Object[] criteria;
-        DocumentModel model = object.getModel();
-        Set<DocumentModelItem> itens = model.getItens();
-        int i = itens.size();
+        Message message = new Message();
         
-        criteria = (i > 0)? new Object[i] : null;
+        message.setId("save");
+        message.add("object", object);
         
-        i = 0;
-        for (DocumentModelItem item : model.getItens())
-            criteria[i++] = object.getValue(item);
-        
-        return iocaste.update(model.getQuery("insert"), criteria);
+        return (Integer)call(message);
     }
     
     /**
@@ -281,47 +189,14 @@ public class Documents extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
     public final ExtendedObject[] select(String query, Object[] criteria)
     		throws Exception {
-        Object value;
-        Object[] lines;
-        Map<String, Object> line;
-        ExtendedObject object;
-        ExtendedObject[] objects;
-        QueryInfo queryinfo = reparseQuery(query);
+        Message message = new Message();
         
-        if (queryinfo.query == null || queryinfo.model == null)
-            return null;
+        message.setId("select");
+        message.add("query", query);
+        message.add("criteria", criteria);
         
-        lines = iocaste.select(queryinfo.query, criteria);
-        if (lines.length == 0)
-            return null;
-        
-        objects = new ExtendedObject[lines.length];
-        
-        for (int i = 0; i < lines.length; i++) {
-        	line = (Map<String, Object>)lines[i];
-        	object = new ExtendedObject(queryinfo.model);
-        	
-        	for (DocumentModelItem modelitem : queryinfo.model.getItens()) {
-        		value = line.get(modelitem.getTableFieldName());
-        		object.setValue(modelitem, value);
-        	}
-        	
-        	objects[i] = object;
-        }
-        
-        return objects;
+        return (ExtendedObject[])call(message);
     }
-}
-
-class QueryInfo {
-	public DocumentModel model;
-	public String query;
-	
-	public QueryInfo() {
-		model = null;
-		query = null;
-	}
 }
