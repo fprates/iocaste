@@ -560,4 +560,45 @@ public class DocumentServices {
         
         return objects;
     }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param model
+     * @throws Exception
+     */
+    public final void updateModel(Iocaste iocaste, DocumentModel model)
+            throws Exception {
+        DataElement ddelement;
+        String altercolumn = "alter table ? alter column ? ?(?)";
+        String[] criteria = new String[4];
+        DocumentModel oldmodel = getDocumentModel(model.getName());
+        
+        criteria[0] = model.getTableName();
+        
+        for (DocumentModelItem item : model.getItens()) {
+            if (oldmodel.contains(item)) {
+                criteria[1] = item.getTableFieldName();
+                
+                ddelement = item.getDataElement();
+                
+                switch (ddelement.getType()) {
+                case DataType.CHAR:
+                    criteria[2] = "varchar";
+                    
+                    break;
+                case DataType.NUMC:
+                    criteria[2] = "numeric";
+                    
+                    break;
+                }
+                
+                criteria[3] = Integer.toString(ddelement.getLength());
+                
+                iocaste.update(altercolumn, criteria);
+                
+                continue;
+            }
+        }
+    }
 }

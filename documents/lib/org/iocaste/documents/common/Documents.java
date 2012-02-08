@@ -140,7 +140,6 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
-     * @param model
      * @param object
      * @throws Exception 
      */
@@ -198,5 +197,19 @@ public class Documents extends AbstractServiceInterface {
         message.add("criteria", criteria);
         
         return (ExtendedObject[])call(message);
+    }
+    
+    /**
+     * 
+     * @param model
+     * @throws Exception
+     */
+    public final void updateModel(DocumentModel model) throws Exception {
+        Message message = new Message();
+        
+        message.setId("update_model");
+        message.add("model", model);
+        
+        call(message);
     }
 }

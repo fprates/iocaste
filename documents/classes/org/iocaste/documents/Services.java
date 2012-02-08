@@ -22,6 +22,7 @@ public class Services extends AbstractFunction {
         export("has_model", "hasModel");
         export("create_model", "createModel");
         export("remove_model", "removeModel");
+        export("update_model", "updateModel");
         export("save", "save");
         export("select", "select");
         export("modify", "modify");
@@ -168,5 +169,17 @@ public class Services extends AbstractFunction {
         Iocaste iocaste = new Iocaste(this);
         
         return doc.select(iocaste, query, criteria);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void updateModel(Message message) throws Exception {
+        Iocaste iocaste = new Iocaste(this);
+        DocumentModel model = (DocumentModel)message.get("model");
+        
+        doc.updateModel(iocaste, model);
     }
 }
