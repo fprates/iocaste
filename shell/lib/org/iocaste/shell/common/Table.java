@@ -115,8 +115,8 @@ public class Table extends AbstractContainer {
     @Override
     public final Element[] getElements() {
         String linename, htmlname;
-        int t = 0, i = 0;
-        Element[] elements = new Element[itens.size() * columns.size()];
+        int i = 0;
+        List<Element> elements = new ArrayList<Element>();
         
         for (TableItem item : itens) {
             linename = new StringBuilder(getName()).append(".").append(i++).
@@ -127,11 +127,11 @@ public class Table extends AbstractContainer {
                         append(element.getName()).toString();
                 
                 element.setHtmlName(htmlname);
-                elements[t++] = element;
+                elements.add(element);
             }
         }
         
-        return elements;
+        return elements.toArray(new Element[0]);
     }
     
     /**
