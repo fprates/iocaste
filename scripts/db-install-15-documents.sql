@@ -69,7 +69,7 @@ insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.
 insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.ELEMENT', 'MODELITEM', 4, 'ENAME', 'DATAELEMENT.NAME', 'dataElement');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.ATTRIB', 'MODELITEM', 5, 'ATTRB', 'MODELITEM.ATTRIB', 'attributeName');
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.NAME', 0, 24, 0, 1);
-insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.INDEX', 1, 3, 0, 0);
+insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.INDEX', 1, 3, 1, 0);
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.FIELDNAME', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.ATTRIB', 0, 64, 0, 1);
 insert into docs004(iname, docid) values('MODELITEM.NAME', 'MODELITEM');
