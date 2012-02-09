@@ -561,6 +561,59 @@ public class DocumentServices {
         return objects;
     }
     
+    private final void updateModelItem(Iocaste iocaste,
+            DocumentModelItem item) throws Exception {
+        StringBuilder sb;
+        DataElement ddelement;
+        Object[] criteria;
+        DocumentModel model = item.getDocumentModel();
+        String modelname = model.getTableName(),
+        query = new StringBuilder("alter table ").append(modelname).append(
+                " alter column ").toString();
+
+        /*
+         * alter table
+         */
+        sb = new StringBuilder(query);
+        sb.append(item.getTableFieldName());
+        
+        ddelement = item.getDataElement();
+        
+        switch (ddelement.getType()) {
+        case DataType.CHAR:
+            sb.append(" varchar(");
+            
+            break;
+        case DataType.NUMC:
+            sb.append(" numeric(");
+            
+            break;
+        }
+        
+        sb.append(Integer.toString(ddelement.getLength()));
+        sb.append(")");
+        
+        query = sb.toString();
+        
+        iocaste.update(query, null);
+        
+        /*
+         * update
+         */
+        query = "update docs003 set decim = ?, lngth = ?, etype = ?, " +
+        		"upcas = ? where ename = ?";
+        
+        criteria = new Object[5];
+        
+        criteria[0] = ddelement.getDecimals();
+        criteria[1] = ddelement.getLength();
+        criteria[2] = ddelement.getType();
+        criteria[3] = ddelement.isUpcase();
+        criteria[4] = ddelement.getName();
+        
+        iocaste.update(query, criteria);
+    }
+    
     /**
      * 
      * @param iocaste
@@ -569,39 +622,13 @@ public class DocumentServices {
      */
     public final void updateModel(Iocaste iocaste, DocumentModel model)
             throws Exception {
-        DataElement ddelement;
         DocumentModel oldmodel = getDocumentModel(model.getName());
-        String query;
-        StringBuilder sb;
-        String altertable = new StringBuilder("alter table ").append(
-                model.getTableName()).append(" alter column ").toString();
         
         for (DocumentModelItem item : model.getItens()) {
             if (!oldmodel.contains(item))
                 continue;
         
-            sb = new StringBuilder(altertable);
-            sb.append(item.getTableFieldName());
-            
-            ddelement = item.getDataElement();
-            
-            switch (ddelement.getType()) {
-            case DataType.CHAR:
-                sb.append(" varchar(");
-                
-                break;
-            case DataType.NUMC:
-                sb.append(" numeric(");
-                
-                break;
-            }
-            
-            sb.append(Integer.toString(ddelement.getLength()));
-            sb.append(")");
-            
-            query = sb.toString();
-            
-            iocaste.update(query, null);
+            updateModelItem(iocaste, item);
         }
     }
 }
