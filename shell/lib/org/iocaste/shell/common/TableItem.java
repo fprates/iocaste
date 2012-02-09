@@ -113,14 +113,19 @@ public class TableItem implements Serializable {
         InputComponent input;
         DocumentModelItem modelitem;
         
-        for (String name : elements.keySet()) {
-            element = elements.get(name);
+        for (TableColumn column : columns) {
+            if (column.isMark())
+                continue;
+            
+            element = elements.get(column.getName());
             
             if (!element.isDataStorable())
                 continue;
             
             input = (InputComponent)element;
-            modelitem = input.getModelItem();
+            modelitem = column.getModelItem();
+            input.setModelItem(modelitem);
+            
             if (modelitem == null)
                 continue;
             
