@@ -464,6 +464,7 @@ public class HtmlRenderer {
      * @return
      */
     private final XMLElement renderList(ListBox list) {
+        String value;
         XMLElement optiontag = null, selecttag= new XMLElement("select");
         String name = list.getHtmlName();
         
@@ -472,7 +473,12 @@ public class HtmlRenderer {
         
         for (String option : list.getEntriesNames()) {
             optiontag = new XMLElement("option");
-            optiontag.add("value", list.get(option));
+            value = list.get(option);
+            optiontag.add("value", value);
+            
+            if (value.equals(list.getValue()))
+                optiontag.add("selected", "selected");
+            
             optiontag.addInner(option);
             
             selecttag.addChild(optiontag);
