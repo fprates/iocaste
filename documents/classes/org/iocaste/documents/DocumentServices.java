@@ -570,35 +570,38 @@ public class DocumentServices {
     public final void updateModel(Iocaste iocaste, DocumentModel model)
             throws Exception {
         DataElement ddelement;
-        String altercolumn = "alter table ? alter column ? ?(?)";
-        String[] criteria = new String[4];
         DocumentModel oldmodel = getDocumentModel(model.getName());
-        
-        criteria[0] = model.getTableName();
+        String query;
+        StringBuilder sb;
+        String altertable = new StringBuilder("alter table ").append(
+                model.getTableName()).append(" alter column ").toString();
         
         for (DocumentModelItem item : model.getItens()) {
-            if (oldmodel.contains(item)) {
-                criteria[1] = item.getTableFieldName();
-                
-                ddelement = item.getDataElement();
-                
-                switch (ddelement.getType()) {
-                case DataType.CHAR:
-                    criteria[2] = "varchar";
-                    
-                    break;
-                case DataType.NUMC:
-                    criteria[2] = "numeric";
-                    
-                    break;
-                }
-                
-                criteria[3] = Integer.toString(ddelement.getLength());
-                
-                iocaste.update(altercolumn, criteria);
-                
+            if (!oldmodel.contains(item))
                 continue;
+        
+            sb = new StringBuilder(altertable);
+            sb.append(item.getTableFieldName());
+            
+            ddelement = item.getDataElement();
+            
+            switch (ddelement.getType()) {
+            case DataType.CHAR:
+                sb.append(" varchar(");
+                
+                break;
+            case DataType.NUMC:
+                sb.append(" numeric(");
+                
+                break;
             }
+            
+            sb.append(Integer.toString(ddelement.getLength()));
+            sb.append(")");
+            
+            query = sb.toString();
+            
+            iocaste.update(query, null);
         }
     }
 }
