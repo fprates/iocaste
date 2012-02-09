@@ -27,6 +27,36 @@ public class DocumentServices {
     
     /**
      * 
+     * @param iocaste
+     * @param item
+     * @throws Exception
+     */
+    private final void addDBColumn(Iocaste iocaste, DocumentModelItem item) 
+            throws Exception {
+        String query, modelname = item.getDocumentModel().getTableName();
+        StringBuilder sb = new StringBuilder("alter table ").append(modelname);
+        DataElement ddelement = item.getDataElement();
+        
+        sb.append(" add column ").append(item.getTableFieldName());
+        
+        switch (ddelement.getType()) {
+        case DataType.CHAR:
+            sb.append(" varchar(");
+            break;
+        case DataType.NUMC:
+            sb.append(" numeric(");
+            break;
+        }
+        
+        sb.append(Integer.toString(ddelement.getLength())).append(")");
+        
+        query = sb.toString();
+        
+        iocaste.update(query, null);
+    }
+    
+    /**
+     * 
      * @param message
      * @throws Exception
      */
@@ -129,6 +159,7 @@ public class DocumentServices {
         for (Object object : lines) {
             columns = (Map<String, Object>)object;
             composed = ((String)columns.get("INAME")).split("\\.");
+            
             item = new DocumentModelItem();
             item.setDocumentModel(document);
             item.setName(composed[1]);
@@ -181,6 +212,56 @@ public class DocumentServices {
                 new Object[] {modelname});
         
         return (lines.length == 0)? false : true;
+    }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param item
+     * @throws Exception
+     */
+    private final void insertDataElement(Iocaste iocaste,
+            DocumentModelItem item) throws Exception {
+        DataElement dataelement;
+        String name, query = "insert into docs003(ename, decim, lngth, " +
+                "etype, upcas) values(?, ?, ?, ?, ?)";
+        DocumentModel model = item.getDocumentModel();
+        
+        dataelement = item.getDataElement();
+        name = new StringBuilder(model.getName()).append(".").
+                append(item.getName()).toString();
+        iocaste.update(query, new Object[] {name,
+                dataelement.getDecimals(),
+                dataelement.getLength(),
+                dataelement.getType(),
+                dataelement.isUpcase()});
+        
+    }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param item
+     */
+    private final void insertModelItem(Iocaste iocaste, DocumentModelItem item) 
+            throws Exception {
+        DataElement dataelement;
+        String tname;
+        DocumentModel model = item.getDocumentModel();
+        String query = "insert into docs002 (iname, docid, index, " +
+                "fname, ename, attrb) values (?, ?, ?, ?, ?, ?)";
+        
+        dataelement = item.getDataElement();
+        
+        tname = new StringBuilder(model.getName()).append(".").
+                append(item.getName()).toString();
+        
+        iocaste.update(query, new Object[] {tname,
+                model.getName(),
+                item.getIndex(),
+                item.getTableFieldName(),
+                dataelement.getName(),
+                item.getAttributeName()});
     }
     
     /**
@@ -392,21 +473,10 @@ public class DocumentServices {
      */
     private final void saveDataElements(Iocaste iocaste, DocumentModel model) 
             throws Exception {
-        DataElement dataelement;
         Set<DocumentModelItem> itens = model.getItens();
-        String name, query = "insert into docs003(ename, decim, lngth, " +
-        		"etype, upcas) values(?, ?, ?, ?, ?)";
         
-        for (DocumentModelItem item : itens) {
-            dataelement = item.getDataElement();
-            name = new StringBuilder(model.getName()).append(".").
-                    append(item.getName()).toString();
-            iocaste.update(query, new Object[] {name,
-                    dataelement.getDecimals(),
-                    dataelement.getLength(),
-                    dataelement.getType(),
-                    dataelement.isUpcase()});
-        }
+        for (DocumentModelItem item : itens)
+            insertDataElement(iocaste, item);
     }
     
     /**
@@ -447,20 +517,12 @@ public class DocumentServices {
         size = itens.size() - 1;
         
         for (DocumentModelItem item : itens) {
-            dataelement = item.getDataElement();
-            
-            tname = new StringBuilder(model.getName()).append(".").
-                    append(item.getName()).toString();
-            
-            iocaste.update(query, new Object[] {tname,
-                    model.getName(),
-                    item.getIndex(),
-                    item.getTableFieldName(),
-                    dataelement.getName(),
-                    item.getAttributeName()});
+            insertModelItem(iocaste, item);
             
             tname = item.getTableFieldName();
             sb.append(tname);
+            
+            dataelement = item.getDataElement();
             
             switch (dataelement.getType()) {
             case DataType.CHAR:
@@ -561,6 +623,12 @@ public class DocumentServices {
         return objects;
     }
     
+    /**
+     * 
+     * @param iocaste
+     * @param item
+     * @throws Exception
+     */
     private final void updateModelItem(Iocaste iocaste,
             DocumentModelItem item) throws Exception {
         StringBuilder sb;
@@ -625,10 +693,13 @@ public class DocumentServices {
         DocumentModel oldmodel = getDocumentModel(model.getName());
         
         for (DocumentModelItem item : model.getItens()) {
-            if (!oldmodel.contains(item))
-                continue;
-        
-            updateModelItem(iocaste, item);
+            if (!oldmodel.contains(item)) {
+                insertDataElement(iocaste, item);
+                insertModelItem(iocaste, item);
+                addDBColumn(iocaste, item);
+            } else {
+                updateModelItem(iocaste, item);
+            }
         }
     }
 }
