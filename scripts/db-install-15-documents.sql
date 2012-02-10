@@ -74,7 +74,18 @@ insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.FIELDNA
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.ATTRIB', 0, 64, 0, 1);
 insert into docs004(iname, docid) values('MODELITEM.NAME', 'MODELITEM');
 
+insert into docs001(docid, tname, class) values('DATAELEMENT', 'DOCS003', 'org.iocaste.documents.common.DataElement');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('DATAELEMENT.NAME', 'DATAELEMENT', 0, 'ENAME', 'DATAELEMENT.NAME', 'name');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('DATAELEMENT.DECIMALS', 'DATAELEMENT', 1, 'DECIM', 'DATAELEMENT.DECIMALS', 'decimals');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('DATAELEMENT.LENGTH', 'DATAELEMENT', 2, 'LNGTH', 'DATAELEMENT.LENGTH', 'length');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('DATAELEMENT.TYPE', 'DATAELEMENT', 3, 'ETYPE', 'DATAELEMENT.TYPE', 'type');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('DATAELEMENT.UPCASE', 'DATAELEMENT', 4, 'UPCAS', 'DATAELEMENT.UPCASE', 'upcase');
 insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.NAME', 0, 36, 0, 1);
+insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.DECIMALS', 0, 2, 1, 0);
+insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.LENGTH', 0, 4, 1, 0);
+insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.TYPE', 0, 1, 1, 0);
+insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.UPCASE', 0, 1, 1, 0);
+insert into docs004(iname, docid) values('DATAELEMENT.NAME', 'DATAELEMENT');
 
 commit work;
 
