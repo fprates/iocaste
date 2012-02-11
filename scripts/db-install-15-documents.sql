@@ -71,7 +71,7 @@ insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.NAME', 0, 24, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.INDEX', 1, 3, 3, 0);
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.FIELDNAME', 0, 12, 0, 1);
-insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.ATTRIB', 0, 64, 0, 1);
+insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.ATTRIB', 0, 64, 0, 0);
 insert into docs004(iname, docid) values('MODELITEM.NAME', 'MODELITEM');
 
 insert into docs001(docid, tname, class) values('DATAELEMENT', 'DOCS003', 'org.iocaste.documents.common.DataElement');
