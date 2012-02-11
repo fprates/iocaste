@@ -707,13 +707,13 @@ public class HtmlRenderer {
         if (!textfield.isEnabled())
             inputtag.add("readonly", "readonly");
         
+        tags.add(inputtag);
+        
         if (textfield.isObligatory()) {
             spantag = new XMLElement("span");
             spantag.addInner("*");
             tags.add(spantag);
         }
-        
-        tags.add(inputtag);
         
         search = textfield.getSearchHelp();
         if (search != null)
