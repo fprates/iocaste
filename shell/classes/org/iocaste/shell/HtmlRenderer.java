@@ -224,8 +224,8 @@ public class HtmlRenderer {
         List<XMLElement> tags = new ArrayList<XMLElement>();
         
         table.setHeader(false);
-        table.addColumn("name");
-        table.addColumn("field");
+        new TableColumn(table, "name");
+        new TableColumn(table, "field");
         
         for (Element element : form.getElements()) {
             if (element.isControlComponent())

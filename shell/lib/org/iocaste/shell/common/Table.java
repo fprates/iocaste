@@ -43,18 +43,16 @@ public class Table extends AbstractContainer {
     
     public Table(Container container, String name) {
         super(container, Const.TABLE, name);
-        TableColumn column = new TableColumn();
+        TableColumn column;
         
         header = true;
         mark = false;
         itens = new ArrayList<TableItem>();
         columns = new LinkedHashMap<String, TableColumn>();
-        
-        column.setName("");
+
+        column = new TableColumn(this, "");        
         column.setMark(true);
         column.setVisible(true);
-        
-        columns.put(name, column);
     }
     
     /*
@@ -75,20 +73,13 @@ public class Table extends AbstractContainer {
     
     /**
      * 
-     * @param name
+     * @param column
      */
-    public void addColumn(String name) {
-        TableColumn column;
-        
-        if (columns.containsKey(name))
+    public void add(TableColumn column) {
+        if (columns.containsKey(column.getName()))
             throw new RuntimeException("Table column has already exists.");
         
-        column = new TableColumn();
-        column.setName(name);
-        column.setMark(false);
-        column.setVisible(true);
-        
-        columns.put(name, column);
+        columns.put(column.getName(), column);
     }
     
     /**
@@ -180,8 +171,7 @@ public class Table extends AbstractContainer {
         for (DocumentModelItem item : model.getItens()) {
             name = item.getName();
             
-            column = new TableColumn();
-            column.setName(name);
+            column = new TableColumn(this, name);
             column.setMark(false);
             column.setVisible(true);
             column.setModelItem(item);

@@ -10,8 +10,12 @@ public class TableColumn implements Serializable {
     private String name;
     private DocumentModelItem modelitem;
     
-    public TableColumn() {
+    public TableColumn(Table table, String name) {
         visible = true;
+        mark = false;
+        visible = true;
+        this.name = name;
+        table.add(this);
     }
     
     /**
