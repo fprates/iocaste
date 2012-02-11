@@ -414,6 +414,22 @@ public class DocumentServices {
     
     /**
      * 
+     * @param iocaste
+     * @param item
+     * @throws Exception
+     */
+    private final void removeDBColumn(Iocaste iocaste, DocumentModelItem item)
+            throws Exception {
+        String fieldname = item.getTableFieldName();
+        String tablename = item.getDocumentModel().getTableName();
+        String query = new StringBuilder("alter table ").append(tablename).
+                append(" drop column ").append(fieldname).toString();
+        
+        iocaste.update(query, null);
+    }
+    
+    /**
+     * 
      * @param model
      * @throws Exception
      */
@@ -427,12 +443,8 @@ public class DocumentServices {
             iocaste.update(query, new Object[] {name});
         }
         
-        query = "delete from docs002 where iname = ?";
-        for (DocumentModelItem item : model.getItens()) {
-            name = new StringBuilder(item.getDocumentModel().getName()).
-                    append(".").append(item.getName()).toString();
-            iocaste.update(query, new Object[] {name});
-        }
+        for (DocumentModelItem item : model.getItens())
+            removeModelItem(iocaste, item);
         
         query = "delete from docs001 where docid = ?";
         iocaste.update(query, new Object[] {model.getName()});
@@ -440,6 +452,20 @@ public class DocumentServices {
         query = new StringBuilder("drop table ").append(model.getTableName()).
                 toString();
         iocaste.update(query, null);
+    }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param item
+     * @throws Exception
+     */
+    private final void removeModelItem(Iocaste iocaste, DocumentModelItem item)
+            throws Exception {
+        String query = "delete from docs002 where iname = ?";
+        String name = new StringBuilder(item.getDocumentModel().getName()).
+                append(".").append(item.getName()).toString();
+        iocaste.update(query, new Object[] {name});
     }
     
     /**
@@ -700,6 +726,14 @@ public class DocumentServices {
             } else {
                 updateModelItem(iocaste, item);
             }
+        }
+        
+        for (DocumentModelItem olditem : oldmodel.getItens()) {
+            if (model.contains(olditem))
+                continue;
+            
+            removeModelItem(iocaste, olditem);
+            removeDBColumn(iocaste, olditem);
         }
     }
 }
