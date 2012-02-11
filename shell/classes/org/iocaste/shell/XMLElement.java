@@ -60,6 +60,15 @@ public class XMLElement {
         inner.addAll(lines);
     }
     
+    /**
+     * 
+     * @param lines
+     */
+    public final void addInner(String[] lines) {
+        for (String line : lines)
+            inner.add(line);
+    }
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()

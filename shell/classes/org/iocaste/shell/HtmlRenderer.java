@@ -20,6 +20,7 @@ import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.HtmlTag;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.Menu;
@@ -270,6 +271,10 @@ public class HtmlRenderer {
             return;
         
         switch (element.getType()) {
+        case HTML_TAG:
+            tags.add(renderHtmlTag((HtmlTag)element));
+            break;
+            
         case CHECKBOX:
             tags.add(renderCheckBox((CheckBox)element));
             break;
@@ -391,6 +396,19 @@ public class HtmlRenderer {
         headtag.addChild(renderStyleSheet(vdata));
         
         return headtag;
+    }
+    
+    /**
+     * 
+     * @param htmltag
+     * @return
+     */
+    private final XMLElement renderHtmlTag(HtmlTag htmltag) {
+        XMLElement xmltag = new XMLElement(htmltag.getElement());
+        
+        xmltag.addInner(htmltag.getLines());
+        
+        return xmltag;
     }
     
     /**
