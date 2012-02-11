@@ -2,6 +2,7 @@ package org.iocaste.shell.common;
 
 import java.io.Serializable;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 
 public class TableColumn implements Serializable {
@@ -9,6 +10,7 @@ public class TableColumn implements Serializable {
     private boolean visible, mark;
     private String name;
     private DocumentModelItem modelitem;
+    private DataElement de;
     
     public TableColumn(Table table, String name) {
         visible = true;
@@ -16,6 +18,14 @@ public class TableColumn implements Serializable {
         visible = true;
         this.name = name;
         table.add(this);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final DataElement getDataElement() {
+        return (modelitem == null)? de : modelitem.getDataElement();
     }
     
     /**
@@ -48,6 +58,14 @@ public class TableColumn implements Serializable {
      */
     public final boolean isVisible() {
         return visible;
+    }
+    
+    /**
+     * 
+     * @param de
+     */
+    public final void setDataElement(DataElement de) {
+        this.de = de;
     }
     
     /**
