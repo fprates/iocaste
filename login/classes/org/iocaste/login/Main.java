@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
@@ -31,7 +32,7 @@ public class Main extends AbstractPage {
          * o modelo "login". ainda não estamos autenticados pelo iocaste.
          */
         loginform.importModel(modelInstance());
-        loginform.addAction("connect");
+        new Button(form, "connect");
         
         for (Element element : loginform.getElements())
             if (element.isDataStorable())

@@ -21,9 +21,6 @@
 
 package org.iocaste.shell.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
@@ -36,42 +33,12 @@ import org.iocaste.documents.common.ExtendedObject;
  */
 public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
-    private List<String> actions;
     private boolean keyrequired;
     
     public DataForm(Container container, String name) {
         super(container, Const.DATA_FORM, name);
         
-        actions = new ArrayList<String>();
         keyrequired = false;
-    }
-    
-    /**
-     * Adiciona uma ação ao formulário.
-     * @param action ação
-     */
-    public final void addAction(String action) {
-        Button button = new Button(this, action);
-        
-        button.setSubmit(true);
-        button.setStyleClass("submit");
-        button.setCancellable(false);
-        
-        actions.add(action);
-    }
-    
-    /**
-     * 
-     * @param action
-     */
-    public final void addExitAction(String action) {
-        Button button = new Button(this, action);
-        
-        button.setSubmit(true);
-        button.setStyleClass("submit");
-        button.setCancellable(true);
-        
-        actions.add(action);
     }
     
     /**
@@ -87,14 +54,6 @@ public class DataForm extends AbstractContainer {
             input = (InputComponent)element;
             input.setValue(null);
         }
-    }
-    
-    /**
-     * Retorna ações associadas ao formulário.
-     * @return ações
-     */
-    public final String[] getActions() {
-        return actions.toArray(new String[0]);
     }
     
     /**

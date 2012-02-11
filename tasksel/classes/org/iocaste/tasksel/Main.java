@@ -2,6 +2,7 @@ package org.iocaste.tasksel;
 
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
@@ -33,7 +34,7 @@ public class Main extends AbstractPage {
         DataItem dataitem = new DataItem(dataform, Const.TEXT_FIELD, "command");
         
         dataitem.setLength(255);
-        dataform.addAction("run");
+        new Button(form, "run");
         
         view.setNavbarActionEnabled("help", true);
         view.setFocus("command");

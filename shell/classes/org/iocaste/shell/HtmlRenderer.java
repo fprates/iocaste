@@ -257,9 +257,6 @@ public class HtmlRenderer {
         
         renderContainer(tags, table);
         
-        for (String action : form.getActions())
-            tags.add(renderButton((Button)form.getElement(action)));
-        
         return tags;
     }
     
@@ -627,6 +624,7 @@ public class HtmlRenderer {
     
     /**
      * 
+     * @param table
      * @param item
      * @return
      */
