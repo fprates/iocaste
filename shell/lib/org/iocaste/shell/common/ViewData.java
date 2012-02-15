@@ -44,7 +44,7 @@ public class ViewData implements Serializable {
     private List<Container> containers;
     private Map<String, Object> parameters;
     private Container nbcontainer;
-    private boolean disabledhead, reloadable, pagecall;
+    private boolean disabledhead, reloadable, dontpushpage, pagecall;
     private Const messagetype;
     
     public ViewData(String appname, String pagename) {
@@ -58,6 +58,7 @@ public class ViewData implements Serializable {
         nbcontainer = new StandardContainer(null, "navbar");
         containers.add(nbcontainer);
         disabledhead = false;
+        dontpushpage = false;
         
         this.appname = appname;
         this.pagename = pagename;
@@ -129,6 +130,7 @@ public class ViewData implements Serializable {
         messagetype = null;
         reloadable = false;
         pagecall = false;
+        dontpushpage = false;
     }
     
     /**
@@ -142,6 +144,7 @@ public class ViewData implements Serializable {
      * 
      */
     public final void dontPushPage() {
+        dontpushpage = true;
         pagecall = false;
     }
     
@@ -425,7 +428,8 @@ public class ViewData implements Serializable {
         rapp = app;
         rpage = page;
         
-        pagecall = true;
+        if (!dontpushpage)
+            pagecall = true;
     }
     
     /**
