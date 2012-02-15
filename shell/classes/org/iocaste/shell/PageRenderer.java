@@ -175,6 +175,7 @@ public class PageRenderer extends HttpServlet implements Function {
         String[] pageparse;
         ServletFileUpload fileupload;
         List<FileItem> files;
+        int t;
         String pagetrack = null;
         
         if (ServletFileUpload.isMultipartContent(req)) {
@@ -204,7 +205,14 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagetrack == null)
             return null;
         
-        pageparse = pagetrack.split("\\.", 2);
+        pageparse = pagetrack.split("\\.");
+        t = pageparse.length - 1;
+        
+        for (int i = 0; i < t; i++)
+            if (i > 0)
+                pageparse[0] += ("." + pageparse[i]);
+        
+        pageparse[1] = pageparse[t];
         
         return getPageContext(sessionid, pageparse[0], pageparse[1]);
     }
