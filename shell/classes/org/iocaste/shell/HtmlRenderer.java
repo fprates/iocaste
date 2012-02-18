@@ -29,6 +29,7 @@ import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -180,8 +181,6 @@ public class HtmlRenderer {
      */
     private final void renderContainer(List<XMLElement> tags,
             Container container) {
-        XMLElement divtag;
-        
         switch (container.getType()) {
         case FORM:
             tags.add(renderForm((Form)container));
@@ -197,11 +196,7 @@ public class HtmlRenderer {
             
         case MENU:
         case STANDARD_CONTAINER:
-            divtag = new XMLElement("div");
-            divtag.addChildren(renderElements(container.getElements()));
-            
-            tags.add(divtag);
-            
+            tags.add(renderStandardContainer((StandardContainer)container));
             break;
         }
         
@@ -563,6 +558,21 @@ public class HtmlRenderer {
         button.setText("?");
         
         return renderButton(button);
+    }
+    
+    /**
+     * 
+     * @param container
+     * @return
+     */
+    private final XMLElement renderStandardContainer(
+            StandardContainer container) {
+        XMLElement divtag = new XMLElement("div");
+        
+        divtag.add("id", container.getName());
+        divtag.addChildren(renderElements(container.getElements()));
+        
+        return divtag;
     }
     
     /**
