@@ -20,7 +20,16 @@ function search(actionname, pagetrack) {
 }
 
 function searchCallback(action, xmlhttp) {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
         document.getElementById(action+".area").innerHTML=xmlhttp.responseText;
-    }
+}
+
+function setElementDisplay(id, state) {
+    document.getElementById(id).style.display = state;
+}
+
+function revertElementDisplay(id) {
+    var display = document.getElementById(id).style.display;
+    
+    setElementDisplay(id, (display == 'none')? 'block' : 'none');
 }

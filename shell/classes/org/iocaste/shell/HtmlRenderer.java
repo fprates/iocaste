@@ -30,6 +30,8 @@ import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
+import org.iocaste.shell.common.TabbedPane;
+import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -189,6 +191,10 @@ public class HtmlRenderer {
             
         case DATA_FORM:
             tags.addAll(renderDataForm((DataForm)container));
+            break;
+            
+        case TABBED_PANE:
+            tags.add(renderTabbedPane((TabbedPane)container));
             break;
             
         case TABLE:
@@ -621,6 +627,65 @@ public class HtmlRenderer {
         }
         
         return styletag;
+    }
+    
+    /**
+     * 
+     * @param tabbedpane
+     * @return
+     */
+    private final XMLElement renderTabbedPane(TabbedPane tabbedpane) {
+        Button button;
+        String name;
+        StringBuilder onclick;
+        XMLElement tabitem, tabbedtag = new XMLElement("div");
+        TabbedPaneItem[] itens = tabbedpane.getItens();
+        
+        tabbedtag.add("id", tabbedpane.getName());
+        
+        for (TabbedPaneItem item : itens) {
+            name = item.getName();
+            
+            button = new Button(null, name);
+            button.setSubmit(false);
+            
+            onclick = new StringBuilder();
+            
+            for (TabbedPaneItem item_ : itens) {
+                onclick.append("setElementDisplay('").append(item_.getName());
+                
+                onclick.append((item ==  item_)?
+                        ".tabitem', 'block');" : ".tabitem', 'none');");
+            }
+            
+            button.addAttribute("onClick", onclick.toString());
+            
+            tabbedtag.addChild(renderButton(button));
+        }
+        
+        for (TabbedPaneItem item : itens) {
+            tabitem = renderStandardContainer(new StandardContainer(
+                    null, item.getName() + ".tabitem"));
+            tabitem.addChildren(renderTabbedPaneItem(item));
+            
+            tabbedtag.addChild(tabitem);
+        }
+        
+        return tabbedtag;
+    }
+    
+    /**
+     * 
+     * @param tabbedpaneitem
+     * @return
+     */
+    private final List<XMLElement> renderTabbedPaneItem(
+            TabbedPaneItem tabbedpaneitem) {
+        List<XMLElement> elements = new ArrayList<XMLElement>();
+        
+        renderContainer(elements, tabbedpaneitem.getContainer());
+        
+        return elements;
     }
     
     /**
