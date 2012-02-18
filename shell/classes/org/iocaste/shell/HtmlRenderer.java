@@ -636,25 +636,22 @@ public class HtmlRenderer {
      */
     private final XMLElement renderTabbedPane(TabbedPane tabbedpane) {
         Button button;
-        String name;
         StringBuilder onclick;
         XMLElement tabitem, tabbedtag = new XMLElement("div");
-        TabbedPaneItem[] itens = tabbedpane.getItens();
+        String[] names = tabbedpane.getItensNames();
         
         tabbedtag.add("id", tabbedpane.getName());
         
-        for (TabbedPaneItem item : itens) {
-            name = item.getName();
-            
+        for (String name : names) {
             button = new Button(null, name);
             button.setSubmit(false);
             
             onclick = new StringBuilder();
             
-            for (TabbedPaneItem item_ : itens) {
-                onclick.append("setElementDisplay('").append(item_.getName());
+            for (String name_ : names) {
+                onclick.append("setElementDisplay('").append(name_);
                 
-                onclick.append((item ==  item_)?
+                onclick.append((name.equals(name_))?
                         ".tabitem', 'block');" : ".tabitem', 'none');");
             }
             
@@ -663,10 +660,10 @@ public class HtmlRenderer {
             tabbedtag.addChild(renderButton(button));
         }
         
-        for (TabbedPaneItem item : itens) {
+        for (String name : names) {
             tabitem = renderStandardContainer(new StandardContainer(
-                    null, item.getName() + ".tabitem"));
-            tabitem.addChildren(renderTabbedPaneItem(item));
+                    null, name + ".tabitem"));
+            tabitem.addChildren(renderTabbedPaneItem(tabbedpane.get(name)));
             
             tabbedtag.addChild(tabitem);
         }

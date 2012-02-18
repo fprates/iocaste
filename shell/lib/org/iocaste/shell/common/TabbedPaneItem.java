@@ -8,9 +8,9 @@ public class TabbedPaneItem implements Serializable {
     private String name;
     
     public TabbedPaneItem(TabbedPane pane, String name) {
-        pane.add(this);
-        
         this.name = name;
+        
+        pane.add(this);
     }
     
     /**

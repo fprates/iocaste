@@ -1,16 +1,16 @@
 package org.iocaste.shell.common;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class TabbedPane extends AbstractContainer {
     private static final long serialVersionUID = -8260508533459016709L;
-    private List<TabbedPaneItem> itens;
+    private Map<String, TabbedPaneItem> itens;
     
     public TabbedPane(Container container, String name) {
         super(container, Const.TABBED_PANE, name);
         
-        itens = new ArrayList<TabbedPaneItem>();
+        itens = new LinkedHashMap<String, TabbedPaneItem>();
     }
     
     /*
@@ -26,14 +26,23 @@ public class TabbedPane extends AbstractContainer {
      * @param item
      */
     public final void add(TabbedPaneItem item) {
-        itens.add(item);
+        itens.put(item.getName(), item);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final TabbedPaneItem get(String name) {
+        return itens.get(name);
     }
     
     /**
      * 
      * @return
      */
-    public final TabbedPaneItem[] getItens() {
-        return itens.toArray(new TabbedPaneItem[0]);
+    public final String[] getItensNames() {
+        return itens.keySet().toArray(new String[0]);
     }
 }
