@@ -152,6 +152,8 @@ public class HtmlRenderer {
         buttontag.add("value", getText(text_, name));
         buttontag.add("onClick", "defineAction('"+name+"')");
         
+        setAttributes(buttontag, button);
+        
         return buttontag;
     }
 
@@ -354,6 +356,8 @@ public class HtmlRenderer {
         formtag.add("method", "post");
         formtag.add("action", "index.html");
         formtag.add("name", container.getHtmlName());
+
+        setAttributes(formtag, container);
         
         if (enctype != null)
             formtag.add("enctype", enctype);
@@ -480,6 +484,8 @@ public class HtmlRenderer {
         
         selecttag.add("name", name);
         selecttag.add("id", name);
+
+        setAttributes(selecttag, list);
         
         for (String option : list.getEntriesNames()) {
             optiontag = new XMLElement("option");
@@ -535,10 +541,17 @@ public class HtmlRenderer {
         hiddentag.add("type", "hidden");
         hiddentag.add("name", name);
         hiddentag.add("id", name);
+
+        setAttributes(hiddentag, parameter);
         
         return hiddentag;
     }
     
+    /**
+     * 
+     * @param line
+     * @return
+     */
     private final XMLElement renderPrintElement(String line) {
         XMLElement ptag = new XMLElement("p");
         
@@ -570,6 +583,7 @@ public class HtmlRenderer {
         XMLElement divtag = new XMLElement("div");
         
         divtag.add("id", container.getName());
+        setAttributes(divtag, container);
         divtag.addChildren(renderElements(container.getElements()));
         
         return divtag;
@@ -619,6 +633,8 @@ public class HtmlRenderer {
         String name;
         XMLElement trtag, thtag, tabletag = new XMLElement("table");
         List<XMLElement> tags = new ArrayList<XMLElement>();
+
+        setAttributes(tabletag, table);
         
         if (table.hasHeader()) {
             trtag = new XMLElement("tr");
@@ -696,6 +712,9 @@ public class HtmlRenderer {
         
         ptag.add("id", text.getHtmlName());
         ptag.add("class", text.getStyleClass());
+
+        setAttributes(ptag, text);
+        
         ptag.addInner(getText(text.getText(), text.getName()));
         
         return ptag;
@@ -732,6 +751,8 @@ public class HtmlRenderer {
         
         if (!textfield.isEnabled())
             inputtag.add("readonly", "readonly");
+
+        setAttributes(inputtag, textfield);
         
         tags.add(inputtag);
         
@@ -790,6 +811,16 @@ public class HtmlRenderer {
         html.add(htmltag.toString());
         
         return html.toArray(new String[0]);
+    }
+    
+    /**
+     * 
+     * @param tag
+     * @param element
+     */
+    private void setAttributes(XMLElement tag, Element element) {
+        for (String name : element.getAttributeNames())
+            tag.add(name, element.getAttribute(name));
     }
     
     /**

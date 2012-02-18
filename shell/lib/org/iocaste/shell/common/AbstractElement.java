@@ -21,6 +21,9 @@
 
 package org.iocaste.shell.common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Implementação abstrata de elemento.
  * 
@@ -37,6 +40,7 @@ public abstract class AbstractElement implements Element {
     private String name, htmlname, style, destiny;
     private boolean enabled, visible;
     private ViewData view;
+    private Map<String, String> attributes;
     
     public AbstractElement(Const type, String name) {
         if (name == null)
@@ -48,6 +52,18 @@ public abstract class AbstractElement implements Element {
         style = "";
         enabled = true;
         visible = true;
+        
+        attributes = new HashMap<String, String>();
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#addAttribute(
+     *     java.lang.String, java.lang.String)
+     */
+    @Override
+    public final void addAttribute(String name, String value) {
+        attributes.put(name, value);
     }
     
     /*
@@ -81,6 +97,24 @@ public abstract class AbstractElement implements Element {
             return false;
         
         return true;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#getAttribute(java.lang.String)
+     */
+    @Override
+    public final String getAttribute(String name) {
+        return attributes.get(name);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#getAttributeNames()
+     */
+    @Override
+    public final String[] getAttributeNames() {
+        return attributes.keySet().toArray(new String[0]);
     }
     
     /*

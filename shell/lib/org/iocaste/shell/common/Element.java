@@ -32,6 +32,26 @@ import java.io.Serializable;
 public interface Element extends Comparable<Element>, Serializable {
     
     /**
+     * 
+     * @param name
+     * @param value
+     */
+    public abstract void addAttribute(String name, String value);
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public abstract String getAttribute(String name);
+    
+    /**
+     * 
+     * @return
+     */
+    public abstract String[] getAttributeNames();
+    
+    /**
      * Se o componente suporta conteúdo multipart, retorna
      * o caminho para gravação dos dados.
      * @return caminho para gravação dos dados.
