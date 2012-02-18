@@ -142,12 +142,9 @@ public class HtmlRenderer {
         if (text_ == null)
             text_ = name;
         
-        if (!button.isSubmit())
-            buttontag.add("type", "button");
-        else
-            buttontag.add("type", "submit");
-        
+        buttontag.add("type", (!button.isSubmit())? "button" : "submit");
         buttontag.add("name", name);
+        buttontag.add("id", name);
         buttontag.add("class", button.getStyleClass());
         buttontag.add("value", getText(text_, name));
         buttontag.add("onClick", "defineAction('"+name+"')");
@@ -169,6 +166,8 @@ public class HtmlRenderer {
         cboxtag.add("type", "checkbox");
         cboxtag.add("name", name);
         cboxtag.add("id", name);
+        
+        setAttributes(cboxtag, checkbox);
         
         if (checkbox.isSelected())
             cboxtag.add("checked", "checked");
