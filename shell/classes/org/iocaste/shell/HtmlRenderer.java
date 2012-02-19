@@ -638,26 +638,35 @@ public class HtmlRenderer {
      */
     private final XMLElement renderTabbedPane(TabbedPane tabbedpane) {
         Button button;
-        StringBuilder onclick;
+        StringBuilder sb;
         XMLElement tabitem, tabbedtag = new XMLElement("div");
         String[] names = tabbedpane.getItensNames();
         
         tabbedtag.add("id", tabbedpane.getName());
         
         for (String name : names) {
+            sb = new StringBuilder("setElementDisplay('").append(name);
+            
+            if (tabbedpane.getCurrent().equals(name))
+                sb.append(".tabitem', 'block');");
+            else
+                sb.append(".tabitem', 'none');");
+            
+            onload.add(sb.toString());
+            
             button = new Button(null, name);
             button.setSubmit(false);
             
-            onclick = new StringBuilder();
+            sb = new StringBuilder();
             
             for (String name_ : names) {
-                onclick.append("setElementDisplay('").append(name_);
+                sb.append("setElementDisplay('").append(name_);
                 
-                onclick.append((name.equals(name_))?
+                sb.append((name.equals(name_))?
                         ".tabitem', 'block');" : ".tabitem', 'none');");
             }
             
-            button.addAttribute("onClick", onclick.toString());
+            button.addAttribute("onClick", sb.toString());
             
             tabbedtag.addChild(renderButton(button));
         }
@@ -844,6 +853,7 @@ public class HtmlRenderer {
         XMLElement htmltag = new XMLElement("html");
         XMLElement bodytag = new XMLElement("body");
         
+        onload.clear();
         messages = vdata.getMessages();
         pagetrack = new StringBuffer(vdata.getAppName()).append(".").
                 append(vdata.getPageName()).toString();
