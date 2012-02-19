@@ -31,26 +31,53 @@ public class ExtendedObject implements Serializable {
 	public final Object getValue(DocumentModelItem item) {
 		return values.get(item);
 	}
+
+	/**
+	 * 
+	 * @param loose
+	 * @return
+	 * @throws Exception
+	 */
+    @SuppressWarnings("unchecked")
+	private final <T> T newInstance(boolean loose) throws Exception {
+        Method method;
+        Class<?> class_ = Class.forName(model.getClassName());
+        T instance = (T)class_.newInstance();
+        
+        for (DocumentModelItem item : values.keySet()) {
+            try {
+                method = instance.getClass().getMethod(
+                        item.getSetterName(), item.getDataElement().
+                        getClassType());
+            } catch (NoSuchMethodException e) {
+                if (loose)
+                    continue;
+                else
+                    throw e;
+            }
+            
+            method.invoke(instance, values.get(item));
+        }
+        
+        return instance;
+	}
 	
 	/**
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public final <T> T newInstance() throws Exception {
-		Method method;
-        Class<?> class_ = Class.forName(model.getClassName());
-		T instance = (T)class_.newInstance();
-        
-        for (DocumentModelItem item : values.keySet()) {
-    		method = instance.getClass().getMethod(
-    				item.getSetterName(), item.getDataElement().
-    				getClassType());
-    		method.invoke(instance, values.get(item));
-        }
-        
-        return instance;
+	    return newInstance(false);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public final <T> T newLooseInstance() throws Exception {
+	    return newInstance(true);
 	}
 	
 	/**
