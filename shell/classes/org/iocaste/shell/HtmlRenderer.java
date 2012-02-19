@@ -40,16 +40,15 @@ import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class HtmlRenderer {
-    private String msgtext;
+    private String username, pagetrack, msgtext;
     private Const msgtype;
-    private List<String> script;
-    private String username;
+    private List<String> onload, script;
     private MessageSource messages;
-    private String pagetrack;
     
     public HtmlRenderer() {
         String line;
         script = new ArrayList<String>();
+        onload = new ArrayList<String>();
         InputStream is = this.getClass().getResourceAsStream(
                 "/META-INF/shell.js");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -384,6 +383,7 @@ public class HtmlRenderer {
      * @return
      */
     private final XMLElement renderHeader(ViewData vdata) {
+        String focus = vdata.getFocus();
         String title = vdata.getTitle();
         XMLElement headtag = new XMLElement("head");
         XMLElement metatag = new XMLElement("meta");
@@ -394,9 +394,13 @@ public class HtmlRenderer {
         
         titletag.addInner((title == null)?"Iocaste" : title);
 
+        if (focus != null)
+            onload.add(new StringBuffer("document.getElementById('").
+                    append(focus).append("').focus();").toString());
+        
         headtag.addChild(metatag);
         headtag.addChild(titletag);
-        headtag.addChild(renderJavaScript(vdata));
+        headtag.addChild(renderJavaScript());
         headtag.addChild(renderStyleSheet(vdata));
         
         return headtag;
@@ -420,16 +424,14 @@ public class HtmlRenderer {
      * @param vdata
      * @return
      */
-    private final XMLElement renderJavaScript(ViewData vdata) {
-        String focus = vdata.getFocus();
+    private final XMLElement renderJavaScript() {
         XMLElement scripttag = new XMLElement("script");
         
         scripttag.add("type", "text/javascript");
         scripttag.addInner("function initialize() {");
         
-        if (focus != null)
-            scripttag.addInner(new StringBuffer("document.getElementById('").
-                    append(focus).append("').focus();").toString());
+        for (String line : onload)
+            scripttag.addInner(line);
 
         scripttag.addInner("}");
         scripttag.addInner(script);
@@ -838,6 +840,7 @@ public class HtmlRenderer {
     public final String[] run(ViewData vdata) {
         List<String> html = new ArrayList<String>();
         List<XMLElement> tags = new ArrayList<XMLElement>();
+        List<XMLElement> bodycontent = new ArrayList<XMLElement>();
         XMLElement htmltag = new XMLElement("html");
         XMLElement bodytag = new XMLElement("body");
         
@@ -852,13 +855,15 @@ public class HtmlRenderer {
                 "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
 
         bodytag.add("onLoad", "initialize()");
-        tags.add(renderHeader(vdata));
-        tags.add(bodytag);
         
         configNavigationBar(vdata);
         
         for (Container container : vdata.getContainers())
-            renderContainer(tags, container);
+            renderContainer(bodycontent, container);
+        
+        bodytag.addChildren(bodycontent);
+        tags.add(renderHeader(vdata));
+        tags.add(bodytag);
         
         msgtext = null;
         msgtype = Const.NONE;
