@@ -36,6 +36,12 @@
           
         <!-- transport -->
         <ant antfile="${basedir}/src/transport/build.xml"/>
+
+        <!-- datadict -->
+        <ant antfile="${basedir}/src/datadict/build.xml"/>
+            
+        <!-- dataview -->
+        <ant antfile="${basedir}/src/dataview/build.xml"/>
         
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
