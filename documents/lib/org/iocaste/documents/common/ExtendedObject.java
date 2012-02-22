@@ -8,10 +8,13 @@ import java.util.Map;
 public class ExtendedObject implements Serializable {
 	private static final long serialVersionUID = -8700097929412206566L;
 	private Map<DocumentModelItem, Object> values;
+	private Map<String, DocumentModelItem> byname;
 	private DocumentModel model;
 	
 	public ExtendedObject(DocumentModel model) {
 		values = new HashMap<DocumentModelItem, Object>();
+		byname = new HashMap<String, DocumentModelItem>();
+		
 		this.model = model;
 	}
 	
@@ -21,6 +24,15 @@ public class ExtendedObject implements Serializable {
 	 */
 	public final DocumentModel getModel() {
 	    return model;
+	}
+	
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public final Object getValue(String name) {
+	    return getValue(byname.get(name));
 	}
 	
 	/**
@@ -82,6 +94,15 @@ public class ExtendedObject implements Serializable {
 	
 	/**
 	 * 
+	 * @param name
+	 * @param value
+	 */
+	public final void setValue(String name, Object value) {
+	    setValue(byname.get(name), value);
+	}
+	
+	/**
+	 * 
 	 * @param item
 	 * @param value
 	 */
@@ -93,5 +114,6 @@ public class ExtendedObject implements Serializable {
 	        values.remove(item);
 	    
 	    values.put(item, value);
+	    byname.put(item.getName(), item);
 	}
 }
