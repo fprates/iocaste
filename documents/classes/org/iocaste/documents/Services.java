@@ -1,5 +1,6 @@
 package org.iocaste.documents;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 
@@ -101,7 +102,7 @@ public class Services extends AbstractFunction {
             throw new Exception("Range \""+ident+"\" not found.");
         
         columns = (Map<String, Object>)lines[0];
-        current = ((Long)columns.get("CRRNT"))+1;
+        current = ((BigDecimal)columns.get("CRRNT")).longValue() + 1;
         iocaste.update("update range001 set crrnt = ? where ident = ?",
                 new Object[] {current, ident});
         iocaste.commit();
