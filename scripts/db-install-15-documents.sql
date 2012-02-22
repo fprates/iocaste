@@ -87,5 +87,12 @@ insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.TYPE'
 insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.UPCASE', 0, 1, 1, 0);
 insert into docs004(iname, docid) values('DATAELEMENT.NAME', 'DATAELEMENT');
 
+insert into docs001(docid, tname, class) values('NUMBER_RANGE', 'RANGE001', '');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('NUMBER_RANGE.IDENT', 'NUMBER_RANGE', 0, 'IDENT', 'NUMBER_RANGE.IDENT', '');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('NUMBER_RANGE.CURRENT', 'NUMBER_RANGE', 1, 'CRRNT', 'NUMBER_RANGE.CURRENT', '');
+insert into docs003(ename, decim, lngth, etype, upcas) values('NUMBER_RANGE.IDENT', 0, 12, 0, 1);
+insert into docs003(ename, decim, lngth, etype, upcas) values('NUMBER_RANGE.CURRENT', 0, 12, 3, 0);
+insert into docs004(iname, docid) values('NUMBER_RANGE.IDENT', 'NUMBER_RANGE');
+
 commit work;
 
