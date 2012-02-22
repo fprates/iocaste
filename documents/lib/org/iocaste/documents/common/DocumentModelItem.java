@@ -163,7 +163,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
         StringBuffer sb;
         this.attribname = attribname;
         
-        if (attribname == null) {
+        if (attribname == null || attribname.equals("")) {
             gettername = null;
             settername = null;
             return;
