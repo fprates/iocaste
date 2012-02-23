@@ -86,9 +86,6 @@ public class Request {
         query = new StringBuilder("from ").append(name).toString();
         itens = documents.select(query, null);
         
-        if (itens == null)
-            throw new Exception("table.is.empty");
-        
         return itens;
     }
     
