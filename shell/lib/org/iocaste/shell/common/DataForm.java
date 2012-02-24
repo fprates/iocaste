@@ -58,6 +58,15 @@ public class DataForm extends AbstractContainer {
     
     /**
      * 
+     * @param name
+     * @return
+     */
+    public final DataItem get(String name) {
+        return (DataItem)getElement(name);
+    }
+    
+    /**
+     * 
      * @return
      */
     public final ExtendedObject getObject() {
@@ -75,20 +84,12 @@ public class DataForm extends AbstractContainer {
     	return object;
     }
     
-    /**
-     * 
-     * @param name
-     * @return
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractContainer#importModel(
+     *     org.iocaste.documents.common.DocumentModel)
      */
-    public final String getValue(String name) {
-        Element element = getElement(name);
-        
-        if (element.getType() != Const.DATA_ITEM)
-            return null;
-        
-        return ((DataItem)element).getValue();
-    }
-    
+    @Override
     public final void importModel(DocumentModel model) {
         DataItem dataitem;
         
