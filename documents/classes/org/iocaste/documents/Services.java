@@ -19,6 +19,7 @@ public class Services extends AbstractFunction {
         
         export("get_data_element", "getDataElement");
         export("get_next_number", "getNextNumber");
+        export("get_object", "getObject");
         export("get_document_model", "getDocumentModel");
         export("has_model", "hasModel");
         export("create_model", "createModel");
@@ -76,6 +77,23 @@ public class Services extends AbstractFunction {
         String documentname = message.getString("name");
         
         return doc.getDocumentModel(documentname);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final ExtendedObject getObject(Message message) throws Exception {
+        String modelname = message.getString("modelname");
+        Object key = message.get("key");
+        DocumentModel model = doc.getDocumentModel(modelname);
+        
+        if (model == null)
+            throw new Exception("invalid model.");
+        
+        return doc.getObject(model, key);
     }
     
     /**

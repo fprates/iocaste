@@ -195,6 +195,62 @@ public class DocumentServices {
     
     /**
      * 
+     * @param model
+     * @param line
+     * @return
+     */
+    private final ExtendedObject getExtendedObjectFrom(DocumentModel model,
+            Map<String, Object> line) {
+        Object value;
+        ExtendedObject object = new ExtendedObject(model);
+        
+        for (DocumentModelItem modelitem : model.getItens()) {
+            value = line.get(modelitem.getTableFieldName());
+            object.setValue(modelitem, value);
+        }
+        
+        return object;
+    }
+    
+    /**
+     * 
+     * @param model
+     * @return
+     */
+    private final DocumentModelItem getModelKey(DocumentModel model) {
+        for (DocumentModelKey key : model.getKeys())
+            return model.getModelItem(key.getModelItemName());
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * @param model
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public final ExtendedObject getObject(DocumentModel model, Object key)
+            throws Exception {
+        Iocaste iocaste = new Iocaste(function);
+        String query = new StringBuilder("select * from ").
+                append(model.getTableName()).
+                append(" where ").
+                append(getModelKey(model).getTableFieldName()).
+                append(" = ?").toString();
+        
+        Object[] objects = iocaste.select(query, new Object[] {key});
+        
+        if (objects.length == 0)
+            return null;
+        
+        return getExtendedObjectFrom(model, (Map<String, Object>)objects[0]);
+    }
+    
+    /**
+     * 
      * @param message
      * @return
      * @throws Exception
@@ -632,10 +688,8 @@ public class DocumentServices {
     @SuppressWarnings("unchecked")
     public final ExtendedObject[] select(Iocaste iocaste, String query,
             Object[] criteria) throws Exception {
-        Object value;
         Object[] lines;
         Map<String, Object> line;
-        ExtendedObject object;
         ExtendedObject[] objects;
         QueryInfo queryinfo = parseQuery(query);
         
@@ -650,14 +704,7 @@ public class DocumentServices {
         
         for (int i = 0; i < lines.length; i++) {
             line = (Map<String, Object>)lines[i];
-            object = new ExtendedObject(queryinfo.model);
-            
-            for (DocumentModelItem modelitem : queryinfo.model.getItens()) {
-                value = line.get(modelitem.getTableFieldName());
-                object.setValue(modelitem, value);
-            }
-            
-            objects[i] = object;
+            objects[i] = getExtendedObjectFrom(queryinfo.model, line);
         }
         
         return objects;

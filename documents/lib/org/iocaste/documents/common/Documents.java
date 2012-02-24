@@ -125,6 +125,24 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
+     * @param modelname
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    public final ExtendedObject getObject(String modelname, Object key)
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("get_object");
+        message.add("modelname", modelname);
+        message.add("key", key);
+        
+        return (ExtendedObject)call(message);
+    }
+    
+    /**
+     * 
      * @param name
      * @return
      * @throws Exception
