@@ -358,20 +358,23 @@ public class DocumentServices {
      * @throws Exception
      */
     public final QueryInfo parseQuery(String query) throws Exception {
+        String upcasetoken;
         String[] select, parsed = query.split(" ");
         int t, pass = 0;
         StringBuilder sb = new StringBuilder("select ");
         QueryInfo queryinfo = new QueryInfo();
         
         for (String token : parsed) {
+            upcasetoken = token.toUpperCase();
+            
             switch (pass) {
             case 0:
-                if (token.equals("select")) {
+                if (upcasetoken.equals("SELECT")) {
                     pass = 1;
                     continue;
                 }
                 
-                if (token.equals("from")) {
+                if (upcasetoken.equals("FROM")) {
                     pass = 3;
                     sb.append("* from ");
                     continue;
@@ -392,17 +395,28 @@ public class DocumentServices {
                 pass = 2;
                 continue;
             case 2:
-                if (token.equals("from"))
+                if (upcasetoken.equals("FROM"))
                     sb.append(" from ");
                 
                 pass = 3;
                 continue;
             case 3:
-                queryinfo.model = getDocumentModel(token);
+                queryinfo.model = getDocumentModel(upcasetoken);
                 if (queryinfo.model == null)
                     throw new Exception("Document model not found.");
                 
                 sb.append(queryinfo.model.getTableName());
+                pass = 4;
+                continue;
+            case 4:
+                if (upcasetoken.equals("WHERE"))
+                    sb.append(" where ");
+                else
+                    continue;
+                
+                pass = 5;
+                continue;
+            case 5:
                 continue;
             }
         }
