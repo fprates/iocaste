@@ -147,7 +147,7 @@ public class Main extends AbstractPage {
         String settype;
         DataForm form = (DataForm)vdata.getElement("structure.form");
         Table itens = (Table)vdata.getElement("itens");
-        String value, classname = form.getValue("modelclass");
+        String value, classname = form.get("modelclass").getValue();
         String[] parts = classname.split("\\.");
         StringBuilder sb = new StringBuilder("package ");
         StringBuilder getter = new StringBuilder();
@@ -500,17 +500,13 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void main(ViewData view) {
+    public final void main(ViewData view) throws Exception {
         Container main = new Form(null, "datadict.main");
         DataForm modelform = new DataForm(main, "modelform");
         DataItem modelname = new DataItem(modelform, Const.TEXT_FIELD,
                 "modelname");
-        DataElement dataelement = new DataElement();
         SearchHelp search = new SearchHelp(main, "tablename");
-        
-        dataelement.setUpcase(true);
-        dataelement.setLength(20);
-        dataelement.setType(DataType.CHAR);
+        Documents documents = new Documents(this);
         
         search.setText("table.name.search");
         search.setModelName("MODEL");
@@ -518,7 +514,7 @@ public class Main extends AbstractPage {
         search.setExport("NAME");
         
         modelname.setSearchHelp(search);
-        modelname.setDataElement(dataelement);
+        modelname.setDataElement(documents.getDataElement("MODEL.NAME"));
         modelname.setObligatory(true);
         
         new Button(main, "create");
@@ -654,9 +650,9 @@ public class Main extends AbstractPage {
         if (hasItemDuplicated(vdata))
             return;
         
-        model.setName(structure.getValue("modelname"));
-        model.setClassName(structure.getValue("modelclass"));
-        model.setTableName(structure.getValue("modeltable"));
+        model.setName(structure.get("modelname").getValue());
+        model.setClassName(structure.get("modelclass").getValue());
+        model.setTableName(structure.get("modeltable").getValue());
         
         for (TableItem item : itens.getItens()) {
             itemname = getTableValue(modo, item, "item.name");
