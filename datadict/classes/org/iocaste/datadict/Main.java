@@ -53,7 +53,7 @@ public class Main extends AbstractPage {
         KEY("item.key", null), 
         TYPE("item.type", null),
         LENGTH("item.length", "DATAELEMENT.LENGTH"),
-        TEXT("item.text", null);
+        UPCASE("item.upcase", null);
         
         private String name, de;
         
@@ -436,9 +436,9 @@ public class Main extends AbstractPage {
                     if (mode == SHOW)
                         helper.value = model.isKey(modelitem)? "yes" : "no";
                     else
-                        helper.value =  model.isKey(modelitem)? "no" : "off";
+                        helper.value =  model.isKey(modelitem)? "on" : "off";
                 } else {
-                    helper.value = (mode == SHOW)?"no" : "off";
+                    helper.value = (mode == SHOW)? "no" : "off";
                 }
                 
                 newField(helper);
@@ -475,6 +475,25 @@ public class Main extends AbstractPage {
                     list.add("char", Integer.toString(DataType.CHAR));
                     list.add("numc", Integer.toString(DataType.NUMC));
                 }
+                
+                continue;
+            }
+            
+            if (helper.name.equals("item.upcase")) {
+                helper.type = Const.CHECKBOX;
+                helper.obligatory = NON_OBLIGATORY;
+                
+                if (modelitem != null) {
+                    model = modelitem.getDocumentModel();
+                    if (mode == SHOW)
+                        helper.value = dataelement.isUpcase()? "yes" : "no";
+                    else
+                        helper.value =  dataelement.isUpcase()? "on" : "off";
+                } else {
+                    helper.value = (mode == SHOW)? "no" : "off";
+                }
+                
+                newField(helper);
                 
                 continue;
             }
@@ -639,7 +658,7 @@ public class Main extends AbstractPage {
         DocumentModelKey modelkey;
         DataElement dataelement;
         String itemname;
-        CheckBox key;
+        CheckBox upcase, key;
         Documents documents = new Documents(this);
         DataForm structure = (DataForm)vdata.getElement("structure.form");
         Table itens = (Table)vdata.getElement("itens");
@@ -664,7 +683,9 @@ public class Main extends AbstractPage {
                     modo, item, "item.length")));
             dataelement.setType(Integer.parseInt(getTableValue(
                     modo, item, "item.type")));
-             
+            upcase = (CheckBox)item.get("item.upcase");
+            dataelement.setUpcase(upcase.isSelected());
+            
             modelitem = new DocumentModelItem();
             modelitem.setIndex(i++);
             modelitem.setName(itemname);
