@@ -10,7 +10,5 @@ public class Servlet extends ServerServlet {
      * @see org.iocaste.protocol.ServerServlet#config()
      */
     @Override
-    public void config() {
-        register(new Service());
-    }
+    public void config() { }
 }

@@ -5,16 +5,111 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
+    
+    public final void add(ViewData view) throws Exception {
+        Table objects = (Table)view.getElement("objects");
+        
+        insertItem(objects);
+    }
+    
+    public final void generate(ViewData view) throws Exception {
+        String name;
+        Table objects = (Table)view.getElement("objects");
+        List<String> lines, instructions = new ArrayList<String>();
+        Documents documents = new Documents(this);
+        
+        instructions.add("IOCASTE000001");
+        
+        for (TableItem item : objects.getItens()) {
+            name = ((InputComponent)item.get("object")).getValue();
+            
+            if (name.equals(""))
+                continue;
+            
+            lines = getInstructions(name, documents);
+            
+            if (lines == null) {
+                view.message(Const.ERROR, "model.not.found");
+                return;
+            }
+            
+            instructions.addAll(lines);
+        }
+        
+        if (instructions.size() == 1)
+            return;
+        
+        view.setReloadableView(true);
+        view.export("list", instructions.toArray(new String[0]));
+        view.redirect(null, "report");
+    }
+    
+    public final List<String> getInstructions(String name, Documents documents) 
+            throws Exception {
+        DataElement dataelement;
+        StringBuilder sb;
+        List<String> lines;
+        DocumentModel model;
+        Set<DocumentModelItem> itens;
+        Set<DocumentModelKey> keys;
+        
+        if (!documents.hasModel(name))
+            return null;
+        
+        lines = new ArrayList<String>();  
+
+        model = documents.getModel(name);
+        itens = model.getItens();
+        keys = model.getKeys();
+        
+        sb = new StringBuilder(model.getName()).append(";").
+                append(model.getTableName()).append(";").
+                append(model.getClassName()).append(";").
+                append(itens.size()).append(";").
+                append(keys.size());
+        
+        lines.add(sb.toString());
+        for (DocumentModelItem item : itens) {
+            dataelement = item.getDataElement();
+            
+            sb = new StringBuilder(item.getName()).append(";").
+                    append(item.getTableFieldName()).append(";").
+                    append(item.getAttributeName()).append(";").
+                    append(dataelement.getName()).append(";").
+                    append(dataelement.getType()).append(";").
+                    append(dataelement.getLength()).append(";").
+                    append(dataelement.getDecimals()).append(";").
+                    append(dataelement.isUpcase());
+            
+            lines.add(sb.toString());
+        }
+        
+        for (DocumentModelKey key : keys)
+            lines.add(key.getModelItemName());
+        
+        return lines;
+    }
     
     public final void importing(ViewData view) throws Exception {
         Parameter filepath = (Parameter)view.getElement("file");
@@ -33,28 +128,30 @@ public class Main extends AbstractPage {
         view.message(Const.STATUS, "objects.deployed.successfully");
         view.setReloadableView(true);
     }
-    
-    private final String getTransportDir() {
-        return getRealPath("../../../transport");
-    }
 
-    public void main(ViewData view) {
-        Link link;
-        String name, path = getTransportDir();
+    private final void insertItem(Table table) throws Exception {
+        Documents documents = new Documents(this);
+        TableItem item = new TableItem(table);
+        TextField tfield = new TextField(table, "name");
+        
+        tfield.setDataElement(documents.getDataElement("MODEL.NAME"));
+        item.add(tfield);
+    }
+    
+    public void main(ViewData view) throws Exception {
         Container container = new Form(null, "main");
-        File files = new File(path);
-        Parameter file = new Parameter(container, "file");
+        Table objects = new Table(container, "objects");
         
-        for (String filename : files.list()) {
-            name = filename.replace(' ', '_');
-            link = new Link(container, "import_"+name, filename);
-            link.add(file, path+System.getProperty("file.separator")+filename);
-            link.setAction("importing");
-        }
+        new TableColumn(objects, "object");
         
-        view.setNavbarActionEnabled("back", true);
-        view.setTitle("object-transport-program");
+        insertItem(objects);
+        
+        new Button(container, "add");
+        new Button(container, "generate");
+        
         view.addContainer(container);
+        view.setNavbarActionEnabled("back", true);
+        view.setTitle("transport-utility");
     }
     
     public final void report(ViewData view) {
@@ -64,7 +161,7 @@ public class Main extends AbstractPage {
         for (String line : list)
             view.print(line);
         
-        view.setTitle("transport-order-viewer");
+        view.setTitle("order-viewer");
         view.setNavbarActionEnabled("back", true);
         view.addContainer(container);
     }
