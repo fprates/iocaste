@@ -105,12 +105,14 @@ public class Table extends AbstractContainer {
      */
     @Override
     public final Element[] getElements() {
+        SearchHelp sh;
         String linename, htmlname;
         int i = 0;
         List<Element> elements = new ArrayList<Element>();
         
         for (TableItem item : itens) {
-            linename = new StringBuilder(getName()).append(".").append(i++).
+            linename = new StringBuilder(getName()).
+                    append(".").append(i++).
                     append(".").toString();
             
             for (Element element : item.getElements()) {
@@ -119,6 +121,23 @@ public class Table extends AbstractContainer {
                 
                 element.setHtmlName(htmlname);
                 elements.add(element);
+                
+                /*
+                 * ajusta nome de ajuda de pesquisa, se houver
+                 */
+                if (!element.isDataStorable())
+                    continue;
+                
+                sh = ((InputComponent)element).getSearchHelp();
+                
+                if (sh == null)
+                    continue;
+                
+                htmlname = new StringBuilder(linename).
+                        append(sh.getName()).toString();
+                
+                sh.setHtmlName(htmlname);
+                elements.add(sh);
             }
         }
         

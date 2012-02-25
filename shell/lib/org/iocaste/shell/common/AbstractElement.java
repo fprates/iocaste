@@ -230,7 +230,7 @@ public abstract class AbstractElement implements Element {
      * @see org.iocaste.shell.common.Element#setHtmlName(java.lang.String)
      */
     @Override
-    public final void setHtmlName(String htmlname) {
+    public void setHtmlName(String htmlname) {
         this.htmlname = htmlname;
     }
     

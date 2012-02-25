@@ -573,7 +573,7 @@ public class HtmlRenderer {
      * @return
      */
     private final XMLElement renderSearchHelp(SearchHelp sh) {
-        Button button = new Button(null, sh.getName());
+        Button button = new Button(null, sh.getHtmlName());
         
         button.setText("?");
         

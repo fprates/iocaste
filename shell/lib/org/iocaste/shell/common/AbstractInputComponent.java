@@ -143,6 +143,21 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractElement#setHtmlName(
+     *     java.lang.String)
+     */
+    @Override
+    public final void setHtmlName(String name) {
+        super.setHtmlName(name);
+        
+        if (search == null)
+            return;
+        
+        search.setInputName(name);
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#setLength(int)
      */
     @Override
@@ -181,7 +196,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
         if (search == null)
             return;
         
-        this.search.setInputName(getName());
+        this.search.setInputName(getHtmlName());
     }
     
     /*
