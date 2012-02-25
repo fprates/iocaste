@@ -19,6 +19,7 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -133,8 +134,15 @@ public class Main extends AbstractPage {
         Documents documents = new Documents(this);
         TableItem item = new TableItem(table);
         TextField tfield = new TextField(table, "name");
+        SearchHelp sh = new SearchHelp(table, "shname");
+        
+        sh.setModelName("MODEL");
+        sh.addModelItemName("NAME");
+        sh.setExport("NAME");
         
         tfield.setDataElement(documents.getDataElement("MODEL.NAME"));
+        tfield.setSearchHelp(sh);
+        
         item.add(tfield);
     }
     
