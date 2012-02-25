@@ -714,23 +714,42 @@ public class DocumentServices {
      * 
      * @param iocaste
      * @param item
+     * @param oldmodel
      * @throws Exception
      */
     private final void updateModelItem(Iocaste iocaste,
-            DocumentModelItem item) throws Exception {
+            DocumentModelItem item, DocumentModel oldmodel) throws Exception {
         StringBuilder sb;
         DataElement ddelement;
         Object[] criteria;
         DocumentModel model = item.getDocumentModel();
-        String modelname = model.getTableName(),
-        query = new StringBuilder("alter table ").append(modelname).append(
-                " alter column ").toString();
-
+        DocumentModelItem olditem = oldmodel.getModelItem(item.getName());
+        
+        String tablename = model.getTableName(),
+                oldfieldname = olditem.getTableFieldName(),
+                fieldname = item.getTableFieldName();
+        
+        String query = new StringBuilder("alter table ").
+                append(tablename).
+                append(" alter column ").toString();
+        
         /*
-         * alter table
+         * renomeia campo da tabela
+         */
+        if (!fieldname.equals(oldfieldname)) {
+            sb = new StringBuilder(query).
+                    append(oldfieldname).
+                    append(" rename to ").
+                    append(fieldname);
+            
+            iocaste.update(sb.toString(), null);
+        }
+        
+        /*
+         * atualização das característica dos itens da tabela
          */
         sb = new StringBuilder(query);
-        sb.append(item.getTableFieldName());
+        sb.append(fieldname);
         
         ddelement = item.getDataElement();
         
@@ -753,7 +772,7 @@ public class DocumentServices {
         iocaste.update(query, null);
         
         /*
-         * update
+         * atualização do modelo
          */
         query = "update docs003 set decim = ?, lngth = ?, etype = ?, " +
         		"upcas = ? where ename = ?";
@@ -785,7 +804,7 @@ public class DocumentServices {
                 insertModelItem(iocaste, item);
                 addDBColumn(iocaste, item);
             } else {
-                updateModelItem(iocaste, item);
+                updateModelItem(iocaste, item, oldmodel);
             }
         }
         
