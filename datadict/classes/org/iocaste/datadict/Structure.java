@@ -108,12 +108,15 @@ public class Structure {
         view.setTitle(title);
         view.addContainer(main);
     }
+    
     /**
      * 
      * @param form
      * @param modelname
      * @param model
      * @param mode
+     * @param function
+     * @throws Exception
      */
     private static final void prepareHeader(DataForm form, String modelname,
             DocumentModel model, byte mode, Function function) throws Exception {
@@ -171,6 +174,10 @@ public class Structure {
     /**
      * 
      * @param itens
+     * @param mode
+     * @param model
+     * @param function
+     * @throws Exception
      */
     private static final void prepareItens(Table itens, byte mode,
             DocumentModel model, Function function) throws Exception {

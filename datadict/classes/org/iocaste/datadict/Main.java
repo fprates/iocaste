@@ -1,15 +1,12 @@
 package org.iocaste.datadict;
 
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.HtmlTag;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewData;
-import org.iocaste.transport.common.Order;
-import org.iocaste.transport.common.Transport;
 
 public class Main extends AbstractPage {
     
@@ -132,19 +129,6 @@ public class Main extends AbstractPage {
      */
     public final void structure(ViewData vdata) throws Exception {
         Structure.main(vdata, this);
-    }
-    
-    /**
-     * 
-     * @param vdata
-     */
-    public final void transport(ViewData vdata) throws Exception {
-        Transport transport = new Transport(this);
-        Order order = new Order();
-        
-        transport.save(order);
-      
-        vdata.message(Const.STATUS, "object.transport.successful");
     }
     
     /**
