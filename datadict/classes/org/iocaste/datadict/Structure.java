@@ -35,15 +35,21 @@ public class Structure {
             return model.getName();
     }
 
+    /**
+     * 
+     * @param view
+     * @param function
+     * @throws Exception
+     */
     public static final void main(ViewData view, Function function)
             throws Exception {
+        Table itens;
         String title, modelname;
         TableColumn column;
         DocumentModel usermodel = (DocumentModel)view.getParameter("model");
         byte mode = Common.getMode(view);
         Container main = new Form(null, "datadict.structure");
         DataForm structure = new DataForm(main, "structure.form");
-        Table itens = new Table(main, "itens");
         Map<Common.ItensNames, DataElement> references =
                 Common.getFieldReferences(function);
         
@@ -54,6 +60,10 @@ public class Structure {
         new DataItem(structure, Const.TEXT_FIELD, "modeltable");
         
         prepareHeader(structure, modelname, usermodel, mode, function);
+        
+        new Button(main, "foreignkey");
+        
+        itens = new Table(main, "itens");
         
         for (Common.ItensNames itemname : Common.ItensNames.values()) {
             column = new TableColumn(itens, itemname.getName());

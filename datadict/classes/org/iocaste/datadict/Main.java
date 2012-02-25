@@ -53,6 +53,32 @@ public class Main extends AbstractPage {
     
     /**
      * 
+     * @param view
+     * @throws Exception
+     */
+    public final void fkupdate(ViewData view) throws Exception {
+        FKUpdate.main(view, this);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void fkstructure(ViewData view) throws Exception {
+        FKStructure.main(view, this);
+    }
+    
+    /**
+     * 
+     * @param view
+     */
+    public final void foreignkey(ViewData view) {
+        ForeignKey.main(view);
+    }
+    
+    /**
+     * 
      * @param vdata
      */
     public final void generateclass(ViewData vdata) {

@@ -1,5 +1,6 @@
 /* tokens \c e \p nao sao aceitos. nao existe parametro 'if exists' para 'drop user' */
 drop table range001 if exists;
+drop table docs005 if exists;
 drop table docs004 if exists;
 drop table docs003 if exists;
 drop table docs002 if exists;
@@ -43,6 +44,15 @@ create table docs004 (
    iname varchar(48) primary key,
    docid varchar(24) foreign key references docs001(docid)
 );
+
+/* chaves estrangeiras */
+create table docs005 (
+   iname varchar(48) primary key,
+   docid varchar(24) foreign key references docs001(docid),
+   fkitm varchar(48) foreign key references docs002(iname),
+   fkdoc varchar(24) foreign key references docs001(docid)
+);
+
 \p document tables has been generated
 
 grant select, insert, update, delete on range001 to iocastedb;
@@ -50,6 +60,7 @@ grant select, insert, update, delete on docs001 to iocastedb;
 grant select, insert, update, delete on docs002 to iocastedb;
 grant select, insert, update, delete on docs003 to iocastedb;
 grant select, insert, update, delete on docs004 to iocastedb;
+grant select, insert, update, delete on docs005 to iocastedb;
 \p permissions granted.
 
 insert into docs001(docid, tname, class) values('MODEL', 'DOCS001', 'org.iocaste.documents.common.DocumentModel');
@@ -93,6 +104,13 @@ insert into docs002(iname, docid, index, fname, ename, attrb) values('NUMBER_RAN
 insert into docs003(ename, decim, lngth, etype, upcas) values('NUMBER_RANGE.IDENT', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('NUMBER_RANGE.CURRENT', 0, 12, 3, 0);
 insert into docs004(iname, docid) values('NUMBER_RANGE.IDENT', 'NUMBER_RANGE');
+
+insert into docs001(docid, tname, class) values('FOREIGN_KEY', 'DOCS005', 'org.iocaste.documents.common.ForeignKey');
+insert into docs002(iname, docid, index, fname, ename, attrb) values ('FOREIGN_KEY.NAME', 'FOREIGN_KEY', 0, 'INAME', 'MODELITEM.NAME', 'name');
+insert into docs002(iname, docid, index, fname, ename, attrb) values ('FOREIGN_KEY.MODEL', 'FOREIGN_KEY', 1, 'DOCID', 'MODEL.NAME', 'documentModel');
+insert into docs002(iname, docid, index, fname, ename, attrb) values ('FOREIGN_KEY.NAMEREF', 'FOREIGN_KEY', 2, 'FKITM', 'MODELITEM.NAME', 'fkItem');
+insert into docs002(iname, docid, index, fname, ename, attrb) values ('FOREIGN_KEY.MODELREF', 'FOREIGN_KEY', 3, 'FKDOC', 'MODEL.NAME', 'fkModel');
+insert into docs004(iname, docid) values ('FOREIGN_KEY.NAME', 'FOREIGN_KEY');
 
 commit work;
 
