@@ -20,6 +20,7 @@ import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Frame;
 import org.iocaste.shell.common.HtmlTag;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
@@ -200,6 +201,10 @@ public class HtmlRenderer {
             tags.add(renderTable((Table)container));
             break;
             
+        case FRAME:
+            tags.add(renderFrame((Frame)container));
+            break;
+            
         case MENU:
         case STANDARD_CONTAINER:
             tags.add(renderStandardContainer((StandardContainer)container));
@@ -375,6 +380,24 @@ public class HtmlRenderer {
         formtag.addChildren(renderElements(container.getElements()));
         
         return formtag;
+    }
+    
+    /**
+     * 
+     * @param frame
+     * @return
+     */
+    private final XMLElement renderFrame(Frame frame) {
+        XMLElement frametag = new XMLElement("fieldset");
+        XMLElement legendtag = new XMLElement("legend");
+        
+        legendtag.addInner(frame.getText());
+        
+        frametag.add("id", frame.getName());
+        frametag.addChild(legendtag);
+        frametag.addChildren(renderElements(frame.getElements()));
+        
+        return frametag;
     }
     
     /**
