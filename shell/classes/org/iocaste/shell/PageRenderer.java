@@ -384,6 +384,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void render(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
+        String contenttype;
         String[] text;
         AppContext appctx;
         ViewData viewdata;
@@ -391,7 +392,6 @@ public class PageRenderer extends HttpServlet implements Function {
         PrintWriter writer = resp.getWriter();
         
         resp.setCharacterEncoding("utf-8");
-        resp.setContentType("text/html");
         viewdata = pagectx.getViewData();
         
         if (viewdata == null || pagectx.isReloadableView()) {
@@ -407,6 +407,12 @@ public class PageRenderer extends HttpServlet implements Function {
                     composeUrl(appctx.getName()), message);
             pagectx.setViewData(viewdata);
         }
+
+        contenttype = viewdata.getContentType();
+        resp.setContentType((contenttype == null)? "text/html" : contenttype);
+        
+        for (String key : viewdata.getHeaderKeys())
+            resp.setHeader(key, viewdata.getHeader(key));
         
         text = renderer.run(pagectx.getViewData());
 

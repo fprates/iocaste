@@ -36,13 +36,14 @@ import java.util.Map;
 public class ViewData implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
     private String title, focus, sheet, appname, pagename;
-    private String rapp, rpage, messagetext;
+    private String contenttype, rapp, rpage, messagetext;
     private MessageSource messages;
     private List<String> inputs, exports, lines;
     private Map<String, Boolean> navbarstatus;
     private List<Element> mpelements;
     private List<Container> containers;
     private Map<String, Object> parameters;
+    private Map<String, String> headervalues;
     private Container nbcontainer;
     private boolean disabledhead, reloadable, dontpushpage, pagecall;
     private Const messagetype;
@@ -53,12 +54,14 @@ public class ViewData implements Serializable {
         lines = new ArrayList<String>();
         navbarstatus = new HashMap<String, Boolean>();
         parameters = new HashMap<String, Object>();
+        headervalues = new HashMap<String, String>();
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<Element>();
         nbcontainer = new StandardContainer(null, "navbar");
         containers.add(nbcontainer);
         disabledhead = false;
         dontpushpage = false;
+        contenttype = null;
         
         this.appname = appname;
         this.pagename = pagename;
@@ -227,6 +230,14 @@ public class ViewData implements Serializable {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final String getContentType() {
+        return contenttype;
+    }
+    
+    /**
      * Retorna elemento por nome.
      * @param name nome
      * @return elemento
@@ -257,6 +268,23 @@ public class ViewData implements Serializable {
      */
     public final String getFocus() {
         return focus;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String[] getHeaderKeys() {
+        return headervalues.keySet().toArray(new String[0]);
+    }
+    
+    /**
+     * 
+     * @param key
+     * @return
+     */
+    public final String getHeader(String key) {
+        return headervalues.get(key);
     }
     
     /**
@@ -433,11 +461,31 @@ public class ViewData implements Serializable {
     }
     
     /**
+     * 
+     * @param contenttype
+     */
+    public final void setContentType(String contenttype) {
+        this.contenttype = contenttype;
+    }
+    
+    /**
      * Ajusta elemento com foco.
      * @param focus nome do elemento
      */
     public final void setFocus(String focus) {
         this.focus = focus;
+    }
+    
+    /**
+     * 
+     * @param key
+     * @param value
+     */
+    public final void setHeader(String key, String value) {
+        if (headervalues.containsKey(key))
+            headervalues.remove(key);
+        
+        headervalues.put(key, value);
     }
     
     /**
