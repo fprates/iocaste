@@ -1,8 +1,10 @@
 package org.iocaste.shell;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.fileupload.FileItem;
 import org.iocaste.shell.common.ViewData;
 
 public class PageContext {
@@ -11,6 +13,7 @@ public class PageContext {
     private String name;
     private boolean reloadable;
     private Map<String, Object> parameters;
+    private List<FileItem> files;
     
     public PageContext(String name) {
         parameters =  new HashMap<String, Object>();
@@ -40,6 +43,14 @@ public class PageContext {
      */
     public final AppContext getAppContext() {
         return appctx;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final List<FileItem> getFiles() {
+        return files;
     }
     
     /**
@@ -80,6 +91,14 @@ public class PageContext {
      */
     public final void setAppContext(AppContext appctx) {
         this.appctx = appctx;
+    }
+    
+    /**
+     * 
+     * @param files
+     */
+    public final void setFiles(List<FileItem> files) {
+        this.files = files;
     }
     
     /**

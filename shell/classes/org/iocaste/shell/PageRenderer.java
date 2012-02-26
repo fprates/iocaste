@@ -28,7 +28,6 @@ import org.iocaste.shell.common.ViewData;
 public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String LOGIN_APP = "iocaste-login";
-    private static final int MEMORY_THRESOLD = 512*1024;
     private static final String NOT_CONNECTED = "not.connected";
     private static Map<String, SessionContext> apps =
             new HashMap<String, SessionContext>();
@@ -190,8 +189,9 @@ public class PageRenderer extends HttpServlet implements Function {
             String sessionid) throws Exception {
         String[] pageparse;
         ServletFileUpload fileupload;
-        List<FileItem> files;
         int t;
+        PageContext pagectx;
+        List<FileItem> files = null;
         String pagetrack = null;
         
         if (ServletFileUpload.isMultipartContent(req)) {
@@ -212,6 +212,8 @@ public class PageRenderer extends HttpServlet implements Function {
                 if (!pagetrack.equals("pagetrack"))
                     continue;
                 
+                pagetrack = fileitem.getString();
+                
                 break;
             }
         } else {
@@ -230,7 +232,10 @@ public class PageRenderer extends HttpServlet implements Function {
         
         pageparse[1] = pageparse[t];
         
-        return getPageContext(sessionid, pageparse[0], pageparse[1]);
+        pagectx = getPageContext(sessionid, pageparse[0], pageparse[1]);
+        pagectx.setFiles(files);
+        
+        return pagectx;
     }
     
     /**
@@ -334,31 +339,18 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param pagectx
      * @throws Exception
      */
-    private final Map<String, String[]> processMultipartContent(HttpServletRequest req,
-            PageContext pagectx) throws Exception {
-        DiskFileItemFactory factory;
-        ServletFileUpload fileupload;
-        List<?> files;
-        String path;
-        String fieldname;
-        String filename;
+    private final Map<String, String[]> processMultipartContent(
+            HttpServletRequest req, PageContext pagectx) throws Exception {
+        String filename, fieldname;
         Element[] elements;
         FileItem fileitem;
         Map<String, String[]> parameters;
-        
-        factory = new DiskFileItemFactory();
-        factory.setSizeThreshold(MEMORY_THRESOLD);
-        path = req.getSession().getServletContext().
-                getRealPath("WEB-INF/data");
-        factory.setRepository(new File(path));
-        fileupload = new ServletFileUpload(factory);
-        files = fileupload.parseRequest(req);
         
         parameters = new HashMap<String, String[]>();
         elements = pagectx.getViewData().getMultipartElements();
         
         for (Element element : elements) {
-            for (Object object : files) {
+            for (Object object : pagectx.getFiles()) {
             	fileitem = (FileItem)object;
                 fieldname = fileitem.getFieldName();
                 
