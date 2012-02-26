@@ -6,8 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
@@ -41,15 +43,18 @@ import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class HtmlRenderer {
-    private String username, pagetrack, msgtext;
+    private String currentaction, username, pagetrack, msgtext;
     private Const msgtype;
     private List<String> onload, script;
+    private Set<String> actions;
     private MessageSource messages;
     
     public HtmlRenderer() {
         String line;
         script = new ArrayList<String>();
         onload = new ArrayList<String>();
+        actions = new HashSet<String>();
+        
         InputStream is = this.getClass().getResourceAsStream(
                 "/META-INF/shell.js");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -92,6 +97,14 @@ public class HtmlRenderer {
         
         navbar.setMessage((msgtype == null)? Const.STATUS : msgtype,
                 (msgtext == null)? "" : msgtext);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Set<String> getActions() {
+        return actions;
     }
     
     /**
@@ -149,7 +162,8 @@ public class HtmlRenderer {
         buttontag.add("id", name);
         buttontag.add("class", button.getStyleClass());
         buttontag.add("value", getText(text_, name));
-        buttontag.add("onClick", "defineAction('"+name+"')");
+        buttontag.add("onClick", "defineAction('"+currentaction+"', '" +
+        		name + "')");
         
         setAttributes(buttontag, button);
         
@@ -361,6 +375,9 @@ public class HtmlRenderer {
     private final XMLElement renderForm(Form container) {
         XMLElement hiddentag, formtag = new XMLElement("form");
         String enctype = container.getEnctype();
+        
+        currentaction = container.getAction();
+        actions.add(currentaction);
         
         formtag.add("method", "post");
         formtag.add("action", "index.html");
@@ -877,6 +894,8 @@ public class HtmlRenderer {
         XMLElement bodytag = new XMLElement("body");
         
         onload.clear();
+        actions.clear();
+        
         messages = vdata.getMessages();
         pagetrack = new StringBuffer(vdata.getAppName()).append(".").
                 append(vdata.getPageName()).toString();

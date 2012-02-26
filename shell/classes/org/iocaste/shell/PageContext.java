@@ -3,6 +3,7 @@ package org.iocaste.shell;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.fileupload.FileItem;
 import org.iocaste.shell.common.ViewData;
@@ -14,10 +15,13 @@ public class PageContext {
     private boolean reloadable;
     private Map<String, Object> parameters;
     private List<FileItem> files;
+    private Set<String> actions;
     
     public PageContext(String name) {
         parameters =  new HashMap<String, Object>();
         reloadable = false;
+        actions = null;
+        
         this.name = name;
     }
     
@@ -79,10 +83,27 @@ public class PageContext {
     
     /**
      * 
+     * @param action
+     * @return
+     */
+    public final boolean isAction(String action) {
+        return (actions == null)?  false : actions.contains(action);
+    }
+    
+    /**
+     * 
      * @return
      */
     public final boolean isReloadableView() {
         return reloadable;
+    }
+    
+    /**
+     * 
+     * @param actions
+     */
+    public final void setActions(Set<String> actions) {
+        this.actions = actions;
     }
     
     /**

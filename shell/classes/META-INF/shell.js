@@ -3,8 +3,8 @@ function setValue(name, value) {
 	param.value = value;
 }
 
-function defineAction(actionname) {
-	setValue('action', actionname);
+function defineAction(action, actionname) {
+	setValue(action, actionname);
 }
 
 function search(actionname, pagetrack) {

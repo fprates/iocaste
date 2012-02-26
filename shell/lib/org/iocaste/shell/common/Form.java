@@ -30,10 +30,13 @@ package org.iocaste.shell.common;
 public class Form extends AbstractContainer {
     private static final long serialVersionUID = -4049409929220114810L;
     private String enctype;
+    private Parameter action;
     
     public Form(Container container, String name) {
         super(container, Const.FORM, name);
-        new Parameter(this, "action");
+        
+        action = new Parameter(this, "action");
+        action.setHtmlName(name+".action");
     }
 
     /**
@@ -50,5 +53,13 @@ public class Form extends AbstractContainer {
      */
     public final void setEnctype(String enctype) {
         this.enctype = enctype;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getAction() {
+        return action.getHtmlName();
     }
 }

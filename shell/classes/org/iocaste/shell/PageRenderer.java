@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -286,6 +287,8 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
+        Enumeration<String> parameternames;
+        String key;
         PageContext pagectx_;
         Map<String, String[]> parameters;
         String appname, pagename;
@@ -295,7 +298,15 @@ public class PageRenderer extends HttpServlet implements Function {
             parameters = processMultipartContent(req, pagectx);
         } else {
             parameters = new HashMap<String, String[]>();
-            parameters.putAll(req.getParameterMap());
+            
+            parameternames = req.getParameterNames();
+            
+            while (parameternames.hasMoreElements()) {
+                key = parameternames.nextElement();
+                
+                parameters.put(pagectx.isAction(key)? "action" : key,
+                        req.getParameterValues(key));
+            }
             
             if (parameters.size() == 0)
                 return pagectx;
@@ -355,8 +366,12 @@ public class PageRenderer extends HttpServlet implements Function {
                 fieldname = fileitem.getFieldName();
                 
                 if (fileitem.isFormField()) {
+                    if (pagectx.isAction(fieldname))
+                        fieldname = "action";
+                    
                     parameters.put(fieldname,
                     		new String[] {fileitem.getString()});
+                    
                     continue;
                 }
                 
@@ -440,6 +455,8 @@ public class PageRenderer extends HttpServlet implements Function {
         
         text = renderer.run(pagectx.getViewData());
 
+        pagectx.setActions(renderer.getActions());
+        
         if (text != null)
             for (String line : text)
                 writer.println(line);
