@@ -4,13 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
@@ -32,6 +32,18 @@ public class Main extends AbstractPage {
         Table objects = (Table)view.getElement("objects");
         
         insertItem(objects);
+    }
+    
+    public final void download(ViewData view) throws Exception {
+        String filename = (String)view.getParameter("instructionname");
+        String[] lines = (String[])view.getParameter("list");
+        
+        for (String line : lines)
+            view.print(line+"\n");
+        
+        view.setContentType("text/plain");
+        view.setHeader("Content-Disposition", "attachment; filename=\"" +
+        		filename + "\"");
     }
     
     public final void generate(ViewData view) throws Exception {
@@ -61,9 +73,14 @@ public class Main extends AbstractPage {
         if (instructions.size() == 1)
             return;
         
+        name = new StringBuilder("IOCASTE_BUILD_INSTRUCTIONS_").
+                append(Calendar.getInstance().getTime().getTime()).
+                append(".txt").toString();
+        
         view.setReloadableView(true);
         view.export("list", instructions.toArray(new String[0]));
-        view.redirect(null, "report");
+        view.export("instructionname", name);
+        view.redirect(null, "download");
     }
     
     public final List<String> getInstructions(String name, Documents documents) 
@@ -73,7 +90,6 @@ public class Main extends AbstractPage {
         List<String> lines;
         DocumentModel model;
         Set<DocumentModelItem> itens;
-        Set<DocumentModelKey> keys;
         
         if (!documents.hasModel(name))
             return null;
@@ -82,13 +98,11 @@ public class Main extends AbstractPage {
 
         model = documents.getModel(name);
         itens = model.getItens();
-        keys = model.getKeys();
         
         sb = new StringBuilder(model.getName()).append(";").
                 append(model.getTableName()).append(";").
                 append(model.getClassName()).append(";").
-                append(itens.size()).append(";").
-                append(keys.size());
+                append(itens.size());
         
         lines.add(sb.toString());
         for (DocumentModelItem item : itens) {
@@ -101,13 +115,11 @@ public class Main extends AbstractPage {
                     append(dataelement.getType()).append(";").
                     append(dataelement.getLength()).append(";").
                     append(dataelement.getDecimals()).append(";").
-                    append(dataelement.isUpcase());
+                    append(dataelement.isUpcase()).append(";").
+                    append(model.isKey(item));
             
             lines.add(sb.toString());
         }
-        
-        for (DocumentModelKey key : keys)
-            lines.add(key.getModelItemName());
         
         return lines;
     }
@@ -125,7 +137,7 @@ public class Main extends AbstractPage {
         breader.close();
         
         view.export("list", list.toArray(new String[0]));
-        view.redirect(null, "report");
+        view.redirect(null, "download");
         view.message(Const.STATUS, "objects.deployed.successfully");
         view.setReloadableView(true);
     }
@@ -162,15 +174,15 @@ public class Main extends AbstractPage {
         view.setTitle("transport-utility");
     }
     
-    public final void report(ViewData view) {
-        Container container = new Form(null, "report");
-        String[] list = (String[])view.getParameter("list");
-        
-        for (String line : list)
-            view.print(line);
-        
-        view.setTitle("order-viewer");
-        view.setNavbarActionEnabled("back", true);
-        view.addContainer(container);
-    }
+//    public final void report(ViewData view) {
+//        Container container = new Form(null, "report");
+//        String[] list = (String[])view.getParameter("list");
+//        
+//        for (String line : list)
+//            view.print(line);
+//        
+//        view.setTitle("order-viewer");
+//        view.setNavbarActionEnabled("back", true);
+//        view.addContainer(container);
+//    }
 }
