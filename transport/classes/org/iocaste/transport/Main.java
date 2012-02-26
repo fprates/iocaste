@@ -16,9 +16,10 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Frame;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
@@ -27,6 +28,7 @@ import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
+    private static final String IDTAG = "IOCASTE000001";
     
     public final void add(ViewData view) throws Exception {
         Table objects = (Table)view.getElement("objects");
@@ -52,7 +54,7 @@ public class Main extends AbstractPage {
         List<String> lines, instructions = new ArrayList<String>();
         Documents documents = new Documents(this);
         
-        instructions.add("IOCASTE000001");
+        instructions.add(IDTAG);
         
         for (TableItem item : objects.getItens()) {
             name = ((InputComponent)item.get("object")).getValue();
@@ -123,24 +125,6 @@ public class Main extends AbstractPage {
         
         return lines;
     }
-    
-    public final void importing(ViewData view) throws Exception {
-        Parameter filepath = (Parameter)view.getElement("file");
-        File file = new File(filepath.getValue());
-        FileReader freader = new FileReader(file);
-        BufferedReader breader = new BufferedReader(freader);
-        List<String> list = new ArrayList<String>();
-        
-        while (breader.ready())
-            list.add(breader.readLine());
-        
-        breader.close();
-        
-        view.export("list", list.toArray(new String[0]));
-        view.redirect(null, "download");
-        view.message(Const.STATUS, "objects.deployed.successfully");
-        view.setReloadableView(true);
-    }
 
     private final void insertItem(Table table) throws Exception {
         Documents documents = new Documents(this);
@@ -160,29 +144,116 @@ public class Main extends AbstractPage {
     
     public void main(ViewData view) throws Exception {
         Container container = new Form(null, "main");
-        Table objects = new Table(container, "objects");
+        Form uploadcontainer = new Form(null, "upldcntr");
+        Frame exportframe = new Frame(container, "export");
+        Frame importframe = new Frame(uploadcontainer, "import");
+        Table objects = new Table(exportframe, "objects");
         
         new TableColumn(objects, "object");
         
         insertItem(objects);
         
-        new Button(container, "add");
-        new Button(container, "generate");
+        new Button(exportframe, "add");
+        new Button(exportframe, "generate");
+        
+        uploadcontainer.setEnctype("multipart/form-data");
+        
+        new FileEntry(importframe, "buildfile");
+        new Button(importframe, "upload");
         
         view.addContainer(container);
+        view.addContainer(uploadcontainer);
         view.setNavbarActionEnabled("back", true);
         view.setTitle("transport-utility");
     }
     
-//    public final void report(ViewData view) {
-//        Container container = new Form(null, "report");
-//        String[] list = (String[])view.getParameter("list");
-//        
-//        for (String line : list)
-//            view.print(line);
-//        
-//        view.setTitle("order-viewer");
-//        view.setNavbarActionEnabled("back", true);
-//        view.addContainer(container);
-//    }
+    public void upload(ViewData view) throws Exception {
+        int currentline, nitens, pass;
+        File file;
+        FileReader freader;
+        BufferedReader breader;
+        List<String> list;
+        String[] parsed;
+        DocumentModel model;
+        DocumentModelItem modelitem;
+        Documents documents;
+        FileEntry fileentry = (FileEntry)view.getElement("buildfile");
+        String filename = fileentry.getValue();
+        
+        if (filename.equals("")) {
+            view.message(Const.ERROR, "filename.is.obligatory");
+            return;
+        }
+        
+        file = new File(filename);
+        freader = new FileReader(file);
+        breader = new BufferedReader(freader);
+        list = new ArrayList<String>();
+        
+        while (breader.ready())
+            list.add(breader.readLine());
+        
+        breader.close();
+        
+        if (list.size() == 0) {
+            view.message(Const.ERROR, "file.is.empty");
+            return;
+        }
+        
+        pass = 0;
+        currentline = 0;
+        nitens = 0;
+        model = null;
+        
+        for (String line : list) {
+            switch (pass) {
+            case 0:
+                if (!line.equals(IDTAG)) {
+                    view.message(Const.ERROR, "invalid.file");
+                    return;
+                }
+                
+                pass = 1;
+                break;
+            case 1:
+                parsed = line.split(";");
+                
+                if (parsed.length != 4) {
+                    view.message(Const.ERROR, "invalid.header");
+                    return;
+                }
+                
+                model = new DocumentModel();
+                model.setName(parsed[0]);
+                model.setTableName(parsed[1]);
+                model.setClassName(parsed[2]);
+                
+                nitens = Integer.parseInt(parsed[3]);
+                
+                pass = 2;
+                
+                currentline = 0;
+                break;
+            case 2:
+                modelitem = new DocumentModelItem();
+                modelitem.setDocumentModel(model);
+                
+                currentline++;
+                
+                if (currentline == nitens)
+                    pass = 1;
+                
+                break;
+            }
+        }
+        
+        documents = new Documents(this);
+        
+        if (!documents.hasModel(model.getName()))
+            documents.createModel(model);
+        else
+            documents.updateModel(model);
+        
+        view.message(Const.STATUS, "model.imported.successfully");
+    }
 }
