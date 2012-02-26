@@ -2,6 +2,7 @@ package org.iocaste.shell;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +70,21 @@ public class PageRenderer extends HttpServlet implements Function {
     private final String composeUrl(String app) {
         return new StringBuffer(servername).append("/").
                 append(app).append("/view.html").toString();
+    }
+    
+    /**
+     * 
+     * @param resp
+     * @param view
+     */
+    private final void configResponse(HttpServletResponse resp, ViewData view) {
+        String contenttype = view.getContentType();
+        
+        resp.setContentType((contenttype == null)? "text/html" : contenttype);
+        resp.setCharacterEncoding("utf-8");
+        
+        for (String key : view.getHeaderKeys())
+            resp.setHeader(key, view.getHeader(key));
     }
     
     /**
@@ -384,14 +400,13 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void render(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
-        String contenttype;
+        OutputStream os;
         String[] text;
         AppContext appctx;
         ViewData viewdata;
         Message message = new Message();
         PrintWriter writer = resp.getWriter();
-        
-        resp.setCharacterEncoding("utf-8");
+
         viewdata = pagectx.getViewData();
         
         if (viewdata == null || pagectx.isReloadableView()) {
@@ -407,12 +422,29 @@ public class PageRenderer extends HttpServlet implements Function {
                     composeUrl(appctx.getName()), message);
             pagectx.setViewData(viewdata);
         }
-
-        contenttype = viewdata.getContentType();
-        resp.setContentType((contenttype == null)? "text/html" : contenttype);
         
-        for (String key : viewdata.getHeaderKeys())
-            resp.setHeader(key, viewdata.getHeader(key));
+        /*
+         * reseta o servlet response para que possamos
+         * usar OutputStream novamente (já é utilizado em
+         * Service.callServer()).
+         */
+        if (viewdata.getContentType() != null) {
+            resp.reset();
+            
+            configResponse(resp, viewdata);
+            
+            os = resp.getOutputStream();
+            
+            for (String line : viewdata.getPrintLines())
+                os.write(line.getBytes());
+            
+            os.flush();
+            os.close();
+            
+            return;
+        }
+        
+        configResponse(resp, viewdata);
         
         text = renderer.run(pagectx.getViewData());
 
