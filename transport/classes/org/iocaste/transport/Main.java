@@ -183,7 +183,11 @@ public class Main extends AbstractPage {
         FileEntry fileentry = (FileEntry)view.getElement("buildfile");
         String filename = fileentry.getValue();
         
-        if (filename.equals("")) {
+        switch (fileentry.getError()) {
+        case FileEntry.FILE_NOT_FOUND:
+            view.message(Const.ERROR, "file.not.found");
+            return;
+        case FileEntry.EMPTY_FILE_NAME:
             view.message(Const.ERROR, "filename.is.obligatory");
             return;
         }
