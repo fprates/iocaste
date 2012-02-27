@@ -37,7 +37,7 @@ import java.util.Map;
 public abstract class AbstractElement implements Element {
     private static final long serialVersionUID = -4565295670850530184L;
     private Const type;
-    private String name, htmlname, style, destiny;
+    private String name, htmlname, style;
     private boolean enabled, visible;
     private ViewData view;
     private Map<String, String> attributes;
@@ -119,15 +119,6 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#getDestiny()
-     */
-    @Override
-    public final String getDestiny() {
-        return destiny;
-    }
-    
-    /*
-     * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#getHtmlName()
      */
     @Override
@@ -205,15 +196,6 @@ public abstract class AbstractElement implements Element {
     @Override
     public final boolean isVisible() {
         return visible;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#setDestiny(java.lang.String)
-     */
-    @Override
-    public final void setDestiny(String destiny) {
-        this.destiny = destiny;
     }
     
     /*

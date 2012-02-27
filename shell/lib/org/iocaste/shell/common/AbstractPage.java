@@ -230,7 +230,7 @@ public abstract class AbstractPage extends AbstractFunction {
             vdata.addInput(element.getHtmlName());
         
         if (element.hasMultipartSupport())
-            vdata.addMultipartElement(element);
+            vdata.addMultipartElement((MultipartElement)element);
     }
     
     /**

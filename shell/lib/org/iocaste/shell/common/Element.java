@@ -52,13 +52,6 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract String[] getAttributeNames();
     
     /**
-     * Se o componente suporta conteúdo multipart, retorna
-     * o caminho para gravação dos dados.
-     * @return caminho para gravação dos dados.
-     */
-    public abstract String getDestiny();
-    
-    /**
      * 
      * @return
      */
@@ -124,13 +117,6 @@ public interface Element extends Comparable<Element>, Serializable {
      * @return true, se visível.
      */
     public abstract boolean isVisible();
-    
-    /**
-     * Se o componente suporta conteúdo multipart, ajusta
-     * o caminho para gravação dos dados.
-     * @param destiny caminho para gravação de dados.
-     */
-    public abstract void setDestiny(String destiny);
     
     /**
      * Habilita funcionalidade do elemento.

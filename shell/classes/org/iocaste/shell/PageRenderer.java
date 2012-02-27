@@ -1,6 +1,7 @@
 package org.iocaste.shell;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -24,6 +25,7 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.ViewData;
 
 public class PageRenderer extends HttpServlet implements Function {
@@ -353,14 +355,14 @@ public class PageRenderer extends HttpServlet implements Function {
     private final Map<String, String[]> processMultipartContent(
             HttpServletRequest req, PageContext pagectx) throws Exception {
         String filename, fieldname;
-        Element[] elements;
+        MultipartElement[] elements;
         FileItem fileitem;
         Map<String, String[]> parameters;
         
         parameters = new HashMap<String, String[]>();
         elements = pagectx.getViewData().getMultipartElements();
         
-        for (Element element : elements) {
+        for (MultipartElement element : elements) {
             for (Object object : pagectx.getFiles()) {
             	fileitem = (FileItem)object;
                 fieldname = fileitem.getFieldName();
@@ -375,11 +377,22 @@ public class PageRenderer extends HttpServlet implements Function {
                     continue;
                 }
                 
-                if (!fieldname.equals(element.getName()))
+                if (!fieldname.equals(((Element)element).getName()))
                     continue;
                 
                 filename = fileitem.getName();
-                fileitem.write(new File(element.getDestiny(), filename));
+                
+                try {
+                    if (filename.equals("")) {
+                        element.setError(MultipartElement.EMPTY_FILE_NAME);
+                    } else {
+                        fileitem.write(new File(
+                                element.getDestiny(), filename));
+                        element.setError(0);
+                    }
+                } catch (FileNotFoundException e) {
+                    element.setError(MultipartElement.FILE_NOT_FOUND);
+                }
                 
                 parameters.put(fieldname, new String[] {filename});
             }

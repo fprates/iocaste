@@ -40,7 +40,7 @@ public class ViewData implements Serializable {
     private MessageSource messages;
     private List<String> inputs, exports, lines;
     private Map<String, Boolean> navbarstatus;
-    private List<Element> mpelements;
+    private List<MultipartElement> mpelements;
     private List<Container> containers;
     private Map<String, Object> parameters;
     private Map<String, String> headervalues;
@@ -56,7 +56,7 @@ public class ViewData implements Serializable {
         parameters = new HashMap<String, Object>();
         headervalues = new HashMap<String, String>();
         containers = new ArrayList<Container>();
-        mpelements = new ArrayList<Element>();
+        mpelements = new ArrayList<MultipartElement>();
         nbcontainer = new StandardContainer(null, "navbar");
         containers.add(nbcontainer);
         disabledhead = false;
@@ -89,7 +89,7 @@ public class ViewData implements Serializable {
      * Adiciona elemento multipart.
      * @param elemento
      */
-    public final void addMultipartElement(Element element) {
+    public final void addMultipartElement(MultipartElement element) {
         mpelements.add(element);
     }
     
@@ -314,8 +314,8 @@ public class ViewData implements Serializable {
      * Retorna elementos multipart.
      * @return elementos
      */
-    public final Element[] getMultipartElements() {
-        return mpelements.toArray(new Element[0]);
+    public final MultipartElement[] getMultipartElements() {
+        return mpelements.toArray(new MultipartElement[0]);
     }
     
     /**
