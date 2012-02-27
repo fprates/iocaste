@@ -11,6 +11,7 @@ import java.util.Set;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
@@ -45,7 +46,7 @@ public class Main extends AbstractPage {
         
         view.setContentType("text/plain");
         view.setHeader("Content-Disposition", "attachment; filename=\"" +
-        		filename + "\"");
+                filename + "\"");
     }
     
     public final void generate(ViewData view) throws Exception {
@@ -176,6 +177,8 @@ public class Main extends AbstractPage {
         String[] parsed;
         DocumentModel model;
         DocumentModelItem modelitem;
+        DocumentModelKey key;
+        DataElement dataelement;
         Documents documents;
         FileEntry fileentry = (FileEntry)view.getElement("buildfile");
         String filename = fileentry.getValue();
@@ -204,6 +207,7 @@ public class Main extends AbstractPage {
         currentline = 0;
         nitens = 0;
         model = null;
+        documents = new Documents(this);
         
         for (String line : list) {
             switch (pass) {
@@ -214,7 +218,7 @@ public class Main extends AbstractPage {
                 }
                 
                 pass = 1;
-                break;
+                continue;
             case 1:
                 parsed = line.split(";");
                 
@@ -233,26 +237,52 @@ public class Main extends AbstractPage {
                 pass = 2;
                 
                 currentline = 0;
-                break;
+                continue;
             case 2:
+                parsed = line.split(";");
+                
                 modelitem = new DocumentModelItem();
                 modelitem.setDocumentModel(model);
+
+                modelitem.setName(parsed[0]);
+                modelitem.setTableFieldName(parsed[1]);
+                modelitem.setAttributeName(parsed[2]);
+                modelitem.setIndex(currentline);
+                
+                dataelement = new DataElement();
+                dataelement.setName(parsed[3]);
+                dataelement.setType(Integer.parseInt(parsed[4]));
+                dataelement.setLength(Integer.parseInt(parsed[5]));
+                dataelement.setDecimals(Integer.parseInt(parsed[6]));
+                dataelement.setUpcase(Boolean.parseBoolean(parsed[7]));
+                
+                modelitem.setDataElement(dataelement);
+                
+                if (Boolean.parseBoolean(parsed[8])) {
+                    key = new DocumentModelKey();
+                    key.setModel(model);
+                    key.setModelItem(modelitem.getName());
+                    
+                    model.addKey(key);
+                }
+                
+                model.add(modelitem);
                 
                 currentline++;
                 
-                if (currentline == nitens)
-                    pass = 1;
+                if (currentline != nitens)
+                    continue;
                 
-                break;
+                if (!documents.hasModel(model.getName()))
+                    documents.createModel(model);
+                else
+                    documents.updateModel(model);
+                
+                pass = 1;
+                
+                continue;
             }
         }
-        
-        documents = new Documents(this);
-        
-        if (!documents.hasModel(model.getName()))
-            documents.createModel(model);
-        else
-            documents.updateModel(model);
         
         view.message(Const.STATUS, "model.imported.successfully");
     }
