@@ -48,8 +48,12 @@ public class Services extends AbstractFunction {
      * @return
      */
     public final ViewData getView(Message message) {
-        return PageRenderer.getView(message.getSessionid(),
-                message.getString("app_name"), message.getString("page_name"));
+        String sessionid = message.getSessionid();
+        String appname = message.getString("app_name");
+        String pagename = message.getString("page_name");
+        int logid = message.getInt("logid");
+        
+        return PageRenderer.getView(sessionid, appname, pagename, logid);
     }
     
     /**
@@ -140,7 +144,10 @@ public class Services extends AbstractFunction {
      * @return
      */
     public final String[] popPage(Message message) {
-        return PageRenderer.popPage(message.getSessionid());
+        String sessionid = message.getSessionid();
+        int logid = message.getInt("logid");
+        
+        return PageRenderer.popPage(sessionid, logid);
     }
     
     /**
@@ -208,8 +215,9 @@ public class Services extends AbstractFunction {
         String sessionid = message.getSessionid();
         String appname = message.getString("app_name");
         String pagename = message.getString("page_name");
+        int logid = message.getInt("logid");
         
-        PageRenderer.pushPage(sessionid, appname, pagename);
+        PageRenderer.pushPage(sessionid, appname, pagename, logid);
     }
     
     /**

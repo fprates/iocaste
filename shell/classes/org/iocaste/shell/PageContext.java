@@ -16,11 +16,13 @@ public class PageContext {
     private Map<String, Object> parameters;
     private List<FileItem> files;
     private Set<String> actions;
+    private int logid;
     
     public PageContext(String name) {
         parameters =  new HashMap<String, Object>();
         reloadable = false;
         actions = null;
+        logid = 0;
         
         this.name = name;
     }
@@ -55,6 +57,14 @@ public class PageContext {
      */
     public final List<FileItem> getFiles() {
         return files;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final int getLogid() {
+        return logid;
     }
     
     /**
@@ -120,6 +130,14 @@ public class PageContext {
      */
     public final void setFiles(List<FileItem> files) {
         this.files = files;
+    }
+    
+    /**
+     * 
+     * @param logid
+     */
+    public final void setLogid(int logid) {
+        this.logid = logid;
     }
     
     /**

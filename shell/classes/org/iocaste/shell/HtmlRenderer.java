@@ -48,12 +48,14 @@ public class HtmlRenderer {
     private List<String> onload, script;
     private Set<String> actions;
     private MessageSource messages;
+    private int logid;
     
     public HtmlRenderer() {
         String line;
+        
         script = new ArrayList<String>();
         onload = new ArrayList<String>();
-        actions = new HashSet<String>();
+        logid = 0;
         
         InputStream is = this.getClass().getResourceAsStream(
                 "/META-INF/shell.js");
@@ -93,7 +95,8 @@ public class HtmlRenderer {
         txttitle.setTag("h1");
         
         txtuname = new Text(navbar.getStatusArea(), "navbar.username");
-        txtuname.setText(username);
+        txtuname.setText(new StringBuilder(username).
+                append("@term:").append(logid).toString());
         
         navbar.setMessage((msgtype == null)? Const.STATUS : msgtype,
                 (msgtext == null)? "" : msgtext);
@@ -894,11 +897,12 @@ public class HtmlRenderer {
         XMLElement bodytag = new XMLElement("body");
         
         onload.clear();
-        actions.clear();
+        actions = new HashSet<String>();
         
         messages = vdata.getMessages();
         pagetrack = new StringBuffer(vdata.getAppName()).append(".").
-                append(vdata.getPageName()).toString();
+                append(vdata.getPageName()).append(":").
+                append(logid).toString();
         
         if (messages == null)
             messages = new MessageSource(null);
@@ -947,6 +951,14 @@ public class HtmlRenderer {
      */
     public void setMessageText(String msgtext) {
         this.msgtext = msgtext;
+    }
+    
+    /**
+     * 
+     * @param logid
+     */
+    public void setLogid(int logid) {
+        this.logid = logid;
     }
     
     /**

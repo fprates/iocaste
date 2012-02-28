@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +33,8 @@ public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String LOGIN_APP = "iocaste-login";
     private static final String NOT_CONNECTED = "not.connected";
-    private static Map<String, SessionContext> apps =
-            new HashMap<String, SessionContext>();
+    private static Map<String, List<SessionContext>> apps =
+            new HashMap<String, List<SessionContext>>();
     private String sessionid;
     private String servername;
     private HtmlRenderer renderer;
@@ -90,25 +91,46 @@ public class PageRenderer extends HttpServlet implements Function {
     }
     
     /**
-     * 
+     * s
      * @param sessionid
      * @param appname
      * @param pagename
+     * @param logid
      * @return
      */
     private final PageContext createPageContext(String sessionid,
-            String appname, String pagename) {
-        SessionContext sessionctx = (apps.containsKey(sessionid))?
-                apps.get(sessionid) : new SessionContext();
-        AppContext appctx = (sessionctx.contains(appname))?
-                sessionctx.getAppContext(appname) : new AppContext(appname);
-        PageContext pagectx = new PageContext(pagename);
+            String appname, String pagename, int logid) {
+        AppContext appctx;
+        PageContext pagectx;
+        List<SessionContext> sessions;
+        SessionContext sessionctx;
         
+        if (!apps.containsKey(sessionid)) {
+            sessions = new ArrayList<SessionContext>();
+            apps.put(sessionid, sessions);
+            
+            sessionctx = new SessionContext();
+            sessions.add(sessionctx);
+        } else {
+            sessions = apps.get(sessionid);
+            
+            if (logid >= sessions.size()) {
+                sessionctx = new SessionContext();
+                sessions.add(sessionctx);
+            } else {
+                sessionctx = sessions.get(logid);
+            }
+        }
+        
+        appctx = (sessionctx.contains(appname))?
+                sessionctx.getAppContext(appname) : new AppContext(appname);
+                
+        pagectx = new PageContext(pagename);
         pagectx.setAppContext(appctx);
+        pagectx.setLogid(logid);
+        
         appctx.put(pagename, pagectx);
         sessionctx.put(appname, appctx);
-        
-        apps.put(sessionid, sessionctx);
         
         return pagectx;
     }
@@ -152,26 +174,38 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void entry(HttpServletRequest req, HttpServletResponse resp)
             throws Exception {
-        PageContext pagectx;
+        int logid = 0;
+        PageContext pagectx = null;
         Iocaste iocaste = new Iocaste(this);
         
         if (apps.containsKey(sessionid)) {
             pagectx = getPageContext(req, sessionid);
-            
-            if (pagectx == null) {
-                pagectx = getPageContext(sessionid, LOGIN_APP, "authentic");
-                renderer.setUsername(NOT_CONNECTED);
-            }
-            
-            pagectx = processController(iocaste, req, pagectx);
-        } else {
-            pagectx = createPageContext(sessionid, LOGIN_APP, "authentic");
+            logid = apps.get(sessionid).size();
+        }
+        
+        if (pagectx == null) {
+            pagectx = createPageContext(sessionid, LOGIN_APP, "authentic",
+                    logid);
             renderer.setUsername(NOT_CONNECTED);
         }
+        
+        if (pagectx.getViewData() != null)
+            pagectx = processController(iocaste, req, pagectx);
         
         render(resp, pagectx);
     }
 
+    /**
+     * 
+     * @param pagetrack
+     * @return
+     */
+    private final int getLogid(String pagetrack) {
+        String[] parsed = pagetrack.split(":");
+        
+        return Integer.parseInt(parsed[1]);
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#getMethods()
@@ -192,7 +226,7 @@ public class PageRenderer extends HttpServlet implements Function {
             String sessionid) throws Exception {
         String[] pageparse;
         ServletFileUpload fileupload;
-        int t;
+        int t, logid;
         PageContext pagectx;
         List<FileItem> files = null;
         String pagetrack = null;
@@ -226,7 +260,12 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagetrack == null)
             return null;
         
+        pageparse = pagetrack.split(":");
+        logid = Integer.parseInt(pageparse[1]);
+        
+        pagetrack = pageparse[0];
         pageparse = pagetrack.split("\\.");
+        
         t = pageparse.length - 1;
         
         for (int i = 0; i < t; i++)
@@ -235,7 +274,11 @@ public class PageRenderer extends HttpServlet implements Function {
         
         pageparse[1] = pageparse[t];
         
-        pagectx = getPageContext(sessionid, pageparse[0], pageparse[1]);
+        pagectx = getPageContext(sessionid, pageparse[0], pageparse[1], logid);
+        
+        if (pagectx == null)
+            return null;
+        
         pagectx.setFiles(files);
         
         return pagectx;
@@ -246,11 +289,18 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param sessionid
      * @param appname
      * @param pagename
+     * @param logid
      * @return
      */
     private final PageContext getPageContext (String sessionid, String appname,
-            String pagename) {
-        AppContext appctx = apps.get(sessionid).getAppContext(appname);
+            String pagename, int logid) {
+        AppContext appctx;
+        List<SessionContext> sessions = apps.get(sessionid);
+        
+        if (logid >= sessions.size())
+            return null;
+        
+        appctx = sessions.get(logid).getAppContext(appname);
         
         return (appctx == null)? null : appctx.getPageContext(pagename);
     }
@@ -260,11 +310,13 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param sessionid
      * @param appname
      * @param pagename
+     * @param logid
      * @return
      */
     public static final ViewData getView(String sessionid, String appname,
-            String pagename) {
-        AppContext appcontext = apps.get(sessionid).getAppContext(appname);
+            String pagename, int logid) {
+        AppContext appcontext = apps.get(sessionid).
+                get(logid).getAppContext(appname);
         
         return appcontext.getPageContext(pagename).getViewData();
     }
@@ -272,11 +324,11 @@ public class PageRenderer extends HttpServlet implements Function {
     /**
      * 
      * @param sessionid
-     * @param appname
+     * @param logid
      * @return
      */
-    public static final String[] popPage(String sessionid) {
-        return apps.get(sessionid).popPage();
+    public static final String[] popPage(String sessionid, int logid) {
+        return apps.get(sessionid).get(logid).popPage();
     }
     
     /**
@@ -290,11 +342,11 @@ public class PageRenderer extends HttpServlet implements Function {
     private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
         Enumeration<String> parameternames;
-        String key;
         PageContext pagectx_;
         Map<String, String[]> parameters;
         String appname, pagename;
         ViewData view;
+        String key, pagetrack = null;
         
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagectx);
@@ -314,8 +366,10 @@ public class PageRenderer extends HttpServlet implements Function {
                 return pagectx;
         }
 
-        if (parameters.containsKey("pagetrack"))
+        if (parameters.containsKey("pagetrack")) {
+            pagetrack = parameters.get("pagetrack")[0];
             parameters.remove("pagetrack");
+        }
         
         view = callController(sessionid, parameters, pagectx);
         
@@ -332,10 +386,12 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagename == null)
             pagename = pagectx.getName();
         
-        pagectx_ = getPageContext(sessionid, appname, pagename);
+        pagectx_ = getPageContext(sessionid, appname, pagename,
+                getLogid(pagetrack));
         
         if (pagectx_ == null)
-            pagectx_ = createPageContext(sessionid, appname, pagename);
+            pagectx_ = createPageContext(sessionid, appname, pagename,
+                    getLogid(pagetrack));
         
         pagectx_.setReloadableView(view.isReloadableView());
         
@@ -406,10 +462,11 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param sessionid
      * @param appname
      * @param pagename
+     * @param logid
      */
     public static final void pushPage(String sessionid, String appname,
-            String pagename) {
-        apps.get(sessionid).pushPage(appname, pagename);
+            String pagename, int logid) {
+        apps.get(sessionid).get(logid).pushPage(appname, pagename);
     }
     
     /**
@@ -436,6 +493,7 @@ public class PageRenderer extends HttpServlet implements Function {
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
             message.add("parameters", pagectx.getParameters());
+            message.add("logid", pagectx.getLogid());
             message.setSessionid(sessionid);
             
             viewdata = (ViewData)Service.callServer(
@@ -466,6 +524,7 @@ public class PageRenderer extends HttpServlet implements Function {
         
         configResponse(resp, viewdata);
         
+        renderer.setLogid(pagectx.getLogid());
         text = renderer.run(pagectx.getViewData());
 
         pagectx.setActions(renderer.getActions());
@@ -525,7 +584,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param view
      */
     public static final void updateView(String sessionid, ViewData view) {
-        AppContext appcontext = apps.get(sessionid).
+        AppContext appcontext = apps.get(sessionid).get(view.getLogid()).
                 getAppContext(view.getAppName());
         
         appcontext.getPageContext(view.getPageName()).setViewData(view);

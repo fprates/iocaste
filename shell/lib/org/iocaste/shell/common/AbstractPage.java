@@ -99,8 +99,10 @@ public abstract class AbstractPage extends AbstractFunction {
         }
         
         appname = view.getAppName();
-        if (shell == null)
+        if (shell == null) {
             shell = new Shell(this);
+            shell.setView(view);
+        }
         
         beforeActionCall(view);
         
@@ -144,6 +146,8 @@ public abstract class AbstractPage extends AbstractFunction {
         ViewData view;
         String page = message.getString("page");
         String app = message.getString("app");
+        int logid = message.getInt("logid");
+        
         @SuppressWarnings("unchecked")
         Map<String, Object> parameters =
                 (Map<String, Object>)message.get("parameters");
@@ -151,7 +155,7 @@ public abstract class AbstractPage extends AbstractFunction {
         if (app == null || page == null)
             throw new Exception("Page not especified.");
         
-        view = new ViewData(app, page);
+        view = new ViewData(app, page, logid);
         for (String name : parameters.keySet())
             view.addParameter(name, parameters.get(name));
         

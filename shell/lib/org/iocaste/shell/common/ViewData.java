@@ -47,8 +47,9 @@ public class ViewData implements Serializable {
     private Container nbcontainer;
     private boolean disabledhead, reloadable, dontpushpage, pagecall;
     private Const messagetype;
+    private int logid;
     
-    public ViewData(String appname, String pagename) {
+    public ViewData(String appname, String pagename, int logid) {
         inputs = new ArrayList<String>();
         exports = new ArrayList<String>();
         lines = new ArrayList<String>();
@@ -63,6 +64,7 @@ public class ViewData implements Serializable {
         dontpushpage = false;
         contenttype = null;
         
+        this.logid = logid;
         this.appname = appname;
         this.pagename = pagename;
         
@@ -293,6 +295,14 @@ public class ViewData implements Serializable {
      */
     public final String[] getInputs() {
         return inputs.toArray(new String[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final int getLogid() {
+        return logid;
     }
     
     /**
