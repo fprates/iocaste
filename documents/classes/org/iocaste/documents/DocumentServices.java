@@ -584,7 +584,7 @@ public class DocumentServices {
     private final void saveDocumentHeader(Iocaste iocaste,
             DocumentModel model) throws Exception {
         String query = "insert into docs001 (docid, tname, class) " +
-        		"values (?, ?, ?)";
+                "values (?, ?, ?)";
         
         iocaste.update(query, new Object[] {model.getName(),
                                             model.getTableName(),
@@ -660,7 +660,7 @@ public class DocumentServices {
     private void saveDocumentKeys(Iocaste iocaste, DocumentModel model)
             throws Exception {
         String dbuser, name, query = "insert into docs004(iname, docid) " +
-        		"values (?, ?)";
+                "values (?, ?)";
         
         for (DocumentModelKey key : model.getKeys()) {
             name = new StringBuilder(model.getName()).append(".").
@@ -775,7 +775,7 @@ public class DocumentServices {
          * atualização do modelo
          */
         query = "update docs003 set decim = ?, lngth = ?, etype = ?, " +
-        		"upcas = ? where ename = ?";
+                "upcas = ? where ename = ?";
         
         criteria = new Object[5];
         
@@ -784,6 +784,21 @@ public class DocumentServices {
         criteria[2] = ddelement.getType();
         criteria[3] = ddelement.isUpcase();
         criteria[4] = ddelement.getName();
+
+        iocaste.update(query, criteria);
+        
+        query = "update docs002 set docid = ?, index = ?, fname = ?, " +
+                "ename = ?, attrb = ? where iname = ?";
+        
+        criteria = new Object[6];
+        
+        criteria[0] = model.getName();
+        criteria[1] = item.getIndex();
+        criteria[2] = item.getTableFieldName();
+        criteria[3] = ddelement.getName();
+        criteria[4] = item.getAttributeName();
+        criteria[5] = new StringBuilder(model.getName()).
+                append(".").append(item.getName()).toString();
         
         iocaste.update(query, criteria);
     }
