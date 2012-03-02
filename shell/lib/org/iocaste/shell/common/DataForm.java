@@ -21,6 +21,7 @@
 
 package org.iocaste.shell.common;
 
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
@@ -39,6 +40,22 @@ public class DataForm extends AbstractContainer {
         super(container, Const.DATA_FORM, name);
         
         keyrequired = false;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractContainer#add(
+     *     org.iocaste.shell.common.Element)
+     */
+    @Override
+    public final void add(Element element) { };
+
+    /**
+     * 
+     * @param item
+     */
+    public final void add(DataItem item) {
+        super.add(item);
     }
     
     /**
@@ -117,5 +134,26 @@ public class DataForm extends AbstractContainer {
      */
     public final void setKeyRequired(boolean keyrequired) {
         this.keyrequired = keyrequired;
+    }
+    
+    /**
+     * 
+     * @param object
+     */
+    public final void setObject(ExtendedObject object) {
+        DataItem item;
+        String value, name;
+        
+        for (Element element : getElements()) {
+            item = (DataItem)element;
+            name = item.getName();
+            
+            if (Shell.getDataElement(item).getType() == DataType.NUMC)
+                value = Integer.toString((Integer)object.getValue(name));
+            else
+                value = (String)object.getValue(name);
+            
+            item.setValue(value);
+        }
     }
 }

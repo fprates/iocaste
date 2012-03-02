@@ -58,7 +58,7 @@ public class Shell extends AbstractServiceInterface {
             return new DataForm(container, name);
             
         case DATA_ITEM:
-            return new DataItem(container, (Const)args[0], name);
+            return new DataItem((DataForm)container, (Const)args[0], name);
             
         case FORM:
             return new Form(container, name);
