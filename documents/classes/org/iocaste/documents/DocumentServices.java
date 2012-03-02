@@ -328,7 +328,9 @@ public class DocumentServices {
      */
     public final void modify(Iocaste iocaste, ExtendedObject object)
             throws Exception {
+        String query;
         Object value;
+        int nrregs;
         DocumentModel model = object.getModel();
         List<Object> criteria = new ArrayList<Object>();
         List<Object> uargs = new ArrayList<Object>();
@@ -345,8 +347,13 @@ public class DocumentServices {
         }
         
         uargs.addAll(criteria);
+        nrregs = 0;
         
-        if (iocaste.update(model.getQuery("update"), uargs.toArray()) == 0)
+        query = model.getQuery("update");
+        if (query != null)
+            nrregs = iocaste.update(query, uargs.toArray());
+        
+        if (nrregs == 0)
             iocaste.update(model.getQuery("insert"), iargs.toArray());
     }
     
@@ -396,12 +403,17 @@ public class DocumentServices {
                 update.append(fieldname).append("=?");
         }
 
-        update.append(where);
+        if (setok)
+            update.append(where);
+        
         insert.append(values).append(")");
         delete.append(where);
         
         queries.put("insert", insert.toString());
-        queries.put("update", update.toString());
+        
+        if (setok)
+            queries.put("update", update.toString());
+        
         queries.put("delete", delete.toString());
         
         this.queries.put(model.getName(), queries);
