@@ -83,8 +83,14 @@ public abstract class AbstractPage extends AbstractFunction {
             view = status.view;
         }
         
+        appname = view.getAppName();
+        if (shell == null) {
+            shell = new Shell(this);
+            shell.setView(view);
+        }
+        
         if (status.input != null) {
-            view.setFocus(((Component)status.input).getName());
+            view.setFocus(((Component)status.input).getHtmlName());
             
             switch (status.error) {
             case EINITIAL:
@@ -95,13 +101,9 @@ public abstract class AbstractPage extends AbstractFunction {
                 break;
             }
             
+            updateView(view);
+            
             return view;
-        }
-        
-        appname = view.getAppName();
-        if (shell == null) {
-            shell = new Shell(this);
-            shell.setView(view);
         }
         
         beforeActionCall(view);
