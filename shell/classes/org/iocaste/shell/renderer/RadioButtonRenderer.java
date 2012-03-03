@@ -24,10 +24,14 @@ public class RadioButtonRenderer extends Renderer {
             rbtag.add("type", "radio");
             rbtag.add("name", radiobutton.getHtmlName());
             rbtag.add("value", key);
+            rbtag.add("id", radiobutton.getHtmlName());
+            
             rbtag.addInner(values.get(key));
             
             if (radiobutton.getValue().equals(key))
                 rbtag.add("checked", "checked");
+            
+            addAttributes(rbtag, radiobutton);
             
             elements.add(rbtag);
             
