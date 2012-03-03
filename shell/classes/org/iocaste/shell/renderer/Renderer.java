@@ -17,6 +17,7 @@ import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.Table;
@@ -39,6 +40,7 @@ public class Renderer {
      * 
      * @param tags
      * @param container
+     * @param config
      */
     public static final void renderContainer(List<XMLElement> tags,
             Container container, Config config) {
@@ -76,6 +78,7 @@ public class Renderer {
      * 
      * @param tags
      * @param element
+     * @param config
      */
     protected static final void renderElement(List<XMLElement> tags,
             Element element, Config config) {
@@ -121,6 +124,10 @@ public class Renderer {
         
         case PARAMETER:
             tags.add(ParameterRenderer.render((Parameter)element));
+            break;
+            
+        case RADIO_BUTTON:
+            tags.addAll(RadioButtonRenderer.render((RadioButton)element));
             break;
             
         default:
