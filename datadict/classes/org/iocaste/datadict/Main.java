@@ -132,6 +132,15 @@ public class Main extends AbstractPage {
     
     /**
      * 
+     * @param view
+     * @throws Exception
+     */
+    public final void saveshitem(ViewData view) throws Exception {
+        Save.shitem(view);
+    }
+    
+    /**
+     * 
      * @param vdata
      * @throws Exception 
      */

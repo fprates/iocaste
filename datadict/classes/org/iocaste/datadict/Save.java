@@ -96,5 +96,9 @@ public class Save {
         
         view.message(Const.STATUS, "table.saved.successfully");
     }
+    
+    public static final void shitem(ViewData view) {
+        
+    }
 
 }
