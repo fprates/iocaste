@@ -136,7 +136,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void saveshitem(ViewData view) throws Exception {
-        Save.shitem(view);
+        Save.shitem(view, this);
     }
     
     /**
