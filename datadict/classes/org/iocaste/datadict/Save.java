@@ -112,14 +112,16 @@ public class Save {
             throws Exception {
         List<ExtendedObject> oitens;
         SHLib shlib = new SHLib(function);
-        DataForm header = (DataForm)view.getElement("shmodel");
-        DocumentModel model = header.getModel();
-        ExtendedObject object = new ExtendedObject(model);
+        DataForm header = (DataForm)view.getElement("header");
+        ExtendedObject oitem, object = header.getObject();
         Table itens = (Table)view.getElement("itens");
         
         oitens = new ArrayList<ExtendedObject>();
-        for (TableItem item : itens.getItens())
-            oitens.add(item.getObject());
+        for (TableItem item : itens.getItens()) {
+            oitem = item.getObject();
+            oitem.setValue("SH_NAME", object.getValue("NAME"));
+            oitens.add(oitem);
+        }
         
         shlib.save(object, oitens.toArray(new ExtendedObject[0]));
         
