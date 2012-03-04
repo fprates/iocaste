@@ -1,5 +1,5 @@
 <project name="search-help" default="compile">
-    <property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
+    <property name="server.class" value="org.iocaste.sh.Servlet"/>
     <property name="warfilename" value="${basedir}/iocaste-${ant.project.name}.war"/>
     
     <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
@@ -36,6 +36,9 @@
         
         <jar basedir="${builddir}/${ant.project.name}/lib"
             destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
+          
+        <copy todir="${basedir}/ext"
+            file="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}"
