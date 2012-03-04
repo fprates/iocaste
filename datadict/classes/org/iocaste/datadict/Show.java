@@ -9,22 +9,40 @@ import org.iocaste.shell.common.ViewData;
 
 public class Show {
 
+    /**
+     * 
+     * @param view
+     * @param function
+     * @throws Exception
+     */
     public static final void main(ViewData view, Function function)
             throws Exception {
         DocumentModel model;
-        String modelname = ((DataItem)view.getElement("modelname")).getValue();
+        String name = ((DataItem)view.getElement("modelname")).getValue();
         Documents documents = new Documents(function);
+        int op = Common.getTpObjectValue(view);
         
-        if (!documents.hasModel(modelname)) {
-            view.message(Const.ERROR, "model.not.found");
-            return;
+        switch (op) {
+        case Common.TABLE:
+            if (!documents.hasModel(name)) {
+                view.message(Const.ERROR, "model.not.found");
+                return;
+            }
+            
+            model = documents.getModel(name);
+            view.export("model", model);
+            view.redirect(null, "tbstructure");
+            
+            break;
+            
+        case Common.SH:
+            view.redirect(null, "shstructure");
+            view.export("shname", name);
+            
+            break;
         }
-        
-        model = documents.getModel(modelname);
         
         view.setReloadableView(true);
         view.export("mode", Common.SHOW);
-        view.export("model", model);
-        view.redirect(null, "structure");
     }
 }

@@ -21,6 +21,14 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
+     */
+    public final void addshitem(ViewData view) {
+        Add.shitem(view);
+    }
+    
+    /**
+     * 
+     * @param view
      * @throws Exception
      */
     public final void create(ViewData view) throws Exception {
@@ -46,6 +54,14 @@ public class Main extends AbstractPage {
         for (TableItem item : itens.getItens())
             if (item.isSelected())
                 itens.remove(item);
+    }
+    
+    /**
+     * 
+     * @param view
+     */
+    public final void deleteshitem(ViewData view) {
+        Delete.shitem(view);
     }
     
     /**
@@ -126,9 +142,18 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param vdata
+     * @throws Exception
      */
-    public final void structure(ViewData vdata) throws Exception {
-        Structure.main(vdata, this);
+    public final void shstructure(ViewData vdata) throws Exception {
+        SHStructure.main(vdata, this);
+    }
+    
+    /**
+     * 
+     * @param vdata
+     */
+    public final void tbstructure(ViewData vdata) throws Exception {
+        TableStructure.main(vdata, this);
     }
     
     /**

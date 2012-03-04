@@ -18,7 +18,7 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.ViewData;
 
-public class Structure {
+public class TableStructure {
     
     /**
      * 

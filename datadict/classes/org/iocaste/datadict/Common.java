@@ -13,6 +13,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.ListBox;
+import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
@@ -30,6 +31,9 @@ public class Common {
     
     public static final boolean OBLIGATORY = true;
     public static final boolean NON_OBLIGATORY = false;
+    
+    public static final byte TABLE = 0;
+    public static final byte SH = 1;
     
     public enum ItensNames {
         NAME("item.name", "DATAELEMENT.NAME"),
@@ -58,15 +62,6 @@ public class Common {
     
     /**
      * 
-     * @param vdata
-     * @return
-     */
-    public static final byte getMode(ViewData vdata) {
-        return (Byte)vdata.getParameter("mode");
-    }
-    
-    /**
-     * 
      * @return
      */
     public static final Map<ItensNames, DataElement> getFieldReferences(
@@ -85,6 +80,15 @@ public class Common {
     
     /**
      * 
+     * @param vdata
+     * @return
+     */
+    public static final byte getMode(ViewData vdata) {
+        return (Byte)vdata.getParameter("mode");
+    }
+    
+    /**
+     * 
      * @param modo
      * @param item
      * @param name
@@ -96,6 +100,17 @@ public class Common {
             return ((Text)item.get(name)).getText();
         else
             return ((InputComponent)item.get(name)).getValue();
+    }
+    
+    /**
+     * 
+     * @param view
+     * @return
+     */
+    public static final int getTpObjectValue(ViewData view) {
+        RadioButton tpobj = (RadioButton)view.getElement("tpobject");
+        
+        return Integer.parseInt(tpobj.getValue());
     }
     
     /**
