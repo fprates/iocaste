@@ -123,6 +123,32 @@ public class Main extends AbstractPage {
     
     /**
      * 
+     * @param view
+     */
+    public final void rename(ViewData view) {
+        Rename.main(view);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void renamedialog(ViewData view) throws Exception {
+        Rename.dialog(view, this);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void renameok(ViewData view) throws Exception {
+        Rename.ok(view, this);
+    }
+    
+    /**
+     * 
      * @param vdata
      * @throws Exception
      */

@@ -24,6 +24,7 @@ public class Services extends AbstractFunction {
         export("has_model", "hasModel");
         export("create_model", "createModel");
         export("remove_model", "removeModel");
+        export("rename_model", "renameModel");
         export("update_model", "updateModel");
         export("save", "save");
         export("select", "select");
@@ -162,6 +163,18 @@ public class Services extends AbstractFunction {
         DocumentModel model = doc.getDocumentModel(modelname);
         
         doc.removeModel(model);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void renameModel(Message message) throws Exception {
+        String oldname = message.getString("oldname");
+        String newname = message.getString("newname");
+        
+        doc.renameModel(oldname, newname);
     }
     
     /**

@@ -48,6 +48,7 @@ public class Selection {
         new Button(main, "show");
         new Button(main, "update");
         new Button(main, "delete");
+        new Button(main, "rename");
         
         view.setFocus("modelname");
         view.setNavbarActionEnabled("back", true);

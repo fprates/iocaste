@@ -538,6 +538,23 @@ public class DocumentServices {
     
     /**
      * 
+     * @param oldname
+     * @param newname
+     * @throws Exception
+     */
+    public final void renameModel(String oldname, String newname)
+            throws Exception {
+        DocumentModel model = getDocumentModel(oldname);
+        
+        model.setName(newname);
+        createModel(model);
+        
+        model.setName(oldname);
+        removeModel(model);
+    }
+    
+    /**
+     * 
      * @param iocaste
      * @param item
      * @throws Exception

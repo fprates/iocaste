@@ -186,6 +186,23 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
+     * @param oldname
+     * @param newname
+     * @throws Exception
+     */
+    public final void renameModel(String oldname, String newname)
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("rename_model");
+        message.add("oldname", oldname);
+        message.add("newname", newname);
+        
+        call(message);
+    }
+    
+    /**
+     * 
      * @param object
      * @return
      * @throws Exception
