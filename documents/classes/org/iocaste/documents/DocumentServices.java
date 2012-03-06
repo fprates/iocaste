@@ -561,8 +561,8 @@ public class DocumentServices {
             throws Exception {
         Object[] criteria;
         DocumentModel model = object.getModel();
-        Set<DocumentModelItem> itens = model.getItens();
-        int i = itens.size();
+        DocumentModelItem[] itens = model.getItens();
+        int i = itens.length;
         
         criteria = (i > 0)? new Object[i] : null;
         
@@ -581,7 +581,7 @@ public class DocumentServices {
      */
     private final void saveDataElements(Iocaste iocaste, DocumentModel model) 
             throws Exception {
-        Set<DocumentModelItem> itens = model.getItens();
+        DocumentModelItem[] itens = model.getItens();
         
         for (DocumentModelItem item : itens)
             insertDataElement(iocaste, item);
@@ -617,12 +617,12 @@ public class DocumentServices {
         StringBuilder sb, sbk = null;
         String tname, query = "insert into docs002 (iname, docid, index, " +
                 "fname, ename, attrb) values (?, ?, ?, ?, ?, ?)";
-        Set<DocumentModelItem> itens = model.getItens();
+        DocumentModelItem[] itens = model.getItens();
         
         sb = new StringBuilder("create table ").append(model.getTableName()).
                 append(" (");
         
-        size = itens.size() - 1;
+        size = itens.length - 1;
         
         for (DocumentModelItem item : itens) {
             insertModelItem(iocaste, item);

@@ -56,7 +56,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
         if (compare != 0)
             return compare;
 
-        return index - documentitem.getIndex();
+        return name.compareTo(documentitem.getName());
     }
     
     /*

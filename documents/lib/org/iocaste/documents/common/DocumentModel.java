@@ -115,8 +115,13 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * Retorna conjunto de itens do documento.
      * @return itens
      */
-    public Set<DocumentModelItem> getItens() {
-        return itens;
+    public DocumentModelItem[] getItens() {
+        DocumentModelItem[] ordered = new DocumentModelItem[itens.size()];
+        
+        for (DocumentModelItem item : itens)
+            ordered[item.getIndex()] = item;
+        
+        return ordered;
     }
     
     /**

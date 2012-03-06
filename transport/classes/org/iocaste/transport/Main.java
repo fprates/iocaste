@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
@@ -229,7 +228,7 @@ public class Main extends AbstractPage {
         StringBuilder sb;
         List<String> lines;
         DocumentModel model;
-        Set<DocumentModelItem> itens;
+        DocumentModelItem[] itens;
         
         if (!documents.hasModel(name))
             return null;
@@ -242,7 +241,7 @@ public class Main extends AbstractPage {
         sb = new StringBuilder(model.getName()).append(";").
                 append(model.getTableName()).append(";").
                 append(model.getClassName()).append(";").
-                append(itens.size());
+                append(itens.length);
         
         lines.add(sb.toString());
         for (DocumentModelItem item : itens) {
