@@ -15,14 +15,6 @@ public class TabbedPane extends AbstractContainer {
         
         itens = new LinkedHashMap<String, TabbedPaneItem>();
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractContainer#add(
-     *     org.iocaste.shell.common.Element)
-     */
-    @Override
-    public final void add(Element element) { }
 
     /**
      * 
