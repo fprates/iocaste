@@ -436,8 +436,9 @@ public class DocumentServices {
      * @throws Exception
      */
     public final QueryInfo parseQuery(String query) throws Exception {
-        String upcasetoken;
-        String[] select, parsed = query.split(" ");
+        String criteria = "", temp, arg1, arg2, upcasetoken, op;
+        char[] charcrit;
+        String[] select, parsed = query.split("\\s");
         int t, pass = 0;
         StringBuilder sb = new StringBuilder("select ");
         QueryInfo queryinfo = new QueryInfo();
@@ -495,8 +496,77 @@ public class DocumentServices {
                 pass = 5;
                 continue;
             case 5:
+                criteria += token; 
                 continue;
             }
+        }
+        
+        charcrit = criteria.toCharArray();
+        temp = "";
+        arg1 = null;
+        arg2 = null;
+        op = null;
+        
+        for (int i = 0; i < charcrit.length; i++) {
+            /*
+             * (arg1) op arg2
+             */
+            if (arg1 == null) {
+                charcrit[i] = Character.toUpperCase(charcrit[i]);
+                
+                if ((charcrit[i] >= 'A' && charcrit[i] <= 'Z') ||
+                        charcrit[i] == '_') {
+                    temp += charcrit[i];
+                    continue;
+                } else {
+                    arg1 = temp;
+                    temp = "";
+                    op = null;
+                }
+            }
+            
+            /*
+             * arg1 (op) arg2
+             */
+            if (op == null) {
+                if ((charcrit[i] >= '1' && charcrit[i] <= '0') ||
+                        charcrit[i] == '?') {
+                    op = temp;
+                    temp = "";
+                    arg2 = null;
+                } else {
+                    temp += charcrit[i];
+                    continue;
+                }
+            }
+            
+            /*
+             * arg1 op (arg2)
+             */
+            if (arg2 == null) {
+                if ((charcrit[i] >= '1' && charcrit[i] <= '0') ||
+                        (charcrit[i] >= 'A' && charcrit[i] <= 'Z') ||
+                        (charcrit[i] == '?')) {
+                    temp += charcrit[i];
+                    
+                    if (charcrit[i] == '?') {
+                        arg2 = temp;
+                        
+                        sb.append(queryinfo.model.getModelItem(arg1).
+                                        getTableFieldName()).append(op).
+                                        append(arg2);
+                    }
+                    
+                    continue;
+                } else {
+                    arg2 = temp;
+                    
+                    sb.append (" ").
+                            append(queryinfo.model.getModelItem(arg1)).
+                            append(op).append(arg2);
+                }
+            }
+            
         }
         
         queryinfo.query = sb.toString();
