@@ -25,8 +25,7 @@ public class DataFormRenderer extends Renderer {
      */
     public static final List<XMLElement> render(DataForm form, Config config) {
         Text text;
-        String inputname;
-        String styleclass;
+        String inputname, styleclass;
         DataItem dataitem;
         TableItem tableitem;
         String tablename = new StringBuffer(form.getName()).append(".table").
@@ -40,13 +39,13 @@ public class DataFormRenderer extends Renderer {
         new TableColumn(table, "field");
         
         for (Element element : form.getElements()) {
-            if (element.isControlComponent())
-                continue;
-            
             if (element.getType() != Const.DATA_ITEM) {
                 renderElement(tags, element, config);
                 continue;
             }
+            
+            if (!element.isVisible())
+                continue;
             
             dataitem = (DataItem)element;
             inputname = dataitem.getName();
