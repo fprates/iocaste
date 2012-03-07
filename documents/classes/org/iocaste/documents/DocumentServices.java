@@ -208,6 +208,10 @@ public class DocumentServices {
         
         for (DocumentModelItem modelitem : model.getItens()) {
             value = line.get(modelitem.getTableFieldName());
+            
+            if (modelitem.getDataElement().getType() == DataType.NUMC)
+                value = ((BigDecimal)value).longValue();
+            
             object.setValue(modelitem, value);
         }
         
