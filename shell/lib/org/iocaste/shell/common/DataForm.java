@@ -149,7 +149,7 @@ public class DataForm extends AbstractContainer {
             name = item.getName();
             
             if (Shell.getDataElement(item).getType() == DataType.NUMC)
-                value = Integer.toString((Integer)object.getValue(name));
+                value = Long.toString((Long)object.getValue(name));
             else
                 value = (String)object.getValue(name);
             
