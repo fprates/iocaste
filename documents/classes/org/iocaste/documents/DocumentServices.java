@@ -68,6 +68,8 @@ public class DocumentServices {
         saveDocumentItens(iocaste, model);
         saveDocumentKeys(iocaste, model);
         saveDataElements(iocaste, model);
+        
+        parseQueries(model);
     }
     
     /**
@@ -416,7 +418,11 @@ public class DocumentServices {
         
         queries.put("delete", delete.toString());
         
-        this.queries.put(model.getName(), queries);
+        fieldname = model.getName();
+        if (queries.containsKey(fieldname))
+            this.queries.remove(fieldname);
+        
+        this.queries.put(fieldname, queries);
     }
     
     /**
@@ -859,5 +865,7 @@ public class DocumentServices {
             removeModelItem(iocaste, olditem);
             removeDBColumn(iocaste, olditem);
         }
+        
+        parseQueries(model);
     }
 }
