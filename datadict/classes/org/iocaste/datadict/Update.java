@@ -25,6 +25,6 @@ public class Update {
         view.setReloadableView(true);
         view.export("mode", Common.UPDATE);
         view.export("model", model);
-        view.redirect(null, "structure");
+        view.redirect(null, "tbstructure");
     }
 }
