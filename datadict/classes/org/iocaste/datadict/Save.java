@@ -10,7 +10,7 @@ import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
-import org.iocaste.sh.common.SHLib;
+//import org.iocaste.sh.common.SHLib;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -111,7 +111,7 @@ public class Save {
     public static final void shitem(ViewData view, Function function)
             throws Exception {
         List<ExtendedObject> oitens;
-        SHLib shlib = new SHLib(function);
+//        SHLib shlib = new SHLib(function);
         DataForm header = (DataForm)view.getElement("header");
         ExtendedObject oitem, object = header.getObject();
         Table itens = (Table)view.getElement("itens");
@@ -123,7 +123,7 @@ public class Save {
             oitens.add(oitem);
         }
         
-        shlib.save(object, oitens.toArray(new ExtendedObject[0]));
+//        shlib.save(object, oitens.toArray(new ExtendedObject[0]));
         
         view.message(Const.STATUS, "search.help.saved.successfully");
     }
