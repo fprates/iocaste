@@ -423,7 +423,7 @@ public class DocumentServices {
         queries.put("delete", delete.toString());
         
         fieldname = model.getName();
-        if (queries.containsKey(fieldname))
+        if (this.queries.containsKey(fieldname))
             this.queries.remove(fieldname);
         
         this.queries.put(fieldname, queries);
@@ -608,12 +608,16 @@ public class DocumentServices {
         for (DocumentModelItem item : model.getItens())
             removeModelItem(iocaste, item);
         
+        name = model.getName();
         query = "delete from docs001 where docid = ?";
-        iocaste.update(query, new Object[] {model.getName()});
+        iocaste.update(query, new Object[] {name});
         
         query = new StringBuilder("drop table ").append(model.getTableName()).
                 toString();
+        
         iocaste.update(query, null);
+        
+        queries.remove(name);
     }
     
     /**
