@@ -30,6 +30,7 @@ public class Services extends AbstractFunction {
         export("select", "select");
         export("modify", "modify");
         export("delete", "delete");
+        export("update", "update");
     }
     
     /**
@@ -201,6 +202,18 @@ public class Services extends AbstractFunction {
         Iocaste iocaste = new Iocaste(this);
         
         return doc.select(iocaste, query, criteria);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void update(Message message) throws Exception {
+        String query = message.getString("query");
+        Object[] criteria = (Object[])message.get("criteria");
+        
+        doc.update(new Iocaste(this), query, criteria);
     }
     
     /**

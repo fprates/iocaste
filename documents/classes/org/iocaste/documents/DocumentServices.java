@@ -436,11 +436,10 @@ public class DocumentServices {
      * @throws Exception
      */
     public final QueryInfo parseQuery(String query) throws Exception {
-        String criteria = "", temp, arg1, arg2, upcasetoken, op;
-        char[] charcrit;
+        String where, criteria = "", upcasetoken;
         String[] select, parsed = query.split("\\s");
         int t, pass = 0;
-        StringBuilder sb = new StringBuilder("select ");
+        StringBuilder sb = new StringBuilder();
         QueryInfo queryinfo = new QueryInfo();
         
         for (String token : parsed) {
@@ -449,13 +448,20 @@ public class DocumentServices {
             switch (pass) {
             case 0:
                 if (upcasetoken.equals("SELECT")) {
+                    sb.append("select ");
                     pass = 1;
                     continue;
                 }
                 
                 if (upcasetoken.equals("FROM")) {
+                    sb.append("select * from ");
                     pass = 3;
-                    sb.append("* from ");
+                    continue;
+                }
+                
+                if (upcasetoken.equals("DELETE")) {
+                    sb.append("delete from ");
+                    pass = 3;
                     continue;
                 }
                 
@@ -501,11 +507,18 @@ public class DocumentServices {
             }
         }
         
-        charcrit = criteria.toCharArray();
-        temp = "";
-        arg1 = null;
-        arg2 = null;
-        op = null;
+        where = parseWhere(criteria, queryinfo.model);
+        sb.append(where);
+        
+        queryinfo.query = sb.toString();
+        
+        return queryinfo;
+    }
+    
+    private final String parseWhere(String criteria, DocumentModel model) {
+        StringBuilder sb = new StringBuilder();
+        char[] charcrit = criteria.toCharArray();
+        String temp = "", arg1 = null, arg2 = null, op = null;
         
         for (int i = 0; i < charcrit.length; i++) {
             /*
@@ -552,7 +565,7 @@ public class DocumentServices {
                     if (charcrit[i] == '?') {
                         arg2 = temp;
                         
-                        sb.append(queryinfo.model.getModelItem(arg1).
+                        sb.append(model.getModelItem(arg1).
                                         getTableFieldName()).append(op).
                                         append(arg2);
                     }
@@ -562,16 +575,13 @@ public class DocumentServices {
                     arg2 = temp;
                     
                     sb.append (" ").
-                            append(queryinfo.model.getModelItem(arg1)).
+                            append(model.getModelItem(arg1)).
                             append(op).append(arg2);
                 }
             }
-            
         }
         
-        queryinfo.query = sb.toString();
-        
-        return queryinfo;
+        return sb.toString();
     }
     
     /**
@@ -821,6 +831,13 @@ public class DocumentServices {
         }
         
         return objects;
+    }
+    
+    public final void update(Iocaste iocaste, String query, Object... criteria)
+            throws Exception {
+        QueryInfo queryinfo = parseQuery(query);
+        
+        iocaste.update(queryinfo.query, criteria);
     }
     
     /**

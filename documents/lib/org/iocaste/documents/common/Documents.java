@@ -236,6 +236,23 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
+     * @param query
+     * @param criteria
+     * @throws Exception
+     */
+    public final void update(String query, Object... criteria)
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("update");
+        message.add("query", query);
+        message.add("criteria", criteria);
+        
+        call(message);
+    }
+    
+    /**
+     * 
      * @param model
      * @throws Exception
      */
