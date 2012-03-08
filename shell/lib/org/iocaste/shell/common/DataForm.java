@@ -95,7 +95,11 @@ public class DataForm extends AbstractContainer {
                 continue;
         	
         	input = (InputComponent)element;
-        	object.setValue(input.getModelItem(), input.getValue());
+        	if (Shell.getDataElement(input).getType() == DataType.NUMC)
+        	    object.setValue(input.getModelItem(), Long.
+        	            parseLong(input.getValue()));
+        	else
+        	    object.setValue(input.getModelItem(), input.getValue());
         }
     	
     	return object;
