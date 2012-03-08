@@ -88,6 +88,7 @@ public class DataForm extends AbstractContainer {
      */
     public final ExtendedObject getObject() {
     	InputComponent input;
+    	String value;
     	ExtendedObject object = new ExtendedObject(getModel());
     	
         for (Element element: getElements()) {
@@ -95,11 +96,13 @@ public class DataForm extends AbstractContainer {
                 continue;
         	
         	input = (InputComponent)element;
+        	value = input.getValue();
+        	
         	if (Shell.getDataElement(input).getType() == DataType.NUMC)
-        	    object.setValue(input.getModelItem(), Long.
-        	            parseLong(input.getValue()));
+        	    object.setValue(input.getModelItem(), (value == null)? 0 :
+        	        Long.parseLong(value));
         	else
-        	    object.setValue(input.getModelItem(), input.getValue());
+        	    object.setValue(input.getModelItem(), value);
         }
     	
     	return object;
