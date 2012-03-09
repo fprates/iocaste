@@ -25,6 +25,7 @@ public class Shell extends AbstractServiceInterface {
     public static final Element createInputItem(Container container,
             AbstractInputComponent inputitem, String name) {
         TextField tfield;
+        CheckBox cbox;
         
         switch (inputitem.getComponentType()) {
         case TEXT_FIELD:
@@ -40,11 +41,28 @@ public class Shell extends AbstractServiceInterface {
             tfield.setSearchHelp(inputitem.getSearchHelp());
             
             return tfield;
-        default:
-            return null;
+        case CHECKBOX:
+            cbox = new CheckBox(container, name);
+            cbox.setStyleClass(inputitem.getStyleClass());
+            cbox.setValue(inputitem.getValue());
+            cbox.setModelItem(inputitem.getModelItem());
+            cbox.setEnabled(inputitem.isEnabled());
+            cbox.setDataElement(inputitem.getDataElement());
+            
+            return cbox;
         }
+        
+        return null;
     }
     
+    /**
+     * 
+     * @param container
+     * @param type
+     * @param name
+     * @param args
+     * @return
+     */
     public static final Element factory(Container container, Const type,
             String name, Object[] args) {
         switch (type) {
