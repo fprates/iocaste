@@ -105,7 +105,8 @@ public class DataForm extends AbstractContainer {
         	    if (input.isBooleanComponent())
         	        object.setValue(modelitem, input.isSelected()? 1 : 0);
         	    else
-        	        object.setValue(modelitem, Long.parseLong(value));
+        	        object.setValue(modelitem, (value == null)?
+        	                0 : Long.parseLong(value));
         	    
         	    break;
         	default:
