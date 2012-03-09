@@ -210,7 +210,7 @@ public class DocumentServices {
             value = line.get(modelitem.getTableFieldName());
             
             if (modelitem.getDataElement().getType() == DataType.NUMC)
-                value = ((BigDecimal)value).longValue();
+                value = (value == null)? 0 : ((BigDecimal)value).longValue();
             
             object.setValue(modelitem, value);
         }
