@@ -7,10 +7,20 @@ public class CheckBox extends AbstractInputComponent {
         super(container, Const.CHECKBOX, null, name);
     }
     
-    /**
-     * 
-     * @return
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#isBooleanComponent()
      */
+    @Override
+    public final boolean isBooleanComponent() {
+        return true;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#isSelected()
+     */
+    @Override
     public final boolean isSelected() {
         String value;
         
@@ -19,5 +29,14 @@ public class CheckBox extends AbstractInputComponent {
         
         value = getValue().toLowerCase();
         return (value.equals("on"))? true : false;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#setSelected(boolean)
+     */
+    @Override
+    public final void setSelected(boolean selected) {
+        setValue((selected)? "on" : "off");
     }
 }

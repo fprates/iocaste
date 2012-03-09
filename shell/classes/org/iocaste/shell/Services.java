@@ -111,9 +111,9 @@ public class Services extends AbstractFunction {
      * @param value
      * @return
      */
-    private final boolean isValueCompatible(InputComponent input,
-            String value) {
+    private final boolean isValueCompatible(InputComponent input) {
         DataElement dataelement;
+        String value = input.getValue();
         
         if (value == null || value.trim().length() == 0)
             return true;
@@ -128,10 +128,10 @@ public class Services extends AbstractFunction {
             return true;
             
         case DataType.NUMC:
-            return input.getValue().matches("[0-9]+");
+            return value.matches("[0-9]+");
             
         case DataType.DEC:
-            return input.getValue().matches("[0-9\\.]+");
+            return value.matches("[0-9\\.]+");
             
         default:
             return false;
@@ -177,7 +177,8 @@ public class Services extends AbstractFunction {
             value = getString(values, name);
             
             input.setValue(value);
-            if (!isValueCompatible(input, value)) {
+            
+            if (!isValueCompatible(input) && !input.isBooleanComponent()) {
                 einput = input;
                 ecode = AbstractPage.EMISMATCH;
                 continue;

@@ -87,6 +87,7 @@ public class DataForm extends AbstractContainer {
      * @return
      */
     public final ExtendedObject getObject() {
+        DocumentModelItem modelitem;
     	InputComponent input;
     	String value;
     	ExtendedObject object = new ExtendedObject(getModel());
@@ -97,12 +98,21 @@ public class DataForm extends AbstractContainer {
         	
         	input = (InputComponent)element;
         	value = input.getValue();
+        	modelitem = input.getModelItem();
         	
-        	if (Shell.getDataElement(input).getType() == DataType.NUMC)
-        	    object.setValue(input.getModelItem(), (value == null)? 0 :
-        	        Long.parseLong(value));
-        	else
-        	    object.setValue(input.getModelItem(), value);
+        	switch (Shell.getDataElement(input).getType()) {
+        	case DataType.NUMC:
+        	    if (input.isBooleanComponent())
+        	        object.setValue(modelitem, input.isSelected()? 1 : 0);
+        	    else
+        	        object.setValue(modelitem, Long.parseLong(value));
+        	    
+        	    break;
+        	default:
+        	    object.setValue(modelitem, value);
+        	    
+        	    break;
+        	}
         }
     	
     	return object;
@@ -149,18 +159,25 @@ public class DataForm extends AbstractContainer {
      */
     public final void setObject(ExtendedObject object) {
         DataItem item;
-        String value, name;
+        String name;
         
         for (Element element : getElements()) {
             item = (DataItem)element;
             name = item.getName();
             
-            if (Shell.getDataElement(item).getType() == DataType.NUMC)
-                value = Long.toString((Long)object.getValue(name));
-            else
-                value = (String)object.getValue(name);
-            
-            item.setValue(value);
+            switch (Shell.getDataElement(item).getType()) {
+            case DataType.NUMC:
+                if (item.isBooleanComponent())
+                    item.setSelected(
+                            ((Long)object.getValue(name) == 0)? false : true);
+                else
+                    item.setValue(Long.toString((Long)object.getValue(name)));
+                break;
+                
+            default:
+                item.setValue((String)object.getValue(name));
+                break;
+            }
         }
     }
 }
