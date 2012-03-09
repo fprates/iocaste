@@ -92,8 +92,17 @@ public abstract class AbstractInputComponent extends AbstractComponent
      * @see org.iocaste.shell.common.DataComponent#getValue()
      */
     @Override
-    public final String getValue() {
+    public String getValue() {
         return value;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#isBooleanComponent()
+     */
+    @Override
+    public boolean isBooleanComponent() {
+        return false;
     }
     
     /*
@@ -129,6 +138,25 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final boolean isSecret() {
         return secret;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#isSelected()
+     */
+    @Override
+    public boolean isSelected() {
+        return false;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setComponentType(
+     *     org.iocaste.shell.common.Const)
+     */
+    @Override
+    public final void setComponentType(Const type) {
+        this.type = type;
     }
     
     /*
@@ -210,11 +238,23 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setSelected(boolean)
+     */
+    @Override
+    public void setSelected(boolean selected) { };
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.DataComponent#setValue(java.lang.String)
      */
     @Override
     public void setValue(String value) {
-        this.value = value;
+        DataElement delement = Shell.getDataElement(this);
+            
+        if (value == null && delement != null)
+            this.value = (delement.getType() == DataType.NUMC)? "0" : "";
+        else
+            this.value = value;
     }
 
 }
