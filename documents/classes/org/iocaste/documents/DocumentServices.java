@@ -134,6 +134,7 @@ public class DocumentServices {
     public final DocumentModel getDocumentModel(String documentname)
             throws Exception {
         Object[] lines;
+        String modelref, itemref;
         String[] composed;
         Map<String, Object> columns;
         DocumentModelKey key;
@@ -170,6 +171,13 @@ public class DocumentServices {
             item.setDataElement(getDataElement(iocaste,
                     (String)columns.get("ENAME")));
             item.setIndex(((BigDecimal)columns.get("INDEX")).intValue());
+            
+            modelref = (String)columns.get("MDREF");
+            itemref = (String)columns.get("ITREF");
+            
+            if (modelref != null && itemref != null)
+                item.setReference(getDocumentModel(modelref).
+                        getModelItem(itemref));
             
             document.add(item);
         }
@@ -307,23 +315,29 @@ public class DocumentServices {
      */
     private final void insertModelItem(Iocaste iocaste, DocumentModelItem item) 
             throws Exception {
+        DocumentModelItem reference;
         DataElement dataelement;
         String tname;
         DocumentModel model = item.getDocumentModel();
         String query = "insert into docs002 (iname, docid, index, " +
-                "fname, ename, attrb) values (?, ?, ?, ?, ?, ?)";
+                "fname, ename, attrb, mdref, itref) values " +
+                "(?, ?, ?, ?, ?, ?, ?, ?)";
         
         dataelement = item.getDataElement();
         
         tname = new StringBuilder(model.getName()).append(".").
                 append(item.getName()).toString();
         
+        reference = item.getReference();
         iocaste.update(query, new Object[] {tname,
                 model.getName(),
                 item.getIndex(),
                 item.getTableFieldName(),
                 dataelement.getName(),
-                item.getAttributeName()});
+                item.getAttributeName(),
+                (reference == null)? null : reference.getDocumentModel().
+                        getName(),
+                (reference == null)? null : reference.getName()});
     }
     
     /**
@@ -724,6 +738,7 @@ public class DocumentServices {
     private final void saveDocumentItens(Iocaste iocaste,
             DocumentModel model) throws Exception {
         DataElement dataelement;
+        DocumentModelItem reference;
         int size;
         StringBuilder sb, sbk = null;
         String tname, query = "insert into docs002 (iname, docid, index, " +
@@ -762,8 +777,19 @@ public class DocumentServices {
                 sbk.append(tname);
             }
             
-            sb.append(dataelement.getLength()).append(
-                    (item.getIndex() == size)? ")" : "),");
+            sb.append(dataelement.getLength()).append(")");
+            
+            reference = item.getReference();
+            if (reference != null) {
+                sb.append(" foreign key references ").
+                        append(model.getTableName()).
+                        append("(").
+                        append(reference.getDocumentModel().getTableName()).
+                        append(reference.getTableFieldName());
+            }
+            
+            if (item.getIndex() == size)
+                sb.append(",");
         }
         
         if (sbk != null)
@@ -786,16 +812,19 @@ public class DocumentServices {
                 "values (?, ?)";
         
         for (DocumentModelKey key : model.getKeys()) {
-            name = new StringBuilder(model.getName()).append(".").
+            name = new StringBuilder(model.getName()).
+                    append(".").
                     append(key.getModelItemName()).toString();
+            
             iocaste.update(query, new Object[] {name,
                     key.getModel().getName()});
         }
         
         dbuser = iocaste.getSystemParameter("db.user");
         query = new StringBuilder("grant select, insert, update, delete on ").
-                append(model.getTableName()).append(" to ").append(dbuser).
-                toString();
+                append(model.getTableName()).
+                append(" to ").
+                append(dbuser).toString();
         
         iocaste.update(query, null);
     }

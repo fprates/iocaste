@@ -36,21 +36,15 @@ create table docs002 (
    index numeric(3),
    fname varchar(12),
    ename varchar(36),
-   attrb varchar(64)
+   attrb varchar(64),
+   mdref varchar(24),
+   itref varchar(48)
 );
 
 /* chaves do documento */
 create table docs004 (
    iname varchar(48) primary key,
    docid varchar(24) foreign key references docs001(docid)
-);
-
-/* chaves estrangeiras */
-create table docs005 (
-   iname varchar(48) primary key,
-   docid varchar(24) foreign key references docs001(docid),
-   fkitm varchar(48) foreign key references docs002(iname),
-   fkdoc varchar(24) foreign key references docs001(docid)
 );
 
 \p document tables has been generated
@@ -60,7 +54,6 @@ grant select, insert, update, delete on docs001 to iocastedb;
 grant select, insert, update, delete on docs002 to iocastedb;
 grant select, insert, update, delete on docs003 to iocastedb;
 grant select, insert, update, delete on docs004 to iocastedb;
-grant select, insert, update, delete on docs005 to iocastedb;
 \p permissions granted.
 
 insert into docs001(docid, tname, class) values('MODEL', 'DOCS001', 'org.iocaste.documents.common.DocumentModel');
@@ -74,11 +67,13 @@ insert into docs004(iname, docid) values('MODEL.NAME', 'MODEL');
 
 insert into docs001(docid, tname, class) values('MODELITEM', 'DOCS002', 'org.iocaste.documents.common.DocumentModelItem');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.NAME', 'MODELITEM', 0, 'INAME', 'MODELITEM.NAME', 'name');
-insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.MODEL', 'MODELITEM', 1, 'DOCID', 'MODEL.NAME', 'documentModel');
+insert into docs002(iname, docid, index, fname, ename, attrb, mdref, itref) values('MODELITEM.MODEL', 'MODELITEM', 1, 'DOCID', 'MODEL.NAME', 'documentModel', 'MODEL', 'NAME');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.INDEX', 'MODELITEM', 2, 'INDEX', 'MODELITEM.INDEX', 'index');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.FIELDNAME', 'MODELITEM', 3, 'FNAME', 'MODELITEM.FIELDNAME', 'tableFieldName');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.ELEMENT', 'MODELITEM', 4, 'ENAME', 'DATAELEMENT.NAME', 'dataElement');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.ATTRIB', 'MODELITEM', 5, 'ATTRB', 'MODELITEM.ATTRIB', 'attributeName');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.MODEL_REF', 'MODELITEM', 6, 'MDREF', 'MODEL.NAME', 'modelReference');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('MODELITEM.ITEM_REF', 'MODELITEM', 7, 'ITREF', 'MODELITEM.NAME', 'itemReference');
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.NAME', 0, 48, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.INDEX', 1, 3, 3, 0);
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.FIELDNAME', 0, 12, 0, 1);
@@ -104,13 +99,6 @@ insert into docs002(iname, docid, index, fname, ename, attrb) values('NUMBER_RAN
 insert into docs003(ename, decim, lngth, etype, upcas) values('NUMBER_RANGE.IDENT', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('NUMBER_RANGE.CURRENT', 0, 12, 3, 0);
 insert into docs004(iname, docid) values('NUMBER_RANGE.IDENT', 'NUMBER_RANGE');
-
-insert into docs001(docid, tname, class) values('FOREIGN_KEY', 'DOCS005', 'org.iocaste.documents.common.ForeignKey');
-insert into docs002(iname, docid, index, fname, ename, attrb) values ('FOREIGN_KEY.NAME', 'FOREIGN_KEY', 0, 'INAME', 'MODELITEM.NAME', 'name');
-insert into docs002(iname, docid, index, fname, ename, attrb) values ('FOREIGN_KEY.MODEL', 'FOREIGN_KEY', 1, 'DOCID', 'MODEL.NAME', 'documentModel');
-insert into docs002(iname, docid, index, fname, ename, attrb) values ('FOREIGN_KEY.NAMEREF', 'FOREIGN_KEY', 2, 'FKITM', 'MODELITEM.NAME', 'fkItem');
-insert into docs002(iname, docid, index, fname, ename, attrb) values ('FOREIGN_KEY.MODELREF', 'FOREIGN_KEY', 3, 'FKDOC', 'MODEL.NAME', 'fkModel');
-insert into docs004(iname, docid) values ('FOREIGN_KEY.NAME', 'FOREIGN_KEY');
 
 commit work;
 

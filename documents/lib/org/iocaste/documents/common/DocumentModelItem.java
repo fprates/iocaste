@@ -39,6 +39,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     private String settername;
     private String fieldname;
     private int index;
+    private DocumentModelItem reference;
     
     /*
      * (non-Javadoc)
@@ -131,6 +132,14 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
+     * 
+     * @return
+     */
+    public final DocumentModelItem getReference() {
+        return reference;
+    }
+    
+    /**
      * Retorna o nome do método setter.
      * @return nome do setter
      */
@@ -205,6 +214,14 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      */
     public void setName(String name) {
         this.name = name;
+    }
+    
+    /**
+     * 
+     * @param reference
+     */
+    public final void setReference(DocumentModelItem reference) {
+        this.reference = reference;
     }
     
     /**
