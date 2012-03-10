@@ -777,19 +777,18 @@ public class DocumentServices {
                 sbk.append(tname);
             }
             
-            sb.append(dataelement.getLength()).append(")");
+            sb.append(dataelement.getLength());
             
             reference = item.getReference();
             if (reference != null) {
-                sb.append(" foreign key references ").
+                sb.append(") foreign key references ").
                         append(model.getTableName()).
                         append("(").
                         append(reference.getDocumentModel().getTableName()).
                         append(reference.getTableFieldName());
             }
             
-            if (item.getIndex() == size)
-                sb.append(",");
+            sb.append((item.getIndex() == size)? ")" : "),");
         }
         
         if (sbk != null)
