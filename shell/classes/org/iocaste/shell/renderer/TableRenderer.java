@@ -27,13 +27,14 @@ public class TableRenderer extends Renderer {
             trtag = new XMLElement("tr");
             
             for (TableColumn column: table.getColumns()) {
-                if (!column.isVisible())
-                    continue;
-                
                 if (column.isMark() && !table.hasMark())
                     continue;
                 
                 thtag = new XMLElement("th");
+                
+                if (!column.isVisible())
+                    thtag.add("class", "invisible");
+                
                 name = column.getName();
                 if (name != null)
                     thtag.addInner(name);

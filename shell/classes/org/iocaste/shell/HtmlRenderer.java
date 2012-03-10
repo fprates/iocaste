@@ -104,6 +104,10 @@ public class HtmlRenderer {
 //            for (StyleElementProperty property : element.getProperties())
 //                properties.put(property.getName(), property.getValue());
 //        }
+        Map<String, String> element = new HashMap<String, String>();
+        
+        element.put("visibility", "hidden");
+        elements.put(".invisible", element);
         
         return elements;
     }
