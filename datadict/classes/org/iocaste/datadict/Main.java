@@ -70,7 +70,8 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void fkupdate(ViewData view) throws Exception {
-        ForeignKey.updateReference(view, this);
+        if (ForeignKey.updateReference(view, this))
+            back(view);
     }
     
     /**

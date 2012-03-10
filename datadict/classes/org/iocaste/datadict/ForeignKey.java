@@ -1,5 +1,7 @@
 package org.iocaste.datadict;
 
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
@@ -31,24 +33,32 @@ public class ForeignKey {
         Container container = new Form(null, "main");
         DataForm form = new DataForm(container, "fkform");
         byte mode = Common.getMode(view);
+        DocumentModel modelitem = new Documents(function).getModel("MODELITEM");
+        
+        dataitem = new DataItem(form, Const.TEXT_FIELD, "model.name");
+        dataitem.setValue(modelname);
+        dataitem.setModelItem(modelitem.getModelItem("MODEL"));
+        dataitem.setEnabled(false);
         
         dataitem = new DataItem(form, Const.TEXT_FIELD, "item.name");
         dataitem.setValue(itemname);
+        dataitem.setModelItem(modelitem.getModelItem("NAME"));
         dataitem.setEnabled(false);
-            
-        dataitem = new DataItem(form, Const.TEXT_FIELD, "model.name");
-        dataitem.setValue(modelname);
-        dataitem.setEnabled(false);
-        
-        dataitem = new DataItem(form, Const.TEXT_FIELD, "reference.item");
-        dataitem.setValue(itemref);
-        dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         dataitem = new DataItem(form, Const.TEXT_FIELD, "reference.model");
         dataitem.setValue(modelref);
+        dataitem.setModelItem(modelitem.getModelItem("MODEL"));
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
-        new Button(container, "fkupdate");
+        dataitem = new DataItem(form, Const.TEXT_FIELD, "reference.item");
+        dataitem.setValue(itemref);
+        dataitem.setModelItem(modelitem.getModelItem("NAME"));
+        dataitem.setEnabled((mode == Common.SHOW)? false : true);
+        
+        if (mode != Common.SHOW) {
+            new Button(container, "fkupdate");
+            view.setFocus("reference.model");
+        }
         
         view.addContainer(container);
         view.setNavbarActionEnabled("back", true);
@@ -103,17 +113,24 @@ public class ForeignKey {
      * @param function
      * @throws Exception
      */
-    public static final void updateReference(ViewData view, Function function)
-            throws Exception {
+    public static final boolean updateReference(ViewData view,
+            Function function) throws Exception {
         InputComponent input;
         DataForm form = (DataForm)view.getElement("fkform");
         String itemname = ((DataItem)form.get("item.name")).getValue();
         String itemref = ((DataItem)form.get("reference.item")).getValue();
         String modelref = ((DataItem)form.get("reference.model")).getValue();
         Shell shell = new Shell(function);
-        ViewData structview = shell.getView(null, "tbstructure");
+        ViewData structview = shell.getView(view, "tbstructure");
         Table itens = (Table)structview.getElement("itens");
+        DocumentModel model = new Documents(function).
+                getModel(modelref);
         
+        if (!model.isKey(model.getModelItem(itemref))) {
+            view.message(Const.ERROR, "reference.isnot.key");
+            return false;
+        }
+            
         for (TableItem item : itens.getItens()) {
             input = (InputComponent)item.get("item.name");
             
@@ -127,5 +144,8 @@ public class ForeignKey {
         }
         
         shell.updateView(structview);
+        view.message(Const.STATUS, "reference.updated");
+        
+        return true;
     }
 }
