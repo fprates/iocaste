@@ -197,29 +197,4 @@ public class TableStructure {
             for (DocumentModelItem modelitem : model.getItens())
                 Common.insertItem(itens, mode, modelitem, references);
     }
-
-    /**
-     * 
-     * @param view
-     * @param function
-     * @throws Exception
-     */
-    public static final void update(ViewData view, Function function)
-            throws Exception {
-        DocumentModel model;
-        String modelname = ((DataItem)view.getElement("modelname")).getValue();
-        Documents documents = new Documents(function);
-        
-        if (!documents.hasModel(modelname)) {
-            view.message(Const.ERROR, "model.not.found");
-            return;
-        }
-        
-        model = documents.getModel(modelname);
-        
-        view.setReloadableView(true);
-        view.export("mode", Common.UPDATE);
-        view.export("model", model);
-        view.redirect(null, "tbstructure");
-    }
 }

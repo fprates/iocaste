@@ -32,7 +32,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void create(ViewData view) throws Exception {
-        Create.main(view, this);
+        Selection.create(view, this);
     }
     
     /**
@@ -171,7 +171,7 @@ public class Main extends AbstractPage {
      * @throws Exception 
      */
     public final void show(ViewData vdata) throws Exception {
-        Show.main(vdata, this);
+        Selection.show(vdata, this);
     }
     
     /**
@@ -197,6 +197,6 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void update(ViewData vdata) throws Exception {
-        TableStructure.update(vdata, this);
+        Selection.update(vdata, this);
     }
 }
