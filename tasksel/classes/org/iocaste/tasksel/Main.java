@@ -81,7 +81,7 @@ public class Main extends AbstractPage {
                 if (values.length < 2)
                     break;
                 
-                vdata.addParameter(values[0], values[1]);
+                vdata.export(values[0], values[1]);
                 break;
             }
         }
