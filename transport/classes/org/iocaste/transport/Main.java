@@ -31,7 +31,7 @@ import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
-    private static final String IDTAG = "IOCASTE000001";
+    private static final String IDTAG = "IOCASTE000002";
     private static final int FILE_IS_EMPTY = 1;
     private static final int INVALID_FILE = 2;
     private static final int INVALID_HEADER = 3;
@@ -135,6 +135,10 @@ public class Main extends AbstractPage {
                     model.addKey(key);
                 }
                 
+                if (!parsed[9].equals(""))
+                    modelitem.setReference(documents.getModel(parsed[9]).
+                            getModelItem(parsed[10]));
+                
                 model.add(modelitem);
                 
                 currentline++;
@@ -228,6 +232,7 @@ public class Main extends AbstractPage {
         StringBuilder sb;
         List<String> lines;
         DocumentModel model;
+        DocumentModelItem reference;
         DocumentModelItem[] itens;
         
         if (!documents.hasModel(name))
@@ -246,6 +251,7 @@ public class Main extends AbstractPage {
         lines.add(sb.toString());
         for (DocumentModelItem item : itens) {
             dataelement = item.getDataElement();
+            reference = item.getReference();
             
             sb = new StringBuilder(item.getName()).append(";").
                     append(item.getTableFieldName()).append(";").
@@ -255,7 +261,13 @@ public class Main extends AbstractPage {
                     append(dataelement.getLength()).append(";").
                     append(dataelement.getDecimals()).append(";").
                     append(dataelement.isUpcase()).append(";").
-                    append(model.isKey(item));
+                    append(model.isKey(item)).append(";");
+            
+            if (reference != null)
+                sb.append(reference.getDocumentModel().getName()).append(";").
+                        append(reference.getName());
+            else
+                sb.append(";");
             
             lines.add(sb.toString());
         }
