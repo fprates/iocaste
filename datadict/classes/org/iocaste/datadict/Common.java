@@ -42,7 +42,10 @@ public class Common {
         KEY("item.key", null), 
         TYPE("item.type", null),
         LENGTH("item.length", "DATAELEMENT.LENGTH"),
-        UPCASE("item.upcase", null);
+        UPCASE("item.upcase", null),
+        ITEM_REFERENCE("item.reference", "MODEL.NAME"),
+        MODEL_REFERENCE("model.reference", "MODELITEM.NAME");
+        
         
         private String name, de;
         
@@ -169,9 +172,14 @@ public class Common {
             Map<ItensNames, DataElement> references) {
         ListBox list;
         DocumentModel model;
-        DataElement dataelement = (modelitem == null)?
-                null : modelitem.getDataElement();
+        DataElement dataelement = null;
+        DocumentModelItem itemref = null;
         FieldHelper helper = new FieldHelper();
+        
+        if (modelitem != null) {
+            dataelement = modelitem.getDataElement();
+            itemref = modelitem.getReference();
+        }
         
         helper.item = new TableItem(itens);
         helper.mode = mode;
@@ -288,6 +296,27 @@ public class Common {
                 } else {
                     helper.value = (mode == Common.SHOW)? "no" : "off";
                 }
+                
+                newField(helper);
+                
+                continue;
+            }
+            
+            if (helper.name.equals("item.reference")) {
+                helper.type = Const.TEXT_FIELD;
+                helper.value = (itemref == null)? null : itemref.getName();
+                helper.obligatory = Common.NON_OBLIGATORY;
+                
+                newField(helper);
+                
+                continue;
+            }
+            
+            if (helper.name.equals("model.reference")) {
+                helper.type = Const.TEXT_FIELD;
+                helper.value = (itemref == null)? null : itemref.
+                      getDocumentModel().getName();
+                helper.obligatory = Common.NON_OBLIGATORY;
                 
                 newField(helper);
                 

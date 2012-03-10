@@ -44,12 +44,12 @@ public class TableStructure {
     public static final void main(ViewData view, Function function)
             throws Exception {
         Table itens;
-        String title, modelname;
+        String name, title, modelname;
         TableColumn column;
         DocumentModel usermodel = (DocumentModel)view.getParameter("model");
         byte mode = Common.getMode(view);
         Container main = new Form(null, "datadict.structure");
-        DataForm structure = new DataForm(main, "structure.form");
+        DataForm structure = new DataForm(main, "header");
         Map<Common.ItensNames, DataElement> references =
                 Common.getFieldReferences(function);
         
@@ -68,6 +68,13 @@ public class TableStructure {
         for (Common.ItensNames itemname : Common.ItensNames.values()) {
             column = new TableColumn(itens, itemname.getName());
             column.setDataElement(references.get(itemname));
+            
+            name = itemname.getName();
+            if (!name.equals("item.reference") &&
+                    !name.equals("model.reference"))
+                continue;
+            
+            column.setVisible(false);
         }
         
         itens.setMark(true);
@@ -189,5 +196,30 @@ public class TableStructure {
         else
             for (DocumentModelItem modelitem : model.getItens())
                 Common.insertItem(itens, mode, modelitem, references);
+    }
+
+    /**
+     * 
+     * @param view
+     * @param function
+     * @throws Exception
+     */
+    public static final void update(ViewData view, Function function)
+            throws Exception {
+        DocumentModel model;
+        String modelname = ((DataItem)view.getElement("modelname")).getValue();
+        Documents documents = new Documents(function);
+        
+        if (!documents.hasModel(modelname)) {
+            view.message(Const.ERROR, "model.not.found");
+            return;
+        }
+        
+        model = documents.getModel(modelname);
+        
+        view.setReloadableView(true);
+        view.export("mode", Common.UPDATE);
+        view.export("model", model);
+        view.redirect(null, "tbstructure");
     }
 }

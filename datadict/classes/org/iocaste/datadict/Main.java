@@ -70,7 +70,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void fkupdate(ViewData view) throws Exception {
-        FKUpdate.main(view, this);
+        ForeignKey.updateReference(view, this);
     }
     
     /**
@@ -79,7 +79,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void fkstructure(ViewData view) throws Exception {
-        FKStructure.main(view, this);
+        ForeignKey.main(view, this);
     }
     
     /**
@@ -87,7 +87,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void foreignkey(ViewData view) {
-        ForeignKey.main(view);
+        ForeignKey.update(view);
     }
     
     /**
@@ -197,6 +197,6 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void update(ViewData vdata) throws Exception {
-        Update.main(vdata, this);
+        TableStructure.update(vdata, this);
     }
 }

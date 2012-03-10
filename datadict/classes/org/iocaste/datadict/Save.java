@@ -34,7 +34,7 @@ public class Save {
         String itemname;
         CheckBox upcase, key;
         Documents documents = new Documents(function);
-        DataForm structure = (DataForm)view.getElement("structure.form");
+        DataForm structure = (DataForm)view.getElement("header");
         Table itens = (Table)view.getElement("itens");
         DocumentModel model = new DocumentModel();
         byte modo = Common.getMode(view);
