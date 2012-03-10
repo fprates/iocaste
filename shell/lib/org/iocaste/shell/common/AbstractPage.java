@@ -11,7 +11,6 @@ import org.iocaste.protocol.Service;
 public abstract class AbstractPage extends AbstractFunction {
     public static final int EINITIAL = 1;
     public static final int EMISMATCH = 2;
-    private String appname;
     private Shell shell;
     
     public AbstractPage() {
@@ -22,13 +21,13 @@ public abstract class AbstractPage extends AbstractFunction {
     /**
      * 
      * @param controldata
-     * @param viewdata
+     * @param view
      * @throws Exception 
      */
-    public void back(ViewData viewdata) throws Exception {
-        String[] entry = shell.popPage();
-        viewdata.redirect(entry[0], entry[1]);
-        viewdata.dontPushPage();
+    public void back(ViewData view) throws Exception {
+        String[] entry = shell.popPage(view);
+        view.redirect(entry[0], entry[1]);
+        view.dontPushPage();
     }
     
     /**
@@ -83,11 +82,8 @@ public abstract class AbstractPage extends AbstractFunction {
             view = status.view;
         }
         
-        appname = view.getAppName();
-        if (shell == null) {
+        if (shell == null)
             shell = new Shell(this);
-            shell.setView(view);
-        }
         
         if (status.input != null) {
             view.setFocus(((Component)status.input).getHtmlName());
@@ -120,7 +116,7 @@ public abstract class AbstractPage extends AbstractFunction {
         
         if (view.hasPageCall() && (control == null ||
                 !control.isCancellable() || control.allowStacking()))
-            shell.pushPage(view.getAppName(), view.getPageName());
+            shell.pushPage(view);
         
         updateView(view);
         
@@ -133,8 +129,9 @@ public abstract class AbstractPage extends AbstractFunction {
      * @return
      * @throws Exception 
      */
-    protected final ViewData getView(String name) throws Exception {
-        return shell.getView(appname, name);
+    protected final ViewData getView(ViewData view, String name)
+            throws Exception {
+        return shell.getView(view, name);
     }
     
     /**

@@ -11,7 +11,6 @@ import org.iocaste.protocol.Message;
 
 public class Shell extends AbstractServiceInterface {
     public static final String SERVER_NAME = "/iocaste-shell/services.html";
-    public ViewData view;
     
     public Shell(Function function) {
         initService(function, SERVER_NAME);
@@ -126,12 +125,12 @@ public class Shell extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final ViewData getView(String appname, String pagename)
+    public final ViewData getView(ViewData view, String pagename)
             throws Exception {
         Message message = new Message();
         
         message.setId("get_view");
-        message.add("app_name", appname);
+        message.add("app_name", view.getAppName());
         message.add("page_name", pagename);
         message.add("logid", view.getLogid());
         
@@ -173,10 +172,11 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * 
+     * @param view
      * @return
      * @throws Exception
      */
-    public final String[] popPage() throws Exception {
+    public final String[] popPage(ViewData view) throws Exception {
         Message message = new Message();
         
         message.setId("pop_page");
@@ -187,28 +187,18 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * 
-     * @param appname
-     * @param pagename
+     * @param view
      * @throws Exception
      */
-    public final void pushPage(String appname, String pagename)
-            throws Exception {
+    public final void pushPage(ViewData view) throws Exception {
         Message message = new Message();
         
         message.setId("push_page");
-        message.add("app_name", appname);
-        message.add("page_name", pagename);
+        message.add("app_name", view.getAppName());
+        message.add("page_name", view.getPageName());
         message.add("logid", view.getLogid());
         
         call(message);
-    }
-    
-    /**
-     * 
-     * @param view
-     */
-    public final void setView(ViewData view) {
-        this.view = view;
     }
     
     /**
