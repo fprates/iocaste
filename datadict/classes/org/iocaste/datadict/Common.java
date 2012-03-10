@@ -335,7 +335,7 @@ public class Common {
         InputComponent input;
         Table table = helper.item.getTable();
         
-        if (helper.mode == Common.SHOW) {
+        if (helper.mode == Common.SHOW && helper.type != Const.TEXT_FIELD) {
             element = Shell.factory(table, Const.TEXT, helper.name, null);
             ((Text)element).setText(helper.value);
         } else {
@@ -345,6 +345,7 @@ public class Common {
             input.setValue(helper.value);
             input.setDataElement(helper.reference);
             input.setObligatory(helper.obligatory);
+            element.setEnabled((helper.mode == Common.SHOW)? false : true);
         }
         
         helper.item.add(element);

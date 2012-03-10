@@ -91,7 +91,7 @@ public class TableStructure {
             break;
         
         case Common.SHOW:
-            itens.setMark(false);
+            itens.setMark(true);
             title = "datadict-view";
             new Button(main, "generateclass");
             

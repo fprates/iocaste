@@ -30,6 +30,7 @@ public class ForeignKey {
         String modelref = (String)view.getParameter("model.reference");
         Container container = new Form(null, "main");
         DataForm form = new DataForm(container, "fkform");
+        byte mode = Common.getMode(view);
         
         dataitem = new DataItem(form, Const.TEXT_FIELD, "item.name");
         dataitem.setValue(itemname);
@@ -41,9 +42,11 @@ public class ForeignKey {
         
         dataitem = new DataItem(form, Const.TEXT_FIELD, "reference.item");
         dataitem.setValue(itemref);
+        dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         dataitem = new DataItem(form, Const.TEXT_FIELD, "reference.model");
         dataitem.setValue(modelref);
+        dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         new Button(container, "fkupdate");
         
@@ -62,6 +65,7 @@ public class ForeignKey {
                 form.get("modelname").getValue();
         TableItem selected = null;
         Table itens = (Table)view.getElement("itens");
+        byte mode = Common.getMode(view);
         
         for (TableItem item : itens.getItens()) {
             if (selected != null) {
@@ -85,6 +89,7 @@ public class ForeignKey {
         itemref = ((InputComponent)selected.get("item.reference")).getValue();
         
         view.setReloadableView(true);
+        view.export("mode", mode);
         view.export("model.name", modelname);
         view.export("item.name", itemname);
         view.export("model.reference", modelref);
