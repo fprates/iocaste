@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExternalElement extends ExternalMessage {
+    private static final long serialVersionUID = 8309839020191452354L;
     private List<ExternalElement> elements;
     
     public ExternalElement(ExternalElement container, String type, String name)

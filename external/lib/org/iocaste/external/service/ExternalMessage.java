@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExternalMessage implements ExternalMessageProtocol {
+    private static final long serialVersionUID = -6235483400025590121L;
     private Map<String, ExternalProperty> values;
     
     public ExternalMessage() {

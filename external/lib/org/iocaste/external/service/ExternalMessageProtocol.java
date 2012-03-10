@@ -1,6 +1,8 @@
 package org.iocaste.external.service;
 
-public interface ExternalMessageProtocol {
+import java.io.Serializable;
+
+public interface ExternalMessageProtocol extends Serializable {
 
     public abstract ExternalPropertyProtocol[] getProperties();
 
