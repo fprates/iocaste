@@ -64,7 +64,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void insertitem(ViewData vdata) throws Exception {
-        ViewData selectview = getView("select");
+        ViewData selectview = getView(vdata, "select");
         
         Request.insertcommon(vdata, selectview, this);
         updateView(selectview);
@@ -78,7 +78,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void insertnext(ViewData vdata) throws Exception {
-        ViewData selectview = getView("select");
+        ViewData selectview = getView(vdata, "select");
         
         Request.insertnext(vdata, selectview, this);
         updateView(selectview);
