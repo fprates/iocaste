@@ -28,10 +28,10 @@ public class Save {
      */
     public static final void main(ViewData view, Function function)
             throws Exception {
-        DocumentModelItem modelitem;
+        DocumentModelItem modelitem, reference;
         DocumentModelKey modelkey;
         DataElement dataelement;
-        String itemname;
+        String modelref, itemref, itemname;
         CheckBox upcase, key;
         Documents documents = new Documents(function);
         DataForm structure = (DataForm)view.getElement("header");
@@ -69,6 +69,13 @@ public class Save {
                     modo, item, "item.classfield"));
             modelitem.setDataElement(dataelement);
             modelitem.setDocumentModel(model);
+            
+            modelref = Common.getTableValue(modo, item, "model.reference");
+            if (modelref != null && !modelref.equals("")) {
+                itemref = Common.getTableValue(modo, item, "item.reference");
+                reference = documents.getModel(modelref).getModelItem(itemref);
+                modelitem.setReference(reference);
+            }
             
             model.add(modelitem);
             
