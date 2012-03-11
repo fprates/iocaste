@@ -2,31 +2,16 @@ TO-DO
 
 Sem prioridade definida:
 
-- Suporte à CSS em componentes:
--- implementação de estruturas; [ok]
--- gravação em tabela; [ok]
--- armazenamento em buffer para evitar leituras em disco;
--- associação de folha a usuarios;
+- implementação de usuários, grupos e autorizações;
 
-- Barra de navegação:
--- implementação de barra de navegação; [ok]
--- implementação de procedimentos padrão de navegação entre telas;
+- criptografia;
 
-- Implementação de usuários, grupos e autorizações;
+- transportar dados da sessão para core;
 
-- Upload de arquivos;
--- componente de tela e recepção do arquivo; [ok]
+- substituir Object[] em parâmetros de Iocaste/Documents por Object...;
 
-- Suporte à scripts;
+- implementar rollback automático em caso de exceção;
 
-- Implementação de pacotes de instalação e atualização;
+- validação de valores de campos em tela segundo referência associada;
 
-- Criptografia;
-
-- Melhoria no tracking de aplicação e telas;
--- transportar dados da sessão para core;
-
-- Visão para atualização de tabelas;
-
-- Gerenciamento de memória:
--- invalida sessão ao fim do processamento de ServerServlet; [ok]
+- reimplementação de external.
