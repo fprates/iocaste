@@ -34,6 +34,7 @@ import org.iocaste.protocol.Message;
 public class Documents extends AbstractServiceInterface {
     private static final String SERVERNAME =
             "/iocaste-documents/services.html";
+    public static final int TABLE_ALREADY_ASSIGNED = 1;
     Function function;
     
     public Documents(Function function) {
@@ -263,5 +264,20 @@ public class Documents extends AbstractServiceInterface {
         message.add("model", model);
         
         call(message);
+    }
+    
+    /**
+     * 
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    public final int validate(DocumentModel model) throws Exception {
+        Message message = new Message();
+        
+        message.setId("validate_model");
+        message.add("model", model);
+        
+        return (Integer)call(message);
     }
 }

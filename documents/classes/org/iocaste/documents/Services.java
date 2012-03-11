@@ -1,6 +1,6 @@
 package org.iocaste.documents;
 
-import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -12,10 +12,10 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 public class Services extends AbstractFunction {
-    private DocumentServices doc;
+    private Map<String, Map<String, String>> queries;
     
     public Services() {
-        doc = new DocumentServices(this);
+        queries = new HashMap<String, Map<String, String>>();
         
         export("get_data_element", "getDataElement");
         export("get_next_number", "getNextNumber");
@@ -31,6 +31,7 @@ public class Services extends AbstractFunction {
         export("modify", "modify");
         export("delete", "delete");
         export("update", "update");
+        export("validate_model", "validateModel");
     }
     
     /**
@@ -41,7 +42,7 @@ public class Services extends AbstractFunction {
     public final void createModel(Message message) throws Exception {
         DocumentModel model = (DocumentModel)message.get("model");
         
-        doc.createModel(model);
+        Model.create(model, this, queries);
     }
     
     /**
@@ -53,7 +54,7 @@ public class Services extends AbstractFunction {
         ExtendedObject object = (ExtendedObject)message.get("object");
         Iocaste iocaste = new Iocaste(this);
         
-        doc.delete(iocaste, object);
+        Query.delete(iocaste, object);
     }
     
     /**
@@ -65,7 +66,7 @@ public class Services extends AbstractFunction {
     public final DataElement getDataElement(Message message) throws Exception {
         String name = message.getString("name");
         
-        return doc.getDataElement(new Iocaste(this), name);
+        return DataElementServices.get(new Iocaste(this), name);
     }
     
     /**
@@ -78,7 +79,7 @@ public class Services extends AbstractFunction {
             throws Exception {
         String documentname = message.getString("name");
         
-        return doc.getDocumentModel(documentname);
+        return Model.get(documentname, this, queries);
     }
     
     /**
@@ -90,12 +91,12 @@ public class Services extends AbstractFunction {
     public final ExtendedObject getObject(Message message) throws Exception {
         String modelname = message.getString("modelname");
         Object key = message.get("key");
-        DocumentModel model = doc.getDocumentModel(modelname);
+        DocumentModel model = Model.get(modelname, this, queries);
         
         if (model == null)
             throw new Exception("invalid model.");
         
-        return doc.getObject(model, key);
+        return Query.get(model, key, this);
     }
     
     /**
@@ -104,30 +105,10 @@ public class Services extends AbstractFunction {
      * @return próximo número
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
     public final long getNextNumber(Message message) throws Exception {
-        long current;
-        Object[] lines;
-        Map<String, Object> columns;
         String ident = message.getString("range");
-        Iocaste iocaste = new Iocaste(this);
         
-        if (ident == null)
-            throw new Exception("Numeric range not specified.");
-
-        lines = iocaste.select("select crrnt from range001 where ident = ?",
-                new Object[] {ident});
-        
-        if (lines.length == 0)
-            throw new Exception("Range \""+ident+"\" not found.");
-        
-        columns = (Map<String, Object>)lines[0];
-        current = ((BigDecimal)columns.get("CRRNT")).longValue() + 1;
-        iocaste.update("update range001 set crrnt = ? where ident = ?",
-                new Object[] {current, ident});
-        iocaste.commit();
-        
-        return current;
+        return NumberRange.getCurrent(ident, this);
     }
     
     /**
@@ -139,7 +120,7 @@ public class Services extends AbstractFunction {
     public final boolean hasModel(Message message) throws Exception {
         String modelname = message.getString("model_name");
 
-        return doc.hasModel(modelname);
+        return Model.has(modelname, this);
     }
     
     /**
@@ -148,10 +129,9 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void modify(Message message) throws Exception {
-        Iocaste iocaste = new Iocaste(this);
         ExtendedObject object = (ExtendedObject)message.get("object");
         
-        doc.modify(iocaste, object);
+        Query.modify(object, this);
     }
     
     /**
@@ -161,9 +141,9 @@ public class Services extends AbstractFunction {
      */
     public final void removeModel(Message message) throws Exception {
         String modelname = message.getString("model_name");
-        DocumentModel model = doc.getDocumentModel(modelname);
+        DocumentModel model = Model.get(modelname, this, queries);
         
-        doc.removeModel(model);
+        Model.remove(model, this, queries);
     }
     
     /**
@@ -175,7 +155,7 @@ public class Services extends AbstractFunction {
         String oldname = message.getString("oldname");
         String newname = message.getString("newname");
         
-        doc.renameModel(oldname, newname);
+        Model.rename(oldname, newname, this, queries);
     }
     
     /**
@@ -185,10 +165,9 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final int save(Message message) throws Exception {
-        Iocaste iocaste = new Iocaste(this);
         ExtendedObject object = (ExtendedObject)message.get("object");
         
-        return doc.save(iocaste, object);
+        return Query.save(object, this);
     }
     
     /**
@@ -199,9 +178,8 @@ public class Services extends AbstractFunction {
     public final ExtendedObject[] select(Message message) throws Exception {
         String query = message.getString("query");
         Object[] criteria = (Object[])message.get("criteria");
-        Iocaste iocaste = new Iocaste(this);
         
-        return doc.select(iocaste, query, criteria);
+        return Query.select(query, criteria, this, queries);
     }
     
     /**
@@ -213,7 +191,7 @@ public class Services extends AbstractFunction {
         String query = message.getString("query");
         Object[] criteria = (Object[])message.get("criteria");
         
-        doc.update(new Iocaste(this), query, criteria);
+        Query.update(query, this, queries, criteria);
     }
     
     /**
@@ -222,9 +200,19 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void updateModel(Message message) throws Exception {
-        Iocaste iocaste = new Iocaste(this);
         DocumentModel model = (DocumentModel)message.get("model");
         
-        doc.updateModel(iocaste, model);
+        Model.update(model, this, queries);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final int validateModel(Message message) throws Exception {
+        DocumentModel model = (DocumentModel)message.get("model");
+        
+        return Model.validate(model, this, queries);
     }
 }
