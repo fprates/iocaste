@@ -33,6 +33,7 @@ public class DocumentServices {
      */
     private final void addDBColumn(Iocaste iocaste, DocumentModelItem item) 
             throws Exception {
+        DocumentModelItem reference;
         String query, modelname = item.getDocumentModel().getTableName();
         StringBuilder sb = new StringBuilder("alter table ").append(modelname);
         DataElement ddelement = item.getDataElement();
@@ -48,9 +49,16 @@ public class DocumentServices {
             break;
         }
         
-        sb.append(Integer.toString(ddelement.getLength())).append(")");
+        sb.append(Integer.toString(ddelement.getLength()));
         
-        query = sb.toString();
+        reference = item.getReference();
+        if (reference != null) {
+            sb.append(") foreign key references ").append(reference.
+                    getDocumentModel().getTableName()).append("(").
+                    append(reference.getTableFieldName());
+        }
+        
+        query = sb.append(")").toString();
         
         iocaste.update(query, null);
     }
@@ -881,7 +889,8 @@ public class DocumentServices {
         DataElement ddelement;
         Object[] criteria;
         DocumentModel model = item.getDocumentModel();
-        DocumentModelItem olditem = oldmodel.getModelItem(item.getName());
+        DocumentModelItem reference, olditem = oldmodel.
+                getModelItem(item.getName());
         
         String tablename = model.getTableName(),
                 oldfieldname = olditem.getTableFieldName(),
@@ -929,6 +938,32 @@ public class DocumentServices {
         
         iocaste.update(query, null);
         
+        reference = item.getReference();
+        if (reference != null) {
+            if (olditem.getReference() == null) {
+                query = new StringBuilder("alter table ").
+                        append(tablename).
+                        append(" add foreign key (").
+                        append(item.getTableFieldName()).
+                        append(") references ").
+                        append(reference.getDocumentModel().getTableName()).
+                        append("(").
+                        append(reference.getTableFieldName()).
+                        append(")").toString();
+                
+                iocaste.update(query, null);
+            }
+        } else {
+            if (olditem.getReference() != null) {
+                query = new StringBuilder("alter table").
+                        append(tablename).
+                        append(" drop constraint ").
+                        append(item.getTableFieldName()).toString();
+                
+                iocaste.update(query, null);
+            }
+        }
+        
         /*
          * atualização do modelo
          */
@@ -946,17 +981,21 @@ public class DocumentServices {
         iocaste.update(query, criteria);
         
         query = "update docs002 set docid = ?, index = ?, fname = ?, " +
-                "ename = ?, attrb = ? where iname = ?";
+                "ename = ?, attrb = ?, mdref = ?, itref = ? where iname = ?";
         
-        criteria = new Object[6];
+        criteria = new Object[8];
         
         criteria[0] = model.getName();
         criteria[1] = item.getIndex();
         criteria[2] = item.getTableFieldName();
         criteria[3] = ddelement.getName();
         criteria[4] = item.getAttributeName();
-        criteria[5] = new StringBuilder(model.getName()).
-                append(".").append(item.getName()).toString();
+        criteria[5] = (reference == null)? null : reference.getDocumentModel().
+                getName();
+        criteria[6] = (reference == null)? null : reference.getName();
+        criteria[7] = new StringBuilder(model.getName()).
+                append(".").
+                append(item.getName()).toString();
         
         iocaste.update(query, criteria);
     }
