@@ -153,8 +153,8 @@ public class TableStructure {
             }
             
             if (name.equals("modeltable")) {
-                dataitem.setEnabled((mode == Common.SHOW)?false:true);
-                dataitem.setObligatory((mode == Common.SHOW)?false:true);
+                dataitem.setEnabled((mode == Common.CREATE)? true : false);
+                dataitem.setObligatory((mode == Common.CREATE)? true : false);
                 dataitem.setDataElement(references[Common.MODELTABLE]);
                 
                 if (model == null)
