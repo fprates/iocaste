@@ -229,9 +229,13 @@ public class Model {
         for (DocumentModelItem item : model.getItens())
             removeModelItem(iocaste, item);
         
+        query = "delete from docs005 where tname = ?";
+        
+        iocaste.update(query, new String[] {model.getTableName()});
+        
         name = model.getName();
         query = "delete from docs001 where docid = ?";
-        iocaste.update(query, new Object[] {name});
+        iocaste.update(query, new String[] {name});
         
         query = new StringBuilder("drop table ").append(model.getTableName()).
                 toString();
@@ -300,10 +304,18 @@ public class Model {
         String query = "insert into docs001 (docid, tname, class) " +
                 "values (?, ?, ?)";
         
-        iocaste.update(query, new Object[] {model.getName(),
-                                            model.getTableName(),
-                                            model.getClassName()});
+        iocaste.update(query, new Object[] {
+                model.getName(),
+                model.getTableName(),
+                model.getClassName()
+        });
         
+        query = "insert into docs005(tname, docid) values(? , ?)";
+        
+        iocaste.update(query, new Object[] {
+                model.getTableName(),
+                model.getName()
+        });
     }
     
     /**
