@@ -341,7 +341,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
-        Enumeration<String> parameternames;
+        Enumeration<?> parameternames;
         PageContext pagectx_;
         Map<String, String[]> parameters;
         String appname, pagename;
@@ -356,7 +356,7 @@ public class PageRenderer extends HttpServlet implements Function {
             parameternames = req.getParameterNames();
             
             while (parameternames.hasMoreElements()) {
-                key = parameternames.nextElement();
+                key = (String)parameternames.nextElement();
                 
                 parameters.put(pagectx.isAction(key)? "action" : key,
                         req.getParameterValues(key));
