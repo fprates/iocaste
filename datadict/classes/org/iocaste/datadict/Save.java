@@ -90,18 +90,18 @@ public class Save {
             model.addKey(modelkey);
         }
         
-        switch (documents.validate(model)) {
-        case Documents.TABLE_ALREADY_ASSIGNED:
-            view.message(Const.ERROR, "table.already.assigned");
-            return;
-        }
-        
         switch (modo) {
         case Common.UPDATE:
             documents.updateModel(model);
             
             break;
         case Common.CREATE:
+            switch (documents.validate(model)) {
+            case Documents.TABLE_ALREADY_ASSIGNED:
+                view.message(Const.ERROR, "table.already.assigned");
+                return;
+            }
+            
             documents.createModel(model);
             view.export("model", model);
             view.export("mode", Common.UPDATE);
