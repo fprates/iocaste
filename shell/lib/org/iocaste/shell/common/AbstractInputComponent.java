@@ -9,12 +9,12 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private static final long serialVersionUID = 7276777605716326451L;
     private String value;
     private DocumentModelItem modelitem;
-    private boolean obligatory;
+    private boolean secret, obligatory, validref;
     private int length;
     private Const type;
-    private boolean secret;
     private DataElement dataelement;
     private SearchHelp search;
+    
     
     public AbstractInputComponent(Container container, Const type,
             Const type_, String name) {
@@ -22,6 +22,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
 
         this.type = type_;
         obligatory = false;
+        validref = false;
     }
     
     /*
@@ -133,6 +134,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#isReferenceValidable()
+     */
+    @Override
+    public final boolean isReferenceValidable() {
+        return validref;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#isSecret()
      */
     @Override
@@ -201,6 +211,8 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setModelItem(DocumentModelItem modelitem) {
         this.modelitem = modelitem;
+        
+        validref = (modelitem == null)? false : true;
     }
 
     /*
@@ -210,6 +222,16 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setObligatory(boolean obligatory) {
         this.obligatory = obligatory;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setReferenceValidable(
+     *     boolean)
+     */
+    @Override
+    public final void setReferenceValidable(boolean validref) {
+        this.validref = validref;
     }
     
     /*

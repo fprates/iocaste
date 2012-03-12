@@ -4,6 +4,9 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
@@ -68,6 +71,50 @@ public class Services extends AbstractFunction {
         } catch (ClassCastException e) {
             return ((String[])values.get(name))[0];
         }
+    }
+    
+    /**
+     * 
+     * @param input
+     * @return
+     * @throws Exception
+     */
+    private final boolean hasValidReference(InputComponent input) 
+            throws Exception {
+        Documents documents;
+        ExtendedObject object;
+        Object value;
+        String svalue;
+        DocumentModelItem reference, item = input.getModelItem();
+        
+        if (item == null)
+            return true;
+        
+        reference = item.getReference();
+        svalue = input.getValue();
+        
+        if (reference == null || svalue == null)
+            return true;
+        
+        switch (Shell.getDataElement(input).getType()) {
+        case DataType.CHAR:
+            value = svalue;
+            break;
+        case DataType.NUMC:
+            value = Long.parseLong(svalue);
+            break;
+        case DataType.BOOLEAN:
+            value = Boolean.parseBoolean(svalue);
+            break;
+        default:
+            return true;
+        }
+        
+        documents = new Documents(this); 
+        object = documents.getObject(reference.getDocumentModel().getName(),
+                value);
+        
+        return (object == null)? false : true;
     }
     
     /**
@@ -200,6 +247,12 @@ public class Services extends AbstractFunction {
             
             if (dataelement.isUpcase())
                 input.setValue(value.toUpperCase());
+            
+            if (!hasValidReference(input) && input.isReferenceValidable()) {
+                einput = input;
+                ecode = AbstractPage.EINVALID_REFERENCE;
+                continue;
+            }
         }
         
         result[0] = einput;
@@ -208,6 +261,7 @@ public class Services extends AbstractFunction {
         
         return result;
     }
+    
     /**
      * 
      * @param message

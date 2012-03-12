@@ -4,13 +4,12 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.Service;
 
 public abstract class AbstractPage extends AbstractFunction {
     public static final int EINITIAL = 1;
     public static final int EMISMATCH = 2;
+    public static final int EINVALID_REFERENCE = 3;
     private Shell shell;
     
     public AbstractPage() {
@@ -92,8 +91,13 @@ public abstract class AbstractPage extends AbstractFunction {
             case EINITIAL:
                 view.message(Const.ERROR, "field.is.obligatory");
                 break;
+                
             case EMISMATCH:
                 view.message(Const.ERROR, "field.type.mismatch");
+                break;
+                
+            case EINVALID_REFERENCE:
+                view.message(Const.ERROR, "invalid.value");
                 break;
             }
             
@@ -189,17 +193,12 @@ public abstract class AbstractPage extends AbstractFunction {
     private final InputStatus processInputs(ViewData view,
             Map<String, Object> values) throws Exception {
         Object[] result;
-        String 
-        servername = new StringBuffer(new Iocaste(this).getHost()).append(
-                Shell.SERVER_NAME).toString();
-        Message message = new Message();
-        InputStatus status = new InputStatus();
+        InputStatus status;
+        Shell shell = new Shell(this);
         
-        message.setId("process_inputs");
-        message.add("view", view);
-        message.add("values", values);
+        result = (Object[])shell.processInputs(view, values);
         
-        result = (Object[])Service.callServer(servername, message);
+        status = new InputStatus();
         status.input = (InputComponent)result[0];
         status.error = (Integer)result[1];
         status.view = (ViewData)result[2];

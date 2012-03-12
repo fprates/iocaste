@@ -21,6 +21,8 @@ public interface InputComponent {
     
     public abstract boolean isObligatory();
     
+    public abstract boolean isReferenceValidable();
+    
     public abstract boolean isSecret();
     
     public abstract boolean isSelected();
@@ -36,6 +38,8 @@ public interface InputComponent {
     public abstract void setModelItem(DocumentModelItem modelitem);
     
     public abstract void setObligatory(boolean obligatory);
+    
+    public abstract void setReferenceValidable(boolean refvalidable);
     
     public abstract void setSearchHelp(SearchHelp search);
     
