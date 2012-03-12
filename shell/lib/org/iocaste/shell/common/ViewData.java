@@ -358,8 +358,9 @@ public class ViewData implements Serializable {
      * @param name nome
      * @return value valor
      */
-    public final Object getParameter(String name) {
-        return parameters.get(name);
+    @SuppressWarnings("unchecked")
+    public final <T> T getParameter(String name) {
+        return (T)parameters.get(name);
     }
     
     /**

@@ -22,7 +22,7 @@ public class SHStructure {
     public static final void main(ViewData view, Function function) {
         DataItem ditem;
         Container container = new Form(null, "main");
-        DocumentModel model = (DocumentModel)view.getParameter("shmodel");
+        DocumentModel model = view.getParameter("shmodel");
         DataForm header = new DataForm(container, "header");
         Table itens = new Table(container, "itens");
         
@@ -44,7 +44,7 @@ public class SHStructure {
             ditem.setObligatory(true);
         }
         
-        model = (DocumentModel)view.getParameter("shitens");
+        model = view.getParameter("shitens");
         itens.importModel(model);
         itens.getColumn("SH_NAME").setVisible(false);
         itens.setMark(true);

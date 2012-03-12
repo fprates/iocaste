@@ -26,8 +26,8 @@ public class Main extends AbstractPage {
      */
     public final void choose(ViewData vdata) 
             throws Exception {
-        SearchHelp sh = (SearchHelp)vdata.getParameter("sh");
-        Parameter value = (Parameter)vdata.getElement("value");
+        SearchHelp sh = vdata.getParameter("sh");
+        Parameter value = vdata.getElement("value");
         ViewData view = sh.getView();
         InputComponent input = view.getElement(sh.getInputName());
         
@@ -58,7 +58,7 @@ public class Main extends AbstractPage {
         String name, value, export;
         Text text;
         Link link;
-        SearchHelp sh = (SearchHelp)vdata.getParameter("sh");
+        SearchHelp sh = vdata.getParameter("sh");
         ExtendedObject[] result = getResultsFrom(sh);
         DocumentModel model = result[0].getModel();
         Container container = new Form(null, "main");

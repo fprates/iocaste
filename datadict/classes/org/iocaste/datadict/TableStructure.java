@@ -27,10 +27,10 @@ public class TableStructure {
      */
     private static final String getModelName(ViewData vdata) {
         byte mode = Common.getMode(vdata);
-        DocumentModel model = (DocumentModel)vdata.getParameter("model");
+        DocumentModel model = vdata.getParameter("model");
         
         if (mode == Common.CREATE)
-            return ((String)vdata.getParameter("modelname"));
+            return vdata.getParameter("modelname");
         else
             return model.getName();
     }
@@ -46,7 +46,7 @@ public class TableStructure {
         Table itens;
         String name, title, modelname;
         TableColumn column;
-        DocumentModel usermodel = (DocumentModel)view.getParameter("model");
+        DocumentModel usermodel = view.getParameter("model");
         byte mode = Common.getMode(view);
         Container main = new Form(null, "datadict.structure");
         DataForm structure = new DataForm(main, "header");

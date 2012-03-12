@@ -26,10 +26,10 @@ public class ForeignKey {
     public static final void main(ViewData view, Function function)
             throws Exception {
         DataItem dataitem;
-        String itemname = (String)view.getParameter("item.name");
-        String modelname = (String)view.getParameter("model.name");
-        String itemref = (String)view.getParameter("item.reference");
-        String modelref = (String)view.getParameter("model.reference");
+        String itemname = view.getParameter("item.name");
+        String modelname = view.getParameter("model.name");
+        String itemref = view.getParameter("item.reference");
+        String modelref = view.getParameter("model.reference");
         Container container = new Form(null, "main");
         DataForm form = new DataForm(container, "fkform");
         byte mode = Common.getMode(view);

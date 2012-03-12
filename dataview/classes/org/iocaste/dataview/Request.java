@@ -94,7 +94,7 @@ public class Request {
      * @param vdata
      */
     public static final void insert(ViewData vdata) {
-        String modelname = (String)vdata.getParameter("model.name");
+        String modelname = vdata.getParameter("model.name");
         
         vdata.clearParameters();
         vdata.export("model.name", modelname);
@@ -148,7 +148,7 @@ public class Request {
         InputComponent input;
         DocumentModelItem modelitem;
         ExtendedObject object;
-        String modelname = (String)vdata.getParameter("model.name");
+        String modelname = vdata.getParameter("model.name");
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel(modelname);
         Table table = vdata.getElement("selection_view");

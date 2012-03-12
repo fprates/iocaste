@@ -87,7 +87,7 @@ public class Common {
      * @return
      */
     public static final byte getMode(ViewData vdata) {
-        return (Byte)vdata.getParameter("mode");
+        return vdata.getParameter("mode");
     }
     
     /**

@@ -81,13 +81,12 @@ public class Response {
             throws Exception {
         boolean key;
         Container container = new Form(null, "dataview.container");
-        ExtendedObject[] itens =
-                (ExtendedObject[])view.getParameter("model.regs");
+        ExtendedObject[] itens = view.getParameter("model.regs");
         Documents documents = new Documents(function);
-        String modelname = (String)view.getParameter("model.name");
+        String modelname = view.getParameter("model.name");
         DocumentModel model = documents.getModel(modelname);
         Table table = new Table(container, "selection_view");
-        Const viewtype = (Const)view.getParameter("view.type");
+        Const viewtype = view.getParameter("view.type");
         
         table.setMark(true);
         table.importModel(model);

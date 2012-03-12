@@ -105,7 +105,7 @@ public class Main extends AbstractPage {
      */
     public final void list(ViewData vdata) {
         Container container = new StandardContainer(null, "list");
-        String[] lines = (String[])vdata.getParameter("code");
+        String[] lines = vdata.getParameter("code");
         HtmlTag code = new HtmlTag(container, "code");
         
         code.setLines(lines);

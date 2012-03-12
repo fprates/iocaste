@@ -166,8 +166,8 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void download(ViewData view) throws Exception {
-        String filename = (String)view.getParameter("instructionname");
-        String[] lines = (String[])view.getParameter("list");
+        String filename = view.getParameter("instructionname");
+        String[] lines = view.getParameter("list");
         
         for (String line : lines)
             view.print(line+"\n");
@@ -339,7 +339,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public void list(ViewData view) throws Exception {
-        String[] files = (String[])view.getParameter("files");
+        String[] files = view.getParameter("files");
         Container container = new Form(null, "list");
         Table table = new Table(container, "pool");
         
