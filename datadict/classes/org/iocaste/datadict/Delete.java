@@ -37,7 +37,7 @@ public class Delete {
      * @param view
      */
     public static final void shitem(ViewData view) {
-        Table itens = (Table)view.getElement("itens");
+        Table itens = view.getElement("itens");
         
         for (TableItem item : itens.getItens()) {
             if (!item.isSelected())

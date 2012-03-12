@@ -34,8 +34,8 @@ public class Save {
         String modelref, itemref, itemname;
         CheckBox upcase, key;
         Documents documents = new Documents(function);
-        DataForm structure = (DataForm)view.getElement("header");
-        Table itens = (Table)view.getElement("itens");
+        DataForm structure = view.getElement("header");
+        Table itens = view.getElement("itens");
         DocumentModel model = new DocumentModel();
         byte modo = Common.getMode(view);
         int i = 0;
@@ -125,9 +125,9 @@ public class Save {
             throws Exception {
         List<ExtendedObject> oitens;
 //        SHLib shlib = new SHLib(function);
-        DataForm header = (DataForm)view.getElement("header");
+        DataForm header = view.getElement("header");
         ExtendedObject oitem, object = header.getObject();
-        Table itens = (Table)view.getElement("itens");
+        Table itens = view.getElement("itens");
         
         oitens = new ArrayList<ExtendedObject>();
         for (TableItem item : itens.getItens()) {

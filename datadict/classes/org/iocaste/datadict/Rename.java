@@ -38,7 +38,7 @@ public class Rename {
     }
     
     public static final void main(ViewData view) {
-        DataForm form = (DataForm)view.getElement("modelform");
+        DataForm form = view.getElement("modelform");
         String oldname = form.get("modelname").getValue();
         
         view.setReloadableView(true);
@@ -48,7 +48,7 @@ public class Rename {
     
     public static final void ok(ViewData view, Function function)
             throws Exception {
-        DataForm form = (DataForm)view.getElement("rename.form");
+        DataForm form = view.getElement("rename.form");
         String oldname = form.get("oldname").getValue();
         String newname = form.get("newname").getValue();
         Documents documents = new Documents(function);

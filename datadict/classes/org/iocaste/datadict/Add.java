@@ -40,7 +40,7 @@ public class Add {
     public static final void main(ViewData view, Function function)
             throws Exception {
         byte mode = Common.getMode(view);
-        Table itens = (Table)view.getElement("itens");
+        Table itens = view.getElement("itens");
         Map<ItensNames, DataElement> references =
                 Common.getFieldReferences(function);
         
@@ -55,7 +55,7 @@ public class Add {
      * @param view
      */
     public static final void shitem(ViewData view) {
-        Table itens = (Table)view.getElement("itens");
+        Table itens = view.getElement("itens");
         
         insertSHItem(itens);
     }

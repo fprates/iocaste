@@ -23,7 +23,7 @@ public class Request {
      */
     public static final void delete(ViewData vdata, Function function)
             throws Exception {
-        Table table = (Table)vdata.getElement("selection_view");
+        Table table = vdata.getElement("selection_view");
         Documents documents = new Documents(function);
         
         for (TableItem item : table.getItens()) {
@@ -110,7 +110,7 @@ public class Request {
     public static final void insertcommon(ViewData vdata, ViewData selectview,
             Function function) throws Exception {
         Table table;
-        DataForm form = (DataForm)vdata.getElement("model.form");
+        DataForm form = vdata.getElement("model.form");
         ExtendedObject object = form.getObject();
         Documents documents = new Documents(function);
         
@@ -129,7 +129,7 @@ public class Request {
      */
     public static final void insertnext(ViewData vdata, ViewData selectview,
             Function function) throws Exception {
-        DataForm form = (DataForm)vdata.getElement("model.form");
+        DataForm form = vdata.getElement("model.form");
         
         insertcommon(vdata, selectview, function);
         form.clearInputs();
@@ -151,7 +151,7 @@ public class Request {
         String modelname = (String)vdata.getParameter("model.name");
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel(modelname);
-        Table table = ((Table)vdata.getElement("selection_view"));
+        Table table = vdata.getElement("selection_view");
         
         for (TableItem item : table.getItens()) {
             object = null;

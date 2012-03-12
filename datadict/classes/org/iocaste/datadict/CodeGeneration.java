@@ -12,8 +12,8 @@ public class CodeGeneration {
 
     public static final void main(ViewData view) {
         String settype;
-        DataForm form = (DataForm)view.getElement("structure.form");
-        Table itens = (Table)view.getElement("itens");
+        DataForm form = view.getElement("structure.form");
+        Table itens = view.getElement("itens");
         String value, classname = form.get("modelclass").getValue();
         String[] parts = classname.split("\\.");
         StringBuilder sb = new StringBuilder("package ");

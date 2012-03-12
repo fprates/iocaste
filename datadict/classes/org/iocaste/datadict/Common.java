@@ -111,7 +111,7 @@ public class Common {
      * @return
      */
     public static final int getTpObjectValue(ViewData view) {
-        RadioButton tpobj = (RadioButton)view.getElement("tpobject");
+        RadioButton tpobj = view.getElement("tpobject");
         
         return Integer.parseInt(tpobj.getValue());
     }
@@ -124,7 +124,7 @@ public class Common {
     public static final boolean hasItemDuplicated(ViewData vdata) {
         String name, classfield, tablefield;
         String testname, testclassfield, testtablefield;
-        Table itens = (Table)vdata.getElement("itens");
+        Table itens = vdata.getElement("itens");
         byte modo = Common.getMode(vdata);
         
         for (TableItem item : itens.getItens()) {

@@ -244,7 +244,8 @@ public class ViewData implements Serializable {
      * @param name nome
      * @return elemento
      */
-    public final Element getElement(String name) {
+    @SuppressWarnings("unchecked")
+    public final <T extends Element> T getElement(String name) {
         Element element = null;
         
         for (Container container : containers) {
@@ -253,7 +254,7 @@ public class ViewData implements Serializable {
                 break;
         }
         
-        return element;
+        return (T)element;
     }
     
     /**

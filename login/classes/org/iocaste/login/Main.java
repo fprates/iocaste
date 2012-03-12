@@ -52,7 +52,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void connect(ViewData view) throws Exception {
-        DataForm form = (DataForm)view.getElement("login");
+        DataForm form = view.getElement("login");
         Iocaste iocaste = new Iocaste(this);
         Login login = form.getObject().newInstance();
         

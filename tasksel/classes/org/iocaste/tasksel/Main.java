@@ -49,7 +49,7 @@ public class Main extends AbstractPage {
     public final void run(ViewData vdata) throws Exception {
         String[] parsed, values;
         Iocaste iocaste;
-        DataItem dataitem = (DataItem)vdata.getElement("command");
+        DataItem dataitem = vdata.getElement("command");
         String command = dataitem.getValue();
         String page = "main";
         String app = null;

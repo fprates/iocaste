@@ -70,11 +70,11 @@ public class ForeignKey {
      * @param view
      */
     public static final void update(ViewData view) {
-        DataForm form = (DataForm)view.getElement("header");
+        DataForm form = view.getElement("header");
         String itemname, modelref, itemref, modelname =
                 form.get("modelname").getValue();
         TableItem selected = null;
-        Table itens = (Table)view.getElement("itens");
+        Table itens = view.getElement("itens");
         byte mode = Common.getMode(view);
         
         for (TableItem item : itens.getItens()) {
@@ -116,13 +116,13 @@ public class ForeignKey {
     public static final boolean updateReference(ViewData view,
             Function function) throws Exception {
         InputComponent input;
-        DataForm form = (DataForm)view.getElement("fkform");
+        DataForm form = view.getElement("fkform");
         String itemname = ((DataItem)form.get("item.name")).getValue();
         String itemref = ((DataItem)form.get("reference.item")).getValue();
         String modelref = ((DataItem)form.get("reference.model")).getValue();
         Shell shell = new Shell(function);
         ViewData structview = shell.getView(view, "tbstructure");
-        Table itens = (Table)structview.getElement("itens");
+        Table itens = structview.getElement("itens");
         DocumentModel model = new Documents(function).
                 getModel(modelref);
         

@@ -8,8 +8,6 @@ Sem prioridade definida:
 
 - transportar dados da sessão para core;
 
-- substituir Object[] em parâmetros de Iocaste/Documents por Object...;
-
 - implementar rollback automático em caso de exceção;
 
 - validação de valores de campos em tela segundo referência associada;

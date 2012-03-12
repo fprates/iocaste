@@ -42,7 +42,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void add(ViewData view) throws Exception {
-        Table objects = (Table)view.getElement("objects");
+        Table objects = view.getElement("objects");
         
         insertItem(objects);
     }
@@ -184,7 +184,7 @@ public class Main extends AbstractPage {
      */
     public final void generate(ViewData view) throws Exception {
         String name;
-        Table objects = (Table)view.getElement("objects");
+        Table objects = view.getElement("objects");
         List<String> lines, instructions = new ArrayList<String>();
         Documents documents = new Documents(this);
         
@@ -282,7 +282,7 @@ public class Main extends AbstractPage {
      */
     public final void importitens(ViewData view) throws Exception {
         String filename = null;
-        Table table = (Table)view.getElement("pool");
+        Table table = view.getElement("pool");
         
         for (TableItem item : table.getItens()) {
             if (!item.isSelected())
@@ -416,7 +416,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public void upload(ViewData view) throws Exception {
-        FileEntry fileentry = (FileEntry)view.getElement("buildfile");
+        FileEntry fileentry = view.getElement("buildfile");
         String filename = fileentry.getValue();
         
         switch (fileentry.getError()) {

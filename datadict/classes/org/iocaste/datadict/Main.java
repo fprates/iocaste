@@ -49,7 +49,7 @@ public class Main extends AbstractPage {
      * @param vdata
      */
     public final void deleteitem(ViewData vdata) {
-        Table itens = (Table)vdata.getElement("itens");
+        Table itens = vdata.getElement("itens");
         
         for (TableItem item : itens.getItens())
             if (item.isSelected())

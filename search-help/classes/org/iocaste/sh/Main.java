@@ -29,8 +29,7 @@ public class Main extends AbstractPage {
         SearchHelp sh = (SearchHelp)vdata.getParameter("sh");
         Parameter value = (Parameter)vdata.getElement("value");
         ViewData view = sh.getView();
-        InputComponent input = (InputComponent)view.getElement(
-                sh.getInputName());
+        InputComponent input = view.getElement(sh.getInputName());
         
         input.setValue(value.getValue());
         updateView(view);
