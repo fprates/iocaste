@@ -84,7 +84,7 @@ public class Request {
             throw new Exception("invalid.model");
             
         query = new StringBuilder("from ").append(name).toString();
-        itens = documents.select(query, null);
+        itens = documents.select(query);
         
         return itens;
     }

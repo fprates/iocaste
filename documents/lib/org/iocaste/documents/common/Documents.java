@@ -224,7 +224,7 @@ public class Documents extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final ExtendedObject[] select(String query, Object[] criteria)
+    public final ExtendedObject[] select(String query, Object... criteria)
     		throws Exception {
         Message message = new Message();
         

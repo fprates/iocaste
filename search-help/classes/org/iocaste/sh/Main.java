@@ -45,7 +45,7 @@ public class Main extends AbstractPage {
      */
     private ExtendedObject[] getResultsFrom(SearchHelp sh) throws Exception {
         Documents documents = new Documents(this);
-        return documents.select("from "+sh.getModelName(), null);
+        return documents.select("from "+sh.getModelName());
     }
     
     /**

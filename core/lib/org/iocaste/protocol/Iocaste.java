@@ -167,7 +167,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return resultados
      * @throws Exception
      */
-    public final Object[] select(String query, Object[] criteria) 
+    public final Object[] select(String query, Object... criteria) 
             throws Exception {
         Message message = new Message();
         
@@ -200,7 +200,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final int update(String query, Object[] criteria) throws Exception {
+    public final int update(String query, Object... criteria) throws Exception {
     	Message message = new Message();
     	
     	message.setId("update");

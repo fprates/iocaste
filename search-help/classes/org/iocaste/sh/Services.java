@@ -31,7 +31,7 @@ public class Services extends AbstractFunction {
         sh.setExport((String)shdata.getValue("EXPORT_ITEM"));
         
         objects = documents.select("from SH_ITENS where SH_NAME = ?",
-                new String[] {sh.getModelName()});
+                sh.getModelName());
         
         for (ExtendedObject object : objects)
             sh.addModelItemName((String)object.getValue("ITEM_NAME"));

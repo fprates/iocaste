@@ -50,7 +50,7 @@ public class Model {
         
         query = sb.append(")").toString();
         
-        iocaste.update(query, null);
+        iocaste.update(query);
     }
     
     /**
@@ -231,16 +231,16 @@ public class Model {
         
         query = "delete from docs005 where tname = ?";
         
-        iocaste.update(query, new String[] {model.getTableName()});
+        iocaste.update(query, model.getTableName());
         
         name = model.getName();
         query = "delete from docs001 where docid = ?";
-        iocaste.update(query, new String[] {name});
+        iocaste.update(query, name);
         
         query = new StringBuilder("drop table ").append(model.getTableName()).
                 toString();
         
-        iocaste.update(query, null);
+        iocaste.update(query);
         
         queries.remove(name);
     }
@@ -385,7 +385,7 @@ public class Model {
         
         query = sb.append(")").toString();
         
-        iocaste.update(query, null);
+        iocaste.update(query);
     }
 
     /**
@@ -414,7 +414,7 @@ public class Model {
                 append(" to ").
                 append(dbuser).toString();
         
-        iocaste.update(query, null);
+        iocaste.update(query);
     }
     
     /**
@@ -463,7 +463,7 @@ public class Model {
         String query = new StringBuilder("alter table ").append(tablename).
                 append(" drop column ").append(fieldname).toString();
         
-        iocaste.update(query, null);
+        iocaste.update(query);
     }
     
     /**
@@ -499,7 +499,7 @@ public class Model {
                     append(" rename to ").
                     append(fieldname);
             
-            iocaste.update(sb.toString(), null);
+            iocaste.update(sb.toString());
         }
         
         /*
@@ -526,7 +526,7 @@ public class Model {
         
         query = sb.toString();
         
-        iocaste.update(query, null);
+        iocaste.update(query);
         
         reference = item.getReference();
         if (reference != null) {
@@ -541,7 +541,7 @@ public class Model {
                         append(reference.getTableFieldName()).
                         append(")").toString();
                 
-                iocaste.update(query, null);
+                iocaste.update(query);
             }
         } else {
             if (olditem.getReference() != null) {
@@ -550,7 +550,7 @@ public class Model {
                         append(" drop constraint ").
                         append(item.getTableFieldName()).toString();
                 
-                iocaste.update(query, null);
+                iocaste.update(query);
             }
         }
         
