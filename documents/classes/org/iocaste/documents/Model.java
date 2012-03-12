@@ -371,9 +371,8 @@ public class Model {
             reference = item.getReference();
             if (reference != null) {
                 sb.append(") foreign key references ").
-                        append(model.getTableName()).
-                        append("(").
                         append(reference.getDocumentModel().getTableName()).
+                        append("(").
                         append(reference.getTableFieldName());
             }
             
