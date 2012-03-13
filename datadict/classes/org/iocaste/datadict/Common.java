@@ -240,12 +240,9 @@ public class Common {
                 
                 if (modelitem != null) {
                     model = modelitem.getDocumentModel();
-                    if (mode == Common.SHOW)
-                        helper.value = model.isKey(modelitem)? "yes" : "no";
-                    else
-                        helper.value =  model.isKey(modelitem)? "on" : "off";
+                    helper.value =  model.isKey(modelitem)? "on" : "off";
                 } else {
-                    helper.value = (mode == Common.SHOW)? "no" : "off";
+                    helper.value = "off";
                 }
                 
                 newField(helper);
@@ -255,33 +252,13 @@ public class Common {
         
             if (helper.name.equals("item.type")) {
                 helper.obligatory = Common.NON_OBLIGATORY;
+                helper.type = Const.LIST_BOX;
+                helper.value = (modelitem == null)?null:Integer.toString(
+                        dataelement.getType());
                 
-                if (mode == Common.SHOW) {
-                    helper.type = Const.TEXT;
-                    
-                    switch (dataelement.getType()) {
-                    case 0:
-                        helper.value = "char";
-                        break;
-                    case 3:
-                        helper.value = "numc";
-                        break;
-                    default:
-                        helper.value = "?";
-                        break;
-                    }
-                    
-                    newField(helper);
-                    
-                } else {
-                    helper.type = Const.LIST_BOX;
-                    helper.value = (modelitem == null)?null:Integer.toString(
-                            dataelement.getType());
-                    
-                    list = (ListBox)newField(helper);
-                    list.add("char", Integer.toString(DataType.CHAR));
-                    list.add("numc", Integer.toString(DataType.NUMC));
-                }
+                list = (ListBox)newField(helper);
+                list.add("char", Integer.toString(DataType.CHAR));
+                list.add("numc", Integer.toString(DataType.NUMC));
                 
                 continue;
             }
@@ -292,12 +269,9 @@ public class Common {
                 
                 if (modelitem != null) {
                     model = modelitem.getDocumentModel();
-                    if (mode == Common.SHOW)
-                        helper.value = dataelement.isUpcase()? "yes" : "no";
-                    else
-                        helper.value =  dataelement.isUpcase()? "on" : "off";
+                    helper.value =  dataelement.isUpcase()? "on" : "off";
                 } else {
-                    helper.value = (mode == Common.SHOW)? "no" : "off";
+                    helper.value = "off";
                 }
                 
                 newField(helper);
@@ -334,22 +308,16 @@ public class Common {
      * @return
      */
     private static final Element newField(FieldHelper helper) {
-        Element element;
         InputComponent input;
         Table table = helper.item.getTable();
+        Element element = Shell.factory(table, helper.type, helper.name, null);
         
-        if (helper.mode == Common.SHOW && helper.type != Const.TEXT_FIELD) {
-            element = Shell.factory(table, Const.TEXT, helper.name, null);
-            ((Text)element).setText(helper.value);
-        } else {
-            element = Shell.factory(table, helper.type, helper.name, null);
-            
-            input = (InputComponent)element;
-            input.setValue(helper.value);
-            input.setDataElement(helper.reference);
-            input.setObligatory(helper.obligatory);
-            element.setEnabled((helper.mode == Common.SHOW)? false : true);
-        }
+        element.setEnabled((helper.mode == Common.SHOW)? false : true);
+        
+        input = (InputComponent)element;
+        input.setValue(helper.value);
+        input.setDataElement(helper.reference);
+        input.setObligatory(helper.obligatory);
         
         helper.item.add(element);
         
