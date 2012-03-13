@@ -1,7 +1,12 @@
 package org.iocaste.datadict;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
+import org.iocaste.sh.common.SHLib;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -10,6 +15,7 @@ import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewData;
 
 public class SHStructure {
@@ -46,7 +52,7 @@ public class SHStructure {
         
         model = view.getParameter("shitens");
         itens.importModel(model);
-        itens.getColumn("SH_NAME").setVisible(false);
+        itens.getColumn("SEARCH_HELP").setVisible(false);
         itens.setMark(true);
         
         Add.insertSHItem(itens);
@@ -57,5 +63,25 @@ public class SHStructure {
         
         view.setNavbarActionEnabled("back", true);
         view.addContainer(container);
+    }
+    
+    public static final void save(ViewData view, Function function)
+            throws Exception {
+        List<ExtendedObject> oitens;
+        SHLib shlib = new SHLib(function);
+        DataForm header = view.getElement("header");
+        ExtendedObject oitem, object = header.getObject();
+        Table itens = view.getElement("itens");
+          
+        oitens = new ArrayList<ExtendedObject>();
+        for (TableItem item : itens.getItens()) {
+            oitem = item.getObject();
+            oitem.setValue("NAME", object.getValue("NAME"));
+            oitens.add(oitem);
+        }
+          
+        shlib.save(object, oitens.toArray(new ExtendedObject[0]));
+          
+        view.message(Const.STATUS, "search.help.saved.successfully");
     }
 }

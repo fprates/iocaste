@@ -85,9 +85,12 @@ public class ForeignKey {
             }
                 
             if (item.isSelected()) {
+                item.setSelected(false);
                 selected = item;
                 break;
             }
+            
+            item.setSelected(false);
         }
         
         if (selected == null) {

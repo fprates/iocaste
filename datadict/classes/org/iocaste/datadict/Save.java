@@ -1,16 +1,11 @@
 package org.iocaste.datadict;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
-//import org.iocaste.sh.common.SHLib;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -113,32 +108,6 @@ public class Save {
         documents.commit();
         
         view.message(Const.STATUS, "table.saved.successfully");
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param function
-     * @throws Exception
-     */
-    public static final void shitem(ViewData view, Function function)
-            throws Exception {
-        List<ExtendedObject> oitens;
-//        SHLib shlib = new SHLib(function);
-        DataForm header = view.getElement("header");
-        ExtendedObject oitem, object = header.getObject();
-        Table itens = view.getElement("itens");
-        
-        oitens = new ArrayList<ExtendedObject>();
-        for (TableItem item : itens.getItens()) {
-            oitem = item.getObject();
-            oitem.setValue("SH_NAME", object.getValue("NAME"));
-            oitens.add(oitem);
-        }
-        
-//        shlib.save(object, oitens.toArray(new ExtendedObject[0]));
-        
-        view.message(Const.STATUS, "search.help.saved.successfully");
     }
 
 }
