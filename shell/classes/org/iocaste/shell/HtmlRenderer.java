@@ -124,6 +124,9 @@ public class HtmlRenderer {
         XMLElement metatag = new XMLElement("meta");
         XMLElement titletag = new XMLElement("title");
         
+        if (focus == null)
+            focus = vdata.getElementFocus().getHtmlName();
+        
         metatag.add("http-equiv", "Content-Type");
         metatag.add("content", "text/html; charset=utf-8");
         

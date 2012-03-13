@@ -35,6 +35,7 @@ import java.util.Map;
  */
 public class ViewData implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
+    private Element elementfocus;
     private String title, focus, sheet, appname, pagename;
     private String contenttype, rapp, rpage, messagetext;
     private MessageSource messages;
@@ -255,6 +256,14 @@ public class ViewData implements Serializable {
         }
         
         return (T)element;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Element getElementFocus() {
+        return elementfocus;
     }
     
     /**
@@ -486,6 +495,16 @@ public class ViewData implements Serializable {
      */
     public final void setFocus(String focus) {
         this.focus = focus;
+        elementfocus = null;
+    }
+    
+    /**
+     * 
+     * @param element
+     */
+    public final void setFocus(Element element) {
+        elementfocus = element;
+        focus = null;
     }
     
     /**
