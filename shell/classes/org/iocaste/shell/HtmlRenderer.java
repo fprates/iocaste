@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewData;
@@ -118,14 +119,17 @@ public class HtmlRenderer {
      * @return
      */
     private final XMLElement renderHeader(ViewData vdata, Config config) {
+        Element elementfocus;
         String focus = vdata.getFocus();
         String title = vdata.getTitle();
         XMLElement headtag = new XMLElement("head");
         XMLElement metatag = new XMLElement("meta");
         XMLElement titletag = new XMLElement("title");
         
-        if (focus == null)
-            focus = vdata.getElementFocus().getHtmlName();
+        if (focus == null) {
+            elementfocus = vdata.getElementFocus();
+            focus = (elementfocus == null)? null : elementfocus.getHtmlName();
+        }
         
         metatag.add("http-equiv", "Content-Type");
         metatag.add("content", "text/html; charset=utf-8");
