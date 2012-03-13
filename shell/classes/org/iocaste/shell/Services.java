@@ -212,12 +212,13 @@ public class Services extends AbstractFunction {
         ViewData view = (ViewData)message.get("view");
         @SuppressWarnings("unchecked")
         Map<String, Object> values = (Map<String, Object>)message.get("values");
-        String[] inputs = view.getInputs();
         int ecode = 0;
         
-        for (String name : inputs) {
+        for (String name : values.keySet()) {
             element = view.getElement(name);
-            if (!element.isEnabled())
+            
+            if (element == null || !element.isDataStorable() ||
+                    !element.isEnabled())
                 continue;
             
             input = (InputComponent)element;

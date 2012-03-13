@@ -29,13 +29,10 @@ public class TableItemRenderer extends Renderer {
         for (Element element : item.getElements()) {
             column = columns[i++];
             
-            if (column.isMark() && !table.hasMark())
+            if ((column.isMark() && !table.hasMark()) || !column.isVisible())
                 continue;
             
             tdtag = new XMLElement("td");
-            
-            if (!column.isVisible())
-                tdtag.add("class", "invisible");
             
             if (element != null) {
                 tags.clear();

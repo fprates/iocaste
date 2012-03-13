@@ -11,13 +11,15 @@ public class ListRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(ListBox list) {
-        String value;
         XMLElement optiontag = null, selecttag= new XMLElement("select");
-        String name = list.getHtmlName();
+        String value, name = list.getHtmlName();
         
         selecttag.add("name", name);
         selecttag.add("id", name);
 
+        if (!list.isEnabled())
+            selecttag.add("disabled", "disabled");
+        
         addAttributes(selecttag, list);
         
         for (String option : list.getEntriesNames()) {

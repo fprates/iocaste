@@ -18,6 +18,9 @@ public class CheckBoxRenderer extends Renderer {
         cboxtag.add("name", name);
         cboxtag.add("id", name);
         
+        if (!checkbox.isEnabled())
+            cboxtag.add("disabled", "disabled");
+        
         addAttributes(cboxtag, checkbox);
         
         if (checkbox.isSelected())
