@@ -47,7 +47,7 @@ public class Add {
         if (Common.hasItemDuplicated(view))
             return;
         
-        Common.insertItem(itens, mode, null, references);
+        Common.insertItem(itens, mode, null, view, references);
     }
     
     /**

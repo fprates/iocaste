@@ -78,7 +78,7 @@ public class TableStructure {
         }
         
         itens.setMark(true);
-        prepareItens(itens, mode, usermodel, function);
+        prepareItens(itens, mode, usermodel, function, view);
         
         switch (mode) {
         case Common.UPDATE:
@@ -187,14 +187,15 @@ public class TableStructure {
      * @throws Exception
      */
     private static final void prepareItens(Table itens, byte mode,
-            DocumentModel model, Function function) throws Exception {
+            DocumentModel model, Function function, ViewData view)
+                    throws Exception {
         Map<Common.ItensNames, DataElement> references =
                 Common.getFieldReferences(function);
         
         if (model == null)
-            Common.insertItem(itens, mode, null, references);
+            Common.insertItem(itens, mode, null, null, references);
         else
             for (DocumentModelItem modelitem : model.getItens())
-                Common.insertItem(itens, mode, modelitem, references);
+                Common.insertItem(itens, mode, modelitem, view, references);
     }
 }

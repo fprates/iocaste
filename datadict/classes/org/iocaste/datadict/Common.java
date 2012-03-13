@@ -168,7 +168,7 @@ public class Common {
      * @param modelitem
      */
     public static final void insertItem(Table itens, byte mode,
-            DocumentModelItem modelitem,
+            DocumentModelItem modelitem, ViewData view,
             Map<ItensNames, DataElement> references) {
         ListBox list;
         DocumentModel model;
@@ -204,7 +204,7 @@ public class Common {
                 helper.value = (modelitem == null)?
                         null:modelitem.getAttributeName();
                 helper.obligatory = Common.OBLIGATORY;
-
+                
                 newField(helper);
                 
                 continue;
@@ -215,7 +215,10 @@ public class Common {
                 helper.value = (modelitem == null)?null:modelitem.getName();
                 helper.obligatory = Common.OBLIGATORY;
 
-                newField(helper);
+                if (view != null)
+                    view.setFocus(newField(helper));
+                else
+                    newField(helper);
                 
                 continue;
             }
