@@ -84,6 +84,15 @@ public class Table extends AbstractContainer {
     
     /**
      * 
+     * @param index
+     * @return
+     */
+    public final TableItem get(int index) {
+        return itens.get(index);
+    }
+    
+    /**
+     * 
      * @param name
      * @return
      */
