@@ -135,7 +135,7 @@ public class Main extends AbstractPage {
                     model.addKey(key);
                 }
                 
-                if (!parsed[9].equals(""))
+                if ((parsed.length == 11) && (!parsed[9].equals("")))
                     modelitem.setReference(documents.getModel(parsed[9]).
                             getModelItem(parsed[10]));
                 
@@ -416,8 +416,12 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public void upload(ViewData view) throws Exception {
-        FileEntry fileentry = view.getElement("buildfile");
-        String filename = fileentry.getValue();
+        FileEntry fileentry = null;
+        String filename = null;
+        Table table = view.getElement("importtable");
+        
+        fileentry = (FileEntry)table.get(0).get("a");
+        filename = fileentry.getValue();
         
         switch (fileentry.getError()) {
         case FileEntry.FILE_NOT_FOUND:
