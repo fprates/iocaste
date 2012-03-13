@@ -1,6 +1,7 @@
 package org.iocaste.datadict;
 
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
@@ -125,9 +126,17 @@ public class ForeignKey {
         Table itens = structview.getElement("itens");
         DocumentModel model = new Documents(function).
                 getModel(modelref);
+        DocumentModelItem modelitemref = model.getModelItem(itemref);
         
-        if (!model.isKey(model.getModelItem(itemref))) {
+        if (modelitemref == null) {
+            view.message(Const.ERROR, "reference.doesnt.exists");
+            view.setFocus("reference.item");
+            return false;
+        }
+            
+        if (!model.isKey(modelitemref)) {
             view.message(Const.ERROR, "reference.isnot.key");
+            view.setFocus("reference.item");
             return false;
         }
             
