@@ -137,4 +137,14 @@ public class TableItem implements Serializable {
             input.setValue((value == null)?null : value.toString());
         }
     }
+    
+    /**
+     * 
+     * @param selected
+     */
+    public final void setSelected(boolean selected) {
+        CheckBox mark = (CheckBox)elements.get("mark");
+        
+        mark.setSelected(selected);
+    }
 }
