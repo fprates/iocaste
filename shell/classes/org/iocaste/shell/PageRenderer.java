@@ -433,7 +433,7 @@ public class PageRenderer extends HttpServlet implements Function {
                     continue;
                 }
                 
-                if (!fieldname.equals(((Element)element).getName()))
+                if (!fieldname.equals(((Element)element).getHtmlName()))
                     continue;
                 
                 filename = fileitem.getName();
