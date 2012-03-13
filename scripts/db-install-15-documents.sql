@@ -1,11 +1,4 @@
 /* tokens \c e \p nao sao aceitos. nao existe parametro 'if exists' para 'drop user' */
-drop table range001 if exists;
-drop table docs005 if exists;
-drop table docs004 if exists;
-drop table docs003 if exists;
-drop table docs002 if exists;
-drop table docs001 if exists;
-\p document tables dropped.
 
 /* range numérico */
 create table range001 (

@@ -1,8 +1,4 @@
 /* tokens '\c e \p nao sao aceitos. nao existe parametro 'if exists' para 'drop user' */
-drop table shell003 if exists;
-drop table shell002 if exists;
-drop table shell001 if exists;
-\p shell tables dropped.
 
 /* folha de estilo */
 create table shell001 (

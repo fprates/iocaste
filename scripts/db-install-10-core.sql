@@ -1,7 +1,4 @@
 /* tokens '\c e \p nao sao aceitos. nao existe parametro 'if exists' para 'drop user' */
-\c true
-drop user iocastedb;
-\c false
 create user iocastedb password initial;
 \p user generated.
 
