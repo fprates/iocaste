@@ -2,7 +2,8 @@
 
 create table shcab (
     ident varchar(24) primary key,
-    docid varchar(24) foreign key references docs001(docid)
+    docid varchar(24) foreign key references docs001(docid),
+    exprt varchar(48) foreign key references docs002(iname)
 );
 
 create table shitm (
@@ -20,6 +21,7 @@ grant select, insert, update, delete on shitm to iocastedb;
 insert into docs001(docid, tname, class) values('SEARCH_HELP', 'SHCAB', '');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('SEARCH_HELP.NAME', 'SEARCH_HELP', 0, 'IDENT', 'SEARCH_HELP.NAME', 'name');
 insert into docs002(iname, docid, index, fname, ename, attrb, mdref, itref) values('SEARCH_HELP.MODEL', 'SEARCH_HELP', 1, 'DOCID', 'MODEL.NAME', 'model', 'MODEL', 'NAME');
+insert into docs002(iname, docid, index, fname, ename, attrb, mdref, itref) values('SEARCH_HELP.EXPORT', 'SEARCH_HELP', 2, 'EXPRT', 'MODELITEM.NAME', 'export', 'MODELITEM', 'NAME');
 insert into docs003(ename, decim, lngth, etype, upcas) values('SEARCH_HELP.NAME', 0, 12, 0, 1);
 insert into docs004(iname, docid) values('SEARCH_HELP.NAME', 'SEARCH_HELP');
 insert into docs005(tname, docid) values('SHCAB', 'SEARCH_HELP');

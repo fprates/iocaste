@@ -14,6 +14,11 @@ public class Services extends AbstractFunction {
         export("save", "save");
     }
     
+    private final String composeName(String model, Object item) {
+        return new StringBuilder(model).append(".").
+                append(item).toString();
+    }
+    
     /**
      * 
      * @param message
@@ -27,8 +32,8 @@ public class Services extends AbstractFunction {
         Documents documents = new Documents(this);
         ExtendedObject shdata = documents.getObject("SEARCH_HELP", name);
         
-        sh.setModelName((String)shdata.getValue("MODEL_NAME"));
-        sh.setExport((String)shdata.getValue("EXPORT_ITEM"));
+        sh.setModelName((String)shdata.getValue("NAME"));
+        sh.setExport((String)shdata.getValue("EXPORT"));
         
         objects = documents.select("from SH_ITENS where SH_NAME = ?",
                 sh.getModelName());
@@ -45,17 +50,20 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void save(Message message) throws Exception {
-        String shname, shitemname;
+        String export, shname, shitemname;
         Documents documents = new Documents(this);
         ExtendedObject header = (ExtendedObject)message.get("header");
         ExtendedObject[] itens = (ExtendedObject[])message.get("itens");
-        
-        documents.save(header);
+
         shname = (String)header.getValue("NAME");
+        export = composeName((String)header.getValue("MODEL"),
+                header.getValue("EXPORT"));
+        
+        header.setValue("EXPORT", export);
+        documents.save(header);
         
         for (ExtendedObject item : itens) {
-            shitemname = new StringBuilder(shname).append(".").
-                    append(item.getValue("NAME")).toString();
+            shitemname = composeName(shname, item.getValue("NAME"));
             
             item.setValue("NAME", shitemname);
             item.setValue("SEARCH_HELP", shname);
