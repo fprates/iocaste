@@ -23,7 +23,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void addshitem(ViewData view) {
-        Add.shitem(view);
+        SHStructure.insert(view);
     }
     
     /**
@@ -146,6 +146,17 @@ public class Main extends AbstractPage {
      */
     public final void renameok(ViewData view) throws Exception {
         Rename.ok(view, this);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractPage#returnBeforeActionCall(
+     *     org.iocaste.shell.common.ViewData)
+     */
+    @Override
+    public final boolean returnBeforeActionCall(ViewData view)
+            throws Exception {
+        return SHStructure.validate(view, this);
     }
     
     /**
