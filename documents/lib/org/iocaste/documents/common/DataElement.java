@@ -32,7 +32,7 @@ import java.util.Date;
  */
 public class DataElement implements Serializable {
     private static final long serialVersionUID = -2827176147542188319L;
-    private String name;
+    private String name, sh;
     private int decimals;
     private int length;
     private int type;
@@ -61,7 +61,7 @@ public class DataElement implements Serializable {
      * Retorna quantidade de casas decimais.
      * @return quantidade
      */
-    public int getDecimals() {
+    public final int getDecimals() {
         return decimals;
     }
     
@@ -69,7 +69,7 @@ public class DataElement implements Serializable {
      * Retorna comprimento máximo do dado.
      * @return comprimento máximo
      */
-    public int getLength() {
+    public final int getLength() {
         return length;
     }
     
@@ -77,15 +77,23 @@ public class DataElement implements Serializable {
      * Retorna nome do elemento.
      * @return nome
      */
-    public String getName() {
+    public final String getName() {
         return name;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getSearchHelp() {
+        return sh;
     }
     
     /**
      * Retorna tipo do elemento.
      * @return tipo
      */
-    public int getType() {
+    public final int getType() {
         return type;
     }
     
@@ -93,7 +101,7 @@ public class DataElement implements Serializable {
      * 
      * @return
      */
-    public boolean isUpcase() {
+    public final boolean isUpcase() {
     	return upcase;
     }
     
@@ -101,7 +109,7 @@ public class DataElement implements Serializable {
      * Define quantidade de casas decimais.
      * @param decimals quantidade
      */
-    public void setDecimals(int decimals) {
+    public final void setDecimals(int decimals) {
         this.decimals = decimals;
     }
     
@@ -109,7 +117,7 @@ public class DataElement implements Serializable {
      * Define comprimento do elemento.
      * @param length comprimento
      */
-    public void setLength(int length) {
+    public final void setLength(int length) {
         this.length = length;
     }
     
@@ -117,15 +125,23 @@ public class DataElement implements Serializable {
      * Define nome do elemento.
      * @param name
      */
-    public void setName(String name) {
+    public final void setName(String name) {
         this.name = name;
+    }
+    
+    /**
+     * 
+     * @param sh
+     */
+    public final void setSearchHelp(String sh) {
+        this.sh = sh;
     }
     
     /**
      * Define tipo do elemento.
      * @param type tipo
      */
-    public void setType(int type) {
+    public final void setType(int type) {
         this.type = type;
     }
     
@@ -133,7 +149,7 @@ public class DataElement implements Serializable {
      * 
      * @param upcase
      */
-    public void setUpcase(boolean upcase) {
+    public final void setUpcase(boolean upcase) {
     	this.upcase = upcase;
     }
 }
