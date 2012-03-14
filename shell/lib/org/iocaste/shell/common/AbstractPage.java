@@ -34,13 +34,6 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param cdata
      * @param vdata
      */
-    protected void beforeActionCall(ViewData vdata) throws Exception {};
-    
-    /**
-     * 
-     * @param cdata
-     * @param vdata
-     */
     protected void beforeValidation(ViewData vdata) throws Exception {};
     
     /**
@@ -110,7 +103,12 @@ public abstract class AbstractPage extends AbstractFunction {
             return view;
         }
         
-        beforeActionCall(view);
+        if (returnBeforeActionCall(view)) {
+            updateView(view);
+            
+            return view;
+        }
+            
         
         if (element.getType() == Const.SEARCH_HELP) {
             view.export("sh", element);
@@ -238,6 +236,15 @@ public abstract class AbstractPage extends AbstractFunction {
         if (element.hasMultipartSupport())
             vdata.addMultipartElement((MultipartElement)element);
     }
+    
+    /**
+     * 
+     * @param cdata
+     * @param vdata
+     */
+    protected boolean returnBeforeActionCall(ViewData vdata) throws Exception {
+        return false;
+    };
     
     /**
      * 
