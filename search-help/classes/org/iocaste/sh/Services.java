@@ -45,14 +45,23 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void save(Message message) throws Exception {
+        String shname, shitemname;
         Documents documents = new Documents(this);
         ExtendedObject header = (ExtendedObject)message.get("header");
         ExtendedObject[] itens = (ExtendedObject[])message.get("itens");
         
         documents.save(header);
+        shname = (String)header.getValue("NAME");
         
-        for (ExtendedObject item : itens)
+        for (ExtendedObject item : itens) {
+            shitemname = new StringBuilder(shname).append(".").
+                    append(item.getValue("NAME")).toString();
+            
+            item.setValue("NAME", shitemname);
+            item.setValue("SEARCH_HELP", shname);
+            
             documents.save(item);
+        }
     }
 
 }
