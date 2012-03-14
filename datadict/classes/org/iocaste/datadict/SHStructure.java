@@ -21,6 +21,10 @@ import org.iocaste.shell.common.ViewData;
 
 public class SHStructure {
     
+    private static String composeName(String model, String item) {
+        return new StringBuilder(model).append(".").append(item).toString();
+    }
+    
     /**
      * 
      * @param mode
@@ -154,8 +158,7 @@ public class SHStructure {
         header = view.getElement("header");
         model = header.get("MODEL").getValue();
         element = header.get("EXPORT");
-        value = new StringBuilder(model).append(".").
-                append(((InputComponent)element).getValue()).toString();
+        value = composeName(model, ((InputComponent)element).getValue());
         
         if (documents.getObject("MODELITEM", value) == null) {
             view.message(Const.ERROR, "invalid.model.item");
@@ -169,9 +172,7 @@ public class SHStructure {
         for (TableItem item : itens.getItens()) {
             element = item.get("ITEM");
             
-            value = new StringBuilder(model).
-                    append(".").
-                    append(((InputComponent)element).getValue()).toString();
+            value = composeName(model, ((InputComponent)element).getValue());
             
             if (documents.getObject("MODELITEM", value) != null)
                 continue;
