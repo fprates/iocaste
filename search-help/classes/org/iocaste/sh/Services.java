@@ -50,22 +50,23 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void save(Message message) throws Exception {
-        String export, shname, shitemname;
+        String model, export, shname, shitemname;
         Documents documents = new Documents(this);
         ExtendedObject header = (ExtendedObject)message.get("header");
         ExtendedObject[] itens = (ExtendedObject[])message.get("itens");
 
         shname = (String)header.getValue("NAME");
-        export = composeName((String)header.getValue("MODEL"),
-                header.getValue("EXPORT"));
+        model = (String)header.getValue("MODEL");
+        export = composeName(model, header.getValue("EXPORT"));
         
         header.setValue("EXPORT", export);
         documents.save(header);
         
         for (ExtendedObject item : itens) {
-            shitemname = composeName(shname, item.getValue("NAME"));
+            shitemname = (String)item.getValue("ITEM");
             
-            item.setValue("NAME", shitemname);
+            item.setValue("NAME", composeName(shname, shitemname));
+            item.setValue("ITEM", composeName(model, shitemname));
             item.setValue("SEARCH_HELP", shname);
             
             documents.save(item);

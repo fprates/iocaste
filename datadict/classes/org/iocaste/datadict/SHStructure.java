@@ -28,14 +28,18 @@ public class SHStructure {
      */
     private static void insertItem(byte mode, Table itens) {
         TextField tfield;
+        String name;
         TableItem item = new TableItem(itens);
         DocumentModel model = itens.getModel();
         
         for (DocumentModelItem modelitem : model.getItens()) {
-            tfield = new TextField(itens, modelitem.getName());
+            name = modelitem.getName();
+            tfield = new TextField(itens, name);
             tfield.setModelItem(modelitem);
             tfield.setReferenceValidable(false);
-            tfield.setObligatory((mode == Common.SHOW)? false : true);
+            
+            if ((mode == Common.SHOW) || name.equals("NAME"))
+                tfield.setObligatory(false);
             
             item.add(tfield);
         }
@@ -48,6 +52,7 @@ public class SHStructure {
      */
     public static final void main(ViewData view, Function function) {
         DataItem ditem;
+        String name;
         Container container = new Form(null, "main");
         DocumentModel model = view.getParameter("shmodel");
         DataForm header = new DataForm(container, "header");
@@ -60,19 +65,25 @@ public class SHStructure {
                 continue;
             
             ditem = (DataItem)element;
+            name = ditem.getName();
             
-            if (ditem.getName().equals("NAME")) {
+            if (name.equals("NAME")) {
                 ditem.setValue((String)view.getParameter("shname"));
                 ditem.setEnabled(false);
                 
                 continue;
             }
             
+            if (name.equals("EXPORT"))
+                ditem.setReferenceValidable(false);
+            
             ditem.setObligatory(true);
         }
         
         model = view.getParameter("shitens");
+        
         itens.importModel(model);
+        itens.getColumn("NAME").setVisible(false);
         itens.getColumn("SEARCH_HELP").setVisible(false);
         itens.setMark(true);
         
@@ -142,17 +153,25 @@ public class SHStructure {
         documents = new Documents(function);
         header = view.getElement("header");
         model = header.get("MODEL").getValue();
+        element = header.get("EXPORT");
+        value = new StringBuilder(model).append(".").
+                append(((InputComponent)element).getValue()).toString();
+        
+        if (documents.getObject("MODELITEM", value) == null) {
+            view.message(Const.ERROR, "invalid.model.item");
+            view.setFocus(element);
+            
+            return true;
+        }
+        
         itens = view.getElement("itens");
         
         for (TableItem item : itens.getItens()) {
             element = item.get("ITEM");
             
-            value = ((InputComponent)element).getValue();
-            if (value.equals(""))
-                continue;
-            
-            value = new StringBuilder(model).append(".").
-                    append(value).toString();
+            value = new StringBuilder(model).
+                    append(".").
+                    append(((InputComponent)element).getValue()).toString();
             
             if (documents.getObject("MODELITEM", value) != null)
                 continue;
