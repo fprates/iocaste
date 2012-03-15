@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public abstract class AbstractPage extends AbstractFunction {
@@ -24,13 +25,6 @@ public abstract class AbstractPage extends AbstractFunction {
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
     }
-    
-    /**
-     * 
-     * @param cdata
-     * @param vdata
-     */
-    protected void beforeValidation(ViewData vdata) throws Exception {};
     
     /**
      * 
@@ -93,7 +87,7 @@ public abstract class AbstractPage extends AbstractFunction {
                 (Map<String, Object>)message.get("parameters");
         
         if (app == null || page == null)
-            throw new Exception("Page not especified.");
+            throw new IocasteException("page not especified.");
         
         view = new ViewData(app, page, logid);
         for (String name : parameters.keySet())
