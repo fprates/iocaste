@@ -20,6 +20,7 @@ public class Controller {
     private static final int EINITIAL = 1;
     private static final int EMISMATCH = 2;
     private static final int EINVALID_REFERENCE = 3;
+    private static final int WINVALID_ACTION = 4;
     
     /**
      * 
@@ -260,8 +261,10 @@ public class Controller {
         
         view.clearRedirect();
         
-        if (controlname.equals(""))
-            return null;
+        if (controlname.equals("")) {
+            status.error = WINVALID_ACTION;
+            return status;
+        }
         
         element = view.getElement(controlname);
         if (element.isControlComponent()) {
