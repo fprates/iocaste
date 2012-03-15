@@ -1,11 +1,12 @@
 package org.iocaste.sh;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.SearchHelp;
 
 public class Services extends AbstractFunction {
     
@@ -24,24 +25,33 @@ public class Services extends AbstractFunction {
      * @param message
      * @return
      */
-    public final SearchHelp get(Message message) throws Exception {
-        ExtendedObject[] objects;
-        Container container = (Container)message.get("container");
-        String name = message.getString("name");
-        SearchHelp sh = new SearchHelp(container, name);
+    public final ExtendedObject[] get(Message message) throws Exception {
+        ExtendedObject[] itens;
+        List<ExtendedObject> shdata;
+        String value, name = message.getString("name");
         Documents documents = new Documents(this);
-        ExtendedObject shdata = documents.getObject("SEARCH_HELP", name);
+        ExtendedObject header = documents.getObject("SEARCH_HELP", name);
         
-        sh.setModelName((String)shdata.getValue("NAME"));
-        sh.setExport((String)shdata.getValue("EXPORT"));
+        if (header == null)
+            return null;
         
-        objects = documents.select("from SH_ITENS where SH_NAME = ?",
-                sh.getModelName());
+        value = (String)header.getValue("EXPORT");
+        header.setValue("EXPORT", value.split("\\.")[1]);
         
-        for (ExtendedObject object : objects)
-            sh.addModelItemName((String)object.getValue("ITEM_NAME"));
+        itens = documents.select("from SH_ITENS where SEARCH_HELP = ?",
+                header.getValue("NAME"));
         
-        return sh;
+        shdata = new ArrayList<ExtendedObject>();
+        shdata.add(header);
+        
+        for (ExtendedObject item : itens) {
+            value = (String)item.getValue("ITEM");
+            item.setValue("ITEM", value.split("\\.")[1]);
+            
+            shdata.add(item);
+        }
+        
+        return shdata.toArray(new ExtendedObject[0]);
     }
     
     /**
@@ -71,6 +81,16 @@ public class Services extends AbstractFunction {
             
             documents.save(item);
         }
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void update(Message message) throws Exception {
+        ExtendedObject header = (ExtendedObject)message.get("header");
+        ExtendedObject[] itens = (ExtendedObject[])message.get("itens"); 
     }
 
 }

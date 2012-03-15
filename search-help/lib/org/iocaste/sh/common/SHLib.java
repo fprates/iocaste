@@ -4,8 +4,6 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.SearchHelp;
 
 public class SHLib extends AbstractServiceInterface {
     private static final String APP_NAME = "/iocaste-search-help/services.html";
@@ -16,34 +14,48 @@ public class SHLib extends AbstractServiceInterface {
     
     /**
      * 
-     * @param container
      * @param name
      * @return
      * @throws Exception
      */
-    public final SearchHelp get(Container container, String name)
-            throws Exception {
+    public final ExtendedObject[] get(String name) throws Exception {
         Message message = new Message();
         
         message.setId("get");
         message.add("name", name);
-        message.add("container", container);
         
-        return (SearchHelp)call(message);
+        return (ExtendedObject[])call(message);
     }
     
     /**
      * 
-     * @param object
+     * @param header
      * @param itens
      * @throws Exception
      */
-    public final void save(ExtendedObject object, ExtendedObject...itens)
+    public final void save(ExtendedObject header, ExtendedObject...itens)
             throws Exception {
         Message message = new Message();
         
         message.setId("save");
-        message.add("header", object);
+        message.add("header", header);
+        message.add("itens", itens);
+        
+        call(message);
+    }
+    
+    /**
+     * 
+     * @param header
+     * @param itens
+     * @throws Exception
+     */
+    public final void update(ExtendedObject header, ExtendedObject... itens)
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("update");
+        message.add("header", header);
         message.add("itens", itens);
         
         call(message);
