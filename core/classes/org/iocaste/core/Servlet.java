@@ -4,7 +4,7 @@ package org.iocaste.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.protocol.InvalidSessionException;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.ServerServlet;
 
@@ -41,6 +41,6 @@ public class Servlet extends ServerServlet {
             return;
         
         if (!services.isConnected(message))
-            throw new InvalidSessionException();
+            throw new IocasteException("core.pre-run: invalid session.");
     }
 }

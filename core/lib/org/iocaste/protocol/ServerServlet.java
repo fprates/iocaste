@@ -192,7 +192,7 @@ public abstract class ServerServlet extends HttpServlet {
         connected = (Boolean)Service.callServer(url, test);
         
         if (!connected)
-            throw new InvalidSessionException();
+            throw new IocasteException("protocol.pre-run: invalid session");
     }
     
     /**
