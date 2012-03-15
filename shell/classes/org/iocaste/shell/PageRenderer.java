@@ -23,9 +23,12 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.ViewData;
 
@@ -52,15 +55,24 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final ViewData callController(String sessionid,
             Map<String, ?> parameters, PageContext pagectx) throws Exception {
-        Message message = new Message();
+        InputStatus status;
+        Message message;
         
+        status = Controller.validate(pagectx.getViewData(), parameters, this);
+        if (status.fatal != null)
+            throw new IocasteException(status.fatal);
+        
+        if (status.error > 0)
+            return pagectx.getViewData();
+        
+        message = new Message();
         message.setId("exec_action");
         message.add("view", pagectx.getViewData());
         message.setSessionid(sessionid);
         
         for (String name : parameters.keySet())
             message.add(name, parameters.get(name));
-            
+        
         return (ViewData)Service.callServer(
                 composeUrl(pagectx.getAppContext().getName()), message);
     }
@@ -372,6 +384,12 @@ public class PageRenderer extends HttpServlet implements Function {
         }
         
         view = callController(sessionid, parameters, pagectx);
+        view.clearInputs();
+        
+        for (Container container : view.getContainers())
+            registerInputs(view, container);
+        
+        updateView(sessionid, view);
         
         renderer.setMessageText(view.getTranslatedMessage());
         renderer.setMessageType(view.getMessageType());
@@ -471,6 +489,35 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
+     * @param inputs
+     * @param element
+     */
+    private final static void registerInputs(ViewData vdata, Element element) {
+        Container container;
+        
+        if (element == null)
+            return;
+        
+        element.setView(vdata);
+        
+        if (element.isContainable()) {
+            container = (Container)element;
+            
+            for (Element element_ : container.getElements())
+                registerInputs(vdata, element_);
+            
+            return;
+        }
+        
+        if (element.isDataStorable())
+            vdata.addInput(element.getHtmlName());
+        
+        if (element.hasMultipartSupport())
+            vdata.addMultipartElement((MultipartElement)element);
+    }
+    
+    /**
+     * 
      * @param resp
      * @param pagectx
      * @throws Exception
@@ -498,6 +545,10 @@ public class PageRenderer extends HttpServlet implements Function {
             
             viewdata = (ViewData)Service.callServer(
                     composeUrl(appctx.getName()), message);
+            
+            for (Container container : viewdata.getContainers())
+                registerInputs(viewdata, container);
+            
             pagectx.setViewData(viewdata);
         }
         
@@ -587,7 +638,15 @@ public class PageRenderer extends HttpServlet implements Function {
         AppContext appcontext = apps.get(sessionid).get(view.getLogid()).
                 getAppContext(view.getAppName());
         
+        for (Container container : view.getContainers())
+            registerInputs(view, container);
+        
         appcontext.getPageContext(view.getPageName()).setViewData(view);
     }
+}
 
+class InputStatus {
+    public int error = 0;
+    public InputComponent input = null;
+    public String fatal = null;
 }

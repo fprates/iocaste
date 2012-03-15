@@ -1,7 +1,6 @@
 package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -184,24 +183,6 @@ public class Shell extends AbstractServiceInterface {
         message.add("logid", view.getLogid());
         
         return (String[])call(message);
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param values
-     * @return
-     * @throws Exception
-     */
-    public final Object[] processInputs(ViewData view,
-            Map<String, Object> values) throws Exception {
-        Message message = new Message();
-        
-        message.setId("process_inputs");
-        message.add("view", view);
-        message.add("values", values);
-        
-        return (Object[])call(message);
     }
     
     /**

@@ -7,10 +7,6 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
 public abstract class AbstractPage extends AbstractFunction {
-    public static final int EINITIAL = 1;
-    public static final int EMISMATCH = 2;
-    public static final int EINVALID_REFERENCE = 3;
-    private Shell shell;
     
     public AbstractPage() {
         export("get_view_data", "getViewData");
@@ -24,7 +20,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @throws Exception 
      */
     public void back(ViewData view) throws Exception {
-        String[] entry = shell.popPage(view);
+        String[] entry = new Shell(this).popPage(view);
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
     }
@@ -44,74 +40,15 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public final ViewData execAction(Message message) throws Exception {
         Method method;
-        ViewData view;
-        Element element;
-        ControlComponent control;
+        ViewData view = (ViewData)message.get("view");
         String action, controlname = message.getString("action");
-        InputStatus status = new InputStatus();
+        ControlComponent control = view.getElement(controlname);
         
-        if (controlname == null)
-            return null;
-        
-        view = (ViewData)message.get("view");
-        if (view == null)
-            throw new Exception("Null view on action processing.");
-        
-        view.clearRedirect();
-        
-        if (controlname.equals(""))
+        if (returnBeforeActionCall(view))
             return view;
         
-        beforeValidation(view);
-        
-        element = view.getElement(controlname);
-        if (element.isControlComponent()) {
-            control = (ControlComponent)element;
-            
-            if (!control.isCancellable()) {
-                status = processInputs(view, message.getParameters());
-                view = status.view;
-            }
-        } else {
-            control = null;
-            status = processInputs(view, message.getParameters());
-            view = status.view;
-        }
-        
-        if (shell == null)
-            shell = new Shell(this);
-        
-        if (status.input != null) {
-            view.setFocus(((Component)status.input).getHtmlName());
-            
-            switch (status.error) {
-            case EINITIAL:
-                view.message(Const.ERROR, "field.is.obligatory");
-                break;
-                
-            case EMISMATCH:
-                view.message(Const.ERROR, "field.type.mismatch");
-                break;
-                
-            case EINVALID_REFERENCE:
-                view.message(Const.ERROR, "invalid.value");
-                break;
-            }
-            
-            updateView(view);
-            
-            return view;
-        }
-        
-        if (returnBeforeActionCall(view)) {
-            updateView(view);
-            
-            return view;
-        }
-            
-        
-        if (element.getType() == Const.SEARCH_HELP) {
-            view.export("sh", element);
+        if (((Element)control).getType() == Const.SEARCH_HELP) {
+            view.export("sh", control);
             view.redirect("iocaste-search-help", "main");
             view.setReloadableView(true);
         } else {
@@ -122,9 +59,7 @@ public abstract class AbstractPage extends AbstractFunction {
         
         if (view.hasPageCall() && (control == null ||
                 !control.isCancellable() || control.allowStacking()))
-            shell.pushPage(view);
-        
-        updateView(view);
+            new Shell(this).pushPage(view);
         
         return view;
     }
@@ -137,7 +72,7 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     protected final ViewData getView(ViewData view, String name)
             throws Exception {
-        return shell.getView(view, name);
+        return new Shell(this).getView(view, name);
     }
     
     /**
@@ -167,9 +102,6 @@ public abstract class AbstractPage extends AbstractFunction {
         method = this.getClass().getMethod(page, ViewData.class);
         method.invoke(this, view);
         
-        for (Container container : view.getContainers())
-            registerInputs(view, container);
-        
         return view;
     }
     
@@ -187,58 +119,6 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
-     * @param view
-     * @param message
-     * @return
-     * @throws Exception
-     */
-    private final InputStatus processInputs(ViewData view,
-            Map<String, Object> values) throws Exception {
-        Object[] result;
-        InputStatus status;
-        Shell shell = new Shell(this);
-        
-        result = (Object[])shell.processInputs(view, values);
-        
-        status = new InputStatus();
-        status.input = (InputComponent)result[0];
-        status.error = (Integer)result[1];
-        status.view = (ViewData)result[2];
-        
-        return status;
-    }
-    
-    /**
-     * 
-     * @param inputs
-     * @param element
-     */
-    private final void registerInputs(ViewData vdata, Element element) {
-        Container container;
-        
-        if (element == null)
-            return;
-        
-        element.setView(vdata);
-        
-        if (element.isContainable()) {
-            container = (Container)element;
-            
-            for (Element element_ : container.getElements())
-                registerInputs(vdata, element_);
-            
-            return;
-        }
-        
-        if (element.isDataStorable())
-            vdata.addInput(element.getHtmlName());
-        
-        if (element.hasMultipartSupport())
-            vdata.addMultipartElement((MultipartElement)element);
-    }
-    
-    /**
-     * 
      * @param cdata
      * @param vdata
      */
@@ -252,16 +132,6 @@ public abstract class AbstractPage extends AbstractFunction {
      * @throws Exception
      */
     protected final void updateView(ViewData view) throws Exception {
-        view.clearInputs();
-        for (Container container : view.getContainers())
-            registerInputs(view, container);
-        
-        shell.updateView(view);
+        new Shell(this).updateView(view);
     }
-}
-
-class InputStatus {
-    public int error = 0;
-    public InputComponent input = null;
-    public ViewData view = null;
 }
