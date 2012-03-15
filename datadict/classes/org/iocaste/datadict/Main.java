@@ -182,8 +182,19 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception 
      */
-    public final void show(ViewData vdata) throws Exception {
-        Selection.show(vdata, this);
+    public final void show(ViewData view) throws Exception {
+        int op = Common.getTpObjectValue(view);
+        
+        switch (op) {
+        case Common.TABLE:
+            Selection.showtb(view, this);
+            break;
+        case Common.SH:
+            Selection.showsh(view, this);
+            break;
+        }
+        
+        view.export("mode", Common.SHOW);
     }
     
     /**

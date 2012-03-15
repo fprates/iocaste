@@ -20,6 +20,11 @@ import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class SHStructure {
+    private final static String[] TITLE = {
+        "sh-editor-create",
+        "sh-editor-display",
+        "sh-editor-update"
+    };
     
     private static String composeName(String model, String item) {
         return new StringBuilder(model).append(".").append(item).toString();
@@ -29,8 +34,10 @@ public class SHStructure {
      * 
      * @param mode
      * @param itens
+     * @param object
      */
-    private static void insertItem(byte mode, Table itens) {
+    private static void insertItem(byte mode, Table itens,
+            ExtendedObject object) {
         TextField tfield;
         String name;
         TableItem item = new TableItem(itens);
@@ -41,12 +48,16 @@ public class SHStructure {
             tfield = new TextField(itens, name);
             tfield.setModelItem(modelitem);
             tfield.setReferenceValidable(false);
+            tfield.setEnabled((mode == Common.SHOW)? false : true);
             
             if ((mode == Common.SHOW) || name.equals("NAME"))
                 tfield.setObligatory(false);
             
             item.add(tfield);
         }
+        
+        if (object != null)
+            item.setObject(object);
     }
 
     /**
@@ -54,15 +65,22 @@ public class SHStructure {
      * @param view
      * @param function
      */
-    public static final void main(ViewData view, Function function) {
+    public static final void main(ViewData view, Function function)
+            throws Exception {
         DataItem ditem;
         String name;
+        ExtendedObject[] oitens;
         Container container = new Form(null, "main");
-        DocumentModel model = view.getParameter("shmodel");
+        Documents documents = new Documents(function);
+        DocumentModel model = documents.getModel("SEARCH_HELP");
         DataForm header = new DataForm(container, "header");
         Table itens = new Table(container, "itens");
+        byte mode = Common.getMode(view);
         
         header.importModel(model);
+        
+        if (mode != Common.CREATE)
+            header.setObject((ExtendedObject)view.getParameter("header"));
         
         for (Element element : header.getElements()) {
             if (element.getType() != Const.DATA_ITEM)
@@ -81,22 +99,52 @@ public class SHStructure {
             if (name.equals("EXPORT"))
                 ditem.setReferenceValidable(false);
             
-            ditem.setObligatory(true);
+            ditem.setObligatory((mode == Common.SHOW)? false : true);
+            ditem.setEnabled((mode == Common.SHOW)? false : true);
         }
         
-        model = view.getParameter("shitens");
+        model = documents.getModel("SH_ITENS");
         
         itens.importModel(model);
         itens.getColumn("NAME").setVisible(false);
         itens.getColumn("SEARCH_HELP").setVisible(false);
-        itens.setMark(true);
         
-        insertItem(Common.getMode(view), itens);
+        switch (mode) {
+        case Common.SHOW:
+            itens.setMark(false);
+            
+            oitens = view.getParameter("itens");
+            for (ExtendedObject item : oitens)
+                insertItem(mode, itens, item);
+            
+            break;
+            
+        case Common.CREATE:
+            itens.setMark(true);
+            
+            insertItem(mode, itens, null);
+            
+            new Button(container, "saveshitem");
+            new Button(container, "addshitem");
+            new Button(container, "deleteshitem");
+            
+            break;
+            
+        case Common.UPDATE:
+            itens.setMark(true);
+            
+            oitens = view.getParameter("shitens");
+            for (ExtendedObject item : oitens)
+                insertItem(mode, itens, item);
+            
+            new Button(container, "saveshitem");
+            new Button(container, "addshitem");
+            new Button(container, "deleteshitem");
+            
+            break;
+        }
         
-        new Button(container, "saveshitem");
-        new Button(container, "addshitem");
-        new Button(container, "deleteshitem");
-        
+        view.setTitle(TITLE[mode]);
         view.setFocus("MODEL");
         view.setNavbarActionEnabled("back", true);
         view.addContainer(container);
@@ -116,13 +164,25 @@ public class SHStructure {
         DataForm header = view.getElement("header");
         ExtendedObject object = header.getObject();
         Table itens = view.getElement("itens");
-          
         oitens = new ExtendedObject[itens.length()];
+        byte mode = Common.getMode(view);
+        
         for (TableItem item : itens.getItens())
             oitens[i] = item.getObject();
-          
-        shlib.save(object, oitens);
-          
+        
+        switch (mode) {
+        case Common.CREATE:
+            shlib.save(object, oitens);
+            view.export("mode", Common.UPDATE);
+            view.setTitle(TITLE[mode]);
+            
+            break;
+        case Common.UPDATE:
+            shlib.update(object, oitens);
+            
+            break;
+        }
+        
         view.message(Const.STATUS, "search.help.saved.successfully");
     }
     
@@ -133,7 +193,7 @@ public class SHStructure {
     public static final void insert(ViewData view) {
         Table itens = view.getElement("itens");
         
-        insertItem(Common.getMode(view), itens);
+        insertItem(Common.getMode(view), itens, null);
     }
     
     /**

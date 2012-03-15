@@ -2,7 +2,9 @@ package org.iocaste.datadict;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
+import org.iocaste.sh.common.SHLib;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -23,7 +25,6 @@ public class Selection {
      */
     public static final void create(ViewData view, Function function)
             throws Exception {
-        DocumentModel model;
         Documents documents = new Documents(function);
         String name = ((DataItem)view.getElement("modelname")).getValue();
         int op = Common.getTpObjectValue(view);
@@ -41,14 +42,8 @@ public class Selection {
             
             break;
         case Common.SH:
-            model = documents.getModel("SEARCH_HELP");
-            
             view.redirect(null, "shstructure");
             view.export("shname", name);
-            view.export("shmodel", model);
-            
-            model = documents.getModel("SH_ITENS");
-            view.export("shitens", model);
             
             break;
         }
@@ -105,35 +100,43 @@ public class Selection {
      * @param function
      * @throws Exception
      */
-    public static final void show(ViewData view, Function function)
+    public static final void showtb(ViewData view, Function function)
             throws Exception {
         DocumentModel model;
         String name = ((DataItem)view.getElement("modelname")).getValue();
         Documents documents = new Documents(function);
-        int op = Common.getTpObjectValue(view);
         
-        switch (op) {
-        case Common.TABLE:
-            if (!documents.hasModel(name)) {
-                view.message(Const.ERROR, "model.not.found");
-                return;
-            }
-            
-            model = documents.getModel(name);
-            view.export("model", model);
-            view.redirect(null, "tbstructure");
-            
-            break;
-            
-        case Common.SH:
-            view.redirect(null, "shstructure");
-            view.export("shname", name);
-            
-            break;
+        if (!documents.hasModel(name)) {
+            view.message(Const.ERROR, "model.not.found");
+            return;
         }
         
+        model = documents.getModel(name);
+        
         view.setReloadableView(true);
-        view.export("mode", Common.SHOW);
+        view.export("model", model);
+        view.redirect(null, "tbstructure");
+    }
+    
+    public static final void showsh(ViewData view, Function function)
+            throws Exception {
+        ExtendedObject[] shitens;
+        SHLib shlib = new SHLib(function);
+        String name = ((DataItem)view.getElement("modelname")).getValue();
+        ExtendedObject[] shdata = shlib.get(name);
+        
+        if (shdata == null) {
+            view.message(Const.ERROR, "model.not.found");
+            return;
+        }
+        
+        shitens = new ExtendedObject[shdata.length - 1];
+        System.arraycopy(shdata, 1, shitens, 0, shitens.length);
+        
+        view.redirect(null, "shstructure");
+        view.export("header", shdata[0]);
+        view.export("itens", shitens);
+        view.export("shname", name);
     }
 
     /**
