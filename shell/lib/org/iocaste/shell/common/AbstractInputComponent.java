@@ -152,6 +152,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#isSelectable()
+     */
+    @Override
+    public boolean isSelectable() {
+        return false;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#isSelected()
      */
     @Override

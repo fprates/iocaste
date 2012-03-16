@@ -185,6 +185,28 @@ public class Controller {
         DataElement dataelement;
         InputComponent input;
         
+        /*
+         * Componentes selecionáveis (como checkboxes), só fornecem
+         * valor quando marcados. Processa o estado falso deles antes
+         * do processamento principal.
+         */
+        for (String name : view.getInputs()) {
+            value = getString(values, name);
+            
+            if (value != null)
+                continue;
+            
+            element = view.getElement(name);
+            if (!element.isDataStorable())
+                continue;
+            
+            input = (InputComponent)element;
+            if (!input.isSelectable())
+                continue;
+            
+            setString(values, name, "off");
+        }
+        
         for (String name : values.keySet()) {
             element = view.getElement(name);
             
@@ -231,6 +253,27 @@ public class Controller {
     
     /**
      * 
+     * @param values
+     * @param name
+     * @param value
+     */
+    private static final void setString(Map<String, ?> values, String name,
+            String value) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> values_ = (Map<String, Object>)values;
+
+        if (values_.containsKey(name))
+            values_.remove(name);
+        
+        try {
+            values_.put(name, value);
+        } catch (ClassCastException e) {
+            values_.put(name, new String[] {value});
+        }
+    }
+    
+    /**
+     * 
      * @param view
      * @param values
      * @param function
@@ -243,11 +286,7 @@ public class Controller {
         String controlname;
         InputStatus status = new InputStatus();
 
-        try {
-            controlname = (String)values.get("action");
-        } catch (ClassCastException e) {
-            controlname = ((String[])values.get("action"))[0];
-        }
+        controlname = getString(values, "action");
         
         if (controlname == null) {
             status.fatal = "null control name.";

@@ -25,6 +25,8 @@ public interface InputComponent {
     
     public abstract boolean isSecret();
     
+    public abstract boolean isSelectable();
+    
     public abstract boolean isSelected();
     
     public abstract Object getParsedValue();
