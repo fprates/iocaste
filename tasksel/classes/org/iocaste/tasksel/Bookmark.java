@@ -46,7 +46,7 @@ public class Bookmark {
         
         item.setEnabled(false);
         
-        new Button(container, "savetask");
+        new Button(container, "save");
         
         view.setNavbarActionEnabled("back", true);
         view.setFocus("COMMAND");

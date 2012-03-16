@@ -2,7 +2,9 @@ package org.iocaste.tasksel;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Iocaste;
+import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.packagetool.common.PackageTool;
+import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
@@ -13,6 +15,11 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
+    
+    public Main() {
+        super();
+        export("install", "install");
+    }
     
     /**
      * 
@@ -35,6 +42,42 @@ public class Main extends AbstractPage {
     }
     
     /**
+     * 
+     * @param view
+     */
+    public final void install(ViewData view) {
+        Install.main(view);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final InstallData install(Message message) {
+        return Install.self();
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void installcancel(ViewData view) throws Exception {
+        back(view);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void installok(ViewData view) throws Exception {
+        Install.proceed(view, this);
+        back(view);
+    }
+    
+    /**
      * Visão geral de tarefas
      * @param view Visão
      * @throws Exception
@@ -43,6 +86,9 @@ public class Main extends AbstractPage {
         Container container = new Form(null, "main");
         DataForm form = new DataForm(container, "selector");
         DataItem cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
+        
+        if (!new Documents(this).hasModel("TASKS"))
+            new PackageTool(this).install("iocaste-tasksel");
         
         cmdline.setLength(128);
         new Button(container, "run");
@@ -70,7 +116,6 @@ public class Main extends AbstractPage {
      */
     public final void run(ViewData vdata) throws Exception {
         String[] parsed, values;
-        Iocaste iocaste;
         ExtendedObject task;
         DataForm form = vdata.getElement("selector");
         DataItem cmdline = form.get("command");
@@ -89,6 +134,11 @@ public class Main extends AbstractPage {
 
         task = new Documents(this).getObject("TASKS", parsed[0].toUpperCase());
         if (task == null) {
+            if (PackageTool.hasPackage(parsed[0])) {
+                vdata.redirect(null, "install");
+                return;
+            }
+            
             vdata.message(Const.ERROR, "command.not.found");
             vdata.setFocus("command");
             return;
@@ -119,13 +169,8 @@ public class Main extends AbstractPage {
         if (app == null)
             return;
         
-        iocaste = new Iocaste(this);
-        if (!iocaste.isAppEnabled(app)) {
-            vdata.message(Const.ERROR, "app.not.enabled");
-        } else {
-            vdata.setReloadableView(true);
-            vdata.redirect(app, page);
-        }
+        vdata.setReloadableView(true);
+        vdata.redirect(app, page);
     }
     
     /**
