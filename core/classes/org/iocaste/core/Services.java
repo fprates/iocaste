@@ -36,7 +36,6 @@ public class Services extends AbstractFunction {
         export("checked_select", "checkedSelect");
         export("get_host", "getHost");
         export("get_system_parameter", "getSystemParameter");
-        export("is_app_enabled", "isAppEnabled");
     }
     
     /**
@@ -202,16 +201,6 @@ public class Services extends AbstractFunction {
         }
         
         return users; 
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
-     */
-    public final boolean isAppEnabled(Message message) throws Exception {
-        // #TODO
-        return true;
     }
     
     /**

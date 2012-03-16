@@ -116,21 +116,6 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param name
-     * @return
-     * @throws Exception
-     */
-    public final boolean isAppEnabled(String name) throws Exception {
-        Message message = new Message();
-        
-        message.setId("is_app_enabled");
-        message.add("app_name", name);
-        
-        return (Boolean)call(message);
-    }
-    
-    /**
      * Verifica se há usuário conectado a sessão atual.
      * @return true, se usuário está conectado.
      * @throws Exception
