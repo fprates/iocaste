@@ -13,39 +13,14 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
-    private static final int CREATE = 0;
-    private static final int EDIT = 1;
-    private static final String[] TITLE = {
-        "bookmark-task-create",
-        "bookmark-task-update"
-    };
     
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
     public final void bookmark(ViewData view) throws Exception {
-        DataItem item;
-        byte mode = view.getParameter("mode");
-        Container container = new Form(null, "main");
-        DataForm form = new DataForm(container, "task");
-        
-        form.importModel(new Documents(this).getModel("TASKS"));
-
-        item = form.get("NAME");
-        switch (mode) {
-        case CREATE:
-            item.setValue((String)view.getParameter("name"));
-            break;
-        case EDIT:
-            form.setObject((ExtendedObject)view.getParameter("task"));
-            break;
-        }
-        
-        item.setEnabled(false);
-        
-        new Button(container, "savetask");
-        
-        view.setNavbarActionEnabled("back", true);
-        view.setFocus("COMMAND");
-        view.setTitle(TITLE[mode]);
-        view.addContainer(container);
+        Bookmark.main(view, this);
     }
     
     /*
@@ -71,7 +46,7 @@ public class Main extends AbstractPage {
         
         cmdline.setLength(128);
         new Button(container, "run");
-        new Button(container, "save");
+        new Button(container, "newentry");
         
         view.setNavbarActionEnabled("help", true);
         view.setFocus("command");
@@ -80,8 +55,18 @@ public class Main extends AbstractPage {
     }
     
     /**
-     * Controlador geral de tarefas
+     * 
      * @param view
+     * @throws Exception
+     */
+    public final void newentry(ViewData view) throws Exception {
+        Bookmark.newentry(view, this);
+    }
+    
+    /**
+     * 
+     * @param vdata
+     * @throws Exception
      */
     public final void run(ViewData vdata) throws Exception {
         String[] parsed, values;
@@ -146,60 +131,9 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
+     * @throws Exception
      */
     public final void save(ViewData view) throws Exception {
-        byte mode;
-        ExtendedObject task;
-        Documents documents;
-        DataForm form = view.getElement("selector");
-        String command = form.get("command").getValue();
-        
-        command = (command == null)? "" : command.toUpperCase();
-        
-        if (command.equals("")) {
-            view.message(Const.ERROR, "task.name.is.required");
-            view.setFocus("command");
-            return;
-        }
-        
-        documents = new Documents(this);
-        task = documents.getObject("TASKS", command);
-        
-        if (task != null) {
-            mode = EDIT;
-            view.export("task", task);
-        } else {
-            mode = CREATE;
-            view.export("name", command);
-        }
-        
-        view.export("mode", mode);
-        view.setReloadableView(true);
-        view.redirect(null, "bookmark");
-    }
-    
-    /**
-     * 
-     * @param view
-     */
-    public final void savetask(ViewData view) throws Exception {
-        DataForm form = view.getElement("task");
-        Documents documents = new Documents(this);
-        byte mode = view.getParameter("mode");
-        ExtendedObject task = form.getObject();
-        
-        switch (mode) {
-        case CREATE:
-            documents.save(task);
-            break;
-        case EDIT:
-            documents.modify(task);
-            break;
-        }
-            
-        documents.commit();
-        
-        view.message(Const.STATUS, "task.saved.successfully");
-        view.redirect(null, "main");
+        Bookmark.save(view, this);
     }
 }
