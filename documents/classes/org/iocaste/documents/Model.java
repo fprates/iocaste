@@ -301,21 +301,20 @@ public class Model {
      */
     private static final void saveDocumentHeader(Iocaste iocaste,
             DocumentModel model) throws Exception {
-        String query = "insert into docs001 (docid, tname, class) " +
+        String query = new StringBuilder("drop table ").
+                append(model.getTableName()).toString();
+        
+        iocaste.update(query);
+        
+        query = "insert into docs001 (docid, tname, class) " +
                 "values (?, ?, ?)";
         
-        iocaste.update(query, new Object[] {
-                model.getName(),
-                model.getTableName(),
-                model.getClassName()
-        });
+        iocaste.update(query, model.getName(),
+                model.getTableName(),model.getClassName());
         
         query = "insert into docs005(tname, docid) values(? , ?)";
         
-        iocaste.update(query, new Object[] {
-                model.getTableName(),
-                model.getName()
-        });
+        iocaste.update(query, model.getTableName(),model.getName());
     }
     
     /**
