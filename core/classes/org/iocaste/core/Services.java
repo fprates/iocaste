@@ -83,7 +83,7 @@ public class Services extends AbstractFunction {
             throw new Exception("Invalid username or password");
         
         db.update(getDBConnection(message.getSessionid()),
-                "insert into users001(uname, secrt) values(?, ?)", null);
+                "insert into users001(uname, secrt) values(?, ?)");
     }
     
     /**
@@ -187,7 +187,7 @@ public class Services extends AbstractFunction {
         User[] users;
         int t;
         Object[] lines = db.select(getDBConnection(message.getSessionid()),
-                "select username, firstname, surname from User", null);
+                "select username, firstname, surname from User");
         
         t = lines.length;
         if (t == 0)

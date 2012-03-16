@@ -55,7 +55,7 @@ public class DBServices {
      * @return
      */
     public final Object[] select(Connection connection, 
-            String query, Object[] criteria) throws Exception {
+            String query, Object... criteria) throws Exception {
         List<Map<String, Object>> lines;
         Map<String, Object> line;
         ResultSetMetaData metadata;
@@ -96,7 +96,7 @@ public class DBServices {
      * @throws Exception
      */
     public final int update(Connection connection, String query,
-            Object[] criteria) throws Exception {
+            Object... criteria) throws Exception {
         PreparedStatement ps = connection.prepareStatement(query);
         int i = 1;
         
