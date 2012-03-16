@@ -163,6 +163,9 @@ public class Request {
                 input = (InputComponent)element;
                 modelitem = input.getModelItem();
                 
+                if (modelitem == null)
+                    continue;
+                
                 value = input.getValue();
                 if (value == null && model.isKey(modelitem))
                     break;
