@@ -10,8 +10,7 @@ drop table docs004 if exists;
 drop table docs003 if exists;
 drop table docs002 if exists;
 drop table docs001 if exists;
+drop table tasks if exists;
 drop user iocastedb;
-\p document tables dropped.
-
 \c false
 \p tables dropped.
