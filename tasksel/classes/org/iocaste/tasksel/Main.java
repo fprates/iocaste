@@ -115,7 +115,7 @@ public class Main extends AbstractPage {
      */
     public final void run(ViewData vdata) throws Exception {
         String[] parsed, values;
-        ExtendedObject task;
+        ExtendedObject task = null;
         DataForm form = vdata.getElement("selector");
         DataItem cmdline = form.get("command");
         String command = cmdline.getValue();
@@ -131,7 +131,9 @@ public class Main extends AbstractPage {
         parsed = command.split("\\s");
         vdata.clearParameters();
 
-        task = new Documents(this).getObject("TASKS", parsed[0].toUpperCase());
+        if (parsed[0].length() < 19)
+            task = new Documents(this).getObject("TASKS", parsed[0].toUpperCase());
+        
         if (task == null) {
             if (PackageTool.hasPackage(parsed[0])) {
                 vdata.setReloadableView(true);
