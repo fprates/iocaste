@@ -47,7 +47,7 @@ public class NumberRange {
             throw new IocasteException("Numeric range not specified.");
 
         lines = iocaste.select("select crrnt from range001 where ident = ?",
-                new Object[] {ident});
+                ident);
         
         if (lines.length == 0)
             throw new IocasteException("Range \""+ident+"\" not found.");
@@ -55,8 +55,7 @@ public class NumberRange {
         columns = (Map<String, Object>)lines[0];
         current = ((BigDecimal)columns.get("CRRNT")).longValue() + 1;
         iocaste.update("update range001 set crrnt = ? where ident = ?",
-                new Object[] {current, ident});
-        iocaste.commit();
+                current, ident);
         
         return current;
     }
