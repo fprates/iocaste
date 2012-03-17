@@ -24,6 +24,7 @@ public class NumberRange {
         ExtendedObject range = new ExtendedObject(model);
         
         range.setValue("IDENT", name);
+        range.setValue("CURRENT", 0);
         
         Query.save(range, function);
     }
