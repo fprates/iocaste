@@ -1,10 +1,16 @@
 package org.iocaste.dataview;
 
+import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
+    
+    public Main() {
+        export("install", "install");
+    }
     
     /**
      * 
@@ -82,6 +88,15 @@ public class Main extends AbstractPage {
         
         Request.insertnext(vdata, selectview, this);
         updateView(selectview);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final InstallData install(Message message) {
+        return Install.self();
     }
     
     /**
