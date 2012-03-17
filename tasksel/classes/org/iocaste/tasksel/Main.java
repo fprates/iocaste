@@ -17,7 +17,6 @@ import org.iocaste.shell.common.ViewData;
 public class Main extends AbstractPage {
     
     public Main() {
-        super();
         export("install", "install");
     }
     
@@ -135,6 +134,8 @@ public class Main extends AbstractPage {
         task = new Documents(this).getObject("TASKS", parsed[0].toUpperCase());
         if (task == null) {
             if (PackageTool.hasPackage(parsed[0])) {
+                vdata.setReloadableView(true);
+                vdata.export("package", parsed[0]);
                 vdata.redirect(null, "install");
                 return;
             }

@@ -20,7 +20,10 @@ public class Install {
         Container container = new Form(null, "main");
         Text message = new Text(container, "install.continue");
         
-        message.setText("Do you want to install this package?");
+        message.setText(new StringBuilder("Do you want to install \"").
+                append(view.getParameter("package")).
+                append("\"?").toString());
+        
         new Button(container, "installok");
         new Button(container, "installcancel");
         
@@ -64,13 +67,9 @@ public class Install {
         
         data.addModelItem(tasks, "COMMAND", "CMDLN", element, "command", false);
         
-        data.addValues(tasks, "DATADICT", "iocaste-datadict");
-        data.addValues(tasks, "SE11", "iocaste-datadict");
-        data.addValues(tasks, "DATAVIEW", "iocaste-dataview");
-        data.addValues(tasks, "SE16", "iocaste-dataview");
-        data.addValues(tasks, "INFOSIS", "iocaste-infosis");
-        data.addValues(tasks, "TRANSPORT", "iocaste-transport");
-        data.addValues(tasks, "EXTERNAL", "iocaste-external");
+        data.link("INFOSIS", "iocaste-infosis");
+        data.link("TRANSPORT", "iocaste-transport");
+        data.link("EXTERNAL", "iocaste-external");
         
         return data;
     }
