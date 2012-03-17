@@ -17,6 +17,7 @@ public class Services extends AbstractFunction {
     public Services() {
         queries = new HashMap<String, Map<String, String>>();
         
+        export("create_number_factory", "createNumberFactory");
         export("get_data_element", "getDataElement");
         export("get_next_number", "getNextNumber");
         export("get_object", "getObject");
@@ -43,6 +44,17 @@ public class Services extends AbstractFunction {
         DocumentModel model = (DocumentModel)message.get("model");
         
         Model.create(model, this, queries);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void createNumberFactory(Message message) throws Exception {
+        String name = message.getString("name");
+        
+        NumberRange.create(name, this, queries);
     }
     
     /**

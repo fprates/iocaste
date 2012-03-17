@@ -66,6 +66,20 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
+     * @param name
+     * @throws Exception
+     */
+    public final void createNumberFactory(String name) throws Exception {
+        Message message = new Message();
+        
+        message.setId("create_number_factory");
+        message.add("name", name);
+        
+        call(message);
+    }
+    
+    /**
+     * 
      * @param object
      * @return
      * @throws Exception
