@@ -27,6 +27,7 @@ public class Install {
         new Button(container, "installok");
         new Button(container, "installcancel");
         
+        view.setFocus("installok");
         view.setTitle("package.install.confirmation");
         view.addContainer(container);
     }
