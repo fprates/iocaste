@@ -1,5 +1,7 @@
 package org.iocaste.datadict;
 
+import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.HtmlTag;
@@ -9,6 +11,9 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
+    public Main() {
+        export("install", "install");
+    }
     
     /**
      * 
@@ -97,6 +102,15 @@ public class Main extends AbstractPage {
      */
     public final void generateclass(ViewData vdata) {
         CodeGeneration.main(vdata);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final InstallData install(Message message) {
+        return Install.self();
     }
     
     /**

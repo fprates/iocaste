@@ -126,7 +126,8 @@ public class TableStructure {
      * @throws Exception
      */
     private static final void prepareHeader(DataForm form, String modelname,
-            DocumentModel model, byte mode, Function function) throws Exception {
+            DocumentModel model, byte mode, Function function)
+                    throws Exception {
         String name;
         DataItem dataitem;
         DataElement[] references = new DataElement[3];
