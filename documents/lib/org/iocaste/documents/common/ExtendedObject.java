@@ -15,6 +15,9 @@ public class ExtendedObject implements Serializable {
 		values = new HashMap<DocumentModelItem, Object>();
 		byname = new HashMap<String, DocumentModelItem>();
 		
+		for (DocumentModelItem item : model.getItens())
+		    byname.put(item.getName(), item);
+		
 		this.model = model;
 	}
 	
@@ -114,6 +117,5 @@ public class ExtendedObject implements Serializable {
 	        values.remove(item);
 	    
 	    values.put(item, value);
-	    byname.put(item.getName(), item);
 	}
 }
