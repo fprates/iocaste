@@ -46,6 +46,12 @@ create table docs005 (
     docid varchar(24) foreign key references docs001(docid)
 );
 
+/* referências estrangeiras */
+create table docs006 (
+    iname varchar(48) primary key,
+    itref varchar(48) foreign key references docs002(iname)
+);
+
 \p document tables has been generated
 
 grant select, insert, update, delete on range001 to iocastedb;
@@ -54,6 +60,7 @@ grant select, insert, update, delete on docs002 to iocastedb;
 grant select, insert, update, delete on docs003 to iocastedb;
 grant select, insert, update, delete on docs004 to iocastedb;
 grant select, insert, update, delete on docs005 to iocastedb;
+grant select, insert, update, delete on docs006 to iocastedb;
 \p permissions granted.
 
 insert into docs001(docid, tname, class) values('MODEL', 'DOCS001', 'org.iocaste.documents.common.DocumentModel');
@@ -81,7 +88,8 @@ insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.FIELDNA
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODELITEM.ATTRIB', 0, 64, 0, 0);
 insert into docs004(iname, docid) values('MODELITEM.NAME', 'MODELITEM');
 insert into docs005(tname, docid) values('DOCS002', 'MODELITEM');
-
+insert into docs006(iname, itref) values('MODELITEM.MODEL', 'MODEL.NAME');
+ 
 insert into docs001(docid, tname, class) values('DATAELEMENT', 'DOCS003', 'org.iocaste.documents.common.DataElement');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('DATAELEMENT.NAME', 'DATAELEMENT', 0, 'ENAME', 'DATAELEMENT.NAME', 'name');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('DATAELEMENT.DECIMALS', 'DATAELEMENT', 1, 'DECIM', 'DATAELEMENT.DECIMALS', 'decimals');
@@ -101,6 +109,15 @@ insert into docs002(iname, docid, index, fname, ename, attrb) values('TABLE_MODE
 insert into docs002(iname, docid, index, fname, ename, attrb, mdref, itref) values('TABLE_MODEL.MODEL', 'TABLE_MODEL', 1, 'MODEL', 'MODEL.NAME', 'model', 'MODEL', 'NAME');
 insert into docs004(iname, docid) values('TABLE_MODEL.TABLE', 'TABLE_MODEL');
 insert into docs005(tname, docid) values('DOCS005', 'TABLE_MODEL');
+insert into docs006(iname, itref) values('TABLE_MODEL.MODEL', 'MODEL.NAME');
+
+insert into docs001(docid, tname, class) values('FOREIGN_KEY', 'DOCS006', '');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('FOREIGN_KEY.ITEM_NAME', 'FOREIGN_KEY', 0, 'ITREF', 'MODELITEM.NAME', 'itemName');
+insert into docs002(iname, docid, index, fname, ename, attrb, mdref, itref) values('FOREIGN_KEY.REFERENCE', 'FOREIGN_KEY', 1, 'INAME', 'MODELITEM.NAME', 'reference', 'MODELITEM', 'NAME');
+insert into docs004(iname, docid) values('FOREIGN_KEY.ITEM_NAME', 'FOREIGN_KEY');
+insert into docs005(tname, docid) values('DOCS006', 'FOREIGN_KEY');
+insert into docs006(iname, itref) values('FOREIGN_KEY.REFERENCE', 'MODELITEM.NAME');
+insert into docs006(iname, itref) values('FOREIGN_KEY.ITEM_NAME', 'MODELITEM.NAME');
 
 insert into docs001(docid, tname, class) values('NUMBER_RANGE', 'RANGE001', '');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('NUMBER_RANGE.IDENT', 'NUMBER_RANGE', 0, 'IDENT', 'NUMBER_RANGE.IDENT', '');

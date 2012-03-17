@@ -185,7 +185,7 @@ public class Model {
             DocumentModelItem item) throws Exception {
         DocumentModelItem reference;
         DataElement dataelement;
-        String tname;
+        String itemref, tname;
         DocumentModel model = item.getDocumentModel();
         String query = "insert into docs002 (iname, docid, index, " +
                 "fname, ename, attrb, mdref, itref) values " +
@@ -206,6 +206,13 @@ public class Model {
                 (reference == null)? null : reference.getDocumentModel().
                         getName(),
                 (reference == null)? null : reference.getName()});
+        
+        if (reference == null)
+            return;
+        
+        itemref = Common.getComposedName(reference);
+        query = "insert into docs006(iname, itref) values(?, ?)";
+        iocaste.update(query, tname, itemref);
     }
     
     /**
@@ -221,9 +228,9 @@ public class Model {
         String name, query = "delete from docs004 where iname = ?";
         
         for (DocumentModelKey key : model.getKeys()) {
-            name = new StringBuilder(key.getModel().getName()).append(".").
-                    append(key.getModelItemName()).toString();
-            iocaste.update(query, new Object[] {name});
+            name = Common.getComposedName(key.getModel().
+                    getModelItem(key.getModelItemName()));
+            iocaste.update(query, name);
         }
         
         for (DocumentModelItem item : model.getItens())
@@ -253,10 +260,13 @@ public class Model {
      */
     private static final void removeModelItem(Iocaste iocaste,
             DocumentModelItem item) throws Exception {
-        String query = "delete from docs002 where iname = ?";
-        String name = new StringBuilder(item.getDocumentModel().getName()).
-                append(".").append(item.getName()).toString();
-        iocaste.update(query, new Object[] {name});
+        String query = "delete from docs006 where iname = ?";
+        String name = Common.getComposedName(item);
+        
+        iocaste.update(query, name);
+        
+        query = "delete from docs002 where iname = ?";
+        iocaste.update(query, name);
     }
     
     /**
@@ -310,11 +320,11 @@ public class Model {
                 "values (?, ?, ?)";
         
         iocaste.update(query, model.getName(),
-                model.getTableName(),model.getClassName());
+                model.getTableName(), model.getClassName());
         
         query = "insert into docs005(tname, docid) values(? , ?)";
         
-        iocaste.update(query, model.getTableName(),model.getName());
+        iocaste.update(query, model.getTableName(), model.getName());
     }
     
     /**
@@ -398,12 +408,10 @@ public class Model {
                 "values (?, ?)";
         
         for (DocumentModelKey key : model.getKeys()) {
-            name = new StringBuilder(model.getName()).
-                    append(".").
-                    append(key.getModelItemName()).toString();
+            name = Common.getComposedName(model.
+                    getModelItem(key.getModelItemName()));
             
-            iocaste.update(query, new Object[] {name,
-                    key.getModel().getName()});
+            iocaste.update(query, name, key.getModel().getName());
         }
         
         dbuser = iocaste.getSystemParameter("db.user");

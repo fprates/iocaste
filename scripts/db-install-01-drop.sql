@@ -5,6 +5,7 @@ drop table shell003 if exists;
 drop table shell002 if exists;
 drop table shell001 if exists;
 drop table range001 if exists;
+drop table docs006 if exists;
 drop table docs005 if exists;
 drop table docs004 if exists;
 drop table docs003 if exists;
