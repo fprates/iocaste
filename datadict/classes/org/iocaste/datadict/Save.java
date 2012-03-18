@@ -72,12 +72,15 @@ public class Save {
                 modelitem.setReference(reference);
             }
             
+            modelitem.setSearchHelp(Common.
+                    getTableValue(modo, item, "item.sh"));
+            
             model.add(modelitem);
             
             key = (CheckBox)item.get("item.key");
             if (!key.isSelected())
                 continue;
-        
+            
             modelkey = new DocumentModelKey();
             modelkey.setModel(model);
             modelkey.setModelItem(itemname);

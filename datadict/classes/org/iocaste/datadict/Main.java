@@ -74,8 +74,8 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void fkupdate(ViewData view) throws Exception {
-        if (ForeignKey.updateReference(view, this))
+    public final void detailsupdate(ViewData view) throws Exception {
+        if (ItemDetails.update(view, this))
             back(view);
     }
     
@@ -84,16 +84,8 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void fkstructure(ViewData view) throws Exception {
-        ForeignKey.main(view, this);
-    }
-    
-    /**
-     * 
-     * @param view
-     */
-    public final void foreignkey(ViewData view) {
-        ForeignKey.update(view);
+    public final void detailsview(ViewData view) throws Exception {
+        ItemDetails.main(view, this);
     }
     
     /**
@@ -111,6 +103,14 @@ public class Main extends AbstractPage {
      */
     public final InstallData install(Message message) {
         return Install.self();
+    }
+    
+    /**
+     * 
+     * @param view
+     */
+    public final void itemdetails(ViewData view) {
+        ItemDetails.select(view);
     }
     
     /**

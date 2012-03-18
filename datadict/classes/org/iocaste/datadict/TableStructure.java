@@ -61,7 +61,7 @@ public class TableStructure {
         
         prepareHeader(structure, modelname, usermodel, mode, function);
         
-        new Button(main, "foreignkey");
+        new Button(main, "itemdetails");
         
         itens = new Table(main, "itens");
         
@@ -70,8 +70,11 @@ public class TableStructure {
             column.setDataElement(references.get(itemname));
             
             name = itemname.getName();
-            if (!name.equals("item.reference") &&
-                    !name.equals("model.reference"))
+            if (!name.equals("item.classfield") &&
+                    !name.equals("item.reference") &&
+                    !name.equals("model.reference") &&
+                    !name.equals("item.upcase") &&
+                    !name.equals("item.sh"))
                 continue;
             
             column.setVisible(false);
@@ -167,7 +170,7 @@ public class TableStructure {
             
             if (name.equals("modelclass")) {
                 dataitem.setEnabled((mode == Common.SHOW)?false:true);
-                dataitem.setObligatory((mode == Common.SHOW)?false:true);
+                dataitem.setObligatory(false);
                 dataitem.setDataElement(references[Common.MODELCLASS]);
                 
                 if (model == null)

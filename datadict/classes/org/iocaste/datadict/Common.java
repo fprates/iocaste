@@ -17,7 +17,6 @@ import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewData;
 
 public class Common {
@@ -28,9 +27,6 @@ public class Common {
     public static final byte MODELNAME = 0;
     public static final byte MODELCLASS = 1;
     public static final byte MODELTABLE = 2;
-    
-    public static final boolean OBLIGATORY = true;
-    public static final boolean NON_OBLIGATORY = false;
     
     public static final byte TABLE = 0;
     public static final byte SH = 1;
@@ -44,8 +40,8 @@ public class Common {
         LENGTH("item.length", "DATAELEMENT.LENGTH"),
         UPCASE("item.upcase", null),
         ITEM_REFERENCE("item.reference", "MODEL.NAME"),
-        MODEL_REFERENCE("model.reference", "MODELITEM.NAME");
-        
+        MODEL_REFERENCE("model.reference", "MODELITEM.NAME"),
+        SEARCH_HELP("item.sh", "SEARCH_HELP.NAME");
         
         private String name, de;
         
@@ -99,10 +95,7 @@ public class Common {
      */
     public static final String getTableValue(byte modo, TableItem item,
             String name) {
-        if (modo == Common.SHOW)
-            return ((Text)item.get(name)).getText();
-        else
-            return ((InputComponent)item.get(name)).getValue();
+        return ((InputComponent)item.get(name)).getValue();
     }
     
     /**
@@ -192,7 +185,7 @@ public class Common {
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (modelitem == null)?
                         null:modelitem.getTableFieldName();
-                helper.obligatory = Common.OBLIGATORY;
+                helper.obligatory = true;
                 
                 newField(helper);
                 
@@ -202,8 +195,8 @@ public class Common {
             if (helper.name.equals("item.classfield")) {
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (modelitem == null)?
-                        null:modelitem.getAttributeName();
-                helper.obligatory = Common.OBLIGATORY;
+                        null : modelitem.getAttributeName();
+                helper.obligatory = false;
                 
                 newField(helper);
                 
@@ -211,9 +204,17 @@ public class Common {
             }
             
             if (helper.name.equals("item.name")) {
+                dataelement = new DataElement();
+                dataelement.setDecimals(0);
+                dataelement.setLength(24);
+                dataelement.setName(helper.reference.getName());
+                dataelement.setType(helper.reference.getType());
+                dataelement.setUpcase(helper.reference.isUpcase());
+                
+                helper.reference = dataelement;
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (modelitem == null)?null:modelitem.getName();
-                helper.obligatory = Common.OBLIGATORY;
+                helper.obligatory = true;
 
                 if (view != null)
                     view.setFocus(newField(helper));
@@ -227,7 +228,7 @@ public class Common {
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (modelitem == null)?null:Integer.toString(
                         dataelement.getLength());
-                helper.obligatory = Common.OBLIGATORY;
+                helper.obligatory = true;
 
                 newField(helper);
                 
@@ -236,7 +237,7 @@ public class Common {
             
             if (helper.name.equals("item.key")) {
                 helper.type = Const.CHECKBOX;
-                helper.obligatory = Common.NON_OBLIGATORY;
+                helper.obligatory = false;
                 
                 if (modelitem != null) {
                     model = modelitem.getDocumentModel();
@@ -251,7 +252,7 @@ public class Common {
             }
         
             if (helper.name.equals("item.type")) {
-                helper.obligatory = Common.NON_OBLIGATORY;
+                helper.obligatory = false;
                 helper.type = Const.LIST_BOX;
                 helper.value = (modelitem == null)?null:Integer.toString(
                         dataelement.getType());
@@ -265,7 +266,7 @@ public class Common {
             
             if (helper.name.equals("item.upcase")) {
                 helper.type = Const.CHECKBOX;
-                helper.obligatory = Common.NON_OBLIGATORY;
+                helper.obligatory = false;
                 
                 if (modelitem != null) {
                     model = modelitem.getDocumentModel();
@@ -282,7 +283,7 @@ public class Common {
             if (helper.name.equals("item.reference")) {
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (itemref == null)? null : itemref.getName();
-                helper.obligatory = Common.NON_OBLIGATORY;
+                helper.obligatory = false;
                 
                 newField(helper);
                 
@@ -293,11 +294,20 @@ public class Common {
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (itemref == null)? null : itemref.
                       getDocumentModel().getName();
-                helper.obligatory = Common.NON_OBLIGATORY;
+                helper.obligatory = false;
                 
                 newField(helper);
                 
                 continue;
+            }
+            
+            if (helper.name.equals("item.sh")) {
+                helper.type = Const.TEXT_FIELD;
+                helper.value = (modelitem == null)? null :
+                    modelitem.getSearchHelp();
+                helper.obligatory = false;
+                
+                newField(helper);
             }
         }
     }

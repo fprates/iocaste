@@ -10,13 +10,14 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Frame;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewData;
 
-public class ForeignKey {
+public class ItemDetails {
 
     /**
      * 
@@ -31,48 +32,79 @@ public class ForeignKey {
         String modelname = view.getParameter("model.name");
         String itemref = view.getParameter("item.reference");
         String modelref = view.getParameter("model.reference");
+        String upcase = view.getParameter("item.upcase");
+        String sh = view.getParameter("item.sh");
+        String classfield = view.getParameter("item.classfield");
         Container container = new Form(null, "main");
-        DataForm form = new DataForm(container, "fkform");
+        Frame techframe, fkframe = new Frame(container, "foreign.key");
+        DataForm techform, fkform = new DataForm(fkframe, "fkform");
         byte mode = Common.getMode(view);
-        DocumentModel modelitem = new Documents(function).getModel("MODELITEM");
+        Documents documents = new Documents(function);
+        DocumentModel model = documents.getModel("MODELITEM");
         
-        dataitem = new DataItem(form, Const.TEXT_FIELD, "model.name");
+        /*
+         * foreign key
+         */
+        dataitem = new DataItem(fkform, Const.TEXT_FIELD, "model.name");
         dataitem.setValue(modelname);
-        dataitem.setModelItem(modelitem.getModelItem("MODEL"));
+        dataitem.setModelItem(model.getModelItem("MODEL"));
         dataitem.setEnabled(false);
         
-        dataitem = new DataItem(form, Const.TEXT_FIELD, "item.name");
+        dataitem = new DataItem(fkform, Const.TEXT_FIELD, "item.name");
         dataitem.setValue(itemname);
-        dataitem.setModelItem(modelitem.getModelItem("NAME"));
+        dataitem.setModelItem(model.getModelItem("NAME"));
         dataitem.setEnabled(false);
         
-        dataitem = new DataItem(form, Const.TEXT_FIELD, "reference.model");
+        dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.model");
         dataitem.setValue(modelref);
-        dataitem.setModelItem(modelitem.getModelItem("MODEL"));
+        dataitem.setModelItem(model.getModelItem("MODEL"));
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
-        dataitem = new DataItem(form, Const.TEXT_FIELD, "reference.item");
+        dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.item");
         dataitem.setValue(itemref);
-        dataitem.setModelItem(modelitem.getModelItem("NAME"));
+        dataitem.setModelItem(model.getModelItem("NAME"));
+        dataitem.setEnabled((mode == Common.SHOW)? false : true);
+
+        /*
+         * technical details
+         */
+        techframe = new Frame(container, "technical.details");
+        techform = new DataForm(techframe, "techform");
+        
+        dataitem = new DataItem(techform, Const.TEXT_FIELD, "item.classfield");
+        dataitem.setValue(classfield);
+        dataitem.setModelItem(model.getModelItem("ATTRIB"));
+        dataitem.setEnabled((mode == Common.SHOW)? false : true);
+        
+        dataitem = new DataItem(techform, Const.TEXT_FIELD, "item.sh");
+        dataitem.setValue(sh);
+        dataitem.setModelItem(documents.getModel("SH_REFERENCE").
+                getModelItem("NAME"));
+        dataitem.setEnabled((mode == Common.SHOW)? false : true);
+        
+        dataitem = new DataItem(techform, Const.CHECKBOX, "item.upcase");
+        dataitem.setValue(upcase);
+        dataitem.setModelItem(documents.getModel("DATAELEMENT").
+                getModelItem("UPCASE"));
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         if (mode != Common.SHOW) {
-            new Button(container, "fkupdate");
+            new Button(container, "detailsupdate");
             view.setFocus("reference.model");
         }
         
         view.addContainer(container);
         view.setNavbarActionEnabled("back", true);
-        view.setTitle("fk-editor");
+        view.setTitle("item-detail-editor");
     }
 
     /**
      * 
      * @param view
      */
-    public static final void update(ViewData view) {
+    public static final void select(ViewData view) {
         DataForm form = view.getElement("header");
-        String itemname, modelref, itemref, modelname =
+        String itemname, modelref, itemref, upcase, classfield, sh, modelname =
                 form.get("modelname").getValue();
         TableItem selected = null;
         Table itens = view.getElement("itens");
@@ -98,9 +130,12 @@ public class ForeignKey {
             return;
         }
         
-        itemname = ((InputComponent)selected.get("item.name")).getValue();
-        modelref = ((InputComponent)selected.get("model.reference")).getValue();
-        itemref = ((InputComponent)selected.get("item.reference")).getValue();
+        itemname = Common.getTableValue(mode, selected, "item.name");
+        modelref = Common.getTableValue(mode, selected,"model.reference");
+        itemref = Common.getTableValue(mode, selected, "item.reference");
+        upcase = Common.getTableValue(mode, selected, "item.upcase");
+        classfield = Common.getTableValue(mode, selected, "item.classfield");
+        sh = Common.getTableValue(mode, selected, "item.sh");
         
         view.setReloadableView(true);
         view.export("mode", mode);
@@ -108,7 +143,10 @@ public class ForeignKey {
         view.export("item.name", itemname);
         view.export("model.reference", modelref);
         view.export("item.reference", itemref);
-        view.redirect(null, "fkstructure");
+        view.export("item.upcase", upcase);
+        view.export("item.classfield", classfield);
+        view.export("item.sh", sh);
+        view.redirect(null, "detailsview");
     }
     
     /**
@@ -117,7 +155,7 @@ public class ForeignKey {
      * @param function
      * @throws Exception
      */
-    public static final boolean updateReference(ViewData view,
+    public static final boolean update(ViewData view,
             Function function) throws Exception {
         InputComponent input;
         DataForm form = view.getElement("fkform");
