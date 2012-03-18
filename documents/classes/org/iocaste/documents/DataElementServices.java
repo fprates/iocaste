@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.Iocaste;
 
@@ -24,8 +23,7 @@ public class DataElementServices {
         DataElement element;
         Map<String, Object> columns;
         
-        lines = iocaste.select("select * from docs003 where ename = ?",
-                new Object[] {name});
+        lines = iocaste.select("select * from docs003 where ename = ?", name);
         
         if (lines.length == 0)
             return null;
@@ -52,15 +50,14 @@ public class DataElementServices {
         DataElement dataelement;
         String name, query = "insert into docs003(ename, decim, lngth, " +
                 "etype, upcas) values(?, ?, ?, ?, ?)";
-        DocumentModel model = item.getDocumentModel();
         
         dataelement = item.getDataElement();
-        name = new StringBuilder(model.getName()).append(".").
-                append(item.getName()).toString();
-        iocaste.update(query, new Object[] {name,
+        name = Common.getComposedName(item);
+        
+        iocaste.update(query, name,
                 dataelement.getDecimals(),
                 dataelement.getLength(),
                 dataelement.getType(),
-                dataelement.isUpcase()});
+                dataelement.isUpcase());
     }
 }

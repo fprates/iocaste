@@ -32,7 +32,7 @@ import java.util.Date;
  */
 public class DataElement implements Serializable {
     private static final long serialVersionUID = -2827176147542188319L;
-    private String name, sh;
+    private String name;
     private int decimals;
     private int length;
     private int type;
@@ -82,14 +82,6 @@ public class DataElement implements Serializable {
     }
     
     /**
-     * 
-     * @return
-     */
-    public final String getSearchHelp() {
-        return sh;
-    }
-    
-    /**
      * Retorna tipo do elemento.
      * @return tipo
      */
@@ -127,14 +119,6 @@ public class DataElement implements Serializable {
      */
     public final void setName(String name) {
         this.name = name;
-    }
-    
-    /**
-     * 
-     * @param sh
-     */
-    public final void setSearchHelp(String sh) {
-        this.sh = sh;
     }
     
     /**

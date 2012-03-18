@@ -1,4 +1,5 @@
 \c true
+drop table shref if exists;
 drop table shitm if exists;
 drop table shcab if exists;
 drop table shell003 if exists;

@@ -31,13 +31,9 @@ import java.io.Serializable;
 public class DocumentModelItem implements Comparable<DocumentModelItem>,
             Serializable {
     private static final long serialVersionUID = 7353680713818082301L;
-    private String name;
     private DocumentModel document;
     private DataElement dataelement;
-    private String attribname;
-    private String gettername;
-    private String settername;
-    private String fieldname;
+    private String name, attribname, gettername, settername, fieldname, sh;
     private int index;
     private DocumentModelItem reference;
     
@@ -151,6 +147,14 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * 
      * @return
      */
+    public final String getSearchHelp() {
+        return sh;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final String getTableFieldName() {
     	return fieldname;
     }
@@ -222,6 +226,14 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      */
     public final void setReference(DocumentModelItem reference) {
         this.reference = reference;
+    }
+    
+    /**
+     * 
+     * @param sh
+     */
+    public final void setSearchHelp(String sh) {
+        this.sh = sh;
     }
     
     /**

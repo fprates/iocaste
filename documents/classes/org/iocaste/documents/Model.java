@@ -185,7 +185,7 @@ public class Model {
             DocumentModelItem item) throws Exception {
         DocumentModelItem reference;
         DataElement dataelement;
-        String itemref, tname;
+        String itemref, tname, shname;
         DocumentModel model = item.getDocumentModel();
         String query = "insert into docs002 (iname, docid, index, " +
                 "fname, ename, attrb, mdref, itref) values " +
@@ -193,11 +193,10 @@ public class Model {
         
         dataelement = item.getDataElement();
         
-        tname = new StringBuilder(model.getName()).append(".").
-                append(item.getName()).toString();
+        tname = Common.getComposedName(item);
         
         reference = item.getReference();
-        iocaste.update(query, new Object[] {tname,
+        iocaste.update(query, tname,
                 model.getName(),
                 item.getIndex(),
                 item.getTableFieldName(),
@@ -205,14 +204,20 @@ public class Model {
                 item.getAttributeName(),
                 (reference == null)? null : reference.getDocumentModel().
                         getName(),
-                (reference == null)? null : reference.getName()});
+                (reference == null)? null : reference.getName());
         
-        if (reference == null)
+        if (reference != null) {        
+            itemref = Common.getComposedName(reference);
+            query = "insert into docs006(iname, itref) values(?, ?)";
+            iocaste.update(query, tname, itemref);
+        }
+        
+        shname = item.getSearchHelp();
+        if (shname == null)
             return;
         
-        itemref = Common.getComposedName(reference);
-        query = "insert into docs006(iname, itref) values(?, ?)";
-        iocaste.update(query, tname, itemref);
+        query = "insert into shref(iname, shitm) values(? , ?)";
+        iocaste.update(query, tname, shname);
     }
     
     /**
@@ -237,7 +242,6 @@ public class Model {
             removeModelItem(iocaste, item);
         
         query = "delete from docs005 where tname = ?";
-        
         iocaste.update(query, model.getTableName());
         
         name = model.getName();
@@ -246,7 +250,6 @@ public class Model {
         
         query = new StringBuilder("drop table ").append(model.getTableName()).
                 toString();
-        
         iocaste.update(query);
         
         queries.remove(name);
@@ -263,6 +266,9 @@ public class Model {
         String query = "delete from docs006 where iname = ?";
         String name = Common.getComposedName(item);
         
+        iocaste.update(query, name);
+        
+        query = "delete from shref where iname = ?";
         iocaste.update(query, name);
         
         query = "delete from docs002 where iname = ?";
@@ -496,6 +502,8 @@ public class Model {
                 append(tablename).
                 append(" alter column ").toString();
         
+        iocaste.update("delete from shref where iname = ?", olditem.getName());
+        
         /*
          * renomeia campo da tabela
          */
@@ -531,7 +539,6 @@ public class Model {
         sb.append(")");
         
         query = sb.toString();
-        
         iocaste.update(query);
         
         reference = item.getReference();
@@ -589,11 +596,12 @@ public class Model {
         criteria[5] = (reference == null)? null : reference.getDocumentModel().
                 getName();
         criteria[6] = (reference == null)? null : reference.getName();
-        criteria[7] = new StringBuilder(model.getName()).
-                append(".").
-                append(item.getName()).toString();
+        criteria[7] = Common.getComposedName(item);
         
         iocaste.update(query, criteria);
+        
+        query = "insert into shref(iname, shitm) values(? ,?)";
+        iocaste.update(query, item.getName(), item.getSearchHelp());
     }
     
     /**
