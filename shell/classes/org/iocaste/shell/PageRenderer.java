@@ -21,15 +21,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.sh.common.SHLib;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MultipartElement;
+import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.ViewData;
 
 public class PageRenderer extends HttpServlet implements Function {
@@ -207,6 +211,35 @@ public class PageRenderer extends HttpServlet implements Function {
         render(resp, pagectx);
     }
 
+    /**
+     * 
+     * @param input
+     * @param container
+     * @throws Exception
+     */
+    private static final void generateSearchHelp(InputComponent input,
+            Container container, Function function) throws Exception {
+        SearchHelp sh;
+        Element element;
+        SHLib shlib = new SHLib(function);
+        String shname = input.getModelItem().getSearchHelp();
+        ExtendedObject[] shdata = shlib.get(shname);
+        
+        if (shdata == null || shdata.length == 0)
+            return;
+        
+        element = (Element)input;
+        sh = new SearchHelp(container, element.getName()+".sh");
+        sh.setHtmlName(element.getHtmlName()+".sh");
+        sh.setModelName((String)shdata[0].getValue("MODEL"));
+        sh.setExport((String)shdata[0].getValue("EXPORT"));
+        
+        for (int i = 1; i < shdata.length; i++)
+            sh.addModelItemName((String)shdata[i].getValue("NAME"));
+        
+        input.setSearchHelp(sh);
+    }
+    
     /**
      * 
      * @param pagetrack
@@ -387,9 +420,9 @@ public class PageRenderer extends HttpServlet implements Function {
         view.clearInputs();
         
         for (Container container : view.getContainers())
-            registerInputs(view, container);
+            registerInputs(view, container, null, this);
         
-        updateView(sessionid, view);
+        updateView(sessionid, view, this);
         
         renderer.setMessageText(view.getTranslatedMessage());
         renderer.setMessageType(view.getMessageType());
@@ -489,11 +522,17 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
-     * @param inputs
+     * @param vdata
      * @param element
+     * @param container_
+     * @param function
+     * @throws Exception
      */
-    private final static void registerInputs(ViewData vdata, Element element) {
+    private static final void registerInputs(ViewData vdata, Element element,
+            Container container_, Function function) throws Exception {
         Container container;
+        InputComponent input;
+        DocumentModelItem modelitem;
         
         if (element == null)
             return;
@@ -504,13 +543,20 @@ public class PageRenderer extends HttpServlet implements Function {
             container = (Container)element;
             
             for (Element element_ : container.getElements())
-                registerInputs(vdata, element_);
+                registerInputs(vdata, element_, container, function);
             
             return;
         }
         
-        if (element.isDataStorable())
+        if (element.isDataStorable()) {
             vdata.addInput(element.getHtmlName());
+            
+            input = (InputComponent)element;
+            modelitem = input.getModelItem();
+            if (input.getSearchHelp() == null && modelitem != null &&
+                    modelitem.getSearchHelp() != null)
+                generateSearchHelp(input, container_, function);
+        }
         
         if (element.hasMultipartSupport())
             vdata.addMultipartElement((MultipartElement)element);
@@ -547,7 +593,7 @@ public class PageRenderer extends HttpServlet implements Function {
                     composeUrl(appctx.getName()), message);
             
             for (Container container : viewdata.getContainers())
-                registerInputs(viewdata, container);
+                registerInputs(viewdata, container, null, this);
             
             pagectx.setViewData(viewdata);
         }
@@ -633,13 +679,16 @@ public class PageRenderer extends HttpServlet implements Function {
      * 
      * @param sessionid
      * @param view
+     * @param function
+     * @throws Exception
      */
-    public static final void updateView(String sessionid, ViewData view) {
+    public static final void updateView(String sessionid, ViewData view,
+            Function function) throws Exception {
         AppContext appcontext = apps.get(sessionid).get(view.getLogid()).
                 getAppContext(view.getAppName());
         
         for (Container container : view.getContainers())
-            registerInputs(view, container);
+            registerInputs(view, container, null, function);
         
         appcontext.getPageContext(view.getPageName()).setViewData(view);
     }

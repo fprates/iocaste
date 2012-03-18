@@ -55,9 +55,10 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
+     * @throws Exception
      */
-    public final void updateView(Message message) {
+    public final void updateView(Message message) throws Exception {
         PageRenderer.updateView(message.getSessionid(),
-                (ViewData)message.get("view"));
+                (ViewData)message.get("view"), this);
     }
 }
