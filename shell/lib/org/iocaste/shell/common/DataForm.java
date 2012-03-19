@@ -41,14 +41,6 @@ public class DataForm extends AbstractContainer {
         
         keyrequired = false;
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractContainer#add(
-     *     org.iocaste.shell.common.Element)
-     */
-    @Override
-    public final void add(Element element) { };
 
     /**
      * 

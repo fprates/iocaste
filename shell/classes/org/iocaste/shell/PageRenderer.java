@@ -28,11 +28,11 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
-import org.iocaste.sh.common.SHLib;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MultipartElement;
+import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.ViewData;
 
@@ -235,7 +235,7 @@ public class PageRenderer extends HttpServlet implements Function {
         sh.setExport((String)shdata[0].getValue("EXPORT"));
         
         for (int i = 1; i < shdata.length; i++)
-            sh.addModelItemName((String)shdata[i].getValue("NAME"));
+            sh.addModelItemName((String)shdata[i].getValue("ITEM"));
         
         input.setSearchHelp(sh);
     }
