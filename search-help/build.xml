@@ -26,19 +26,6 @@
         
         <replace file="${builddir}/${ant.project.name}/web/web.xml"
             token="@server.class@" value="${server.class}"/>
-        
-        <!-- compilação lib -->
-        <javac srcdir="${basedir}/src/${ant.project.name}" 
-            destdir="${builddir}/${ant.project.name}/lib"
-        	debug="${debug.status}">
-            <classpath refid="dependencies"/>
-        </javac>
-        
-        <jar basedir="${builddir}/${ant.project.name}/lib"
-            destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
-          
-        <copy todir="${basedir}/ext"
-            file="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}"
