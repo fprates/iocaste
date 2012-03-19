@@ -3,6 +3,7 @@ package org.iocaste.shell.common;
 import java.lang.reflect.Method;
 
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractServiceInterface;
@@ -135,6 +136,40 @@ public class Shell extends AbstractServiceInterface {
         message.add("logid", view.getLogid());
         
         return (ViewData)call(message);
+    }
+    
+    /**
+     * 
+     * @param input
+     * @return
+     */
+    public static final boolean isInitial(InputComponent input) {
+        DataElement dataelement;
+        String value, test;
+        
+        value = input.getValue();
+        if (value == null)
+            return true;
+        
+        test = value.trim();
+        if (test.length() == 0)
+            return true;
+        
+        dataelement = Shell.getDataElement(input);
+        
+        if (dataelement == null)
+            return false;
+        
+        switch (dataelement.getType()) {
+        case DataType.NUMC:
+            return (Long.parseLong(test) == 0)? true : false;
+            
+        case DataType.DEC:
+            return (Double.parseDouble(test) == 0)? true : false;
+            
+        default:
+            return false;
+        }
     }
     
     /**

@@ -83,12 +83,19 @@ public class Controller {
         switch (Shell.getDataElement(input).getType()) {
         case DataType.CHAR:
             value = svalue;
+            if (((String)value).equals(""))
+                return true;
+            
             break;
         case DataType.NUMC:
             value = Long.parseLong(svalue);
+            if ((Long)value == 0)
+                return true;
+            
             break;
         case DataType.BOOLEAN:
             value = Boolean.parseBoolean(svalue);
+            
             break;
         default:
             return true;
@@ -99,41 +106,6 @@ public class Controller {
                 value);
         
         return (object == null)? false : true;
-    }
-    
-    /**
-     * 
-     * @param input
-     * @param value
-     * @return
-     */
-    private static final boolean isInitial(String name, InputComponent input,
-            String value) throws Exception {
-        DataElement dataelement;
-        String test;
-        
-        if (value == null)
-            return true;
-        
-        test = value.trim();
-        if (test.length() == 0)
-            return true;
-        
-        dataelement = Shell.getDataElement(input);
-        
-        if (dataelement == null)
-            return false;
-        
-        switch (dataelement.getType()) {
-        case DataType.NUMC:
-            return (Long.parseLong(test) == 0)? true : false;
-            
-        case DataType.DEC:
-            return (Double.parseDouble(test) == 0)? true : false;
-            
-        default:
-            return false;
-        }
     }
     
     /**
@@ -225,7 +197,7 @@ public class Controller {
                 continue;
             }
            
-            if (input.isObligatory() && isInitial(name, input, value)) {
+            if (input.isObligatory() && Shell.isInitial(input)) {
                 status.input = input;
                 status.error = EINITIAL;
                 continue;
