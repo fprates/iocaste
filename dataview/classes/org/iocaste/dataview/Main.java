@@ -102,9 +102,10 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param vdata
+     * @throws Exception
      */
-    public final void main(ViewData vdata) {
-        Response.main(vdata);
+    public final void main(ViewData vdata) throws Exception {
+        Response.main(vdata, this);
     }
 
     /**

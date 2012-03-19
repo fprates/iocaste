@@ -1,7 +1,5 @@
 package org.iocaste.dataview;
 
-import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -12,7 +10,6 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.ViewData;
@@ -44,24 +41,17 @@ public class Response {
     /**
      * 
      * @param view
+     * @param function
+     * @throws Exception
      */
-    public static final void main(ViewData view) {
+    public static final void main(ViewData view, Function function)
+            throws Exception {
         Container container = new Form(null, "main");
         DataForm form = new DataForm(container, "model");
         DataItem formitem = new DataItem(form, Const.TEXT_FIELD, "model.name");
-        DataElement dataelement = new DataElement();
-        SearchHelp sh = new SearchHelp(container, "tablename.search");
         
-        dataelement.setLength(20);
-        dataelement.setType(DataType.CHAR);
-        dataelement.setUpcase(true);
-        
-        sh.setModelName("MODEL");
-        sh.addModelItemName("NAME");
-        sh.setExport("NAME");
-        
-        formitem.setSearchHelp(sh);
-        formitem.setDataElement(dataelement);
+        formitem.setModelItem(new Documents(function).getModel("MODEL").
+                getModelItem("NAME"));
         formitem.setObligatory(true);
         new Button(container, "edit");
 //        form.addAction("show");
