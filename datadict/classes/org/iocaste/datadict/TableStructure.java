@@ -46,7 +46,6 @@ public class TableStructure {
         Table itens;
         String name, title, modelname;
         TableColumn column;
-        DocumentModel usermodel = view.getParameter("model");
         byte mode = Common.getMode(view);
         Container main = new Form(null, "datadict.structure");
         DataForm structure = new DataForm(main, "header");
@@ -59,7 +58,7 @@ public class TableStructure {
         new DataItem(structure, Const.TEXT_FIELD, "modelclass");
         new DataItem(structure, Const.TEXT_FIELD, "modeltable");
         
-        prepareHeader(structure, modelname, usermodel, mode, function);
+        prepareHeader(structure, modelname, mode, function);
         
         new Button(main, "itemdetails");
         
@@ -81,7 +80,7 @@ public class TableStructure {
         }
         
         itens.setMark(true);
-        prepareItens(itens, mode, usermodel, function, view);
+        prepareItens(itens, mode, modelname, function, view);
         
         switch (mode) {
         case Common.UPDATE:
@@ -129,12 +128,12 @@ public class TableStructure {
      * @throws Exception
      */
     private static final void prepareHeader(DataForm form, String modelname,
-            DocumentModel model, byte mode, Function function)
-                    throws Exception {
+            byte mode, Function function) throws Exception {
         String name;
         DataItem dataitem;
         DataElement[] references = new DataElement[3];
         Documents docs = new Documents(function);
+        DocumentModel model = docs.getModel("MODEL");
         
         references[Common.MODELNAME] = docs.getDataElement("MODEL.NAME");
         references[Common.MODELTABLE] = docs.getDataElement("MODEL.TABLE");
@@ -191,15 +190,27 @@ public class TableStructure {
      * @throws Exception
      */
     private static final void prepareItens(Table itens, byte mode,
-            DocumentModel model, Function function, ViewData view)
+            String modelname, Function function, ViewData view)
                     throws Exception {
         Map<Common.ItensNames, DataElement> references =
                 Common.getFieldReferences(function);
+        Documents documents = new Documents(function);
+        DocumentModel model = documents.getModel("MODELITEM");
+        DocumentModel usermodel = documents.getModel(modelname);
+        ItemConfig itemconfig = new ItemConfig();
+
+        itemconfig.setTable(itens);
+        itemconfig.setMode(mode);
+        itemconfig.setModel(model);
+        itemconfig.setReferences(references);
         
-        if (model == null)
-            Common.insertItem(itens, mode, null, null, references);
+        if (usermodel == null)
+            Common.insertItem(itemconfig);
         else
-            for (DocumentModelItem modelitem : model.getItens())
-                Common.insertItem(itens, mode, modelitem, view, references);
+            for (DocumentModelItem modelitem : usermodel.getItens()) {
+                itemconfig.setModelItem(modelitem);
+                
+                Common.insertItem(itemconfig);
+            }
     }
 }

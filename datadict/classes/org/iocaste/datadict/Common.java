@@ -160,22 +160,23 @@ public class Common {
      * @param mode
      * @param modelitem
      */
-    public static final void insertItem(Table itens, byte mode,
-            DocumentModelItem modelitem, ViewData view,
-            Map<ItensNames, DataElement> references) {
+    public static final void insertItem(ItemConfig config) {
         ListBox list;
         DocumentModel model;
         DataElement dataelement = null;
         DocumentModelItem itemref = null;
         FieldHelper helper = new FieldHelper();
+        DocumentModelItem modelitem = config.getModelItem();
+        Map<ItensNames, DataElement> references = config.getReferences();
+        ViewData view = config.getView();
         
         if (modelitem != null) {
             dataelement = modelitem.getDataElement();
             itemref = modelitem.getReference();
         }
         
-        helper.item = new TableItem(itens);
-        helper.mode = mode;
+        helper.item = new TableItem(config.getTable());
+        helper.mode = config.getMode();
         
         for (ItensNames itemname : ItensNames.values()) {
             helper.name = itemname.getName();
@@ -184,7 +185,7 @@ public class Common {
             if (helper.name.equals("item.tablefield")) {
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (modelitem == null)?
-                        null:modelitem.getTableFieldName();
+                        null : modelitem.getTableFieldName();
                 helper.obligatory = true;
                 
                 newField(helper);
@@ -204,14 +205,7 @@ public class Common {
             }
             
             if (helper.name.equals("item.name")) {
-                dataelement = new DataElement();
-                dataelement.setDecimals(0);
-                dataelement.setLength(24);
-                dataelement.setName(helper.reference.getName());
-                dataelement.setType(helper.reference.getType());
-                dataelement.setUpcase(helper.reference.isUpcase());
-                
-                helper.reference = dataelement;
+                helper.reference.setLength(24);                
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (modelitem == null)?null:modelitem.getName();
                 helper.obligatory = true;
@@ -254,7 +248,7 @@ public class Common {
             if (helper.name.equals("item.type")) {
                 helper.obligatory = false;
                 helper.type = Const.LIST_BOX;
-                helper.value = (modelitem == null)?null:Integer.toString(
+                helper.value = (modelitem == null)?null : Integer.toString(
                         dataelement.getType());
                 
                 list = (ListBox)newField(helper);
@@ -332,6 +326,17 @@ public class Common {
         helper.item.add(element);
         
         return element;
+    }
+    
+    /**
+     * 
+     * @param item
+     * @param name
+     * @param value
+     */
+    public static final void setTableValue(TableItem item, String name,
+            String value) {
+        ((InputComponent)item.get(name)).setValue(value);
     }
 }
 
