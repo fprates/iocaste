@@ -14,7 +14,7 @@ create table shitm (
 
 create table shref (
     iname varchar(48) primary key,
-    shitm varchar(48) foreign key references shitm(iname)
+    shcab varchar(48) foreign key references shcab(ident)
 );
 
 \p sh tables has been generated
@@ -46,9 +46,9 @@ insert into docs006(iname, itref) values('SH_ITENS.ITEM', 'MODELITEM.NAME');
 
 insert into docs001(docid, tname, class) values('SH_REFERENCE', 'SHREF', '');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('SH_REFERENCE.MODEL_ITEM', 'SH_REFERENCE', 0, 'INAME', 'MODELITEM.NAME', 'modelItem');
-insert into docs002(iname, docid, index, fname, ename, attrb, mdref, itref) values('SH_REFERENCE.SH_ITEM', 'SH_REFERENCE', 1, 'SHITM', 'SH_ITENS.NAME', 'shItem', 'SH_ITENS', 'NAME');
+insert into docs002(iname, docid, index, fname, ename, attrb, mdref, itref) values('SH_REFERENCE.SEARCH_HELP', 'SH_REFERENCE', 1, 'SHCAB', 'SEARCH_HELP.NAME', 'searchHelp', 'SEARCH_HELP', 'NAME');
 insert into docs004(iname, docid) values('SH_REFERENCE.MODEL_ITEM', 'SH_REFERENCE');
 insert into docs005(tname, docid) values('SHREF', 'SH_REFERENCE');
-insert into docs006(iname, itref) values('SH_REFERENCE.SH_ITEM', 'SH_ITENS.NAME');
+insert into docs006(iname, itref) values('SH_REFERENCE.SEARCH_HELP', 'SEARCH_HELP.NAME');
 
 commit work;

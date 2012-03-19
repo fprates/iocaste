@@ -83,8 +83,8 @@ public class Model {
     public static final DocumentModel get(String documentname,
             Function function, Map<String, Map<String, String>> queries)
                     throws Exception {
-        Object[] lines;
-        String modelref, itemref;
+        Object[] lines, shlines;
+        String modelref, itemref, query, name;
         String[] composed;
         Map<String, Object> columns;
         DocumentModelKey key;
@@ -95,8 +95,8 @@ public class Model {
         if (documentname == null)
             throw new Exception("Document model not specified.");
 
-        lines = iocaste.select("select * from docs001 where docid = ?",
-                new Object[] {documentname});
+        query = "select * from docs001 where docid = ?";
+        lines = iocaste.select(query, documentname);
         if (lines.length == 0)
             return null;
         
@@ -107,11 +107,12 @@ public class Model {
         document.setTableName((String)columns.get("TNAME"));
         document.setClassName((String)columns.get("CLASS"));
         
-        lines = iocaste.select("select * from docs002 where docid = ?",
-                new Object[] {documentname});
+        query = "select * from docs002 where docid = ?";
+        lines = iocaste.select(query, documentname);
         for (Object object : lines) {
             columns = (Map<String, Object>)object;
-            composed = ((String)columns.get("INAME")).split("\\.");
+            name = (String)columns.get("INAME");
+            composed = name.split("\\.");
             
             item = new DocumentModelItem();
             item.setDocumentModel(document);
@@ -129,11 +130,18 @@ public class Model {
                 item.setReference(get(modelref, function, queries).
                         getModelItem(itemref));
             
+            query = "select * from shref where iname = ?";
+            shlines = iocaste.select(query, name);
+            if (shlines != null && shlines.length > 0) {
+                columns = (Map<String, Object>)shlines[0];
+                item.setSearchHelp((String)columns.get("SHCAB"));
+            }
+            
             document.add(item);
         }
         
         lines = iocaste.select("select * from docs004 where docid = ?",
-                new Object[] {documentname});
+                documentname);
         for (Object object : lines) {
             columns = (Map<String, Object>)object;
             
