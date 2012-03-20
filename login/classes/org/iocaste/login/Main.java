@@ -41,9 +41,9 @@ public class Main extends AbstractPage {
         vdata.setMessages(new MessageSource("/META-INF/message.properties"));
         vdata.setTitle("authentic");
         vdata.addContainer(form);
-        vdata.setFocus("username");
+        vdata.setFocus("USERNAME");
         
-        ((DataItem)vdata.getElement("secret")).setSecret(true);
+        ((DataItem)vdata.getElement("SECRET")).setSecret(true);
     }
     
     /**
@@ -63,8 +63,8 @@ public class Main extends AbstractPage {
             view.message(Const.ERROR, "invalid.login");
         }
 
-        ((DataItem)view.getElement("username")).setValue("");
-        ((DataItem)view.getElement("secret")).setValue("");
+        ((DataItem)view.getElement("USERNAME")).setValue("");
+        ((DataItem)view.getElement("SECRET")).setValue("");
     }
     
     /**
