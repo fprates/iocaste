@@ -3,6 +3,8 @@ package org.iocaste.tasksel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.Function;
@@ -14,8 +16,11 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewData;
 
 public class Install {
-    private static final boolean IS_KEY = true;
     
+    /**
+     * 
+     * @param view
+     */
     public static final void main(ViewData view) {
         Container container = new Form(null, "main");
         Text message = new Text(container, "install.continue");
@@ -54,19 +59,40 @@ public class Install {
     public static final InstallData self() {
         DataElement element;
         DocumentModel tasks;
+        DocumentModelItem item;
         InstallData data = new InstallData();
         
         tasks = data.getModel("TASKS", "TASKS", "");
 
-        element = data.getDataElement("TASKS.NAME", 0, 18, DataType.CHAR,
-                DataType.UPPERCASE);
+        element = new DataElement();
+        element.setName("TASKS.NAME");
+        element.setLength(18);
+        element.setType(DataType.CHAR);
+        element.setUpcase(true);
         
-        data.addModelItem(tasks, "NAME", "TSKNM", element, "name", IS_KEY);
+        item = new DocumentModelItem();
+        item.setDocumentModel(tasks);
+        item.setName("NAME");
+        item.setTableFieldName("TSKNM");
+        item.setDataElement(element);
+        item.setIndex(0);
         
-        element = data.getDataElement("TASKS.COMMAND", 0, 128, DataType.CHAR,
-                DataType.KEEPCASE);
+        tasks.add(item);
+        tasks.add(new DocumentModelKey(item));
         
-        data.addModelItem(tasks, "COMMAND", "CMDLN", element, "command", false);
+        element = new DataElement();
+        element.setName("TASKS.COMMAND");
+        element.setLength(128);
+        element.setType(DataType.CHAR);
+        
+        item = new DocumentModelItem();
+        item.setDocumentModel(tasks);
+        item.setName("COMMAND");
+        item.setTableFieldName("CMDLN");
+        item.setDataElement(element);
+        item.setIndex(1);
+        
+        tasks.add(item);
         
         data.link("INFOSIS", "iocaste-infosis");
         data.link("TRANSPORT", "iocaste-transport");

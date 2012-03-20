@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.DocumentModelKey;
 
 public class InstallData implements Serializable {
     private static final long serialVersionUID = -4509980464670421174L;
@@ -37,63 +34,6 @@ public class InstallData implements Serializable {
     
     /**
      * 
-     * @param model
-     * @param name
-     * @param fieldname
-     * @param element
-     * @param attribute
-     * @param iskey
-     * @return
-     */
-    public final DocumentModelItem addModelItem(DocumentModel model,
-            String name, String fieldname, DataElement element,
-            String attribute, boolean iskey) {
-        
-        return addModelItem(model, name, fieldname, element, attribute, iskey,
-                null);
-    }
-    
-    /**
-     * 
-     * @param model
-     * @param name
-     * @param fieldname
-     * @param element
-     * @param attribute
-     * @param iskey
-     * @param reference
-     * @return
-     */
-    public final DocumentModelItem addModelItem(DocumentModel model, String name,
-            String fieldname, DataElement element, String attribute,
-            boolean iskey, DocumentModelItem reference) {
-        DocumentModelItem item;
-        DocumentModelKey key;
-        
-        item = new DocumentModelItem();
-        item.setName(name);
-        item.setTableFieldName(fieldname);
-        item.setDataElement(element);
-        item.setAttributeName(attribute);
-        item.setIndex(model.getItens().length);
-        item.setDocumentModel(model);
-        item.setReference(reference);
-        
-        model.add(item);
-        
-        if (!iskey)
-            return item;
-        
-        key = new DocumentModelKey();
-        key.setModel(model);
-        key.setModelItem(name);
-        model.addKey(key);
-        
-        return item;
-    }
-    
-    /**
-     * 
      * @param name
      */
     public final void addNumberFactory(String name) {
@@ -107,28 +47,6 @@ public class InstallData implements Serializable {
      */
     public final void addValues(DocumentModel model, Object... values) {
         this.values.put(model, values);
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param decimals
-     * @param length
-     * @param type
-     * @param upcase
-     * @return
-     */
-    public final DataElement getDataElement(String name, int decimals,
-            int length, int type, boolean upcase) {
-        DataElement element = new DataElement();
-        
-        element.setName(name);
-        element.setDecimals(decimals);
-        element.setLength(length);
-        element.setType(type);
-        element.setUpcase(upcase);
-        
-        return element;
     }
     
     /**

@@ -60,7 +60,6 @@ public class Main extends AbstractPage {
         String[] parsed;
         DocumentModel model;
         DocumentModelItem modelitem;
-        DocumentModelKey key;
         DataElement dataelement;
         Documents documents;
         File file = new File(filename);
@@ -127,13 +126,8 @@ public class Main extends AbstractPage {
                 
                 modelitem.setDataElement(dataelement);
                 
-                if (Boolean.parseBoolean(parsed[8])) {
-                    key = new DocumentModelKey();
-                    key.setModel(model);
-                    key.setModelItem(modelitem.getName());
-                    
-                    model.addKey(key);
-                }
+                if (Boolean.parseBoolean(parsed[8]))
+                    model.add(new DocumentModelKey(modelitem));
                 
                 if ((parsed.length == 11) && (!parsed[9].equals("")))
                     modelitem.setReference(documents.getModel(parsed[9]).
