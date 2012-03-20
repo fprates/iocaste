@@ -58,12 +58,26 @@ public class Main extends AbstractPage {
         String name, value, export;
         Text text;
         Link link;
+        DocumentModel model;
+        Table table;
+        Parameter param;
+        Container container = new Form(null, "main");
         SearchHelp sh = vdata.getParameter("sh");
         ExtendedObject[] result = getResultsFrom(sh);
-        DocumentModel model = result[0].getModel();
-        Container container = new Form(null, "main");
-        Table table = new Table(container, "search.table");
-        Parameter param = new Parameter(container, "value");
+        
+        if (result == null) {
+            text = new Text(container, "no.results.found");
+            
+            vdata.setNavbarActionEnabled("back", true);
+            vdata.setTitle(sh.getText());
+            vdata.addContainer(container);
+            
+            return;
+        }
+        
+        model = result[0].getModel();
+        table = new Table(container, "search.table");
+        param = new Parameter(container, "value");
         
         table.importModel(model);
         
