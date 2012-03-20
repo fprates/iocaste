@@ -59,7 +59,8 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * Adiciona chave ao documento.
      * @param key
      */
-    public final void addKey(DocumentModelKey key) {
+    public final void add(DocumentModelKey key) {
+        key.setModel(this);
         keys.add(key);
     }
     
@@ -185,9 +186,8 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * @return true, se item é chave
      */
     public final boolean isKey(DocumentModelItem item) {
-        DocumentModelKey key = new DocumentModelKey();
+        DocumentModelKey key = new DocumentModelKey(item);
         key.setModel(this);
-        key.setModelItem(item.getName());
         
         return keys.contains(key);
     }

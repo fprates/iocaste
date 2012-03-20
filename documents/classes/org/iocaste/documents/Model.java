@@ -87,7 +87,6 @@ public class Model {
         String modelref, itemref, query, name;
         String[] composed;
         Map<String, Object> columns;
-        DocumentModelKey key;
         DocumentModelItem item;
         DocumentModel document = null;
         Iocaste iocaste = new Iocaste(function);
@@ -144,13 +143,9 @@ public class Model {
                 documentname);
         for (Object object : lines) {
             columns = (Map<String, Object>)object;
-            
-            key = new DocumentModelKey();
-            key.setModel(document);
             composed = ((String)columns.get("INAME")).split("\\.");
-            key.setModelItem(composed[1]);
             
-            document.addKey(key);
+            document.add(new DocumentModelKey(composed[1]));
         }
         
         if (!queries.containsKey(documentname))

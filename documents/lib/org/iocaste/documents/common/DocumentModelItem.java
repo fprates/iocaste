@@ -217,7 +217,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * @param nome
      */
     public void setName(String name) {
-        this.name = name;
+        this.name = name.toUpperCase();
     }
     
     /**
@@ -233,7 +233,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * @param sh
      */
     public final void setSearchHelp(String sh) {
-        this.sh = sh;
+        this.sh = sh.toUpperCase();
     }
     
     /**
@@ -241,7 +241,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * @param fieldname
      */
     public void setTableFieldName(String fieldname) {
-    	this.fieldname = fieldname;
+    	this.fieldname = fieldname.toUpperCase();
     }
 
 }

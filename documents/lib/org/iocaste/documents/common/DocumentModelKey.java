@@ -6,7 +6,24 @@ public class DocumentModelKey implements Comparable<DocumentModelKey>, Serializa
     private static final long serialVersionUID = -9169359567383979476L;
     private DocumentModel model;
     private String item;
-
+    
+    /**
+     * 
+     * @param model
+     * @param item
+     */
+    public DocumentModelKey(DocumentModelItem item) {
+        this.item = item.getName().toUpperCase();
+    }
+    
+    /**
+     * 
+     * @param name
+     */
+    public DocumentModelKey(String name) {
+        item = name.toUpperCase();
+    }
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Comparable#compareTo(java.lang.Object)
@@ -90,6 +107,6 @@ public class DocumentModelKey implements Comparable<DocumentModelKey>, Serializa
      * @param item item de modelo
      */
     public void setModelItem(String item) {
-        this.item = item;
+        this.item = item.toUpperCase();
     }
 }
