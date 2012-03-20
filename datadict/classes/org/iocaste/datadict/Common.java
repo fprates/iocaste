@@ -61,11 +61,12 @@ public class Common {
     
     /**
      * 
+     * @param function
      * @return
+     * @throws Exception
      */
     public static final Map<ItensNames, DataElement> getFieldReferences(
-            Function function)
-            throws Exception {
+            Function function) throws Exception {
         Map<ItensNames, DataElement> references =
                 new HashMap<ItensNames, DataElement>();
         Documents docs = new Documents(function);
@@ -138,12 +139,12 @@ public class Common {
                     return true;
                 }
 
-                if (classfield.equals(testclassfield)) {
+                if (classfield != null && classfield.equals(testclassfield)) {
                     vdata.message(Const.ERROR, "item.classfield.duplicated");
                     return true;
                 }
                 
-                if (tablefield.equals(testtablefield)) {
+                if (tablefield != null && tablefield.equals(testtablefield)) {
                     vdata.message(Const.ERROR, "item.tablefield.duplicated");
                     return true;
                 }

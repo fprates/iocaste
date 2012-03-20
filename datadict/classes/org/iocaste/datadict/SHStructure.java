@@ -5,7 +5,6 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
-import org.iocaste.sh.common.SHLib;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -14,6 +13,7 @@ import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextField;
@@ -124,7 +124,7 @@ public class SHStructure {
             
             insertItem(mode, itens, null);
             
-            new Button(container, "saveshitem");
+            new Button(container, "savesh");
             new Button(container, "addshitem");
             new Button(container, "deleteshitem");
             
@@ -137,7 +137,7 @@ public class SHStructure {
             for (ExtendedObject item : oitens)
                 insertItem(mode, itens, item);
             
-            new Button(container, "saveshitem");
+            new Button(container, "savesh");
             new Button(container, "addshitem");
             new Button(container, "deleteshitem");
             
@@ -168,7 +168,7 @@ public class SHStructure {
         byte mode = Common.getMode(view);
         
         for (TableItem item : itens.getItens())
-            oitens[i] = item.getObject();
+            oitens[i++] = item.getObject();
         
         switch (mode) {
         case Common.CREATE:

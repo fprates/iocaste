@@ -187,7 +187,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void saveshitem(ViewData view) throws Exception {
+    public final void savesh(ViewData view) throws Exception {
         SHStructure.save(view, this);
     }
     
@@ -201,10 +201,10 @@ public class Main extends AbstractPage {
         
         switch (op) {
         case Common.TABLE:
-            Selection.showtb(view, this);
+            Selection.readtb(view, this);
             break;
         case Common.SH:
-            Selection.showsh(view, this);
+            Selection.readsh(view, this);
             break;
         }
         
@@ -230,10 +230,21 @@ public class Main extends AbstractPage {
     
     /**
      * 
-     * @param vdata
+     * @param view
      * @throws Exception
      */
-    public final void update(ViewData vdata) throws Exception {
-        Selection.update(vdata, this);
+    public final void update(ViewData view) throws Exception {
+        int op = Common.getTpObjectValue(view);
+        
+        switch (op) {
+        case Common.TABLE:
+            Selection.readtb(view, this);
+            break;
+        case Common.SH:
+            Selection.readsh(view, this);
+            break;
+        }
+        
+        view.export("mode", Common.UPDATE);
     }
 }

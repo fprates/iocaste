@@ -155,40 +155,55 @@ public class ItemDetails {
      * @param function
      * @throws Exception
      */
-    public static final boolean update(ViewData view,
-            Function function) throws Exception {
+    public static final boolean update(ViewData view, Function function)
+            throws Exception {
         InputComponent input;
+        DocumentModel model;
+        DocumentModelItem modelitemref;
+        boolean upcase; 
         DataForm form = view.getElement("fkform");
         String itemname = ((DataItem)form.get("item.name")).getValue();
-        String itemref = ((DataItem)form.get("reference.item")).getValue();
-        String modelref = ((DataItem)form.get("reference.model")).getValue();
+        String shname, classfield, modelref = null, itemref = null;
         Shell shell = new Shell(function);
         ViewData structview = shell.getView(view, "tbstructure");
         Table itens = structview.getElement("itens");
-        DocumentModel model = new Documents(function).
-                getModel(modelref);
-        DocumentModelItem modelitemref = model.getModelItem(itemref);
         
-        if (modelitemref == null) {
-            view.message(Const.ERROR, "reference.doesnt.exists");
-            view.setFocus("reference.item");
-            return false;
-        }
+        input = (DataItem)form.get("reference.model");
+        if (!Shell.isInitial(input)) {
+            modelref = input.getValue();
+            model = new Documents(function).getModel(modelref);
+            itemref = ((DataItem)form.get("reference.item")).getValue();
+            modelitemref = model.getModelItem(itemref);
             
-        if (!model.isKey(modelitemref)) {
-            view.message(Const.ERROR, "reference.isnot.key");
-            view.setFocus("reference.item");
-            return false;
+            if (modelitemref == null) {
+                view.message(Const.ERROR, "reference.doesnt.exists");
+                view.setFocus("reference.item");
+                return false;
+            }
+                
+            if (!model.isKey(modelitemref)) {
+                view.message(Const.ERROR, "reference.isnot.key");
+                view.setFocus("reference.item");
+                return false;
+            }
         }
-            
+        
+        form = view.getElement("techform");
+        shname = ((DataItem)form.get("item.sh")).getValue();
+        upcase = ((DataItem)form.get("item.upcase")).isSelected();
+        classfield = ((DataItem)form.get("item.classfield")).getValue();
+        
         for (TableItem item : itens.getItens()) {
             input = (InputComponent)item.get("item.name");
             
             if (!input.getValue().equals(itemname))
                 continue;
             
-            ((InputComponent)item.get("item.reference")).setValue(itemref);
-            ((InputComponent)item.get("model.reference")).setValue(modelref);
+            Common.setTableValue(item, "item.reference", itemref);
+            Common.setTableValue(item, "model.reference", modelref);
+            Common.setTableValue(item, "item.sh", shname);
+            Common.setTableValue(item, "item.classfield", classfield);
+            ((InputComponent)item.get("item.upcase")).setSelected(upcase);
             
             break;
         }

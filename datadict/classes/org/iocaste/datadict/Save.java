@@ -24,7 +24,6 @@ public class Save {
     public static final void main(ViewData view, Function function)
             throws Exception {
         DocumentModelItem modelitem, reference;
-        DocumentModelKey modelkey;
         DataElement dataelement;
         String modelref, itemref, itemname;
         CheckBox upcase, key;
@@ -81,11 +80,7 @@ public class Save {
             if (!key.isSelected())
                 continue;
             
-            modelkey = new DocumentModelKey();
-            modelkey.setModel(model);
-            modelkey.setModelItem(itemname);
-            
-            model.addKey(modelkey);
+            model.add(new DocumentModelKey(modelitem));
         }
         
         switch (modo) {

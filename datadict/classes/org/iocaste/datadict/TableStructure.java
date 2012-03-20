@@ -133,7 +133,7 @@ public class TableStructure {
         DataItem dataitem;
         DataElement[] references = new DataElement[3];
         Documents docs = new Documents(function);
-        DocumentModel model = docs.getModel("MODEL");
+        DocumentModel model = docs.getModel(modelname);
         
         references[Common.MODELNAME] = docs.getDataElement("MODEL.NAME");
         references[Common.MODELTABLE] = docs.getDataElement("MODEL.TABLE");

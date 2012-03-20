@@ -4,7 +4,6 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
-import org.iocaste.sh.common.SHLib;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -12,7 +11,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.RadioButton;
-import org.iocaste.shell.common.SearchHelp;
+import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.ViewData;
 
 public class Selection {
@@ -25,6 +24,7 @@ public class Selection {
      */
     public static final void create(ViewData view, Function function)
             throws Exception {
+        SHLib shlib;
         Documents documents = new Documents(function);
         String name = ((DataItem)view.getElement("modelname")).getValue();
         int op = Common.getTpObjectValue(view);
@@ -42,6 +42,12 @@ public class Selection {
             
             break;
         case Common.SH:
+            shlib = new SHLib(function);
+            if (shlib.get(name) != null) {
+                view.message(Const.ERROR, "sh.already.exist");
+                return;
+            }
+            
             view.redirect(null, "shstructure");
             view.export("shname", name);
             
@@ -65,16 +71,10 @@ public class Selection {
         DataForm modelform = new DataForm(main, "modelform");
         DataItem modelname = new DataItem(modelform, Const.TEXT_FIELD,
                 "modelname");
-        SearchHelp search = new SearchHelp(main, "tablename");
         Documents documents = new Documents(function);
         
-        search.setText("table.name.search");
-        search.setModelName("MODEL");
-        search.addModelItemName("NAME");
-        search.setExport("NAME");
-        
-        modelname.setSearchHelp(search);
-        modelname.setDataElement(documents.getDataElement("MODEL.NAME"));
+        modelname.setModelItem(documents.getModel("MODEL").
+                getModelItem("NAME"));
         modelname.setObligatory(true);
         
         tpobj = new RadioButton(main, "tpobject");
@@ -100,7 +100,7 @@ public class Selection {
      * @param function
      * @throws Exception
      */
-    public static final void showtb(ViewData view, Function function)
+    public static final void readtb(ViewData view, Function function)
             throws Exception {
         DocumentModel model;
         String name = ((DataItem)view.getElement("modelname")).getValue();
@@ -118,7 +118,7 @@ public class Selection {
         view.redirect(null, "tbstructure");
     }
     
-    public static final void showsh(ViewData view, Function function)
+    public static final void readsh(ViewData view, Function function)
             throws Exception {
         ExtendedObject[] shitens;
         SHLib shlib = new SHLib(function);
@@ -126,41 +126,17 @@ public class Selection {
         ExtendedObject[] shdata = shlib.get(name);
         
         if (shdata == null) {
-            view.message(Const.ERROR, "model.not.found");
+            view.message(Const.ERROR, "sh.not.found");
             return;
         }
         
         shitens = new ExtendedObject[shdata.length - 1];
         System.arraycopy(shdata, 1, shitens, 0, shitens.length);
         
+        view.setReloadableView(true);
         view.redirect(null, "shstructure");
         view.export("header", shdata[0]);
         view.export("itens", shitens);
         view.export("shname", name);
-    }
-
-    /**
-     * 
-     * @param view
-     * @param function
-     * @throws Exception
-     */
-    public static final void update(ViewData view, Function function)
-            throws Exception {
-        DocumentModel model;
-        String modelname = ((DataItem)view.getElement("modelname")).getValue();
-        Documents documents = new Documents(function);
-        
-        if (!documents.hasModel(modelname)) {
-            view.message(Const.ERROR, "model.not.found");
-            return;
-        }
-        
-        model = documents.getModel(modelname);
-        
-        view.setReloadableView(true);
-        view.export("mode", Common.UPDATE);
-        view.export("model", model);
-        view.redirect(null, "tbstructure");
     }
 }
