@@ -219,7 +219,7 @@ public class Model {
         if (shname == null)
             return;
         
-        query = "insert into shref(iname, shitm) values(? , ?)";
+        query = "insert into shref(iname, shcab) values(? , ?)";
         iocaste.update(query, tname, shname);
     }
     
@@ -256,6 +256,22 @@ public class Model {
         iocaste.update(query);
         
         queries.remove(name);
+    }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param item
+     * @throws Exception
+     */
+    private static final void removeDBColumn(Iocaste iocaste,
+            DocumentModelItem item) throws Exception {
+        String fieldname = item.getTableFieldName();
+        String tablename = item.getDocumentModel().getTableName();
+        String query = new StringBuilder("alter table ").append(tablename).
+                append(" drop column ").append(fieldname).toString();
+        
+        iocaste.update(query);
     }
     
     /**
@@ -469,22 +485,6 @@ public class Model {
      * 
      * @param iocaste
      * @param item
-     * @throws Exception
-     */
-    private static final void removeDBColumn(Iocaste iocaste,
-            DocumentModelItem item) throws Exception {
-        String fieldname = item.getTableFieldName();
-        String tablename = item.getDocumentModel().getTableName();
-        String query = new StringBuilder("alter table ").append(tablename).
-                append(" drop column ").append(fieldname).toString();
-        
-        iocaste.update(query);
-    }
-    
-    /**
-     * 
-     * @param iocaste
-     * @param item
      * @param oldmodel
      * @throws Exception
      */
@@ -493,6 +493,7 @@ public class Model {
         StringBuilder sb;
         DataElement ddelement;
         Object[] criteria;
+        String shname;
         DocumentModel model = item.getDocumentModel();
         DocumentModelItem reference, olditem = oldmodel.
                 getModelItem(item.getName());
@@ -603,8 +604,12 @@ public class Model {
         
         iocaste.update(query, criteria);
         
-        query = "insert into shref(iname, shitm) values(? ,?)";
-        iocaste.update(query, item.getName(), item.getSearchHelp());
+        shname = item.getSearchHelp();
+        if (shname == null)
+            return;
+        
+        query = "insert into shref(iname, shcab) values(? ,?)";
+        iocaste.update(query, criteria[7], shname);
     }
     
     /**
