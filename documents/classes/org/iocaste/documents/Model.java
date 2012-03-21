@@ -84,7 +84,7 @@ public class Model {
             Function function, Map<String, Map<String, String>> queries)
                     throws Exception {
         Object[] lines, shlines;
-        String modelref, itemref, query, name;
+        String itemref, query, name;
         String[] composed;
         Map<String, Object> columns;
         DocumentModelItem item;
@@ -122,12 +122,13 @@ public class Model {
                     (String)columns.get("ENAME")));
             item.setIndex(((BigDecimal)columns.get("INDEX")).intValue());
             
-            modelref = (String)columns.get("MDREF");
             itemref = (String)columns.get("ITREF");
             
-            if (modelref != null && itemref != null)
-                item.setReference(get(modelref, function, queries).
-                        getModelItem(itemref));
+            if (itemref != null) {
+                composed = itemref.split("\\.");
+                item.setReference(get(composed[0], function, queries).
+                        getModelItem(composed[1]));
+            }
             
             query = "select * from shref where iname = ?";
             shlines = iocaste.select(query, name);
@@ -166,15 +167,13 @@ public class Model {
     public static final boolean has(String modelname, Function function)
             throws Exception {
         Object[] lines;
-        Iocaste iocaste;
+        String query;
         
         if (modelname == null)
             throw new Exception("Document model not specified.");
 
-        iocaste = new Iocaste(function);
-        
-        lines = iocaste.select("select docid from docs001 where docid = ?",
-                new Object[] {modelname});
+        query = "select docid from docs001 where docid = ?";
+        lines = new Iocaste(function).select(query, modelname);
         
         return (lines.length == 0)? false : true;
     }
@@ -191,26 +190,23 @@ public class Model {
         String itemref, tname, shname;
         DocumentModel model = item.getDocumentModel();
         String query = "insert into docs002 (iname, docid, index, " +
-                "fname, ename, attrb, mdref, itref) values " +
-                "(?, ?, ?, ?, ?, ?, ?, ?)";
+                "fname, ename, attrb, itref) values(?, ?, ?, ?, ?, ?, ?)";
         
         dataelement = item.getDataElement();
         
         tname = Common.getComposedName(item);
-        
         reference = item.getReference();
+        itemref = (reference == null)? null : Common.getComposedName(reference);
+        
         iocaste.update(query, tname,
                 model.getName(),
                 item.getIndex(),
                 item.getTableFieldName(),
                 dataelement.getName(),
                 item.getAttributeName(),
-                (reference == null)? null : reference.getDocumentModel().
-                        getName(),
-                (reference == null)? null : reference.getName());
+                itemref);
         
-        if (reference != null) {        
-            itemref = Common.getComposedName(reference);
+        if (itemref != null) {
             query = "insert into docs006(iname, itref) values(?, ?)";
             iocaste.update(query, tname, itemref);
         }
@@ -364,8 +360,7 @@ public class Model {
         DocumentModelItem reference;
         int size;
         StringBuilder sb, sbk = null;
-        String tname, query = "insert into docs002 (iname, docid, index, " +
-                "fname, ename, attrb) values (?, ?, ?, ?, ?, ?)";
+        String tname, query;
         DocumentModelItem[] itens = model.getItens();
         
         sb = new StringBuilder("create table ").append(model.getTableName()).
@@ -588,19 +583,18 @@ public class Model {
         iocaste.update(query, criteria);
         
         query = "update docs002 set docid = ?, index = ?, fname = ?, " +
-                "ename = ?, attrb = ?, mdref = ?, itref = ? where iname = ?";
+                "ename = ?, attrb = ?, itref = ? where iname = ?";
         
-        criteria = new Object[8];
+        criteria = new Object[7];
         
         criteria[0] = model.getName();
         criteria[1] = item.getIndex();
         criteria[2] = item.getTableFieldName();
         criteria[3] = ddelement.getName();
         criteria[4] = item.getAttributeName();
-        criteria[5] = (reference == null)? null : reference.getDocumentModel().
-                getName();
-        criteria[6] = (reference == null)? null : reference.getName();
-        criteria[7] = Common.getComposedName(item);
+        criteria[5] = (reference == null)?
+                null : Common.getComposedName(reference);
+        criteria[6] = Common.getComposedName(item);
         
         iocaste.update(query, criteria);
         

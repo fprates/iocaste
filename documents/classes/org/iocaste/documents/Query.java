@@ -90,7 +90,7 @@ public class Query {
                 append(getModelKey(model).getTableFieldName()).
                 append(" = ?").toString();
         
-        Object[] objects = iocaste.select(query, new Object[] {key});
+        Object[] objects = iocaste.select(query, key);
         
         if (objects.length == 0)
             return null;
