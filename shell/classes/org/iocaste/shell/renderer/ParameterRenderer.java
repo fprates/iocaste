@@ -12,12 +12,16 @@ public class ParameterRenderer extends Renderer {
      */
     public static final XMLElement render(Parameter parameter) {
         XMLElement hiddentag = new XMLElement("input");
-        String name = parameter.getHtmlName();
+        String value, name = parameter.getHtmlName();
         
         hiddentag.add("type", "hidden");
         hiddentag.add("name", name);
         hiddentag.add("id", name);
-
+        
+        value = parameter.getValue();
+        if (value != null)
+            hiddentag.add("value", value);
+        
         addAttributes(hiddentag, parameter);
         
         return hiddentag;
