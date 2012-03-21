@@ -44,9 +44,15 @@ public class Renderer {
      */
     public static final void renderContainer(List<XMLElement> tags,
             Container container, Config config) {
+        XMLElement xmltag;
+        
         switch (container.getType()) {
         case FORM:
-            tags.add(FormRenderer.render((Form)container, config));
+            xmltag = FormRenderer.render((Form)container, config);
+            xmltag.addChildren(config.getToForm());
+            config.clearToForm();
+            
+            tags.add(xmltag);
             break;
             
         case DATA_FORM:

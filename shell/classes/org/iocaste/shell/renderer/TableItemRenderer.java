@@ -5,11 +5,21 @@ import java.util.List;
 
 import org.iocaste.shell.XMLElement;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 
 public class TableItemRenderer extends Renderer {
+    private static List<InputComponent> hidden;
+    
+    /**
+     * 
+     * @return
+     */
+    public static final List<InputComponent> getHidden() {
+        return hidden;
+    }
     
     /**
      * 
@@ -26,11 +36,19 @@ public class TableItemRenderer extends Renderer {
         XMLElement tdtag, trtag = new XMLElement("tr");
         List<XMLElement> tags = new ArrayList<XMLElement>();
         
+        hidden = new ArrayList<InputComponent>();
+        
         for (Element element : item.getElements()) {
             column = columns[i++];
             
-            if ((column.isMark() && !table.hasMark()) || !column.isVisible())
+            if (column.isMark() && !table.hasMark())
                 continue;
+            
+            if (!column.isVisible()) {
+                if (element.isDataStorable())
+                    hidden.add((InputComponent)element);
+                continue;
+            }
             
             tdtag = new XMLElement("td");
             

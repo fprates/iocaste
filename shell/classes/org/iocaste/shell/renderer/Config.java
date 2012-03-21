@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.iocaste.shell.XMLElement;
 import org.iocaste.shell.common.MessageSource;
 
 public class Config {
@@ -12,10 +13,12 @@ public class Config {
     private MessageSource messages;
     private Set<String> actions;
     private List<String> onload; 
+    private List<XMLElement> toform;
     
     public Config() {
         actions = new HashSet<String>();
         onload = new ArrayList<String>();
+        toform = new ArrayList<XMLElement>();
     }
     
     /**
@@ -32,6 +35,21 @@ public class Config {
      */
     public final void addOnload(String onload) {
         this.onload.add(onload);
+    }
+    
+    /**
+     * 
+     * @param element
+     */
+    public final void addToForm(XMLElement element) {
+        toform.add(element);
+    }
+    
+    /**
+     * 
+     */
+    public final void clearToForm() {
+        toform.clear();
     }
     
     /**
@@ -85,6 +103,14 @@ public class Config {
             return fail;
         
         return messages.get(tag, tag);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final List<XMLElement> getToForm() {
+        return toform;
     }
     
     /**

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.shell.XMLElement;
+import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -18,7 +21,9 @@ public class TableRenderer extends Renderer {
      */
     public static final XMLElement render(Table table, Config config) {
         String name;
+        Parameter parameter;
         XMLElement trtag, thtag, tabletag = new XMLElement("table");
+        List<InputComponent> hidden = new ArrayList<InputComponent>();
         List<XMLElement> tags = new ArrayList<XMLElement>();
 
         addAttributes(tabletag, table);
@@ -46,7 +51,18 @@ public class TableRenderer extends Renderer {
         for (TableItem item : table.getItens()) {
             tags.clear();
             tags.add(TableItemRenderer.render(table, item, config));
+            hidden.addAll(TableItemRenderer.getHidden());
             tabletag.addChildren(tags);
+        }
+        
+        /*
+         * componentes de entrada de colunas invisíveis são tratados
+         * como parâmetros, pois precisam ter seu conteúdo armazenado.
+         */
+        for (InputComponent input : hidden) {
+            parameter = new Parameter(null, ((Element)input).getHtmlName());
+            parameter.setValue(input.getValue());
+            config.addToForm(ParameterRenderer.render(parameter));
         }
         
         return tabletag;
