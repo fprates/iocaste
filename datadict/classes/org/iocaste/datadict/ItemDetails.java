@@ -46,23 +46,23 @@ public class ItemDetails {
          * foreign key
          */
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "model.name");
-        dataitem.setValue(modelname);
         dataitem.setModelItem(model.getModelItem("MODEL"));
+        dataitem.setValue(modelname);
         dataitem.setEnabled(false);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "item.name");
-        dataitem.setValue(itemname);
         dataitem.setModelItem(model.getModelItem("NAME"));
+        dataitem.setValue(itemname);
         dataitem.setEnabled(false);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.model");
-        dataitem.setValue(modelref);
         dataitem.setModelItem(model.getModelItem("MODEL"));
+        dataitem.setValue(modelref);
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.item");
-        dataitem.setValue(itemref);
         dataitem.setModelItem(model.getModelItem("NAME"));
+        dataitem.setValue(itemref);
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
 
         /*
@@ -72,20 +72,20 @@ public class ItemDetails {
         techform = new DataForm(techframe, "techform");
         
         dataitem = new DataItem(techform, Const.TEXT_FIELD, "item.classfield");
-        dataitem.setValue(classfield);
         dataitem.setModelItem(model.getModelItem("ATTRIB"));
+        dataitem.setValue(classfield);
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         dataitem = new DataItem(techform, Const.TEXT_FIELD, "item.sh");
-        dataitem.setValue(sh);
         dataitem.setModelItem(documents.getModel("SH_REFERENCE").
                 getModelItem("NAME"));
+        dataitem.setValue(sh);
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         dataitem = new DataItem(techform, Const.CHECKBOX, "item.upcase");
-        dataitem.setValue(upcase);
         dataitem.setModelItem(documents.getModel("DATAELEMENT").
                 getModelItem("UPCASE"));
+        dataitem.setValue(upcase);
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         if (mode != Common.SHOW) {

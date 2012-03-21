@@ -36,7 +36,7 @@ public class SHStructure {
      * @param itens
      * @param object
      */
-    private static void insertItem(byte mode, Table itens,
+    private static void insertItem(byte mode, Table itens, ViewData view,
             ExtendedObject object) {
         TextField tfield;
         String name;
@@ -52,6 +52,9 @@ public class SHStructure {
             
             if ((mode == Common.SHOW) || name.equals("NAME"))
                 tfield.setObligatory(false);
+            
+            if (name.equals("ITEM"))
+                view.setFocus(tfield);
             
             item.add(tfield);
         }
@@ -115,14 +118,14 @@ public class SHStructure {
             
             oitens = view.getParameter("itens");
             for (ExtendedObject item : oitens)
-                insertItem(mode, itens, item);
+                insertItem(mode, itens, view, item);
             
             break;
             
         case Common.CREATE:
             itens.setMark(true);
             
-            insertItem(mode, itens, null);
+            insertItem(mode, itens, view, null);
             
             new Button(container, "savesh");
             new Button(container, "addshitem");
@@ -135,7 +138,7 @@ public class SHStructure {
             
             oitens = view.getParameter("shitens");
             for (ExtendedObject item : oitens)
-                insertItem(mode, itens, item);
+                insertItem(mode, itens, view, item);
             
             new Button(container, "savesh");
             new Button(container, "addshitem");
@@ -174,7 +177,7 @@ public class SHStructure {
         case Common.CREATE:
             shlib.save(object, oitens);
             view.export("mode", Common.UPDATE);
-            view.setTitle(TITLE[mode]);
+            view.setTitle(TITLE[Common.UPDATE]);
             
             break;
         case Common.UPDATE:
@@ -193,7 +196,7 @@ public class SHStructure {
     public static final void insert(ViewData view) {
         Table itens = view.getElement("itens");
         
-        insertItem(Common.getMode(view), itens, null);
+        insertItem(Common.getMode(view), itens, view, null);
     }
     
     /**
