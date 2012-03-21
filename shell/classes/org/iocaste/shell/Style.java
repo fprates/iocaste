@@ -1,98 +1,62 @@
 package org.iocaste.shell;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Style implements Comparable<Style> {
-    private String name;
-    private int index;
-    private Set<StyleElement> elements;
-    
-    public Style() {
-        elements = new TreeSet<StyleElement>();
-    }
-    
-    public Set<StyleElement> getElements() {
-        return elements;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public int getIndex() {
-        return index;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-    
-    /**
-     * 
-     * @param elements
-     */
-    public void setElements(Set<StyleElement> elements) {
-        this.elements = elements;
-    }
-    
-    /**
-     * 
-     * @param index
-     */
-    public void setIndex(int index) {
-        this.index = index;
+import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Iocaste;
+
+public class Style {
+
+    private static final Object[] checkedSelect(Iocaste iocaste, String from,
+            String where, Object... criteria) throws Exception {
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        
+        parameters.put("from", from);
+        parameters.put("where", where);
+        parameters.put("criteria", criteria);
+        
+        return (Object[])iocaste.callAuthorized("checked_select",
+                parameters);
     }
     
     /**
      * 
      * @param name
+     * @param function
+     * @return
+     * @throws Exception
      */
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    @Override
-    public int compareTo(Style style) {
-        if (style == this)
-            return 0;
+    @SuppressWarnings("unchecked")
+    public static final Map<String, Map<String, String>> get(
+            String name, Function function) throws Exception {
+        long index;
+        Object[] eobjects, aobjects;
+        Map<String, Object> oelement, oattribute;
+        Map<String, String> attributes;
+        Iocaste iocaste = new Iocaste(function);
+        Map<String, Map<String, String>> elements =
+                new HashMap<String, Map<String, String>>();
         
-        return name.compareTo(style.getName()); 
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object object) {
-        Style style;
+        eobjects = checkedSelect(iocaste, "shell002", "sname = ?", name);
         
-        if ((object == null) || !(object == this))
-            return false;
+        for (Object eobject : eobjects) {
+            oelement = (Map<String, Object>)eobject;
+            index = ((BigDecimal)oelement.get("EINDX")).longValue();
+            aobjects = checkedSelect(iocaste, "shell003", "eindx = ?", index);
+            
+            attributes = new HashMap<String, String>();
+            
+            for (Object aobject : aobjects) {
+                oattribute = (Map<String, Object>)aobject;
+                attributes.put((String)oattribute.get("PNAME"),
+                        (String)oattribute.get("VALUE"));
+            }
+            
+            elements.put((String)oelement.get("ENAME"), attributes);
+        }
         
-        style = (Style)object;
-        
-        if (name.equals(style.getName()))
-            return true;
-        
-        return false;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return name.hashCode();
+        return elements;
     }
 }

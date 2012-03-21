@@ -621,6 +621,7 @@ public class PageRenderer extends HttpServlet implements Function {
         
         configResponse(resp, viewdata);
         
+        renderer.setCssElements(Style.get("DEFAULT", this));
         renderer.setLogid(pagectx.getLogid());
         text = renderer.run(pagectx.getViewData());
 

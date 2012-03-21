@@ -1,6 +1,9 @@
 package org.iocaste.shell;
 
+import java.util.Map;
+
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.ViewData;
 
@@ -11,6 +14,11 @@ public class Services extends AbstractFunction {
         export("update_view", "updateView");
         export("pop_page", "popPage");
         export("push_page", "pushPage");
+    }
+    
+    public final static Map<String, Map<String, String>> getStyle(
+            String name, Function function) throws Exception {
+        return Style.get(name, function);
     }
     
     /**

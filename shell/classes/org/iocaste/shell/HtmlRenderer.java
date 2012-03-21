@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,16 +24,16 @@ public class HtmlRenderer {
     private List<String> script;
     private Set<String> actions;
     private int logid;
+    private Map<String, Map<String, String>> csselements;
     
     public HtmlRenderer() {
         String line;
-        
-        script = new ArrayList<String>();
-        logid = 0;
-        
         InputStream is = this.getClass().getResourceAsStream(
                 "/META-INF/shell.js");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        
+        script = new ArrayList<String>();
+        logid = 0;
         
         try {
             while ((line = reader.readLine()) != null)
@@ -83,30 +82,6 @@ public class HtmlRenderer {
      */
     public final Set<String> getActions() {
         return actions;
-    }
-    
-    /**
-     * 
-     * @param name
-     * @return
-     */
-    private final Map<String, Map<String, String>> getStyleSheetElements(
-            String name) {
-//        Style style;
-        Map<String, Map<String, String>> elements =
-                new HashMap<String, Map<String, String>>();
-//        Map<String, String> properties;
-//        
-//        style = (Style)session.load(Style.class, name);
-//        for (StyleElement element : style.getElements()) {
-//            properties = new HashMap<String, String>();
-//            elements.put(element.getName(), properties);
-//            
-//            for (StyleElementProperty property : element.getProperties())
-//                properties.put(property.getName(), property.getValue());
-//        }
-        
-        return elements;
     }
     
     /**
@@ -184,7 +159,6 @@ public class HtmlRenderer {
      */
     private final XMLElement renderStyleSheet(ViewData vdata) {
         Map<String, String> properties;
-        Map<String, Map<String, String>> elements;
         String sheet = vdata.getStyleSheet();
         XMLElement styletag = new XMLElement("style");
         
@@ -193,12 +167,11 @@ public class HtmlRenderer {
         if (sheet == null)
             sheet = "DEFAULT";
         
-        elements = getStyleSheetElements(sheet);
-        if (elements.size() == 0)
+        if (csselements.size() == 0)
             styletag.addInner("");
         
-        for (String element : elements.keySet()) {
-            properties = elements.get(element);
+        for (String element : csselements.keySet()) {
+            properties = csselements.get(element);
             styletag.addInner(element+" {");
             
             for (String property: properties.keySet())
@@ -262,12 +235,21 @@ public class HtmlRenderer {
         
         return html.toArray(new String[0]);
     }
+
+    /**
+     * 
+     * @param elements
+     */
+    public final void setCssElements(Map<String,
+            Map<String, String>> csselements) {
+        this.csselements = csselements;
+    }
     
     /**
      * Ajusta texto da barra de mensagens.
      * @param msgtext texto
      */
-    public void setMessageText(String msgtext) {
+    public final void setMessageText(String msgtext) {
         this.msgtext = msgtext;
     }
     
@@ -275,7 +257,7 @@ public class HtmlRenderer {
      * 
      * @param logid
      */
-    public void setLogid(int logid) {
+    public final void setLogid(int logid) {
         this.logid = logid;
     }
     
@@ -291,7 +273,7 @@ public class HtmlRenderer {
      * Ajusta nome do usuário
      * @param username nome
      */
-    public void setUsername(String username) {
+    public final void setUsername(String username) {
         this.username = username;
     }
 }
