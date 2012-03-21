@@ -36,7 +36,8 @@ public abstract class AbstractServiceInterface {
         Message message = new Message();
         
         message.setId(function);
-        message.add("params", params);
+        for (String key : params.keySet())
+            message.add(key, params.get(key));
         
         return call(message);
     }
