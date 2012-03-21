@@ -16,12 +16,14 @@ public class InstallData implements Serializable {
     private Map<DocumentModel, Object[]> values;
     private Map<String, String> links;
     private Set<String> numbers;
+    private List<SearchHelpData> shds;
     
     public InstallData() {
         models = new ArrayList<DocumentModel>();
         values = new HashMap<DocumentModel, Object[]>();
         links = new HashMap<String, String>();
         numbers = new HashSet<String>();
+        shds = new ArrayList<SearchHelpData>();
     }
     
     /**
@@ -30,6 +32,14 @@ public class InstallData implements Serializable {
      */
     public final void add(DocumentModel model) {
         models.add(model);
+    }
+    
+    /**
+     * 
+     * @param shd
+     */
+    public final void add(SearchHelpData shd) {
+        shds.add(shd);
     }
     
     /**
@@ -91,6 +101,14 @@ public class InstallData implements Serializable {
      */
     public final String[] getNumberFactories() {
         return numbers.toArray(new String[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final SearchHelpData[] getSHData() {
+        return shds.toArray(new SearchHelpData[0]);
     }
     
     /**
