@@ -45,6 +45,9 @@
             
         <!-- dataview -->
         <ant antfile="${basedir}/src/dataview/build.xml"/>
+    	
+    	<!-- style-editor -->
+    	<ant antfile="${basedir}/src/styleeditor/build.xml"/>
         
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
