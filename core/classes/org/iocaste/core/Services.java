@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 
@@ -46,14 +47,25 @@ public class Services extends AbstractFunction {
      */
     public final Object[] checkedSelect(Message message) throws Exception {
         Object[] results;
-        String columns = message.getString("columns");
+        Connection connection;
+        String query, columns = message.getString("columns");
         String from = message.getString("from");
         String where = message.getString("where");
         Object[] criteria = (Object[])message.get("criteria");
-        String query = new StringBuilder("select").append(columns).
-                append(" from ").append(from).append(" where ").append(where).
-                toString();
-        Connection connection = db.instance();
+        StringBuilder sb = new StringBuilder("select ");
+        
+        sb.append((columns == null)? "*" : columns);
+        
+        if (from == null)
+            throw new IocasteException("Table not specified.");
+        
+        sb.append(" from ").append(from);
+        
+        if (where != null)
+            sb.append(" where ").append(where);
+        
+        query = sb.toString();
+        connection = db.instance();
         
         results = db.select(connection, query, criteria);
         connection.close();
@@ -244,7 +256,7 @@ public class Services extends AbstractFunction {
         
         lines = db.select(connection,
                 "select uname, secrt from users001 where uname = ?",
-                new Object[] {username.toUpperCase()});
+                username.toUpperCase());
         
         connection.close();
         
