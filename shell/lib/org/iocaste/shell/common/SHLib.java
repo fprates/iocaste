@@ -1,5 +1,6 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
@@ -10,6 +11,21 @@ public class SHLib extends AbstractServiceInterface {
     
     public SHLib(Function function) {
         initService(function, APP_NAME);
+    }
+    
+    /**
+     * 
+     * @param shname
+     * @param itemname
+     * @throws Exception
+     */
+    public final void assign(DocumentModelItem item) throws Exception {
+        Message message = new Message();
+        
+        message.setId("assign");
+        message.add("model_item", item);
+        
+        call(message);
     }
     
     /**
@@ -25,6 +41,21 @@ public class SHLib extends AbstractServiceInterface {
         message.add("name", name);
         
         return (ExtendedObject[])call(message);
+    }
+    
+    /**
+     * 
+     * @param shname
+     * @return
+     * @throws Exception
+     */
+    public final int remove(String name) throws Exception {
+        Message message = new Message();
+        
+        message.setId("remove");
+        message.add("shname", name);
+        
+        return (Integer)call(message);
     }
     
     /**
