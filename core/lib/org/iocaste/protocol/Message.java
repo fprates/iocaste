@@ -45,8 +45,9 @@ public class Message implements Serializable {
      * @param name
      * @return
      */
-    public final Object get(String name) {
-        return values.get(name);
+    @SuppressWarnings("unchecked")
+    public final <T> T get(String name) {
+        return (T)values.get(name);
     }
     
     /**
