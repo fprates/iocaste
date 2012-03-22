@@ -45,7 +45,7 @@ public class PackageTool extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final byte install(String name) throws Exception {
+    public final Integer install(String name) throws Exception {
         InstallData data;
         String viewname = new StringBuilder("/").
                 append(name).
@@ -62,7 +62,7 @@ public class PackageTool extends AbstractServiceInterface {
         message.clear();
         message.add("data", data);
         
-        return (Byte)call(message);
+        return (Integer)call(message);
     }
 
 }
