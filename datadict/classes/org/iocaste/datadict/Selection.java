@@ -64,6 +64,51 @@ public class Selection {
      * @param function
      * @throws Exception
      */
+    public static void deletesh(ViewData view, Function function)
+            throws Exception {
+        ExtendedObject[] shdata;
+        SHLib shlib = new SHLib(function);
+        String shname = ((DataItem)view.getElement("modelname")).getValue();
+        
+        shdata = shlib.get(shname);
+        if (shdata == null) {
+            view.message(Const.ERROR, "sh.not.found");
+            return;
+        }
+        
+        shlib.remove((String)shdata[0].getValue("NAME"));
+        
+        view.message(Const.STATUS, "sh.removed.sucessfully");
+    }
+    
+    /**
+     * 
+     * @param view
+     * @param function
+     * @throws Exception
+     */
+    public static void deletetb(ViewData view, Function function)
+            throws Exception {
+        Documents documents = new Documents(function);
+        String modelname = ((DataItem)view.getElement("modelname")).getValue();
+        
+        if (!documents.hasModel(modelname)) {
+            view.message(Const.ERROR, "model.not.found");
+            return;
+        }
+        
+        documents.removeModel(modelname);
+        documents.commit();
+        
+        view.message(Const.STATUS, "model.removed.sucessfully");
+    }
+    
+    /**
+     * 
+     * @param view
+     * @param function
+     * @throws Exception
+     */
     public static final void main(ViewData view, Function function)
             throws Exception {
         RadioButton tpobj;
@@ -118,6 +163,12 @@ public class Selection {
         view.redirect(null, "tbstructure");
     }
     
+    /**
+     * 
+     * @param view
+     * @param function
+     * @throws Exception
+     */
     public static final void readsh(ViewData view, Function function)
             throws Exception {
         ExtendedObject[] shitens;

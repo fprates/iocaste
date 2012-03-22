@@ -42,11 +42,20 @@ public class Main extends AbstractPage {
     
     /**
      * 
-     * @param vdata
+     * @param view
      * @throws Exception
      */
-    public final void delete(ViewData vdata) throws Exception {
-        Delete.main(vdata, this);
+    public final void delete(ViewData view) throws Exception {
+        int op = Common.getTpObjectValue(view);
+        
+        switch (op) {
+        case Common.TABLE:
+            Selection.deletetb(view, this);
+            break;
+        case Common.SH:
+            Selection.deletesh(view, this);
+            break;
+        }
     }
     
     /**
