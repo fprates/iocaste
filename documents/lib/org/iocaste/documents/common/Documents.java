@@ -53,15 +53,16 @@ public class Documents extends AbstractServiceInterface {
     /**
      * 
      * @param model
+     * @return
      * @throws Exception
      */
-    public final void createModel(DocumentModel model) throws Exception {
+    public final int createModel(DocumentModel model) throws Exception {
         Message message = new Message();
         
         message.setId("create_model");
         message.add("model", model);
         
-        call(message);
+        return (Integer)call(message);
     }
     
     /**
@@ -91,6 +92,16 @@ public class Documents extends AbstractServiceInterface {
         message.add("object", object);
         
         return (Integer)call(message);
+    }
+    
+    /**
+     * 
+     * @param item
+     * @return
+     */
+    public static final String getComposedName(DocumentModelItem item) {
+        return new StringBuilder(item.getDocumentModel().getName()).
+                append(".").append(item.getName()).toString();
     }
     
     /**
@@ -174,38 +185,41 @@ public class Documents extends AbstractServiceInterface {
     /**
      * 
      * @param object
-     * @throws Exception 
+     * @return
+     * @throws Exception
      */
-    public final void modify(ExtendedObject object) throws Exception {
+    public final int modify(ExtendedObject object) throws Exception {
         Message message = new Message();
         
         message.setId("modify");
         message.add("object", object);
         
-        call(message);
+        return (Integer)call(message);
     }
     
     /**
      * 
      * @param name
+     * @return
      * @throws Exception
      */
-    public final void removeModel(String name) throws Exception {
+    public final int removeModel(String name) throws Exception {
         Message message = new Message();
         
         message.setId("remove_model");
         message.add("model_name", name);
         
-        call(message);
+        return (Integer)call(message);
     }
     
     /**
      * 
      * @param oldname
      * @param newname
+     * @return
      * @throws Exception
      */
-    public final void renameModel(String oldname, String newname)
+    public final int renameModel(String oldname, String newname)
             throws Exception {
         Message message = new Message();
         
@@ -213,7 +227,7 @@ public class Documents extends AbstractServiceInterface {
         message.add("oldname", oldname);
         message.add("newname", newname);
         
-        call(message);
+        return (Integer)call(message);
     }
     
     /**
@@ -253,9 +267,10 @@ public class Documents extends AbstractServiceInterface {
      * 
      * @param query
      * @param criteria
+     * @return
      * @throws Exception
      */
-    public final void update(String query, Object... criteria)
+    public final int update(String query, Object... criteria)
             throws Exception {
         Message message = new Message();
         
@@ -263,21 +278,22 @@ public class Documents extends AbstractServiceInterface {
         message.add("query", query);
         message.add("criteria", criteria);
         
-        call(message);
+        return (Integer)call(message);
     }
     
     /**
      * 
      * @param model
+     * @return
      * @throws Exception
      */
-    public final void updateModel(DocumentModel model) throws Exception {
+    public final int updateModel(DocumentModel model) throws Exception {
         Message message = new Message();
         
         message.setId("update_model");
         message.add("model", model);
         
-        call(message);
+        return (Integer)call(message);
     }
     
     /**

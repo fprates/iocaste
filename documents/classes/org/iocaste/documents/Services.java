@@ -9,6 +9,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class Services extends AbstractFunction {
@@ -38,12 +39,13 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
+     * @return
      * @throws Exception
      */
-    public final void createModel(Message message) throws Exception {
-        DocumentModel model = (DocumentModel)message.get("model");
+    public final int createModel(Message message) throws Exception {
+        DocumentModel model = message.get("model");
         
-        Model.create(model, this, queries);
+        return Model.create(model, this, queries);
     }
     
     /**
@@ -62,11 +64,11 @@ public class Services extends AbstractFunction {
      * @param message
      * @throws Exception
      */
-    public final void delete(Message message) throws Exception {
-        ExtendedObject object = (ExtendedObject)message.get("object");
+    public final int delete(Message message) throws Exception {
+        ExtendedObject object = message.get("object");
         Iocaste iocaste = new Iocaste(this);
         
-        Query.delete(iocaste, object);
+        return Query.delete(iocaste, object);
     }
     
     /**
@@ -106,7 +108,7 @@ public class Services extends AbstractFunction {
         DocumentModel model = Model.get(modelname, this, queries);
         
         if (model == null)
-            throw new Exception("invalid model.");
+            throw new IocasteException("invalid model.");
         
         return Query.get(model, key, this);
     }
@@ -138,36 +140,39 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
+     * @return
      * @throws Exception
      */
-    public final void modify(Message message) throws Exception {
-        ExtendedObject object = (ExtendedObject)message.get("object");
+    public final int modify(Message message) throws Exception {
+        ExtendedObject object = message.get("object");
         
-        Query.modify(object, this);
+        return Query.modify(object, this);
     }
     
     /**
      * 
      * @param message
+     * @return
      * @throws Exception
      */
-    public final void removeModel(Message message) throws Exception {
+    public final int removeModel(Message message) throws Exception {
         String modelname = message.getString("model_name");
         DocumentModel model = Model.get(modelname, this, queries);
         
-        Model.remove(model, this, queries);
+        return Model.remove(model, this, queries);
     }
     
     /**
      * 
      * @param message
+     * @return
      * @throws Exception
      */
-    public final void renameModel(Message message) throws Exception {
+    public final int renameModel(Message message) throws Exception {
         String oldname = message.getString("oldname");
         String newname = message.getString("newname");
         
-        Model.rename(oldname, newname, this, queries);
+        return Model.rename(oldname, newname, this, queries);
     }
     
     /**
@@ -177,7 +182,7 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final int save(Message message) throws Exception {
-        ExtendedObject object = (ExtendedObject)message.get("object");
+        ExtendedObject object = message.get("object");
         
         return Query.save(object, this);
     }
@@ -189,41 +194,44 @@ public class Services extends AbstractFunction {
      */
     public final ExtendedObject[] select(Message message) throws Exception {
         String query = message.getString("query");
-        Object[] criteria = (Object[])message.get("criteria");
+        Object[] criteria = message.get("criteria");
         
-        return Query.select(query, criteria, this, queries);
+        return Query.select(query, this, queries, criteria);
     }
     
     /**
      * 
      * @param message
+     * @return
      * @throws Exception
      */
-    public final void update(Message message) throws Exception {
+    public final int update(Message message) throws Exception {
         String query = message.getString("query");
-        Object[] criteria = (Object[])message.get("criteria");
+        Object[] criteria = message.get("criteria");
         
-        Query.update(query, this, queries, criteria);
+        return Query.update(query, this, queries, criteria);
     }
     
     /**
      * 
      * @param message
+     * @return
      * @throws Exception
      */
-    public final void updateModel(Message message) throws Exception {
-        DocumentModel model = (DocumentModel)message.get("model");
+    public final int updateModel(Message message) throws Exception {
+        DocumentModel model = message.get("model");
         
-        Model.update(model, this, queries);
+        return Model.update(model, this, queries);
     }
     
     /**
      * 
      * @param message
+     * @return
      * @throws Exception
      */
     public final int validateModel(Message message) throws Exception {
-        DocumentModel model = (DocumentModel)message.get("model");
+        DocumentModel model = message.get("model");
         
         return Model.validate(model, this, queries);
     }

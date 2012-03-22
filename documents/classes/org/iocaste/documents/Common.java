@@ -10,16 +10,6 @@ public class Common {
     
     /**
      * 
-     * @param item
-     * @return
-     */
-    public static final String getComposedName(DocumentModelItem item) {
-        return new StringBuilder(item.getDocumentModel().getName()).
-                append(".").append(item.getName()).toString();
-    }
-    
-    /**
-     * 
      * @param model
      * @param queries
      */

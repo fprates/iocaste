@@ -13,6 +13,7 @@ import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.IocasteException;
 
 public class Query {
     
@@ -102,9 +103,10 @@ public class Query {
      * 
      * @param object
      * @param function
+     * @return
      * @throws Exception
      */
-    public static final void modify(ExtendedObject object, Function function)
+    public static final int modify(ExtendedObject object, Function function)
             throws Exception {
         String query;
         Object value;
@@ -133,7 +135,10 @@ public class Query {
             nrregs = iocaste.update(query, uargs.toArray());
         
         if (nrregs == 0)
-            iocaste.update(model.getQuery("insert"), iargs.toArray());
+            if (iocaste.update(model.getQuery("insert"), iargs.toArray()) == 0)
+                    throw new IocasteException("");
+        
+        return 1;
     }
     
     /**
@@ -334,9 +339,9 @@ public class Query {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public static final ExtendedObject[] select(String query,
-            Object[] criteria, Function function, Map<String,
-            Map<String, String>> queries) throws Exception {
+    public static final ExtendedObject[] select(String query, Function function,
+            Map<String, Map<String, String>> queries, Object... criteria)
+                    throws Exception {
         Iocaste iocaste; 
         Object[] lines;
         Map<String, Object> line;
@@ -364,19 +369,22 @@ public class Query {
     
     /**
      * 
-     * @param iocaste
      * @param query
      * @param function
      * @param queries
      * @param criteria
+     * @return
      * @throws Exception
      */
-    public static final void update(String query, Function function,
+    public static final int update(String query, Function function,
             Map<String, Map<String, String>> queries, Object... criteria)
                     throws Exception {
         QueryInfo queryinfo = parseQuery(query, function, queries);
         
-        new Iocaste(function).update(queryinfo.query, criteria);
+        if (new Iocaste(function).update(queryinfo.query, criteria) == 0)
+            throw new IocasteException("");
+        
+        return 1;
     }
 
 }

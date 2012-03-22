@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Iocaste;
 
 public class DataElementServices {
@@ -43,18 +44,19 @@ public class DataElementServices {
      * 
      * @param iocaste
      * @param item
+     * @return
      * @throws Exception
      */
-    public static final void insert(Iocaste iocaste, DocumentModelItem item)
+    public static final int insert(Iocaste iocaste, DocumentModelItem item)
             throws Exception {
         DataElement dataelement;
         String name, query = "insert into docs003(ename, decim, lngth, " +
                 "etype, upcas) values(?, ?, ?, ?, ?)";
         
         dataelement = item.getDataElement();
-        name = Common.getComposedName(item);
+        name = Documents.getComposedName(item);
         
-        iocaste.update(query, name,
+        return iocaste.update(query, name,
                 dataelement.getDecimals(),
                 dataelement.getLength(),
                 dataelement.getType(),

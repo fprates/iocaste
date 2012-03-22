@@ -12,6 +12,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.IocasteException;
 
 public class Model {
     
@@ -19,9 +20,10 @@ public class Model {
      * 
      * @param iocaste
      * @param item
+     * @return
      * @throws Exception
      */
-    private static final void addDBColumn(Iocaste iocaste,
+    private static final int addDBColumn(Iocaste iocaste,
             DocumentModelItem item) throws Exception {
         DocumentModelItem reference;
         String query, modelname = item.getDocumentModel().getTableName();
@@ -49,8 +51,7 @@ public class Model {
         }
         
         query = sb.append(")").toString();
-        
-        iocaste.update(query);
+        return iocaste.update(query);
     }
     
     /**
@@ -58,9 +59,10 @@ public class Model {
      * @param model
      * @param function
      * @param queries
+     * @return
      * @throws Exception
      */
-    public static final void create(DocumentModel model, Function function,
+    public static final int create(DocumentModel model, Function function,
             Map<String, Map<String, String>> queries) throws Exception {
         Iocaste iocaste = new Iocaste(function);
         
@@ -70,6 +72,8 @@ public class Model {
         saveDataElements(iocaste, model);
         
         Common.parseQueries(model, queries);
+        
+        return 1;
     }
     
     /**
@@ -182,8 +186,10 @@ public class Model {
      * 
      * @param iocaste
      * @param item
+     * @return
+     * @throws Exception
      */
-    private static final void insertModelItem(Iocaste iocaste,
+    private static final int insertModelItem(Iocaste iocaste,
             DocumentModelItem item) throws Exception {
         DocumentModelItem reference;
         DataElement dataelement;
@@ -194,29 +200,35 @@ public class Model {
         
         dataelement = item.getDataElement();
         
-        tname = Common.getComposedName(item);
+        tname = Documents.getComposedName(item);
         reference = item.getReference();
-        itemref = (reference == null)? null : Common.getComposedName(reference);
+        itemref = (reference == null)? null : Documents.getComposedName(reference);
         
-        iocaste.update(query, tname,
+        if (iocaste.update(query, tname,
                 model.getName(),
                 item.getIndex(),
                 item.getTableFieldName(),
                 dataelement.getName(),
                 item.getAttributeName(),
-                itemref);
+                itemref) == 0)
+            return 0;
         
         if (itemref != null) {
             query = "insert into docs006(iname, itref) values(?, ?)";
-            iocaste.update(query, tname, itemref);
+            if (iocaste.update(query, tname, itemref) == 0)
+                return 0;
         }
         
         shname = item.getSearchHelp();
         if (shname == null)
-            return;
+            return 1;
         
-        query = "insert into shref(iname, shcab) values(? , ?)";
-        iocaste.update(query, tname, shname);
+        query = "select * from shcab where ident = ?";
+        if (iocaste.select(query, shname).length == 0)
+            return 1;
+        
+        query = "insert into shref(iname, shcab) values(?, ?)";
+        return iocaste.update(query, tname, shname);
     }
     
     /**
@@ -224,70 +236,94 @@ public class Model {
      * @param model
      * @param function
      * @param queries
+     * @return
      * @throws Exception
      */
-    public static final void remove(DocumentModel model, Function function,
+    public static final int remove(DocumentModel model, Function function,
             Map<String, Map<String, String>> queries) throws Exception {
         Iocaste iocaste = new Iocaste(function);
-        String name, query = "delete from docs004 where iname = ?";
+        String tablename, name, query = "delete from docs004 where iname = ?";
         
         for (DocumentModelKey key : model.getKeys()) {
-            name = Common.getComposedName(key.getModel().
+            name = Documents.getComposedName(key.getModel().
                     getModelItem(key.getModelItemName()));
-            iocaste.update(query, name);
+            if (iocaste.update(query, name) == 0)
+                throw new IocasteException("");
         }
         
         for (DocumentModelItem item : model.getItens())
-            removeModelItem(iocaste, item);
+            if (removeModelItem(iocaste, item) == 0)
+                throw new IocasteException("");
         
+        tablename = model.getTableName();
         query = "delete from docs005 where tname = ?";
-        iocaste.update(query, model.getTableName());
+        if (iocaste.update(query, tablename) == 0)
+            throw new IocasteException("");
         
         name = model.getName();
         query = "delete from docs001 where docid = ?";
-        iocaste.update(query, name);
+        if (iocaste.update(query, name) == 0)
+            throw new IocasteException("");
         
-        query = new StringBuilder("drop table ").append(model.getTableName()).
+        query = new StringBuilder("drop table ").append(tablename).
                 toString();
         iocaste.update(query);
         
         queries.remove(name);
+        
+        return 1;
     }
     
     /**
      * 
      * @param iocaste
      * @param item
+     * @return
      * @throws Exception
      */
-    private static final void removeDBColumn(Iocaste iocaste,
+    private static final int removeDBColumn(Iocaste iocaste,
             DocumentModelItem item) throws Exception {
         String fieldname = item.getTableFieldName();
         String tablename = item.getDocumentModel().getTableName();
         String query = new StringBuilder("alter table ").append(tablename).
                 append(" drop column ").append(fieldname).toString();
         
-        iocaste.update(query);
+        return iocaste.update(query);
     }
     
     /**
      * 
      * @param iocaste
      * @param item
+     * @return
      * @throws Exception
      */
-    private static final void removeModelItem(Iocaste iocaste,
+    private static final int removeModelItem(Iocaste iocaste,
             DocumentModelItem item) throws Exception {
-        String query = "delete from docs006 where iname = ?";
-        String name = Common.getComposedName(item);
+        String sherror, query = "delete from docs006 where iname = ?";
+        String name = Documents.getComposedName(item);
         
         iocaste.update(query, name);
         
         query = "delete from shref where iname = ?";
         iocaste.update(query, name);
+
+        sherror = "there is search help dependence on item ";
+        sherror = new StringBuilder(sherror).append(name).toString();
+        
+        query = "select * from shitm where mditm = ?";
+        if (iocaste.select(query, name).length > 0)
+            throw new IocasteException(sherror);
+            
+        query = "select * from shcab where exprt = ?";
+        if (iocaste.select(query, name).length > 0)
+            throw new IocasteException(sherror);
         
         query = "delete from docs002 where iname = ?";
-        iocaste.update(query, name);
+        if (iocaste.update(query, name) == 0)
+            throw new IocasteException("");
+        
+        return 1;
     }
     
     /**
@@ -296,41 +332,50 @@ public class Model {
      * @param newname
      * @param function
      * @param queries
+     * @return
      * @throws Exception
      */
-    public static final void rename(String oldname, String newname,
+    public static final int rename(String oldname, String newname,
             Function function, Map<String, Map<String, String>> queries)
                     throws Exception {
         DocumentModel model = Model.get(oldname, function, queries);
         
         model.setName(newname);
-        Model.create(model, function, queries);
+        if (Model.create(model, function, queries) == 0)
+            throw new IocasteException("");
         
         model.setName(oldname);
-        remove(model, function, queries);
+        if (remove(model, function, queries) == 0)
+            throw new IocasteException("");
+        
+        return 1;
     }
     
     /**
      * 
      * @param iocaste
      * @param model
+     * @return
      * @throws Exception
      */
-    private static final void saveDataElements(Iocaste iocaste,
+    private static final int saveDataElements(Iocaste iocaste,
             DocumentModel model) throws Exception {
         DocumentModelItem[] itens = model.getItens();
         
         for (DocumentModelItem item : itens)
             DataElementServices.insert(iocaste, item);
+        
+        return 1;
     }
     
     /**
      * 
      * @param iocaste
      * @param model
+     * @return
      * @throws Exception
      */
-    private static final void saveDocumentHeader(Iocaste iocaste,
+    private static final int saveDocumentHeader(Iocaste iocaste,
             DocumentModel model) throws Exception {
         String query = new StringBuilder("drop table ").
                 append(model.getTableName()).toString();
@@ -339,22 +384,25 @@ public class Model {
         
         query = "insert into docs001 (docid, tname, class) " +
                 "values (?, ?, ?)";
-        
-        iocaste.update(query, model.getName(),
-                model.getTableName(), model.getClassName());
+        if (iocaste.update(query, model.getName(), model.getTableName(),
+                model.getClassName()) == 0)
+            throw new IocasteException("");
         
         query = "insert into docs005(tname, docid) values(? , ?)";
+        if (iocaste.update(query, model.getTableName(), model.getName()) == 0)
+            throw new IocasteException("");
         
-        iocaste.update(query, model.getTableName(), model.getName());
+        return 1;
     }
     
     /**
      * 
      * @param iocaste
      * @param model
+     * @return
      * @throws Exception
      */
-    private static final void saveDocumentItens(Iocaste iocaste,
+    private static final int saveDocumentItens(Iocaste iocaste,
             DocumentModel model) throws Exception {
         DataElement dataelement;
         DocumentModelItem reference;
@@ -412,26 +460,27 @@ public class Model {
             sb.append(sbk).append(")");
         
         query = sb.append(")").toString();
-        
-        iocaste.update(query);
+        return iocaste.update(query);
     }
 
     /**
      * 
      * @param iocaste
      * @param model
+     * @return
      * @throws Exception
      */
-    private static void saveDocumentKeys(Iocaste iocaste, DocumentModel model)
+    private static int saveDocumentKeys(Iocaste iocaste, DocumentModel model)
             throws Exception {
         String dbuser, name, query = "insert into docs004(iname, docid) " +
                 "values (?, ?)";
         
         for (DocumentModelKey key : model.getKeys()) {
-            name = Common.getComposedName(model.
+            name = Documents.getComposedName(model.
                     getModelItem(key.getModelItemName()));
             
-            iocaste.update(query, name, key.getModel().getName());
+            if (iocaste.update(query, name, key.getModel().getName()) == 0)
+                throw new IocasteException("");
         }
         
         dbuser = iocaste.getSystemParameter("db.user");
@@ -440,7 +489,7 @@ public class Model {
                 append(" to ").
                 append(dbuser).toString();
         
-        iocaste.update(query);
+        return iocaste.update(query);
     }
     
     /**
@@ -450,30 +499,38 @@ public class Model {
      * @param queries
      * @throws Exception
      */
-    public static final void update(DocumentModel model, Function function,
+    public static final int update(DocumentModel model, Function function,
             Map<String, Map<String, String>> queries) throws Exception {
         DocumentModel oldmodel = get(model.getName(), function, queries);
         Iocaste iocaste = new Iocaste(function);
         
         for (DocumentModelItem item : model.getItens()) {
             if (!oldmodel.contains(item)) {
-                DataElementServices.insert(iocaste, item);
-                insertModelItem(iocaste, item);
+                if (DataElementServices.insert(iocaste, item) == 0)
+                    throw new IocasteException("");
+                
+                if (insertModelItem(iocaste, item) == 0)
+                    throw new IocasteException("");
+                
                 addDBColumn(iocaste, item);
             } else {
-                updateModelItem(iocaste, item, oldmodel);
+                if (updateModelItem(iocaste, item, oldmodel) == 0)
+                    throw new IocasteException("");
             }
         }
         
         for (DocumentModelItem olditem : oldmodel.getItens()) {
             if (model.contains(olditem))
                 continue;
-            
-            removeModelItem(iocaste, olditem);
-            removeDBColumn(iocaste, olditem);
+            if (removeModelItem(iocaste, olditem) == 0)
+                throw new IocasteException("");
+            if (removeDBColumn(iocaste, olditem) == 0)
+                throw new IocasteException("");
         }
         
         Common.parseQueries(model, queries);
+        
+        return 1;
     }
     
     /**
@@ -481,9 +538,10 @@ public class Model {
      * @param iocaste
      * @param item
      * @param oldmodel
+     * @return
      * @throws Exception
      */
-    private static final void updateModelItem(Iocaste iocaste,
+    private static final int updateModelItem(Iocaste iocaste,
             DocumentModelItem item, DocumentModel oldmodel) throws Exception {
         StringBuilder sb;
         DataElement ddelement;
@@ -501,7 +559,9 @@ public class Model {
                 append(tablename).
                 append(" alter column ").toString();
         
-        iocaste.update("delete from shref where iname = ?", olditem.getName());
+        if (iocaste.update("delete from shref where iname = ?",
+                Documents.getComposedName(olditem)) == 0)
+            return 0;
         
         /*
          * renomeia campo da tabela
@@ -512,7 +572,8 @@ public class Model {
                     append(" rename to ").
                     append(fieldname);
             
-            iocaste.update(sb.toString());
+            if (iocaste.update(sb.toString()) == 0)
+                return 0;
         }
         
         /*
@@ -538,7 +599,8 @@ public class Model {
         sb.append(")");
         
         query = sb.toString();
-        iocaste.update(query);
+        if (iocaste.update(query) == 0)
+            return 0;
         
         reference = item.getReference();
         if (reference != null) {
@@ -553,7 +615,8 @@ public class Model {
                         append(reference.getTableFieldName()).
                         append(")").toString();
                 
-                iocaste.update(query);
+                if (iocaste.update(query) == 0)
+                    return 0;
             }
         } else {
             if (olditem.getReference() != null) {
@@ -562,7 +625,8 @@ public class Model {
                         append(" drop constraint ").
                         append(item.getTableFieldName()).toString();
                 
-                iocaste.update(query);
+                if (iocaste.update(query) == 0)
+                    return 0;
             }
         }
         
@@ -580,7 +644,8 @@ public class Model {
         criteria[3] = ddelement.isUpcase();
         criteria[4] = ddelement.getName();
 
-        iocaste.update(query, criteria);
+        if (iocaste.update(query, criteria) == 0)
+            throw new IocasteException("");
         
         query = "update docs002 set docid = ?, index = ?, fname = ?, " +
                 "ename = ?, attrb = ?, itref = ? where iname = ?";
@@ -593,17 +658,21 @@ public class Model {
         criteria[3] = ddelement.getName();
         criteria[4] = item.getAttributeName();
         criteria[5] = (reference == null)?
-                null : Common.getComposedName(reference);
-        criteria[6] = Common.getComposedName(item);
+                null : Documents.getComposedName(reference);
+        criteria[6] = Documents.getComposedName(item);
         
-        iocaste.update(query, criteria);
+        if (iocaste.update(query, criteria) == 0)
+            throw new IocasteException("");
         
         shname = item.getSearchHelp();
         if (shname == null)
-            return;
+            return 1;
         
         query = "insert into shref(iname, shcab) values(? ,?)";
-        iocaste.update(query, criteria[7], shname);
+        if (iocaste.update(query, criteria[7], shname) == 0)
+            throw new IocasteException("");
+        
+        return 1;
     }
     
     /**
