@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,10 +73,11 @@ public class DBServices {
         
         results = ps.executeQuery();
         lines = new ArrayList<Map<String, Object>>();
+
+        metadata = results.getMetaData();
+        cols = metadata.getColumnCount();
         
         while (results.next()) {
-            metadata = results.getMetaData();
-            cols = metadata.getColumnCount();
             line = new HashMap<String, Object>();
             
             for (int i = 1; i <= cols; i++)
@@ -108,6 +110,8 @@ public class DBServices {
         
         try {            
             return ps.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new Exception(e);
         } catch (SQLException e) {
             return 0;
         } finally {
