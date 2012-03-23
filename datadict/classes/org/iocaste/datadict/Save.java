@@ -49,6 +49,8 @@ public class Save {
                     append(itemname).toString());
             dataelement.setLength(Integer.parseInt(Common.getTableValue(
                     modo, item, "item.length")));
+            dataelement.setDecimals(Integer.parseInt(Common.getTableValue(
+                    modo, item, "item.dec")));
             dataelement.setType(Integer.parseInt(Common.getTableValue(
                     modo, item, "item.type")));
             upcase = (CheckBox)item.get("item.upcase");

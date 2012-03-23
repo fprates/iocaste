@@ -38,6 +38,7 @@ public class Common {
         KEY("item.key", null), 
         TYPE("item.type", null),
         LENGTH("item.length", "DATAELEMENT.LENGTH"),
+        DECIMALS("item.dec", "DATAELEMENT.DECIMALS"),
         UPCASE("item.upcase", null),
         ITEM_REFERENCE("item.reference", "MODEL.NAME"),
         MODEL_REFERENCE("model.reference", "MODELITEM.NAME"),
@@ -230,6 +231,17 @@ public class Common {
                 continue;
             }
             
+            if (helper.name.equals("item.dec")) {
+                helper.type = Const.TEXT_FIELD;
+                helper.value = (modelitem == null)? null : Integer.toString(
+                        dataelement.getDecimals());
+                helper.obligatory = false;
+                
+                newField(helper);
+                
+                continue;
+            }
+            
             if (helper.name.equals("item.key")) {
                 helper.type = Const.CHECKBOX;
                 helper.obligatory = false;
@@ -255,6 +267,8 @@ public class Common {
                 list = (ListBox)newField(helper);
                 list.add("char", Integer.toString(DataType.CHAR));
                 list.add("numc", Integer.toString(DataType.NUMC));
+                list.add("dec", Integer.toString(DataType.DEC));
+                list.add("date", Integer.toString(DataType.DATE));
                 
                 continue;
             }
