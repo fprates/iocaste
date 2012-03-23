@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Iocaste;
 
 public class DataElementServices {
@@ -47,19 +45,15 @@ public class DataElementServices {
      * @return
      * @throws Exception
      */
-    public static final int insert(Iocaste iocaste, DocumentModelItem item)
+    public static final int insert(Iocaste iocaste, DataElement element)
             throws Exception {
-        DataElement dataelement;
-        String name, query = "insert into docs003(ename, decim, lngth, " +
+        String query = "insert into docs003(ename, decim, lngth, " +
                 "etype, upcas) values(?, ?, ?, ?, ?)";
         
-        dataelement = item.getDataElement();
-        name = Documents.getComposedName(item);
-        
-        return iocaste.update(query, name,
-                dataelement.getDecimals(),
-                dataelement.getLength(),
-                dataelement.getType(),
-                dataelement.isUpcase());
+        return iocaste.update(query, element.getName(),
+                element.getDecimals(),
+                element.getLength(),
+                element.getType(),
+                element.isUpcase());
     }
 }

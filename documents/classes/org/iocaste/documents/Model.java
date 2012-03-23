@@ -35,17 +35,29 @@ public class Model {
         switch (ddelement.getType()) {
         case DataType.CHAR:
             sb.append(" varchar(");
+            sb.append(ddelement.getLength());
+            sb.append(")");
             break;
         case DataType.NUMC:
             sb.append(" numeric(");
+            sb.append(ddelement.getLength());
+            sb.append(")");
+            break;
+        case DataType.DEC:
+            sb.append(" decimal(");            
+            sb.append(ddelement.getLength());
+            sb.append(",");
+            sb.append(ddelement.getDecimals());
+            sb.append(")");
+            break;
+        case DataType.DATE:
+            sb.append(" date");
             break;
         }
         
-        sb.append(Integer.toString(ddelement.getLength()));
-        
         reference = item.getReference();
         if (reference != null) {
-            sb.append(") foreign key references ").append(reference.
+            sb.append(" foreign key references ").append(reference.
                     getDocumentModel().getTableName()).append("(").
                     append(reference.getTableFieldName());
         }
@@ -360,10 +372,18 @@ public class Model {
      */
     private static final int saveDataElements(Iocaste iocaste,
             DocumentModel model) throws Exception {
+        DataElement element;
         DocumentModelItem[] itens = model.getItens();
+        String query = "select * from docs003 where ename = ?";
         
-        for (DocumentModelItem item : itens)
-            DataElementServices.insert(iocaste, item);
+        for (DocumentModelItem item : itens) {
+            element = item.getDataElement();
+            
+            if (iocaste.select(query, element.getName()).length > 0)
+                continue;
+            
+            DataElementServices.insert(iocaste, item.getDataElement());
+        }
         
         return 1;
     }
@@ -420,6 +440,9 @@ public class Model {
             insertModelItem(iocaste, item);
             
             tname = item.getTableFieldName();
+            if (tname == null)
+                throw new IocasteException("Table field name is null.");
+            
             sb.append(tname);
             
             dataelement = item.getDataElement();
@@ -427,11 +450,26 @@ public class Model {
             switch (dataelement.getType()) {
             case DataType.CHAR:
                 sb.append(" varchar(");
+                sb.append(dataelement.getLength());
+                sb.append(")");
                 break;
                 
             case DataType.NUMC:
                 sb.append(" numeric(");
+                sb.append(dataelement.getLength());
+                sb.append(")");
                 break;
+                
+            case DataType.DEC:
+                sb.append(" decimal(");
+                sb.append(dataelement.getLength());
+                sb.append(",");
+                sb.append(dataelement.getDecimals());
+                sb.append(")");
+                break;
+                
+            case DataType.DATE:
+                sb.append(" date");
             }
             
             if (model.isKey(item)) {
@@ -443,17 +481,16 @@ public class Model {
                 sbk.append(tname);
             }
             
-            sb.append(dataelement.getLength());
-            
             reference = item.getReference();
             if (reference != null) {
-                sb.append(") foreign key references ").
+                sb.append(" foreign key references ").
                         append(reference.getDocumentModel().getTableName()).
                         append("(").
                         append(reference.getTableFieldName());
             }
             
-            sb.append((item.getIndex() == size)? ")" : "),");
+            if (size != item.getIndex())
+                sb.append(",");
         }
         
         if (sbk != null)
@@ -506,7 +543,8 @@ public class Model {
         
         for (DocumentModelItem item : model.getItens()) {
             if (!oldmodel.contains(item)) {
-                if (DataElementServices.insert(iocaste, item) == 0)
+                if (DataElementServices.
+                        insert(iocaste, item.getDataElement()) == 0)
                     throw new IocasteException("");
                 
                 if (insertModelItem(iocaste, item) == 0)
