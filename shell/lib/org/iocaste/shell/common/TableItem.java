@@ -46,8 +46,9 @@ public class TableItem implements Serializable {
      * @param name
      * @return
      */
-    public final Element get(String name) {
-        return elements.get(name);
+    @SuppressWarnings("unchecked")
+    public final <T extends Element> T get(String name) {
+        return (T)elements.get(name);
     }
     
     /**
