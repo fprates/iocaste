@@ -46,6 +46,8 @@ public class TabbedPaneRenderer extends Renderer {
                 
                 sb.append((name.equals(name_))?
                         ".tabitem', 'block');" : ".tabitem', 'none');");
+                
+                sb.append("send(").append(name_).append(")");
             }
             
             button.addAttribute("onClick", sb.toString());

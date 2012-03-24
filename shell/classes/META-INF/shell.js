@@ -7,25 +7,27 @@ function defineAction(action, actionname) {
 	setValue(action, actionname);
 }
 
-function search(actionname, pagetrack) {
-    action = actionname;
-    var url = "index.html?pagetrack="+pagetrack+"&action="+action;
+function send(actionname) {
+    pagetrack = document.getElementById('pagetrack').value;
+    var url = 'index.html?pagetrack='+pagetrack+'&action='+actionname;
     
     xmlhttp=XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
-        searchCallback(actionname, xmlhttp);
+        sendCallback(actionname, xmlhttp);
     }
     xmlhttp.open("POST", url, true);
     xmlhttp.send();
 }
 
-function searchCallback(action, xmlhttp) {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-        document.getElementById(action+".area").innerHTML=xmlhttp.responseText;
+function sendCallback(action, xmlhttp) {
+/*    if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+ *        document.getElementById(action+".area").innerHTML=xmlhttp.responseText;
+ */
 }
 
 function setElementDisplay(id, state) {
     document.getElementById(id).style.display = state;
+    sendAction(
 }
 
 function revertElementDisplay(id) {

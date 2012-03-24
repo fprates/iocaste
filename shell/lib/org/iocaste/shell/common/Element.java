@@ -113,6 +113,12 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract boolean isEnabled();
     
     /**
+     * 
+     * @return
+     */
+    public abstract boolean isEventAware();
+    
+    /**
      * Retorna true se elemento é visível.
      * @return true, se visível.
      */

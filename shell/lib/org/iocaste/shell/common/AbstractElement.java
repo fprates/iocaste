@@ -191,6 +191,15 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#isEventAware()
+     */
+    @Override
+    public boolean isEventAware() {
+        return false;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#isVisible()
      */
     @Override
