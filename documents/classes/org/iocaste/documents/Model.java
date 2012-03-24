@@ -432,7 +432,7 @@ public class Model {
         DocumentModelItem[] itens = model.getItens();
         
         sb = new StringBuilder("create table ").append(model.getTableName()).
-                append(" (");
+                append("(");
         
         size = itens.length - 1;
         
@@ -470,27 +470,27 @@ public class Model {
                 
             case DataType.DATE:
                 sb.append(" date");
+                break;
             }
             
             if (model.isKey(item)) {
                 if (sbk == null)
-                    sbk = new StringBuilder(", primary key (");
+                    sbk = new StringBuilder(", primary key(");
                 else
-                    sbk.append(",");
+                    sbk.append(", ");
                 
                 sbk.append(tname);
             }
             
             reference = item.getReference();
-            if (reference != null) {
+            if (reference != null)
                 sb.append(" foreign key references ").
                         append(reference.getDocumentModel().getTableName()).
                         append("(").
-                        append(reference.getTableFieldName());
-            }
+                        append(reference.getTableFieldName()).append(")");
             
             if (size != item.getIndex())
-                sb.append(",");
+                sb.append(", ");
         }
         
         if (sbk != null)
@@ -584,18 +584,13 @@ public class Model {
         StringBuilder sb;
         DataElement ddelement;
         Object[] criteria;
-        String shname;
         DocumentModel model = item.getDocumentModel();
         DocumentModelItem reference, olditem = oldmodel.
                 getModelItem(item.getName());
         
-        String tablename = model.getTableName(),
+        String query, shname, tablename = model.getTableName(),
                 oldfieldname = olditem.getTableFieldName(),
                 fieldname = item.getTableFieldName();
-        
-        String query = new StringBuilder("alter table ").
-                append(tablename).
-                append(" alter column ").toString();
         
         if (iocaste.update("delete from shref where iname = ?",
                 Documents.getComposedName(olditem)) == 0)
@@ -604,6 +599,11 @@ public class Model {
         /*
          * renomeia campo da tabela
          */
+        
+        query = new StringBuilder("alter table ").
+                append(tablename).
+                append(" alter column ").toString();
+        
         if (!fieldname.equals(oldfieldname)) {
             sb = new StringBuilder(query).
                     append(oldfieldname).
@@ -625,16 +625,30 @@ public class Model {
         switch (ddelement.getType()) {
         case DataType.CHAR:
             sb.append(" varchar(");
+            sb.append(ddelement.getLength());
+            sb.append(")");
             
             break;
         case DataType.NUMC:
             sb.append(" numeric(");
+            sb.append(ddelement.getLength());
+            sb.append(")");
+            
+            break;
+            
+        case DataType.DEC:
+            sb.append(" decimal(");
+            sb.append(ddelement.getLength());
+            sb.append(",");
+            sb.append(ddelement.getDecimals());
+            sb.append(")");
+            
+            break;
+        case DataType.DATE:
+            sb.append(" date");
             
             break;
         }
-        
-        sb.append(Integer.toString(ddelement.getLength()));
-        sb.append(")");
         
         query = sb.toString();
         if (iocaste.update(query) == 0)
@@ -727,10 +741,7 @@ public class Model {
         ExtendedObject link = Query.get(tablemodel, model.getTableName(),
                 function);
         
-        if (link != null)
-            return Documents.TABLE_ALREADY_ASSIGNED;
-        
-        return 0;
+        return (link != null)? Documents.TABLE_ALREADY_ASSIGNED : 0;
     }
 
 }
