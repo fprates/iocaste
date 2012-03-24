@@ -175,27 +175,6 @@ public class Model {
     
     /**
      * 
-     * @param modelname
-     * @param function
-     * @return
-     * @throws Exception
-     */
-    public static final boolean has(String modelname, Function function)
-            throws Exception {
-        Object[] lines;
-        String query;
-        
-        if (modelname == null)
-            throw new Exception("Document model not specified.");
-
-        query = "select docid from docs001 where docid = ?";
-        lines = new Iocaste(function).select(query, modelname);
-        
-        return (lines.length == 0)? false : true;
-    }
-    
-    /**
-     * 
      * @param iocaste
      * @param item
      * @return

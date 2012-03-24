@@ -14,6 +14,12 @@ import org.iocaste.shell.common.ViewData;
 
 public class Rename {
 
+    /**
+     * 
+     * @param view
+     * @param function
+     * @throws Exception
+     */
     public static final void dialog(ViewData view, Function function)
             throws Exception {
         Container container = new Form(null, "main");
@@ -37,6 +43,10 @@ public class Rename {
         view.addContainer(container);
     }
     
+    /**
+     * 
+     * @param view
+     */
     public static final void main(ViewData view) {
         DataForm form = view.getElement("modelform");
         String oldname = form.get("modelname").getValue();
@@ -46,6 +56,12 @@ public class Rename {
         view.redirect(null, "renamedialog");
     }
     
+    /**
+     * 
+     * @param view
+     * @param function
+     * @throws Exception
+     */
     public static final void ok(ViewData view, Function function)
             throws Exception {
         DataForm form = view.getElement("rename.form");
@@ -53,7 +69,7 @@ public class Rename {
         String newname = form.get("newname").getValue();
         Documents documents = new Documents(function);
         
-        if (documents.hasModel(newname)) {
+        if (documents.getModel(newname) != null) {
             view.message(Const.ERROR, "model.has.already.exists");
             return;
         }

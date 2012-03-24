@@ -140,7 +140,7 @@ public class Main extends AbstractPage {
                 if (currentline != nitens)
                     continue;
                 
-                if (!documents.hasModel(model.getName()))
+                if (documents.getModel(model.getName()) == null)
                     documents.createModel(model);
                 else
                     documents.updateModel(model);
@@ -229,12 +229,11 @@ public class Main extends AbstractPage {
         DocumentModelItem reference;
         DocumentModelItem[] itens;
         
-        if (!documents.hasModel(name))
+        model = documents.getModel(name);
+        if (model == null)
             return null;
         
-        lines = new ArrayList<String>();  
-
-        model = documents.getModel(name);
+        lines = new ArrayList<String>();
         itens = model.getItens();
         
         sb = new StringBuilder(model.getName()).append(";").

@@ -80,7 +80,7 @@ public class Request {
         String query;
         Documents documents = new Documents(function);
         
-        if (!documents.hasModel(name))
+        if (documents.getModel(name) == null)
             throw new Exception("invalid.model");
             
         query = new StringBuilder("from ").append(name).toString();

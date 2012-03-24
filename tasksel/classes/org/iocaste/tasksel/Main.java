@@ -86,7 +86,7 @@ public class Main extends AbstractPage {
         DataForm form = new DataForm(container, "selector");
         DataItem cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
         
-        if (!new Documents(this).hasModel("TASKS"))
+        if (new Documents(this).getModel("TASKS") == null)
             new PackageTool(this).install("iocaste-tasksel");
         
         cmdline.setLength(128);

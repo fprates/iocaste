@@ -23,7 +23,6 @@ public class Services extends AbstractFunction {
         export("get_next_number", "getNextNumber");
         export("get_object", "getObject");
         export("get_document_model", "getDocumentModel");
-        export("has_model", "hasModel");
         export("create_model", "createModel");
         export("remove_model", "removeModel");
         export("rename_model", "renameModel");
@@ -123,18 +122,6 @@ public class Services extends AbstractFunction {
         String ident = message.getString("range");
         
         return NumberRange.getCurrent(ident, this);
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
-     * @throws Exception
-     */
-    public final boolean hasModel(Message message) throws Exception {
-        String modelname = message.getString("model_name");
-
-        return Model.has(modelname, this);
     }
     
     /**

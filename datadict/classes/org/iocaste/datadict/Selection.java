@@ -31,7 +31,7 @@ public class Selection {
         
         switch (op) {
         case Common.TABLE:
-            if (documents.hasModel(name)) {
+            if (documents.getModel(name) != null) {
                 view.message(Const.ERROR, "model.already.exist");
                 return;
             }
@@ -92,7 +92,7 @@ public class Selection {
         Documents documents = new Documents(function);
         String modelname = ((DataItem)view.getElement("modelname")).getValue();
         
-        if (!documents.hasModel(modelname)) {
+        if (documents.getModel(modelname) == null) {
             view.message(Const.ERROR, "model.not.found");
             return;
         }
@@ -151,7 +151,7 @@ public class Selection {
         String name = ((DataItem)view.getElement("modelname")).getValue();
         Documents documents = new Documents(function);
         
-        if (!documents.hasModel(name)) {
+        if (documents.getModel(name) == null) {
             view.message(Const.ERROR, "model.not.found");
             return;
         }

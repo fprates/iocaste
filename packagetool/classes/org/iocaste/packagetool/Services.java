@@ -44,7 +44,7 @@ public class Services extends AbstractFunction {
         shm = new HashMap<String, DocumentModelItem>();
         
         for (DocumentModel model : data.getModels()) {
-            if (documents.hasModel(model.getName())) {
+            if (documents.getModel(model.getName()) != null) {
                 if (documents.updateModel(model) == 0)
                     throw new IocasteException("update model error.");
             } else {

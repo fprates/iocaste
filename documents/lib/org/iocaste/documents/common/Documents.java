@@ -169,21 +169,6 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
-     * @param name
-     * @return
-     * @throws Exception
-     */
-    public final boolean hasModel(String name) throws Exception {
-        Message message = new Message();
-        
-        message.setId("has_model");
-        message.add("model_name", name);
-        
-        return (Boolean)call(message);
-    }
-    
-    /**
-     * 
      * @param object
      * @return
      * @throws Exception
