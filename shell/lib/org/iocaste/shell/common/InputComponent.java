@@ -3,7 +3,7 @@ package org.iocaste.shell.common;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 
-public interface InputComponent {
+public interface InputComponent extends Component {
 
     public abstract Const getComponentType();
     

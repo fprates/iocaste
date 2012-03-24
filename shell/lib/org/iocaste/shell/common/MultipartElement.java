@@ -1,6 +1,6 @@
 package org.iocaste.shell.common;
 
-public interface MultipartElement {
+public interface MultipartElement extends InputComponent {
     public static final int FILE_NOT_FOUND = 1;
     public static final int EMPTY_FILE_NAME = 2;
     

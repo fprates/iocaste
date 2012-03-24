@@ -220,7 +220,6 @@ public class PageRenderer extends HttpServlet implements Function {
     private static final void generateSearchHelp(InputComponent input,
             Container container, Function function) throws Exception {
         SearchHelp sh;
-        Element element;
         SHLib shlib = new SHLib(function);
         String shname = input.getModelItem().getSearchHelp();
         ExtendedObject[] shdata = shlib.get(shname);
@@ -228,9 +227,8 @@ public class PageRenderer extends HttpServlet implements Function {
         if (shdata == null || shdata.length == 0)
             return;
         
-        element = (Element)input;
-        sh = new SearchHelp(container, element.getName()+".sh");
-        sh.setHtmlName(element.getHtmlName()+".sh");
+        sh = new SearchHelp(container, input.getName()+".sh");
+        sh.setHtmlName(input.getHtmlName()+".sh");
         sh.setModelName((String)shdata[0].getValue("MODEL"));
         sh.setExport((String)shdata[0].getValue("EXPORT"));
         
@@ -484,7 +482,7 @@ public class PageRenderer extends HttpServlet implements Function {
                     continue;
                 }
                 
-                if (!fieldname.equals(((Element)element).getHtmlName()))
+                if (!fieldname.equals(element.getHtmlName()))
                     continue;
                 
                 filename = fileitem.getName();

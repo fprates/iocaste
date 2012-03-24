@@ -53,7 +53,7 @@ public class Save {
                     modo, item, "item.dec")));
             dataelement.setType(Integer.parseInt(Common.getTableValue(
                     modo, item, "item.type")));
-            upcase = (CheckBox)item.get("item.upcase");
+            upcase = item.get("item.upcase");
             dataelement.setUpcase(upcase.isSelected());
             
             modelitem = new DocumentModelItem();
@@ -78,7 +78,7 @@ public class Save {
             
             model.add(modelitem);
             
-            key = (CheckBox)item.get("item.key");
+            key = item.get("item.key");
             if (!key.isSelected())
                 continue;
             
