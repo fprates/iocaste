@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import org.hsqldb.HsqlException;
 
 public class DBServices {
     private DataSource ds;
@@ -99,19 +102,24 @@ public class DBServices {
      */
     public final int update(Connection connection, String query,
             Object... criteria) throws Exception {
-        PreparedStatement ps = connection.prepareStatement(query);
+        PreparedStatement ps = null;
         int i = 1;
         
         System.err.println(query);
+        try {
+            ps = connection.prepareStatement(query);
+            
+            if (criteria != null)
+                for (Object object : criteria)
+                    ps.setObject(i++, object);
         
-        if (criteria != null)
-            for (Object object : criteria)
-                ps.setObject(i++, object);
-        
-        try {            
             return ps.executeUpdate();
+        } catch (HsqlException e) {
+            throw new Exception(e.getMessage());
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new Exception(e);
+            throw e;
+        } catch (SQLDataException e) {
+            throw new SQLDataException(e.getMessage());
         } catch (SQLException e) {
             return 0;
         } finally {
