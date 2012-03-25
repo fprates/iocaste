@@ -35,13 +35,25 @@ public abstract class AbstractControlComponent extends AbstractComponent
     private static final long serialVersionUID = -6444029817491608067L;
     private boolean cancellable, stacking;
     private String action;
+    private EventAware eventhandler;
     
     public AbstractControlComponent(
             Container container, Const type, String name) {
         super(container, type, name);
         cancellable = false;
         stacking = false;
+        eventhandler = null;
+        
         setAction(name);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#allowStacking()
+     */
+    @Override
+    public final boolean allowStacking() {
+        return stacking;
     }
 
     /*
@@ -82,11 +94,21 @@ public abstract class AbstractControlComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.ControlComponent#allowStacking()
+     * @see org.iocaste.shell.common.AbstractElement#isEventAware()
      */
     @Override
-    public final boolean allowStacking() {
-        return stacking;
+    public final boolean isEventAware() {
+        return (eventhandler == null)? false : true;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#onEvent(byte,
+     *     java.lang.String)
+     */
+    @Override
+    public final void onEvent(byte event, String args) {
+        eventhandler.onEvent(event, args);
     }
     
     /*
@@ -98,6 +120,15 @@ public abstract class AbstractControlComponent extends AbstractComponent
     public final void setAction(String action) {
         this.action = action;
     }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#setAllowStacking(boolean)
+     */
+    @Override
+    public final void setAllowStacking(boolean stacking) {
+        this.stacking = stacking;
+    }
     
     /*
      * (non-Javadoc)
@@ -107,13 +138,14 @@ public abstract class AbstractControlComponent extends AbstractComponent
     public final void setCancellable(boolean cancellable) {
         this.cancellable = cancellable;
     }
-
+    
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.ControlComponent#setAllowStacking(boolean)
+     * @see org.iocaste.shell.common.ControlComponent#setEventHandler(
+     *     org.iocaste.shell.common.EventAware)
      */
     @Override
-    public final void setAllowStacking(boolean stacking) {
-        this.stacking = stacking;
+    public final void setEventHandler(EventAware eventhandler) {
+        this.eventhandler = eventhandler;
     }
 }

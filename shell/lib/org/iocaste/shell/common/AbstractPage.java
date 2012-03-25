@@ -34,26 +34,27 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public final ViewData execAction(Message message) throws Exception {
         Method method;
-        ViewData view = (ViewData)message.get("view");
+        ViewData view = message.get("view");
         String action, controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
         
         if (returnBeforeActionCall(view))
             return view;
         
-        if (((Element)control).getType() == Const.SEARCH_HELP) {
+        if (control.getType() == Const.SEARCH_HELP) {
             view.export("sh", control);
             view.redirect("iocaste-search-help", "main");
             view.setReloadableView(true);
         } else {
-            action = (control == null)?controlname : control.getAction();
+            action = (control == null)? controlname : control.getAction();
+            if (control.isEventAware()) {
+                control.onEvent(EventAware.ON_CLICK, action);
+                return view;
+            }
+            
             method = this.getClass().getMethod(action, ViewData.class);
             method.invoke(this, view);
         }
-        
-        if (view.hasPageCall() && (control == null ||
-                !control.isCancellable() || control.allowStacking()))
-            new Shell(this).pushPage(view);
         
         return view;
     }

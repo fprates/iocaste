@@ -3,7 +3,7 @@ package org.iocaste.shell.common;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class TabbedPane extends AbstractContainer implements EventAware {
+public class TabbedPane extends AbstractContainer {
     private static final long serialVersionUID = -8260508533459016709L;
     private Map<String, TabbedPaneItem> itens;
     private String current;
@@ -52,20 +52,6 @@ public class TabbedPane extends AbstractContainer implements EventAware {
      */
     public final String[] getItensNames() {
         return itens.keySet().toArray(new String[0]);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final boolean isEventAware() {
-        return true;
-    }
-    
-    
-    @Override
-    public final void onEvent(byte event, String args) {
-        
     }
     
     /**

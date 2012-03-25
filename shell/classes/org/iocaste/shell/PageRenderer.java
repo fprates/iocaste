@@ -29,6 +29,7 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MultipartElement;
@@ -384,12 +385,12 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
+        ControlComponent action;
         Enumeration<?> parameternames;
         PageContext pagectx_;
         Map<String, String[]> parameters;
-        String appname, pagename;
         ViewData view;
-        String key, pagetrack = null;
+        String  appname, pagename, key, pagetrack = null, actionname = null;
         
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagectx);
@@ -401,8 +402,12 @@ public class PageRenderer extends HttpServlet implements Function {
             while (parameternames.hasMoreElements()) {
                 key = (String)parameternames.nextElement();
                 
-                parameters.put(pagectx.isAction(key)? "action" : key,
-                        req.getParameterValues(key));
+                if (pagectx.isAction(key)) {
+                    actionname = req.getParameterValues(key)[0];
+                    parameters.put("action", req.getParameterValues(key));
+                } else {
+                    parameters.put(key, req.getParameterValues(key));
+                }
             }
             
             if (parameters.size() == 0)
@@ -415,6 +420,13 @@ public class PageRenderer extends HttpServlet implements Function {
         }
         
         view = callController(sessionid, parameters, pagectx);
+        
+        action = view.getElement(actionname);
+        if (view.hasPageCall() && (action == null ||
+                !action.isCancellable() || action.allowStacking()))
+            pushPage(sessionid, view.getAppName(), view.getPageName(),
+                    view.getLogid());
+        
         view.clearInputs();
         
         for (Container container : view.getContainers())
