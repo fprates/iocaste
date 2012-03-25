@@ -140,12 +140,14 @@ public class Common {
                     return true;
                 }
 
-                if (classfield != null && classfield.equals(testclassfield)) {
+                if (!Shell.isInitial(classfield) &&
+                        classfield.equals(testclassfield)) {
                     vdata.message(Const.ERROR, "item.classfield.duplicated");
                     return true;
                 }
                 
-                if (tablefield != null && tablefield.equals(testtablefield)) {
+                if (!Shell.isInitial(tablefield) &&
+                        tablefield.equals(testtablefield)) {
                     vdata.message(Const.ERROR, "item.tablefield.duplicated");
                     return true;
                 }
@@ -209,7 +211,7 @@ public class Common {
             if (helper.name.equals("item.name")) {
                 helper.reference.setLength(24);                
                 helper.type = Const.TEXT_FIELD;
-                helper.value = (modelitem == null)?null:modelitem.getName();
+                helper.value = (modelitem == null)? null : modelitem.getName();
                 helper.obligatory = true;
 
                 if (view != null)
@@ -222,7 +224,7 @@ public class Common {
             
             if (helper.name.equals("item.length")) {
                 helper.type = Const.TEXT_FIELD;
-                helper.value = (modelitem == null)?null:Integer.toString(
+                helper.value = (modelitem == null)? null : Integer.toString(
                         dataelement.getLength());
                 helper.obligatory = true;
 
