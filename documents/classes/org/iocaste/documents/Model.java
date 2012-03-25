@@ -571,9 +571,8 @@ public class Model {
                 oldfieldname = olditem.getTableFieldName(),
                 fieldname = item.getTableFieldName();
         
-        if (iocaste.update("delete from shref where iname = ?",
-                Documents.getComposedName(olditem)) == 0)
-            return 0;
+        iocaste.update("delete from shref where iname = ?",
+                Documents.getComposedName(olditem));
         
         /*
          * renomeia campo da tabela
@@ -589,8 +588,7 @@ public class Model {
                     append(" rename to ").
                     append(fieldname);
             
-            if (iocaste.update(sb.toString()) == 0)
-                return 0;
+            iocaste.update(sb.toString());
         }
         
         /*
@@ -630,8 +628,7 @@ public class Model {
         }
         
         query = sb.toString();
-        if (iocaste.update(query) == 0)
-            return 0;
+        iocaste.update(query);
         
         reference = item.getReference();
         if (reference != null) {
@@ -646,8 +643,7 @@ public class Model {
                         append(reference.getTableFieldName()).
                         append(")").toString();
                 
-                if (iocaste.update(query) == 0)
-                    return 0;
+                iocaste.update(query);
             }
         } else {
             if (olditem.getReference() != null) {
@@ -656,8 +652,7 @@ public class Model {
                         append(" drop constraint ").
                         append(item.getTableFieldName()).toString();
                 
-                if (iocaste.update(query) == 0)
-                    return 0;
+                iocaste.update(query);
             }
         }
         
