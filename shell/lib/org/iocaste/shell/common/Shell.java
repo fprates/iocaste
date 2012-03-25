@@ -175,6 +175,15 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * 
+     * @param value
+     * @return
+     */
+    public static final boolean isInitial(String value) {
+        return (value == null || value.trim().length() == 0)? true : false;
+    }
+    
+    /**
+     * 
      * @param input
      * @param object
      */
