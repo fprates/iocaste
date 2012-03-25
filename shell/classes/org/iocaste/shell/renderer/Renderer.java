@@ -76,6 +76,8 @@ public class Renderer {
             tags.add(StandardContainerRenderer.render(
                     (StandardContainer)container, config));
             break;
+        default:
+            break;
         }
         
     }

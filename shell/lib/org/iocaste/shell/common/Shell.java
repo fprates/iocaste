@@ -50,9 +50,10 @@ public class Shell extends AbstractServiceInterface {
             cbox.setDataElement(inputitem.getDataElement());
             
             return cbox;
+            
+        default:
+            return null;
         }
-        
-        return null;
     }
     
     /**

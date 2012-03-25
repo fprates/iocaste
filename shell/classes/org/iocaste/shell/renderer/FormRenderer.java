@@ -2,6 +2,7 @@ package org.iocaste.shell.renderer;
 
 import org.iocaste.shell.XMLElement;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Parameter;
 
 public class FormRenderer extends Renderer {
     
@@ -12,6 +13,7 @@ public class FormRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(Form container, Config config) {
+        Parameter parameter;
         XMLElement hiddentag, formtag = new XMLElement("form");
         String enctype = container.getEnctype();
         String currentaction = container.getAction();
@@ -28,10 +30,9 @@ public class FormRenderer extends Renderer {
         if (enctype != null)
             formtag.add("enctype", enctype);
         
-        hiddentag = new XMLElement("input");
-        hiddentag.add("type", "hidden");
-        hiddentag.add("name", "pagetrack");
-        hiddentag.add("value", config.getPageTrack());
+        parameter = new Parameter(null, "pagetrack");
+        parameter.setValue(config.getPageTrack());
+        hiddentag = ParameterRenderer.render(parameter);
         
         formtag.addInner(hiddentag.toString());
         formtag.addChildren(renderElements(container.getElements(), config));
