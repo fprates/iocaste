@@ -34,7 +34,7 @@ public class ExtendedObject implements Serializable {
 	 * @param name
 	 * @return
 	 */
-	public final Object getValue(String name) {
+	public final <T> T getValue(String name) {
 	    return getValue(byname.get(name));
 	}
 	
@@ -43,8 +43,9 @@ public class ExtendedObject implements Serializable {
 	 * @param item
 	 * @return
 	 */
-	public final Object getValue(DocumentModelItem item) {
-		return values.get(item);
+	@SuppressWarnings("unchecked")
+	public final <T> T getValue(DocumentModelItem item) {
+		return (T)values.get(item);
 	}
 
 	/**
