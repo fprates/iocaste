@@ -78,10 +78,8 @@ public class DataForm extends AbstractContainer {
      * 
      * @return
      */
-    public final ExtendedObject getObject() {
-        DocumentModelItem modelitem;
+    public final ExtendedObject getObject() throws Exception {
     	InputComponent input;
-    	String value;
     	ExtendedObject object = new ExtendedObject(getModel());
     	
         for (Element element: getElements()) {
@@ -89,23 +87,7 @@ public class DataForm extends AbstractContainer {
                 continue;
         	
         	input = (InputComponent)element;
-        	value = input.getValue();
-        	modelitem = input.getModelItem();
-        	
-        	switch (Shell.getDataElement(input).getType()) {
-        	case DataType.NUMC:
-        	    if (input.isBooleanComponent())
-        	        object.setValue(modelitem, input.isSelected()? 1 : 0);
-        	    else
-        	        object.setValue(modelitem, (value == null)?
-        	                0 : Long.parseLong(value));
-        	    
-        	    break;
-        	default:
-        	    object.setValue(modelitem, value);
-        	    
-        	    break;
-        	}
+        	object.setValue(input.getName(), Shell.getInputValue(input));
         }
     	
     	return object;

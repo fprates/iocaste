@@ -122,6 +122,29 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * 
+     * @param input
+     * @return
+     */
+    public static final Object getInputValue(InputComponent input)
+            throws Exception {
+        String value = input.getValue();
+        
+        switch (getDataElement(input).getType()) {
+        case DataType.NUMC:
+            if (input.isBooleanComponent())
+                return input.isSelected()? 1 : 0;
+            else
+                return (isInitial(input))? 0 : Long.parseLong(value);
+            
+        case DataType.DATE:
+            
+        default:
+            return value;
+        }
+    }
+    
+    /**
+     * 
      * @param appname
      * @param pagename
      * @return
@@ -144,7 +167,8 @@ public class Shell extends AbstractServiceInterface {
      * @param input
      * @return
      */
-    public static final boolean isInitial(InputComponent input) {
+    public static final boolean isInitial(InputComponent input)
+            throws Exception {
         DataElement dataelement;
         String value, test;
         
@@ -167,6 +191,8 @@ public class Shell extends AbstractServiceInterface {
             
         case DataType.DEC:
             return (Double.parseDouble(test) == 0)? true : false;
+            
+        case DataType.DATE:
             
         default:
             return false;

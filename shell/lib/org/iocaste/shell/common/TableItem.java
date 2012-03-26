@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 
@@ -62,8 +61,9 @@ public class TableItem implements Serializable {
     /**
      * 
      * @return
+     * @throws Exception
      */
-    public final ExtendedObject getObject() {
+    public final ExtendedObject getObject() throws Exception {
         Element element;
         InputComponent input;
         DocumentModelItem modelitem;
@@ -81,10 +81,7 @@ public class TableItem implements Serializable {
             if (modelitem == null)
                 continue;
             
-            if (Shell.getDataElement(input).getType() == DataType.NUMC)
-                object.setValue(modelitem, Long.parseLong(input.getValue()));
-            else
-                object.setValue(modelitem, input.getValue());
+            object.setValue(modelitem, Shell.getInputValue(input));
         }
         
         return object;

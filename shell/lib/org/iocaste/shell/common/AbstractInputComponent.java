@@ -1,5 +1,7 @@
 package org.iocaste.shell.common;
 
+import java.text.DateFormat;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -14,7 +16,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private Const type;
     private DataElement dataelement;
     private SearchHelp search;
-    
+    private DateFormat dateformat;
     
     public AbstractInputComponent(Container container, Const type,
             Const type_, String name) {
@@ -23,6 +25,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
         this.type = type_;
         obligatory = false;
         validref = false;
+        dateformat = DateFormat.getDateInstance(DateFormat.SHORT);
     }
     
     /*
@@ -66,7 +69,8 @@ public abstract class AbstractInputComponent extends AbstractComponent
      * @see org.iocaste.shell.common.InputComponent#getParsedValue()
      */
     @Override
-    public final Object getParsedValue() {
+    public final Object getParsedValue() throws Exception {
+        
         switch (modelitem.getDataElement().getType()) {
         case DataType.CHAR:
             return value;
@@ -74,6 +78,8 @@ public abstract class AbstractInputComponent extends AbstractComponent
             return Double.parseDouble(value);
         case DataType.NUMC:
             return Integer.parseInt(value);
+        case DataType.DATE:
+            return dateformat.parse(value);
         default:
             return null;
         }

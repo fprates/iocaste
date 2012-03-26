@@ -29,7 +29,7 @@ public interface InputComponent extends Component {
     
     public abstract boolean isSelected();
     
-    public abstract Object getParsedValue();
+    public abstract Object getParsedValue() throws Exception;
     
     public abstract void setComponentType(Const type);
     
