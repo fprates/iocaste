@@ -10,6 +10,15 @@ public class Common {
     
     /**
      * 
+     * @param value
+     * @return
+     */
+    public static final boolean isInitial(String value) {
+        return (value == null || value.trim().length() == 0)? true : false;
+    }
+    
+    /**
+     * 
      * @param model
      * @param queries
      */

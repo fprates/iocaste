@@ -691,11 +691,11 @@ public class Model {
             throw new IocasteException("");
         
         shname = item.getSearchHelp();
-        if (shname == null)
+        if (Common.isInitial(shname))
             return 1;
         
         query = "insert into shref(iname, shcab) values(? ,?)";
-        if (iocaste.update(query, criteria[7], shname) == 0)
+        if (iocaste.update(query, criteria[6], shname) == 0)
             throw new IocasteException("");
         
         return 1;
