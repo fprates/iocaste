@@ -425,32 +425,7 @@ public class Model {
             sb.append(tname);
             
             dataelement = item.getDataElement();
-            
-            switch (dataelement.getType()) {
-            case DataType.CHAR:
-                sb.append(" varchar(");
-                sb.append(dataelement.getLength());
-                sb.append(")");
-                break;
-                
-            case DataType.NUMC:
-                sb.append(" numeric(");
-                sb.append(dataelement.getLength());
-                sb.append(")");
-                break;
-                
-            case DataType.DEC:
-                sb.append(" decimal(");
-                sb.append(dataelement.getLength());
-                sb.append(",");
-                sb.append(dataelement.getDecimals());
-                sb.append(")");
-                break;
-                
-            case DataType.DATE:
-                sb.append(" date");
-                break;
-            }
+            setDBFieldsString(sb, dataelement);
             
             if (model.isKey(item)) {
                 if (sbk == null)
@@ -506,6 +481,46 @@ public class Model {
                 append(dbuser).toString();
         
         return iocaste.update(query);
+    }
+    
+    /**
+     * 
+     * @param sb
+     * @param ddelement
+     */
+    public static void setDBFieldsString(StringBuilder sb,
+            DataElement ddelement) {
+        switch (ddelement.getType()) {
+        case DataType.CHAR:
+            sb.append(" varchar(");
+            sb.append(ddelement.getLength());
+            sb.append(")");
+            
+            break;
+        case DataType.NUMC:
+            sb.append(" numeric(");
+            sb.append(ddelement.getLength());
+            sb.append(")");
+            
+            break;
+            
+        case DataType.DEC:
+            sb.append(" decimal(");
+            sb.append(ddelement.getLength());
+            sb.append(",");
+            sb.append(ddelement.getDecimals());
+            sb.append(")");
+            
+            break;
+        case DataType.DATE:
+            ddelement.setLength(10);
+            ddelement.setDecimals(0);
+            ddelement.setUpcase(false);
+            
+            sb.append(" date");
+            
+            break;
+        }
     }
     
     /**
@@ -598,34 +613,7 @@ public class Model {
         sb.append(fieldname);
         
         ddelement = item.getDataElement();
-        
-        switch (ddelement.getType()) {
-        case DataType.CHAR:
-            sb.append(" varchar(");
-            sb.append(ddelement.getLength());
-            sb.append(")");
-            
-            break;
-        case DataType.NUMC:
-            sb.append(" numeric(");
-            sb.append(ddelement.getLength());
-            sb.append(")");
-            
-            break;
-            
-        case DataType.DEC:
-            sb.append(" decimal(");
-            sb.append(ddelement.getLength());
-            sb.append(",");
-            sb.append(ddelement.getDecimals());
-            sb.append(")");
-            
-            break;
-        case DataType.DATE:
-            sb.append(" date");
-            
-            break;
-        }
+        setDBFieldsString(sb, ddelement);
         
         query = sb.toString();
         iocaste.update(query);
