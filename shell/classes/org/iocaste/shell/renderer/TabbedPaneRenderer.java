@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.iocaste.shell.XMLElement;
 import org.iocaste.shell.common.Button;
-import org.iocaste.shell.common.EventAware;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
@@ -22,7 +21,6 @@ public class TabbedPaneRenderer extends Renderer {
             Config config) {
         Button button;
         StringBuilder sb;
-        TabbedPaneHandler tpanehandler = new TabbedPaneHandler(tabbedpane);
         XMLElement tabitem, tabbedtag = new XMLElement("div");
         String[] names = tabbedpane.getItensNames();
         
@@ -40,7 +38,7 @@ public class TabbedPaneRenderer extends Renderer {
             
             button = new Button(tabbedpane, name);
             button.setSubmit(false);
-            button.setEventHandler(tpanehandler);
+            button.setEventHandler(tabbedpane.getHandler());
             
             sb = new StringBuilder();
             
@@ -52,9 +50,7 @@ public class TabbedPaneRenderer extends Renderer {
             }
             
             sb.append("send('").append(name).append("', null)");
-            
             button.addAttribute("onClick", sb.toString());
-            
             tabbedtag.addChild(ButtonRenderer.render(button, config));
         }
         
@@ -84,23 +80,4 @@ public class TabbedPaneRenderer extends Renderer {
         
         return elements;
     }
-}
-
-class TabbedPaneHandler implements EventAware {
-    private static final long serialVersionUID = -4701284786729026501L;
-    private TabbedPane tpane;
-    
-    public TabbedPaneHandler(TabbedPane tpane) {
-        this.tpane = tpane;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.EventAware#onEvent(byte, java.lang.String)
-     */
-    @Override
-    public void onEvent(byte event, String action) {
-        tpane.setCurrent(action);
-    }
-    
 }
