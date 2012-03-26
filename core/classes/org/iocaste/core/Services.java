@@ -23,21 +23,23 @@ public class Services extends AbstractFunction {
         db = new DBServices();
         
         properties.put("db.user", "iocastedb");
-        
-        export("login", "login");
-        export("is_connected", "isConnected");
-        export("get_username", "getUsername");
+
+        export("checked_select", "checkedSelect");
+        export("commit", "commit");
         export("create_user", "createUser");
         export("disconnect", "disconnect");
-        export("get_context", "getContext");
-        export("set_context", "setContext");
-        export("get_users", "getUsers");
-        export("select", "select");
-        export("update", "update");
-        export("commit", "commit");
-        export("checked_select", "checkedSelect");
         export("get_host", "getHost");
         export("get_system_parameter", "getSystemParameter");
+        export("get_username", "getUsername");
+        export("get_context", "getContext");
+        export("get_locale", "getLocale");
+        export("get_users", "getUsers");
+        export("is_connected", "isConnected");
+        export("login", "login");
+        export("select", "select");        
+        export("set_context", "setContext");
+        export("update", "update");
+        
     }
     
     /**
@@ -87,6 +89,7 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
+     * @throws Exception
      */
     public final void createUser(Message message) throws Exception {
         User user = (User)message.get("userdata");
@@ -142,6 +145,17 @@ public class Services extends AbstractFunction {
      */
     public final String getHost(Message message) {
         return host;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final Locale getLocale(Message message) {
+        UserContext context = sessions.get(message.getSessionid());
+        
+        return (context == null)? null : context.getLocale();
     }
     
     /**

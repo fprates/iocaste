@@ -27,6 +27,7 @@ public class Servlet extends ServerServlet {
                 new String[] {"shell001", "shell002", "shell003"});
         authorize("checked_select", parameters);
         authorize("get_host", null);
+        authorize("get_locale", null);
     }
     
     /*

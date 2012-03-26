@@ -1,5 +1,7 @@
 package org.iocaste.protocol;
 
+import java.util.Locale;
+
 import org.iocaste.protocol.user.User;
 
 public final class Iocaste extends AbstractServiceInterface {
@@ -72,6 +74,19 @@ public final class Iocaste extends AbstractServiceInterface {
         message.setId("get_host");
         
         return (String)call(message);
+    }
+    
+    /**
+     * 
+     * @return
+     * @throws Exception
+     */
+    public final Locale getLocale() throws Exception {
+        Message message = new Message();
+        
+        message.setId("get_locale");
+        
+        return (Locale)call(message);
     }
     
     /**
