@@ -2,6 +2,7 @@ package org.iocaste.core;
 
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
@@ -244,6 +245,7 @@ public class Services extends AbstractFunction {
         User user = null;
         String username = message.getString("user");
         String secret = message.getString("secret");
+        String locale[] = message.getString("locale").split("_");
         String sessionid = message.getSessionid();
         
         if (sessionid == null)
@@ -276,6 +278,8 @@ public class Services extends AbstractFunction {
         context = new UserContext();
         context.setUser(user);
         context.setConnection(db.instance());
+        context.setLocale((locale.length == 1)?
+                new Locale(locale[0]) : new Locale(locale[0], locale[1]));
         
         sessions.put(sessionid, context);
         

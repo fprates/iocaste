@@ -132,15 +132,18 @@ public final class Iocaste extends AbstractServiceInterface {
      * Conecta usuário à sessão.
      * @param user nome do usuário
      * @param secret senha
+     * @param locale
      * @return true, se a conexão foi bem sucedida
      * @throws Exception
      */
-    public final boolean login(String user, String secret) throws Exception {
+    public final boolean login(String user, String secret, String locale)
+            throws Exception {
         Message message = new Message();
         
         message.setId("login");
         message.add("user", user);
         message.add("secret", secret);
+        message.add("locale", locale);
         
         return (Boolean)call(message);
     }

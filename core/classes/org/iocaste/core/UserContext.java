@@ -2,6 +2,7 @@ package org.iocaste.core;
 
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.protocol.user.User;
@@ -10,6 +11,7 @@ public class UserContext {
     private Map<String, Object> objects;
     private User user;
     private Connection connection;
+    private Locale locale;
     
     public UserContext() {
         objects = new HashMap<String, Object>();
@@ -21,6 +23,14 @@ public class UserContext {
      */
     public final Connection getConnection() {
         return connection;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Locale getLocale() {
+        return locale;
     }
     
     /**
@@ -46,6 +56,14 @@ public class UserContext {
      */
     public final void setConnection(Connection connection) {
         this.connection = connection;
+    }
+    
+    /**
+     * 
+     * @param locale
+     */
+    public final void setLocale(Locale locale) {
+        this.locale = locale;
     }
     
     /**

@@ -3,6 +3,11 @@ package org.iocaste.login;
 public class Login {
     private String username;
     private String secret;
+    private String locale;
+    
+    public final String getLocale() {
+        return locale;
+    }
     
     /**
      * @return the username
@@ -16,6 +21,14 @@ public class Login {
      */
     public final String getSecret() {
         return secret;
+    }
+    
+    /**
+     * 
+     * @param locale
+     */
+    public final void setLocale(String locale) {
+        this.locale = locale;
     }
     
     /**

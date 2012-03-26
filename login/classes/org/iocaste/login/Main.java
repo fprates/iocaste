@@ -24,6 +24,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void authentic(ViewData vdata) throws Exception {
+        InputComponent input;
         Container form = new Form(null, "main");
         DataForm loginform = new DataForm(form, "login");
         
@@ -34,10 +35,21 @@ public class Main extends AbstractPage {
         loginform.importModel(modelInstance());
         new Button(form, "connect");
         
-        for (Element element : loginform.getElements())
-            if (element.isDataStorable())
-                ((InputComponent)element).setObligatory(true);
-                
+        for (Element element : loginform.getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            
+            input = (InputComponent)element;
+            
+            if (input.getName().equals("LOCALE")) {
+                input.setValue("pt_BR");
+                input.setObligatory(false);
+                continue;
+            }
+            
+            input.setObligatory(true);
+        }
+        
         vdata.setMessages(new MessageSource("/META-INF/message.properties"));
         vdata.setTitle("authentic");
         vdata.addContainer(form);
@@ -56,7 +68,8 @@ public class Main extends AbstractPage {
         Iocaste iocaste = new Iocaste(this);
         Login login = form.getObject().newInstance();
         
-        if (iocaste.login(login.getUsername(), login.getSecret())) {
+        if (iocaste.login(login.getUsername(), login.getSecret(),
+                login.getLocale())) {
             view.setReloadableView(true);
             view.redirect("iocaste-tasksel", "main");
         } else {
@@ -105,6 +118,10 @@ public class Main extends AbstractPage {
         item = modelItemInstance(model, "secret", 1);
         item.setDataElement(dataElementInstance(
         		"CHAR12", DataType.CHAR, 12, DataType.KEEPCASE));
+        
+        item = modelItemInstance(model, "locale", 2);
+        item.setDataElement(dataElementInstance(
+                "CHAR5", DataType.CHAR, 5, DataType.KEEPCASE));
         
         return model;
     }
