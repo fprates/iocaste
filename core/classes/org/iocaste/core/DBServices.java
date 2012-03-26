@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLDataException;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,9 +114,7 @@ public class DBServices {
         
             return ps.executeUpdate();
         } catch (HsqlException e) {
-            throw new Exception(e.getMessage());
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw e;
+            throw new SQLException(e.getMessage());
         } catch (SQLDataException e) {
             throw new SQLDataException(e.getMessage());
         } catch (SQLException e) {
