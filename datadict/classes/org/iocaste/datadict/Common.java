@@ -35,7 +35,8 @@ public class Common {
         NAME("item.name", "DATAELEMENT.NAME"),
         TABLE_FIELD("item.tablefield", "MODELITEM.FIELDNAME"),
         CLASS_FIELD("item.classfield", "MODELITEM.ATTRIB"),
-        KEY("item.key", null), 
+        KEY("item.key", null),
+        DATA_ELEMENT("item.element", "DATAELEMENT.NAME"),
         TYPE("item.type", null),
         LENGTH("item.length", "DATAELEMENT.LENGTH"),
         DECIMALS("item.dec", "DATAELEMENT.DECIMALS"),
@@ -259,11 +260,22 @@ public class Common {
                 
                 continue;
             }
-        
+            
+            if (helper.name.equals("item.element")) {
+                helper.obligatory = false;
+                helper.type = Const.TEXT_FIELD;
+                helper.value = (modelitem == null)?
+                        null : dataelement.getName();
+                
+                newField(helper).setEnabled(false);
+                
+                continue;
+            }
+            
             if (helper.name.equals("item.type")) {
                 helper.obligatory = false;
                 helper.type = Const.LIST_BOX;
-                helper.value = (modelitem == null)?null : Integer.toString(
+                helper.value = (modelitem == null)? null : Integer.toString(
                         dataelement.getType());
                 
                 list = (ListBox)newField(helper);

@@ -45,8 +45,18 @@ public class Save {
             itemname = Common.getTableValue(modo, item, "item.name");
             
             dataelement = new DataElement();
-            dataelement.setName(new StringBuilder(model.getName()).append(".").
-                    append(itemname).toString());
+            switch (modo) {
+            case Common.CREATE:
+                dataelement.setName(new StringBuilder(model.getName()).
+                        append(".").
+                        append(itemname).toString());
+                break;
+            case Common.UPDATE:
+                dataelement.setName(Common.getTableValue(
+                        modo, item, "item.element"));
+                break;
+            }
+            
             dataelement.setLength(Integer.parseInt(Common.getTableValue(
                     modo, item, "item.length")));
             dataelement.setDecimals(Integer.parseInt(Common.getTableValue(
