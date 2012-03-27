@@ -68,7 +68,7 @@ public class Main extends AbstractPage {
         DocumentModel model;
         Table table;
         Parameter param;
-        Container container = new Form(null, "main");
+        Container container = new Form(vdata, "main");
         SearchHelp sh = vdata.getParameter("sh");
         ExtendedObject[] result = getResultsFrom(sh);
         
@@ -77,7 +77,6 @@ public class Main extends AbstractPage {
             
             vdata.setNavbarActionEnabled("back", true);
             vdata.setTitle(sh.getText());
-            vdata.addContainer(container);
             
             return;
         }
@@ -129,6 +128,5 @@ public class Main extends AbstractPage {
         
         vdata.setNavbarActionEnabled("back", true);
         vdata.setTitle(sh.getText());
-        vdata.addContainer(container);
     }
 }

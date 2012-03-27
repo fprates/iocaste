@@ -13,13 +13,12 @@ public class Main extends AbstractPage {
     }
     
     public final void view(ViewData vdata) {
-        Container form = new Form(null, "help.form");
+        Container form = new Form(vdata, "help.form");
         Text help = new Text(form, "not.yet");
         
         help.setText("Help not implemented. Back soon later.");
         
         vdata.setTitle("help");
-        vdata.addContainer(form);
         vdata.setNavbarActionEnabled("back", true);
     }
 }

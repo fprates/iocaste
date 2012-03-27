@@ -82,7 +82,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void main(ViewData view) throws Exception {
-        Container container = new Form(null, "main");
+        Container container = new Form(view, "main");
         DataForm form = new DataForm(container, "selector");
         DataItem cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
         
@@ -95,7 +95,6 @@ public class Main extends AbstractPage {
         
         view.setNavbarActionEnabled("help", true);
         view.setFocus("command");
-        view.addContainer(container);
         view.setTitle("task-selector");
     }
     

@@ -17,7 +17,7 @@ public class Main extends AbstractPage {
         TableItem item;
         Text text;
         Properties properties = System.getProperties();
-        Container container = new StandardContainer(null, "container");
+        Container container = new StandardContainer(vdata, "container");
         Table table = new Table(container, "properties");
         
         new TableColumn(table, "name");
@@ -36,6 +36,5 @@ public class Main extends AbstractPage {
         
         vdata.setTitle("iocaste-infosis");
         vdata.setNavbarActionEnabled("back", true);
-        vdata.addContainer(container);
     }
 }

@@ -22,7 +22,7 @@ public class Install {
      * @param view
      */
     public static final void main(ViewData view) {
-        Container container = new Form(null, "main");
+        Container container = new Form(view, "main");
         Text message = new Text(container, "install.continue");
         
         message.setText(new StringBuilder("Do you want to install \"").
@@ -34,7 +34,6 @@ public class Install {
         
         view.setFocus("installok");
         view.setTitle("package.install.confirmation");
-        view.addContainer(container);
     }
     
     /**

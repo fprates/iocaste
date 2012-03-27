@@ -27,7 +27,7 @@ public class Main extends AbstractPage {
     }
     
     public final void main(ViewData view) throws Exception {
-        Container container = new Form(null, "main");
+        Container container = new Form(view, "main");
         DataForm form = new DataForm(container, "selection");
         DataItem item = new DataItem(form, Const.TEXT_FIELD, "estilo");
         
@@ -39,7 +39,6 @@ public class Main extends AbstractPage {
         new Button(container, "update");
         
         view.setNavbarActionEnabled("back", true);
-        view.addContainer(container);
         view.setTitle("style-editor");
     }
 }

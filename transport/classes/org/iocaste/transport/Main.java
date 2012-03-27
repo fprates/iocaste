@@ -333,7 +333,7 @@ public class Main extends AbstractPage {
      */
     public void list(ViewData view) throws Exception {
         String[] files = view.getParameter("files");
-        Container container = new Form(null, "list");
+        Container container = new Form(view, "list");
         Table table = new Table(container, "pool");
         
         new TableColumn(table, "filename");
@@ -347,7 +347,6 @@ public class Main extends AbstractPage {
         
         view.setNavbarActionEnabled("back", true);
         view.setTitle("importable-build-instructions");
-        view.addContainer(container);
     }
     
     /**
@@ -357,8 +356,8 @@ public class Main extends AbstractPage {
      */
     public void main(ViewData view) throws Exception {
         TableItem importtbitem;
-        Container container = new Form(null, "main");
-        Form uploadcontainer = new Form(null, "upldcntr");
+        Container container = new Form(view, "main");
+        Form uploadcontainer = new Form(view, "upldcntr");
         Frame exportframe = new Frame(container, "export");
         Frame importframe = new Frame(uploadcontainer, "import");
         Table importtable, objects = new Table(exportframe, "objects");
@@ -384,8 +383,6 @@ public class Main extends AbstractPage {
         importtbitem = new TableItem(importtable);
         importtbitem.add(new Link(importtable, "frompool", "pool"));
         
-        view.addContainer(container);
-        view.addContainer(uploadcontainer);
         view.setNavbarActionEnabled("back", true);
         view.setTitle("transport-utility");
     }

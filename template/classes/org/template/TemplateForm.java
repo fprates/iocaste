@@ -9,12 +9,11 @@ import org.iocaste.shell.common.ViewData;
 public class TemplateForm extends AbstractPage {
 
     public void main(ViewData view) {
-        Container container = new Form(null, "main");
+        Container container = new Form(view, "main");
         Text text = new Text(container, "hello.world");
         
         text.setText("Aplicação Iocaste Template");
         view.setTitle("iocaste-project-template");
-        view.addContainer(container);
     }
     
     public final void templateaction(ViewData view) {

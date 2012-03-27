@@ -29,7 +29,7 @@ public class Bookmark {
             throws Exception {
         DataItem item;
         byte mode = view.getParameter("mode");
-        Container container = new Form(null, "main");
+        Container container = new Form(view, "main");
         DataForm form = new DataForm(container, "task");
         
         form.importModel(new Documents(function).getModel("TASKS"));
@@ -51,7 +51,6 @@ public class Bookmark {
         view.setNavbarActionEnabled("back", true);
         view.setFocus("COMMAND");
         view.setTitle(TITLE[mode]);
-        view.addContainer(container);
     }
     
     /**
