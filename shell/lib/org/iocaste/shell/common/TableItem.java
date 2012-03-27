@@ -132,7 +132,7 @@ public class TableItem implements Serializable {
                 continue;
             
             value = object.getValue(modelitem);
-            input.setValue((value == null)?null : value.toString());
+            Shell.setInputValue(input, value);
         }
     }
     

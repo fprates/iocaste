@@ -1,5 +1,7 @@
 package org.iocaste.shell;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
@@ -115,6 +117,7 @@ public class Controller {
      * @return
      */
     private static final boolean isValueCompatible(InputComponent input) {
+        DateFormat dateformat;
         DataElement dataelement;
         String value = input.getValue();
         
@@ -136,6 +139,16 @@ public class Controller {
         case DataType.DEC:
             return value.matches("[0-9\\.]+");
             
+        case DataType.DATE:
+            try {
+                dateformat = DateFormat.getDateInstance(DateFormat.SHORT,
+                        input.getLocale());
+                dateformat.parse(value);
+                
+                return true;
+            } catch (ParseException e) {
+                return false;
+            }
         default:
             return false;
         }

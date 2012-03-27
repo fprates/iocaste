@@ -1,6 +1,8 @@
 package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
+import java.text.DateFormat;
+import java.util.Date;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
@@ -127,6 +129,7 @@ public class Shell extends AbstractServiceInterface {
      */
     public static final Object getInputValue(InputComponent input)
             throws Exception {
+        DateFormat dateformat;
         String value = input.getValue();
         
         switch (getDataElement(input).getType()) {
@@ -137,6 +140,13 @@ public class Shell extends AbstractServiceInterface {
                 return (isInitial(input))? 0 : Long.parseLong(value);
             
         case DataType.DATE:
+            if (isInitial(value))
+                return null;
+            
+            dateformat = DateFormat.getDateInstance(DateFormat.SHORT,
+                    input.getLocale());
+            
+            return dateformat.parse(value);
             
         default:
             return value;
@@ -171,28 +181,22 @@ public class Shell extends AbstractServiceInterface {
             throws Exception {
         DataElement dataelement;
         String value, test;
-        
+
         value = input.getValue();
-        if (value == null)
-            return true;
-        
-        test = value.trim();
-        if (test.length() == 0)
+        if (isInitial(value))
             return true;
         
         dataelement = Shell.getDataElement(input);
-        
         if (dataelement == null)
             return false;
         
+        test = value.trim();
         switch (dataelement.getType()) {
         case DataType.NUMC:
             return (Long.parseLong(test) == 0)? true : false;
             
         case DataType.DEC:
             return (Double.parseDouble(test) == 0)? true : false;
-            
-        case DataType.DATE:
             
         default:
             return false;
@@ -270,6 +274,36 @@ public class Shell extends AbstractServiceInterface {
         message.add("logid", view.getLogid());
         
         call(message);
+    }
+    
+    /**
+     * 
+     * @param input
+     * @param value
+     */
+    public static final void setInputValue(InputComponent input, Object value) {
+        DateFormat dateformat;
+        
+        switch (Shell.getDataElement(input).getType()) {
+        case DataType.NUMC:
+            if (input.isBooleanComponent())
+                input.setSelected(((Long)value == 0)? false : true);
+            else
+                input.setValue(Long.toString((Long)value));
+            break;
+            
+        case DataType.DATE:
+            dateformat = DateFormat.getDateInstance(DateFormat.SHORT,
+                    input.getLocale());
+            
+            input.setValue((value == null)?null : dateformat.
+                    format((Date)value));
+            break;
+            
+        default:
+            input.setValue((value == null)?null : value.toString());
+            break;
+        }
     }
     
     /**

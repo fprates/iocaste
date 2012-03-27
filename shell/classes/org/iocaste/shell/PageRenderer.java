@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,8 +44,7 @@ public class PageRenderer extends HttpServlet implements Function {
     private static final String NOT_CONNECTED = "not.connected";
     private static Map<String, List<SessionContext>> apps =
             new HashMap<String, List<SessionContext>>();
-    private String sessionid;
-    private String servername;
+    private String sessionid, servername;
     private HtmlRenderer renderer;
     
     public PageRenderer() {
@@ -385,6 +385,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
+        InputData inputdata;
         ControlComponent action;
         Enumeration<?> parameternames;
         PageContext pagectx_;
@@ -429,8 +430,16 @@ public class PageRenderer extends HttpServlet implements Function {
         
         view.clearInputs();
         
-        for (Container container : view.getContainers())
-            registerInputs(view, container, null, this);
+        inputdata = new InputData();
+        inputdata.view = view;
+        inputdata.container = null;
+        inputdata.function = this;
+        inputdata.locale = iocaste.getLocale();
+        
+        for (Container container : view.getContainers()) {
+            inputdata.element = container;
+            registerInputs(inputdata);
+        }
         
         updateView(sessionid, view, this);
         
@@ -532,44 +541,54 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
-     * @param vdata
-     * @param element
-     * @param container_
-     * @param function
+     * @param inputdata
      * @throws Exception
      */
-    private static final void registerInputs(ViewData vdata, Element element,
-            Container container_, Function function) throws Exception {
+    private static final void registerInputs(InputData inputdata)
+            throws Exception {
+        InputData inputdata_;
         Container container;
         InputComponent input;
         DocumentModelItem modelitem;
         
-        if (element == null)
+        if (inputdata.element == null)
             return;
         
-        element.setView(vdata);
+        inputdata.element.setView(inputdata.view);
         
-        if (element.isContainable()) {
-            container = (Container)element;
+        if (inputdata.element.isContainable()) {
+            container = (Container)inputdata.element;
             
-            for (Element element_ : container.getElements())
-                registerInputs(vdata, element_, container, function);
+            inputdata_ = new InputData();
+            inputdata_.container = container;
+            inputdata_.view = inputdata.view;
+            inputdata_.function = inputdata.function;
+            inputdata_.locale = inputdata.locale;
+            
+            for (Element element : container.getElements()) {
+                inputdata_.element = element;
+                registerInputs(inputdata_);
+            }
             
             return;
         }
         
-        if (element.isDataStorable()) {
-            vdata.addInput(element.getHtmlName());
+        if (inputdata.element.isDataStorable()) {
+            inputdata.view.addInput(inputdata.element.getHtmlName());
             
-            input = (InputComponent)element;
+            input = (InputComponent)inputdata.element;
+            input.setLocale(inputdata.locale);
+            
             modelitem = input.getModelItem();
             if (input.getSearchHelp() == null && modelitem != null &&
                     modelitem.getSearchHelp() != null)
-                generateSearchHelp(input, container_, function);
+                generateSearchHelp(input, inputdata.container,
+                        inputdata.function);
         }
         
-        if (element.hasMultipartSupport())
-            vdata.addMultipartElement((MultipartElement)element);
+        if (inputdata.element.hasMultipartSupport())
+            inputdata.view.addMultipartElement(
+                    (MultipartElement)inputdata.element);
     }
     
     /**
@@ -580,6 +599,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void render(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
+        InputData inputdata;
         OutputStream os;
         String[] text;
         AppContext appctx;
@@ -602,8 +622,16 @@ public class PageRenderer extends HttpServlet implements Function {
             viewdata = (ViewData)Service.callServer(
                     composeUrl(appctx.getName()), message);
             
-            for (Container container : viewdata.getContainers())
-                registerInputs(viewdata, container, null, this);
+            inputdata = new InputData();
+            inputdata.view = viewdata;
+            inputdata.container = null;
+            inputdata.function = this;
+            inputdata.locale = new Iocaste(this).getLocale();
+            
+            for (Container container : viewdata.getContainers()) {
+                inputdata.element = container;
+                registerInputs(inputdata);
+            }
             
             pagectx.setViewData(viewdata);
         }
@@ -697,9 +725,17 @@ public class PageRenderer extends HttpServlet implements Function {
             Function function) throws Exception {
         AppContext appcontext = apps.get(sessionid).get(view.getLogid()).
                 getAppContext(view.getAppName());
+        InputData inputdata = new InputData();
         
-        for (Container container : view.getContainers())
-            registerInputs(view, container, null, function);
+        inputdata.view = view;
+        inputdata.container = null;
+        inputdata.function = function;
+        inputdata.locale = new Iocaste(function).getLocale();
+        
+        for (Container container : view.getContainers()) {
+            inputdata.element = container;
+            registerInputs(inputdata);
+        }
         
         appcontext.getPageContext(view.getPageName()).setViewData(view);
     }
@@ -709,4 +745,12 @@ class InputStatus {
     public int error = 0;
     public InputComponent input = null;
     public String fatal = null;
+}
+
+class InputData {
+    public ViewData view;
+    public Element element;
+    public Container container;
+    public Function function;
+    public Locale locale;
 }

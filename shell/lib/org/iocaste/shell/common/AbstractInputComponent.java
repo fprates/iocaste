@@ -1,6 +1,7 @@
 package org.iocaste.shell.common;
 
 import java.text.DateFormat;
+import java.util.Locale;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
@@ -17,6 +18,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private DataElement dataelement;
     private SearchHelp search;
     private DateFormat dateformat;
+    private Locale locale;
     
     public AbstractInputComponent(Container container, Const type,
             Const type_, String name) {
@@ -53,6 +55,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final int getLength() {
         return length;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getLocale()
+     */
+    @Override
+    public final Locale getLocale() {
+        return locale;
     }
     
     /*
@@ -216,6 +227,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setLength(int length) {
         this.length = length;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setLocale(java.util.Locale)
+     */
+    @Override
+    public final void setLocale(Locale locale) {
+        this.locale = locale;
     }
     
     /*

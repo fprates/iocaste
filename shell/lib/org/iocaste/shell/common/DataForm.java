@@ -21,7 +21,6 @@
 
 package org.iocaste.shell.common;
 
-import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
@@ -140,19 +139,7 @@ public class DataForm extends AbstractContainer {
             item = (DataItem)element;
             name = item.getName();
             
-            switch (Shell.getDataElement(item).getType()) {
-            case DataType.NUMC:
-                if (item.isBooleanComponent())
-                    item.setSelected(
-                            ((Long)object.getValue(name) == 0)? false : true);
-                else
-                    item.setValue(Long.toString((Long)object.getValue(name)));
-                break;
-                
-            default:
-                item.setValue((String)object.getValue(name));
-                break;
-            }
+            Shell.setInputValue(item, object.getValue(name));
         }
     }
 }

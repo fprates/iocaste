@@ -1,5 +1,7 @@
 package org.iocaste.shell.common;
 
+import java.util.Locale;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 
@@ -10,6 +12,8 @@ public interface InputComponent extends Component {
     public abstract DataElement getDataElement();
     
     public abstract int getLength();
+    
+    public abstract Locale getLocale();
     
     public abstract DocumentModelItem getModelItem();
 
@@ -36,6 +40,8 @@ public interface InputComponent extends Component {
     public abstract void setDataElement(DataElement dataelement);
     
     public abstract void setLength(int length);
+    
+    public abstract void setLocale(Locale locale);
     
     public abstract void setModelItem(DocumentModelItem modelitem);
     
