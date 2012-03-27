@@ -175,8 +175,8 @@ public class Query {
                 }
                 
                 if (upcasetoken.equals("DELETE")) {
-                    sb.append("delete from ");
-                    pass = 3;
+                    sb.append("delete ");
+                    pass = 2;
                     continue;
                 }
                 
