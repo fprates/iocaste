@@ -23,7 +23,7 @@ public class Response {
      */
     public static final void form(ViewData vdata, Function function)
             throws Exception {
-        Container container = new Form(null, "form");
+        Container container = new Form(vdata, "form");
         DataForm form = new DataForm(container, "model.form");
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel(
@@ -35,7 +35,6 @@ public class Response {
         new Button(container, "insertnext");
         
         vdata.setNavbarActionEnabled("back", true);
-        vdata.addContainer(container);
     }
 
     /**
@@ -46,7 +45,7 @@ public class Response {
      */
     public static final void main(ViewData view, Function function)
             throws Exception {
-        Container container = new Form(null, "main");
+        Container container = new Form(view, "main");
         DataForm form = new DataForm(container, "model");
         DataItem formitem = new DataItem(form, Const.TEXT_FIELD, "model.name");
         
@@ -59,7 +58,6 @@ public class Response {
         view.setFocus("model.name");
         view.setTitle("dataview-selection");
         view.setNavbarActionEnabled("back", true);
-        view.addContainer(container);
     }
     
     /**
@@ -70,7 +68,7 @@ public class Response {
     public static final void select(ViewData view, Function function)
             throws Exception {
         boolean key;
-        Container container = new Form(null, "dataview.container");
+        Container container = new Form(view, "dataview.container");
         ExtendedObject[] itens = view.getParameter("model.regs");
         Documents documents = new Documents(function);
         String modelname = view.getParameter("model.name");
@@ -104,7 +102,6 @@ public class Response {
         
         view.setTitle(modelname);
         view.setNavbarActionEnabled("back", true);
-        view.addContainer(container);
     }
 
 }
