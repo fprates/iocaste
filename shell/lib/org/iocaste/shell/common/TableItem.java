@@ -2,6 +2,7 @@ package org.iocaste.shell.common;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModelItem;
@@ -17,6 +18,7 @@ public class TableItem implements Serializable {
     private Map<String, Element> elements;
     private TableColumn[] columns;
     private Table table;
+    private Locale locale;
     
     public TableItem(Table table) {
         table.add(this);
@@ -38,6 +40,7 @@ public class TableItem implements Serializable {
             throw new RuntimeException("Item overflow for table.");
         
         elements.put(columns[i].getName(), element);
+        element.setLocale(locale);
     }
     
     /**
@@ -56,6 +59,14 @@ public class TableItem implements Serializable {
      */
     public final Element[] getElements() {
         return elements.values().toArray(new Element[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Locale getLocale() {
+        return locale;
     }
     
     /**
@@ -103,6 +114,14 @@ public class TableItem implements Serializable {
         CheckBox mark = (CheckBox)elements.get("mark");
         
         return mark.isSelected();
+    }
+    
+    /**
+     * 
+     * @param locale
+     */
+    public final void setLocale(Locale locale) {
+        this.locale = locale;
     }
     
     /**

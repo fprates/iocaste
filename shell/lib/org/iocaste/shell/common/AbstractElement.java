@@ -22,6 +22,7 @@
 package org.iocaste.shell.common;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -41,6 +42,7 @@ public abstract class AbstractElement implements Element {
     private boolean enabled, visible;
     private ViewData view;
     private Map<String, String> attributes;
+    private Locale locale;
     
     public AbstractElement(Const type, String name) {
         if (name == null)
@@ -115,6 +117,15 @@ public abstract class AbstractElement implements Element {
     @Override
     public final String[] getAttributeNames() {
         return attributes.keySet().toArray(new String[0]);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#getLocale()
+     */
+    @Override
+    public final Locale getLocale() {
+        return locale;
     }
     
     /*
@@ -214,6 +225,15 @@ public abstract class AbstractElement implements Element {
     @Override
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#setLocale(java.util.Locale)
+     */
+    @Override
+    public final void setLocale(Locale locale) {
+        this.locale = locale;
     }
     
     /*

@@ -80,6 +80,7 @@ public class Table extends AbstractContainer {
      */
     public final void add(TableItem item) {
         itens.add(item);
+        item.setLocale(getLocale());
     }
     
     /**

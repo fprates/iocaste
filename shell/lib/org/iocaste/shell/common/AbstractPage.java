@@ -1,6 +1,7 @@
 package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
+import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
@@ -82,7 +83,7 @@ public abstract class AbstractPage extends AbstractFunction {
         String page = message.getString("page");
         String app = message.getString("app");
         int logid = message.getInt("logid");
-        
+        Locale locale = message.get("locale");
         @SuppressWarnings("unchecked")
         Map<String, Object> parameters =
                 (Map<String, Object>)message.get("parameters");
@@ -91,6 +92,8 @@ public abstract class AbstractPage extends AbstractFunction {
             throw new IocasteException("page not especified.");
         
         view = new ViewData(app, page, logid);
+        view.setLocale(locale);
+        
         for (String name : parameters.keySet())
             view.addParameter(name, parameters.get(name));
         

@@ -22,6 +22,7 @@
 package org.iocaste.shell.common;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * Interface fundamental para elementos.
@@ -56,6 +57,12 @@ public interface Element extends Comparable<Element>, Serializable {
      * @return
      */
     public abstract String getHtmlName();
+    
+    /**
+     * 
+     * @return
+     */
+    public abstract Locale getLocale();
     
     /**
      * Retorna nome do elemento.
@@ -135,6 +142,12 @@ public interface Element extends Comparable<Element>, Serializable {
      * @param name
      */
     public abstract void setHtmlName(String name);
+    
+    /**
+     * 
+     * @param locale
+     */
+    public abstract void setLocale(Locale locale);
     
     /**
      * Ajusta nome da classe CSS do elemento.

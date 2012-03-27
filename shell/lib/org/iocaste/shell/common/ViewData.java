@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -49,6 +50,7 @@ public class ViewData implements Serializable {
     private boolean disabledhead, reloadable, dontpushpage, pagecall;
     private Const messagetype;
     private int logid;
+    private Locale locale;
     
     public ViewData(String appname, String pagename, int logid) {
         inputs = new ArrayList<String>();
@@ -310,6 +312,14 @@ public class ViewData implements Serializable {
      * 
      * @return
      */
+    public final Locale getLocale() {
+        return locale;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final int getLogid() {
         return logid;
     }
@@ -516,6 +526,14 @@ public class ViewData implements Serializable {
             headervalues.remove(key);
         
         headervalues.put(key, value);
+    }
+    
+    /**
+     * 
+     * @param locale
+     */
+    public final void setLocale(Locale locale) {
+        this.locale = locale;
     }
     
     /**

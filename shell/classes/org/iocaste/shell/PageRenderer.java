@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -116,7 +115,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @return
      */
     private final PageContext createPageContext(String sessionid,
-            String appname, String pagename, int logid) {
+            String appname, String pagename, int logid) throws Exception {
         AppContext appctx;
         PageContext pagectx;
         List<SessionContext> sessions;
@@ -145,6 +144,7 @@ public class PageRenderer extends HttpServlet implements Function {
         pagectx = new PageContext(pagename);
         pagectx.setAppContext(appctx);
         pagectx.setLogid(logid);
+        pagectx.setLocale(new Iocaste(this).getLocale());
         
         appctx.put(pagename, pagectx);
         sessionctx.put(appname, appctx);
@@ -434,7 +434,6 @@ public class PageRenderer extends HttpServlet implements Function {
         inputdata.view = view;
         inputdata.container = null;
         inputdata.function = this;
-        inputdata.locale = iocaste.getLocale();
         
         for (Container container : view.getContainers()) {
             inputdata.element = container;
@@ -563,7 +562,6 @@ public class PageRenderer extends HttpServlet implements Function {
             inputdata_.container = container;
             inputdata_.view = inputdata.view;
             inputdata_.function = inputdata.function;
-            inputdata_.locale = inputdata.locale;
             
             for (Element element : container.getElements()) {
                 inputdata_.element = element;
@@ -576,10 +574,9 @@ public class PageRenderer extends HttpServlet implements Function {
         if (inputdata.element.isDataStorable()) {
             inputdata.view.addInput(inputdata.element.getHtmlName());
             
-            input = (InputComponent)inputdata.element;
-            input.setLocale(inputdata.locale);
-            
+            input = (InputComponent)inputdata.element;            
             modelitem = input.getModelItem();
+            
             if (input.getSearchHelp() == null && modelitem != null &&
                     modelitem.getSearchHelp() != null)
                 generateSearchHelp(input, inputdata.container,
@@ -617,6 +614,7 @@ public class PageRenderer extends HttpServlet implements Function {
             message.add("page", pagectx.getName());
             message.add("parameters", pagectx.getParameters());
             message.add("logid", pagectx.getLogid());
+            message.add("locale", pagectx.getLocale());
             message.setSessionid(sessionid);
             
             viewdata = (ViewData)Service.callServer(
@@ -626,7 +624,6 @@ public class PageRenderer extends HttpServlet implements Function {
             inputdata.view = viewdata;
             inputdata.container = null;
             inputdata.function = this;
-            inputdata.locale = new Iocaste(this).getLocale();
             
             for (Container container : viewdata.getContainers()) {
                 inputdata.element = container;
@@ -730,7 +727,6 @@ public class PageRenderer extends HttpServlet implements Function {
         inputdata.view = view;
         inputdata.container = null;
         inputdata.function = function;
-        inputdata.locale = new Iocaste(function).getLocale();
         
         for (Container container : view.getContainers()) {
             inputdata.element = container;
@@ -752,5 +748,4 @@ class InputData {
     public Element element;
     public Container container;
     public Function function;
-    public Locale locale;
 }
