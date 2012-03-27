@@ -112,7 +112,7 @@ public class Selection {
     public static final void main(ViewData view, Function function)
             throws Exception {
         RadioButton tpobj;
-        Container main = new Form(null, "datadict.main");
+        Container main = new Form(view, "datadict.main");
         DataForm modelform = new DataForm(main, "modelform");
         DataItem modelname = new DataItem(modelform, Const.TEXT_FIELD,
                 "modelname");
@@ -136,7 +136,6 @@ public class Selection {
         view.setFocus("modelname");
         view.setNavbarActionEnabled("back", true);
         view.setTitle("datadict-selection");
-        view.addContainer(main);
     }
 
     /**

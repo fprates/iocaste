@@ -22,7 +22,7 @@ public class Rename {
      */
     public static final void dialog(ViewData view, Function function)
             throws Exception {
-        Container container = new Form(null, "main");
+        Container container = new Form(view, "main");
         DataForm form = new DataForm(container, "rename.form");
         DataItem oldname = new DataItem(form, Const.TEXT_FIELD, "oldname");
         DataItem newname = new DataItem(form, Const.TEXT_FIELD, "newname");
@@ -40,7 +40,6 @@ public class Rename {
         
         view.setFocus("newname");
         view.setNavbarActionEnabled("back", true);
-        view.addContainer(container);
     }
     
     /**

@@ -127,13 +127,12 @@ public class Main extends AbstractPage {
      * @param vdata
      */
     public final void list(ViewData vdata) {
-        Container container = new StandardContainer(null, "list");
+        Container container = new StandardContainer(vdata, "list");
         String[] lines = vdata.getParameter("code");
         HtmlTag code = new HtmlTag(container, "code");
         
         code.setLines(lines);
         
-        vdata.addContainer(container);
         vdata.setNavbarActionEnabled("back", true);
     }
     

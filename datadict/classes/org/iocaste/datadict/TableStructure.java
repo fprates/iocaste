@@ -47,7 +47,7 @@ public class TableStructure {
         String name, title, modelname;
         TableColumn column;
         byte mode = Common.getMode(view);
-        Container main = new Form(null, "datadict.structure");
+        Container main = new Form(view, "datadict.structure");
         DataForm structure = new DataForm(main, "header");
         Map<Common.ItensNames, DataElement> references =
                 Common.getFieldReferences(function);
@@ -115,7 +115,6 @@ public class TableStructure {
         view.setFocus("modeltext");
         view.setNavbarActionEnabled("back", true);
         view.setTitle(title);
-        view.addContainer(main);
     }
     
     /**

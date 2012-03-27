@@ -73,7 +73,7 @@ public class SHStructure {
         DataItem ditem;
         String name;
         ExtendedObject[] oitens;
-        Container container = new Form(null, "main");
+        Container container = new Form(view, "main");
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel("SEARCH_HELP");
         DataForm header = new DataForm(container, "header");
@@ -150,7 +150,6 @@ public class SHStructure {
         view.setTitle(TITLE[mode]);
         view.setFocus("MODEL");
         view.setNavbarActionEnabled("back", true);
-        view.addContainer(container);
     }
     
     /**

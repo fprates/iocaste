@@ -35,7 +35,7 @@ public class ItemDetails {
         String upcase = view.getParameter("item.upcase");
         String sh = view.getParameter("item.sh");
         String classfield = view.getParameter("item.classfield");
-        Container container = new Form(null, "main");
+        Container container = new Form(view, "main");
         Frame techframe, fkframe = new Frame(container, "foreign.key");
         DataForm techform, fkform = new DataForm(fkframe, "fkform");
         byte mode = Common.getMode(view);
@@ -93,7 +93,6 @@ public class ItemDetails {
             view.setFocus("reference.model");
         }
         
-        view.addContainer(container);
         view.setNavbarActionEnabled("back", true);
         view.setTitle("item-detail-editor");
     }
