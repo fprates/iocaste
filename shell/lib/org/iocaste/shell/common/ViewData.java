@@ -59,8 +59,7 @@ public class ViewData implements Serializable {
         headervalues = new HashMap<String, String>();
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<MultipartElement>();
-        nbcontainer = new StandardContainer(null, "navbar");
-        containers.add(nbcontainer);
+        nbcontainer = new StandardContainer(this, "navbar");
         disabledhead = false;
         dontpushpage = false;
         contenttype = null;
@@ -76,7 +75,7 @@ public class ViewData implements Serializable {
      * Adiciona container à visão.
      * @param container container
      */
-    public final void addContainer(Container container) {
+    public final void add(Container container) {
         containers.add(container);
     }
     

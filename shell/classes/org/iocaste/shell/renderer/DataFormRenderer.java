@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.shell.XMLElement;
-import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
@@ -30,7 +29,7 @@ public class DataFormRenderer extends Renderer {
         TableItem tableitem;
         String tablename = new StringBuffer(form.getName()).append(".table").
                 toString();
-        Table table = new Table(null, tablename);
+        Table table = new Table(form, tablename);
         DocumentModel model = form.getModel();
         List<XMLElement> tags = new ArrayList<XMLElement>();
         
@@ -39,12 +38,7 @@ public class DataFormRenderer extends Renderer {
         new TableColumn(table, "field");
         
         for (Element element : form.getElements()) {
-            if (element.getType() != Const.DATA_ITEM) {
-                renderElement(tags, element, config);
-                continue;
-            }
-            
-            if (!element.isVisible())
+            if (!element.isDataStorable() || !element.isVisible())
                 continue;
             
             dataitem = (DataItem)element;

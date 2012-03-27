@@ -56,7 +56,9 @@ public class TabbedPaneRenderer extends Renderer {
         
         for (String name : names) {
             tabitem = StandardContainerRenderer.render(new StandardContainer(
-                    null, name + ".tabitem"), config);
+                    tabbedpane, new StringBuilder(name).
+                            append(".tabitem").toString()), config);
+            
             tabitem.addChildren(renderTabbedPaneItem(tabbedpane.get(name),
                     config));
             

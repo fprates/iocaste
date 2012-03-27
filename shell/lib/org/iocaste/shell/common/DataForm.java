@@ -35,6 +35,12 @@ public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
     private boolean keyrequired;
     
+    public DataForm(ViewData view, String name) {
+        super(view, Const.DATA_FORM, name);
+
+        keyrequired = false;
+    }
+    
     public DataForm(Container container, String name) {
         super(container, Const.DATA_FORM, name);
         

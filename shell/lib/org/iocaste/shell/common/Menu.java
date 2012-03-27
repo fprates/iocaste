@@ -9,8 +9,19 @@ public class Menu extends AbstractContainer {
     private Parameter parameter;
     private Set<String> parameters;
     
+    public Menu(ViewData view, String action) {
+        super(view, Const.MENU, action);
+        
+        init(action);
+    }
+    
     public Menu(Container container, String action) {
         super(container, Const.MENU, action);
+        
+        init(action);
+    }
+    
+    private final void init(String action) {
         this.action = action;
         parameter = new Parameter(this, "function");
         parameters = new HashSet<String>();

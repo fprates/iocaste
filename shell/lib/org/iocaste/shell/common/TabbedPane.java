@@ -8,14 +8,23 @@ public class TabbedPane extends AbstractContainer {
     private Map<String, TabbedPaneItem> itens;
     private String current;
     
+    public TabbedPane(ViewData view, String name) {
+        super(view, Const.TABBED_PANE, name);
+        
+        init();
+    }
+    
     public TabbedPane(Container container, String name) {
         super(container, Const.TABBED_PANE, name);
         
-        current = null;
-        
-        itens = new LinkedHashMap<String, TabbedPaneItem>();
+        init();
     }
 
+    private final void init() {
+        current = null;
+        itens = new LinkedHashMap<String, TabbedPaneItem>();
+    }
+    
     /**
      * 
      * @param item

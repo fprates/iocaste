@@ -32,13 +32,23 @@ public class Form extends AbstractContainer {
     private String enctype;
     private Parameter action;
     
+    public Form(ViewData view, String name) {
+        super(view, Const.FORM, name);
+        
+        init(name);
+    }
+    
     public Form(Container container, String name) {
         super(container, Const.FORM, name);
         
+        init(name);
+    }
+
+    private final void init(String name) {
         action = new Parameter(this, "action");
         action.setHtmlName(name+".action");
     }
-
+    
     /**
      * Retorna o tipo de codificação.
      * @return codificação

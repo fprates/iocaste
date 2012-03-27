@@ -41,8 +41,19 @@ public class Table extends AbstractContainer {
     private Map<String, TableColumn> columns;
     private List<TableItem> itens;
     
+    public Table(ViewData view, String name) {
+        super(view, Const.TABLE, name);
+        
+        init();
+    }
+    
     public Table(Container container, String name) {
         super(container, Const.TABLE, name);
+        
+        init();
+    }
+    
+    private final void init() {
         TableColumn column;
         
         header = true;
