@@ -1,5 +1,7 @@
 package org.iocaste.sh;
 
+import java.text.DateFormat;
+
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -7,7 +9,6 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
@@ -26,14 +27,13 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void choose(ViewData vdata) 
-            throws Exception {
+    public final void choose(ViewData vdata) throws Exception {
         SearchHelp sh = vdata.getParameter("sh");
         Parameter value = vdata.getElement("value");
         ViewData view = sh.getView();
         InputComponent input = view.getElement(sh.getInputName());
         
-        if (!((Element)input).isEnabled()) {
+        if (!input.isEnabled()) {
             back(vdata);
             return;
         }
@@ -60,6 +60,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public void main(ViewData vdata) throws Exception {
+        DateFormat dateformat;
         TableColumn column;
         TableItem tableitem;
         String name, value, export;
@@ -94,10 +95,18 @@ public class Main extends AbstractPage {
                 name = modelitem.getName();
                 switch (modelitem.getDataElement().getType()) {
                 case DataType.CHAR:
-                    value = (String)object.getValue(modelitem);
+                    value = object.getValue(modelitem);
                     break;
                 case DataType.NUMC:
                     value = Long.toString((Long)object.getValue(modelitem));
+                    break;
+                case DataType.DATE:
+                    dateformat = DateFormat.getDateInstance(DateFormat.SHORT,
+                            vdata.getLocale());
+                    
+                    value = dateformat.format(
+                            (DateFormat)object.getValue(modelitem));
+                    
                     break;
                 default:
                     value = null;
