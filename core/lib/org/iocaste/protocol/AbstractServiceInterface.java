@@ -20,8 +20,9 @@ public abstract class AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    protected final Object call(Message message) throws Exception {
-        return service.call(message);
+    @SuppressWarnings("unchecked")
+    protected final <T> T call(Message message) throws Exception {
+        return (T)service.call(message);
     }
     
     /**
