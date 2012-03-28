@@ -9,6 +9,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewData;
@@ -173,7 +174,7 @@ public class Request {
                 if (object == null)
                     object = new ExtendedObject(model);
                 
-                object.setValue(modelitem, input.getParsedValue());
+                object.setValue(modelitem, Shell.getInputValue(input));
             }
             
             if (object == null)

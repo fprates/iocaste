@@ -22,10 +22,10 @@
 package org.iocaste.shell.common;
 
 /**
- * Implementação abstrata de controle.
+ * Control abstract implementation
  * 
- * Se deseja criar um controle (tal como botões), pode desejar
- * fazê-lo a partir dessa implementação.
+ * If you want to create a new control (such as button), you
+ * can do it from this implementation.
  * 
  * @author francisco.prates
  *

@@ -1,11 +1,18 @@
 package org.iocaste.shell.common;
 
-import java.text.DateFormat;
-
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 
+/**
+ * Input component abstract implementation
+ * 
+ * If you want to create a new input component (such as text box), you
+ * can do it from this implementation.
+ * 
+ * @author francisco.prates
+ *
+ */
 public abstract class AbstractInputComponent extends AbstractComponent
     implements InputComponent {
     private static final long serialVersionUID = 7276777605716326451L;
@@ -16,16 +23,14 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private Const type;
     private DataElement dataelement;
     private SearchHelp search;
-    private DateFormat dateformat;
     
     public AbstractInputComponent(Container container, Const type,
             Const type_, String name) {
         super(container, type, name);
-
+        
         this.type = type_;
         obligatory = false;
         validref = false;
-        dateformat = DateFormat.getDateInstance(DateFormat.SHORT);
     }
     
     /*
@@ -62,27 +67,6 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final DocumentModelItem getModelItem() {
         return modelitem;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.InputComponent#getParsedValue()
-     */
-    @Override
-    public final Object getParsedValue() throws Exception {
-        
-        switch (modelitem.getDataElement().getType()) {
-        case DataType.CHAR:
-            return value;
-        case DataType.DEC:
-            return Double.parseDouble(value);
-        case DataType.NUMC:
-            return Integer.parseInt(value);
-        case DataType.DATE:
-            return dateformat.parse(value);
-        default:
-            return null;
-        }
     }
     
     /*

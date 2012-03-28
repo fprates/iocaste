@@ -2,7 +2,8 @@ package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
 import java.text.DateFormat;
-import java.util.Date;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
@@ -130,7 +131,9 @@ public class Shell extends AbstractServiceInterface {
     public static final Object getInputValue(InputComponent input)
             throws Exception {
         DateFormat dateformat;
+        NumberFormat numberformat;
         String value = input.getValue();
+        Locale locale = input.getLocale();
         
         switch (getDataElement(input).getType()) {
         case DataType.NUMC:
@@ -140,13 +143,18 @@ public class Shell extends AbstractServiceInterface {
                 return (isInitial(input))? 0 : Long.parseLong(value);
             
         case DataType.DATE:
-            if (isInitial(value))
+            if (isInitial(input))
                 return null;
             
-            dateformat = DateFormat.getDateInstance(DateFormat.SHORT,
-                    input.getLocale());
-            
+            dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
             return dateformat.parse(value);
+        
+        case DataType.DEC:
+            if (isInitial(input))
+                return 0;
+            
+            numberformat = NumberFormat.getNumberInstance(locale);
+            return numberformat.parse(value);
             
         default:
             return value;
@@ -169,7 +177,7 @@ public class Shell extends AbstractServiceInterface {
         message.add("page_name", pagename);
         message.add("logid", view.getLogid());
         
-        return (ViewData)call(message);
+        return call(message);
     }
     
     /**
@@ -179,9 +187,11 @@ public class Shell extends AbstractServiceInterface {
      */
     public static final boolean isInitial(InputComponent input)
             throws Exception {
+        NumberFormat numberformat;
         DataElement dataelement;
         String value, test;
-
+        Locale locale = input.getLocale();
+        
         value = input.getValue();
         if (isInitial(value))
             return true;
@@ -196,7 +206,9 @@ public class Shell extends AbstractServiceInterface {
             return (Long.parseLong(test) == 0)? true : false;
             
         case DataType.DEC:
-            return (Double.parseDouble(test) == 0)? true : false;
+            numberformat = NumberFormat.getNumberInstance(locale);
+            
+            return (numberformat.parse(test).doubleValue() == 0)? true : false;
             
         default:
             return false;
@@ -257,7 +269,7 @@ public class Shell extends AbstractServiceInterface {
         message.setId("pop_page");
         message.add("logid", view.getLogid());
         
-        return (String[])call(message);
+        return call(message);
     }
     
     /**
@@ -283,6 +295,8 @@ public class Shell extends AbstractServiceInterface {
      */
     public static final void setInputValue(InputComponent input, Object value) {
         DateFormat dateformat;
+        NumberFormat numberformat;
+        Locale locale = input.getLocale();
         
         switch (Shell.getDataElement(input).getType()) {
         case DataType.NUMC:
@@ -290,18 +304,24 @@ public class Shell extends AbstractServiceInterface {
                 input.setSelected(((Long)value == 0)? false : true);
             else
                 input.setValue(Long.toString((Long)value));
+            
+            break;
+            
+        case DataType.DEC:
+            numberformat = NumberFormat.getNumberInstance(locale);
+            input.setValue((value == null)? null : numberformat.format(value));
+            
             break;
             
         case DataType.DATE:
-            dateformat = DateFormat.getDateInstance(DateFormat.SHORT,
-                    input.getLocale());
+            dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+            input.setValue((value == null)? null : dateformat.format(value));
             
-            input.setValue((value == null)?null : dateformat.
-                    format((Date)value));
             break;
             
         default:
-            input.setValue((value == null)?null : value.toString());
+            input.setValue((value == null)? null : value.toString());
+            
             break;
         }
     }

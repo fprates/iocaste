@@ -1,7 +1,9 @@
 package org.iocaste.shell;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
@@ -30,16 +32,43 @@ public class Controller {
      */
     private static void convertInputValue(InputComponent input) {
         String value;
+        NumberFormat numberformat;
+        DateFormat dateformat;
+        Locale locale;
         DataElement dataelement = Shell.getDataElement(input);
         
         if (dataelement == null)
             return;
         
+        locale = input.getLocale();
         value = input.getValue();
+        
         switch(dataelement.getType()) {
         case DataType.NUMC:
-            if (value == null || value.trim().length() == 0)
+            if (Shell.isInitial(value))
                 input.setValue("0");
+            break;
+            
+        case DataType.DEC:
+            numberformat = NumberFormat.getNumberInstance(locale);
+            
+            try {
+                input.setValue(numberformat.format(numberformat.parse(value)));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            
+            break;
+            
+        case DataType.DATE:
+            dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+            
+            try {
+                input.setValue(dateformat.format(dateformat.parse(value)));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            
             break;
         }
     }
@@ -117,6 +146,8 @@ public class Controller {
      * @return
      */
     private static final boolean isValueCompatible(InputComponent input) {
+        Locale locale;
+        NumberFormat numberformat;
         DateFormat dateformat;
         DataElement dataelement;
         String value = input.getValue();
@@ -128,7 +159,8 @@ public class Controller {
         
         if (dataelement == null)
             return true;
-        
+
+        locale = input.getLocale();
         switch (dataelement.getType()) {
         case DataType.CHAR:
             return true;
@@ -137,12 +169,19 @@ public class Controller {
             return value.matches("[0-9]+");
             
         case DataType.DEC:
-            return value.matches("[0-9\\.]+");
+            try {
+                numberformat = NumberFormat.getNumberInstance(locale);
+                numberformat.parse(value);
+                
+                return true;
+            } catch (ParseException e) {
+                return false;
+            }
             
         case DataType.DATE:
             try {
-                dateformat = DateFormat.getDateInstance(DateFormat.SHORT,
-                        input.getLocale());
+                dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM,
+                        locale);
                 dateformat.parse(value);
                 
                 return true;
