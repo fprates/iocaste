@@ -224,7 +224,7 @@ public class Controller {
             Map<String, ?> values, InputStatus status) throws Exception {
         ValidatorConfig validatorcfg;
         Element element;
-        String value;
+        String message, value;
         DataElement dataelement;
         InputComponent input;
         
@@ -294,9 +294,9 @@ public class Controller {
             
             validatorcfg = input.getValidatorConfig();
             if (validatorcfg != null) {
-                status.message = callCustomValidation(function, view,
-                        validatorcfg);
-                if (status.message != null) {
+                message = callCustomValidation(function, view, validatorcfg);
+                if (message != null) {
+                    status.message = message;
                     status.input = input;
                     status.error = EVALIDATION;
                 }
