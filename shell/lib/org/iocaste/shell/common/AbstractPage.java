@@ -13,6 +13,7 @@ public abstract class AbstractPage extends AbstractFunction {
     public AbstractPage() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
+        export("custom_validation", "customValidation");
     }
     
     /**
@@ -25,6 +26,19 @@ public abstract class AbstractPage extends AbstractFunction {
         String[] entry = new Shell(this).popPage(view);
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final String customValidation(Message message) throws Exception {
+        ValidatorConfig config = message.get("config");
+        Validator validator = (Validator)Class.forName(config.getClassName()).
+                newInstance();
+        
+        return validator.validate(config);
     }
     
     /**

@@ -15,6 +15,8 @@ public interface InputComponent extends Component {
 
     public abstract SearchHelp getSearchHelp();
     
+    public abstract ValidatorConfig getValidatorConfig();
+    
     public abstract String getValue();
     
     public abstract boolean isBooleanComponent();
@@ -46,6 +48,8 @@ public interface InputComponent extends Component {
     public abstract void setSecret(boolean secret);
     
     public abstract void setSelected(boolean selected);
+    
+    public abstract void setValidatorConfig(ValidatorConfig validator);
     
     public abstract void setValue(String value);
 }

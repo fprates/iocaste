@@ -740,7 +740,7 @@ public class PageRenderer extends HttpServlet implements Function {
 class InputStatus {
     public int error = 0;
     public InputComponent input = null;
-    public String fatal = null;
+    public String fatal = null, message = null;
 }
 
 class InputData {

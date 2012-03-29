@@ -3,6 +3,7 @@ package org.iocaste.shell.common;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
 
 import org.iocaste.documents.common.DataElement;
@@ -185,8 +186,7 @@ public class Shell extends AbstractServiceInterface {
      * @param input
      * @return
      */
-    public static final boolean isInitial(InputComponent input)
-            throws Exception {
+    public static final boolean isInitial(InputComponent input) {
         NumberFormat numberformat;
         DataElement dataelement;
         String value, test;
@@ -208,8 +208,12 @@ public class Shell extends AbstractServiceInterface {
         case DataType.DEC:
             numberformat = NumberFormat.getNumberInstance(locale);
             
-            return (numberformat.parse(test).doubleValue() == 0)? true : false;
-            
+            try {
+                return (numberformat.parse(test).doubleValue() == 0)? true : false;
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
         default:
             return false;
         }

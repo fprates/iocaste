@@ -12,12 +12,14 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
-import org.iocaste.shell.common.Component;
+import org.iocaste.protocol.GenericService;
+import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.ValidatorConfig;
 import org.iocaste.shell.common.ViewData;
 
 public class Controller {
@@ -25,6 +27,20 @@ public class Controller {
     private static final int EMISMATCH = 2;
     private static final int EINVALID_REFERENCE = 3;
     private static final int WINVALID_ACTION = 4;
+    private static final int EVALIDATION = 5;
+
+    private static final String callCustomValidation(Function function,
+            ViewData view, ValidatorConfig validatorcfg) throws Exception {
+        String url = new StringBuilder("/").append(view.getAppName()).
+                append("/view.html").toString();
+        GenericService service = new GenericService(function, url);
+        Message message = new Message();
+        
+        message.setId("custom_validation");
+        message.add("config", validatorcfg);
+        
+        return service.invoke(message);
+    }
     
     /**
      * 
@@ -61,6 +77,9 @@ public class Controller {
             break;
             
         case DataType.DATE:
+            if (Shell.isInitial(input))
+                break;
+            
             dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
             
             try {
@@ -196,14 +215,14 @@ public class Controller {
     /**
      * 
      * @param view
+     * @param function
      * @param values
      * @param status
-     * @param function
      * @throws Exception
      */
-    private static final void processInputs(ViewData view,
-            Map<String, ?> values, InputStatus status, Function function)
-                    throws Exception {
+    private static final void processInputs(ViewData view, Function function,
+            Map<String, ?> values, InputStatus status) throws Exception {
+        ValidatorConfig validatorcfg;
         Element element;
         String value;
         DataElement dataelement;
@@ -238,9 +257,9 @@ public class Controller {
                     !element.isEnabled())
                 continue;
             
-            input = (InputComponent)element;
             value = getString(values, name);
-            
+
+            input = (InputComponent)element;
             input.setValue(value);
             
             if (!isValueCompatible(input) && !input.isBooleanComponent()) {
@@ -271,6 +290,16 @@ public class Controller {
                 status.input = input;
                 status.error = EINVALID_REFERENCE;
                 continue;
+            }
+            
+            validatorcfg = input.getValidatorConfig();
+            if (validatorcfg != null) {
+                status.message = callCustomValidation(function, view,
+                        validatorcfg);
+                if (status.message != null) {
+                    status.input = input;
+                    status.error = EVALIDATION;
+                }
             }
         }
     }
@@ -332,13 +361,13 @@ public class Controller {
         element = view.getElement(controlname);
         if (element.isControlComponent()) {
             if (!((ControlComponent)element).isCancellable())
-                processInputs(view, values, status, function);
+                processInputs(view, function, values, status);
         } else {
-            processInputs(view, values, status, function);
+            processInputs(view, function, values, status);
         }
         
         if (status.input != null) {
-            view.setFocus(((Component)status.input).getHtmlName());
+            view.setFocus(status.input);
             
             switch (status.error) {
             case EINITIAL:
@@ -351,6 +380,10 @@ public class Controller {
                 
             case EINVALID_REFERENCE:
                 view.message(Const.ERROR, "invalid.value");
+                break;
+                
+            case EVALIDATION:
+                view.message(Const.ERROR, status.message);
                 break;
             }
         }
