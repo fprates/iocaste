@@ -13,14 +13,14 @@ import org.iocaste.documents.common.DocumentModel;
 public class InstallData implements Serializable {
     private static final long serialVersionUID = -4509980464670421174L;
     private List<DocumentModel> models;
-    private Map<DocumentModel, Object[]> values;
+    private Map<DocumentModel, List<Object[]>> values;
     private Map<String, String> links;
     private Set<String> numbers;
     private List<SearchHelpData> shds;
     
     public InstallData() {
         models = new ArrayList<DocumentModel>();
-        values = new HashMap<DocumentModel, Object[]>();
+        values = new HashMap<DocumentModel, List<Object[]>>();
         links = new HashMap<String, String>();
         numbers = new HashSet<String>();
         shds = new ArrayList<SearchHelpData>();
@@ -56,7 +56,17 @@ public class InstallData implements Serializable {
      * @param values
      */
     public final void addValues(DocumentModel model, Object... values) {
-        this.values.put(model, values);
+        List<Object[]> list;
+        
+        if (this.values.containsKey(model)) {
+            list = this.values.get(model);
+        } else {
+            list = new ArrayList<Object[]>();
+            this.values.put(model, list);
+        }
+        
+        list.add(values);
+        this.values.put(model, list);
     }
     
     /**
@@ -116,7 +126,7 @@ public class InstallData implements Serializable {
      * @param model
      * @return
      */
-    public final Object[] getValues(DocumentModel model) {
+    public final List<Object[]> getValues(DocumentModel model) {
         return values.get(model);
     }
     

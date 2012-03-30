@@ -1,6 +1,7 @@
 package org.iocaste.packagetool;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
@@ -28,21 +29,25 @@ public class Services extends AbstractFunction {
      */
     public final Integer install(Message message) throws Exception {
         String shname;
-        ExtendedObject header, object;
+        ExtendedObject header;
         ExtendedObject[] itens;
         DocumentModel tasks, shmodel, shimodel;
         SearchHelpData[] shdata;
-        Object[] values;
+        List<Object[]> values;
         String[] shitens;
-        int i;
         Map<String, String> links;
-        Map<String, DocumentModelItem> shm;
         SHLib shlib;
+        int i;
         InstallData data = (InstallData)message.get("data");
         Documents documents = new Documents(this);
+        Map<String, DocumentModelItem> shm =
+                new HashMap<String, DocumentModelItem>();
         
-        shm = new HashMap<String, DocumentModelItem>();
-        
+        /*
+         * gera modelos;
+         * insere registros;
+         * prepara dados para ajuda de pesquisa.
+         */
         for (DocumentModel model : data.getModels()) {
             if (documents.getModel(model.getName()) != null) {
                 if (documents.updateModel(model) == 0)
@@ -52,37 +57,52 @@ public class Services extends AbstractFunction {
                     throw new IocasteException("create model error.");
             }
             
-            values = data.getValues(model);
-            object = (values == null)? null: new ExtendedObject(model);
-            i = 0;
-            
-            for (DocumentModelItem modelitem : model.getItens()) {
+            for (DocumentModelItem modelitem : model.getItens())
                 if (modelitem.getSearchHelp() != null)
                     shm.put(modelitem.getSearchHelp(), modelitem);
-                
-                if (values == null)
-                    continue;
-                
-                object.setValue(modelitem, values[i++]);
-            }
             
-            if (values != null)
-                documents.save(object);
+            /*
+             * recupera modelo para trazer as queries.
+             */
+            model = documents.getModel(model.getName());
+            values = data.getValues(model);
+            
+            if (values == null)
+                continue;
+            
+            for (Object[] line : values) {
+                header = new ExtendedObject(model);
+                i = 0;
+                
+                for (DocumentModelItem modelitem : model.getItens())
+                    header.setValue(modelitem, line[i++]);
+                
+                documents.save(header);
+            }
         }
         
+        /*
+         * registra tarefas
+         */
         tasks = documents.getModel("TASKS");
         links = data.getLinks();
         for (String link : links.keySet()) {
-            object = new ExtendedObject(tasks);
-            object.setValue("NAME", link);
-            object.setValue("COMMAND", links.get(link));
+            header = new ExtendedObject(tasks);
+            header.setValue("NAME", link);
+            header.setValue("COMMAND", links.get(link));
             
-            documents.save(object);
+            documents.save(header);
         }
         
+        /*
+         * registra objetos de numeração
+         */
         for (String factory : data.getNumberFactories())
             documents.createNumberFactory(factory);
         
+        /*
+         * gera ajudas de pesquisa
+         */
         shdata = data.getSHData();
         if (shdata.length > 0) {
             shlib = new SHLib(this);
