@@ -51,8 +51,12 @@ public class Controller {
         NumberFormat numberformat;
         DateFormat dateformat;
         Locale locale;
-        DataElement dataelement = Shell.getDataElement(input);
+        DataElement dataelement;
         
+        if (Shell.isInitial(input))
+            return;
+        
+        dataelement = Shell.getDataElement(input);
         if (dataelement == null)
             return;
         
@@ -60,11 +64,6 @@ public class Controller {
         value = input.getValue();
         
         switch(dataelement.getType()) {
-        case DataType.NUMC:
-            if (Shell.isInitial(value))
-                input.setValue("0");
-            break;
-            
         case DataType.DEC:
             numberformat = NumberFormat.getNumberInstance(locale);
             
@@ -118,38 +117,17 @@ public class Controller {
         Documents documents;
         ExtendedObject object;
         Object value;
-        String svalue;
         DocumentModelItem reference, item = input.getModelItem();
         
-        if (item == null)
+        if ((item == null) || (Shell.isInitial(input)))
             return true;
         
         reference = item.getReference();
-        svalue = input.getValue();
         
-        if (reference == null || svalue == null)
+        if (reference == null)
             return true;
         
-        switch (Shell.getDataElement(input).getType()) {
-        case DataType.CHAR:
-            value = svalue;
-            if (((String)value).equals(""))
-                return true;
-            
-            break;
-        case DataType.NUMC:
-            value = Long.parseLong(svalue);
-            if ((Long)value == 0)
-                return true;
-            
-            break;
-        case DataType.BOOLEAN:
-            value = Boolean.parseBoolean(svalue);
-            
-            break;
-        default:
-            return true;
-        }
+        value = Shell.getInputValue(input);
         
         documents = new Documents(function); 
         object = documents.getObject(reference.getDocumentModel().getName(),

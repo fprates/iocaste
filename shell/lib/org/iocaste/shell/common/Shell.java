@@ -203,7 +203,10 @@ public class Shell extends AbstractServiceInterface {
         test = value.trim();
         switch (dataelement.getType()) {
         case DataType.NUMC:
-            return (Long.parseLong(test) == 0)? true : false;
+            if (input.isBooleanComponent())
+                return input.isSelected();
+            else
+                return (Long.parseLong(test) == 0)? true : false;
             
         case DataType.DEC:
             numberformat = NumberFormat.getNumberInstance(locale);

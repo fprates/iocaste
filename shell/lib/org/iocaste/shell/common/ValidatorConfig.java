@@ -44,11 +44,17 @@ public class ValidatorConfig implements Serializable {
             return Long.parseLong(input.getValue());
             
         case DataType.DEC:
+            if (Shell.isInitial(input))
+                return (double)0;
+            
             numberformat = NumberFormat.getNumberInstance(locale);
             
             return numberformat.parse(input.getValue()).doubleValue();
             
         case DataType.DATE:
+            if (Shell.isInitial(input))
+                return null;
+            
             dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
             
             return dateformat.parse(input.getValue());
