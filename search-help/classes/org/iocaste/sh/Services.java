@@ -108,8 +108,8 @@ public class Services extends AbstractFunction {
         query = "from SH_REFERENCE where SEARCH_HELP = ?";
         shdata = documents.select(query, shname);
         if (shdata != null) {
-            query = new StringBuilder("Search help has pendence on table ").
-                    append(shdata[0].getValue("NAME")).toString();
+            query = new StringBuilder("Search help has pendence on  ").
+                    append(shdata[0].getValue("MODEL_ITEM")).toString();
             throw new IocasteException(query);
         }
         
