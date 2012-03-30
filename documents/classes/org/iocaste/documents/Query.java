@@ -381,10 +381,7 @@ public class Query {
                     throws Exception {
         QueryInfo queryinfo = parseQuery(query, function, queries);
         
-        if (new Iocaste(function).update(queryinfo.query, criteria) == 0)
-            throw new IocasteException("");
-        
-        return 1;
+        return new Iocaste(function).update(queryinfo.query, criteria);
     }
 
 }
