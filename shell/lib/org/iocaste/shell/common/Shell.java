@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
+import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
@@ -23,13 +24,17 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * 
+     * @param container
      * @param inputitem
+     * @param name
+     * @param values
      * @return
      */
-    public static final Element createInputItem(Container container,
-            AbstractInputComponent inputitem, String name) {
+    public static final InputComponent copyInputItem(Container container,
+            InputComponent inputitem, String name, Map<String, String> values) {
         TextField tfield;
         CheckBox cbox;
+        ListBox lbox;
         
         switch (inputitem.getComponentType()) {
         case TEXT_FIELD:
@@ -54,6 +59,19 @@ public class Shell extends AbstractServiceInterface {
             cbox.setDataElement(inputitem.getDataElement());
             
             return cbox;
+            
+        case LIST_BOX:
+            lbox = new ListBox(container, name);
+            lbox.setStyleClass(inputitem.getStyleClass());
+            lbox.setValue(inputitem.getValue());
+            lbox.setModelItem(inputitem.getModelItem());
+            lbox.setEnabled(inputitem.isEnabled());
+            lbox.setDataElement(inputitem.getDataElement());
+            
+            for (String key : values.keySet())
+                lbox.add(key, values.get(key));
+            
+            return lbox;
             
         default:
             return null;
@@ -129,8 +147,7 @@ public class Shell extends AbstractServiceInterface {
      * @param input
      * @return
      */
-    public static final Object getInputValue(InputComponent input)
-            throws Exception {
+    public static final Object getInputValue(InputComponent input) {
         DateFormat dateformat;
         NumberFormat numberformat;
         String value = input.getValue();
@@ -148,14 +165,22 @@ public class Shell extends AbstractServiceInterface {
                 return null;
             
             dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-            return dateformat.parse(value);
+            try {
+                return dateformat.parse(value);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         
         case DataType.DEC:
             if (isInitial(input))
                 return 0;
             
             numberformat = NumberFormat.getNumberInstance(locale);
-            return numberformat.parse(value);
+            try {
+                return numberformat.parse(value);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
             
         default:
             return value;
@@ -304,8 +329,14 @@ public class Shell extends AbstractServiceInterface {
         DateFormat dateformat;
         NumberFormat numberformat;
         Locale locale = input.getLocale();
+        DataElement dataelement = Shell.getDataElement(input);
         
-        switch (Shell.getDataElement(input).getType()) {
+        if (dataelement == null) {
+            input.setValue((String)value);
+            return;
+        }
+        
+        switch (dataelement.getType()) {
         case DataType.NUMC:
             if (input.isBooleanComponent())
                 input.setSelected(((Long)value == 0)? false : true);
