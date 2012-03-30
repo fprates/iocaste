@@ -8,6 +8,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.XMLElement;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Text;
 
@@ -17,6 +18,7 @@ public class DataItemRenderer {
         Text text;
         List<XMLElement> coltags;
         DocumentModelItem modelitem;
+        InputComponent input;
         DocumentModel model = null;
         DataForm form = (DataForm)dataitem.getContainer();
         XMLElement coltag, itemtag = new XMLElement("tr");
@@ -43,9 +45,10 @@ public class DataItemRenderer {
         
         coltag = new XMLElement("td");
         coltags = new ArrayList<XMLElement>();
-        
-        Renderer.renderElement(coltags,
-                Shell.createInputItem(null, dataitem, inputname), config);
+
+        input = Shell.copyInputItem(null, dataitem, inputname, dataitem.
+                getValues());
+        Renderer.renderElement(coltags, input, config);
         
         coltag.addChildren(coltags);
         itemtag.addChild(coltag);

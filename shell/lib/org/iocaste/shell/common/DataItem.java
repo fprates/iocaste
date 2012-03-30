@@ -1,15 +1,44 @@
 package org.iocaste.shell.common;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class DataItem extends AbstractInputComponent {
     private static final long serialVersionUID = 3376883855229003535L;
+    private Map<String, String> values;
     
     public DataItem(DataForm form, Const type, String name) {
         super(form, Const.DATA_ITEM, type, name);
         
         form.add(this);
         
+        values = new LinkedHashMap<String, String>();
         setStyleClass("form");
         setLength(20);
+    }
+    
+    /**
+     * 
+     * @param key
+     * @param value
+     */
+    public final void add(String key, String value) {
+        values.put(key, value);
+    }
+    
+    /**
+     * 
+     */
+    public final void clear() {
+        values.clear();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Map<String, String> getValues() {
+        return values;
     }
     
     /*
