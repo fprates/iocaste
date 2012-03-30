@@ -40,7 +40,7 @@ public class Common {
         TYPE("item.type", null),
         LENGTH("item.length", "DATAELEMENT.LENGTH"),
         DECIMALS("item.dec", "DATAELEMENT.DECIMALS"),
-        UPCASE("item.upcase", null),
+        UPCASE("item.upcase", "DATAELEMENT.UPCASE"),
         ITEM_REFERENCE("item.reference", "MODEL.NAME"),
         MODEL_REFERENCE("model.reference", "MODELITEM.NAME"),
         SEARCH_HELP("item.sh", "SEARCH_HELP.NAME");

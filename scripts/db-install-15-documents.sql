@@ -98,7 +98,7 @@ insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.NAME'
 insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.DECIMALS', 0, 2, 3, 0);
 insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.LENGTH', 0, 4, 3, 0);
 insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.TYPE', 0, 1, 3, 0);
-insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.UPCASE', 0, 1, 1, 0);
+insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.UPCASE', 0, 1, 3, 0);
 insert into docs004(iname, docid) values('DATAELEMENT.NAME', 'DATAELEMENT');
 insert into docs005(tname, docid) values('DOCS003', 'DATAELEMENT');
 
