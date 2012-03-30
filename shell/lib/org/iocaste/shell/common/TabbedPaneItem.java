@@ -17,8 +17,9 @@ public class TabbedPaneItem implements Serializable {
      * 
      * @return
      */
-    public final Container getContainer() {
-        return container;
+    @SuppressWarnings("unchecked")
+    public final <T extends Container> T getContainer() {
+        return (T)container;
     }
     
     /**
