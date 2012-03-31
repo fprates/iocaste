@@ -14,9 +14,11 @@ public class ValidatorConfig implements Serializable {
     private static final long serialVersionUID = 7221911835519740078L;
     private Map<String, InputComponent> inputs;
     private String classname;
+    private Map<String, Object> values;
     
     public ValidatorConfig() {
         inputs = new HashMap<String, InputComponent>();
+        values = new HashMap<String, Object>();
     }
     
     /**
@@ -25,6 +27,15 @@ public class ValidatorConfig implements Serializable {
      */
     public final void add(InputComponent input) {
         inputs.put(input.getName(), input);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param value
+     */
+    public final void add(String name, Object value) {
+        values.put(name, value);
     }
     
     /**
@@ -72,6 +83,15 @@ public class ValidatorConfig implements Serializable {
         return classname;
     }
     
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public final <T> T getValue(String name) {
+        return (T)values.get(name);
+    }
     /**
      * 
      * @param validator

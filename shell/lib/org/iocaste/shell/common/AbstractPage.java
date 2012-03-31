@@ -38,6 +38,8 @@ public abstract class AbstractPage extends AbstractFunction {
         Validator validator = (Validator)Class.forName(config.getClassName()).
                 newInstance();
         
+        validator.setFunction(this);
+        
         return validator.validate(config);
     }
     
@@ -52,9 +54,6 @@ public abstract class AbstractPage extends AbstractFunction {
         ViewData view = message.get("view");
         String action, controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
-        
-        if (returnBeforeActionCall(view))
-            return view;
         
         if (control.getType() == Const.SEARCH_HELP) {
             view.export("sh", control);
@@ -128,15 +127,6 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view
      */
     public void home(ViewData view) { }
-    
-    /**
-     * 
-     * @param cdata
-     * @param vdata
-     */
-    protected boolean returnBeforeActionCall(ViewData vdata) throws Exception {
-        return false;
-    };
     
     /**
      * 
