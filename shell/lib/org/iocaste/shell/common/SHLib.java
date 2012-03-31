@@ -40,7 +40,7 @@ public class SHLib extends AbstractServiceInterface {
         message.setId("get");
         message.add("name", name);
         
-        return (ExtendedObject[])call(message);
+        return call(message);
     }
     
     /**
@@ -55,7 +55,7 @@ public class SHLib extends AbstractServiceInterface {
         message.setId("remove");
         message.add("shname", name);
         
-        return (Integer)call(message);
+        return call(message);
     }
     
     /**

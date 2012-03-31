@@ -18,17 +18,7 @@ public class Services extends AbstractFunction {
         export("save", "save");
         export("assign", "assign");
         export("remove", "remove");
-    }
-    
-    /**
-     * 
-     * @param model
-     * @param item
-     * @return
-     */
-    private final String composeName(String model, Object item) {
-        return new StringBuilder(model).append(".").
-                append(item).toString();
+        export("update", "update");
     }
     
     /**
@@ -47,6 +37,17 @@ public class Services extends AbstractFunction {
         reference.setValue("SEARCH_HELP", item.getSearchHelp());
         
         return documents.save(reference);
+    }
+    
+    /**
+     * 
+     * @param model
+     * @param item
+     * @return
+     */
+    private final String composeName(String model, Object item) {
+        return new StringBuilder(model).append(".").
+                append(item).toString();
     }
     
     /**
@@ -132,13 +133,43 @@ public class Services extends AbstractFunction {
         ExtendedObject header = message.get("header");
         ExtendedObject[] itens = message.get("itens");
 
-        shname = (String)header.getValue("NAME");
-        model = (String)header.getValue("MODEL");
+        shname = header.getValue("NAME");
+        model = header.getValue("MODEL");
         export = composeName(model, header.getValue("EXPORT"));
         
         header.setValue("EXPORT", export);
         documents.save(header);
         
+        for (ExtendedObject item : itens) {
+            shitemname = (String)item.getValue("ITEM");
+            
+            item.setValue("NAME", composeName(shname, shitemname));
+            item.setValue("ITEM", composeName(model, shitemname));
+            item.setValue("SEARCH_HELP", shname);
+            
+            documents.save(item);
+        }
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void update(Message message) throws Exception {
+        String model, export, shname, shitemname;
+        ExtendedObject header = message.get("header");
+        ExtendedObject[] itens = message.get("itens");
+        Documents documents = new Documents(this);
+
+        shname = header.getValue("NAME");
+        model = header.getValue("MODEL");
+        export = composeName(model, header.getValue("EXPORT"));
+        
+        header.setValue("EXPORT", export);
+        documents.modify(header);
+        
+        documents.update("delete from SH_ITENS where SEARCH_HELP = ?", shname);
         for (ExtendedObject item : itens) {
             shitemname = (String)item.getValue("ITEM");
             
