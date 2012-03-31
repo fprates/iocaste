@@ -117,13 +117,16 @@ public class Controller {
         Documents documents;
         ExtendedObject object;
         Object value;
-        DocumentModelItem reference, item = input.getModelItem();
+        DocumentModelItem reference, item;
         
-        if ((item == null) || (Shell.isInitial(input)))
+        if (Shell.isInitial(input))
+            return true;
+        
+        item = input.getModelItem();
+        if (item == null)
             return true;
         
         reference = item.getReference();
-        
         if (reference == null)
             return true;
         
@@ -263,8 +266,7 @@ public class Controller {
             if (dataelement.isUpcase())
                 input.setValue(value.toUpperCase());
             
-            if (!hasValidReference(input, function) &&
-                    input.isReferenceValidable()) {
+            if (!hasValidReference(input, function)) {
                 status.input = input;
                 status.error = EINVALID_REFERENCE;
                 continue;

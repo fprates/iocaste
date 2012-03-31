@@ -150,7 +150,8 @@ public class TableItem implements Serializable {
             
             input = (InputComponent)element;
             modelitem = column.getModelItem();
-            input.setModelItem(modelitem);
+            if (input.getModelItem() == null)
+                input.setModelItem(modelitem);
             
             if (modelitem == null)
                 continue;
