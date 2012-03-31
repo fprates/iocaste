@@ -170,17 +170,6 @@ public class Main extends AbstractPage {
         Rename.ok(view, this);
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractPage#returnBeforeActionCall(
-     *     org.iocaste.shell.common.ViewData)
-     */
-    @Override
-    public final boolean returnBeforeActionCall(ViewData view)
-            throws Exception {
-        return SHStructure.validate(view, this);
-    }
-    
     /**
      * 
      * @param vdata

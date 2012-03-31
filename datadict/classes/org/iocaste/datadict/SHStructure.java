@@ -17,6 +17,7 @@ import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextField;
+import org.iocaste.shell.common.ValidatorConfig;
 import org.iocaste.shell.common.ViewData;
 
 public class SHStructure {
@@ -26,14 +27,11 @@ public class SHStructure {
         "sh-editor-update"
     };
     
-    private static String composeName(String model, String item) {
-        return new StringBuilder(model).append(".").append(item).toString();
-    }
-    
     /**
      * 
      * @param mode
      * @param itens
+     * @param view
      * @param object
      */
     private static void insertItem(byte mode, Table itens, ViewData view,
@@ -42,21 +40,40 @@ public class SHStructure {
         String name;
         TableItem item = new TableItem(itens);
         DocumentModel model = itens.getModel();
+        ValidatorConfig validatorcfg = new ValidatorConfig();
+        InputComponent modelinput = ((DataForm)view.getElement("header")).
+                get("MODEL");
+        
+        validatorcfg.add(modelinput);
+        validatorcfg.setValidator(SHItemValidator.class);
         
         for (DocumentModelItem modelitem : model.getItens()) {
             name = modelitem.getName();
+            
             tfield = new TextField(itens, name);
-            tfield.setModelItem(modelitem);
-            tfield.setReferenceValidable(false);
-            tfield.setEnabled((mode == Common.SHOW)? false : true);
-            
-            if ((mode == Common.SHOW) || name.equals("NAME"))
-                tfield.setObligatory(false);
-            
-            if (name.equals("ITEM"))
-                view.setFocus(tfield);
-            
             item.add(tfield);
+            tfield.getModelItem().setReference(null);
+            
+            switch (mode) {
+            case Common.SHOW:
+                tfield.setEnabled(false);
+                if (name.equals("NAME"))
+                    tfield.setObligatory(false);
+                
+                break;
+                
+            default:
+                tfield.setEnabled(true);
+                
+                break;
+            }
+            
+            if (name.equals("ITEM")) {
+                validatorcfg.add(tfield);
+                tfield.setValidatorConfig(validatorcfg);
+                view.setFocus(tfield);
+                modelitem.getDataElement().setLength(24);
+            }
         }
         
         if (object != null)
@@ -73,6 +90,7 @@ public class SHStructure {
         DataItem ditem;
         String name;
         ExtendedObject[] oitens;
+        ValidatorConfig validatorcfg;
         Container container = new Form(view, "main");
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel("SEARCH_HELP");
@@ -84,6 +102,9 @@ public class SHStructure {
         
         if (mode != Common.CREATE)
             header.setObject((ExtendedObject)view.getParameter("header"));
+        
+        validatorcfg = new ValidatorConfig();
+        validatorcfg.setValidator(SHExportValidator.class);
         
         for (Element element : header.getElements()) {
             if (element.getType() != Const.DATA_ITEM)
@@ -99,8 +120,16 @@ public class SHStructure {
                 continue;
             }
             
-            if (name.equals("EXPORT"))
-                ditem.setReferenceValidable(false);
+            if (name.equals("MODEL"))
+                validatorcfg.add(ditem);
+            
+            if (name.equals("EXPORT")) {
+                validatorcfg.add(ditem);
+                
+                ditem.getModelItem().getDataElement().setLength(24);
+                ditem.getModelItem().setReference(null);
+                ditem.setValidatorConfig(validatorcfg);
+            }
             
             ditem.setObligatory((mode == Common.SHOW)? false : true);
             ditem.setEnabled((mode == Common.SHOW)? false : true);
@@ -136,7 +165,7 @@ public class SHStructure {
         case Common.UPDATE:
             itens.setMark(true);
             
-            oitens = view.getParameter("shitens");
+            oitens = view.getParameter("itens");
             for (ExtendedObject item : oitens)
                 insertItem(mode, itens, view, item);
             
@@ -196,55 +225,5 @@ public class SHStructure {
         Table itens = view.getElement("itens");
         
         insertItem(Common.getMode(view), itens, view, null);
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param function
-     * @return
-     * @throws Exception
-     */
-    public static final boolean validate(ViewData view, Function function)
-            throws Exception {
-        DataForm header;
-        Table itens;
-        Element element;
-        String model, value;
-        Documents documents;
-        
-        if (!view.getPageName().equals("shstructure"))
-            return false;
-        
-        documents = new Documents(function);
-        header = view.getElement("header");
-        model = header.get("MODEL").getValue();
-        element = header.get("EXPORT");
-        value = composeName(model, ((InputComponent)element).getValue());
-        
-        if (documents.getObject("MODELITEM", value) == null) {
-            view.message(Const.ERROR, "invalid.model.item");
-            view.setFocus(element);
-            
-            return true;
-        }
-        
-        itens = view.getElement("itens");
-        
-        for (TableItem item : itens.getItens()) {
-            element = item.get("ITEM");
-            
-            value = composeName(model, ((InputComponent)element).getValue());
-            
-            if (documents.getObject("MODELITEM", value) != null)
-                continue;
-            
-            view.message(Const.ERROR, "invalid.model.item");
-            view.setFocus(element);
-            
-            return true;
-        }
-        
-        return false;
     }
 }
