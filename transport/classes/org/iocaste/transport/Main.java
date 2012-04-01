@@ -185,7 +185,7 @@ public class Main extends AbstractPage {
         instructions.add(IDTAG);
         
         for (TableItem item : objects.getItens()) {
-            name = ((InputComponent)item.get("object")).getValue();
+            name = ((InputComponent)item.get("object")).get();
             
             if (name.equals(""))
                 continue;
@@ -411,7 +411,7 @@ public class Main extends AbstractPage {
         Table table = view.getElement("importtable");
         
         fileentry = (FileEntry)table.get(0).get("a");
-        filename = fileentry.getValue();
+        filename = fileentry.get();
         
         switch (fileentry.getError()) {
         case FileEntry.FILE_NOT_FOUND:

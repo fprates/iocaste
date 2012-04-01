@@ -147,7 +147,7 @@ public class TableStructure {
             
             if (name.equals("modelname")) {
                 dataitem.setObligatory(false);
-                dataitem.setValue(modelname);
+                dataitem.set(modelname);
                 dataitem.setEnabled(false);
                 dataitem.setDataElement(references[Common.MODELNAME]);
                 
@@ -162,7 +162,7 @@ public class TableStructure {
                 if (model == null)
                     continue;
                 
-                dataitem.setValue(model.getTableName());
+                dataitem.set(model.getTableName());
                 continue;
             }
             
@@ -174,7 +174,7 @@ public class TableStructure {
                 if (model == null)
                     continue;
                 
-                dataitem.setValue(model.getClassName());
+                dataitem.set(model.getClassName());
                 continue;
             }
         }

@@ -114,7 +114,7 @@ public class SHStructure {
             name = ditem.getName();
             
             if (name.equals("NAME")) {
-                ditem.setValue((String)view.getParameter("shname"));
+                ditem.set(view.getParameter("shname"));
                 ditem.setEnabled(false);
                 
                 continue;

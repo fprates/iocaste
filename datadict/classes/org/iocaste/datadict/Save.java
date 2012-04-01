@@ -32,17 +32,16 @@ public class Save {
         Table itens = view.getElement("itens");
         DocumentModel model = new DocumentModel();
         byte modo = Common.getMode(view);
-        int i = 0;
         
         if (Common.hasItemDuplicated(view))
             return;
         
-        model.setName(structure.get("modelname").getValue());
-        model.setClassName(structure.get("modelclass").getValue());
-        model.setTableName(structure.get("modeltable").getValue());
+        model.setName((String)structure.get("modelname").get());
+        model.setClassName((String)structure.get("modelclass").get());
+        model.setTableName((String)structure.get("modeltable").get());
         
         for (TableItem item : itens.getItens()) {
-            itemname = Common.getTableValue(modo, item, "item.name");
+            itemname = Common.getTableValue(item, "item.name");
             
             dataelement = new DataElement();
             switch (modo) {
@@ -52,39 +51,38 @@ public class Save {
                         append(itemname).toString());
                 break;
             case Common.UPDATE:
-                dataelement.setName(Common.getTableValue(
-                        modo, item, "item.element"));
+                dataelement.setName((String)Common.getTableValue(
+                        item, "item.element"));
                 break;
             }
             
-            dataelement.setLength(Integer.parseInt(Common.getTableValue(
-                    modo, item, "item.length")));
-            dataelement.setDecimals(Integer.parseInt(Common.getTableValue(
-                    modo, item, "item.dec")));
-            dataelement.setType(Integer.parseInt(Common.getTableValue(
-                    modo, item, "item.type")));
+            dataelement.setLength((Integer)Common.getTableValue(
+                    item, "item.length"));
+            dataelement.setDecimals((Integer)Common.getTableValue(
+                    item, "item.dec"));
+            dataelement.setType((Integer)Common.getTableValue(
+                    item, "item.type"));
             upcase = item.get("item.upcase");
             dataelement.setUpcase(upcase.isSelected());
             
             modelitem = new DocumentModelItem();
-            modelitem.setIndex(i++);
             modelitem.setName(itemname);
-            modelitem.setTableFieldName(Common.getTableValue(
-                    modo, item, "item.tablefield"));
-            modelitem.setAttributeName(Common.getTableValue(
-                    modo, item, "item.classfield"));
+            modelitem.setTableFieldName((String)Common.getTableValue(
+                    item, "item.tablefield"));
+            modelitem.setAttributeName((String)Common.getTableValue(
+                    item, "item.classfield"));
             modelitem.setDataElement(dataelement);
             modelitem.setDocumentModel(model);
             
-            modelref = Common.getTableValue(modo, item, "model.reference");
+            modelref = Common.getTableValue(item, "model.reference");
             if (modelref != null && !modelref.equals("")) {
-                itemref = Common.getTableValue(modo, item, "item.reference");
+                itemref = Common.getTableValue(item, "item.reference");
                 reference = documents.getModel(modelref).getModelItem(itemref);
                 modelitem.setReference(reference);
             }
             
-            modelitem.setSearchHelp(Common.
-                    getTableValue(modo, item, "item.sh"));
+            modelitem.setSearchHelp((String)Common.
+                    getTableValue(item, "item.sh"));
             
             model.add(modelitem);
             

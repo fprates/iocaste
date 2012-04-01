@@ -117,7 +117,7 @@ public class Main extends AbstractPage {
         ExtendedObject task = null;
         DataForm form = vdata.getElement("selector");
         DataItem cmdline = form.get("command");
-        String command = cmdline.getValue();
+        String command = cmdline.get();
         String page = "main";
         String app = null;
         
@@ -126,7 +126,7 @@ public class Main extends AbstractPage {
         else
             command.trim();
         
-        cmdline.setValue("");
+        cmdline.set(null);
         parsed = command.split("\\s");
         vdata.clearParameters();
 

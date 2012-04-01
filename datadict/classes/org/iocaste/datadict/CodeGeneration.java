@@ -14,7 +14,7 @@ public class CodeGeneration {
         String settype;
         DataForm form = view.getElement("structure.form");
         Table itens = view.getElement("itens");
-        String value, classname = form.get("modelclass").getValue();
+        String value, classname = form.get("modelclass").get();
         String[] parts = classname.split("\\.");
         StringBuilder sb = new StringBuilder("package ");
         StringBuilder getter = new StringBuilder();
@@ -47,7 +47,7 @@ public class CodeGeneration {
             getter.setLength(0);
             setter.setLength(0);
             
-            value = Common.getTableValue(modo, item, "item.type");
+            value = Common.getTableValue(item, "item.type");
             if (modo == Common.SHOW) {
                 if (value.equals("char"))
                     value = "0";
@@ -76,7 +76,7 @@ public class CodeGeneration {
                 break;
             }
             
-            value = Common.getTableValue(modo, item, "item.classfield");
+            value = Common.getTableValue(item, "item.classfield");
             sb.append(value).append(";");
             code.add(sb.toString());
             

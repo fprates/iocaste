@@ -47,22 +47,22 @@ public class ItemDetails {
          */
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "model.name");
         dataitem.setModelItem(model.getModelItem("MODEL"));
-        dataitem.setValue(modelname);
+        dataitem.set(modelname);
         dataitem.setEnabled(false);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "item.name");
         dataitem.setModelItem(model.getModelItem("NAME"));
-        dataitem.setValue(itemname);
+        dataitem.set(itemname);
         dataitem.setEnabled(false);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.model");
         dataitem.setModelItem(model.getModelItem("MODEL"));
-        dataitem.setValue(modelref);
+        dataitem.set(modelref);
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.item");
         dataitem.setModelItem(model.getModelItem("NAME"));
-        dataitem.setValue(itemref);
+        dataitem.set(itemref);
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
 
         /*
@@ -73,19 +73,19 @@ public class ItemDetails {
         
         dataitem = new DataItem(techform, Const.TEXT_FIELD, "item.classfield");
         dataitem.setModelItem(model.getModelItem("ATTRIB"));
-        dataitem.setValue(classfield);
+        dataitem.set(classfield);
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         dataitem = new DataItem(techform, Const.TEXT_FIELD, "item.sh");
         dataitem.setModelItem(documents.getModel("SH_REFERENCE").
                 getModelItem("NAME"));
-        dataitem.setValue(sh);
+        dataitem.set(sh);
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         dataitem = new DataItem(techform, Const.CHECKBOX, "item.upcase");
         dataitem.setModelItem(documents.getModel("DATAELEMENT").
                 getModelItem("UPCASE"));
-        dataitem.setValue(upcase);
+        dataitem.set(upcase);
         dataitem.setEnabled((mode == Common.SHOW)? false : true);
         
         if (mode != Common.SHOW) {
@@ -104,7 +104,7 @@ public class ItemDetails {
     public static final void select(ViewData view) {
         DataForm form = view.getElement("header");
         String itemname, modelref, itemref, upcase, classfield, sh, modelname =
-                form.get("modelname").getValue();
+                form.get("modelname").get();
         TableItem selected = null;
         Table itens = view.getElement("itens");
         byte mode = Common.getMode(view);
@@ -129,12 +129,12 @@ public class ItemDetails {
             return;
         }
         
-        itemname = Common.getTableValue(mode, selected, "item.name");
-        modelref = Common.getTableValue(mode, selected,"model.reference");
-        itemref = Common.getTableValue(mode, selected, "item.reference");
-        upcase = Common.getTableValue(mode, selected, "item.upcase");
-        classfield = Common.getTableValue(mode, selected, "item.classfield");
-        sh = Common.getTableValue(mode, selected, "item.sh");
+        itemname = Common.getTableValue(selected, "item.name");
+        modelref = Common.getTableValue(selected,"model.reference");
+        itemref = Common.getTableValue(selected, "item.reference");
+        upcase = Common.getTableValue(selected, "item.upcase");
+        classfield = Common.getTableValue(selected, "item.classfield");
+        sh = Common.getTableValue(selected, "item.sh");
         
         view.setReloadableView(true);
         view.export("mode", mode);
@@ -161,17 +161,17 @@ public class ItemDetails {
         DocumentModelItem modelitemref;
         boolean upcase; 
         DataForm form = view.getElement("fkform");
-        String itemname = ((DataItem)form.get("item.name")).getValue();
+        String itemname = ((DataItem)form.get("item.name")).get();
         String shname, classfield, modelref = null, itemref = null;
         Shell shell = new Shell(function);
         ViewData structview = shell.getView(view, "tbstructure");
         Table itens = structview.getElement("itens");
         
         input = (DataItem)form.get("reference.model");
-        if (!Shell.isInitial(input)) {
-            modelref = input.getValue();
+        if (input.get() != null) {
+            modelref = input.get();
             model = new Documents(function).getModel(modelref);
-            itemref = ((DataItem)form.get("reference.item")).getValue();
+            itemref = ((DataItem)form.get("reference.item")).get();
             modelitemref = model.getModelItem(itemref);
             
             if (modelitemref == null) {
@@ -188,14 +188,14 @@ public class ItemDetails {
         }
         
         form = view.getElement("techform");
-        shname = ((DataItem)form.get("item.sh")).getValue();
+        shname = ((DataItem)form.get("item.sh")).get();
         upcase = ((DataItem)form.get("item.upcase")).isSelected();
-        classfield = ((DataItem)form.get("item.classfield")).getValue();
+        classfield = ((DataItem)form.get("item.classfield")).get();
         
         for (TableItem item : itens.getItens()) {
             input = (InputComponent)item.get("item.name");
             
-            if (!input.getValue().equals(itemname))
+            if (!input.get().equals(itemname))
                 continue;
             
             Common.setTableValue(item, "item.reference", itemref);

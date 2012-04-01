@@ -37,7 +37,7 @@ public class Bookmark {
         item = form.get("NAME");
         switch (mode) {
         case CREATE:
-            item.setValue((String)view.getParameter("name"));
+            item.set((String)view.getParameter("name"));
             break;
         case EDIT:
             form.setObject((ExtendedObject)view.getParameter("task"));
@@ -65,7 +65,7 @@ public class Bookmark {
         ExtendedObject task;
         Documents documents;
         DataForm form = view.getElement("selector");
-        String command = form.get("command").getValue();
+        String command = form.get("command").get();
         
         command = (command == null)? "" : command.toUpperCase();
         

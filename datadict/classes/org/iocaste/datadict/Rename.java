@@ -30,7 +30,7 @@ public class Rename {
                 getDataElement("MODEL.NAME");
         
         oldname.setEnabled(false);
-        oldname.setValue((String)view.getParameter("oldname"));
+        oldname.set(view.getParameter("oldname"));
         oldname.setDataElement(delement);
         
         newname.setObligatory(true);
@@ -48,7 +48,7 @@ public class Rename {
      */
     public static final void main(ViewData view) {
         DataForm form = view.getElement("modelform");
-        String oldname = form.get("modelname").getValue();
+        String oldname = form.get("modelname").get();
         
         view.setReloadableView(true);
         view.export("oldname", oldname);
@@ -64,8 +64,8 @@ public class Rename {
     public static final void ok(ViewData view, Function function)
             throws Exception {
         DataForm form = view.getElement("rename.form");
-        String oldname = form.get("oldname").getValue();
-        String newname = form.get("newname").getValue();
+        String oldname = form.get("oldname").get();
+        String newname = form.get("newname").get();
         Documents documents = new Documents(function);
         
         if (documents.getModel(newname) != null) {

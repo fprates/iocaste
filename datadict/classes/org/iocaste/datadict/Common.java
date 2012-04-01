@@ -37,7 +37,7 @@ public class Common {
         CLASS_FIELD("item.classfield", "MODELITEM.ATTRIB"),
         KEY("item.key", null),
         DATA_ELEMENT("item.element", "DATAELEMENT.NAME"),
-        TYPE("item.type", null),
+        TYPE("item.type", "DATAELEMENT.TYPE"),
         LENGTH("item.length", "DATAELEMENT.LENGTH"),
         DECIMALS("item.dec", "DATAELEMENT.DECIMALS"),
         UPCASE("item.upcase", "DATAELEMENT.UPCASE"),
@@ -91,14 +91,14 @@ public class Common {
     
     /**
      * 
-     * @param modo
      * @param item
      * @param name
      * @return
      */
-    public static final String getTableValue(byte modo, TableItem item,
-            String name) {
-        return ((InputComponent)item.get(name)).getValue();
+    public static final <T> T getTableValue(TableItem item, String name) {
+        InputComponent input = item.get(name);
+        
+        return input.get();
     }
     
     /**
@@ -109,7 +109,7 @@ public class Common {
     public static final int getTpObjectValue(ViewData view) {
         RadioButton tpobj = view.getElement("tpobject");
         
-        return Integer.parseInt(tpobj.getValue());
+        return Integer.parseInt((String)tpobj.get());
     }
     
     /**
@@ -121,20 +121,19 @@ public class Common {
         String name, classfield, tablefield;
         String testname, testclassfield, testtablefield;
         Table itens = vdata.getElement("itens");
-        byte modo = Common.getMode(vdata);
         
         for (TableItem item : itens.getItens()) {
-            name = getTableValue(modo, item, "item.name");
-            classfield = getTableValue(modo, item, "item.classfield");
-            tablefield = getTableValue(modo, item, "item.tablefield");
+            name = getTableValue(item, "item.name");
+            classfield = getTableValue(item, "item.classfield");
+            tablefield = getTableValue(item, "item.tablefield");
             
             for (TableItem test : itens.getItens()) {
                 if (item == test)
                     continue;
                 
-                testname = getTableValue(modo, test, "item.name");
-                testclassfield = getTableValue(modo, test, "item.classfield");
-                testtablefield = getTableValue(modo, test, "item.tablefield");
+                testname = getTableValue(test, "item.name");
+                testclassfield = getTableValue(test, "item.classfield");
+                testtablefield = getTableValue(test, "item.tablefield");
                 
                 if (name.equals(testname)) {
                     vdata.message(Const.ERROR, "item.name.duplicated");
@@ -225,8 +224,8 @@ public class Common {
             
             if (helper.name.equals("item.length")) {
                 helper.type = Const.TEXT_FIELD;
-                helper.value = (modelitem == null)? null : Integer.toString(
-                        dataelement.getLength());
+                helper.value = (modelitem == null)?
+                        null : dataelement.getLength();
                 helper.obligatory = true;
 
                 newField(helper);
@@ -236,8 +235,8 @@ public class Common {
             
             if (helper.name.equals("item.dec")) {
                 helper.type = Const.TEXT_FIELD;
-                helper.value = (modelitem == null)? null : Integer.toString(
-                        dataelement.getDecimals());
+                helper.value = (modelitem == null)?
+                        null : dataelement.getDecimals();
                 helper.obligatory = false;
                 
                 newField(helper);
@@ -275,14 +274,14 @@ public class Common {
             if (helper.name.equals("item.type")) {
                 helper.obligatory = false;
                 helper.type = Const.LIST_BOX;
-                helper.value = (modelitem == null)? null : Integer.toString(
-                        dataelement.getType());
+                helper.value = (modelitem == null)?
+                        null : dataelement.getType();
                 
                 list = (ListBox)newField(helper);
-                list.add("char", Integer.toString(DataType.CHAR));
-                list.add("numc", Integer.toString(DataType.NUMC));
-                list.add("dec", Integer.toString(DataType.DEC));
-                list.add("date", Integer.toString(DataType.DATE));
+                list.add("char", DataType.CHAR);
+                list.add("numc", DataType.NUMC);
+                list.add("dec", DataType.DEC);
+                list.add("date", DataType.DATE);
                 
                 continue;
             }
@@ -343,12 +342,12 @@ public class Common {
     private static final Element newField(FieldHelper helper) {
         InputComponent input;
         Table table = helper.item.getTable();
-        Element element = Shell.factory(table, helper.type, helper.name, null);
+        Element element = Shell.factory(table, helper.type, helper.name);
         
         element.setEnabled((helper.mode == Common.SHOW)? false : true);
         
         input = (InputComponent)element;
-        input.setValue(helper.value);
+        input.set(helper.value);
         input.setDataElement(helper.reference);
         input.setObligatory(helper.obligatory);
         
@@ -365,7 +364,7 @@ public class Common {
      */
     public static final void setTableValue(TableItem item, String name,
             String value) {
-        ((InputComponent)item.get(name)).setValue(value);
+        ((InputComponent)item.get(name)).set(value);
     }
 }
 
@@ -373,7 +372,8 @@ class FieldHelper {
     public Const type;
     public int mode;
     public TableItem item;
-    public String name, value;
+    public String name;
+    public Object value;
     public DataElement reference;
     public boolean obligatory;
 }

@@ -38,7 +38,7 @@ public class Main extends AbstractPage {
             return;
         }
         
-        input.setValue(value.getValue());
+        input.set(value.get());
         updateView(view);
         back(vdata);
     }

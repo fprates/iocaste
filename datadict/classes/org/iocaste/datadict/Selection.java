@@ -26,7 +26,7 @@ public class Selection {
             throws Exception {
         SHLib shlib;
         Documents documents = new Documents(function);
-        String name = ((DataItem)view.getElement("modelname")).getValue();
+        String name = ((DataItem)view.getElement("modelname")).get();
         int op = Common.getTpObjectValue(view);
         
         switch (op) {
@@ -68,7 +68,7 @@ public class Selection {
             throws Exception {
         ExtendedObject[] shdata;
         SHLib shlib = new SHLib(function);
-        String shname = ((DataItem)view.getElement("modelname")).getValue();
+        String shname = ((DataItem)view.getElement("modelname")).get();
         
         shdata = shlib.get(shname);
         if (shdata == null) {
@@ -90,7 +90,7 @@ public class Selection {
     public static void deletetb(ViewData view, Function function)
             throws Exception {
         Documents documents = new Documents(function);
-        String modelname = ((DataItem)view.getElement("modelname")).getValue();
+        String modelname = ((DataItem)view.getElement("modelname")).get();
         
         if (documents.getModel(modelname) == null) {
             view.message(Const.ERROR, "model.not.found");
@@ -125,7 +125,7 @@ public class Selection {
         tpobj = new RadioButton(main, "tpobject");
         tpobj.add("0", "table");
         tpobj.add("1", "search.help");
-        tpobj.setValue("0");
+        tpobj.set("0");
         
         new Button(main, "create");
         new Button(main, "show");
@@ -147,7 +147,7 @@ public class Selection {
     public static final void readtb(ViewData view, Function function)
             throws Exception {
         DocumentModel model;
-        String name = ((DataItem)view.getElement("modelname")).getValue();
+        String name = ((DataItem)view.getElement("modelname")).get();
         Documents documents = new Documents(function);
         
         if (documents.getModel(name) == null) {
@@ -172,7 +172,7 @@ public class Selection {
             throws Exception {
         ExtendedObject[] shitens;
         SHLib shlib = new SHLib(function);
-        String name = ((DataItem)view.getElement("modelname")).getValue();
+        String name = ((DataItem)view.getElement("modelname")).get();
         ExtendedObject[] shdata = shlib.get(name);
         
         if (shdata == null) {

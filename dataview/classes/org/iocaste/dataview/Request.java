@@ -9,7 +9,6 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewData;
@@ -50,8 +49,8 @@ public class Request {
      */
     public static final void edit(ViewData vdata, Function function) {
         ExtendedObject[] itens;
-        String modelname = ((InputComponent)vdata.
-                getElement("model.name")).getValue();
+        String modelname = ((InputComponent)vdata.getElement("model.name")).
+                get();
         
         try {
             itens = getTableItens(modelname, function);
@@ -167,14 +166,14 @@ public class Request {
                 if (modelitem == null)
                     continue;
                 
-                value = input.getValue();
+                value = input.get();
                 if (value == null && model.isKey(modelitem))
                     break;
                 
                 if (object == null)
                     object = new ExtendedObject(model);
                 
-                object.setValue(modelitem, Shell.getInputValue(input));
+                object.setValue(modelitem, input.get());
             }
             
             if (object == null)
@@ -194,8 +193,8 @@ public class Request {
     public static final void show(ViewData vdata, Function function)
             throws Exception {
         ExtendedObject[] itens;
-        String modelname = ((InputComponent)vdata.
-                getElement("model.name")).getValue();
+        String modelname = ((InputComponent)vdata.getElement("model.name")).
+                get();
         
         try {
             itens = getTableItens(modelname, function);

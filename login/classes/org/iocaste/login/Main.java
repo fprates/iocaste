@@ -42,7 +42,7 @@ public class Main extends AbstractPage {
             input = (InputComponent)element;
             
             if (input.getName().equals("LOCALE")) {
-                input.setValue("pt_BR");
+                input.set("pt_BR");
                 input.setObligatory(false);
                 continue;
             }
@@ -75,8 +75,8 @@ public class Main extends AbstractPage {
             view.message(Const.ERROR, "invalid.login");
         }
 
-        ((DataItem)view.getElement("USERNAME")).setValue("");
-        ((DataItem)view.getElement("SECRET")).setValue("");
+        ((DataItem)view.getElement("USERNAME")).set(null);
+        ((DataItem)view.getElement("SECRET")).set(null);
     }
     
     /**
