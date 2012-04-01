@@ -24,7 +24,7 @@ public class Shell extends AbstractServiceInterface {
      * @return
      */
     public static final InputComponent copyInputItem(Container container,
-            InputComponent inputitem, String name, Map<String, String> values) {
+            InputComponent inputitem, String name, Map<String, Object> values) {
         TextField tfield;
         CheckBox cbox;
         ListBox lbox;

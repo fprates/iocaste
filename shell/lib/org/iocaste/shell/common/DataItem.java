@@ -5,14 +5,14 @@ import java.util.Map;
 
 public class DataItem extends AbstractInputComponent {
     private static final long serialVersionUID = 3376883855229003535L;
-    private Map<String, String> values;
+    private Map<String, Object> values;
     
     public DataItem(DataForm form, Const type, String name) {
         super(form, Const.DATA_ITEM, type, name);
         
         form.add(this);
         
-        values = new LinkedHashMap<String, String>();
+        values = new LinkedHashMap<String, Object>();
         setStyleClass("form");
         setLength(20);
     }
@@ -22,7 +22,7 @@ public class DataItem extends AbstractInputComponent {
      * @param key
      * @param value
      */
-    public final void add(String key, String value) {
+    public final void add(String key, Object value) {
         values.put(key, value);
     }
     
@@ -37,7 +37,7 @@ public class DataItem extends AbstractInputComponent {
      * 
      * @return
      */
-    public final Map<String, String> getValues() {
+    public final Map<String, Object> getValues() {
         return values;
     }
     
