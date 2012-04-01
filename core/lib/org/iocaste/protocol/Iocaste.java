@@ -73,7 +73,7 @@ public final class Iocaste extends AbstractServiceInterface {
         
         message.setId("get_host");
         
-        return (String)call(message);
+        return call(message);
     }
     
     /**
@@ -86,7 +86,7 @@ public final class Iocaste extends AbstractServiceInterface {
         
         message.setId("get_locale");
         
-        return (Locale)call(message);
+        return call(message);
     }
     
     /**
@@ -101,7 +101,7 @@ public final class Iocaste extends AbstractServiceInterface {
         message.setId("get_system_parameter");
         message.add("parameter", name);
         
-        return (String)call(message);
+        return call(message);
     }
     
     /**
@@ -114,7 +114,7 @@ public final class Iocaste extends AbstractServiceInterface {
         
         message.setId("get_username");
         
-        return (String)call(message);
+        return call(message);
     }
     
     /**
@@ -127,7 +127,7 @@ public final class Iocaste extends AbstractServiceInterface {
         
         message.setId("get_users");
         
-        return (User[])call(message);
+        return call(message);
     }
     
     /**
@@ -140,7 +140,7 @@ public final class Iocaste extends AbstractServiceInterface {
         
         message.setId("is_connected");
         
-        return (Boolean)call(message);
+        return call(message);
     }
     
     /**
@@ -160,7 +160,17 @@ public final class Iocaste extends AbstractServiceInterface {
         message.add("secret", secret);
         message.add("locale", locale);
         
-        return (Boolean)call(message);
+        return call(message);
+    }
+    
+    /**
+     * 
+     */
+    public final void rollback() throws Exception {
+        Message message = new Message();
+        
+        message.setId("rollback");
+        call(message);
     }
     
     /**
@@ -178,7 +188,7 @@ public final class Iocaste extends AbstractServiceInterface {
         message.add("query", query);
         message.add("criteria", criteria);
         
-        return (Object[])call(message);
+        return call(message);
     }
     
     /**
@@ -210,6 +220,6 @@ public final class Iocaste extends AbstractServiceInterface {
     	message.add("query", query);
     	message.add("criteria", criteria);
     	
-    	return (Integer)call(message);
+    	return call(message);
     }
 }

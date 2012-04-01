@@ -47,7 +47,20 @@ public class DBServices {
      * @throws Exception
      */
     public final Connection instance() throws Exception {
-        return ds.getConnection();
+        Connection connection = ds.getConnection();
+        
+        connection.setAutoCommit(false);
+        
+        return connection;
+    }
+    
+    /**
+     * 
+     * @param connection
+     * @throws SQLException
+     */
+    public final void rollback(Connection connection) throws SQLException {
+        connection.rollback();
     }
     
     /**

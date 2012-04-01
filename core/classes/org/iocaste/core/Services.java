@@ -36,6 +36,7 @@ public class Services extends AbstractFunction {
         export("get_users", "getUsers");
         export("is_connected", "isConnected");
         export("login", "login");
+        export("rollback", "rollback");
         export("select", "select");        
         export("set_context", "setContext");
         export("update", "update");
@@ -298,6 +299,16 @@ public class Services extends AbstractFunction {
         sessions.put(sessionid, context);
         
         return true;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void rollback(Message message) throws Exception {
+        String sessionid = message.getSessionid();
+        db.rollback(getDBConnection(sessionid));
     }
     
     /**
