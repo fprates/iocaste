@@ -44,8 +44,8 @@ insert into shell003 (pindx, eindx, pname, value) values (000100040002, 00010004
 insert into shell003 (pindx, eindx, pname, value) values (000100040003, 000100040000, 'font-size', '8pt');
 
 insert into docs001(docid, tname, class) values('STYLE', 'SHELL001', '');
-insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE.NAME', 'STYLE', 0, 'SNAME', 'STYLE.NAME', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.NAME', 0, 12, 0, 1);
+insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE.NAME', 'STYLE', 0, 'SNAME', 'STYLE.NAME', '');
 insert into docs004(iname, docid) values('STYLE.NAME', 'STYLE');
 insert into docs005(tname, docid) values('SHELL001', 'STYLE');
 \p initial configuration saved.

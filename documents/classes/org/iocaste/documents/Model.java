@@ -77,11 +77,11 @@ public class Model {
     public static final int create(DocumentModel model, Function function,
             Map<String, Map<String, String>> queries) throws Exception {
         Iocaste iocaste = new Iocaste(function);
-        
+
+        saveDataElements(iocaste, model);
         saveDocumentHeader(iocaste, model);
         saveDocumentItens(iocaste, model);
         saveDocumentKeys(iocaste, model);
-        saveDataElements(iocaste, model);
         
         Common.parseQueries(model, queries);
         
@@ -291,7 +291,7 @@ public class Model {
      */
     private static final int removeModelItem(Iocaste iocaste,
             DocumentModelItem item) throws Exception {
-        String sherror, query = "delete from docs006 where iname = ?";
+        String error, query = "delete from docs006 where iname = ?";
         String name = Documents.getComposedName(item);
         
         iocaste.update(query, name);
@@ -299,20 +299,24 @@ public class Model {
         query = "delete from shref where iname = ?";
         iocaste.update(query, name);
 
-        sherror = "there is search help dependence on item ";
-        sherror = new StringBuilder(sherror).append(name).toString();
+        error = "there is search help dependence on item ";
+        error = new StringBuilder(error).append(name).toString();
         
         query = "select * from shitm where mditm = ?";
         if (iocaste.select(query, name).length > 0)
-            throw new IocasteException(sherror);
+            throw new IocasteException(error);
             
         query = "select * from shcab where exprt = ?";
         if (iocaste.select(query, name).length > 0)
-            throw new IocasteException(sherror);
+            throw new IocasteException(error);
         
         query = "delete from docs002 where iname = ?";
         if (iocaste.update(query, name) == 0)
-            throw new IocasteException("");
+            throw new IocasteException("error on removing model item");
+        
+        query = "delete from docs003 where ename = ?";
+        if (iocaste.update(query, item.getDataElement().getName()) == 0)
+            throw new IocasteException("erro on removing data element");
         
         return 1;
     }
