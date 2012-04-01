@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -47,13 +48,22 @@ public class Query {
     private static final ExtendedObject getExtendedObjectFrom(
             DocumentModel model, Map<String, Object> line) {
         Object value;
+        DataElement element;
         ExtendedObject object = new ExtendedObject(model);
         
         for (DocumentModelItem modelitem : model.getItens()) {
             value = line.get(modelitem.getTableFieldName());
+            element = modelitem.getDataElement();
             
-            if (modelitem.getDataElement().getType() == DataType.NUMC)
-                value = (value == null)? 0 : ((BigDecimal)value).longValue();
+            switch (element.getType()) {
+            case DataType.NUMC:
+                if (element.getLength() < DataType.MAX_INT_LEN)
+                    value = (value == null)? 0 : ((BigDecimal)value).intValue();
+                else
+                    value = (value == null)?
+                            0l : ((BigDecimal)value).longValue();
+                break;
+            }
             
             object.setValue(modelitem, value);
         }

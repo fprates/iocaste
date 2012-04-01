@@ -31,29 +31,8 @@ public class Model {
         DataElement ddelement = item.getDataElement();
         
         sb.append(" add column ").append(item.getTableFieldName());
-        
-        switch (ddelement.getType()) {
-        case DataType.CHAR:
-            sb.append(" varchar(");
-            sb.append(ddelement.getLength());
-            sb.append(")");
-            break;
-        case DataType.NUMC:
-            sb.append(" numeric(");
-            sb.append(ddelement.getLength());
-            sb.append(")");
-            break;
-        case DataType.DEC:
-            sb.append(" decimal(");            
-            sb.append(ddelement.getLength());
-            sb.append(",");
-            sb.append(ddelement.getDecimals());
-            sb.append(")");
-            break;
-        case DataType.DATE:
-            sb.append(" date");
-            break;
-        }
+
+        setDBFieldsString(sb, ddelement);
         
         reference = item.getReference();
         if (reference != null) {
@@ -193,7 +172,8 @@ public class Model {
         
         tname = Documents.getComposedName(item);
         reference = item.getReference();
-        itemref = (reference == null)? null : Documents.getComposedName(reference);
+        itemref = (reference == null)?
+                null : Documents.getComposedName(reference);
         
         if (iocaste.update(query, tname,
                 model.getName(),

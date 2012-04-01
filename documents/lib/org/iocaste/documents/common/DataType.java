@@ -35,4 +35,5 @@ public class DataType {
     public static final int BOOLEAN = 5;
     public static final boolean UPPERCASE = true;
     public static final boolean KEEPCASE = false;
+    public static final byte MAX_INT_LEN = 10;
 }
