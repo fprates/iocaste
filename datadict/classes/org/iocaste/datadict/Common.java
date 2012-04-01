@@ -250,9 +250,9 @@ public class Common {
                 
                 if (modelitem != null) {
                     model = modelitem.getDocumentModel();
-                    helper.value =  model.isKey(modelitem)? "on" : "off";
+                    helper.value =  model.isKey(modelitem);
                 } else {
-                    helper.value = "off";
+                    helper.value = false;
                 }
                 
                 newField(helper);
@@ -292,9 +292,9 @@ public class Common {
                 
                 if (modelitem != null) {
                     model = modelitem.getDocumentModel();
-                    helper.value =  dataelement.isUpcase()? "on" : "off";
+                    helper.value =  dataelement.isUpcase();
                 } else {
-                    helper.value = "off";
+                    helper.value = false;
                 }
                 
                 newField(helper);

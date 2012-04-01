@@ -32,7 +32,7 @@ public class ItemDetails {
         String modelname = view.getParameter("model.name");
         String itemref = view.getParameter("item.reference");
         String modelref = view.getParameter("model.reference");
-        String upcase = view.getParameter("item.upcase");
+        boolean upcase = view.getParameter("item.upcase");
         String sh = view.getParameter("item.sh");
         String classfield = view.getParameter("item.classfield");
         Container container = new Form(view, "main");
@@ -103,8 +103,9 @@ public class ItemDetails {
      */
     public static final void select(ViewData view) {
         DataForm form = view.getElement("header");
-        String itemname, modelref, itemref, upcase, classfield, sh, modelname =
+        String itemname, modelref, itemref, classfield, sh, modelname =
                 form.get("modelname").get();
+        boolean upcase;
         TableItem selected = null;
         Table itens = view.getElement("itens");
         byte mode = Common.getMode(view);
