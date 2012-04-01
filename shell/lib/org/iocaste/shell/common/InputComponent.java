@@ -12,12 +12,12 @@ public interface InputComponent extends Component {
     public abstract int getLength();
     
     public abstract DocumentModelItem getModelItem();
+    
+    public abstract <T> T get();
 
     public abstract SearchHelp getSearchHelp();
     
     public abstract ValidatorConfig getValidatorConfig();
-    
-    public abstract String getValue();
     
     public abstract boolean isBooleanComponent();
     
@@ -28,6 +28,8 @@ public interface InputComponent extends Component {
     public abstract boolean isSelectable();
     
     public abstract boolean isSelected();
+    
+    public abstract void set(Object value);
     
     public abstract void setComponentType(Const type);
     
@@ -46,6 +48,4 @@ public interface InputComponent extends Component {
     public abstract void setSelected(boolean selected);
     
     public abstract void setValidatorConfig(ValidatorConfig validator);
-    
-    public abstract void setValue(String value);
 }

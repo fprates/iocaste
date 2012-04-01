@@ -47,45 +47,71 @@ public class Controller {
      * @param input
      */
     private static void convertInputValue(InputComponent input) {
-        String value;
         NumberFormat numberformat;
         DateFormat dateformat;
         Locale locale;
         DataElement dataelement;
-        
-        if (Shell.isInitial(input))
-            return;
+        String value = input.get();
         
         dataelement = Shell.getDataElement(input);
         if (dataelement == null)
             return;
         
         locale = input.getLocale();
-        value = input.getValue();
         
         switch(dataelement.getType()) {
         case DataType.DEC:
-            numberformat = NumberFormat.getNumberInstance(locale);
-            
-            try {
-                input.setValue(numberformat.format(numberformat.parse(value)));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+            if (Shell.isInitial(value))
+                input.set(0d);
+            else
+                try {
+                    numberformat = NumberFormat.getNumberInstance(locale);
+                    
+                    input.set(numberformat.parse(value).doubleValue());
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
             
             break;
             
         case DataType.DATE:
-            if (Shell.isInitial(input))
+            if (Shell.isInitial(value))
+                input.set(null);
+            else
+                try {
+                    dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM,
+                            locale);
+                    input.set(dateformat.parse(value));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            
+        case DataType.NUMC:
+            if (input.isBooleanComponent()) {
+                input.set(value);
                 break;
-            
-            dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-            
-            try {
-                input.setValue(dateformat.format(dateformat.parse(value)));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
             }
+            
+            if (Shell.isInitial(value)) {
+                if (dataelement.getLength() < 9)
+                    input.set(0);
+                else
+                    input.set(0l);
+            } else {
+                if (dataelement.getLength() < 9)
+                    input.set(Integer.parseInt(value));
+                else
+                    input.set(Long.parseLong(value));
+            }
+            
+            break;
+            
+        case DataType.CHAR:
+            if (Shell.isInitial(value))
+                input.set(null);
+            else
+                if (dataelement.isUpcase())
+                    input.set(value.toUpperCase());
             
             break;
         }
@@ -116,10 +142,9 @@ public class Controller {
             Function function) throws Exception {
         Documents documents;
         ExtendedObject object;
-        Object value;
         DocumentModelItem reference, item;
         
-        if (Shell.isInitial(input))
+        if (isInitial(input))
             return true;
         
         item = input.getModelItem();
@@ -130,13 +155,45 @@ public class Controller {
         if (reference == null)
             return true;
         
-        value = Shell.getInputValue(input);
-        
         documents = new Documents(function); 
         object = documents.getObject(reference.getDocumentModel().getName(),
-                value);
+                input.get());
         
         return (object == null)? false : true;
+    }
+    
+    /**
+     * 
+     * @param input
+     * @return
+     */
+    private static final boolean isInitial(InputComponent input) {
+        DataElement dataelement;
+        Object value = input.get();
+        
+        if (value == null)
+            return true;
+        
+        dataelement = Shell.getDataElement(input);
+        if (dataelement == null)
+            return Shell.isInitial((String)value);
+        
+        switch (dataelement.getType()) {
+        case DataType.NUMC:
+            if (input.isBooleanComponent()) {
+                return input.isSelected();
+            } else {
+                if (dataelement.getLength() < 9)
+                    return ((Integer)value == 0)? true : false;
+                else
+                    return ((Long)value == 0l)? true : false;
+            }
+        case DataType.DEC:
+            return ((Double)value == 0)? true : false;
+
+        default:
+            return Shell.isInitial(value.toString());
+        }
     }
     
     /**
@@ -150,13 +207,12 @@ public class Controller {
         NumberFormat numberformat;
         DateFormat dateformat;
         DataElement dataelement;
-        String value = input.getValue();
+        String value = (String)input.get();
         
-        if (value == null || value.trim().length() == 0)
+        if (Shell.isInitial(value))
             return true;
         
         dataelement = Shell.getDataElement(input);
-        
         if (dataelement == null)
             return true;
 
@@ -241,30 +297,25 @@ public class Controller {
             value = getString(values, name);
 
             input = (InputComponent)element;
-            input.setValue(value);
+            input.set(value);
             
             if (!isValueCompatible(input) && !input.isBooleanComponent()) {
                 status.input = input;
                 status.error = EMISMATCH;
                 continue;
             }
+            
+            convertInputValue(input);
            
-            if (input.isObligatory() && Shell.isInitial(input)) {
+            if (input.isObligatory() && isInitial(input)) {
                 status.input = input;
                 status.error = EINITIAL;
                 continue;
             }
             
-            if (status.error == 0)
-                convertInputValue(input);
-            
             dataelement = Shell.getDataElement(input);
-            
             if (value == null || dataelement == null)
                 continue;
-            
-            if (dataelement.isUpcase())
-                input.setValue(value.toUpperCase());
             
             if (!hasValidReference(input, function)) {
                 status.input = input;

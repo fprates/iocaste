@@ -97,7 +97,7 @@ public class TableItem implements Serializable {
             if (modelitem == null)
                 continue;
             
-            object.setValue(modelitem, Shell.getInputValue(input));
+            object.setValue(modelitem, input.get());
         }
         
         return object;
@@ -157,7 +157,7 @@ public class TableItem implements Serializable {
                 continue;
             
             value = object.getValue(modelitem);
-            Shell.setInputValue(input, value);
+            input.set(value);
         }
     }
     

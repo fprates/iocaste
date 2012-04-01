@@ -28,7 +28,7 @@ public class RadioButtonRenderer extends Renderer {
             
             rbtag.addInner(values.get(key));
             
-            if (radiobutton.getValue().equals(key))
+            if (toString(radiobutton).equals(key))
                 rbtag.add("checked", "checked");
             
             addAttributes(rbtag, radiobutton);

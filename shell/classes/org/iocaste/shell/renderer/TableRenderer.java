@@ -61,7 +61,7 @@ public class TableRenderer extends Renderer {
          */
         for (InputComponent input : hidden) {
             parameter = new Parameter(null, ((Element)input).getHtmlName());
-            parameter.setValue(input.getValue());
+            parameter.set(input.get());
             config.addToForm(ParameterRenderer.render(parameter));
         }
         

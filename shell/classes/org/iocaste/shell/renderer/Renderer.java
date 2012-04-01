@@ -1,8 +1,12 @@
 package org.iocaste.shell.renderer;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.shell.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
@@ -13,11 +17,13 @@ import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Frame;
 import org.iocaste.shell.common.HtmlTag;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.RadioButton;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.Table;
@@ -159,4 +165,49 @@ public class Renderer {
         return tags;
     }
     
+    /**
+     * 
+     * @param input
+     * @return
+     */
+    protected static final String toString(InputComponent input) {
+        Object value = input.get();
+        DataElement element = Shell.getDataElement(input);
+        
+        if (element == null || value == null)
+            return (String)value;
+        
+        return toString(value, element, input.getLocale());
+    }
+    
+    /**
+     * 
+     * @param value
+     * @param element
+     * @param locale
+     * @return
+     */
+    protected static final String toString(Object value, DataElement element,
+            Locale locale) {
+        DateFormat dateformat;
+        
+        switch (element.getType()) {
+        case DataType.DEC:
+            return Double.toString((Double)value);
+            
+        case DataType.NUMC:
+            if (element.getLength() < 9)
+                return Integer.toString((Integer)value);
+            else
+                return Long.toString((Long)value);
+            
+        case DataType.DATE:
+            dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+            
+            return dateformat.format(value);
+            
+        default:
+            return (String)value;
+        }
+    }
 }

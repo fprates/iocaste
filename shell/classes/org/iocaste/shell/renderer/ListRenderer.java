@@ -2,6 +2,7 @@ package org.iocaste.shell.renderer;
 
 import org.iocaste.shell.XMLElement;
 import org.iocaste.shell.common.ListBox;
+import org.iocaste.shell.common.Shell;
 
 public class ListRenderer extends Renderer {
     
@@ -24,10 +25,12 @@ public class ListRenderer extends Renderer {
         
         for (String option : list.getEntriesNames()) {
             optiontag = new XMLElement("option");
-            value = list.get(option);
+            value = toString(list.get(option), Shell.getDataElement(list),
+                    list.getLocale());
+            
             optiontag.add("value", value);
             
-            if (value.equals(list.getValue()))
+            if (value.equals(toString(list)))
                 optiontag.add("selected", "selected");
             
             optiontag.addInner(option);

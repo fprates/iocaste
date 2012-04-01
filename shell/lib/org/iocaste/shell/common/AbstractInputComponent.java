@@ -1,7 +1,6 @@
 package org.iocaste.shell.common;
 
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 
 /**
@@ -16,7 +15,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 public abstract class AbstractInputComponent extends AbstractComponent
     implements InputComponent {
     private static final long serialVersionUID = 7276777605716326451L;
-    private String value;
+    private Object value;
     private DocumentModelItem modelitem;
     private boolean secret, obligatory;
     private int length;
@@ -31,6 +30,16 @@ public abstract class AbstractInputComponent extends AbstractComponent
         
         this.type = type_;
         obligatory = false;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#get()
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public final <T> T get() {
+        return (T)value;
     }
     
     /*
@@ -85,15 +94,6 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final ValidatorConfig getValidatorConfig() {
         return validatorcfg;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.DataComponent#getValue()
-     */
-    @Override
-    public String getValue() {
-        return value;
     }
     
     /*
@@ -156,6 +156,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public boolean isSelected() {
         return false;
+    }
+   
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#set(java.lang.Object)
+     */
+    @Override
+    public final void set(Object value) {
+        this.value = value;
     }
     
     /*
@@ -261,19 +270,4 @@ public abstract class AbstractInputComponent extends AbstractComponent
     public final void setValidatorConfig(ValidatorConfig validatorcfg) {
         this.validatorcfg = validatorcfg;
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.DataComponent#setValue(java.lang.String)
-     */
-    @Override
-    public void setValue(String value) {
-        DataElement delement = Shell.getDataElement(this);
-            
-        if (value == null && delement != null)
-            this.value = (delement.getType() == DataType.NUMC)? "0" : "";
-        else
-            this.value = value;
-    }
-
 }

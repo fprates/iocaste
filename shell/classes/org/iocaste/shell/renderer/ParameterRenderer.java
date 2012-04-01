@@ -18,7 +18,7 @@ public class ParameterRenderer extends Renderer {
         hiddentag.add("name", name);
         hiddentag.add("id", name);
         
-        value = parameter.getValue();
+        value = toString(parameter);
         if (value != null)
             hiddentag.add("value", value);
         

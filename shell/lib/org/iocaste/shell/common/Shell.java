@@ -1,16 +1,9 @@
 package org.iocaste.shell.common;
 
-import java.lang.reflect.Method;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
@@ -43,7 +36,7 @@ public class Shell extends AbstractServiceInterface {
             tfield.setObligatory(inputitem.isObligatory());
             tfield.setPassword(inputitem.isSecret());
             tfield.setLength(inputitem.getLength());
-            tfield.setValue(inputitem.getValue());
+            tfield.set(inputitem.get());
             tfield.setModelItem(inputitem.getModelItem());
             tfield.setEnabled(inputitem.isEnabled());
             tfield.setDataElement(inputitem.getDataElement());
@@ -53,7 +46,7 @@ public class Shell extends AbstractServiceInterface {
         case CHECKBOX:
             cbox = new CheckBox(container, name);
             cbox.setStyleClass(inputitem.getStyleClass());
-            cbox.setValue(inputitem.getValue());
+            cbox.set(inputitem.get());
             cbox.setModelItem(inputitem.getModelItem());
             cbox.setEnabled(inputitem.isEnabled());
             cbox.setDataElement(inputitem.getDataElement());
@@ -63,7 +56,7 @@ public class Shell extends AbstractServiceInterface {
         case LIST_BOX:
             lbox = new ListBox(container, name);
             lbox.setStyleClass(inputitem.getStyleClass());
-            lbox.setValue(inputitem.getValue());
+            lbox.set(inputitem.get());
             lbox.setModelItem(inputitem.getModelItem());
             lbox.setEnabled(inputitem.isEnabled());
             lbox.setDataElement(inputitem.getDataElement());
@@ -87,7 +80,7 @@ public class Shell extends AbstractServiceInterface {
      * @return
      */
     public static final Element factory(Container container, Const type,
-            String name, Object[] args) {
+            String name, Object... args) {
         switch (type) {
         case BUTTON:
             return new Button(container, name);
@@ -144,51 +137,6 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * 
-     * @param input
-     * @return
-     */
-    public static final Object getInputValue(InputComponent input) {
-        DateFormat dateformat;
-        NumberFormat numberformat;
-        String value = input.getValue();
-        Locale locale = input.getLocale();
-        
-        switch (getDataElement(input).getType()) {
-        case DataType.NUMC:
-            if (input.isBooleanComponent())
-                return input.isSelected()? 1 : 0;
-            else
-                return (isInitial(input))? 0 : Long.parseLong(value);
-            
-        case DataType.DATE:
-            if (isInitial(input))
-                return null;
-            
-            dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-            try {
-                return dateformat.parse(value);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-        
-        case DataType.DEC:
-            if (isInitial(input))
-                return 0;
-            
-            numberformat = NumberFormat.getNumberInstance(locale);
-            try {
-                return numberformat.parse(value);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-            
-        default:
-            return value;
-        }
-    }
-    
-    /**
-     * 
      * @param appname
      * @param pagename
      * @return
@@ -208,85 +156,11 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * 
-     * @param input
-     * @return
-     */
-    public static final boolean isInitial(InputComponent input) {
-        NumberFormat numberformat;
-        DataElement dataelement;
-        String value, test;
-        Locale locale = input.getLocale();
-        
-        value = input.getValue();
-        if (isInitial(value))
-            return true;
-        
-        dataelement = Shell.getDataElement(input);
-        if (dataelement == null)
-            return false;
-        
-        test = value.trim();
-        switch (dataelement.getType()) {
-        case DataType.NUMC:
-            if (input.isBooleanComponent())
-                return input.isSelected();
-            else
-                return (Long.parseLong(test) == 0)? true : false;
-            
-        case DataType.DEC:
-            numberformat = NumberFormat.getNumberInstance(locale);
-            
-            try {
-                return (numberformat.parse(test).doubleValue() == 0)? true : false;
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-
-        default:
-            return false;
-        }
-    }
-    
-    /**
-     * 
      * @param value
      * @return
      */
     public static final boolean isInitial(String value) {
         return (value == null || value.trim().length() == 0)? true : false;
-    }
-    
-    /**
-     * 
-     * @param input
-     * @param object
-     */
-    public final static void moveExtendedToInput(
-    		InputComponent input, ExtendedObject object) {
-        Object value;
-        
-        value = object.getValue(input.getModelItem());
-        input.setValue((value == null)? "" : value.toString());
-    }
-    
-    /**
-     * 
-     * @param input
-     * @param object
-     */
-    public final static void moveItemToInput(
-    		InputComponent input, Object object) {
-        Method method;
-        Object value;
-        DocumentModelItem modelitem = input.getModelItem();
-        
-        try {
-            method = object.getClass().getMethod(modelitem.getGetterName());
-            value = method.invoke(object, new Object[] {});
-            input.setValue((value == null)? "" : value.toString());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
     
     /**
@@ -318,50 +192,6 @@ public class Shell extends AbstractServiceInterface {
         message.add("logid", view.getLogid());
         
         call(message);
-    }
-    
-    /**
-     * 
-     * @param input
-     * @param value
-     */
-    public static final void setInputValue(InputComponent input, Object value) {
-        DateFormat dateformat;
-        NumberFormat numberformat;
-        Locale locale = input.getLocale();
-        DataElement dataelement = Shell.getDataElement(input);
-        
-        if (dataelement == null) {
-            input.setValue((String)value);
-            return;
-        }
-        
-        switch (dataelement.getType()) {
-        case DataType.NUMC:
-            if (input.isBooleanComponent())
-                input.setSelected(((Long)value == 0)? false : true);
-            else
-                input.setValue(Long.toString((Long)value));
-            
-            break;
-            
-        case DataType.DEC:
-            numberformat = NumberFormat.getNumberInstance(locale);
-            input.setValue((value == null)? null : numberformat.format(value));
-            
-            break;
-            
-        case DataType.DATE:
-            dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-            input.setValue((value == null)? null : dateformat.format(value));
-            
-            break;
-            
-        default:
-            input.setValue((value == null)? null : value.toString());
-            
-            break;
-        }
     }
     
     /**

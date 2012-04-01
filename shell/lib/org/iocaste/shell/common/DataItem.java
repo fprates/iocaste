@@ -57,10 +57,10 @@ public class DataItem extends AbstractInputComponent {
     public final boolean isSelected() {
         String value;
         
-        if (getValue() == null)
+        if (get() == null)
             return false;
         
-        value = getValue().toLowerCase();
+        value = get().toString().toLowerCase();
         return (value.equals("on"))? true : false;
     }
     
@@ -70,6 +70,6 @@ public class DataItem extends AbstractInputComponent {
      */
     @Override
     public final void setSelected(boolean selected) {
-        setValue((selected)? "on" : "off");
+        set((selected)? "on" : "off");
     }
 }

@@ -31,7 +31,7 @@ public class FormRenderer extends Renderer {
             formtag.add("enctype", enctype);
         
         parameter = new Parameter(null, "pagetrack");
-        parameter.setValue(config.getPageTrack());
+        parameter.set(config.getPageTrack());
         hiddentag = ParameterRenderer.render(parameter);
         
         formtag.addInner(hiddentag.toString());

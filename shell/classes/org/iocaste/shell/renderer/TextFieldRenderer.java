@@ -24,7 +24,7 @@ public class TextFieldRenderer extends Renderer {
         DataElement dataelement = Shell.getDataElement(textfield);
         int length = (dataelement == null)?textfield.getLength() :
             dataelement.getLength();
-        String name = textfield.getHtmlName(), value = textfield.getValue();
+        String name = textfield.getHtmlName(), value = toString(textfield);
         XMLElement spantag, inputtag = new XMLElement("input");
         List<XMLElement> tags = new ArrayList<XMLElement>();
         

@@ -66,7 +66,7 @@ public class DataForm extends AbstractContainer {
                 continue;
             
             input = (InputComponent)element;
-            input.setValue(null);
+            input.set(null);
         }
     }
     
@@ -92,7 +92,7 @@ public class DataForm extends AbstractContainer {
                 continue;
         	
         	input = (InputComponent)element;
-        	object.setValue(input.getName(), Shell.getInputValue(input));
+        	object.setValue(input.getName(), input.get());
         }
     	
     	return object;
@@ -145,7 +145,7 @@ public class DataForm extends AbstractContainer {
             item = (DataItem)element;
             name = item.getName();
             
-            Shell.setInputValue(item, object.getValue(name));
+            item.set(object.getValue(name));
         }
     }
 }

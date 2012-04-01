@@ -47,7 +47,7 @@ public class Menu extends AbstractContainer {
                 continue;
             
             menuitem = (MenuItem)element;
-            if (parameter.getValue().equals(menuitem.getFunction()))
+            if (parameter.get().equals(menuitem.getFunction()))
                 return menuitem;
         }
         
