@@ -47,17 +47,13 @@ public class Request {
      * @param vdata
      * @param function
      */
-    public static final void edit(ViewData vdata, Function function) {
+    public static final void edit(ViewData vdata, Function function)
+            throws Exception {
         ExtendedObject[] itens;
         String modelname = ((InputComponent)vdata.getElement("model.name")).
                 get();
         
-        try {
-            itens = getTableItens(modelname, function);
-        } catch (Exception e) {
-            vdata.message(Const.ERROR, e.getMessage());
-            return;
-        }
+        itens = getTableItens(modelname, function);
         
         vdata.clearParameters();
         vdata.export("mode", "edit");

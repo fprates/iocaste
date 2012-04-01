@@ -23,6 +23,7 @@ public class Response {
      */
     public static final void form(ViewData vdata, Function function)
             throws Exception {
+        DataItem item;
         Container container = new Form(vdata, "form");
         DataForm form = new DataForm(container, "model.form");
         Documents documents = new Documents(function);
@@ -31,6 +32,10 @@ public class Response {
         
         form.importModel(model);
         form.setKeyRequired(true);
+        
+        item = form.get("UPCASE");
+        item.setComponentType(Const.CHECKBOX);
+        
         new Button(container, "insertitem");
         new Button(container, "insertnext");
         
