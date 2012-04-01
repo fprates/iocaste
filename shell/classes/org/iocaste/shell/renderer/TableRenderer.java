@@ -60,6 +60,7 @@ public class TableRenderer extends Renderer {
          */
         for (InputComponent input : hidden) {
             parameter = new Parameter(null, input.getHtmlName());
+            parameter.setModelItem(input.getModelItem());
             
             if (input.isBooleanComponent())
                 parameter.set((input.isSelected())? "on" : "off");
