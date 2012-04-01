@@ -26,7 +26,7 @@ public class ListRenderer extends Renderer {
         for (String option : list.getEntriesNames()) {
             optiontag = new XMLElement("option");
             value = toString(list.get(option), Shell.getDataElement(list),
-                    list.getLocale());
+                    list.getLocale(), false);
             
             optiontag.add("value", value);
             

@@ -177,7 +177,8 @@ public class Renderer {
         if (element == null || value == null)
             return (String)value;
         
-        return toString(value, element, input.getLocale());
+        return toString(value, element, input.getLocale(),
+                input.isBooleanComponent());
     }
     
     /**
@@ -188,7 +189,7 @@ public class Renderer {
      * @return
      */
     protected static final String toString(Object value, DataElement element,
-            Locale locale) {
+            Locale locale, boolean boolconvert) {
         DateFormat dateformat;
         
         switch (element.getType()) {
@@ -196,7 +197,7 @@ public class Renderer {
             return Double.toString((Double)value);
             
         case DataType.NUMC:
-            if (element.getLength() < 9)
+            if (element.getLength() < DataType.MAX_INT_LEN)
                 return Integer.toString((Integer)value);
             else
                 return Long.toString((Long)value);
@@ -206,6 +207,11 @@ public class Renderer {
             
             return dateformat.format(value);
             
+        case DataType.BOOLEAN:
+            if (boolconvert)
+                return ((Boolean)value)? "on" : "off";
+            else
+                return Boolean.toString((Boolean)value);
         default:
             return (String)value;
         }

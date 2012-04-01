@@ -31,13 +31,9 @@ public class CheckBox extends AbstractInputComponent {
      */
     @Override
     public final boolean isSelected() {
-        String value;
+        Object value = get();
         
-        if (get() == null)
-            return false;
-        
-        value = get().toString().toLowerCase();
-        return (value.equals("on"))? true : false;
+        return (value == null)? false : (Boolean)value;
     }
     
     /*
@@ -46,6 +42,6 @@ public class CheckBox extends AbstractInputComponent {
      */
     @Override
     public final void setSelected(boolean selected) {
-        set((selected)? "on" : "off");
+        set(selected);
     }
 }

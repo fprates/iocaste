@@ -70,6 +70,6 @@ public class DataItem extends AbstractInputComponent {
      */
     @Override
     public final void setSelected(boolean selected) {
-        set((selected)? "on" : "off");
+        set(selected);
     }
 }

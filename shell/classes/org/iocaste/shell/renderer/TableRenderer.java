@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.shell.XMLElement;
-import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Table;
@@ -60,8 +59,13 @@ public class TableRenderer extends Renderer {
          * como parâmetros, pois precisam ter seu conteúdo armazenado.
          */
         for (InputComponent input : hidden) {
-            parameter = new Parameter(null, ((Element)input).getHtmlName());
-            parameter.set(input.get());
+            parameter = new Parameter(null, input.getHtmlName());
+            
+            if (input.isBooleanComponent())
+                parameter.set((input.isSelected())? "on" : "off");
+            else
+                parameter.set(input.get());
+            
             config.addToForm(ParameterRenderer.render(parameter));
         }
         

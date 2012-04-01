@@ -54,8 +54,12 @@ public class Controller {
         String value = input.get();
         
         dataelement = Shell.getDataElement(input);
-        if (dataelement == null)
+        if (dataelement == null) {
+            if (input.isBooleanComponent())
+                input.setSelected((value.equals("on")? true : false));
+            
             return;
+        }
         
         locale = input.getLocale();
         
@@ -93,12 +97,12 @@ public class Controller {
             }
             
             if (Shell.isInitial(value)) {
-                if (dataelement.getLength() < 9)
+                if (dataelement.getLength() < DataType.MAX_INT_LEN)
                     input.set(0);
                 else
                     input.set(0l);
             } else {
-                if (dataelement.getLength() < 9)
+                if (dataelement.getLength() < DataType.MAX_INT_LEN)
                     input.set(Integer.parseInt(value));
                 else
                     input.set(Long.parseLong(value));
@@ -114,6 +118,16 @@ public class Controller {
                     input.set(value.toUpperCase());
             
             break;
+            
+        case DataType.BOOLEAN:
+            if (input.isBooleanComponent()) {
+                if (value.equals("off"))
+                    input.setSelected(false);
+                else
+                    input.setSelected(true);
+            } else {
+                input.set(value);
+            }
         }
     }
     
@@ -183,7 +197,7 @@ public class Controller {
             if (input.isBooleanComponent()) {
                 return input.isSelected();
             } else {
-                if (dataelement.getLength() < 9)
+                if (dataelement.getLength() < DataType.MAX_INT_LEN)
                     return ((Integer)value == 0)? true : false;
                 else
                     return ((Long)value == 0l)? true : false;
