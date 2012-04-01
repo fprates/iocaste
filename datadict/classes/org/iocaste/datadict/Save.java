@@ -25,7 +25,7 @@ public class Save {
             throws Exception {
         DocumentModelItem modelitem, reference;
         DataElement dataelement;
-        String modelref, itemref, itemname;
+        String value, modelref, itemref, itemname;
         CheckBox upcase, key;
         Documents documents = new Documents(function);
         DataForm structure = view.getElement("header");
@@ -44,18 +44,13 @@ public class Save {
             itemname = Common.getTableValue(item, "item.name");
             
             dataelement = new DataElement();
-            switch (modo) {
-            case Common.CREATE:
-                dataelement.setName(new StringBuilder(model.getName()).
-                        append(".").
-                        append(itemname).toString());
-                break;
-            case Common.UPDATE:
-                dataelement.setName((String)Common.getTableValue(
-                        item, "item.element"));
-                break;
-            }
             
+            value = Common.getTableValue(item, "item.element");
+            if (value == null)
+                value = new StringBuilder(model.getName()).
+                        append(".").append(itemname).toString();
+            
+            dataelement.setName(value);
             dataelement.setLength((Integer)Common.getTableValue(
                     item, "item.length"));
             dataelement.setDecimals((Integer)Common.getTableValue(
