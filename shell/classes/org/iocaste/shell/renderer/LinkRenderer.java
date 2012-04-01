@@ -14,7 +14,7 @@ public class LinkRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(Link link, Config config) {
-        Map<Parameter, String> parameters;
+        Map<Parameter, Object> parameters;
         StringBuffer sb;
         XMLElement atag;
         

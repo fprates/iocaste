@@ -6,21 +6,21 @@ import java.util.Map;
 public class Link extends AbstractControlComponent {
     private static final long serialVersionUID = 667738108271176995L;
     private boolean absolute;
-    private Map<Parameter, String> values;
+    private Map<Parameter, Object> values;
     
     public Link(Container container, String name, String action) {
         super(container, Const.LINK, name);
         setText(action);
         setAction(action);
         absolute = false;
-        values = new HashMap<Parameter, String>();
+        values = new HashMap<Parameter, Object>();
     }
 
-    public final void add(Parameter parameter, String value) {
+    public final void add(Parameter parameter, Object value) {
         values.put(parameter, value);
     }
     
-    public final Map<Parameter, String> getParametersMap() {
+    public final Map<Parameter, Object> getParametersMap() {
         return values;
     }
     
