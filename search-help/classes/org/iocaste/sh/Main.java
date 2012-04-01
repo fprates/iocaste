@@ -1,8 +1,5 @@
 package org.iocaste.sh;
 
-import java.text.DateFormat;
-
-import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
@@ -60,10 +57,10 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public void main(ViewData vdata) throws Exception {
-        DateFormat dateformat;
         TableColumn column;
         TableItem tableitem;
-        String name, value, export;
+        String name, export;
+        Object value;
         Text text;
         Link link;
         DocumentModel model;
@@ -93,37 +90,19 @@ public class Main extends AbstractPage {
             
             for (DocumentModelItem modelitem : model.getItens()) {
                 name = modelitem.getName();
-                switch (modelitem.getDataElement().getType()) {
-                case DataType.CHAR:
-                    value = object.getValue(modelitem);
-                    break;
-                case DataType.NUMC:
-                    value = Long.toString((Long)object.getValue(modelitem));
-                    break;
-                case DataType.DATE:
-                    dateformat = DateFormat.getDateInstance(DateFormat.SHORT,
-                            vdata.getLocale());
-                    
-                    value = dateformat.format(
-                            (DateFormat)object.getValue(modelitem));
-                    
-                    break;
-                default:
-                    value = null;
-                    break;
-                }
-                
+                value = object.getValue(modelitem);
                 export = sh.getExport();
                 
                 if (export != null && export.equals(name)) {
+                    param.setModelItem(modelitem);
                     link = new Link(table, "choose", "choose");
                     tableitem.add(link);
                     link.add(param, value);
-                    link.setText(value);
+                    link.setText(value.toString());
                 } else {
                     text = new Text(table, name);
                     tableitem.add(text);
-                    text.setText(value);
+                    text.setText((value == null)? null : value.toString());
                 }
                 
                 if (!sh.contains(name)) {

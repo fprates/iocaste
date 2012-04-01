@@ -77,7 +77,7 @@ public class Services extends AbstractFunction {
         if (header == null)
             return null;
         
-        value = (String)header.getValue("EXPORT");
+        value = header.getValue("EXPORT");
         header.setValue("EXPORT", value.split("\\.")[1]);
         
         itens = documents.select("from SH_ITENS where SEARCH_HELP = ?", name);
@@ -86,7 +86,7 @@ public class Services extends AbstractFunction {
         shdata.add(header);
         
         for (ExtendedObject item : itens) {
-            value = (String)item.getValue("ITEM");
+            value = item.getValue("ITEM");
             item.setValue("ITEM", value.split("\\.")[1]);
             
             shdata.add(item);
@@ -141,7 +141,7 @@ public class Services extends AbstractFunction {
         documents.save(header);
         
         for (ExtendedObject item : itens) {
-            shitemname = (String)item.getValue("ITEM");
+            shitemname = item.getValue("ITEM");
             
             item.setValue("NAME", composeName(shname, shitemname));
             item.setValue("ITEM", composeName(model, shitemname));
@@ -171,7 +171,7 @@ public class Services extends AbstractFunction {
         
         documents.update("delete from SH_ITENS where SEARCH_HELP = ?", shname);
         for (ExtendedObject item : itens) {
-            shitemname = (String)item.getValue("ITEM");
+            shitemname = item.getValue("ITEM");
             
             item.setValue("NAME", composeName(shname, shitemname));
             item.setValue("ITEM", composeName(model, shitemname));
