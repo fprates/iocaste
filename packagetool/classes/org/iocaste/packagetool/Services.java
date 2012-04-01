@@ -134,6 +134,8 @@ public class Services extends AbstractFunction {
             }
         }
         
+        documents.commit();
+        
         return 1;
     }
 }
