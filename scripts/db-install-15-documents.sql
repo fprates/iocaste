@@ -77,7 +77,7 @@ insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.NAME'
 insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.DECIMALS', 0, 2, 3, 0);
 insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.LENGTH', 0, 4, 3, 0);
 insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.TYPE', 0, 1, 3, 0);
-insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.UPCASE', 0, 1, 3, 0);
+insert into docs003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.UPCASE', 0, 1, 5, 0);
 insert into docs002(iname, docid, index, fname, ename, attrb) values('DATAELEMENT.NAME', 'DATAELEMENT', 0, 'ENAME', 'DATAELEMENT.NAME', 'name');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('DATAELEMENT.DECIMALS', 'DATAELEMENT', 1, 'DECIM', 'DATAELEMENT.DECIMALS', 'decimals');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('DATAELEMENT.LENGTH', 'DATAELEMENT', 2, 'LNGTH', 'DATAELEMENT.LENGTH', 'length');
