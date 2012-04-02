@@ -102,7 +102,7 @@ public class Main extends AbstractPage {
                 } else {
                     text = new Text(table, name);
                     tableitem.add(text);
-                    text.setText((value == null)? null : value.toString());
+                    text.setText((value == null)? "" : value.toString());
                 }
                 
                 if (!sh.contains(name)) {
