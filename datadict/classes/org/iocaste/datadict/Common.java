@@ -282,6 +282,7 @@ public class Common {
                 list.add("numc", DataType.NUMC);
                 list.add("dec", DataType.DEC);
                 list.add("date", DataType.DATE);
+                list.add("bool", DataType.BOOLEAN);
                 
                 continue;
             }
