@@ -90,12 +90,9 @@ public class Controller {
                     throw new RuntimeException(e);
                 }
             
-        case DataType.NUMC:
-            if (input.isBooleanComponent()) {
-                input.set(value);
-                break;
-            }
+            break;
             
+        case DataType.NUMC:
             if (Shell.isInitial(value)) {
                 if (dataelement.getLength() < DataType.MAX_INT_LEN)
                     input.set(0);
@@ -128,6 +125,8 @@ public class Controller {
             } else {
                 input.set(value);
             }
+            
+            break;
         }
     }
     
