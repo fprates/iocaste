@@ -504,6 +504,14 @@ public class Model {
             sb.append(" date");
             
             break;
+        case DataType.BOOLEAN:
+            ddelement.setLength(1);
+            ddelement.setDecimals(0);
+            ddelement.setUpcase(false);
+            
+            sb.append(" bit");
+            
+            break;
         }
     }
     
