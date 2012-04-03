@@ -67,7 +67,6 @@ public class Save {
             modelitem.setAttributeName((String)Common.getTableValue(
                     item, "item.classfield"));
             modelitem.setDataElement(dataelement);
-            modelitem.setDocumentModel(model);
             
             modelref = Common.getTableValue(item, "model.reference");
             if (modelref != null && !modelref.equals("")) {
