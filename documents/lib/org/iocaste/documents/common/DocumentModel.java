@@ -53,6 +53,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      */
     public final void add(DocumentModelItem item) {
         item.setIndex(itens.size());
+        item.setDocumentModel(this);
         itens.add(item);
     }
     
