@@ -364,7 +364,7 @@ public class Common {
      * @param value
      */
     public static final void setTableValue(TableItem item, String name,
-            String value) {
+            Object value) {
         ((InputComponent)item.get(name)).set(value);
     }
 }

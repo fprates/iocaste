@@ -9,6 +9,7 @@ import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewData;
@@ -43,20 +44,24 @@ public class Save {
         for (TableItem item : itens.getItens()) {
             itemname = Common.getTableValue(item, "item.name");
             
-            dataelement = new DataElement();
-            
             value = Common.getTableValue(item, "item.element");
-            if (value == null)
+            if (value == null) {
                 value = new StringBuilder(model.getName()).
                         append(".").append(itemname).toString();
+                Common.setTableValue(item, "item.element", value);
+            }
             
+            dataelement = new DataElement();
             dataelement.setName(value);
             dataelement.setLength((Integer)Common.getTableValue(
                     item, "item.length"));
+            
             dataelement.setDecimals((Integer)Common.getTableValue(
                     item, "item.dec"));
+            
             dataelement.setType((Integer)Common.getTableValue(
                     item, "item.type"));
+            
             upcase = item.get("item.upcase");
             dataelement.setUpcase(upcase.isSelected());
             
@@ -64,12 +69,14 @@ public class Save {
             modelitem.setName(itemname);
             modelitem.setTableFieldName((String)Common.getTableValue(
                     item, "item.tablefield"));
+            
             modelitem.setAttributeName((String)Common.getTableValue(
                     item, "item.classfield"));
+            
             modelitem.setDataElement(dataelement);
             
             modelref = Common.getTableValue(item, "model.reference");
-            if (modelref != null && !modelref.equals("")) {
+            if (!Shell.isInitial(modelref)) {
                 itemref = Common.getTableValue(item, "item.reference");
                 reference = documents.getModel(modelref).getModelItem(itemref);
                 modelitem.setReference(reference);
