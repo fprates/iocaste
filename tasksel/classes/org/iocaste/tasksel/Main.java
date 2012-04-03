@@ -72,7 +72,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void installok(ViewData view) throws Exception {
-        Install.proceed(view, this);
+        Install.installok(view, this);
         back(view);
     }
     
@@ -85,9 +85,10 @@ public class Main extends AbstractPage {
         Container container = new Form(view, "main");
         DataForm form = new DataForm(container, "selector");
         DataItem cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
+        PackageTool pkgtool = new PackageTool(this);
         
-        if (new Documents(this).getModel("TASKS") == null)
-            new PackageTool(this).install("iocaste-tasksel");
+        if (!pkgtool.isInstalled("iocaste-tasksel"))
+            pkgtool.install("iocaste-tasksel");
         
         cmdline.setLength(128);
         new Button(container, "run");
@@ -117,9 +118,7 @@ public class Main extends AbstractPage {
         ExtendedObject task = null;
         DataForm form = vdata.getElement("selector");
         DataItem cmdline = form.get("command");
-        String command = cmdline.get();
-        String page = "main";
-        String app = null;
+        String command = cmdline.get(), page = "main", app = null;
         
         if (command == null || command.length() == 0)
             return;
@@ -131,13 +130,19 @@ public class Main extends AbstractPage {
         vdata.clearParameters();
 
         if (parsed[0].length() < 19)
-            task = new Documents(this).getObject("TASKS", parsed[0].toUpperCase());
+            task = new Documents(this).getObject("TASKS", parsed[0].
+                    toUpperCase());
         
         if (task == null) {
             if (PackageTool.hasPackage(parsed[0])) {
                 vdata.setReloadableView(true);
                 vdata.export("package", parsed[0]);
-                vdata.redirect(null, "install");
+                
+                if (new PackageTool(this).isInstalled(parsed[0]))
+                    vdata.redirect(null, "uninstall");
+                else
+                    vdata.redirect(null, "install");
+                
                 return;
             }
             
@@ -182,5 +187,33 @@ public class Main extends AbstractPage {
      */
     public final void save(ViewData view) throws Exception {
         Bookmark.save(view, this);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void uninstall(ViewData view) throws Exception {
+        Install.remove(view);
+        back(view);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void uninstallcancel(ViewData view) throws Exception {
+        back(view);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void uninstallok(ViewData view) throws Exception {
+        Install.removeok(view, this);
     }
 }

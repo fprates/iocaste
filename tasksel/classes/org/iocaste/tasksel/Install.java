@@ -20,6 +20,21 @@ public class Install {
     /**
      * 
      * @param view
+     * @param function
+     * @throws Exception
+     */
+    public static final void installok(ViewData view, Function function)
+            throws Exception {
+        String name = view.getParameter("package");
+        
+        new PackageTool(function).install(name);
+        
+        view.message(Const.STATUS, "package.installed.successfully");
+    }
+    
+    /**
+     * 
+     * @param view
      */
     public static final void main(ViewData view) {
         Container container = new Form(view, "main");
@@ -39,16 +54,35 @@ public class Install {
     /**
      * 
      * @param view
+     */
+    public static final void remove(ViewData view) {
+        Container container = new Form(view, "main");
+        Text message = new Text(container, "uninstall.continue");
+        
+        message.setText(new StringBuilder("Do you want to uninstall \"").
+                append(view.getParameter("package")).
+                append("\"?").toString());
+        
+        new Button(container, "uninstallok");
+        new Button(container, "uninstallcancel");
+        
+        view.setFocus("uninstallok");
+        view.setTitle("package.uninstall.confirmation");
+    }
+    
+    /**
+     * 
+     * @param view
      * @param function
      * @throws Exception
      */
-    public static final void proceed(ViewData view, Function function)
+    public static final void removeok(ViewData view, Function function)
             throws Exception {
         String name = view.getParameter("package");
         
-        new PackageTool(function).install(name);
+        new PackageTool(function).uninstall(name);
         
-        view.message(Const.STATUS, "package.installed.successfully");
+        view.message(Const.STATUS, "package.uninstalled.successfully");
     }
     
     /**
@@ -70,11 +104,9 @@ public class Install {
         element.setUpcase(true);
         
         item = new DocumentModelItem();
-        item.setDocumentModel(tasks);
         item.setName("NAME");
         item.setTableFieldName("TSKNM");
         item.setDataElement(element);
-        item.setIndex(0);
         
         tasks.add(item);
         tasks.add(new DocumentModelKey(item));
@@ -85,11 +117,9 @@ public class Install {
         element.setType(DataType.CHAR);
         
         item = new DocumentModelItem();
-        item.setDocumentModel(tasks);
         item.setName("COMMAND");
         item.setTableFieldName("CMDLN");
         item.setDataElement(element);
-        item.setIndex(1);
         
         tasks.add(item);
         
