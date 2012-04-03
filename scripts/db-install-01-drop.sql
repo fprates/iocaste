@@ -1,4 +1,6 @@
 \c true
+drop table package002 if exists;
+drop table package001 if exists;
 drop table shref if exists;
 drop table shitm if exists;
 drop table shcab if exists;

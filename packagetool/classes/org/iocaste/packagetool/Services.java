@@ -19,6 +19,8 @@ public class Services extends AbstractFunction {
 
     public Services() {
         export("install", "install");
+        export("is_installed", "isInstalled");
+        export("uninstall", "uninstall");
     }
     
     /**
@@ -28,7 +30,6 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final Integer install(Message message) throws Exception {
-        String shname;
         ExtendedObject header;
         ExtendedObject[] itens;
         DocumentModel tasks, shmodel, shimodel;
@@ -39,9 +40,18 @@ public class Services extends AbstractFunction {
         SHLib shlib;
         int i;
         InstallData data = (InstallData)message.get("data");
+        String shname, package_ = message.getString("name");
         Documents documents = new Documents(this);
         Map<String, DocumentModelItem> shm =
                 new HashMap<String, DocumentModelItem>();
+        
+        /*
+         * Registra instalação do pacote
+         */
+        header = new ExtendedObject(documents.getModel("PACKAGE"));
+        header.setValue("NAME", package_);
+        
+        documents.save(header);
         
         /*
          * gera modelos;
@@ -56,6 +66,8 @@ public class Services extends AbstractFunction {
                 if (documents.createModel(model) == 0)
                     throw new IocasteException("create model error.");
             }
+            
+            Registry.add(model, package_, documents);
             
             for (DocumentModelItem modelitem : model.getItens())
                 if (modelitem.getSearchHelp() != null)
@@ -92,13 +104,18 @@ public class Services extends AbstractFunction {
             header.setValue("COMMAND", links.get(link));
             
             documents.save(header);
+            
+            Registry.add(link, "TASK", package_, documents);
         }
         
         /*
          * registra objetos de numeração
          */
-        for (String factory : data.getNumberFactories())
+        for (String factory : data.getNumberFactories()) {
             documents.createNumberFactory(factory);
+            
+            Registry.add(factory, "NUMBER", package_, documents);
+        }
         
         /*
          * gera ajudas de pesquisa
@@ -131,11 +148,36 @@ public class Services extends AbstractFunction {
                 
                 if (shm.containsKey(shname))
                     shlib.assign(shm.get(shname));
+                
+                Registry.add(shname, "SH", package_, documents);
             }
         }
         
         documents.commit();
         
         return 1;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final boolean isInstalled(Message message) throws Exception {
+        String package_ = message.getString("package");
+        ExtendedObject item = new Documents(this).
+                getObject("PACKAGE", package_);
+        
+        return (item == null)? false : true;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void uninstall(Message message) throws Exception {
+        
     }
 }

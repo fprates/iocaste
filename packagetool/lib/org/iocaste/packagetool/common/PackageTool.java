@@ -61,8 +61,37 @@ public class PackageTool extends AbstractServiceInterface {
         message.setId("install");
         message.clear();
         message.add("data", data);
+        message.add("name", name);
         
-        return (Integer)call(message);
+        return call(message);
     }
 
+    /**
+     * 
+     * @param name
+     * @return
+     * @throws Exception
+     */
+    public final boolean isInstalled(String name) throws Exception {
+        Message message = new Message();
+        
+        message.setId("is_installed");
+        message.add("package", name);
+        
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @throws Exception
+     */
+    public final void uninstall(String name) throws Exception {
+        Message message = new Message();
+        
+        message.setId("uninstall");
+        message.add("package", name);
+        
+        call(message);
+    }
 }
