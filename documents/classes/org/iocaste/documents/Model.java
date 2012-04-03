@@ -38,10 +38,10 @@ public class Model {
         if (reference != null) {
             sb.append(" foreign key references ").append(reference.
                     getDocumentModel().getTableName()).append("(").
-                    append(reference.getTableFieldName());
+                    append(reference.getTableFieldName()).append(")");
         }
         
-        query = sb.append(")").toString();
+        query = sb.toString();
         return iocaste.update(query);
     }
     
