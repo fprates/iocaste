@@ -45,9 +45,20 @@ insert into shell003 (pindx, eindx, pname, value) values (000100040003, 00010004
 
 insert into docs001(docid, tname, class) values('STYLE', 'SHELL001', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.NAME', 0, 12, 0, 1);
+insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.INDEX', 0, 12, 3, 1);
 insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE.NAME', 'STYLE', 0, 'SNAME', 'STYLE.NAME', '');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE.INDEX', 'STYLE', 1, 'SINDX', 'STYLE.INDEX', '');
 insert into docs004(iname, docid) values('STYLE.NAME', 'STYLE');
 insert into docs005(tname, docid) values('SHELL001', 'STYLE');
+
+insert into docs001(docid, tname, class) values('STYLE_ELEMENT', 'SHELL002', '');
+insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE_ELEMENT.NAME', 0, 12, 0, 1); 
+insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE_ELEMENT.INDEX', 'STYLE_ELEMENT', 0, 'EINDX', 'STYLE.INDEX', '');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE_ELEMENT.NAME', 'STYLE_ELEMENT', 1, 'ENAME', 'STYLE_ELEMENT.NAME', '');
+insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE_ELEMENT.STYLE', 'STYLE_ELEMENT', 2, 'SNAME', 'STYLE.NAME', '');
+insert into docs004(iname, docid) values('STYLE_ELEMENT.INDEX', 'STYLE_ELEMENT');
+insert into docs005(tname, docid) values('SHELL002', 'STYLE_ELEMENT');
+
 \p initial configuration saved.
 
 commit work;
