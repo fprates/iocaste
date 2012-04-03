@@ -56,7 +56,7 @@ public class Service {
         ois.close();
         
         if (response.getException() != null)
-            throw new Exception(response.getException());
+            throw response.getException();
         
         return response.get("return");
     }
