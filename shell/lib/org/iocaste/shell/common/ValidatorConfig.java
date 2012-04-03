@@ -37,7 +37,7 @@ public class ValidatorConfig implements Serializable {
      * @param name
      * @return
      */
-    public final Object get(String name) throws Exception {
+    public final <T> T get(String name) throws Exception {
         return inputs.get(name).get();
     }
     

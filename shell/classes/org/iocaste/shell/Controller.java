@@ -3,6 +3,8 @@ package org.iocaste.shell;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -202,7 +204,7 @@ public class Controller {
                     return ((Long)value == 0l)? true : false;
             }
         case DataType.DEC:
-            return ((Double)value == 0)? true : false;
+            return (((Number)value).doubleValue() == 0)? true : false;
 
         default:
             return Shell.isInitial(value.toString());
@@ -272,11 +274,11 @@ public class Controller {
      */
     private static final void processInputs(ViewData view, Function function,
             Map<String, ?> values, InputStatus status) throws Exception {
-        ValidatorConfig validatorcfg;
         Element element;
         String message, value;
         DataElement dataelement;
         InputComponent input;
+        List<InputComponent> validations = new ArrayList<InputComponent>();
         
         /*
          * Componentes selecionáveis (como checkboxes), só fornecem
@@ -336,15 +338,24 @@ public class Controller {
                 continue;
             }
             
-            validatorcfg = input.getValidatorConfig();
-            if (validatorcfg != null) {
-                message = callCustomValidation(function, view, validatorcfg);
-                if (message != null) {
-                    status.message = message;
-                    status.input = input;
-                    status.error = EVALIDATION;
-                }
-            }
+            if (input.getValidatorConfig() != null)
+                validations.add(input);
+        }
+        
+        if (status.error != 0)
+            return;
+        
+        for (InputComponent input_ : validations) {
+            message = callCustomValidation(function, view, input_.
+                    getValidatorConfig());
+            
+            if (message == null)
+                continue;
+            
+            status.message = message;
+            status.input = input_;
+            status.error = EVALIDATION;
+            break;
         }
     }
     

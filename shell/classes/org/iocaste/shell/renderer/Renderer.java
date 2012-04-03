@@ -1,6 +1,7 @@
 package org.iocaste.shell.renderer;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -191,10 +192,13 @@ public class Renderer {
     protected static final String toString(Object value, DataElement element,
             Locale locale, boolean boolconvert) {
         DateFormat dateformat;
+        NumberFormat numberformat;
         
         switch (element.getType()) {
         case DataType.DEC:
-            return Double.toString((Double)value);
+            numberformat = NumberFormat.getNumberInstance(locale);
+            
+            return numberformat.format(value);
             
         case DataType.NUMC:
             if (element.getLength() < DataType.MAX_INT_LEN)
