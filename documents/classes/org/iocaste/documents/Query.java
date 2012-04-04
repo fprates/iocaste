@@ -154,13 +154,12 @@ public class Query {
     /**
      * 
      * @param query
-     * @param function
-     * @param queries
+     * @param cache
      * @return
      * @throws Exception
      */
-    public static final QueryInfo parseQuery(String query, Function function,
-            Map<String, Map<String, String>> queries) throws Exception {
+    public static final QueryInfo parseQuery(String query, Cache cache)
+            throws Exception {
         String where, criteria = "", upcasetoken;
         String[] select, parsed = query.split("\\s");
         int t, pass = 0;
@@ -211,7 +210,7 @@ public class Query {
                 pass = 3;
                 continue;
             case 3:
-                queryinfo.model = Model.get(upcasetoken, function, queries);
+                queryinfo.model = Model.get(upcasetoken, cache);
                 if (queryinfo.model == null)
                     throw new Exception("Document model not found.");
                 
@@ -349,19 +348,18 @@ public class Query {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public static final ExtendedObject[] select(String query, Function function,
-            Map<String, Map<String, String>> queries, Object... criteria)
-                    throws Exception {
+    public static final ExtendedObject[] select(String query, Cache cache,
+            Object... criteria) throws Exception {
         Iocaste iocaste; 
         Object[] lines;
         Map<String, Object> line;
         ExtendedObject[] objects;
-        QueryInfo queryinfo = parseQuery(query, function, queries);
+        QueryInfo queryinfo = parseQuery(query, cache);
         
         if (queryinfo.query == null || queryinfo.model == null)
             return null;
 
-        iocaste = new Iocaste(function);
+        iocaste = new Iocaste(cache.function);
         
         lines = iocaste.select(queryinfo.query, criteria);
         if (lines.length == 0)
@@ -380,18 +378,16 @@ public class Query {
     /**
      * 
      * @param query
-     * @param function
-     * @param queries
+     * @param cache
      * @param criteria
      * @return
      * @throws Exception
      */
-    public static final int update(String query, Function function,
-            Map<String, Map<String, String>> queries, Object... criteria)
-                    throws Exception {
-        QueryInfo queryinfo = parseQuery(query, function, queries);
+    public static final int update(String query, Cache cache,
+            Object... criteria) throws Exception {
+        QueryInfo queryinfo = parseQuery(query, cache);
         
-        return new Iocaste(function).update(queryinfo.query, criteria);
+        return new Iocaste(cache.function).update(queryinfo.query, criteria);
     }
 
 }

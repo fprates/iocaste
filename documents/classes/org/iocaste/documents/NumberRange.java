@@ -14,19 +14,17 @@ public class NumberRange {
     /**
      * 
      * @param name
-     * @param function
-     * @param queries
+     * @param cache
      * @throws Exception
      */
-    public static void create(String name, Function function, Map<String,
-            Map<String, String>> queries) throws Exception {
-        DocumentModel model = Model.get("NUMBER_RANGE", function, queries);
+    public static void create(String name, Cache cache) throws Exception {
+        DocumentModel model = Model.get("NUMBER_RANGE", cache);
         ExtendedObject range = new ExtendedObject(model);
         
         range.setValue("IDENT", name);
         range.setValue("CURRENT", 0);
         
-        Query.save(range, function);
+        Query.save(range, cache.function);
     }
     
     /**

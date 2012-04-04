@@ -1,9 +1,5 @@
 package org.iocaste.documents;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
@@ -13,10 +9,10 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class Services extends AbstractFunction {
-    private Map<String, Map<String, String>> queries;
+    private Cache cache;
     
     public Services() {
-        queries = new HashMap<String, Map<String, String>>();
+        cache = new Cache(this);
         
         export("create_number_factory", "createNumberFactory");
         export("get_data_element", "getDataElement");
@@ -44,7 +40,7 @@ public class Services extends AbstractFunction {
     public final int createModel(Message message) throws Exception {
         DocumentModel model = message.get("model");
         
-        return Model.create(model, this, queries);
+        return Model.create(model, cache);
     }
     
     /**
@@ -55,7 +51,7 @@ public class Services extends AbstractFunction {
     public final void createNumberFactory(Message message) throws Exception {
         String name = message.getString("name");
         
-        NumberRange.create(name, this, queries);
+        NumberRange.create(name, cache);
     }
     
     /**
@@ -92,7 +88,7 @@ public class Services extends AbstractFunction {
             throws Exception {
         String documentname = message.getString("name");
         
-        return Model.get(documentname, this, queries);
+        return Model.get(documentname, cache);
     }
     
     /**
@@ -104,7 +100,7 @@ public class Services extends AbstractFunction {
     public final ExtendedObject getObject(Message message) throws Exception {
         String modelname = message.getString("modelname");
         Object key = message.get("key");
-        DocumentModel model = Model.get(modelname, this, queries);
+        DocumentModel model = Model.get(modelname, cache);
         
         if (model == null)
             throw new IocasteException("invalid model.");
@@ -144,9 +140,9 @@ public class Services extends AbstractFunction {
      */
     public final int removeModel(Message message) throws Exception {
         String modelname = message.getString("model_name");
-        DocumentModel model = Model.get(modelname, this, queries);
+        DocumentModel model = Model.get(modelname, cache);
         
-        return Model.remove(model, this, queries);
+        return Model.remove(model, cache);
     }
     
     /**
@@ -159,7 +155,7 @@ public class Services extends AbstractFunction {
         String oldname = message.getString("oldname");
         String newname = message.getString("newname");
         
-        return Model.rename(oldname, newname, this, queries);
+        return Model.rename(oldname, newname, cache);
     }
     
     /**
@@ -183,7 +179,7 @@ public class Services extends AbstractFunction {
         String query = message.getString("query");
         Object[] criteria = message.get("criteria");
         
-        return Query.select(query, this, queries, criteria);
+        return Query.select(query, cache, criteria);
     }
     
     /**
@@ -196,7 +192,7 @@ public class Services extends AbstractFunction {
         String query = message.getString("query");
         Object[] criteria = message.get("criteria");
         
-        return Query.update(query, this, queries, criteria);
+        return Query.update(query, cache, criteria);
     }
     
     /**
@@ -208,7 +204,7 @@ public class Services extends AbstractFunction {
     public final int updateModel(Message message) throws Exception {
         DocumentModel model = message.get("model");
         
-        return Model.update(model, this, queries);
+        return Model.update(model, cache);
     }
     
     /**
@@ -220,6 +216,6 @@ public class Services extends AbstractFunction {
     public final int validateModel(Message message) throws Exception {
         DocumentModel model = message.get("model");
         
-        return Model.validate(model, this, queries);
+        return Model.validate(model, cache);
     }
 }

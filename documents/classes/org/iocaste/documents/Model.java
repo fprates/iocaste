@@ -10,7 +10,6 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 
@@ -48,21 +47,27 @@ public class Model {
     /**
      * 
      * @param model
-     * @param function
-     * @param queries
+     * @param cache
      * @return
      * @throws Exception
      */
-    public static final int create(DocumentModel model, Function function,
-            Map<String, Map<String, String>> queries) throws Exception {
-        Iocaste iocaste = new Iocaste(function);
+    public static final int create(DocumentModel model, Cache cache)
+            throws Exception {
+        String name;
+        Iocaste iocaste = new Iocaste(cache.function);
 
         saveDataElements(iocaste, model);
         saveDocumentHeader(iocaste, model);
         saveDocumentItens(iocaste, model);
         saveDocumentKeys(iocaste, model);
         
-        Common.parseQueries(model, queries);
+        Common.parseQueries(model, cache.queries);
+        
+        name = model.getName();
+        if (cache.models.containsKey(name))
+            cache.models.remove(name);
+        
+        cache.models.put(name, model);
         
         return 1;
     }
@@ -70,24 +75,28 @@ public class Model {
     /**
      * 
      * @param documentname
-     * @param function
+     * @param cache
      * @return
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public static final DocumentModel get(String documentname,
-            Function function, Map<String, Map<String, String>> queries)
-                    throws Exception {
+    public static final DocumentModel get(String documentname, Cache cache)
+            throws Exception {
+        Iocaste iocaste;
         Object[] lines, shlines;
         String itemref, query, name;
         String[] composed;
         Map<String, Object> columns;
         DocumentModelItem item;
         DocumentModel document = null;
-        Iocaste iocaste = new Iocaste(function);
         
         if (documentname == null)
             throw new Exception("Document model not specified.");
+        
+        if (cache.models.containsKey(documentname))
+            return cache.models.get(documentname);
+        
+        iocaste = new Iocaste(cache.function);
 
         query = "select * from docs001 where docid = ?";
         lines = iocaste.select(query, documentname);
@@ -121,7 +130,7 @@ public class Model {
             
             if (itemref != null) {
                 composed = itemref.split("\\.");
-                item.setReference(get(composed[0], function, queries).
+                item.setReference(get(composed[0], cache).
                         getModelItem(composed[1]));
             }
             
@@ -144,10 +153,12 @@ public class Model {
             document.add(new DocumentModelKey(composed[1]));
         }
         
-        if (!queries.containsKey(documentname))
-            Common.parseQueries(document, queries);
+        if (!cache.queries.containsKey(documentname))
+            Common.parseQueries(document, cache.queries);
         
-        document.setQueries(queries.get(documentname));
+        document.setQueries(cache.queries.get(documentname));
+        
+        cache.models.put(documentname, document);
         
         return document;
     }
@@ -205,14 +216,13 @@ public class Model {
     /**
      * 
      * @param model
-     * @param function
-     * @param queries
+     * @param cache
      * @return
      * @throws Exception
      */
-    public static final int remove(DocumentModel model, Function function,
-            Map<String, Map<String, String>> queries) throws Exception {
-        Iocaste iocaste = new Iocaste(function);
+    public static final int remove(DocumentModel model, Cache cache)
+            throws Exception {
+        Iocaste iocaste = new Iocaste(cache.function);
         String tablename, name, query = "delete from docs004 where iname = ?";
         
         for (DocumentModelKey key : model.getKeys()) {
@@ -240,7 +250,8 @@ public class Model {
                 toString();
         iocaste.update(query);
         
-        queries.remove(name);
+        cache.queries.remove(name);
+        cache.models.remove(name);
         
         return 1;
     }
@@ -305,22 +316,20 @@ public class Model {
      * 
      * @param oldname
      * @param newname
-     * @param function
-     * @param queries
+     * @param cache
      * @return
      * @throws Exception
      */
-    public static final int rename(String oldname, String newname,
-            Function function, Map<String, Map<String, String>> queries)
-                    throws Exception {
-        DocumentModel model = Model.get(oldname, function, queries);
+    public static final int rename(String oldname, String newname, Cache cache)
+            throws Exception {
+        DocumentModel model = Model.get(oldname, cache);
         
         model.setName(newname);
-        if (Model.create(model, function, queries) == 0)
+        if (Model.create(model, cache) == 0)
             throw new IocasteException("");
         
         model.setName(oldname);
-        if (remove(model, function, queries) == 0)
+        if (remove(model, cache) == 0)
             throw new IocasteException("");
         
         return 1;
@@ -365,8 +374,7 @@ public class Model {
         
         iocaste.update(query);
         
-        query = "insert into docs001 (docid, tname, class) " +
-                "values (?, ?, ?)";
+        query = "insert into docs001(docid, tname, class) values(?, ?, ?)";
         if (iocaste.update(query, model.getName(), model.getTableName(),
                 model.getClassName()) == 0)
             throw new IocasteException("");
@@ -518,14 +526,15 @@ public class Model {
     /**
      * 
      * @param model
-     * @param function
-     * @param queries
+     * @param cache
+     * @return
      * @throws Exception
      */
-    public static final int update(DocumentModel model, Function function,
-            Map<String, Map<String, String>> queries) throws Exception {
-        DocumentModel oldmodel = get(model.getName(), function, queries);
-        Iocaste iocaste = new Iocaste(function);
+    public static final int update(DocumentModel model, Cache cache)
+            throws Exception {
+        String name = model.getName();
+        DocumentModel oldmodel = get(name, cache);
+        Iocaste iocaste = new Iocaste(cache.function);
         
         for (DocumentModelItem item : model.getItens()) {
             if (!oldmodel.contains(item)) {
@@ -546,13 +555,18 @@ public class Model {
         for (DocumentModelItem olditem : oldmodel.getItens()) {
             if (model.contains(olditem))
                 continue;
+            
             if (removeModelItem(iocaste, olditem) == 0)
                 throw new IocasteException("");
+            
             if (removeDBColumn(iocaste, olditem) == 0)
                 throw new IocasteException("");
         }
         
-        Common.parseQueries(model, queries);
+        Common.parseQueries(model, cache.queries);
+        
+        cache.models.remove(name);
+        cache.models.put(name, model);
         
         return 1;
     }
@@ -684,16 +698,15 @@ public class Model {
     /**
      * 
      * @param model
-     * @param function
-     * @param queries
+     * @param cache
      * @return
      * @throws Exception
      */
-    public static final int validate(DocumentModel model, Function function,
-            Map<String, Map<String, String>> queries) throws Exception {
-        DocumentModel tablemodel = Model.get("TABLE_MODEL", function, queries);
+    public static final int validate(DocumentModel model, Cache cache)
+            throws Exception {
+        DocumentModel tablemodel = Model.get("TABLE_MODEL", cache);
         ExtendedObject link = Query.get(tablemodel, model.getTableName(),
-                function);
+                cache.function);
         
         return (link != null)? Documents.TABLE_ALREADY_ASSIGNED : 0;
     }
