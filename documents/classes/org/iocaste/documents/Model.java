@@ -67,6 +67,7 @@ public class Model {
         if (cache.models.containsKey(name))
             cache.models.remove(name);
         
+        model.setQueries(cache.queries.get(name));
         cache.models.put(name, model);
         
         return 1;

@@ -60,9 +60,9 @@ public class Common {
             
             values.append("?");
             if (iskey)
-                where.append(fieldname).append("=?");
+                where.append(fieldname).append(" = ?");
             else
-                update.append(fieldname).append("=?");
+                update.append(fieldname).append(" = ?");
         }
 
         if (setok)
