@@ -45,9 +45,11 @@ public class PageRenderer extends HttpServlet implements Function {
             new HashMap<String, List<SessionContext>>();
     private String sessionid, servername;
     private HtmlRenderer renderer;
+    private Map<String, Map<String, String>> style;
     
     public PageRenderer() {
         renderer = new HtmlRenderer();
+        style = null;
     }
     
     /**
@@ -656,7 +658,10 @@ public class PageRenderer extends HttpServlet implements Function {
         
         configResponse(resp, viewdata);
         
-        renderer.setCssElements(Style.get("DEFAULT", this));
+        if (style == null)
+            style = Style.get("DEFAULT", this);
+        
+        renderer.setCssElements(style);
         renderer.setLogid(pagectx.getLogid());
         text = renderer.run(pagectx.getViewData());
 
