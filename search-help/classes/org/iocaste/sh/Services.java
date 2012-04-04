@@ -1,7 +1,9 @@
 package org.iocaste.sh;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -12,8 +14,11 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class Services extends AbstractFunction {
+    private Map<String, ExtendedObject[]> cache;
     
     public Services() {
+        cache = new HashMap<String, ExtendedObject[]>();
+        
         export("get", "get");
         export("save", "save");
         export("assign", "assign");
@@ -71,6 +76,10 @@ public class Services extends AbstractFunction {
         String value;
         ExtendedObject[] itens;
         List<ExtendedObject> shdata;
+        
+        if (cache.containsKey(name))
+            return cache.get(name);
+        
         Documents documents = new Documents(this);
         ExtendedObject header = documents.getObject("SEARCH_HELP", name);
         
@@ -92,7 +101,10 @@ public class Services extends AbstractFunction {
             shdata.add(item);
         }
         
-        return shdata.toArray(new ExtendedObject[0]);
+        itens = shdata.toArray(new ExtendedObject[0]);
+        cache.put(name, itens);
+        
+        return itens;
     }
 
     /**
@@ -119,6 +131,8 @@ public class Services extends AbstractFunction {
         for (int i = 1; i < shdata.length; i++)
             documents.delete(shdata[i]);
         
+        cache.remove(shname);
+        
         return documents.delete(shdata[0]);
     }
     
@@ -132,6 +146,7 @@ public class Services extends AbstractFunction {
         Documents documents = new Documents(this);
         ExtendedObject header = message.get("header");
         ExtendedObject[] itens = message.get("itens");
+        List<ExtendedObject> shdata = new ArrayList<ExtendedObject>();
 
         shname = header.getValue("NAME");
         model = header.getValue("MODEL");
@@ -139,6 +154,7 @@ public class Services extends AbstractFunction {
         
         header.setValue("EXPORT", export);
         documents.save(header);
+        shdata.add(header);
         
         for (ExtendedObject item : itens) {
             shitemname = item.getValue("ITEM");
@@ -148,7 +164,10 @@ public class Services extends AbstractFunction {
             item.setValue("SEARCH_HELP", shname);
             
             documents.save(item);
+            shdata.add(item);
         }
+        
+        cache.put(shname, shdata.toArray(new ExtendedObject[0]));
     }
     
     /**
@@ -161,13 +180,15 @@ public class Services extends AbstractFunction {
         ExtendedObject header = message.get("header");
         ExtendedObject[] itens = message.get("itens");
         Documents documents = new Documents(this);
-
+        List<ExtendedObject> shdata = new ArrayList<ExtendedObject>();
+        
         shname = header.getValue("NAME");
         model = header.getValue("MODEL");
         export = composeName(model, header.getValue("EXPORT"));
         
         header.setValue("EXPORT", export);
         documents.modify(header);
+        shdata.add(header);
         
         documents.update("delete from SH_ITENS where SEARCH_HELP = ?", shname);
         for (ExtendedObject item : itens) {
@@ -178,6 +199,10 @@ public class Services extends AbstractFunction {
             item.setValue("SEARCH_HELP", shname);
             
             documents.save(item);
+            shdata.add(item);
         }
+        
+        cache.remove(shname);
+        cache.put(shname, shdata.toArray(new ExtendedObject[0]));
     }
 }
