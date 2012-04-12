@@ -83,6 +83,7 @@ public class Model {
     @SuppressWarnings("unchecked")
     public static final DocumentModel get(String documentname, Cache cache)
             throws Exception {
+        int i;
         Iocaste iocaste;
         Object[] lines, shlines;
         String itemref, query, name;
@@ -142,7 +143,9 @@ public class Model {
                 item.setSearchHelp((String)columns.get("SHCAB"));
             }
             
+            i = item.getIndex();
             document.add(item);
+            item.setIndex(i);
         }
         
         lines = iocaste.select("select * from docs004 where docid = ?",
