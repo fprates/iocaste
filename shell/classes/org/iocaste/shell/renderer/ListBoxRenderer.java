@@ -4,7 +4,7 @@ import org.iocaste.shell.XMLElement;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.Shell;
 
-public class ListRenderer extends Renderer {
+public class ListBoxRenderer extends Renderer {
     
     /**
      * 
