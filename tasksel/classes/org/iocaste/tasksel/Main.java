@@ -3,7 +3,6 @@ package org.iocaste.tasksel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
@@ -12,6 +11,7 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
@@ -85,10 +85,6 @@ public class Main extends AbstractPage {
         Container container = new Form(view, "main");
         DataForm form = new DataForm(container, "selector");
         DataItem cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
-        PackageTool pkgtool = new PackageTool(this);
-        
-        if (!pkgtool.isInstalled("iocaste-tasksel"))
-            pkgtool.install("iocaste-tasksel");
         
         cmdline.setLength(128);
         new Button(container, "run");
@@ -120,7 +116,7 @@ public class Main extends AbstractPage {
         DataItem cmdline = form.get("command");
         String command = cmdline.get(), page = "main", app = null;
         
-        if (command == null || command.length() == 0)
+        if (Shell.isInitial(command))
             return;
         else
             command.trim();
@@ -129,29 +125,33 @@ public class Main extends AbstractPage {
         parsed = command.split("\\s");
         vdata.clearParameters();
 
-        if (parsed[0].length() < 19)
-            task = new Documents(this).getObject("TASKS", parsed[0].
-                    toUpperCase());
+        if (parsed[0].length() >= 19) {
+            vdata.message(Const.ERROR, "command.not.found");
+            vdata.setFocus("command");
+            return;
+        }
+        
+        task = new Documents(this).getObject("TASKS", parsed[0].toUpperCase());
         
         if (task == null) {
-            if (PackageTool.hasPackage(parsed[0])) {
-                vdata.setReloadableView(true);
-                vdata.export("package", parsed[0]);
-                
-                if (new PackageTool(this).isInstalled(parsed[0]))
-                    vdata.redirect(null, "uninstall");
-                else
-                    vdata.redirect(null, "install");
-                
-                return;
-            }
-            
+//            if (PackageTool.hasPackage(parsed[0])) {
+//                vdata.setReloadableView(true);
+//                vdata.export("package", parsed[0]);
+//                
+//                if (new PackageTool(this).isInstalled(parsed[0]))
+//                    vdata.redirect(null, "uninstall");
+//                else
+//                    vdata.redirect(null, "install");
+//                
+//                return;
+//            }
+//            
             vdata.message(Const.ERROR, "command.not.found");
             vdata.setFocus("command");
             return;
         }
 
-        parsed[0] = (String)task.getValue("COMMAND");
+        parsed[0] = task.getValue("COMMAND");
         
         for (int i = 0; i < parsed.length; i++) {
             switch (i) {

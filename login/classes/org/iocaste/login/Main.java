@@ -4,6 +4,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
@@ -63,12 +64,23 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void connect(ViewData view) throws Exception {
+        PackageTool pkgtool = new PackageTool(this);
         DataForm form = view.getElement("login");
         Iocaste iocaste = new Iocaste(this);
         Login login = form.getObject().newInstance();
+        String[] packages = new String[] {
+                "iocaste-tasksel",
+                "iocaste-packagetool"
+        };
         
         if (iocaste.login(login.getUsername(), login.getSecret(),
                 login.getLocale())) {
+            pkgtool = new PackageTool(this);
+            
+            for (String pkgname : packages)
+                if (!pkgtool.isInstalled(pkgname))
+                    pkgtool.install(pkgname);
+            
             view.setReloadableView(true);
             view.redirect("iocaste-tasksel", "main");
         } else {
