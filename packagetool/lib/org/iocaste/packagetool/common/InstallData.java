@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 
 public class InstallData implements Serializable {
@@ -17,6 +18,7 @@ public class InstallData implements Serializable {
     private Map<String, String> links;
     private Set<String> numbers;
     private List<SearchHelpData> shds;
+    private List<DataElement> elements;
     
     public InstallData() {
         models = new ArrayList<DocumentModel>();
@@ -24,6 +26,15 @@ public class InstallData implements Serializable {
         links = new HashMap<String, String>();
         numbers = new HashSet<String>();
         shds = new ArrayList<SearchHelpData>();
+        elements = new ArrayList<DataElement>();
+    }
+    
+    /**
+     * 
+     * @param element
+     */
+    public final void add(DataElement element) {
+        elements.add(element);
     }
     
     /**
@@ -67,6 +78,14 @@ public class InstallData implements Serializable {
         
         list.add(values);
         this.values.put(model, list);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final List<DataElement> getElements() {
+        return elements;
     }
     
     /**

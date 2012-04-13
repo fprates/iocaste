@@ -1,9 +1,11 @@
 package org.iocaste.packagetool;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
@@ -39,8 +41,9 @@ public class Services extends AbstractFunction {
         Map<String, String> links;
         SHLib shlib;
         int i;
+        long pkgid;
         InstallData data = (InstallData)message.get("data");
-        String shname, package_ = message.getString("name");
+        String shname, pkgname = message.getString("name");
         Documents documents = new Documents(this);
         Map<String, DocumentModelItem> shm =
                 new HashMap<String, DocumentModelItem>();
@@ -48,9 +51,10 @@ public class Services extends AbstractFunction {
         /*
          * Registra instalação do pacote
          */
+        pkgid = documents.getNextNumber("PKGCODE") * 1000000;
         header = new ExtendedObject(documents.getModel("PACKAGE"));
-        header.setValue("NAME", package_);
-        
+        header.setValue("NAME", pkgname);
+        header.setValue("CODE", pkgid);
         documents.save(header);
         
         /*
@@ -67,7 +71,8 @@ public class Services extends AbstractFunction {
                     throw new IocasteException("create model error.");
             }
             
-            Registry.add(model, package_, documents);
+            pkgid++;
+            Registry.add(model, pkgname, documents, pkgid);
             
             for (DocumentModelItem modelitem : model.getItens())
                 if (modelitem.getSearchHelp() != null)
@@ -104,8 +109,9 @@ public class Services extends AbstractFunction {
             header.setValue("COMMAND", links.get(link));
             
             documents.save(header);
-            
-            Registry.add(link, "TASK", package_, documents);
+
+            pkgid++;
+            Registry.add(link, "TASK", pkgname, documents, pkgid);
         }
         
         /*
@@ -113,8 +119,9 @@ public class Services extends AbstractFunction {
          */
         for (String factory : data.getNumberFactories()) {
             documents.createNumberFactory(factory);
-            
-            Registry.add(factory, "NUMBER", package_, documents);
+
+            pkgid++;
+            Registry.add(factory, "NUMBER", pkgname, documents, pkgid);
         }
         
         /*
@@ -148,9 +155,16 @@ public class Services extends AbstractFunction {
                 
                 if (shm.containsKey(shname))
                     shlib.assign(shm.get(shname));
-                
-                Registry.add(shname, "SH", package_, documents);
+
+                pkgid++;
+                Registry.add(shname, "SH", pkgname, documents, pkgid);
             }
+        }
+        
+        for (DataElement element : data.getElements()) {
+            pkgid++;
+            Registry.add(element.getName(), "DATA_ELEMENT", pkgname,
+                    documents, pkgid);
         }
         
         documents.commit();
@@ -178,6 +192,30 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void uninstall(Message message) throws Exception {
+        String model;
+//        SHLib shlib;
+        String pkgname = message.getString("package");
+        ExtendedObject[] objects = Registry.getEntries(pkgname, this);
+        List<ExtendedObject> shs = new ArrayList<ExtendedObject>();
+        List<ExtendedObject> elements = new ArrayList<ExtendedObject>();
         
+        for (ExtendedObject object : objects) {
+            model = object.getValue("MODEL");
+            
+            if (model.equals("SEARCH_HELP")) {
+                shs.add(object);
+                continue;
+            }
+            
+            if (model.equals("DATA_ELEMENT")) {
+                elements.add(object);
+                continue;
+            }
+        }
+//        
+//        shlib = new SHLib(this);
+//        for (ExtendedObject object : shs) {
+//            name = object.getValue("NAME");
+//        }
     }
 }
