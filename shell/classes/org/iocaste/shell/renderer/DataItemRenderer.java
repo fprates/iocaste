@@ -10,12 +10,10 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Shell;
-import org.iocaste.shell.common.Text;
 
 public class DataItemRenderer {
 
     public static final XMLElement render(DataItem dataitem, Config config) {
-        Text text;
         List<XMLElement> coltags;
         DocumentModelItem modelitem;
         InputComponent input;
@@ -23,15 +21,10 @@ public class DataItemRenderer {
         DataForm form = (DataForm)dataitem.getContainer();
         XMLElement coltag, itemtag = new XMLElement("tr");
         String inputname = dataitem.getName();
-        String styleclass = dataitem.getStyleClass();
-        
-        text = new Text(form, new StringBuffer(inputname).
-                append(".text").toString());
-        text.setText(inputname);
-        text.setStyleClass(styleclass);
         
         coltag = new XMLElement("td");
-        coltag.addChild(TextRenderer.render(text, config));
+        coltag.add("class", dataitem.getStyleClass());
+        coltag.addInner(config.getText(inputname, inputname));
         
         modelitem = dataitem.getModelItem();
         if (modelitem != null)
