@@ -264,7 +264,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param pagetrack
      * @return
      */
-    private final int getLogid(String pagetrack) {
+    private static final int getLogid(String pagetrack) {
         String[] parsed = pagetrack.split(":");
         
         return Integer.parseInt(parsed[1]);
@@ -383,9 +383,12 @@ public class PageRenderer extends HttpServlet implements Function {
      * @return
      */
     public static final ViewData getView(String sessionid, String appname,
-            String pagename, int logid) {
-        AppContext appcontext = apps.get(sessionid).
-                get(logid).getAppContext(appname);
+            String pagename) {
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        
+        AppContext appcontext = apps.get(complexid[0]).get(logid).
+                getAppContext(appname);
         
         return appcontext.getPageContext(pagename).getViewData();
     }
@@ -396,8 +399,11 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param logid
      * @return
      */
-    public static final String[] popPage(String sessionid, int logid) {
-        return apps.get(sessionid).get(logid).popPage();
+    public static final String[] popPage(String sessionid) {
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        
+        return apps.get(complexid[0]).get(logid).popPage();
     }
     
     /**
@@ -410,6 +416,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
+        int logid;
         ContextData contextdata;
         InputData inputdata;
         ControlComponent action;
@@ -449,10 +456,11 @@ public class PageRenderer extends HttpServlet implements Function {
         view = callController(sessionid, parameters, pagectx);
         
         action = view.getElement(actionname);
+        logid = getLogid(pagetrack);
         if (view.hasPageCall() && (action == null ||
                 !action.isCancellable() || action.allowStacking()))
-            pushPage(sessionid, view.getAppName(), view.getPageName(),
-                    view.getLogid());
+            pushPage(getComplexId(sessionid, logid), view.getAppName(),
+                    view.getPageName());
         
         view.clearInputs();
         
@@ -466,7 +474,7 @@ public class PageRenderer extends HttpServlet implements Function {
             registerInputs(inputdata);
         }
         
-        updateView(sessionid, view, this);
+        updateView(getComplexId(sessionid, logid), view, this);
         
         renderer.setMessageText(view.getTranslatedMessage());
         renderer.setMessageType(view.getMessageType());
@@ -485,7 +493,7 @@ public class PageRenderer extends HttpServlet implements Function {
         contextdata.sessionid = sessionid;
         contextdata.appname = appname;
         contextdata.pagename = pagename;
-        contextdata.logid = getLogid(pagetrack);
+        contextdata.logid = logid;
         
         pagectx_ = getPageContext(contextdata);
         
@@ -564,8 +572,11 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param logid
      */
     public static final void pushPage(String sessionid, String appname,
-            String pagename, int logid) {
-        apps.get(sessionid).get(logid).pushPage(appname, pagename);
+            String pagename) {
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        
+        apps.get(complexid[0]).get(logid).pushPage(appname, pagename);
     }
     
     /**
@@ -644,7 +655,6 @@ public class PageRenderer extends HttpServlet implements Function {
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
             message.add("parameters", pagectx.getParameters());
-            message.add("logid", logid);
             message.add("locale", pagectx.getLocale());
             message.setSessionid(getComplexId(sessionid, logid));
             
@@ -754,7 +764,9 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     public static final void updateView(String sessionid, ViewData view,
             Function function) throws Exception {
-        AppContext appcontext = apps.get(sessionid).get(view.getLogid()).
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        AppContext appcontext = apps.get(complexid[0]).get(logid).
                 getAppContext(view.getAppName());
         InputData inputdata = new InputData();
         

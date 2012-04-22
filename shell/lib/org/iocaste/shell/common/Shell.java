@@ -149,7 +149,6 @@ public class Shell extends AbstractServiceInterface {
         message.setId("get_view");
         message.add("app_name", view.getAppName());
         message.add("page_name", pagename);
-        message.add("logid", view.getLogid());
         
         return call(message);
     }
@@ -173,7 +172,6 @@ public class Shell extends AbstractServiceInterface {
         Message message = new Message();
         
         message.setId("pop_page");
-        message.add("logid", view.getLogid());
         
         return call(message);
     }
@@ -189,7 +187,6 @@ public class Shell extends AbstractServiceInterface {
         message.setId("push_page");
         message.add("app_name", view.getAppName());
         message.add("page_name", view.getPageName());
-        message.add("logid", view.getLogid());
         
         call(message);
     }
