@@ -74,7 +74,7 @@ public class PageRenderer extends HttpServlet implements Function {
         message = new Message();
         message.setId("exec_action");
         message.add("view", pagectx.getViewData());
-        message.setSessionid(sessionid);
+        message.setSessionid(getComplexId(sessionid, pagectx.getLogid()));
         
         for (String name : parameters.keySet())
             message.add(name, parameters.get(name));
@@ -110,14 +110,12 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
-     * @param sessionid
-     * @param appname
-     * @param pagename
-     * @param logid
+     * @param contextdata
      * @return
+     * @throws Exception
      */
-    private final PageContext createPageContext(String sessionid,
-            String appname, String pagename, int logid) throws Exception {
+    private final PageContext createPageContext(ContextData contextdata)
+            throws Exception {
         AppContext appctx;
         PageContext pagectx;
         List<SessionContext> sessions;
@@ -132,24 +130,25 @@ public class PageRenderer extends HttpServlet implements Function {
         } else {
             sessions = apps.get(sessionid);
             
-            if (logid >= sessions.size()) {
+            if (contextdata.logid >= sessions.size()) {
                 sessionctx = new SessionContext();
                 sessions.add(sessionctx);
             } else {
-                sessionctx = sessions.get(logid);
+                sessionctx = sessions.get(contextdata.logid);
             }
         }
         
-        appctx = (sessionctx.contains(appname))?
-                sessionctx.getAppContext(appname) : new AppContext(appname);
+        appctx = (sessionctx.contains(contextdata.appname))?
+                sessionctx.getAppContext(contextdata.appname) :
+                    new AppContext(contextdata.appname);
                 
-        pagectx = new PageContext(pagename);
+        pagectx = new PageContext(contextdata.pagename);
         pagectx.setAppContext(appctx);
-        pagectx.setLogid(logid);
+        pagectx.setLogid(contextdata.logid);
         pagectx.setLocale(new Iocaste(this).getLocale());
         
-        appctx.put(pagename, pagectx);
-        sessionctx.put(appname, appctx);
+        appctx.put(contextdata.pagename, pagectx);
+        sessionctx.put(contextdata.appname, appctx);
         
         return pagectx;
     }
@@ -193,9 +192,10 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void entry(HttpServletRequest req, HttpServletResponse resp)
             throws Exception {
+        Iocaste iocaste;
+        ContextData contextdata;
         int logid = 0;
         PageContext pagectx = null;
-        Iocaste iocaste = new Iocaste(this);
         
         if (apps.containsKey(sessionid)) {
             pagectx = getPageContext(req, sessionid);
@@ -203,13 +203,20 @@ public class PageRenderer extends HttpServlet implements Function {
         }
         
         if (pagectx == null) {
-            pagectx = createPageContext(sessionid, LOGIN_APP, "authentic",
-                    logid);
+            contextdata = new ContextData();
+            contextdata.sessionid = sessionid;
+            contextdata.appname = LOGIN_APP;
+            contextdata.pagename = "authentic";
+            contextdata.logid = logid;
+            
+            pagectx = createPageContext(contextdata);
             renderer.setUsername(NOT_CONNECTED);
         }
         
-        if (pagectx.getViewData() != null)
+        if (pagectx.getViewData() != null) {
+            iocaste = new Iocaste(this);
             pagectx = processController(iocaste, req, pagectx);
+        }
         
         render(resp, pagectx);
     }
@@ -217,20 +224,20 @@ public class PageRenderer extends HttpServlet implements Function {
     /**
      * 
      * @param input
-     * @param container
+     * @param inputdata
      * @throws Exception
      */
     private static final void generateSearchHelp(InputComponent input,
-            Container container, Function function) throws Exception {
+            InputData inputdata) throws Exception {
         SearchHelp sh;
-        SHLib shlib = new SHLib(function);
+        SHLib shlib = new SHLib(inputdata.function);
         String shname = input.getModelItem().getSearchHelp();
         ExtendedObject[] shdata = shlib.get(shname);
         
         if (shdata == null || shdata.length == 0)
             return;
         
-        sh = new SearchHelp(container, input.getName()+".sh");
+        sh = new SearchHelp(inputdata.container, input.getName()+".sh");
         sh.setHtmlName(input.getHtmlName()+".sh");
         sh.setModelName((String)shdata[0].getValue("MODEL"));
         sh.setExport((String)shdata[0].getValue("EXPORT"));
@@ -239,6 +246,17 @@ public class PageRenderer extends HttpServlet implements Function {
             sh.addModelItemName((String)shdata[i].getValue("ITEM"));
         
         input.setSearchHelp(sh);
+    }
+    
+    /**
+     * 
+     * @param sessionid
+     * @param logid
+     * @return
+     */
+    private final String getComplexId(String sessionid, int logid) {
+        return new StringBuilder(sessionid).append(":").append(logid).
+                toString();
     }
     
     /**
@@ -270,6 +288,7 @@ public class PageRenderer extends HttpServlet implements Function {
     @SuppressWarnings("unchecked")
     private final PageContext getPageContext(HttpServletRequest req,
             String sessionid) throws Exception {
+        ContextData contextdata;
         String[] pageparse;
         ServletFileUpload fileupload;
         int t, logid;
@@ -320,7 +339,13 @@ public class PageRenderer extends HttpServlet implements Function {
         
         pageparse[1] = pageparse[t];
         
-        pagectx = getPageContext(sessionid, pageparse[0], pageparse[1], logid);
+        contextdata = new ContextData();
+        contextdata.sessionid = sessionid;
+        contextdata.appname = pageparse[0];
+        contextdata.pagename = pageparse[1];
+        contextdata.logid = logid;
+        
+        pagectx = getPageContext(contextdata);
         
         if (pagectx == null)
             return null;
@@ -332,23 +357,21 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
-     * @param sessionid
-     * @param appname
-     * @param pagename
-     * @param logid
+     * @param contextdata
      * @return
      */
-    private final PageContext getPageContext (String sessionid, String appname,
-            String pagename, int logid) {
+    private final PageContext getPageContext (ContextData contextdata) {
         AppContext appctx;
         List<SessionContext> sessions = apps.get(sessionid);
         
-        if (logid >= sessions.size())
+        if (contextdata.logid >= sessions.size())
             return null;
         
-        appctx = sessions.get(logid).getAppContext(appname);
+        appctx = sessions.get(contextdata.logid).getAppContext(
+                contextdata.appname);
         
-        return (appctx == null)? null : appctx.getPageContext(pagename);
+        return (appctx == null)? null : appctx.getPageContext(
+                contextdata.pagename);
     }
     
     /**
@@ -387,6 +410,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
+        ContextData contextdata;
         InputData inputdata;
         ControlComponent action;
         Enumeration<?> parameternames;
@@ -447,7 +471,7 @@ public class PageRenderer extends HttpServlet implements Function {
         renderer.setMessageText(view.getTranslatedMessage());
         renderer.setMessageType(view.getMessageType());
         renderer.setUsername((iocaste.isConnected())?
-                iocaste.getUsername():NOT_CONNECTED);
+                iocaste.getUsername() : NOT_CONNECTED);
         
         appname = view.getRedirectedApp();
         if (appname == null)
@@ -457,12 +481,16 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagename == null)
             pagename = pagectx.getName();
         
-        pagectx_ = getPageContext(sessionid, appname, pagename,
-                getLogid(pagetrack));
+        contextdata = new ContextData();
+        contextdata.sessionid = sessionid;
+        contextdata.appname = appname;
+        contextdata.pagename = pagename;
+        contextdata.logid = getLogid(pagetrack);
+        
+        pagectx_ = getPageContext(contextdata);
         
         if (pagectx_ == null)
-            pagectx_ = createPageContext(sessionid, appname, pagename,
-                    getLogid(pagetrack));
+            pagectx_ = createPageContext(contextdata);
         
         pagectx_.setReloadableView(view.isReloadableView());
         
@@ -581,8 +609,7 @@ public class PageRenderer extends HttpServlet implements Function {
             
             if (input.getSearchHelp() == null && modelitem != null &&
                     modelitem.getSearchHelp() != null)
-                generateSearchHelp(input, inputdata.container,
-                        inputdata.function);
+                generateSearchHelp(input, inputdata);
         }
         
         if (inputdata.element.hasMultipartSupport())
@@ -598,6 +625,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void render(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
+        int logid;
         InputData inputdata;
         OutputStream os;
         String[] text;
@@ -610,14 +638,15 @@ public class PageRenderer extends HttpServlet implements Function {
         
         if (viewdata == null || pagectx.isReloadableView()) {
             appctx = pagectx.getAppContext();
+            logid = pagectx.getLogid();
             
             message.setId("get_view_data");
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
             message.add("parameters", pagectx.getParameters());
-            message.add("logid", pagectx.getLogid());
+            message.add("logid", logid);
             message.add("locale", pagectx.getLocale());
-            message.setSessionid(sessionid);
+            message.setSessionid(getComplexId(sessionid, logid));
             
             viewdata = (ViewData)Service.callServer(
                     composeUrl(appctx.getName()), message);
@@ -747,4 +776,11 @@ class InputData {
     public Element element;
     public Container container;
     public Function function;
+}
+
+class ContextData {
+    public String sessionid;
+    public String appname;
+    public String pagename;
+    public int logid;
 }

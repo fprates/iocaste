@@ -298,6 +298,16 @@ public class Services extends AbstractFunction {
         
         sessions.put(sessionid, context);
         
+        sessionid = sessionid.split(":")[0];
+        if (sessions.containsKey(sessionid))
+            return true;
+        
+        context = new UserContext();
+        context.setUser(user);
+        context.setConnection(db.instance());
+        
+        sessions.put(sessionid, context);
+        
         return true;
     }
     
