@@ -84,7 +84,12 @@ public class Services extends AbstractFunction {
      */
     public final void commit(Message message) throws Exception {
         String sessionid = message.getSessionid();
-        db.commit(getDBConnection(sessionid));
+        UserContext context = sessions.get(sessionid);
+        Connection connection = context.getConnection();
+        
+        db.commit(connection);
+        connection.close();
+        context.setConnection(null);
     }
     
     /**
@@ -93,7 +98,7 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void createUser(Message message) throws Exception {
-        User user = (User)message.get("userdata");
+        User user = message.get("userdata");
         
         if (user.getUsername() == null || user.getSecret() == null)
             throw new Exception("Invalid username or password");
@@ -134,9 +139,16 @@ public class Services extends AbstractFunction {
      * 
      * @param sessionid
      * @return
+     * @throws Exception
      */
-    private final Connection getDBConnection(String sessionid) {
-        return sessions.get(sessionid).getConnection();
+    private final Connection getDBConnection(String sessionid)
+            throws Exception {
+        UserContext context = sessions.get(sessionid);
+        
+        if (context.getConnection() == null)
+            context.setConnection(db.instance());
+        
+        return context.getConnection();
     }
     
     /**
@@ -292,7 +304,6 @@ public class Services extends AbstractFunction {
         
         context = new UserContext();
         context.setUser(user);
-        context.setConnection(db.instance());
         context.setLocale((locale.length == 1)?
                 new Locale(locale[0]) : new Locale(locale[0], locale[1]));
         
@@ -304,7 +315,6 @@ public class Services extends AbstractFunction {
         
         context = new UserContext();
         context.setUser(user);
-        context.setConnection(db.instance());
         
         sessions.put(sessionid, context);
         
@@ -318,7 +328,12 @@ public class Services extends AbstractFunction {
      */
     public final void rollback(Message message) throws Exception {
         String sessionid = message.getSessionid();
-        db.rollback(getDBConnection(sessionid));
+        UserContext context = sessions.get(sessionid);
+        Connection connection = context.getConnection();
+        
+        db.rollback(connection);
+        connection.close();
+        context.setConnection(null);
     }
     
     /**
@@ -328,10 +343,11 @@ public class Services extends AbstractFunction {
      * @throws Exception 
      */
     public final Object[] select(Message message) throws Exception {
-        UserContext context = sessions.get(message.getSessionid());
+        String query = message.getString("query");
+        Object[] criteria = message.get("criteria");
+        Connection connection = getDBConnection(message.getSessionid());
         
-        return db.select(context.getConnection(), message.getString("query"),
-                (Object[])message.get("criteria"));
+        return db.select(connection, query, criteria);
     }
     
     /**
@@ -361,10 +377,11 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final int update(Message message) throws Exception {
-    	UserContext context = sessions.get(message.getSessionid());
+        String query = message.getString("query");
+        Object[] criteria = message.get("criteria");
+        Connection connection = getDBConnection(message.getSessionid());
     	
-    	return db.update(context.getConnection(), message.getString("query"),
-    	        (Object[])message.get("criteria"));
+    	return db.update(connection, query, criteria);
     }
 
 }
