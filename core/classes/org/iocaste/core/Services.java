@@ -269,10 +269,11 @@ public class Services extends AbstractFunction {
         Object[] lines;
         Map<String, Object> columns;
         Connection connection;
+        Locale locale;
         User user = null;
+        String[] locale_ = message.getString("locale").split("_");
         String username = message.getString("user");
         String secret = message.getString("secret");
-        String locale[] = message.getString("locale").split("_");
         String sessionid = message.getSessionid();
         
         if (sessionid == null)
@@ -302,10 +303,12 @@ public class Services extends AbstractFunction {
         if (!user.getSecret().equals(secret))
             return false;
         
+        locale = (locale_.length == 1)?
+                new Locale(locale_[0]) : new Locale(locale_[0], locale_[1]);
+                
         context = new UserContext();
         context.setUser(user);
-        context.setLocale((locale.length == 1)?
-                new Locale(locale[0]) : new Locale(locale[0], locale[1]));
+        context.setLocale(locale);
         
         sessions.put(sessionid, context);
         
@@ -315,6 +318,7 @@ public class Services extends AbstractFunction {
         
         context = new UserContext();
         context.setUser(user);
+        context.setLocale(locale);
         
         sessions.put(sessionid, context);
         
