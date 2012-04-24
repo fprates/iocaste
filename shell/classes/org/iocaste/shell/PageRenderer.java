@@ -333,9 +333,8 @@ public class PageRenderer extends HttpServlet implements Function {
         
         t = pageparse.length - 1;
         
-        for (int i = 0; i < t; i++)
-            if (i > 0)
-                pageparse[0] += ("." + pageparse[i]);
+        for (int i = 1; i < t; i++)
+            pageparse[0] += ("." + pageparse[i]);
         
         pageparse[1] = pageparse[t];
         

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.shell.XMLElement;
+import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
@@ -30,6 +31,7 @@ public class TableItemRenderer extends Renderer {
      */
     public static final XMLElement render(Table table, TableItem item,
             Config config) {
+        Component component;
         TableColumn column;
         TableColumn[] columns = table.getColumns();
         int i = 0;
@@ -54,8 +56,17 @@ public class TableItemRenderer extends Renderer {
             
             if (element != null) {
                 tags.clear();
-                renderElement(tags, element, config);
-                tdtag.addChildren(tags);
+                if (column.getRenderTextOnly()) {
+                    if (!(element instanceof Component)) {
+                        tdtag.addInner("");
+                    } else {
+                        component = (Component)element;
+                        tdtag.addInner(component.getText());
+                    }
+                } else {
+                    renderElement(tags, element, config);
+                    tdtag.addChildren(tags);
+                }
             }
             
             trtag.addChild(tdtag);

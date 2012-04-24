@@ -90,6 +90,7 @@ public class Main extends AbstractPage {
             
             for (DocumentModelItem modelitem : model.getItens()) {
                 name = modelitem.getName();
+                column = table.getColumn(name);
                 value = object.getValue(modelitem);
                 export = sh.getExport();
                 
@@ -100,15 +101,14 @@ public class Main extends AbstractPage {
                     link.add(param, value);
                     link.setText(value.toString());
                 } else {
+                    column.setRenderTextOnly(true);
                     text = new Text(table, name);
                     tableitem.add(text);
                     text.setText((value == null)? "" : value.toString());
                 }
                 
-                if (!sh.contains(name)) {
-                    column = table.getColumn(name);
+                if (!sh.contains(name))
                     column.setVisible(false);
-                }
             }
             
             tableitem.setObject(object);

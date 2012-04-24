@@ -7,7 +7,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 
 public class TableColumn implements Serializable {
     private static final long serialVersionUID = -39703809895121317L;
-    private boolean visible, mark;
+    private boolean visible, mark, rendertextonly;
     private String name;
     private DocumentModelItem modelitem;
     private DataElement de;
@@ -16,6 +16,7 @@ public class TableColumn implements Serializable {
         visible = true;
         mark = false;
         visible = true;
+        rendertextonly = false;
         this.name = name;
         table.add(this);
     }
@@ -62,6 +63,14 @@ public class TableColumn implements Serializable {
     
     /**
      * 
+     * @return
+     */
+    public final boolean getRenderTextOnly() {
+        return rendertextonly;
+    }
+    
+    /**
+     * 
      * @param de
      */
     public final void setDataElement(DataElement de) {
@@ -90,6 +99,14 @@ public class TableColumn implements Serializable {
      */
     public final void setName(String name) {
         this.name = name;
+    }
+    
+    /**
+     * 
+     * @param rendertextonly
+     */
+    public final void setRenderTextOnly(boolean rendertextonly) {
+        this.rendertextonly = rendertextonly;
     }
     
     /**
