@@ -55,7 +55,7 @@ public class Services extends AbstractFunction {
         String query, columns = message.getString("columns");
         String from = message.getString("from");
         String where = message.getString("where");
-        Object[] criteria = (Object[])message.get("criteria");
+        Object[] criteria = message.get("criteria");
         StringBuilder sb = new StringBuilder("select ");
         
         sb.append((columns == null)? "*" : columns);

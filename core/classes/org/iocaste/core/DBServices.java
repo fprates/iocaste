@@ -50,6 +50,8 @@ public class DBServices {
         Connection connection = ds.getConnection();
         
         connection.setAutoCommit(false);
+        connection.setTransactionIsolation(
+                Connection.TRANSACTION_READ_COMMITTED);
         
         return connection;
     }
