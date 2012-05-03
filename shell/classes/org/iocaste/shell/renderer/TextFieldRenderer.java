@@ -46,7 +46,7 @@ public class TextFieldRenderer extends Renderer {
         if (!textfield.isEnabled())
             inputtag.add("readonly", "readonly");
 
-        addAttributes(inputtag, textfield);
+        addEvents(inputtag, textfield);
         
         tags.add(inputtag);
         

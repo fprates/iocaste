@@ -39,9 +39,9 @@ public class Renderer {
      * @param tag
      * @param element
      */
-    protected static void addAttributes(XMLElement tag, Element element) {
-        for (String name : element.getAttributeNames())
-            tag.add(name, element.getAttribute(name));
+    protected static void addEvents(XMLElement tag, Element element) {
+        for (String name : element.getEventNames())
+            tag.add(name, element.getEvent(name));
     }
     
     /**

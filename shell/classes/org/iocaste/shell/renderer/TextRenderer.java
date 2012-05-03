@@ -17,7 +17,7 @@ public class TextRenderer extends Renderer {
         ptag.add("id", text.getHtmlName());
         ptag.add("class", text.getStyleClass());
 
-        addAttributes(ptag, text);
+        addEvents(ptag, text);
         
         ptag.addInner(config.getText(text.getText(), text.getName()));
         

@@ -37,20 +37,20 @@ public interface Element extends Comparable<Element>, Serializable {
      * @param name
      * @param value
      */
-    public abstract void addAttribute(String name, String value);
+    public abstract void addEvent(String name, String value);
     
     /**
      * 
      * @param name
      * @return
      */
-    public abstract String getAttribute(String name);
+    public abstract String getEvent(String name);
     
     /**
      * 
      * @return
      */
-    public abstract String[] getAttributeNames();
+    public abstract String[] getEventNames();
     
     /**
      * 

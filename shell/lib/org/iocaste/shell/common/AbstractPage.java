@@ -55,15 +55,19 @@ public abstract class AbstractPage extends AbstractFunction {
         String action, controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
         
-        if (control.getType() == Const.SEARCH_HELP) {
+        if (control != null && control.getType() == Const.SEARCH_HELP) {
             view.export("sh", control);
             view.redirect("iocaste-search-help", "main");
             view.setReloadableView(true);
         } else {
-            action = (control == null)? controlname : control.getAction();
-            if (control.isEventAware()) {
-                control.onEvent(EventAware.ON_CLICK, action);
-                return view;
+            if (control == null) {
+                action = controlname;
+            } else {
+                action = control.getAction();
+                if (control.isEventAware()) {
+                    control.onEvent(EventAware.ON_CLICK, action);
+                    return view;
+                }
             }
             
             method = this.getClass().getMethod(action, ViewData.class);

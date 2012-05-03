@@ -50,7 +50,7 @@ public class TabbedPaneRenderer extends Renderer {
             }
             
             sb.append("send('").append(name).append("', null)");
-            button.addAttribute("onClick", sb.toString());
+            button.addEvent("onClick", sb.toString());
             tabbedtag.addChild(ButtonRenderer.render(button, config));
         }
         

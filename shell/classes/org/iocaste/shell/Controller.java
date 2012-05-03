@@ -388,8 +388,8 @@ public class Controller {
      * @return
      * @throws Exception
      */
-    public static final InputStatus validate(ViewData view, Map<String, ?> values,
-            Function function) throws Exception {
+    public static final InputStatus validate(ViewData view,
+            Map<String, ?> values, Function function) throws Exception {
         Element element;
         String controlname;
         InputStatus status = new InputStatus();
@@ -414,7 +414,7 @@ public class Controller {
         }
         
         element = view.getElement(controlname);
-        if (element.isControlComponent()) {
+        if (element != null && element.isControlComponent()) {
             if (!((ControlComponent)element).isCancellable())
                 processInputs(view, function, values, status);
         } else {

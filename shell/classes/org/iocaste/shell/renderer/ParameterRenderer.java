@@ -22,7 +22,7 @@ public class ParameterRenderer extends Renderer {
         if (value != null)
             hiddentag.add("value", value);
         
-        addAttributes(hiddentag, parameter);
+        addEvents(hiddentag, parameter);
         
         return hiddentag;
     }

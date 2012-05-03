@@ -15,23 +15,28 @@ public class RadioButtonRenderer extends Renderer {
      * @return
      */
     public static final List<XMLElement> render(RadioButton radiobutton) {
+        XMLElement rbtag;
+        String value;
         List<XMLElement> elements = new ArrayList<XMLElement>();
         Map<String, String> values = radiobutton.getValues();
-        XMLElement rbtag;
         
         for (String key : values.keySet()) {
+            value = radiobutton.getHtmlName();
             rbtag = new XMLElement("input");
             rbtag.add("type", "radio");
-            rbtag.add("name", radiobutton.getHtmlName());
+            rbtag.add("name", value);
             rbtag.add("value", key);
-            rbtag.add("id", radiobutton.getHtmlName());
+            rbtag.add("id", value);
             
-            rbtag.addInner(values.get(key));
+            value = values.get(key);
+            if (value != null)
+                rbtag.addInner(value);
             
-            if (toString(radiobutton).equals(key))
+            value = toString(radiobutton);
+            if (value != null && value.equals(key))
                 rbtag.add("checked", "checked");
             
-            addAttributes(rbtag, radiobutton);
+            addEvents(rbtag, radiobutton);
             
             elements.add(rbtag);
             

@@ -25,7 +25,7 @@ public class TableRenderer extends Renderer {
         List<InputComponent> hidden = new ArrayList<InputComponent>();
         List<XMLElement> tags = new ArrayList<XMLElement>();
 
-        addAttributes(tabletag, table);
+        addEvents(tabletag, table);
         
         if (table.hasHeader()) {
             trtag = new XMLElement("tr");

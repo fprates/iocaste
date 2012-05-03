@@ -21,7 +21,7 @@ public class ListBoxRenderer extends Renderer {
         if (!list.isEnabled())
             selecttag.add("disabled", "disabled");
         
-        addAttributes(selecttag, list);
+        addEvents(selecttag, list);
         
         for (String option : list.getEntriesNames()) {
             optiontag = new XMLElement("option");

@@ -1,5 +1,5 @@
 function setValue(name, value) {
-	param = document.getElementById(name);
+	var param = document.getElementById(name);
 	param.value = value;
 }
 
@@ -7,14 +7,21 @@ function defineAction(action, actionname) {
 	setValue(action, actionname);
 }
 
+function revertElementDisplay(id) {
+    var display = document.getElementById(id).style.display;
+    
+    setElementDisplay(id, (display == "none")? "block" : "none");
+}
+
 function send(actionname, response) {
-    pagetrack = document.getElementById("pagetrack").value;
+    var pagetrack = document.getElementById("pagetrack").value;
     var url = "index.html?pagetrack="+pagetrack+"&action="+actionname;
     var xmlhttp = XMLHttpRequest();
     
     xmlhttp.onreadystatechange = function() {
         sendCallback(actionname, response, xmlhttp);
     }
+    
     xmlhttp.open("POST", url, true);
     xmlhttp.send();
 }
@@ -31,8 +38,10 @@ function setElementDisplay(id, state) {
     document.getElementById(id).style.display = state;
 }
 
-function revertElementDisplay(id) {
-    var display = document.getElementById(id).style.display;
+function submit(formname, actionname, value) {
+    var form = document.getElementById(formname);
+    var action = document.getElementBydId(actionname);
     
-    setElementDisplay(id, (display == "none")? "block" : "none");
+    action.value = value;
+    form.submit();
 }

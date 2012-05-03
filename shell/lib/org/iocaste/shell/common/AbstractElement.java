@@ -41,7 +41,7 @@ public abstract class AbstractElement implements Element {
     private String name, htmlname, style;
     private boolean enabled, visible;
     private ViewData view;
-    private Map<String, String> attributes;
+    private Map<String, String> events;
     private Locale locale;
     
     public AbstractElement(Const type, String name) {
@@ -55,17 +55,17 @@ public abstract class AbstractElement implements Element {
         enabled = true;
         visible = true;
         
-        attributes = new HashMap<String, String>();
+        events = new HashMap<String, String>();
     }
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#addAttribute(
+     * @see org.iocaste.shell.common.Element#addEvent(
      *     java.lang.String, java.lang.String)
      */
     @Override
-    public final void addAttribute(String name, String value) {
-        attributes.put(name, value);
+    public final void addEvent(String name, String value) {
+        events.put(name, value);
     }
     
     /*
@@ -103,20 +103,20 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#getAttribute(java.lang.String)
+     * @see org.iocaste.shell.common.Element#getEvent(java.lang.String)
      */
     @Override
-    public final String getAttribute(String name) {
-        return attributes.get(name);
+    public final String getEvent(String name) {
+        return events.get(name);
     }
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#getAttributeNames()
+     * @see org.iocaste.shell.common.Element#getEventNames()
      */
     @Override
-    public final String[] getAttributeNames() {
-        return attributes.keySet().toArray(new String[0]);
+    public final String[] getEventNames() {
+        return events.keySet().toArray(new String[0]);
     }
     
     /*

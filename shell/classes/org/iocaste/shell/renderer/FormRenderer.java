@@ -25,7 +25,7 @@ public class FormRenderer extends Renderer {
         formtag.add("action", "index.html");
         formtag.add("name", container.getHtmlName());
 
-        addAttributes(formtag, container);
+        addEvents(formtag, container);
         
         if (enctype != null)
             formtag.add("enctype", enctype);

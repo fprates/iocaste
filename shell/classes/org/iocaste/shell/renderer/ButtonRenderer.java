@@ -28,7 +28,7 @@ public class ButtonRenderer extends Renderer {
                 append(config.getCurrentAction()).append("', '").
                 append(htmlname).append("')").toString());
         
-        addAttributes(buttontag, button);
+        addEvents(buttontag, button);
         
         return buttontag;
     }
