@@ -62,7 +62,7 @@ public class Documents extends AbstractServiceInterface {
         message.setId("create_model");
         message.add("model", model);
         
-        return (Integer)call(message);
+        return call(message);
     }
     
     /**
@@ -91,7 +91,7 @@ public class Documents extends AbstractServiceInterface {
         message.setId("delete");
         message.add("object", object);
         
-        return (Integer)call(message);
+        return call(message);
     }
     
     /**
@@ -116,7 +116,7 @@ public class Documents extends AbstractServiceInterface {
         message.setId("get_data_element");
         message.add("name", name);
         
-        return (DataElement)call(message);
+        return call(message);
     }
     
     /**
@@ -131,7 +131,7 @@ public class Documents extends AbstractServiceInterface {
         message.setId("get_document_model");
         message.add("name", name);
         
-        return (DocumentModel)call(message);
+        return call(message);
     }
     
     /**
@@ -146,7 +146,7 @@ public class Documents extends AbstractServiceInterface {
         message.setId("get_next_number");
         message.add("range", range);
         
-        return (Long)call(message);
+        return call(message);
     }
     
     /**
@@ -164,7 +164,7 @@ public class Documents extends AbstractServiceInterface {
         message.add("modelname", modelname);
         message.add("key", key);
         
-        return (ExtendedObject)call(message);
+        return call(message);
     }
     
     /**
@@ -179,7 +179,7 @@ public class Documents extends AbstractServiceInterface {
         message.setId("modify");
         message.add("object", object);
         
-        return (Integer)call(message);
+        return call(message);
     }
     
     /**
@@ -194,7 +194,7 @@ public class Documents extends AbstractServiceInterface {
         message.setId("remove_model");
         message.add("model_name", name);
         
-        return (Integer)call(message);
+        return call(message);
     }
     
     /**
@@ -212,7 +212,15 @@ public class Documents extends AbstractServiceInterface {
         message.add("oldname", oldname);
         message.add("newname", newname);
         
-        return (Integer)call(message);
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @throws Exception
+     */
+    public final void rollback() throws Exception {
+        new Iocaste(function).rollback();
     }
     
     /**
@@ -227,7 +235,7 @@ public class Documents extends AbstractServiceInterface {
         message.setId("save");
         message.add("object", object);
         
-        return (Integer)call(message);
+        return call(message);
     }
     
     /**
@@ -245,7 +253,7 @@ public class Documents extends AbstractServiceInterface {
         message.add("query", query);
         message.add("criteria", criteria);
         
-        return (ExtendedObject[])call(message);
+        return call(message);
     }
     
     /**
@@ -263,7 +271,7 @@ public class Documents extends AbstractServiceInterface {
         message.add("query", query);
         message.add("criteria", criteria);
         
-        return (Integer)call(message);
+        return call(message);
     }
     
     /**
@@ -278,7 +286,7 @@ public class Documents extends AbstractServiceInterface {
         message.setId("update_model");
         message.add("model", model);
         
-        return (Integer)call(message);
+        return call(message);
     }
     
     /**
@@ -293,6 +301,6 @@ public class Documents extends AbstractServiceInterface {
         message.setId("validate_model");
         message.add("model", model);
         
-        return (Integer)call(message);
+        return call(message);
     }
 }
