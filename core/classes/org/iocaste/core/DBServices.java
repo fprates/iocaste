@@ -51,7 +51,7 @@ public class DBServices {
         
         connection.setAutoCommit(false);
         connection.setTransactionIsolation(
-                Connection.TRANSACTION_READ_COMMITTED);
+                Connection.TRANSACTION_READ_UNCOMMITTED);
         
         return connection;
     }
