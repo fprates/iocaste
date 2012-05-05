@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
@@ -71,7 +72,13 @@ public abstract class AbstractPage extends AbstractFunction {
             }
             
             method = this.getClass().getMethod(action, ViewData.class);
-            method.invoke(this, view);
+            
+            try {
+                method.invoke(this, view);
+            } catch (Exception e) {
+                new Iocaste(this).rollback();
+                throw e;
+            }
         }
         
         return view;
@@ -114,7 +121,12 @@ public abstract class AbstractPage extends AbstractFunction {
             view.addParameter(name, parameters.get(name));
         
         method = this.getClass().getMethod(page, ViewData.class);
-        method.invoke(this, view);
+        try {
+            method.invoke(this, view);
+        } catch (Exception e) {
+            new Iocaste(this).rollback();
+            throw e;
+        }
         
         return view;
     }
