@@ -9,7 +9,7 @@ create table package001 (
 create table package002 (
     ident numeric(12) primary key,
     packg varchar(60) foreign key references package001(ident),
-    iname varchar(24),
+    iname varchar(60),
     model varchar(24),
 );
 
