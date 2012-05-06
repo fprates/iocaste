@@ -21,6 +21,8 @@ public class DataFormRenderer extends Renderer {
         List<XMLElement> tags = new ArrayList<XMLElement>();
         XMLElement formtag = new XMLElement("table");
         
+        formtag.add("class", form.getStyleClass());
+        
         for (Element element : form.getElements()) {
             if (!element.isDataStorable() || !element.isVisible())
                 continue;

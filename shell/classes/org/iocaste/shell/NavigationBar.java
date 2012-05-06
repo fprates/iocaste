@@ -41,6 +41,7 @@ public class NavigationBar implements Serializable {
         link.setEnabled(false);
         link.setCancellable(true);
         link.setAllowStacking(false);
+        link.setStyleClass("navbar_link");
         
         bar.put(name, link);
     }
@@ -110,5 +111,19 @@ public class NavigationBar implements Serializable {
      */
     public final void setMessage(Const msgtype, String text) {
         message.setText(composeMessage(msgtype, text));
+        
+        switch (msgtype) {
+        case ERROR:
+            message.setStyleClass("error_message");
+            break;
+        case WARNING:
+            message.setStyleClass("warning_message");
+            break;
+        case STATUS:
+            message.setStyleClass("status_message");
+            break;
+        default:
+            break;
+        }
     }
 }

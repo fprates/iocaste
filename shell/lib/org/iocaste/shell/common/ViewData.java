@@ -68,6 +68,8 @@ public class ViewData implements Serializable {
         this.appname = appname;
         this.pagename = pagename;
         
+        nbcontainer.setStyleClass("header");
+        
         clearRedirect();
     }
     

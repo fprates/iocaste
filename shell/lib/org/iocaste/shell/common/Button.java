@@ -7,6 +7,7 @@ public class Button extends AbstractControlComponent {
     public Button(Container container, String name) {
         super(container, Const.BUTTON, name);
         submit = true;
+        setStyleClass("button");
     }
     
     public final boolean isSubmit() {

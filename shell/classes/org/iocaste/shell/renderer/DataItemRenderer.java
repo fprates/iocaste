@@ -10,10 +10,12 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.Text;
 
 public class DataItemRenderer {
 
     public static final XMLElement render(DataItem dataitem, Config config) {
+        Text colname;
         List<XMLElement> coltags;
         DocumentModelItem modelitem;
         InputComponent input;
@@ -22,9 +24,13 @@ public class DataItemRenderer {
         XMLElement coltag, itemtag = new XMLElement("tr");
         String inputname = dataitem.getName();
         
+        colname = new Text(null, inputname);
+        colname.setStyleClass("item_form_name");
+        colname.setText(inputname);
+        
         coltag = new XMLElement("td");
         coltag.add("class", dataitem.getStyleClass());
-        coltag.addInner(config.getText(inputname, inputname));
+        coltag.addChild(TextRenderer.render(colname, config));
         
         modelitem = dataitem.getModelItem();
         if (modelitem != null)
@@ -37,6 +43,8 @@ public class DataItemRenderer {
         itemtag.addChild(coltag);
         
         coltag = new XMLElement("td");
+        coltag.add("class", dataitem.getStyleClass());
+        
         coltags = new ArrayList<XMLElement>();
 
         input = Shell.copyInputItem(null, dataitem, inputname, dataitem.

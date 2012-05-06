@@ -32,7 +32,6 @@ public class Shell extends AbstractServiceInterface {
         switch (inputitem.getComponentType()) {
         case TEXT_FIELD:
             tfield = new TextField(container, name);
-            tfield.setStyleClass(inputitem.getStyleClass());
             tfield.setObligatory(inputitem.isObligatory());
             tfield.setPassword(inputitem.isSecret());
             tfield.setLength(inputitem.getLength());
@@ -45,7 +44,6 @@ public class Shell extends AbstractServiceInterface {
             return tfield;
         case CHECKBOX:
             cbox = new CheckBox(container, name);
-            cbox.setStyleClass(inputitem.getStyleClass());
             cbox.set(inputitem.get());
             cbox.setModelItem(inputitem.getModelItem());
             cbox.setEnabled(inputitem.isEnabled());
@@ -55,7 +53,6 @@ public class Shell extends AbstractServiceInterface {
             
         case LIST_BOX:
             lbox = new ListBox(container, name);
-            lbox.setStyleClass(inputitem.getStyleClass());
             lbox.set(inputitem.get());
             lbox.setModelItem(inputitem.getModelItem());
             lbox.setEnabled(inputitem.isEnabled());

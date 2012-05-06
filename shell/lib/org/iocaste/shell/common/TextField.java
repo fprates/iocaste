@@ -8,6 +8,7 @@ public class TextField extends AbstractInputComponent {
         super(container, Const.TEXT_FIELD, null, name);
         password = false;
         setLength(20);
+        setStyleClass("text_field");
     }
     
     /**

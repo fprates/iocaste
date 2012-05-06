@@ -13,7 +13,7 @@ public class DataItem extends AbstractInputComponent {
         form.add(this);
         
         values = new LinkedHashMap<String, Object>();
-        setStyleClass("form");
+        setStyleClass("form_cell");
         setLength(20);
     }
     

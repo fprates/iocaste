@@ -65,10 +65,12 @@ public class HtmlRenderer {
             navbar.setEnabled(name, navbarstatus.get(name));
         
         txttitle = new Text(navbar.getStatusArea(), "navbar.title");
+        txttitle.setStyleClass("title");
         txttitle.setText((title == null)?vdata.getAppName() : title);
         txttitle.setTag("h1");
         
         txtuname = new Text(navbar.getStatusArea(), "navbar.username");
+        txtuname.setStyleClass("status");
         txtuname.setText(new StringBuilder(username).
                 append("@term:").append(logid).toString());
         

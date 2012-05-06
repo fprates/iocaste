@@ -21,11 +21,13 @@ public class LinkRenderer extends Renderer {
         if (!link.isEnabled()) {
             atag = new XMLElement("span");
             atag.addInner(link.getText());
+            atag.add("class", link.getStyleClass());
             
             return atag;
         }
         
         atag = new XMLElement("a");
+        atag.add("class", link.getStyleClass());
         
         if (link.isAbsolute())
             sb = new StringBuffer();
