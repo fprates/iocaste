@@ -315,7 +315,7 @@ public class Controller {
             
             if (input.isSelectable() && input.isStackable())
                 for (InputComponent input_ : input.getStackComponents())
-                    input_.set((value.equals(input.getName()))? true : false);
+                    input_.setSelected(value.equals(input_.getName()));
             else
                 input.set(value);
             

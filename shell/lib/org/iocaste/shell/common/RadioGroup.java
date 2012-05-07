@@ -14,11 +14,15 @@ public class RadioGroup implements Serializable {
         group = new ArrayList<RadioButton>();
     }
     
-    public final void add(RadioButton rb) {
+    public final int add(RadioButton rb) {
+        int index = group.size();
+        
         group.add(rb);
+        
+        return index;
     }
     
-    public final InputComponent[] getComponents() {
+    public final RadioButton[] getComponents() {
         return group.toArray(new RadioButton[0]);
     }
     
