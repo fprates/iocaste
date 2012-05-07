@@ -37,9 +37,13 @@ import org.iocaste.documents.common.DocumentModelItem;
  */
 public class Table extends AbstractContainer {
     private static final long serialVersionUID = -245959547368570624L;
+    public static final byte MULTIPLE = 0;
+    public static final byte SINGLE = 1;
     private boolean header, mark;
     private Map<String, TableColumn> columns;
     private List<TableItem> itens;
+    private byte seltype;
+    private RadioGroup group;
     
     public Table(ViewData view, String name) {
         super(view, Const.TABLE, name);
@@ -51,19 +55,6 @@ public class Table extends AbstractContainer {
         super(container, Const.TABLE, name);
         
         init();
-    }
-    
-    private final void init() {
-        TableColumn column;
-        
-        header = true;
-        mark = false;
-        itens = new ArrayList<TableItem>();
-        columns = new LinkedHashMap<String, TableColumn>();
-
-        column = new TableColumn(this, "");        
-        column.setMark(true);
-        column.setVisible(true);
     }
     
     /*
@@ -126,41 +117,11 @@ public class Table extends AbstractContainer {
      */
     @Override
     public final Element[] getElements() {
-        SearchHelp sh;
-        String linename, htmlname;
-        int i = 0;
         List<Element> elements = new ArrayList<Element>();
         
-        for (TableItem item : itens) {
-            linename = new StringBuilder(getName()).
-                    append(".").append(i++).
-                    append(".").toString();
-            
-            for (Element element : item.getElements()) {
-                htmlname = new StringBuilder(linename).
-                        append(element.getName()).toString();
-                
-                element.setHtmlName(htmlname);
+        for (TableItem item : itens)
+            for (Element element : item.getElements())
                 elements.add(element);
-                
-                /*
-                 * ajusta nome de ajuda de pesquisa, se houver
-                 */
-                if (!element.isDataStorable())
-                    continue;
-                
-                sh = ((InputComponent)element).getSearchHelp();
-                
-                if (sh == null)
-                    continue;
-                
-                htmlname = new StringBuilder(linename).
-                        append(sh.getName()).toString();
-                
-                sh.setHtmlName(htmlname);
-                elements.add(sh);
-            }
-        }
         
         return elements.toArray(new Element[0]);
     }
@@ -169,8 +130,24 @@ public class Table extends AbstractContainer {
      * 
      * @return
      */
+    public final RadioGroup getGroup() {
+        return group;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final TableItem[] getItens() {
         return itens.toArray(new TableItem[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final byte getSelectionType() {
+        return seltype;
     }
     
     /**
@@ -224,6 +201,33 @@ public class Table extends AbstractContainer {
     
     /**
      * 
+     */
+    private final void init() {
+        TableColumn column;
+        
+        header = true;
+        mark = false;
+        itens = new ArrayList<TableItem>();
+        columns = new LinkedHashMap<String, TableColumn>();
+        seltype = MULTIPLE;
+        group = new RadioGroup(getName()+".mark");
+        
+        column = new TableColumn(this, "");
+        column.setMark(true);
+        column.setVisible(true);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractContainer#isMultiLine()
+     */
+    @Override
+    public final boolean isMultiLine() {
+        return true;
+    }
+    
+    /**
+     * 
      * @return
      */
     public final int length() {
@@ -252,6 +256,14 @@ public class Table extends AbstractContainer {
      */
     public final void setMark(boolean mark) {
         this.mark = mark;
+    }
+    
+    /**
+     * 
+     * @param seltype
+     */
+    public final void setSelectionType(byte seltype) {
+        this.seltype = seltype;
     }
     
     /**

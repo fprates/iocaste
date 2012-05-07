@@ -150,6 +150,15 @@ public abstract class AbstractContainer
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#isMultiLine()
+     */
+    @Override
+    public boolean isMultiLine() {
+        return false;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.Container#remove(
      *     org.iocaste.shell.common.Element)
      */

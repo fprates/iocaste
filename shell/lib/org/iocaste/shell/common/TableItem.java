@@ -21,12 +21,27 @@ public class TableItem implements Serializable {
     private Locale locale;
     
     public TableItem(Table table) {
+        String markname;
+        RadioButton mark;
         table.add(this);
         
         this.table = table;
         columns = table.getColumns();
         elements = new LinkedHashMap<String, Element>();
-        elements.put("mark", new CheckBox(table, "mark"));
+        
+        switch (table.getSelectionType()) {
+        case Table.SINGLE:
+            markname = new StringBuilder(table.getName()).append(".").
+                    append(table.length() - 1).append(".mark").toString();
+            mark = new RadioButton(table, markname, table.getGroup());
+            
+            elements.put("mark", mark);
+            break;
+            
+        case Table.MULTIPLE:
+            elements.put("mark", new CheckBox(table, "mark"));
+            break;
+        }
     }
     
     /**
@@ -116,9 +131,9 @@ public class TableItem implements Serializable {
      * @return
      */
     public final boolean isSelected() {
-        CheckBox mark = (CheckBox)elements.get("mark");
+        InputComponent input = (InputComponent)elements.get("mark");
         
-        return mark.isSelected();
+        return input.isSelected();
     }
     
     /**

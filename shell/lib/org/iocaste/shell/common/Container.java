@@ -78,6 +78,12 @@ public interface Container extends Element {
 
     /**
      * 
+     * @return
+     */
+    public abstract boolean isMultiLine();
+    
+    /**
+     * 
      * @param element
      */
     public abstract void remove(Element element);

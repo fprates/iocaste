@@ -28,6 +28,7 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
@@ -35,6 +36,9 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.SearchHelp;
+import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewData;
 
 public class PageRenderer extends HttpServlet implements Function {
@@ -242,8 +246,10 @@ public class PageRenderer extends HttpServlet implements Function {
         sh.setModelName((String)shdata[0].getValue("MODEL"));
         sh.setExport((String)shdata[0].getValue("EXPORT"));
         
-        for (int i = 1; i < shdata.length; i++)
-            sh.addModelItemName((String)shdata[i].getValue("ITEM"));
+        for (int i = 1; i < shdata.length; i++) {
+            shname = shdata[i].getValue("ITEM");
+            sh.addModelItemName(shname);
+        }
         
         input.setSearchHelp(sh);
     }
@@ -277,6 +283,68 @@ public class PageRenderer extends HttpServlet implements Function {
     @Override
     public final Set<String> getMethods() {
         return null;
+    }
+    
+    private static final Element[] getMultiLineElements(Container container) {
+        byte selectiontype;
+        Element element;
+        SearchHelp sh;
+        Table table;
+        TableColumn[] columns;
+        List<Element> elements = new ArrayList<Element>();
+        String name, linename, htmlname, markname = null;
+        int i = 0;
+        
+        if (container.getType() != Const.TABLE)
+            new RuntimeException("Multi-line container not supported.");
+        
+        table = (Table)container;
+        name = table.getName();
+        selectiontype = table.getSelectionType();
+        
+        if (selectiontype == Table.SINGLE)
+            markname = new StringBuilder(name).append(".mark").toString();
+        
+        columns = table.getColumns();
+        elements = new ArrayList<Element>();
+        
+        for (TableItem item : table.getItens()) {
+            linename = new StringBuilder(name).append(".").append(i++).
+                    append(".").toString();
+            
+            for (TableColumn column: columns) {
+                element = (column.isMark())?
+                        item.get("mark") : item.get(column.getName());
+                
+                if (column.isMark() && markname != null)
+                    htmlname = markname;
+                else
+                    htmlname = new StringBuilder(linename).
+                            append(element.getName()).toString();
+                
+                element.setHtmlName(htmlname);
+                elements.add(element);
+                
+                /*
+                 * ajusta nome de ajuda de pesquisa, se houver
+                 */
+                if (!element.isDataStorable())
+                    continue;
+                
+                sh = ((InputComponent)element).getSearchHelp();
+                
+                if (sh == null)
+                    continue;
+                
+                htmlname = new StringBuilder(linename).
+                        append(sh.getName()).toString();
+                
+                sh.setHtmlName(htmlname);
+                elements.add(sh);
+            }
+        }
+        
+        return elements.toArray(new Element[0]);
     }
     
     /**
@@ -585,6 +653,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private static final void registerInputs(InputData inputdata)
             throws Exception {
+        Element[] elements;
         InputData inputdata_;
         Container container;
         InputComponent input;
@@ -603,7 +672,10 @@ public class PageRenderer extends HttpServlet implements Function {
             inputdata_.view = inputdata.view;
             inputdata_.function = inputdata.function;
             
-            for (Element element : container.getElements()) {
+            elements = (container.isMultiLine())?
+                    getMultiLineElements(container) : container.getElements();
+                    
+            for (Element element : elements) {
                 inputdata_.element = element;
                 registerInputs(inputdata_);
             }
