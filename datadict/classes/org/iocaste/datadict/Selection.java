@@ -11,6 +11,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.RadioButton;
+import org.iocaste.shell.common.RadioGroup;
 import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.ViewData;
 
@@ -116,6 +117,7 @@ public class Selection {
      */
     public static final void main(ViewData view, Function function)
             throws Exception {
+        RadioGroup group;
         RadioButton tpobj;
         Container main = new Form(view, "datadict.main");
         DataForm modelform = new DataForm(main, "modelform");
@@ -127,10 +129,13 @@ public class Selection {
                 getModelItem("NAME"));
         modelname.setObligatory(true);
         
-        tpobj = new RadioButton(main, "tpobject");
-        tpobj.add("0", "table");
-        tpobj.add("1", "search.help");
-        tpobj.set("0");
+        group = new RadioGroup("tpobject");
+        tpobj = new RadioButton(main, "tpobjtable", group);
+        tpobj.setText("table");
+        tpobj.setSelected(true);
+        
+        tpobj = new RadioButton(main, "tpobjsh", group);
+        tpobj.setText("search.help");
         
         new Button(main, "create");
         new Button(main, "show");

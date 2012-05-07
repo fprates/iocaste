@@ -109,7 +109,9 @@ public class Common {
     public static final int getTpObjectValue(ViewData view) {
         RadioButton tpobj = view.getElement("tpobject");
         
-        return Integer.parseInt((String)tpobj.get());
+        tpobj = tpobj.getSelectedComponent();
+        
+        return tpobj.index();
     }
     
     /**
