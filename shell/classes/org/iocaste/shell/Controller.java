@@ -312,13 +312,21 @@ public class Controller {
             value = getString(values, name);
 
             input = (InputComponent)element;
-            input.set(value);
             
-            if (!isValueCompatible(input) && !input.isBooleanComponent()) {
+            if (input.isSelectable() && input.isStackable())
+                for (InputComponent input_ : input.getStackComponents())
+                    input_.set((value.equals(input.getName()))? true : false);
+            else
+                input.set(value);
+            
+            if (!input.isBooleanComponent() && !isValueCompatible(input)) {
                 status.input = input;
                 status.error = EMISMATCH;
                 continue;
             }
+            
+            if (input.isStackable())
+                continue;
             
             convertInputValue(input);
            

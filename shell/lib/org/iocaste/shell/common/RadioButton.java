@@ -1,52 +1,60 @@
 package org.iocaste.shell.common;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public class RadioButton extends AbstractInputComponent {
     private static final long serialVersionUID = 4032308949086603543L;
-    public static final int HORIZONT = 0;
-    public static final int VERTICAL = 1;
-    private Map<String, String> values;
-    private int alignment;
+    private RadioGroup group;
     
-    public RadioButton(Container container, String name) {
+    public RadioButton(Container container, String name, RadioGroup group) {
         super(container, Const.RADIO_BUTTON, null, name);
         
-        values = new LinkedHashMap<String, String>();
-        alignment = VERTICAL;
-    }
-    
-    /**
-     * 
-     * @param key
-     * @param value
-     */
-    public final void add(String key, String value) {
-        values.put(key, value);
+        this.group = group;
+        group.add(this);
+        
+        setHtmlName(group.getName());
+        setSelected(false);
     }
     
     /**
      * 
      * @return
      */
-    public final int getAlignment() {
-        return alignment;
+    public final RadioGroup getGroup() {
+        return group;
     }
     
-    /**
-     * 
-     * @return
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#getStackComponents()
      */
-    public final Map<String, String> getValues() {
-        return values;
+    @Override
+    public final InputComponent[] getStackComponents() {
+        return group.getComponents();
     }
     
-    /**
-     * 
-     * @param alignment
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#isBooleanComponent()
      */
-    public final void setAlignment(int alignment) {
-        this.alignment = alignment;
+    @Override
+    public final boolean isBooleanComponent() {
+        return true;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#isSelectable()
+     */
+    @Override
+    public final boolean isSelectable() {
+        return true;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#isStackable()
+     */
+    @Override
+    public final boolean isStackable() {
+        return true;
     }
 }

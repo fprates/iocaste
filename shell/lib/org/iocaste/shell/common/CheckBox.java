@@ -24,24 +24,4 @@ public class CheckBox extends AbstractInputComponent {
     public final boolean isSelectable() {
         return true;
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractInputComponent#isSelected()
-     */
-    @Override
-    public final boolean isSelected() {
-        Object value = get();
-        
-        return (value == null)? false : (Boolean)value;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractInputComponent#setSelected(boolean)
-     */
-    @Override
-    public final void setSelected(boolean selected) {
-        set(selected);
-    }
 }

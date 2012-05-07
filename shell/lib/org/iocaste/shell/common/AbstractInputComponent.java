@@ -89,6 +89,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getStackComponents()
+     */
+    @Override
+    public InputComponent[] getStackComponents() {
+        return null;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#getValidator()
      */
     @Override
@@ -154,10 +163,19 @@ public abstract class AbstractInputComponent extends AbstractComponent
      * @see org.iocaste.shell.common.InputComponent#isSelected()
      */
     @Override
-    public boolean isSelected() {
+    public final boolean isSelected() {
+        return (Boolean)get();
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#isStackable()
+     */
+    @Override
+    public boolean isStackable() {
         return false;
     }
-   
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#set(java.lang.Object)
@@ -259,7 +277,9 @@ public abstract class AbstractInputComponent extends AbstractComponent
      * @see org.iocaste.shell.common.InputComponent#setSelected(boolean)
      */
     @Override
-    public void setSelected(boolean selected) { };
+    public final void setSelected(boolean selected) {
+        set(selected);
+    };
     
     /*
      * (non-Javadoc)

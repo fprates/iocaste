@@ -48,28 +48,4 @@ public class DataItem extends AbstractInputComponent {
     public final boolean isBooleanComponent() {
         return (getComponentType() == Const.CHECKBOX)? true : false;
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractInputComponent#isSelected()
-     */
-    @Override
-    public final boolean isSelected() {
-        String value;
-        
-        if (get() == null)
-            return false;
-        
-        value = get().toString().toLowerCase();
-        return (value.equals("on"))? true : false;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractInputComponent#setSelected(boolean)
-     */
-    @Override
-    public final void setSelected(boolean selected) {
-        set(selected);
-    }
 }

@@ -17,6 +17,8 @@ public interface InputComponent extends Component {
 
     public abstract SearchHelp getSearchHelp();
     
+    public abstract InputComponent[] getStackComponents();
+    
     public abstract ValidatorConfig getValidatorConfig();
     
     public abstract boolean isBooleanComponent();
@@ -28,6 +30,8 @@ public interface InputComponent extends Component {
     public abstract boolean isSelectable();
     
     public abstract boolean isSelected();
+    
+    public abstract boolean isStackable();
     
     public abstract void set(Object value);
     
