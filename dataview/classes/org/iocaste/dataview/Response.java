@@ -1,5 +1,7 @@
 package org.iocaste.dataview;
 
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -9,7 +11,9 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.ViewData;
@@ -23,6 +27,7 @@ public class Response {
      */
     public static final void form(ViewData vdata, Function function)
             throws Exception {
+        DataElement dataelement;
         DataItem item;
         Container container = new Form(vdata, "form");
         DataForm form = new DataForm(container, "model.form");
@@ -33,8 +38,17 @@ public class Response {
         form.importModel(model);
         form.setKeyRequired(true);
         
-        item = form.get("UPCASE");
-        item.setComponentType(Const.CHECKBOX);
+        for (Element element : form.getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            
+            item = (DataItem)element;
+            dataelement = Shell.getDataElement(item);
+            if (dataelement.getType() != DataType.BOOLEAN)
+                continue;
+            
+            item.setComponentType(Const.CHECKBOX);
+        }
         
         new Button(container, "insertitem");
         new Button(container, "insertnext");
