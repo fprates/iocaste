@@ -111,11 +111,13 @@ public class Request {
         Documents documents = new Documents(function);
         
         if (documents.save(object) == 0) {
+            documents.rollback();
             vdata.message(Const.ERROR, "duplicated.entry");
             return;
         }
         
-        table = (Table)selectview.getElement("selection_view");
+        documents.commit();
+        table = selectview.getElement("selection_view");
         Common.addTableItem(table, object);
     }
     
@@ -176,8 +178,9 @@ public class Request {
                 continue;
             
             documents.modify(object);
-            documents.commit();
         }
+        
+        documents.commit();
     }
     
     /**
