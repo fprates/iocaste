@@ -87,6 +87,9 @@ public class Services extends AbstractFunction {
         UserContext context = sessions.get(sessionid);
         Connection connection = context.getConnection();
         
+        if (connection == null)
+            return;
+        
         db.commit(connection);
         connection.close();
         context.setConnection(null);
@@ -334,6 +337,9 @@ public class Services extends AbstractFunction {
         String sessionid = message.getSessionid();
         UserContext context = sessions.get(sessionid);
         Connection connection = context.getConnection();
+        
+        if (connection == null)
+            return;
         
         db.rollback(connection);
         connection.close();
