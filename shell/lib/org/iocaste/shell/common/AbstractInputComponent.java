@@ -164,7 +164,9 @@ public abstract class AbstractInputComponent extends AbstractComponent
      */
     @Override
     public final boolean isSelected() {
-        return (Boolean)get();
+        Object value = get();
+        
+        return (value == null)? false : (Boolean)value;
     }
     
     /*
