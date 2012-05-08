@@ -34,6 +34,10 @@ function sendCallback(action, area, xmlhttp) {
         document.getElementById(area).innerHTML=xmlhttp.responseText;
 }
 
+function setClassStyle(id, classname) {
+    document.getElementById(id).className = classname;
+}
+
 function setElementDisplay(id, state) {
     document.getElementById(id).style.display = state;
 }

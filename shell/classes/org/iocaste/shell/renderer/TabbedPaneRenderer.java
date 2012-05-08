@@ -19,8 +19,11 @@ public class TabbedPaneRenderer extends Renderer {
      */
     public static final XMLElement render(TabbedPane tabbedpane,
             Config config) {
+        StandardContainer container;
         Button button;
         StringBuilder sb;
+        String buttonfocusedstyle, buttonunfocusedstyle, classname;
+        boolean isfirst = true;
         XMLElement tabitem, tabbedtag = new XMLElement("div");
         String[] names = tabbedpane.getItensNames();
         
@@ -29,36 +32,60 @@ public class TabbedPaneRenderer extends Renderer {
         for (String name : names) {
             sb = new StringBuilder("setElementDisplay('").append(name);
             
-            if (tabbedpane.getCurrent().equals(name))
+            if (tabbedpane.getCurrent().equals(name)) {
                 sb.append(".tabitem', 'block');");
-            else
+                if (isfirst)
+                    classname = "tp_first_button_focused";
+                else
+                    classname = "tp_button_focused";
+            } else {
                 sb.append(".tabitem', 'none');");
-            
+                classname = "tp_button_unfocused";
+            }
             config.addOnload(sb.toString());
             
             button = new Button(tabbedpane, name);
+            button.setStyleClass(classname);
             button.setSubmit(false);
             button.setEventHandler(tabbedpane.getHandler());
             
             sb = new StringBuilder();
             
+            isfirst = true;
+            
             for (String name_ : names) {
                 sb.append("setElementDisplay('").append(name_);
                 
-                sb.append((name.equals(name_))?
-                        ".tabitem', 'block');" : ".tabitem', 'none');");
+                if (isfirst) {
+                    buttonfocusedstyle = "', 'tp_first_button_focused'); ";
+                    buttonunfocusedstyle = "', 'tp_first_button_unfocused'); ";
+                    
+                    isfirst = false;
+                } else {
+                    buttonfocusedstyle = "', 'tp_button_focused'); ";
+                    buttonunfocusedstyle = "', 'tp_button_unfocused'); ";
+                }
+                
+                if (name.equals(name_))
+                    sb.append(".tabitem', 'block'); setClassStyle('").
+                            append(name_).append(buttonfocusedstyle);
+                else
+                    sb.append(".tabitem', 'none'); setClassStyle('").
+                            append(name_).append(buttonunfocusedstyle);
             }
             
+            isfirst = false;
             sb.append("send('").append(name).append("', null)");
             button.addEvent("onClick", sb.toString());
             tabbedtag.addChild(ButtonRenderer.render(button, config));
         }
         
         for (String name : names) {
-            tabitem = StandardContainerRenderer.render(new StandardContainer(
-                    tabbedpane, new StringBuilder(name).
-                            append(".tabitem").toString()), config);
+            container = new StandardContainer(tabbedpane,
+                    new StringBuilder(name).append(".tabitem").toString());
+            container.setStyleClass("tp_item");
             
+            tabitem = StandardContainerRenderer.render(container, config);
             tabitem.addChildren(renderTabbedPaneItem(tabbedpane.get(name),
                     config));
             

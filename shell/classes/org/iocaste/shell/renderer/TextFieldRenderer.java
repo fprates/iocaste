@@ -72,6 +72,7 @@ public class TextFieldRenderer extends Renderer {
             Config config) {
         Button button = new Button(null, sh.getHtmlName());
         
+        button.setStyleClass("sh_button");
         button.setText("?");
         
         return ButtonRenderer.render(button, config);
