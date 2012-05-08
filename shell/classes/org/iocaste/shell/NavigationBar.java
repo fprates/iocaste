@@ -48,30 +48,6 @@ public class NavigationBar implements Serializable {
     
     /**
      * 
-     * @param text
-     */
-    private final String composeMessage(Const msgtype, String message) {
-        StringBuilder sb;
-        
-        switch (msgtype) {
-        case WARNING:
-            sb = new StringBuilder("Aviso: ");
-            break;
-            
-        case ERROR:
-            sb = new StringBuilder("Erro: ");
-            break;
-            
-        default:
-            sb = new StringBuilder();
-            break;
-        }
-        
-        return sb.append(message).toString();
-    }
-    
-    /**
-     * 
      * @return
      */
     public final Container getStatusArea() {
@@ -110,7 +86,7 @@ public class NavigationBar implements Serializable {
      * @param text
      */
     public final void setMessage(Const msgtype, String text) {
-        message.setText(composeMessage(msgtype, text));
+        message.setText(text);
         
         switch (msgtype) {
         case ERROR:

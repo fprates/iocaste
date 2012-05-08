@@ -22,8 +22,7 @@ public class TabbedPaneRenderer extends Renderer {
         StandardContainer container;
         Button button;
         StringBuilder sb;
-        String buttonfocusedstyle, buttonunfocusedstyle, classname;
-        boolean isfirst = true;
+        String classname;
         XMLElement tabitem, tabbedtag = new XMLElement("div");
         String[] names = tabbedpane.getItensNames();
         
@@ -34,10 +33,7 @@ public class TabbedPaneRenderer extends Renderer {
             
             if (tabbedpane.getCurrent().equals(name)) {
                 sb.append(".tabitem', 'block');");
-                if (isfirst)
-                    classname = "tp_first_button_focused";
-                else
-                    classname = "tp_button_focused";
+                classname = "tp_button_focused";
             } else {
                 sb.append(".tabitem', 'none');");
                 classname = "tp_button_unfocused";
@@ -51,30 +47,17 @@ public class TabbedPaneRenderer extends Renderer {
             
             sb = new StringBuilder();
             
-            isfirst = true;
-            
             for (String name_ : names) {
                 sb.append("setElementDisplay('").append(name_);
                 
-                if (isfirst) {
-                    buttonfocusedstyle = "', 'tp_first_button_focused'); ";
-                    buttonunfocusedstyle = "', 'tp_first_button_unfocused'); ";
-                    
-                    isfirst = false;
-                } else {
-                    buttonfocusedstyle = "', 'tp_button_focused'); ";
-                    buttonunfocusedstyle = "', 'tp_button_unfocused'); ";
-                }
-                
                 if (name.equals(name_))
                     sb.append(".tabitem', 'block'); setClassStyle('").
-                            append(name_).append(buttonfocusedstyle);
+                            append(name_).append("', 'tp_button_focused'); ");
                 else
                     sb.append(".tabitem', 'none'); setClassStyle('").
-                            append(name_).append(buttonunfocusedstyle);
+                            append(name_).append("', 'tp_button_unfocused'); ");
             }
             
-            isfirst = false;
             sb.append("send('").append(name).append("', null)");
             button.addEvent("onClick", sb.toString());
             tabbedtag.addChild(ButtonRenderer.render(button, config));
