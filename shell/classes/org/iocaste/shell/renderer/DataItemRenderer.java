@@ -24,7 +24,7 @@ public class DataItemRenderer {
         XMLElement coltag, itemtag = new XMLElement("tr");
         String inputname = dataitem.getName();
         
-        colname = new Text(null, inputname);
+        colname = new Text(null, "");
         colname.setStyleClass("item_form_name");
         colname.setText(inputname);
         
