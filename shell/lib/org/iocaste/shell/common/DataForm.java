@@ -158,6 +158,9 @@ public class DataForm extends AbstractContainer {
         String name;
         
         for (Element element : getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            
             item = (DataItem)element;
             name = item.getName();
             

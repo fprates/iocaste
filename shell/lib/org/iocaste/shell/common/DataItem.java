@@ -10,8 +10,6 @@ public class DataItem extends AbstractInputComponent {
     public DataItem(DataForm form, Const type, String name) {
         super(form, Const.DATA_ITEM, type, name);
         
-        form.add(this);
-        
         values = new LinkedHashMap<String, Object>();
         setStyleClass("form_cell");
         setLength(20);
