@@ -58,7 +58,7 @@ public class TabbedPaneRenderer extends Renderer {
                             append(name_).append("', 'tp_button_unfocused'); ");
             }
             
-            sb.append("send('").append(name).append("', null)");
+            sb.append("send('").append(name).append("', null, null)");
             button.addEvent("onClick", sb.toString());
             tabbedtag.addChild(ButtonRenderer.render(button, config));
         }
