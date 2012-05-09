@@ -13,10 +13,13 @@ function revertElementDisplay(id) {
     setElementDisplay(id, (display == "none")? "block" : "none");
 }
 
-function send(actionname, response) {
+function send(actionname, args, response) {
     var pagetrack = document.getElementById("pagetrack").value;
     var url = "index.html?pagetrack="+pagetrack+"&action="+actionname;
     var xmlhttp = XMLHttpRequest();
+    
+    if (args != null)
+        url += args;
     
     xmlhttp.onreadystatechange = function() {
         sendCallback(actionname, response, xmlhttp);
