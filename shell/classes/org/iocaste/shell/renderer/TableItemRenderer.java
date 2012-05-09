@@ -53,6 +53,7 @@ public class TableItemRenderer extends Renderer {
             }
             
             tdtag = new XMLElement("td");
+            tdtag.add("class", "table_cell");
             
             if (element != null) {
                 tags.clear();

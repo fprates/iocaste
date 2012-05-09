@@ -25,6 +25,7 @@ public class TableRenderer extends Renderer {
         List<InputComponent> hidden = new ArrayList<InputComponent>();
         List<XMLElement> tags = new ArrayList<XMLElement>();
 
+        tabletag.add("class", "table_area");
         addEvents(tabletag, table);
         
         if (table.hasHeader()) {
@@ -36,6 +37,7 @@ public class TableRenderer extends Renderer {
                     continue;
                 
                 thtag = new XMLElement("th");
+                thtag.add("class", "table_header");
                 
                 name = column.getName();
                 if (name != null)
