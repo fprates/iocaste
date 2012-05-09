@@ -35,7 +35,7 @@ public class LinkRenderer extends Renderer {
             sb = new StringBuffer("index.html?pagetrack=").
                     append(config.getPageTrack()).append("&action=");
         
-        sb.append(link.getHtmlName());
+        sb.append(link.getAction());
         
         parameters = link.getParametersMap();
         

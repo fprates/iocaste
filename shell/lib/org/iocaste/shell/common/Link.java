@@ -16,19 +16,52 @@ public class Link extends AbstractControlComponent {
         values = new HashMap<Parameter, Object>();
     }
 
+    /**
+     * 
+     * @param parameter
+     * @param value
+     */
     public final void add(Parameter parameter, Object value) {
         values.put(parameter, value);
     }
     
+    /**
+     * 
+     * @return
+     */
     public final Map<Parameter, Object> getParametersMap() {
         return values;
     }
     
+    /**
+     * 
+     * @return
+     */
     public final boolean isAbsolute() {
         return absolute;
     }
     
+    /**
+     * 
+     * @param absolute
+     */
     public final void setAbsolute(boolean absolute) {
         this.absolute = absolute;
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param value
+     */
+    public final void setValue(String name, Object value) {
+        for (Parameter parameter : values.keySet()) {
+            if (!parameter.getName().equals(name))
+                continue;
+            
+            values.remove(parameter);
+            values.put(parameter, value);
+            break;
+        }
     }
 }
