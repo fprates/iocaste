@@ -322,6 +322,7 @@ public class Controller {
             if (!input.isBooleanComponent() && !isValueCompatible(input)) {
                 status.input = input;
                 status.error = EMISMATCH;
+                input.set(null);
                 continue;
             }
             
