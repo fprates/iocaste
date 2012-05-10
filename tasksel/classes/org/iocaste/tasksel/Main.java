@@ -86,7 +86,7 @@ public class Main extends AbstractPage {
         DataForm form = new DataForm(container, "selector");
         DataItem cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
         
-        cmdline.setLength(128);
+        cmdline.setLength(80);
         new Button(container, "run");
         new Button(container, "newentry");
         
