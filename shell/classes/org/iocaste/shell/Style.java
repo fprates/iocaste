@@ -2,6 +2,7 @@ package org.iocaste.shell;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.protocol.Function;
@@ -37,7 +38,7 @@ public class Style {
         Map<String, String> attributes;
         Iocaste iocaste = new Iocaste(function);
         Map<String, Map<String, String>> elements =
-                new HashMap<String, Map<String, String>>();
+                new LinkedHashMap<String, Map<String, String>>();
         
         eobjects = checkedSelect(iocaste, "shell002", "sname = ?", name);
         

@@ -12,6 +12,7 @@ public class Link extends AbstractControlComponent {
         super(container, Const.LINK, name);
         setText(action);
         setAction(action);
+        setStyleClass("link");
         absolute = false;
         values = new HashMap<Parameter, Object>();
     }

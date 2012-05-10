@@ -39,7 +39,7 @@ insert into shell003 (pindx, eindx, pname, value) values (000100020002, 00010002
 insert into shell003 (pindx, eindx, pname, value) values (000100020003, 000100020000, 'text-align', 'center');
 insert into shell003 (pindx, eindx, pname, value) values (000100020004, 000100020000, 'background-color', '#808080');
 insert into shell003 (pindx, eindx, pname, value) values (000100020005, 000100020000, 'color', '#ffffff');
-insert into shell003 (pindx, eindx, pname, value) values (000100020006, 000100020000, 'font-weight', 'bold');
+insert into shell003 (pindx, eindx, pname, value) values (000100020006, 000100020000, 'font-weight', 'normal');
 insert into shell003 (pindx, eindx, pname, value) values (000100020007, 000100020000, 'border-style', 'none');
 insert into shell003 (pindx, eindx, pname, value) values (000100020008, 000100020000, 'padding-top', '5px');
 insert into shell003 (pindx, eindx, pname, value) values (000100020009, 000100020000, 'padding-bottom', '5px');
@@ -151,7 +151,10 @@ insert into shell003 (pindx, eindx, pname, value) values (000100140012, 00010014
 insert into shell002 (eindx, sname, ename) values (000100150000, 'DEFAULT', '.tp_item');
 insert into shell003 (pindx, eindx, pname, value) values (000100150001, 000100150000, 'background-color', '#000000');
 insert into shell003 (pindx, eindx, pname, value) values (000100150002, 000100150000, 'margin-bottom', '5px');
-
+insert into shell003 (pindx, eindx, pname, value) values (000100150003, 000100150000, 'padding-top', '5px');
+insert into shell003 (pindx, eindx, pname, value) values (000100150004, 000100150000, 'padding-bottom', '0px');
+insert into shell003 (pindx, eindx, pname, value) values (000100150005, 000100150000, 'padding-left', '5px');
+insert into shell003 (pindx, eindx, pname, value) values (000100150006, 000100150000, 'padding-right', '5px');
 
 insert into shell002 (eindx, sname, ename) values (000100160000, 'DEFAULT', '.tp_button_focused');
 insert into shell003 (pindx, eindx, pname, value) values (000100160001, 000100160000, 'font-size', '12pt');
@@ -159,7 +162,7 @@ insert into shell003 (pindx, eindx, pname, value) values (000100160002, 00010016
 insert into shell003 (pindx, eindx, pname, value) values (000100160003, 000100160000, 'text-align', 'center');
 insert into shell003 (pindx, eindx, pname, value) values (000100160004, 000100160000, 'background-color', '#000000');
 insert into shell003 (pindx, eindx, pname, value) values (000100160005, 000100160000, 'color', '#ffffff');
-insert into shell003 (pindx, eindx, pname, value) values (000100160006, 000100160000, 'font-weight', 'bold');
+insert into shell003 (pindx, eindx, pname, value) values (000100160006, 000100160000, 'font-weight', 'normal');
 insert into shell003 (pindx, eindx, pname, value) values (000100160007, 000100160000, 'border-style', 'none');
 insert into shell003 (pindx, eindx, pname, value) values (000100160008, 000100160000, 'padding-top', '5px');
 insert into shell003 (pindx, eindx, pname, value) values (000100160009, 000100160000, 'padding-bottom', '5px');
@@ -173,7 +176,7 @@ insert into shell003 (pindx, eindx, pname, value) values (000100170002, 00010017
 insert into shell003 (pindx, eindx, pname, value) values (000100170003, 000100170000, 'text-align', 'center');
 insert into shell003 (pindx, eindx, pname, value) values (000100170004, 000100170000, 'background-color', '#808080');
 insert into shell003 (pindx, eindx, pname, value) values (000100170005, 000100170000, 'color', '#000000');
-insert into shell003 (pindx, eindx, pname, value) values (000100170006, 000100170000, 'font-weight', 'bold');
+insert into shell003 (pindx, eindx, pname, value) values (000100170006, 000100170000, 'font-weight', 'normal');
 insert into shell003 (pindx, eindx, pname, value) values (000100170007, 000100170000, 'border-style', 'none');
 insert into shell003 (pindx, eindx, pname, value) values (000100170008, 000100170000, 'padding-top', '5px');
 insert into shell003 (pindx, eindx, pname, value) values (000100170009, 000100170000, 'padding-bottom', '5px');
@@ -187,16 +190,15 @@ insert into shell003 (pindx, eindx, pname, value) values (000100180002, 00010018
 insert into shell003 (pindx, eindx, pname, value) values (000100180003, 000100180000, 'text-align', 'center');
 insert into shell003 (pindx, eindx, pname, value) values (000100180004, 000100180000, 'background-color', '#000000');
 insert into shell003 (pindx, eindx, pname, value) values (000100180005, 000100180000, 'color', '#ffffff');
-insert into shell003 (pindx, eindx, pname, value) values (000100180006, 000100180000, 'font-weight', 'bold');
+insert into shell003 (pindx, eindx, pname, value) values (000100180006, 000100180000, 'font-weight', 'normal');
 insert into shell003 (pindx, eindx, pname, value) values (000100180007, 000100180000, 'padding', '5px');
 insert into shell003 (pindx, eindx, pname, value) values (000100180008, 000100180000, 'margin', '0px');
 
 insert into shell002 (eindx, sname, ename) values (000100190000, 'DEFAULT', '.table_cell');
 insert into shell003 (pindx, eindx, pname, value) values (000100190001, 000100190000, 'background-color', '#000000');
 insert into shell003 (pindx, eindx, pname, value) values (000100190002, 000100190000, 'color', '#ffffff');
-insert into shell003 (pindx, eindx, pname, value) values (000100190003, 000100190000, 'font-weight', 'regular');
-insert into shell003 (pindx, eindx, pname, value) values (000100190004, 000100190000, 'padding', '5px');
-insert into shell003 (pindx, eindx, pname, value) values (000100190005, 000100190000, 'margin', '0px');
+insert into shell003 (pindx, eindx, pname, value) values (000100190003, 000100190000, 'padding', '5px');
+insert into shell003 (pindx, eindx, pname, value) values (000100190004, 000100190000, 'margin', '0px');
 
 insert into shell002 (eindx, sname, ename) values (000100200000, 'DEFAULT', '.table_area');
 insert into shell003 (pindx, eindx, pname, value) values (000100200001, 000100200000, 'background-color', '#000000');
@@ -204,6 +206,34 @@ insert into shell003 (pindx, eindx, pname, value) values (000100200002, 00010020
 insert into shell003 (pindx, eindx, pname, value) values (000100200003, 000100200000, 'border-collapse', 'collapse');
 insert into shell003 (pindx, eindx, pname, value) values (000100200004, 000100200000, 'margin-bottom', '5px');
 insert into shell003 (pindx, eindx, pname, value) values (000100200005, 000100200000, 'padding', '0px');
+
+insert into shell002 (eindx, sname, ename) values (000100210000, 'DEFAULT', '.link:link');
+insert into shell003 (pindx, eindx, pname, value) values (000100210001, 000100210000, 'color', '#ffffff');
+insert into shell003 (pindx, eindx, pname, value) values (000100210002, 000100210000, 'font-family', 'sans-serif');
+insert into shell003 (pindx, eindx, pname, value) values (000100210003, 000100210000, 'font-weight', 'normal');
+insert into shell003 (pindx, eindx, pname, value) values (000100210004, 000100210000, 'font-size', '12pt');
+insert into shell003 (pindx, eindx, pname, value) values (000100210005, 000100210000, 'text-decoration', 'underline');
+
+insert into shell002 (eindx, sname, ename) values (000100220000, 'DEFAULT', '.link:visited');
+insert into shell003 (pindx, eindx, pname, value) values (000100220001, 000100220000, 'color', '#ffffff');
+insert into shell003 (pindx, eindx, pname, value) values (000100220002, 000100220000, 'font-family', 'sans-serif');
+insert into shell003 (pindx, eindx, pname, value) values (000100220003, 000100220000, 'font-weight', 'normal');
+insert into shell003 (pindx, eindx, pname, value) values (000100220004, 000100220000, 'font-size', '12pt');
+insert into shell003 (pindx, eindx, pname, value) values (000100220005, 000100220000, 'text-decoration', 'underline');
+
+insert into shell002 (eindx, sname, ename) values (000100230000, 'DEFAULT', '.link:hover');
+insert into shell003 (pindx, eindx, pname, value) values (000100230001, 000100230000, 'color', '#808080');
+insert into shell003 (pindx, eindx, pname, value) values (000100230002, 000100230000, 'font-family', 'sans-serif');
+insert into shell003 (pindx, eindx, pname, value) values (000100230003, 000100230000, 'font-weight', 'normal');
+insert into shell003 (pindx, eindx, pname, value) values (000100230004, 000100230000, 'font-size', '12pt');
+insert into shell003 (pindx, eindx, pname, value) values (000100230005, 000100230000, 'text-decoration', 'none');
+
+insert into shell002 (eindx, sname, ename) values (000100240000, 'DEFAULT', '.link:active');
+insert into shell003 (pindx, eindx, pname, value) values (000100240001, 000100240000, 'color', '#ffffff');
+insert into shell003 (pindx, eindx, pname, value) values (000100240002, 000100240000, 'font-family', 'sans-serif');
+insert into shell003 (pindx, eindx, pname, value) values (000100240003, 000100240000, 'font-weight', 'normal');
+insert into shell003 (pindx, eindx, pname, value) values (000100240004, 000100240000, 'font-size', '12pt');
+insert into shell003 (pindx, eindx, pname, value) values (000100240005, 000100240000, 'text-decoration', 'underline');
 
 insert into docs001(docid, tname, class) values('STYLE', 'SHELL001', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.NAME', 0, 12, 0, 1);
