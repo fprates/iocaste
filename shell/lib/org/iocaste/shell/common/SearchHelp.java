@@ -12,7 +12,6 @@ public class SearchHelp extends AbstractControlComponent {
         super(container, Const.SEARCH_HELP, name);
         
         itemnames = new LinkedHashSet<String>();
-        setCancellable(true);
         setAllowStacking(true);
     }
 

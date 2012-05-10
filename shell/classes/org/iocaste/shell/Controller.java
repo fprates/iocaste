@@ -330,7 +330,11 @@ public class Controller {
                 continue;
             
             convertInputValue(input);
-           
+            
+            if (status.control != null &&
+                    status.control.getType() == Const.SEARCH_HELP)
+                continue;
+            
             if (input.isObligatory() && isInitial(input)) {
                 status.input = input;
                 status.error = EINITIAL;
@@ -424,7 +428,8 @@ public class Controller {
         
         element = view.getElement(controlname);
         if (element != null && element.isControlComponent()) {
-            if (!((ControlComponent)element).isCancellable())
+            status.control = (ControlComponent)element;
+            if (!status.control.isCancellable())
                 processInputs(view, function, values, status);
         } else {
             processInputs(view, function, values, status);
