@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.Iocaste;
 
 public class DataElementServices {
@@ -49,6 +50,12 @@ public class DataElementServices {
             throws Exception {
         String query = "insert into docs003(ename, decim, lngth, " +
                 "etype, upcas) values(?, ?, ?, ?, ?)";
+        
+        switch (element.getType()) {
+        case DataType.DATE:
+            element.setLength(10);
+            break;
+        }
         
         return iocaste.update(query, element.getName(),
                 element.getDecimals(),

@@ -358,7 +358,7 @@ public class Model {
             if (iocaste.select(query, element.getName()).length > 0)
                 continue;
             
-            DataElementServices.insert(iocaste, item.getDataElement());
+            DataElementServices.insert(iocaste, element);
         }
         
         return 1;
