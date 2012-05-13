@@ -73,6 +73,8 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     private final ExtendedObject[] load(String name) throws Exception {
+        Documents documents;
+        ExtendedObject header;
         String value;
         ExtendedObject[] itens;
         List<ExtendedObject> shdata;
@@ -80,8 +82,8 @@ public class Services extends AbstractFunction {
         if (cache.containsKey(name))
             return cache.get(name);
         
-        Documents documents = new Documents(this);
-        ExtendedObject header = documents.getObject("SEARCH_HELP", name);
+        documents = new Documents(this);
+        header = documents.getObject("SEARCH_HELP", name);
         
         if (header == null)
             return null;
@@ -167,7 +169,7 @@ public class Services extends AbstractFunction {
             shdata.add(item);
         }
         
-        cache.put(shname, shdata.toArray(new ExtendedObject[0]));
+        cache.put(shname, load(shname));
     }
     
     /**
