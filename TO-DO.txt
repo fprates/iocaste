@@ -1,15 +1,33 @@
-TO-DO
+﻿TO-DO
 
 Sem prioridade definida:
 
-- implementação de usuários, grupos e autorizações;
-
-- criptografia;
-
-- transportar dados da sessão para core;
-
-- implementar rollback automático em caso de exceção;
-
-- validação de valores de campos em tela segundo referência associada;
-
-- reimplementação de external.
+Suporte à conexão segura
+Suporte à criptografia
+Melhoria no suporte à temas
+Melhoria na consulta de ajuda de pesquisa
+Suporte à relacionamentos entre modelos de documentos
+Suporte à componente de detalhe
+Suporte à bloqueio de registros
+Melhoria no tratamento de erros em tempo de execução
+Suporte à aplicações externas, integração
+Unificação dos pacotes de protocolo
+Inclusão de dados de projeto no versionamento
+Suporte à desinstalação de pacotes
+Melhoria no suporte à mensagens de texto da aplicação
+Suporte à dependências de pacotes
+Melhoria na tela de conexão do usuário (seleção de idioma)
+Suporte à usuários, grupos e autorizações
+Suporte a importação/exportação de dados
+Melhoria no programa de ajuda
+Melhoria na notificação de erro
+Suporte à detalhe de campos em tela
+Suporte à atualização on-line
+Suporte à log de eventos
+Melhoria no seletor de tarefas
+Melhoria no editor do dicionário de dados
+Melhoria na visão de edição tabelas
+Suporte à visão de dados
+Melhoria na documentação das APIs
+Melhoria na interface do programa de pacotes
+Implementação de gerador de relatórios e formulários
