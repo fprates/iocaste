@@ -83,16 +83,24 @@ public class DBServices {
         
         System.err.println(query);
         
-        ps = connection.prepareStatement(query);
-        if (criteria != null)
-            for (Object object : criteria)
-                ps.setObject(cols++, object);
-        
-        results = ps.executeQuery();
-        lines = new ArrayList<Map<String, Object>>();
-
-        metadata = results.getMetaData();
-        cols = metadata.getColumnCount();
+        try {
+            ps = connection.prepareStatement(query);
+            if (criteria != null)
+                for (Object object : criteria)
+                    ps.setObject(cols++, object);
+            
+            results = ps.executeQuery();
+            lines = new ArrayList<Map<String, Object>>();
+    
+            metadata = results.getMetaData();
+            cols = metadata.getColumnCount();
+        } catch (HsqlException e) {
+            throw new SQLException(e.getMessage());
+        } catch (SQLDataException e) {
+            throw new SQLDataException(e.getMessage());
+        } catch (SQLException e) {
+            throw new SQLException (e.getMessage());
+        }
         
         while (results.next()) {
             line = new HashMap<String, Object>();

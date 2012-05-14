@@ -12,6 +12,10 @@ public class Servlet extends ServerServlet {
     private static final long serialVersionUID = -8569034003940826582L;
     private Services services;
     
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.ServerServlet#config()
+     */
     @Override
     public void config() {
         Map<String, Object[]> parameters;
@@ -28,6 +32,7 @@ public class Servlet extends ServerServlet {
         authorize("checked_select", parameters);
         authorize("get_host", null);
         authorize("get_locale", null);
+        authorize("rollback", null);
     }
     
     /*
