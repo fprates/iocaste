@@ -26,6 +26,7 @@ public class Main extends AbstractPage {
      */
     public final void authentic(ViewData vdata) throws Exception {
         InputComponent input;
+        MessageSource messages;
         Container form = new Form(vdata, "main");
         DataForm loginform = new DataForm(form, "login");
         
@@ -51,7 +52,10 @@ public class Main extends AbstractPage {
             input.setObligatory(true);
         }
         
-        vdata.setMessages(new MessageSource("/META-INF/message.properties"));
+        messages = new MessageSource();
+        messages.loadFromFile("/META-INF/message.properties");
+        
+        vdata.setMessages(messages);
         vdata.setTitle("authentic");
         vdata.setFocus("USERNAME");
         

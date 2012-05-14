@@ -206,7 +206,7 @@ public class HtmlRenderer {
                 toString());
         
         if (config.getMessageSource() == null)
-            config.setMessageSource(new MessageSource(null));
+            config.setMessageSource(new MessageSource());
         
         html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
                 "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");

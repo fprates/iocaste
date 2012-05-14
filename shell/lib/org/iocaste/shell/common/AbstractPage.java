@@ -102,6 +102,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @throws Exception
      */
     public final ViewData getViewData(Message message) throws Exception {
+        MessageSource messages;
         Method method;
         ViewData view;
         String page = message.getString("page");
@@ -122,6 +123,12 @@ public abstract class AbstractPage extends AbstractFunction {
         
         method = this.getClass().getMethod(page, ViewData.class);
         method.invoke(this, view);
+        
+        if (view.getMessages() == null) {
+            messages = new MessageSource();
+            messages.loadFromApplication(app, locale, this);
+            view.setMessages(messages);
+        }
         
         return view;
     }
