@@ -33,56 +33,158 @@ public class Services extends AbstractFunction {
      */
     public final Integer install(Message message) throws Exception {
         ExtendedObject header;
-        ExtendedObject[] itens;
-        DocumentModel tasks, shmodel, shimodel;
-        SearchHelpData[] shdata;
-        List<Object[]> values;
-        String[] shitens;
+        DocumentModel tasks;
         Map<String, String> links;
-        SHLib shlib;
-        int i;
-        long pkgid;
-        InstallData data = (InstallData)message.get("data");
-        String shname, pkgname = message.getString("name");
-        Documents documents = new Documents(this);
-        Map<String, DocumentModelItem> shm =
-                new HashMap<String, DocumentModelItem>();
+        Map<String, Map<String, String>> messages;
+        DocumentModel[] models;
+        SearchHelpData[] shdata;
+        State state = new State();
         
         /*
          * Registra instalação do pacote
          */
-        pkgid = documents.getNextNumber("PKGCODE") * 1000000;
-        header = new ExtendedObject(documents.getModel("PACKAGE"));
-        header.setValue("NAME", pkgname);
-        header.setValue("CODE", pkgid);
-        documents.save(header);
+        state.pkgname = message.getString("name");
+        state.data = message.get("data");
+        state.documents = new Documents(this);
+        state.pkgid = state.documents.getNextNumber("PKGCODE") * 1000000;
+        state.shm = new HashMap<String, DocumentModelItem>();
+        
+        header = new ExtendedObject(state.documents.getModel("PACKAGE"));
+        header.setValue("NAME", state.pkgname);
+        header.setValue("CODE", state.pkgid);
+        state.documents.save(header);
         
         /*
          * gera modelos;
          * insere registros;
          * prepara dados para ajuda de pesquisa.
          */
-        for (DocumentModel model : data.getModels()) {
-            if (documents.getModel(model.getName()) != null) {
-                if (documents.updateModel(model) == 0)
+        models = state.data.getModels();
+        if (models.length > 0)
+            installModels(models, state);
+        
+        /*
+         * registra tarefas
+         */
+        tasks = state.documents.getModel("TASKS");
+        links = state.data.getLinks();
+        if (links.size() > 0)
+            installLinks(links, tasks, state);
+        
+        /*
+         * registra objetos de numeração
+         */
+        for (String factory : state.data.getNumberFactories()) {
+            state.documents.createNumberFactory(factory);
+
+            Registry.add(factory, "NUMBER", state);
+        }
+        
+        /*
+         * gera ajudas de pesquisa
+         */
+        shdata = state.data.getSHData();
+        if (shdata.length > 0)
+            installSH(shdata, state);
+        
+        for (DataElement element : state.data.getElements())
+            Registry.add(element.getName(), "DATA_ELEMENT", state);
+        
+        messages = state.data.getMessages();
+        if (messages.size() > 0)
+            installMessages(messages, state);
+        
+        state.documents.commit();
+        
+        return 1;
+    }
+    
+    /**
+     * 
+     * @param links
+     * @param tasks
+     * @param state
+     * @throws Exception
+     */
+    private final void installLinks(Map<String, String> links,
+            DocumentModel tasks, State state) throws Exception {
+        ExtendedObject header;
+        
+        for (String link : links.keySet()) {
+            header = new ExtendedObject(tasks);
+            header.setValue("NAME", link);
+            header.setValue("COMMAND", links.get(link));
+            
+            state.documents.save(header);
+
+            Registry.add(link, "TASK", state);
+        }
+    }
+    
+    /**
+     * 
+     * @param msgsource
+     * @param state
+     * @throws Exception
+     */
+    private final void installMessages(
+            Map<String, Map<String, String>> msgsource, State state)
+                    throws Exception {
+        Map<String, String> messages;
+        DocumentModel msgmodel = state.documents.getModel("MESSAGES");
+        DocumentModel langmodel = state.documents.getModel("LANGUAGES");
+        ExtendedObject olanguage = new ExtendedObject(langmodel);
+        ExtendedObject omessage = new ExtendedObject(msgmodel);
+        
+        for (String language : msgsource.keySet()) {
+            olanguage.setValue("LOCALE", language);
+            
+            state.documents.save(olanguage);
+            
+            messages = msgsource.get(language);
+            for (String msgcode : messages.keySet()) {
+                omessage.setValue("NAME", msgcode);
+                omessage.setValue("LOCALE", language);
+                omessage.setValue("PACKAGE", state.pkgname);
+                omessage.setValue("TEXT", messages.get(msgcode));
+                
+                state.documents.save(omessage);
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @param models
+     * @param state
+     * @throws Exception
+     */
+    private final void installModels(DocumentModel[] models, State state)
+            throws Exception {
+        int i;
+        List<Object[]> values;
+        ExtendedObject header;
+        
+        for (DocumentModel model : models) {
+            if (state.documents.getModel(model.getName()) != null) {
+                if (state.documents.updateModel(model) == 0)
                     throw new IocasteException("update model error.");
             } else {
-                if (documents.createModel(model) == 0)
+                if (state.documents.createModel(model) == 0)
                     throw new IocasteException("create model error.");
             }
             
-            pkgid++;
-            Registry.add(model, pkgname, documents, pkgid);
+            Registry.add(model.getName(), state);
             
             for (DocumentModelItem modelitem : model.getItens())
                 if (modelitem.getSearchHelp() != null)
-                    shm.put(modelitem.getSearchHelp(), modelitem);
+                    state.shm.put(modelitem.getSearchHelp(), modelitem);
             
             /*
              * recupera modelo para trazer as queries.
              */
-            model = documents.getModel(model.getName());
-            values = data.getValues(model);
+            model = state.documents.getModel(model.getName());
+            values = state.data.getValues(model);
             
             if (values == null)
                 continue;
@@ -94,82 +196,53 @@ public class Services extends AbstractFunction {
                 for (DocumentModelItem modelitem : model.getItens())
                     header.setValue(modelitem, line[i++]);
                 
-                documents.save(header);
+                state.documents.save(header);
             }
         }
+    }
+    
+    /**
+     * 
+     * @param shdata
+     * @param state
+     * @throws Exception
+     */
+    private final void installSH(SearchHelpData[] shdata, State state)
+            throws Exception {
+        ExtendedObject header;
+        String shname;
+        String[] shitens;
+        ExtendedObject[] itens;
+        int i;
+        SHLib shlib = new SHLib(this);
+        DocumentModel shmodel = state.documents.getModel("SEARCH_HELP");
+        DocumentModel shimodel = state.documents.getModel("SH_ITENS");
         
-        /*
-         * registra tarefas
-         */
-        tasks = documents.getModel("TASKS");
-        links = data.getLinks();
-        for (String link : links.keySet()) {
-            header = new ExtendedObject(tasks);
-            header.setValue("NAME", link);
-            header.setValue("COMMAND", links.get(link));
+        for (SearchHelpData shd : shdata) {
+            shname = shd.getName();
+            header = new ExtendedObject(shmodel);
+            header.setValue("NAME", shname);
+            header.setValue("MODEL", shd.getModel());
+            header.setValue("EXPORT", shd.getExport());
             
-            documents.save(header);
+            shitens = shd.getItens();
+            itens = new ExtendedObject[shitens.length];
 
-            pkgid++;
-            Registry.add(link, "TASK", pkgname, documents, pkgid);
-        }
-        
-        /*
-         * registra objetos de numeração
-         */
-        for (String factory : data.getNumberFactories()) {
-            documents.createNumberFactory(factory);
-
-            pkgid++;
-            Registry.add(factory, "NUMBER", pkgname, documents, pkgid);
-        }
-        
-        /*
-         * gera ajudas de pesquisa
-         */
-        shdata = data.getSHData();
-        if (shdata.length > 0) {
-            shlib = new SHLib(this);
-            shmodel = documents.getModel("SEARCH_HELP");
-            shimodel = documents.getModel("SH_ITENS");
-            
-            for (SearchHelpData shd : shdata) {
-                shname = shd.getName();
-                header = new ExtendedObject(shmodel);
-                header.setValue("NAME", shname);
-                header.setValue("MODEL", shd.getModel());
-                header.setValue("EXPORT", shd.getExport());
-                
-                shitens = shd.getItens();
-                itens = new ExtendedObject[shitens.length];
-                i = 0;
-                
-                for (String name : shitens) {
-                    itens[i] = new ExtendedObject(shimodel);
-                    itens[i].setValue("NAME", name);
-                    itens[i].setValue("SEARCH_HELP", shname);
-                    itens[i++].setValue("ITEM", name);
-                }
-                
-                shlib.save(header, itens);
-                
-                if (shm.containsKey(shname))
-                    shlib.assign(shm.get(shname));
-
-                pkgid++;
-                Registry.add(shname, "SH", pkgname, documents, pkgid);
+            i = 0;
+            for (String name : shitens) {
+                itens[i] = new ExtendedObject(shimodel);
+                itens[i].setValue("NAME", name);
+                itens[i].setValue("SEARCH_HELP", shname);
+                itens[i++].setValue("ITEM", name);
             }
+            
+            shlib.save(header, itens);
+            
+            if (state.shm.containsKey(shname))
+                shlib.assign(state.shm.get(shname));
+
+            Registry.add(shname, "SH", state);
         }
-        
-        for (DataElement element : data.getElements()) {
-            pkgid++;
-            Registry.add(element.getName(), "DATA_ELEMENT", pkgname,
-                    documents, pkgid);
-        }
-        
-        documents.commit();
-        
-        return 1;
     }
     
     /**
@@ -218,4 +291,12 @@ public class Services extends AbstractFunction {
 //            name = object.getValue("NAME");
 //        }
     }
+}
+
+class State {
+    public Documents documents;
+    public long pkgid;
+    public String pkgname;
+    public Map<String, DocumentModelItem> shm;
+    public InstallData data;
 }

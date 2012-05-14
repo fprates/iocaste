@@ -1,6 +1,5 @@
 package org.iocaste.packagetool;
 
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
@@ -9,37 +8,32 @@ public class Registry {
 
     /**
      * 
-     * @param model
-     * @param package_
-     * @param documents
-     * @param pkgid
+     * @param state
      * @throws Exception
      */
-    public static final void add(DocumentModel model, String package_,
-            Documents documents, long pkgid) throws Exception {
-        add(model.getName(), "MODEL", package_, documents, pkgid);
+    public static final void add(String name, State state) throws Exception {
+        add(name, "MODEL", state);
     }
     
     /**
      * 
      * @param name
      * @param model
-     * @param pkgname
-     * @param documents
-     * @param pkgid
+     * @param state
      * @throws Exception
      */
-    public static final void add(String name, String model, String pkgname,
-            Documents documents, long pkgid) throws Exception {
+    public static final void add(String name, String model, State state)
+            throws Exception {
         ExtendedObject pkgitem = new ExtendedObject(
-                documents.getModel("PACKAGE_ITEM"));
+                state.documents.getModel("PACKAGE_ITEM"));
         
-        pkgitem.setValue("CODE", pkgid);
+        pkgitem.setValue("CODE", state.pkgid);
         pkgitem.setValue("NAME", name);
-        pkgitem.setValue("PACKAGE", pkgname);
+        pkgitem.setValue("PACKAGE", state.pkgname);
         pkgitem.setValue("MODEL", model);
-        
-        documents.save(pkgitem);
+
+        state.pkgid++;
+        state.documents.save(pkgitem);
     }
     
     /**

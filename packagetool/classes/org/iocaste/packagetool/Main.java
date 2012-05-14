@@ -19,10 +19,21 @@ public class Main extends AbstractPage {
         export("install", "install");
     }
     
-    public final InstallData install(Message message) {
-        return Install.self();
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final InstallData install(Message message) throws Exception {
+        return Install.self(this);
     }
     
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
     public final void main(ViewData view) throws Exception {
         Link link;
         String action;

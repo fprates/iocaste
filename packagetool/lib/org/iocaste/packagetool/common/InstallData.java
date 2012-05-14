@@ -19,6 +19,7 @@ public class InstallData implements Serializable {
     private Set<String> numbers;
     private List<SearchHelpData> shds;
     private List<DataElement> elements;
+    private Map<String, Map<String, String>> messages;
     
     public InstallData() {
         models = new ArrayList<DocumentModel>();
@@ -27,6 +28,7 @@ public class InstallData implements Serializable {
         numbers = new HashSet<String>();
         shds = new ArrayList<SearchHelpData>();
         elements = new ArrayList<DataElement>();
+        messages = new HashMap<String, Map<String, String>>();
     }
     
     /**
@@ -98,6 +100,14 @@ public class InstallData implements Serializable {
     
     /**
      * 
+     * @return
+     */
+    public final Map<String, Map<String, String>> getMessages() {
+        return messages;
+    }
+    
+    /**
+     * 
      * @param name
      * @param tablename
      * @param classname
@@ -156,5 +166,15 @@ public class InstallData implements Serializable {
      */
     public final void link(String link, String command) {
         links.put(link, command);
+    }
+    
+    /**
+     * 
+     * @param language
+     * @param messages
+     */
+    public final void setMessages(String language, Map<String, String> messages)
+    {
+        this.messages.put(language, messages);
     }
 }
