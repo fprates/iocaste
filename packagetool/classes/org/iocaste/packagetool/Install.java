@@ -34,6 +34,23 @@ public class Install {
         model.add(item);
         model.add(new DocumentModelKey(item));
         
+        element = new DataElement();
+        element.setName("LANGUAGES.CODE");
+        element.setType(DataType.NUMC);
+        element.setLength(3);
+        
+        item = new DocumentModelItem();
+        item.setName("CODE");
+        item.setDataElement(element);
+        item.setTableFieldName("LCODE");
+        
+        model.add(item);
+        
+        data.addValues(model, "pt_BR", 1);
+        data.addValues(model, "en_US", 2);
+        data.addValues(model, "pt_PT", 3);
+        data.addValues(model, "en_GB", 4);
+        
         return model;
     }
     
@@ -52,8 +69,24 @@ public class Install {
         DataElement element = new DataElement();
         
         /*
+         * índice
+         */
+        element.setName("INDEX");
+        element.setType(DataType.NUMC);
+        element.setLength(13);
+        
+        item = new DocumentModelItem();
+        item.setName("INDEX");
+        item.setDataElement(element);
+        item.setTableFieldName("MSGNR");
+        
+        model.add(item);
+        model.add(new DocumentModelKey(item));
+        
+        /*
          * nome
          */
+        element = new DataElement();
         element.setName("MESSAGES.NAME");
         element.setType(DataType.CHAR);
         element.setLength(64);
@@ -65,7 +98,6 @@ public class Install {
         item.setTableFieldName("MSGNM");
         
         model.add(item);
-        model.add(new DocumentModelKey(item));
         
         /*
          * localização

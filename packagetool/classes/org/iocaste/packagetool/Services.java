@@ -130,19 +130,28 @@ public class Services extends AbstractFunction {
     private final void installMessages(
             Map<String, Map<String, String>> msgsource, State state)
                     throws Exception {
+        long index;
+        int langcode;
+        String locale;
         Map<String, String> messages;
+        ExtendedObject[] languages = state.documents.select("from LANGUAGES");
         DocumentModel msgmodel = state.documents.getModel("MESSAGES");
-        DocumentModel langmodel = state.documents.getModel("LANGUAGES");
-        ExtendedObject olanguage = new ExtendedObject(langmodel);
         ExtendedObject omessage = new ExtendedObject(msgmodel);
         
         for (String language : msgsource.keySet()) {
-            olanguage.setValue("LOCALE", language);
-            
-            state.documents.save(olanguage);
+            langcode = 0;
+            for (ExtendedObject olanguage : languages) {
+                locale = olanguage.getValue("LOCALE");
+                if (language.equals(locale)) {
+                    langcode = olanguage.getValue("CODE");
+                    break;
+                }
+            }
             
             messages = msgsource.get(language);
+            index = (langcode * 1000000000) + (state.pkgid / 100);
             for (String msgcode : messages.keySet()) {
+                omessage.setValue("INDEX", index++);
                 omessage.setValue("NAME", msgcode);
                 omessage.setValue("LOCALE", language);
                 omessage.setValue("PACKAGE", state.pkgname);
