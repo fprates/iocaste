@@ -222,7 +222,7 @@ public class Query {
                     sb.append(" where ");
                 else
                     continue;
-                
+
                 pass = 5;
                 continue;
             case 5:
@@ -298,16 +298,44 @@ public class Query {
                         sb.append(model.getModelItem(arg1).
                                         getTableFieldName()).append(op).
                                         append(arg2);
+                        
+                        temp = "";
                     }
-                    
-                    continue;
                 } else {
                     arg2 = temp;
                     
-                    sb.append (" ").
-                            append(model.getModelItem(arg1)).
+                    sb.append(" ").append(model.getModelItem(arg1)).
                             append(op).append(arg2);
+                    
+                    temp = "";
                 }
+                
+                continue;
+            }
+            
+            /*
+             * operador lógido
+             */
+            charcrit[i] = Character.toUpperCase(charcrit[i]);
+            if (charcrit[i] >= 'A' && charcrit[i] <= 'Z') {
+                temp += charcrit[i];
+                
+                if (temp.equals("AND") || temp.equals("OR") ||
+                        temp.equals("LIKE")) {
+                    sb.append(" ").append(temp).append(" ");
+                    
+                    arg1 = null;
+                    op = null;
+                    arg2 = null;
+                    temp = "";
+                }
+            } else {
+                sb.append(" ").append(temp).append(" ");
+                
+                arg1 = null;
+                op = null;
+                arg2 = null;
+                temp = "";
             }
         }
         
