@@ -87,7 +87,12 @@ public abstract class AbstractFunction implements Function {
         
         method = getClass().getMethod(methodname, Message.class);
         
-        return method.invoke(this, message);
+        try {
+            return method.invoke(this, message);
+        } catch (Exception e) {
+            new Iocaste(this).rollback();
+            throw e;
+        }
     }
     
     /*
