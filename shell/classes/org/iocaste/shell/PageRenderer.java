@@ -714,7 +714,7 @@ public class PageRenderer extends HttpServlet implements Function {
         AppContext appctx;
         ViewData viewdata;
         Message message = new Message();
-        PrintWriter writer = resp.getWriter();
+        PrintWriter writer;
 
         viewdata = pagectx.getViewData();
         
@@ -776,6 +776,8 @@ public class PageRenderer extends HttpServlet implements Function {
         text = renderer.run(pagectx.getViewData());
 
         pagectx.setActions(renderer.getActions());
+        
+        writer = resp.getWriter();
         
         if (text != null)
             for (String line : text)
