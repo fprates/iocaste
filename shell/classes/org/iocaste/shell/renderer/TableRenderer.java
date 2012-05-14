@@ -41,7 +41,7 @@ public class TableRenderer extends Renderer {
                 
                 name = column.getName();
                 if (name != null)
-                    thtag.addInner(name);
+                    thtag.addInner(config.getText(name, name));
                 
                 trtag.addChild(thtag);
             }
