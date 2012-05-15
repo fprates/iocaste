@@ -86,6 +86,7 @@ public class NavigationBar implements Serializable {
      * @param text
      */
     public final void setMessage(Const msgtype, String text) {
+        message.setVisible((text == null)? false : true);
         message.setText(text);
         
         switch (msgtype) {

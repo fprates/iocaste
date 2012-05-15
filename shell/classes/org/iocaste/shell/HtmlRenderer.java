@@ -66,7 +66,7 @@ public class HtmlRenderer {
         
         txttitle = new Text(navbar.getStatusArea(), "navbar.title");
         txttitle.setStyleClass("title");
-        txttitle.setText((title == null)?vdata.getAppName() : title);
+        txttitle.setText((title == null)? vdata.getAppName() : title);
         txttitle.setTag("h1");
         
         txtuname = new Text(navbar.getStatusArea(), "navbar.username");
@@ -74,8 +74,7 @@ public class HtmlRenderer {
         txtuname.setText(new StringBuilder(username).
                 append("@term:").append(logid).toString());
         
-        navbar.setMessage((msgtype == null)? Const.STATUS : msgtype,
-                (msgtext == null)? "" : msgtext);
+        navbar.setMessage((msgtype == null)? Const.STATUS : msgtype, msgtext);
     }
     
     /**
