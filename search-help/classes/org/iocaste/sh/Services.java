@@ -23,6 +23,7 @@ public class Services extends AbstractFunction {
         export("save", "save");
         export("assign", "assign");
         export("remove", "remove");
+        export("unassign", "unassign");
         export("update", "update");
     }
     
@@ -170,6 +171,19 @@ public class Services extends AbstractFunction {
         }
         
         cache.put(shname, load(shname));
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final int unassign(Message message) throws Exception {
+        String shname = message.getString("name");
+        String query = "delete from SH_REFERENCE where SEARCH_HELP = ?";
+        
+        return new Documents(this).update(query, shname);
     }
     
     /**

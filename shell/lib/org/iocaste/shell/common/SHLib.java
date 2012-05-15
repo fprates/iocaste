@@ -77,6 +77,21 @@ public class SHLib extends AbstractServiceInterface {
     
     /**
      * 
+     * @param shname
+     * @return
+     * @throws Exception
+     */
+    public final int unassign(String shname) throws Exception {
+        Message message = new Message();
+        
+        message.setId("unassign");
+        message.add("name", shname);
+        
+        return call(message);
+    }
+    
+    /**
+     * 
      * @param header
      * @param itens
      * @throws Exception
