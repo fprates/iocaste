@@ -160,6 +160,8 @@ public class Services extends AbstractFunction {
                 state.documents.save(omessage);
             }
         }
+        
+        Registry.add(null, "MESSAGE", state);
     }
     
     /**
@@ -183,7 +185,7 @@ public class Services extends AbstractFunction {
                     throw new IocasteException("create model error.");
             }
             
-            Registry.add(model.getName(), state);
+            Registry.add(model.getName(), "MODEL", state);
             
             for (DocumentModelItem modelitem : model.getItens())
                 if (modelitem.getSearchHelp() != null)

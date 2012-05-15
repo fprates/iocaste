@@ -5,15 +5,6 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 
 public class Registry {
-
-    /**
-     * 
-     * @param state
-     * @throws Exception
-     */
-    public static final void add(String name, State state) throws Exception {
-        add(name, "MODEL", state);
-    }
     
     /**
      * 
