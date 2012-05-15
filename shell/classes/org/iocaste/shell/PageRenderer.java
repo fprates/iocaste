@@ -106,7 +106,7 @@ public class PageRenderer extends HttpServlet implements Function {
         String contenttype = view.getContentType();
         
         resp.setContentType((contenttype == null)? "text/html" : contenttype);
-        resp.setCharacterEncoding("utf-8");
+        resp.setCharacterEncoding("UTF-8");
         
         for (String key : view.getHeaderKeys())
             resp.setHeader(key, view.getHeader(key));
@@ -200,6 +200,8 @@ public class PageRenderer extends HttpServlet implements Function {
         ContextData contextdata;
         int logid = 0;
         PageContext pagectx = null;
+        
+        req.setCharacterEncoding("UTF-8");
         
         if (apps.containsKey(sessionid)) {
             pagectx = getPageContext(req, sessionid);
@@ -491,7 +493,7 @@ public class PageRenderer extends HttpServlet implements Function {
         PageContext pagectx_;
         Map<String, String[]> parameters;
         ViewData view;
-        String  appname, pagename, key, pagetrack = null, actionname = null;
+        String appname, pagename, key, pagetrack = null, actionname = null;
         
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagectx);
