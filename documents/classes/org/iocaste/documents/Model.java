@@ -310,8 +310,7 @@ public class Model {
             throw new IocasteException("error on removing model item");
         
         query = "delete from docs003 where ename = ?";
-        if (iocaste.update(query, item.getDataElement().getName()) == 0)
-            throw new IocasteException("erro on removing data element");
+        iocaste.update(query, name);
         
         return 1;
     }
