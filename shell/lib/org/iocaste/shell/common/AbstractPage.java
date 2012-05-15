@@ -72,13 +72,10 @@ public abstract class AbstractPage extends AbstractFunction {
             }
             
             method = this.getClass().getMethod(action, ViewData.class);
+            method.invoke(this, view);
             
-            try {
-                method.invoke(this, view);
-            } catch (Exception e) {
+            if (view.getMessageType() == Const.ERROR)
                 new Iocaste(this).rollback();
-                throw e;
-            }
         }
         
         return view;
