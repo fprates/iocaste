@@ -44,6 +44,12 @@ public class DataItem extends AbstractInputComponent {
      * @see org.iocaste.shell.common.AbstractInputComponent#isBooleanComponent()
      */
     public final boolean isBooleanComponent() {
-        return (getComponentType() == Const.CHECKBOX)? true : false;
+        switch (getComponentType()) {
+        case CHECKBOX:
+        case RADIO_BUTTON:
+            return true;
+        default:
+            return false;
+        }
     }
 }
