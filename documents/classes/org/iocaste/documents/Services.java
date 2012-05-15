@@ -21,6 +21,7 @@ public class Services extends AbstractFunction {
         export("get_document_model", "getDocumentModel");
         export("create_model", "createModel");
         export("remove_model", "removeModel");
+        export("remove_number_factory", "removeNumberFactory");
         export("rename_model", "renameModel");
         export("update_model", "updateModel");
         export("save", "save");
@@ -143,6 +144,18 @@ public class Services extends AbstractFunction {
         DocumentModel model = Model.get(modelname, cache);
         
         return Model.remove(model, cache);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final int removeNumberFactory(Message message) throws Exception {
+        String name = message.getString("name");
+        
+        return NumberRange.remove(name, cache);
     }
     
     /**

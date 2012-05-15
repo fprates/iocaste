@@ -59,4 +59,16 @@ public class NumberRange {
         return current;
     }
 
+    /**
+     * 
+     * @param name
+     * @param cache
+     * @return
+     * @throws Exception
+     */
+    public static int remove(String name, Cache cache) throws Exception {
+        String query = "delete from NUMBER_RANGE where IDENT = ?";
+        
+        return Query.update(query, cache, name);
+    }
 }

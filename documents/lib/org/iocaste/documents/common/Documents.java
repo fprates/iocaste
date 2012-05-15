@@ -199,6 +199,21 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
+     * @param name
+     * @return
+     * @throws Exception
+     */
+    public final int removeNumberFactory(String name) throws Exception {
+        Message message = new Message();
+        
+        message.setId("remove_number_factory");
+        message.add("name", name);
+        
+        return call(message);
+    }
+    
+    /**
+     * 
      * @param oldname
      * @param newname
      * @return
