@@ -323,6 +323,13 @@ public class Services extends AbstractFunction {
                 continue;
             }
             
+            if (modeltype.equals("NUMBER")) {
+                documents.removeNumberFactory(name);
+                documents.delete(object);
+                
+                continue;
+            }
+            
             if (modeltype.equals("DATA_ELEMENT"))
                 documents.delete(object);
         }
