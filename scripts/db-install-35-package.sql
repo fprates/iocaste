@@ -20,7 +20,7 @@ grant select, insert, update, delete on package002 to iocastedb;
 \p permissions granted.
 
 insert into docs001(docid, tname, class) values('PACKAGE', 'PACKAGE001', '');
-insert into docs003(ename, decim, lngth, etype, upcas) values('PACKAGE.NAME', 0, 60, 0, 1);
+insert into docs003(ename, decim, lngth, etype, upcas) values('PACKAGE.NAME', 0, 60, 0, 0);
 insert into docs003(ename, decim, lngth, etype, upcas) values('PACKAGE.CODE', 0, 12, 3, 0);
 insert into docs002(iname, docid, index, fname, ename, attrb) values('PACKAGE.NAME', 'PACKAGE', 0, 'IDENT', 'PACKAGE.NAME', '');
 insert into docs002(iname, docid, index, fname, ename, attrb) values('PACKAGE.CODE', 'PACKAGE', 1, 'PKGID', 'PACKAGE.CODE', '');

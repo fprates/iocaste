@@ -24,7 +24,7 @@ public class Install {
         element.setName("LANGUAGES.LOCALE");
         element.setType(DataType.CHAR);
         element.setLength(5);
-        element.setUpcase(true);
+        element.setUpcase(false);
         
         item = new DocumentModelItem();
         item.setName("LOCALE");
@@ -90,7 +90,7 @@ public class Install {
         element.setName("MESSAGES.NAME");
         element.setType(DataType.CHAR);
         element.setLength(64);
-        element.setUpcase(true);
+        element.setUpcase(false);
         
         item = new DocumentModelItem();
         item.setName("NAME");

@@ -1,6 +1,5 @@
 package org.iocaste.packagetool;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -276,31 +275,60 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void uninstall(Message message) throws Exception {
-        String model;
-//        SHLib shlib;
+        String query, modeltype, name;
+        ExtendedObject object;
+        SHLib shlib = new SHLib(this);
+        Documents documents = new Documents(this);
         String pkgname = message.getString("package");
         ExtendedObject[] objects = Registry.getEntries(pkgname, this);
-        List<ExtendedObject> shs = new ArrayList<ExtendedObject>();
-        List<ExtendedObject> elements = new ArrayList<ExtendedObject>();
         
-        for (ExtendedObject object : objects) {
-            model = object.getValue("MODEL");
+        for (int i = objects.length; i > 0; i--) {
+            object = objects[i - 1];
             
-            if (model.equals("SEARCH_HELP")) {
-                shs.add(object);
+            modeltype = object.getValue("MODEL");
+            name = object.getValue("NAME");
+            if (modeltype.equals("MESSAGE")) {
+                name = object.getValue("PACKAGE");
+                query = "delete from MESSAGES where PACKAGE = ?";
+                documents.update(query, name);
+                
+                query = "delete from PACKAGE_ITEM where PACKAGE = ? and " +
+                		"MODEL = ?";
+                documents.update(query, name, "MESSAGE");
+                documents.delete(object);
+                
                 continue;
             }
             
-            if (model.equals("DATA_ELEMENT")) {
-                elements.add(object);
+            if (modeltype.equals("SH")) {
+                shlib.unassign(name);
+                shlib.remove(name);
+                documents.delete(object);
+                
                 continue;
             }
+            
+            if (modeltype.equals("TASK")) {
+                query = "delete from TASKS where NAME = ?";
+                documents.update(query, name);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("MODEL")) {
+                documents.removeModel(name);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("DATA_ELEMENT"))
+                documents.delete(object);
         }
-//        
-//        shlib = new SHLib(this);
-//        for (ExtendedObject object : shs) {
-//            name = object.getValue("NAME");
-//        }
+        
+        documents.update("delete from PACKAGE where NAME = ?", pkgname);
+        documents.commit();
     }
 }
 
