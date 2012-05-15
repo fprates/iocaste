@@ -6,14 +6,17 @@ public class Frame extends AbstractContainer {
     
     public Frame(ViewData view, String name) {
         super(view, Const.FRAME, name);
-        
-        text = name;
+        init(name);
     }
     
     public Frame(Container container, String name) {
         super(container, Const.FRAME, name);
-        
+        init(name);
+    }
+    
+    private final void init(String name) {
         text = name;
+        setStyleClass("frame");
     }
     
     /**

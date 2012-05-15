@@ -237,6 +237,13 @@ insert into shell003 (pindx, eindx, pname, value) values (000100240003, 00010024
 insert into shell003 (pindx, eindx, pname, value) values (000100240004, 000100240000, 'font-size', '12pt');
 insert into shell003 (pindx, eindx, pname, value) values (000100240005, 000100240000, 'text-decoration', 'underline');
 
+insert into shell002 (eindx, sname, ename) values (000100250000, 'DEFAULT', '.frame');
+insert into shell003 (pindx, eindx, pname, value) values (000100250001, 000100250000, 'color', '#ffffff');
+insert into shell003 (pindx, eindx, pname, value) values (000100250002, 000100250000, 'background-color', '#000000');
+insert into shell003 (pindx, eindx, pname, value) values (000100250003, 000100250000, 'font-family', 'sans-serif');
+insert into shell003 (pindx, eindx, pname, value) values (000100250004, 000100250000, 'font-size', '11pt');
+insert into shell003 (pindx, eindx, pname, value) values (000100250005, 000100250000, 'font-weight', 'normal');
+
 insert into docs001(docid, tname, class) values('STYLE', 'SHELL001', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.NAME', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.INDEX', 0, 12, 3, 1);
