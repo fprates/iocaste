@@ -24,6 +24,13 @@ public class ListBox extends AbstractInputComponent {
     
     /**
      * 
+     */
+    public void clear() {
+        values.clear();
+    }
+    
+    /**
+     * 
      * @param name
      * @return
      */
