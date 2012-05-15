@@ -13,9 +13,10 @@ public class RadioButtonRenderer extends Renderer {
      * @param radiobutton
      * @return
      */
-    public static final List<XMLElement> render(RadioButton radiobutton) {
-        String text;
+    public static final List<XMLElement> render(RadioButton radiobutton,
+            Config config) {
         XMLElement rbtag, rbtexttag;
+        String text;
         List<XMLElement> elements = new ArrayList<XMLElement>();
         
         text = radiobutton.getHtmlName();
@@ -34,7 +35,7 @@ public class RadioButtonRenderer extends Renderer {
         text = radiobutton.getText();
         if (text != null) {
             rbtexttag = new XMLElement("span");
-            rbtexttag.addInner(text);
+            rbtexttag.addInner(config.getText(text, text));
             elements.add(rbtexttag);
         }
         

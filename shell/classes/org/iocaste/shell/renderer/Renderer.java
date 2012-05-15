@@ -147,7 +147,8 @@ public class Renderer {
             break;
             
         case RADIO_BUTTON:
-            tags.addAll(RadioButtonRenderer.render((RadioButton)element));
+            tags.addAll(RadioButtonRenderer.render((RadioButton)element,
+                    config));
             break;
             
         default:
