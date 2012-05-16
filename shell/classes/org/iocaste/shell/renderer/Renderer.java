@@ -14,6 +14,7 @@ import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.ExpandBar;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Frame;
@@ -81,6 +82,10 @@ public class Renderer {
             
         case FRAME:
             tags.add(FrameRenderer.render((Frame)container, config));
+            break;
+            
+        case EXPAND_BAR:
+            tags.addAll(ExpandBarRenderer.render((ExpandBar)container, config));
             break;
             
         case MENU:
