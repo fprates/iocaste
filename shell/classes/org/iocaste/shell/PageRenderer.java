@@ -318,6 +318,9 @@ public class PageRenderer extends HttpServlet implements Function {
                 element = (column.isMark())?
                         item.get("mark") : item.get(column.getName());
                 
+                if (element == null)
+                    continue;
+                
                 if (column.isMark() && markname != null)
                     htmlname = markname;
                 else
