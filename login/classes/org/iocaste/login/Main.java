@@ -1,5 +1,7 @@
 package org.iocaste.login;
 
+import java.util.Properties;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
@@ -53,7 +55,7 @@ public class Main extends AbstractPage {
         }
         
         messages = new MessageSource();
-        messages.loadFromFile("/META-INF/message.properties");
+        messages.setMessages(getMessages());
         
         vdata.setMessages(messages);
         vdata.setTitle("authentic");
@@ -113,6 +115,23 @@ public class Main extends AbstractPage {
         dataelement.setUpcase(upcase);
         
         return dataelement;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    private final Properties getMessages() {
+        Properties messages = new Properties();
+        
+        messages.put("authentic", "Autenticação");
+        messages.put("connect", "Conectar");
+        messages.put("invalid.login", "Usuário ou senha inválidos.");
+        messages.put("SECRET", "Senha");
+        messages.put("USERNAME", "Usuário");
+        messages.put("LOCALE", "Idioma");
+        
+        return messages;
     }
     
     /**

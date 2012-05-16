@@ -80,4 +80,12 @@ public class MessageSource implements Serializable {
             throw new RuntimeException(e);
         }
     }
+    
+    /**
+     * 
+     * @param messages
+     */
+    public final void setMessages(Properties messages) {
+        this.messages.putAll(messages);
+    }
 }
