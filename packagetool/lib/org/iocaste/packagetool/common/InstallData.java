@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +14,7 @@ import org.iocaste.documents.common.DocumentModel;
 
 public class InstallData implements Serializable {
     private static final long serialVersionUID = -4509980464670421174L;
-    private List<DocumentModel> models;
+    private Map<String, DocumentModel> models;
     private Map<DocumentModel, List<Object[]>> values;
     private Map<String, String> links;
     private Set<String> numbers;
@@ -22,7 +23,7 @@ public class InstallData implements Serializable {
     private Map<String, Map<String, String>> messages;
     
     public InstallData() {
-        models = new ArrayList<DocumentModel>();
+        models = new LinkedHashMap<String, DocumentModel>();
         values = new HashMap<DocumentModel, List<Object[]>>();
         links = new HashMap<String, String>();
         numbers = new HashSet<String>();
@@ -44,7 +45,12 @@ public class InstallData implements Serializable {
      * @param model
      */
     public final void add(DocumentModel model) {
-        models.add(model);
+        String name = model.getName();
+        
+        if (models.containsKey(name))
+            throw new RuntimeException("can't add a duplicated model.");
+        
+        models.put(name, model);
     }
     
     /**
@@ -131,7 +137,7 @@ public class InstallData implements Serializable {
      * @return
      */
     public final DocumentModel[] getModels() {
-        return models.toArray(new DocumentModel[0]);
+        return models.values().toArray(new DocumentModel[0]);
     }
     
     /**
