@@ -99,7 +99,7 @@ public class DataForm extends AbstractContainer {
      * 
      * @return
      */
-    public final ExtendedObject getObject() throws Exception {
+    public final ExtendedObject getObject() {
     	InputComponent input;
     	ExtendedObject object = new ExtendedObject(getModel());
     	
