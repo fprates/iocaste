@@ -155,6 +155,7 @@ insert into shell003 (pindx, eindx, pname, value) values (000100150003, 00010015
 insert into shell003 (pindx, eindx, pname, value) values (000100150004, 000100150000, 'padding-bottom', '0px');
 insert into shell003 (pindx, eindx, pname, value) values (000100150005, 000100150000, 'padding-left', '5px');
 insert into shell003 (pindx, eindx, pname, value) values (000100150006, 000100150000, 'padding-right', '5px');
+insert into shell003 (pindx, eindx, pname, value) values (000100150007, 000100150000, 'overflow', 'auto');
 
 insert into shell002 (eindx, sname, ename) values (000100160000, 'DEFAULT', '.tp_button_focused');
 insert into shell003 (pindx, eindx, pname, value) values (000100160001, 000100160000, 'font-size', '12pt');
@@ -257,6 +258,7 @@ insert into shell003 (pindx, eindx, pname, value) values (000100260008, 00010026
 insert into shell003 (pindx, eindx, pname, value) values (000100260009, 000100260000, 'padding-left', '5px');
 insert into shell003 (pindx, eindx, pname, value) values (000100260010, 000100260000, 'padding-right', '5px');
 insert into shell003 (pindx, eindx, pname, value) values (000100260011, 000100260000, 'margin-bottom', '5px');
+insert into shell003 (pindx, eindx, pname, value) values (000100260012, 000100260000, 'overflow', 'auto');
 
 insert into shell002 (eindx, sname, ename) values (000100270000, 'DEFAULT', '.eb_edge');
 insert into shell003 (pindx, eindx, pname, value) values (000100270001, 000100270000, 'color', '#ffffff');
