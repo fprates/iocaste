@@ -225,7 +225,16 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * @param reference
      */
     public final void setReference(DocumentModelItem reference) {
+        DocumentModel model;
+        
         this.reference = reference;
+        
+        if (reference == null)
+            return;
+        
+        model = reference.getDocumentModel();
+        if (!model.isKey(reference))
+            throw new RuntimeException("reference isn't model key");
     }
     
     /**
