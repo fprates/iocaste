@@ -72,7 +72,13 @@ public abstract class AbstractPage extends AbstractFunction {
             }
             
             method = this.getClass().getMethod(action, ViewData.class);
-            method.invoke(this, view);
+            
+            try {
+                method.invoke(this, view);
+            } catch (Exception e) {
+                new Iocaste(this).rollback();
+                throw e;
+            }
             
             if (view.getMessageType() == Const.ERROR)
                 new Iocaste(this).rollback();
@@ -119,7 +125,13 @@ public abstract class AbstractPage extends AbstractFunction {
             view.addParameter(name, parameters.get(name));
         
         method = this.getClass().getMethod(page, ViewData.class);
-        method.invoke(this, view);
+        
+        try {
+            method.invoke(this, view);
+        } catch (Exception e) {
+            new Iocaste(this).rollback();
+            throw e;
+        }
         
         if (view.getMessages() == null) {
             messages = new MessageSource();

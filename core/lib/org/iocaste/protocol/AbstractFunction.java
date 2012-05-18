@@ -81,18 +81,14 @@ public abstract class AbstractFunction implements Function {
         String methodname = exports.get(id);
         
         if (methodname == null)
-            throw new Exception("Method \""+id+"\" not implemented");
+            throw new Exception(new StringBuilder("Method \"").
+                    append(id).append("\" not implemented").toString());
 
         setSessionid(message.getSessionid());
         
         method = getClass().getMethod(methodname, Message.class);
         
-        try {
-            return method.invoke(this, message);
-        } catch (Exception e) {
-            new Iocaste(this).rollback();
-            throw e;
-        }
+        return method.invoke(this, message);
     }
     
     /*
