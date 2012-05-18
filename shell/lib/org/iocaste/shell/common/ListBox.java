@@ -11,6 +11,7 @@ public class ListBox extends AbstractInputComponent {
         super(container, Const.LIST_BOX, Const.LIST_BOX, name);
         
         values = new LinkedHashMap<String, Object>();
+        setStyleClass("list_box");
     }
     
     /**

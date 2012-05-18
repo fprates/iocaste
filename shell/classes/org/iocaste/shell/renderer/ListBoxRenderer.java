@@ -18,8 +18,13 @@ public class ListBoxRenderer extends Renderer {
         selecttag.add("name", name);
         selecttag.add("id", name);
 
-        if (!list.isEnabled())
+        if (!list.isEnabled()) {
+            selecttag.add("class", new StringBuilder(list.getStyleClass()).
+                    append("_disabled").toString());
             selecttag.add("disabled", "disabled");
+        } else {
+            selecttag.add("class", list.getStyleClass());
+        }
         
         addEvents(selecttag, list);
         

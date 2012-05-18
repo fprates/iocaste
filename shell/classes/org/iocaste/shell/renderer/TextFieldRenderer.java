@@ -37,15 +37,19 @@ public class TextFieldRenderer extends Renderer {
             inputtag.add("type", "password");
         
         inputtag.add("name", name);
-        inputtag.add("class", textfield.getStyleClass());
         inputtag.add("id", name);
         inputtag.add("size", Integer.toString(length));
         inputtag.add("maxlength", Integer.toString(length));
         inputtag.add("value", value);
         
-        if (!textfield.isEnabled())
+        if (!textfield.isEnabled()) {
+            inputtag.add("class", new StringBuilder(textfield.getStyleClass()).
+                    append("_disabled").toString());
             inputtag.add("readonly", "readonly");
-
+        } else {
+            inputtag.add("class", textfield.getStyleClass());
+        }
+        
         addEvents(inputtag, textfield);
         
         tags.add(inputtag);
