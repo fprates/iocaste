@@ -42,14 +42,6 @@ public class Main extends AbstractPage {
     
     /**
      * 
-     * @param view
-     */
-    public final void install(ViewData view) {
-        Install.main(view);
-    }
-    
-    /**
-     * 
      * @param message
      * @return
      */
@@ -187,16 +179,6 @@ public class Main extends AbstractPage {
      */
     public final void save(ViewData view) throws Exception {
         Bookmark.save(view, this);
-    }
-    
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void uninstall(ViewData view) throws Exception {
-        Install.remove(view);
-        back(view);
     }
     
     /**
