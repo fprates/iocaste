@@ -243,12 +243,12 @@ public class Model {
         tablename = model.getTableName();
         query = "delete from docs005 where tname = ?";
         if (iocaste.update(query, tablename) == 0)
-            throw new IocasteException("");
+            throw new IocasteException("error on delete model/table reference");
         
         name = model.getName();
         query = "delete from docs001 where docid = ?";
         if (iocaste.update(query, name) == 0)
-            throw new IocasteException("");
+            throw new IocasteException("error on delete header model data");
         
         query = new StringBuilder("drop table ").append(tablename).
                 toString();
@@ -372,19 +372,18 @@ public class Model {
      */
     private static final int saveDocumentHeader(Iocaste iocaste,
             DocumentModel model) throws Exception {
-        String query = new StringBuilder("drop table ").
-                append(model.getTableName()).toString();
+        String name = model.getName();
+        String tablename = model.getTableName();
+        String query =
+                "insert into docs001(docid, tname, class) values(?, ?, ?)";
         
-        iocaste.update(query);
-        
-        query = "insert into docs001(docid, tname, class) values(?, ?, ?)";
-        if (iocaste.update(query, model.getName(), model.getTableName(),
-                model.getClassName()) == 0)
-            throw new IocasteException("");
+        if (iocaste.update(
+                query, name, tablename, model.getClassName()) == 0)
+            throw new IocasteException("document header generation error");
         
         query = "insert into docs005(tname, docid) values(? , ?)";
-        if (iocaste.update(query, model.getTableName(), model.getName()) == 0)
-            throw new IocasteException("");
+        if (iocaste.update(query, tablename, name) == 0)
+            throw new IocasteException("document header generation error");
         
         return 1;
     }
