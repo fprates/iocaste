@@ -28,7 +28,7 @@ public class HtmlRenderer {
     
     public HtmlRenderer() {
         String line;
-        InputStream is = this.getClass().getResourceAsStream(
+        InputStream is = getClass().getResourceAsStream(
                 "/META-INF/shell.js");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         
@@ -106,7 +106,8 @@ public class HtmlRenderer {
         metatag.add("http-equiv", "Content-Type");
         metatag.add("content", "text/html; charset=utf-8");
         
-        titletag.addInner((title == null)?"Iocaste" : title);
+        titletag.addInner((title == null)?"Iocaste" : config.
+                getText(title, title));
 
         if (focus != null)
             config.addOnload(new StringBuffer("document.getElementById('").
