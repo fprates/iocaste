@@ -2,7 +2,6 @@ package org.iocaste.shell;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,7 +17,6 @@ public class PageContext {
     private List<FileItem> files;
     private Set<String> actions;
     private int logid;
-    private Locale locale;
     
     public PageContext(String name) {
         parameters =  new HashMap<String, Object>();
@@ -59,14 +57,6 @@ public class PageContext {
      */
     public final List<FileItem> getFiles() {
         return files;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final Locale getLocale() {
-        return locale;
     }
     
     /**
@@ -140,14 +130,6 @@ public class PageContext {
      */
     public final void setFiles(List<FileItem> files) {
         this.files = files;
-    }
-    
-    /**
-     * 
-     * @param locale
-     */
-    public final void setLocale(Locale locale) {
-        this.locale = locale;
     }
     
     /**

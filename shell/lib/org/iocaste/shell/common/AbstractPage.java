@@ -108,9 +108,9 @@ public abstract class AbstractPage extends AbstractFunction {
         MessageSource messages;
         Method method;
         ViewData view;
+        Locale locale;
         String page = message.getString("page");
         String app = message.getString("app");
-        Locale locale = message.get("locale");
         @SuppressWarnings("unchecked")
         Map<String, Object> parameters =
                 (Map<String, Object>)message.get("parameters");
@@ -118,6 +118,7 @@ public abstract class AbstractPage extends AbstractFunction {
         if (app == null || page == null)
             throw new IocasteException("page not especified.");
         
+        locale = new Iocaste(this).getLocale();
         view = new ViewData(app, page);
         view.setLocale(locale);
         

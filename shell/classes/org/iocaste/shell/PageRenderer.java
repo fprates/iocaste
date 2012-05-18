@@ -149,7 +149,6 @@ public class PageRenderer extends HttpServlet implements Function {
         pagectx = new PageContext(contextdata.pagename);
         pagectx.setAppContext(appctx);
         pagectx.setLogid(contextdata.logid);
-        pagectx.setLocale(new Iocaste(this).getLocale());
         
         appctx.put(contextdata.pagename, pagectx);
         sessionctx.put(contextdata.appname, appctx);
@@ -731,7 +730,6 @@ public class PageRenderer extends HttpServlet implements Function {
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
             message.add("parameters", pagectx.getParameters());
-            message.add("locale", pagectx.getLocale());
             message.setSessionid(getComplexId(sessionid, logid));
             
             viewdata = (ViewData)Service.callServer(
