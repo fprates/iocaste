@@ -11,7 +11,7 @@ import org.iocaste.shell.common.ViewData;
 public class PageContext {
     private ViewData view;
     private AppContext appctx;
-    private String name;
+    private String name, username;
     private boolean reloadable;
     private Map<String, Object> parameters;
     private List<FileItem> files;
@@ -87,6 +87,14 @@ public class PageContext {
      * 
      * @return
      */
+    public final String getUsername() {
+        return username;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final ViewData getViewData() {
         return view;
     }
@@ -146,6 +154,14 @@ public class PageContext {
      */
     public final void setReloadableView(boolean reloadable) {
         this.reloadable = reloadable;
+    }
+    
+    /**
+     * 
+     * @param username
+     */
+    public final void setUsername(String username) {
+        this.username = username;
     }
     
     /**

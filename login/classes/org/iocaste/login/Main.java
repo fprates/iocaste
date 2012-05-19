@@ -70,6 +70,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void connect(ViewData view) throws Exception {
+        String username;
         PackageTool pkgtool = new PackageTool(this);
         DataForm form = view.getElement("login");
         Iocaste iocaste = new Iocaste(this);
@@ -79,14 +80,16 @@ public class Main extends AbstractPage {
                 "iocaste-packagetool"
         };
         
-        if (iocaste.login(login.getUsername(), login.getSecret(),
-                login.getLocale())) {
+        view.clearParameters();
+        username = login.getUsername();
+        if (iocaste.login(username, login.getSecret(), login.getLocale())) {
             pkgtool = new PackageTool(this);
             
             for (String pkgname : packages)
                 if (!pkgtool.isInstalled(pkgname))
                     pkgtool.install(pkgname);
             
+            view.addParameter("username", username);
             view.setReloadableView(true);
             view.redirect("iocaste-tasksel", "main");
         } else {

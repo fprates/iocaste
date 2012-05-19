@@ -215,7 +215,6 @@ public class PageRenderer extends HttpServlet implements Function {
             contextdata.logid = logid;
             
             pagectx = createPageContext(contextdata);
-            renderer.setUsername(NOT_CONNECTED);
         }
         
         if (pagectx.getViewData() != null) {
@@ -286,6 +285,11 @@ public class PageRenderer extends HttpServlet implements Function {
         return null;
     }
     
+    /**
+     * 
+     * @param container
+     * @return
+     */
     private static final Element[] getMultiLineElements(Container container) {
         byte selectiontype;
         Element element;
@@ -547,11 +551,6 @@ public class PageRenderer extends HttpServlet implements Function {
         
         updateView(getComplexId(sessionid, logid), view, this);
         
-        renderer.setMessageText(view.getTranslatedMessage());
-        renderer.setMessageType(view.getMessageType());
-        renderer.setUsername((iocaste.isConnected())?
-                iocaste.getUsername() : NOT_CONNECTED);
-        
         appname = view.getRedirectedApp();
         if (appname == null)
             appname = pagectx.getAppContext().getName();
@@ -576,6 +575,11 @@ public class PageRenderer extends HttpServlet implements Function {
         pagectx_.clearParameters();
         for (String name : view.getExportable())
             pagectx_.addParameter(name, view.getParameter(name));
+        
+        if (view.getAppName().equals(LOGIN_APP) && iocaste.isConnected())
+            pagectx_.setUsername((String)view.getParameter("username"));
+        else
+            pagectx_.setUsername(pagectx.getUsername());
         
         return pagectx_;
     }
@@ -711,14 +715,15 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void render(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
+        String username;
         int logid;
         InputData inputdata;
         OutputStream os;
         String[] text;
         AppContext appctx;
         ViewData viewdata;
-        Message message = new Message();
         PrintWriter writer;
+        Message message = new Message();
 
         viewdata = pagectx.getViewData();
         
@@ -773,7 +778,11 @@ public class PageRenderer extends HttpServlet implements Function {
         
         if (style == null)
             style = Style.get("DEFAULT", this);
-        
+
+        username = pagectx.getUsername();
+        renderer.setMessageText(viewdata.getTranslatedMessage());
+        renderer.setMessageType(viewdata.getMessageType());
+        renderer.setUsername((username == null)? NOT_CONNECTED : username);
         renderer.setCssElements(style);
         renderer.setLogid(pagectx.getLogid());
         text = renderer.run(pagectx.getViewData());
