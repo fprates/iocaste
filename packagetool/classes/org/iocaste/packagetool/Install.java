@@ -1,5 +1,8 @@
 package org.iocaste.packagetool;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
@@ -152,11 +155,16 @@ public class Install {
      * @throws Exception
      */
     public static final InstallData self(Function function) throws Exception {
+        Map<String, String> messages;
         InstallData data = new InstallData();
         DocumentModel languages = installLanguages(data);
         
         installMessages(data, languages, function);
         
+        messages = new HashMap<String, String>();
+        messages.put("package-manager", "Gerenciador de pacotes");
+        
+        data.setMessages("pt_BR", messages);
         data.link("PACKAGE", "iocaste-packagetool");
         
         return data;

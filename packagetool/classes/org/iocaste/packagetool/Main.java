@@ -53,7 +53,7 @@ public class Main extends AbstractPage {
         }
         
         view.setNavbarActionEnabled("back", true);
-        view.setTitle("package.manager");
+        view.setTitle("package-manager");
     }
     
     /**
