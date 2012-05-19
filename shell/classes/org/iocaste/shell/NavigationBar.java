@@ -9,6 +9,7 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.renderer.Config;
 
 public class NavigationBar implements Serializable {
     private static final long serialVersionUID = -3075185426719189481L;
@@ -16,12 +17,14 @@ public class NavigationBar implements Serializable {
     private Container linkarea;
     private Container statusarea;
     private Text message;
+    private Config config;
     
-    public NavigationBar(Container container) {
+    public NavigationBar(Container container, Config config) {
         bar = new LinkedHashMap<String, Link>();
         linkarea = new StandardContainer(container, "navbar.linkarea");
         statusarea = new StandardContainer(container, "navbar.status");
         message = new Text(container, "navbar.message");
+        this.config = config;
         
         addAction("home", "home");
         addAction("back", "back");
@@ -42,6 +45,7 @@ public class NavigationBar implements Serializable {
         link.setCancellable(true);
         link.setAllowStacking(false);
         link.setStyleClass("navbar_link");
+        link.setText(config.getText(name, name));
         
         bar.put(name, link);
     }

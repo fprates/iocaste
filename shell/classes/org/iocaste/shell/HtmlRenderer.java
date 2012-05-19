@@ -28,8 +28,7 @@ public class HtmlRenderer {
     
     public HtmlRenderer() {
         String line;
-        InputStream is = getClass().getResourceAsStream(
-                "/META-INF/shell.js");
+        InputStream is = getClass().getResourceAsStream("/META-INF/shell.js");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         
         script = new ArrayList<String>();
@@ -50,7 +49,7 @@ public class HtmlRenderer {
      * 
      * @param vdata
      */
-    private final void configNavigationBar(ViewData vdata) {
+    private final void configNavigationBar(ViewData vdata, Config config) {
         NavigationBar navbar;
         Text txtuname, txttitle;
         Map<String, Boolean> navbarstatus;
@@ -58,7 +57,7 @@ public class HtmlRenderer {
         String title = vdata.getTitle();
         
         container.clear();
-        navbar = new NavigationBar(container);
+        navbar = new NavigationBar(container, config);
         
         navbarstatus = vdata.getNavbarStatus();
         for (String name : navbarstatus.keySet())
@@ -213,7 +212,7 @@ public class HtmlRenderer {
 
         bodytag.add("onLoad", "initialize()");
         
-        configNavigationBar(vdata);
+        configNavigationBar(vdata, config);
         
         for (Container container : vdata.getContainers())
             Renderer.renderContainer(bodycontent, container, config);
