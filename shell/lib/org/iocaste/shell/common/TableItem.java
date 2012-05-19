@@ -19,6 +19,7 @@ public class TableItem implements Serializable {
     private TableColumn[] columns;
     private Table table;
     private Locale locale;
+    private boolean visible;
     
     public TableItem(Table table) {
         String markname;
@@ -28,6 +29,7 @@ public class TableItem implements Serializable {
         this.table = table;
         columns = table.getColumns();
         elements = new LinkedHashMap<String, Element>();
+        visible = true;
         
         switch (table.getSelectionType()) {
         case Table.SINGLE:
@@ -92,9 +94,8 @@ public class TableItem implements Serializable {
     /**
      * 
      * @return
-     * @throws Exception
      */
-    public final ExtendedObject getObject() throws Exception {
+    public final ExtendedObject getObject() {
         Element element;
         InputComponent input;
         DocumentModelItem modelitem;
@@ -134,6 +135,14 @@ public class TableItem implements Serializable {
         InputComponent input = (InputComponent)elements.get("mark");
         
         return input.isSelected();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final boolean isVisible() {
+        return visible;
     }
     
     /**
@@ -184,5 +193,13 @@ public class TableItem implements Serializable {
         CheckBox mark = (CheckBox)elements.get("mark");
         
         mark.setSelected(selected);
+    }
+    
+    /**
+     * 
+     * @param visible
+     */
+    public final void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

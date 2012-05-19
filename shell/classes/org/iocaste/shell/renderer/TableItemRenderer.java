@@ -46,7 +46,7 @@ public class TableItemRenderer extends Renderer {
             if (column.isMark() && !table.hasMark())
                 continue;
             
-            if (!column.isVisible()) {
+            if (!column.isVisible() || !item.isVisible()) {
                 if (element.isDataStorable())
                     hidden.add((InputComponent)element);
                 continue;
