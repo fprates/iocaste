@@ -162,17 +162,17 @@ public class ItemDetails {
         DocumentModelItem modelitemref;
         boolean upcase; 
         DataForm form = view.getElement("fkform");
-        String itemname = ((DataItem)form.get("item.name")).get();
+        String itemname = form.get("item.name").get();
         String shname, classfield, modelref = null, itemref = null;
         Shell shell = new Shell(function);
         ViewData structview = shell.getView(view, "tbstructure");
         Table itens = structview.getElement("itens");
         
-        input = (DataItem)form.get("reference.model");
+        input = form.get("reference.model");
         if (input.get() != null) {
             modelref = input.get();
             model = new Documents(function).getModel(modelref);
-            itemref = ((DataItem)form.get("reference.item")).get();
+            itemref = form.get("reference.item").get();
             modelitemref = model.getModelItem(itemref);
             
             if (modelitemref == null) {
@@ -189,12 +189,12 @@ public class ItemDetails {
         }
         
         form = view.getElement("techform");
-        shname = ((DataItem)form.get("item.sh")).get();
-        upcase = ((DataItem)form.get("item.upcase")).isSelected();
-        classfield = ((DataItem)form.get("item.classfield")).get();
+        shname = form.get("item.sh").get();
+        upcase = form.get("item.upcase").isSelected();
+        classfield = form.get("item.classfield").get();
         
         for (TableItem item : itens.getItens()) {
-            input = (InputComponent)item.get("item.name");
+            input = item.get("item.name");
             
             if (!input.get().equals(itemname))
                 continue;
