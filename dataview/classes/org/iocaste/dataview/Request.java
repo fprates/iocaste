@@ -34,10 +34,11 @@ public class Request {
                 vdata.message(Const.ERROR, "error.on.delete");
                 return;
             }
-
-            documents.commit();
+            
             table.remove(item);
         }
+
+        documents.commit();
         
         vdata.message(Const.STATUS, "delete.sucessful");
     }
@@ -111,7 +112,6 @@ public class Request {
         Documents documents = new Documents(function);
         
         if (documents.save(object) == 0) {
-            documents.rollback();
             vdata.message(Const.ERROR, "duplicated.entry");
             return;
         }
