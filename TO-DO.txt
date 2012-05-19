@@ -13,8 +13,6 @@ Melhoria no tratamento de erros em tempo de execução
 Suporte à aplicações externas, integração
 Unificação dos pacotes de protocolo
 Inclusão de dados de projeto no versionamento
-Suporte à desinstalação de pacotes
-Melhoria no suporte à mensagens de texto da aplicação
 Suporte à dependências de pacotes
 Melhoria na tela de conexão do usuário (seleção de idioma)
 Suporte à usuários, grupos e autorizações
