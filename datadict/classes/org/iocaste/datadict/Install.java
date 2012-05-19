@@ -57,6 +57,8 @@ public class Install {
         messages.put("deleteshitem", "Remover");
         messages.put("choose.one.item",
                 "Marque um item para obter seu detalhe.");
+        messages.put("sh.not.found", "Ajuda de pesquisa não encontrada");
+        
         data.setMessages("pt_BR", messages);
         
         return data;
