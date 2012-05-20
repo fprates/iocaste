@@ -42,6 +42,32 @@ public class Query {
     /**
      * 
      * @param model
+     * @param key
+     * @param function
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public static final ExtendedObject get(DocumentModel model,
+            Object key, Function function) throws Exception {
+        Iocaste iocaste = new Iocaste(function);
+        String query = new StringBuilder("select * from ").
+                append(model.getTableName()).
+                append(" where ").
+                append(getModelKey(model).getTableFieldName()).
+                append(" = ?").toString();
+        
+        Object[] objects = iocaste.selectUpTo(query, 1, key);
+        
+        if (objects == null)
+            return null;
+        
+        return getExtendedObjectFrom(model, (Map<String, Object>)objects[0]);
+    }
+    
+    /**
+     * 
+     * @param model
      * @param line
      * @return
      */
@@ -81,32 +107,6 @@ public class Query {
             return model.getModelItem(key.getModelItemName());
         
         return null;
-    }
-    
-    /**
-     * 
-     * @param model
-     * @param key
-     * @param function
-     * @return
-     * @throws Exception
-     */
-    @SuppressWarnings("unchecked")
-    public static final ExtendedObject get(DocumentModel model,
-            Object key, Function function) throws Exception {
-        Iocaste iocaste = new Iocaste(function);
-        String query = new StringBuilder("select * from ").
-                append(model.getTableName()).
-                append(" where ").
-                append(getModelKey(model).getTableFieldName()).
-                append(" = ?").toString();
-        
-        Object[] objects = iocaste.select(query, key);
-        
-        if (objects.length == 0)
-            return null;
-        
-        return getExtendedObjectFrom(model, (Map<String, Object>)objects[0]);
     }
     
     /**
@@ -378,7 +378,6 @@ public class Query {
     @SuppressWarnings("unchecked")
     public static final ExtendedObject[] select(String query, Cache cache,
             Object... criteria) throws Exception {
-        Iocaste iocaste; 
         Object[] lines;
         Map<String, Object> line;
         ExtendedObject[] objects;
@@ -386,11 +385,9 @@ public class Query {
         
         if (queryinfo.query == null || queryinfo.model == null)
             return null;
-
-        iocaste = new Iocaste(cache.function);
         
-        lines = iocaste.select(queryinfo.query, criteria);
-        if (lines.length == 0)
+        lines = new Iocaste(cache.function).select(queryinfo.query, criteria);
+        if (lines == null)
             return null;
         
         objects = new ExtendedObject[lines.length];

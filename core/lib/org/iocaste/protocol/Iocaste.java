@@ -131,6 +131,22 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
+     * 
+     * @param authorization
+     * @return
+     * @throws Exception
+     */
+    public final boolean isAuthorized(Authorization authorization)
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("is_authorized");
+        message.add("authorization", authorization);
+        
+        return call(message);
+    }
+    
+    /**
      * Verifica se há usuário conectado a sessão atual.
      * @return true, se usuário está conectado.
      * @throws Exception
@@ -182,11 +198,24 @@ public final class Iocaste extends AbstractServiceInterface {
      */
     public final Object[] select(String query, Object... criteria) 
             throws Exception {
+        return selectUpTo(query, 0, criteria);
+    }
+    
+    /**
+     * Seleciona itens de tabela através de query.
+     * @param query seleção
+     * @param criteria critérios da seleção
+     * @return resultados
+     * @throws Exception
+     */
+    public final Object[] selectUpTo(String query, int rows, Object... criteria) 
+            throws Exception {
         Message message = new Message();
         
         message.setId("select");
         message.add("query", query);
         message.add("criteria", criteria);
+        message.add("rows", rows);
         
         return call(message);
     }

@@ -70,11 +70,13 @@ public class DBServices {
      * 
      * @param connection
      * @param query
+     * @param rows
      * @param criteria
      * @return
+     * @throws Exception
      */
-    public final Object[] select(Connection connection, 
-            String query, Object... criteria) throws Exception {
+    public final Object[] select(Connection connection, String query,
+            int rows, Object... criteria) throws Exception {
         List<Map<String, Object>> lines;
         Map<String, Object> line;
         ResultSetMetaData metadata;
@@ -90,9 +92,10 @@ public class DBServices {
                 for (Object object : criteria)
                     ps.setObject(cols++, object);
             
+            if (rows > 0)
+                ps.setFetchSize(rows);
+            
             results = ps.executeQuery();
-            lines = new ArrayList<Map<String, Object>>();
-    
             metadata = results.getMetaData();
             cols = metadata.getColumnCount();
         } catch (HsqlException e) {
@@ -103,6 +106,7 @@ public class DBServices {
             throw new SQLException (e.getMessage());
         }
         
+        lines = new ArrayList<Map<String, Object>>();
         while (results.next()) {
             line = new HashMap<String, Object>();
             
@@ -114,7 +118,7 @@ public class DBServices {
         
         results.close();
         
-        return lines.toArray();
+        return (lines.size() == 0)? null : lines.toArray();
     }
     
     /**

@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.Authorization;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
@@ -34,6 +35,7 @@ public class Services extends AbstractFunction {
         export("get_context", "getContext");
         export("get_locale", "getLocale");
         export("get_users", "getUsers");
+        export("is_authorized", "isAuthorized");
         export("is_connected", "isConnected");
         export("login", "login");
         export("rollback", "rollback");
@@ -71,7 +73,7 @@ public class Services extends AbstractFunction {
         query = sb.toString();
         connection = db.instance();
         
-        results = db.select(connection, query, criteria);
+        results = db.select(connection, query, 0, criteria);
         connection.close();
         
         return results;
@@ -229,7 +231,7 @@ public class Services extends AbstractFunction {
         User[] users;
         int t;
         Object[] lines = db.select(getDBConnection(message.getSessionid()),
-                "select username, firstname, surname from User");
+                "select username, firstname, surname from User", 0);
         
         t = lines.length;
         if (t == 0)
@@ -246,6 +248,39 @@ public class Services extends AbstractFunction {
         return users; 
     }
     
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public final boolean isAuthorized(Message message) throws Exception {
+        Map<String, Object> resultmap;
+        Authorization authorization = message.get("authorization");
+        Connection connection = db.instance();
+        String query = "select * from AUTHOROBJ where OBJCT = ?";
+        Object[] result = db.select(connection, query, 1,
+                authorization.getObject());
+        
+        if (result == null) {
+            connection.close();
+            return false;
+        }
+        
+        query = "select * from AUTHORACT where OBJID = ? and ACTION = ?";
+        resultmap = (Map<String, Object>)result[0];
+        result = db.select(connection, query, 1, resultmap.get("OBJID"),
+                authorization.getAction());
+        
+        if (result == null) {
+            connection.close();
+            return false;
+        }
+        
+        connection.close();
+        return true;
+    }
     /**
      * 
      * @param message
@@ -273,6 +308,7 @@ public class Services extends AbstractFunction {
         Map<String, Object> columns;
         Connection connection;
         Locale locale;
+        String query;
         User user = null;
         String[] locale_ = message.getString("locale").split("_");
         String username = message.getString("user");
@@ -287,21 +323,17 @@ public class Services extends AbstractFunction {
 
         connection = db.instance();
         
-        lines = db.select(connection,
-                "select uname, secrt from users001 where uname = ?",
-                username.toUpperCase());
+        query = "select uname, secrt from users001 where uname = ?";
+        lines = db.select(connection, query, 1, username.toUpperCase());
         
         connection.close();
         
-        if (lines.length == 0)
+        if (lines == null)
             return false;
         
-        for (Object object : lines) {
-            columns = (Map<String, Object>)object;
-            user = getUserFromColumns(columns);
-            user.setSecret((String)columns.get("SECRT"));
-            break;
-        }
+        columns = (Map<String, Object>)lines[0];
+        user = getUserFromColumns(columns);
+        user.setSecret((String)columns.get("SECRT"));
         
         if (!user.getSecret().equals(secret))
             return false;
@@ -355,9 +387,11 @@ public class Services extends AbstractFunction {
     public final Object[] select(Message message) throws Exception {
         String query = message.getString("query");
         Object[] criteria = message.get("criteria");
+        int rows = message.getInt("rows");
+        
         Connection connection = getDBConnection(message.getSessionid());
         
-        return db.select(connection, query, criteria);
+        return db.select(connection, query, rows, criteria);
     }
     
     /**

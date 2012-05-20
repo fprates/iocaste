@@ -99,10 +99,9 @@ public class Model {
             return cache.models.get(documentname);
         
         iocaste = new Iocaste(cache.function);
-
         query = "select * from docs001 where docid = ?";
-        lines = iocaste.select(query, documentname);
-        if (lines.length == 0)
+        lines = iocaste.selectUpTo(query, 1, documentname);
+        if (lines == null)
             return null;
         
         columns = (Map<String, Object>)lines[0];
@@ -129,7 +128,6 @@ public class Model {
             item.setIndex(((BigDecimal)columns.get("INDEX")).intValue());
             
             itemref = (String)columns.get("ITREF");
-            
             if (itemref != null) {
                 composed = itemref.split("\\.");
                 item.setReference(get(composed[0], cache).
@@ -138,7 +136,7 @@ public class Model {
             
             query = "select * from shref where iname = ?";
             shlines = iocaste.select(query, name);
-            if (shlines != null && shlines.length > 0) {
+            if (shlines != null) {
                 columns = (Map<String, Object>)shlines[0];
                 item.setSearchHelp((String)columns.get("SHCAB"));
             }
@@ -210,7 +208,7 @@ public class Model {
             return 1;
         
         query = "select * from shcab where ident = ?";
-        if (iocaste.select(query, shname).length == 0)
+        if (iocaste.select(query, shname) == null)
             return 1;
         
         query = "insert into shref(iname, shcab) values(?, ?)";
@@ -298,11 +296,11 @@ public class Model {
         error = new StringBuilder(error).append(name).toString();
         
         query = "select * from shitm where mditm = ?";
-        if (iocaste.select(query, name).length > 0)
+        if (iocaste.selectUpTo(query, 1, name) != null)
             throw new IocasteException(error);
             
         query = "select * from shcab where exprt = ?";
-        if (iocaste.select(query, name).length > 0)
+        if (iocaste.selectUpTo(query, 1, name) != null)
             throw new IocasteException(error);
         
         query = "delete from docs002 where iname = ?";
@@ -354,7 +352,7 @@ public class Model {
         for (DocumentModelItem item : itens) {
             element = item.getDataElement();
             
-            if (iocaste.select(query, element.getName()).length > 0)
+            if (iocaste.selectUpTo(query, 1, element.getName()) != null)
                 continue;
             
             DataElementServices.insert(iocaste, element);

@@ -33,6 +33,7 @@ public class Servlet extends ServerServlet {
         authorize("get_host", null);
         authorize("get_locale", null);
         authorize("rollback", null);
+        authorize("is_authorized", null);
     }
     
     /*
