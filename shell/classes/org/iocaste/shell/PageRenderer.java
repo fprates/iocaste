@@ -23,6 +23,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.Authorization;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
@@ -499,7 +500,9 @@ public class PageRenderer extends HttpServlet implements Function {
         PageContext pagectx_;
         Map<String, String[]> parameters;
         ViewData view;
-        String appname, pagename, key, pagetrack = null, actionname = null;
+        Authorization authorization;
+        String complexid, appname, pagename, key, pagetrack = null,
+                actionname = null;
         
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagectx);
@@ -532,9 +535,10 @@ public class PageRenderer extends HttpServlet implements Function {
         
         action = view.getElement(actionname);
         logid = getLogid(pagetrack);
+        complexid = getComplexId(sessionid, logid);
         if (view.hasPageCall() && (action == null ||
                 !action.isCancellable() || action.allowStacking()))
-            pushPage(getComplexId(sessionid, logid), view.getAppName(),
+            pushPage(complexid, view.getAppName(),
                     view.getPageName());
         
         view.clearInputs();
@@ -559,6 +563,17 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagename == null)
             pagename = pagectx.getName();
         
+        authorization = new Authorization();
+        authorization.setObject("APPLICATION");
+        authorization.setAction("EXECUTE");
+        authorization.add("APPNAME", appname);
+        authorization.add("PAGENAME", pagename);
+        
+        if (!iocaste.isAuthorized(authorization)) {
+            view.message(Const.ERROR, "user.not.authorized");
+            return pagectx;
+        }
+        
         contextdata = new ContextData();
         contextdata.sessionid = sessionid;
         contextdata.appname = appname;
@@ -566,12 +581,10 @@ public class PageRenderer extends HttpServlet implements Function {
         contextdata.logid = logid;
         
         pagectx_ = getPageContext(contextdata);
-        
         if (pagectx_ == null)
             pagectx_ = createPageContext(contextdata);
         
         pagectx_.setReloadableView(view.isReloadableView());
-        
         pagectx_.clearParameters();
         for (String name : view.getExportable())
             pagectx_.addParameter(name, view.getParameter(name));
