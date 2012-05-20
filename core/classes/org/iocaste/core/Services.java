@@ -42,7 +42,6 @@ public class Services extends AbstractFunction {
         export("select", "select");        
         export("set_context", "setContext");
         export("update", "update");
-        
     }
     
     /**
@@ -256,6 +255,7 @@ public class Services extends AbstractFunction {
      */
     @SuppressWarnings("unchecked")
     public final boolean isAuthorized(Message message) throws Exception {
+        Map<String, String> parameters;
         Map<String, Object> resultmap;
         Authorization authorization = message.get("authorization");
         Connection connection = db.instance();
@@ -274,6 +274,25 @@ public class Services extends AbstractFunction {
                 authorization.getAction());
         
         if (result == null) {
+            connection.close();
+            return false;
+        }
+        
+        query = "select * from AUTHORPAR where ACTID = ?";
+        resultmap = (Map<String, Object>)result[0];
+        result = db.select(connection, query, 0, resultmap.get("ACTID"));
+        
+        if (result == null) {
+            connection.close();
+            return false;
+        }
+
+        parameters = authorization.getParameters();
+        for (Object object : result) {
+            resultmap = (Map<String, Object>)object;
+            if (parameters.containsKey(resultmap.get("PARAM")))
+                continue;
+            
             connection.close();
             return false;
         }
