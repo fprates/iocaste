@@ -6,9 +6,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.protocol.Authorization;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 
 public class Services extends AbstractFunction {
@@ -253,53 +253,50 @@ public class Services extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
     public final boolean isAuthorized(Message message) throws Exception {
-        Map<String, String> parameters;
-        Map<String, Object> resultmap;
-        Authorization authorization = message.get("authorization");
+        boolean fail;
+        String objvalue, usrvalue;
+        Map<String, String> usrparameters, objparameters;
+        Authorization[] usrauthorizations;
+        Authorization objauthorization = message.get("authorization");
         Connection connection = db.instance();
-        String query = "select * from AUTHOROBJ where OBJCT = ?";
-        Object[] result = db.select(connection, query, 1,
-                authorization.getObject());
+        UserContext context = sessions.get(message.getSessionid());
+        String username = context.getUser().getUsername();
+        String authname = objauthorization.getName();
         
-        if (result == null) {
-            connection.close();
-            return false;
-        }
-        
-        query = "select * from AUTHORACT where OBJID = ? and ACTION = ?";
-        resultmap = (Map<String, Object>)result[0];
-        result = db.select(connection, query, 1, resultmap.get("OBJID"),
-                authorization.getAction());
-        
-        if (result == null) {
-            connection.close();
-            return false;
-        }
-        
-        query = "select * from AUTHORPAR where ACTID = ?";
-        resultmap = (Map<String, Object>)result[0];
-        result = db.select(connection, query, 0, resultmap.get("ACTID"));
-        
-        if (result == null) {
-            connection.close();
-            return false;
-        }
-
-        parameters = authorization.getParameters();
-        for (Object object : result) {
-            resultmap = (Map<String, Object>)object;
-            if (parameters.containsKey(resultmap.get("PARAM")))
-                continue;
-            
-            connection.close();
-            return false;
-        }
+        usrauthorizations = AuthServices.getAuthorization(connection, db,
+                username, authname);
         
         connection.close();
-        return true;
+        
+        if (usrauthorizations == null)
+            return false;
+        
+        objparameters = objauthorization.getParameters();
+        for (Authorization usrauthorization : usrauthorizations) {
+            usrparameters = usrauthorization.getParameters();
+            
+            fail = false;
+            for (String key : objparameters.keySet()) {
+                objvalue = objparameters.get(key);
+                if (objvalue == null || objvalue.length() == 0)
+                    continue;
+                
+                usrvalue = usrparameters.get(key);
+                if ((usrvalue != null) && (usrvalue.equals(objvalue)))
+                    continue;
+                
+                fail = true;
+                break;
+            }
+            
+            if (!fail)
+                return true;
+        }
+        
+        return false;
     }
+    
     /**
      * 
      * @param message

@@ -2,6 +2,7 @@ package org.iocaste.protocol;
 
 import java.util.Locale;
 
+import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 
 public final class Iocaste extends AbstractServiceInterface {

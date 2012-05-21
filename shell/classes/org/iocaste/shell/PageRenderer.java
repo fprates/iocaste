@@ -23,12 +23,12 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Authorization;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
@@ -46,6 +46,7 @@ public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String LOGIN_APP = "iocaste-login";
     private static final String NOT_CONNECTED = "not.connected";
+    private static final byte AUTHORIZATION_ERROR = 1;
     private static Map<String, List<SessionContext>> apps =
             new HashMap<String, List<SessionContext>>();
     private String sessionid, servername;
@@ -564,14 +565,18 @@ public class PageRenderer extends HttpServlet implements Function {
             pagename = pagectx.getName();
         
         authorization = new Authorization();
+        authorization.setName("APPLICATION.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", appname);
-        authorization.add("PAGENAME", pagename);
         
         if (!iocaste.isAuthorized(authorization)) {
-            view.message(Const.ERROR, "user.not.authorized");
+            pagectx.setError(AUTHORIZATION_ERROR);
+            pagectx.getViewData().message(Const.ERROR, "user.not.authorized");
+            
             return pagectx;
+        } else {
+            pagectx.setError((byte)0);
         }
         
         contextdata = new ContextData();
@@ -740,7 +745,8 @@ public class PageRenderer extends HttpServlet implements Function {
 
         viewdata = pagectx.getViewData();
         
-        if (viewdata == null || pagectx.isReloadableView()) {
+        if (pagectx.getError() == 0 &&
+                (viewdata == null || pagectx.isReloadableView())) {
             appctx = pagectx.getAppContext();
             logid = pagectx.getLogid();
             

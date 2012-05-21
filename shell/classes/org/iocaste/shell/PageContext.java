@@ -17,6 +17,7 @@ public class PageContext {
     private List<FileItem> files;
     private Set<String> actions;
     private int logid;
+    private byte error;
     
     public PageContext(String name) {
         parameters =  new HashMap<String, Object>();
@@ -49,6 +50,14 @@ public class PageContext {
      */
     public final AppContext getAppContext() {
         return appctx;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final byte getError() {
+        return error;
     }
     
     /**
@@ -130,6 +139,14 @@ public class PageContext {
      */
     public final void setAppContext(AppContext appctx) {
         this.appctx = appctx;
+    }
+    
+    /**
+     * 
+     * @param error
+     */
+    public final void setError(byte error) {
+        this.error = error;
     }
     
     /**
