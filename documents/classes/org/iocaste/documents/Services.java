@@ -191,8 +191,9 @@ public class Services extends AbstractFunction {
     public final ExtendedObject[] select(Message message) throws Exception {
         String query = message.getString("query");
         Object[] criteria = message.get("criteria");
+        int rows = message.getInt("rows");
         
-        return Query.select(query, cache, criteria);
+        return Query.select(query, rows, cache, criteria);
     }
     
     /**

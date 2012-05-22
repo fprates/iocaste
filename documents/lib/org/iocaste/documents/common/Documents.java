@@ -262,15 +262,29 @@ public class Documents extends AbstractServiceInterface {
      */
     public final ExtendedObject[] select(String query, Object... criteria)
     		throws Exception {
+        return selectLimitedTo(query, 0, criteria);
+    }
+    
+    /**
+     * 
+     * @param query
+     * @param rows
+     * @param criteria
+     * @return
+     * @throws Exception
+     */
+    public final ExtendedObject[] selectLimitedTo(String query, int rows,
+            Object... criteria) throws Exception {
         Message message = new Message();
         
         message.setId("select");
         message.add("query", query);
         message.add("criteria", criteria);
+        message.add("rows", rows);
         
         return call(message);
+        
     }
-    
     /**
      * 
      * @param query

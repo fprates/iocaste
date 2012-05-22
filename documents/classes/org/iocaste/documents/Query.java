@@ -369,15 +369,15 @@ public class Query {
     /**
      * 
      * @param query
+     * @param rows
+     * @param cache
      * @param criteria
-     * @param function
-     * @param queries
      * @return
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public static final ExtendedObject[] select(String query, Cache cache,
-            Object... criteria) throws Exception {
+    public static final ExtendedObject[] select(String query, int rows,
+            Cache cache, Object... criteria) throws Exception {
         Object[] lines;
         Map<String, Object> line;
         ExtendedObject[] objects;
@@ -386,7 +386,8 @@ public class Query {
         if (queryinfo.query == null || queryinfo.model == null)
             return null;
         
-        lines = new Iocaste(cache.function).select(queryinfo.query, criteria);
+        lines = new Iocaste(cache.function).
+                selectUpTo(queryinfo.query, rows, criteria);
         if (lines == null)
             return null;
         
