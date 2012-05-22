@@ -37,6 +37,7 @@ public class NumberRange {
     @SuppressWarnings("unchecked")
     public static long getCurrent(String ident, Function function)
             throws Exception {
+        String query;
         long current;
         Object[] lines;
         Map<String, Object> columns;
@@ -45,10 +46,10 @@ public class NumberRange {
         if (ident == null)
             throw new IocasteException("Numeric range not specified.");
 
-        lines = iocaste.select("select crrnt from range001 where ident = ?",
-                ident);
+        query = "select crrnt from range001 where ident = ?";
+        lines = iocaste.selectUpTo(query, 1, ident);
         
-        if (lines.length == 0)
+        if (lines == null)
             throw new IocasteException("Range \""+ident+"\" not found.");
         
         columns = (Map<String, Object>)lines[0];
