@@ -564,8 +564,7 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagename == null)
             pagename = pagectx.getName();
         
-        authorization = new Authorization();
-        authorization.setName("APPLICATION.EXECUTE");
+        authorization = new Authorization("APPLICATION.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", appname);

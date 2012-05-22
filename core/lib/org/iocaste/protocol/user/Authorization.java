@@ -11,8 +11,9 @@ public class Authorization implements Serializable {
     private String action;
     private Map<String, String> parameters;
     
-    public Authorization() {
+    public Authorization(String name) {
         parameters = new HashMap<String, String>();
+        this.name = name;
     }
     
     public final void add(String name, String value) {
@@ -37,10 +38,6 @@ public class Authorization implements Serializable {
     
     public final void setAction(String action) {
         this.action = action;
-    }
-    
-    public final void setName(String name) {
-        this.name = name;
     }
     
     public final void setObject(String object) {

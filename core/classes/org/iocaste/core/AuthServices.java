@@ -56,8 +56,7 @@ public class AuthServices {
                 ident = bdToInt(resultmap.get("IDENT"));
                 prmresult = db.select(connection, query, 0, ident);
                 
-                authorization = new Authorization();
-                authorization.setName(authname);
+                authorization = new Authorization(authname);
                 authlist.add(authorization);
                 
                 for (Object prmobject : prmresult) {
