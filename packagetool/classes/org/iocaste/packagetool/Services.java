@@ -25,8 +25,63 @@ public class Services extends AbstractFunction {
         export("uninstall", "uninstall");
     }
     
-    private final void createAuthorization(Authorization authorization,
-            State state) throws Exception {
+    /**
+     * 
+     * @param username
+     * @param profilename
+     * @param authobject
+     * @param authorization
+     * @param state
+     * @throws Exception
+     */
+    private final void assignAuthorization(String username, String profilename,
+            ExtendedObject authobject, Authorization authorization, State state)
+                    throws Exception {
+        Map<String, String> parameters;
+        ExtendedObject paramobj;
+        long itemid;
+        String query = "select * from USER_PROFILE where USERNAME = ? and " +
+        		"PROFILE = ?";
+        ExtendedObject[] profileobj = state.documents.selectLimitedTo(
+                query, 1, username, profilename);
+        int profileid = profileobj[0].getValue("ID");
+        long lastauthid = profileobj[0].getValue("CURRENT");
+        DocumentModel model = state.documents.getModel("USER_AUTHORITY");
+        ExtendedObject userauth = new ExtendedObject(model);
+        
+        lastauthid++;
+        userauth.setValue("ID", lastauthid);
+        userauth.setValue("PROFILE", profileid);
+        userauth.setValue("NAME", authorization.getName());
+        state.documents.save(userauth);
+        
+        model = state.documents.getModel("USER_AUTHORITY_ITEM");
+        parameters = authorization.getParameters();
+        itemid = lastauthid * 1000;
+        for (String key : parameters.keySet()) {
+            itemid++;
+            paramobj = new ExtendedObject(model);
+            paramobj.setValue("ID", itemid);
+            paramobj.setValue("AUTHORIZATION", lastauthid);
+            paramobj.setValue("NAME", key);
+            paramobj.setValue("VALUE", parameters.get(key));
+            
+            state.documents.save(paramobj);
+        }
+        
+        profileobj[0].setValue("CURRENT", itemid);
+        state.documents.modify(profileobj[0]);
+    }
+    
+    /**
+     * 
+     * @param authorization
+     * @param state
+     * @return
+     * @throws Exception
+     */
+    private final ExtendedObject createAuthorization(
+            Authorization authorization, State state) throws Exception {
         ExtendedObject object;
         Map<String, String> parameters;
         long ident, itemid;
@@ -53,6 +108,22 @@ public class Services extends AbstractFunction {
             
             state.documents.save(object);
         }
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param state
+     * @return
+     */
+    private final ExtendedObject getAuthorization(String name, State state)
+            throws Exception {
+        ExtendedObject authobject = state.documents.
+                getObject("AUTHORIZATION", name);
+        
+        return authobject;
     }
     
     /**
@@ -141,17 +212,17 @@ public class Services extends AbstractFunction {
      */
     private final void installAuthorizations(Authorization[] authorizations,
             State state) throws Exception {
-//        ExtendedObject object;
-//        DocumentModel model = state.documents.getModel("USER_AUTHORITY");
-//        
-//        for (Authorization authorization : authorizations) {
-//            authorization = getUserAuthorization("ADMIN", )
-//            
-//            if (object == null) {
-//                createAuthorization(authorization, state);
-//                profile = getUserProfile("ADMIN", "ALL");
-//            }
-//        }
+        ExtendedObject authobject;
+        
+        for (Authorization authorization : authorizations) {
+            authobject = getAuthorization(authorization.getName(), state);
+            
+            if (authobject == null)
+                authobject = createAuthorization(authorization, state);
+            
+            assignAuthorization("ADMIN", "ALL", authobject, authorization,
+                    state);
+        }
     }
     
     /**

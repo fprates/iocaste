@@ -35,7 +35,8 @@ create table auth002 (
 create table users004 (
    ident numeric(9) primary key,
    uname varchar(12) foreign key references users001(uname),
-   prfnm varchar(12)
+   prfnm varchar(12),
+   crrnt numeric(12),
 );
    
 create table users002 (
@@ -64,11 +65,11 @@ grant select, insert, update, delete on auth002 to iocastedb;
 insert into users001(uname, secrt, fname, sname, usrid) values('ADMIN', 'iocaste', 'Administrator', '', 1);
 insert into auth001(autnm, objct, actio, autid) values('APPLICATION.EXECUTE', 'APPLICATION', 'EXECUTE', 1);
 insert into auth002(ident, autnm, prmnm) values(1001, 'APPLICATION.EXECUTE', 'APPNAME');
-insert into users004(ident, uname, prfnm) values(1001, 'ADMIN', 'ALL');
+insert into users004(ident, uname, prfnm, crrnt) values(1001, 'ADMIN', 'ALL', 1001002);
 insert into users002(ident, prfid, autnm) values(1001001, 1001, 'APPLICATION.EXECUTE');
 insert into users003(ident, autid, param, value) values(1001001001, 1001001, 'APPNAME', 'iocaste-tasksel');
-insert into users002(ident, prfid, autnm) values(1002001, 1001, 'APPLICATION.EXECUTE');
-insert into users003(ident, autid, param, value) values(1001002001, 1002001, 'APPNAME', 'iocaste-packagetool');
+insert into users002(ident, prfid, autnm) values(1001002, 1001, 'APPLICATION.EXECUTE');
+insert into users003(ident, autid, param, value) values(1001002001, 1001002, 'APPNAME', 'iocaste-packagetool');
 \p initial configuration saved.
 
 commit work;

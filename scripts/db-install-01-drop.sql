@@ -1,4 +1,6 @@
 \c true
+drop table msgsrc if exists;
+drop table lang if exists;
 drop table package002 if exists;
 drop table package001 if exists;
 drop table shref if exists;
