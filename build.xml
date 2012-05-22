@@ -7,6 +7,7 @@
     </target>
         
     <target name="compile" depends="clean">
+        <!-- bibliotecas base do sistema -->
     	<!-- core -->
         <ant antfile="${basedir}/src/core/build.xml"/>
         
@@ -22,6 +23,7 @@
         <!-- search-help -->
         <ant antfile="${basedir}/src/search-help/build.xml"/>
         
+        <!-- aplicações começam a partir daqui -->
         <!-- login -->
         <ant antfile="${basedir}/src/login/build.xml"/>
     	
@@ -48,6 +50,9 @@
     	
     	<!-- style-editor -->
     	<ant antfile="${basedir}/src/styleeditor/build.xml"/>
+          
+        <!-- usereditor -->
+        <ant antfile="${basedir}/src/usereditor/build.xml"/>
         
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
