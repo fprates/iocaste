@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.protocol.user.Authorization;
 
 public class InstallData implements Serializable {
     private static final long serialVersionUID = -4509980464670421174L;
@@ -21,6 +22,7 @@ public class InstallData implements Serializable {
     private List<SearchHelpData> shds;
     private List<DataElement> elements;
     private Map<String, Map<String, String>> messages;
+    private List<Authorization> authorizations;
     
     public InstallData() {
         models = new LinkedHashMap<String, DocumentModel>();
@@ -30,6 +32,15 @@ public class InstallData implements Serializable {
         shds = new ArrayList<SearchHelpData>();
         elements = new ArrayList<DataElement>();
         messages = new HashMap<String, Map<String, String>>();
+        authorizations = new ArrayList<Authorization>();
+    }
+    
+    /**
+     * 
+     * @param authorization
+     */
+    public final void add(Authorization authorization) {
+        authorizations.add(authorization);
     }
     
     /**
@@ -86,6 +97,14 @@ public class InstallData implements Serializable {
         
         list.add(values);
         this.values.put(model, list);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Authorization[] getAuthorizations() {
+        return authorizations.toArray(new Authorization[0]);
     }
     
     /**

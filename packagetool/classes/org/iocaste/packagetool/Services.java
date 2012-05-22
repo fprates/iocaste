@@ -14,6 +14,7 @@ import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.SHLib;
 
 public class Services extends AbstractFunction {
@@ -22,6 +23,36 @@ public class Services extends AbstractFunction {
         export("install", "install");
         export("is_installed", "isInstalled");
         export("uninstall", "uninstall");
+    }
+    
+    private final void createAuthorization(Authorization authorization,
+            State state) throws Exception {
+        ExtendedObject object;
+        Map<String, String> parameters;
+        long ident, itemid;
+        DocumentModel model = state.documents.getModel("AUTHORIZATION"),
+                modelitem = state.documents.getModel("AUTHORIZATION_ITEM");
+        
+        ident = state.documents.getNextNumber("AUTHINDEX");
+        object = new ExtendedObject(model);
+        object.setValue("NAME", authorization.getName());
+        object.setValue("OBJECT", authorization.getObject());
+        object.setValue("ACTION", authorization.getAction());
+        object.setValue("INDEX", ident);
+        
+        state.documents.save(object);
+        
+        itemid = 1000 * ident;
+        parameters = authorization.getParameters();
+        for (String key : parameters.keySet()) {
+            itemid++;
+            object = new ExtendedObject(modelitem);
+            object.setValue("ID", itemid);
+            object.setValue("AUTHORIZATION", authorization.getName());
+            object.setValue("NAME", key);
+            
+            state.documents.save(object);
+        }
     }
     
     /**
@@ -37,6 +68,7 @@ public class Services extends AbstractFunction {
         Map<String, Map<String, String>> messages;
         DocumentModel[] models;
         SearchHelpData[] shdata;
+        Authorization[] authorizations;
         State state = new State();
         
         /*
@@ -93,9 +125,33 @@ public class Services extends AbstractFunction {
         if (messages.size() > 0)
             installMessages(messages, state);
         
+        authorizations = state.data.getAuthorizations();
+        if (authorizations.length > 0)
+            installAuthorizations(authorizations, state);
+        
         state.documents.commit();
         
         return 1;
+    }
+    
+    /**
+     * 
+     * @param authorizations
+     * @param state
+     */
+    private final void installAuthorizations(Authorization[] authorizations,
+            State state) throws Exception {
+//        ExtendedObject object;
+//        DocumentModel model = state.documents.getModel("USER_AUTHORITY");
+//        
+//        for (Authorization authorization : authorizations) {
+//            authorization = getUserAuthorization("ADMIN", )
+//            
+//            if (object == null) {
+//                createAuthorization(authorization, state);
+//                profile = getUserProfile("ADMIN", "ALL");
+//            }
+//        }
     }
     
     /**

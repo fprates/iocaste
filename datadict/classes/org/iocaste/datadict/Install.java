@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.protocol.user.Authorization;
 
 public class Install {
 
     public static InstallData self() {
+        Authorization authorization;
         Map<String, String> messages;
         InstallData data = new InstallData();
         
@@ -60,6 +62,13 @@ public class Install {
         messages.put("sh.not.found", "Ajuda de pesquisa não encontrada");
         
         data.setMessages("pt_BR", messages);
+        
+        authorization = new Authorization("APPLICATION.EXECUTE");
+        authorization.setObject("APPLICATION");
+        authorization.setAction("EXECUTE");
+        authorization.add("APPNAME", "iocaste-datadict");
+        
+        data.add(authorization);
         
         return data;
     }
