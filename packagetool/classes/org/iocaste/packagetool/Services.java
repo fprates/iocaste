@@ -69,7 +69,7 @@ public class Services extends AbstractFunction {
             state.documents.save(paramobj);
         }
         
-        profileobj[0].setValue("CURRENT", itemid);
+        profileobj[0].setValue("CURRENT", lastauthid);
         state.documents.modify(profileobj[0]);
     }
     
