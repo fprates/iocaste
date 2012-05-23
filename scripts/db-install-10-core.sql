@@ -65,11 +65,17 @@ grant select, insert, update, delete on auth002 to iocastedb;
 insert into users001(uname, secrt, fname, sname, usrid) values('ADMIN', 'iocaste', 'Administrator', '', 1);
 insert into auth001(autnm, objct, actio, autid) values('APPLICATION.EXECUTE', 'APPLICATION', 'EXECUTE', 1);
 insert into auth002(ident, autnm, prmnm) values(1001, 'APPLICATION.EXECUTE', 'APPNAME');
-insert into users004(ident, uname, prfnm, crrnt) values(1001, 'ADMIN', 'ALL', 1001002);
+insert into users004(ident, uname, prfnm, crrnt) values(1001, 'ADMIN', 'ALL', 1001001);
+insert into users004(ident, uname, prfnm, crrnt) values(1002, 'ADMIN', 'BASE', 1002003);
 insert into users002(ident, prfid, autnm) values(1001001, 1001, 'APPLICATION.EXECUTE');
-insert into users003(ident, autid, param, value) values(1001001001, 1001001, 'APPNAME', 'iocaste-tasksel');
-insert into users002(ident, prfid, autnm) values(1001002, 1001, 'APPLICATION.EXECUTE');
-insert into users003(ident, autid, param, value) values(1001002001, 1001002, 'APPNAME', 'iocaste-packagetool');
+insert into users003(ident, autid, param, value) values(1001001001, 1001001, 'APPNAME', 'iocaste-packagetool');
+insert into users002(ident, prfid, autnm) values(1002001, 1002, 'APPLICATION.EXECUTE');
+insert into users003(ident, autid, param, value) values(1002001001, 1002001, 'APPNAME', 'iocaste-tasksel');
+insert into users002(ident, prfid, autnm) values(1002002, 1002, 'APPLICATION.EXECUTE');
+insert into users003(ident, autid, param, value) values(1002002001, 1002002, 'APPNAME', 'iocaste-search-help');
+insert into users002(ident, prfid, autnm) values(1002003, 1002, 'APPLICATION.EXECUTE');
+insert into users003(ident, autid, param, value) values(1002003001, 1002003, 'APPNAME', 'iocaste-help');
+
 \p initial configuration saved.
 
 commit work;
