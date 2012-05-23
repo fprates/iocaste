@@ -16,7 +16,10 @@
         
         <!-- shell -->
         <ant antfile="${basedir}/src/shell/build.xml"/>
-          
+        
+        <!-- authority -->
+        <ant antfile="${basedir}/src/authority/build.xml"/>
+        
         <!-- packagetool -->
         <ant antfile="${basedir}/src/packagetool/build.xml"/>
     	
