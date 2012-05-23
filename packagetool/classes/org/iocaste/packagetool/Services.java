@@ -13,6 +13,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.Function;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
@@ -24,107 +25,6 @@ public class Services extends AbstractFunction {
         export("install", "install");
         export("is_installed", "isInstalled");
         export("uninstall", "uninstall");
-    }
-    
-    /**
-     * 
-     * @param username
-     * @param profilename
-     * @param authobject
-     * @param authorization
-     * @param state
-     * @throws Exception
-     */
-    private final void assignAuthorization(String username, String profilename,
-            ExtendedObject authobject, Authorization authorization, State state)
-                    throws Exception {
-        Map<String, String> parameters;
-        ExtendedObject paramobj;
-        long itemid;
-        String query = "select * from USER_PROFILE where USERNAME = ? and " +
-        		"PROFILE = ?";
-        ExtendedObject[] profileobj = state.documents.selectLimitedTo(
-                query, 1, username, profilename);
-        int profileid = profileobj[0].getValue("ID");
-        long lastauthid = profileobj[0].getValue("CURRENT");
-        DocumentModel model = state.documents.getModel("USER_AUTHORITY");
-        ExtendedObject userauth = new ExtendedObject(model);
-        
-        lastauthid++;
-        userauth.setValue("ID", lastauthid);
-        userauth.setValue("PROFILE", profileid);
-        userauth.setValue("NAME", authorization.getName());
-        state.documents.save(userauth);
-        
-        model = state.documents.getModel("USER_AUTHORITY_ITEM");
-        parameters = authorization.getParameters();
-        itemid = lastauthid * 1000;
-        for (String key : parameters.keySet()) {
-            itemid++;
-            paramobj = new ExtendedObject(model);
-            paramobj.setValue("ID", itemid);
-            paramobj.setValue("AUTHORIZATION", lastauthid);
-            paramobj.setValue("NAME", key);
-            paramobj.setValue("VALUE", parameters.get(key));
-            
-            state.documents.save(paramobj);
-        }
-        
-        profileobj[0].setValue("CURRENT", lastauthid);
-        state.documents.modify(profileobj[0]);
-    }
-    
-    /**
-     * 
-     * @param authorization
-     * @param state
-     * @return
-     * @throws Exception
-     */
-    private final ExtendedObject createAuthorization(
-            Authorization authorization, State state) throws Exception {
-        ExtendedObject object;
-        Map<String, String> parameters;
-        long ident, itemid;
-        DocumentModel model = state.documents.getModel("AUTHORIZATION"),
-                modelitem = state.documents.getModel("AUTHORIZATION_ITEM");
-        
-        ident = state.documents.getNextNumber("AUTHINDEX");
-        object = new ExtendedObject(model);
-        object.setValue("NAME", authorization.getName());
-        object.setValue("OBJECT", authorization.getObject());
-        object.setValue("ACTION", authorization.getAction());
-        object.setValue("INDEX", ident);
-        
-        state.documents.save(object);
-        
-        itemid = 1000 * ident;
-        parameters = authorization.getParameters();
-        for (String key : parameters.keySet()) {
-            itemid++;
-            object = new ExtendedObject(modelitem);
-            object.setValue("ID", itemid);
-            object.setValue("AUTHORIZATION", authorization.getName());
-            object.setValue("NAME", key);
-            
-            state.documents.save(object);
-        }
-        
-        return null;
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param state
-     * @return
-     */
-    private final ExtendedObject getAuthorization(String name, State state)
-            throws Exception {
-        ExtendedObject authobject = state.documents.
-                getObject("AUTHORIZATION", name);
-        
-        return authobject;
     }
     
     /**
@@ -151,6 +51,7 @@ public class Services extends AbstractFunction {
         state.documents = new Documents(this);
         state.pkgid = state.documents.getNextNumber("PKGCODE") * 1000000;
         state.shm = new HashMap<String, DocumentModelItem>();
+        state.function = this;
         
         header = new ExtendedObject(state.documents.getModel("PACKAGE"));
         header.setValue("NAME", state.pkgname);
@@ -213,18 +114,16 @@ public class Services extends AbstractFunction {
      */
     private final void installAuthorizations(Authorization[] authorizations,
             State state) throws Exception {
-        ExtendedObject authobject;
         String name;
+        Authority authority = new Authority(state.function);
         
         for (Authorization authorization : authorizations) {
             name = authorization.getName();
-            authobject = getAuthorization(name, state);
             
-            if (authobject == null)
-                authobject = createAuthorization(authorization, state);
+            if (authority.get(name) == null)
+                authority.save(authorization);
             
-            assignAuthorization("ADMIN", "ALL", authobject, authorization,
-                    state);
+            authority.assign("ADMIN", "ALL", authorization);
             
             Registry.add(name, "AUTHORIZATION", state);
         }
@@ -485,4 +384,5 @@ class State {
     public String pkgname;
     public Map<String, DocumentModelItem> shm;
     public InstallData data;
+    public Function function;
 }
