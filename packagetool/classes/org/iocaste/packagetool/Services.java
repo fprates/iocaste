@@ -142,7 +142,7 @@ public class Services extends AbstractFunction {
         
         for (String link : links.keySet()) {
             header = new ExtendedObject(tasks);
-            header.setValue("NAME", link);
+            header.setValue("NAME", link.toUpperCase());
             header.setValue("COMMAND", links.get(link));
             
             state.documents.save(header);
