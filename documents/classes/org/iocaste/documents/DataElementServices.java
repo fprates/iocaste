@@ -25,7 +25,7 @@ public class DataElementServices {
         
         lines = iocaste.select("select * from docs003 where ename = ?", name);
         
-        if (lines.length == 0)
+        if (lines == null)
             return null;
         
         columns = (Map<String, Object>)lines[0];
