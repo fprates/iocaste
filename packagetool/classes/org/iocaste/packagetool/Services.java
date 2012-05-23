@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -213,15 +214,19 @@ public class Services extends AbstractFunction {
     private final void installAuthorizations(Authorization[] authorizations,
             State state) throws Exception {
         ExtendedObject authobject;
+        String name;
         
         for (Authorization authorization : authorizations) {
-            authobject = getAuthorization(authorization.getName(), state);
+            name = authorization.getName();
+            authobject = getAuthorization(name, state);
             
             if (authobject == null)
                 authobject = createAuthorization(authorization, state);
             
             assignAuthorization("ADMIN", "ALL", authobject, authorization,
                     state);
+            
+            Registry.add(name, "AUTHORIZATION", state);
         }
     }
     
@@ -406,6 +411,7 @@ public class Services extends AbstractFunction {
         ExtendedObject object;
         SHLib shlib = new SHLib(this);
         Documents documents = new Documents(this);
+        Authority authority = new Authority(this);
         String pkgname = message.getString("package");
         ExtendedObject[] objects = Registry.getEntries(pkgname, this);
         
@@ -452,6 +458,13 @@ public class Services extends AbstractFunction {
             
             if (modeltype.equals("NUMBER")) {
                 documents.removeNumberFactory(name);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("AUTHORIZATION")) {
+                authority.remove(name);
                 documents.delete(object);
                 
                 continue;

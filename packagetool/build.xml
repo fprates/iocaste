@@ -15,6 +15,7 @@
             <fileset dir="${builddir}/core/lib"/>
             <fileset dir="${builddir}/shell/lib"/>
         	<fileset dir="${builddir}/documents/lib"/>
+            <fileset dir="${builddir}/authority/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
@@ -65,6 +66,7 @@
             <lib dir="${builddir}/core/lib" includes="*.jar"/>
             <lib dir="${builddir}/shell/lib" includes="*.jar"/>
         	<lib dir="${builddir}/documents/lib" includes="*.jar"/>
+            <lib dir="${builddir}/authority/lib" includes="*.jar"/>
             <lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
