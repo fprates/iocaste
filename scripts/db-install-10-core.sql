@@ -2,9 +2,9 @@
 create user iocastedb password initial;
 \p user generated.
 
-drop table users003 if exists;
 drop table users002 if exists;
-drop table users004 if exists;
+drop table auth004 if exists;
+drop table auth003 if exists;
 drop table auth002 if exists;
 drop table auth001 if exists;
 drop table users001 if exists;
@@ -16,9 +16,10 @@ create table users001 (
    secrt varchar(12),
    fname varchar(64),
    sname varchar(64),
-   usrid numeric(6)
+   usrid numeric(5)
 );
 
+/* autorizações */
 create table auth001 (
    autnm varchar(24) primary key,
    objct varchar(12),
@@ -26,55 +27,68 @@ create table auth001 (
    autid numeric(5)
 );
 
+/* parâmetros da autorização */
 create table auth002 (
    ident numeric(8) primary key,
    autnm varchar(24) foreign key references auth001(autnm),
-   prmnm varchar(12)
-);
-
-create table users004 (
-   ident numeric(9) primary key,
-   uname varchar(12) foreign key references users001(uname),
-   prfnm varchar(12),
-   crrnt numeric(12),
-);
-   
-create table users002 (
-   ident numeric(12) primary key,
-   prfid numeric(9) foreign key references users004(ident),
-   autnm varchar(24) foreign key references auth001(autnm)
-);
-
-create table users003 (
-   ident numeric(15) primary key,
-   autid numeric(12) foreign key references users002(ident),
    param varchar(12),
    value varchar(64)
+);
+
+/* perfil de autorização */
+create table auth003 (
+   prfnm varchar(12) primary key,
+   prfid numeric(5)
+);
+
+/* autorizações do perfil */
+create table auth004 (
+   ident numeric(8) primary key,
+   prfnm varchar(12) foreign key references auth003(prfnm),
+   autnm varchar(24) foreign key references auth001(autnm),
+   objct varchar(12),
+   actio varchar(12)
+);
+
+create table users002(
+   ident numeric(8) primary key,
+   uname varchar(12) foreign key references users001(uname),
+   prfnm varchar(12) foreign key references auth003(prfnm)
 );
 
 \p core tables generated.
 
 grant select, insert, update, delete on users001 to iocastedb;
 grant select, insert, update, delete on users002 to iocastedb;
-grant select, insert, update, delete on users003 to iocastedb;
-grant select, insert, update, delete on users004 to iocastedb;
 grant select, insert, update, delete on auth001 to iocastedb;
 grant select, insert, update, delete on auth002 to iocastedb;
+grant select, insert, update, delete on auth003 to iocastedb;
+grant select, insert, update, delete on auth004 to iocastedb;
 \p permissions granted.
 
 insert into users001(uname, secrt, fname, sname, usrid) values('ADMIN', 'iocaste', 'Administrator', '', 1);
-insert into auth001(autnm, objct, actio, autid) values('APPLICATION.EXECUTE', 'APPLICATION', 'EXECUTE', 1);
-insert into auth002(ident, autnm, prmnm) values(1001, 'APPLICATION.EXECUTE', 'APPNAME');
-insert into users004(ident, uname, prfnm, crrnt) values(1001, 'ADMIN', 'ALL', 1001001);
-insert into users004(ident, uname, prfnm, crrnt) values(1002, 'ADMIN', 'BASE', 1002003);
-insert into users002(ident, prfid, autnm) values(1001001, 1001, 'APPLICATION.EXECUTE');
-insert into users003(ident, autid, param, value) values(1001001001, 1001001, 'APPNAME', 'iocaste-packagetool');
-insert into users002(ident, prfid, autnm) values(1002001, 1002, 'APPLICATION.EXECUTE');
-insert into users003(ident, autid, param, value) values(1002001001, 1002001, 'APPNAME', 'iocaste-tasksel');
-insert into users002(ident, prfid, autnm) values(1002002, 1002, 'APPLICATION.EXECUTE');
-insert into users003(ident, autid, param, value) values(1002002001, 1002002, 'APPNAME', 'iocaste-search-help');
-insert into users002(ident, prfid, autnm) values(1002003, 1002, 'APPLICATION.EXECUTE');
-insert into users003(ident, autid, param, value) values(1002003001, 1002003, 'APPNAME', 'iocaste-help');
+insert into auth001(autnm, objct, actio, autid) values('PACKAGE.EXECUTE', 'APPLICATION', 'EXECUTE', 1);
+insert into auth002(ident, autnm, param, value) values(101, 'PACKAGE.EXECUTE', 'APPNAME', 'iocaste-packagetool');
+
+insert into auth001(autnm, objct, actio, autid) values('TASKSEL.EXECUTE', 'APPLICATION', 'EXECUTE', 2);
+insert into auth002(ident, autnm, param, value) values(201, 'TASKSEL.EXECUTE', 'APPNAME', 'iocaste-tasksel');
+
+insert into auth001(autnm, objct, actio, autid) values('SH.EXECUTE', 'APPLICATION', 'EXECUTE', 3);
+insert into auth002(ident, autnm, param, value) values(301, 'SH.EXECUTE', 'APPNAME', 'iocaste-search-help');
+
+insert into auth001(autnm, objct, actio, autid) values('HELP.EXECUTE', 'APPLICATION', 'EXECUTE', 4);
+insert into auth002(ident, autnm, param, value) values(401, 'HELP.EXECUTE', 'APPNAME', 'iocaste-help');
+
+insert into auth003(prfnm, prfid) values('ALL', 1);
+insert into auth004(ident, prfnm, autnm, objct, actio) values(101, 'ALL', 'PACKAGE.EXECUTE', 'APPLICATION', 'EXECUTE');
+
+insert into auth003(prfnm, prfid) values('BASE', 2);
+insert into auth004(ident, prfnm, autnm, objct, actio) values(201, 'BASE', 'TASKSEL.EXECUTE', 'APPLICATION', 'EXECUTE');
+insert into auth004(ident, prfnm, autnm, objct, actio) values(202, 'BASE', 'SH.EXECUTE', 'APPLICATION', 'EXECUTE');
+insert into auth004(ident, prfnm, autnm, objct, actio) values(203, 'BASE', 'HELP.EXECUTE', 'APPLICATION', 'EXECUTE');
+
+insert into users002(ident, uname, prfnm) values(101, 'ADMIN', 'ALL');
+insert into users002(ident, uname, prfnm) values(102, 'ADMIN', 'BASE');
 
 \p initial configuration saved.
 

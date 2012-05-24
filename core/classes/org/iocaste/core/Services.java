@@ -262,10 +262,10 @@ public class Services extends AbstractFunction {
         Connection connection = db.instance();
         UserContext context = sessions.get(message.getSessionid());
         String username = context.getUser().getUsername();
-        String authname = objauthorization.getName();
         
         usrauthorizations = AuthServices.getAuthorization(connection, db,
-                username, authname);
+                username, objauthorization.getObject(),
+                objauthorization.getAction());
         
         connection.close();
         

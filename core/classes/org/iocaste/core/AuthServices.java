@@ -1,6 +1,5 @@
 package org.iocaste.core;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +8,14 @@ import java.util.Map;
 import org.iocaste.protocol.user.Authorization;
 
 public class AuthServices {
-
-    private static final int bdToInt(Object object) {
-        return ((BigDecimal)object).intValue();
-    }
+    private static final byte USER_AUTHORITY = 0;
+    private static final byte USER_PROFILE_ITEM = 1;
+    private static final byte AUTHORIZATION_ITEM = 2;
+    private static final String[] QUERIES = {
+        "select * from USERS002 where UNAME = ?",
+        "select * from AUTH004 where PRFNM = ? and OBJCT = ? and ACTIO = ?",
+        "select * from AUTH002 where AUTNM = ?"
+    };
     
     /**
      * 
@@ -25,42 +28,44 @@ public class AuthServices {
      */
     @SuppressWarnings("unchecked")
     public static final Authorization[] getAuthorization(Connection connection,
-            DBServices db, String username, String authname) throws Exception {
-        int ident;
+            DBServices db, String username, String object, String action)
+                    throws Exception {
         Authorization authorization;
         Map<String, Object> resultmap;
         List<Authorization> authlist;
-        String name, value, query = "select * from USERS004 where UNAME = ?";
-        Object[] prmresult, authresult, prfresult =
-                db.select(connection, query, 0, username);
+        String profilename, authname, name, value;
+        Object[] parameters, profileitens, profiles =
+                db.select(connection, QUERIES[USER_AUTHORITY], 0, username);
         
-        if (prfresult == null)
+        if (profiles == null)
             return null;
         
         authlist = new ArrayList<Authorization>();
         
-        for (Object prfobject : prfresult) {
-            resultmap = (Map<String, Object>)prfobject;
-            ident = bdToInt(resultmap.get("IDENT"));
-            query = "select * from USERS002 where PRFID = ? and AUTNM = ?";
-            authresult = db.select(connection, query, 0, ident, authname);
+        for (Object profile : profiles) {
+            resultmap = (Map<String, Object>)profile;
+            profilename = (String)resultmap.get("PRFNM");
+            profileitens = db.select(connection, QUERIES[USER_PROFILE_ITEM],
+                    0, profilename, object, action);
             
-            if (authresult == null)
+            if (profileitens == null)
                 continue;
             
-            query = "select * from USERS003 where AUTID = ?";
-            
-            for (Object authobject : authresult) {
-                resultmap = (Map<String, Object>)authobject;
+            for (Object profileitem : profileitens) {
+                resultmap = (Map<String, Object>)profileitem;
                 
-                ident = bdToInt(resultmap.get("IDENT"));
-                prmresult = db.select(connection, query, 0, ident);
+                authname = (String)resultmap.get("AUTNM");
+                parameters = db.select(connection, QUERIES[AUTHORIZATION_ITEM],
+                        0, authname);
                 
                 authorization = new Authorization(authname);
+                authorization.setObject(object);
+                authorization.setAction(action);
+                
                 authlist.add(authorization);
                 
-                for (Object prmobject : prmresult) {
-                    resultmap = (Map<String, Object>)prmobject;
+                for (Object parameter : parameters) {
+                    resultmap = (Map<String, Object>)parameter;
                     name = (String)resultmap.get("PARAM");
                     value = (String)resultmap.get("VALUE");
                     authorization.add(name, value);
