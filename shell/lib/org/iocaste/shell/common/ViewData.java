@@ -36,6 +36,7 @@ import java.util.Map;
  */
 public class ViewData implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
+    private byte[] content;
     private Element elementfocus;
     private String title, focus, sheet, appname, pagename;
     private String contenttype, rapp, rpage, messagetext;
@@ -231,6 +232,14 @@ public class ViewData implements Serializable {
      */
     public final Container[] getContainers() {
         return containers.toArray(new Container[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final byte[] getContent() {
+        return content;
     }
     
     /**
@@ -480,6 +489,14 @@ public class ViewData implements Serializable {
         
         if (!dontpushpage)
             pagecall = true;
+    }
+    
+    /**
+     * 
+     * @param content
+     */
+    public final void setContent(byte[] content) {
+        this.content = content;
     }
     
     /**

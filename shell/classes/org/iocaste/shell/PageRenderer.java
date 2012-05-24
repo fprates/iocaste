@@ -732,6 +732,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void render(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
+        byte[] content;
         String username;
         int logid;
         InputData inputdata;
@@ -783,8 +784,14 @@ public class PageRenderer extends HttpServlet implements Function {
             
             os = resp.getOutputStream();
             
-            for (String line : viewdata.getPrintLines())
-                os.write(line.getBytes());
+            content = viewdata.getContent();
+            if (content != null) {
+                os.write(content);
+                resp.setContentLength(content.length);
+            } else {
+                for (String line : viewdata.getPrintLines())
+                    os.write(line.getBytes());
+            }
             
             os.flush();
             os.close();
