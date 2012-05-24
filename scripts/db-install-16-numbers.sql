@@ -1,3 +1,3 @@
-insert into range001(ident, crrnt) values('AUTHINDEX', 1);
+insert into range001(ident, crrnt) values('AUTHINDEX', 4);
 
 commit work;

@@ -35,8 +35,10 @@ insert into docs005(tname, docid) values('AUTH002', 'AUTHORIZATION_ITEM');
 insert into docs001(docid, tname) values('USER_PROFILE', 'AUTH003');
 insert into docs003(ename, decim, lngth, etype, upcas) values('USER_PROFILE.NAME', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('USER_PROFILE.ID', 0, 5, 3, 0);
+insert into docs003(ename, decim, lngth, etype, upcas) values('USER_PROFILE.CURRENT', 0, 8, 3, 0);
 insert into docs002(iname, docid, index, fname, ename) values('USER_PROFILE.NAME', 'USER_PROFILE', 0, 'PRFNM', 'USER_PROFILE.NAME');
 insert into docs002(iname, docid, index, fname, ename) values('USER_PROFILE.ID', 'USER_PROFILE', 1, 'PRFID', 'USER_PROFILE.ID');
+insert into docs002(iname, docid, index, fname, ename) values('USER_PROFILE.CURRENT', 'USER_PROFILE', 2, 'CRRNT', 'USER_PROFILE.CURRENT');
 insert into docs004(iname, docid) values('USER_PROFILE.NAME', 'USER_PROFILE');
 insert into docs005(tname, docid) values('AUTH003', 'USER_PROFILE');
    

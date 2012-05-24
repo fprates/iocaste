@@ -13,7 +13,7 @@ public class Services extends AbstractFunction {
     private static final byte SELECT_PROFILE = 0;
     private static final byte AUTH_ITENS = 1;
     private static final String[] QUERIES = {
-        "select * from USER_PROFILE where USERNAME = ? and PROFILE = ?",
+        "select * from USER_AUTHORITY where USERNAME = ? and PROFILE = ?",
         "select * from AUTHORIZATION_ITEM where AUTHORIZATION = ?"
     };
     
@@ -30,42 +30,37 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void assign(Message message) throws Exception {
-        Map<String, String> parameters;
-        ExtendedObject paramobj;
-        long itemid;
+        DocumentModel model;
+        ExtendedObject profileitem;
+        int itemid;
         Authorization authorization = message.get("authorization");
         String username = message.getString("username");
         String profilename = message.getString("profile");
         Documents documents = new Documents(this);
-        ExtendedObject[] profileobj = documents.selectLimitedTo(
+        ExtendedObject[] profiles = documents.selectLimitedTo(
                 QUERIES[SELECT_PROFILE], 1, username, profilename);
-        int profileid = profileobj[0].getValue("ID");
-        long lastauthid = profileobj[0].getValue("CURRENT");
-        DocumentModel model = documents.getModel("USER_AUTHORITY");
-        ExtendedObject userauth = new ExtendedObject(model);
         
-        lastauthid++;
-        userauth.setValue("ID", lastauthid);
-        userauth.setValue("PROFILE", profileid);
-        userauth.setValue("NAME", authorization.getName());
-        documents.save(userauth);
+        if (profiles == null)
+            throw new Exception(new StringBuilder(profilename).
+                    append(" for ").
+                    append(username).
+                    append(" is an invalid profile.").toString());
         
-        model = documents.getModel("USER_AUTHORITY_ITEM");
-        parameters = authorization.getParameters();
-        itemid = lastauthid * 1000;
-        for (String key : parameters.keySet()) {
-            itemid++;
-            paramobj = new ExtendedObject(model);
-            paramobj.setValue("ID", itemid);
-            paramobj.setValue("AUTHORIZATION", lastauthid);
-            paramobj.setValue("NAME", key);
-            paramobj.setValue("VALUE", parameters.get(key));
-            
-            documents.save(paramobj);
-        }
+        profiles[0] = documents.getObject("USER_PROFILE", profilename);
+        itemid = profiles[0].getValue("CURRENT");
+        itemid++;
         
-        profileobj[0].setValue("CURRENT", lastauthid);
-        documents.modify(profileobj[0]);
+        model = documents.getModel("USER_PROFILE_ITEM");
+        profileitem = new ExtendedObject(model);
+        profileitem.setValue("ID", itemid);
+        profileitem.setValue("PROFILE", profilename);
+        profileitem.setValue("NAME", authorization.getName());
+        profileitem.setValue("OBJECT", authorization.getObject());
+        profileitem.setValue("ACTION", authorization.getAction());
+        documents.save(profileitem);
+        
+        profiles[0].setValue("CURRENT", itemid);
+        documents.modify(profiles[0]);
     }
     
     /**
@@ -126,7 +121,7 @@ public class Services extends AbstractFunction {
         
         documents.save(authobject);
         
-        itemid = 1000 * ident;
+        itemid = 100 * ident;
         parameters = authorization.getParameters();
         for (String key : parameters.keySet()) {
             itemid++;
@@ -134,6 +129,7 @@ public class Services extends AbstractFunction {
             authobject.setValue("ID", itemid);
             authobject.setValue("AUTHORIZATION", name);
             authobject.setValue("NAME", key);
+            authobject.setValue("VALUE", parameters.get(key));
             
             documents.save(authobject);
         }

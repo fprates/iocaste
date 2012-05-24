@@ -38,7 +38,8 @@ create table auth002 (
 /* perfil de autorização */
 create table auth003 (
    prfnm varchar(12) primary key,
-   prfid numeric(5)
+   prfid numeric(5),
+   crrnt numeric(8)
 );
 
 /* autorizações do perfil */
@@ -79,10 +80,10 @@ insert into auth002(ident, autnm, param, value) values(301, 'SH.EXECUTE', 'APPNA
 insert into auth001(autnm, objct, actio, autid) values('HELP.EXECUTE', 'APPLICATION', 'EXECUTE', 4);
 insert into auth002(ident, autnm, param, value) values(401, 'HELP.EXECUTE', 'APPNAME', 'iocaste-help');
 
-insert into auth003(prfnm, prfid) values('ALL', 1);
+insert into auth003(prfnm, prfid, crrnt) values('ALL', 1, 101);
 insert into auth004(ident, prfnm, autnm, objct, actio) values(101, 'ALL', 'PACKAGE.EXECUTE', 'APPLICATION', 'EXECUTE');
 
-insert into auth003(prfnm, prfid) values('BASE', 2);
+insert into auth003(prfnm, prfid, crrnt) values('BASE', 2, 203);
 insert into auth004(ident, prfnm, autnm, objct, actio) values(201, 'BASE', 'TASKSEL.EXECUTE', 'APPLICATION', 'EXECUTE');
 insert into auth004(ident, prfnm, autnm, objct, actio) values(202, 'BASE', 'SH.EXECUTE', 'APPLICATION', 'EXECUTE');
 insert into auth004(ident, prfnm, autnm, objct, actio) values(203, 'BASE', 'HELP.EXECUTE', 'APPLICATION', 'EXECUTE');
