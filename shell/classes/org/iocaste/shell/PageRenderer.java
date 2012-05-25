@@ -470,6 +470,15 @@ public class PageRenderer extends HttpServlet implements Function {
         return appcontext.getPageContext(pagename).getViewData();
     }
     
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#isAuthorizedCall()
+     */
+    @Override
+    public final boolean isAuthorizedCall() {
+        return false;
+    }
+    
     /**
      * 
      * @param sessionid
@@ -569,7 +578,8 @@ public class PageRenderer extends HttpServlet implements Function {
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", appname);
         
-        if (!iocaste.isAuthorized(authorization)) {
+        if (!iocaste.isAuthorized(authorization) && !appname.equals(LOGIN_APP))
+        {
             pagectx.setError(AUTHORIZATION_ERROR);
             pagectx.getViewData().message(Const.ERROR, "user.not.authorized");
             
@@ -843,6 +853,13 @@ public class PageRenderer extends HttpServlet implements Function {
         return new Service(sessionid, url);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#setAuthorizedCall(boolean)
+     */
+    @Override
+    public final void setAuthorizedCall(boolean authorized) { };
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#setServerName(java.lang.String)
