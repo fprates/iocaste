@@ -7,8 +7,9 @@ public class Install {
 
     public static final InstallData self() {
         InstallData data = new InstallData();
-        Authorization authorization = new Authorization("APPLICATION.EXECUTE");
+        Authorization authorization;
         
+        authorization = new Authorization("DATAVIEWER.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", "iocaste-dataview");

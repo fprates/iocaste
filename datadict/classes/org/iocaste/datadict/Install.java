@@ -63,7 +63,7 @@ public class Install {
         
         data.setMessages("pt_BR", messages);
         
-        authorization = new Authorization("APPLICATION.EXECUTE");
+        authorization = new Authorization("DDICT.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", "iocaste-datadict");
