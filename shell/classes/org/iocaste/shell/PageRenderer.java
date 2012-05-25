@@ -44,18 +44,18 @@ import org.iocaste.shell.common.ViewData;
 
 public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
-    private static final String LOGIN_APP = "iocaste-login";
     private static final String NOT_CONNECTED = "not.connected";
     private static final byte AUTHORIZATION_ERROR = 1;
     private static Map<String, List<SessionContext>> apps =
             new HashMap<String, List<SessionContext>>();
-    private String sessionid, servername;
+    private String sessionid, servername, sessionconnector;
     private HtmlRenderer renderer;
     private Map<String, Map<String, String>> style;
     
     public PageRenderer() {
         renderer = new HtmlRenderer();
         style = null;
+        sessionconnector = "iocaste-login";
     }
     
     /**
@@ -212,7 +212,7 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagectx == null) {
             contextdata = new ContextData();
             contextdata.sessionid = sessionid;
-            contextdata.appname = LOGIN_APP;
+            contextdata.appname = sessionconnector;
             contextdata.pagename = "authentic";
             contextdata.logid = logid;
             
@@ -481,6 +481,15 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
+     * @param name
+     * @return
+     */
+    private final boolean isSessionConnector(String name) {
+        return sessionconnector.equals(name);
+    }
+    
+    /**
+     * 
      * @param sessionid
      * @param logid
      * @return
@@ -578,8 +587,8 @@ public class PageRenderer extends HttpServlet implements Function {
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", appname);
         
-        if (!iocaste.isAuthorized(authorization) && !appname.equals(LOGIN_APP))
-        {
+        if (!iocaste.isAuthorized(authorization) &&
+                !isSessionConnector(appname)) {
             pagectx.setError(AUTHORIZATION_ERROR);
             pagectx.getViewData().message(Const.ERROR, "user.not.authorized");
             
@@ -603,7 +612,7 @@ public class PageRenderer extends HttpServlet implements Function {
         for (String name : view.getExportable())
             pagectx_.addParameter(name, view.getParameter(name));
         
-        if (view.getAppName().equals(LOGIN_APP) && iocaste.isConnected())
+        if (isSessionConnector(view.getAppName()) && iocaste.isConnected())
             pagectx_.setUsername((String)view.getParameter("username"));
         else
             pagectx_.setUsername(pagectx.getUsername());
