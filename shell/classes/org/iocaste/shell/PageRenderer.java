@@ -752,7 +752,8 @@ public class PageRenderer extends HttpServlet implements Function {
     private final void render(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
         byte[] content;
-        String username;
+        String username, viewmessage;
+        Const messagetype;
         int logid;
         InputData inputdata;
         OutputStream os;
@@ -763,6 +764,13 @@ public class PageRenderer extends HttpServlet implements Function {
         Message message = new Message();
 
         viewdata = pagectx.getViewData();
+        if (viewdata != null) {
+            viewmessage = viewdata.getTranslatedMessage();
+            messagetype = viewdata.getMessageType();
+        } else {
+            viewmessage = null;
+            messagetype = null;
+        }
         
         if (pagectx.getError() == 0 &&
                 (viewdata == null || pagectx.isReloadableView())) {
@@ -824,8 +832,8 @@ public class PageRenderer extends HttpServlet implements Function {
             style = Style.get("DEFAULT", this);
 
         username = pagectx.getUsername();
-        renderer.setMessageText(viewdata.getTranslatedMessage());
-        renderer.setMessageType(viewdata.getMessageType());
+        renderer.setMessageText(viewmessage);
+        renderer.setMessageType(messagetype);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
         renderer.setCssElements(style);
         renderer.setLogid(pagectx.getLogid());
