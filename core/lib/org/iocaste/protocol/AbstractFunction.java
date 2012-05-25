@@ -13,10 +13,12 @@ public abstract class AbstractFunction implements Function {
     private Map<String, String> exports;
     private String servername;
     private String sessionid;
+    private boolean authorized;
     
     public AbstractFunction() {
         exports = new HashMap<String, String>();
         exports.put("call_authorized", "callAuthorized");
+        authorized = false;
     }
     
     /**
@@ -72,6 +74,15 @@ public abstract class AbstractFunction implements Function {
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#isAuthorizedCall()
+     */
+    @Override
+    public final boolean isAuthorizedCall() {
+        return authorized;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.protocol.Function#run(org.iocaste.protocol.Message)
      */
     @Override
@@ -100,6 +111,15 @@ public abstract class AbstractFunction implements Function {
         String url = new StringBuffer(servername).append(path).toString();
         
         return new Service(sessionid, url);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.protocol.Function#setAuthorizedCall(boolean)
+     */
+    @Override
+    public final void setAuthorizedCall(boolean authorized) {
+        this.authorized = authorized;
     }
     
     /*

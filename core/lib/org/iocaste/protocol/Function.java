@@ -7,7 +7,11 @@ import javax.servlet.ServletContext;
 public interface Function {
     public abstract Set<String> getMethods();
 
+    public abstract boolean isAuthorizedCall();
+    
     public abstract Object run(Message message) throws Exception;
+    
+    public abstract void setAuthorizedCall(boolean authorized);
     
     public abstract void setServerName(String servername);
     

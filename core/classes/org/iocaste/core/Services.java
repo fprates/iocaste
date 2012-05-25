@@ -255,13 +255,19 @@ public class Services extends AbstractFunction {
      */
     public final boolean isAuthorized(Message message) throws Exception {
         boolean fail;
-        String objvalue, usrvalue;
+        String objvalue, usrvalue, username;
         Map<String, String> usrparameters, objparameters;
         Authorization[] usrauthorizations;
-        Authorization objauthorization = message.get("authorization");
-        Connection connection = db.instance();
+        Connection connection;
+        Authorization objauthorization;
         UserContext context = sessions.get(message.getSessionid());
-        String username = context.getUser().getUsername();
+        
+        if (context == null && isAuthorizedCall())
+            return false;
+        
+        objauthorization = message.get("authorization");
+        connection = db.instance();
+        username = context.getUser().getUsername();
         
         usrauthorizations = AuthServices.getAuthorization(connection, db,
                 username, objauthorization.getObject(),
@@ -382,9 +388,14 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void rollback(Message message) throws Exception {
+        Connection connection;
         String sessionid = message.getSessionid();
         UserContext context = sessions.get(sessionid);
-        Connection connection = context.getConnection();
+        
+        if (context == null && isAuthorizedCall())
+            return;
+        
+        connection = context.getConnection();
         
         if (connection == null)
             return;

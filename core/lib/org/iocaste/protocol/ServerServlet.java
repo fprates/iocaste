@@ -113,6 +113,7 @@ public abstract class ServerServlet extends HttpServlet {
             function.setServletContext(getServletContext());
             function.setServerName(getServerName());
             function.setSessionid(sessionid);
+            function.setAuthorizedCall(isAuthorized(message));
             
             service.messageReturn(message, function.run(message));
         } catch (Exception e) {
