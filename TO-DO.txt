@@ -15,7 +15,8 @@ Unificação dos pacotes de protocolo
 Inclusão de dados de projeto no versionamento
 Suporte à dependências de pacotes
 Melhoria na tela de conexão do usuário (seleção de idioma)
-Suporte à usuários, grupos e autorizações
+Implementar utilitário de manutenção de usuários
+Suporte à grupos de usuários
 Suporte a importação/exportação de dados
 Melhoria no programa de ajuda
 Melhoria na notificação de erro
