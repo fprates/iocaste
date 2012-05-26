@@ -12,7 +12,9 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
+import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
@@ -35,6 +37,10 @@ public class Main extends AbstractPage {
     private static final int FILE_IS_EMPTY = 1;
     private static final int INVALID_FILE = 2;
     private static final int INVALID_HEADER = 3;
+    
+    public Main() {
+        export("install", "install");
+    }
     
     /**
      * 
@@ -324,6 +330,15 @@ public class Main extends AbstractPage {
         tfield.setSearchHelp(sh);
         
         item.add(tfield);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final InstallData install(Message message) {
+        return Install.init();
     }
     
     /**
