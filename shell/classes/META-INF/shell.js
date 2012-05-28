@@ -16,7 +16,7 @@ function revertElementDisplay(id) {
 function send(actionname, args, response) {
     var pagetrack = document.getElementById("pagetrack").value;
     var url = "index.html?pagetrack="+pagetrack+"&action="+actionname;
-    var xmlhttp = XMLHttpRequest();
+    var xmlhttp = new XMLHttpRequest();
     
     if (args != null)
         url += args;
