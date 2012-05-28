@@ -20,15 +20,6 @@ public class Main extends AbstractPage {
         export("install", "install");
     }
     
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void bookmark(ViewData view) throws Exception {
-        Bookmark.main(view, this);
-    }
-    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.AbstractPage#help(
@@ -46,26 +37,7 @@ public class Main extends AbstractPage {
      * @return
      */
     public final InstallData install(Message message) {
-        return Install.self();
-    }
-    
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void installcancel(ViewData view) throws Exception {
-        back(view);
-    }
-    
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void installok(ViewData view) throws Exception {
-        Install.installok(view, this);
-        back(view);
+        return Install.init();
     }
     
     /**
@@ -80,20 +52,10 @@ public class Main extends AbstractPage {
         
         cmdline.setLength(80);
         new Button(container, "run");
-        new Button(container, "newentry");
         
         view.setNavbarActionEnabled("help", true);
         view.setFocus("command");
         view.setTitle("task-selector");
-    }
-    
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void newentry(ViewData view) throws Exception {
-        Bookmark.newentry(view, this);
     }
     
     /**
@@ -126,18 +88,6 @@ public class Main extends AbstractPage {
         task = new Documents(this).getObject("TASKS", parsed[0].toUpperCase());
         
         if (task == null) {
-//            if (PackageTool.hasPackage(parsed[0])) {
-//                vdata.setReloadableView(true);
-//                vdata.export("package", parsed[0]);
-//                
-//                if (new PackageTool(this).isInstalled(parsed[0]))
-//                    vdata.redirect(null, "uninstall");
-//                else
-//                    vdata.redirect(null, "install");
-//                
-//                return;
-//            }
-//            
             vdata.message(Const.ERROR, "command.not.found");
             vdata.setFocus("command");
             return;
@@ -170,32 +120,5 @@ public class Main extends AbstractPage {
         
         vdata.setReloadableView(true);
         vdata.redirect(app, page);
-    }
-    
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void save(ViewData view) throws Exception {
-        Bookmark.save(view, this);
-    }
-    
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void uninstallcancel(ViewData view) throws Exception {
-        back(view);
-    }
-    
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void uninstallok(ViewData view) throws Exception {
-        Install.removeok(view, this);
     }
 }

@@ -6,48 +6,14 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.packagetool.common.PackageTool;
-import org.iocaste.protocol.Function;
-import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.ViewData;
 
 public class Install {
     
     /**
      * 
-     * @param view
-     * @param function
-     * @throws Exception
-     */
-    public static final void installok(ViewData view, Function function)
-            throws Exception {
-        String name = view.getParameter("package");
-        
-        new PackageTool(function).install(name);
-        
-        view.message(Const.STATUS, "package.installed.successfully");
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param function
-     * @throws Exception
-     */
-    public static final void removeok(ViewData view, Function function)
-            throws Exception {
-        String name = view.getParameter("package");
-        
-        new PackageTool(function).uninstall(name);
-        
-        view.message(Const.STATUS, "package.uninstalled.successfully");
-    }
-    
-    /**
-     * 
      * @return
      */
-    public static final InstallData self() {
+    public static final InstallData init() {
         DataElement element;
         DocumentModel tasks;
         DocumentModelItem item;
