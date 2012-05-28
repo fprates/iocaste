@@ -117,11 +117,24 @@ public class Table extends AbstractContainer {
      */
     @Override
     public final Element[] getElements() {
+        InputComponent input;
+        SearchHelp sh;
         List<Element> elements = new ArrayList<Element>();
         
         for (TableItem item : itens)
-            for (Element element : item.getElements())
+            for (Element element : item.getElements()) {
                 elements.add(element);
+                
+                if (!element.isDataStorable())
+                    continue;
+                
+                input = (InputComponent)element;
+                sh = input.getSearchHelp();
+                if (sh == null)
+                    continue;
+                
+                elements.add(sh);
+            }
         
         return elements.toArray(new Element[0]);
     }
