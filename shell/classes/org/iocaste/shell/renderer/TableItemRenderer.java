@@ -33,6 +33,7 @@ public class TableItemRenderer extends Renderer {
             Config config) {
         Component component;
         TableColumn column;
+        String text;
         TableColumn[] columns = table.getColumns();
         int i = 0;
         XMLElement tdtag, trtag = new XMLElement("tr");
@@ -62,7 +63,8 @@ public class TableItemRenderer extends Renderer {
                         tdtag.addInner("");
                     } else {
                         component = (Component)element;
-                        tdtag.addInner(component.getText());
+                        text = component.getText();
+                        tdtag.addInner(config.getText(text, text));
                     }
                 } else {
                     renderElement(tags, element, config);

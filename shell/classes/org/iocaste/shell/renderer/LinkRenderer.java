@@ -17,6 +17,7 @@ public class LinkRenderer extends Renderer {
         Map<Parameter, Object> parameters;
         StringBuffer sb;
         XMLElement atag;
+        String text;
         
         if (!link.isEnabled()) {
             atag = new XMLElement("span");
@@ -45,7 +46,8 @@ public class LinkRenderer extends Renderer {
                         append(parameters.get(parameter));
 
         atag.add("href", sb.toString());
-        atag.addInner(link.getText());
+        text = link.getText();
+        atag.addInner(config.getText(text, text));
         
         return atag;
     }
