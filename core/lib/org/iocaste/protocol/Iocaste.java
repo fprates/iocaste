@@ -1,6 +1,7 @@
 package org.iocaste.protocol;
 
 import java.util.Locale;
+import java.util.Properties;
 
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
@@ -86,6 +87,19 @@ public final class Iocaste extends AbstractServiceInterface {
         Message message = new Message();
         
         message.setId("get_locale");
+        
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @return
+     * @throws Exception
+     */
+    public final Properties getSystemInfo() throws Exception {
+        Message message = new Message();
+        
+        message.setId("get_system_info");
         
         return call(message);
     }

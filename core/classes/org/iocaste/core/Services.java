@@ -1,9 +1,11 @@
 package org.iocaste.core;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.IocasteException;
@@ -29,11 +31,12 @@ public class Services extends AbstractFunction {
         export("commit", "commit");
         export("create_user", "createUser");
         export("disconnect", "disconnect");
+        export("get_context", "getContext");
         export("get_host", "getHost");
+        export("get_locale", "getLocale");
+        export("get_system_info", "getSystemInfo");
         export("get_system_parameter", "getSystemParameter");
         export("get_username", "getUsername");
-        export("get_context", "getContext");
-        export("get_locale", "getLocale");
         export("get_users", "getUsers");
         export("is_authorized", "isAuthorized");
         export("is_connected", "isConnected");
@@ -173,6 +176,26 @@ public class Services extends AbstractFunction {
         UserContext context = sessions.get(message.getSessionid());
         
         return (context == null)? null : context.getLocale();
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final Properties getSystemInfo(Message message)
+            throws Exception {
+        Properties dbprops = new Properties();
+        Connection connection = getDBConnection(message.getSessionid());
+        DatabaseMetaData metadata = connection.getMetaData();
+        
+        dbprops.put("db_product_name", metadata.getDatabaseProductName());
+        dbprops.put("db_product_version", metadata.getDatabaseProductVersion());
+        dbprops.put("jdbc_driver_name", metadata.getDriverName());
+        dbprops.put("jdbc_driver_version", metadata.getDriverVersion());
+        
+        return dbprops;
     }
     
     /**
