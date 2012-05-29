@@ -47,10 +47,6 @@ public class Install {
         
         tasks.add(item);
         
-        data.link("INFOSIS", "iocaste-infosis");
-        data.link("TRANSPORT", "iocaste-transport");
-        data.link("EXTERNAL", "iocaste-external");
-        
         return data;
     }
 }
