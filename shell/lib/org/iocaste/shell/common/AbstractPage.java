@@ -27,6 +27,9 @@ public abstract class AbstractPage extends AbstractFunction {
         String[] entry = new Shell(this).popPage(view);
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
+        
+        if (!view.getAppName().equals(entry[0]))
+            view.setReloadableView(true);
     }
     
     /**
