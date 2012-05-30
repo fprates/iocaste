@@ -96,6 +96,19 @@ public class Install {
         item.setDataElement(element);
         group.add(item);
         
+        // contador de associações
+        element = new DataElement();
+        element.setName("TASKS_GROUPS.CURRENT");
+        element.setType(DataType.NUMC);
+        element.setLength(5);
+        
+        item = new DocumentModelItem();
+        item.setName("CURRENT");
+        item.setTableFieldName("CRRNT");
+        item.setDataElement(element);
+        group.add(item);
+        
+        data.addNumberFactory("TSKGROUP");
         /*
          * item do grupo de tarefas
          */
@@ -105,7 +118,7 @@ public class Install {
         element = new DataElement();
         element.setName("TASK_ENTRY.ID");
         element.setType(DataType.NUMC);
-        element.setLength(6);
+        element.setLength(8);
         
         item = new DocumentModelItem();
         item.setName("ID");
@@ -170,7 +183,7 @@ public class Install {
         element = new DataElement();
         element.setName("USER_TASKS_GROUPS.ID");
         element.setType(DataType.NUMC);
-        element.setLength(3);
+        element.setLength(8);
         
         item = new DocumentModelItem();
         item.setName("ID");
