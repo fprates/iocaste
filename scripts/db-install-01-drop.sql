@@ -1,4 +1,7 @@
 \c true
+drop table usrtaskgrp if exists;
+drop table taskentry if exists;
+drop table TASKSGRP if exists;
 drop table msgsrc if exists;
 drop table lang if exists;
 drop table package002 if exists;
