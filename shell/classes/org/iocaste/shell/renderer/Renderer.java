@@ -23,6 +23,7 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.MenuItem;
+import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.Shell;
@@ -86,6 +87,10 @@ public class Renderer {
             
         case EXPAND_BAR:
             tags.addAll(ExpandBarRenderer.render((ExpandBar)container, config));
+            break;
+        
+        case NODE_LIST:
+            tags.add(NodeListRenderer.render((NodeList)container, config));
             break;
             
         case MENU:
