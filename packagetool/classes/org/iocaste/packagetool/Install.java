@@ -254,11 +254,11 @@ public class Install {
         item.setDataElement(element);
         group.add(item);
         
-        // contador de associações
+        // último item do grupo
         element = new DataElement();
         element.setName("TASKS_GROUPS.CURRENT");
         element.setType(DataType.NUMC);
-        element.setLength(5);
+        element.setLength(6);
         
         item = new DocumentModelItem();
         item.setName("CURRENT");
@@ -266,19 +266,8 @@ public class Install {
         item.setDataElement(element);
         group.add(item);
         
-        // último item do grupo
-        element = new DataElement();
-        element.setName("TASKS_GROUPS.CURRENT_TASK");
-        element.setType(DataType.NUMC);
-        element.setLength(8);
-        
-        item = new DocumentModelItem();
-        item.setName("CURRENT_TASK");
-        item.setTableFieldName("CRTSK");
-        item.setDataElement(element);
-        group.add(item);
-        
         data.addNumberFactory("TSKGROUP");
+        
         /*
          * item do grupo de tarefas
          */

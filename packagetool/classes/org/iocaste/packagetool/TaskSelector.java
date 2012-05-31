@@ -17,7 +17,7 @@ public class TaskSelector {
     public static final void addEntry(String taskname, ExtendedObject group,
             State state) throws Exception {
         ExtendedObject object;
-        int entryid = group.getValue("CURRENT_TASK");
+        int entryid = group.getValue("CURRENT");
         int groupid = group.getValue("ID");
         DocumentModel model = state.documents.getModel("TASK_ENTRY");
         
@@ -25,7 +25,7 @@ public class TaskSelector {
             entryid = groupid * 1000;
         
         entryid++;
-        group.setValue("CURRENT_TASK", entryid);
+        group.setValue("CURRENT", entryid);
         state.documents.modify(group);
         
         object = new ExtendedObject(model);
@@ -52,14 +52,9 @@ public class TaskSelector {
         int userid, groupid = 0;
         String groupname = group.getValue("NAME");
         
-        groupid = group.getValue("CURRENT");
-        groupid++;
-        group.setValue("CURRENT", groupid);
-        state.documents.modify(group);
-        
         object = state.documents.getObject("LOGIN", username);
         userid = object.getValue("ID");
-        
+        groupid = group.getValue("ID");
         taskid = (userid * 1000) + groupid;
         model = state.documents.getModel("USER_TASKS_GROUPS");
         
@@ -87,7 +82,6 @@ public class TaskSelector {
         object.setValue("NAME", name);
         object.setValue("ID", id);
         object.setValue("CURRENT", 0);
-        object.setValue("CURRENT_TASK", 0);
         
         state.documents.save(object);
         
