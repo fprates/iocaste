@@ -2,6 +2,7 @@ package org.iocaste.tasksel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -26,9 +27,11 @@ import org.iocaste.shell.common.ViewData;
 public class Main extends AbstractPage {
     private static final byte USER_GROUPS = 0;
     private static final byte ENTRY = 1;
+    private static final byte TASK_TEXT = 2;
     private static final String[] QUERIES = {
         "from USER_TASKS_GROUPS where USERNAME = ?",
-        "from TASK_ENTRY where GROUP = ?"
+        "from TASK_ENTRY where GROUP = ?",
+        "from TASK_ENTRY_TEXT where TASK = ? and LANGUAGE = ?"
     };
     
     public Main() {
@@ -40,19 +43,21 @@ public class Main extends AbstractPage {
      * @return
      * @throws Exception
      */
-    private final List<TasksList> getLists() throws Exception {
+    private final List<TasksList> getLists(Locale locale) throws Exception {
         TasksList list;
         TaskEntry entry;
-        ExtendedObject[] result, iresult;
+        ExtendedObject[] result, iresult, mobject;
         List<TasksList> lists;
-        String groupname;
+        int taskid;
+        String groupname, language, taskname, username = 
+                new Iocaste(this).getUsername();
         Documents documents = new Documents(this);
-        String username = new Iocaste(this).getUsername();
         
         result = documents.select(QUERIES[USER_GROUPS], username);
         if (result == null)
             return null;
         
+        language = locale.toString();
         lists = new ArrayList<TasksList>();
         for (ExtendedObject object : result) {
             groupname = object.getValue("GROUP");
@@ -66,8 +71,17 @@ public class Main extends AbstractPage {
                 continue;
             
             for (ExtendedObject iobject : iresult) {
+                taskname = iobject.getValue("NAME");
+                taskid = iobject.getValue("ID");
+                
                 entry = new TaskEntry();
-                entry.setName((String)iobject.getValue("NAME"));
+                entry.setName(taskname);
+                
+                mobject = documents.selectLimitedTo(QUERIES[TASK_TEXT], 1,
+                        taskid, language);
+                
+                if (mobject != null)
+                    entry.setText((String)mobject[0].getValue("TEXT"));
                 
                 list.add(entry);
             }
@@ -123,22 +137,23 @@ public class Main extends AbstractPage {
         DataForm form;
         DataItem cmdline;
         Parameter groupcommand;
+        String taskname;
         Container container = new Form(view, "main");
         
         /*
          * tarefas pré-definidas
          */
-        lists = getLists();
+        lists = getLists(view.getLocale());
         if (lists != null)
             for (TasksList tasks : lists) {
                 frame = new Frame(container, tasks.getName());
                 group = new NodeList(frame, tasks.getName());
                 for (TaskEntry entry : tasks.getEntries()) {
                     groupcommand = new Parameter(container, "groupcommand");
-                    
-                    link = new Link(group, entry.getName(), "grouprun");
-                    link.setText(entry.getName());
-                    link.add(groupcommand, entry.getName());
+                    taskname = entry.getName();
+                    link = new Link(group, taskname, "grouprun");
+                    link.setText(entry.getText());
+                    link.add(groupcommand, taskname);
                 }
             }
         

@@ -1,5 +1,6 @@
 \c true
 drop table usrtaskgrp if exists;
+drop table taskentrytxt if exists;
 drop table taskentry if exists;
 drop table TASKSGRP if exists;
 drop table msgsrc if exists;
