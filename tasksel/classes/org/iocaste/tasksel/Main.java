@@ -15,17 +15,31 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Frame;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
+import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
+    private static final byte USER_GROUPS = 0;
+    private static final byte ENTRY = 1;
+    private static final String[] QUERIES = {
+        "from USER_TASKS_GROUPS where USERNAME = ?",
+        "from TASK_ENTRY where GROUP = ?"
+    };
     
     public Main() {
         export("install", "install");
     }
     
+    /**
+     * 
+     * @return
+     * @throws Exception
+     */
     private final List<TasksList> getLists() throws Exception {
         TasksList list;
         TaskEntry entry;
@@ -34,14 +48,11 @@ public class Main extends AbstractPage {
         String groupname;
         Documents documents = new Documents(this);
         String username = new Iocaste(this).getUsername();
-        String query = "from USER_TASKS_GROUPS where USERNAME = ?";
         
-        result = documents.select(query, username);
-        
+        result = documents.select(QUERIES[USER_GROUPS], username);
         if (result == null)
             return null;
         
-        query = "from TASK_ENTRY where GROUP = ?";
         lists = new ArrayList<TasksList>();
         for (ExtendedObject object : result) {
             groupname = object.getValue("GROUP");
@@ -50,7 +61,7 @@ public class Main extends AbstractPage {
             list.setName(groupname);
             lists.add(list);
             
-            iresult = documents.select(query, groupname);
+            iresult = documents.select(QUERIES[ENTRY], groupname);
             if (iresult == null)
                 continue;
             
@@ -65,8 +76,17 @@ public class Main extends AbstractPage {
         return lists;
     }
     
-    public final void grouprun(ViewData view) {
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    public final void grouprun(ViewData view) throws Exception {
+        String command = ((InputComponent)view.getElement("groupcommand")).
+                get();
+        String[] parsed = Common.parseCommand(command, view, this);
         
+        Common.run(view, parsed);
     }
     
     /*
@@ -96,24 +116,40 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void main(ViewData view) throws Exception {
+        Link link;
+        Frame frame;
         NodeList group;
         List<TasksList> lists;
+        DataForm form;
+        DataItem cmdline;
+        Parameter groupcommand;
         Container container = new Form(view, "main");
-        DataForm form = new DataForm(container, "selector");
-        DataItem cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
+        
+        /*
+         * tarefas pré-definidas
+         */
+        lists = getLists();
+        if (lists != null)
+            for (TasksList tasks : lists) {
+                frame = new Frame(container, tasks.getName());
+                group = new NodeList(frame, tasks.getName());
+                for (TaskEntry entry : tasks.getEntries()) {
+                    groupcommand = new Parameter(container, "groupcommand");
+                    
+                    link = new Link(group, entry.getName(), "grouprun");
+                    link.setText(entry.getName());
+                    link.add(groupcommand, entry.getName());
+                }
+            }
+        
+        /*
+         * linha de comando
+         */
+        form = new DataForm(container, "selector");
+        cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
         
         cmdline.setLength(80);
         new Button(container, "run");
-        
-        lists = getLists();
-        
-        if (lists != null)
-            for (TasksList tasks : lists) {
-                group = new NodeList(container, tasks.getName());
-                for (TaskEntry entry : tasks.getEntries())
-                    new Link(group, entry.getName(), "grouprun").
-                            setText(entry.getName());
-            }
         
         view.setNavbarActionEnabled("help", true);
         view.setFocus("command");
@@ -126,62 +162,19 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void run(ViewData vdata) throws Exception {
-        String[] parsed, values;
-        ExtendedObject task = null;
+        String[] parsed;
         DataForm form = vdata.getElement("selector");
         DataItem cmdline = form.get("command");
-        String command = cmdline.get(), page = "main", app = null;
+        String command = cmdline.get();
         
         if (Shell.isInitial(command))
             return;
-        else
-            command.trim();
         
         cmdline.set(null);
-        parsed = command.split("\\s");
-        vdata.clearParameters();
-
-        if (parsed[0].length() >= 19) {
-            vdata.message(Const.ERROR, "command.not.found");
-            vdata.setFocus("command");
-            return;
-        }
-        
-        task = new Documents(this).getObject("TASKS", parsed[0].toUpperCase());
-        
-        if (task == null) {
-            vdata.message(Const.ERROR, "command.not.found");
-            vdata.setFocus("command");
-            return;
-        }
-
-        parsed[0] = task.getValue("COMMAND");
-        
-        for (int i = 0; i < parsed.length; i++) {
-            switch (i) {
-            case 0:
-                app = parsed[i];
-                break;
-                
-            default:
-                if (parsed[i].startsWith("@")) {
-                    page = parsed[i].substring(1);
-                    break;
-                }
-                
-                values = parsed[i].split("=");
-                if (values.length < 2)
-                    break;
-                
-                vdata.export(values[0], values[1]);
-                break;
-            }
-        }
-        
-        if (app == null)
+        parsed = Common.parseCommand(command, vdata, this);
+        if (parsed == null)
             return;
         
-        vdata.setReloadableView(true);
-        vdata.redirect(app, page);
+        Common.run(vdata, parsed);
     }
 }
