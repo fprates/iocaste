@@ -76,8 +76,8 @@ public class Main extends AbstractPage {
         Iocaste iocaste = new Iocaste(this);
         Login login = form.getObject().newInstance();
         String[] packages = new String[] {
-                "iocaste-tasksel",
-                "iocaste-packagetool"
+                "iocaste-packagetool",
+                "iocaste-tasksel"
         };
         
         view.clearParameters();
