@@ -14,7 +14,7 @@ public class Install {
         InstallData data = new InstallData();
         
         data.link("SE11", "iocaste-datadict");
-        data.link("DATADICT", "iocaste-datadict");
+        data.addTaskGroup("DEVELOP", "SE11");
         
         messages = new HashMap<String, String>();
         messages.put("datadict-selection", "Selecionar objeto do dicionário");
@@ -60,7 +60,7 @@ public class Install {
         messages.put("choose.one.item",
                 "Marque um item para obter seu detalhe.");
         messages.put("sh.not.found", "Ajuda de pesquisa não encontrada");
-        
+        messages.put("SE11", "Editor de modelos de dados");
         data.setMessages("pt_BR", messages);
         
         authorization = new Authorization("DDICT.EXECUTE");

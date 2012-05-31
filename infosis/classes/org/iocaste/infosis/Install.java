@@ -22,6 +22,7 @@ public class Install {
         messages.put("system-info", "Informações do servidor");
         messages.put("java-properties", "Propriedades do ambiente java");
         messages.put("infosis", "Informações do sistema");
+        messages.put("INFOSIS", "Informações do sistema");
         data.setMessages("pt_BR", messages);
         
         authorization.setObject("APPLICATION");
@@ -30,6 +31,7 @@ public class Install {
         data.add(authorization);
         
         data.link("INFOSIS", "iocaste-infosis");
+        data.addTaskGroup("ADMIN", "INFOSIS");
         
         return data;
     }
