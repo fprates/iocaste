@@ -23,6 +23,7 @@ public class InstallData implements Serializable {
     private List<DataElement> elements;
     private Map<String, Map<String, String>> messages;
     private List<Authorization> authorizations;
+    private Map<String, Set<String>> tasksgroups;
     
     public InstallData() {
         models = new LinkedHashMap<String, DocumentModel>();
@@ -33,6 +34,7 @@ public class InstallData implements Serializable {
         elements = new ArrayList<DataElement>();
         messages = new HashMap<String, Map<String, String>>();
         authorizations = new ArrayList<Authorization>();
+        tasksgroups = new HashMap<String, Set<String>>();
     }
     
     /**
@@ -78,6 +80,27 @@ public class InstallData implements Serializable {
      */
     public final void addNumberFactory(String name) {
         numbers.add(name);
+    }
+    
+    /**
+     * 
+     * @param group
+     * @param task
+     */
+    public final void addTaskGroup(String group, String task) {
+        Set<String> entries;
+        
+        if (!tasksgroups.containsKey(group)) {
+            entries = new HashSet<String>();
+            entries.add(task);
+                
+            tasksgroups.put(group, entries);
+        } else {
+            entries = tasksgroups.get(group);
+        }
+        
+        if (!entries.contains(task))
+            entries.add(task);
     }
     
     /**
@@ -173,6 +196,10 @@ public class InstallData implements Serializable {
      */
     public final SearchHelpData[] getSHData() {
         return shds.toArray(new SearchHelpData[0]);
+    }
+    
+    public final Map<String, Set<String>> getTasksGroups() {
+        return tasksgroups;
     }
     
     /**

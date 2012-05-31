@@ -1,6 +1,7 @@
 package org.iocaste.packagetool;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
@@ -20,6 +21,8 @@ public class Install {
      * @return
      */
     private static final DocumentModel installLanguages(InstallData data) {
+        int i;
+        String tag, country;
         DocumentModelItem item;
         DocumentModel model = data.getModel("LANGUAGES", "LANG", "");
         DataElement element = new DataElement();
@@ -49,10 +52,16 @@ public class Install {
         
         model.add(item);
         
-        data.addValues(model, "pt_BR", 1);
-        data.addValues(model, "en_US", 2);
-        data.addValues(model, "pt_PT", 3);
-        data.addValues(model, "en_GB", 4);
+        i = 1;
+        for (Locale locale : Locale.getAvailableLocales()) {
+            country = locale.getCountry();
+            if (country.length() == 0)
+                continue;
+            
+            tag = new StringBuilder(locale.getLanguage()).append("_").
+                    append(country).toString();
+            data.addValues(model, tag, i++);
+        }
         
         return model;
     }
@@ -166,6 +175,7 @@ public class Install {
         
         data.setMessages("pt_BR", messages);
         data.link("PACKAGE", "iocaste-packagetool");
+        data.addTaskGroup("ADMIN", "PACKAGE");
         
         return data;
     }

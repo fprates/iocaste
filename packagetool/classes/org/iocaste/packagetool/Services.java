@@ -3,6 +3,7 @@ package org.iocaste.packagetool;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.DataElement;
@@ -37,6 +38,7 @@ public class Services extends AbstractFunction {
         ExtendedObject header;
         DocumentModel tasks;
         Map<String, String> links;
+        Map<String, Set<String>> tasksgroups;
         Map<String, Map<String, String>> messages;
         DocumentModel[] models;
         SearchHelpData[] shdata;
@@ -74,6 +76,10 @@ public class Services extends AbstractFunction {
         links = state.data.getLinks();
         if (links.size() > 0)
             installLinks(links, tasks, state);
+        
+        tasksgroups = state.data.getTasksGroups();
+        if (tasksgroups.size() > 0)
+            installTasksGroups(tasksgroups, state);
         
         /*
          * registra objetos de numeração
@@ -283,6 +289,32 @@ public class Services extends AbstractFunction {
                 shlib.assign(state.shm.get(shname));
 
             Registry.add(shname, "SH", state);
+        }
+    }
+    
+    /**
+     * 
+     * @param tasksgroups
+     * @param state
+     * @throws Exception
+     */
+    private final void installTasksGroups(Map<String, Set<String>> tasksgroups,
+            State state) throws Exception {
+        Set<String> itens;
+        ExtendedObject group;
+        
+        for (String groupname : tasksgroups.keySet()) {
+            group = TaskSelector.getGroup(groupname, state);
+            if (group == null) {
+                group = TaskSelector.createGroup(groupname, state);
+                TaskSelector.assignGroup(group, "ADMIN", state);
+            }
+
+            itens = tasksgroups.get(groupname);
+            for (String taskname : itens)
+                TaskSelector.addEntry(taskname, group, state);
+            
+            Registry.add(groupname, "TSKGROUP", state);
         }
     }
     
