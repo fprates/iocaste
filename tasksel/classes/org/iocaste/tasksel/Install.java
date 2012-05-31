@@ -86,7 +86,7 @@ public class Install {
         
         // índice do grupo
         element = new DataElement();
-        element.setName("TASKS_GROUPS.INDEX");
+        element.setName("TASKS_GROUPS.ID");
         element.setType(DataType.NUMC);
         element.setLength(3);
         
@@ -105,6 +105,18 @@ public class Install {
         item = new DocumentModelItem();
         item.setName("CURRENT");
         item.setTableFieldName("CRRNT");
+        item.setDataElement(element);
+        group.add(item);
+        
+        // último item do grupo
+        element = new DataElement();
+        element.setName("TASKS_GROUPS.CURRENT_TASK");
+        element.setType(DataType.NUMC);
+        element.setLength(8);
+        
+        item = new DocumentModelItem();
+        item.setName("CURRENT_TASK");
+        item.setTableFieldName("CRTSK");
         item.setDataElement(element);
         group.add(item);
         
