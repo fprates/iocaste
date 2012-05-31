@@ -39,7 +39,6 @@ public class Services extends AbstractFunction {
         DocumentModel tasks;
         Map<String, String> links;
         Map<String, Set<String>> tasksgroups;
-        Map<String, Map<String, String>> messages;
         DocumentModel[] models;
         SearchHelpData[] shdata;
         Authorization[] authorizations;
@@ -91,9 +90,9 @@ public class Services extends AbstractFunction {
         /*
          * registra mensagens
          */
-        messages = state.data.getMessages();
-        if (messages.size() > 0)
-            installMessages(messages, state);
+        state.messages = state.data.getMessages();
+        if (state.messages.size() > 0)
+            installMessages(state);
         
         authorizations = state.data.getAuthorizations();
         if (authorizations.length > 0)
@@ -166,9 +165,7 @@ public class Services extends AbstractFunction {
      * @param state
      * @throws Exception
      */
-    private final void installMessages(
-            Map<String, Map<String, String>> msgsource, State state)
-                    throws Exception {
+    private final void installMessages(State state) throws Exception {
         long index;
         int langcode;
         String locale;
@@ -177,7 +174,7 @@ public class Services extends AbstractFunction {
         DocumentModel msgmodel = state.documents.getModel("MESSAGES");
         ExtendedObject omessage = new ExtendedObject(msgmodel);
         
-        for (String language : msgsource.keySet()) {
+        for (String language : state.messages.keySet()) {
             langcode = 0;
             for (ExtendedObject olanguage : languages) {
                 locale = olanguage.getValue("LOCALE");
@@ -187,7 +184,7 @@ public class Services extends AbstractFunction {
                 }
             }
             
-            messages = msgsource.get(language);
+            messages = state.messages.get(language);
             index = (langcode * 1000000000) + (state.pkgid / 100);
             for (String msgcode : messages.keySet()) {
                 omessage.setValue("INDEX", index++);
@@ -304,7 +301,7 @@ public class Services extends AbstractFunction {
     private final void installTasksGroups(Map<String, Set<String>> tasksgroups,
             State state) throws Exception {
         Set<String> itens;
-        ExtendedObject group;
+        ExtendedObject task, group;
         
         for (String groupname : tasksgroups.keySet()) {
             group = TaskSelector.getGroup(groupname, state);
@@ -316,7 +313,10 @@ public class Services extends AbstractFunction {
 
             itens = tasksgroups.get(groupname);
             for (String taskname : itens) {
-                TaskSelector.addEntry(taskname, group, state);
+                task = TaskSelector.addEntry(taskname, group, state);
+                if (state.messages.size() > 0)
+                    TaskSelector.addEntryMessage(task, group, state);
+                
                 Registry.add(taskname, "TSKITEM", state);
             }
         }
@@ -421,4 +421,5 @@ class State {
     public Map<String, DocumentModelItem> shm;
     public InstallData data;
     public Function function;
+    public Map<String, Map<String, String>> messages;
 }

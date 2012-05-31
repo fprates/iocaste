@@ -1,6 +1,7 @@
 package org.iocaste.packagetool;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
@@ -12,10 +13,11 @@ public class TaskSelector {
      * @param taskname
      * @param group
      * @param state
+     * @return
      * @throws Exception
      */
-    public static final void addEntry(String taskname, ExtendedObject group,
-            State state) throws Exception {
+    public static final ExtendedObject addEntry(String taskname,
+            ExtendedObject group, State state) throws Exception {
         ExtendedObject object;
         int entryid = group.getValue("CURRENT");
         int groupid = group.getValue("ID");
@@ -34,6 +36,43 @@ public class TaskSelector {
         object.setValue("GROUP", group.getValue("NAME"));
         
         state.documents.save(object);
+        
+        return object;
+    }
+    
+    /**
+     * 
+     * @param task
+     * @param group
+     * @param state
+     * @throws Exception
+     */
+    public static final void addEntryMessage(ExtendedObject task,
+            ExtendedObject group, State state) throws Exception {
+        String name;
+        DocumentModel model;
+        ExtendedObject object;
+        Map<String, String> messages;
+        int taskid = task.getValue("ID");
+        int msgid = taskid * 100;
+        
+        model = state.documents.getModel("TASK_ENTRY_TEXT");
+        name = task.getValue("NAME");
+        
+        for (String locale : state.messages.keySet()) {
+            messages = state.messages.get(locale);
+            
+            if (!messages.containsKey(name))
+                continue;
+            
+            msgid++;
+            object = new ExtendedObject(model);
+            object.setValue("ID", msgid);
+            object.setValue("TASK", taskid);
+            object.setValue("LANGUAGE", locale);
+            object.setValue("TEXT", messages.get(name));
+            state.documents.save(object);
+        }
     }
     
     /**

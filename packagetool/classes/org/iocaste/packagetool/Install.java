@@ -22,18 +22,20 @@ public class Install {
      * @throws Exception
      */
     public static final InstallData init(Function function) throws Exception {
-        DocumentModel group;
         Map<String, String> messages;
         InstallData data = new InstallData();
-        DocumentModel languages = installLanguages(data);
-        
+        Models models = new Models();
+
+        installLanguages(data, models);
         installTasks(data);
-        installMessages(data, languages, function);
-        group = installTasksGroups(data);
-        installUserTasksGroups(data, group, function);
+        installMessages(data, models, function);
+        installTasksGroups(data, models);
+        installUserTasksGroups(data, models, function);
         
         messages = new HashMap<String, String>();
         messages.put("package-manager", "Gerenciador de pacotes");
+        messages.put("PACKAGE", "Gerenciador de pacotes");
+        messages.put("ADMIN", "Administração");
         
         data.setMessages("pt_BR", messages);
         data.link("PACKAGE", "iocaste-packagetool");
@@ -47,7 +49,8 @@ public class Install {
      * @param data
      * @return
      */
-    private static final DocumentModel installLanguages(InstallData data) {
+    private static final void installLanguages(InstallData data, Models models)
+    {
         int i;
         String tag, country;
         DocumentModelItem item;
@@ -90,18 +93,18 @@ public class Install {
             data.addValues(model, tag, i++);
         }
         
-        return model;
+        models.languages = model;
     }
     
     /**
      * 
      * @param data
-     * @param languages
+     * @param models
      * @param function
      * @throws Exception
      */
-    private static final void installMessages(InstallData data,
-            DocumentModel languages, Function function) throws Exception {
+    private static final void installMessages(InstallData data, Models models,
+            Function function) throws Exception {
         Documents documents;
         DocumentModelItem item, reference;
         DocumentModel model = data.getModel("MESSAGES", "MSGSRC", "");
@@ -141,7 +144,7 @@ public class Install {
         /*
          * localização
          */
-        reference = languages.getModelItem("LOCALE");
+        reference = models.languages.getModelItem("LOCALE");
         element = reference.getDataElement();
         
         item = new DocumentModelItem();
@@ -182,8 +185,14 @@ public class Install {
         item.setTableFieldName("MSGTX");
         
         model.add(item);
+        
+        models.messages = model;
     }
     
+    /**
+     * 
+     * @param data
+     */
     private static final void installTasks(InstallData data) {
         DataElement element;
         DocumentModel tasks;
@@ -218,10 +227,17 @@ public class Install {
         tasks.add(item);
     }
     
-    private static final DocumentModel installTasksGroups(InstallData data) {
+    /**
+     * 
+     * @param data
+     * @param models
+     * @return
+     */
+    private static final void installTasksGroups(InstallData data,
+            Models models) {
         DataElement element;
         DocumentModel model, group;
-        DocumentModelItem item, groupname;
+        DocumentModelItem item, groupname, entryid, language, text;
         
         /*
          * grupos de tarefas
@@ -279,12 +295,12 @@ public class Install {
         element.setType(DataType.NUMC);
         element.setLength(8);
         
-        item = new DocumentModelItem();
-        item.setName("ID");
-        item.setTableFieldName("IDENT");
-        item.setDataElement(element);
-        model.add(item);
-        model.add(new DocumentModelKey(item));
+        entryid = new DocumentModelItem();
+        entryid.setName("ID");
+        entryid.setTableFieldName("IDENT");
+        entryid.setDataElement(element);
+        model.add(entryid);
+        model.add(new DocumentModelKey(entryid));
         
         // nome da entrada
         element = new DataElement();
@@ -309,29 +325,68 @@ public class Install {
         item.setReference(groupname);
         model.add(item);
         
-//        
-//        /*
-//         * textos
-//         */
-//        model = data.getModel("TASK_ENTRY_TEXT", "TASKENTRYTXT", null);
-//        
-//        element = new DataElement();
-//        element.setName("TASKS_GROUPS.NAME");
-//        element.setType(DataType.CHAR);
-//        element.setLength(12);
-//        element.setUpcase(true);
-//        
-//        item = new DocumentModelItem();
-//        item.setTableFieldName("ID");
-//        item.setDataElement(element);
-//        model.add(item);
-//        model.add(new DocumentModelKey(item));
         
-        return group;
+        /*
+         * textos
+         */
+        model = data.getModel("TASK_ENTRY_TEXT", "TASKENTRYTXT", null);
+
+        // identificador
+        element = new DataElement();
+        element.setName("TASK_ENTRY_TEXT.ID");
+        element.setType(DataType.NUMC);
+        element.setLength(10);
+        
+        item = new DocumentModelItem();
+        item.setName("ID");
+        item.setTableFieldName("IDENT");
+        item.setDataElement(element);
+        model.add(item);
+        model.add(new DocumentModelKey(item));
+
+        // tarefa do grupo
+        element = entryid.getDataElement();
+        
+        item = new DocumentModelItem();
+        item.setName("TASK");
+        item.setTableFieldName("ENTRY");
+        item.setDataElement(element);
+        item.setReference(entryid);
+        model.add(item);
+        
+        // localização
+        language = models.languages.getModelItem("LOCALE");
+        element = language.getDataElement();
+        
+        item = new DocumentModelItem();
+        item.setName("LANGUAGE");
+        item.setTableFieldName("LANGU");
+        item.setDataElement(element);
+        item.setReference(language);
+        model.add(item);
+        
+        // texto
+        text = models.messages.getModelItem("TEXT");
+        element = text.getDataElement();
+        
+        item = new DocumentModelItem();
+        item.setName("TEXT");
+        item.setTableFieldName("TEXT");
+        item.setDataElement(element);
+        model.add(item);
+        
+        models.group = group;
     }
     
+    /**
+     * 
+     * @param data
+     * @param models
+     * @param function
+     * @throws Exception
+     */
     private static final void installUserTasksGroups(InstallData data,
-            DocumentModel group, Function function) throws Exception {
+            Models models, Function function) throws Exception {
         DataElement element;
         DocumentModel model;
         DocumentModelItem item, username, groupname;
@@ -365,7 +420,7 @@ public class Install {
         model.add(new DocumentModelKey(item));
         
         // grupo
-        groupname = group.getModelItem("NAME");
+        groupname = models.group.getModelItem("NAME");
         element = groupname.getDataElement();
         
         item = new DocumentModelItem();
@@ -374,31 +429,9 @@ public class Install {
         item.setDataElement(element);
         item.setReference(groupname);
         model.add(item);
-        
-//        // id entrada
-//        element = new DataElement();
-//        element.setName("TASKS_GROUPS.NAME");
-//        element.setType(DataType.CHAR);
-//        element.setLength(12);
-//        element.setUpcase(true);
-//        
-//        item = new DocumentModelItem();
-//        item.setName("NAME");
-//        item.setTableFieldName("ENTRY");
-//        item.setDataElement(element);
-//        model.add(item);
-//        
-//        // texto
-//        element = new DataElement();
-//        element.setName("TASKS_GROUPS.NAME");
-//        element.setType(DataType.CHAR);
-//        element.setLength(12);
-//        element.setUpcase(true);
-//        
-//        item = new DocumentModelItem();
-//        item.setName("TEXT");
-//        item.setTableFieldName("TEXT");
-//        item.setDataElement(element);
-//        model.add(item);
     }
+}
+
+class Models {
+    public DocumentModel languages, messages, group;
 }
