@@ -14,6 +14,33 @@ import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Function;
 
 public class Install {
+    
+    /**
+     * 
+     * @param function
+     * @return
+     * @throws Exception
+     */
+    public static final InstallData init(Function function) throws Exception {
+        DocumentModel group;
+        Map<String, String> messages;
+        InstallData data = new InstallData();
+        DocumentModel languages = installLanguages(data);
+        
+        installTasks(data);
+        installMessages(data, languages, function);
+        group = installTasksGroups(data);
+        installUserTasksGroups(data, group, function);
+        
+        messages = new HashMap<String, String>();
+        messages.put("package-manager", "Gerenciador de pacotes");
+        
+        data.setMessages("pt_BR", messages);
+        data.link("PACKAGE", "iocaste-packagetool");
+        data.addTaskGroup("ADMIN", "PACKAGE");
+        
+        return data;
+    }
 
     /**
      * 
@@ -157,26 +184,232 @@ public class Install {
         model.add(item);
     }
     
-    /**
-     * 
-     * @param function
-     * @return
-     * @throws Exception
-     */
-    public static final InstallData self(Function function) throws Exception {
-        Map<String, String> messages;
-        InstallData data = new InstallData();
-        DocumentModel languages = installLanguages(data);
+    private static final void installTasks(InstallData data) {
+        DataElement element;
+        DocumentModel tasks;
+        DocumentModelItem item;
         
-        installMessages(data, languages, function);
+        tasks = data.getModel("TASKS", "TASKS", "");
+
+        element = new DataElement();
+        element.setName("TASKS.NAME");
+        element.setLength(18);
+        element.setType(DataType.CHAR);
+        element.setUpcase(true);
         
-        messages = new HashMap<String, String>();
-        messages.put("package-manager", "Gerenciador de pacotes");
+        item = new DocumentModelItem();
+        item.setName("NAME");
+        item.setTableFieldName("TSKNM");
+        item.setDataElement(element);
         
-        data.setMessages("pt_BR", messages);
-        data.link("PACKAGE", "iocaste-packagetool");
-        data.addTaskGroup("ADMIN", "PACKAGE");
+        tasks.add(item);
+        tasks.add(new DocumentModelKey(item));
         
-        return data;
+        element = new DataElement();
+        element.setName("TASKS.COMMAND");
+        element.setLength(128);
+        element.setType(DataType.CHAR);
+        
+        item = new DocumentModelItem();
+        item.setName("COMMAND");
+        item.setTableFieldName("CMDLN");
+        item.setDataElement(element);
+        
+        tasks.add(item);
+    }
+    
+    private static final DocumentModel installTasksGroups(InstallData data) {
+        DataElement element;
+        DocumentModel model, group;
+        DocumentModelItem item, groupname;
+        
+        /*
+         * grupos de tarefas
+         */
+        group = data.getModel("TASKS_GROUPS", "TASKSGRP", "");
+        
+        // nome do grupo
+        element = new DataElement();
+        element.setName("TASKS_GROUPS.NAME");
+        element.setType(DataType.CHAR);
+        element.setLength(12);
+        element.setUpcase(true);
+        
+        groupname = new DocumentModelItem();
+        groupname.setName("NAME");
+        groupname.setTableFieldName("GRPID");
+        groupname.setDataElement(element);
+        group.add(groupname);
+        group.add(new DocumentModelKey(groupname));
+        
+        // índice do grupo
+        element = new DataElement();
+        element.setName("TASKS_GROUPS.ID");
+        element.setType(DataType.NUMC);
+        element.setLength(3);
+        
+        item = new DocumentModelItem();
+        item.setName("ID");
+        item.setTableFieldName("INDEX");
+        item.setDataElement(element);
+        group.add(item);
+        
+        // contador de associações
+        element = new DataElement();
+        element.setName("TASKS_GROUPS.CURRENT");
+        element.setType(DataType.NUMC);
+        element.setLength(5);
+        
+        item = new DocumentModelItem();
+        item.setName("CURRENT");
+        item.setTableFieldName("CRRNT");
+        item.setDataElement(element);
+        group.add(item);
+        
+        // último item do grupo
+        element = new DataElement();
+        element.setName("TASKS_GROUPS.CURRENT_TASK");
+        element.setType(DataType.NUMC);
+        element.setLength(8);
+        
+        item = new DocumentModelItem();
+        item.setName("CURRENT_TASK");
+        item.setTableFieldName("CRTSK");
+        item.setDataElement(element);
+        group.add(item);
+        
+        data.addNumberFactory("TSKGROUP");
+        /*
+         * item do grupo de tarefas
+         */
+        model = data.getModel("TASK_ENTRY", "TASKENTRY", null);
+        
+        // identificador
+        element = new DataElement();
+        element.setName("TASK_ENTRY.ID");
+        element.setType(DataType.NUMC);
+        element.setLength(8);
+        
+        item = new DocumentModelItem();
+        item.setName("ID");
+        item.setTableFieldName("IDENT");
+        item.setDataElement(element);
+        model.add(item);
+        model.add(new DocumentModelKey(item));
+        
+        // nome da entrada
+        element = new DataElement();
+        element.setName("TASK_ENTRY.NAME");
+        element.setType(DataType.CHAR);
+        element.setLength(12);
+        element.setUpcase(true);
+        
+        item = new DocumentModelItem();
+        item.setName("NAME");
+        item.setTableFieldName("ENTRY");
+        item.setDataElement(element);
+        model.add(item);
+        
+        // grupo
+        element = groupname.getDataElement();
+        
+        item = new DocumentModelItem();
+        item.setName("GROUP");
+        item.setTableFieldName("GRPID");
+        item.setDataElement(element);
+        item.setReference(groupname);
+        model.add(item);
+        
+//        
+//        /*
+//         * textos
+//         */
+//        model = data.getModel("TASK_ENTRY_TEXT", "TASKENTRYTXT", null);
+//        
+//        element = new DataElement();
+//        element.setName("TASKS_GROUPS.NAME");
+//        element.setType(DataType.CHAR);
+//        element.setLength(12);
+//        element.setUpcase(true);
+//        
+//        item = new DocumentModelItem();
+//        item.setTableFieldName("ID");
+//        item.setDataElement(element);
+//        model.add(item);
+//        model.add(new DocumentModelKey(item));
+        
+        return group;
+    }
+    
+    private static final void installUserTasksGroups(InstallData data,
+            DocumentModel group, Function function) throws Exception {
+        DataElement element;
+        DocumentModel model;
+        DocumentModelItem item, username, groupname;
+        
+        model = data.getModel("USER_TASKS_GROUPS", "USRTASKGRP", null);
+        
+        // identificador
+        element = new DataElement();
+        element.setName("USER_TASKS_GROUPS.ID");
+        element.setType(DataType.NUMC);
+        element.setLength(8);
+        
+        item = new DocumentModelItem();
+        item.setName("ID");
+        item.setTableFieldName("IDENT");
+        item.setDataElement(element);
+        model.add(item);
+        model.add(new DocumentModelKey(item));
+        
+        // usuário
+        username = new Documents(function).getModel("LOGIN").
+                getModelItem("USERNAME");
+        element = username.getDataElement();
+        
+        item = new DocumentModelItem();
+        item.setName("USERNAME");
+        item.setTableFieldName("UNAME");
+        item.setDataElement(element);
+        item.setReference(username);
+        model.add(item);
+        model.add(new DocumentModelKey(item));
+        
+        // grupo
+        groupname = group.getModelItem("NAME");
+        element = groupname.getDataElement();
+        
+        item = new DocumentModelItem();
+        item.setName("GROUP");
+        item.setTableFieldName("GRPID");
+        item.setDataElement(element);
+        item.setReference(groupname);
+        model.add(item);
+        
+//        // id entrada
+//        element = new DataElement();
+//        element.setName("TASKS_GROUPS.NAME");
+//        element.setType(DataType.CHAR);
+//        element.setLength(12);
+//        element.setUpcase(true);
+//        
+//        item = new DocumentModelItem();
+//        item.setName("NAME");
+//        item.setTableFieldName("ENTRY");
+//        item.setDataElement(element);
+//        model.add(item);
+//        
+//        // texto
+//        element = new DataElement();
+//        element.setName("TASKS_GROUPS.NAME");
+//        element.setType(DataType.CHAR);
+//        element.setLength(12);
+//        element.setUpcase(true);
+//        
+//        item = new DocumentModelItem();
+//        item.setName("TEXT");
+//        item.setTableFieldName("TEXT");
+//        item.setDataElement(element);
+//        model.add(item);
     }
 }
