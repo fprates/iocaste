@@ -16,6 +16,9 @@ public class Messages {
         messages.put("invalid.value", "Valor inválido.");
         messages.put("not.connected", "Não conectado");
         messages.put("user.not.authorized", "Usuário não autorizado.");
+        messages.put("home", "Inicial");
+        messages.put("back", "Voltar");
+        messages.put("help", "Ajuda");
         
         msgsource = new MessageSource();
         msgsource.setMessages(messages);
