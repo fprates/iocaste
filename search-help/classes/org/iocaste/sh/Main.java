@@ -11,6 +11,7 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -18,6 +19,19 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
+    
+    /**
+     * 
+     * @param controldata
+     * @param view
+     * @throws Exception 
+     */
+    @Override
+    public void back(ViewData view) throws Exception {
+        String[] entry = new Shell(this).popPage(view);
+        view.redirect(entry[0], entry[1]);
+        view.dontPushPage();
+    }
     
     /**
      * 
