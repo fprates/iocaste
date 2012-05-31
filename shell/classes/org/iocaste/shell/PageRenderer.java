@@ -34,6 +34,7 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.SearchHelp;
@@ -51,11 +52,13 @@ public class PageRenderer extends HttpServlet implements Function {
     private String sessionid, servername, sessionconnector;
     private HtmlRenderer renderer;
     private Map<String, Map<String, String>> style;
+    private MessageSource msgsource;
     
     public PageRenderer() {
         renderer = new HtmlRenderer();
         style = null;
         sessionconnector = "iocaste-login";
+        msgsource = Messages.getMessages();
     }
     
     /**
@@ -832,6 +835,7 @@ public class PageRenderer extends HttpServlet implements Function {
             style = Style.get("DEFAULT", this);
 
         username = pagectx.getUsername();
+        renderer.setMessageSource(msgsource);
         renderer.setMessageText(viewmessage);
         renderer.setMessageType(messagetype);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);

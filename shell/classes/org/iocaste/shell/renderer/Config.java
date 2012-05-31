@@ -10,7 +10,7 @@ import org.iocaste.shell.common.MessageSource;
 
 public class Config {
     private String currentaction, pagetrack;
-    private MessageSource messages;
+    private List<MessageSource> msgsources;
     private Set<String> actions;
     private List<String> onload; 
     private List<XMLElement> toform;
@@ -19,6 +19,7 @@ public class Config {
         actions = new HashSet<String>();
         onload = new ArrayList<String>();
         toform = new ArrayList<XMLElement>();
+        msgsources = new ArrayList<MessageSource>();
     }
     
     /**
@@ -27,6 +28,17 @@ public class Config {
      */
     public final void addAction(String action) {
         actions.add(action);
+    }
+    
+    /**
+     * 
+     * @param messages
+     */
+    public final void addMessageSource(MessageSource messages) {
+        if (messages == null)
+            return;
+        
+        msgsources.add(messages);
     }
     
     /**
@@ -72,8 +84,8 @@ public class Config {
      * 
      * @return
      */
-    public final MessageSource getMessageSource() {
-        return messages;
+    public final MessageSource[] getMessageSources() {
+        return msgsources.toArray(new MessageSource[0]);
     }
     
     /**
@@ -99,10 +111,20 @@ public class Config {
      * @return
      */
     public final String getText(String tag, String fail) {
+        String message;
+        
         if (tag == null)
             return fail;
         
-        return messages.get(tag, tag);
+        for (MessageSource messages : msgsources) {
+            message = messages.get(tag);
+            if (message == null)
+                continue;
+            
+            return message;
+        }
+        
+        return tag;
     }
     
     /**
@@ -119,14 +141,6 @@ public class Config {
      */
     public final void setCurrentAction(String currentaction) {
         this.currentaction = currentaction;
-    }
-    
-    /**
-     * 
-     * @param messages
-     */
-    public final void setMessageSource(MessageSource messages) {
-        this.messages = messages;
     }
     
     /**

@@ -25,6 +25,7 @@ public class HtmlRenderer {
     private Set<String> actions;
     private int logid;
     private Map<String, Map<String, String>> csselements;
+    private MessageSource msgsource;
     
     public HtmlRenderer() {
         String line;
@@ -199,13 +200,11 @@ public class HtmlRenderer {
         XMLElement bodytag = new XMLElement("body");
         Config config = new Config();
         
-        config.setMessageSource(vdata.getMessages());
+        config.addMessageSource(vdata.getMessages());
+        config.addMessageSource(msgsource);
         config.setPageTrack(new StringBuffer(vdata.getAppName()).append(".").
                 append(vdata.getPageName()).append(":").append(logid).
                 toString());
-        
-        if (config.getMessageSource() == null)
-            config.setMessageSource(new MessageSource());
         
         html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
                 "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
@@ -244,6 +243,14 @@ public class HtmlRenderer {
     public final void setCssElements(Map<String,
             Map<String, String>> csselements) {
         this.csselements = csselements;
+    }
+    
+    /**
+     * 
+     * @param msgsource
+     */
+    public final void setMessageSource(MessageSource msgsource) {
+        this.msgsource = msgsource;
     }
     
     /**
