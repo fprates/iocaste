@@ -70,18 +70,6 @@ public class Services extends AbstractFunction {
             installModels(models, state);
         
         /*
-         * registra tarefas
-         */
-        tasks = state.documents.getModel("TASKS");
-        links = state.data.getLinks();
-        if (links.size() > 0)
-            installLinks(links, tasks, state);
-        
-        tasksgroups = state.data.getTasksGroups();
-        if (tasksgroups.size() > 0)
-            installTasksGroups(tasksgroups, state);
-        
-        /*
          * registra objetos de numeração
          */
         for (String factory : state.data.getNumberFactories()) {
@@ -100,6 +88,9 @@ public class Services extends AbstractFunction {
         for (DataElement element : state.data.getElements())
             Registry.add(element.getName(), "DATA_ELEMENT", state);
         
+        /*
+         * registra mensagens
+         */
         messages = state.data.getMessages();
         if (messages.size() > 0)
             installMessages(messages, state);
@@ -107,6 +98,18 @@ public class Services extends AbstractFunction {
         authorizations = state.data.getAuthorizations();
         if (authorizations.length > 0)
             installAuthorizations(authorizations, state);
+        
+        /*
+         * registra tarefas
+         */
+        tasks = state.documents.getModel("TASKS");
+        links = state.data.getLinks();
+        if (links.size() > 0)
+            installLinks(links, tasks, state);
+        
+        tasksgroups = state.data.getTasksGroups();
+        if (tasksgroups.size() > 0)
+            installTasksGroups(tasksgroups, state);
         
         state.documents.commit();
         
@@ -308,13 +311,14 @@ public class Services extends AbstractFunction {
             if (group == null) {
                 group = TaskSelector.createGroup(groupname, state);
                 TaskSelector.assignGroup(group, "ADMIN", state);
+                Registry.add(groupname, "TSKGROUP", state);
             }
 
             itens = tasksgroups.get(groupname);
-            for (String taskname : itens)
+            for (String taskname : itens) {
                 TaskSelector.addEntry(taskname, group, state);
-            
-            Registry.add(groupname, "TSKGROUP", state);
+                Registry.add(taskname, "TSKITEM", state);
+            }
         }
     }
     
