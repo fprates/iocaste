@@ -33,6 +33,8 @@ public class Install {
         installUserTasksGroups(data, models, function);
         
         messages = new HashMap<String, String>();
+        messages.put("package.installed", "Pacote instalado com sucesso.");
+        messages.put("package.uninstalled", "Pacote desinstalado com sucesso.");
         messages.put("package-manager", "Gerenciador de pacotes");
         messages.put("PACKAGE", "Gerenciador de pacotes");
         messages.put("ADMIN", "Administração");
@@ -417,7 +419,6 @@ public class Install {
         item.setDataElement(element);
         item.setReference(username);
         model.add(item);
-        model.add(new DocumentModelKey(item));
         
         // grupo
         groupname = models.group.getModelItem("NAME");

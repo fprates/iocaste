@@ -7,6 +7,18 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class TaskSelector {
+    private static final byte DEL_USR_TSK_GRP = 0;
+    private static final byte DEL_TASK = 1;
+    private static final byte DEL_TASK_TEXT = 2;
+    private static final byte DEL_TSK_GRP = 3;
+    private static final byte TASK = 4;
+    private static final String[] QUERIES = {
+        "delete from USER_TASKS_GROUPS where GROUP = ?",
+        "delete from TASK_ENTRY where ID = ?",
+        "delete from TASK_ENTRY_TEXT where TASK = ?",
+        "delete from TASKS_GROUPS where NAME = ?",
+        "from TASK_ENTRY where NAME = ?"
+    };
     
     /**
      * 
@@ -137,5 +149,37 @@ public class TaskSelector {
     public static final ExtendedObject getGroup(String name, State state)
             throws Exception {
         return state.documents.getObject("TASKS_GROUPS", name);
+    }
+    
+    /**
+     * 
+     * @param groupname
+     * @param state
+     * @throws Exception
+     */
+    public static final void removeGroup(String groupname, State state)
+            throws Exception {
+        state.documents.update(QUERIES[DEL_USR_TSK_GRP], groupname);
+        state.documents.update(QUERIES[DEL_TSK_GRP], groupname);
+    }
+    
+    /**
+     * 
+     * @param taskname
+     * @param state
+     * @throws Exception
+     */
+    public static final void removeTask(String taskname, State state)
+            throws Exception {
+        int taskid;
+        ExtendedObject[] task = state.documents.
+                selectLimitedTo(QUERIES[TASK], 1, taskname);
+        
+        if (task == null)
+            return;
+        
+        taskid = task[0].getValue("ID");
+        state.documents.update(QUERIES[DEL_TASK_TEXT], taskid);
+        state.documents.update(QUERIES[DEL_TASK], taskid);
     }
 }

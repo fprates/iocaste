@@ -345,10 +345,12 @@ public class Services extends AbstractFunction {
         String query, modeltype, name;
         ExtendedObject object;
         SHLib shlib = new SHLib(this);
-        Documents documents = new Documents(this);
         Authority authority = new Authority(this);
         String pkgname = message.getString("package");
         ExtendedObject[] objects = Registry.getEntries(pkgname, this);
+        State state = new State();
+        
+        state.documents = new Documents(this);
         
         for (int i = objects.length; i > 0; i--) {
             object = objects[i - 1];
@@ -358,12 +360,12 @@ public class Services extends AbstractFunction {
             if (modeltype.equals("MESSAGE")) {
                 name = object.getValue("PACKAGE");
                 query = "delete from MESSAGES where PACKAGE = ?";
-                documents.update(query, name);
+                state.documents.update(query, name);
                 
                 query = "delete from PACKAGE_ITEM where PACKAGE = ? and " +
                 		"MODEL = ?";
-                documents.update(query, name, "MESSAGE");
-                documents.delete(object);
+                state.documents.update(query, name, "MESSAGE");
+                state.documents.delete(object);
                 
                 continue;
             }
@@ -371,46 +373,60 @@ public class Services extends AbstractFunction {
             if (modeltype.equals("SH")) {
                 shlib.unassign(name);
                 shlib.remove(name);
-                documents.delete(object);
+                state.documents.delete(object);
                 
                 continue;
             }
             
             if (modeltype.equals("TASK")) {
                 query = "delete from TASKS where NAME = ?";
-                documents.update(query, name);
-                documents.delete(object);
+                state.documents.update(query, name);
+                state.documents.delete(object);
                 
                 continue;
             }
             
             if (modeltype.equals("MODEL")) {
-                documents.removeModel(name);
-                documents.delete(object);
+                state.documents.removeModel(name);
+                state.documents.delete(object);
                 
                 continue;
             }
             
             if (modeltype.equals("NUMBER")) {
-                documents.removeNumberFactory(name);
-                documents.delete(object);
+                state.documents.removeNumberFactory(name);
+                state.documents.delete(object);
                 
                 continue;
             }
             
             if (modeltype.equals("AUTHORIZATION")) {
                 authority.remove(name);
-                documents.delete(object);
+                state.documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("TSKGROUP")) {
+                TaskSelector.removeGroup(name, state);
+                state.documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("TSKITEM")) {
+                TaskSelector.removeTask(name, state);
+                state.documents.delete(object);
                 
                 continue;
             }
             
             if (modeltype.equals("DATA_ELEMENT"))
-                documents.delete(object);
+                state.documents.delete(object);
         }
         
-        documents.update("delete from PACKAGE where NAME = ?", pkgname);
-        documents.commit();
+        state.documents.update("delete from PACKAGE where NAME = ?", pkgname);
+        state.documents.commit();
     }
 }
 
