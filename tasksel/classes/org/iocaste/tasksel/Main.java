@@ -137,7 +137,7 @@ public class Main extends AbstractPage {
         DataForm form;
         DataItem cmdline;
         Parameter groupcommand;
-        String taskname;
+        String taskname, text;
         Container container = new Form(view, "main");
         
         /*
@@ -151,8 +151,10 @@ public class Main extends AbstractPage {
                 for (TaskEntry entry : tasks.getEntries()) {
                     groupcommand = new Parameter(container, "groupcommand");
                     taskname = entry.getName();
+                    text = entry.getText();
+                    
                     link = new Link(group, taskname, "grouprun");
-                    link.setText(entry.getText());
+                    link.setText((text == null)? taskname : text);
                     link.add(groupcommand, taskname);
                 }
             }
