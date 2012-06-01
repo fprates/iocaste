@@ -28,8 +28,10 @@ public abstract class AbstractPage extends AbstractFunction {
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
         
-        if (!view.getAppName().equals(entry[0]))
-                view.setReloadableView(true);
+        if (view.getAppName().equals(entry[0]))
+            return;
+        
+        view.setReloadableView(true);
     }
     
     /**
@@ -78,6 +80,7 @@ public abstract class AbstractPage extends AbstractFunction {
             
             try {
                 method.invoke(this, view);
+                new Iocaste(this).commit();
             } catch (Exception e) {
                 new Iocaste(this).rollback();
                 throw e;
