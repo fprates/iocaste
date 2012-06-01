@@ -100,15 +100,21 @@ public class DataForm extends AbstractContainer {
      * @return
      */
     public final ExtendedObject getObject() {
+        String name;
     	InputComponent input;
-    	ExtendedObject object = new ExtendedObject(getModel());
+    	DocumentModel model = getModel();
+    	ExtendedObject object = new ExtendedObject(model);
     	
         for (Element element: getElements()) {
         	if (!element.isDataStorable())
                 continue;
         	
         	input = (InputComponent)element;
-        	object.setValue(input.getName(), input.get());
+        	name = input.getName();
+            if (model.getModelItem(name) == null)
+                continue;
+            
+        	object.setValue(name, input.get());
         }
     	
     	return object;
