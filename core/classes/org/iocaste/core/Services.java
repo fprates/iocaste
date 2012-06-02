@@ -278,7 +278,8 @@ public class Services extends AbstractFunction {
      */
     public final boolean isAuthorized(Message message) throws Exception {
         boolean fail;
-        String objvalue, usrvalue, username;
+        User user;
+        String objvalue, usrvalue;
         Map<String, String> usrparameters, objparameters;
         Authorization[] usrauthorizations;
         Connection connection;
@@ -287,13 +288,16 @@ public class Services extends AbstractFunction {
         
         if (context == null && isAuthorizedCall())
             return false;
+
+        user = context.getUser();
+        if (user == null)
+            return false;
         
         objauthorization = message.get("authorization");
         connection = db.instance();
-        username = context.getUser().getUsername();
         
         usrauthorizations = AuthServices.getAuthorization(connection, db,
-                username, objauthorization.getObject(),
+                user.getUsername(), objauthorization.getObject(),
                 objauthorization.getAction());
         
         connection.close();
@@ -397,7 +401,7 @@ public class Services extends AbstractFunction {
             return true;
         
         context = new UserContext();
-        context.setUser(user);
+        context.setUser(null);
         context.setLocale(locale);
         
         sessions.put(sessionid, context);
