@@ -46,6 +46,7 @@ import org.iocaste.shell.common.ViewData;
 public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String NOT_CONNECTED = "not.connected";
+    private static final String EXCEPTION_HANDLER = "iocaste-exhandler";
     private static final byte AUTHORIZATION_ERROR = 1;
     private static Map<String, List<SessionContext>> apps =
             new HashMap<String, List<SessionContext>>();
@@ -117,6 +118,30 @@ public class PageRenderer extends HttpServlet implements Function {
             resp.setHeader(key, view.getHeader(key));
     }
     
+    /**
+     * 
+     * @param expagectx
+     * @param exception
+     * @return
+     * @throws Exception
+     */
+    private final PageContext createExceptionContext(PageContext expagectx,
+            Exception exception) throws Exception {
+        PageContext pagectx;
+        ContextData contextdata = new ContextData();
+        
+        contextdata.sessionid = sessionid;
+        contextdata.appname = EXCEPTION_HANDLER;
+        contextdata.pagename = "main";
+        contextdata.logid = expagectx.getLogid();
+        
+        pagectx = createPageContext(contextdata);
+        pagectx.addParameter("exception", exception);
+        pagectx.addParameter("exview", expagectx.getViewData());
+        pagectx.setReloadableView(true);
+        
+        return pagectx;
+    }
     /**
      * 
      * @param contextdata
@@ -207,27 +232,33 @@ public class PageRenderer extends HttpServlet implements Function {
         
         req.setCharacterEncoding("UTF-8");
         
-        if (apps.containsKey(sessionid)) {
-            pagectx = getPageContext(req, sessionid);
-            logid = apps.get(sessionid).size();
-        }
-        
-        if (pagectx == null) {
-            contextdata = new ContextData();
-            contextdata.sessionid = sessionid;
-            contextdata.appname = sessionconnector;
-            contextdata.pagename = "authentic";
-            contextdata.logid = logid;
+        try {
+            if (apps.containsKey(sessionid)) {
+                pagectx = getPageContext(req, sessionid);
+                logid = apps.get(sessionid).size();
+            }
             
-            pagectx = createPageContext(contextdata);
+            if (pagectx == null) {
+                contextdata = new ContextData();
+                contextdata.sessionid = sessionid;
+                contextdata.appname = sessionconnector;
+                contextdata.pagename = "authentic";
+                contextdata.logid = logid;
+                
+                pagectx = createPageContext(contextdata);
+            }
+            
+            if (pagectx.getViewData() != null) {
+                iocaste = new Iocaste(this);
+                pagectx = processController(iocaste, req, pagectx);
+            }
+            
+            render(resp, pagectx);
+        } catch (Exception e) {
+            pagectx = createExceptionContext(pagectx, e);
+            resp.reset();
+            render(resp, pagectx);
         }
-        
-        if (pagectx.getViewData() != null) {
-            iocaste = new Iocaste(this);
-            pagectx = processController(iocaste, req, pagectx);
-        }
-        
-        render(resp, pagectx);
     }
 
     /**
@@ -270,6 +301,13 @@ public class PageRenderer extends HttpServlet implements Function {
                 toString();
     }
     
+    /**
+     * 
+     * @param appname
+     * @param complexid
+     * @return
+     * @throws Exception
+     */
     private final boolean isExecuteAuthorized(String appname, String complexid)
             throws Exception {
         String url;
@@ -863,7 +901,8 @@ public class PageRenderer extends HttpServlet implements Function {
         if (text != null)
             for (String line : text)
                 writer.println(line);
-                
+        
+        writer.flush();
         writer.close();
     }
     
