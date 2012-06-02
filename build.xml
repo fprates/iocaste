@@ -59,6 +59,9 @@
           
         <!-- usereditor -->
         <ant antfile="${basedir}/src/usereditor/build.xml"/>
+          
+        <!-- exhandler -->
+        <ant antfile="${basedir}/src/exhandler/build.xml"/>
         
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
