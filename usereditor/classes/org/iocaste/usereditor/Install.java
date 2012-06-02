@@ -20,6 +20,7 @@ public class Install {
         data.add(authorization);
         
         messages = new HashMap<String, String>();
+        messages.put("user.saved.successfully", "Usuário gravado com sucesso.");
         messages.put("user.already.exists", "Usuário já existe.");
         messages.put("invalid.user", "Usuário inválido.");
         messages.put("user-selection", "Seleção de usuário");

@@ -122,6 +122,7 @@ public class Response {
             break;
         }
         
+        view.setFocus(secret);
         view.setNavbarActionEnabled("back", true);
         view.setTitle(Common.TITLE[mode]);
     }

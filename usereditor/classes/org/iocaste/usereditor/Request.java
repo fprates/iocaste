@@ -1,18 +1,22 @@
 package org.iocaste.usereditor;
 
+import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewData;
 
 public class Request {
     private static final byte PROFILES = 0;
+    private static final byte DEL_USR_AUTH = 1;
     private static final String[] QUERIES = {
-        "from USER_AUTHORITY where USERNAME = ?"
+        "from USER_AUTHORITY where USERNAME = ?",
+        "delete from USER_AUTHORITY where USERNAME = ?"
     };
     
     public static final void addprofile(ViewData view) {
@@ -61,10 +65,14 @@ public class Request {
     
     public static final void save(ViewData view, Function function)
             throws Exception {
+        Authority authority;
+        Table itens;
+        String profilename;
         byte mode = Common.getMode(view);
         DataForm form = view.getElement("identity");
         ExtendedObject object = form.getObject();
         Documents documents = new Documents(function);
+        String username = object.getValue("USERNAME");
         
         switch (mode) {
         case Common.CREATE:
@@ -74,6 +82,18 @@ public class Request {
             view.export("mode", mode);
             view.setTitle(Common.TITLE[mode]);
             break;
+            
+        case Common.UPDATE:
+            documents.modify(object);
+            documents.update(QUERIES[DEL_USR_AUTH], username);
+            break;
+        }
+        
+        authority = new Authority(function);
+        itens = view.getElement("profiles");
+        for (TableItem item : itens.getItens()) {
+            profilename = ((InputComponent)item.get("PROFILE")).get();
+            authority.assign(username, profilename);
         }
         
         view.message(Const.STATUS, "user.saved.successfully");
