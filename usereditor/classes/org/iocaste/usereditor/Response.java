@@ -12,6 +12,11 @@ import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.StandardContainer;
+import org.iocaste.shell.common.TabbedPane;
+import org.iocaste.shell.common.TabbedPaneItem;
+import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.ViewData;
 
 public class Response {
@@ -24,14 +29,23 @@ public class Response {
      */
     public static final void form(ViewData view, Function function)
             throws Exception {
-        Button save;
+        Container profilecnt;
+        Table profiles;
+        TabbedPaneItem tabitem;
+        Button save, addprofile, removeprofile;
         DataItem secret, confirm, username;
         ExtendedObject object;
+        ExtendedObject[] oprofiles;
         Container container = new Form(view, "main");
         byte mode = Common.getMode(view);
-        DataForm form = new DataForm(container, "identity");
-        DocumentModel model = new Documents(function).getModel("LOGIN");
+        TabbedPane tabs = new TabbedPane(container, "tabs");
+        DataForm form = new DataForm(tabs, "identity");
+        Documents documents = new Documents(function);
+        DocumentModel model = documents.getModel("LOGIN");
         
+        /*
+         * identificação
+         */
         form.importModel(model);
         form.get("ID").setVisible(false);
         secret = form.get("SECRET");
@@ -42,22 +56,69 @@ public class Response {
         confirm.setSecret(true);
         confirm.setModelItem(secret.getModelItem());
         
+        if (mode == Common.DISPLAY) {
+            secret.setEnabled(false);
+            confirm.setEnabled(false);
+        }
+        
+        tabitem = new TabbedPaneItem(tabs, "idtab");
+        tabitem.setContainer(form);
+        
+        /*
+         * perfis
+         */
+        profilecnt = new StandardContainer(tabs, "profilecnt");
+        
+        addprofile = new Button(profilecnt, "addprofile");
+        removeprofile = new Button(profilecnt, "removeprofile");
+        
+        model = documents.getModel("USER_AUTHORITY");
+        profiles = new Table(profilecnt, "profiles");
+        profiles.importModel(model);
+        
+        for (TableColumn column : profiles.getColumns())
+            if (!column.getName().equals("PROFILE"))
+                column.setVisible(false);
+        
+        tabitem = new TabbedPaneItem(tabs, "profiletab");
+        tabitem.setContainer(profilecnt);
+        
         save = new Button(container, "save");
         
         switch (mode) {
         case Common.CREATE:
+            addprofile.setVisible(true);
+            removeprofile.setEnabled(false);
+            profiles.setMark(true);
             username.set(view.getParameter("username"));
             break;
             
         case Common.DISPLAY:
+            addprofile.setVisible(false);
+            removeprofile.setVisible(false);
+            profiles.setMark(false);
             object = view.getParameter("identity");
             form.setObject(object);
             save.setVisible(false);
+            
+            oprofiles = view.getParameter("profiles");
+            if (oprofiles != null)
+                for (ExtendedObject oprofile : oprofiles)
+                    Common.insertItem(profiles, oprofile, mode);
+            
             break;
             
         case Common.UPDATE:
+            addprofile.setVisible(true);
+            profiles.setMark(true);
             object = view.getParameter("identity");
             form.setObject(object);
+            
+            oprofiles = view.getParameter("profiles");
+            if (oprofiles != null)
+                for (ExtendedObject oprofile : oprofiles)
+                    Common.insertItem(profiles, oprofile, mode);
+            
             break;
         }
         

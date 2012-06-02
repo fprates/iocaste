@@ -10,6 +10,10 @@ public class Main extends AbstractPage {
         export("install", "install");
     }
     
+    public final void addprofile(ViewData view) {
+        Request.addprofile(view);
+    }
+    
     public final void create(ViewData view) throws Exception {
         Request.create(view, this);
     }
@@ -28,6 +32,10 @@ public class Main extends AbstractPage {
     
     public final void main(ViewData view) throws Exception {
         Response.selector(view, this);
+    }
+    
+    public final void removeprofile(ViewData view) {
+        Request.removeprofile(view);
     }
     
     public final void save(ViewData view) throws Exception {

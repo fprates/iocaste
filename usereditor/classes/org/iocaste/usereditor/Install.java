@@ -34,6 +34,11 @@ public class Install {
         messages.put("usereditor-display", "Exibir usuário");
         messages.put("usereditor-update", "Atualizar usuário");
         messages.put("SU01", "Gerenciamento de usuários");
+        messages.put("idtab", "Identificação");
+        messages.put("profiletab", "Perfis");
+        messages.put("addprofile", "Adicionar");
+        messages.put("removeprofile", "Remover");
+        messages.put("PROFILE", "Perfil");
         data.setMessages("pt_BR", messages);
         
         data.link("SU01", "iocaste-usereditor");
