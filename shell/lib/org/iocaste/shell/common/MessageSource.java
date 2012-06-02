@@ -13,6 +13,10 @@ import org.iocaste.protocol.Function;
 public class MessageSource implements Serializable {
     private static final long serialVersionUID = 7937205136041189687L;
     private Properties messages;
+    private static final byte MESSAGES = 0;
+    private static final String[] QUERIES = {
+            "from MESSAGES where LOCALE = ? and PACKAGE = ?"
+    };
     
     public MessageSource() {
         messages = new Properties();
@@ -46,12 +50,15 @@ public class MessageSource implements Serializable {
      */
     public final void loadFromApplication(String app, Locale locale,
             Function function) throws Exception {
+        ExtendedObject[] objects;
         String tag, message;
-        Documents documents = new Documents(function);
-        String query = "from MESSAGES where LOCALE = ? and PACKAGE = ?";
-        ExtendedObject[] objects = documents.select(
-                query, locale.toString(), app);
+        Documents documents;
         
+        if (locale == null)
+            return;
+        
+        documents = new Documents(function);
+        objects = documents.select(QUERIES[MESSAGES], locale.toString(), app);
         if (objects == null)
             return;
         
