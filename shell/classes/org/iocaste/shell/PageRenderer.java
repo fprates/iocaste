@@ -270,6 +270,26 @@ public class PageRenderer extends HttpServlet implements Function {
                 toString();
     }
     
+    private final boolean isExecuteAuthorized(String appname, String complexid)
+            throws Exception {
+        String url;
+        Message message;
+        Authorization authorization = new Authorization("APPLICATION.EXECUTE");
+        
+        authorization.setObject("APPLICATION");
+        authorization.setAction("EXECUTE");
+        authorization.add("APPNAME", appname);
+        
+        message = new Message();
+        message.setId("is_authorized");
+        message.add("authorization", authorization);
+        message.setSessionid(complexid);
+        
+        url = new StringBuilder(servername).append(Iocaste.SERVERNAME).
+                toString();
+        return (Boolean)Service.callServer(url, message);
+    }
+    
     /**
      * 
      * @param pagetrack
@@ -522,7 +542,6 @@ public class PageRenderer extends HttpServlet implements Function {
         PageContext pagectx_;
         Map<String, String[]> parameters;
         ViewData view;
-        Authorization authorization;
         String complexid, appname, pagename, key, pagetrack = null,
                 actionname = null;
         
@@ -585,20 +604,14 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagename == null)
             pagename = pagectx.getName();
         
-        authorization = new Authorization("APPLICATION.EXECUTE");
-        authorization.setObject("APPLICATION");
-        authorization.setAction("EXECUTE");
-        authorization.add("APPNAME", appname);
-        
-        if (!iocaste.isAuthorized(authorization) &&
-                !isSessionConnector(appname)) {
+        if (!isExecuteAuthorized(appname, complexid)) {
             pagectx.setError(AUTHORIZATION_ERROR);
             pagectx.getViewData().message(Const.ERROR, "user.not.authorized");
             
             return pagectx;
-        } else {
-            pagectx.setError((byte)0);
         }
+        
+        pagectx.setError((byte)0);
         
         contextdata = new ContextData();
         contextdata.sessionid = sessionid;
