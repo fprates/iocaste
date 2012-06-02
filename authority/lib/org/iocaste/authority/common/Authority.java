@@ -20,6 +20,22 @@ public class Authority extends AbstractServiceInterface {
      * 
      * @param username
      * @param profile
+     * @throws Exception
+     */
+    public final void assign(String username, String profile) throws Exception {
+        Message message = new Message();
+        
+        message.setId("assign_profile");
+        message.add("username", username);
+        message.add("profile", profile);
+        
+        call(message);
+    }
+    
+    /**
+     * 
+     * @param username
+     * @param profile
      * @param authorization
      * @throws Exception
      */
@@ -27,7 +43,7 @@ public class Authority extends AbstractServiceInterface {
             Authorization authorization) throws Exception {
         Message message = new Message();
         
-        message.setId("assign");
+        message.setId("assign_authorization");
         message.add("username", username);
         message.add("profile", profile);
         message.add("authorization", authorization);

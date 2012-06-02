@@ -18,7 +18,8 @@ public class Services extends AbstractFunction {
     };
     
     public Services() {
-        export("assign", "assign");
+        export("assign_authorization", "assignAuthorization");
+        export("assign_profile", "assignProfile");
         export("get", "get");
         export("remove", "remove");
         export("save", "save");
@@ -29,7 +30,7 @@ public class Services extends AbstractFunction {
      * @param message
      * @throws Exception
      */
-    public final void assign(Message message) throws Exception {
+    public final void assignAuthorization(Message message) throws Exception {
         DocumentModel model;
         ExtendedObject profileitem;
         int itemid;
@@ -61,6 +62,40 @@ public class Services extends AbstractFunction {
         
         profiles[0].setValue("CURRENT", itemid);
         documents.modify(profiles[0]);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void assignProfile(Message message) throws Exception {
+        int userid, id, profileid;
+        DocumentModel model;
+        String username = message.getString("username");
+        String profile = message.getString("profile");
+        Documents documents = new Documents(this);
+        ExtendedObject object = documents.getObject("LOGIN", username);
+        
+        if (object == null)
+            throw new Exception("Invalid user.");
+        
+        userid = object.getValue("ID");
+        
+        object = documents.getObject("USER_PROFILE", profile);
+        if (object == null)
+            throw new Exception("Invalid profile.");
+        
+        profileid = object.getValue("ID");
+        id = (userid * 100) + profileid;
+
+        model = documents.getModel("USER_AUTHORITY");
+        object = new ExtendedObject(model);
+        object.setValue("ID", id);
+        object.setValue("USERNAME", username);
+        object.setValue("PROFILE", profile);
+        
+        documents.save(object);
     }
     
     /**
