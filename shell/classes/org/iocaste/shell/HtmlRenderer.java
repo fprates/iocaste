@@ -146,12 +146,13 @@ public class HtmlRenderer {
      * @param line
      * @return
      */
-    private final XMLElement renderPrintElement(String line) {
-        XMLElement ptag = new XMLElement("p");
+    private final XMLElement renderPrintLines(String[] lines) {
+        XMLElement pretag = new XMLElement("pre");
         
-        ptag.addInner(line);
+        pretag.add("class", "output_list");
+        pretag.addInner(lines);
         
-        return ptag;
+        return pretag;
     }
     
     /**
@@ -193,6 +194,7 @@ public class HtmlRenderer {
      * @return código html da visão
      */
     public final String[] run(ViewData vdata) {
+        String[] printlines;
         List<String> html = new ArrayList<String>();
         List<XMLElement> tags = new ArrayList<XMLElement>();
         List<XMLElement> bodycontent = new ArrayList<XMLElement>();
@@ -224,8 +226,9 @@ public class HtmlRenderer {
         msgtype = Const.NONE;
         
         htmltag.addChildren(tags);
-        for (String line : vdata.getPrintLines())
-            htmltag.addChild(renderPrintElement(line));
+        printlines = vdata.getPrintLines();
+        if (printlines.length > 0)
+            htmltag.addChild(renderPrintLines(printlines));
         
         vdata.clearPrintLines();
         

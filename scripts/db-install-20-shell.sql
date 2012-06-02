@@ -302,6 +302,13 @@ insert into shell003 (pindx, eindx, pname, value) values (000100300005, 00010030
 insert into shell003 (pindx, eindx, pname, value) values (000100300006, 000100300000, 'font-size', '12pt');
 insert into shell003 (pindx, eindx, pname, value) values (000100300007, 000100300000, 'padding', '5px');
 
+insert into shell002 (eindx, sname, ename) values (000100310000, 'DEFAULT', '.output_list');
+insert into shell003 (pindx, eindx, pname, value) values (000100310001, 000100310000, 'background-color', 'transparent');
+insert into shell003 (pindx, eindx, pname, value) values (000100310002, 000100310000, 'color', '#ffffff');
+insert into shell003 (pindx, eindx, pname, value) values (000100310003, 000100310000, 'font-family', 'monospace');
+insert into shell003 (pindx, eindx, pname, value) values (000100310004, 000100310000, 'font-weight', 'normal');
+insert into shell003 (pindx, eindx, pname, value) values (000100310005, 000100310000, 'font-size', '10pt');
+
 insert into docs001(docid, tname, class) values('STYLE', 'SHELL001', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.NAME', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.INDEX', 0, 12, 3, 1);
