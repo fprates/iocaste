@@ -138,6 +138,7 @@ public class PageRenderer extends HttpServlet implements Function {
         pagectx = createPageContext(contextdata);
         pagectx.addParameter("exception", exception);
         pagectx.addParameter("exview", expagectx.getViewData());
+        pagectx.setUsername(expagectx.getUsername());
         pagectx.setReloadableView(true);
         
         return pagectx;
