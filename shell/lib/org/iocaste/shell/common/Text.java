@@ -7,6 +7,7 @@ public class Text extends AbstractComponent {
     public Text(Container container, String name) {
         super(container, Const.TEXT, name);
         
+        setStyleClass("text");
         tag = "p";
     }
     
