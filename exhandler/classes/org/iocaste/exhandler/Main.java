@@ -174,7 +174,7 @@ public class Main extends AbstractPage {
             if (element.isDataStorable()) {
                 input = (InputComponent)element;
                 view.print(concatenate(level_, " ", input.getName(), ": ",
-                        input.get()));
+                        (input.isSecret())? "***" : input.get()));
                 continue;
             }
             
