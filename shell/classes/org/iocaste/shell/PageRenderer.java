@@ -643,7 +643,8 @@ public class PageRenderer extends HttpServlet implements Function {
         if (pagename == null)
             pagename = pagectx.getName();
         
-        if (!isExecuteAuthorized(appname, complexid)) {
+        if (!isExecuteAuthorized(appname, complexid) &&
+                view.getRedirectedApp() != null) {
             pagectx.setError(AUTHORIZATION_ERROR);
             pagectx.getViewData().message(Const.ERROR, "user.not.authorized");
             
