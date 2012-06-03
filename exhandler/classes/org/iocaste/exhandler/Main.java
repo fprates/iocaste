@@ -22,7 +22,8 @@ public class Main extends AbstractPage {
         messages.put("stack-trace", "Pilha de chamadas");
         messages.put("parameters", "Parâmetros");
         messages.put("exception", "Exceção");
-        messages.put("view-elements", "Elementos da página");
+        messages.put("view-elements", "Elementos da visão afetada");
+        messages.put("no.view.information", "Sem informações da visão\n");
     }
     
     /**
@@ -66,10 +67,11 @@ public class Main extends AbstractPage {
         /*
          * dados do programa interrompido
          */
-        if (exview != null) {
-            view.print(messages.get("view-info"));
+        view.print(messages.get("view-info"));
+        if (exview == null)
+            view.print(messages.get("no.view.information"));
+        else
             printOffensiveView(view, exview);
-        }
         
         /*
          * pilha de chamadas
@@ -80,11 +82,16 @@ public class Main extends AbstractPage {
         /*
          * elementos da visão
          */
-        containers = exview.getContainers();
-        if (containers.length > 0) {
-            view.print(messages.get("view-elements"));
-            for (Container container : containers)
-                printViewContainer(view, container, "-");
+        view.print(messages.get("view-elements"));
+        if (exview == null) {
+            view.print(messages.get("no.view.information"));
+        } else {
+            containers = exview.getContainers();
+            if (containers.length > 0) {
+                view.print(messages.get("view-elements"));
+                for (Container container : containers)
+                    printViewContainer(view, container, "-");
+            }
         }
         
         view.setNavbarActionEnabled("home", true);
