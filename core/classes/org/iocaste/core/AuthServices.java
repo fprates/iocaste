@@ -64,6 +64,9 @@ public class AuthServices {
                 
                 authlist.add(authorization);
                 
+                if (parameters == null)
+                    continue;
+                
                 for (Object parameter : parameters) {
                     resultmap = (Map<String, Object>)parameter;
                     name = (String)resultmap.get("PARAM");
