@@ -19,9 +19,8 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
-     * @param controldata
      * @param view
-     * @throws Exception 
+     * @throws Exception
      */
     public void back(ViewData view) throws Exception {
         String[] entry = new Shell(this).popPage(view);
@@ -158,8 +157,14 @@ public abstract class AbstractPage extends AbstractFunction {
     /**
      * 
      * @param view
+     * @throws Exception
      */
-    public void home(ViewData view) { }
+    public void home(ViewData view) throws Exception {
+        String[] entry = new Shell(this).home(view);
+        view.redirect(entry[0], entry[1]);
+        view.dontPushPage();
+        view.setReloadableView(true);
+    }
     
     /**
      * 

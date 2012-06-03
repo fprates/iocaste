@@ -11,9 +11,10 @@ public class Services extends AbstractFunction {
 
     public Services() {
         export("get_view", "getView");
-        export("update_view", "updateView");
+        export("home", "home");
         export("pop_page", "popPage");
         export("push_page", "pushPage");
+        export("update_view", "updateView");
     }
     
     public final static Map<String, Map<String, String>> getStyle(
@@ -32,6 +33,17 @@ public class Services extends AbstractFunction {
         String pagename = message.getString("page_name");
         
         return PageRenderer.getView(sessionid, appname, pagename);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final String[] home(Message message) {
+        String sessionid = message.getSessionid();
+        
+        return PageRenderer.home(sessionid);
     }
     
     /**

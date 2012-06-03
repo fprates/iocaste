@@ -532,6 +532,18 @@ public class PageRenderer extends HttpServlet implements Function {
         return appcontext.getPageContext(pagename).getViewData();
     }
     
+    /**
+     * 
+     * @param sessionid
+     * @return
+     */
+    public static final String[] home(String sessionid) {
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        
+        return apps.get(complexid[0]).get(logid).home();
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#isAuthorizedCall()

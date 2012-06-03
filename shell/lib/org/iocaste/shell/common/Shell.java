@@ -152,6 +152,20 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * 
+     * @param view
+     * @return
+     * @throws Exception
+     */
+    public final String[] home(ViewData view) throws Exception {
+        Message message = new Message();
+        
+        message.setId("home");
+        
+        return call(message);
+    }
+    
+    /**
+     * 
      * @param value
      * @return
      */

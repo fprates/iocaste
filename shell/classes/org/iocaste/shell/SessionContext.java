@@ -35,6 +35,19 @@ public class SessionContext {
      * 
      * @return
      */
+    public final String[] home() {
+        String[] home = null;
+        
+        while (pagestack.size() > 1)
+            home = pagestack.pop();
+        
+        return home;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final String[] popPage() {
         return pagestack.pop();
     }
