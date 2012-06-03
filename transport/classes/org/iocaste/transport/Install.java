@@ -28,6 +28,7 @@ public class Install {
         messages.put("upload", "Carregar");
         messages.put("pool", "Pool de ordens");
         messages.put("SE09", "Utilitário de transporte de ajustes");
+        messages.put("no.files", "Sem arquivos no pool de transporte.");
         data.setMessages("pt_BR", messages);
         
         data.addTaskGroup("DEVELOP", "SE09");

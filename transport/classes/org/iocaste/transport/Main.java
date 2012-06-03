@@ -409,9 +409,15 @@ public class Main extends AbstractPage {
      */
     public void pool(ViewData view) throws Exception {
         File file = new File(getRealPath("WEB-INF", "pool"));
+        String[] files = file.list();
+        
+        if (files == null) {
+            view.message(Const.ERROR, "no.files");
+            return;
+        }
         
         view.setReloadableView(true);
-        view.export("files", file.list());
+        view.export("files", files);
         view.redirect(null, "list");
     }
     
