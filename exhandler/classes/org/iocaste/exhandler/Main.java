@@ -87,7 +87,7 @@ public class Main extends AbstractPage {
                 printViewContainer(view, container, "-");
         }
         
-        view.setNavbarActionEnabled("back", true);
+        view.setNavbarActionEnabled("home", true);
         view.setTitle(messages.get("exception-handler"));
     }
     

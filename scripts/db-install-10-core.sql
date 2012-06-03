@@ -80,13 +80,17 @@ insert into auth002(ident, autnm, param, value) values(301, 'SH.EXECUTE', 'APPNA
 insert into auth001(autnm, objct, actio, autid) values('HELP.EXECUTE', 'APPLICATION', 'EXECUTE', 4);
 insert into auth002(ident, autnm, param, value) values(401, 'HELP.EXECUTE', 'APPNAME', 'iocaste-help');
 
+insert into auth001(autnm, objct, actio, autid) values('EXHANDLER.EXECUTE', 'APPLICATION', 'EXECUTE', 5);
+insert into auth002(ident, autnm, param, value) values(501, 'EXHANDLER.EXECUTE', 'APPNAME', 'iocaste-exhandler');
+
 insert into auth003(prfnm, prfid, crrnt) values('ALL', 1, 101);
 insert into auth004(ident, prfnm, autnm, objct, actio) values(101, 'ALL', 'PACKAGE.EXECUTE', 'APPLICATION', 'EXECUTE');
 
-insert into auth003(prfnm, prfid, crrnt) values('BASE', 2, 203);
+insert into auth003(prfnm, prfid, crrnt) values('BASE', 2, 204);
 insert into auth004(ident, prfnm, autnm, objct, actio) values(201, 'BASE', 'TASKSEL.EXECUTE', 'APPLICATION', 'EXECUTE');
 insert into auth004(ident, prfnm, autnm, objct, actio) values(202, 'BASE', 'SH.EXECUTE', 'APPLICATION', 'EXECUTE');
 insert into auth004(ident, prfnm, autnm, objct, actio) values(203, 'BASE', 'HELP.EXECUTE', 'APPLICATION', 'EXECUTE');
+insert into auth004(ident, prfnm, autnm, objct, actio) values(204, 'BASE', 'EXHANDLER.EXECUTE', 'APPLICATION', 'EXECUTE');
 
 insert into users002(ident, uname, prfnm) values(101, 'ADMIN', 'ALL');
 insert into users002(ident, uname, prfnm) values(102, 'ADMIN', 'BASE');
