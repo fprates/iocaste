@@ -87,10 +87,14 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void commit(Message message) throws Exception {
+        Connection connection;
         String sessionid = message.getSessionid();
         UserContext context = sessions.get(sessionid);
-        Connection connection = context.getConnection();
         
+        if (context == null)
+            return;
+        
+        connection = context.getConnection();
         if (connection == null)
             return;
         

@@ -32,6 +32,7 @@ public class Servlet extends ServerServlet {
         authorize("checked_select", parameters);
         authorize("get_host", null);
         authorize("get_locale", null);
+        authorize("commit", null);
         authorize("rollback", null);
         authorize("is_authorized", null);
     }
@@ -48,6 +49,7 @@ public class Servlet extends ServerServlet {
             return;
         
         if (!services.isConnected(message))
-            throw new IocasteException("core.pre-run: invalid session.");
+            throw new IocasteException(new StringBuilder(message.getId()).
+                    append("() denied: invalid session.").toString());
     }
 }
