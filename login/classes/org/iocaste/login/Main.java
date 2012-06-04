@@ -21,6 +21,11 @@ import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
+    private static final String[] PACKAGES = new String[] {
+            "iocaste-packagetool",
+            "iocaste-tasksel",
+            "iocaste-setup"
+    };
     
     /**
      * 
@@ -44,7 +49,6 @@ public class Main extends AbstractPage {
                 continue;
             
             input = (InputComponent)element;
-            
             if (input.getName().equals("LOCALE")) {
                 input.set("pt_BR");
                 input.setObligatory(false);
@@ -75,17 +79,13 @@ public class Main extends AbstractPage {
         DataForm form = view.getElement("login");
         Iocaste iocaste = new Iocaste(this);
         Login login = form.getObject().newInstance();
-        String[] packages = new String[] {
-                "iocaste-packagetool",
-                "iocaste-tasksel"
-        };
         
         view.clearParameters();
         username = login.getUsername();
         if (iocaste.login(username, login.getSecret(), login.getLocale())) {
             pkgtool = new PackageTool(this);
             
-            for (String pkgname : packages)
+            for (String pkgname : PACKAGES)
                 if (!pkgtool.isInstalled(pkgname))
                     pkgtool.install(pkgname);
             

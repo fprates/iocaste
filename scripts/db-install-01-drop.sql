@@ -1,4 +1,8 @@
 \c true
+drop table cplxditem if exists;
+drop table cplxdoc if exists;
+drop table cplxmitem if exists;
+drop table CPLXMODEL if exists;
 drop table usrtaskgrp if exists;
 drop table taskentrytxt if exists;
 drop table taskentry if exists;

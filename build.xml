@@ -62,6 +62,9 @@
           
         <!-- exhandler -->
         <ant antfile="${basedir}/src/exhandler/build.xml"/>
+          
+        <!-- setup -->
+        <ant antfile="${basedir}/src/setup/build.xml"/>
         
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
