@@ -87,11 +87,9 @@ public class Main extends AbstractPage {
             view.print(messages.get("no.view.information"));
         } else {
             containers = exview.getContainers();
-            if (containers.length > 0) {
-                view.print(messages.get("view-elements"));
+            if (containers.length > 0)
                 for (Container container : containers)
                     printViewContainer(view, container, "-");
-            }
         }
         
         view.setNavbarActionEnabled("home", true);
