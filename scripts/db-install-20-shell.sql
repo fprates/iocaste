@@ -104,6 +104,7 @@ insert into shell003 (pindx, eindx, pname, value) values (000100090004, 00010009
 insert into shell003 (pindx, eindx, pname, value) values (000100090005, 000100090000, 'border-style', 'solid');
 insert into shell003 (pindx, eindx, pname, value) values (000100090006, 000100090000, 'border-width', '5px');
 insert into shell003 (pindx, eindx, pname, value) values (000100090007, 000100090000, 'border-color', '#000000');
+insert into shell003 (pindx, eindx, pname, value) values (000100090008, 000100090000, 'color', '#ffffff');
 
 insert into shell002 (eindx, sname, ename) values (000100100000, 'DEFAULT', '.text_field');
 insert into shell003 (pindx, eindx, pname, value) values (000100100001, 000100100000, 'background-color', '#ffffff'); 
