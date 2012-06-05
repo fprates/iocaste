@@ -24,7 +24,8 @@ public class Main extends AbstractPage {
     private static final String[] PACKAGES = new String[] {
             "iocaste-packagetool",
             "iocaste-tasksel",
-            "iocaste-setup"
+            "iocaste-setup",
+            "iocaste-search-help"
     };
     
     /**
