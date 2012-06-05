@@ -4,6 +4,8 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
@@ -19,6 +21,10 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
+    
+    public Main() {
+        export("install", "install");
+    }
     
     /**
      * 
@@ -63,6 +69,15 @@ public class Main extends AbstractPage {
     private ExtendedObject[] getResultsFrom(SearchHelp sh) throws Exception {
         Documents documents = new Documents(this);
         return documents.select("from "+sh.getModelName());
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final InstallData install(Message message) {
+        return Install.init();
     }
     
     /**
