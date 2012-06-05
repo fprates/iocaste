@@ -36,7 +36,11 @@ public class Install {
         messages.put("package.installed", "Pacote instalado com sucesso.");
         messages.put("package.uninstalled", "Pacote desinstalado com sucesso.");
         messages.put("package-manager", "Gerenciador de pacotes");
+        messages.put("packageinstall", "Instalar");
+        messages.put("packageuninstall", "Desinstalar");
         messages.put("PACKAGE", "Gerenciador de pacotes");
+        messages.put("name", "Nome");
+        messages.put("action", "Ação");
         messages.put("ADMIN", "Administração");
         
         data.setMessages("pt_BR", messages);
