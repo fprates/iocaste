@@ -54,65 +54,70 @@ public class Services extends AbstractFunction {
         state.shm = new HashMap<String, DocumentModelItem>();
         state.function = this;
         
-        header = new ExtendedObject(state.documents.getModel("PACKAGE"));
-        header.setValue("NAME", state.pkgname);
-        header.setValue("CODE", state.pkgid);
-        state.documents.save(header);
+        try {
+            header = new ExtendedObject(state.documents.getModel("PACKAGE"));
+            header.setValue("NAME", state.pkgname);
+            header.setValue("CODE", state.pkgid);
+            state.documents.save(header);
+            
+            /*
+             * gera modelos;
+             * insere registros;
+             * prepara dados para ajuda de pesquisa.
+             */
+            models = state.data.getModels();
+            if (models.length > 0)
+                installModels(models, state);
+            
+            /*
+             * registra objetos de numeração
+             */
+            for (String factory : state.data.getNumberFactories()) {
+                state.documents.createNumberFactory(factory);
+    
+                Registry.add(factory, "NUMBER", state);
+            }
+            
+            /*
+             * gera ajudas de pesquisa
+             */
+            shdata = state.data.getSHData();
+            if (shdata.length > 0)
+                installSH(shdata, state);
+            
+            for (DataElement element : state.data.getElements())
+                Registry.add(element.getName(), "DATA_ELEMENT", state);
+            
+            /*
+             * registra mensagens
+             */
+            state.messages = state.data.getMessages();
+            if (state.messages.size() > 0)
+                installMessages(state);
+            
+            authorizations = state.data.getAuthorizations();
+            if (authorizations.length > 0)
+                installAuthorizations(authorizations, state);
+            
+            /*
+             * registra tarefas
+             */
+            tasks = state.documents.getModel("TASKS");
+            links = state.data.getLinks();
+            if (links.size() > 0)
+                installLinks(links, tasks, state);
+            
+            tasksgroups = state.data.getTasksGroups();
+            if (tasksgroups.size() > 0)
+                installTasksGroups(tasksgroups, state);
+            
+            state.documents.commit();
         
-        /*
-         * gera modelos;
-         * insere registros;
-         * prepara dados para ajuda de pesquisa.
-         */
-        models = state.data.getModels();
-        if (models.length > 0)
-            installModels(models, state);
-        
-        /*
-         * registra objetos de numeração
-         */
-        for (String factory : state.data.getNumberFactories()) {
-            state.documents.createNumberFactory(factory);
-
-            Registry.add(factory, "NUMBER", state);
+            return 1;
+        } catch (Exception e) {
+            state.documents.rollback();
+            throw e;
         }
-        
-        /*
-         * gera ajudas de pesquisa
-         */
-        shdata = state.data.getSHData();
-        if (shdata.length > 0)
-            installSH(shdata, state);
-        
-        for (DataElement element : state.data.getElements())
-            Registry.add(element.getName(), "DATA_ELEMENT", state);
-        
-        /*
-         * registra mensagens
-         */
-        state.messages = state.data.getMessages();
-        if (state.messages.size() > 0)
-            installMessages(state);
-        
-        authorizations = state.data.getAuthorizations();
-        if (authorizations.length > 0)
-            installAuthorizations(authorizations, state);
-        
-        /*
-         * registra tarefas
-         */
-        tasks = state.documents.getModel("TASKS");
-        links = state.data.getLinks();
-        if (links.size() > 0)
-            installLinks(links, tasks, state);
-        
-        tasksgroups = state.data.getTasksGroups();
-        if (tasksgroups.size() > 0)
-            installTasksGroups(tasksgroups, state);
-        
-        state.documents.commit();
-        
-        return 1;
     }
     
     /**
@@ -352,78 +357,79 @@ public class Services extends AbstractFunction {
         
         state.documents = new Documents(this);
         
-        for (int i = objects.length; i > 0; i--) {
-            object = objects[i - 1];
-            
-            modeltype = object.getValue("MODEL");
-            name = object.getValue("NAME");
-            if (modeltype.equals("MESSAGE")) {
-                name = object.getValue("PACKAGE");
-                query = "delete from MESSAGES where PACKAGE = ?";
-                state.documents.update(query, name);
+        if (objects != null)
+            for (int i = objects.length; i > 0; i--) {
+                object = objects[i - 1];
                 
-                query = "delete from PACKAGE_ITEM where PACKAGE = ? and " +
-                		"MODEL = ?";
-                state.documents.update(query, name, "MESSAGE");
-                state.documents.delete(object);
+                modeltype = object.getValue("MODEL");
+                name = object.getValue("NAME");
+                if (modeltype.equals("MESSAGE")) {
+                    name = object.getValue("PACKAGE");
+                    query = "delete from MESSAGES where PACKAGE = ?";
+                    state.documents.update(query, name);
+                    
+                    query = "delete from PACKAGE_ITEM where PACKAGE = ? and " +
+                    		"MODEL = ?";
+                    state.documents.update(query, name, "MESSAGE");
+                    state.documents.delete(object);
+                    
+                    continue;
+                }
                 
-                continue;
+                if (modeltype.equals("SH")) {
+                    shlib.unassign(name);
+                    shlib.remove(name);
+                    state.documents.delete(object);
+                    
+                    continue;
+                }
+                
+                if (modeltype.equals("TASK")) {
+                    query = "delete from TASKS where NAME = ?";
+                    state.documents.update(query, name);
+                    state.documents.delete(object);
+                    
+                    continue;
+                }
+                
+                if (modeltype.equals("MODEL")) {
+                    state.documents.removeModel(name);
+                    state.documents.delete(object);
+                    
+                    continue;
+                }
+                
+                if (modeltype.equals("NUMBER")) {
+                    state.documents.removeNumberFactory(name);
+                    state.documents.delete(object);
+                    
+                    continue;
+                }
+                
+                if (modeltype.equals("AUTHORIZATION")) {
+                    authority.remove(name);
+                    state.documents.delete(object);
+                    
+                    continue;
+                }
+                
+                if (modeltype.equals("TSKGROUP")) {
+                    TaskSelector.removeGroup(name, state);
+                    state.documents.delete(object);
+                    
+                    continue;
+                }
+                
+                if (modeltype.equals("TSKITEM")) {
+                    TaskSelector.removeTask(name, state);
+                    state.documents.delete(object);
+                    
+                    continue;
+                }
+                
+                if (modeltype.equals("DATA_ELEMENT"))
+                    state.documents.delete(object);
             }
-            
-            if (modeltype.equals("SH")) {
-                shlib.unassign(name);
-                shlib.remove(name);
-                state.documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("TASK")) {
-                query = "delete from TASKS where NAME = ?";
-                state.documents.update(query, name);
-                state.documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("MODEL")) {
-                state.documents.removeModel(name);
-                state.documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("NUMBER")) {
-                state.documents.removeNumberFactory(name);
-                state.documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("AUTHORIZATION")) {
-                authority.remove(name);
-                state.documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("TSKGROUP")) {
-                TaskSelector.removeGroup(name, state);
-                state.documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("TSKITEM")) {
-                TaskSelector.removeTask(name, state);
-                state.documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("DATA_ELEMENT"))
-                state.documents.delete(object);
-        }
         
         state.documents.update("delete from PACKAGE where NAME = ?", pkgname);
         state.documents.commit();
