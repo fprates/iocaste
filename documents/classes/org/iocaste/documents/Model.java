@@ -352,6 +352,10 @@ public class Model {
         for (DocumentModelItem item : itens) {
             element = item.getDataElement();
             
+            if (element == null)
+                throw new Exception(new StringBuilder(item.getName()).
+                        append(" has null data element.").toString());
+            
             if (iocaste.selectUpTo(query, 1, element.getName()) != null)
                 continue;
             
