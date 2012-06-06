@@ -2,7 +2,9 @@ package org.iocaste.external.service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ExternalMessage implements Serializable {
     private static final long serialVersionUID = -6788346709638821129L;
@@ -10,6 +12,10 @@ public class ExternalMessage implements Serializable {
     
     public ExternalMessage() {
         values = new ArrayList<ExternalProperty>();
+    }
+    
+    public final void add(ExternalProperty property) {
+        values.add(property);
     }
     
     public final void add(String name, boolean value) {
@@ -62,5 +68,18 @@ public class ExternalMessage implements Serializable {
         
         for (ExternalProperty property : properties)
             values.add(property);
+    }
+    
+    public final Map<String, String> toMap() {
+        Map<String, String> map;
+        
+        if (values.size() == 0)
+            return null;
+        
+        map = new HashMap<String, String>();
+        for (ExternalProperty property : values)
+            map.put(property.getName(), property.getValue());
+        
+        return map;
     }
 }

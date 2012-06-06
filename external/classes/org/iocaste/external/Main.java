@@ -1,8 +1,7 @@
 package org.iocaste.external;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMAttribute;
@@ -10,7 +9,6 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
-import org.apache.axiom.om.OMText;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.Constants;
 import org.apache.axis2.addressing.EndpointReference;
@@ -27,18 +25,36 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
-    private static final String NAMESPACE =
-            "http://service.external.iocaste.org";
-    private static final String SERVICE = "Ping";
     
     public Main() {
         export("install", "install");
     }
     
+    /**
+     * 
+     * @param view
+     */
+    public final void add(ViewData view) {
+        Table attributes = view.getElement("attribs");
+        TableItem item = new TableItem(attributes);
+        
+        item.add(new TextField(attributes, "aname"));
+        item.add(new TextField(attributes, "avalue"));
+    }
+    
+    /**
+     * 
+     * @param factory
+     * @param method
+     * @param message
+     */
     private final void addMessage(OMFactory factory, OMElement method,
             ExternalMessage message) {
         OMElement xmlvalues;
@@ -66,40 +82,93 @@ public class Main extends AbstractPage {
         OMFactory factory;
         OMElement ping;
         ExternalMessage emessage;
-        ServiceClient service;
+        ServiceClient client;
         OMElement result;
         Options options;
-        String url = ((InputComponent)view.getElement("url")).get();
-        String method = ((InputComponent)view.getElement("method")).get();
+        String namespace = Common.getInput(view, "namespace");
+        String service = Common.getInput(view, "service");
+        String url = Common.getInput(view, "url");
+        String method = Common.getInput(view, "method");
         
         try {
             epr = new EndpointReference(url);
             factory = OMAbstractFactory.getOMFactory();
-            ping = getMethod(factory, method);
-            emessage = new ExternalMessage();
+            ping = getMethod(factory, method, namespace, service);
             
+            emessage = new ExternalMessage();
             addMessage(factory, ping, emessage);
             
             options = new Options();
             options.setTo(epr);
             options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
             
-            service = new ServiceClient();
-            service.setOptions(options);
+            client = new ServiceClient();
+            client.setOptions(options);
             
-            result = service.sendReceive(ping);
+            result = client.sendReceive(ping);
         } catch (AxisFault e) {
             throw new Exception(e.getMessage());
         }
         
+        emessage = new ExternalMessage();
+        convertToMessage(result, emessage, null);
+
         view.setReloadableView(true);
-        view.export("print", printElement("-", result));
+        view.export("map", emessage.toMap());
         view.redirect(null, "output");
     }
     
-    private final OMElement getMethod(
-            OMFactory factory, String methodname) {
-        OMNamespace ns = factory.createOMNamespace(NAMESPACE, SERVICE);
+    /**
+     * 
+     * @param node
+     * @param message
+     * @param property
+     */
+    private final void convertToMessage(OMNode node,
+            ExternalMessage message, ExternalProperty property) {
+        OMNode node_;
+        OMElement element;
+        String name;
+        OMAttribute attribute;
+        Iterator<?> it;
+        
+        if (node.getType() != 1)
+            return;
+        
+        element = (OMElement)node;
+        name = element.getLocalName();
+        if (name.equals("name"))
+            property.setName(element.getText());
+        
+        if (name.equals("value"))
+            property.setValue(element.getText());
+        
+        it = element.getAllAttributes();
+        while (it.hasNext()) {
+            attribute = (OMAttribute)it.next();
+            if (!attribute.getLocalName().equals("type"))
+                continue;
+            
+            name = attribute.getAttributeValue().split(":")[1];
+            if (name.equals("ExternalMessage"))
+                continue;
+            
+            if (name.equals("ExternalProperty")) {
+                property = new ExternalProperty();
+                message.add(property);
+            }
+        }
+        
+        it = element.getChildren();
+        while (it.hasNext()) {
+            node_ = (OMNode)it.next();
+            convertToMessage(node_, message, property);
+        }
+    }
+    
+    private final OMElement getMethod(OMFactory factory, String methodname,
+            String namespace, String service) {
+        OMNamespace ns = factory.createOMNamespace(namespace, service);
         
         return factory.createOMElement(methodname, ns); 
     }
@@ -128,70 +197,56 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void main(ViewData view) throws Exception {
+        Table attributes;
+        DataItem dataitem;
         Container container = new Form(view, "main");
         DataForm form = new DataForm(container, "selection");
         
+        dataitem = new DataItem(form, Const.TEXT_FIELD, "namespace");
+        dataitem.setLength(80);
+        dataitem.set("http://service.external.iocaste.org");
+        
+        new DataItem(form, Const.TEXT_FIELD, "service");
         new DataItem(form, Const.TEXT_FIELD, "url").setLength(80);
         new DataItem(form, Const.TEXT_FIELD, "method");
         
+        new Button(container, "add");
+        new Button(container, "remove");
+        
+        attributes = new Table(container, "attribs");
+        attributes.setMark(true);
+        new TableColumn(attributes, "name");
+        new TableColumn(attributes, "value");
+        
         new Button(container, "call");
         
-        view.setFocus("url");
+        view.setFocus("service");
         view.setReloadableView(true);
         view.setNavbarActionEnabled("back", true);
     }
     
+    /**
+     * 
+     * @param view
+     */
     public final void output(ViewData view) {
-        List<String> list = view.getParameter("print");
+        Map<String, String> map = view.getParameter("map");
         
-        for (String line : list)
-            view.print(line);
+        for (String key : map.keySet())
+            view.print(key+": "+map.get(key));
         
         view.setNavbarActionEnabled("back", true);
     }
     
-    private final List<String> printElement(String level, OMNode node) {
-        OMElement element;
-        OMText text;
-        OMNode node_;
-        OMAttribute attribute;
-        Iterator<?> it;
-        List<String> print = new ArrayList<String>();
+    /**
+     * 
+     * @param view
+     */
+    public final void remove(ViewData view) {
+        Table attributes = view.getElement("attribs");
         
-        switch (node.getType()) {
-        case 1:
-            element = (OMElement)node;
-            print.add(level+" Element: "+element.getLocalName()+
-                    " - type: "+node.getType()+" - text: "+element.getText());
-            
-            it = element.getAllAttributes();
-            while (it.hasNext()) {
-                attribute = (OMAttribute)it.next();
-                print.add(level+" *"+attribute.getLocalName()+": "+attribute.
-                        getAttributeValue());
-            }
-            
-            it = element.getChildren();
-            
-            while (it.hasNext()) {
-                node_ = (OMNode)it.next();
-                print.addAll(printElement(level+"-", node_));
-            }
-            
-            break;
-            
-        case 4:
-            text = (OMText)node;
-            print.add(level+" Text: "+text.getText()+" - type: "+node.
-                    getType());
-            
-            break;
-        default:
-            print.add(level+" unknown - type: "+node.getType());
-            
-            break;
-        }
-        
-        return print;
+        for (TableItem item : attributes.getItens())
+            if (item.isSelected())
+                attributes.remove(item);
     }
 }
