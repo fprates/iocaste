@@ -145,7 +145,7 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void save(Message message) throws Exception {
-        String model, export, shname, shitemname;
+        String model, export, shname, shitemname, exmessage;
         Documents documents = new Documents(this);
         ExtendedObject header = message.get("header");
         ExtendedObject[] itens = message.get("itens");
@@ -156,7 +156,10 @@ public class Services extends AbstractFunction {
         export = composeName(model, header.getValue("EXPORT"));
         
         header.setValue("EXPORT", export);
-        documents.save(header);
+        if (documents.save(header) == 0)
+            throw new Exception (new StringBuilder("Error saving header of " +
+            		"sh ").append(shname).toString());
+        
         shdata.add(header);
         
         for (ExtendedObject item : itens) {
@@ -166,7 +169,13 @@ public class Services extends AbstractFunction {
             item.setValue("ITEM", composeName(model, shitemname));
             item.setValue("SEARCH_HELP", shname);
             
-            documents.save(item);
+            if (documents.save(item) == 0) {
+                exmessage = new StringBuilder("Error saving line of sh ").
+                        append(item.getValue("NAME")).toString();
+                
+                throw new Exception(exmessage);
+            }
+            
             shdata.add(item);
         }
         
