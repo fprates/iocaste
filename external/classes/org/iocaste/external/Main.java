@@ -25,6 +25,8 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -82,13 +84,17 @@ public class Main extends AbstractPage {
         OMFactory factory;
         OMElement ping;
         ExternalMessage emessage;
+        ExternalProperty eproperty;
         ServiceClient client;
         OMElement result;
         Options options;
+        InputComponent input;
+        String name;
         String namespace = Common.getInput(view, "namespace");
         String service = Common.getInput(view, "service");
         String url = Common.getInput(view, "url");
         String method = Common.getInput(view, "method");
+        Table attributes = view.getElement("attribs");
         
         try {
             epr = new EndpointReference(url);
@@ -96,6 +102,22 @@ public class Main extends AbstractPage {
             ping = getMethod(factory, method, namespace, service);
             
             emessage = new ExternalMessage();
+            for (TableItem item : attributes.getItens()) {
+                input = (InputComponent)item.get("name");
+                name = input.get();
+                
+                if (Shell.isInitial(name))
+                    continue;
+                
+                eproperty = new ExternalProperty();
+                eproperty.setName(name);
+                
+                input = (InputComponent)item.get("value");
+                eproperty.setValue((String)input.get());
+                
+                emessage.add(eproperty);
+            }
+            
             addMessage(factory, ping, emessage);
             
             options = new Options();
