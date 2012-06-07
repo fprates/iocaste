@@ -128,7 +128,7 @@ public abstract class AbstractPage extends AbstractFunction {
         view.setLocale(locale);
         
         for (String name : parameters.keySet())
-            view.addParameter(name, parameters.get(name));
+            view.export(name, parameters.get(name));
         
         method = this.getClass().getMethod(page, ViewData.class);
         

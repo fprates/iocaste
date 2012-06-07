@@ -41,7 +41,7 @@ public class ViewData implements Serializable {
     private String title, focus, sheet, appname, pagename;
     private String contenttype, rapp, rpage, messagetext;
     private MessageSource messages;
-    private List<String> inputs, exports, lines;
+    private List<String> inputs, lines;
     private Map<String, Boolean> navbarstatus;
     private List<MultipartElement> mpelements;
     private List<Container> containers;
@@ -54,7 +54,6 @@ public class ViewData implements Serializable {
     
     public ViewData(String appname, String pagename) {
         inputs = new ArrayList<String>();
-        exports = new ArrayList<String>();
         lines = new ArrayList<String>();
         navbarstatus = new HashMap<String, Boolean>();
         parameters = new HashMap<String, Object>();
@@ -96,15 +95,6 @@ public class ViewData implements Serializable {
      */
     public final void addMultipartElement(MultipartElement element) {
         mpelements.add(element);
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param value
-     */
-    public final void addParameter(String name, Object value) {
-        parameters.put(name, value);
     }
     
     /**
@@ -183,8 +173,10 @@ public class ViewData implements Serializable {
      * @param value
      */
     public final void export(String name, Object value) {
-        exports.add(name);
-        addParameter(name, value);
+        if (parameters.containsKey(name))
+            parameters.remove(name);
+        
+        parameters.put(name, value);
     }
     
     /**
@@ -281,7 +273,7 @@ public class ViewData implements Serializable {
      * @return
      */
     public final String[] getExportable() {
-        return exports.toArray(new String[0]);
+        return parameters.keySet().toArray(new String[0]);
     }
     
     /**
