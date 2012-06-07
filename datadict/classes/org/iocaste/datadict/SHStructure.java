@@ -40,12 +40,8 @@ public class SHStructure {
         String name;
         TableItem item = new TableItem(itens);
         DocumentModel model = itens.getModel();
-        ValidatorConfig validatorcfg = new ValidatorConfig();
         InputComponent modelinput = ((DataForm)view.getElement("header")).
                 get("MODEL");
-        
-        validatorcfg.add(modelinput);
-        validatorcfg.setValidator(SHItemValidator.class);
         
         for (DocumentModelItem modelitem : model.getItens()) {
             name = modelitem.getName();
@@ -69,8 +65,8 @@ public class SHStructure {
             }
             
             if (name.equals("ITEM")) {
-                validatorcfg.add(tfield);
-                tfield.setValidatorConfig(validatorcfg);
+                tfield.setValidator(SHItemValidator.class);
+                tfield.addValidatorInput(modelinput);
                 view.setFocus(tfield);
                 modelitem.getDataElement().setLength(24);
             }
@@ -128,7 +124,7 @@ public class SHStructure {
                 
                 ditem.getModelItem().getDataElement().setLength(24);
                 ditem.getModelItem().setReference(null);
-                ditem.setValidatorConfig(validatorcfg);
+                ditem.setValidator(SHItemValidator.class);
             }
             
             ditem.setObligatory((mode == Common.SHOW)? false : true);

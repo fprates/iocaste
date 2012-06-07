@@ -13,21 +13,18 @@ public class SHItemValidator extends AbstractValidator {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Validator#validate(
+     * @see org.iocaste.shell.common.AbstractValidator#validate(
      *     org.iocaste.shell.common.ValidatorConfig)
      */
     @Override
-    public final String validate(ValidatorConfig config) throws Exception {
+    public final void validate(ValidatorConfig config) throws Exception {
         Documents documents = new Documents(getFunction());
-        String modelname = (String)config.get("MODEL");
-        String itemname = (String)config.get("ITEM");
+        String modelname = config.get("MODEL");
+        String itemname = config.get("ITEM");
         String value = composeName(modelname, itemname);
         
         if (documents.getObject("MODELITEM", value) == null)
-            return "invalid.model.item";
-        
-        return null;
-      
+            config.setMessage("invalid.model.item");
   }
 
 }

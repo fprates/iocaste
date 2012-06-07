@@ -17,17 +17,14 @@ public class SHExportValidator extends AbstractValidator {
      *     org.iocaste.shell.common.ValidatorConfig)
      */
     @Override
-    public final String validate(ValidatorConfig config) throws Exception {
+    public final void validate(ValidatorConfig config) throws Exception {
         Documents documents = new Documents(getFunction());
-        String modelname = (String)config.get("MODEL");
-        String itemname = (String)config.get("EXPORT");
+        String modelname = config.get("MODEL");
+        String itemname = config.get("EXPORT");
         String value = composeName(modelname, itemname);
         
         if (documents.getObject("MODELITEM", value) == null)
-            return "invalid.export.field";
-        
-        return null;
-      
+            config.setMessage("invalid.export.field");
   }
 
 }
