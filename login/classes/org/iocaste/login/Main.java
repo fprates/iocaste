@@ -90,15 +90,15 @@ public class Main extends AbstractPage {
                 if (!pkgtool.isInstalled(pkgname))
                     pkgtool.install(pkgname);
             
-            view.addParameter("username", username);
+            view.export("username", username);
             view.setReloadableView(true);
             view.redirect("iocaste-tasksel", "main");
         } else {
             view.message(Const.ERROR, "invalid.login");
         }
 
-        ((DataItem)view.getElement("USERNAME")).set(null);
-        ((DataItem)view.getElement("SECRET")).set(null);
+        form.get("USERNAME").set(null);
+        form.get("SECRET").set(null);
     }
     
     /**

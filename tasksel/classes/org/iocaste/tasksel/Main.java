@@ -110,7 +110,8 @@ public class Main extends AbstractPage {
      */
     @Override
     public final void help(ViewData vdata) {
-        vdata.addParameter("topic", "tasksel-index");
+        vdata.clearParameters();
+        vdata.export("topic", "tasksel-index");
         vdata.redirect("iocaste-help", "view");
     }
     

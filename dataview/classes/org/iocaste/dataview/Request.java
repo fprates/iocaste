@@ -203,9 +203,9 @@ public class Request {
         }
         
         vdata.clearParameters();
-        vdata.addParameter("mode", "show");
-        vdata.addParameter("view.type", Const.SINGLE);
-        vdata.addParameter("model.name", modelname);
+        vdata.export("mode", "show");
+        vdata.export("view.type", Const.SINGLE);
+        vdata.export("model.name", modelname);
         vdata.export("model.regs", itens);
         vdata.setReloadableView(true);
         vdata.redirect(null, "select");
