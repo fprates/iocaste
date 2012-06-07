@@ -499,7 +499,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param contextdata
      * @return
      */
-    private final PageContext getPageContext (ContextData contextdata) {
+    private final PageContext getPageContext(ContextData contextdata) {
         AppContext appctx;
         List<SessionContext> sessions = apps.get(sessionid);
         
@@ -829,6 +829,7 @@ public class PageRenderer extends HttpServlet implements Function {
         AppContext appctx;
         ViewData viewdata;
         PrintWriter writer;
+        Map<String, Object> parameters;
         Message message = new Message();
 
         viewdata = pagectx.getViewData();
@@ -865,6 +866,10 @@ public class PageRenderer extends HttpServlet implements Function {
             }
             
             pagectx.setViewData(viewdata);
+        } else {
+            parameters = pagectx.getParameters();
+            for (String key : parameters.keySet())
+                viewdata.export(key, parameters.get(key));
         }
         
         /*
@@ -874,9 +879,7 @@ public class PageRenderer extends HttpServlet implements Function {
          */
         if (viewdata.getContentType() != null) {
             resp.reset();
-            
             configResponse(resp, viewdata);
-            
             os = resp.getOutputStream();
             
             content = viewdata.getContent();
@@ -907,9 +910,8 @@ public class PageRenderer extends HttpServlet implements Function {
         renderer.setCssElements(style);
         renderer.setLogid(pagectx.getLogid());
         text = renderer.run(pagectx.getViewData());
-
-        pagectx.setActions(renderer.getActions());
         
+        pagectx.setActions(renderer.getActions());
         writer = resp.getWriter();
         
         if (text != null)
