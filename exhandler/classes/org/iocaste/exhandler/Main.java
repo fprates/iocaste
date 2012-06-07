@@ -59,7 +59,7 @@ public class Main extends AbstractPage {
         ViewData exview = view.getParameter("exview");
         
         /*
-         * exceçao
+         * exceção
          */
         view.print(messages.get("exception"));
         printException(view, ex);
@@ -130,13 +130,13 @@ public class Main extends AbstractPage {
         view.print(concatenate(messages.get("page"), ": ",
                 checkunknown(exview.getPageName())));
         
-        keys = view.getExportable();
+        keys = exview.getExportable();
         if (keys.length > 0) {
             view.print(messages.get("parameters"));
             
             for (String key : keys)
                 view.print(concatenate("- ", key, ": ",
-                        view.getParameter(key)));
+                        exview.getParameter(key)));
         }
         
         view.print("");
