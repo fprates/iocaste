@@ -53,6 +53,8 @@ public class Common {
         String page = "main", app = null;
         String[] values;
         
+        view.clearParameters();
+        
         for (int i = 0; i < parsed.length; i++) {
             switch (i) {
             case 0:
