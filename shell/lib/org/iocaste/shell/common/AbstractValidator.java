@@ -30,6 +30,6 @@ public abstract class AbstractValidator implements Validator {
      *     org.iocaste.shell.common.ValidatorConfig)
      */
     @Override
-    public abstract String validate(ValidatorConfig config) throws Exception;
+    public abstract void validate(ValidatorConfig config) throws Exception;
 
 }

@@ -31,7 +31,7 @@ public class Controller {
     private static final int WINVALID_ACTION = 4;
     private static final int EVALIDATION = 5;
 
-    private static final String callCustomValidation(Function function,
+    private static final ValidatorConfig callCustomValidation(Function function,
             ViewData view, ValidatorConfig validatorcfg) throws Exception {
         String url = new StringBuilder("/").append(view.getAppName()).
                 append("/view.html").toString();
@@ -222,7 +222,7 @@ public class Controller {
         NumberFormat numberformat;
         DateFormat dateformat;
         DataElement dataelement;
-        String value = (String)input.get();
+        String value = input.get();
         
         if (Shell.isInitial(value))
             return true;
@@ -274,8 +274,9 @@ public class Controller {
      */
     private static final void processInputs(ViewData view, Function function,
             Map<String, ?> values, InputStatus status) throws Exception {
+        ValidatorConfig validatorcfg;
         Element element;
-        String message, value;
+        String value;
         DataElement dataelement;
         InputComponent input;
         List<InputComponent> validations = new ArrayList<InputComponent>();
@@ -351,7 +352,9 @@ public class Controller {
                 continue;
             }
             
-            if (input.getValidatorConfig() != null)
+            validatorcfg = input.getValidatorConfig();
+            if (validatorcfg != null &&
+                    !Shell.isInitial(validatorcfg.getClassName()))
                 validations.add(input);
         }
         
@@ -359,13 +362,19 @@ public class Controller {
             return;
         
         for (InputComponent input_ : validations) {
-            message = callCustomValidation(function, view, input_.
-                    getValidatorConfig());
+            validatorcfg = input_.getValidatorConfig();
+            validatorcfg = callCustomValidation(function, view, validatorcfg);
             
-            if (message == null)
+            status.message = validatorcfg.getMessage();
+            if (status.message == null) {
+                for (InputComponent vinput : validatorcfg.getInputs()) {
+                    element = view.getElement(vinput.getHtmlName());
+                    ((InputComponent)element).set(vinput.get());
+                }
+                
                 continue;
+            }
             
-            status.message = message;
             status.input = input_;
             status.error = EVALIDATION;
             break;

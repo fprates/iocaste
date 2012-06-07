@@ -4,6 +4,8 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 
 public interface InputComponent extends Component {
+    
+    public abstract void addValidatorInput(InputComponent input);
 
     public abstract Const getComponentType();
     
@@ -51,5 +53,5 @@ public interface InputComponent extends Component {
     
     public abstract void setSelected(boolean selected);
     
-    public abstract void setValidatorConfig(ValidatorConfig validator);
+    public abstract void setValidator(Class<? extends Validator> validator);
 }

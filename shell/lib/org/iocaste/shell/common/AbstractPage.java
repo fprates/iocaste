@@ -38,14 +38,27 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param message
      * @return
      */
-    public final String customValidation(Message message) throws Exception {
+    public final ValidatorConfig customValidation(Message message)
+            throws Exception {
         ValidatorConfig config = message.get("config");
         Validator validator = (Validator)Class.forName(config.getClassName()).
                 newInstance();
         
         validator.setFunction(this);
+        config.setMessage(null);
         
-        return validator.validate(config);
+        try {
+            validator.validate(config);
+            if (config.getMessage() == null)
+                new Iocaste(this).commit();
+            else
+                new Iocaste(this).rollback();
+            
+            return config;
+        } catch (Exception e) {
+            new Iocaste(this).rollback();
+            throw e;
+        }
     }
     
     /**

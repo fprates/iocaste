@@ -30,6 +30,13 @@ public abstract class AbstractInputComponent extends AbstractComponent
         
         this.type = type_;
         obligatory = false;
+        validatorcfg = new ValidatorConfig();
+        validatorcfg.add(this);
+    }
+    
+    @Override
+    public final void addValidatorInput(InputComponent input) {
+        validatorcfg.add(input);
     }
     
     /*
@@ -285,11 +292,11 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.InputComponent#setValidatorConfig(
-     *     org.iocaste.shell.common.ValidatorConfig)
+     * @see org.iocaste.shell.common.InputComponent#setValidator(
+     *     java.lang.Class)
      */
     @Override
-    public final void setValidatorConfig(ValidatorConfig validatorcfg) {
-        this.validatorcfg = validatorcfg;
+    public final void setValidator(Class<? extends Validator> validator) {
+        validatorcfg.setValidator(validator);
     }
 }

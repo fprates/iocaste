@@ -9,6 +9,7 @@ public class ValidatorConfig implements Serializable {
     private Map<String, InputComponent> inputs;
     private String classname;
     private Map<String, Object> values;
+    private String message;
     
     public ValidatorConfig() {
         inputs = new HashMap<String, InputComponent>();
@@ -51,6 +52,22 @@ public class ValidatorConfig implements Serializable {
     
     /**
      * 
+     * @return
+     */
+    public final InputComponent[] getInputs() {
+        return inputs.values().toArray(new InputComponent[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getMessage() {
+        return message;
+    }
+    
+    /**
+     * 
      * @param name
      * @return
      */
@@ -58,6 +75,24 @@ public class ValidatorConfig implements Serializable {
     public final <T> T getValue(String name) {
         return (T)values.get(name);
     }
+    
+    /**
+     * 
+     * @param name
+     * @param value
+     */
+    public final void set(String name, Object value) {
+        inputs.get(name).set(value);
+    }
+    
+    /**
+     * 
+     * @param message
+     */
+    public final void setMessage(String message) {
+        this.message = message;
+    }
+    
     /**
      * 
      * @param validator
