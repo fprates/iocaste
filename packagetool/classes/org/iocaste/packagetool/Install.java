@@ -42,8 +42,10 @@ public class Install {
         messages.put("name", "Nome");
         messages.put("action", "Ação");
         messages.put("ADMIN", "Administração");
-        
+        messages.put("info", "Conteúdo do pacote");
+        messages.put("package-contents", "Conteúdo do pacote");
         data.setMessages("pt_BR", messages);
+        
         data.link("PACKAGE", "iocaste-packagetool");
         data.addTaskGroup("ADMIN", "PACKAGE");
         
