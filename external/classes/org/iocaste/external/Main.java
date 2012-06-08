@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMException;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.OMNode;
@@ -130,6 +131,8 @@ public class Main extends AbstractPage {
             result = client.sendReceive(ping);
         } catch (AxisFault e) {
             throw new Exception(e.getMessage());
+        } catch (OMException e) {
+            throw new Exception(e.getMessage());
         }
         
         emessage = new ExternalMessage();
@@ -227,10 +230,15 @@ public class Main extends AbstractPage {
         dataitem = new DataItem(form, Const.TEXT_FIELD, "namespace");
         dataitem.setLength(80);
         dataitem.set("http://service.external.iocaste.org");
+        dataitem.setObligatory(true);
         
-        new DataItem(form, Const.TEXT_FIELD, "service");
-        new DataItem(form, Const.TEXT_FIELD, "url").setLength(80);
-        new DataItem(form, Const.TEXT_FIELD, "method");
+        new DataItem(form, Const.TEXT_FIELD, "service").setObligatory(true);
+        
+        dataitem = new DataItem(form, Const.TEXT_FIELD, "url");
+        dataitem.setLength(80);
+        dataitem.setObligatory(true);
+        
+        new DataItem(form, Const.TEXT_FIELD, "method").setObligatory(true);
         
         new Button(container, "add");
         new Button(container, "remove");
