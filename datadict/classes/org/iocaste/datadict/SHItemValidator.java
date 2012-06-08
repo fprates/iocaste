@@ -19,8 +19,8 @@ public class SHItemValidator extends AbstractValidator {
     @Override
     public final void validate(ValidatorConfig config) throws Exception {
         Documents documents = new Documents(getFunction());
-        String modelname = config.get("MODEL");
-        String itemname = config.get("ITEM");
+        String modelname = config.getInput("MODEL").get();
+        String itemname = config.getInput("ITEM").get();
         String value = composeName(modelname, itemname);
         
         if (documents.getObject("MODELITEM", value) == null)

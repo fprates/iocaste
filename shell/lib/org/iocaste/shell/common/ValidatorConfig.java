@@ -35,15 +35,6 @@ public class ValidatorConfig implements Serializable {
     
     /**
      * 
-     * @param name
-     * @return
-     */
-    public final <T> T get(String name) throws Exception {
-        return inputs.get(name).get();
-    }
-    
-    /**
-     * 
      * @return
      */
     public final String getClassName() {
@@ -54,8 +45,17 @@ public class ValidatorConfig implements Serializable {
      * 
      * @return
      */
-    public final InputComponent[] getInputs() {
-        return inputs.values().toArray(new InputComponent[0]);
+    public final String[] getInputNames() {
+        return inputs.keySet().toArray(new String[0]);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final InputComponent getInput(String name) {
+        return inputs.get(name);
     }
     
     /**

@@ -1,8 +1,3 @@
-function setValue(name, value) {
-	var param = document.getElementById(name);
-	param.value = value;
-}
-
 function defineAction(action, actionname) {
 	setValue(action, actionname);
 }
@@ -43,6 +38,11 @@ function setClassStyle(id, classname) {
 
 function setElementDisplay(id, state) {
     document.getElementById(id).style.display = state;
+}
+
+function setValue(name, value) {
+	var param = document.getElementById(name);
+	param.value = value;
 }
 
 function submit(formname, actionname, value) {
