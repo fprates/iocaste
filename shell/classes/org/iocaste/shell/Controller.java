@@ -367,9 +367,11 @@ public class Controller {
             
             status.message = validatorcfg.getMessage();
             if (status.message == null) {
-                for (InputComponent vinput : validatorcfg.getInputs()) {
-                    element = view.getElement(vinput.getHtmlName());
-                    ((InputComponent)element).set(vinput.get());
+                for (String inputname : validatorcfg.getInputNames()) {
+                    input = validatorcfg.getInput(inputname);
+                    input_ = view.getElement(input.getHtmlName());
+                    input_.set(input.get());
+                    input_.setText(input.getText());
                 }
                 
                 continue;

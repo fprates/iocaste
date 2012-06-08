@@ -8,6 +8,7 @@ import org.iocaste.shell.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
 
 public class TextFieldRenderer extends Renderer {
@@ -20,6 +21,8 @@ public class TextFieldRenderer extends Renderer {
      */
     public static final List<XMLElement> render(TextField textfield,
             Config config) {
+        String tftext;
+        Text text;
         SearchHelp search;
         DataElement dataelement = Shell.getDataElement(textfield);
         int length = (dataelement == null)?textfield.getLength() :
@@ -54,15 +57,26 @@ public class TextFieldRenderer extends Renderer {
         
         tags.add(inputtag);
         
-        if (textfield.isObligatory()) {
-            spantag = new XMLElement("span");
-            spantag.addInner("*");
-            tags.add(spantag);
-        }
-        
         search = textfield.getSearchHelp();
         if (search != null)
             tags.add(renderSearchHelp(search, config));
+        
+        if (textfield.isObligatory()) {
+            spantag = new XMLElement("input");
+            spantag.add("type", "button");
+            spantag.add("class", "sh_button");
+            spantag.add("value", "!");
+            spantag.add("disabled", "disabled");
+            tags.add(spantag);
+        }
+        
+        tftext = textfield.getText();
+        if (tftext != null) {
+            text = new Text(null, "");
+            text.setStyleClass("tftext");
+            text.setText(tftext);
+            tags.add(TextRenderer.render(text, config));
+        }
         
         return tags;
     }

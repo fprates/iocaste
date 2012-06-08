@@ -44,11 +44,12 @@ public class DataItemRenderer {
         
         coltag = new XMLElement("td");
         coltag.add("class", dataitem.getStyleClass());
-        
-        coltags = new ArrayList<XMLElement>();
 
         input = Shell.copyInputItem(null, dataitem, inputname, dataitem.
                 getValues());
+        input.setText(dataitem.getText());
+        
+        coltags = new ArrayList<XMLElement>();
         Renderer.renderElement(coltags, input, config);
         
         coltag.addChildren(coltags);
