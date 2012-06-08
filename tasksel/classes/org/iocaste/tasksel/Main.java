@@ -1,8 +1,10 @@
 package org.iocaste.tasksel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -22,6 +24,7 @@ import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.ViewData;
 
 public class Main extends AbstractPage {
@@ -140,6 +143,10 @@ public class Main extends AbstractPage {
         Parameter groupcommand;
         String taskname, text;
         Container container = new Form(view, "main");
+        StandardContainer groups = new StandardContainer(container, "groups");
+        
+        groups.setStyleClass("groups");
+        setCustomStyleSheet(view);
         
         /*
          * tarefas pré-definidas
@@ -147,7 +154,8 @@ public class Main extends AbstractPage {
         lists = getLists(view.getLocale());
         if (lists != null)
             for (TasksList tasks : lists) {
-                frame = new Frame(container, tasks.getName());
+                frame = new Frame(groups, tasks.getName());
+                frame.setStyleClass("tasksel_frame");
                 group = new NodeList(frame, tasks.getName());
                 for (TaskEntry entry : tasks.getEntries()) {
                     groupcommand = new Parameter(container, "groupcommand");
@@ -194,5 +202,31 @@ public class Main extends AbstractPage {
             return;
         
         Common.run(vdata, parsed);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    private final void setCustomStyleSheet(ViewData view) throws Exception {
+        Map<String, Map<String, String>> defaultsheet;
+        Map<String, String> style;
+        
+        defaultsheet = new Shell(this).getStyleSheet(view);
+        
+        style = new HashMap<String, String>();
+        style.putAll(defaultsheet.get(".frame"));
+        style.put("display", "inline");
+        style.put("vertical-align", "top");
+        defaultsheet.put(".tasksel_frame", style);
+        
+        style = new HashMap<String, String>();
+        style.put("background-color", "#000000");
+        style.put("padding", "3px");
+        style.put("margin-bottom", "3px");
+        defaultsheet.put(".groups", style);
+        
+        view.setStyleSheet(defaultsheet);
     }
 }
