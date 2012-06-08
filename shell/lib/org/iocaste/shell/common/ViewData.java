@@ -472,6 +472,14 @@ public class ViewData implements Serializable {
     
     /**
      * 
+     * @param page
+     */
+    public final void redirect(String page) {
+        redirect(null, page);
+    }
+    
+    /**
+     * 
      * @param app
      * @param page
      */
