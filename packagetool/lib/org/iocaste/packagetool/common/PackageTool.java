@@ -45,6 +45,25 @@ public class PackageTool extends AbstractServiceInterface {
      * 
      * @param name
      * @return
+     * @throws Exception
+     */
+    public final InstallData getInstallData(String name) throws Exception {
+        String viewname = new StringBuilder("/").
+                append(name).
+                append("/view.html").toString();
+        GenericService service = new GenericService(function, viewname);
+        Message message = new Message();
+        
+        message.setId("install");
+        message.add("name", name);
+        
+        return service.invoke(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
      */
     public static final boolean hasPackage(String name) {
         String[] files = getAvailablePackages();
@@ -63,17 +82,8 @@ public class PackageTool extends AbstractServiceInterface {
      * @throws Exception
      */
     public final Integer install(String name) throws Exception {
-        InstallData data;
-        String viewname = new StringBuilder("/").
-                append(name).
-                append("/view.html").toString();
-        GenericService service = new GenericService(function, viewname);
+        InstallData data = getInstallData(name);
         Message message = new Message();
-        
-        message.setId("install");
-        message.add("name", name);
-        
-        data = (InstallData)service.invoke(message);
         
         message.setId("install");
         message.clear();
