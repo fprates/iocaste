@@ -38,7 +38,9 @@ public class Install {
         messages.put("item.length", "Comprimento");
         messages.put("item.dec", "Decimais");
         messages.put("generateclass", "Gerar classe");
-        messages.put("datadict-view", "Exibir objeto do dicionário");
+        messages.put("datadict-view", "Exibir modelo");
+        messages.put("datadict-update", "Editar modelo");
+        messages.put("datadict-create", "Criar modelo");
         messages.put("item-detail-editor", "Detalhes do item do object");
         messages.put("foreign.key", "Referência estrangeira");
         messages.put("model.name", "Modelo");
@@ -54,6 +56,9 @@ public class Install {
         messages.put("EXPORT", "Exportar");
         messages.put("ITEM", "Exibir");
         messages.put("sh-editor-display", "Exibir ajuda de pesquisa");
+        messages.put("sh-editor-create", "Criar ajuda de pesquisa");
+        messages.put("sh-editor-update", "Editar ajuda de pesquisa");
+        messages.put("sh.already.exist", "Ajuda de pesquisa já existe.");
         messages.put("savesh", "Salvar");
         messages.put("addshitem", "Adicionar");
         messages.put("deleteshitem", "Remover");
