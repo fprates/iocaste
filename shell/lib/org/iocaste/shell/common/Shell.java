@@ -134,6 +134,22 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * 
+     * @param view
+     * @return
+     * @throws Exception
+     */
+    public final Map<String, Map<String, String>> getStyleSheet(ViewData view)
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("get_style_sheet");
+        message.add("appname", view.getAppName());
+        
+        return call(message);
+    }
+    
+    /**
+     * 
      * @param appname
      * @param pagename
      * @return

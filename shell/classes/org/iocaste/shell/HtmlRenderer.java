@@ -116,7 +116,7 @@ public class HtmlRenderer {
         headtag.addChild(metatag);
         headtag.addChild(titletag);
         headtag.addChild(renderJavaScript(config));
-        headtag.addChild(renderStyleSheet(vdata));
+        headtag.addChild(renderStyleSheet());
         
         return headtag;
     }
@@ -157,18 +157,13 @@ public class HtmlRenderer {
     
     /**
      * 
-     * @param vdata
      * @return
      */
-    private final XMLElement renderStyleSheet(ViewData vdata) {
+    private final XMLElement renderStyleSheet() {
         Map<String, String> properties;
-        String sheet = vdata.getStyleSheet();
         XMLElement styletag = new XMLElement("style");
         
         styletag.add("type", "text/css");
-        
-        if (sheet == null)
-            sheet = "DEFAULT";
         
         if (csselements.size() == 0)
             styletag.addInner("");

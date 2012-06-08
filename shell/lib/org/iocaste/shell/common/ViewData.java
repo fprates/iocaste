@@ -38,7 +38,7 @@ public class ViewData implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
     private byte[] content;
     private Element elementfocus;
-    private String title, focus, sheet, appname, pagename;
+    private String title, focus, appname, pagename;
     private String contenttype, rapp, rpage, messagetext;
     private MessageSource messages;
     private List<String> inputs, lines;
@@ -47,6 +47,7 @@ public class ViewData implements Serializable {
     private List<Container> containers;
     private Map<String, Object> parameters;
     private Map<String, String> headervalues;
+    private Map<String, Map<String, String>> sheet; 
     private Container nbcontainer;
     private boolean disabledhead, reloadable, dontpushpage, pagecall;
     private Const messagetype;
@@ -399,10 +400,10 @@ public class ViewData implements Serializable {
     }
     
     /**
-     * Retorna nome da folha de estilos.
+     * Retorna folha de estilos.
      * @return nome
      */
-    public final String getStyleSheet() {
+    public final Map<String, Map<String, String>> getStyleSheet() {
         return sheet;
     }
     
@@ -574,10 +575,10 @@ public class ViewData implements Serializable {
     }
     
     /**
-     * Ajusta nome da folha de estilos.
+     * Ajusta folha de estilos.
      * @param sheet nome
      */
-    public final void setStyleSheet(String sheet) {
+    public final void setStyleSheet(Map<String, Map<String, String>> sheet) {
         this.sheet = sheet;
     }
     

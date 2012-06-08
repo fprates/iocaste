@@ -513,6 +513,15 @@ public class PageRenderer extends HttpServlet implements Function {
                 contextdata.pagename);
     }
     
+    public static final Map<String, Map<String, String>> getStyleSheet(
+            String sessionid, String appname) {
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        
+        return apps.get(complexid[0]).get(logid).getAppContext(appname).
+                getStyleSheet();
+    }
+    
     /**
      * 
      * @param sessionid
@@ -819,6 +828,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void render(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
+        Map<String, Map<String, String>> userstyle;
         byte[] content;
         String username, viewmessage;
         Const messagetype;
@@ -832,6 +842,7 @@ public class PageRenderer extends HttpServlet implements Function {
         Map<String, Object> parameters;
         Message message = new Message();
 
+        appctx = pagectx.getAppContext();
         viewdata = pagectx.getViewData();
         if (viewdata != null) {
             viewmessage = viewdata.getTranslatedMessage();
@@ -843,8 +854,14 @@ public class PageRenderer extends HttpServlet implements Function {
         
         if (pagectx.getError() == 0 &&
                 (viewdata == null || pagectx.isReloadableView())) {
-            appctx = pagectx.getAppContext();
             logid = pagectx.getLogid();
+            
+            if (appctx.getStyleSheet() == null) {
+                if (style == null)
+                    style = Style.get("DEFAULT", this);
+                    
+                appctx.setStyleSheet(style);
+            }
             
             message.setId("get_view_data");
             message.add("app", appctx.getName());
@@ -899,17 +916,18 @@ public class PageRenderer extends HttpServlet implements Function {
         
         configResponse(resp, viewdata);
         
-        if (style == null)
-            style = Style.get("DEFAULT", this);
-
+        userstyle = viewdata.getStyleSheet();
+        if (userstyle != null)
+            appctx.setStyleSheet(userstyle);
+        
         username = pagectx.getUsername();
         renderer.setMessageSource(msgsource);
         renderer.setMessageText(viewmessage);
         renderer.setMessageType(messagetype);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
-        renderer.setCssElements(style);
+        renderer.setCssElements(appctx.getStyleSheet());
         renderer.setLogid(pagectx.getLogid());
-        text = renderer.run(pagectx.getViewData());
+        text = renderer.run(viewdata);
         
         pagectx.setActions(renderer.getActions());
         writer = resp.getWriter();
