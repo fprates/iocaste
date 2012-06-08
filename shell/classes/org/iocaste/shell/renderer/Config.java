@@ -9,7 +9,7 @@ import org.iocaste.shell.XMLElement;
 import org.iocaste.shell.common.MessageSource;
 
 public class Config {
-    private String currentaction, pagetrack;
+    private String currentaction, currentform, pagetrack;
     private List<MessageSource> msgsources;
     private Set<String> actions;
     private List<String> onload; 
@@ -84,6 +84,14 @@ public class Config {
      * 
      * @return
      */
+    public final String getCurrentForm() {
+        return currentform;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final MessageSource[] getMessageSources() {
         return msgsources.toArray(new MessageSource[0]);
     }
@@ -141,6 +149,14 @@ public class Config {
      */
     public final void setCurrentAction(String currentaction) {
         this.currentaction = currentaction;
+    }
+    
+    /**
+     * 
+     * @param currentform
+     */
+    public final void setCurrentForm(String currentform) {
+        this.currentform = currentform;
     }
     
     /**
