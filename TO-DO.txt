@@ -2,31 +2,85 @@
 
 Sem prioridade definida:
 
-Suporte à conexão segura
-Suporte à criptografia
-Melhoria no suporte à temas
-Melhoria na consulta de ajuda de pesquisa
-Suporte à relacionamentos entre modelos de documentos
-Suporte à componente de detalhe
-Suporte à bloqueio de registros
-Melhoria no tratamento de erros em tempo de execução
-Suporte à aplicações externas, integração
-Unificação dos pacotes de protocolo
-Inclusão de dados de projeto no versionamento
-Suporte à dependências de pacotes
-Melhoria na tela de conexão do usuário (seleção de idioma)
-Implementar utilitário de manutenção de usuários
-Suporte à grupos de usuários
-Suporte a importação/exportação de dados
-Melhoria no programa de ajuda
-Melhoria na notificação de erro
-Suporte à detalhe de campos em tela
-Suporte à atualização on-line
-Suporte à log de eventos
-Melhoria no seletor de tarefas
-Melhoria no editor do dicionário de dados
-Melhoria na visão de edição tabelas
-Suporte à visão de dados
-Melhoria na documentação das APIs
-Melhoria na interface do programa de pacotes
-Implementação de gerador de relatórios e formulários
+- exhandler
+arquivar logs
+envio de logs para desenvolvedor
+suporte a stacktrace no nível de chamada de funções
+
+- report
+efetuar testes e avaliar necessidades
+
+- authority
+
+- usereditor
+confirmação de validade de senha
+incluir grupos de tarefas
+implementar grupos de usuários
+
+- styleeditor
+completar implementação
+
+- packagetool
+implementar validaçao de dependências
+permitir inclusão de dados de projeto no versionamento
+implementar atualização on-line
+
+- datadict
+permitir adicionar autorização
+melhorar atualização de elemento de dados
+
+- dataview
+tornar edição transacional
+melhorar layout de edição
+
+- help
+efetuar testes e avaliar necessidades
+
+- transport
+redefinir módulo para gerar scripts de instalação
+
+- documents
+completar implementação de documentos complexos
+implementar bloqueio de registros
+implementar visão
+
+- shell
+diálogos modais
+fixar cabeçalho
+alinhamento de componentes em container
+implementar à componente de detalhe
+implementar informações técnicas do elemento
+permitir anexar documentação à mensagem de erro
+implementar calendário para campos tipo data
+
+- core
+informação sobre versão do núcleo
+implementar cache de autorizações
+
+- infosis
+implementar formato para impressão
+
+- login
+transportar instalação de programas para módulo adequado
+melhorar seleção de idiomas
+suporte à conexão segura
+suporte à criptografia
+
+- tasksel
+dispor grupos horizontalmente, para melhor uso de espaço
+
+- external
+permitir configurar interface do webservice
+implementar protocolo par leitura de telas
+implementar comunicação de webservice com o módulo
+
+- search-help
+implementar critérios de consulta
+implementar exibição modal (depende do shell)
+
+- não relacionados
+unificar pacotes de protocolo
+implementar importação/exportação de dados
+implementar log de eventos
+melhorar documentação das APIs
+implementar spool de impressão
