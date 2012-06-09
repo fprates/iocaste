@@ -41,7 +41,7 @@ public abstract class AbstractContainer
     private Map<String, Element> elements;
     private DocumentModel model;
 
-    public AbstractContainer(ViewData view, Const type, String name) {
+    public AbstractContainer(View view, Const type, String name) {
         super(type, name);
 
         elements = new LinkedHashMap<String, Element>();

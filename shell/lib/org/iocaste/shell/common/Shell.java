@@ -141,7 +141,7 @@ public class Shell extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final Map<String, Map<String, String>> getStyleSheet(ViewData view)
+    public final Map<String, Map<String, String>> getStyleSheet(View view)
             throws Exception {
         Message message = new Message();
         
@@ -158,7 +158,7 @@ public class Shell extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final ViewData getView(ViewData view, String pagename)
+    public final View getView(View view, String pagename)
             throws Exception {
         Message message = new Message();
         
@@ -175,7 +175,7 @@ public class Shell extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final String[] home(ViewData view) throws Exception {
+    public final String[] home(View view) throws Exception {
         Message message = new Message();
         
         message.setId("home");
@@ -198,7 +198,7 @@ public class Shell extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final String[] popPage(ViewData view) throws Exception {
+    public final String[] popPage(View view) throws Exception {
         Message message = new Message();
         
         message.setId("pop_page");
@@ -211,7 +211,7 @@ public class Shell extends AbstractServiceInterface {
      * @param view
      * @throws Exception
      */
-    public final void pushPage(ViewData view) throws Exception {
+    public final void pushPage(View view) throws Exception {
         Message message = new Message();
         
         message.setId("push_page");
@@ -226,7 +226,7 @@ public class Shell extends AbstractServiceInterface {
      * @param view
      * @throws Exception
      */
-    public final void updateView(ViewData view) throws Exception {
+    public final void updateView(View view) throws Exception {
         Message message = new Message();
         
         message.setId("update_view");

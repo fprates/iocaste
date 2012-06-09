@@ -45,7 +45,7 @@ public class DataForm extends AbstractContainer {
      * @param view
      * @param name
      */
-    public DataForm(ViewData view, String name) {
+    public DataForm(View view, String name) {
         super(view, Const.DATA_FORM, name);
         init();
     }

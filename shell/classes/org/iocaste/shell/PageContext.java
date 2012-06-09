@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.fileupload.FileItem;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class PageContext {
-    private ViewData view;
+    private View view;
     private AppContext appctx;
     private String name, username;
     private boolean reloadable;
@@ -104,7 +104,7 @@ public class PageContext {
      * 
      * @return
      */
-    public final ViewData getViewData() {
+    public final View getViewData() {
         return view;
     }
     
@@ -185,7 +185,7 @@ public class PageContext {
      * 
      * @param view
      */
-    public final void setViewData(ViewData view) {
+    public final void setViewData(View view) {
         this.view = view;
     }
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Services extends AbstractFunction {
 
@@ -36,7 +36,7 @@ public class Services extends AbstractFunction {
      * @param message
      * @return
      */
-    public final ViewData getView(Message message) {
+    public final View getView(Message message) {
         String sessionid = message.getSessionid();
         String appname = message.getString("app_name");
         String pagename = message.getString("page_name");
@@ -85,6 +85,6 @@ public class Services extends AbstractFunction {
      */
     public final void updateView(Message message) throws Exception {
         PageRenderer.updateView(message.getSessionid(),
-                (ViewData)message.get("view"), this);
+                (View)message.get("view"), this);
     }
 }

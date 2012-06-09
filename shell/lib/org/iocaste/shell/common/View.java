@@ -34,7 +34,7 @@ import java.util.Map;
  * @author Francisco Prates
  *
  */
-public class ViewData implements Serializable {
+public class View implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
     private byte[] content;
     private Element elementfocus;
@@ -42,34 +42,28 @@ public class ViewData implements Serializable {
     private String contenttype, rapp, rpage, messagetext;
     private MessageSource messages;
     private List<String> inputs, lines;
-    private Map<String, Boolean> navbarstatus;
     private List<MultipartElement> mpelements;
     private List<Container> containers;
     private Map<String, Object> parameters;
     private Map<String, String> headervalues;
-    private Map<String, Map<String, String>> sheet; 
-    private Container nbcontainer;
+    private Map<String, Map<String, String>> sheet;
     private boolean disabledhead, reloadable, dontpushpage, pagecall;
     private Const messagetype;
     private Locale locale;
     
-    public ViewData(String appname, String pagename) {
+    public View(String appname, String pagename) {
         inputs = new ArrayList<String>();
         lines = new ArrayList<String>();
-        navbarstatus = new HashMap<String, Boolean>();
         parameters = new HashMap<String, Object>();
         headervalues = new HashMap<String, String>();
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<MultipartElement>();
-        nbcontainer = new StandardContainer(this, "navbar");
         disabledhead = false;
         dontpushpage = false;
         contenttype = null;
         
         this.appname = appname;
         this.pagename = pagename;
-        
-        nbcontainer.setStyleClass("header");
         
         clearRedirect();
     }
@@ -152,15 +146,15 @@ public class ViewData implements Serializable {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public final boolean equals(Object object) {
-    	ViewData viewdata;
+    	View viewdata;
     	
     	if (object == this)
     		return true;
     	
-    	if (!(object instanceof ViewData))
+    	if (!(object instanceof View))
     		return false;
     	
-    	viewdata = (ViewData)object;
+    	viewdata = (View)object;
     	if ((!appname.equals(viewdata.getAppName())) ||
     			(!pagename.equals(viewdata.getPageName())))
     		return false;
@@ -339,22 +333,6 @@ public class ViewData implements Serializable {
      */
     public final MultipartElement[] getMultipartElements() {
         return mpelements.toArray(new MultipartElement[0]);
-    }
-    
-    /**
-     * Retorna status dos elementos da barra de navegação.
-     * @return status dos elementos
-     */
-    public final Map<String, Boolean> getNavbarStatus() {
-        return navbarstatus;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final Container getNavBarContainer() {
-        return nbcontainer;
     }
     
     /**
@@ -552,18 +530,6 @@ public class ViewData implements Serializable {
      */
     public final void setMessages(MessageSource messages) {
         this.messages = messages;
-    }
-    
-    /**
-     * Habilita ação da barra de navegação.
-     * @param name nome da ação
-     * @param enabled true, para habilitar ação
-     */
-    public final void setNavbarActionEnabled(String name, boolean enabled) {
-        if (navbarstatus.containsKey(name))
-            navbarstatus.remove(name);
-        
-        navbarstatus.put(name, enabled);
     }
 
     /**

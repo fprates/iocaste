@@ -22,7 +22,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view
      * @throws Exception
      */
-    public void back(ViewData view) throws Exception {
+    public void back(View view) throws Exception {
         String[] entry = new Shell(this).popPage(view);
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
@@ -67,9 +67,9 @@ public abstract class AbstractPage extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final ViewData execAction(Message message) throws Exception {
+    public final View execAction(Message message) throws Exception {
         Method method;
-        ViewData view = message.get("view");
+        View view = message.get("view");
         String action, controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
         
@@ -88,7 +88,7 @@ public abstract class AbstractPage extends AbstractFunction {
                 }
             }
             
-            method = this.getClass().getMethod(action, ViewData.class);
+            method = this.getClass().getMethod(action, View.class);
             
             try {
                 method.invoke(this, view);
@@ -111,7 +111,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @return
      * @throws Exception 
      */
-    protected final ViewData getView(ViewData view, String name)
+    protected final View getView(View view, String name)
             throws Exception {
         return new Shell(this).getView(view, name);
     }
@@ -122,10 +122,10 @@ public abstract class AbstractPage extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final ViewData getViewData(Message message) throws Exception {
+    public final View getViewData(Message message) throws Exception {
         MessageSource messages;
         Method method;
-        ViewData view;
+        View view;
         Locale locale;
         String page = message.getString("page");
         String app = message.getString("app");
@@ -137,13 +137,13 @@ public abstract class AbstractPage extends AbstractFunction {
             throw new IocasteException("page not especified.");
         
         locale = new Iocaste(this).getLocale();
-        view = new ViewData(app, page);
+        view = new View(app, page);
         view.setLocale(locale);
         
         for (String name : parameters.keySet())
             view.export(name, parameters.get(name));
         
-        method = this.getClass().getMethod(page, ViewData.class);
+        method = this.getClass().getMethod(page, View.class);
         
         try {
             method.invoke(this, view);
@@ -165,14 +165,14 @@ public abstract class AbstractPage extends AbstractFunction {
      * 
      * @param view
      */
-    public void help(ViewData view) { }
+    public void help(View view) { }
     
     /**
      * 
      * @param view
      * @throws Exception
      */
-    public void home(ViewData view) throws Exception {
+    public void home(View view) throws Exception {
         String[] entry = new Shell(this).home(view);
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
@@ -184,7 +184,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view
      * @throws Exception
      */
-    protected final void updateView(ViewData view) throws Exception {
+    protected final void updateView(View view) throws Exception {
         new Shell(this).updateView(view);
     }
 }

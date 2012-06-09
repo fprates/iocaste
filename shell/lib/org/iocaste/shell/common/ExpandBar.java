@@ -20,7 +20,7 @@ public class ExpandBar extends AbstractContainer {
      * @param view
      * @param name
      */
-    public ExpandBar(ViewData view, String name) {
+    public ExpandBar(View view, String name) {
         super(view, Const.EXPAND_BAR, name);
         
         init();

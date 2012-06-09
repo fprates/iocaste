@@ -40,7 +40,7 @@ public abstract class AbstractElement implements Element {
     private Const type;
     private String name, htmlname, style;
     private boolean enabled, visible;
-    private ViewData view;
+    private View view;
     private Map<String, String> events;
     private Locale locale;
     
@@ -169,7 +169,7 @@ public abstract class AbstractElement implements Element {
      * @see org.iocaste.shell.common.Element#getView()
      */
     @Override
-    public final ViewData getView() {
+    public final View getView() {
         return view;
     }
     
@@ -260,7 +260,7 @@ public abstract class AbstractElement implements Element {
      *     org.iocaste.shell.common.ViewData)
      */
     @Override
-    public final void setView(ViewData view) {
+    public final void setView(View view) {
         this.view = view;
     }
     

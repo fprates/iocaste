@@ -13,7 +13,7 @@ public class NodeList extends AbstractContainer {
         init();
     }
     
-    public NodeList(ViewData view, String name) {
+    public NodeList(View view, String name) {
         super(view, Const.NODE_LIST, name);
         
         init();

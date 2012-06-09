@@ -8,7 +8,7 @@ public class TabbedPane extends AbstractContainer {
     private Map<String, TabbedPaneItem> itens;
     private String current;
     
-    public TabbedPane(ViewData view, String name) {
+    public TabbedPane(View view, String name) {
         super(view, Const.TABBED_PANE, name);
         
         init();

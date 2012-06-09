@@ -86,7 +86,7 @@ public interface Element extends Comparable<Element>, Serializable {
      * 
      * @return
      */
-    public abstract ViewData getView();
+    public abstract View getView();
     
     /**
      * Retorna true se for componente que suporta
@@ -159,7 +159,7 @@ public interface Element extends Comparable<Element>, Serializable {
      * 
      * @param view
      */
-    public abstract void setView(ViewData view);
+    public abstract void setView(View view);
     
     /**
      * Ajusta visibilidade do elemento.

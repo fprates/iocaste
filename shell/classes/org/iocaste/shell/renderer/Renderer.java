@@ -24,6 +24,7 @@ import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.NodeList;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.Shell;
@@ -57,6 +58,11 @@ public class Renderer {
         XMLElement xmltag;
         
         switch (container.getType()) {
+        case PAGE_CONTROL:
+            tags.add(PageControlRenderer.render(
+                    (PageControl)container, config));
+            break;
+            
         case FORM:
             config.setCurrentForm(container.getHtmlName());
             xmltag = FormRenderer.render((Form)container, config);

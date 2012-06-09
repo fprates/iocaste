@@ -4,7 +4,7 @@ public class Frame extends AbstractContainer {
     private static final long serialVersionUID = 819231435339310268L;
     private String text;
     
-    public Frame(ViewData view, String name) {
+    public Frame(View view, String name) {
         super(view, Const.FRAME, name);
         init(name);
     }

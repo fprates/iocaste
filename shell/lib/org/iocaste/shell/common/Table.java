@@ -45,7 +45,7 @@ public class Table extends AbstractContainer {
     private byte seltype;
     private RadioGroup group;
     
-    public Table(ViewData view, String name) {
+    public Table(View view, String name) {
         super(view, Const.TABLE, name);
         
         init();

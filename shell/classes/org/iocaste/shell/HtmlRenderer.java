@@ -13,8 +13,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.MessageSource;
-import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 import org.iocaste.shell.renderer.Config;
 import org.iocaste.shell.renderer.Renderer;
 
@@ -45,37 +44,6 @@ public class HtmlRenderer {
             new RuntimeException(e);
         }
     }
-
-    /**
-     * 
-     * @param vdata
-     */
-    private final void configNavigationBar(ViewData vdata, Config config) {
-        NavigationBar navbar;
-        Text txtuname, txttitle;
-        Map<String, Boolean> navbarstatus;
-        Container container = vdata.getNavBarContainer();
-        String title = vdata.getTitle();
-        
-        container.clear();
-        navbar = new NavigationBar(container, config);
-        
-        navbarstatus = vdata.getNavbarStatus();
-        for (String name : navbarstatus.keySet())
-            navbar.setEnabled(name, navbarstatus.get(name));
-        
-        txttitle = new Text(navbar.getStatusArea(), "navbar.title");
-        txttitle.setStyleClass("title");
-        txttitle.setText((title == null)? vdata.getAppName() : title);
-        txttitle.setTag("h1");
-        
-        txtuname = new Text(navbar.getStatusArea(), "navbar.username");
-        txtuname.setStyleClass("status");
-        txtuname.setText(new StringBuilder(username).
-                append("@term:").append(logid).toString());
-        
-        navbar.setMessage((msgtype == null)? Const.STATUS : msgtype, msgtext);
-    }
     
     /**
      * 
@@ -90,7 +58,7 @@ public class HtmlRenderer {
      * @param vdata
      * @return
      */
-    private final XMLElement renderHeader(ViewData vdata, Config config) {
+    private final XMLElement renderHeader(View vdata, Config config) {
         Element elementfocus;
         String focus = vdata.getFocus();
         String title = vdata.getTitle();
@@ -188,15 +156,19 @@ public class HtmlRenderer {
      * @param vdata dados da visão
      * @return código html da visão
      */
-    public final String[] run(ViewData vdata) {
+    public final String[] run(View vdata) {
         String[] printlines;
+        Config config;
         List<String> html = new ArrayList<String>();
         List<XMLElement> tags = new ArrayList<XMLElement>();
         List<XMLElement> bodycontent = new ArrayList<XMLElement>();
         XMLElement htmltag = new XMLElement("html");
         XMLElement bodytag = new XMLElement("body");
-        Config config = new Config();
         
+        config = new Config();
+        config.setView(vdata);
+        config.setUsername(username, logid);
+        config.setMessage(msgtype, msgtext);
         config.addMessageSource(vdata.getMessages());
         config.addMessageSource(msgsource);
         config.setPageTrack(new StringBuffer(vdata.getAppName()).append(".").
@@ -207,8 +179,6 @@ public class HtmlRenderer {
                 "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
 
         bodytag.add("onLoad", "initialize()");
-        
-        configNavigationBar(vdata, config);
         
         for (Container container : vdata.getContainers())
             Renderer.renderContainer(bodycontent, container, config);

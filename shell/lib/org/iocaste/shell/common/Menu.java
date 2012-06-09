@@ -9,7 +9,7 @@ public class Menu extends AbstractContainer {
     private Parameter parameter;
     private Set<String> parameters;
     
-    public Menu(ViewData view, String action) {
+    public Menu(View view, String action) {
         super(view, Const.MENU, action);
         
         init(action);

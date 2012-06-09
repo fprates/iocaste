@@ -41,7 +41,7 @@ import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
@@ -72,7 +72,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @return
      * @throws Exception
      */
-    private final ViewData callController(String sessionid,
+    private final View callController(String sessionid,
             Map<String, ?> parameters, PageContext pagectx) throws Exception {
         InputStatus status;
         Message message;
@@ -92,7 +92,7 @@ public class PageRenderer extends HttpServlet implements Function {
         for (String name : parameters.keySet())
             message.add(name, parameters.get(name));
         
-        return (ViewData)Service.callServer(
+        return (View)Service.callServer(
                 composeUrl(pagectx.getAppContext().getName()), message);
     }
     
@@ -111,7 +111,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param resp
      * @param view
      */
-    private final void configResponse(HttpServletResponse resp, ViewData view) {
+    private final void configResponse(HttpServletResponse resp, View view) {
         String contenttype = view.getContentType();
         
         resp.setContentType((contenttype == null)? STD_CONTENT : contenttype);
@@ -544,7 +544,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param logid
      * @return
      */
-    public static final ViewData getView(String sessionid, String appname,
+    public static final View getView(String sessionid, String appname,
             String pagename) {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
@@ -615,7 +615,7 @@ public class PageRenderer extends HttpServlet implements Function {
         Enumeration<?> parameternames;
         PageContext pagectx_;
         Map<String, String[]> parameters;
-        ViewData view;
+        View view;
         String complexid, appname, pagename, key, pagetrack = null,
                 actionname = null;
         
@@ -851,7 +851,7 @@ public class PageRenderer extends HttpServlet implements Function {
         OutputStream os;
         String[] text;
         AppContext appctx;
-        ViewData viewdata;
+        View viewdata;
         PrintWriter writer;
         Map<String, Object> parameters;
         Message message = new Message();
@@ -883,7 +883,7 @@ public class PageRenderer extends HttpServlet implements Function {
             message.add("parameters", pagectx.getParameters());
             message.setSessionid(getComplexId(sessionid, logid));
             
-            viewdata = (ViewData)Service.callServer(
+            viewdata = (View)Service.callServer(
                     composeUrl(appctx.getName()), message);
             
             inputdata = new InputData();
@@ -1010,7 +1010,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @param function
      * @throws Exception
      */
-    public static final void updateView(String sessionid, ViewData view,
+    public static final void updateView(String sessionid, View view,
             Function function) throws Exception {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
@@ -1032,7 +1032,7 @@ public class PageRenderer extends HttpServlet implements Function {
 }
 
 class InputData {
-    public ViewData view;
+    public View view;
     public Element element;
     public Container container;
     public Function function;

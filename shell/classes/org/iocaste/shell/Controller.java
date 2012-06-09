@@ -22,7 +22,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.ValidatorConfig;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Controller {
     private static final int EINITIAL = 1;
@@ -32,7 +32,7 @@ public class Controller {
     private static final int EVALIDATION = 5;
 
     private static final ValidatorConfig callCustomValidation(Function function,
-            ViewData view, ValidatorConfig validatorcfg) throws Exception {
+            View view, ValidatorConfig validatorcfg) throws Exception {
         String url = new StringBuilder("/").append(view.getAppName()).
                 append("/view.html").toString();
         GenericService service = new GenericService(function, url);
@@ -272,7 +272,7 @@ public class Controller {
      * @param status
      * @throws Exception
      */
-    private static final void processInputs(ViewData view, Function function,
+    private static final void processInputs(View view, Function function,
             Map<String, ?> values, InputStatus status) throws Exception {
         ValidatorConfig validatorcfg;
         Element element;
@@ -412,7 +412,7 @@ public class Controller {
      * @return
      * @throws Exception
      */
-    public static final InputStatus validate(ViewData view,
+    public static final InputStatus validate(View view,
             Map<String, ?> values, Function function) throws Exception {
         Element element;
         String controlname;

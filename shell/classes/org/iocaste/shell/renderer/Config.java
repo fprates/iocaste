@@ -6,14 +6,20 @@ import java.util.List;
 import java.util.Set;
 
 import org.iocaste.shell.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.MessageSource;
+import org.iocaste.shell.common.View;
 
 public class Config {
-    private String currentaction, currentform, pagetrack;
+    private String currentaction, currentform, pagetrack, message, username;
+    private int logid;
     private List<MessageSource> msgsources;
     private Set<String> actions;
     private List<String> onload; 
     private List<XMLElement> toform;
+    private boolean pcstarted;
+    private View view;
+    private Const msgtype;
     
     public Config() {
         actions = new HashSet<String>();
@@ -92,8 +98,32 @@ public class Config {
      * 
      * @return
      */
+    public final int getLogId() {
+        return logid;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getMessage() {
+        return message;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final MessageSource[] getMessageSources() {
         return msgsources.toArray(new MessageSource[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Const getMessageType() {
+        return msgtype;
     }
     
     /**
@@ -145,6 +175,30 @@ public class Config {
     
     /**
      * 
+     * @return
+     */
+    public final String getUsername() {
+        return username;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final View getView() {
+        return view;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final boolean isPageControlStarted() {
+        return pcstarted;
+    }
+    
+    /**
+     * 
      * @param currentaction
      */
     public final void setCurrentAction(String currentaction) {
@@ -161,9 +215,45 @@ public class Config {
     
     /**
      * 
+     * @param msgtype
+     * @param message
+     */
+    public final void setMessage(Const msgtype, String message) {
+        this.msgtype = msgtype;
+        this.message = message;
+    }
+    
+    /**
+     * 
+     * @param pcstarted
+     */
+    public final void setPageControlStarted(boolean pcstarted) {
+        this.pcstarted = pcstarted;
+    }
+    
+    /**
+     * 
      * @param pagetrack
      */
     public final void setPageTrack(String pagetrack) {
         this.pagetrack = pagetrack;
+    }
+    
+    /**
+     * 
+     * @param username
+     * @param logid
+     */
+    public final void setUsername(String username, int logid) {
+        this.username = username;
+        this.logid = logid;
+    }
+    
+    /**
+     * 
+     * @param view
+     */
+    public final void setView(View view) {
+        this.view = view;
     }
 }

@@ -32,7 +32,7 @@ public class Form extends AbstractContainer {
     private String enctype;
     private Parameter action;
     
-    public Form(ViewData view, String name) {
+    public Form(View view, String name) {
         super(view, Const.FORM, name);
         
         init(name);
