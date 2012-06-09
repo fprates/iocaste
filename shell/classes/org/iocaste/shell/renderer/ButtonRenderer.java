@@ -20,16 +20,10 @@ public class ButtonRenderer extends Renderer {
         if (text_ == null)
             text_ = name;
         
-        onclick = new StringBuilder();
-        
-        if (!button.isSubmit())
-            onclick.append("formSubmit('").append(config.getCurrentForm()).
-                    append("', '").append(config.getCurrentAction()).
-                    append("', '").append(htmlname).append("');");
-        else
-            onclick.append("defineAction('").
-                    append(config.getCurrentAction()).append("', '").
-                    append(htmlname).append("');");
+        onclick = new StringBuilder("formSubmit('").
+                append(config.getCurrentForm()).
+                append("', '").append(config.getCurrentAction()).
+                append("', '").append(htmlname).append("');");
         
         buttontag.add("type", (!button.isSubmit())? "button" : "submit");
         buttontag.add("name", htmlname);
