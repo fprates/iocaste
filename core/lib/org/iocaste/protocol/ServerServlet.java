@@ -56,19 +56,6 @@ public abstract class ServerServlet extends HttpServlet {
         service.setInputStream(req.getInputStream());
         service.setOutputStream(resp.getOutputStream());
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.http.HttpServlet#doGet(
-     *     javax.servlet.http.HttpServletRequest,
-     *     javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    protected final void doGet(
-            HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        doPost(req, resp);
-    }
 
     /*
      * (non-Javadoc)
