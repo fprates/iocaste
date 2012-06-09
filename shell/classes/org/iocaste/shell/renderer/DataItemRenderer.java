@@ -14,14 +14,15 @@ import org.iocaste.shell.common.Text;
 
 public class DataItemRenderer {
 
-    public static final XMLElement render(DataItem dataitem, Config config) {
+    public static final void render(DataItem dataitem, XMLElement itemtag,
+            Config config) {
         Text colname;
         List<XMLElement> coltags;
         DocumentModelItem modelitem;
         InputComponent input;
         DocumentModel model = null;
         DataForm form = (DataForm)dataitem.getContainer();
-        XMLElement coltag, itemtag = new XMLElement("tr");
+        XMLElement coltag;
         String inputname = dataitem.getName();
         
         colname = new Text(null, "");
@@ -54,7 +55,5 @@ public class DataItemRenderer {
         
         coltag.addChildren(coltags);
         itemtag.addChild(coltag);
-        
-        return itemtag;
     }
 }

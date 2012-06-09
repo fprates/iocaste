@@ -21,6 +21,9 @@
 
 package org.iocaste.shell.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
@@ -34,6 +37,8 @@ import org.iocaste.documents.common.ExtendedObject;
 public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
     private boolean keyrequired;
+    private byte columns;
+    private List<String[]> lines;
     
     /**
      * 
@@ -54,14 +59,6 @@ public class DataForm extends AbstractContainer {
         super(container, Const.DATA_FORM, name);
         init();
     }
-
-    /**
-     * 
-     */
-    private final void init() {
-        keyrequired = false;
-        setStyleClass("form");
-    }
     
     /**
      * 
@@ -69,6 +66,17 @@ public class DataForm extends AbstractContainer {
      */
     public final void add(DataItem item) {
         super.add(item);
+    }
+    
+    /**
+     * 
+     * @param columns
+     */
+    public final void addLine(String... entries) {
+        if (entries.length != columns)
+            throw new RuntimeException("Invalid number of columns.");
+        
+        lines.add(entries);
     }
     
     /**
@@ -93,6 +101,22 @@ public class DataForm extends AbstractContainer {
      */
     public final DataItem get(String name) {
         return (DataItem)getElement(name);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final byte getColumns() {
+        return columns;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final List<String[]> getLines() {
+        return lines;
     }
     
     /**
@@ -138,6 +162,16 @@ public class DataForm extends AbstractContainer {
         
         super.importModel(model);
     }
+
+    /**
+     * 
+     */
+    private final void init() {
+        keyrequired = false;
+        setStyleClass("form");
+        columns = 0;
+        lines = new ArrayList<String[]>();
+    }
     
     /**
      * 
@@ -145,6 +179,14 @@ public class DataForm extends AbstractContainer {
      */
     public final boolean isKeyRequired() {
         return keyrequired;
+    }
+    
+    /**
+     * 
+     * @param columns
+     */
+    public final void setColumns(byte columns) {
+        this.columns = columns;
     }
     
     /**
