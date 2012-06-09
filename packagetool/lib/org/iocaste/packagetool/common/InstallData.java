@@ -24,6 +24,7 @@ public class InstallData implements Serializable {
     private Map<String, Map<String, String>> messages;
     private List<Authorization> authorizations;
     private Map<String, Set<String>> tasksgroups;
+    private String[] dependencies;
     
     public InstallData() {
         models = new LinkedHashMap<String, DocumentModel>();
@@ -134,6 +135,14 @@ public class InstallData implements Serializable {
      * 
      * @return
      */
+    public final String[] getDependencies() {
+        return dependencies;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final List<DataElement> getElements() {
         return elements;
     }
@@ -218,6 +227,14 @@ public class InstallData implements Serializable {
      */
     public final void link(String link, String command) {
         links.put(link, command);
+    }
+    
+    /**
+     * 
+     * @param dependencies
+     */
+    public final void setDependencies(String... dependencies) {
+        this.dependencies = dependencies;
     }
     
     /**

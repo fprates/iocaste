@@ -42,19 +42,32 @@ public class Services extends AbstractFunction {
         DocumentModel[] models;
         SearchHelpData[] shdata;
         Authorization[] authorizations;
-        State state = new State();
+        String[] dependencies;
+        State state;
+        
         
         /*
          * Registra instalação do pacote
          */
-        state.pkgname = message.getString("name");
+        state = new State();
         state.data = message.get("data");
+        state.pkgname = message.getString("name");
         state.documents = new Documents(this);
         state.pkgid = state.documents.getNextNumber("PKGCODE") * 1000000;
         state.shm = new HashMap<String, DocumentModelItem>();
         state.function = this;
         
         try {
+            dependencies = state.data.getDependencies();
+            if (dependencies != null)
+                for (String pkgname : dependencies) {
+                    if (!isInstalled(pkgname))
+                        throw new Exception(new StringBuilder(state.pkgname).
+                                append(": required package ").
+                                append(pkgname).
+                                append(" not installed.").toString());
+                }
+            
             header = new ExtendedObject(state.documents.getModel("PACKAGE"));
             header.setValue("NAME", state.pkgname);
             header.setValue("CODE", state.pkgid);
@@ -334,11 +347,22 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final boolean isInstalled(Message message) throws Exception {
-        String package_ = message.getString("package");
-        ExtendedObject item = new Documents(this).
-                getObject("PACKAGE", package_);
+        String pkgname = message.getString("package");
         
-        return (item == null)? false : true;
+        return isInstalled(pkgname);
+    }
+    
+    /**
+     * 
+     * @param pkgname
+     * @return
+     * @throws Exception
+     */
+    private final boolean isInstalled(String pkgname) throws Exception {
+        ExtendedObject item = new Documents(this).
+                getObject("PACKAGE", pkgname);
+        
+        return (item != null);
     }
     
     /**

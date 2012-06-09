@@ -52,6 +52,7 @@ public class Main extends AbstractPage {
                 view.export("authorizations", data.getAuthorizations());
                 view.export("links", data.getLinks());
                 view.export("numbers", data.getNumberFactories());
+                view.export("dependencies", data.getDependencies());
                 view.redirect("printinfo");
                 
                 break;
@@ -154,34 +155,41 @@ public class Main extends AbstractPage {
         DocumentModel[] models = view.getParameter("models");
         Authorization[] authorizations = view.getParameter("authorizations");
         String[] numbers = view.getParameter("numbers");
+        String[] dependencies = view.getParameter("dependencies");
         
         if (authorizations.length > 0) {
-            view.print("Autorizações");
+            view.print("- Autorizações");
             for (Authorization authorization : authorizations)
                 view.print(authorization.getName());
         }
         
         if (links.size() > 0) {
-            view.print("\nLinks");
+            view.print("\n- Links");
             for (String key : links.keySet())
                 view.print(new StringBuilder(key).append(": ").
                         append(links.get(key)).toString());
         }
             
         if (models.length > 0) {
-            view.print("\nModelos");
+            view.print("\n- Modelos");
             for (DocumentModel model : models)
                 view.print(model.getName());
         }
         
         if (numbers.length > 0) {
-            view.print("\nObjetos de numeração");
+            view.print("\n- Objetos de numeração");
             for (String number : numbers)
                 view.print(number);
         }
         
         if (view.getPrintLines().length == 0)
             view.print("Sem conteúdo instalável");
+        
+        if (dependencies != null) {
+            view.print("\n- Dependências");
+            for (String dependency : dependencies)
+                view.print(dependency);
+        }
         
         view.setTitle("package-contents");
         view.setNavbarActionEnabled("back", true);
