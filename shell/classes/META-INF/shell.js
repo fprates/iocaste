@@ -2,6 +2,14 @@ function defineAction(action, actionname) {
 	setValue(action, actionname);
 }
 
+function formSubmit(formname, actionname, value) {
+    var form = document.getElementById(formname);
+    var action = document.getElementById(actionname);
+    
+    action.value = value;
+    form.submit();
+}
+
 function revertElementDisplay(id) {
     var display = document.getElementById(id).style.display;
     
@@ -43,12 +51,4 @@ function setElementDisplay(id, state) {
 function setValue(name, value) {
 	var param = document.getElementById(name);
 	param.value = value;
-}
-
-function submit(formname, actionname, value) {
-    var form = document.getElementById(formname);
-    var action = document.getElementBydId(actionname);
-    
-    action.value = value;
-    form.submit();
 }

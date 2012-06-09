@@ -14,10 +14,10 @@ public class LinkRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(Link link, Config config) {
-        Map<Parameter, Object> parameters;
-        StringBuffer sb;
         XMLElement atag;
-        String text;
+        String text, href;
+        StringBuilder onclick;
+        Map<Parameter, Object> parameters;
         
         if (!link.isEnabled()) {
             atag = new XMLElement("span");
@@ -31,21 +31,25 @@ public class LinkRenderer extends Renderer {
         atag.add("class", link.getStyleClass());
         
         if (link.isAbsolute())
-            sb = new StringBuffer();
+            href = link.getAction();
         else
-            sb = new StringBuffer("index.html?pagetrack=").
-                    append(config.getPageTrack()).append("&action=");
-        
-        sb.append(link.getAction());
+            href = new StringBuilder("javascript:formSubmit('").
+                    append(config.getCurrentForm()).
+                    append("', '").append(config.getCurrentAction()).
+                    append("', '").append(link.getAction()).
+                    append("');").toString();
         
         parameters = link.getParametersMap();
-        
-        if (parameters.size() > 0)
-            for (Parameter parameter: parameters.keySet())
-                sb.append("&").append(parameter.getName()).append("=").
-                        append(parameters.get(parameter));
-
-        atag.add("href", sb.toString());
+        if (parameters.size() > 0) {
+            onclick = new StringBuilder();
+            for (Parameter parameter : parameters.keySet())
+                onclick.append("setValue('").append(parameter.getHtmlName()).
+                        append("', '").append(parameters.get(parameter)).
+                        append("');");
+            
+            atag.add("onClick", onclick.toString());
+        }
+        atag.add("href", href);
         text = link.getText();
         atag.addInner(config.getText(text, text));
         

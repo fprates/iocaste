@@ -17,13 +17,15 @@ public class FormRenderer extends Renderer {
         XMLElement hiddentag, formtag = new XMLElement("form");
         String enctype = container.getEnctype();
         String currentaction = container.getAction();
+        String htmlname = container.getHtmlName();
         
         config.setCurrentAction(currentaction);
         config.addAction(currentaction);
         
         formtag.add("method", "post");
         formtag.add("action", "index.html");
-        formtag.add("name", container.getHtmlName());
+        formtag.add("id", htmlname);
+        formtag.add("name", htmlname);
 
         addEvents(formtag, container);
         

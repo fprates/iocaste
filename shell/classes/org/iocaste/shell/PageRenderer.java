@@ -47,7 +47,10 @@ public class PageRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String NOT_CONNECTED = "not.connected";
     private static final String EXCEPTION_HANDLER = "iocaste-exhandler";
+    private static final String STD_CONTENT = "text/html";
     private static final byte AUTHORIZATION_ERROR = 1;
+    private static final boolean NEW_SESSION = false;
+    private static final boolean KEEP_SESSION = true;
     private static Map<String, List<SessionContext>> apps =
             new HashMap<String, List<SessionContext>>();
     private String sessionid, servername, sessionconnector;
@@ -111,7 +114,7 @@ public class PageRenderer extends HttpServlet implements Function {
     private final void configResponse(HttpServletResponse resp, ViewData view) {
         String contenttype = view.getContentType();
         
-        resp.setContentType((contenttype == null)? "text/html" : contenttype);
+        resp.setContentType((contenttype == null)? STD_CONTENT : contenttype);
         resp.setCharacterEncoding("UTF-8");
         
         for (String key : view.getHeaderKeys())
@@ -195,7 +198,16 @@ public class PageRenderer extends HttpServlet implements Function {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        doPost(req, resp);
+        sessionid = req.getSession().getId();
+        servername = new StringBuffer(req.getScheme()).append("://").
+                        append(req.getServerName()).append(":").
+                        append(req.getServerPort()).toString();
+        
+        try {
+            entry(req, resp, NEW_SESSION);
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
     }
 
     /* (non-Javadoc)
@@ -212,7 +224,7 @@ public class PageRenderer extends HttpServlet implements Function {
                         append(req.getServerPort()).toString();
         
         try {
-            entry(req, resp);
+            entry(req, resp, KEEP_SESSION);
         } catch (Exception e) {
             throw new ServletException(e);
         }
@@ -222,10 +234,11 @@ public class PageRenderer extends HttpServlet implements Function {
      * 
      * @param req
      * @param resp
+     * @param keepsession
      * @throws Exception
      */
-    private final void entry(HttpServletRequest req, HttpServletResponse resp)
-            throws Exception {
+    private final void entry(HttpServletRequest req, HttpServletResponse resp,
+            boolean keepsession) throws Exception {
         Iocaste iocaste;
         ContextData contextdata;
         int logid = 0;
@@ -235,7 +248,8 @@ public class PageRenderer extends HttpServlet implements Function {
         
         try {
             if (apps.containsKey(sessionid)) {
-                pagectx = getPageContext(req, sessionid);
+                if (keepsession)
+                    pagectx = getPageContext(req, sessionid);
                 logid = apps.get(sessionid).size();
             }
             
