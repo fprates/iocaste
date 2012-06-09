@@ -7,7 +7,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.Table;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class ItemConfig {
     private Table table;
@@ -15,7 +15,7 @@ public class ItemConfig {
     private DocumentModelItem modelitem;
     private byte mode;
     private Map<ItensNames, DataElement> references;
-    private ViewData view;
+    private View view;
     
     public final byte getMode() {
         return mode;
@@ -37,7 +37,7 @@ public class ItemConfig {
         return table;
     }
     
-    public final ViewData getView() {
+    public final View getView() {
         return view;
     }
     
@@ -62,7 +62,7 @@ public class ItemConfig {
         this.table = table;
     }
     
-    public final void setView(ViewData view) {
+    public final void setView(View view) {
         this.view = view;
     }
 

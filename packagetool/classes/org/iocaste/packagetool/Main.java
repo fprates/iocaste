@@ -10,16 +10,16 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
 
@@ -32,7 +32,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void info(ViewData view) throws Exception {
+    public final void info(View view) throws Exception {
         InstallData data;
         String pkgname;
         Table table = view.getElement("packages");
@@ -74,17 +74,19 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void main(ViewData view) throws Exception {
+    public final void main(View view) throws Exception {
         Link link;
         TableItem item;
         String action;
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         Parameter parameter = new Parameter(container, "package");
         String[] packages = PackageTool.getAvailablePackages();
         PackageTool pkgtool = new PackageTool(this);
         Button info = new Button(container, "info");
         Table table = new Table(container, "packages");
         
+        pagecontrol.add("home");
         table.setMark(true);
         table.setSelectionType(Table.SINGLE);
         
@@ -112,7 +114,6 @@ public class Main extends AbstractPage {
         
         info.setVisible(table.length() > 0);
         
-        view.setNavbarActionEnabled("back", true);
         view.setTitle("package-manager");
     }
     
@@ -121,7 +122,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void packageinstall(ViewData view) throws Exception {
+    public final void packageinstall(View view) throws Exception {
         String pkgname = ((InputComponent)view.getElement("package")).get();
         PackageTool pkgtool = new PackageTool(this);
         
@@ -136,7 +137,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void packageuninstall(ViewData view) throws Exception {
+    public final void packageuninstall(View view) throws Exception {
         String pkgname = ((InputComponent)view.getElement("package")).get();
         PackageTool pkgtool = new PackageTool(this);
         
@@ -150,7 +151,7 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void printinfo(ViewData view) {
+    public final void printinfo(View view) {
         Map<String, String> links = view.getParameter("links");
         DocumentModel[] models = view.getParameter("models");
         Authorization[] authorizations = view.getParameter("authorizations");
@@ -192,6 +193,5 @@ public class Main extends AbstractPage {
         }
         
         view.setTitle("package-contents");
-        view.setNavbarActionEnabled("back", true);
     }
 }

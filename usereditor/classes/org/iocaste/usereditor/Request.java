@@ -9,7 +9,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Request {
     private static final byte PROFILES = 0;
@@ -19,13 +19,13 @@ public class Request {
         "delete from USER_AUTHORITY where USERNAME = ?"
     };
     
-    public static final void addprofile(ViewData view) {
+    public static final void addprofile(View view) {
         Table profiles = view.getElement("profiles");
         
         Common.insertItem(profiles, null, Common.getMode(view));
     }
     
-    public static final void create(ViewData view, Function function)
+    public static final void create(View view, Function function)
             throws Exception {
         DataForm form = view.getElement("selection");
         String username = form.get("USERNAME").get();
@@ -41,7 +41,7 @@ public class Request {
         view.redirect(null, "form");
     }
     
-    public static final void load(ViewData view, Function function, byte mode)
+    public static final void load(View view, Function function, byte mode)
             throws Exception {
         ExtendedObject[] objects;
         DataForm form = view.getElement("selection");
@@ -63,7 +63,7 @@ public class Request {
         view.redirect(null, "form");
     }
     
-    public static final void save(ViewData view, Function function)
+    public static final void save(View view, Function function)
             throws Exception {
         Authority authority;
         Table itens;
@@ -99,7 +99,7 @@ public class Request {
         view.message(Const.STATUS, "user.saved.successfully");
     }
     
-    public static final void removeprofile(ViewData view) {
+    public static final void removeprofile(View view) {
         Table profiles = view.getElement("profiles");
         
         for (TableItem item : profiles.getItens())

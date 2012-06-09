@@ -6,11 +6,11 @@ import java.util.List;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class CodeGeneration {
 
-    public static final void main(ViewData view) {
+    public static final void main(View view) {
         String settype;
         DataForm form = view.getElement("structure.form");
         Table itens = view.getElement("itens");

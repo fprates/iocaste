@@ -11,14 +11,13 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.PageControl;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     private static final String[] PACKAGES = new String[] {
@@ -32,10 +31,11 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void authentic(ViewData vdata) throws Exception {
+    public final void authentic(View vdata) throws Exception {
         InputComponent input;
         MessageSource messages;
-        Container form = new Form(vdata, "main");
+        Form form = new Form(vdata, "main");
+        new PageControl(form);
         DataForm loginform = new DataForm(form, "login");
         
         /*
@@ -66,7 +66,7 @@ public class Main extends AbstractPage {
         vdata.setTitle("authentic");
         vdata.setFocus("USERNAME");
         
-        ((DataItem)vdata.getElement("SECRET")).setSecret(true);
+        loginform.get("SECRET").setSecret(true);
     }
     
     /**
@@ -74,7 +74,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void connect(ViewData view) throws Exception {
+    public final void connect(View view) throws Exception {
         String username;
         PackageTool pkgtool = new PackageTool(this);
         DataForm form = view.getElement("login");

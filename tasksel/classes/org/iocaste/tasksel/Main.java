@@ -14,7 +14,6 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
@@ -22,10 +21,11 @@ import org.iocaste.shell.common.Frame;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     private static final byte USER_GROUPS = 0;
@@ -98,7 +98,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void grouprun(ViewData view) throws Exception {
+    public final void grouprun(View view) throws Exception {
         String command = ((InputComponent)view.getElement("groupcommand")).
                 get();
         String[] parsed = Common.parseCommand(command, view, this);
@@ -112,7 +112,7 @@ public class Main extends AbstractPage {
      *     org.iocaste.shell.common.ViewData)
      */
     @Override
-    public final void help(ViewData vdata) {
+    public final void help(View vdata) {
         vdata.clearParameters();
         vdata.export("topic", "tasksel-index");
         vdata.redirect("iocaste-help", "view");
@@ -133,7 +133,7 @@ public class Main extends AbstractPage {
      * @param view Visão
      * @throws Exception
      */
-    public final void main(ViewData view) throws Exception {
+    public final void main(View view) throws Exception {
         Link link;
         Frame frame;
         NodeList group;
@@ -142,9 +142,11 @@ public class Main extends AbstractPage {
         DataItem cmdline;
         Parameter groupcommand;
         String taskname, text;
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         StandardContainer groups = new StandardContainer(container, "groups");
         
+        pagecontrol.add("help");
         groups.setStyleClass("groups");
         setCustomStyleSheet(view);
         
@@ -177,7 +179,6 @@ public class Main extends AbstractPage {
         cmdline.setLength(80);
         new Button(container, "run");
         
-        view.setNavbarActionEnabled("help", true);
         view.setFocus("command");
         view.setTitle("task-selector");
     }
@@ -187,7 +188,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void run(ViewData vdata) throws Exception {
+    public final void run(View vdata) throws Exception {
         String[] parsed;
         DataForm form = vdata.getElement("selector");
         DataItem cmdline = form.get("command");
@@ -209,7 +210,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    private final void setCustomStyleSheet(ViewData view) throws Exception {
+    private final void setCustomStyleSheet(View view) throws Exception {
         Map<String, Map<String, String>> defaultsheet;
         Map<String, String> style;
         

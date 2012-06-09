@@ -5,24 +5,26 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Response {
 
-    public static final void selection(ViewData view, Function function)
+    public static final void selection(View view, Function function)
             throws Exception {
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "selection");
         DataItem item = new DataItem(form, Const.TEXT_FIELD, "estilo");
         
+        pagecontrol.add("home");
         item.setModelItem(new Documents(function).getModel("STYLE").
                 getModelItem("NAME"));
         
@@ -33,18 +35,21 @@ public class Response {
         new Button(container, "update");
         
         view.setFocus("estilo");
-        view.setNavbarActionEnabled("back", true);
         view.setTitle("style-editor");
     }
     
-    public static final void style(ViewData view, Function function)
+    public static final void style(View view, Function function)
             throws Exception {
         Table itens;
         ExtendedObject[] elements = view.getParameter("elements");
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "newstyle");
         DataItem style = new DataItem(form, Const.TEXT_FIELD, "style");
         byte mode = Common.getMode(view);
+        
+        pagecontrol.add("home");
+        pagecontrol.add("back");
         
         style.setModelItem(new Documents(function).getModel("STYLE").
                 getModelItem("NAME"));
@@ -80,7 +85,6 @@ public class Response {
             break;
         }
         
-        view.setNavbarActionEnabled("back", true);
         view.setFocus(style);
     }
 }

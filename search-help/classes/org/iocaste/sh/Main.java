@@ -7,10 +7,10 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
@@ -18,7 +18,7 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     
@@ -33,7 +33,7 @@ public class Main extends AbstractPage {
      * @throws Exception 
      */
     @Override
-    public void back(ViewData view) throws Exception {
+    public void back(View view) throws Exception {
         String[] entry = new Shell(this).popPage(view);
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
@@ -44,10 +44,10 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void choose(ViewData vdata) throws Exception {
+    public final void choose(View vdata) throws Exception {
         SearchHelp sh = vdata.getParameter("sh");
         Parameter value = vdata.getElement("value");
-        ViewData view = sh.getView();
+        View view = sh.getView();
         InputComponent input = view.getElement(sh.getInputName());
         
         if (!input.isEnabled()) {
@@ -85,7 +85,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public void main(ViewData vdata) throws Exception {
+    public void main(View vdata) throws Exception {
         TableColumn column;
         TableItem tableitem;
         String name, export;
@@ -95,14 +95,16 @@ public class Main extends AbstractPage {
         DocumentModel model;
         Table table;
         Parameter param;
-        Container container = new Form(vdata, "main");
+        Form container = new Form(vdata, "main");
+        PageControl pagecontrol = new PageControl(container);
         SearchHelp sh = vdata.getParameter("sh");
         ExtendedObject[] result = getResultsFrom(sh);
+        
+        pagecontrol.add("back");
         
         if (result == null) {
             text = new Text(container, "no.results.found");
             
-            vdata.setNavbarActionEnabled("back", true);
             vdata.setTitle(sh.getText());
             
             return;
@@ -143,7 +145,6 @@ public class Main extends AbstractPage {
             tableitem.setObject(object);
         }
         
-        vdata.setNavbarActionEnabled("back", true);
         vdata.setTitle(sh.getText());
     }
 }

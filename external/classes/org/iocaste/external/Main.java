@@ -22,17 +22,17 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextField;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     
@@ -44,7 +44,7 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void add(ViewData view) {
+    public final void add(View view) {
         Table attributes = view.getElement("attribs");
         TableItem item = new TableItem(attributes);
         
@@ -80,7 +80,7 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void call(ViewData view) throws Exception {
+    public final void call(View view) throws Exception {
         EndpointReference epr;
         OMFactory factory;
         OMElement ping;
@@ -221,11 +221,14 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void main(ViewData view) throws Exception {
+    public final void main(View view) throws Exception {
         Table attributes;
         DataItem dataitem;
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "selection");
+        
+        pagecontrol.add("home");
         
         dataitem = new DataItem(form, Const.TEXT_FIELD, "namespace");
         dataitem.setLength(80);
@@ -252,27 +255,28 @@ public class Main extends AbstractPage {
         
         view.setFocus("service");
         view.setReloadableView(true);
-        view.setNavbarActionEnabled("back", true);
     }
     
     /**
      * 
      * @param view
      */
-    public final void output(ViewData view) {
+    public final void output(View view) {
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         Map<String, String> map = view.getParameter("map");
+        
+        pagecontrol.add("back");
         
         for (String key : map.keySet())
             view.print(key+": "+map.get(key));
-        
-        view.setNavbarActionEnabled("back", true);
     }
     
     /**
      * 
      * @param view
      */
-    public final void remove(ViewData view) {
+    public final void remove(View view) {
         Table attributes = view.getElement("attribs");
         
         for (TableItem item : attributes.getItens())

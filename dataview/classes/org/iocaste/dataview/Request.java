@@ -11,7 +11,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Request {
     
@@ -21,7 +21,7 @@ public class Request {
      * @param function
      * @throws Exception
      */
-    public static final void delete(ViewData vdata, Function function)
+    public static final void delete(View vdata, Function function)
             throws Exception {
         Table table = vdata.getElement("selection_view");
         Documents documents = new Documents(function);
@@ -48,7 +48,7 @@ public class Request {
      * @param vdata
      * @param function
      */
-    public static final void edit(ViewData vdata, Function function)
+    public static final void edit(View vdata, Function function)
             throws Exception {
         ExtendedObject[] itens;
         String modelname = ((InputComponent)vdata.getElement("model.name")).
@@ -90,7 +90,7 @@ public class Request {
      * 
      * @param vdata
      */
-    public static final void insert(ViewData vdata) {
+    public static final void insert(View vdata) {
         String modelname = vdata.getParameter("model.name");
         
         vdata.clearParameters();
@@ -104,7 +104,7 @@ public class Request {
      * @param vdata
      * @throws Exception
      */
-    public static final void insertcommon(ViewData vdata, ViewData selectview,
+    public static final void insertcommon(View vdata, View selectview,
             Function function) throws Exception {
         Table table;
         DataForm form = vdata.getElement("model.form");
@@ -125,7 +125,7 @@ public class Request {
      * 
      * @param vdata
      */
-    public static final void insertnext(ViewData vdata, ViewData selectview,
+    public static final void insertnext(View vdata, View selectview,
             Function function) throws Exception {
         DataForm form = vdata.getElement("model.form");
         
@@ -140,7 +140,7 @@ public class Request {
      * @param function
      * @throws Exception
      */
-    public static final void save(ViewData vdata, Function function)
+    public static final void save(View vdata, Function function)
             throws Exception {
         String value;
         InputComponent input;
@@ -189,7 +189,7 @@ public class Request {
      * @param function
      * @throws Exception
      */
-    public static final void show(ViewData vdata, Function function)
+    public static final void show(View vdata, Function function)
             throws Exception {
         ExtendedObject[] itens;
         String modelname = ((InputComponent)vdata.getElement("model.name")).

@@ -18,19 +18,19 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Frame;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     private static final String IDTAG = "IOCASTE000002";
@@ -47,7 +47,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void add(ViewData view) throws Exception {
+    public final void add(View view) throws Exception {
         Table objects = view.getElement("objects");
         
         insertItem(objects);
@@ -165,7 +165,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void download(ViewData view) throws Exception {
+    public final void download(View view) throws Exception {
         String filename = view.getParameter("instructionname");
         String[] lines = view.getParameter("list");
         
@@ -182,7 +182,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void generate(ViewData view) throws Exception {
+    public final void generate(View view) throws Exception {
         String name;
         Table objects = view.getElement("objects");
         List<String> lines, instructions = new ArrayList<String>();
@@ -279,7 +279,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void importitens(ViewData view) throws Exception {
+    public final void importitens(View view) throws Exception {
         String filename = null;
         Table table = view.getElement("pool");
         
@@ -346,10 +346,13 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public void list(ViewData view) throws Exception {
+    public void list(View view) throws Exception {
         String[] files = view.getParameter("files");
-        Container container = new Form(view, "list");
+        Form container = new Form(view, "list");
+        PageControl pagecontrol = new PageControl(container);
         Table table = new Table(container, "pool");
+        
+        pagecontrol.add("back");
         
         new TableColumn(table, "filename");
         table.setHeader(false);
@@ -360,7 +363,6 @@ public class Main extends AbstractPage {
         
         new Button(container, "importitens");
         
-        view.setNavbarActionEnabled("back", true);
         view.setTitle("importable-build-instructions");
     }
     
@@ -369,13 +371,16 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public void main(ViewData view) throws Exception {
+    public void main(View view) throws Exception {
         TableItem importtbitem;
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         Form uploadcontainer = new Form(view, "upldcntr");
         Frame exportframe = new Frame(container, "export");
         Frame importframe = new Frame(uploadcontainer, "import");
         Table importtable, objects = new Table(exportframe, "objects");
+        
+        pagecontrol.add("home");
         
         new TableColumn(objects, "object");
         
@@ -398,7 +403,6 @@ public class Main extends AbstractPage {
         importtbitem = new TableItem(importtable);
         importtbitem.add(new Link(importtable, "frompool", "pool"));
         
-        view.setNavbarActionEnabled("back", true);
         view.setTitle("transport-utility");
     }
     
@@ -407,7 +411,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public void pool(ViewData view) throws Exception {
+    public void pool(View view) throws Exception {
         File file = new File(getRealPath("WEB-INF", "pool"));
         String[] files = file.list();
         
@@ -426,7 +430,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public void upload(ViewData view) throws Exception {
+    public void upload(View view) throws Exception {
         FileEntry fileentry = null;
         String filename = null;
         Table table = view.getElement("importtable");

@@ -6,11 +6,11 @@ import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.PageControl;
+import org.iocaste.shell.common.View;
 
 public class Rename {
 
@@ -20,15 +20,17 @@ public class Rename {
      * @param function
      * @throws Exception
      */
-    public static final void dialog(ViewData view, Function function)
+    public static final void dialog(View view, Function function)
             throws Exception {
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "rename.form");
         DataItem oldname = new DataItem(form, Const.TEXT_FIELD, "oldname");
         DataItem newname = new DataItem(form, Const.TEXT_FIELD, "newname");
         DataElement delement = new Documents(function).
                 getDataElement("MODEL.NAME");
         
+        pagecontrol.add("back");
         oldname.setEnabled(false);
         oldname.set(view.getParameter("oldname"));
         oldname.setDataElement(delement);
@@ -39,14 +41,13 @@ public class Rename {
         new Button(container, "renameok");
         
         view.setFocus("newname");
-        view.setNavbarActionEnabled("back", true);
     }
     
     /**
      * 
      * @param view
      */
-    public static final void main(ViewData view) {
+    public static final void main(View view) {
         DataForm form = view.getElement("modelform");
         String oldname = form.get("modelname").get();
         
@@ -61,7 +62,7 @@ public class Rename {
      * @param function
      * @throws Exception
      */
-    public static final void ok(ViewData view, Function function)
+    public static final void ok(View view, Function function)
             throws Exception {
         DataForm form = view.getElement("rename.form");
         String oldname = form.get("oldname").get();

@@ -9,12 +9,12 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.StandardContainer;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
 
@@ -26,25 +26,28 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
-    public final void jvpropin(ViewData view) {
+    public final void jvpropin(View view) {
         view.redirect(null, "jvpropout");
     }
     
-    public final void jvpropout(ViewData view) {
+    public final void jvpropout(View view) {
         Properties properties = System.getProperties();
-        Container container = new StandardContainer(view, "container");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         
+        pagecontrol.add("back");
         report(container, properties);
         
         view.setTitle("java-properties");
-        view.setNavbarActionEnabled("back", true);
     }
     
-    public final void main(ViewData view) {
+    public final void main(View view) {
         Link link;
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         Table table = new Table(container, "links");
         
+        pagecontrol.add("home");
         table.setHeader(false);
         table.setMark(false);
         new TableColumn(table, "link");
@@ -57,7 +60,6 @@ public class Main extends AbstractPage {
         link.setText("system-info");
         new TableItem(table).add(link);
         
-        view.setNavbarActionEnabled("back", true);
         view.setTitle("infosis");
     }
     
@@ -84,18 +86,19 @@ public class Main extends AbstractPage {
         
     }
     
-    public final void sysinfin(ViewData view) throws Exception {
+    public final void sysinfin(View view) throws Exception {
         view.redirect(null, "sysinfout");
     }
     
-    public final void sysinfout(ViewData view) throws Exception {
-        Container container = new Form(view, "main");
+    public final void sysinfout(View view) throws Exception {
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         Iocaste iocaste = new Iocaste(this);
         Properties properties = iocaste.getSystemInfo();
         
+        pagecontrol.add("back");
         report(container, properties);
         
         view.setTitle("system-info");
-        view.setNavbarActionEnabled("back", true);
     }
 }

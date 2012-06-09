@@ -2,7 +2,7 @@ package org.iocaste.datadict;
 
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Table;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Add {
 
@@ -12,7 +12,7 @@ public class Add {
      * @param function
      * @throws Exception
      */
-    public static final void main(ViewData view, Function function)
+    public static final void main(View view, Function function)
             throws Exception {
         ItemConfig config;
         byte mode = Common.getMode(view);

@@ -1,24 +1,25 @@
 package org.iocaste.help;
 
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
 
-    public void main(ViewData view) {
+    public void main(View view) {
         
     }
     
-    public final void view(ViewData vdata) {
-        Container form = new Form(vdata, "help.form");
+    public final void view(View vdata) {
+        Form form = new Form(vdata, "help.form");
+        PageControl pagecontrol = new PageControl(form);
         Text help = new Text(form, "not.yet");
         
+        pagecontrol.add("back");
         help.setText("Help not implemented. Back soon later.");
         
         vdata.setTitle("help");
-        vdata.setNavbarActionEnabled("back", true);
     }
 }

@@ -3,12 +3,12 @@ package org.iocaste.datadict;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.HtmlTag;
-import org.iocaste.shell.common.StandardContainer;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     public Main() {
@@ -19,7 +19,7 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void add(ViewData vdata) throws Exception {
+    public final void add(View vdata) throws Exception {
         Add.main(vdata, this);
     }
     
@@ -27,7 +27,7 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void addshitem(ViewData view) {
+    public final void addshitem(View view) {
         SHStructure.insert(view);
     }
     
@@ -36,7 +36,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void create(ViewData view) throws Exception {
+    public final void create(View view) throws Exception {
         Selection.create(view, this);
     }
     
@@ -45,7 +45,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void delete(ViewData view) throws Exception {
+    public final void delete(View view) throws Exception {
         int op = Common.getTpObjectValue(view);
         
         switch (op) {
@@ -62,7 +62,7 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void deleteitem(ViewData vdata) {
+    public final void deleteitem(View vdata) {
         Table itens = vdata.getElement("itens");
         
         for (TableItem item : itens.getItens())
@@ -74,7 +74,7 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void deleteshitem(ViewData view) {
+    public final void deleteshitem(View view) {
         Delete.shitem(view);
     }
     
@@ -83,7 +83,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void detailsupdate(ViewData view) throws Exception {
+    public final void detailsupdate(View view) throws Exception {
         if (ItemDetails.update(view, this))
             back(view);
     }
@@ -93,7 +93,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void detailsview(ViewData view) throws Exception {
+    public final void detailsview(View view) throws Exception {
         ItemDetails.main(view, this);
     }
     
@@ -101,7 +101,7 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void generateclass(ViewData vdata) {
+    public final void generateclass(View vdata) {
         CodeGeneration.main(vdata);
     }
     
@@ -118,7 +118,7 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void itemdetails(ViewData view) {
+    public final void itemdetails(View view) {
         ItemDetails.select(view);
     }
     
@@ -126,21 +126,21 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void list(ViewData vdata) {
-        Container container = new StandardContainer(vdata, "list");
-        String[] lines = vdata.getParameter("code");
+    public final void list(View view) {
+        Form container = new Form(view, "list");
+        PageControl pagecontrol = new PageControl(container);
+        String[] lines = view.getParameter("code");
         HtmlTag code = new HtmlTag(container, "code");
         
+        pagecontrol.add("back");
         code.setLines(lines);
-        
-        vdata.setNavbarActionEnabled("back", true);
     }
     
     /**
      * 
      * @param view
      */
-    public final void main(ViewData view) throws Exception {
+    public final void main(View view) throws Exception {
         Selection.main(view, this);
     }
     
@@ -148,7 +148,7 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void rename(ViewData view) {
+    public final void rename(View view) {
         Rename.main(view);
     }
     
@@ -157,7 +157,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void renamedialog(ViewData view) throws Exception {
+    public final void renamedialog(View view) throws Exception {
         Rename.dialog(view, this);
     }
     
@@ -166,7 +166,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void renameok(ViewData view) throws Exception {
+    public final void renameok(View view) throws Exception {
         Rename.ok(view, this);
     }
     
@@ -175,7 +175,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void save(ViewData view) throws Exception {
+    public final void save(View view) throws Exception {
         Save.main(view, this);
     }
     
@@ -184,7 +184,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void savesh(ViewData view) throws Exception {
+    public final void savesh(View view) throws Exception {
         SHStructure.save(view, this);
     }
     
@@ -193,7 +193,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception 
      */
-    public final void show(ViewData view) throws Exception {
+    public final void show(View view) throws Exception {
         int op = Common.getTpObjectValue(view);
         
         switch (op) {
@@ -213,7 +213,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void shstructure(ViewData vdata) throws Exception {
+    public final void shstructure(View vdata) throws Exception {
         SHStructure.main(vdata, this);
     }
     
@@ -221,7 +221,7 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void tbstructure(ViewData vdata) throws Exception {
+    public final void tbstructure(View vdata) throws Exception {
         TableStructure.main(vdata, this);
     }
     
@@ -230,7 +230,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void update(ViewData view) throws Exception {
+    public final void update(View view) throws Exception {
         int op = Common.getTpObjectValue(view);
         
         switch (op) {

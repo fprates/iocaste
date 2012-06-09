@@ -8,15 +8,15 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Response {
     
@@ -25,15 +25,18 @@ public class Response {
      * @param vdata
      * @throws Exception
      */
-    public static final void form(ViewData vdata, Function function)
+    public static final void form(View vdata, Function function)
             throws Exception {
         DataElement dataelement;
         DataItem item;
-        Container container = new Form(vdata, "form");
+        Form container = new Form(vdata, "form");
+        PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "model.form");
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel(
                 (String)vdata.getParameter("model.name"));
+        
+        pagecontrol.add("back");
         
         form.importModel(model);
         form.setKeyRequired(true);
@@ -52,8 +55,6 @@ public class Response {
         
         new Button(container, "insertitem");
         new Button(container, "insertnext");
-        
-        vdata.setNavbarActionEnabled("back", true);
     }
 
     /**
@@ -62,21 +63,24 @@ public class Response {
      * @param function
      * @throws Exception
      */
-    public static final void main(ViewData view, Function function)
+    public static final void main(View view, Function function)
             throws Exception {
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "model");
         DataItem formitem = new DataItem(form, Const.TEXT_FIELD, "model.name");
+        
+        pagecontrol.add("home");
         
         formitem.setModelItem(new Documents(function).getModel("MODEL").
                 getModelItem("NAME"));
         formitem.setObligatory(true);
+        
         new Button(container, "edit");
 //        form.addAction("show");
         
         view.setFocus("model.name");
         view.setTitle("dataview-selection");
-        view.setNavbarActionEnabled("back", true);
     }
     
     /**
@@ -84,16 +88,20 @@ public class Response {
      * @param view
      * @throws Exception
      */
-    public static final void select(ViewData view, Function function)
+    public static final void select(View view, Function function)
             throws Exception {
         boolean key;
-        Container container = new Form(view, "dataview.container");
+        Form container = new Form(view, "dataview.container");
+        PageControl pagecontrol = new PageControl(container);
         ExtendedObject[] itens = view.getParameter("model.regs");
         Documents documents = new Documents(function);
         String modelname = view.getParameter("model.name");
         DocumentModel model = documents.getModel(modelname);
         Table table = new Table(container, "selection_view");
         Const viewtype = view.getParameter("view.type");
+        
+        pagecontrol.add("home");
+        pagecontrol.add("back");
         
         table.setMark(true);
         table.importModel(model);
@@ -120,7 +128,6 @@ public class Response {
 //        new Button(container, "lastpage").setSubmit(true);
         
         view.setTitle(modelname);
-        view.setNavbarActionEnabled("back", true);
     }
 
 }

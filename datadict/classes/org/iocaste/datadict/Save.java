@@ -12,7 +12,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Save {
 
@@ -22,7 +22,7 @@ public class Save {
      * @param function
      * @throws Exception
      */
-    public static final void main(ViewData view, Function function)
+    public static final void main(View view, Function function)
             throws Exception {
         DocumentModelItem modelitem, reference;
         DataElement dataelement;

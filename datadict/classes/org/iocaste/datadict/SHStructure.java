@@ -7,18 +7,18 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ValidatorConfig;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class SHStructure {
     private final static String[] TITLE = {
@@ -34,7 +34,7 @@ public class SHStructure {
      * @param view
      * @param object
      */
-    private static void insertItem(byte mode, Table itens, ViewData view,
+    private static void insertItem(byte mode, Table itens, View view,
             ExtendedObject object) {
         TextField tfield;
         String name;
@@ -81,19 +81,22 @@ public class SHStructure {
      * @param view
      * @param function
      */
-    public static final void main(ViewData view, Function function)
+    public static final void main(View view, Function function)
             throws Exception {
         DataItem ditem;
         String name;
         ExtendedObject[] oitens;
         ValidatorConfig validatorcfg;
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel("SEARCH_HELP");
         DataForm header = new DataForm(container, "header");
         Table itens = new Table(container, "itens");
         byte mode = Common.getMode(view);
         
+        pagecontrol.add("home");
+        pagecontrol.add("back");
         header.importModel(model);
         
         if (mode != Common.CREATE)
@@ -174,7 +177,6 @@ public class SHStructure {
         
         view.setTitle(TITLE[mode]);
         view.setFocus("MODEL");
-        view.setNavbarActionEnabled("back", true);
     }
     
     /**
@@ -183,7 +185,7 @@ public class SHStructure {
      * @param function
      * @throws Exception
      */
-    public static final void save(ViewData view, Function function)
+    public static final void save(View view, Function function)
             throws Exception {
         ExtendedObject[] oitens;
         int i = 0;
@@ -217,7 +219,7 @@ public class SHStructure {
      * 
      * @param view
      */
-    public static final void insert(ViewData view) {
+    public static final void insert(View view) {
         Table itens = view.getElement("itens");
         
         insertItem(Common.getMode(view), itens, view, null);

@@ -6,8 +6,10 @@ import java.util.Map;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.PageControl;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     private Map<String, String> messages;
@@ -53,10 +55,15 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public void main(ViewData view) {
+    public void main(View view) {
         Container[] containers;
+        PageControl pagecontrol;
         Exception ex = view.getParameter("exception");
-        ViewData exview = view.getParameter("exview");
+        View exview = view.getParameter("exview");
+        Form form = new Form(view, "main");
+        
+        pagecontrol = new PageControl(form);
+        pagecontrol.add("home");
         
         /*
          * exceção
@@ -92,7 +99,6 @@ public class Main extends AbstractPage {
                     printViewContainer(view, container, "-");
         }
         
-        view.setNavbarActionEnabled("home", true);
         view.setTitle(messages.get("exception-handler"));
     }
     
@@ -101,7 +107,7 @@ public class Main extends AbstractPage {
      * @param view
      * @param ex
      */
-    private void printException(ViewData view, Throwable ex) {
+    private void printException(View view, Throwable ex) {
         String message;
         StringBuilder sb;
         
@@ -122,7 +128,7 @@ public class Main extends AbstractPage {
      * @param view
      * @param exview
      */
-    private void printOffensiveView(ViewData view, ViewData exview) {
+    private void printOffensiveView(View view, View exview) {
         String[] keys;
         
         view.print(concatenate(messages.get("module"), ": ",
@@ -147,7 +153,7 @@ public class Main extends AbstractPage {
      * @param view
      * @param ex
      */
-    private void printStackTrace(ViewData view, Throwable ex) {
+    private void printStackTrace(View view, Throwable ex) {
         while (ex.getCause() != null)
             ex = ex.getCause();
         
@@ -163,7 +169,7 @@ public class Main extends AbstractPage {
      * @param container
      * @param level
      */
-    private void printViewContainer(ViewData view, Container container,
+    private void printViewContainer(View view, Container container,
             String level) {
         InputComponent input;
         String level_ = level + "-";

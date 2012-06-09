@@ -4,7 +4,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Common {
     
@@ -16,7 +16,7 @@ public class Common {
      * @return
      * @throws Exception
      */
-    public static final String[] parseCommand(String command, ViewData view,
+    public static final String[] parseCommand(String command, View view,
             Function function) throws Exception {
         String[] parsed;
         ExtendedObject task = null;
@@ -49,7 +49,7 @@ public class Common {
      * @param view
      * @param parsed
      */
-    public static final void run(ViewData view, String[] parsed) {
+    public static final void run(View view, String[] parsed) {
         String page = "main", app = null;
         String[] values;
         

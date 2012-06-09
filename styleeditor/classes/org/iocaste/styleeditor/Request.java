@@ -5,15 +5,15 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Request {
 
-    public static final void addstyle(ViewData view) {
+    public static final void addstyle(View view) {
         
     }
     
-    public static final void create(ViewData view, Function function)
+    public static final void create(View view, Function function)
             throws Exception {
         String style = ((DataForm)view.getElement("selection")).get("estilo").
                 get();
@@ -28,11 +28,11 @@ public class Request {
         view.redirect(null, "style");
     }
     
-    public static final byte getMode(ViewData view) {
+    public static final byte getMode(View view) {
         return view.getParameter("mode");
     }
     
-    public static final void load(ViewData view, Function function, byte mode)
+    public static final void load(View view, Function function, byte mode)
             throws Exception {
         ExtendedObject ostyle;
         ExtendedObject[] oelements;

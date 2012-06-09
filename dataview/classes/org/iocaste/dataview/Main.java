@@ -4,7 +4,7 @@ import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     
@@ -17,7 +17,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void delete(ViewData vdata) throws Exception {
+    public final void delete(View vdata) throws Exception {
         Request.delete(vdata, this);
     }
     
@@ -25,7 +25,7 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void earlierpage(ViewData vdata) {
+    public final void earlierpage(View vdata) {
         
     }
     
@@ -34,7 +34,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void edit(ViewData vdata) throws Exception {
+    public final void edit(View vdata) throws Exception {
         Request.edit(vdata, this);
     }
     
@@ -43,7 +43,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void form(ViewData vdata) throws Exception {
+    public final void form(View vdata) throws Exception {
         Response.form(vdata, this);
     }
     
@@ -51,7 +51,7 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void insert(ViewData vdata) {
+    public final void insert(View vdata) {
         Request.insert(vdata);
     }
     
@@ -60,7 +60,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception 
      */
-    public final void insertcancel(ViewData vdata) throws Exception {
+    public final void insertcancel(View vdata) throws Exception {
         back(vdata);
     }
     
@@ -69,8 +69,8 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void insertitem(ViewData vdata) throws Exception {
-        ViewData selectview = getView(vdata, "select");
+    public final void insertitem(View vdata) throws Exception {
+        View selectview = getView(vdata, "select");
         
         Request.insertcommon(vdata, selectview, this);
         updateView(selectview);
@@ -83,8 +83,8 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void insertnext(ViewData vdata) throws Exception {
-        ViewData selectview = getView(vdata, "select");
+    public final void insertnext(View vdata) throws Exception {
+        View selectview = getView(vdata, "select");
         
         Request.insertnext(vdata, selectview, this);
         updateView(selectview);
@@ -104,7 +104,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void main(ViewData vdata) throws Exception {
+    public final void main(View vdata) throws Exception {
         Response.main(vdata, this);
     }
 
@@ -113,7 +113,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void save(ViewData vdata) throws Exception {
+    public final void save(View vdata) throws Exception {
         Request.save(vdata, this);
     }
     
@@ -122,7 +122,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void select(ViewData vdata) throws Exception {
+    public final void select(View vdata) throws Exception {
         Response.select(vdata, this);
     }
     
@@ -131,7 +131,7 @@ public class Main extends AbstractPage {
      * @param vdata
      * @throws Exception
      */
-    public final void show(ViewData vdata) throws Exception {
+    public final void show(View vdata) throws Exception {
         Request.show(vdata, this);
     }
 }

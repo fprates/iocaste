@@ -17,7 +17,7 @@ import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Common {
     public static final byte CREATE = 0;
@@ -85,7 +85,7 @@ public class Common {
      * @param vdata
      * @return
      */
-    public static final byte getMode(ViewData vdata) {
+    public static final byte getMode(View vdata) {
         return vdata.getParameter("mode");
     }
     
@@ -106,7 +106,7 @@ public class Common {
      * @param view
      * @return
      */
-    public static final int getTpObjectValue(ViewData view) {
+    public static final int getTpObjectValue(View view) {
         RadioButton tpobj = view.getElement("tpobject");
         
         tpobj = tpobj.getSelectedComponent();
@@ -119,7 +119,7 @@ public class Common {
      * @param vdata
      * @return
      */
-    public static final boolean hasItemDuplicated(ViewData vdata) {
+    public static final boolean hasItemDuplicated(View vdata) {
         String name, classfield, tablefield;
         String testname, testclassfield, testtablefield;
         Table itens = vdata.getElement("itens");
@@ -174,7 +174,7 @@ public class Common {
         FieldHelper helper = new FieldHelper();
         DocumentModelItem modelitem = config.getModelItem();
         Map<ItensNames, DataElement> references = config.getReferences();
-        ViewData view = config.getView();
+        View view = config.getView();
         
         if (modelitem != null) {
             dataelement = modelitem.getDataElement();

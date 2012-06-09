@@ -6,14 +6,14 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.RadioGroup;
 import org.iocaste.shell.common.SHLib;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Selection {
     
@@ -23,7 +23,7 @@ public class Selection {
      * @param function
      * @throws Exception
      */
-    public static final void create(ViewData view, Function function)
+    public static final void create(View view, Function function)
             throws Exception {
         SHLib shlib;
         Documents documents = new Documents(function);
@@ -65,7 +65,7 @@ public class Selection {
      * @param function
      * @throws Exception
      */
-    public static void deletesh(ViewData view, Function function)
+    public static void deletesh(View view, Function function)
             throws Exception {
         ExtendedObject[] shdata;
         SHLib shlib = new SHLib(function);
@@ -93,7 +93,7 @@ public class Selection {
      * @param function
      * @throws Exception
      */
-    public static void deletetb(ViewData view, Function function)
+    public static void deletetb(View view, Function function)
             throws Exception {
         Documents documents = new Documents(function);
         String modelname = ((DataItem)view.getElement("modelname")).get();
@@ -115,16 +115,18 @@ public class Selection {
      * @param function
      * @throws Exception
      */
-    public static final void main(ViewData view, Function function)
+    public static final void main(View view, Function function)
             throws Exception {
         RadioGroup group;
         RadioButton tpobj;
-        Container main = new Form(view, "datadict.main");
+        Form main = new Form(view, "datadict.main");
+        PageControl pagecontrol = new PageControl(main);
         DataForm modelform = new DataForm(main, "modelform");
         DataItem modelname = new DataItem(modelform, Const.TEXT_FIELD,
                 "modelname");
         Documents documents = new Documents(function);
         
+        pagecontrol.add("home");
         modelname.setModelItem(documents.getModel("MODEL").
                 getModelItem("NAME"));
         modelname.setObligatory(true);
@@ -144,7 +146,6 @@ public class Selection {
         new Button(main, "rename");
         
         view.setFocus("modelname");
-        view.setNavbarActionEnabled("back", true);
         view.setTitle("datadict-selection");
     }
 
@@ -154,7 +155,7 @@ public class Selection {
      * @param function
      * @throws Exception
      */
-    public static final void readtb(ViewData view, Function function)
+    public static final void readtb(View view, Function function)
             throws Exception {
         DocumentModel model;
         String name = ((DataItem)view.getElement("modelname")).get();
@@ -178,7 +179,7 @@ public class Selection {
      * @param function
      * @throws Exception
      */
-    public static final void readsh(ViewData view, Function function)
+    public static final void readsh(View view, Function function)
             throws Exception {
         ExtendedObject[] shitens;
         SHLib shlib = new SHLib(function);

@@ -12,12 +12,13 @@ import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class Response {
 
@@ -27,7 +28,7 @@ public class Response {
      * @param function
      * @throws Exception
      */
-    public static final void form(ViewData view, Function function)
+    public static final void form(View view, Function function)
             throws Exception {
         Container profilecnt;
         Table profiles;
@@ -36,12 +37,16 @@ public class Response {
         DataItem secret, confirm, username;
         ExtendedObject object;
         ExtendedObject[] oprofiles;
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         byte mode = Common.getMode(view);
         TabbedPane tabs = new TabbedPane(container, "tabs");
         DataForm form = new DataForm(tabs, "identity");
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel("LOGIN");
+
+        pagecontrol.add("home");
+        pagecontrol.add("back");
         
         /*
          * identificação
@@ -123,7 +128,6 @@ public class Response {
         }
         
         view.setFocus(secret);
-        view.setNavbarActionEnabled("back", true);
         view.setTitle(Common.TITLE[mode]);
     }
     
@@ -133,11 +137,13 @@ public class Response {
      * @param function
      * @throws Exception
      */
-    public static final void selector(ViewData view, Function function)
+    public static final void selector(View view, Function function)
             throws Exception {
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "selection");
         
+        pagecontrol.add("home");
         form.importModel(new Documents(function).getModel("LOGIN"));
         for (Element element : form.getElements()) {
             if (!element.getName().equals("USERNAME")) {
@@ -153,7 +159,6 @@ public class Response {
         new Button(container, "display");
         new Button(container, "update");
         
-        view.setNavbarActionEnabled("back", true);
         view.setTitle("user-selection");
     }
 }

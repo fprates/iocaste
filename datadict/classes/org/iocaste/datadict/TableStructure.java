@@ -9,14 +9,14 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class TableStructure {
     
@@ -25,7 +25,7 @@ public class TableStructure {
      * @param vdata
      * @return
      */
-    private static final String getModelName(ViewData vdata) {
+    private static final String getModelName(View vdata) {
         byte mode = Common.getMode(vdata);
         DocumentModel model = vdata.getParameter("model");
         
@@ -41,17 +41,20 @@ public class TableStructure {
      * @param function
      * @throws Exception
      */
-    public static final void main(ViewData view, Function function)
+    public static final void main(View view, Function function)
             throws Exception {
         Table itens;
         String name, title, modelname;
         TableColumn column;
         byte mode = Common.getMode(view);
-        Container main = new Form(view, "datadict.structure");
+        Form main = new Form(view, "datadict.structure");
+        PageControl pagecontrol = new PageControl(main);
         DataForm structure = new DataForm(main, "header");
         Map<Common.ItensNames, DataElement> references =
                 Common.getFieldReferences(function);
         
+        pagecontrol.add("home");
+        pagecontrol.add("back");
         modelname = getModelName(view);
         new DataItem(structure, Const.TEXT_FIELD, "modelname");
         new DataItem(structure, Const.TEXT_FIELD, "modeltext");
@@ -113,7 +116,6 @@ public class TableStructure {
         }
         
         view.setFocus("modeltext");
-        view.setNavbarActionEnabled("back", true);
         view.setTitle(title);
     }
     
@@ -189,7 +191,7 @@ public class TableStructure {
      * @throws Exception
      */
     private static final void prepareItens(Table itens, byte mode,
-            String modelname, Function function, ViewData view)
+            String modelname, Function function, View view)
                     throws Exception {
         Map<Common.ItensNames, DataElement> references =
                 Common.getFieldReferences(function);

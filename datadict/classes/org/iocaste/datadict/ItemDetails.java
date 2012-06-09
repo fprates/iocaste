@@ -6,16 +6,16 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Frame;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.ViewData;
+import org.iocaste.shell.common.View;
 
 public class ItemDetails {
 
@@ -25,7 +25,7 @@ public class ItemDetails {
      * @param function
      * @throws Exception
      */
-    public static final void main(ViewData view, Function function)
+    public static final void main(View view, Function function)
             throws Exception {
         DataItem dataitem;
         String itemname = view.getParameter("item.name");
@@ -35,13 +35,15 @@ public class ItemDetails {
         boolean upcase = view.getParameter("item.upcase");
         String sh = view.getParameter("item.sh");
         String classfield = view.getParameter("item.classfield");
-        Container container = new Form(view, "main");
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         Frame techframe, fkframe = new Frame(container, "foreign.key");
         DataForm techform, fkform = new DataForm(fkframe, "fkform");
         byte mode = Common.getMode(view);
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel("MODELITEM");
         
+        pagecontrol.add("back");
         /*
          * foreign key
          */
@@ -93,7 +95,6 @@ public class ItemDetails {
             view.setFocus("reference.model");
         }
         
-        view.setNavbarActionEnabled("back", true);
         view.setTitle("item-detail-editor");
     }
 
@@ -101,7 +102,7 @@ public class ItemDetails {
      * 
      * @param view
      */
-    public static final void select(ViewData view) {
+    public static final void select(View view) {
         DataForm form = view.getElement("header");
         String itemname, modelref, itemref, classfield, sh, modelname =
                 form.get("modelname").get();
@@ -155,7 +156,7 @@ public class ItemDetails {
      * @param function
      * @throws Exception
      */
-    public static final boolean update(ViewData view, Function function)
+    public static final boolean update(View view, Function function)
             throws Exception {
         InputComponent input;
         DocumentModel model;
@@ -165,7 +166,7 @@ public class ItemDetails {
         String itemname = form.get("item.name").get();
         String shname, classfield, modelref = null, itemref = null;
         Shell shell = new Shell(function);
-        ViewData structview = shell.getView(view, "tbstructure");
+        View structview = shell.getView(view, "tbstructure");
         Table itens = structview.getElement("itens");
         
         input = form.get("reference.model");
