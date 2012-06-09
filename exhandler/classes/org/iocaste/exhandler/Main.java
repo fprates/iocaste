@@ -101,12 +101,12 @@ public class Main extends AbstractPage {
      * @param view
      * @param ex
      */
-    private void printException(ViewData view, Exception ex) {
+    private void printException(ViewData view, Throwable ex) {
         String message;
         StringBuilder sb;
         
         while (ex.getCause() != null)
-            ex = (Exception)ex.getCause();
+            ex = ex.getCause();
         
         sb = new StringBuilder(ex.getClass().getName());
         message = ex.getMessage();
@@ -147,9 +147,9 @@ public class Main extends AbstractPage {
      * @param view
      * @param ex
      */
-    private void printStackTrace(ViewData view, Exception ex) {
+    private void printStackTrace(ViewData view, Throwable ex) {
         while (ex.getCause() != null)
-            ex = (Exception)ex.getCause();
+            ex = ex.getCause();
         
         for (StackTraceElement element : ex.getStackTrace())
             view.print(element.toString());
