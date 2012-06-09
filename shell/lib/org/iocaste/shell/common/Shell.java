@@ -40,6 +40,7 @@ public class Shell extends AbstractServiceInterface {
             tfield.setEnabled(inputitem.isEnabled());
             tfield.setDataElement(inputitem.getDataElement());
             tfield.setSearchHelp(inputitem.getSearchHelp());
+            tfield.setLocale(inputitem.getLocale());
             
             return tfield;
         case CHECKBOX:
@@ -48,6 +49,7 @@ public class Shell extends AbstractServiceInterface {
             cbox.setModelItem(inputitem.getModelItem());
             cbox.setEnabled(inputitem.isEnabled());
             cbox.setDataElement(inputitem.getDataElement());
+            cbox.setLocale(inputitem.getLocale());
             
             return cbox;
             
@@ -57,6 +59,7 @@ public class Shell extends AbstractServiceInterface {
             lbox.setModelItem(inputitem.getModelItem());
             lbox.setEnabled(inputitem.isEnabled());
             lbox.setDataElement(inputitem.getDataElement());
+            lbox.setLocale(inputitem.getLocale());
             
             for (String key : values.keySet())
                 lbox.add(key, values.get(key));
