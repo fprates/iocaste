@@ -38,7 +38,7 @@ public class View implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
     private byte[] content;
     private Element elementfocus;
-    private String title, focus, appname, pagename;
+    private String title, appname, pagename;
     private String contenttype, rapp, rpage, messagetext;
     private MessageSource messages;
     private List<String> inputs, lines;
@@ -259,24 +259,16 @@ public class View implements Serializable {
      * 
      * @return
      */
-    public final Element getElementFocus() {
-        return elementfocus;
+    public final String[] getExportable() {
+        return parameters.keySet().toArray(new String[0]);
     }
     
     /**
      * 
      * @return
      */
-    public final String[] getExportable() {
-        return parameters.keySet().toArray(new String[0]);
-    }
-    
-    /**
-     * Retorna nome do componente com foco.
-     * @return nome do componente
-     */
-    public final String getFocus() {
-        return focus;
+    public final Element getFocus() {
+        return elementfocus;
     }
     
     /**
@@ -487,21 +479,11 @@ public class View implements Serializable {
     }
     
     /**
-     * Ajusta elemento com foco.
-     * @param focus nome do elemento
-     */
-    public final void setFocus(String focus) {
-        this.focus = focus;
-        elementfocus = null;
-    }
-    
-    /**
      * 
      * @param element
      */
-    public final void setFocus(Element element) {
-        elementfocus = element;
-        focus = null;
+    public final void setFocus(Element elementfocus) {
+        this.elementfocus = elementfocus;
     }
     
     /**

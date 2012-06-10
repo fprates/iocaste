@@ -59,17 +59,11 @@ public class HtmlRenderer {
      * @return
      */
     private final XMLElement renderHeader(View vdata, Config config) {
-        Element elementfocus;
-        String focus = vdata.getFocus();
+        Element focus = vdata.getFocus();
         String title = vdata.getTitle();
         XMLElement headtag = new XMLElement("head");
         XMLElement metatag = new XMLElement("meta");
         XMLElement titletag = new XMLElement("title");
-        
-        if (focus == null) {
-            elementfocus = vdata.getElementFocus();
-            focus = (elementfocus == null)? null : elementfocus.getHtmlName();
-        }
         
         metatag.add("http-equiv", "Content-Type");
         metatag.add("content", "text/html; charset=utf-8");
@@ -79,7 +73,8 @@ public class HtmlRenderer {
 
         if (focus != null)
             config.addOnload(new StringBuffer("document.getElementById('").
-                    append(focus).append("').focus();").toString());
+                    append(focus.getHtmlName()).
+                    append("').focus();").toString());
         
         headtag.addChild(metatag);
         headtag.addChild(titletag);
