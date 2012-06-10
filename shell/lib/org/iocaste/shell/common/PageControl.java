@@ -1,15 +1,15 @@
 package org.iocaste.shell.common;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PageControl extends AbstractContainer {
     private static final long serialVersionUID = 462408931862107155L;
-    private Set<String> actions;
+    private List<String> actions;
     
     public PageControl(Form form) {
         super(form, Const.PAGE_CONTROL, "navbar");
-        actions = new TreeSet<String>();
+        actions = new ArrayList<String>();
         setStyleClass("header");
     }
     
