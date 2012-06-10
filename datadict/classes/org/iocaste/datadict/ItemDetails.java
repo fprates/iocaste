@@ -44,6 +44,7 @@ public class ItemDetails {
         DocumentModel model = documents.getModel("MODELITEM");
         
         pagecontrol.add("back");
+        
         /*
          * foreign key
          */
@@ -60,12 +61,13 @@ public class ItemDetails {
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.model");
         dataitem.setModelItem(model.getModelItem("MODEL"));
         dataitem.set(modelref);
-        dataitem.setEnabled((mode == Common.SHOW)? false : true);
+        dataitem.setEnabled(mode != Common.SHOW);
+        view.setFocus(dataitem);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.item");
         dataitem.setModelItem(model.getModelItem("NAME"));
         dataitem.set(itemref);
-        dataitem.setEnabled((mode == Common.SHOW)? false : true);
+        dataitem.setEnabled(mode != Common.SHOW);
 
         /*
          * technical details
@@ -76,24 +78,22 @@ public class ItemDetails {
         dataitem = new DataItem(techform, Const.TEXT_FIELD, "item.classfield");
         dataitem.setModelItem(model.getModelItem("ATTRIB"));
         dataitem.set(classfield);
-        dataitem.setEnabled((mode == Common.SHOW)? false : true);
+        dataitem.setEnabled(mode != Common.SHOW);
         
         dataitem = new DataItem(techform, Const.TEXT_FIELD, "item.sh");
         dataitem.setModelItem(documents.getModel("SH_REFERENCE").
                 getModelItem("NAME"));
         dataitem.set(sh);
-        dataitem.setEnabled((mode == Common.SHOW)? false : true);
+        dataitem.setEnabled(mode != Common.SHOW);
         
         dataitem = new DataItem(techform, Const.CHECKBOX, "item.upcase");
         dataitem.setModelItem(documents.getModel("DATAELEMENT").
                 getModelItem("UPCASE"));
         dataitem.set(upcase);
-        dataitem.setEnabled((mode == Common.SHOW)? false : true);
+        dataitem.setEnabled(mode != Common.SHOW);
         
-        if (mode != Common.SHOW) {
+        if (mode != Common.SHOW)
             new Button(container, "detailsupdate");
-            view.setFocus("reference.model");
-        }
         
         view.setTitle("item-detail-editor");
     }
@@ -158,6 +158,7 @@ public class ItemDetails {
      */
     public static final boolean update(View view, Function function)
             throws Exception {
+        DataItem refitem;
         InputComponent input;
         DocumentModel model;
         DocumentModelItem modelitemref;
@@ -173,18 +174,19 @@ public class ItemDetails {
         if (input.get() != null) {
             modelref = input.get();
             model = new Documents(function).getModel(modelref);
-            itemref = form.get("reference.item").get();
+            refitem = form.get("reference.item");
+            itemref = refitem.get();
             modelitemref = model.getModelItem(itemref);
             
             if (modelitemref == null) {
                 view.message(Const.ERROR, "reference.doesnt.exists");
-                view.setFocus("reference.item");
+                view.setFocus(refitem);
                 return false;
             }
                 
             if (!model.isKey(modelitemref)) {
                 view.message(Const.ERROR, "reference.isnot.key");
-                view.setFocus("reference.item");
+                view.setFocus(refitem);
                 return false;
             }
         }

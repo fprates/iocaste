@@ -26,7 +26,6 @@ public class Common {
 
         if (parsed[0].length() >= 19) {
             view.message(Const.ERROR, "command.not.found");
-            view.setFocus("command");
             return null;
         }
         
@@ -35,7 +34,6 @@ public class Common {
         
         if (task == null) {
             view.message(Const.ERROR, "command.not.found");
-            view.setFocus("command");
             return null;
         }
 

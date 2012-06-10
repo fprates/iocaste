@@ -26,6 +26,7 @@ public class Install {
         messages.put("delete", "Remover");
         messages.put("rename", "Renomear");
         messages.put("modelname", "Modelo");
+        messages.put("name", "Objeto");
         messages.put("modeltext", "Descrição");
         messages.put("modelclass", "Classe");
         messages.put("modeltable", "Tabela");
@@ -59,6 +60,7 @@ public class Install {
         messages.put("sh-editor-create", "Criar ajuda de pesquisa");
         messages.put("sh-editor-update", "Editar ajuda de pesquisa");
         messages.put("sh.already.exist", "Ajuda de pesquisa já existe.");
+        messages.put("model.already.exist", "Modelo já existe");
         messages.put("savesh", "Salvar");
         messages.put("addshitem", "Adicionar");
         messages.put("deleteshitem", "Remover");

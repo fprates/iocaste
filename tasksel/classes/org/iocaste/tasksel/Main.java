@@ -179,7 +179,7 @@ public class Main extends AbstractPage {
         cmdline.setLength(80);
         new Button(container, "run");
         
-        view.setFocus("command");
+        view.setFocus(cmdline);
         view.setTitle("task-selector");
     }
     
@@ -199,8 +199,10 @@ public class Main extends AbstractPage {
         
         cmdline.set(null);
         parsed = Common.parseCommand(command, vdata, this);
-        if (parsed == null)
+        if (parsed == null) {
+            vdata.setFocus(cmdline);
             return;
+        }
         
         Common.run(vdata, parsed);
     }

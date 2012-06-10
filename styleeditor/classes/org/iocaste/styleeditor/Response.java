@@ -34,7 +34,7 @@ public class Response {
         new Button(container, "show");
         new Button(container, "update");
         
-        view.setFocus("estilo");
+        view.setFocus(item);
         view.setTitle("style-editor");
     }
     

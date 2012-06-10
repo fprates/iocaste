@@ -234,8 +234,10 @@ public class Main extends AbstractPage {
         dataitem.setLength(80);
         dataitem.set("http://service.external.iocaste.org");
         dataitem.setObligatory(true);
-        
-        new DataItem(form, Const.TEXT_FIELD, "service").setObligatory(true);
+
+        dataitem = new DataItem(form, Const.TEXT_FIELD, "service");
+        dataitem.setObligatory(true);
+        view.setFocus(dataitem);
         
         dataitem = new DataItem(form, Const.TEXT_FIELD, "url");
         dataitem.setLength(80);
@@ -253,7 +255,6 @@ public class Main extends AbstractPage {
         
         new Button(container, "call");
         
-        view.setFocus("service");
         view.setReloadableView(true);
     }
     

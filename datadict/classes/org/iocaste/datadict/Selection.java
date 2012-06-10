@@ -27,7 +27,8 @@ public class Selection {
             throws Exception {
         SHLib shlib;
         Documents documents = new Documents(function);
-        String name = ((DataItem)view.getElement("modelname")).get();
+        DataForm form = view.getElement("model");
+        String name = form.get("name").get();
         int op = Common.getTpObjectValue(view);
         
         switch (op) {
@@ -69,9 +70,10 @@ public class Selection {
             throws Exception {
         ExtendedObject[] shdata;
         SHLib shlib = new SHLib(function);
-        String shname = ((DataItem)view.getElement("modelname")).get();
+        DataForm form = view.getElement("model");
+        String name = form.get("name").get();
         
-        shdata = shlib.get(shname);
+        shdata = shlib.get(name);
         if (shdata == null) {
             view.message(Const.ERROR, "sh.not.found");
             return;
@@ -96,14 +98,15 @@ public class Selection {
     public static void deletetb(View view, Function function)
             throws Exception {
         Documents documents = new Documents(function);
-        String modelname = ((DataItem)view.getElement("modelname")).get();
+        DataForm form = view.getElement("model");
+        String name = form.get("name").get();
         
-        if (documents.getModel(modelname) == null) {
+        if (documents.getModel(name) == null) {
             view.message(Const.ERROR, "model.not.found");
             return;
         }
         
-        documents.removeModel(modelname);
+        documents.removeModel(name);
         documents.commit();
         
         view.message(Const.STATUS, "model.removed.sucessfully");
@@ -121,12 +124,12 @@ public class Selection {
         RadioButton tpobj;
         Form main = new Form(view, "datadict.main");
         PageControl pagecontrol = new PageControl(main);
-        DataForm modelform = new DataForm(main, "modelform");
-        DataItem modelname = new DataItem(modelform, Const.TEXT_FIELD,
-                "modelname");
+        DataForm modelform = new DataForm(main, "model");
+        DataItem modelname = new DataItem(modelform, Const.TEXT_FIELD, "name");
         Documents documents = new Documents(function);
         
         pagecontrol.add("home");
+        
         modelname.setModelItem(documents.getModel("MODEL").
                 getModelItem("NAME"));
         modelname.setObligatory(true);
@@ -145,7 +148,7 @@ public class Selection {
         new Button(main, "delete");
         new Button(main, "rename");
         
-        view.setFocus("modelname");
+        view.setFocus(modelname);
         view.setTitle("datadict-selection");
     }
 
@@ -158,7 +161,8 @@ public class Selection {
     public static final void readtb(View view, Function function)
             throws Exception {
         DocumentModel model;
-        String name = ((DataItem)view.getElement("modelname")).get();
+        DataForm form = view.getElement("model");
+        String name = form.get("name").get();
         Documents documents = new Documents(function);
         
         if (documents.getModel(name) == null) {
@@ -183,7 +187,8 @@ public class Selection {
             throws Exception {
         ExtendedObject[] shitens;
         SHLib shlib = new SHLib(function);
-        String name = ((DataItem)view.getElement("modelname")).get();
+        DataForm form = view.getElement("model");
+        String name = form.get("name").get();
         ExtendedObject[] shdata = shlib.get(name);
         
         if (shdata == null) {

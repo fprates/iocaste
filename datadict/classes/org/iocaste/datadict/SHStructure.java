@@ -119,8 +119,10 @@ public class SHStructure {
                 continue;
             }
             
-            if (name.equals("MODEL"))
+            if (name.equals("MODEL")) {
                 validatorcfg.add(ditem);
+                view.setFocus(ditem);
+            }
             
             if (name.equals("EXPORT")) {
                 validatorcfg.add(ditem);
@@ -130,8 +132,8 @@ public class SHStructure {
                 ditem.setValidator(SHItemValidator.class);
             }
             
-            ditem.setObligatory((mode == Common.SHOW)? false : true);
-            ditem.setEnabled((mode == Common.SHOW)? false : true);
+            ditem.setObligatory(mode != Common.SHOW);
+            ditem.setEnabled(mode != Common.SHOW);
         }
         
         model = documents.getModel("SH_ITENS");
@@ -176,7 +178,6 @@ public class SHStructure {
         }
         
         view.setTitle(TITLE[mode]);
-        view.setFocus("MODEL");
     }
     
     /**

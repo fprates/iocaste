@@ -57,7 +57,7 @@ public class TableStructure {
         pagecontrol.add("back");
         modelname = getModelName(view);
         new DataItem(structure, Const.TEXT_FIELD, "modelname");
-        new DataItem(structure, Const.TEXT_FIELD, "modeltext");
+        view.setFocus(new DataItem(structure, Const.TEXT_FIELD, "modeltext"));
         new DataItem(structure, Const.TEXT_FIELD, "modelclass");
         new DataItem(structure, Const.TEXT_FIELD, "modeltable");
         
@@ -115,7 +115,6 @@ public class TableStructure {
             title = null;
         }
         
-        view.setFocus("modeltext");
         view.setTitle(title);
     }
     

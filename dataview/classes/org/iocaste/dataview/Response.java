@@ -75,11 +75,11 @@ public class Response {
         formitem.setModelItem(new Documents(function).getModel("MODEL").
                 getModelItem("NAME"));
         formitem.setObligatory(true);
+        view.setFocus(formitem);
         
         new Button(container, "edit");
 //        form.addAction("show");
         
-        view.setFocus("model.name");
         view.setTitle("dataview-selection");
     }
     

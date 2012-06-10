@@ -40,7 +40,7 @@ public class Rename {
         
         new Button(container, "renameok");
         
-        view.setFocus("newname");
+        view.setFocus(newname);
     }
     
     /**

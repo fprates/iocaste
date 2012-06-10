@@ -51,8 +51,8 @@ public class Request {
     public static final void edit(View vdata, Function function)
             throws Exception {
         ExtendedObject[] itens;
-        String modelname = ((InputComponent)vdata.getElement("model.name")).
-                get();
+        DataForm form = vdata.getElement("model");
+        String modelname = form.get("model.name").get();
         
         itens = getTableItens(modelname, function);
         

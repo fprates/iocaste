@@ -32,6 +32,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void authentic(View vdata) throws Exception {
+        String name;
         InputComponent input;
         MessageSource messages;
         Form form = new Form(vdata, "main");
@@ -43,18 +44,22 @@ public class Main extends AbstractPage {
          * o modelo "login". ainda não estamos autenticados pelo iocaste.
          */
         loginform.importModel(modelInstance());
-        new Button(form, "connect");
+        new Button(form, "connect").setSubmit(true);
         
         for (Element element : loginform.getElements()) {
             if (!element.isDataStorable())
                 continue;
             
             input = (InputComponent)element;
-            if (input.getName().equals("LOCALE")) {
+            name = input.getName();
+            if (name.equals("LOCALE")) {
                 input.set("pt_BR");
                 input.setObligatory(false);
                 continue;
             }
+            
+            if (name.equals("USERNAME"))
+                vdata.setFocus(element);
             
             input.setObligatory(true);
         }
@@ -64,7 +69,6 @@ public class Main extends AbstractPage {
         
         vdata.setMessages(messages);
         vdata.setTitle("authentic");
-        vdata.setFocus("USERNAME");
         
         loginform.get("SECRET").setSecret(true);
     }
