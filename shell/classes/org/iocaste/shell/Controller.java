@@ -297,8 +297,11 @@ public class Controller {
                 continue;
             
             input = (InputComponent)element;
-            if (!input.isSelectable())
+            if (!input.isSelectable()) {
+                if (!values.containsKey(name))
+                    values.put(name, null);
                 continue;
+            }
             
             setString(values, name, "off");
         }
