@@ -12,6 +12,7 @@ public class ListBoxRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(ListBox list) {
+        String[] entriesnames;
         XMLElement optiontag = null, selecttag= new XMLElement("select");
         String value, name = list.getHtmlName();
         
@@ -28,20 +29,24 @@ public class ListBoxRenderer extends Renderer {
         
         addEvents(selecttag, list);
         
-        for (String option : list.getEntriesNames()) {
-            optiontag = new XMLElement("option");
-            value = toString(list.get(option), Shell.getDataElement(list),
-                    list.getLocale(), false);
-            
-            optiontag.add("value", value);
-            
-            if (value.equals(toString(list)))
-                optiontag.add("selected", "selected");
-            
-            optiontag.addInner(option);
-            
-            selecttag.addChild(optiontag);
-        }
+        entriesnames = list.getEntriesNames();
+        if (entriesnames.length == 0)
+            selecttag.addInner("");
+        else
+            for (String option : entriesnames) {
+                optiontag = new XMLElement("option");
+                value = toString(list.get(option), Shell.getDataElement(list),
+                        list.getLocale(), false);
+                
+                optiontag.add("value", value);
+                
+                if (value.equals(toString(list)))
+                    optiontag.add("selected", "selected");
+                
+                optiontag.addInner(option);
+                
+                selecttag.addChild(optiontag);
+            }
         
         return selecttag;
     }
