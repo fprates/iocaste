@@ -306,8 +306,7 @@ public class Controller {
         for (String name : values.keySet()) {
             element = view.getElement(name);
             
-            if (element == null || !element.isDataStorable() ||
-                    !element.isEnabled())
+            if (element == null || !element.isDataStorable())
                 continue;
             
             value = getString(values, name);
@@ -336,7 +335,7 @@ public class Controller {
                     status.control.getType() == Const.SEARCH_HELP)
                 continue;
             
-            if (input.isObligatory() && isInitial(input)) {
+            if (input.isObligatory() && isInitial(input) && input.isEnabled()) {
                 status.input = input;
                 status.error = EINITIAL;
                 continue;
