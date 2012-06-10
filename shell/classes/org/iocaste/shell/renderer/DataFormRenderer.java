@@ -20,7 +20,7 @@ public class DataFormRenderer extends Renderer {
         DataItem dataitem;
         byte columns;
         List<XMLElement> tags = new ArrayList<XMLElement>();
-        XMLElement itemtag, formtag = new XMLElement("table");
+        XMLElement nulltag, itemtag, formtag = new XMLElement("table");
         
         formtag.add("class", form.getStyleClass());
         
@@ -41,7 +41,12 @@ public class DataFormRenderer extends Renderer {
                 for (String column : line) {
                     dataitem = (column == null)? null : form.get(column);
                     if (dataitem == null || !dataitem.isVisible()) {
-                        itemtag.addChild(new XMLElement("td"));
+                        nulltag = new XMLElement("td");
+                        nulltag.add("class", "form_cell");
+                        nulltag.addInner("");
+                        itemtag.addChild(nulltag);
+                        itemtag.addChild(nulltag);
+                        
                         continue;
                     }
                     
