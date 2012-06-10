@@ -78,15 +78,6 @@ public class ValidatorConfig implements Serializable {
     
     /**
      * 
-     * @param name
-     * @param value
-     */
-    public final void set(String name, Object value) {
-        inputs.get(name).set(value);
-    }
-    
-    /**
-     * 
      * @param message
      */
     public final void setMessage(String message) {
