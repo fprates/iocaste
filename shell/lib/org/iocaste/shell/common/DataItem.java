@@ -13,6 +13,8 @@ public class DataItem extends AbstractInputComponent {
         values = new LinkedHashMap<String, Object>();
         setStyleClass("form_cell");
         setLength(20);
+        setHtmlName(new StringBuilder(form.getName()).append(".").
+                append(name).toString());
     }
     
     /**
