@@ -1,5 +1,10 @@
 package org.iocaste.documents;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
@@ -10,25 +15,30 @@ import org.iocaste.protocol.Message;
 
 public class Services extends AbstractFunction {
     private Cache cache;
+    private Map<String, Set<Lock>> lockcache;
     
     public Services() {
         cache = new Cache(this);
+        lockcache = new HashMap<String, Set<Lock>>();
         
+        export("create_model", "createModel");
         export("create_number_factory", "createNumberFactory");
+        export("delete", "delete");
         export("get_data_element", "getDataElement");
         export("get_next_number", "getNextNumber");
         export("get_object", "getObject");
         export("get_document_model", "getDocumentModel");
-        export("create_model", "createModel");
+        export("is_locked", "isLocked");
+        export("lock", "lock");
+        export("modify", "modify");
         export("remove_model", "removeModel");
         export("remove_number_factory", "removeNumberFactory");
         export("rename_model", "renameModel");
-        export("update_model", "updateModel");
         export("save", "save");
         export("select", "select");
-        export("modify", "modify");
-        export("delete", "delete");
+        export("unlock", "unlock");
         export("update", "update");
+        export("update_model", "updateModel");
         export("validate_model", "validateModel");
     }
     
@@ -121,6 +131,60 @@ public class Services extends AbstractFunction {
         return NumberRange.getCurrent(ident, this);
     }
     
+    public final boolean isLocked(Message message) {
+        String sessionid = message.getSessionid();
+        String modelname = message.getString("model");
+        Object key = message.get("key");
+        
+        return isLocked(modelname, key, sessionid);
+    }
+    
+    private final boolean isLocked(String modelname, Object key,
+            String sessionid) {
+        Set<Lock> locks;
+        Object testkey;
+        
+        if (!lockcache.containsKey(modelname))
+            return false;
+        
+        locks = lockcache.get(modelname);
+        for (Lock lock : locks) {
+            testkey = lock.getKey();
+            if (!testkey.equals(key))
+                continue;
+            
+            if (lock.getSessionid().equals(sessionid))
+                return false;
+        }
+        
+        return true;
+    }
+    
+    public final int lock(Message message) throws Exception {
+        Set<Lock> locks;
+        Lock lock;
+        String sessionid = message.getSessionid();
+        String modelname = message.getString("model");
+        Object key = message.get("key");
+        
+        if (isLocked(modelname, key, sessionid))
+            return 0;
+        
+        if (lockcache.containsKey(modelname)) {
+            locks = lockcache.get(modelname);
+        } else {
+            locks = new HashSet<Lock>();
+            lockcache.put(modelname, locks);
+        }
+        
+        lock = new Lock();
+        lock.setSessionid(sessionid);
+        lock.setKey(key);
+        locks.add(lock);
+        
+        return 1;
+    }
+    
     /**
      * 
      * @param message
@@ -194,6 +258,29 @@ public class Services extends AbstractFunction {
         int rows = message.getInt("rows");
         
         return Query.select(query, rows, cache, criteria);
+    }
+    
+    public final int unlock(Message message) {
+        Set<Lock> locks;
+        Lock lock;
+        String sessionid = message.getSessionid();
+        String modelname = message.getString("model");
+        Object key = message.get("key");
+        
+        if (isLocked(modelname, key, sessionid))
+            return 0;
+        
+        if (!lockcache.containsKey(modelname))
+            return 1;
+
+        lock = new Lock();
+        lock.setSessionid(sessionid);
+        lock.setKey(key);
+        
+        locks = lockcache.get(modelname);
+        locks.remove(lock);
+        
+        return 1;
     }
     
     /**

@@ -169,6 +169,41 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
+     * @param model
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    public final boolean isLocked(String model, Object key)
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("is_locked");
+        message.add("model", model);
+        message.add("key", key);
+        
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param model
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    public final int lock(String model, Object key) throws Exception {
+        Message message = new Message();
+        
+        message.setId("lock");
+        message.add("model", model);
+        message.add("key", key);
+        
+        return call(message);
+    }
+    
+    /**
+     * 
      * @param object
      * @return
      * @throws Exception
@@ -285,6 +320,24 @@ public class Documents extends AbstractServiceInterface {
         return call(message);
         
     }
+    
+    /**
+     * 
+     * @param model
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    public final int unlock(String model, Object key) throws Exception {
+        Message message = new Message();
+        
+        message.setId("unlock");
+        message.add("model", model);
+        message.add("key", key);
+        
+        return call(message);
+    }
+    
     /**
      * 
      * @param query
