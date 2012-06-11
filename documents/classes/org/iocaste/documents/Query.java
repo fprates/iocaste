@@ -89,6 +89,10 @@ public class Query {
                     value = (value == null)?
                             0l : ((BigDecimal)value).longValue();
                 break;
+                
+            case DataType.DEC:
+                value = ((BigDecimal)value).doubleValue();
+                break;
             }
             
             object.setValue(modelitem, value);
