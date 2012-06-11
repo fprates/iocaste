@@ -147,6 +147,17 @@ public final class Iocaste extends AbstractServiceInterface {
     
     /**
      * 
+     */
+    public final void invalidateAuthCache() throws Exception {
+        Message message = new Message();
+        
+        message.setId("invalidate_auth_cache");
+        
+        call(message);
+    }
+    
+    /**
+     * 
      * @param authorization
      * @return
      * @throws Exception

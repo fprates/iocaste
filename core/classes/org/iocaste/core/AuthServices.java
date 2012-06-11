@@ -2,6 +2,7 @@ package org.iocaste.core;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,9 @@ public class AuthServices {
         "select * from AUTH004 where PRFNM = ? and OBJCT = ? and ACTIO = ?",
         "select * from AUTH002 where AUTNM = ?"
     };
-    
+    private static Map<String, Authorization[]> authorizations =
+            new HashMap<String, Authorization[]>();
+            
     /**
      * 
      * @param connection
@@ -34,6 +37,11 @@ public class AuthServices {
         Map<String, Object> resultmap;
         List<Authorization> authlist;
         String profilename, authname, name, value;
+        Authorization[] autharray;
+        
+        if (authorizations.containsKey(username))
+            return authorizations.get(username);
+        
         Object[] parameters, profileitens, profiles =
                 db.select(connection, QUERIES[USER_AUTHORITY], 0, username);
         
@@ -76,7 +84,17 @@ public class AuthServices {
             }
         }
         
-        return (authlist.size() == 0)? null :
-            authlist.toArray(new Authorization[0]);
+        if (authlist.size() == 0) {
+            return null;
+        } else {
+            autharray = authlist.toArray(new Authorization[0]);
+            authorizations.put(username, autharray);
+            
+            return autharray;
+        }
+    }
+    
+    public static final void invalidateCache() {
+        authorizations.clear();
     }
 }

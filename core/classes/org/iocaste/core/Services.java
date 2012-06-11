@@ -38,6 +38,7 @@ public class Services extends AbstractFunction {
         export("get_system_parameter", "getSystemParameter");
         export("get_username", "getUsername");
         export("get_users", "getUsers");
+        export("invalidate_auth_cache", "invalidateAuthCache");
         export("is_authorized", "isAuthorized");
         export("is_connected", "isConnected");
         export("login", "login");
@@ -272,6 +273,14 @@ public class Services extends AbstractFunction {
         }
         
         return users; 
+    }
+    
+    /**
+     * 
+     * @param message
+     */
+    public final void invalidateAuthCache(Message message) {
+        AuthServices.invalidateCache();
     }
     
     /**
