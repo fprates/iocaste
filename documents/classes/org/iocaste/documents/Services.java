@@ -134,12 +134,12 @@ public class Services extends AbstractFunction {
     public final boolean isLocked(Message message) {
         String sessionid = message.getSessionid();
         String modelname = message.getString("model");
-        Object key = message.get("key");
+        String key = message.getString("key");
         
         return isLocked(modelname, key, sessionid);
     }
     
-    private final boolean isLocked(String modelname, Object key,
+    private final boolean isLocked(String modelname, String key,
             String sessionid) {
         Set<Lock> locks;
         Object testkey;
@@ -165,7 +165,7 @@ public class Services extends AbstractFunction {
         Lock lock;
         String sessionid = message.getSessionid();
         String modelname = message.getString("model");
-        Object key = message.get("key");
+        String key = message.getString("key");
         
         if (isLocked(modelname, key, sessionid))
             return 0;
@@ -265,7 +265,7 @@ public class Services extends AbstractFunction {
         Lock lock;
         String sessionid = message.getSessionid();
         String modelname = message.getString("model");
-        Object key = message.get("key");
+        String key = message.getString("key");
         
         if (isLocked(modelname, key, sessionid))
             return 0;
@@ -279,6 +279,8 @@ public class Services extends AbstractFunction {
         
         locks = lockcache.get(modelname);
         locks.remove(lock);
+        if (locks.size() == 0)
+            lockcache.remove(modelname);
         
         return 1;
     }

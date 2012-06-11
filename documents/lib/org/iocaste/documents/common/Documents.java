@@ -174,7 +174,7 @@ public class Documents extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final boolean isLocked(String model, Object key)
+    public final boolean isLocked(String model, String key)
             throws Exception {
         Message message = new Message();
         
@@ -192,7 +192,7 @@ public class Documents extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final int lock(String model, Object key) throws Exception {
+    public final int lock(String model, String key) throws Exception {
         Message message = new Message();
         
         message.setId("lock");
@@ -328,7 +328,7 @@ public class Documents extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final int unlock(String model, Object key) throws Exception {
+    public final int unlock(String model, String key) throws Exception {
         Message message = new Message();
         
         message.setId("unlock");

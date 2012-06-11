@@ -2,7 +2,7 @@ package org.iocaste.documents;
 
 public class Lock {
     private String sessionid;
-    private Object key;
+    private String key;
     
     /*
      * (non-Javadoc)
@@ -26,7 +26,7 @@ public class Lock {
         return true;
     }
     
-    public final Object getKey() {
+    public final String getKey() {
         return key;
     }
     
@@ -34,7 +34,14 @@ public class Lock {
         return sessionid;
     }
     
-    public final void setKey(Object key) {
+    @Override
+    public final int hashCode() {
+        int hash = new StringBuilder(sessionid).append(key).
+                append(".").toString().hashCode();
+        return hash;
+    }
+    
+    public final void setKey(String key) {
         this.key = key;
     }
     
