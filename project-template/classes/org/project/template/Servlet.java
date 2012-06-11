@@ -1,4 +1,4 @@
-package org.project.template;
+package org.template;
 
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.ServerServlet;
@@ -14,7 +14,7 @@ public class Servlet extends ServerServlet {
      */
     @Override
     public void config() {
-        
+        register(new Services());
     }
     
     /*

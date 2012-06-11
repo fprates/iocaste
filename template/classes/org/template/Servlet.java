@@ -14,7 +14,7 @@ public class Servlet extends ServerServlet {
      */
     @Override
     public void config() {
-        
+        register(new Services());
     }
     
     /*
