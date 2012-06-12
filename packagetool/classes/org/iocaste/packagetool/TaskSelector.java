@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class TaskSelector {
@@ -154,32 +155,32 @@ public class TaskSelector {
     /**
      * 
      * @param groupname
-     * @param state
+     * @param documents
      * @throws Exception
      */
-    public static final void removeGroup(String groupname, State state)
+    public static final void removeGroup(String groupname, Documents documents)
             throws Exception {
-        state.documents.update(QUERIES[DEL_USR_TSK_GRP], groupname);
-        state.documents.update(QUERIES[DEL_TSK_GRP], groupname);
+        documents.update(QUERIES[DEL_USR_TSK_GRP], groupname);
+        documents.update(QUERIES[DEL_TSK_GRP], groupname);
     }
     
     /**
      * 
      * @param taskname
-     * @param state
+     * @param documents
      * @throws Exception
      */
-    public static final void removeTask(String taskname, State state)
+    public static final void removeTask(String taskname, Documents documents)
             throws Exception {
         int taskid;
-        ExtendedObject[] task = state.documents.
-                selectLimitedTo(QUERIES[TASK], 1, taskname);
+        ExtendedObject[] task;
         
+        task = documents.selectLimitedTo(QUERIES[TASK], 1, taskname);
         if (task == null)
             return;
         
         taskid = task[0].getValue("ID");
-        state.documents.update(QUERIES[DEL_TASK_TEXT], taskid);
-        state.documents.update(QUERIES[DEL_TASK], taskid);
+        documents.update(QUERIES[DEL_TASK_TEXT], taskid);
+        documents.update(QUERIES[DEL_TASK], taskid);
     }
 }

@@ -15,12 +15,23 @@ import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.SHLib;
 
 public class Services extends AbstractFunction {
+    private static final byte DEL_MESSAGES = 0;
+    private static final byte DEL_PKG_ITEM = 1;
+    private static final byte DEL_TASKS = 2;
+    private static final byte DEL_PACKAGE = 3;
+    private static final String[] QUERIES = {
+        "delete from MESSAGES where PACKAGE = ?",
+        "delete from PACKAGE_ITEM where PACKAGE = ? and MODEL = ?",
+        "delete from TASKS where NAME = ?",
+        "delete from PACKAGE where NAME = ?"
+    };
 
     public Services() {
         export("install", "install");
@@ -153,6 +164,8 @@ public class Services extends AbstractFunction {
             
             Registry.add(name, "AUTHORIZATION", state);
         }
+        
+        new Iocaste(state.function).invalidateAuthCache();
     }
     
     /**
@@ -371,92 +384,92 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void uninstall(Message message) throws Exception {
-        String query, modeltype, name;
+        String modeltype, name;
         ExtendedObject object;
-        SHLib shlib = new SHLib(this);
-        Authority authority = new Authority(this);
+        SHLib shlib;
+        Authority authority;
+        Documents documents;
         String pkgname = message.getString("package");
         ExtendedObject[] objects = Registry.getEntries(pkgname, this);
-        State state = new State();
         
-        state.documents = new Documents(this);
+        if (objects == null)
+            return;
         
-        if (objects != null)
-            for (int i = objects.length; i > 0; i--) {
-                object = objects[i - 1];
+        authority = new Authority(this);
+        shlib = new SHLib(this);
+        documents = new Documents(this);
+        for (int i = objects.length; i > 0; i--) {
+            object = objects[i - 1];
+            modeltype = object.getValue("MODEL");
+            name = object.getValue("NAME");
+            
+            if (modeltype.equals("MESSAGE")) {
+                name = object.getValue("PACKAGE");
+                documents.update(QUERIES[DEL_MESSAGES], name);
+                documents.update(QUERIES[DEL_PKG_ITEM], name, "MESSAGE");
+                documents.delete(object);
                 
-                modeltype = object.getValue("MODEL");
-                name = object.getValue("NAME");
-                if (modeltype.equals("MESSAGE")) {
-                    name = object.getValue("PACKAGE");
-                    query = "delete from MESSAGES where PACKAGE = ?";
-                    state.documents.update(query, name);
-                    
-                    query = "delete from PACKAGE_ITEM where PACKAGE = ? and " +
-                    		"MODEL = ?";
-                    state.documents.update(query, name, "MESSAGE");
-                    state.documents.delete(object);
-                    
-                    continue;
-                }
-                
-                if (modeltype.equals("SH")) {
-                    shlib.unassign(name);
-                    shlib.remove(name);
-                    state.documents.delete(object);
-                    
-                    continue;
-                }
-                
-                if (modeltype.equals("TASK")) {
-                    query = "delete from TASKS where NAME = ?";
-                    state.documents.update(query, name);
-                    state.documents.delete(object);
-                    
-                    continue;
-                }
-                
-                if (modeltype.equals("MODEL")) {
-                    state.documents.removeModel(name);
-                    state.documents.delete(object);
-                    
-                    continue;
-                }
-                
-                if (modeltype.equals("NUMBER")) {
-                    state.documents.removeNumberFactory(name);
-                    state.documents.delete(object);
-                    
-                    continue;
-                }
-                
-                if (modeltype.equals("AUTHORIZATION")) {
-                    authority.remove(name);
-                    state.documents.delete(object);
-                    
-                    continue;
-                }
-                
-                if (modeltype.equals("TSKGROUP")) {
-                    TaskSelector.removeGroup(name, state);
-                    state.documents.delete(object);
-                    
-                    continue;
-                }
-                
-                if (modeltype.equals("TSKITEM")) {
-                    TaskSelector.removeTask(name, state);
-                    state.documents.delete(object);
-                    
-                    continue;
-                }
-                
-                if (modeltype.equals("DATA_ELEMENT"))
-                    state.documents.delete(object);
+                continue;
             }
+            
+            if (modeltype.equals("SH")) {
+                shlib.unassign(name);
+                shlib.remove(name);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("TASK")) {
+                documents.update(QUERIES[DEL_TASKS], name);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("MODEL")) {
+                documents.removeModel(name);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("NUMBER")) {
+                documents.removeNumberFactory(name);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("AUTHORIZATION")) {
+                authority.remove(name);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("TSKGROUP")) {
+                TaskSelector.removeGroup(name, documents);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("TSKITEM")) {
+                TaskSelector.removeTask(name, documents);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("DATA_ELEMENT"))
+                documents.delete(object);
+        }
+            
+        new Iocaste(this).invalidateAuthCache();
         
-        state.documents.update("delete from PACKAGE where NAME = ?", pkgname);
-        state.documents.commit();
+        documents.update(QUERIES[DEL_PACKAGE], pkgname);
+        documents.commit();
     }
 }
 
