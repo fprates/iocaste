@@ -15,8 +15,9 @@ public class Install {
         
         // mensagens
         messages = new HashMap<String, String>();
+        messages.put("TESTE", "Aplicação template");
         messages.put("iocaste-template", "Módulo template");
-        messages.put("server.teste", "Clique no botão para testar o servidor.");
+        messages.put("server.test", "Clique no botão para testar o servidor.");
         data.setMessages("pt_BR", messages);
         
         // autorização de execução
@@ -28,7 +29,7 @@ public class Install {
         
         // link
         data.link("TESTE", "iocaste-template");
-        data.addTaskGroup("TESTE", "iocaste-template");
+        data.addTaskGroup("TESTE", "TESTE");
         
         return data;
     }

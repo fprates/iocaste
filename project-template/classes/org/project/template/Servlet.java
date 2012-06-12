@@ -1,4 +1,4 @@
-package org.template;
+package org.project.template;
 
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.ServerServlet;

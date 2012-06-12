@@ -36,7 +36,7 @@ public class TemplateForm extends AbstractPage {
      * @param view
      * @return
      */
-    public final void action(View view) throws Exception {
+    public final void bind(View view) throws Exception {
         // carrega a biblioteca
         Template template = new Template(this);
         
@@ -66,7 +66,7 @@ public class TemplateForm extends AbstractPage {
         text.setText("server.test");
         
         // inclui um botão. retorna para uma rotina com o mesmo nome do botão
-        new Button(container, "action");
+        new Button(container, "bind");
         
         // ajusta o título da visão
         view.setTitle("iocaste-template");

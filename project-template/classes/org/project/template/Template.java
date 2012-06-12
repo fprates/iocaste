@@ -1,4 +1,4 @@
-package org.template;
+package org.project.template;
 
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
@@ -11,7 +11,7 @@ import org.iocaste.protocol.Message;
  *
  */
 public class Template extends AbstractServiceInterface {
-    private static final String SERVERNAME = "/iocate-template/services.html";
+    private static final String SERVERNAME = "/template/services.html";
     public Template(Function function) {
         initService(function, SERVERNAME);
     }
