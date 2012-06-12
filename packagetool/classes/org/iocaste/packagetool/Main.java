@@ -152,11 +152,15 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void printinfo(View view) {
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
         Map<String, String> links = view.getParameter("links");
         DocumentModel[] models = view.getParameter("models");
         Authorization[] authorizations = view.getParameter("authorizations");
         String[] numbers = view.getParameter("numbers");
         String[] dependencies = view.getParameter("dependencies");
+        
+        pagecontrol.add("back");
         
         if (authorizations.length > 0) {
             view.print("- Autorizações");
