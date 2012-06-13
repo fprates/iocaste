@@ -14,8 +14,8 @@ public class LinkRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(Link link, Config config) {
-        XMLElement atag;
-        String text, href;
+        XMLElement atag, imgtag;
+        String text, href, image;
         StringBuilder onclick;
         Map<Parameter, Object> parameters;
         
@@ -50,9 +50,22 @@ public class LinkRenderer extends Renderer {
             atag.add("onClick", onclick.toString());
         }
         atag.add("href", href);
-        text = link.getText();
-        atag.addInner(config.getText(text, text));
         
+        image = link.getImage();
+        if (image != null) {
+            imgtag = new XMLElement("img");
+            imgtag.add("src", image);
+            atag.addChild(imgtag);
+            
+            text = link.getText();
+            if (text != null)
+                imgtag.add("alt", config.getText(text, text));
+        } else {
+            text = link.getText();
+            if (text != null)
+                atag.addInner(config.getText(text, text));
+        }
+            
         return atag;
     }
 

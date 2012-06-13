@@ -7,6 +7,7 @@ public class Link extends AbstractControlComponent {
     private static final long serialVersionUID = 667738108271176995L;
     private boolean absolute;
     private Map<Parameter, Object> values;
+    private String image;
     
     public Link(Container container, String name, String action) {
         super(container, Const.LINK, name);
@@ -24,6 +25,14 @@ public class Link extends AbstractControlComponent {
      */
     public final void add(Parameter parameter, Object value) {
         values.put(parameter, value);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getImage() {
+        return image;
     }
     
     /**
@@ -48,6 +57,14 @@ public class Link extends AbstractControlComponent {
      */
     public final void setAbsolute(boolean absolute) {
         this.absolute = absolute;
+    }
+    
+    /**
+     * 
+     * @param image
+     */
+    public final void setImage(String image) {
+        this.image = image;
     }
     
     /**
