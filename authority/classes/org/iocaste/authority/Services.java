@@ -120,10 +120,11 @@ public class Services extends AbstractFunction {
         authorization.setAction((String)authobject.getValue("ACTION"));
         
         parameters = documents.select(QUERIES[AUTH_ITENS], name);
-        for (ExtendedObject parameter : parameters) {
-            name = parameter.getValue("NAME");
-            authorization.add(name, null);
-        }
+        if (parameters != null)
+            for (ExtendedObject parameter : parameters) {
+                name = parameter.getValue("NAME");
+                authorization.add(name, null);
+            }
         
         return authorization;
     }
