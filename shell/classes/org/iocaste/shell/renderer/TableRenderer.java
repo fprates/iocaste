@@ -4,13 +4,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.shell.XMLElement;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 
 public class TableRenderer extends Renderer {
+    
+    private static final Container buildLineControl(Table table) {
+        Link link;
+        String action, tablename = table.getName();
+        String name = new StringBuilder(tablename).append(".linecontrol").
+                toString();
+        Container linecontrol = new StandardContainer(table, name);
+        
+        action = table.getAction(Table.ADD);
+        if (action != null) {
+            link = new Link(linecontrol, new StringBuilder(name).append(".add").
+                    toString(), action);
+            link.setImage("images/insitem.svg");
+            link.setStyleClass("imglink");
+        }
+        
+        action = table.getAction(Table.REMOVE);
+        if (action != null) {
+            link = new Link(linecontrol, new StringBuilder(name).
+                    append(".remove").toString(), action);
+            link.setImage("images/remitem.svg");
+            link.setStyleClass("imglink");
+        }
+        
+        return linecontrol;
+    }
     
     /**
      * 
@@ -39,9 +68,18 @@ public class TableRenderer extends Renderer {
                 thtag = new XMLElement("th");
                 thtag.add("class", "table_header");
                 
-                name = column.getName();
-                if (name != null)
-                    thtag.addInner(config.getText(name, name));
+                if (column.isMark() && table.hasMark()) {
+                    if (table.getLineControl() == null)
+                        table.setLineControl(buildLineControl(table));
+                    
+                    thtag.addChildren(Renderer.renderElements(
+                            table.getLineControl().getElements(), config));
+                    
+                } else {
+                    name = column.getName();
+                    if (name != null)
+                        thtag.addInner(config.getText(name, name));
+                }
                 
                 trtag.addChild(thtag);
             }

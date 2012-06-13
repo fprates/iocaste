@@ -55,6 +55,7 @@
         <!-- pacote .war -->
         <war destfile="${warfilename}"
             webxml="${builddir}/${ant.project.name}/web/web.xml">
+    	    <fileset dir="${basedir}/src" includes="images/"/>
             <webinf dir="${basedir}/src/${ant.project.name}/web/">
                 <exclude name="web.xml"/>
                 <include name="**/*"/> 

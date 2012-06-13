@@ -39,11 +39,15 @@ public class Table extends AbstractContainer {
     private static final long serialVersionUID = -245959547368570624L;
     public static final byte MULTIPLE = 0;
     public static final byte SINGLE = 1;
+    public static final byte ADD = 0;
+    public static final byte REMOVE = 1;
     private boolean header, mark;
     private Map<String, TableColumn> columns;
     private List<TableItem> itens;
     private byte seltype;
     private RadioGroup group;
+    private Container linecontrol;
+    private String[] actions;
     
     public Table(View view, String name) {
         super(view, Const.TABLE, name);
@@ -92,6 +96,15 @@ public class Table extends AbstractContainer {
      */
     public final TableItem get(int index) {
         return itens.get(index);
+    }
+    
+    /**
+     * 
+     * @param action
+     * @return
+     */
+    public final String getAction(byte action) {
+        return actions[action];
     }
     
     /**
@@ -153,6 +166,14 @@ public class Table extends AbstractContainer {
      */
     public final TableItem[] getItens() {
         return itens.toArray(new TableItem[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Container getLineControl() {
+        return linecontrol;
     }
     
     /**
@@ -224,6 +245,7 @@ public class Table extends AbstractContainer {
         columns = new LinkedHashMap<String, TableColumn>();
         seltype = MULTIPLE;
         group = new RadioGroup(getName()+".mark");
+        actions = new String[2];
         
         column = new TableColumn(this, "");
         column.setMark(true);
@@ -256,11 +278,28 @@ public class Table extends AbstractContainer {
     }
     
     /**
+     * 
+     * @param action
+     * @param method
+     */
+    public final void setAction(byte action, String method) {
+        actions[action] = method;
+    }
+    
+    /**
      * Ajusta status de exibição da header.
      * @param header true, exibe header
      */
     public final void setHeader(boolean header) {
         this.header = header;
+    }
+    
+    /**
+     * 
+     * @param linecontrol
+     */
+    public final void setLineControl(Container linecontrol) {
+        this.linecontrol = linecontrol;
     }
     
     /**

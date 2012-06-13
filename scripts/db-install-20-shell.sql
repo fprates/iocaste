@@ -332,6 +332,15 @@ insert into shell003 (pindx, eindx, pname, value) values (000100330007, 00010033
 insert into shell003 (pindx, eindx, pname, value) values (000100330008, 000100330000, 'padding', '3px');
 insert into shell003 (pindx, eindx, pname, value) values (000100330009, 000100330000, 'display', 'inline');
 
+insert into shell002 (eindx, sname, ename) values (000100340000, 'DEFAULT', '.imglink:link');
+insert into shell003 (pindx, eindx, pname, value) values (000100340001, 000100340000, 'color', 'transparent');
+insert into shell002 (eindx, sname, ename) values (000100350000, 'DEFAULT', '.imglink:visited');
+insert into shell003 (pindx, eindx, pname, value) values (000100350001, 000100350000, 'color', 'transparent');
+insert into shell002 (eindx, sname, ename) values (000100360000, 'DEFAULT', '.imglink:hover');
+insert into shell003 (pindx, eindx, pname, value) values (000100360001, 000100360000, 'color', 'transparent');
+insert into shell002 (eindx, sname, ename) values (000100370000, 'DEFAULT', '.imglink:active');
+insert into shell003 (pindx, eindx, pname, value) values (000100370001, 000100370000, 'color', 'transparent');
+
 insert into docs001(docid, tname, class) values('STYLE', 'SHELL001', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.NAME', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.INDEX', 0, 12, 3, 1);

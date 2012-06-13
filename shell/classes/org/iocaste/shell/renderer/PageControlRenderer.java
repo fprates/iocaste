@@ -19,12 +19,12 @@ public class PageControlRenderer extends Renderer {
      * @param config
      */
     private static final void addAction(Container container, String action,
-            Config config) {
+            Config config, boolean extern) {
         Link link = new Link(container, action, action);
         
         link.setEnabled(true);
         link.setCancellable(true);
-        link.setAllowStacking(false);
+        link.setAllowStacking(extern);
         link.setStyleClass("navbar_link");
         link.setText(config.getText(action, action));
     }
@@ -35,7 +35,7 @@ public class PageControlRenderer extends Renderer {
      */
     private static final void setMessage(Text message, Const msgtype,
             String text) {
-        message.setVisible((text == null)? false : true);
+        message.setVisible(text != null);
         message.setText(text);
         
         switch (msgtype) {
@@ -76,7 +76,8 @@ public class PageControlRenderer extends Renderer {
         if (actions.length > 0) {
             linkarea = new StandardContainer(pagecontrol, "navbar.linkarea");
             for (String action : actions)
-                addAction(linkarea, action, config);
+                addAction(linkarea, action, config,
+                        pagecontrol.isExternal(action));
         }
         
         statusarea = new StandardContainer(pagecontrol, "navbar.status");
