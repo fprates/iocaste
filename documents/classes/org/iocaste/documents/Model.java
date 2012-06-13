@@ -148,12 +148,14 @@ public class Model {
         
         lines = iocaste.select("select * from docs004 where docid = ?",
                 documentname);
-        for (Object object : lines) {
-            columns = (Map<String, Object>)object;
-            composed = ((String)columns.get("INAME")).split("\\.");
-            
-            document.add(new DocumentModelKey(composed[1]));
-        }
+        
+        if (lines != null)
+            for (Object object : lines) {
+                columns = (Map<String, Object>)object;
+                composed = ((String)columns.get("INAME")).split("\\.");
+                
+                document.add(new DocumentModelKey(composed[1]));
+            }
         
         if (!cache.queries.containsKey(documentname))
             Common.parseQueries(document, cache.queries);
