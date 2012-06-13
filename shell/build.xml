@@ -27,7 +27,7 @@
     		token="@server.class@" value="${server.class}"/>
     	
         <!-- compilação lib -->
-        <javac srcdir="${basedir}/src/${ant.project.name}" 
+        <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
             destdir="${builddir}/${ant.project.name}/lib"
         	debug="${debug.status}">
             <classpath refid="dependencies"/>
@@ -40,7 +40,7 @@
             file="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
     	
         <!-- compilação classes -->
-        <javac srcdir="${basedir}/src/${ant.project.name}"
+        <javac srcdir="${basedir}/src/${ant.project.name}/classes"
             destdir="${builddir}/${ant.project.name}/classes"
         	debug="${debug.status}">
         	

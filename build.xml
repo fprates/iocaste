@@ -69,6 +69,17 @@
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
     	
+    	<copy todir="${basedir}/ext/common">
+    		<fileset dir="${builddir}/core/lib" excludes="*.jar"/>
+    		<fileset dir="${builddir}/documents/lib" excludes="*.jar"/>
+    		<fileset dir="${builddir}/shell/lib" excludes="*.jar"/>
+    		<fileset dir="${builddir}/packagetool/lib" excludes="*.jar"/>
+    	</copy>
+    	
+    	<jar basedir="${basedir}/ext/common"
+    		destfile="${basedir}/ext/iocaste.jar"/>
+    	
+    	<delete dir="${basedir}/ext/common"/>
     	<delete dir="${builddir}"/>
     </target>
 </project>
