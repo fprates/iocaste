@@ -69,15 +69,16 @@ public class Authority extends AbstractServiceInterface {
     /**
      * 
      * @param name
+     * @return
      * @throws Exception
      */
-    public final void remove(String name) throws Exception {
+    public final int remove(String name) throws Exception {
         Message message = new Message();
         
         message.setId("remove");
         message.add("name", name);
         
-        call(message);
+        return call(message);
     }
     
     /**

@@ -12,9 +12,15 @@ import org.iocaste.protocol.user.Authorization;
 public class Services extends AbstractFunction {
     private static final byte SELECT_PROFILE = 0;
     private static final byte AUTH_ITENS = 1;
+    private static final byte DEL_AUTH_ITENS = 2;
+    private static final byte DEL_AUTH = 3;
+    private static final byte DEL_PROFILE_ITEM = 4;
     private static final String[] QUERIES = {
         "select * from USER_AUTHORITY where USERNAME = ? and PROFILE = ?",
-        "select * from AUTHORIZATION_ITEM where AUTHORIZATION = ?"
+        "select * from AUTHORIZATION_ITEM where AUTHORIZATION = ?",
+        "delete from AUTHORIZATION_ITEM where AUTHORIZATION = ?",
+        "delete from AUTHORIZATION where NAME = ?",
+        "delete from USER_PROFILE_ITEM where NAME = ?"
     };
     
     public Services() {
@@ -129,8 +135,20 @@ public class Services extends AbstractFunction {
         return authorization;
     }
     
-    public final void remove(Message message) {
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final int remove(Message message) throws Exception {
+        String name = message.getString("name");
+        Documents documents = new Documents(this);
         
+        documents.update(QUERIES[DEL_PROFILE_ITEM], name);
+        documents.update(QUERIES[DEL_AUTH_ITENS], name);
+        
+        return documents.update(QUERIES[DEL_AUTH], name);
     }
     
     /**
