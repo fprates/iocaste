@@ -33,6 +33,7 @@ import org.iocaste.shell.common.StandardList;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.TextArea;
 import org.iocaste.shell.common.TextField;
 
 public class Renderer {
@@ -148,6 +149,10 @@ public class Renderer {
             
         case TEXT:
             tags.add(TextRenderer.render((Text)element, config));
+            break;
+            
+        case TEXT_AREA:
+            tags.add(TextAreaRenderer.render((TextArea)element, config));
             break;
             
         case TEXT_FIELD:
