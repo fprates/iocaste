@@ -13,11 +13,12 @@ public class NodeListRenderer extends Renderer {
         String itelem;
         XMLElement nltag, itemnltag;
         List<XMLElement> tags;
+        byte type = nodelist.getListType();
         
-        switch (nodelist.getListType()) {
+        switch (type) {
         case NodeList.DEFINITION:
             nltag = new XMLElement("dl");
-            itelem = "dt";
+            itelem = "dd";
             break;
             
         case NodeList.ORDERED:
@@ -35,12 +36,20 @@ public class NodeListRenderer extends Renderer {
         nltag.add("class", nodelist.getStyleClass());
         
         addEvents(nltag, nodelist);
+
+        if (type == NodeList.DEFINITION) {
+            itemnltag = new XMLElement("dt");
+            itemnltag.addInner(nodelist.getName());
+            itemnltag.add("class", nodelist.getStyleClass(NodeList.NODE));
+            nltag.addChild(itemnltag);
+        }
         
         for (Element element : nodelist.getElements()) {
             tags = new ArrayList<XMLElement>();
             Renderer.renderElement(tags, element, config);
             
             itemnltag = new XMLElement(itelem);
+            itemnltag.add("class", nodelist.getStyleClass(NodeList.ITEM));
             itemnltag.addChildren(tags);
             nltag.addChild(itemnltag);
         }

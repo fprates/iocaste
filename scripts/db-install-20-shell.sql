@@ -341,6 +341,17 @@ insert into shell003 (pindx, eindx, pname, value) values (000100360001, 00010036
 insert into shell002 (eindx, sname, ename) values (000100370000, 'DEFAULT', '.imglink:active');
 insert into shell003 (pindx, eindx, pname, value) values (000100370001, 000100370000, 'color', 'transparent');
 
+insert into shell002 (eindx, sname, ename) values (000100380000, 'DEFAULT', '.nlnode');
+insert into shell003 (pindx, eindx, pname, value) values (000100380001, 000100380000, 'color', '#ffffff');
+insert into shell003 (pindx, eindx, pname, value) values (000100380002, 000100380000, 'background-color', 'transparent');
+
+insert into shell002 (eindx, sname, ename) values (000100390000, 'DEFAULT', '.nlitem');
+insert into shell003 (pindx, eindx, pname, value) values (000100390001, 000100390000, 'color', '#ffffff');
+insert into shell003 (pindx, eindx, pname, value) values (000100390002, 000100390000, 'background-color', 'transparent');
+
+insert into shell002 (eindx, sname, ename) values (000100400000, 'DEFAULT', '.textarea');
+insert into shell003 (pindx, eindx, pname, value) values (000100400001, 000100400000, 'width', '100%');
+
 insert into docs001(docid, tname, class) values('STYLE', 'SHELL001', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.NAME', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.INDEX', 0, 12, 3, 1);
