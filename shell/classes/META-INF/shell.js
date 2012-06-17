@@ -18,18 +18,23 @@ function revertElementDisplay(id) {
 
 function send(actionname, args, response) {
     var pagetrack = document.getElementById("pagetrack").value;
-    var url = "index.html?pagetrack="+pagetrack+"&action="+actionname;
+    var url = "index.html";
+    var param = "pagetrack="+pagetrack+"&action="+actionname;
     var xmlhttp = new XMLHttpRequest();
     
     if (args != null)
-        url += args;
+        param += args;
     
     xmlhttp.onreadystatechange = function() {
         sendCallback(actionname, response, xmlhttp);
     }
     
     xmlhttp.open("POST", url, true);
-    xmlhttp.send();
+    xmlhttp.setRequestHeader("Content-type",
+    		"application/x-www-form-urlencoded");
+    xmlhttp.setRequestHeader("Content-length", param.length);
+    xmlhttp.setRequestHeader("Connection", "close")
+    xmlhttp.send(param);
 }
 
 function sendCallback(action, area, xmlhttp) {
