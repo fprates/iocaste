@@ -1,5 +1,11 @@
 package org.iocaste.shell.common;
 
+/**
+ * Implementa fieldset e legend html.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class Frame extends AbstractContainer {
     private static final long serialVersionUID = 819231435339310268L;
     private String text;
@@ -20,16 +26,16 @@ public class Frame extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
+     * Retorna texto do frame.
+     * @return texto
      */
     public final String getText() {
         return text;
     }
     
     /**
-     * 
-     * @param text
+     * Ajusta texto do frame.
+     * @param text texto
      */
     public final void setText(String text) {
         this.text = text;

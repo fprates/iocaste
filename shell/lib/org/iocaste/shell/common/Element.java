@@ -27,40 +27,42 @@ import java.util.Locale;
 /**
  * Interface fundamental para elementos.
  * 
+ * A principal implementação é AbstractElement.
+ * 
  * @author Francisco de Assis Prates
  *
  */
 public interface Element extends Comparable<Element>, Serializable {
     
     /**
-     * 
-     * @param name
-     * @param value
+     * Adiciona evento html.
+     * @param name nome do evento
+     * @param value ação para evento
      */
     public abstract void addEvent(String name, String value);
     
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna ação para evento html.
+     * @param name nome do evento
+     * @return ação
      */
     public abstract String getEvent(String name);
     
     /**
-     * 
-     * @return
+     * Retorna nomes dos eventos adicionados.
+     * @return nomes
      */
     public abstract String[] getEventNames();
     
     /**
-     * 
-     * @return
+     * Retorna nome html equivalente.
+     * @return nome html
      */
     public abstract String getHtmlName();
     
     /**
-     * 
-     * @return
+     * Retorna localização
+     * @return localização
      */
     public abstract Locale getLocale();
     
@@ -83,8 +85,8 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract Const getType();
 
     /**
-     * 
-     * @return
+     * Retorna visão que contém elemento.
+     * @return visão
      */
     public abstract View getView();
     
@@ -102,8 +104,8 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract boolean isContainable();
     
     /**
-     * 
-     * @return
+     * Indica se elemento é um controle.
+     * @return true, se for um controle.
      */
     public abstract boolean isControlComponent();
     
@@ -120,8 +122,8 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract boolean isEnabled();
     
     /**
-     * 
-     * @return
+     * Indica se elemento é suscetível à eventos.
+     * @return true, se tem evento associado.
      */
     public abstract boolean isEventAware();
     
@@ -138,14 +140,14 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract void setEnabled(boolean enabled);
     
     /**
-     * 
-     * @param name
+     * Define um nome html.
+     * @param name nome html.
      */
     public abstract void setHtmlName(String name);
     
     /**
-     * 
-     * @param locale
+     * Define localização
+     * @param locale localização
      */
     public abstract void setLocale(Locale locale);
     
@@ -156,7 +158,7 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract void setStyleClass(String style);
     
     /**
-     * 
+     * Define a visão do elemento.
      * @param view
      */
     public abstract void setView(View view);

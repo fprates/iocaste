@@ -5,6 +5,12 @@ import java.io.Serializable;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 
+/**
+ * Propriedades da coluna da tabela.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class TableColumn implements Serializable {
     private static final long serialVersionUID = -39703809895121317L;
     private boolean visible, mark, rendertextonly;
@@ -22,16 +28,16 @@ public class TableColumn implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Retorna elemento de dados da coluna.
+     * @return elemento de dados.
      */
     public final DataElement getDataElement() {
         return (modelitem == null)? de : modelitem.getDataElement();
     }
     
     /**
-     * 
-     * @return
+     * Retorna item de modelo da coluna.
+     * @return item de modelo.
      */
     public final DocumentModelItem getModelItem() {
         return modelitem;
@@ -46,8 +52,8 @@ public class TableColumn implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Indica se é coluna de seleção de linha.
+     * @return true, se for coluna de seleção
      */
     public final boolean isMark() {
         return mark;
@@ -62,32 +68,32 @@ public class TableColumn implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Indica se deve renderizar apenas o texto, e não o elemento inteiro.
+     * @return true, se deve renderizar apenas texto.
      */
     public final boolean getRenderTextOnly() {
         return rendertextonly;
     }
     
     /**
-     * 
-     * @param de
+     * Define elemento de dados.
+     * @param de elemento de dados.
      */
     public final void setDataElement(DataElement de) {
         this.de = de;
     }
     
     /**
-     * 
-     * @param modelitem
+     * Define item de modelo.
+     * @param modelitem item de modelo.
      */
     public final void setModelItem(DocumentModelItem modelitem) {
         this.modelitem = modelitem;
     }
     
     /**
-     * 
-     * @param mark
+     * Define coluna de seleção de linha.
+     * @param mark true, para coluna de seleção.
      */
     public final void setMark(boolean mark) {
         this.mark = mark;
@@ -102,8 +108,8 @@ public class TableColumn implements Serializable {
     }
     
     /**
-     * 
-     * @param rendertextonly
+     * Renderiza apenas o texto do elemento.
+     * @param rendertextonly, true, para renderizar apenas o texto.
      */
     public final void setRenderTextOnly(boolean rendertextonly) {
         this.rendertextonly = rendertextonly;

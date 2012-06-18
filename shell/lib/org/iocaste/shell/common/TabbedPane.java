@@ -3,6 +3,12 @@ package org.iocaste.shell.common;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Componentes de abas.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class TabbedPane extends AbstractContainer {
     private static final long serialVersionUID = -8260508533459016709L;
     private Map<String, TabbedPaneItem> itens;
@@ -26,8 +32,8 @@ public class TabbedPane extends AbstractContainer {
     }
     
     /**
-     * 
-     * @param item
+     * Adiciona item aos painéis. O primeiro item se torna o atual.
+     * @param item item do painel.
      */
     public final void add(TabbedPaneItem item) {
         String name = item.getName();
@@ -39,17 +45,17 @@ public class TabbedPane extends AbstractContainer {
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna item especificado do painel.
+     * @param name nome do item.
+     * @return item do painel.
      */
     public final TabbedPaneItem get(String name) {
         return itens.get(name);
     }
     
     /**
-     * 
-     * @return
+     * Retorna a aba atual.
+     * @return aba.
      */
     public final String getCurrent() {
         return current;
@@ -64,16 +70,16 @@ public class TabbedPane extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
+     * Retorna nomes das abas.
+     * @return nomes.
      */
     public final String[] getItensNames() {
         return itens.keySet().toArray(new String[0]);
     }
     
     /**
-     * 
-     * @param current
+     * Define a aba atual.
+     * @param current nome da aba.
      */
     public final void setCurrent(String current) {
         this.current = current;

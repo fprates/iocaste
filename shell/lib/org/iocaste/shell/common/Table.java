@@ -70,8 +70,8 @@ public class Table extends AbstractContainer {
     public final void add(Element element) { };
     
     /**
-     * 
-     * @param item
+     * Adiciona linha na tabela.
+     * @param item linha
      */
     public final void add(TableItem item) {
         itens.add(item);
@@ -79,8 +79,8 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * 
-     * @param column
+     * Adiciona coluna à tabela.
+     * @param column coluna
      */
     public void add(TableColumn column) {
         if (columns.containsKey(column.getName()))
@@ -90,16 +90,16 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * 
-     * @param index
-     * @return
+     * Obtem linha da tabela através de índice.
+     * @param index índice
+     * @return linha
      */
     public final TableItem get(int index) {
         return itens.get(index);
     }
     
     /**
-     * 
+     * - not ready, do not use - 
      * @param action
      * @return
      */
@@ -108,9 +108,9 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna dados da coluna especificado.
+     * @param name nome da coluna
+     * @return dados da coluna
      */
     public final TableColumn getColumn(String name) {
         return columns.get(name);
@@ -153,23 +153,23 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
+     * Retorna grupo de seleção, para seleção simples.
+     * @return grupo de seleção.
      */
     public final RadioGroup getGroup() {
         return group;
     }
     
     /**
-     * 
-     * @return
+     * Retorna linhas da tabela.
+     * @return linhas.
      */
     public final TableItem[] getItens() {
         return itens.toArray(new TableItem[0]);
     }
     
     /**
-     * 
+     * - not ready, do not use -
      * @return
      */
     public final Container getLineControl() {
@@ -177,17 +177,17 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
+     * Retorna tipo de seleção de linha: SINGLE, MULTIPLE
+     * @return tipo de seleção.
      */
     public final byte getSelectionType() {
         return seltype;
     }
     
     /**
-     * 
-     * @param index
-     * @return
+     * Retorna item especificado.
+     * @param index índice
+     * @return linha
      */
     public final TableItem getTableItem(int index) {
         return itens.get(index);
@@ -202,8 +202,8 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
+     * Indica se exibe coluna de seleção.
+     * @return true, se deve exibir coluna de seleção.
      */
     public final boolean hasMark() {
         return mark;
@@ -262,23 +262,23 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
+     * Retorna quantidade de linha da tabela.
+     * @return quantidade de linhas.
      */
     public final int length() {
         return itens.size();
     }
     
     /**
-     * 
-     * @param item
+     * Remove linha da tabela.
+     * @param item linha
      */
     public final void remove(TableItem item) {
         itens.remove(item);
     }
     
     /**
-     * 
+     * - not ready, do not use - 
      * @param action
      * @param method
      */
@@ -295,7 +295,7 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * 
+     * - not ready, do not use -
      * @param linecontrol
      */
     public final void setLineControl(Container linecontrol) {
@@ -303,16 +303,16 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * 
-     * @param mark
+     * Define que coluna de seleção de linhas deve ser exibida.
+     * @param mark true, para exibir coluna de seleçao.
      */
     public final void setMark(boolean mark) {
         this.mark = mark;
     }
     
     /**
-     * 
-     * @param seltype
+     * Ajusta o tipo de seleção de linhas.
+     * @param seltype tipo de seleção.
      */
     public final void setSelectionType(byte seltype) {
         this.seltype = seltype;

@@ -46,14 +46,14 @@ public interface Container extends Element {
     public abstract void clear();
     
     /**
-     * 
-     * @param name
+     * Retorna elemento por seu nome html.
+     * @param name nome html.
      * @return
      */
     public abstract Element getElement(String name);
 
     /**
-     * 
+     * Retorna todos os elementos do container.
      * @return
      */
     public abstract Element[] getElements();
@@ -77,14 +77,14 @@ public interface Container extends Element {
     public abstract void importModel(DocumentModel model);
 
     /**
-     * 
-     * @return
+     * Indica se container tem múltiplas linhas;
+     * @return true, se componente de múltiplas linhas
      */
     public abstract boolean isMultiLine();
     
     /**
-     * 
-     * @param element
+     * Remove elemento do container.
+     * @param element elemento
      */
     public abstract void remove(Element element);
 }

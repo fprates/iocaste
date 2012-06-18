@@ -35,7 +35,15 @@ public interface Component extends Element {
      */
     public abstract Container getContainer();
     
+    /**
+     * Retorna texto do componente
+     * @return
+     */
     public abstract String getText();
     
+    /**
+     * Ajusta texto do component
+     * @param text
+     */
     public abstract void setText(String text);
 }

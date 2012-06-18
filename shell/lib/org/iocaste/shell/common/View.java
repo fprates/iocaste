@@ -47,7 +47,7 @@ public class View implements Serializable {
     private Map<String, Object> parameters;
     private Map<String, String> headervalues;
     private Map<String, Map<String, String>> sheet;
-    private boolean disabledhead, reloadable, dontpushpage, pagecall;
+    private boolean reloadable, dontpushpage, pagecall;
     private Const messagetype;
     private Locale locale;
     
@@ -58,7 +58,6 @@ public class View implements Serializable {
         headervalues = new HashMap<String, String>();
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<MultipartElement>();
-        disabledhead = false;
         dontpushpage = false;
         contenttype = null;
         
@@ -77,8 +76,8 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @param name
+     * Adiciona componente de entrada.
+     * @param name componente de entrada
      */
     public final void addInput(String name) {
         inputs.add(name);
@@ -93,28 +92,28 @@ public class View implements Serializable {
     }
     
     /**
-     * 
+     * Limpa componentes de entrada.
      */
     public final void clearInputs() {
         inputs.clear();
     }
     
     /**
-     * 
+     * Limpa parâmetros da visão.
      */
     public final void clearParameters() {
         parameters.clear();
     }
     
     /**
-     * 
+     * Limpa lista de saída.
      */
     public final void clearPrintLines() {
         lines.clear();
     }
     
     /**
-     * 
+     * Limpa dados de redirecionamento de visão.
      */
     public final void clearRedirect() {
         rapp = null;
@@ -127,14 +126,7 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     */
-    public final void disableHead() {
-        disabledhead = true;
-    }
-    
-    /**
-     * 
+     * Não salva página na pilha de chamada.
      */
     public final void dontPushPage() {
         dontpushpage = true;
@@ -163,9 +155,9 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @param name
-     * @param value
+     * Exporta parâmetro para próxima visão.
+     * @param name nome
+     * @param value valor
      */
     public final void export(String name, Object value) {
         if (parameters.containsKey(name))
@@ -222,15 +214,15 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Retorna conteúdo raw.
+     * @return conteúdo
      */
     public final byte[] getContent() {
         return content;
     }
     
     /**
-     * 
+     * Ajusta tipo de conteúdo.
      * @return
      */
     public final String getContentType() {
@@ -256,15 +248,15 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Retorna parâmetros exportáveis.
+     * @return nomes de parâmetros
      */
     public final String[] getExportable() {
         return parameters.keySet().toArray(new String[0]);
     }
     
     /**
-     * 
+     * Ajusta elemento a receber foco.
      * @return
      */
     public final Element getFocus() {
@@ -272,17 +264,17 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Retorna parâmetros a serem passados para setHeader() em HttpResponse.
+     * @return nomes de parâmetros.
      */
     public final String[] getHeaderKeys() {
         return headervalues.keySet().toArray(new String[0]);
     }
     
     /**
-     * 
-     * @param key
-     * @return
+     * Retorna valor de parâmetro para header em response.
+     * @param key nome
+     * @return valor
      */
     public final String getHeader(String key) {
         return headervalues.get(key);
@@ -297,8 +289,8 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Retorna localização da visão.
+     * @return localização.
      */
     public final Locale getLocale() {
         return locale;
@@ -313,7 +305,7 @@ public class View implements Serializable {
     }
     
     /**
-     * @return the messagetype
+     * @return tipo de mensagem.
      */
     public final Const getMessageType() {
         return messagetype;
@@ -346,24 +338,24 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Obtem conteúdo da lista de saída.
+     * @return lista de saída
      */
     public final String[] getPrintLines() {
         return lines.toArray(new String[0]);
     }
     
     /**
-     * 
-     * @return
+     * Retorna aplicação redirecionada.
+     * @return aplicação.
      */
     public final String getRedirectedApp() {
         return rapp;
     }
     
     /**
-     * 
-     * @return
+     * Retorna página redirecionada.
+     * @return página
      */
     public final String getRedirectedPage() {
         return rpage;
@@ -386,8 +378,8 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Retorna mensagem de texto.
+     * @return mensagem.
      */
     public final String getTranslatedMessage() {
         if (messagetext == null)
@@ -400,23 +392,15 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Indica se deve ser feito redirecionamento de página.
+     * @return true, se for redirecionar.
      */
     public final boolean hasPageCall() {
         return pagecall;
     }
     
     /**
-     * 
-     * @return
-     */
-    public final boolean isHeadDisabled() {
-        return disabledhead;
-    }
-    
-    /**
-     * 
+     * Indica se foi solicitada recarga da visão.
      * @return
      */
     public final boolean isReloadableView() {
@@ -424,9 +408,9 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @param messagetype
-     * @param messagetext
+     * Ajusta tipo e texto da mensagem.
+     * @param messagetype tipo
+     * @param messagetext texto
      */
     public final void message(Const messagetype, String messagetext) {
         this.messagetype = messagetype;
@@ -434,7 +418,7 @@ public class View implements Serializable {
     }
     
     /**
-     * 
+     * Adiciona linha na lista de saída.
      * @param line
      */
     public final void print(String line) {
@@ -442,17 +426,17 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @param page
+     * Redireciona visão.
+     * @param page visão.
      */
     public final void redirect(String page) {
         redirect(null, page);
     }
     
     /**
-     * 
-     * @param app
-     * @param page
+     * Redireciona aplicação e visão.
+     * @param app aplicação
+     * @param page visão
      */
     public final void redirect(String app, String page) {
         rapp = app;
@@ -463,33 +447,33 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @param content
+     * Define conteúdo raw da página.
+     * @param content conteúdo.
      */
     public final void setContent(byte[] content) {
         this.content = content;
     }
     
     /**
-     * 
-     * @param contenttype
+     * Define tipo de conteúdo da página.
+     * @param contenttype tipo de conteúdo.
      */
     public final void setContentType(String contenttype) {
         this.contenttype = contenttype;
     }
     
     /**
-     * 
-     * @param element
+     * Define foco da página.
+     * @param element elemento com foco.
      */
     public final void setFocus(Element elementfocus) {
         this.elementfocus = elementfocus;
     }
     
     /**
-     * 
-     * @param key
-     * @param value
+     * Define parâmetro para header http.
+     * @param key nome
+     * @param value valor
      */
     public final void setHeader(String key, String value) {
         if (headervalues.containsKey(key))
@@ -499,8 +483,8 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @param locale
+     * Define localização da visão.
+     * @param locale localização
      */
     public final void setLocale(Locale locale) {
         this.locale = locale;
@@ -515,8 +499,8 @@ public class View implements Serializable {
     }
 
     /**
-     * 
-     * @param reloadable
+     * Ajusta recarga da visão.
+     * @param reloadable true, para recarga da visão.
      */
     public final void setReloadableView(boolean reloadable) {
         this.reloadable = reloadable;

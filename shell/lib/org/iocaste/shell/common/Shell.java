@@ -8,6 +8,12 @@ import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
 
+/**
+ * Serviços do shell.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class Shell extends AbstractServiceInterface {
     public static final String SERVER_NAME = "/iocaste-shell/services.html";
     
@@ -16,12 +22,13 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
+     * Copia componentes de entrada.
      * 
-     * @param container
-     * @param inputitem
-     * @param name
-     * @param values
-     * @return
+     * @param container conteiner
+     * @param inputitem componente original
+     * @param name nome do componente destino
+     * @param values valores (para listbox)
+     * @return componente de destino
      */
     public static final InputComponent copyInputItem(Container container,
             InputComponent inputitem, String name, Map<String, Object> values) {
@@ -33,7 +40,7 @@ public class Shell extends AbstractServiceInterface {
         case TEXT_FIELD:
             tfield = new TextField(container, name);
             tfield.setObligatory(inputitem.isObligatory());
-            tfield.setPassword(inputitem.isSecret());
+            tfield.setSecret(inputitem.isSecret());
             tfield.setLength(inputitem.getLength());
             tfield.set(inputitem.get());
             tfield.setModelItem(inputitem.getModelItem());
@@ -75,6 +82,7 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
+     * Gera um componente especificado.
      * 
      * @param container
      * @param type
@@ -106,9 +114,6 @@ public class Shell extends AbstractServiceInterface {
         case LIST_BOX:
             return new ListBox(container, name);
             
-        case MENU:
-            return new Menu(container, name);
-            
         case TABLE:
             return new Table(container, name);
             
@@ -127,9 +132,9 @@ public class Shell extends AbstractServiceInterface {
     }
 
     /**
-     * 
-     * @param input
-     * @return
+     * Retorna elemento de dados de um componente de entrada.
+     * @param input componente de entrada.
+     * @return elemento de dados.
      */
     public static final DataElement getDataElement(InputComponent input) {
         DocumentModelItem modelitem = input.getModelItem();
@@ -139,9 +144,9 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param view
-     * @return
+     * Retorna folha de estilo associada à visão.
+     * @param view visão
+     * @return mapa com dados da folha de estilo.
      * @throws Exception
      */
     public final Map<String, Map<String, String>> getStyleSheet(View view)
@@ -155,10 +160,10 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param appname
-     * @param pagename
-     * @return
+     * Retorna visão especificada.
+     * @param view visão atual
+     * @param pagename nome da visão
+     * @return visão especificada.
      * @throws Exception
      */
     public final View getView(View view, String pagename)
@@ -173,7 +178,7 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
-     * 
+     * Retorna à página inicial.
      * @param view
      * @return
      * @throws Exception
@@ -187,18 +192,18 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param value
-     * @return
+     * Verifica se uma string é inicial.
+     * @param value string
+     * @return true, se string for inicial.
      */
     public static final boolean isInitial(String value) {
         return (value == null || value.trim().length() == 0)? true : false;
     }
     
     /**
-     * 
-     * @param view
-     * @return
+     * Restaura página anterior.
+     * @param view visão atual
+     * @return dados da página anterior
      * @throws Exception
      */
     public final String[] popPage(View view) throws Exception {
@@ -210,8 +215,8 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param view
+     * Salva página na pilha de páginas.
+     * @param view visão.
      * @throws Exception
      */
     public final void pushPage(View view) throws Exception {
@@ -225,8 +230,8 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param view
+     * Atualiza visão na pilha de páginas.
+     * @param view visão.
      * @throws Exception
      */
     public final void updateView(View view) throws Exception {

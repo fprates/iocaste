@@ -9,6 +9,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 
 /**
+ * Item de tabela html.
  * 
  * @author Francisco Prates
  *
@@ -47,8 +48,8 @@ public class TableItem implements Serializable {
     }
     
     /**
-     * 
-     * @param element
+     * Adiciona elemento para linha.
+     * @param element elemento
      */
     public final void add(Element element) {
         DocumentModelItem modelitem;
@@ -66,9 +67,9 @@ public class TableItem implements Serializable {
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna elemento da linha.
+     * @param name nome do elemento
+     * @return elemento
      */
     @SuppressWarnings("unchecked")
     public final <T extends Element> T get(String name) {
@@ -76,24 +77,24 @@ public class TableItem implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Retorna elementos da linha.
+     * @return elementos
      */
     public final Element[] getElements() {
         return elements.values().toArray(new Element[0]);
     }
     
     /**
-     * 
-     * @return
+     * Retorna localização da linha.
+     * @return localização.
      */
     public final Locale getLocale() {
         return locale;
     }
     
     /**
-     * 
-     * @return
+     * Retorna objeto extendido associado.
+     * @return object extendido.
      */
     public final ExtendedObject getObject() {
         Element element;
@@ -120,16 +121,16 @@ public class TableItem implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Retorna tabela associada.
+     * @return tabela
      */
     public final Table getTable() {
         return table;
     }
     
     /**
-     * 
-     * @return
+     * Indica se a linha foi selecionada.
+     * @return true, se foi selecionada.
      */
     public final boolean isSelected() {
         InputComponent input = (InputComponent)elements.get("mark");
@@ -138,24 +139,27 @@ public class TableItem implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Indica se a linha é visível.
+     * @return true, se a linha é visível.
      */
     public final boolean isVisible() {
         return visible;
     }
     
     /**
-     * 
-     * @param locale
+     * Define localização para linha.
+     * @param locale localização.
      */
     public final void setLocale(Locale locale) {
         this.locale = locale;
     }
     
     /**
+     * Importa objeto extendido.
      * 
-     * @param object
+     * Preenche componentes de entrada com valores do objeto extendido.
+     * 
+     * @param object objeto extendido.
      */
     public final void setObject(ExtendedObject object) {
         Element element;
@@ -186,8 +190,8 @@ public class TableItem implements Serializable {
     }
     
     /**
-     * 
-     * @param selected
+     * Define seleção da linha.
+     * @param selected true, para selecionar linha.
      */
     public final void setSelected(boolean selected) {
         CheckBox mark = (CheckBox)elements.get("mark");
@@ -196,8 +200,8 @@ public class TableItem implements Serializable {
     }
     
     /**
-     * 
-     * @param visible
+     * Define se linha é visível.
+     * @param visible true, para linha visível.
      */
     public final void setVisible(boolean visible) {
         this.visible = visible;

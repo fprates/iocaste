@@ -9,6 +9,15 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
+/**
+ * Implementação abstrata de página web
+ * 
+ * Para implementações que exigem interação com usuário, este componente
+ * envia response através de View e executa métodos chamados via request.
+ * 
+ * @author francisco.prates
+ *
+ */
 public abstract class AbstractPage extends AbstractFunction {
     
     public AbstractPage() {
@@ -18,8 +27,8 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
-     * 
-     * @param view
+     * Retorna a página anterior.
+     * @param view visão atual
      * @throws Exception
      */
     public void back(View view) throws Exception {
@@ -34,7 +43,7 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
-     * 
+     * Chamado quando tem validação ajustada via setValidator().
      * @param message
      * @return
      */
@@ -62,7 +71,7 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
-     * 
+     * Executa métodos associados à action.
      * @param message
      * @return
      * @throws Exception
@@ -73,6 +82,9 @@ public abstract class AbstractPage extends AbstractFunction {
         String action, controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
         
+        /*
+         * TODO poderia ser feito algo melhor do que este hardcode?
+         */
         if (control != null && control.getType() == Const.SEARCH_HELP) {
             view.export("sh", control);
             view.redirect("iocaste-search-help", "main");
@@ -90,6 +102,9 @@ public abstract class AbstractPage extends AbstractFunction {
             
             method = this.getClass().getMethod(action, View.class);
             
+            /*
+             * TODO tratamento de exceção pode ser movido para o servidor
+             */
             try {
                 method.invoke(this, view);
                 new Iocaste(this).commit();
@@ -106,10 +121,11 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
-     * 
-     * @param name
-     * @return
-     * @throws Exception 
+     * Retorna visão especificada.
+     * @param view visão atual
+     * @param name identificador da visão
+     * @return visão
+     * @throws Exception
      */
     protected final View getView(View view, String name)
             throws Exception {
@@ -117,7 +133,7 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
-     * 
+     * Gera uma visão solicitada por redirect().
      * @param message
      * @return
      * @throws Exception
@@ -129,10 +145,11 @@ public abstract class AbstractPage extends AbstractFunction {
         Locale locale;
         String page = message.getString("page");
         String app = message.getString("app");
-        @SuppressWarnings("unchecked")
-        Map<String, Object> parameters =
-                (Map<String, Object>)message.get("parameters");
+        Map<String, Object> parameters = message.get("parameters");
         
+        /*
+         * TODO pode ser movido para o servidor
+         */
         if (app == null || page == null)
             throw new IocasteException("page not especified.");
         
@@ -145,6 +162,9 @@ public abstract class AbstractPage extends AbstractFunction {
         
         method = this.getClass().getMethod(page, View.class);
         
+        /*
+         * TODO tratamento de exceção pode ser movido para o servidor
+         */
         try {
             method.invoke(this, view);
         } catch (Exception e) {
@@ -162,14 +182,14 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
-     * 
+     * Chama visão de ajuda.
      * @param view
      */
     public void help(View view) { }
     
     /**
-     * 
-     * @param view
+     * Retorna à página inicial.
+     * @param view visão atual
      * @throws Exception
      */
     public void home(View view) throws Exception {
@@ -180,8 +200,8 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
-     * 
-     * @param view
+     * Atualiza uma visão, não necessariamente a visão atual.
+     * @param view visão a ser atualizada.
      * @throws Exception
      */
     protected final void updateView(View view) throws Exception {

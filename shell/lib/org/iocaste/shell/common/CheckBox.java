@@ -1,5 +1,13 @@
 package org.iocaste.shell.common;
 
+/**
+ * Checkbox html.
+ * 
+ * Define alguns métodos hardcode apenas para orientação do controlador.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class CheckBox extends AbstractInputComponent {
     private static final long serialVersionUID = -7042599709545616205L;
     

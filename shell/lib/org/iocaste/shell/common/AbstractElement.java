@@ -30,7 +30,7 @@ import java.util.Map;
  * 
  * Todos os componentes html devem, em algum momento, suceder este.
  * Os métodos são muito básicos; convém utilizar as implementações
- * posteriores (como AbstractComponent ou AbstractContainer).
+ * posteriores (como AbstractComponent e AbstractContainer).
  * 
  * @author Francisco de Assis Prates
  *
@@ -44,6 +44,11 @@ public abstract class AbstractElement implements Element {
     private Map<String, String> events;
     private Locale locale;
     
+    /**
+     * 
+     * @param type tipo de componente (conferir em Const)
+     * @param name nome do componente
+     */
     public AbstractElement(Const type, String name) {
         if (name == null)
             throw new RuntimeException("Component name is obligatory");

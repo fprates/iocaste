@@ -3,6 +3,15 @@ package org.iocaste.shell.common;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Implementação de link html.
+ * 
+ * O nome do componente será exibido no link, a menos que
+ * setText() ou setImage() estejam definidos.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class Link extends AbstractControlComponent {
     private static final long serialVersionUID = 667738108271176995L;
     private boolean absolute;
@@ -19,58 +28,61 @@ public class Link extends AbstractControlComponent {
     }
 
     /**
-     * 
-     * @param parameter
-     * @param value
+     * Adiciona parâmetro ao link.
+     * @param parameter nome do parâmetros
+     * @param value valor
      */
     public final void add(Parameter parameter, Object value) {
         values.put(parameter, value);
     }
     
     /**
-     * 
-     * @return
+     * Retorna endereço da imagem.
+     * @return endereço.
      */
     public final String getImage() {
         return image;
     }
     
     /**
-     * 
-     * @return
+     * Retorna parâmetros do link.
+     * @return parâmetros.
      */
     public final Map<Parameter, Object> getParametersMap() {
         return values;
     }
     
     /**
-     * 
-     * @return
+     * Indica se link é absoluto.
+     * @return true, se link é absoluto.
      */
     public final boolean isAbsolute() {
         return absolute;
     }
     
     /**
+     * Define link como absoluto.
      * 
-     * @param absolute
+     * url não fará referência ao domínio do iocaste.
+     * 
+     * @param absolute url.
      */
     public final void setAbsolute(boolean absolute) {
         this.absolute = absolute;
     }
     
     /**
-     * 
-     * @param image
+     * Define endereço da imagem do link.
+     * @param image endereço.
      */
     public final void setImage(String image) {
         this.image = image;
     }
     
     /**
-     * 
-     * @param name
-     * @param value
+     * Ajusta valor dos parâmetros.
+     * @param name nome do parâmetro
+     * @param value valor
      */
     public final void setValue(String name, Object value) {
         for (Parameter parameter : values.keySet()) {

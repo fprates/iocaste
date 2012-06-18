@@ -1,5 +1,12 @@
 package org.iocaste.shell.common;
 
+/**
+ * Define área que pode ser expandida ou contraída se barra do
+ * container for clicada.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class ExpandBar extends AbstractContainer {
     private static final long serialVersionUID = -4962118925903091404L;
     private boolean expanded;
@@ -43,16 +50,16 @@ public class ExpandBar extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
+     * Indica se área está expandida.
+     * @return true, se área estiver expandida.
      */
     public final boolean isExpanded() {
         return expanded;
     }
 
     /**
-     * 
-     * @param expanded
+     * Ajusta estado da expansão da área.
+     * @param expanded true, se área está expandida.
      */
     public final void setExpanded(boolean expanded) {
         this.expanded = expanded;

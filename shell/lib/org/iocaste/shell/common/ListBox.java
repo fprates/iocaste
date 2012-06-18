@@ -3,6 +3,12 @@ package org.iocaste.shell.common;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Implementa lista dropdown.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class ListBox extends AbstractInputComponent {
     private static final long serialVersionUID = -8869412092037011348L;
     private Map<String, Object> values;
@@ -15,33 +21,33 @@ public class ListBox extends AbstractInputComponent {
     }
     
     /**
-     * 
-     * @param name
-     * @param value
+     * Adiciona opção de escolha à lista.
+     * @param name nome
+     * @param value valor
      */
     public void add(String name, Object value) {
         values.put(name, value);
     }
     
     /**
-     * 
+     * Limpa lista de opções.
      */
     public void clear() {
         values.clear();
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna valor da lista de opções.
+     * @param name nome.
+     * @return valor.
      */
     public Object get(String name) {
         return values.get(name);
     }
     
     /**
-     * 
-     * @return
+     * Retorna opções da lista.
+     * @return opções
      */
     public String[] getEntriesNames() {
         return values.keySet().toArray(new String[0]);

@@ -61,7 +61,7 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
-     * 
+     * Adiciona campo à visão.
      * @param item
      */
     public final void add(DataItem item) {
@@ -69,7 +69,7 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
-     * 
+     * Configura disposição das colunas em configuração de múltiplas colunas.
      * @param columns
      */
     public final void addLine(String... entries) {
@@ -80,7 +80,7 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
-     * 
+     * Limpa valores do formulário.
      */
     public final void clearInputs() {
         InputComponent input;
@@ -95,24 +95,24 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna item do formulário.
+     * @param name nome do item
+     * @return item do formulário
      */
     public final DataItem get(String name) {
         return (DataItem)getElement(name);
     }
     
     /**
-     * 
-     * @return
+     * Retorna quantidade de colunas.
+     * @return quantidade
      */
     public final byte getColumns() {
         return columns;
     }
     
     /**
-     * 
+     * Obtem linhas para configuração de múltiplas colunas.
      * @return
      */
     public final List<String[]> getLines() {
@@ -120,8 +120,8 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
+     * Retorna objeto extendido equivalente.
+     * @return objeto extendido
      */
     public final ExtendedObject getObject() {
         String name;
@@ -174,32 +174,32 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
+     * Indica se a chave é requerida.
+     * @return true, se a chave é requerida.
      */
     public final boolean isKeyRequired() {
         return keyrequired;
     }
     
     /**
-     * 
-     * @param columns
+     * Ajusta quantidade de colunas.
+     * @param columns quantidade
      */
     public final void setColumns(byte columns) {
         this.columns = columns;
     }
     
     /**
-     * 
-     * @param keyrequired
+     * Define se chave é requerida.
+     * @param keyrequired true, para chave obrigatória.
      */
     public final void setKeyRequired(boolean keyrequired) {
         this.keyrequired = keyrequired;
     }
     
     /**
-     * 
-     * @param object
+     * Lê a partir de objeto extendido.
+     * @param object object extendido.
      */
     public final void setObject(ExtendedObject object) {
         DataItem item;

@@ -4,6 +4,14 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Pacote de dados para rotina de validação.
+ * 
+ * Transporta componentes de entrada e mensagens
+ * 
+ * @author francisco.prates
+ *
+ */
 public class ValidatorConfig implements Serializable {
     private static final long serialVersionUID = 7221911835519740078L;
     private Map<String, InputComponent> inputs;

@@ -6,6 +6,12 @@ import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
 
+/**
+ * Serviços para gerenciar ajudas de pesquisas.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class SHLib extends AbstractServiceInterface {
     private static final String APP_NAME = "/iocaste-search-help/services.html";
     
@@ -14,9 +20,8 @@ public class SHLib extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param shname
-     * @param itemname
+     * Associa ajuda de pesquisa à um item de modelo.
+     * @param item item de modelo
      * @throws Exception
      */
     public final void assign(DocumentModelItem item) throws Exception {
@@ -29,9 +34,9 @@ public class SHLib extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna dados do ajuda de pesquisa.
+     * @param name nome
+     * @return dados da ajuda de pesquisa
      * @throws Exception
      */
     public final ExtendedObject[] get(String name) throws Exception {
@@ -44,9 +49,9 @@ public class SHLib extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param shname
-     * @return
+     * Remove ajuda de pesquisa.
+     * @param shname nome
+     * @return 1, se removido com sucesso.
      * @throws Exception
      */
     public final int remove(String name) throws Exception {
@@ -59,9 +64,9 @@ public class SHLib extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param header
-     * @param itens
+     * Grava ajuda de pesquisa.
+     * @param header dados do cabeçalho.
+     * @param itens itens da ajuda
      * @throws Exception
      */
     public final void save(ExtendedObject header, ExtendedObject...itens)
@@ -76,9 +81,9 @@ public class SHLib extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param shname
-     * @return
+     * Remove ajuda de pesquisa.
+     * @param shname nome
+     * @return 1, se removido com sucesso
      * @throws Exception
      */
     public final int unassign(String shname) throws Exception {
@@ -91,9 +96,9 @@ public class SHLib extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param header
-     * @param itens
+     * Atualiza ajuda de pesquisa
+     * @param header cabeçalho
+     * @param itens itens
      * @throws Exception
      */
     public final void update(ExtendedObject header, ExtendedObject... itens)

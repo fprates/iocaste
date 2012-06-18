@@ -3,6 +3,12 @@ package org.iocaste.shell.common;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Item de formulário de dados.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class DataItem extends AbstractInputComponent {
     private static final long serialVersionUID = 3376883855229003535L;
     private Map<String, Object> values;

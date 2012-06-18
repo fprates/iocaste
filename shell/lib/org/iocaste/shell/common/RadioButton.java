@@ -1,5 +1,11 @@
 package org.iocaste.shell.common;
 
+/**
+ * Implementação de componente radio button.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class RadioButton extends AbstractInputComponent {
     private static final long serialVersionUID = 4032308949086603543L;
     private RadioGroup group;
@@ -16,16 +22,16 @@ public class RadioButton extends AbstractInputComponent {
     }
     
     /**
-     * 
-     * @return
+     * Retorna grupo de botões.
+     * @return grupo de botões.
      */
     public final RadioGroup getGroup() {
         return group;
     }
     
     /**
-     * 
-     * @return
+     * Indica que componente do grupo foi selecionado.
+     * @return botão selecionado.
      */
     public final RadioButton getSelectedComponent() {
         for (RadioButton rb : group.getComponents())
@@ -45,8 +51,8 @@ public class RadioButton extends AbstractInputComponent {
     }
     
     /**
-     * 
-     * @return
+     * Retorna índice do botão no grupo.
+     * @return índice.
      */
     public final int index() {
         return index;

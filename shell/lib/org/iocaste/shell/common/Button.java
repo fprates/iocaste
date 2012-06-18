@@ -1,5 +1,14 @@
 package org.iocaste.shell.common;
 
+/**
+ * Botão html.
+ * 
+ * A ação chamada por padrão é o nome do botão.
+ * submit é ajustável, false por default.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class Button extends AbstractControlComponent {
     private static final long serialVersionUID = 2295137293981769652L;
     private boolean submit;
@@ -10,10 +19,18 @@ public class Button extends AbstractControlComponent {
         setStyleClass("button");
     }
     
+    /**
+     * Retorna se é submit.
+     * @return true, se for submit.
+     */
     public final boolean isSubmit() {
         return submit;
     }
     
+    /**
+     * Ajusta propriedade submit.
+     * @param submit true, para submit
+     */
     public final void setSubmit(boolean submit) {
         this.submit = submit;
     }

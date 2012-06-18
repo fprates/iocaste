@@ -1,5 +1,11 @@
 package org.iocaste.shell.common;
 
+/**
+ * Elemento genérico html.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class HtmlTag extends AbstractComponent {
     private static final long serialVersionUID = 8216149297894293906L;
     private String[] lines;
@@ -12,16 +18,16 @@ public class HtmlTag extends AbstractComponent {
     }
 
     /**
-     * 
-     * @return
+     * Retorna nome do elemento html.
+     * @return nome
      */
     public final String getElement() {
         return element;
     }
     
     /**
-     * 
-     * @return
+     * Retorna conteúdo para elemento html.
+     * @return conteúdo
      */
     public final String[] getLines() {
         return lines;
@@ -46,15 +52,15 @@ public class HtmlTag extends AbstractComponent {
     }
 
     /**
-     * 
-     * @param element
+     * Define nome do elemento html.
+     * @param element nome
      */
     public final void setElement(String element) {
         this.element = element;
     }
     
     /**
-     * 
+     * Retorna conteúdo do elemento html.
      * @param lines
      */
     public final void setLines(String[] lines) {

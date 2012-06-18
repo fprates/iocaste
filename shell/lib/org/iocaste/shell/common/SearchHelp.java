@@ -3,6 +3,14 @@ package org.iocaste.shell.common;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Ajuda de pesquisa
+ * 
+ * Define parâmetros para ajuda de pesquisa.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class SearchHelp extends AbstractControlComponent {
     private static final long serialVersionUID = -1582634834243087782L;
     private String modelname, export, inputname;
@@ -16,65 +24,65 @@ public class SearchHelp extends AbstractControlComponent {
     }
 
     /**
-     * 
-     * @param itemname
+     * Adiciona coluna.
+     * @param itemname item do modelo
      */
     public final void addModelItemName(String itemname) {
         itemnames.add(itemname);
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Indica se a coluna existe.
+     * @param name nome da coluna
+     * @return true, se a coluna existe.
      */
     public final boolean contains(String name) {
         return itemnames.contains(name);
     }
     
     /**
-     * 
-     * @return
+     * Retorna coluna com valor exportado.
+     * @return coluna.
      */
     public final String getExport() {
         return export;
     }
     
     /**
-     * 
-     * @return
+     * Retorna componente associado.
+     * @return nome do componente.
      */
     public final String getInputName() {
         return inputname;
     }
     
     /**
-     * 
-     * @return
+     * Retorna modelo associado.
+     * @return nome do modelo.
      */
     public final String getModelName() {
         return modelname;
     }
     
     /**
-     * 
-     * @param export
+     * Define item do modelo a ser exportado.
+     * @param export item do modelo.
      */
     public final void setExport(String export) {
         this.export = export;
     }
     
     /**
-     * 
-     * @param inputname
+     * Define campo de entrada associado.
+     * @param inputname nome do campo.
      */
     public final void setInputName(String inputname) {
         this.inputname = inputname;
     }
     
     /**
-     * 
-     * @param modelname
+     * Define modelo de dados.
+     * @param modelname nome do modelo.
      */
     public final void setModelName(String modelname) {
         this.modelname = modelname;
