@@ -5,6 +5,16 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Objeto extendido.
+ * 
+ * Classes do cliente não podem ser serializadas através dos módulos
+ * do sistema. Com objeto extendido, podemos intercâmbiar o conteúdo
+ * das classes.
+ * 
+ * @author francisco.prates
+ *
+ */
 public class ExtendedObject implements Serializable {
 	private static final long serialVersionUID = -8700097929412206566L;
 	private Map<DocumentModelItem, Object> values;
@@ -22,26 +32,26 @@ public class ExtendedObject implements Serializable {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Retorna o modelo de documento associado.
+	 * @return modelo
 	 */
 	public final DocumentModel getModel() {
 	    return model;
 	}
 	
 	/**
-	 * 
-	 * @param name
-	 * @return
+	 * Retorna valor de um item do objeto.
+	 * @param name nome do item
+	 * @return valor
 	 */
 	public final <T> T getValue(String name) {
 	    return getValue(byname.get(name));
 	}
 	
 	/**
-	 * 
-	 * @param item
-	 * @return
+	 * Retorna valor de um item do objeto.
+	 * @param item item do modelo
+	 * @return valor
 	 */
 	@SuppressWarnings("unchecked")
 	public final <T> T getValue(DocumentModelItem item) {
@@ -79,36 +89,39 @@ public class ExtendedObject implements Serializable {
 	}
 	
 	/**
-	 * 
-	 * @return
+     * Gera instancia baseada nos dados do objeto e classe associada.
+     * 
+     * Gera exceção se encontrar item não existente na classe associada.
+	 * @return instância da classe associada.
 	 * @throws Exception
 	 */
 	public final <T> T newInstance() throws Exception {
 	    return newInstance(false);
 	}
-	
-	/**
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
+
+    /**
+     * Gera instancia baseada nos dados do objeto e classe associada.
+     * @param loose true, ignora campos que não existirem na classe.
+     * @return instância da classe associada.
+     * @throws Exception
+     */
 	public final <T> T newLooseInstance() throws Exception {
 	    return newInstance(true);
 	}
 	
 	/**
-	 * 
-	 * @param name
-	 * @param value
+	 * Define valor do item do objeto extendido.
+	 * @param name nome do objeto
+	 * @param value valor
 	 */
 	public final void setValue(String name, Object value) {
 	    setValue(byname.get(name), value);
 	}
 	
 	/**
-	 * 
-	 * @param item
-	 * @param value
+	 * Define valor do item do objeto extendido.
+	 * @param item item de modelo
+	 * @param value valor
 	 */
 	public final void setValue(DocumentModelItem item, Object value) {
 	    if (!model.contains(item))

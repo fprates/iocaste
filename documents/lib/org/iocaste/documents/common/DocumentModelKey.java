@@ -2,23 +2,29 @@ package org.iocaste.documents.common;
 
 import java.io.Serializable;
 
-public class DocumentModelKey implements Comparable<DocumentModelKey>, Serializable {
+/**
+ * Campo chave para modelo.
+ * 
+ * @author francisco.prates
+ *
+ */
+public class DocumentModelKey implements Comparable<DocumentModelKey>,
+        Serializable {
     private static final long serialVersionUID = -9169359567383979476L;
     private DocumentModel model;
     private String item;
     
     /**
-     * 
-     * @param model
-     * @param item
+     * Define item do modelo como chave.
+     * @param item item do modelo.
      */
     public DocumentModelKey(DocumentModelItem item) {
         this.item = item.getName().toUpperCase();
     }
     
     /**
-     * 
-     * @param name
+     * Define item do modelo como chave.
+     * @param name nome do item do modelo.
      */
     public DocumentModelKey(String name) {
         item = name.toUpperCase();

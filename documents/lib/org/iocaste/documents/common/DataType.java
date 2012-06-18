@@ -22,7 +22,8 @@
 package org.iocaste.documents.common;
 
 /**
- * Tipos de dados
+ * Tipos de dados.
+ * 
  * @author Francisco Prates
  *
  */

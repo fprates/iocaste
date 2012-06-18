@@ -27,6 +27,9 @@ import java.util.Date;
 
 /**
  * Implementação de elemento do dicionário de dados
+ * 
+ * Este elemento detém as características de um item.
+ * 
  * @author Francisco Prates
  *
  */
@@ -90,8 +93,9 @@ public class DataElement implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Indica se um campo deve ter seu valor convertido
+     * para maiúscula.
+     * @return true, se valor deve ser convertido para maiúscula.
      */
     public final boolean isUpcase() {
     	return upcase;
@@ -130,8 +134,12 @@ public class DataElement implements Serializable {
     }
     
     /**
+     * Define que um campo deve ter seu valor convertido
+     * para maiúscula.
      * 
-     * @param upcase
+     * deve ser efetivo apenas para tipo caracter.
+     * 
+     * @param upcase true, para converte para maiúscula.
      */
     public final void setUpcase(boolean upcase) {
     	this.upcase = upcase;

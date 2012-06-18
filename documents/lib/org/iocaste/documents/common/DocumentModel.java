@@ -29,6 +29,11 @@ import java.util.TreeSet;
 
 /**
  * Implementação de modelo de documento
+ * 
+ * Modelos de documentos são referências de tipos estruturados.
+ * Modelos podem ser utilizados como base para formatação de objetos extendidos,
+ * tabelas e componentes de visão.
+ * 
  * @author Francisco Prates
  *
  */
@@ -79,9 +84,9 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
 
     /**
-     * 
-     * @param item
-     * @return
+     * Verifica se item faz parte do modelo.
+     * @param item item do modelo.
+     * @return true, se item faz parte do modelo.
      */
     public final boolean contains(DocumentModelItem item) {
         return itens.contains(item);
@@ -107,8 +112,8 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Obtem a classe associada.
+     * @return nome da classe.
      */
     public final String getClassName() {
     	return classname;
@@ -136,9 +141,9 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna item de modelo especificado.
+     * @param name nome do item.
+     * @return item.
      */
     public final DocumentModelItem getModelItem(String name) {
         for (DocumentModelItem item : itens)
@@ -157,17 +162,17 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Obtem uma query SQL a partir do cache do modelo.
+     * @param name nome
+     * @return query.
      */
     public final String getQuery(String name) {
         return queries.get(name);
     }
     
     /**
-     * 
-     * @return
+     * Obtem tabela do banco associada.
+     * @return nome da tabela.
      */
     public String getTableName() {
         return tablename;
@@ -183,7 +188,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
-     * Retorna true se o item do modelo for campo chave.
+     * Indica se o item do modelo for campo chave.
      * @param item item do modelo 
      * @return true, se item é chave
      */
@@ -195,8 +200,8 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
-     * 
-     * @param classname
+     * Define classe associada.
+     * @param classname nome da classe.
      */
     public void setClassName(String classname) {
     	this.classname = classname;
@@ -204,7 +209,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     
     /**
      * Define itens do documento.
-     * @param itens
+     * @param itens itens
      */
     protected void setItens(Set<DocumentModelItem> itens) {
         this.itens = itens;
@@ -220,23 +225,26 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     
     /**
      * Define nome do documento.
-     * @param nome
+     * @param nome.
      */
     public void setName(String name) {
         this.name = name;
     }
     
     /**
+     * Atribui queries SQL ao modelo.
      * 
-     * @param queries
+     * O formato da entrada no mapa é <nome da query, query>
+     * 
+     * @param queries mapa de queries.
      */
     public final void setQueries(Map<String, String> queries) {
         this.queries = queries;
     }
     
     /**
-     * 
-     * @param tablename
+     * Associa tabela do banco ao modelo.
+     * @param tablename nome da tabela.
      */
     public void setTableName(String tablename) {
         this.tablename = tablename;

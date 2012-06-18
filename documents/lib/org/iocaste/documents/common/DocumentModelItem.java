@@ -112,8 +112,8 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
-     * 
-     * @return
+     * Posição do item no modelo.
+     * @return posição
      */
     public final int getIndex() {
     	return index;
@@ -128,8 +128,8 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
-     * 
-     * @return
+     * Retorna referência do item.
+     * @return item de referência.
      */
     public final DocumentModelItem getReference() {
         return reference;
@@ -144,16 +144,16 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
-     * 
-     * @return
+     * Retorna ajuda de pesquisa associada ao item.
+     * @return nome da ajuda de pesquisa.
      */
     public final String getSearchHelp() {
         return sh;
     }
     
     /**
-     * 
-     * @return
+     * Retorna nome do campo da tabela.
+     * @return nome do campo.
      */
     public final String getTableFieldName() {
     	return fieldname;
@@ -169,7 +169,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
-     * Define nome do atributo.
+     * Define nome do atributo da classe.
      * @param attribname nome do atributo
      */
     public void setAttributeName(String attribname) {
@@ -205,8 +205,8 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
-     * 
-     * @param index
+     * Define posição do item no modelo.
+     * @param index posição.
      */
     public final void setIndex(int index) {
     	this.index = index;
@@ -221,8 +221,12 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
+     * Define referência do item.
      * 
-     * @param reference
+     * Pode ser utilizado como referência estrangeira em validação
+     * de entrada de dados em tela.
+     * 
+     * @param reference item de referência.
      */
     public final void setReference(DocumentModelItem reference) {
         DocumentModel model;
@@ -238,14 +242,21 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
+     * Define ajuda de pesquisa para campo.
      * 
-     * @param sh
+     * Se definido, acesso à ajuda de pesquisa será exibido
+     * para campos de entrada em tela que tenham esse item associado.
+     * 
+     * @param sh nome da ajuda de pesquisa.
      */
     public final void setSearchHelp(String sh) {
         this.sh = (sh == null)? null : sh.toUpperCase();
     }
     
     /**
+     * Define nome do campo de tabela associado ao item.
+     * 
+     * O campo será utilizado em operações com tabela.
      * 
      * @param fieldname
      */
