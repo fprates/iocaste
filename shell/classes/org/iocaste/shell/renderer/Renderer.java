@@ -22,7 +22,6 @@ import org.iocaste.shell.common.HtmlTag;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
-import org.iocaste.shell.common.MenuItem;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
@@ -104,7 +103,6 @@ public class Renderer {
             tags.add(NodeListRenderer.render((NodeList)container, config));
             break;
             
-        case MENU:
         case STANDARD_CONTAINER:
             tags.add(StandardContainerRenderer.render(
                     (StandardContainer)container, config));
@@ -133,10 +131,6 @@ public class Renderer {
             
         case CHECKBOX:
             tags.add(CheckBoxRenderer.render((CheckBox)element));
-            break;
-        
-        case MENU_ITEM:
-            tags.add(MenuItemRenderer.render((MenuItem)element, config));
             break;
             
         case FILE_ENTRY:
