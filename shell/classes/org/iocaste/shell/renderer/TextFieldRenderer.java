@@ -34,7 +34,7 @@ public class TextFieldRenderer extends Renderer {
         if (value == null)
             value = "";
         
-        if (!textfield.isPassword())
+        if (!textfield.isSecret())
             inputtag.add("type", "text");
         else
             inputtag.add("type", "password");
