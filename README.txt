@@ -10,12 +10,14 @@ Iocaste fornece às aplicações:
 - rastreamento da sessão.
 
 * Licença
-Iocaste é licenciado sob os termos da Licença Pública Geral versão 2. O arquivo LICENCA.txt contém os termos da licença.
+Iocaste é licenciado sob os termos da Licença Pública Geral versão 2. O arquivo
+LICENCA.txt contém os termos da licença.
 
-Este software acompanha bibliotecas de terceiros sob os termos de suas respectivas licenças.
+Este software acompanha bibliotecas de terceiros sob os termos de suas
+respectivas licenças.
 
 * Instalação
-Consulte doc/INSTALL.txt para informações de instalação.
+Consulte INSTALL.txt para informações de instalação.
 
 Copyright (c) 2011, Francisco de Assis Prates.
 Bibliotecas de terceiros sob seus respectivos direitos de cópia.

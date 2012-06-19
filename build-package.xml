@@ -56,9 +56,6 @@
     	<copy todir="${builddir}/iocaste/scripts/">
     	      <fileset dir="${basedir}/src/scripts/"/>
     	</copy>
-    	<copy todir="${builddir}/iocaste/doc/">
-    	      <fileset file="${basedir}/src/doc/*.txt"/>
-    	</copy>
     	            
         <zip basedir="${builddir}" destfile="${basedir}/iocaste.zip"/>
         <tar longfile="gnu" destfile="${basedir}/iocaste.tar.gz"
