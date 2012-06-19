@@ -51,7 +51,8 @@
         <copy todir="${builddir}/iocaste/hsqldb">
               <fileset dir="${basedir}/hsqldb"/>
         </copy>
-        <copy todir="${builddir}/iocaste/hsqldb/bin/" file="${basedir}/src/server.properties"/>
+        <copy todir="${builddir}/iocaste/hsqldb/bin/"
+        	file="${basedir}/src/server.properties"/>
     	<copy todir="${builddir}/iocaste/scripts/">
     	      <fileset dir="${basedir}/src/scripts/"/>
     	</copy>
@@ -60,12 +61,16 @@
     	</copy>
     	            
         <zip basedir="${builddir}" destfile="${basedir}/iocaste.zip"/>
-        <tar longfile="gnu" destfile="${basedir}/iocaste.tar.gz" compression="gzip">
-              <tarfileset dir="${builddir}/iocaste" prefix="/iocaste" preserveLeadingSlashes="true" filemode="755">
+        <tar longfile="gnu" destfile="${basedir}/iocaste.tar.gz"
+        	compression="gzip">
+              <tarfileset dir="${builddir}/iocaste" prefix="/iocaste"
+              	preserveLeadingSlashes="true" filemode="755">
                   <include name="*.sh"/>
                   <include name="apache-tomcat/bin/*.sh"/>
               </tarfileset>
-              <tarfileset dir="${builddir}/iocaste" prefix="/iocaste" preserveLeadingSlashes="true">
+        	
+              <tarfileset dir="${builddir}/iocaste" prefix="/iocaste"
+              	preserveLeadingSlashes="true">
                   <include name="**"/>
                   <exclude name="*.sh"/>
               	  <exclude name="apache-tomcat/bin/*.sh"/>

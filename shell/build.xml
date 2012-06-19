@@ -15,7 +15,7 @@
             <fileset dir="${builddir}/core/lib"/>
         	<fileset dir="${builddir}/documents/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
-            <fileset dir="${basedir}/lib"/>
+            <fileset dir="${basedir}/lib-shell"/>
             <fileset dir="${basedir}/ext"/>
         </path>
     	
@@ -60,8 +60,8 @@
                 <exclude name="web.xml"/>
                 <include name="**/*"/> 
             </webinf>
+            <lib dir="${basedir}/lib-shell" includes="*.jar"/>
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
-            <lib dir="${basedir}/lib" includes="*.jar"/>
         	<lib dir="${builddir}/core/lib" includes="*.jar"/>
             <lib dir="${builddir}/documents/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
