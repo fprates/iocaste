@@ -38,7 +38,7 @@ public class NodeList extends AbstractContainer {
     
     /**
      * Retorna estilo dos itens da lista.
-     * @param element NODE, ITEM.
+     * @param element categoria do elemento; NODE, ITEM.
      * @return nome do estilo.
      */
     public final String getStyleClass(byte element) {
@@ -58,5 +58,14 @@ public class NodeList extends AbstractContainer {
      */
     public final void setListType(byte type) {
         this.type = type;
+    }
+    
+    /**
+     * Ajusta estilo dos itens da lista.
+     * @param element categoria do elemento; NODE, ITEM.
+     * @param style nome do estilo.
+     */
+    public final void setStyleClass(byte element, String style) {
+        styles[element] = style;
     }
 }
