@@ -17,14 +17,12 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.Frame;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Shell;
-import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
@@ -135,8 +133,7 @@ public class Main extends AbstractPage {
      */
     public final void main(View view) throws Exception {
         Link link;
-        Frame frame;
-        NodeList group;
+        NodeList groups, tasklist;
         List<TasksList> lists;
         DataForm form;
         DataItem cmdline;
@@ -144,31 +141,34 @@ public class Main extends AbstractPage {
         String taskname, text;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
-        StandardContainer groups = new StandardContainer(container, "groups");
         
-        pagecontrol.add("help");
-        groups.setStyleClass("groups");
+        pagecontrol.add("help", PageControl.EXTERNAL);
         setCustomStyleSheet(view);
         
         /*
          * tarefas pré-definidas
          */
         lists = getLists(view.getLocale());
-        if (lists != null)
+        if (lists != null) {
+            groups = new NodeList(container, "groups");
+            groups.setStyleClass("groups");
+            groups.setStyleClass(NodeList.ITEM, "group_item");
+            
             for (TasksList tasks : lists) {
-                frame = new Frame(groups, tasks.getName());
-                frame.setStyleClass("tasksel_frame");
-                group = new NodeList(frame, tasks.getName());
+                tasklist = new NodeList(groups, tasks.getName());
+                tasklist.setListType(NodeList.DEFINITION);
+                
                 for (TaskEntry entry : tasks.getEntries()) {
                     groupcommand = new Parameter(container, "groupcommand");
                     taskname = entry.getName();
                     text = entry.getText();
                     
-                    link = new Link(group, taskname, "grouprun");
+                    link = new Link(tasklist, taskname, "grouprun");
                     link.setText((text == null)? taskname : text);
                     link.add(groupcommand, taskname);
                 }
             }
+        }
         
         /*
          * linha de comando
@@ -216,19 +216,18 @@ public class Main extends AbstractPage {
         Map<String, Map<String, String>> defaultsheet;
         Map<String, String> style;
         
+        style = new HashMap<String, String>();
+        style.put("padding", "0px");
+        style.put("margin", "0px");
+        
         defaultsheet = new Shell(this).getStyleSheet(view);
-        
-        style = new HashMap<String, String>();
-        style.putAll(defaultsheet.get(".frame"));
-        style.put("display", "inline");
-        style.put("vertical-align", "top");
-        defaultsheet.put(".tasksel_frame", style);
-        
-        style = new HashMap<String, String>();
-        style.put("background-color", "#000000");
-        style.put("padding", "3px");
-        style.put("margin-bottom", "3px");
         defaultsheet.put(".groups", style);
+        
+        style = new HashMap<String, String>();
+        style.put("float", "left");
+        style.put("position", "relative");
+        style.put("display", "inline");
+        defaultsheet.put(".group_item", style);
         
         view.setStyleSheet(defaultsheet);
     }
