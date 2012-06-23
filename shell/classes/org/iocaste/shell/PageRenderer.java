@@ -2,8 +2,6 @@ package org.iocaste.shell;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -44,7 +42,6 @@ public class PageRenderer extends AbstractRenderer {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String NOT_CONNECTED = "not.connected";
     private static final String EXCEPTION_HANDLER = "iocaste-exhandler";
-    private static final String STD_CONTENT = "text/html";
     private static final byte AUTHORIZATION_ERROR = 1;
     private static Map<String, List<SessionContext>> apps =
             new HashMap<String, List<SessionContext>>();
@@ -97,21 +94,6 @@ public class PageRenderer extends AbstractRenderer {
     private final String composeUrl(String app) {
         return new StringBuffer(getServerName()).append("/").
                 append(app).append("/view.html").toString();
-    }
-    
-    /**
-     * 
-     * @param resp
-     * @param view
-     */
-    private final void configResponse(HttpServletResponse resp, View view) {
-        String contenttype = view.getContentType();
-        
-        resp.setContentType((contenttype == null)? STD_CONTENT : contenttype);
-        resp.setCharacterEncoding("UTF-8");
-        
-        for (String key : view.getHeaderKeys())
-            resp.setHeader(key, view.getHeader(key));
     }
     
     /**
@@ -223,11 +205,11 @@ public class PageRenderer extends AbstractRenderer {
                 pagectx = processController(iocaste, req, pagectx);
             }
             
-            render(resp, pagectx);
+            startRender(resp, pagectx);
         } catch (Exception e) {
             pagectx = createExceptionContext(pagectx, e);
             resp.reset();
-            render(resp, pagectx);
+            startRender(resp, pagectx);
         }
     }
 
@@ -777,20 +759,16 @@ public class PageRenderer extends AbstractRenderer {
      * @param pagectx
      * @throws Exception
      */
-    private final void render(HttpServletResponse resp, PageContext pagectx)
+    private final void startRender(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
         HtmlRenderer renderer;
         Map<String, Map<String, String>> userstyle;
-        byte[] content;
         String username, viewmessage;
         Const messagetype;
         int logid;
         InputData inputdata;
-        OutputStream os;
-        String[] text;
         AppContext appctx;
         View viewdata;
-        PrintWriter writer;
         Map<String, Object> parameters;
         Message message = new Message();
 
@@ -840,34 +818,10 @@ public class PageRenderer extends AbstractRenderer {
             for (String key : parameters.keySet())
                 viewdata.export(key, parameters.get(key));
         }
-        
+
         /*
-         * reseta o servlet response para que possamos
-         * usar OutputStream novamente (já é utilizado em
-         * Service.callServer()).
+         * ajusta o renderizador
          */
-        if (viewdata.getContentType() != null) {
-            resp.reset();
-            configResponse(resp, viewdata);
-            os = resp.getOutputStream();
-            
-            content = viewdata.getContent();
-            if (content != null) {
-                os.write(content);
-                resp.setContentLength(content.length);
-            } else {
-                for (String line : viewdata.getPrintLines())
-                    os.write(line.getBytes());
-            }
-            
-            os.flush();
-            os.close();
-            
-            return;
-        }
-        
-        configResponse(resp, viewdata);
-        
         username = pagectx.getUsername();
         userstyle = viewdata.getStyleSheet();
         if (userstyle != null)
@@ -880,17 +834,10 @@ public class PageRenderer extends AbstractRenderer {
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
         renderer.setCssElements(appctx.getStyleSheet());
         renderer.setLogid(pagectx.getLogid());
-        text = renderer.run(viewdata);
+        
+        render(viewdata, resp);
         
         pagectx.setActions(renderer.getActions());
-        writer = resp.getWriter();
-        
-        if (text != null)
-            for (String line : text)
-                writer.println(line);
-        
-        writer.flush();
-        writer.close();
     }
     
     /**

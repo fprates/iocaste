@@ -83,18 +83,22 @@ public class HtmlRenderer {
         
         headtag.addChild(metatag);
         headtag.addChild(titletag);
-        headtag.addChild(renderJavaScript(config));
-        headtag.addChild(renderStyleSheet());
+        if (script != null)
+            headtag.addChild(renderJavaScript(script, config));
+        if (csselements != null)
+            headtag.addChild(renderStyleSheet(csselements));
         
         return headtag;
     }
     
     /**
      * 
-     * @param vdata
+     * @param script
+     * @param config
      * @return
      */
-    private final XMLElement renderJavaScript(Config config) {
+    private final XMLElement renderJavaScript(List<String> script,
+            Config config) {
         XMLElement scripttag = new XMLElement("script");
         
         scripttag.add("type", "text/javascript");
@@ -125,9 +129,11 @@ public class HtmlRenderer {
     
     /**
      * 
+     * @param csselements
      * @return
      */
-    private final XMLElement renderStyleSheet() {
+    private final XMLElement renderStyleSheet(
+            Map<String, Map<String, String>> csselements) {
         Map<String, String> properties;
         XMLElement styletag = new XMLElement("style");
         

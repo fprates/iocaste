@@ -1,6 +1,8 @@
 package org.iocaste.internal;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -12,16 +14,33 @@ import javax.servlet.http.HttpServletResponse;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.shell.common.View;
 
 public abstract class AbstractRenderer extends HttpServlet implements Function{
     private static final long serialVersionUID = -7711799346205632679L;
     private static final boolean NEW_SESSION = false;
     private static final boolean KEEP_SESSION = true;
+    private static final String STD_CONTENT = "text/html";
     private HtmlRenderer renderer;
     private String sessionid, servername;
 
     public AbstractRenderer() {
         renderer = new HtmlRenderer();
+    }
+    
+    /**
+     * 
+     * @param resp
+     * @param view
+     */
+    private final void configResponse(HttpServletResponse resp, View view) {
+        String contenttype = view.getContentType();
+        
+        resp.setContentType((contenttype == null)? STD_CONTENT : contenttype);
+        resp.setCharacterEncoding("UTF-8");
+        
+        for (String key : view.getHeaderKeys())
+            resp.setHeader(key, view.getHeader(key));
     }
     
     /* (non-Javadoc)
@@ -114,6 +133,55 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
     @Override
     public final boolean isAuthorizedCall() {
         return false;
+    }
+    
+    /**
+     * 
+     * @param view
+     * @param renderer
+     * @param resp
+     * @throws Exception
+     */
+    protected final void render(View view, HttpServletResponse resp) throws Exception {
+        byte[] content;
+        OutputStream os;
+        String[] text;
+        PrintWriter writer;
+        
+        /*
+         * reseta o servlet response para que possamos
+         * usar OutputStream novamente (já é utilizado em
+         * Service.callServer()).
+         */
+        if (view.getContentType() != null) {
+            resp.reset();
+            configResponse(resp, view);
+            os = resp.getOutputStream();
+            
+            content = view.getContent();
+            if (content != null) {
+                os.write(content);
+                resp.setContentLength(content.length);
+            } else {
+                for (String line : view.getPrintLines())
+                    os.write(line.getBytes());
+            }
+            
+            os.flush();
+            os.close();
+            
+            return;
+        }
+        
+        configResponse(resp, view);
+        text = renderer.run(view);
+        writer = resp.getWriter();
+        if (text != null)
+            for (String line : text)
+                writer.println(line);
+        
+        writer.flush();
+        writer.close();
     }
 
     /*
