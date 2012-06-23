@@ -1,8 +1,8 @@
-package org.iocaste.shell.renderer;
+package org.iocaste.internal.renderer;
 
 import java.util.Map;
 
-import org.iocaste.shell.XMLElement;
+import org.iocaste.internal.XMLElement;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 

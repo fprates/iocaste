@@ -1,9 +1,9 @@
-package org.iocaste.shell.renderer;
+package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iocaste.shell.XMLElement;
+import org.iocaste.internal.XMLElement;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
@@ -48,17 +48,28 @@ public class TableRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(Table table, Config config) {
-        String name;
+        String title, name;
         Parameter parameter;
-        XMLElement trtag, thtag, tabletag = new XMLElement("table");
+        TableItem[] itens;
+        XMLElement tag, trtag, thtag, tabletag = new XMLElement("table");
         List<InputComponent> hidden = new ArrayList<InputComponent>();
         List<XMLElement> tags = new ArrayList<XMLElement>();
 
         tabletag.add("class", "table_area");
         addEvents(tabletag, table);
         
+        title = table.getText();
+        if (title != null) {
+            tag = new XMLElement("caption");
+            tag.add("class", "tbcaption");
+            tag.addInner(config.getText(title, title));
+            tabletag.addChild(tag);
+        }
+        
         if (table.hasHeader()) {
+            tag = new XMLElement("thead");
             trtag = new XMLElement("tr");
+            tag.addChild(trtag);
             
             for (TableColumn column: table.getColumns()) {
                 if ((column.isMark() && !table.hasMark()) ||
@@ -87,11 +98,16 @@ public class TableRenderer extends Renderer {
             tabletag.addChild(trtag);
         }
         
-        for (TableItem item : table.getItens()) {
-            tags.clear();
-            tags.add(TableItemRenderer.render(table, item, config));
-            hidden.addAll(TableItemRenderer.getHidden());
-            tabletag.addChildren(tags);
+        itens = table.getItens();
+        if (itens.length > 0) {
+            tag = new XMLElement("tbody");
+            for (TableItem item : itens) {
+                tags.clear();
+                tags.add(TableItemRenderer.render(table, item, config));
+                hidden.addAll(TableItemRenderer.getHidden());
+                tag.addChildren(tags);
+            }
+            tabletag.addChild(tag);
         }
         
         /*

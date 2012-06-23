@@ -1,11 +1,11 @@
-package org.iocaste.shell.renderer;
+package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.iocaste.shell.XMLElement;
+import org.iocaste.internal.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;

@@ -1,4 +1,4 @@
-package org.iocaste.shell;
+package org.iocaste.internal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.internal.renderer.Config;
+import org.iocaste.internal.renderer.Renderer;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
-import org.iocaste.shell.renderer.Config;
-import org.iocaste.shell.renderer.Renderer;
 
 public class HtmlRenderer {
     private String username, msgtext;
@@ -28,11 +28,16 @@ public class HtmlRenderer {
     
     public HtmlRenderer() {
         String line;
+        BufferedReader reader;
         InputStream is = getClass().getResourceAsStream("/META-INF/shell.js");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        
-        script = new ArrayList<String>();
+
         logid = 0;
+        
+        if (is == null)
+            return;
+        
+        reader = new BufferedReader(new InputStreamReader(is));
+        script = new ArrayList<String>();
         
         try {
             while ((line = reader.readLine()) != null)

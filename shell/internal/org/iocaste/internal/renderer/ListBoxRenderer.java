@@ -1,6 +1,6 @@
-package org.iocaste.shell.renderer;
+package org.iocaste.internal.renderer;
 
-import org.iocaste.shell.XMLElement;
+import org.iocaste.internal.XMLElement;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.Shell;
 

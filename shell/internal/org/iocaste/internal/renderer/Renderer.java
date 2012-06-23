@@ -1,4 +1,4 @@
-package org.iocaste.shell.renderer;
+package org.iocaste.internal.renderer;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -8,7 +8,7 @@ import java.util.Locale;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
-import org.iocaste.shell.XMLElement;
+import org.iocaste.internal.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Container;

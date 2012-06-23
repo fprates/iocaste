@@ -1,9 +1,9 @@
-package org.iocaste.shell.renderer;
+package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iocaste.shell.XMLElement;
+import org.iocaste.internal.XMLElement;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;

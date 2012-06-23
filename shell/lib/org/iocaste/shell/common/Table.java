@@ -48,6 +48,7 @@ public class Table extends AbstractContainer {
     private RadioGroup group;
     private Container linecontrol;
     private String[] actions;
+    private String text;
     
     public Table(View view, String name) {
         super(view, Const.TABLE, name);
@@ -194,6 +195,14 @@ public class Table extends AbstractContainer {
     }
     
     /**
+     * Retorna título da tabela
+     * @return título
+     */
+    public final String getText() {
+        return text;
+    }
+    
+    /**
      * Retorna status de exibição da header.
      * @return true, exibe header.
      */
@@ -316,6 +325,14 @@ public class Table extends AbstractContainer {
      */
     public final void setSelectionType(byte seltype) {
         this.seltype = seltype;
+    }
+    
+    /**
+     * Ajusta título da tabela.
+     * @param text título
+     */
+    public final void setText(String text) {
+        this.text = text;
     }
     
     /**

@@ -2,7 +2,6 @@ package org.iocaste.shell;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -10,11 +9,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,6 +18,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.internal.AbstractRenderer;
+import org.iocaste.internal.HtmlRenderer;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
@@ -43,23 +40,19 @@ import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 
-public class PageRenderer extends HttpServlet implements Function {
+public class PageRenderer extends AbstractRenderer {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String NOT_CONNECTED = "not.connected";
     private static final String EXCEPTION_HANDLER = "iocaste-exhandler";
     private static final String STD_CONTENT = "text/html";
     private static final byte AUTHORIZATION_ERROR = 1;
-    private static final boolean NEW_SESSION = false;
-    private static final boolean KEEP_SESSION = true;
     private static Map<String, List<SessionContext>> apps =
             new HashMap<String, List<SessionContext>>();
-    private String sessionid, servername, sessionconnector;
-    private HtmlRenderer renderer;
+    private String sessionconnector;
     private Map<String, Map<String, String>> style;
     private MessageSource msgsource;
     
     public PageRenderer() {
-        renderer = new HtmlRenderer();
         style = null;
         sessionconnector = "iocaste-login";
         msgsource = Messages.getMessages();
@@ -87,7 +80,7 @@ public class PageRenderer extends HttpServlet implements Function {
         message = new Message();
         message.setId("exec_action");
         message.add("view", pagectx.getViewData());
-        message.setSessionid(getComplexId(sessionid, pagectx.getLogid()));
+        message.setSessionid(getComplexId(getSessionId(), pagectx.getLogid()));
         
         for (String name : parameters.keySet())
             message.add(name, parameters.get(name));
@@ -102,7 +95,7 @@ public class PageRenderer extends HttpServlet implements Function {
      * @return
      */
     private final String composeUrl(String app) {
-        return new StringBuffer(servername).append("/").
+        return new StringBuffer(getServerName()).append("/").
                 append(app).append("/view.html").toString();
     }
     
@@ -133,7 +126,7 @@ public class PageRenderer extends HttpServlet implements Function {
         PageContext pagectx;
         ContextData contextdata = new ContextData();
         
-        contextdata.sessionid = sessionid;
+        contextdata.sessionid = getSessionId();
         contextdata.appname = EXCEPTION_HANDLER;
         contextdata.pagename = "main";
         contextdata.logid = expagectx.getLogid();
@@ -146,6 +139,7 @@ public class PageRenderer extends HttpServlet implements Function {
         
         return pagectx;
     }
+    
     /**
      * 
      * @param contextdata
@@ -159,14 +153,14 @@ public class PageRenderer extends HttpServlet implements Function {
         List<SessionContext> sessions;
         SessionContext sessionctx;
         
-        if (!apps.containsKey(sessionid)) {
+        if (!apps.containsKey(getSessionId())) {
             sessions = new ArrayList<SessionContext>();
-            apps.put(sessionid, sessions);
+            apps.put(getSessionId(), sessions);
             
             sessionctx = new SessionContext();
             sessions.add(sessionctx);
         } else {
-            sessions = apps.get(sessionid);
+            sessions = apps.get(getSessionId());
             
             if (contextdata.logid >= sessions.size()) {
                 sessionctx = new SessionContext();
@@ -190,54 +184,15 @@ public class PageRenderer extends HttpServlet implements Function {
         return pagectx;
     }
     
-    /* (non-Javadoc)
-     * @see javax.servlet.http.HttpServlet#doGet(
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.internal.AbstractRenderer#entry(
      *     javax.servlet.http.HttpServletRequest,
-     *     javax.servlet.http.HttpServletResponse)
+     *     javax.servlet.http.HttpServletResponse,
+     *     boolean)
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        sessionid = req.getSession().getId();
-        servername = new StringBuffer(req.getScheme()).append("://").
-                        append(req.getServerName()).append(":").
-                        append(req.getServerPort()).toString();
-        
-        try {
-            entry(req, resp, NEW_SESSION);
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see javax.servlet.http.HttpServlet#doPost(
-     *     javax.servlet.http.HttpServletRequest,
-     *     javax.servlet.http.HttpServletResponse)
-     */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        sessionid = req.getSession().getId();
-        servername = new StringBuffer(req.getScheme()).append("://").
-                        append(req.getServerName()).append(":").
-                        append(req.getServerPort()).toString();
-        
-        try {
-            entry(req, resp, KEEP_SESSION);
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
-    }
-    
-    /**
-     * 
-     * @param req
-     * @param resp
-     * @param keepsession
-     * @throws Exception
-     */
-    private final void entry(HttpServletRequest req, HttpServletResponse resp,
+    protected final void entry(HttpServletRequest req, HttpServletResponse resp,
             boolean keepsession) throws Exception {
         Iocaste iocaste;
         ContextData contextdata;
@@ -247,15 +202,15 @@ public class PageRenderer extends HttpServlet implements Function {
         req.setCharacterEncoding("UTF-8");
         
         try {
-            if (apps.containsKey(sessionid)) {
+            if (apps.containsKey(getSessionId())) {
                 if (keepsession)
-                    pagectx = getPageContext(req, sessionid);
-                logid = apps.get(sessionid).size();
+                    pagectx = getPageContext(req, getSessionId());
+                logid = apps.get(getSessionId()).size();
             }
             
             if (pagectx == null) {
                 contextdata = new ContextData();
-                contextdata.sessionid = sessionid;
+                contextdata.sessionid = getSessionId();
                 contextdata.appname = sessionconnector;
                 contextdata.pagename = "authentic";
                 contextdata.logid = logid;
@@ -307,12 +262,12 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
-     * @param sessionid
+     * @param getSessionId()
      * @param logid
      * @return
      */
     private final String getComplexId(String sessionid, int logid) {
-        return new StringBuilder(sessionid).append(":").append(logid).
+        return new StringBuilder(getSessionId()).append(":").append(logid).
                 toString();
     }
     
@@ -338,7 +293,7 @@ public class PageRenderer extends HttpServlet implements Function {
         message.add("authorization", authorization);
         message.setSessionid(complexid);
         
-        url = new StringBuilder(servername).append(Iocaste.SERVERNAME).
+        url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
                 toString();
         return (Boolean)Service.callServer(url, message);
     }
@@ -352,15 +307,6 @@ public class PageRenderer extends HttpServlet implements Function {
         String[] parsed = pagetrack.split(":");
         
         return Integer.parseInt(parsed[1]);
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#getMethods()
-     */
-    @Override
-    public final Set<String> getMethods() {
-        return null;
     }
     
     /**
@@ -493,7 +439,7 @@ public class PageRenderer extends HttpServlet implements Function {
         pageparse[1] = pageparse[t];
         
         contextdata = new ContextData();
-        contextdata.sessionid = sessionid;
+        contextdata.sessionid = getSessionId();
         contextdata.appname = pageparse[0];
         contextdata.pagename = pageparse[1];
         contextdata.logid = logid;
@@ -515,7 +461,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final PageContext getPageContext(ContextData contextdata) {
         AppContext appctx;
-        List<SessionContext> sessions = apps.get(sessionid);
+        List<SessionContext> sessions = apps.get(getSessionId());
         
         if (contextdata.logid >= sessions.size())
             return null;
@@ -538,7 +484,7 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
-     * @param sessionid
+     * @param getSessionId()
      * @param appname
      * @param pagename
      * @param logid
@@ -557,7 +503,7 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
-     * @param sessionid
+     * @param getSessionId()
      * @return
      */
     public static final String[] home(String sessionid) {
@@ -565,15 +511,6 @@ public class PageRenderer extends HttpServlet implements Function {
         int logid = Integer.parseInt(complexid[1]);
         
         return apps.get(complexid[0]).get(logid).home();
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#isAuthorizedCall()
-     */
-    @Override
-    public final boolean isAuthorizedCall() {
-        return false;
     }
     
     /**
@@ -587,7 +524,7 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
-     * @param sessionid
+     * @param getSessionId()
      * @param logid
      * @return
      */
@@ -646,11 +583,11 @@ public class PageRenderer extends HttpServlet implements Function {
             parameters.remove("pagetrack");
         }
         
-        view = callController(sessionid, parameters, pagectx);
+        view = callController(getSessionId(), parameters, pagectx);
         
         action = view.getElement(actionname);
         logid = getLogid(pagetrack);
-        complexid = getComplexId(sessionid, logid);
+        complexid = getComplexId(getSessionId(), logid);
         if (view.hasPageCall() && (action == null ||
                 !action.isCancellable() || action.allowStacking()))
             pushPage(complexid, view.getAppName(),
@@ -668,7 +605,7 @@ public class PageRenderer extends HttpServlet implements Function {
             registerInputs(inputdata);
         }
         
-        updateView(getComplexId(sessionid, logid), view, this);
+        updateView(getComplexId(getSessionId(), logid), view, this);
         
         appname = view.getRedirectedApp();
         if (appname == null)
@@ -689,7 +626,7 @@ public class PageRenderer extends HttpServlet implements Function {
         pagectx.setError((byte)0);
         
         contextdata = new ContextData();
-        contextdata.sessionid = sessionid;
+        contextdata.sessionid = getSessionId();
         contextdata.appname = appname;
         contextdata.pagename = pagename;
         contextdata.logid = logid;
@@ -768,7 +705,7 @@ public class PageRenderer extends HttpServlet implements Function {
     
     /**
      * 
-     * @param sessionid
+     * @param getSessionId()
      * @param appname
      * @param pagename
      * @param logid
@@ -842,6 +779,7 @@ public class PageRenderer extends HttpServlet implements Function {
      */
     private final void render(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
+        HtmlRenderer renderer;
         Map<String, Map<String, String>> userstyle;
         byte[] content;
         String username, viewmessage;
@@ -881,7 +819,7 @@ public class PageRenderer extends HttpServlet implements Function {
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
             message.add("parameters", pagectx.getParameters());
-            message.setSessionid(getComplexId(sessionid, logid));
+            message.setSessionid(getComplexId(getSessionId(), logid));
             
             viewdata = (View)Service.callServer(
                     composeUrl(appctx.getName()), message);
@@ -930,11 +868,12 @@ public class PageRenderer extends HttpServlet implements Function {
         
         configResponse(resp, viewdata);
         
+        username = pagectx.getUsername();
         userstyle = viewdata.getStyleSheet();
         if (userstyle != null)
             appctx.setStyleSheet(userstyle);
         
-        username = pagectx.getUsername();
+        renderer = getRenderer();
         renderer.setMessageSource(msgsource);
         renderer.setMessageText(viewmessage);
         renderer.setMessageType(messagetype);
@@ -954,58 +893,9 @@ public class PageRenderer extends HttpServlet implements Function {
         writer.close();
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#run(org.iocaste.protocol.Message)
-     */
-    @Override
-    public final Object run(Message message) throws Exception {
-        return null;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#serviceInstance(java.lang.String)
-     */
-    @Override
-    public final Service serviceInstance(String path) {
-        String url = new StringBuffer(servername).append(path).toString();
-        
-        return new Service(sessionid, url);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#setAuthorizedCall(boolean)
-     */
-    @Override
-    public final void setAuthorizedCall(boolean authorized) { };
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#setServerName(java.lang.String)
-     */
-    @Override
-    public final void setServerName(String servername) { }
-
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#setServletContext(
-     *     javax.servlet.ServletContext)
-     */
-    @Override
-    public final void setServletContext(ServletContext context) { }
-
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.Function#setSessionid(java.lang.String)
-     */
-    @Override
-    public void setSessionid(String sessionid) { }
-    
     /**
      * 
-     * @param sessionid
+     * @param getSessionId()
      * @param view
      * @param function
      * @throws Exception
