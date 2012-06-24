@@ -835,7 +835,7 @@ public class PageRenderer extends AbstractRenderer {
         renderer.setCssElements(appctx.getStyleSheet());
         renderer.setLogid(pagectx.getLogid());
         
-        render(viewdata, resp);
+        render(viewdata);
         
         pagectx.setActions(renderer.getActions());
     }

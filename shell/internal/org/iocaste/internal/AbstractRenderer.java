@@ -23,6 +23,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
     private static final String STD_CONTENT = "text/html";
     private HtmlRenderer renderer;
     private String sessionid, servername;
+    private HttpServletResponse resp;
 
     public AbstractRenderer() {
         renderer = new HtmlRenderer();
@@ -55,6 +56,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
         servername = new StringBuffer(req.getScheme()).append("://").
                         append(req.getServerName()).append(":").
                         append(req.getServerPort()).toString();
+        this.resp = resp;
         
         try {
             entry(req, resp, NEW_SESSION);
@@ -75,6 +77,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
         servername = new StringBuffer(req.getScheme()).append("://").
                         append(req.getServerName()).append(":").
                         append(req.getServerPort()).toString();
+        this.resp = resp;
         
         try {
             entry(req, resp, KEEP_SESSION);
@@ -139,10 +142,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
      * 
      * @param view
      * @param renderer
-     * @param resp
      * @throws Exception
      */
-    protected final void render(View view, HttpServletResponse resp) throws Exception {
+    protected final void render(View view) throws Exception {
         byte[] content;
         OutputStream os;
         String[] text;
