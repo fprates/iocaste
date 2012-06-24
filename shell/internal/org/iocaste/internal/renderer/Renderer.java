@@ -28,7 +28,6 @@ import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
-import org.iocaste.shell.common.StandardList;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.Text;
@@ -77,10 +76,6 @@ public class Renderer {
             
         case DATA_FORM:
             tags.addAll(DataFormRenderer.render((DataForm)container, config));
-            break;
-            
-        case LIST:
-            tags.add(StandardListRenderer.render((StandardList)container, config));
             break;
             
         case TABBED_PANE:
