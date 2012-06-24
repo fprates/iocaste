@@ -146,6 +146,14 @@ public class Main extends AbstractPage {
         setCustomStyleSheet(view);
         
         /*
+         * linha de comando
+         */
+        form = new DataForm(container, "selector");
+        cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
+        cmdline.setLength(80);
+        new Button(container, "run");
+        
+        /*
          * tarefas pré-definidas
          */
         lists = getLists(view.getLocale());
@@ -169,15 +177,6 @@ public class Main extends AbstractPage {
                 }
             }
         }
-        
-        /*
-         * linha de comando
-         */
-        form = new DataForm(container, "selector");
-        cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
-        
-        cmdline.setLength(80);
-        new Button(container, "run");
         
         view.setFocus(cmdline);
         view.setTitle("task-selector");
