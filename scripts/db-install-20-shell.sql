@@ -352,6 +352,14 @@ insert into shell003 (pindx, eindx, pname, value) values (000100390002, 00010039
 insert into shell002 (eindx, sname, ename) values (000100400000, 'DEFAULT', '.textarea');
 insert into shell003 (pindx, eindx, pname, value) values (000100400001, 000100400000, 'width', '100%');
 
+insert into shell002 (eindx, sname, ename) values (000100410000, 'DEFAULT', '.tbcaption');
+insert into shell003 (pindx, eindx, pname, value) values (000100410001, 000100410000, 'color', '#ffffff');
+insert into shell003 (pindx, eindx, pname, value) values (000100410002, 000100410000, 'background-color', '#000000');
+insert into shell003 (pindx, eindx, pname, value) values (000100410003, 000100410000, 'font-size', '12pt');
+insert into shell003 (pindx, eindx, pname, value) values (000100410004, 000100410000, 'font-family', 'sans-serif');
+insert into shell003 (pindx, eindx, pname, value) values (000100410005, 000100410000, 'font-align', 'left');
+
+
 insert into docs001(docid, tname, class) values('STYLE', 'SHELL001', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.NAME', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.INDEX', 0, 12, 3, 1);
