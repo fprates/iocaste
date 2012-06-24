@@ -1,4 +1,4 @@
-package org.iocaste.shell;
+package org.iocaste.internal;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
