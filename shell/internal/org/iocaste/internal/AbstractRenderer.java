@@ -150,6 +150,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
         String[] text;
         PrintWriter writer;
         
+        if (view == null)
+            throw new Exception("Cannot render a null vision.");
+        
         /*
          * reseta o servlet response para que possamos
          * usar OutputStream novamente (já é utilizado em
