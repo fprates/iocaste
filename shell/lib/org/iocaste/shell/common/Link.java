@@ -20,7 +20,7 @@ public class Link extends AbstractControlComponent {
     
     public Link(Container container, String name, String action) {
         super(container, Const.LINK, name);
-        setText(action);
+        setText(name);
         setAction(action);
         setStyleClass("link");
         absolute = false;
