@@ -1,5 +1,10 @@
 package org.iocaste.core;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.HashMap;
@@ -15,17 +20,15 @@ import org.iocaste.protocol.user.User;
 
 public class Services extends AbstractFunction {
     private static final int USERNAME_MAX_LEN = 12;
+    private static final String CONFIG_FILE = "core.properties";
     private Map<String, UserContext> sessions;
     private DBServices db;
     private String host;
-    private Map<String, String> properties;
+    private Properties properties;
     
     public Services() {
         sessions = new HashMap<String, UserContext>();
-        properties = new HashMap<String, String>();
         db = new DBServices();
-        
-        properties.put("db.user", "iocastedb");
 
         export("checked_select", "checkedSelect");
         export("commit", "commit");
@@ -211,7 +214,7 @@ public class Services extends AbstractFunction {
     public final String getSystemParameter(Message message) {
         String name = message.getString("parameter");
         
-        return properties.get(name);
+        return properties.getProperty(name);
     }
     
     /**
@@ -273,6 +276,31 @@ public class Services extends AbstractFunction {
         }
         
         return users; 
+    }
+    
+    /**
+     * 
+     */
+    public final void init() throws Exception {
+        BufferedReader reader;
+        FileInputStream fis;
+        String path = new StringBuilder(System.getProperty("user.home")).
+                append(System.getProperty("file.separator")).
+                append(CONFIG_FILE).toString();
+        File file = new File(path);
+        
+        if (!file.exists() || !file.isFile())
+            throw new IocasteException("Iocaste not configured. " +
+            		"Contact the administrator.");
+        
+        fis = new FileInputStream(file);
+        reader = new BufferedReader(new InputStreamReader(fis));
+        properties = new Properties();
+        properties.load(reader);
+        reader.close();
+        fis.close();
+        
+        db.config(properties);
     }
     
     /**
@@ -355,6 +383,14 @@ public class Services extends AbstractFunction {
             return false;
         
         return sessions.containsKey(sessionid);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final boolean isInitialized() {
+        return (properties != null);
     }
     
     /**

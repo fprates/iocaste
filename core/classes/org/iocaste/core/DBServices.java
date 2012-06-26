@@ -1,6 +1,7 @@
 package org.iocaste.core;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -11,26 +12,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import java.util.Properties;
 
 import org.hsqldb.HsqlException;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
+
 public class DBServices {
-    private DataSource ds;
+    Config config;
     
     public DBServices() {
-        Context initContext;
-        try {
-            initContext = new InitialContext();
-            Context envContext  = (Context)initContext.lookup("java:/comp/env");
-            ds = (DataSource)envContext.lookup("jdbc/iocaste");
-        } catch (NamingException e) {
-            throw new RuntimeException(e);
-        }
+        config = new Config();
     }
     
     /**
@@ -42,19 +34,40 @@ public class DBServices {
         connection.commit();
     }
     
+    public final void config(Properties properties) throws Exception {
+        String driver = properties.getProperty("dbdriver");
+        
+        config.url = properties.getProperty("url");
+        config.username = properties.getProperty("username");
+        config.secret = properties.getProperty("secret");
+        
+        Class.forName(driver);
+    }
+    
     /**
      * 
      * @return
      * @throws Exception
      */
     public final Connection instance() throws Exception {
-        Connection connection = ds.getConnection();
+        Connection connection;
         
-        connection.setAutoCommit(false);
-        connection.setTransactionIsolation(
-                Connection.TRANSACTION_READ_UNCOMMITTED);
+        try {
+            connection = DriverManager.getConnection(
+                    config.url, config.username, config.secret);;
+            connection.setAutoCommit(false);
+            connection.setTransactionIsolation(
+                    Connection.TRANSACTION_READ_UNCOMMITTED);
+            
+            return connection;
         
-        return connection;
+        } catch (HsqlException e) {
+            throw new SQLException(e.getMessage());
+        } catch (SQLServerException e) {
+            throw new SQLException(e.getMessage());
+        } catch (SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
     
     /**
@@ -100,6 +113,8 @@ public class DBServices {
             cols = metadata.getColumnCount();
         } catch (HsqlException e) {
             throw new SQLException(e.getMessage());
+        } catch (SQLServerException e) {
+            throw new SQLException(e.getMessage());
         } catch (SQLDataException e) {
             throw new SQLDataException(e.getMessage());
         } catch (SQLException e) {
@@ -143,6 +158,8 @@ public class DBServices {
             return ps.executeUpdate();
         } catch (HsqlException e) {
             throw new SQLException(e.getMessage());
+        } catch (SQLServerException e) {
+            throw new SQLException(e.getMessage());
         } catch (SQLDataException e) {
             throw new SQLDataException(e.getMessage());
         } catch (SQLSyntaxErrorException e) {
@@ -153,4 +170,10 @@ public class DBServices {
             ps.close();
         }
     }
+}
+
+class Config {
+    public String url = null;
+    public String username = null;
+    public String secret = null;
 }
