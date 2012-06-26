@@ -1,24 +1,20 @@
-create table shell001 (
-    sname varchar(12) primary key,
-    sindx numeric(12)
+create table SHELL001 (
+    SNAME varchar(12) primary key,
+    SINDX numeric(12)
 );
 
-create table shell002 (
-    eindx numeric(12) primary key,
-    sname varchar(12) foreign key references shell001(sname),
-    ename varchar(60) 
+create table SHELL002 (
+    EINDX numeric(12) primary key,
+    SNAME varchar(12) foreign key references shell001(sname),
+    ENAME varchar(60) 
 );
 
-create table shell003 (
-    pindx numeric(12) primary key,
-    eindx numeric(12) foreign key references shell002(eindx),
-    pname varchar(60),
-    value varchar(60)
+create table SHELL003 (
+    PINDX numeric(12) primary key,
+    EINDX numeric(12) foreign key references shell002(eindx),
+    PNAME varchar(60),
+    VALUE varchar(60)
 );
-
-grant select, insert, update, delete on shell001 to iocastedb;
-grant select, insert, update, delete on shell002 to iocastedb;
-grant select, insert, update, delete on shell003 to iocastedb;
 
 insert into shell001 (sname, sindx) values ('DEFAULT', 000100000000);
 insert into shell002 (eindx, sname, ename) values (000100010000, 'DEFAULT', 'body');
@@ -357,15 +353,15 @@ insert into shell003 (pindx, eindx, pname, value) values (000100410005, 00010041
 insert into docs001(docid, tname, class) values('STYLE', 'SHELL001', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.NAME', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE.INDEX', 0, 12, 3, 1);
-insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE.NAME', 'STYLE', 0, 'SNAME', 'STYLE.NAME', '');
-insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE.INDEX', 'STYLE', 1, 'SINDX', 'STYLE.INDEX', '');
+insert into docs002(iname, docid, nritm, fname, ename, attrb) values('STYLE.NAME', 'STYLE', 0, 'SNAME', 'STYLE.NAME', '');
+insert into docs002(iname, docid, nritm, fname, ename, attrb) values('STYLE.INDEX', 'STYLE', 1, 'SINDX', 'STYLE.INDEX', '');
 insert into docs004(iname, docid) values('STYLE.NAME', 'STYLE');
 insert into docs005(tname, docid) values('SHELL001', 'STYLE');
 
 insert into docs001(docid, tname, class) values('STYLE_ELEMENT', 'SHELL002', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('STYLE_ELEMENT.NAME', 0, 12, 0, 1); 
-insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE_ELEMENT.INDEX', 'STYLE_ELEMENT', 0, 'EINDX', 'STYLE.INDEX', '');
-insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE_ELEMENT.NAME', 'STYLE_ELEMENT', 1, 'ENAME', 'STYLE_ELEMENT.NAME', '');
-insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE_ELEMENT.STYLE', 'STYLE_ELEMENT', 2, 'SNAME', 'STYLE.NAME', '');
+insert into docs002(iname, docid, nritm, fname, ename, attrb) values('STYLE_ELEMENT.INDEX', 'STYLE_ELEMENT', 0, 'EINDX', 'STYLE.INDEX', '');
+insert into docs002(iname, docid, nritm, fname, ename, attrb) values('STYLE_ELEMENT.NAME', 'STYLE_ELEMENT', 1, 'ENAME', 'STYLE_ELEMENT.NAME', '');
+insert into docs002(iname, docid, nritm, fname, ename, attrb) values('STYLE_ELEMENT.STYLE', 'STYLE_ELEMENT', 2, 'SNAME', 'STYLE.NAME', '');
 insert into docs004(iname, docid) values('STYLE_ELEMENT.INDEX', 'STYLE_ELEMENT');
 insert into docs005(tname, docid) values('SHELL002', 'STYLE_ELEMENT');

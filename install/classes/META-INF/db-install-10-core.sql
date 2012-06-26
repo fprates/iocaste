@@ -1,51 +1,44 @@
-create table users001 (
-   uname varchar(12) primary key,
-   secrt varchar(12),
-   fname varchar(64),
-   sname varchar(64),
-   usrid numeric(5)
+create table USERS001 (
+   UNAME varchar(12) primary key,
+   SECRT varchar(12),
+   FNAME varchar(64),
+   SNAME varchar(64),
+   USRID numeric(5)
 );
 
-create table auth001 (
-   autnm varchar(24) primary key,
-   objct varchar(12),
-   actio varchar(12),
-   autid numeric(5)
+create table AUTH001 (
+   AUTNM varchar(24) primary key,
+   OBJCT varchar(12),
+   ACTIO varchar(12),
+   AUTID numeric(5)
 );
 
-create table auth002 (
-   ident numeric(8) primary key,
-   autnm varchar(24) foreign key references auth001(autnm),
-   param varchar(12),
-   value varchar(64)
+create table AUTH002 (
+   IDENT numeric(8) primary key,
+   AUTNM varchar(24) foreign key references auth001(autnm),
+   PARAM varchar(12),
+   VALUE varchar(64)
 );
 
-create table auth003 (
-   prfnm varchar(12) primary key,
-   prfid numeric(5),
-   crrnt numeric(8)
+create table AUTH003 (
+   PRFNM varchar(12) primary key,
+   PRFID numeric(5),
+   CRRNT numeric(8)
 );
 
-create table auth004 (
-   ident numeric(8) primary key,
-   prfnm varchar(12) foreign key references auth003(prfnm),
-   autnm varchar(24) foreign key references auth001(autnm),
-   objct varchar(12),
-   actio varchar(12)
+create table AUTH004 (
+   IDENT numeric(8) primary key,
+   PRFNM varchar(12) foreign key references auth003(prfnm),
+   AUTNM varchar(24) foreign key references auth001(autnm),
+   OBJCT varchar(12),
+   ACTIO varchar(12)
 );
 
-create table users002(
-   ident numeric(8) primary key,
-   uname varchar(12) foreign key references users001(uname),
-   prfnm varchar(12) foreign key references auth003(prfnm)
+create table USERS002(
+   IDENT numeric(8) primary key,
+   UNAME varchar(12) foreign key references users001(uname),
+   PRFNM varchar(12) foreign key references auth003(prfnm)
 );
-
-grant select, insert, update, delete on users001 to iocastedb;
-grant select, insert, update, delete on users002 to iocastedb;
-grant select, insert, update, delete on auth001 to iocastedb;
-grant select, insert, update, delete on auth002 to iocastedb;
-grant select, insert, update, delete on auth003 to iocastedb;
-grant select, insert, update, delete on auth004 to iocastedb;
 
 insert into users001(uname, secrt, fname, sname, usrid) values('ADMIN', 'iocaste', 'Administrator', '', 1);
 insert into auth001(autnm, objct, actio, autid) values('PACKAGE.EXECUTE', 'APPLICATION', 'EXECUTE', 1);
