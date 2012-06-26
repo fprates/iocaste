@@ -1,6 +1,3 @@
-/* tokens '\c e \p nao sao aceitos. nao existe parametro 'if exists' para 'drop user' */
-
-/* folha de estilo */
 create table shell001 (
     sname varchar(12) primary key,
     sindx numeric(12)
@@ -19,12 +16,9 @@ create table shell003 (
     value varchar(60)
 );
 
-\p tables generated.
-
 grant select, insert, update, delete on shell001 to iocastedb;
 grant select, insert, update, delete on shell002 to iocastedb;
 grant select, insert, update, delete on shell003 to iocastedb;
-\p permissions granted.
 
 insert into shell001 (sname, sindx) values ('DEFAULT', 000100000000);
 insert into shell002 (eindx, sname, ename) values (000100010000, 'DEFAULT', 'body');
@@ -375,8 +369,3 @@ insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE_ELEM
 insert into docs002(iname, docid, index, fname, ename, attrb) values('STYLE_ELEMENT.STYLE', 'STYLE_ELEMENT', 2, 'SNAME', 'STYLE.NAME', '');
 insert into docs004(iname, docid) values('STYLE_ELEMENT.INDEX', 'STYLE_ELEMENT');
 insert into docs005(tname, docid) values('SHELL002', 'STYLE_ELEMENT');
-
-\p initial configuration saved.
-
-commit work;
-

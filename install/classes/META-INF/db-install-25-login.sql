@@ -1,4 +1,3 @@
-\p running login script.
 insert into docs001(docid, tname) values ('LOGIN', 'USERS001');
 insert into docs003(ename, decim, lngth, etype, upcas) values('LOGIN.USERNAME', 0, 12, 0, 1);
 insert into docs003(ename, decim, lngth, etype, upcas) values('LOGIN.SECRET', 0, 12, 0, 0);
@@ -59,6 +58,3 @@ insert into docs002(iname, docid, index, fname, ename, itref) values('USER_AUTHO
 insert into docs002(iname, docid, index, fname, ename, itref) values('USER_AUTHORITY.PROFILE', 'USER_AUTHORITY', 2, 'PRFNM', 'USER_PROFILE.NAME', 'USER_PROFILE.NAME');
 insert into docs004(iname, docid) values('USER_AUTHORITY.ID', 'USER_AUTHORITY');
 insert into docs005(tname, docid) values('USERS002', 'USER_AUTHORITY');
-
-\p initial configuration saved.
-commit work;

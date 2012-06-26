@@ -1,6 +1,3 @@
-/* tokens \c e \p nao sao aceitos. nao existe parametro 'if exists' para 'drop user' */
-
-/* pacotes instalados */
 create table package001 (
     ident varchar(60) primary key,
     pkgid numeric(12)
@@ -13,11 +10,8 @@ create table package002 (
     model varchar(24),
 );
 
-\p package tables has been generated
-
 grant select, insert, update, delete on package001 to iocastedb;
 grant select, insert, update, delete on package002 to iocastedb;
-\p permissions granted.
 
 insert into docs001(docid, tname, class) values('PACKAGE', 'PACKAGE001', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('PACKAGE.NAME', 0, 60, 0, 0);
@@ -38,6 +32,3 @@ insert into docs004(iname, docid) values('PACKAGE_ITEM.CODE', 'PACKAGE_ITEM');
 insert into docs005(tname, docid) values('PACKAGE002', 'PACKAGE_ITEM');
 
 insert into range001(ident, crrnt) values('PKGCODE', 0);
-
-commit work;
-

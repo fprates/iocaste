@@ -26,12 +26,13 @@ $./install.sh
     Com isto:
 - o banco de dados hsqldb será executado;
 - o servidor de aplicações será executado;
-- as tabelas do programa serão inseridas no banco.
 
 * Testando:
-    Com seu navegador preferido, acesse http://localhost:8080/iocaste-shell.
-    Se a instalação procedeu com sucesso, a página de autenticação será
-exibida.
+    Com seu navegador preferido, acesse http://localhost:8080/iocaste-install
+    O programa de instalação será iniciado, e você deve fornecer dados do seu
+banco de dados, ou prosseguir com a configuração padrão.
+    Se a instalação procedeu com sucesso, você será encaminhado à página de
+autenticação.
     Para se logar:
     usuário: "admin" (não case sensitive)
     senha: "iocaste" (case sensitive).
@@ -40,4 +41,7 @@ exibida.
     usuário: "admin"
     senha: "tomcat"
     
+    A partir daí, basta acessar http://localhost:8080/iocaste-shell para acessar
+o servidor de aplicação.
+
     Copyright 2011 (c) Francisco de Assis Prates

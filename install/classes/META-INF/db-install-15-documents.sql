@@ -1,19 +1,14 @@
-/* tokens \c e \p nao sao aceitos. nao existe parametro 'if exists' para 'drop user' */
-
-/* range numérico */
 create table range001 (
    ident varchar(12) primary key,
    crrnt numeric(12)
 );
 
-/* documentos */
 create table docs001 (
    docid varchar(24) primary key,
    tname varchar(12),
    class varchar(255)
 );
 
-/* elementos de dados */
 create table docs003 (
    ename varchar(48) primary key,
    decim numeric(2),
@@ -22,7 +17,6 @@ create table docs003 (
    upcas bit
 );
 
-/* itens de documento */
 create table docs002 (
    iname varchar(48) primary key,
    docid varchar(24) foreign key references docs001(docid),
@@ -33,25 +27,20 @@ create table docs002 (
    itref varchar(48)
 );
 
-/* chaves do documento */
 create table docs004 (
    iname varchar(48) primary key,
    docid varchar(24) foreign key references docs001(docid)
 );
 
-/* ligação tabela-modelo */
 create table docs005 (
     tname varchar(12) primary key,
     docid varchar(24) foreign key references docs001(docid)
 );
 
-/* referências estrangeiras */
 create table docs006 (
     iname varchar(48) primary key,
     itref varchar(48) foreign key references docs002(iname)
 );
-
-\p document tables has been generated
 
 grant select, insert, update, delete on range001 to iocastedb;
 grant select, insert, update, delete on docs001 to iocastedb;
@@ -60,7 +49,6 @@ grant select, insert, update, delete on docs003 to iocastedb;
 grant select, insert, update, delete on docs004 to iocastedb;
 grant select, insert, update, delete on docs005 to iocastedb;
 grant select, insert, update, delete on docs006 to iocastedb;
-\p permissions granted.
 
 insert into docs001(docid, tname, class) values('MODEL', 'DOCS001', 'org.iocaste.documents.common.DocumentModel');
 insert into docs003(ename, decim, lngth, etype, upcas) values('MODEL.NAME', 0, 24, 0, 1);
@@ -124,6 +112,3 @@ insert into docs002(iname, docid, index, fname, ename, attrb) values('NUMBER_RAN
 insert into docs002(iname, docid, index, fname, ename, attrb) values('NUMBER_RANGE.CURRENT', 'NUMBER_RANGE', 1, 'CRRNT', 'NUMBER_RANGE.CURRENT', '');
 insert into docs004(iname, docid) values('NUMBER_RANGE.IDENT', 'NUMBER_RANGE');
 insert into docs005(tname, docid) values('RANGE001', 'NUMBER_RANGE');
-
-commit work;
-

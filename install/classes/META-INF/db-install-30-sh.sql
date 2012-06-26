@@ -1,5 +1,3 @@
-/* tokens \c e \p nao sao aceitos. nao existe parametro 'if exists' para 'drop user' */
-
 create table shcab (
     ident varchar(24) primary key,
     docid varchar(24) foreign key references docs001(docid),
@@ -17,12 +15,9 @@ create table shref (
     shcab varchar(48) foreign key references shcab(ident)
 );
 
-\p sh tables has been generated
-
 grant select, insert, update, delete on shcab to iocastedb;
 grant select, insert, update, delete on shitm to iocastedb;
 grant select, insert, update, delete on shref to iocastedb;
-\p permissions granted.
 
 insert into docs001(docid, tname, class) values('SEARCH_HELP', 'SHCAB', '');
 insert into docs003(ename, decim, lngth, etype, upcas) values('SEARCH_HELP.NAME', 0, 12, 0, 1);
@@ -50,5 +45,3 @@ insert into docs002(iname, docid, index, fname, ename, attrb, itref) values('SH_
 insert into docs004(iname, docid) values('SH_REFERENCE.MODEL_ITEM', 'SH_REFERENCE');
 insert into docs005(tname, docid) values('SHREF', 'SH_REFERENCE');
 insert into docs006(iname, itref) values('SH_REFERENCE.SEARCH_HELP', 'SEARCH_HELP.NAME');
-
-commit work;
