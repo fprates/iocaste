@@ -125,7 +125,7 @@ public class Model {
             item.setTableFieldName((String)columns.get("FNAME"));
             item.setDataElement(DataElementServices.get(iocaste,
                     (String)columns.get("ENAME")));
-            item.setIndex(((BigDecimal)columns.get("INDEX")).intValue());
+            item.setIndex(((BigDecimal)columns.get("NRITM")).intValue());
             
             itemref = (String)columns.get("ITREF");
             if (itemref != null) {
@@ -180,7 +180,7 @@ public class Model {
         DataElement dataelement;
         String itemref, tname, shname;
         DocumentModel model = item.getDocumentModel();
-        String query = "insert into docs002 (iname, docid, index, " +
+        String query = "insert into docs002 (iname, docid, nritm, " +
                 "fname, ename, attrb, itref) values(?, ?, ?, ?, ?, ?, ?)";
         
         dataelement = item.getDataElement();
@@ -461,7 +461,7 @@ public class Model {
      */
     private static int saveDocumentKeys(Iocaste iocaste, DocumentModel model)
             throws Exception {
-        String dbuser, name, query = "insert into docs004(iname, docid) " +
+        String name, query = "insert into docs004(iname, docid) " +
                 "values (?, ?)";
         
         for (DocumentModelKey key : model.getKeys()) {
@@ -472,13 +472,7 @@ public class Model {
                 throw new IocasteException("");
         }
         
-        dbuser = iocaste.getSystemParameter("db.user");
-        query = new StringBuilder("grant select, insert, update, delete on ").
-                append(model.getTableName()).
-                append(" to ").
-                append(dbuser).toString();
-        
-        return iocaste.update(query);
+        return 1;
     }
     
     /**
@@ -673,7 +667,7 @@ public class Model {
         if (iocaste.update(query, criteria) == 0)
             throw new IocasteException("");
         
-        query = "update docs002 set docid = ?, index = ?, fname = ?, " +
+        query = "update docs002 set docid = ?, nritm = ?, fname = ?, " +
                 "ename = ?, attrb = ?, itref = ? where iname = ?";
         
         criteria = new Object[7];
