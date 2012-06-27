@@ -14,7 +14,7 @@ public class NumberRange {
     private static final byte UPDATE_RANGE = 1;
     private static final byte DEL_RANGE = 2;
     private static final String[] QUERIES = {
-        "select crrnt from RANGE001 where ident = ?",
+        "select CRRNT from RANGE001 where ident = ?",
         "update RANGE001 set crrnt = ? where ident = ?",
         "delete from NUMBER_RANGE where IDENT = ?"
     };
