@@ -46,7 +46,7 @@ public class Model {
         "insert into DOCS002(iname, docid, nritm, " +
                 "fname, ename, attrb, itref) values(?, ?, ?, ?, ?, ?, ?)",
         "insert into DOCS006(iname, itref) values(?, ?)",
-        "select * from shcab where ident = ?",
+        "select * from SHCAB where ident = ?",
         "insert into SHREF(iname, shcab) values(?, ?)",
         "delete from DOCS004 where iname = ?",
         "delete from DOCS005 where tname = ?",
