@@ -24,6 +24,15 @@ public class Services extends AbstractFunction {
     private DBServices db;
     private String host;
     private Properties properties;
+    private static final byte INS_USER = 0;
+    private static final byte USERS = 1;
+    private static final byte USER = 2;
+    private static final String[] QUERIES = {
+        "insert into users001(uname, secrt) values(?, ?)",
+        "select USERNAME, FIRSTNAME, SURNAME from USER",
+        "select UNAME, SECRT from USERS001 where UNAME = ?",
+        
+    };
     
     public Services() {
         sessions = new HashMap<String, UserContext>();
@@ -117,8 +126,7 @@ public class Services extends AbstractFunction {
         if (user.getUsername() == null || user.getSecret() == null)
             throw new Exception("Invalid username or password");
         
-        db.update(getDBConnection(message.getSessionid()),
-                "insert into users001(uname, secrt) values(?, ?)");
+        db.update(getDBConnection(message.getSessionid()), QUERIES[INS_USER]);
     }
     
     /**
@@ -260,7 +268,7 @@ public class Services extends AbstractFunction {
         User[] users;
         int t;
         Object[] lines = db.select(getDBConnection(message.getSessionid()),
-                "select username, firstname, surname from User", 0);
+                QUERIES[USERS], 0);
         
         t = lines.length;
         if (t == 0)
@@ -405,7 +413,6 @@ public class Services extends AbstractFunction {
         Map<String, Object> columns;
         Connection connection;
         Locale locale;
-        String query;
         User user = null;
         String[] locale_ = message.getString("locale").split("_");
         String username = message.getString("user");
@@ -420,8 +427,7 @@ public class Services extends AbstractFunction {
 
         connection = db.instance();
         
-        query = "select uname, secrt from users001 where uname = ?";
-        lines = db.select(connection, query, 1, username.toUpperCase());
+        lines = db.select(connection, QUERIES[USER], 1, username.toUpperCase());
         
         connection.close();
         
