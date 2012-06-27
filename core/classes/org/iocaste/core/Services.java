@@ -28,7 +28,7 @@ public class Services extends AbstractFunction {
     private static final byte USERS = 1;
     private static final byte USER = 2;
     private static final String[] QUERIES = {
-        "insert into users001(uname, secrt) values(?, ?)",
+        "insert into USERS001(uname, secrt) values(?, ?)",
         "select USERNAME, FIRSTNAME, SURNAME from USER",
         "select UNAME, SECRT from USERS001 where UNAME = ?",
         
