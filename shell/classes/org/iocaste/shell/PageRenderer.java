@@ -47,7 +47,7 @@ public class PageRenderer extends AbstractRenderer {
     private static final byte AUTHORIZATION_ERROR = 1;
     private static Map<String, List<SessionContext>> apps =
             new HashMap<String, List<SessionContext>>();
-    private String sessionconnector;
+    private String sessionconnector, dbname;
     private Map<String, Map<String, String>> style;
     private MessageSource msgsource;
     
@@ -154,9 +154,10 @@ public class PageRenderer extends AbstractRenderer {
             }
         }
         
-        appctx = (sessionctx.contains(contextdata.appname))?
-                sessionctx.getAppContext(contextdata.appname) :
-                    new AppContext(contextdata.appname);
+        if (sessionctx.contains(contextdata.appname))
+            appctx = sessionctx.getAppContext(contextdata.appname);
+        else
+            appctx = new AppContext(contextdata.appname);
                 
         pagectx = new PageContext(contextdata.pagename);
         pagectx.setAppContext(appctx);
@@ -761,8 +762,8 @@ public class PageRenderer extends AbstractRenderer {
      * @param pagectx
      * @throws Exception
      */
-    private final void startRender(HttpServletResponse resp, PageContext pagectx)
-            throws Exception {
+    private final void startRender(
+            HttpServletResponse resp, PageContext pagectx) throws Exception {
         HtmlRenderer renderer;
         Map<String, Map<String, String>> userstyle;
         String username, viewmessage;
@@ -837,6 +838,10 @@ public class PageRenderer extends AbstractRenderer {
         renderer.setCssElements(appctx.getStyleSheet());
         renderer.setLogid(pagectx.getLogid());
         
+        if (dbname == null)
+            dbname = new Iocaste(this).getSystemParameter("dbname");
+        
+        renderer.setDBName(dbname);
         render(viewdata);
         
         pagectx.setActions(renderer.getActions());

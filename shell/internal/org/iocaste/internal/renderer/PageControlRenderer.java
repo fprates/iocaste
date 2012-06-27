@@ -86,8 +86,6 @@ public class PageControlRenderer extends Renderer {
         pctag.add("class", pagecontrol.getStyleClass());
         
         config.setPageControlStarted(true);
-
-//        setHelpControl("help", true);
         
         text = new Text(statusarea, "navbar.title");
         text.setStyleClass("title");
@@ -96,8 +94,9 @@ public class PageControlRenderer extends Renderer {
         
         text = new Text(statusarea, "navbar.username");
         text.setStyleClass("status");
-        text.setText(new StringBuilder(config.getUsername()).
-                append("@term:").append(config.getLogId()).toString());
+        text.setText(new StringBuilder(config.getUsername()).append("@").
+                append(config.getDBName()).append(":").
+                append(config.getLogId()).toString());
         
         message = config.getMessage();
         if (message != null) {

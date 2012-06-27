@@ -18,7 +18,7 @@ import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
 
 public class HtmlRenderer {
-    private String username, msgtext;
+    private String username, msgtext, dbname;
     private Const msgtype;
     private List<String> script;
     private Set<String> actions;
@@ -180,6 +180,7 @@ public class HtmlRenderer {
         config.setPageTrack(new StringBuffer(vdata.getAppName()).append(".").
                 append(vdata.getPageName()).append(":").append(logid).
                 toString());
+        config.setDBName(dbname);
         
         html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
                 "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
@@ -217,6 +218,14 @@ public class HtmlRenderer {
     public final void setCssElements(Map<String,
             Map<String, String>> csselements) {
         this.csselements = csselements;
+    }
+    
+    /**
+     * 
+     * @param dbname
+     */
+    public final void setDBName(String dbname) {
+        this.dbname = dbname;
     }
     
     /**

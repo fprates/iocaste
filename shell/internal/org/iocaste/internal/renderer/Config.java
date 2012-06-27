@@ -11,7 +11,8 @@ import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
 
 public class Config {
-    private String currentaction, currentform, pagetrack, message, username;
+    private String currentaction, currentform, pagetrack, message;
+    private String dbname, username;
     private int logid;
     private List<MessageSource> msgsources;
     private Set<String> actions;
@@ -84,6 +85,14 @@ public class Config {
      */
     public final String getCurrentAction() {
         return currentaction;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getDBName() {
+        return dbname;
     }
     
     /**
@@ -211,6 +220,14 @@ public class Config {
      */
     public final void setCurrentForm(String currentform) {
         this.currentform = currentform;
+    }
+    
+    /**
+     * 
+     * @param dbserver
+     */
+    public final void setDBName(String dbname) {
+        this.dbname = dbname;
     }
     
     /**
