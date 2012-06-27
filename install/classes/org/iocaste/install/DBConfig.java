@@ -31,7 +31,9 @@ public class DBConfig {
     private static final String CONFIG_FILE = "core.properties";
     private static final String MSSQL_DRIVER = 
             "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+    private static final String MYSQL_DRIVER = "com.mysql.jdbc.Driver";
     private static final String HSQLDB_DRIVER = "org.hsqldb.jdbcDriver";
+    
     private static final String[] SCRIPTS = {
         "/META-INF/db-install-10-core.sql",
         "/META-INF/db-install-15-documents.sql",
@@ -56,44 +58,11 @@ public class DBConfig {
         "use "
     };
     
-    private final void createTables(Statement ps) throws Exception {
-        String line;
-        InputStream is;
-        BufferedReader reader;
-        List<String> formated, script;
-        
-        script = new ArrayList<String>();
-        for (String name : SCRIPTS) {
-            is = getClass().getResourceAsStream(name);
-            reader = new BufferedReader(new InputStreamReader(is));
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.length() == 0)
-                    continue;
-                
-                script.add(line);
-            }
-            
-            reader.close();
-        }
-        
-        formated = new ArrayList<String>();
-        line = "";
-        for (String scriptline : script) {
-            for (byte b : scriptline.getBytes()) {
-                line += (char)b;
-                if (b != ';')
-                    continue;
-                
-                formated.add(line);
-                line = "";
-                break;
-            }
-        }
-        
-        for (String scriptline : formated)
-            ps.addBatch(scriptline);
-    }
+    private static final String[] MYSQL_INIT = {
+        "drop database if exists ",
+        "create database ",
+        "use "
+    };
     
     /**
      * 
@@ -119,44 +88,14 @@ public class DBConfig {
                 continue;
             
             config.dbtype = Config.dbtypes.valueOf(dbtype.getName());
-            switch (config.dbtype) {
-            case mssql:
-                config.dbdriver = MSSQL_DRIVER;
-                config.url = new StringBuilder("jdbc:sqlserver://").
-                        append(config.host).
-                        append(";databaseName=").
-                        append(config.dbname).toString();
-                
-                init = new String[4];
-                init[0] = MSSQL_INIT[0];
-                init[1] = new StringBuilder(MSSQL_INIT[1]).
-                        append(config.dbname).
-                        append("') ").
-                        append(MSSQL_INIT[2]).
-                        append(config.dbname).toString();
-                init[2] = MSSQL_INIT[3].concat(config.dbname);
-                init[3] = MSSQL_INIT[4].concat(config.dbname);
-                
-                break;
-                
-            case hsqldb:
-                config.dbdriver = HSQLDB_DRIVER;
-                config.url = new StringBuilder("jdbc:hsqldb:hsql://").
-                        append(config.host).
-                        append("/").
-                        append(config.dbname).toString();
-                init = new String[1];
-                init[0] = "drop schema public cascade";
-                
-                break;
-            }
+            init = getDBInitializator(config);
             
             break;
         }
         
         Class.forName(config.dbdriver).newInstance();
         connection = DriverManager.getConnection(
-                config.url, config.username, config.secret);
+                config.iurl.toString(), config.username, config.secret);
         connection.setAutoCommit(false);
         
         try {
@@ -165,9 +104,8 @@ public class DBConfig {
                 for (String sql : init)
                     ps.addBatch(sql);
             
-            createTables(ps);
+            createTables(ps, config);
             ps.executeBatch();
-            
             saveConfig(config);
             
             connection.commit();
@@ -182,11 +120,114 @@ public class DBConfig {
         view.redirect("FINISH");
     }
     
+    private final void createTables(Statement ps, Config config) throws Exception {
+        String line, dbtype;
+        InputStream is;
+        BufferedReader reader;
+        List<String> formated, script;
+        
+        dbtype = new StringBuilder("@").
+                append(config.dbtype.toString()).
+                append(":").toString();
+        
+        script = new ArrayList<String>();
+        for (String name : SCRIPTS) {
+            is = getClass().getResourceAsStream(name);
+            reader = new BufferedReader(new InputStreamReader(is));
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.length() == 0)
+                    continue;
+                if (line.startsWith("@")) {
+                    if (!line.startsWith(dbtype))
+                        continue;
+                    line = line.substring(dbtype.length());
+                }
+                    
+                script.add(line);
+            }
+            
+            reader.close();
+        }
+        
+        formated = new ArrayList<String>();
+        line = "";
+        for (String scriptline : script) {
+            for (char c : scriptline.toCharArray()) {
+                line += c;
+                if (c != ';')
+                    continue;
+                
+                formated.add(line);
+                line = "";
+                break;
+            }
+        }
+        
+        for (String scriptline : formated)
+            ps.addBatch(scriptline);
+    }
+    
+    private final String[] getDBInitializator(Config config) {
+        String[] init = null;
+        
+        switch (config.dbtype) {
+        case mssql:
+            config.dbdriver = MSSQL_DRIVER;
+            config.iurl = new StringBuilder("jdbc:sqlserver://").
+                    append(config.host);
+            config.url = config.iurl.
+                    append(";databaseName=").
+                    append(config.dbname).toString();
+            
+            init = new String[4];
+            init[0] = MSSQL_INIT[0];
+            init[1] = new StringBuilder(MSSQL_INIT[1]).
+                    append(config.dbname).
+                    append("') ").
+                    append(MSSQL_INIT[2]).
+                    append(config.dbname).toString();
+            init[2] = MSSQL_INIT[3].concat(config.dbname);
+            init[3] = MSSQL_INIT[4].concat(config.dbname);
+            
+            break;
+        case hsqldb:
+            config.dbdriver = HSQLDB_DRIVER;
+            config.iurl = new StringBuilder("jdbc:hsqldb:hsql://").
+                    append(config.host).
+                    append("/").
+                    append(config.dbname);
+            config.url = config.iurl.toString();
+            
+            init = new String[1];
+            init[0] = "drop schema public cascade";
+            
+            break;
+        case mysql:
+            config.dbdriver = MYSQL_DRIVER;
+            config.iurl = new StringBuilder("jdbc:mysql://").
+                    append(config.host);
+            config.url = config.iurl.
+                    append("/").
+                    append(config.dbname).toString();
+            
+            init = new String[3];
+            init[0] = MYSQL_INIT[0].concat(config.dbname);
+            init[1] = MYSQL_INIT[1].concat(config.dbname);
+            init[2] = MYSQL_INIT[2].concat(config.dbname);
+            
+            break;
+        }
+        
+        return init;
+    }
+    
     /**
      * 
      * @param view
      */
     public final void render(View view) {
+        String name;
         Container dbtypecnt;
         DataItem item;
         DataForm dbinfo;
@@ -207,8 +248,10 @@ public class DBConfig {
         new DataItem(dbinfo, Const.TEXT_FIELD, "dbname").setObligatory(true);
         
         dbtypecnt = new StandardContainer(container, "dbtypecnt");
-        new RadioButton(dbtypecnt, "hsqldb", rbgroup).setText("hsqldb");
-        new RadioButton(dbtypecnt, "mssql", rbgroup).setText("mssql");
+        for (Config.dbtypes dbtype: Config.dbtypes.values()) {
+            name = dbtype.toString();
+            new RadioButton(dbtypecnt, name, rbgroup).setText(name);
+        }
         
         new Button(container, "continue");
         new Parameter(container, "nextstage").set("DBCREATE");
@@ -242,9 +285,11 @@ public class DBConfig {
 class Config {
     public enum dbtypes {
         hsqldb,
-        mssql
+        mssql,
+        mysql
     };
     
+    public StringBuilder iurl = null;
     public String dbdriver = null;
     public String host = null; 
     public String url = null;
