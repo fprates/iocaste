@@ -40,12 +40,12 @@ public class Style {
         Map<String, Map<String, String>> elements =
                 new LinkedHashMap<String, Map<String, String>>();
         
-        eobjects = checkedSelect(iocaste, "shell002", "sname = ?", name);
+        eobjects = checkedSelect(iocaste, "SHELL002", "sname = ?", name);
         
         for (Object eobject : eobjects) {
             oelement = (Map<String, Object>)eobject;
             index = ((BigDecimal)oelement.get("EINDX")).longValue();
-            aobjects = checkedSelect(iocaste, "shell003", "eindx = ?", index);
+            aobjects = checkedSelect(iocaste, "SHELL003", "eindx = ?", index);
             
             attributes = new HashMap<String, String>();
             
