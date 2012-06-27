@@ -51,7 +51,7 @@ public class DBConfig {
     };
     
     private static final String[] MSSQL_INIT = {
-        "use master",
+        "use master;",
         "if exists(select name from sys.databases where name = '",
         "drop database ",
         "create database ",
@@ -174,9 +174,8 @@ public class DBConfig {
         switch (config.dbtype) {
         case mssql:
             config.dbdriver = MSSQL_DRIVER;
-            config.iurl = new StringBuilder("jdbc:sqlserver://").
-                    append(config.host);
-            config.url = config.iurl.
+            config.iurl = "jdbc:sqlserver://".concat(config.host);
+            config.url = new StringBuilder(config.iurl).
                     append(";databaseName=").
                     append(config.dbname).toString();
             
@@ -186,9 +185,14 @@ public class DBConfig {
                     append(config.dbname).
                     append("') ").
                     append(MSSQL_INIT[2]).
-                    append(config.dbname).toString();
-            init[2] = MSSQL_INIT[3].concat(config.dbname);
-            init[3] = MSSQL_INIT[4].concat(config.dbname);
+                    append(config.dbname).
+                    append(";").toString();
+            init[2] = new StringBuilder(MSSQL_INIT[3]).
+                    append(config.dbname).
+                    append(";").toString();
+            init[3] = new StringBuilder(MSSQL_INIT[4]).
+                    append(config.dbname).
+                    append(";").toString();
             
             break;
         case hsqldb:
@@ -196,8 +200,8 @@ public class DBConfig {
             config.iurl = new StringBuilder("jdbc:hsqldb:hsql://").
                     append(config.host).
                     append("/").
-                    append(config.dbname);
-            config.url = config.iurl.toString();
+                    append(config.dbname).toString();
+            config.url = config.iurl;
             
             init = new String[1];
             init[0] = "drop schema public cascade";
@@ -205,9 +209,8 @@ public class DBConfig {
             break;
         case mysql:
             config.dbdriver = MYSQL_DRIVER;
-            config.iurl = new StringBuilder("jdbc:mysql://").
-                    append(config.host);
-            config.url = config.iurl.
+            config.iurl = "jdbc:mysql://".concat(config.host);
+            config.url = new StringBuilder(config.iurl).
                     append("/").
                     append(config.dbname).toString();
             
@@ -289,7 +292,7 @@ class Config {
         mysql
     };
     
-    public StringBuilder iurl = null;
+    public String iurl = null;
     public String dbdriver = null;
     public String host = null; 
     public String url = null;
