@@ -38,6 +38,7 @@ public class Services extends AbstractFunction {
         sessions = new HashMap<String, UserContext>();
         db = new DBServices();
 
+        export("call_procedure", "callProcedure");
         export("checked_select", "checkedSelect");
         export("commit", "commit");
         export("create_user", "createUser");
@@ -57,6 +58,22 @@ public class Services extends AbstractFunction {
         export("select", "select");        
         export("set_context", "setContext");
         export("update", "update");
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final Object callProcedure(Message message)
+            throws Exception {
+        String sql = message.getString("sql");
+        Object[] in = message.get("in");
+        Map<String, Integer> out = message.get("out");
+        Connection connection = db.instance();
+        
+        return db.callProcedure(connection, sql, in, out);
     }
     
     /**

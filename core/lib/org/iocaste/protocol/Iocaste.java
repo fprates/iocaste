@@ -1,6 +1,7 @@
 package org.iocaste.protocol;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 import org.iocaste.protocol.user.Authorization;
@@ -11,6 +12,18 @@ public final class Iocaste extends AbstractServiceInterface {
     
     public Iocaste(Function function) {
         initService(function, SERVERNAME);
+    }
+    
+    public final Object callProcedure(String sql, Map<String, Integer> out,
+            Object... in) throws Exception {
+        Message message = new Message();
+        
+        message.setId("call_procedure");
+        message.add("sql", sql);
+        message.add("in", in);
+        message.add("out", out);
+        
+        return call(message);
     }
     
     /**

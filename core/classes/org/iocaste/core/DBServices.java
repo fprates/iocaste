@@ -1,5 +1,6 @@
 package org.iocaste.core;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -29,12 +30,59 @@ public class DBServices {
     /**
      * 
      * @param connection
+     * @param sql
+     * @param in
+     * @param out
+     * @return
+     * @throws Exception
+     */
+    public final Object callProcedure(Connection connection, String sql,
+            Object[] in, Map<String, Integer> out) throws Exception {
+        ResultSet rs;
+        CallableStatement cs = connection.prepareCall(sql);
+        
+        try {
+            if (in != null)
+                for (int i = 0; i < in.length; i++)
+                    cs.setObject(i+1, in[i]);
+            
+            if (out != null)
+                for (String name : out.keySet())
+                    cs.registerOutParameter(name, out.get(name));
+            
+            if (cs.execute()) {
+                rs = cs.getResultSet();
+                return processResultSet(rs);
+            } else {
+                return cs.getUpdateCount();
+            }
+        } catch (HsqlException e) {
+            throw new SQLException(e.getMessage());
+        } catch (SQLServerException e) {
+            throw new SQLException(e.getMessage());
+        } catch (MySQLSyntaxErrorException e) {
+            throw new SQLException(e.getMessage());
+        } catch (SQLDataException e) {
+            throw new SQLDataException(e.getMessage());
+        } catch (SQLException e) {
+            throw new SQLException (e.getMessage());
+        }
+    }
+    
+    /**
+     * 
+     * @param connection
      * @throws SQLException 
      */
     public final void commit(Connection connection) throws SQLException {
         connection.commit();
     }
     
+    /**
+     * 
+     * @param properties
+     * @throws Exception
+     */
     public final void config(Properties properties) throws Exception {
         String driver = properties.getProperty("dbdriver");
         
@@ -73,6 +121,27 @@ public class DBServices {
         }
     }
     
+    private final Object[] processResultSet(ResultSet results)
+            throws Exception {
+        Map<String, Object> line;
+        ResultSetMetaData metadata = results.getMetaData();
+        int cols = metadata.getColumnCount();
+        List<Map<String, Object>> lines = new ArrayList<Map<String, Object>>();
+        
+        while (results.next()) {
+            line = new HashMap<String, Object>();
+            
+            for (int i = 1; i <= cols; i++)
+                line.put(metadata.getColumnName(i), results.getObject(i));
+            
+            lines.add(line);
+        }
+        
+        results.close();
+        
+        return (lines.size() == 0)? null : lines.toArray();
+    }
+    
     /**
      * 
      * @param connection
@@ -93,9 +162,6 @@ public class DBServices {
      */
     public final Object[] select(Connection connection, String query,
             int rows, Object... criteria) throws Exception {
-        List<Map<String, Object>> lines;
-        Map<String, Object> line;
-        ResultSetMetaData metadata;
         PreparedStatement ps;
         ResultSet results;
         int cols = 1;
@@ -112,8 +178,6 @@ public class DBServices {
                 ps.setFetchSize(rows);
             
             results = ps.executeQuery();
-            metadata = results.getMetaData();
-            cols = metadata.getColumnCount();
         } catch (HsqlException e) {
             throw new SQLException(e.getMessage());
         } catch (SQLServerException e) {
@@ -126,19 +190,7 @@ public class DBServices {
             throw new SQLException (e.getMessage());
         }
         
-        lines = new ArrayList<Map<String, Object>>();
-        while (results.next()) {
-            line = new HashMap<String, Object>();
-            
-            for (int i = 1; i <= cols; i++)
-                line.put(metadata.getColumnName(i), results.getObject(i));
-            
-            lines.add(line);
-        }
-        
-        results.close();
-        
-        return (lines.size() == 0)? null : lines.toArray();
+        return processResultSet(results);
     }
     
     /**
