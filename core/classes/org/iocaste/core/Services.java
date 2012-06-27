@@ -89,6 +89,7 @@ public class Services extends AbstractFunction {
         String from = message.getString("from");
         String where = message.getString("where");
         Object[] criteria = message.get("criteria");
+        Map<String, String[]> ijoin = message.get("inner_join");
         StringBuilder sb = new StringBuilder("select ");
         
         sb.append((columns == null)? "*" : columns);
@@ -97,6 +98,15 @@ public class Services extends AbstractFunction {
             throw new IocasteException("Table not specified.");
         
         sb.append(" from ").append(from);
+        
+        if (ijoin != null)
+            for (String jointable : ijoin.keySet()) {
+                sb.append(" inner join ").
+                        append(jointable).
+                        append(" on ");
+                for (String clause : ijoin.get(jointable))
+                    sb.append(clause);
+            }
         
         if (where != null)
             sb.append(" where ").append(where);
