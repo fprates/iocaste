@@ -164,6 +164,11 @@ public class DBServices {
         } catch (HsqlException e) {
             throw new SQLException(e.getMessage());
         } catch (SQLServerException e) {
+            i = e.getErrorCode();
+            switch (i) {
+            case 2627: // constraint error code
+                return 0;
+            }
             throw new SQLException(e.getMessage());
         } catch (MySQLSyntaxErrorException e) {
             throw new SQLException(e.getMessage());
