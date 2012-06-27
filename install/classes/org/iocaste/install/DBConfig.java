@@ -33,19 +33,27 @@ public class DBConfig {
             "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     private static final String HSQLDB_DRIVER = "org.hsqldb.jdbcDriver";
     private static final String[] SCRIPTS = {
-            "/META-INF/db-install-10-core.sql",
-            "/META-INF/db-install-15-documents.sql",
-            "/META-INF/db-install-16-numbers.sql",
-            "/META-INF/db-install-20-shell.sql",
-            "/META-INF/db-install-25-login.sql",
-            "/META-INF/db-install-30-sh.sql",
-            "/META-INF/db-install-31-sh.sql",
-            "/META-INF/db-install-35-package.sql"
+        "/META-INF/db-install-10-core.sql",
+        "/META-INF/db-install-15-documents.sql",
+        "/META-INF/db-install-16-numbers.sql",
+        "/META-INF/db-install-20-shell.sql",
+        "/META-INF/db-install-25-login.sql",
+        "/META-INF/db-install-30-sh.sql",
+        "/META-INF/db-install-31-sh.sql",
+        "/META-INF/db-install-35-package.sql"
     };
+    
     private static final String[] LINES = {
-            "Informe usuário e senha para criação do banco de dados do " +
-            "sistema.",
-            "Todos os dados anteriores serão destruídos."
+        "Informe usuário e senha para criação do banco de dados do sistema.",
+        "Todos os dados anteriores serão destruídos."
+    };
+    
+    private static final String[] MSSQL_INIT = {
+        "use master",
+        "if exists(select name from sys.databases where name = '",
+        "drop database ",
+        "create database ",
+        "use "
     };
     
     private final void createTables(Statement ps) throws Exception {
@@ -95,8 +103,7 @@ public class DBConfig {
     public final void action(View view) throws Exception {
         Statement ps;
         Connection connection;
-        String dropquery = null;
-        boolean createdb = false;
+        String[] init = null;
         DataForm dbinfo = view.getElement("dbinfo");
         Config config = new Config();
         RadioButton rb = view.getElement("dbtype");
@@ -105,6 +112,7 @@ public class DBConfig {
         config.username = dbinfo.get("username").get();
         config.secret = dbinfo.get("secret").get();
         config.dbname = dbinfo.get("dbname").get();
+        config.dbname = config.dbname.toUpperCase();
         
         for (RadioButton dbtype : rb.getGroup().getComponents()) {
             if (!dbtype.isSelected())
@@ -115,9 +123,20 @@ public class DBConfig {
             case mssql:
                 config.dbdriver = MSSQL_DRIVER;
                 config.url = new StringBuilder("jdbc:sqlserver://").
-                        append(config.host).toString();
-                dropquery = "drop database iocastedb";
-                createdb = true;
+                        append(config.host).
+                        append(";databaseName=").
+                        append(config.dbname).toString();
+                
+                init = new String[4];
+                init[0] = MSSQL_INIT[0];
+                init[1] = new StringBuilder(MSSQL_INIT[1]).
+                        append(config.dbname).
+                        append("') ").
+                        append(MSSQL_INIT[2]).
+                        append(config.dbname).toString();
+                init[2] = MSSQL_INIT[3].concat(config.dbname);
+                init[3] = MSSQL_INIT[4].concat(config.dbname);
+                
                 break;
                 
             case hsqldb:
@@ -126,8 +145,9 @@ public class DBConfig {
                         append(config.host).
                         append("/").
                         append(config.dbname).toString();
-                dropquery = "drop schema public cascade";
-                createdb = false;
+                init = new String[1];
+                init[0] = "drop schema public cascade";
+                
                 break;
             }
             
@@ -141,11 +161,9 @@ public class DBConfig {
         
         try {
             ps = connection.createStatement();
-            ps.addBatch(dropquery);
-            
-            if (createdb)
-                ps.addBatch(new StringBuilder("create database ").
-                        append(config.dbname).toString());
+            if (init != null)
+                for (String sql : init)
+                    ps.addBatch(sql);
             
             createTables(ps);
             ps.executeBatch();
@@ -214,7 +232,6 @@ public class DBConfig {
         properties.put("url", config.url);
         properties.put("host", config.host);
         properties.put("dbtype", config.dbtype.toString());
-        properties.put("db.user", "iocastedb");
         properties.store(writer, null);
         
         writer.flush();
