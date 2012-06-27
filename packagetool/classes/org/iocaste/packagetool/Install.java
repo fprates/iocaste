@@ -62,7 +62,7 @@ public class Install {
         int i;
         String tag, country;
         DocumentModelItem item;
-        DocumentModel model = data.getModel("LANGUAGES", "LANG", "");
+        DocumentModel model = data.getModel("LANGUAGES", "LANG", null);
         DataElement element = new DataElement();
         
         element.setName("LANGUAGES.LOCALE");
@@ -115,7 +115,7 @@ public class Install {
             Function function) throws Exception {
         Documents documents;
         DocumentModelItem item, reference;
-        DocumentModel model = data.getModel("MESSAGES", "MSGSRC", "");
+        DocumentModel model = data.getModel("MESSAGES", "MSGSRC", null);
         DataElement element = new DataElement();
         
         /*
@@ -206,7 +206,7 @@ public class Install {
         DocumentModel tasks;
         DocumentModelItem item;
         
-        tasks = data.getModel("TASKS", "TASKS", "");
+        tasks = data.getModel("TASKS", "TASKS", null);
 
         element = new DataElement();
         element.setName("TASKS.NAME");
@@ -250,7 +250,7 @@ public class Install {
         /*
          * grupos de tarefas
          */
-        group = data.getModel("TASKS_GROUPS", "TASKSGRP", "");
+        group = data.getModel("TASKS_GROUPS", "TASKSGRP", null);
         
         // nome do grupo
         element = new DataElement();
@@ -274,7 +274,7 @@ public class Install {
         
         item = new DocumentModelItem();
         item.setName("ID");
-        item.setTableFieldName("INDEX");
+        item.setTableFieldName("IDENT");
         item.setDataElement(element);
         group.add(item);
         
