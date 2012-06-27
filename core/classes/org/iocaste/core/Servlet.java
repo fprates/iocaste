@@ -30,11 +30,16 @@ public class Servlet extends ServerServlet {
         parameters.put("from",
                 new String[] {"shell001", "shell002", "shell003"});
         authorize("checked_select", parameters);
+        
         authorize("get_host", null);
         authorize("get_locale", null);
         authorize("commit", null);
         authorize("rollback", null);
         authorize("is_authorized", null);
+        
+        parameters = new HashMap<String, Object[]>();
+        parameters.put("parameter", new String[] {"dbname"});
+        authorize("get_system_parameter", parameters);
     }
     
     /*
