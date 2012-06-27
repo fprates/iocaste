@@ -14,6 +14,58 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 
 public class Model {
+    private static final byte DOCUMENT = 0;
+    private static final byte DOC_ITEM = 1;
+    private static final byte SH_REFERENCE = 2;
+    private static final byte TABLE_INDEX = 3;
+    private static final byte INS_ITEM = 4;
+    private static final byte INS_FOREIGN = 5;
+    private static final byte SH_HEADER = 6;
+    private static final byte INS_SH_REF = 7;
+    private static final byte DEL_KEY = 8;
+    private static final byte DEL_MODEL_REF = 9;
+    private static final byte DEL_MODEL = 10;
+    private static final byte DEL_FOREIGN = 11;
+    private static final byte DEL_SH_REF = 12;
+    private static final byte SH_ITEM = 13;
+    private static final byte SH_HEAD_EXPRT = 14;
+    private static final byte DEL_ITEM = 15;
+    private static final byte DEL_ELEMENT = 16;
+    private static final byte ELEMENT = 17;
+    private static final byte INS_KEY = 18;
+    private static final byte INS_HEADER = 19;
+    private static final byte INS_MODEL_REF = 20;
+    private static final byte UPDATE_ELEMENT = 21;
+    private static final byte UPDATE_ITEM = 22;
+    
+    private static final String[] QUERIES = {
+        "select * from docs001 where docid = ?",
+        "select * from docs002 where docid = ?",
+        "select * from shref where iname = ?",
+        "select * from docs004 where docid = ?",
+        "insert into docs002 (iname, docid, nritm, " +
+                "fname, ename, attrb, itref) values(?, ?, ?, ?, ?, ?, ?)",
+        "insert into docs006(iname, itref) values(?, ?)",
+        "select * from shcab where ident = ?",
+        "insert into shref(iname, shcab) values(?, ?)",
+        "delete from docs004 where iname = ?",
+        "delete from docs005 where tname = ?",
+        "delete from docs001 where docid = ?",
+        "delete from docs006 where iname = ?",
+        "delete from shref where iname = ?",
+        "select * from shitm where mditm = ?",
+        "select * from shcab where exprt = ?",
+        "delete from docs002 where iname = ?",
+        "delete from docs003 where ename = ?",
+        "select * from docs003 where ename = ?",
+        "insert into docs004(iname, docid) values (?, ?)",
+        "insert into docs001(docid, tname, class) values(?, ?, ?)",
+        "insert into docs005(tname, docid) values(? , ?)",
+        "update docs003 set decim = ?, lngth = ?, etype = ?, upcas = ? " +
+                "where ename = ?",
+        "update docs002 set docid = ?, nritm = ?, fname = ?, ename = ?, " +
+                "attrb = ?, itref = ? where iname = ?"
+    };
     
     /**
      * 
@@ -86,7 +138,7 @@ public class Model {
         int i;
         Iocaste iocaste;
         Object[] lines, shlines;
-        String itemref, query, name;
+        String itemref, name;
         String[] composed;
         Map<String, Object> columns;
         DocumentModelItem item;
@@ -99,8 +151,7 @@ public class Model {
             return cache.models.get(documentname);
         
         iocaste = new Iocaste(cache.function);
-        query = "select * from docs001 where docid = ?";
-        lines = iocaste.selectUpTo(query, 1, documentname);
+        lines = iocaste.selectUpTo(QUERIES[DOCUMENT], 1, documentname);
         if (lines == null)
             return null;
         
@@ -111,8 +162,7 @@ public class Model {
         document.setTableName((String)columns.get("TNAME"));
         document.setClassName((String)columns.get("CLASS"));
         
-        query = "select * from docs002 where docid = ?";
-        lines = iocaste.select(query, documentname);
+        lines = iocaste.select(QUERIES[DOC_ITEM], documentname);
         for (Object object : lines) {
             columns = (Map<String, Object>)object;
             name = (String)columns.get("INAME");
@@ -134,8 +184,7 @@ public class Model {
                         getModelItem(composed[1]));
             }
             
-            query = "select * from shref where iname = ?";
-            shlines = iocaste.select(query, name);
+            shlines = iocaste.select(QUERIES[SH_REFERENCE], name);
             if (shlines != null) {
                 columns = (Map<String, Object>)shlines[0];
                 item.setSearchHelp((String)columns.get("SHCAB"));
@@ -146,8 +195,7 @@ public class Model {
             item.setIndex(i);
         }
         
-        lines = iocaste.select("select * from docs004 where docid = ?",
-                documentname);
+        lines = iocaste.select(QUERIES[TABLE_INDEX], documentname);
         
         if (lines != null)
             for (Object object : lines) {
@@ -180,8 +228,6 @@ public class Model {
         DataElement dataelement;
         String itemref, tname, shname;
         DocumentModel model = item.getDocumentModel();
-        String query = "insert into docs002 (iname, docid, nritm, " +
-                "fname, ename, attrb, itref) values(?, ?, ?, ?, ?, ?, ?)";
         
         dataelement = item.getDataElement();
         
@@ -190,7 +236,7 @@ public class Model {
         itemref = (reference == null)?
                 null : Documents.getComposedName(reference);
         
-        if (iocaste.update(query, tname,
+        if (iocaste.update(QUERIES[INS_ITEM], tname,
                 model.getName(),
                 item.getIndex(),
                 item.getTableFieldName(),
@@ -200,21 +246,18 @@ public class Model {
             return 0;
         
         if (itemref != null) {
-            query = "insert into docs006(iname, itref) values(?, ?)";
-            if (iocaste.update(query, tname, itemref) == 0)
+            if (iocaste.update(QUERIES[INS_FOREIGN], tname, itemref) == 0)
                 return 0;
         }
         
         shname = item.getSearchHelp();
         if (shname == null)
             return 1;
-        
-        query = "select * from shcab where ident = ?";
-        if (iocaste.select(query, shname) == null)
+
+        if (iocaste.select(QUERIES[SH_HEADER], shname) == null)
             return 1;
-        
-        query = "insert into shref(iname, shcab) values(?, ?)";
-        return iocaste.update(query, tname, shname);
+
+        return iocaste.update(QUERIES[INS_SH_REF], tname, shname);
     }
     
     /**
@@ -227,12 +270,12 @@ public class Model {
     public static final int remove(DocumentModel model, Cache cache)
             throws Exception {
         Iocaste iocaste = new Iocaste(cache.function);
-        String tablename, name, query = "delete from docs004 where iname = ?";
+        String tablename, name, query;
         
         for (DocumentModelKey key : model.getKeys()) {
             name = Documents.getComposedName(key.getModel().
                     getModelItem(key.getModelItemName()));
-            if (iocaste.update(query, name) == 0)
+            if (iocaste.update(QUERIES[DEL_KEY], name) == 0)
                 throw new IocasteException("");
         }
         
@@ -241,13 +284,11 @@ public class Model {
                 throw new IocasteException("");
         
         tablename = model.getTableName();
-        query = "delete from docs005 where tname = ?";
-        if (iocaste.update(query, tablename) == 0)
+        if (iocaste.update(QUERIES[DEL_MODEL_REF], tablename) == 0)
             throw new IocasteException("error on delete model/table reference");
         
         name = model.getName();
-        query = "delete from docs001 where docid = ?";
-        if (iocaste.update(query, name) == 0)
+        if (iocaste.update(QUERIES[DEL_MODEL], name) == 0)
             throw new IocasteException("error on delete header model data");
         
         query = new StringBuilder("drop table ").append(tablename).
@@ -286,31 +327,26 @@ public class Model {
      */
     private static final int removeModelItem(Iocaste iocaste,
             DocumentModelItem item) throws Exception {
-        String error, query = "delete from docs006 where iname = ?";
+        String error;
         String name = Documents.getComposedName(item);
         
-        iocaste.update(query, name);
+        iocaste.update(QUERIES[DEL_FOREIGN], name);
         
-        query = "delete from shref where iname = ?";
-        iocaste.update(query, name);
+        iocaste.update(QUERIES[DEL_SH_REF], name);
 
         error = "there is search help dependence on item ";
         error = new StringBuilder(error).append(name).toString();
         
-        query = "select * from shitm where mditm = ?";
-        if (iocaste.selectUpTo(query, 1, name) != null)
+        if (iocaste.selectUpTo(QUERIES[SH_ITEM], 1, name) != null)
             throw new IocasteException(error);
-            
-        query = "select * from shcab where exprt = ?";
-        if (iocaste.selectUpTo(query, 1, name) != null)
+
+        if (iocaste.selectUpTo(QUERIES[SH_HEAD_EXPRT], 1, name) != null)
             throw new IocasteException(error);
-        
-        query = "delete from docs002 where iname = ?";
-        if (iocaste.update(query, name) == 0)
+
+        if (iocaste.update(QUERIES[DEL_ITEM], name) == 0)
             throw new IocasteException("error on removing model item");
-        
-        query = "delete from docs003 where ename = ?";
-        iocaste.update(query, name);
+
+        iocaste.update(QUERIES[DEL_ELEMENT], name);
         
         return 1;
     }
@@ -349,7 +385,6 @@ public class Model {
             DocumentModel model) throws Exception {
         DataElement element;
         DocumentModelItem[] itens = model.getItens();
-        String query = "select * from docs003 where ename = ?";
         
         for (DocumentModelItem item : itens) {
             element = item.getDataElement();
@@ -358,7 +393,8 @@ public class Model {
                 throw new Exception(new StringBuilder(item.getName()).
                         append(" has null data element.").toString());
             
-            if (iocaste.selectUpTo(query, 1, element.getName()) != null)
+            if (iocaste.selectUpTo(
+                    QUERIES[ELEMENT], 1, element.getName()) != null)
                 continue;
             
             DataElementServices.insert(iocaste, element);
@@ -378,15 +414,12 @@ public class Model {
             DocumentModel model) throws Exception {
         String name = model.getName();
         String tablename = model.getTableName();
-        String query =
-                "insert into docs001(docid, tname, class) values(?, ?, ?)";
         
-        if (iocaste.update(
-                query, name, tablename, model.getClassName()) == 0)
+        if (iocaste.update(QUERIES[INS_HEADER],
+                name, tablename, model.getClassName()) == 0)
             throw new IocasteException("document header generation error");
-        
-        query = "insert into docs005(tname, docid) values(? , ?)";
-        if (iocaste.update(query, tablename, name) == 0)
+
+        if (iocaste.update(QUERIES[INS_MODEL_REF], tablename, name) == 0)
             throw new IocasteException("document header generation error");
         
         return 1;
@@ -461,14 +494,14 @@ public class Model {
      */
     private static int saveDocumentKeys(Iocaste iocaste, DocumentModel model)
             throws Exception {
-        String name, query = "insert into docs004(iname, docid) " +
-                "values (?, ?)";
+        String name;
         
         for (DocumentModelKey key : model.getKeys()) {
             name = Documents.getComposedName(model.
                     getModelItem(key.getModelItemName()));
             
-            if (iocaste.update(query, name, key.getModel().getName()) == 0)
+            if (iocaste.update(
+                    QUERIES[INS_KEY], name, key.getModel().getName()) == 0)
                 throw new IocasteException("");
         }
         
@@ -557,10 +590,12 @@ public class Model {
                 continue;
             
             if (removeModelItem(iocaste, olditem) == 0)
-                throw new IocasteException("");
+                throw new IocasteException(
+                        "Model.update(): removeModelItem() fail");
             
             if (removeDBColumn(iocaste, olditem) == 0)
-                throw new IocasteException("");
+                throw new IocasteException(
+                        "Model.update():removeDBColumn() fail");
         }
         
         Common.parseQueries(model, cache.queries);
@@ -592,13 +627,12 @@ public class Model {
                 oldfieldname = olditem.getTableFieldName(),
                 fieldname = item.getTableFieldName();
         
-        iocaste.update("delete from shref where iname = ?",
+        iocaste.update(QUERIES[DEL_SH_REF],
                 Documents.getComposedName(olditem));
         
         /*
          * renomeia campo da tabela
          */
-        
         query = new StringBuilder("alter table ").
                 append(tablename).
                 append(" alter column ").toString();
@@ -653,9 +687,6 @@ public class Model {
         /*
          * atualização do modelo
          */
-        query = "update docs003 set decim = ?, lngth = ?, etype = ?, " +
-                "upcas = ? where ename = ?";
-        
         criteria = new Object[5];
         
         criteria[0] = ddelement.getDecimals();
@@ -664,11 +695,9 @@ public class Model {
         criteria[3] = ddelement.isUpcase();
         criteria[4] = ddelement.getName();
 
-        if (iocaste.update(query, criteria) == 0)
-            throw new IocasteException("");
-        
-        query = "update docs002 set docid = ?, nritm = ?, fname = ?, " +
-                "ename = ?, attrb = ?, itref = ? where iname = ?";
+        if (iocaste.update(QUERIES[UPDATE_ELEMENT], criteria) == 0)
+            throw new IocasteException(
+                    "Model.updateModelItem(): UPDATE_ELEMENT fail");
         
         criteria = new Object[7];
         
@@ -681,16 +710,17 @@ public class Model {
                 null : Documents.getComposedName(reference);
         criteria[6] = Documents.getComposedName(item);
         
-        if (iocaste.update(query, criteria) == 0)
-            throw new IocasteException("");
+        if (iocaste.update(QUERIES[UPDATE_ITEM], criteria) == 0)
+            throw new IocasteException(
+                    "Model.updateModelItem(): UPDATE_ITEM fail");
         
         shname = item.getSearchHelp();
         if (Common.isInitial(shname))
             return 1;
         
-        query = "insert into shref(iname, shcab) values(? ,?)";
-        if (iocaste.update(query, criteria[6], shname) == 0)
-            throw new IocasteException("");
+        if (iocaste.update(QUERIES[INS_SH_REF], criteria[6], shname) == 0)
+            throw new IocasteException(
+                    "Model.updateModelItem(): INS_SH_REF fail");
         
         return 1;
     }

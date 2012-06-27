@@ -8,6 +8,13 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.Iocaste;
 
 public class DataElementServices {
+    private static final byte ELEMENT = 0;
+    private static final byte INS_ELEMENT = 1;
+    private static final String[] QUERIES = {
+        "select * from docs003 where ename = ?",
+        "insert into docs003(ename, decim, lngth, etype, upcas) " +
+                "values(?, ?, ?, ?, ?)"
+    };
     
     /**
      * 
@@ -23,7 +30,7 @@ public class DataElementServices {
         DataElement element;
         Map<String, Object> columns;
         
-        lines = iocaste.select("select * from docs003 where ename = ?", name);
+        lines = iocaste.select(QUERIES[ELEMENT], name);
         
         if (lines == null)
             return null;
@@ -48,16 +55,13 @@ public class DataElementServices {
      */
     public static final int insert(Iocaste iocaste, DataElement element)
             throws Exception {
-        String query = "insert into docs003(ename, decim, lngth, " +
-                "etype, upcas) values(?, ?, ?, ?, ?)";
-        
         switch (element.getType()) {
         case DataType.DATE:
             element.setLength(10);
             break;
         }
         
-        return iocaste.update(query, element.getName(),
+        return iocaste.update(QUERIES[INS_ELEMENT], element.getName(),
                 element.getDecimals(),
                 element.getLength(),
                 element.getType(),
