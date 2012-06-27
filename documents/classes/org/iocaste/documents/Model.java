@@ -39,31 +39,31 @@ public class Model {
     private static final byte UPDATE_ITEM = 22;
     
     private static final String[] QUERIES = {
-        "select * from docs001 where docid = ?",
-        "select * from docs002 where docid = ?",
-        "select * from shref where iname = ?",
-        "select * from docs004 where docid = ?",
-        "insert into docs002 (iname, docid, nritm, " +
+        "select * from DOCS001 where docid = ?",
+        "select * from DOCS002 where docid = ?",
+        "select * from SHREF where iname = ?",
+        "select * from DOCS004 where docid = ?",
+        "insert into DOCS002(iname, docid, nritm, " +
                 "fname, ename, attrb, itref) values(?, ?, ?, ?, ?, ?, ?)",
-        "insert into docs006(iname, itref) values(?, ?)",
+        "insert into DOCS006(iname, itref) values(?, ?)",
         "select * from shcab where ident = ?",
-        "insert into shref(iname, shcab) values(?, ?)",
-        "delete from docs004 where iname = ?",
-        "delete from docs005 where tname = ?",
-        "delete from docs001 where docid = ?",
-        "delete from docs006 where iname = ?",
-        "delete from shref where iname = ?",
-        "select * from shitm where mditm = ?",
-        "select * from shcab where exprt = ?",
-        "delete from docs002 where iname = ?",
-        "delete from docs003 where ename = ?",
-        "select * from docs003 where ename = ?",
-        "insert into docs004(iname, docid) values (?, ?)",
-        "insert into docs001(docid, tname, class) values(?, ?, ?)",
-        "insert into docs005(tname, docid) values(? , ?)",
-        "update docs003 set decim = ?, lngth = ?, etype = ?, upcas = ? " +
+        "insert into SHREF(iname, shcab) values(?, ?)",
+        "delete from DOCS004 where iname = ?",
+        "delete from DOCS005 where tname = ?",
+        "delete from DOCS001 where docid = ?",
+        "delete from DOCS006 where iname = ?",
+        "delete from SHREF where iname = ?",
+        "select * from SHITM where mditm = ?",
+        "select * from SHCAB where exprt = ?",
+        "delete from DOCS002 where iname = ?",
+        "delete from DOCS003 where ename = ?",
+        "select * from DOCS003 where ename = ?",
+        "insert into DOCS004(iname, docid) values (?, ?)",
+        "insert into DOCS001(docid, tname, class) values(?, ?, ?)",
+        "insert into DOCS005(tname, docid) values(? , ?)",
+        "update DOCS003 set decim = ?, lngth = ?, etype = ?, upcas = ? " +
                 "where ename = ?",
-        "update docs002 set docid = ?, nritm = ?, fname = ?, ename = ?, " +
+        "update DOCS002 set docid = ?, nritm = ?, fname = ?, ename = ?, " +
                 "attrb = ?, itref = ? where iname = ?"
     };
     
@@ -71,29 +71,28 @@ public class Model {
      * 
      * @param iocaste
      * @param item
+     * @param refstmt
      * @return
      * @throws Exception
      */
     private static final int addDBColumn(Iocaste iocaste,
-            DocumentModelItem item) throws Exception {
+            DocumentModelItem item, String refstmt) throws Exception {
         DocumentModelItem reference;
-        String query, modelname = item.getDocumentModel().getTableName();
+        String modelname = item.getDocumentModel().getTableName();
         StringBuilder sb = new StringBuilder("alter table ").append(modelname);
         DataElement ddelement = item.getDataElement();
         
         sb.append(" add column ").append(item.getTableFieldName());
-
         setDBFieldsString(sb, ddelement);
         
         reference = item.getReference();
-        if (reference != null) {
-            sb.append(" foreign key references ").append(reference.
-                    getDocumentModel().getTableName()).append("(").
+        if (reference != null)
+            sb.append(refstmt).
+                    append(reference.getDocumentModel().getTableName()).
+                    append("(").
                     append(reference.getTableFieldName()).append(")");
-        }
         
-        query = sb.toString();
-        return iocaste.update(query);
+        return iocaste.update(sb.toString());
     }
     
     /**
@@ -213,6 +212,16 @@ public class Model {
         cache.models.put(documentname, document);
         
         return document;
+    }
+    
+    private static final String getReferenceStatement(Iocaste iocaste)
+            throws Exception {
+        String dbtype = iocaste.getSystemParameter("dbtype");
+        
+        if (dbtype.equals("mysql"))
+            return " references ";
+        else
+            return " foreign key references ";
     }
     
     /**
@@ -440,6 +449,7 @@ public class Model {
         StringBuilder sb, sbk = null;
         String tname, query;
         DocumentModelItem[] itens = model.getItens();
+        String refstmt = getReferenceStatement(iocaste);
         
         sb = new StringBuilder("create table ").append(model.getTableName()).
                 append("(");
@@ -469,7 +479,7 @@ public class Model {
             
             reference = item.getReference();
             if (reference != null)
-                sb.append(" foreign key references ").
+                sb.append(refstmt).
                         append(reference.getDocumentModel().getTableName()).
                         append("(").
                         append(reference.getTableFieldName()).append(")");
@@ -568,6 +578,7 @@ public class Model {
         String name = model.getName();
         DocumentModel oldmodel = get(name, cache);
         Iocaste iocaste = new Iocaste(cache.function);
+        String refstmt = getReferenceStatement(iocaste);
         
         for (DocumentModelItem item : model.getItens()) {
             if (!oldmodel.contains(item)) {
@@ -578,7 +589,7 @@ public class Model {
                 if (insertModelItem(iocaste, item) == 0)
                     throw new IocasteException("");
                 
-                addDBColumn(iocaste, item);
+                addDBColumn(iocaste, item, refstmt);
             } else {
                 if (updateModelItem(iocaste, item, oldmodel) == 0)
                     throw new IocasteException("");

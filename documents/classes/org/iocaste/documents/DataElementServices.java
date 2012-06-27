@@ -11,8 +11,8 @@ public class DataElementServices {
     private static final byte ELEMENT = 0;
     private static final byte INS_ELEMENT = 1;
     private static final String[] QUERIES = {
-        "select * from docs003 where ename = ?",
-        "insert into docs003(ename, decim, lngth, etype, upcas) " +
+        "select * from DOCS003 where ename = ?",
+        "insert into DOCS003(ename, decim, lngth, etype, upcas) " +
                 "values(?, ?, ?, ?, ?)"
     };
     

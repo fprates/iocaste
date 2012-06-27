@@ -10,6 +10,14 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 
 public class NumberRange {
+    private static final byte RANGE = 0;
+    private static final byte UPDATE_RANGE = 1;
+    private static final byte DEL_RANGE = 2;
+    private static final String[] QUERIES = {
+        "select crrnt from RANGE001 where ident = ?",
+        "update RANGE001 set crrnt = ? where ident = ?",
+        "delete from NUMBER_RANGE where IDENT = ?"
+    };
     
     /**
      * 
@@ -37,7 +45,6 @@ public class NumberRange {
     @SuppressWarnings("unchecked")
     public static long getCurrent(String ident, Function function)
             throws Exception {
-        String query;
         long current;
         Object[] lines;
         Map<String, Object> columns;
@@ -46,16 +53,14 @@ public class NumberRange {
         if (ident == null)
             throw new IocasteException("Numeric range not specified.");
 
-        query = "select crrnt from range001 where ident = ?";
-        lines = iocaste.selectUpTo(query, 1, ident);
+        lines = iocaste.selectUpTo(QUERIES[RANGE], 1, ident);
         
         if (lines == null)
             throw new IocasteException("Range \""+ident+"\" not found.");
         
         columns = (Map<String, Object>)lines[0];
         current = ((BigDecimal)columns.get("CRRNT")).longValue() + 1;
-        iocaste.update("update range001 set crrnt = ? where ident = ?",
-                current, ident);
+        iocaste.update(QUERIES[UPDATE_RANGE], current, ident);
         
         return current;
     }
@@ -68,8 +73,6 @@ public class NumberRange {
      * @throws Exception
      */
     public static int remove(String name, Cache cache) throws Exception {
-        String query = "delete from NUMBER_RANGE where IDENT = ?";
-        
-        return Query.update(query, cache, name);
+        return Query.update(QUERIES[DEL_RANGE], cache, name);
     }
 }
