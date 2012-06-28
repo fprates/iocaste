@@ -107,14 +107,15 @@ public abstract class AbstractPage extends AbstractFunction {
              */
             try {
                 method.invoke(this, view);
-                new Iocaste(this).commit();
+                if (view.getMessageType() == Const.ERROR)
+                    new Iocaste(this).rollback();
+                else
+                    new Iocaste(this).commit();
+                
             } catch (Exception e) {
                 new Iocaste(this).rollback();
                 throw e;
             }
-            
-            if (view.getMessageType() == Const.ERROR)
-                new Iocaste(this).rollback();
         }
         
         return view;
@@ -167,15 +168,15 @@ public abstract class AbstractPage extends AbstractFunction {
          */
         try {
             method.invoke(this, view);
+            if (view.getMessages() == null) {
+                messages = new MessageSource();
+                messages.loadFromApplication(app, locale, this);
+                view.setMessages(messages);
+            }
+            new Iocaste(this).commit();
         } catch (Exception e) {
             new Iocaste(this).rollback();
             throw e;
-        }
-        
-        if (view.getMessages() == null) {
-            messages = new MessageSource();
-            messages.loadFromApplication(app, locale, this);
-            view.setMessages(messages);
         }
         
         return view;
