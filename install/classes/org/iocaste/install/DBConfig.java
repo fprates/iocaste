@@ -77,6 +77,7 @@ public class DBConfig {
         Config config = new Config();
         RadioButton rb = view.getElement("dbtype");
         
+        config.dropbase = dbinfo.get("dropbase").isSelected();
         config.host = dbinfo.get("host").get();
         config.username = dbinfo.get("username").get();
         config.secret = dbinfo.get("secret").get();
@@ -169,6 +170,7 @@ public class DBConfig {
     }
     
     private final String[] getDBInitializator(Config config) {
+        String usedatabase;
         String[] init = null;
         
         switch (config.dbtype) {
@@ -178,6 +180,17 @@ public class DBConfig {
             config.url = new StringBuilder(config.iurl).
                     append(";databaseName=").
                     append(config.dbname).toString();
+            
+            usedatabase = new StringBuilder(MSSQL_INIT[4]).
+                    append(config.dbname).
+                    append(";").toString();
+            
+            if (!config.dropbase) {
+                init = new String[1];
+                init[0] = usedatabase;
+                
+                return init;
+            }
             
             init = new String[4];
             init[0] = MSSQL_INIT[0];
@@ -190,9 +203,7 @@ public class DBConfig {
             init[2] = new StringBuilder(MSSQL_INIT[3]).
                     append(config.dbname).
                     append(";").toString();
-            init[3] = new StringBuilder(MSSQL_INIT[4]).
-                    append(config.dbname).
-                    append(";").toString();
+            init[3] = usedatabase;
             
             break;
         case hsqldb:
@@ -202,6 +213,9 @@ public class DBConfig {
                     append("/").
                     append(config.dbname).toString();
             config.url = config.iurl;
+            
+            if (!config.dropbase)
+                return null;
             
             init = new String[1];
             init[0] = "drop schema public cascade";
@@ -213,6 +227,13 @@ public class DBConfig {
             config.url = new StringBuilder(config.iurl).
                     append("/").
                     append(config.dbname).toString();
+            
+            if (!config.dropbase) {
+                init = new String[1];
+                init[0] = MYSQL_INIT[2].concat(config.dbname);
+                
+                return init;
+            }
             
             init = new String[3];
             init[0] = MYSQL_INIT[0].concat(config.dbname);
@@ -249,6 +270,7 @@ public class DBConfig {
         new DataItem(dbinfo, Const.TEXT_FIELD, "username").setObligatory(true);
         new DataItem(dbinfo, Const.TEXT_FIELD, "secret").setSecret(true);
         new DataItem(dbinfo, Const.TEXT_FIELD, "dbname").setObligatory(true);
+        new DataItem(dbinfo, Const.CHECKBOX, "dropbase");
         
         dbtypecnt = new StandardContainer(container, "dbtypecnt");
         for (Config.dbtypes dbtype: Config.dbtypes.values()) {
@@ -292,6 +314,7 @@ class Config {
         mysql
     };
     
+    public boolean dropbase = false;
     public String iurl = null;
     public String dbdriver = null;
     public String host = null; 
