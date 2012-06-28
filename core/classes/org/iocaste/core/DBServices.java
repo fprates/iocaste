@@ -37,18 +37,24 @@ public class DBServices {
      * @throws Exception
      */
     public final Object callProcedure(Connection connection, String sql,
-            Object[] in, Map<String, Integer> out) throws Exception {
+            Map<String, Object> in, Map<String, Integer> out)
+                    throws Exception {
+        int i;
         ResultSet rs;
         CallableStatement cs = connection.prepareCall(sql);
         
         try {
-            if (in != null)
-                for (int i = 0; i < in.length; i++)
-                    cs.setObject(i+1, in[i]);
-            
-            if (out != null)
+            if (in != null) {
+                i = 1;
+                for (String name : in.keySet())
+                    cs.setObject(i++, in.get(name));
+            }
+                
+            if (out != null) {
+                i = 1;
                 for (String name : out.keySet())
-                    cs.registerOutParameter(name, out.get(name));
+                    cs.registerOutParameter(i++, out.get(name));
+            }
             
             if (cs.execute()) {
                 rs = cs.getResultSet();
@@ -66,6 +72,8 @@ public class DBServices {
             throw new SQLDataException(e.getMessage());
         } catch (SQLException e) {
             throw new SQLException (e.getMessage());
+        } finally {
+            cs.close();
         }
     }
     
@@ -109,7 +117,6 @@ public class DBServices {
                     Connection.TRANSACTION_READ_UNCOMMITTED);
             
             return connection;
-        
         } catch (HsqlException e) {
             throw new SQLException(e.getMessage());
         } catch (SQLServerException e) {
@@ -162,14 +169,13 @@ public class DBServices {
      */
     public final Object[] select(Connection connection, String query,
             int rows, Object... criteria) throws Exception {
-        PreparedStatement ps;
         ResultSet results;
         int cols = 1;
+        PreparedStatement ps = connection.prepareStatement(query);
         
         System.err.println(query);
         
         try {
-            ps = connection.prepareStatement(query);
             if (criteria != null)
                 for (Object object : criteria)
                     ps.setObject(cols++, object);
@@ -178,6 +184,7 @@ public class DBServices {
                 ps.setFetchSize(rows);
             
             results = ps.executeQuery();
+            return processResultSet(results);
         } catch (HsqlException e) {
             throw new SQLException(e.getMessage());
         } catch (SQLServerException e) {
@@ -188,9 +195,9 @@ public class DBServices {
             throw new SQLDataException(e.getMessage());
         } catch (SQLException e) {
             throw new SQLException (e.getMessage());
+        } finally {
+            ps.close();
         }
-        
-        return processResultSet(results);
     }
     
     /**
@@ -201,17 +208,15 @@ public class DBServices {
      */
     public final int update(Connection connection, String query,
             Object... criteria) throws Exception {
-        PreparedStatement ps = null;
         int i = 1;
+        PreparedStatement ps = connection.prepareStatement(query);
         
         System.err.println(query);
         try {
-            ps = connection.prepareStatement(query);
-            
             if (criteria != null)
                 for (Object object : criteria)
                     ps.setObject(i++, object);
-        
+            
             return ps.executeUpdate();
         } catch (HsqlException e) {
             throw new SQLException(e.getMessage());

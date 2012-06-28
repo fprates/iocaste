@@ -66,12 +66,12 @@ public class Services extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final Object callProcedure(Message message)
-            throws Exception {
+    public final Object callProcedure(Message message) throws Exception {
         String sql = message.getString("sql");
-        Object[] in = message.get("in");
+        Map<String, Object> in = message.get("in");
         Map<String, Integer> out = message.get("out");
-        Connection connection = db.instance();
+        String sessionid = message.getSessionid();
+        Connection connection = getDBConnection(sessionid);
         
         return db.callProcedure(connection, sql, in, out);
     }

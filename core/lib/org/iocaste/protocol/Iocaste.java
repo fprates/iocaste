@@ -14,8 +14,8 @@ public final class Iocaste extends AbstractServiceInterface {
         initService(function, SERVERNAME);
     }
     
-    public final Object callProcedure(String sql, Map<String, Integer> out,
-            Object... in) throws Exception {
+    public final Object callProcedure(String sql, Map<String, Object> in,
+            Map<String, Integer> out) throws Exception {
         Message message = new Message();
         
         message.setId("call_procedure");
