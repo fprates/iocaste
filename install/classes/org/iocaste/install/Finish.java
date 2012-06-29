@@ -13,7 +13,7 @@ public class Finish {
         "Para prosseguir, clique em \"Continuar\"."
     };
     
-    public final void render(View view) {
+    public static final void render(View view) {
         Form container = new Form(view, "main");
         
         for (int i = 0; i < LINES.length; i++)

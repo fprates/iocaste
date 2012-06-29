@@ -11,15 +11,7 @@ import org.iocaste.shell.common.EventAware;
 import org.iocaste.shell.common.View;
 
 public class Install extends AbstractFunction {
-    private Welcome welcome;
-    private DBConfig dbconfig;
-    private Finish finish;
-    
-    public Install() {
-        welcome = new Welcome();
-        dbconfig = new DBConfig();
-        finish = new Finish();
-        
+    public Install() {        
         export("exec_action", "execAction");
         export("get_view_data", "getViewData");
     }
@@ -55,10 +47,10 @@ public class Install extends AbstractFunction {
             
             switch (Stages.valueOf(view.getPageName())) {
             case WELCOME:
-                welcome.action(view);
+                Welcome.action(view);
                 break;
             case DBCONFIG:
-                dbconfig.action(view);
+                DBConfig.action(view);
                 break;
             }
         }
@@ -91,13 +83,13 @@ public class Install extends AbstractFunction {
         
         switch (Stages.valueOf(page)) {
         case WELCOME:
-            welcome.render(view);
+            Welcome.render(view);
             break;
         case DBCONFIG:
-            dbconfig.render(view);
+            DBConfig.render(view);
             break;
         case FINISH:
-            finish.render(view);
+            Finish.render(view);
             break;
         }
         

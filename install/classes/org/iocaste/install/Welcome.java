@@ -15,11 +15,11 @@ public class Welcome {
             "Para continuar, clique no botão \"Continuar\""
     };
 
-    public final void action(View view) {
+    public static final void action(View view) {
         view.redirect("DBCONFIG");
     }
     
-    public final void render(View view) {
+    public static final void render(View view) {
         Form container = new Form(view, "main");
         
         for (int i = 0; i < LINES.length; i++)
