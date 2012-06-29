@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.DataElement;
@@ -65,7 +66,7 @@ public class Services extends AbstractFunction {
         state.pkgname = message.getString("name");
         state.documents = new Documents(this);
         state.pkgid = state.documents.getNextNumber("PKGCODE") * 1000000;
-        state.shm = new HashMap<String, DocumentModelItem>();
+        state.shm = new HashMap<String, Set<DocumentModelItem>>();
         state.function = this;
         
         try {
@@ -239,6 +240,8 @@ public class Services extends AbstractFunction {
      */
     private final void installModels(DocumentModel[] models, State state)
             throws Exception {
+        String name;
+        Set<DocumentModelItem> itens;
         int i;
         List<Object[]> values;
         ExtendedObject header;
@@ -254,9 +257,19 @@ public class Services extends AbstractFunction {
             
             Registry.add(model.getName(), "MODEL", state);
             
-            for (DocumentModelItem modelitem : model.getItens())
-                if (modelitem.getSearchHelp() != null)
-                    state.shm.put(modelitem.getSearchHelp(), modelitem);
+            for (DocumentModelItem modelitem : model.getItens()) {
+                name = modelitem.getSearchHelp();
+                if (name == null)
+                    continue;
+                
+                if (state.shm.containsKey(name)) {
+                    itens = state.shm.get(name);
+                } else {
+                    itens = new TreeSet<DocumentModelItem>();
+                    state.shm.put(name, itens);
+                }
+                itens.add(modelitem);
+            }
             
             /*
              * recupera modelo para trazer as queries.
@@ -287,6 +300,7 @@ public class Services extends AbstractFunction {
      */
     private final void installSH(SearchHelpData[] shdata, State state)
             throws Exception {
+        Set<DocumentModelItem> shm;
         ExtendedObject header;
         String shname;
         String[] shitens;
@@ -315,9 +329,10 @@ public class Services extends AbstractFunction {
             }
             
             shlib.save(header, itens);
-            
-            if (state.shm.containsKey(shname))
-                shlib.assign(state.shm.get(shname));
+            shm = state.shm.get(shname);
+            if (shm != null)
+                for (DocumentModelItem modelitem : shm)
+                    shlib.assign(modelitem);
 
             Registry.add(shname, "SH", state);
         }
@@ -477,7 +492,7 @@ class State {
     public Documents documents;
     public long pkgid;
     public String pkgname;
-    public Map<String, DocumentModelItem> shm;
+    public Map<String, Set<DocumentModelItem>> shm;
     public InstallData data;
     public Function function;
     public Map<String, Map<String, String>> messages;
