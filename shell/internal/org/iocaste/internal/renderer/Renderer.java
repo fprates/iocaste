@@ -214,6 +214,9 @@ public class Renderer {
         DateFormat dateformat;
         NumberFormat numberformat;
         
+        if (element == null)
+            return value.toString();
+        
         switch (element.getType()) {
         case DataType.DEC:
             numberformat = NumberFormat.getNumberInstance(locale);
