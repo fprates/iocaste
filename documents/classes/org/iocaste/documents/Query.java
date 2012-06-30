@@ -17,6 +17,21 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 
 public class Query {
+    private static final String[] COMPARISON_OPERATORS = {
+        "=",
+        "<",
+        ">",
+        "<>",
+        ">=",
+        "<=",
+        "IN",
+        "LIKE"
+    };
+    
+    private static final String[] LOGIC_OPERATORS = {
+        "AND",
+        "OR"
+    };
     
     /**
      * 
@@ -111,6 +126,17 @@ public class Query {
             return model.getModelItem(key.getModelItemName());
         
         return null;
+    }
+    
+    private static final boolean isInvalidOperator(String op,
+            String[] operators) {
+        String ops = op.trim();
+        
+        for (String operator : operators)
+            if (ops.equals(operator))
+                return false;
+        
+        return true;
     }
     
     /**
@@ -230,17 +256,72 @@ public class Query {
                 pass = 5;
                 continue;
             case 5:
-                criteria += token; 
+                criteria += token.concat(" "); 
                 continue;
             }
         }
         
-        where = parseWhere(criteria, queryinfo.model);
-        sb.append(where);
+        if (criteria != null && criteria.length() > 0) {
+            where = parseWhere(criteria, queryinfo.model);
+            sb.append(where);
+        }
         
         queryinfo.query = sb.toString();
         
         return queryinfo;
+    }
+    
+    private static final void parseArg1(char c, Components components) {
+        if (Character.isDigit(c) || Character.isAlphabetic(c) || c == '_') {
+            components.temp += Character.toUpperCase(c);
+            return;
+        }
+        
+        components.arg1 = components.temp;
+        components.temp = "";
+        
+        return;
+    }
+    
+    private static final void parseArg2(char c, Components components) {
+        if (c == ' ') {
+            components.arg2 = components.temp;
+            components.temp = "";
+            return;
+        }
+        
+        components.temp += c;
+        return;
+    }
+    
+    private static final void parseComparisonOperator(char c,
+            Components components) {
+        switch (c) {
+        case '=':
+        case '>':
+        case '<':
+        case 'I':
+        case 'N':
+        case 'L':
+        case 'E':
+        case 'K':
+            components.temp += Character.toUpperCase(c);
+            return;
+        }
+        
+        components.op = components.temp;
+        components.temp = "";
+        return;
+    }
+    
+    private static final boolean parseLogicOperator(char c,
+            Components components) {
+        if (Character.isAlphabetic(c)) {
+            components.temp += Character.toUpperCase(c);
+            return false;
+        }
+        
+        return true;
     }
     
     /**
@@ -248,100 +329,60 @@ public class Query {
      * @param criteria
      * @param model
      * @return
+     * @throws Exception
      */
-    private static final String parseWhere(String criteria, DocumentModel model) {
+    private static final String parseWhere(String criteria, DocumentModel model)
+            throws Exception {
+        String name;
         StringBuilder sb = new StringBuilder();
-        char[] charcrit = criteria.toCharArray();
-        String temp = "", arg1 = null, arg2 = null, op = null;
+        Components components = new Components();
         
-        for (int i = 0; i < charcrit.length; i++) {
-            /*
-             * (arg1) op arg2
-             */
-            if (arg1 == null) {
-                charcrit[i] = Character.toUpperCase(charcrit[i]);
-                
-                if ((charcrit[i] >= 'A' && charcrit[i] <= 'Z') ||
-                        charcrit[i] == '_') {
-                    temp += charcrit[i];
-                    continue;
-                } else {
-                    arg1 = temp;
-                    temp = "";
-                    op = null;
-                }
-            }
+        for (char c : criteria.toCharArray()) {
             
-            /*
-             * arg1 (op) arg2
-             */
-            if (op == null) {
-                if ((charcrit[i] >= '1' && charcrit[i] <= '0') ||
-                        charcrit[i] == '?') {
-                    op = temp;
-                    temp = "";
-                    arg2 = null;
-                } else {
-                    temp += charcrit[i];
-                    continue;
-                }
-            }
-            
-            /*
-             * arg1 op (arg2)
-             */
-            if (arg2 == null) {
-                if ((charcrit[i] >= '1' && charcrit[i] <= '0') ||
-                        (charcrit[i] >= 'A' && charcrit[i] <= 'Z') ||
-                        (charcrit[i] == '?')) {
-                    temp += charcrit[i];
-                    
-                    if (charcrit[i] == '?') {
-                        arg2 = temp;
-                        
-                        sb.append(model.getModelItem(arg1).
-                                        getTableFieldName()).append(op).
-                                        append(arg2);
-                        
-                        temp = "";
-                    }
-                } else {
-                    arg2 = temp;
-                    
-                    sb.append(" ").append(model.getModelItem(arg1)).
-                            append(op).append(arg2);
-                    
-                    temp = "";
-                }
-                
+            // (arg1) op arg2
+            if (components.arg1 == null) {
+                parseArg1(c, components);
                 continue;
             }
             
-            /*
-             * operador lógido
-             */
-            charcrit[i] = Character.toUpperCase(charcrit[i]);
-            if (charcrit[i] >= 'A' && charcrit[i] <= 'Z') {
-                temp += charcrit[i];
-                
-                if (temp.equals("AND") || temp.equals("OR") ||
-                        temp.equals("LIKE")) {
-                    sb.append(" ").append(temp).append(" ");
-                    
-                    arg1 = null;
-                    op = null;
-                    arg2 = null;
-                    temp = "";
-                }
-            } else {
-                sb.append(" ").append(temp).append(" ");
-                
-                arg1 = null;
-                op = null;
-                arg2 = null;
-                temp = "";
+            // arg1 (op) arg2
+            if (components.op == null) {
+                parseComparisonOperator(c, components);
+                if (components.op != null)
+                    if (isInvalidOperator(components.op, COMPARISON_OPERATORS))
+                        throw new Exception(components.op.
+                                concat(" is an invalid comparison operator."));
+                continue;
             }
+            
+            // arg1 op (arg2)
+            if (components.arg2 == null) {
+                parseArg2(c, components);
+                continue;
+            }
+            
+            // operador lógico
+            if (!parseLogicOperator(c, components))
+                continue;
+            
+            if (isInvalidOperator(components.temp, LOGIC_OPERATORS))
+                throw new Exception(components.op.
+                        concat(" is an invalid logic operator."));
+            
+            sb.append(model.getModelItem(components.arg1).getTableFieldName()).
+                append(components.op).
+                append(components.arg2);
+            
+            if (components.temp.length() > 0)
+                sb.append(" ").append(components.temp).append(" ");
+            
+            components.clear();
         }
+        
+        name = model.getModelItem(components.arg1).getTableFieldName();
+        sb.append(name).append(components.op).
+            append((components.arg2 == null)?
+                    components.temp : components.arg2);
         
         return sb.toString();
     }
@@ -419,5 +460,22 @@ public class Query {
         
         return new Iocaste(cache.function).update(queryinfo.query, criteria);
     }
+}
 
+class Components {
+    public String arg1;
+    public String op;
+    public String arg2;
+    public String temp;
+    
+    public Components() {
+        clear();
+    }
+    
+    public final void clear() {
+        arg1 = null;
+        op = null;
+        arg2 = null;
+        temp = "";
+    }
 }
