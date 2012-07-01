@@ -1,6 +1,9 @@
 package org.iocaste.documents.common;
 
-public class ValueRangeItem {
+import java.io.Serializable;
+
+public class ValueRangeItem implements Serializable {
+    private static final long serialVersionUID = -5473588090849405643L;
     private RangeSign sign;
     private RangeOption option;
     private Object low;
