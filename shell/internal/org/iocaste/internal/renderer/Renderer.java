@@ -26,6 +26,7 @@ import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.RadioButton;
+import org.iocaste.shell.common.RangeField;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
@@ -120,8 +121,8 @@ public class Renderer {
             return;
         
         switch (element.getType()) {
-        case HTML_TAG:
-            tags.add(HtmlTagRenderer.render((HtmlTag)element));
+        case BUTTON:
+            tags.add(ButtonRenderer.render((Button)element, config));
             break;
             
         case CHECKBOX:
@@ -132,8 +133,29 @@ public class Renderer {
             tags.add(FileEntryRenderer.render((FileEntry)element));
             break;
             
+        case HTML_TAG:
+            tags.add(HtmlTagRenderer.render((HtmlTag)element));
+            break;
+            
+        case LINK:
+            tags.add(LinkRenderer.render((Link)element, config));
+            break;
+            
         case LIST_BOX:
             tags.add(ListBoxRenderer.render((ListBox)element));
+            break;
+            
+        case PARAMETER:
+            tags.add(ParameterRenderer.render((Parameter)element));
+            break;
+            
+        case RADIO_BUTTON:
+            tags.addAll(RadioButtonRenderer.render((RadioButton)element,
+                    config));
+            break;
+        
+        case RANGE_FIELD:
+            tags.add(RangeFieldRenderer.render((RangeField)element, config));
             break;
             
         case TEXT:
@@ -146,23 +168,6 @@ public class Renderer {
             
         case TEXT_FIELD:
             tags.addAll(TextFieldRenderer.render((TextField)element, config));
-            break;
-            
-        case BUTTON:
-            tags.add(ButtonRenderer.render((Button)element, config));
-            break;
-            
-        case LINK:
-            tags.add(LinkRenderer.render((Link)element, config));
-            break;
-        
-        case PARAMETER:
-            tags.add(ParameterRenderer.render((Parameter)element));
-            break;
-            
-        case RADIO_BUTTON:
-            tags.addAll(RadioButtonRenderer.render((RadioButton)element,
-                    config));
             break;
             
         default:

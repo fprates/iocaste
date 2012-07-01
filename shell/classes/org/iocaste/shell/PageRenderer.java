@@ -33,6 +33,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipartElement;
+import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
@@ -710,6 +711,7 @@ public class PageRenderer extends AbstractRenderer {
      */
     private static final void registerInputs(InputData inputdata)
             throws Exception {
+        RangeInputComponent rinput;
         Element[] elements;
         InputData inputdata_;
         Container container;
@@ -741,14 +743,19 @@ public class PageRenderer extends AbstractRenderer {
         }
         
         if (inputdata.element.isDataStorable()) {
-            inputdata.view.addInput(inputdata.element.getHtmlName());
+            input = (InputComponent)inputdata.element;
+            inputdata.view.addInput(input.getHtmlName());
             
-            input = (InputComponent)inputdata.element;            
             modelitem = input.getModelItem();
-            
             if (input.getSearchHelp() == null && modelitem != null &&
                     modelitem.getSearchHelp() != null)
                 generateSearchHelp(input, inputdata);
+            
+            if (input.isValueRangeComponent()) {
+                rinput = (RangeInputComponent)input;
+                inputdata.view.addInput(rinput.getHighHtmlName());
+                inputdata.view.addInput(rinput.getLowHtmlName());
+            }
         }
         
         if (inputdata.element.hasMultipartSupport())

@@ -353,6 +353,17 @@ insert into SHELL003 (pindx, eindx, pname, value) values (000100410003, 00010041
 insert into SHELL003 (pindx, eindx, pname, value) values (000100410004, 000100410000, 'font-family', 'sans-serif');
 insert into SHELL003 (pindx, eindx, pname, value) values (000100410005, 000100410000, 'font-align', 'left');
 
+insert into SHELL002 (eindx, sname, ename) values (000100420000, 'DEFAULT', '.text_h');
+insert into SHELL003 (pindx, eindx, pname, value) values (000100420001, 000100420000, 'font-size', '12pt');
+insert into SHELL003 (pindx, eindx, pname, value) values (000100420002, 000100420000, 'font-family', 'sans-serif');
+insert into SHELL003 (pindx, eindx, pname, value) values (000100420003, 000100420000, 'text-align', 'left');
+insert into SHELL003 (pindx, eindx, pname, value) values (000100420004, 000100420000, 'background-color', 'transparent');
+insert into SHELL003 (pindx, eindx, pname, value) values (000100420005, 000100420000, 'vertical-align', 'middle');
+insert into SHELL003 (pindx, eindx, pname, value) values (000100420006, 000100420000, 'color', '#ffffff');
+insert into SHELL003 (pindx, eindx, pname, value) values (000100420007, 000100420000, 'margin', '0px');
+insert into SHELL003 (pindx, eindx, pname, value) values (000100420008, 000100420000, 'padding', '3px');
+insert into SHELL003 (pindx, eindx, pname, value) values (000100420009, 000100420000, 'display', 'inline');
+
 insert into DOCS001(docid, tname, class) values('STYLE', 'SHELL001', '');
 insert into DOCS003(ename, decim, lngth, etype, upcas) values('STYLE.NAME', 0, 12, 0, 1);
 insert into DOCS003(ename, decim, lngth, etype, upcas) values('STYLE.INDEX', 0, 12, 3, 1);

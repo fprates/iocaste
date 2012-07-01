@@ -105,6 +105,12 @@ public interface InputComponent extends Component {
     public abstract boolean isStackable();
     
     /**
+     * Indica se componente aceita faixa de valores.
+     * @return true, se retorna faixa de valores.
+     */
+    public abstract boolean isValueRangeComponent();
+    
+    /**
      * Ajusta o valor do componente.
      * @param value valor
      */

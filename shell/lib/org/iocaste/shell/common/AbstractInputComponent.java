@@ -187,6 +187,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#isValueRangeComponent()
+     */
+    @Override
+    public boolean isValueRangeComponent() {
+        return false;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#set(java.lang.Object)
      */
     @Override
@@ -200,7 +209,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
      *     org.iocaste.shell.common.Const)
      */
     @Override
-    public final void setComponentType(Const type) {
+    public void setComponentType(Const type) {
         this.type = type;
     }
     
@@ -220,7 +229,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
      *     java.lang.String)
      */
     @Override
-    public final void setHtmlName(String name) {
+    public void setHtmlName(String name) {
         super.setHtmlName(name);
         
         if (search == null)

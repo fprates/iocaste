@@ -32,25 +32,12 @@ public class Shell extends AbstractServiceInterface {
      */
     public static final InputComponent copyInputItem(Container container,
             InputComponent inputitem, String name, Map<String, Object> values) {
+        RangeField rfield;
         TextField tfield;
         CheckBox cbox;
         ListBox lbox;
         
         switch (inputitem.getComponentType()) {
-        case TEXT_FIELD:
-            tfield = new TextField(container, name);
-            tfield.setObligatory(inputitem.isObligatory());
-            tfield.setSecret(inputitem.isSecret());
-            tfield.setLength(inputitem.getLength());
-            tfield.set(inputitem.get());
-            tfield.setModelItem(inputitem.getModelItem());
-            tfield.setEnabled(inputitem.isEnabled());
-            tfield.setDataElement(inputitem.getDataElement());
-            tfield.setSearchHelp(inputitem.getSearchHelp());
-            tfield.setLocale(inputitem.getLocale());
-            tfield.setHtmlName(inputitem.getHtmlName());
-            
-            return tfield;
         case CHECKBOX:
             cbox = new CheckBox(container, name);
             cbox.set(inputitem.get());
@@ -75,6 +62,35 @@ public class Shell extends AbstractServiceInterface {
                 lbox.add(key, values.get(key));
             
             return lbox;
+            
+        case RANGE_FIELD:
+            rfield = new RangeField(container, name);
+            rfield.setObligatory(inputitem.isObligatory());
+            rfield.setLength(inputitem.getLength());
+            rfield.set(inputitem.get());
+            rfield.setModelItem(inputitem.getModelItem());
+            rfield.setEnabled(inputitem.isEnabled());
+            rfield.setDataElement(inputitem.getDataElement());
+            rfield.setSearchHelp(inputitem.getSearchHelp());
+            rfield.setLocale(inputitem.getLocale());
+            rfield.setHtmlName(inputitem.getHtmlName());
+            
+            return rfield;
+            
+        case TEXT_FIELD:
+            tfield = new TextField(container, name);
+            tfield.setObligatory(inputitem.isObligatory());
+            tfield.setSecret(inputitem.isSecret());
+            tfield.setLength(inputitem.getLength());
+            tfield.set(inputitem.get());
+            tfield.setModelItem(inputitem.getModelItem());
+            tfield.setEnabled(inputitem.isEnabled());
+            tfield.setDataElement(inputitem.getDataElement());
+            tfield.setSearchHelp(inputitem.getSearchHelp());
+            tfield.setLocale(inputitem.getLocale());
+            tfield.setHtmlName(inputitem.getHtmlName());
+            
+            return tfield;
             
         default:
             return null;

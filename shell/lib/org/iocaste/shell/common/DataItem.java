@@ -3,24 +3,40 @@ package org.iocaste.shell.common;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.iocaste.documents.common.ValueRange;
+import org.iocaste.documents.common.ValueRangeItem;
+
 /**
  * Item de formulário de dados.
  * 
  * @author francisco.prates
  *
  */
-public class DataItem extends AbstractInputComponent {
+public class DataItem extends AbstractInputComponent
+        implements RangeInputComponent {
     private static final long serialVersionUID = 3376883855229003535L;
     private Map<String, Object> values;
+    private String highname, lowname;
+    private boolean rangecomponent;
     
     public DataItem(DataForm form, Const type, String name) {
         super(form, Const.DATA_ITEM, type, name);
+        ValueRange range;
         
         values = new LinkedHashMap<String, Object>();
         setStyleClass("form_cell");
         setLength(20);
-        setHtmlName(new StringBuilder(form.getName()).append(".").
+        rangecomponent = (type == Const.RANGE_FIELD);
+        setHtmlName(new StringBuilder(form.getName()).
+                append(".").
                 append(name).toString());
+        
+        if (!rangecomponent)
+            return;
+        
+        range = new ValueRange();
+        range.add(new ValueRangeItem());
+        set(range);
     }
     
     /**
@@ -38,6 +54,24 @@ public class DataItem extends AbstractInputComponent {
     public final void clear() {
         values.clear();
     }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.RangeInputComponent#getHighHtmlName()
+     */
+    @Override
+    public String getHighHtmlName() {
+        return highname;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.RangeInputComponent#getLowHtmlName()
+     */
+    @Override
+    public String getLowHtmlName() {
+        return lowname;
+    }
     
     /**
      * 
@@ -51,6 +85,7 @@ public class DataItem extends AbstractInputComponent {
      * (non-Javadoc)
      * @see org.iocaste.shell.common.AbstractInputComponent#isBooleanComponent()
      */
+    @Override
     public final boolean isBooleanComponent() {
         switch (getComponentType()) {
         case CHECKBOX:
@@ -59,5 +94,48 @@ public class DataItem extends AbstractInputComponent {
         default:
             return false;
         }
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#
+     *     isValueRangeComponent()
+     */
+    @Override
+    public final boolean isValueRangeComponent() {
+        return rangecomponent;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#setComponentType(
+     *     org.iocaste.shell.common.Const)
+     */
+    @Override
+    public final void setComponentType(Const type) {
+        ValueRange range;
+        super.setComponentType(type);
+        
+        rangecomponent = (type == Const.RANGE_FIELD);
+        if (!rangecomponent)
+            return;
+        
+        range = new ValueRange();
+        range.add(new ValueRangeItem());
+        set(range);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#setHtmlName(java.lang.String)
+     */
+    @Override
+    public final void setHtmlName(String name) {
+        String htmlname;
+        super.setHtmlName(name);
+        
+        htmlname = getHtmlName();
+        lowname = htmlname.concat(".low");
+        highname = htmlname.concat(".high");
     }
 }

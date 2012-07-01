@@ -173,6 +173,7 @@ public class View implements Serializable {
      * @return Elemento
      */
     private final Element findElement(Container container, String name) {
+        RangeInputComponent rinput;
         Element element_;
         String name_ = container.getHtmlName();
         
@@ -191,6 +192,16 @@ public class View implements Serializable {
                     continue;
                 
                 return element_;
+            }
+            
+            if (element.isDataStorable()) {
+                if (!((InputComponent)element).isValueRangeComponent())
+                    continue;
+                
+                rinput = (RangeInputComponent)element;
+                if (rinput.getHighHtmlName().equals(name) ||
+                        rinput.getLowHtmlName().equals(name))
+                    return element;
             }
         }
         
