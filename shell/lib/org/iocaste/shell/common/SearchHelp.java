@@ -49,6 +49,14 @@ public class SearchHelp extends AbstractControlComponent {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final String[] getItens() {
+        return itemnames.toArray(new String[0]);
+    }
+    
+    /**
      * Retorna componente associado.
      * @return nome do componente.
      */
