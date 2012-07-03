@@ -8,7 +8,7 @@ public enum RangeOption {
     LE("<="),
     GE(">="),
     BT("AND"),
-    CA("LIKE");
+    CP("LIKE");
     
     private String operator;
     

@@ -24,4 +24,7 @@ public class ValueRange implements Serializable {
         return itens.toArray(new ValueRangeItem[0]);
     }
     
+    public final int length() {
+        return itens.size();
+    }
 }
