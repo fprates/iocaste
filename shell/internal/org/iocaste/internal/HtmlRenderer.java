@@ -14,7 +14,9 @@ import org.iocaste.internal.renderer.Renderer;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
+import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.View;
 
 public class HtmlRenderer {
@@ -65,7 +67,7 @@ public class HtmlRenderer {
      */
     private final XMLElement renderHeader(View vdata, Config config) {
         Element focus = vdata.getFocus();
-        String title = vdata.getTitle();
+        String focusname, title = vdata.getTitle();
         XMLElement headtag = new XMLElement("head");
         XMLElement metatag = new XMLElement("meta");
         XMLElement titletag = new XMLElement("title");
@@ -76,10 +78,16 @@ public class HtmlRenderer {
         titletag.addInner((title == null)?"Iocaste" : config.
                 getText(title, title));
 
-        if (focus != null)
+        if (focus != null) {
+            if (focus.isDataStorable() &&
+                    ((InputComponent)focus).isValueRangeComponent())
+                focusname = ((RangeInputComponent)focus).getLowHtmlName();
+            else
+                focusname = focus.getHtmlName();
+            
             config.addOnload(new StringBuffer("document.getElementById('").
-                    append(focus.getHtmlName()).
-                    append("').focus();").toString());
+                    append(focusname).append("').focus();").toString());
+        }
         
         headtag.addChild(metatag);
         headtag.addChild(titletag);
@@ -184,28 +192,23 @@ public class HtmlRenderer {
         
         html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
                 "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
-
         bodytag.add("onLoad", "initialize()");
-        
         for (Container container : vdata.getContainers())
             Renderer.renderContainer(bodycontent, container, config);
         
         bodytag.addChildren(bodycontent);
         tags.add(renderHeader(vdata, config));
         tags.add(bodytag);
-        
         msgtext = null;
         msgtype = Const.NONE;
-        
         htmltag.addChildren(tags);
+        
         printlines = vdata.getPrintLines();
         if (printlines.length > 0)
             htmltag.addChild(renderPrintLines(printlines));
         
         vdata.clearPrintLines();
-        
         html.add(htmltag.toString());
-        
         actions = config.getActions();
         
         return html.toArray(new String[0]);
