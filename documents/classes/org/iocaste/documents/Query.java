@@ -12,6 +12,9 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.RangeOption;
+import org.iocaste.documents.common.ValueRange;
+import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
@@ -188,12 +191,12 @@ public class Query {
      * @return
      * @throws Exception
      */
-    public static final QueryInfo parseQuery(String query, Cache cache)
-            throws Exception {
-        String where, criteria = "", upcasetoken;
+    public static final QueryInfo parseQuery(String query, Object[] criteria,
+            Cache cache) throws Exception {
+        String upcasetoken;
         String[] select, parsed = query.split("\\s");
         int t, pass = 0;
-        StringBuilder sb = new StringBuilder();
+        StringBuilder where = new StringBuilder(), sb = new StringBuilder();
         QueryInfo queryinfo = new QueryInfo();
         
         for (String token : parsed) {
@@ -248,22 +251,22 @@ public class Query {
                 pass = 4;
                 continue;
             case 4:
-                if (upcasetoken.equals("WHERE"))
-                    sb.append(" where ");
-                else
+                if (!upcasetoken.equals("WHERE"))
                     continue;
-
+                
                 pass = 5;
                 continue;
             case 5:
-                criteria += token.concat(" "); 
+                where.append(token).append(" "); 
                 continue;
             }
         }
         
-        if (criteria != null && criteria.length() > 0) {
-            where = parseWhere(criteria, queryinfo.model);
-            sb.append(where);
+        if (where.length() > 0) {
+            queryinfo.criteria = criteria;
+            upcasetoken = parseWhere(where.toString().trim(), queryinfo);
+            if (upcasetoken.length() > 0)
+                sb.append(" where ").append(upcasetoken);
         }
         
         queryinfo.query = sb.toString();
@@ -296,7 +299,8 @@ public class Query {
     
     private static final void parseComparisonOperator(char c,
             Components components) {
-        switch (c) {
+        char ch = Character.toUpperCase(c);
+        switch (ch) {
         case '=':
         case '>':
         case '<':
@@ -305,7 +309,7 @@ public class Query {
         case 'L':
         case 'E':
         case 'K':
-            components.temp += Character.toUpperCase(c);
+            components.temp += ch;
             return;
         }
         
@@ -321,27 +325,73 @@ public class Query {
             return false;
         }
         
+        components.logic = components.temp;
         return true;
+    }
+    
+    private static final void parseRange(Components components, int argnr,
+            Object[] criteria) {
+        RangeOption option;
+        StringBuilder sb = new StringBuilder();
+        ValueRange range = (ValueRange)criteria[argnr];
+        
+        for (ValueRangeItem item : range.getItens()) {
+            if (sb.length() > 1)
+                sb.append(" or ");
+            
+            option = item.getOption();
+            components.op = option.getOperator();
+            switch (option) {
+            case CP:
+                components.criteria.add(
+                        ((String)item.getLow()).replace("*", "%"));
+                break;
+            default:
+                components.criteria.add((String)item.getLow());
+                break;
+            }
+            
+            sb.append(components.arg1).append(" ").
+                    append(components.op).append(" ").
+                    append(components.arg2);
+        }
+        
+        if (sb.length() == 0) {
+            components.ignore = true;
+            components.range = null;
+            return;
+        }
+        
+        components.range = new StringBuilder("(").append(sb).append(")").
+                toString();
     }
     
     /**
      * 
-     * @param criteria
-     * @param model
+     * @param where
+     * @param queryinfo
      * @return
      * @throws Exception
      */
-    private static final String parseWhere(String criteria, DocumentModel model)
+    private static final String parseWhere(String where, QueryInfo queryinfo)
             throws Exception {
-        String name;
-        StringBuilder sb = new StringBuilder();
-        Components components = new Components();
+        StringBuilder sb;
+        List<Object> criteria;
+        int argnr = 0;
+        Components components = null;
+        String lastlogic = null;
+        List<Components> args = new ArrayList<Components>();
         
-        for (char c : criteria.toCharArray()) {
+        for (char c : where.toCharArray()) {
+            if (components == null)
+                components = new Components();
             
             // (arg1) op arg2
             if (components.arg1 == null) {
                 parseArg1(c, components);
+                if (components.arg1 != null)
+                    components.arg1 = queryinfo.model.
+                            getModelItem(components.arg1).getTableFieldName();
                 continue;
             }
             
@@ -358,6 +408,14 @@ public class Query {
             // arg1 op (arg2)
             if (components.arg2 == null) {
                 parseArg2(c, components);
+                if (components.arg2 != null) {
+                    if (components.op.equals("IN"))
+                        parseRange(components, argnr, queryinfo.criteria);
+                    else
+                        components.criteria.add(
+                                queryinfo.criteria[argnr]);
+                    argnr++;
+                }
                 continue;
             }
             
@@ -369,21 +427,43 @@ public class Query {
                 throw new Exception(components.op.
                         concat(" is an invalid logic operator."));
             
-            sb.append(model.getModelItem(components.arg1).getTableFieldName()).
-                append(components.op).
-                append(components.arg2);
+            args.add(components);
+            components = null;
+        }
+
+        if (components.arg1 != null)
+            if ((!components.op.equals("IN")) ||
+                    (components.op.equals("IN") &&
+                            !components.temp.equals("?"))) {
+                components.criteria.add(queryinfo.criteria[argnr]);
+                args.add(components);
+            }
+        
+        criteria = new ArrayList<Object>();
+        sb = new StringBuilder();
+        for (Components component : args) {
+            if (lastlogic != null)
+                sb.append(" ").append(lastlogic).append(" ");
             
-            if (components.temp.length() > 0)
-                sb.append(" ").append(components.temp).append(" ");
+            if (component.ignore) {
+                lastlogic = null;
+                continue;
+            }
             
-            components.clear();
+            lastlogic = component.logic;
+            if (component.range != null) {
+                sb.append(component.range);
+            } else {
+                sb.append(component.arg1).append(component.op);
+                if (component.arg2 == null)
+                    sb.append(component.temp);
+                else
+                    sb.append(component.arg2);
+            }
+            criteria.addAll(component.criteria);
         }
         
-        name = model.getModelItem(components.arg1).getTableFieldName();
-        sb.append(name).append(components.op).
-            append((components.arg2 == null)?
-                    components.temp : components.arg2);
-        
+        queryinfo.criteria = criteria.toArray();
         return sb.toString();
     }
     
@@ -426,13 +506,13 @@ public class Query {
         Object[] lines;
         Map<String, Object> line;
         ExtendedObject[] objects;
-        QueryInfo queryinfo = parseQuery(query, cache);
+        QueryInfo queryinfo = parseQuery(query, criteria, cache);
         
         if (queryinfo.query == null || queryinfo.model == null)
             return null;
         
         lines = new Iocaste(cache.function).
-                selectUpTo(queryinfo.query, rows, criteria);
+                selectUpTo(queryinfo.query, rows, queryinfo.criteria);
         if (lines == null)
             return null;
         
@@ -456,26 +536,23 @@ public class Query {
      */
     public static final int update(String query, Cache cache,
             Object... criteria) throws Exception {
-        QueryInfo queryinfo = parseQuery(query, cache);
+        QueryInfo queryinfo = parseQuery(query, criteria, cache);
         
         return new Iocaste(cache.function).update(queryinfo.query, criteria);
     }
 }
 
 class Components {
-    public String arg1;
-    public String op;
-    public String arg2;
-    public String temp;
+    public String arg1, op, arg2, temp, range, logic;
+    public List<Object> criteria;
+    public boolean ignore;
     
     public Components() {
-        clear();
-    }
-    
-    public final void clear() {
+        ignore = false;
         arg1 = null;
         op = null;
         arg2 = null;
         temp = "";
+        criteria = new ArrayList<Object>();
     }
 }
