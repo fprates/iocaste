@@ -487,8 +487,10 @@ public class Controller {
                 return;
             }
         
-        if (rangeitem == null)
+        if (rangeitem == null) {
             rangeitem = new ValueRangeItem();
+            range.add(rangeitem);
+        }
         
         switch (ri.type) {
         case LOW_RANGE:
