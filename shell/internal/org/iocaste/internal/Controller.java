@@ -13,6 +13,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.RangeOption;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.protocol.Function;
@@ -53,12 +54,10 @@ public class Controller {
      * 
      * @param input
      */
-    private static void convertInputValue(InputComponent input, byte type) {
-        NumberFormat numberformat;
-        DateFormat dateformat;
-        Locale locale;
+    private static void convertInputValue(InputComponent input,
+            RangeInputStatus ri) {
         DataElement dataelement;
-        String value = getUniversalInputValue(input, type);
+        String value = getUniversalInputValue(input, ri);
         
         dataelement = Shell.getDataElement(input);
         if (dataelement == null) {
@@ -68,73 +67,71 @@ public class Controller {
             return;
         }
         
-        locale = input.getLocale();
+        setUniversalInputValue(input, convertValue(value, input), ri);
+    }
+    
+    private static Object convertValue(String value, InputComponent input) {
+        NumberFormat numberformat;
+        DateFormat dateformat;
+        Locale locale = input.getLocale();
+        DataElement dataelement = Shell.getDataElement(input);
         
         switch(dataelement.getType()) {
         case DataType.DEC:
             if (Shell.isInitial(value))
-                input.set(0d);
+                return 0d;
             else
                 try {
                     numberformat = NumberFormat.getNumberInstance(locale);
                     
-                    input.set(numberformat.parse(value).doubleValue());
+                    return numberformat.parse(value).doubleValue();
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
             
-            break;
-            
         case DataType.DATE:
             if (Shell.isInitial(value))
-                input.set(null);
+                return null;
             else
                 try {
                     dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                             locale);
-                    input.set(dateformat.parse(value));
+                    return dateformat.parse(value);
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
             
-            break;
-            
         case DataType.NUMC:
             if (Shell.isInitial(value)) {
                 if (dataelement.getLength() < DataType.MAX_INT_LEN)
-                    setUniversalInputValue(input, 0, type);
+                    return 0;
                 else
-                    setUniversalInputValue(input, 0l, type);
+                    return 0l;
             } else {
                 if (dataelement.getLength() < DataType.MAX_INT_LEN)
-                    setUniversalInputValue(
-                            input, Integer.parseInt(value), type);
+                    return Integer.parseInt(value);
                 else
-                    setUniversalInputValue(input, Long.parseLong(value), type);
+                    return Long.parseLong(value);
             }
-            
-            break;
             
         case DataType.CHAR:
-            if (Shell.isInitial(value))
-                setUniversalInputValue(input, null, type);
-            else
-                if (dataelement.isUpcase())
-                    setUniversalInputValue(input, value.toUpperCase(), type);
-            
-            break;
-            
-        case DataType.BOOLEAN:
-            if (input.isBooleanComponent()) {
-                if (value.equals("off"))
-                    input.setSelected(false);
-                else
-                    input.setSelected(true);
+            if (Shell.isInitial(value)) {
+                return null;
             } else {
-                setUniversalInputValue(input, value, type);
+                if (dataelement.isUpcase())
+                    return value.toUpperCase();
+                else
+                    return value;
             }
             
-            break;
+        case DataType.BOOLEAN:
+            if (input.isBooleanComponent())
+                return (value.equals("off"))? false : true;
+            else
+                return value;
+            
+        default:
+            return null;
         }
     }
     
@@ -144,11 +141,17 @@ public class Controller {
      * @param type
      * @return
      */
-    private static final Object getRangeValue(InputComponent input, byte type) {
+    private static final Object getRangeValue(InputComponent input,
+            RangeInputStatus ri) {
+        ValueRangeItem rangeitem;
         RangeInputComponent rinput = (RangeInputComponent)input;
-        ValueRangeItem rangeitem = ((ValueRange)rinput.get()).get(0);
+        ValueRange range = rinput.get();
         
-        switch (type) {
+        if (range == null || range.length() == 0)
+            return null;
+        
+        rangeitem = range.get(0);
+        switch (ri.type) {
         case LOW_RANGE:
             return rangeitem.getLow();
         default:
@@ -177,11 +180,11 @@ public class Controller {
      * @return
      */
     private static final String getUniversalInputValue(InputComponent input,
-            byte type) {
-        switch (type) {
+            RangeInputStatus ri) {
+        switch (ri.type) {
         case LOW_RANGE:
         case HIGH_RANGE:
-            return (String)getRangeValue(input, type);
+            return (String)getRangeValue(input, ri);
         default:
             return input.get();
         }
@@ -196,12 +199,12 @@ public class Controller {
      * @throws Exception
      */
     private static final boolean hasValidReference(InputComponent input,
-            byte type, Function function) throws Exception {
+            RangeInputStatus ri, Function function) throws Exception {
         Documents documents;
         ExtendedObject object;
         DocumentModelItem reference, item;
         
-        if (isInitial(input, type))
+        if (isInitial(input, ri))
             return true;
         
         item = input.getModelItem();
@@ -214,7 +217,7 @@ public class Controller {
         
         documents = new Documents(function); 
         object = documents.getObject(reference.getDocumentModel().getName(),
-                getUniversalInputValue(input, type));
+                getUniversalInputValue(input, ri));
         
         return (object != null);
     }
@@ -222,24 +225,29 @@ public class Controller {
     /**
      * 
      * @param input
-     * @param type
+     * @param ri
      * @return
      */
-    private static final boolean isInitial(InputComponent input, byte type) {
-        DataElement dataelement;
-        Object value = getUniversalInputValue(input, type);
+    private static final boolean isInitial(InputComponent input,
+            RangeInputStatus ri) {
+        Object value = getUniversalInputValue(input, ri);
         
+        return isValueInitial(value, Shell.getDataElement(input),
+                input.isBooleanComponent());
+    }
+    
+    private static final boolean isValueInitial(Object value,
+            DataElement dataelement, boolean boolcomponent) {
         if (value == null)
             return true;
         
-        dataelement = Shell.getDataElement(input);
         if (dataelement == null)
             return Shell.isInitial((String)value);
         
         switch (dataelement.getType()) {
         case DataType.NUMC:
-            if (input.isBooleanComponent()) {
-                return input.isSelected();
+            if (boolcomponent) {
+                return (Boolean)value;
             } else {
                 if (dataelement.getLength() < DataType.MAX_INT_LEN)
                     return ((Integer)value == 0)? true : false;
@@ -257,16 +265,16 @@ public class Controller {
     /**
      * 
      * @param input
-     * @param value
+     * @param ri
      * @return
      */
     private static final boolean isValueCompatible(InputComponent input,
-            byte type) {
+            RangeInputStatus ri) {
         Locale locale;
         NumberFormat numberformat;
         DateFormat dateformat;
         DataElement dataelement;
-        String value = getUniversalInputValue(input, type);
+        String value = getUniversalInputValue(input, ri);
         
         if (Shell.isInitial(value))
             return true;
@@ -318,7 +326,6 @@ public class Controller {
      */
     private static final void processInputs(View view, Function function,
             Map<String, ?> values, InputStatus status) throws Exception {
-        byte inputtype;
         RangeInputComponent rinput;
         ValidatorConfig validatorcfg;
         Element element;
@@ -326,6 +333,7 @@ public class Controller {
         DataElement dataelement;
         InputComponent input;
         List<InputComponent> validations = new ArrayList<InputComponent>();
+        RangeInputStatus ri = new RangeInputStatus();
         
         /*
          * Componentes selecionáveis (como checkboxes), só fornecem
@@ -357,26 +365,26 @@ public class Controller {
             
             value = getString(values, name);
             input = (InputComponent)element;
-            inputtype = 0;
+            ri.type = 0;
             if (input.isSelectable() && input.isStackable())
-                inputtype = 2;
+                ri.type = 2;
             
             if (input.isValueRangeComponent())
-                inputtype = 1;
+                ri.type = 1;
             
-            switch (inputtype) {
+            switch (ri.type) {
             case 0:
                 input.set(value);
                 break;
             case 1:
                 rinput = (RangeInputComponent)input;
-                if (name.equals(rinput.getLowHtmlName())) {
-                    inputtype = LOW_RANGE;
-                    setUniversalInputValue(input, value, inputtype);
-                } else {
-                    inputtype = HIGH_RANGE;
-                    setUniversalInputValue(input, value, inputtype);
-                }
+                if (name.equals(rinput.getLowHtmlName()))
+                    ri.type = LOW_RANGE;
+                else
+                    ri.type = HIGH_RANGE;
+                
+                ri.count++;
+                setUniversalInputValue(input, value, ri);
                 
                 break;
             case 2:
@@ -386,7 +394,7 @@ public class Controller {
             }
             
             if (!input.isBooleanComponent() &&
-                    !isValueCompatible(input, inputtype)) {
+                    !isValueCompatible(input, ri)) {
                 status.input = input;
                 status.error = EMISMATCH;
                 input.set(null);
@@ -396,13 +404,13 @@ public class Controller {
             if (input.isStackable())
                 continue;
             
-            convertInputValue(input, inputtype);
+            convertInputValue(input, ri);
             
             if (status.control != null &&
                     status.control.getType() == Const.SEARCH_HELP)
                 continue;
             
-            if (input.isObligatory() && isInitial(input, inputtype) &&
+            if (input.isObligatory() && isInitial(input, ri) &&
                     input.isEnabled()) {
                 status.input = input;
                 status.error = EINITIAL;
@@ -413,7 +421,7 @@ public class Controller {
             if (value == null || dataelement == null)
                 continue;
             
-            if (!hasValidReference(input, inputtype, function)) {
+            if (!hasValidReference(input, ri, function)) {
                 status.input = input;
                 status.error = EINVALID_REFERENCE;
                 continue;
@@ -453,22 +461,59 @@ public class Controller {
     /**
      * 
      * @param input
-     * @param value
-     * @param type
+     * @param object
+     * @param ri
      */
-    private static final void setRangeValue(InputComponent input, Object value,
-            byte type) {
+    private static final void setRangeValue(InputComponent input, Object object,
+            RangeInputStatus ri) {
+        String value;
+        ValueRangeItem rangeitem = null;
         RangeInputComponent rinput = (RangeInputComponent)input;
-        ValueRangeItem rangeitem = ((ValueRange)rinput.get()).get(0);
+        ValueRange range = rinput.get();
+        DataElement dataelement = Shell.getDataElement(rinput);
         
-        switch (type) {
+        if (range == null) {
+            range = new ValueRange();
+            input.set(range);
+        }
+        
+        if (range.length() > 0)
+            rangeitem = range.get(0);
+        
+        if (isValueInitial(object, dataelement, input.isBooleanComponent()))
+            if (rangeitem == null) {
+                if (ri.count == 2)
+                    ri.count = 0;
+                return;
+            }
+        
+        if (rangeitem == null)
+            rangeitem = new ValueRangeItem();
+        
+        switch (ri.type) {
         case LOW_RANGE:
-            rangeitem.setLow(value);
+            if (dataelement.getType() == DataType.CHAR) {
+                value = (String)object;
+                if (ri.count != 2) {
+                    if (value != null && value.contains("*"))
+                        rangeitem.setOption(RangeOption.CP);
+                    else
+                        rangeitem.setOption(RangeOption.EQ);
+                }
+            } else {
+                rangeitem.setOption(RangeOption.EQ);
+            }
+            
+            rangeitem.setLow(object);
             break;
         default:
-            rangeitem.setHigh(value);
+            rangeitem.setOption(RangeOption.BT);
+            rangeitem.setHigh(object);
             break;
         }
+        
+        if (ri.count == 2)
+            ri.count = 0;
     }
     
     /**
@@ -496,14 +541,14 @@ public class Controller {
      * 
      * @param input
      * @param value
-     * @param type
+     * @param ri
      */
     private static final void setUniversalInputValue(InputComponent input,
-            Object value, byte type) {
-        switch (type) {
+            Object value, RangeInputStatus ri) {
+        switch (ri.type) {
         case LOW_RANGE:
         case HIGH_RANGE:
-            setRangeValue(input, value, type);
+            setRangeValue(input, value, ri);
             break;
         default:
             input.set(value);
@@ -577,4 +622,9 @@ public class Controller {
         
         return status;
     }
+}
+
+class RangeInputStatus {
+    public byte type;
+    public byte count;
 }

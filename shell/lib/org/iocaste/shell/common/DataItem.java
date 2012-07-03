@@ -3,9 +3,6 @@ package org.iocaste.shell.common;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.iocaste.documents.common.ValueRange;
-import org.iocaste.documents.common.ValueRangeItem;
-
 /**
  * Item de formulário de dados.
  * 
@@ -21,7 +18,6 @@ public class DataItem extends AbstractInputComponent
     
     public DataItem(DataForm form, Const type, String name) {
         super(form, Const.DATA_ITEM, type, name);
-        ValueRange range;
         
         values = new LinkedHashMap<String, Object>();
         setStyleClass("form_cell");
@@ -30,13 +26,6 @@ public class DataItem extends AbstractInputComponent
         setHtmlName(new StringBuilder(form.getName()).
                 append(".").
                 append(name).toString());
-        
-        if (!rangecomponent)
-            return;
-        
-        range = new ValueRange();
-        range.add(new ValueRangeItem());
-        set(range);
     }
     
     /**
@@ -113,16 +102,8 @@ public class DataItem extends AbstractInputComponent
      */
     @Override
     public final void setComponentType(Const type) {
-        ValueRange range;
         super.setComponentType(type);
-        
         rangecomponent = (type == Const.RANGE_FIELD);
-        if (!rangecomponent)
-            return;
-        
-        range = new ValueRange();
-        range.add(new ValueRangeItem());
-        set(range);
     }
     
     /*

@@ -1,8 +1,5 @@
 package org.iocaste.shell.common;
 
-import org.iocaste.documents.common.ValueRange;
-import org.iocaste.documents.common.ValueRangeItem;
-
 public class RangeField extends AbstractInputComponent
         implements RangeInputComponent {
     private static final long serialVersionUID = -4051730629554327493L;
@@ -10,11 +7,9 @@ public class RangeField extends AbstractInputComponent
     
     public RangeField(Container container, String name) {
         super(container, Const.RANGE_FIELD, null, name);
-        ValueRange range = new ValueRange();
         
         setLength(20);
         setStyleClass("text_field");
-        range.add(new ValueRangeItem());
     }
     
     /*

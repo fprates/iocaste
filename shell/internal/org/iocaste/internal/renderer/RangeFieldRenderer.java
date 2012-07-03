@@ -11,6 +11,7 @@ import org.iocaste.shell.common.TextField;
 public class RangeFieldRenderer extends Renderer {
 
     public static final XMLElement render(RangeField rfield, Config config) {
+        ValueRange range;
         ValueRangeItem value;
         TextField input;
         Element[] elements = new Element[3];
@@ -22,7 +23,8 @@ public class RangeFieldRenderer extends Renderer {
         elements[2] = new TextField(null, "high");
         elements[2].setHtmlName(rfield.getHighHtmlName());
         
-        value = ((ValueRange)rfield.get()).get(0);
+        range = (ValueRange)rfield.get();
+        value = (range == null)? null : range.get(0);
         for (Element element : elements) {
             if (!element.isDataStorable()) {
                 element.setStyleClass("text_h");
@@ -41,9 +43,9 @@ public class RangeFieldRenderer extends Renderer {
             input.setLocale(rfield.getLocale());
             
             if (element.getName().equals("low"))
-                input.set(value.getLow());
+                input.set((value == null)? null : value.getLow());
             else
-                input.set(value.getHigh());
+                input.set((value == null)? null : value.getHigh());
             
             rfieldtag.addChildren(TextFieldRenderer.render(input, config));
         }
