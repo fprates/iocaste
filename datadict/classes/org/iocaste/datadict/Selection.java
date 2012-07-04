@@ -6,6 +6,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
@@ -13,6 +14,7 @@ import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.RadioGroup;
 import org.iocaste.shell.common.SHLib;
+import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.View;
 
 public class Selection {
@@ -122,6 +124,7 @@ public class Selection {
             throws Exception {
         RadioGroup group;
         RadioButton tpobj;
+        Container tpobjcnt;
         Form main = new Form(view, "datadict.main");
         PageControl pagecontrol = new PageControl(main);
         DataForm modelform = new DataForm(main, "model");
@@ -129,17 +132,17 @@ public class Selection {
         Documents documents = new Documents(function);
         
         pagecontrol.add("home");
-        
         modelname.setModelItem(documents.getModel("MODEL").
                 getModelItem("NAME"));
         modelname.setObligatory(true);
         
+        tpobjcnt = new StandardContainer(main, "tpobjcnt");
         group = new RadioGroup("tpobject");
-        tpobj = new RadioButton(main, "tpobjtable", group);
+        tpobj = new RadioButton(tpobjcnt, "tpobjtable", group);
         tpobj.setText("table");
         tpobj.setSelected(true);
         
-        tpobj = new RadioButton(main, "tpobjsh", group);
+        tpobj = new RadioButton(tpobjcnt, "tpobjsh", group);
         tpobj.setText("search.help");
         
         new Button(main, "create");
