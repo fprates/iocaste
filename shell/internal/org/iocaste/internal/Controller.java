@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -383,7 +384,7 @@ public class Controller {
                 else
                     ri.type = HIGH_RANGE;
                 
-                ri.count++;
+                ri.addCount(rinput.getHtmlName());
                 setUniversalInputValue(input, value, ri);
                 
                 break;
@@ -466,26 +467,28 @@ public class Controller {
      */
     private static final void setRangeValue(InputComponent input, Object object,
             RangeInputStatus ri) {
-        String value;
+        String name, value;
+        RangeInputComponent rinput;
+        ValueRange range;
         ValueRangeItem rangeitem = null;
-        RangeInputComponent rinput = (RangeInputComponent)input;
-        ValueRange range = rinput.get();
-        DataElement dataelement = Shell.getDataElement(rinput);
-        
+        DataElement dataelement = Shell.getDataElement(input);
+
+        name = input.getHtmlName();
+        if (isValueInitial(object, dataelement, input.isBooleanComponent())) {
+            if (ri.getCount(name) == 2)
+                ri.clearCount(name);
+            return;
+        }
+
+        rinput = (RangeInputComponent)input;
+        range = rinput.get();
         if (range == null) {
             range = new ValueRange();
             input.set(range);
         }
-        
+
         if (range.length() > 0)
             rangeitem = range.get(0);
-        
-        if (isValueInitial(object, dataelement, input.isBooleanComponent()))
-            if (rangeitem == null) {
-                if (ri.count == 2)
-                    ri.count = 0;
-                return;
-            }
         
         if (rangeitem == null) {
             rangeitem = new ValueRangeItem();
@@ -496,7 +499,7 @@ public class Controller {
         case LOW_RANGE:
             if (dataelement.getType() == DataType.CHAR) {
                 value = (String)object;
-                if (ri.count != 2) {
+                if (ri.getCount(name) != 2) {
                     if (value != null && value.contains("*"))
                         rangeitem.setOption(RangeOption.CP);
                     else
@@ -514,8 +517,8 @@ public class Controller {
             break;
         }
         
-        if (ri.count == 2)
-            ri.count = 0;
+        if (ri.getCount(name) == 2)
+            ri.clearCount(name);
     }
     
     /**
@@ -628,5 +631,27 @@ public class Controller {
 
 class RangeInputStatus {
     public byte type;
-    public byte count;
+    private Map<String, Byte> state;
+    
+    public RangeInputStatus() {
+        state = new HashMap<String, Byte>();
+    }
+    
+    public final void addCount(String name) {
+        byte count;
+        
+        if (state.containsKey(name))
+            count = state.get(name);
+        else
+            count = 0;
+        state.put(name, ++count);
+    }
+    
+    public final void clearCount(String name) {
+        state.put(name, (byte)0);
+    }
+    
+    public final byte getCount(String name) {
+        return state.get(name);
+    }
 }
