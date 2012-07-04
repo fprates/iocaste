@@ -41,8 +41,10 @@ redefinir módulo para gerar scripts de instalação
 
 - documents
 completar implementação de documentos complexos
-implementar bloqueio de registros
+implementar bloqueio de registros (feito)
+suporte à inner join
 implementar visão
+implementar range
 
 - shell
 diálogos modais
@@ -52,10 +54,10 @@ implementar à componente de detalhe
 implementar informações técnicas do elemento
 permitir anexar documentação à mensagem de erro
 implementar calendário para campos tipo data
-
+implementar componente para faixa de valores (feito)
 - core
 informação sobre versão do núcleo
-implementar cache de autorizações
+implementar cache de autorizações (feito)
 
 - infosis
 implementar formato para impressão
@@ -67,7 +69,7 @@ suporte à conexão segura
 suporte à criptografia
 
 - tasksel
-dispor grupos horizontalmente, para melhor uso de espaço
+dispor grupos horizontalmente, para melhor uso de espaço (feito)
 
 - external
 permitir configurar interface do webservice
@@ -75,10 +77,12 @@ implementar protocolo par leitura de telas
 implementar comunicação de webservice com o módulo
 
 - search-help
-implementar critérios de consulta
+implementar critérios de consulta (feito)
 implementar exibição modal (depende do shell)
 
 - não relacionados
+  retirar commit() de getView() em AbstractPage. deixa ciclo de vida da conexão
+iniciada em getView() se extender até execAction().
 unificar pacotes de protocolo
 implementar importação/exportação de dados
 implementar log de eventos
