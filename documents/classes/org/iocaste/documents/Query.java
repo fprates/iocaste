@@ -344,10 +344,10 @@ public class Query {
             switch (option) {
             case CP:
                 components.criteria.add(
-                        ((String)item.getLow()).replace("*", "%"));
+                        item.getLow().toString().replace("*", "%"));
                 break;
             default:
-                components.criteria.add((String)item.getLow());
+                components.criteria.add(item.getLow().toString());
                 break;
             }
             
