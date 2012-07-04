@@ -86,6 +86,7 @@ public abstract class AbstractPage extends AbstractFunction {
          * TODO poderia ser feito algo melhor do que este hardcode?
          */
         if (control != null && control.getType() == Const.SEARCH_HELP) {
+            view.clearParameters();
             view.export("sh", control);
             view.redirect("iocaste-search-help", "main");
             view.setReloadableView(true);
