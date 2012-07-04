@@ -1,7 +1,7 @@
 package org.iocaste.sh;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.protocol.Function;
@@ -30,20 +30,22 @@ public class Request {
     public static final void search(View view, Function function)
             throws Exception {
         ValueRange range;
-        List<ValueRange> values = new ArrayList<ValueRange>();
+        InputComponent input;
+        Map<String, ValueRange> values = new HashMap<String, ValueRange>();
         DataForm form = view.getElement("criteria");
         
         for (Element element : form.getElements()) {
             if (!element.isDataStorable())
                 continue;
             
-            range = ((DataItem)element).get();
+            input = (DataItem)element;
+            range = input.get();
             if (range == null)
                 continue;
-            values.add(range);
+            values.put(input.getModelItem().getName(), range);
         }
         
         view.setReloadableView(true);
-        view.export("criteria", values.toArray());
+        view.export("criteria", values);
     }
 }

@@ -1,8 +1,10 @@
 package org.iocaste.sh;
 
+import java.util.Map;
+
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.SearchHelp;
+import org.iocaste.documents.common.ValueRange;
 
 public class Common {
     
@@ -14,25 +16,26 @@ public class Common {
      * @return
      * @throws Exception
      */
-    public static final ExtendedObject[] getResultsFrom(SearchHelp sh,
-            Documents documents, Object... criteria) throws Exception {
-        String[] itens;
-        StringBuilder sb = new StringBuilder("from ").
-                append(sh.getModelName());
+    public static final ExtendedObject[] getResultsFrom(String modelname,
+            Documents documents, Map<String, ValueRange> criteria)
+                    throws Exception {
+        boolean started;
+        StringBuilder sb = new StringBuilder("from ").append(modelname);
         
-        if (criteria == null || criteria.length == 0) {
+        if (criteria == null || criteria.size() == 0) {
             return documents.select(sb.toString());
         } else {
-            itens = sh.getItens();
+            started = false;
             sb.append(" where");
-            for (int i = 0; i < criteria.length; i++) {
-                sb.append(" ").
-                        append(itens[i]).
-                        append(" in ?");
-                if (i < (criteria.length - 1))
+            for (String name : criteria.keySet()) {
+                if (started)
                     sb.append(" and");
+                else
+                    started = true;
+                
+                sb.append(" ").append(name).append(" in ?");
             }
-            return documents.select(sb.toString(), criteria);
+            return documents.select(sb.toString(), criteria.values().toArray());
         }
     }
 }
