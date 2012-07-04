@@ -2,7 +2,6 @@ package org.iocaste.sh;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.SearchHelp;
 
 public class Common {
@@ -16,10 +15,8 @@ public class Common {
      * @throws Exception
      */
     public static final ExtendedObject[] getResultsFrom(SearchHelp sh,
-            Function function, Object... criteria)
-                    throws Exception {
+            Documents documents, Object... criteria) throws Exception {
         String[] itens;
-        Documents documents = new Documents(function);
         StringBuilder sb = new StringBuilder("from ").
                 append(sh.getModelName());
         
