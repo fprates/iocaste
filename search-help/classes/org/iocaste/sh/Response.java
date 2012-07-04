@@ -66,6 +66,8 @@ public class Response {
             item = (DataItem)element;
             if (sh.contains(item.getName())) {
                 item.setComponentType(Const.RANGE_FIELD);
+                if (view.getFocus() == null)
+                    view.setFocus(item);
                 continue;
             }
             
