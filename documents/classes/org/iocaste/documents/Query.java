@@ -431,13 +431,18 @@ public class Query {
             components = null;
         }
 
-        if (components.arg1 != null)
-            if ((!components.op.equals("IN")) ||
-                    (components.op.equals("IN") &&
-                            !components.temp.equals("?"))) {
+        if (components.arg1 != null) {
+            if (components.arg2 == null)
+                components.arg2 = components.temp;
+            
+            if (!components.op.equals("IN") || !components.temp.equals("?")) {
                 components.criteria.add(queryinfo.criteria[argnr]);
                 args.add(components);
+            } else {
+                parseRange(components, argnr, queryinfo.criteria);
+                args.add(components);
             }
+        }
         
         criteria = new ArrayList<Object>();
         sb = new StringBuilder();
@@ -451,15 +456,11 @@ public class Query {
             }
             
             lastlogic = component.logic;
-            if (component.range != null) {
+            if (component.range != null)
                 sb.append(component.range);
-            } else {
-                sb.append(component.arg1).append(component.op);
-                if (component.arg2 == null)
-                    sb.append(component.temp);
-                else
-                    sb.append(component.arg2);
-            }
+            else
+                sb.append(component.arg1).append(component.op).
+                        append(component.arg2);
             criteria.addAll(component.criteria);
         }
         
