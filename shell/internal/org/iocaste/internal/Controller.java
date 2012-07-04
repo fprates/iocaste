@@ -58,7 +58,7 @@ public class Controller {
     private static void convertInputValue(InputComponent input,
             RangeInputStatus ri) {
         DataElement dataelement;
-        String value = getUniversalInputValue(input, ri);
+        String value = (String)getUniversalInputValue(input, ri);
         
         dataelement = Shell.getDataElement(input);
         if (dataelement == null) {
@@ -138,30 +138,6 @@ public class Controller {
     
     /**
      * 
-     * @param input
-     * @param type
-     * @return
-     */
-    private static final Object getRangeValue(InputComponent input,
-            RangeInputStatus ri) {
-        ValueRangeItem rangeitem;
-        RangeInputComponent rinput = (RangeInputComponent)input;
-        ValueRange range = rinput.get();
-        
-        if (range == null || range.length() == 0)
-            return null;
-        
-        rangeitem = range.get(0);
-        switch (ri.type) {
-        case LOW_RANGE:
-            return rangeitem.getLow();
-        default:
-            return rangeitem.getHigh();
-        }
-    }
-    
-    /**
-     * 
      * @param values
      * @param name
      * @return
@@ -180,12 +156,12 @@ public class Controller {
      * @param type
      * @return
      */
-    private static final String getUniversalInputValue(InputComponent input,
+    private static final Object getUniversalInputValue(InputComponent input,
             RangeInputStatus ri) {
         switch (ri.type) {
         case LOW_RANGE:
         case HIGH_RANGE:
-            return (String)getRangeValue(input, ri);
+            return ri.value;
         default:
             return input.get();
         }
@@ -275,7 +251,7 @@ public class Controller {
         NumberFormat numberformat;
         DateFormat dateformat;
         DataElement dataelement;
-        String value = getUniversalInputValue(input, ri);
+        String value = (String)getUniversalInputValue(input, ri);
         
         if (Shell.isInitial(value))
             return true;
@@ -385,7 +361,7 @@ public class Controller {
                     ri.type = HIGH_RANGE;
                 
                 ri.addCount(rinput.getHtmlName());
-                setUniversalInputValue(input, value, ri);
+                ri.value = value;
                 
                 break;
             case 2:
@@ -477,6 +453,7 @@ public class Controller {
         if (isValueInitial(object, dataelement, input.isBooleanComponent())) {
             if (ri.getCount(name) == 2)
                 ri.clearCount(name);
+            ri.value = object;
             return;
         }
 
@@ -499,7 +476,7 @@ public class Controller {
         case LOW_RANGE:
             if (dataelement.getType() == DataType.CHAR) {
                 value = (String)object;
-                if (ri.getCount(name) != 2) {
+                if (ri.getCount(name) != 2 || rangeitem.getOption() == null) {
                     if (value != null && value.contains("*"))
                         rangeitem.setOption(RangeOption.CP);
                     else
@@ -508,7 +485,7 @@ public class Controller {
             } else {
                 rangeitem.setOption(RangeOption.EQ);
             }
-            
+
             rangeitem.setLow(object);
             break;
         default:
@@ -517,6 +494,7 @@ public class Controller {
             break;
         }
         
+        ri.value = object;
         if (ri.getCount(name) == 2)
             ri.clearCount(name);
     }
@@ -631,6 +609,7 @@ public class Controller {
 
 class RangeInputStatus {
     public byte type;
+    public Object value;
     private Map<String, Byte> state;
     
     public RangeInputStatus() {
