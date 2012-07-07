@@ -22,7 +22,7 @@ public class Common {
         ExtendedObject task = null;
         
         parsed = command.trim().split("\\s");
-        view.clearParameters();
+        view.clearExports();
 
         if (parsed[0].length() >= 19) {
             view.message(Const.ERROR, "command.not.found");
@@ -51,8 +51,6 @@ public class Common {
         String page = "main", app = null;
         String[] values;
         
-        view.clearParameters();
-        
         for (int i = 0; i < parsed.length; i++) {
             switch (i) {
             case 0:
@@ -69,7 +67,7 @@ public class Common {
                 if (values.length < 2)
                     break;
                 
-                view.export(values[0], values[1]);
+                view.setParameter(values[0], values[1]);
                 break;
             }
         }

@@ -56,13 +56,13 @@ public class Request {
         
         itens = getTableItens(modelname, function);
         
-        vdata.clearParameters();
+        vdata.clearExports();
         vdata.export("mode", "edit");
         vdata.export("view.type", Const.SINGLE);
         vdata.export("model.name", modelname);
         vdata.export("model.regs", itens);
         vdata.setReloadableView(true);
-        vdata.redirect(null, "select");
+        vdata.redirect("select");
     }
     
     /**
@@ -93,10 +93,10 @@ public class Request {
     public static final void insert(View vdata) {
         String modelname = vdata.getParameter("model.name");
         
-        vdata.clearParameters();
+        vdata.clearExports();
         vdata.export("model.name", modelname);
         vdata.setReloadableView(true);
-        vdata.redirect(null, "form");
+        vdata.redirect("form");
     }
     
     /**
@@ -202,13 +202,13 @@ public class Request {
             return;
         }
         
-        vdata.clearParameters();
+        vdata.clearExports();
         vdata.export("mode", "show");
         vdata.export("view.type", Const.SINGLE);
         vdata.export("model.name", modelname);
         vdata.export("model.regs", itens);
         vdata.setReloadableView(true);
-        vdata.redirect(null, "select");
+        vdata.redirect("select");
     }
 
 }

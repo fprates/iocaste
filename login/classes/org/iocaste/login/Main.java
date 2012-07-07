@@ -85,7 +85,7 @@ public class Main extends AbstractPage {
         Iocaste iocaste = new Iocaste(this);
         Login login = form.getObject().newInstance();
         
-        view.clearParameters();
+        view.clearExports();
         username = login.getUsername();
         if (iocaste.login(username, login.getSecret(), login.getLocale())) {
             pkgtool = new PackageTool(this);

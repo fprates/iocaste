@@ -46,7 +46,7 @@ public class Main extends AbstractPage {
                  * não passa InstallData, pois não é reconhecido pelo núcleo.
                  * gera erro de serialização.
                  */
-                view.clearParameters();
+                view.clearExports();
                 view.setReloadableView(true);
                 view.export("models", data.getModels());
                 view.export("authorizations", data.getAuthorizations());
