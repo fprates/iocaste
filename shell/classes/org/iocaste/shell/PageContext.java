@@ -9,6 +9,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.iocaste.shell.common.View;
 
 public class PageContext {
+    private String[] initparams;
     private View view;
     private AppContext appctx;
     private String name, username;
@@ -66,6 +67,14 @@ public class PageContext {
      */
     public final List<FileItem> getFiles() {
         return files;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String[] getInitParameters() {
+        return initparams;
     }
     
     /**
@@ -155,6 +164,14 @@ public class PageContext {
      */
     public final void setFiles(List<FileItem> files) {
         this.files = files;
+    }
+    
+    /**
+     * 
+     * @param initparams
+     */
+    public final void setInitParameters(String[] initparams) {
+        this.initparams = initparams;
     }
     
     /**

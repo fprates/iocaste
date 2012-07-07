@@ -24,9 +24,11 @@ package org.iocaste.shell.common;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Implementação de camada de visão
@@ -41,6 +43,7 @@ public class View implements Serializable {
     private String title, appname, pagename;
     private String contenttype, rapp, rpage, messagetext;
     private MessageSource messages;
+    private Set<String> initparams;
     private List<String> inputs, lines;
     private List<MultipartElement> mpelements;
     private List<Container> containers;
@@ -60,6 +63,7 @@ public class View implements Serializable {
         mpelements = new ArrayList<MultipartElement>();
         dontpushpage = false;
         contenttype = null;
+        initparams = new HashSet<String>();
         
         this.appname = appname;
         this.pagename = pagename;
@@ -101,8 +105,17 @@ public class View implements Serializable {
     /**
      * Limpa parâmetros da visão.
      */
-    public final void clearParameters() {
+    public final void clearExports() {
         parameters.clear();
+    }
+    
+    /**
+     * 
+     */
+    public final void clearInitExports() {
+        for (String name : initparams)
+            parameters.remove(name);
+        initparams.clear();
     }
     
     /**
@@ -289,6 +302,14 @@ public class View implements Serializable {
      */
     public final String getHeader(String key) {
         return headervalues.get(key);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String[] getInitParameters() {
+        return initparams.toArray(new String[0]);
     }
     
     /**
@@ -509,6 +530,20 @@ public class View implements Serializable {
         this.messages = messages;
     }
 
+    /**
+     * 
+     * @param name
+     * @param value
+     */
+    public final void setParameter(String name, Object value) {
+        if (initparams.contains(name))
+            parameters.remove(name);
+        else
+            initparams.add(name);
+        
+        parameters.put(name, value);
+    }
+    
     /**
      * Ajusta recarga da visão.
      * @param reloadable true, para recarga da visão.

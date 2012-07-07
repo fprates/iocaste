@@ -622,9 +622,11 @@ public class PageRenderer extends AbstractRenderer {
             pagectx_ = createPageContext(contextdata);
         
         pagectx_.setReloadableView(view.isReloadableView());
+        pagectx_.setInitParameters(view.getInitParameters());
         pagectx_.clearParameters();
         for (String name : view.getExportable())
             pagectx_.addParameter(name, view.getParameter(name));
+        view.clearInitExports();
         
         if (isSessionConnector(view.getAppName()) && iocaste.isConnected())
             pagectx_.setUsername((String)view.getParameter("username"));
@@ -771,6 +773,7 @@ public class PageRenderer extends AbstractRenderer {
      */
     private final void startRender(
             HttpServletResponse resp, PageContext pagectx) throws Exception {
+        String[] initparams;
         HtmlRenderer renderer;
         Map<String, Map<String, String>> userstyle;
         String username, viewmessage;
@@ -779,8 +782,8 @@ public class PageRenderer extends AbstractRenderer {
         InputData inputdata;
         AppContext appctx;
         View viewdata;
-        Map<String, Object> parameters;
-        Message message = new Message();
+        Map<String, Object> iparams, parameters;
+        Message message;
 
         appctx = pagectx.getAppContext();
         viewdata = pagectx.getViewData();
@@ -803,12 +806,24 @@ public class PageRenderer extends AbstractRenderer {
                 appctx.setStyleSheet(style);
             }
             
+            message = new Message();
             message.setId("get_view_data");
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
-            message.add("parameters", pagectx.getParameters());
             message.setSessionid(getComplexId(getSessionId(), logid));
             
+            initparams = pagectx.getInitParameters();
+            if (initparams == null || initparams.length == 0) {
+                parameters = pagectx.getParameters();
+            } else {
+                parameters = new HashMap<String, Object>();
+                iparams = pagectx.getParameters();
+                for (String name : initparams)
+                    parameters.put(name, iparams.get(name));
+                pagectx.setInitParameters(null);
+            }
+
+            message.add("parameters", parameters);
             viewdata = (View)Service.callServer(
                     composeUrl(appctx.getName()), message);
             
