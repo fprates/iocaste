@@ -13,6 +13,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.internal.AbstractRenderer;
 import org.iocaste.internal.Controller;
+import org.iocaste.internal.ControllerData;
 import org.iocaste.internal.HtmlRenderer;
 import org.iocaste.internal.InputStatus;
 import org.iocaste.protocol.Function;
@@ -56,25 +57,24 @@ public class Main extends AbstractRenderer {
      * @return
      * @throws Exception
      */
-    private final View callController(String sessionid,
-            Map<String, ?> parameters, PageContext pagectx) throws Exception {
+    private final View callController(ControllerData config) throws Exception {
         InputStatus status;
         Message message;
         
-        status = Controller.validate(pagectx.getViewData(), parameters, this);
+        status = Controller.validate(config);
         if (status.fatal != null)
             throw new IocasteException(status.fatal);
         
         if (status.error > 0)
-            return pagectx.getViewData();
+            return config.view;
         
         message = new Message();
         message.setId("exec_action");
-        message.add("view", pagectx.getViewData());
-        message.setSessionid(getComplexId(getSessionId(), pagectx.getLogid()));
+        message.add("view", config.view);
+        message.setSessionid(config.sessionid);
         
-        for (String name : parameters.keySet())
-            message.add(name, parameters.get(name));
+        for (String name : config.values.keySet())
+            message.add(name, config.values.get(name));
         
         installapp.setServletContext(getServletContext());
         
@@ -414,7 +414,7 @@ public class Main extends AbstractRenderer {
      */
     private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
-        int logid;
+        ControllerData config;
         ContextData contextdata;
         InputData inputdata;
         ControlComponent action;
@@ -422,8 +422,7 @@ public class Main extends AbstractRenderer {
         PageContext pagectx_;
         Map<String, String[]> parameters;
         View view;
-        String complexid, appname, pagename, key, pagetrack = null,
-                actionname = null;
+        String appname, pagename, key, pagetrack = null, actionname = null;
         
         parameters = new HashMap<String, String[]>();
         parameternames = req.getParameterNames();
@@ -446,15 +445,18 @@ public class Main extends AbstractRenderer {
             parameters.remove("pagetrack");
         }
         
-        view = callController(getSessionId(), parameters, pagectx);
+        config = new ControllerData();
+        config.view = pagectx.getViewData();
+        config.values = parameters;
+        config.contextname = pagectx.getAppContext().getName();
+        config.logid = getLogid(pagetrack);
+        config.sessionid = getComplexId(getSessionId(), config.logid);
+        view = callController(config);
         
         action = view.getElement(actionname);
-        logid = getLogid(pagetrack);
-        complexid = getComplexId(getSessionId(), logid);
         if (view.hasPageCall() && (action == null ||
                 !action.isCancellable() || action.allowStacking()))
-            pushPage(complexid, view.getAppName(),
-                    view.getPageName());
+            pushPage(config.sessionid, view.getAppName(), view.getPageName());
         
         view.clearInputs();
         
@@ -468,8 +470,7 @@ public class Main extends AbstractRenderer {
             registerInputs(inputdata);
         }
         
-        updateView(getComplexId(getSessionId(), logid), view, this);
-        
+        updateView(config.sessionid, view, this);
         appname = view.getRedirectedApp();
         if (appname == null)
             appname = pagectx.getAppContext().getName();
@@ -484,7 +485,7 @@ public class Main extends AbstractRenderer {
         contextdata.sessionid = getSessionId();
         contextdata.appname = appname;
         contextdata.pagename = pagename;
-        contextdata.logid = logid;
+        contextdata.logid = config.logid;
         
         pagectx_ = getPageContext(contextdata);
         if (pagectx_ == null)
