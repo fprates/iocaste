@@ -139,6 +139,7 @@ public class Response {
      */
     public static final void selector(View view, Function function)
             throws Exception {
+        InputComponent input;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "selection");
@@ -151,8 +152,10 @@ public class Response {
                 continue;
             }
 
-            view.setFocus(element);
-            ((InputComponent)element).setObligatory(true);
+            input = (InputComponent)element;
+            view.setFocus(input);
+            input.getModelItem().setSearchHelp("SH_USER");
+            input.setObligatory(true);
         }
         
         new Button(container, "create");

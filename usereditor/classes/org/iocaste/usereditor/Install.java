@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.protocol.user.Authorization;
 
 public class Install {
 
     public static final InstallData init() {
+        SearchHelpData sh;
         Authorization authorization;
         Map<String, String> messages;
         InstallData data = new InstallData();
@@ -45,6 +47,19 @@ public class Install {
         data.link("SU01", "iocaste-usereditor");
         data.addTaskGroup("ADMIN", "SU01");
         
+        sh = new SearchHelpData();
+        sh.setModel("LOGIN");
+        sh.setExport("USERNAME");
+        sh.setName("SH_USER");
+        sh.add("USERNAME");
+        data.add(sh);
+        
+        sh = new SearchHelpData();
+        sh.setModel("USER_PROFILE");
+        sh.setExport("NAME");
+        sh.setName("SH_USER_PROFILE");
+        sh.add("NAME");
+        data.add(sh);
         return data;
     }
 }

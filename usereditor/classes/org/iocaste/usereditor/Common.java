@@ -27,12 +27,16 @@ public class Common {
         InputComponent input;
         TableItem item = new TableItem(itens);
         
-        for (TableColumn column : itens.getColumns())
-            if (!column.isMark()) {
-                input = new TextField(itens, column.getName());
-                input.setEnabled((mode == Common.DISPLAY)? false : true);
-                item.add(input);
-            }
+        for (TableColumn column : itens.getColumns()) {
+            if (column.isMark())
+                continue;
+            
+            input = new TextField(itens, column.getName());
+            input.setEnabled(mode != Common.DISPLAY);
+            item.add(input);
+            if (input.getName().equals("PROFILE"))
+                input.getModelItem().setSearchHelp("SH_USER_PROFILE");
+        }
         
         if (object == null)
             return;
