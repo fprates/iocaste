@@ -27,7 +27,6 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.ValidatorConfig;
-import org.iocaste.shell.common.View;
 
 public class Controller {
     private static final int EINITIAL = 1;
@@ -38,17 +37,37 @@ public class Controller {
     private static final int LOW_RANGE = 3;
     private static final int HIGH_RANGE = 4;
     
-    private static final ValidatorConfig callCustomValidation(Function function,
-            View view, ValidatorConfig validatorcfg) throws Exception {
-        String url = new StringBuilder("/").append(view.getAppName()).
+    /**
+     * 
+     * @param config
+     * @param validatorcfg
+     * @return
+     * @throws Exception
+     */
+    private static final ValidatorConfig callCustomValidation(
+            ControllerData cconfig, ValidatorConfig validatorcfg)
+                    throws Exception {
+        ValidatorConfig vconfig;
+        String url = new StringBuilder("/").append(cconfig.view.getAppName()).
                 append("/view.html").toString();
-        GenericService service = new GenericService(function, url);
+        GenericService service = new GenericService(cconfig.function, url);
         Message message = new Message();
         
         message.setId("custom_validation");
         message.add("config", validatorcfg);
         
-        return service.invoke(message);
+        try {
+            vconfig = service.invoke(message);
+            if (vconfig.getMessage() == null)
+                Common.commit(cconfig.servername, cconfig.sessionid);
+            else
+                Common.rollback(cconfig.servername, cconfig.sessionid);
+            
+            return vconfig;
+        } catch (Exception e) {
+            Common.rollback(cconfig.servername, cconfig.sessionid);
+            throw e;
+        }
     }
     
     /**
@@ -295,14 +314,12 @@ public class Controller {
     
     /**
      * 
-     * @param view
-     * @param function
-     * @param values
+     * @param config
      * @param status
      * @throws Exception
      */
-    private static final void processInputs(View view, Function function,
-            Map<String, ?> values, InputStatus status) throws Exception {
+    private static final void processInputs(ControllerData config,
+            InputStatus status) throws Exception {
         RangeInputComponent rinput;
         ValidatorConfig validatorcfg;
         Element element;
@@ -317,13 +334,13 @@ public class Controller {
          * valor quando marcados. Processa o estado falso deles antes
          * do processamento principal.
          */
-        for (String name : view.getInputs()) {
-            value = getString(values, name);
+        for (String name : config.view.getInputs()) {
+            value = getString(config.values, name);
             
             if (value != null)
                 continue;
             
-            element = view.getElement(name);
+            element = config.view.getElement(name);
             if (!element.isDataStorable())
                 continue;
             
@@ -331,16 +348,16 @@ public class Controller {
             if (!input.isSelectable())
                 continue;
             
-            setString(values, name, "off");
+            setString(config.values, name, "off");
         }
         
-        for (String name : values.keySet()) {
-            element = view.getElement(name);
+        for (String name : config.values.keySet()) {
+            element = config.view.getElement(name);
             
             if (element == null || !element.isDataStorable())
                 continue;
             
-            value = getString(values, name);
+            value = getString(config.values, name);
             input = (InputComponent)element;
             ri.type = 0;
             if (input.isSelectable() && input.isStackable())
@@ -398,7 +415,7 @@ public class Controller {
             if (value == null || dataelement == null)
                 continue;
             
-            if (!hasValidReference(input, ri, function)) {
+            if (!hasValidReference(input, ri, config.function)) {
                 status.input = input;
                 status.error = EINVALID_REFERENCE;
                 continue;
@@ -415,13 +432,13 @@ public class Controller {
         
         for (InputComponent input_ : validations) {
             validatorcfg = input_.getValidatorConfig();
-            validatorcfg = callCustomValidation(function, view, validatorcfg);
+            validatorcfg = callCustomValidation(config, validatorcfg);
             
             status.message = validatorcfg.getMessage();
             if (status.message == null) {
                 for (String inputname : validatorcfg.getInputNames()) {
                     input = validatorcfg.getInput(inputname);
-                    input_ = view.getElement(input.getHtmlName());
+                    input_ = config.view.getElement(input.getHtmlName());
                     input_.set(input.get());
                     input_.setText(input.getText());
                 }
@@ -541,64 +558,62 @@ public class Controller {
     
     /**
      * 
-     * @param view
-     * @param values
-     * @param function
+     * @param config
      * @return
      * @throws Exception
      */
-    public static final InputStatus validate(View view,
-            Map<String, ?> values, Function function) throws Exception {
+    public static final InputStatus validate(ControllerData config)
+            throws Exception {
         Element element;
         String controlname;
         InputStatus status = new InputStatus();
 
-        controlname = getString(values, "action");
+        controlname = getString(config.values, "action");
         
         if (controlname == null) {
             status.fatal = "null control name.";
             return status;
         }
         
-        if (view == null) {
+        if (config.view == null) {
             status.fatal = "null view on action processing.";
             return status;
         }
         
-        view.clearRedirect();
+        config.view.clearRedirect();
         
         if (controlname.equals("")) {
             status.error = WINVALID_ACTION;
             return status;
         }
         
-        element = view.getElement(controlname);
+        element = config.view.getElement(controlname);
         if (element != null && element.isControlComponent()) {
             status.control = (ControlComponent)element;
             if (!status.control.isCancellable())
-                processInputs(view, function, values, status);
+                processInputs(config, status);
         } else {
-            processInputs(view, function, values, status);
+            processInputs(config, status);
         }
         
         if (status.input != null) {
-            view.setFocus(status.input);
+            config.view.setFocus(status.input);
             
             switch (status.error) {
             case EINITIAL:
-                view.message(Const.ERROR, "field.is.obligatory");
+                config.view.message(Const.ERROR, "field.is.obligatory");
                 break;
                 
             case EMISMATCH:
-                view.message(Const.ERROR, "field.type.mismatch");
+                config.view.message(Const.ERROR, "field.type.mismatch");
                 break;
                 
             case EINVALID_REFERENCE:
-                view.message(Const.ERROR, "invalid.value");
+                config.view.message(Const.ERROR, "invalid.value");
                 break;
                 
             case EVALIDATION:
-                view.message(Const.ERROR, status.message);
+                config.view.message(Const.ERROR, status.message);
                 break;
             }
         }

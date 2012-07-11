@@ -55,19 +55,8 @@ public abstract class AbstractPage extends AbstractFunction {
         
         validator.setFunction(this);
         config.setMessage(null);
-        
-        try {
-            validator.validate(config);
-            if (config.getMessage() == null)
-                new Iocaste(this).commit();
-            else
-                new Iocaste(this).rollback();
-            
-            return config;
-        } catch (Exception e) {
-            new Iocaste(this).rollback();
-            throw e;
-        }
+        validator.validate(config);
+        return config;
     }
     
     /**
@@ -101,21 +90,7 @@ public abstract class AbstractPage extends AbstractFunction {
             }
             
             method = this.getClass().getMethod(action, View.class);
-            
-            /*
-             * TODO tratamento de exceção pode ser movido para o servidor
-             */
-            try {
-                method.invoke(this, view);
-                if (view.getMessageType() == Const.ERROR)
-                    new Iocaste(this).rollback();
-                else
-                    new Iocaste(this).commit();
-                
-            } catch (Exception e) {
-                new Iocaste(this).rollback();
-                throw e;
-            }
+            method.invoke(this, view);
         }
         
         return view;
@@ -162,21 +137,11 @@ public abstract class AbstractPage extends AbstractFunction {
             view.export(name, parameters.get(name));
         
         method = this.getClass().getMethod(page, View.class);
-        
-        /*
-         * TODO tratamento de exceção pode ser movido para o servidor
-         */
-        try {
-            method.invoke(this, view);
-            if (view.getMessages() == null) {
-                messages = new MessageSource();
-                messages.loadFromApplication(app, locale, this);
-                view.setMessages(messages);
-            }
-            new Iocaste(this).commit();
-        } catch (Exception e) {
-            new Iocaste(this).rollback();
-            throw e;
+        method.invoke(this, view);
+        if (view.getMessages() == null) {
+            messages = new MessageSource();
+            messages.loadFromApplication(app, locale, this);
+            view.setMessages(messages);
         }
         
         return view;

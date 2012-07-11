@@ -17,9 +17,11 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.internal.AbstractRenderer;
+import org.iocaste.internal.Common;
 import org.iocaste.internal.Controller;
 import org.iocaste.internal.HtmlRenderer;
 import org.iocaste.internal.InputStatus;
+import org.iocaste.internal.ControllerData;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
@@ -60,33 +62,43 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
-     * @param req
-     * @param url
+     * @param config
      * @return
      * @throws Exception
      */
-    private final View callController(String sessionid,
-            Map<String, ?> parameters, PageContext pagectx) throws Exception {
+    private final View callController(ControllerData config) throws Exception {
+        View view;
         InputStatus status;
         Message message;
         
-        status = Controller.validate(pagectx.getViewData(), parameters, this);
+        status = Controller.validate(config);
         if (status.fatal != null)
             throw new IocasteException(status.fatal);
         
         if (status.error > 0)
-            return pagectx.getViewData();
+            return config.view;
         
         message = new Message();
         message.setId("exec_action");
-        message.add("view", pagectx.getViewData());
-        message.setSessionid(getComplexId(getSessionId(), pagectx.getLogid()));
+        message.add("view", config.view);
+        message.setSessionid(config.sessionid);
         
-        for (String name : parameters.keySet())
-            message.add(name, parameters.get(name));
+        for (String name : config.values.keySet())
+            message.add(name, config.values.get(name));
+
+        try {
+            view = (View)Service.callServer(composeUrl(config.contextname),
+                    message);
+            if (view.getMessageType() == Const.ERROR)
+                Common.rollback(getServerName(), config.sessionid);
+            else
+                Common.commit(getServerName(), config.sessionid);
+        } catch (Exception e) {
+            Common.rollback(getServerName(), config.sessionid);
+            throw e;
+        }
         
-        return (View)Service.callServer(
-                composeUrl(pagectx.getAppContext().getName()), message);
+        return view;
     }
     
     /**
@@ -531,7 +543,7 @@ public class PageRenderer extends AbstractRenderer {
      */
     private final PageContext processController(Iocaste iocaste,
             HttpServletRequest req, PageContext pagectx) throws Exception {
-        int logid;
+        ControllerData config;
         ContextData contextdata;
         InputData inputdata;
         ControlComponent action;
@@ -539,16 +551,13 @@ public class PageRenderer extends AbstractRenderer {
         PageContext pagectx_;
         Map<String, String[]> parameters;
         View view;
-        String complexid, appname, pagename, key, pagetrack = null,
-                actionname = null;
+        String appname, pagename, key, pagetrack = null, actionname = null;
         
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagectx);
         } else {
             parameters = new HashMap<String, String[]>();
-            
             parameternames = req.getParameterNames();
-            
             while (parameternames.hasMoreElements()) {
                 key = (String)parameternames.nextElement();
                 
@@ -568,31 +577,33 @@ public class PageRenderer extends AbstractRenderer {
             pagetrack = parameters.get("pagetrack")[0];
             parameters.remove("pagetrack");
         }
+
+        config = new ControllerData();
+        config.view = pagectx.getViewData();
+        config.values = parameters;
+        config.function = this;
+        config.contextname = pagectx.getAppContext().getName();
+        config.logid = getLogid(pagetrack);
+        config.sessionid = getComplexId(getSessionId(), config.logid);
+        config.servername = getServerName();
         
-        view = callController(getSessionId(), parameters, pagectx);
-        
+        view = callController(config);
         action = view.getElement(actionname);
-        logid = getLogid(pagetrack);
-        complexid = getComplexId(getSessionId(), logid);
         if (view.hasPageCall() && (action == null ||
                 !action.isCancellable() || action.allowStacking()))
-            pushPage(complexid, view.getAppName(),
-                    view.getPageName());
+            pushPage(config.sessionid, view.getAppName(), view.getPageName());
         
         view.clearInputs();
-        
         inputdata = new InputData();
         inputdata.view = view;
         inputdata.container = null;
         inputdata.function = this;
-        
         for (Container container : view.getContainers()) {
             inputdata.element = container;
             registerInputs(inputdata);
         }
         
-        updateView(getComplexId(getSessionId(), logid), view, this);
-        
+        updateView(config.sessionid, view, this);
         appname = view.getRedirectedApp();
         if (appname == null)
             appname = pagectx.getAppContext().getName();
@@ -601,7 +612,7 @@ public class PageRenderer extends AbstractRenderer {
         if (pagename == null)
             pagename = pagectx.getName();
         
-        if (!isExecuteAuthorized(appname, complexid) &&
+        if (!isExecuteAuthorized(appname, config.sessionid) &&
                 view.getRedirectedApp() != null) {
             pagectx.setError(AUTHORIZATION_ERROR);
             pagectx.getViewData().message(Const.ERROR, "user.not.authorized");
@@ -615,7 +626,7 @@ public class PageRenderer extends AbstractRenderer {
         contextdata.sessionid = getSessionId();
         contextdata.appname = appname;
         contextdata.pagename = pagename;
-        contextdata.logid = logid;
+        contextdata.logid = config.logid;
         
         pagectx_ = getPageContext(contextdata);
         if (pagectx_ == null)
@@ -771,12 +782,12 @@ public class PageRenderer extends AbstractRenderer {
      * @param pagectx
      * @throws Exception
      */
-    private final void startRender(
-            HttpServletResponse resp, PageContext pagectx) throws Exception {
+    private final void startRender(HttpServletResponse resp,
+            PageContext pagectx) throws Exception {
         String[] initparams;
         HtmlRenderer renderer;
         Map<String, Map<String, String>> userstyle;
-        String username, viewmessage;
+        String username, viewmessage, sessionid;
         Const messagetype;
         int logid;
         InputData inputdata;
@@ -806,11 +817,12 @@ public class PageRenderer extends AbstractRenderer {
                 appctx.setStyleSheet(style);
             }
             
+            sessionid = getComplexId(getSessionId(), logid);
             message = new Message();
             message.setId("get_view_data");
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
-            message.setSessionid(getComplexId(getSessionId(), logid));
+            message.setSessionid(sessionid);
             
             initparams = pagectx.getInitParameters();
             if (initparams == null || initparams.length == 0) {
@@ -824,8 +836,14 @@ public class PageRenderer extends AbstractRenderer {
             }
 
             message.add("parameters", parameters);
-            viewdata = (View)Service.callServer(
-                    composeUrl(appctx.getName()), message);
+            try {
+                viewdata = (View)Service.callServer(
+                        composeUrl(appctx.getName()), message);
+                Common.commit(getServerName(), sessionid);
+            } catch (Exception e) {
+                Common.rollback(getServerName(), sessionid);
+                throw e;
+            }
             
             inputdata = new InputData();
             inputdata.view = viewdata;
