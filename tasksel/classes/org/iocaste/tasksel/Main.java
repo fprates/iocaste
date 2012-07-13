@@ -1,10 +1,11 @@
 package org.iocaste.tasksel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -26,13 +27,15 @@ import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-    private static final byte USER_GROUPS = 0;
-    private static final byte ENTRY = 1;
-    private static final byte TASK_TEXT = 2;
+    private static final byte TASK_TEXT = 0;
+    private static final byte USER_ENTRIES = 1;
     private static final String[] QUERIES = {
-        "from USER_TASKS_GROUPS where USERNAME = ?",
-        "from TASK_ENTRY where GROUP = ?",
-        "from TASK_ENTRY_TEXT where TASK = ? and LANGUAGE = ?"
+        "from TASK_ENTRY_TEXT where TASK = ? and LANGUAGE = ?",
+        "select TASK_ENTRY.GROUP,TASK_ENTRY.NAME,TASK_ENTRY.ID " +
+            "from USER_TASKS_GROUPS " +
+            "inner join TASK_ENTRY on " +
+            "USER_TASKS_GROUPS.GROUP = TASK_ENTRY.GROUP " +
+            "where USERNAME = ?"
     };
     
     public Main() {
@@ -41,51 +44,46 @@ public class Main extends AbstractPage {
     
     /**
      * 
+     * @param locale
      * @return
      * @throws Exception
      */
-    private final List<TasksList> getLists(Locale locale) throws Exception {
-        TasksList list;
+    private final Map<String, Set<TaskEntry>> getLists(Locale locale)
+            throws Exception {
+        Set<TaskEntry> entries;
         TaskEntry entry;
-        ExtendedObject[] result, iresult, mobject;
-        List<TasksList> lists;
+        ExtendedObject[] result, mobject;
+        Map<String, Set<TaskEntry>> lists;
         int taskid;
-        String groupname, language, taskname, username = 
-                new Iocaste(this).getUsername();
+        String groupname, language, taskname, username;
         Documents documents = new Documents(this);
         
-        result = documents.select(QUERIES[USER_GROUPS], username);
+        username = new Iocaste(this).getUsername();
+        result = documents.select(QUERIES[USER_ENTRIES], username);
         if (result == null)
             return null;
         
-        language = locale.toString();
-        lists = new ArrayList<TasksList>();
+        language = locale.toString(); 
+        lists = new LinkedHashMap<String, Set<TaskEntry>>();
         for (ExtendedObject object : result) {
             groupname = object.getValue("GROUP");
-            
-            list = new TasksList();
-            list.setName(groupname);
-            lists.add(list);
-            
-            iresult = documents.select(QUERIES[ENTRY], groupname);
-            if (iresult == null)
-                continue;
-            
-            for (ExtendedObject iobject : iresult) {
-                taskname = iobject.getValue("NAME");
-                taskid = iobject.getValue("ID");
-                
-                entry = new TaskEntry();
-                entry.setName(taskname);
-                
-                mobject = documents.selectLimitedTo(QUERIES[TASK_TEXT], 1,
-                        taskid, language);
-                
-                if (mobject != null)
-                    entry.setText((String)mobject[0].getValue("TEXT"));
-                
-                list.add(entry);
+            if (lists.containsKey(groupname)) {
+                entries = lists.get(groupname);
+            } else {
+                entries = new LinkedHashSet<TaskEntry>();
+                lists.put(groupname, entries);
             }
+            
+            taskname = object.getValue("NAME");
+            taskid = object.getValue("ID");
+            entry = new TaskEntry();
+            entry.setName(taskname);
+            entries.add(entry);
+            mobject = documents.selectLimitedTo(QUERIES[TASK_TEXT], 1,
+                    taskid, language);
+            
+            if (mobject != null)
+                entry.setText((String)mobject[0].getValue("TEXT"));
         }
         
         return lists;
@@ -133,7 +131,8 @@ public class Main extends AbstractPage {
     public final void main(View view) throws Exception {
         Link link;
         NodeList groups, tasklist;
-        List<TasksList> lists;
+        Set<TaskEntry> entries;
+        Map<String, Set<TaskEntry>> lists;
         DataForm form;
         DataItem cmdline;
         Parameter groupcommand;
@@ -161,11 +160,12 @@ public class Main extends AbstractPage {
             groups.setStyleClass("groups");
             groups.setStyleClass(NodeList.ITEM, "group_item");
             
-            for (TasksList tasks : lists) {
-                tasklist = new NodeList(groups, tasks.getName());
+            for (String groupname : lists.keySet()) {
+                entries = lists.get(groupname);
+                tasklist = new NodeList(groups, groupname);
                 tasklist.setListType(NodeList.DEFINITION);
                 
-                for (TaskEntry entry : tasks.getEntries()) {
+                for (TaskEntry entry : entries) {
                     groupcommand = new Parameter(container, "groupcommand");
                     taskname = entry.getName();
                     text = entry.getText();
