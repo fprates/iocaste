@@ -307,18 +307,25 @@ public class Parser {
         
         for (;;) {
             if (i == buffer.length) {
-                if (components.arg2 == null) {
-                    components.arg2 = components.temp;
-                    if (!isjoin) {
-                        if (components.arg2.equals("?"))
-                            components.criteria.add(queryinfo.criteria[argnr]);
-                    } else {
-                        components.arg2 = rebuildField(components.temp.
-                                toUpperCase(), queryinfo, cache);
-                    }
+                args.add(components);
+                if (components.arg2 != null)
+                    break;
+                
+                if (isjoin) {
+                    components.arg2 = rebuildField(components.temp.
+                            toUpperCase(), queryinfo, cache);
+                    break;
                 }
                 
-                args.add(components);
+                components.arg2 = components.temp;
+                if (!components.arg2.equals("?"))
+                    break;
+                
+                if (components.op.equals("IN"))
+                    parseRange(components, argnr,queryinfo.criteria);
+                else
+                    components.criteria.add(queryinfo.criteria[argnr]);
+                
                 break;
             }
             
