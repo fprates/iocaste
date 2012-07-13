@@ -103,6 +103,40 @@ public class Query {
     
     /**
      * 
+     * @param queryinfo
+     * @param line
+     * @return
+     */
+    private static final ExtendedObject getExtendedObject2From(
+            QueryInfo queryinfo, Map<String, Object> line, Cache cache)
+                    throws Exception {
+        DocumentModel model;
+        DocumentModelItem item, itemref;
+        String[] composed;
+        int i;
+        
+        if (queryinfo.join.size() == 0)
+            return getExtendedObjectFrom(queryinfo.model, line);
+
+        model = new DocumentModel();
+        i = 0;
+        for (String column : queryinfo.columns) {
+            item = new DocumentModelItem();
+            composed = column.split("\\.");
+            itemref = Model.get(composed[0], cache).getModelItem(composed[1]);
+            item.setName(composed[1]);
+            item.setTableFieldName(itemref.getTableFieldName());
+            item.setIndex(i++);
+            item.setDataElement(itemref.getDataElement());
+            item.setDocumentModel(model);
+            model.add(item);
+        }
+        
+        return getExtendedObjectFrom(model, line);
+    }
+    
+    /**
+     * 
      * @param model
      * @return
      */
@@ -208,7 +242,7 @@ public class Query {
         
         for (int i = 0; i < lines.length; i++) {
             line = (Map<String, Object>)lines[i];
-            objects[i] = getExtendedObjectFrom(queryinfo.model, line);
+            objects[i] = getExtendedObject2From(queryinfo, line, cache);
         }
         
         return objects;

@@ -452,6 +452,11 @@ public class Parser {
             i = 1;
             t = queryinfo.columns.size();
             for (String column : queryinfo.columns) {
+                if (column.equals("*")) {
+                    sb.append("*");
+                    break;
+                }
+                
                 sb.append(rebuildField(column, queryinfo, cache));
                 if ((i++) < t)
                     sb.append(", ");
