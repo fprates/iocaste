@@ -29,10 +29,15 @@ public abstract class AbstractPage extends AbstractFunction {
     /**
      * Retorna a página anterior.
      * @param view visão atual
-     * @throws Exception
      */
-    public void back(View view) throws Exception {
-        String[] entry = new Shell(this).popPage(view);
+    public void back(View view) {
+        String[] entry;
+        try {
+            entry = new Shell(this).popPage(view);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
         

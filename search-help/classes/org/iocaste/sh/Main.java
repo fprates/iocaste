@@ -16,11 +16,16 @@ public class Main extends AbstractPage {
      * 
      * @param controldata
      * @param view
-     * @throws Exception 
      */
     @Override
-    public void back(View view) throws Exception {
-        String[] entry = new Shell(this).popPage(view);
+    public void back(View view) {
+        String[] entry;
+        try {
+            entry = new Shell(this).popPage(view);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
     }
