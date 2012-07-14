@@ -14,17 +14,37 @@ import org.iocaste.shell.common.View;
 public class Request {
     private static final byte PROFILES = 0;
     private static final byte DEL_USR_AUTH = 1;
+    private static final byte TASKS = 2;
     private static final String[] QUERIES = {
         "from USER_AUTHORITY where USERNAME = ?",
-        "delete from USER_AUTHORITY where USERNAME = ?"
+        "delete from USER_AUTHORITY where USERNAME = ?",
+        "from USER_TASKS_GROUPS where USERNAME = ?"
     };
     
+    /**
+     * 
+     * @param view
+     */
     public static final void addprofile(View view) {
         Table profiles = view.getElement("profiles");
-        
         Common.insertItem(profiles, null, Common.getMode(view));
     }
     
+    /**
+     * 
+     * @param view
+     */
+    public static final void addtask(View view) {
+        Table tasks = view.getElement("tasks");
+        Common.insertItem(tasks, null, Common.getMode(view));
+    }
+    
+    /**
+     * 
+     * @param view
+     * @param function
+     * @throws Exception
+     */
     public static final void create(View view, Function function)
             throws Exception {
         DataForm form = view.getElement("selection");
@@ -38,9 +58,16 @@ public class Request {
         view.setReloadableView(true);
         view.export("username", username);
         view.export("mode", Common.CREATE);
-        view.redirect(null, "form");
+        view.redirect("form");
     }
     
+    /**
+     * 
+     * @param view
+     * @param function
+     * @param mode
+     * @throws Exception
+     */
     public static final void load(View view, Function function, byte mode)
             throws Exception {
         ExtendedObject[] objects;
@@ -57,12 +84,21 @@ public class Request {
         objects = documents.select(QUERIES[PROFILES], username);
         view.export("profiles", objects);
         
+        objects = documents.select(QUERIES[TASKS], username);
+        view.export("tasks", objects);
+        
         view.setReloadableView(true);
         view.export("identity", object);
         view.export("mode", mode);
-        view.redirect(null, "form");
+        view.redirect("form");
     }
     
+    /**
+     * 
+     * @param view
+     * @param function
+     * @throws Exception
+     */
     public static final void save(View view, Function function)
             throws Exception {
         Authority authority;
@@ -99,11 +135,21 @@ public class Request {
         view.message(Const.STATUS, "user.saved.successfully");
     }
     
+    /**
+     * 
+     * @param view
+     */
     public static final void removeprofile(View view) {
         Table profiles = view.getElement("profiles");
-        
-        for (TableItem item : profiles.getItens())
-            if (item.isSelected())
-                profiles.remove(item);
+        Common.removeItem(profiles);
+    }
+    
+    /**
+     * 
+     * @param view
+     */
+    public static final void removetask(View view) {
+        Table tasks = view.getElement("tasks");
+        Common.removeItem(tasks);
     }
 }

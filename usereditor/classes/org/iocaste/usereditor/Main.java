@@ -14,6 +14,10 @@ public class Main extends AbstractPage {
         Request.addprofile(view);
     }
     
+    public final void addtask(View view) {
+        Request.addtask(view);
+    }
+    
     public final void create(View view) throws Exception {
         Request.create(view, this);
     }
@@ -36,6 +40,10 @@ public class Main extends AbstractPage {
     
     public final void removeprofile(View view) {
         Request.removeprofile(view);
+    }
+    
+    public final void removetask(View view) {
+        Request.removetask(view);
     }
     
     public final void save(View view) throws Exception {

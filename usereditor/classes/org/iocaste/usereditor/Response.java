@@ -30,13 +30,13 @@ public class Response {
      */
     public static final void form(View view, Function function)
             throws Exception {
-        Container profilecnt;
-        Table profiles;
+        Container tabcnt;
+        Table profiles, tasks;
         TabbedPaneItem tabitem;
-        Button save, addprofile, removeprofile;
+        Button save, addprofile, removeprofile, addtask, removetask;
         DataItem secret, confirm, username;
         ExtendedObject object;
-        ExtendedObject[] oprofiles;
+        ExtendedObject[] objects;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         byte mode = Common.getMode(view);
@@ -70,23 +70,38 @@ public class Response {
         tabitem.setContainer(form);
         
         /*
+         * tarefas
+         */
+        tabcnt = new StandardContainer(tabs, "taskscnt");
+        addtask = new Button(tabcnt, "addtask");
+        removetask = new Button(tabcnt, "removetask");
+        model = documents.getModel("USER_TASKS_GROUPS");
+        tasks = new Table(tabcnt, "tasks");
+        tasks.importModel(model);
+        
+        for (TableColumn column : tasks.getColumns())
+            if (!column.isMark() && !column.getName().equals("GROUP"))
+                column.setVisible(false);
+        
+        tabitem = new TabbedPaneItem(tabs, "taskstab");
+        tabitem.setContainer(tabcnt);
+        
+        /*
          * perfis
          */
-        profilecnt = new StandardContainer(tabs, "profilecnt");
-        
-        addprofile = new Button(profilecnt, "addprofile");
-        removeprofile = new Button(profilecnt, "removeprofile");
-        
+        tabcnt = new StandardContainer(tabs, "profilecnt");
+        addprofile = new Button(tabcnt, "addprofile");
+        removeprofile = new Button(tabcnt, "removeprofile");
         model = documents.getModel("USER_AUTHORITY");
-        profiles = new Table(profilecnt, "profiles");
+        profiles = new Table(tabcnt, "profiles");
         profiles.importModel(model);
         
         for (TableColumn column : profiles.getColumns())
-            if (!column.getName().equals("PROFILE"))
+            if (!column.isMark() && !column.getName().equals("PROFILE"))
                 column.setVisible(false);
         
         tabitem = new TabbedPaneItem(tabs, "profiletab");
-        tabitem.setContainer(profilecnt);
+        tabitem.setContainer(tabcnt);
         
         save = new Button(container, "save");
         
@@ -94,35 +109,52 @@ public class Response {
         case Common.CREATE:
             addprofile.setVisible(true);
             removeprofile.setEnabled(false);
+            addtask.setVisible(true);
+            removetask.setEnabled(false);
             profiles.setMark(true);
+            tasks.setMark(true);
             username.set(view.getParameter("username"));
             break;
             
         case Common.DISPLAY:
             addprofile.setVisible(false);
             removeprofile.setVisible(false);
+            addtask.setVisible(false);
+            removetask.setVisible(false);
             profiles.setMark(false);
+            tasks.setMark(false);
             object = view.getParameter("identity");
             form.setObject(object);
             save.setVisible(false);
             
-            oprofiles = view.getParameter("profiles");
-            if (oprofiles != null)
-                for (ExtendedObject oprofile : oprofiles)
+            objects = view.getParameter("profiles");
+            if (objects != null)
+                for (ExtendedObject oprofile : objects)
                     Common.insertItem(profiles, oprofile, mode);
             
+            objects = view.getParameter("tasks");
+            if (objects != null)
+                for (ExtendedObject otask : objects)
+                    Common.insertItem(tasks, otask, mode);
             break;
             
         case Common.UPDATE:
             addprofile.setVisible(true);
+            addtask.setVisible(true);
             profiles.setMark(true);
+            tasks.setMark(true);
             object = view.getParameter("identity");
             form.setObject(object);
             
-            oprofiles = view.getParameter("profiles");
-            if (oprofiles != null)
-                for (ExtendedObject oprofile : oprofiles)
+            objects = view.getParameter("profiles");
+            if (objects != null)
+                for (ExtendedObject oprofile : objects)
                     Common.insertItem(profiles, oprofile, mode);
+            
+            objects = view.getParameter("tasks");
+            if (objects != null)
+                for (ExtendedObject otask : objects)
+                    Common.insertItem(tasks, otask, mode);
             
             break;
         }

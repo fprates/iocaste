@@ -43,4 +43,10 @@ public class Common {
         
         item.setObject(object);
     }
+    
+    public static final void removeItem(Table table) {
+        for (TableItem item : table.getItens())
+            if (item.isSelected())
+                table.remove(item);
+    }
 }
