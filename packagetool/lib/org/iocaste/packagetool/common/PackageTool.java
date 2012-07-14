@@ -24,6 +24,23 @@ public class PackageTool extends AbstractServiceInterface {
     
     /**
      * 
+     * @param group
+     * @param username
+     * @throws Exception
+     */
+    public final void assignTaskGroup(String group, String username)
+            throws Exception {
+        Message message = new Message();
+        
+        message.setId("assign_task_group");
+        message.add("group", group);
+        message.add("username", username);
+        
+        call(message);
+    }
+    
+    /**
+     * 
      * @return
      */
     public static final String[] getAvailablePackages() {
@@ -81,7 +98,7 @@ public class PackageTool extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final Integer install(String name) throws Exception {
+    public final int install(String name) throws Exception {
         InstallData data = getInstallData(name);
         Message message = new Message();
         

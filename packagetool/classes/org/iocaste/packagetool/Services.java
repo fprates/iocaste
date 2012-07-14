@@ -35,9 +35,26 @@ public class Services extends AbstractFunction {
     };
 
     public Services() {
+        export("assign_task_group", "assignTaskGroup");
         export("install", "install");
         export("is_installed", "isInstalled");
         export("uninstall", "uninstall");
+    }
+    
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
+    public final void assignTaskGroup(Message message) throws Exception {
+        ExtendedObject group;
+        String groupname = message.getString("group");
+        String username = message.getString("username");
+        State state = new State();
+        
+        state.documents = new Documents(this);
+        group = TaskSelector.getGroup(groupname, state);
+        TaskSelector.assignGroup(group, username, state);
     }
     
     /**
