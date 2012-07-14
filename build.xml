@@ -69,6 +69,9 @@
         <!-- install -->
         <ant antfile="${basedir}/src/install/build.xml"/>
         
+        <!-- datamigr -->
+        <ant antfile="${basedir}/src/datamigr/build.xml"/>
+        
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
     	
