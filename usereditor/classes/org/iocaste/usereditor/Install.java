@@ -23,6 +23,7 @@ public class Install {
         
         messages = new HashMap<String, String>();
         messages.put("addprofile", "Adicionar");
+        messages.put("addtask", "Adicionar");
         messages.put("create", "Criar");
         messages.put("display", "Exibir");
         messages.put("GROUP", "Grupo de tarefas");
@@ -31,6 +32,7 @@ public class Install {
         messages.put("PROFILE", "Perfil");
         messages.put("profiletab", "Perfis");
         messages.put("removeprofile", "Remover");
+        messages.put("removetask", "Remover");
         messages.put("save", "Salvar");
         messages.put("SECRET", "Senha");
         messages.put("secret.confirm", "Confirmação");
@@ -62,6 +64,14 @@ public class Install {
         sh.setName("SH_USER_PROFILE");
         sh.add("NAME");
         data.add(sh);
+        
+        sh = new SearchHelpData();
+        sh.setModel("TASKS_GROUPS");
+        sh.setExport("NAME");
+        sh.setName("SH_TASKS_GROUPS");
+        sh.add("NAME");
+        data.add(sh);
+        
         return data;
     }
 }

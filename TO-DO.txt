@@ -14,7 +14,7 @@ efetuar testes e avaliar necessidades
 
 - usereditor
 confirmação de validade de senha
-incluir grupos de tarefas
+incluir grupos de tarefas (feito)
 implementar grupos de usuários
 
 - styleeditor
@@ -50,11 +50,12 @@ implementar range
 diálogos modais
 fixar cabeçalho
 alinhamento de componentes em container
-implementar à componente de detalhe
+implementar componente de detalhe
 implementar informações técnicas do elemento
 permitir anexar documentação à mensagem de erro
 implementar calendário para campos tipo data
 implementar componente para faixa de valores (feito)
+
 - core
 informação sobre versão do núcleo
 implementar cache de autorizações (feito)
@@ -73,7 +74,7 @@ dispor grupos horizontalmente, para melhor uso de espaço (feito)
 
 - external
 permitir configurar interface do webservice
-implementar protocolo par leitura de telas
+implementar protocolo para leitura de telas
 implementar comunicação de webservice com o módulo
 
 - search-help
@@ -82,7 +83,7 @@ implementar exibição modal (depende do shell)
 
 - não relacionados
   retirar commit() de getView() em AbstractPage. deixa ciclo de vida da conexão
-iniciada em getView() se extender até execAction().
+iniciada em getView() se extender até execAction(). (feito)
 unificar pacotes de protocolo
 implementar importação/exportação de dados
 implementar log de eventos

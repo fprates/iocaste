@@ -26,6 +26,7 @@ public class Common {
             byte mode) {
         InputComponent input;
         TableItem item = new TableItem(itens);
+        String name, tablename = itens.getName();
         
         for (TableColumn column : itens.getColumns()) {
             if (column.isMark())
@@ -34,8 +35,14 @@ public class Common {
             input = new TextField(itens, column.getName());
             input.setEnabled(mode != Common.DISPLAY);
             item.add(input);
-            if (input.getName().equals("PROFILE"))
+            name = input.getName();
+            if (tablename.equals("profiles") && name.equals("PROFILE")) {
                 input.getModelItem().setSearchHelp("SH_USER_PROFILE");
+                continue;
+            }
+            
+            if (tablename.equals("tasks") && name.equals("GROUP"))
+                input.getModelItem().setSearchHelp("SH_TASKS_GROUPS");
         }
         
         if (object == null)

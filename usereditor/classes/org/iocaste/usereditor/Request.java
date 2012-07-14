@@ -3,6 +3,7 @@ package org.iocaste.usereditor;
 import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -15,10 +16,12 @@ public class Request {
     private static final byte PROFILES = 0;
     private static final byte DEL_USR_AUTH = 1;
     private static final byte TASKS = 2;
+    private static final byte DEL_USR_TASK = 3;
     private static final String[] QUERIES = {
         "from USER_AUTHORITY where USERNAME = ?",
         "delete from USER_AUTHORITY where USERNAME = ?",
-        "from USER_TASKS_GROUPS where USERNAME = ?"
+        "from USER_TASKS_GROUPS where USERNAME = ?",
+        "delete from USER_TASKS_GROUPS where USERNAME = ?"
     };
     
     /**
@@ -101,14 +104,14 @@ public class Request {
      */
     public static final void save(View view, Function function)
             throws Exception {
+        PackageTool pkgtool;
         Authority authority;
         Table itens;
-        String profilename;
         byte mode = Common.getMode(view);
         DataForm form = view.getElement("identity");
         ExtendedObject object = form.getObject();
         Documents documents = new Documents(function);
-        String username = object.getValue("USERNAME");
+        String name, username = object.getValue("USERNAME");
         
         switch (mode) {
         case Common.CREATE:
@@ -122,16 +125,25 @@ public class Request {
         case Common.UPDATE:
             documents.modify(object);
             documents.update(QUERIES[DEL_USR_AUTH], username);
+            documents.update(QUERIES[DEL_USR_TASK], username);
             break;
         }
         
         authority = new Authority(function);
         itens = view.getElement("profiles");
         for (TableItem item : itens.getItens()) {
-            profilename = ((InputComponent)item.get("PROFILE")).get();
-            authority.assign(username, profilename);
+            name = ((InputComponent)item.get("PROFILE")).get();
+            authority.assign(username, name);
         }
         
+        itens = view.getElement("tasks");
+        if (itens.length() > 0) {
+            pkgtool = new PackageTool(function);
+            for (TableItem item : itens.getItens()) {
+                name = ((InputComponent)item.get("GROUP")).get();
+                pkgtool.assignTaskGroup(name, username);
+            }
+        }
         view.message(Const.STATUS, "user.saved.successfully");
     }
     
