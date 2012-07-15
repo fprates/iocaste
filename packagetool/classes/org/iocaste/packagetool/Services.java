@@ -44,9 +44,8 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
-     * @throws Exception
      */
-    public final void assignTaskGroup(Message message) throws Exception {
+    public final void assignTaskGroup(Message message) {
         ExtendedObject group;
         String groupname = message.getString("group");
         String username = message.getString("username");
@@ -168,18 +167,16 @@ public class Services extends AbstractFunction {
      * @param state
      */
     private final void installAuthorizations(Authorization[] authorizations,
-            State state) throws Exception {
+            State state) {
         String name;
         Authority authority = new Authority(state.function);
         
         for (Authorization authorization : authorizations) {
             name = authorization.getName();
-            
             if (authority.get(name) == null)
                 authority.save(authorization);
             
             authority.assign("ADMIN", "ALL", authorization);
-            
             Registry.add(name, "AUTHORIZATION", state);
         }
         
@@ -191,10 +188,9 @@ public class Services extends AbstractFunction {
      * @param links
      * @param tasks
      * @param state
-     * @throws Exception
      */
     private final void installLinks(Map<String, String> links,
-            DocumentModel tasks, State state) throws Exception {
+            DocumentModel tasks, State state) {
         ExtendedObject header;
         
         for (String link : links.keySet()) {
@@ -203,18 +199,15 @@ public class Services extends AbstractFunction {
             header.setValue("COMMAND", links.get(link));
             
             state.documents.save(header);
-
             Registry.add(link, "TASK", state);
         }
     }
     
     /**
      * 
-     * @param msgsource
      * @param state
-     * @throws Exception
      */
-    private final void installMessages(State state) throws Exception {
+    private final void installMessages(State state) {
         long index;
         int langcode;
         String locale;
@@ -313,10 +306,8 @@ public class Services extends AbstractFunction {
      * 
      * @param shdata
      * @param state
-     * @throws Exception
      */
-    private final void installSH(SearchHelpData[] shdata, State state)
-            throws Exception {
+    private final void installSH(SearchHelpData[] shdata, State state) {
         Set<DocumentModelItem> shm;
         ExtendedObject header;
         String shname;
@@ -359,10 +350,9 @@ public class Services extends AbstractFunction {
      * 
      * @param tasksgroups
      * @param state
-     * @throws Exception
      */
     private final void installTasksGroups(Map<String, Set<String>> tasksgroups,
-            State state) throws Exception {
+            State state) {
         Set<String> itens;
         ExtendedObject task, group;
         
@@ -389,9 +379,8 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      * @return
-     * @throws Exception
      */
-    public final boolean isInstalled(Message message) throws Exception {
+    public final boolean isInstalled(Message message) {
         String pkgname = message.getString("package");
         
         return isInstalled(pkgname);
@@ -401,9 +390,8 @@ public class Services extends AbstractFunction {
      * 
      * @param pkgname
      * @return
-     * @throws Exception
      */
-    private final boolean isInstalled(String pkgname) throws Exception {
+    private final boolean isInstalled(String pkgname) {
         ExtendedObject item = new Documents(this).
                 getObject("PACKAGE", pkgname);
         
@@ -413,9 +401,8 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
-     * @throws Exception
      */
-    public final void uninstall(Message message) throws Exception {
+    public final void uninstall(Message message) {
         String modeltype, name;
         ExtendedObject object;
         SHLib shlib;
@@ -499,7 +486,6 @@ public class Services extends AbstractFunction {
         }
             
         new Iocaste(this).invalidateAuthCache();
-        
         documents.update(QUERIES[DEL_PACKAGE], pkgname);
         documents.commit();
     }

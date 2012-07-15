@@ -27,10 +27,9 @@ public class TaskSelector {
      * @param group
      * @param state
      * @return
-     * @throws Exception
      */
     public static final ExtendedObject addEntry(String taskname,
-            ExtendedObject group, State state) throws Exception {
+            ExtendedObject group, State state) {
         ExtendedObject object;
         int entryid = group.getValue("CURRENT");
         int groupid = group.getValue("ID");
@@ -49,7 +48,6 @@ public class TaskSelector {
         object.setValue("GROUP", group.getValue("NAME"));
         
         state.documents.save(object);
-        
         return object;
     }
     
@@ -58,10 +56,9 @@ public class TaskSelector {
      * @param task
      * @param group
      * @param state
-     * @throws Exception
      */
     public static final void addEntryMessage(ExtendedObject task,
-            ExtendedObject group, State state) throws Exception {
+            ExtendedObject group, State state) {
         String name;
         DocumentModel model;
         ExtendedObject object;
@@ -94,10 +91,9 @@ public class TaskSelector {
      * @param username
      * @param state
      * @return
-     * @throws Exception
      */
     public static final void assignGroup(ExtendedObject group,
-            String username, State state) throws Exception {
+            String username, State state) {
         long taskid;
         DocumentModel model;
         ExtendedObject object;
@@ -122,10 +118,8 @@ public class TaskSelector {
      * @param name
      * @param state
      * @return
-     * @throws Exception
      */
-    public static final ExtendedObject createGroup(String name, State state)
-            throws Exception {
+    public static final ExtendedObject createGroup(String name, State state) {
         DocumentModel model = state.documents.getModel("TASKS_GROUPS");
         ExtendedObject object = new ExtendedObject(model);
         int id = new BigDecimal(state.documents.getNextNumber("TSKGROUP")).
@@ -145,10 +139,8 @@ public class TaskSelector {
      * @param name
      * @param state
      * @return
-     * @throws Exception
      */
-    public static final ExtendedObject getGroup(String name, State state)
-            throws Exception {
+    public static final ExtendedObject getGroup(String name, State state) {
         return state.documents.getObject("TASKS_GROUPS", name);
     }
     
@@ -156,10 +148,9 @@ public class TaskSelector {
      * 
      * @param groupname
      * @param documents
-     * @throws Exception
      */
     public static final void removeGroup(String groupname, Documents documents)
-            throws Exception {
+    {
         documents.update(QUERIES[DEL_USR_TSK_GRP], groupname);
         documents.update(QUERIES[DEL_TSK_GRP], groupname);
     }
@@ -168,10 +159,8 @@ public class TaskSelector {
      * 
      * @param taskname
      * @param documents
-     * @throws Exception
      */
-    public static final void removeTask(String taskname, Documents documents)
-            throws Exception {
+    public static final void removeTask(String taskname, Documents documents) {
         int taskid;
         ExtendedObject[] task;
         

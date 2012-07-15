@@ -30,9 +30,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void info(View view) throws Exception {
+    public final void info(View view) {
         InstallData data;
         String pkgname;
         Table table = view.getElement("packages");
@@ -63,18 +62,16 @@ public class Main extends AbstractPage {
      * 
      * @param message
      * @return
-     * @throws Exception
      */
-    public final InstallData install(Message message) throws Exception {
+    public final InstallData install(Message message) {
         return Install.init(this);
     }
     
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void main(View view) throws Exception {
+    public final void main(View view) {
         Link link;
         TableItem item;
         String action;
@@ -113,21 +110,18 @@ public class Main extends AbstractPage {
         }
         
         info.setVisible(table.length() > 0);
-        
         view.setTitle("package-manager");
     }
     
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void packageinstall(View view) throws Exception {
+    public final void packageinstall(View view) {
         String pkgname = ((InputComponent)view.getElement("package")).get();
         PackageTool pkgtool = new PackageTool(this);
         
         pkgtool.install(pkgname);
-        
         view.setReloadableView(true);
         view.message(Const.STATUS, "package.installed");
     }
@@ -135,9 +129,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void packageuninstall(View view) throws Exception {
+    public final void packageuninstall(View view) {
         String pkgname = ((InputComponent)view.getElement("package")).get();
         PackageTool pkgtool = new PackageTool(this);
         

@@ -19,9 +19,8 @@ public class Install {
      * 
      * @param function
      * @return
-     * @throws Exception
      */
-    public static final InstallData init(Function function) throws Exception {
+    public static final InstallData init(Function function) {
         Map<String, String> messages;
         InstallData data = new InstallData();
         Models models = new Models();
@@ -109,10 +108,9 @@ public class Install {
      * @param data
      * @param models
      * @param function
-     * @throws Exception
      */
     private static final void installMessages(InstallData data, Models models,
-            Function function) throws Exception {
+            Function function) {
         Documents documents;
         DocumentModelItem item, reference;
         DocumentModel model = data.getModel("MESSAGES", "MSGSRC", null);
@@ -391,10 +389,9 @@ public class Install {
      * @param data
      * @param models
      * @param function
-     * @throws Exception
      */
     private static final void installUserTasksGroups(InstallData data,
-            Models models, Function function) throws Exception {
+            Models models, Function function) {
         DataElement element;
         DocumentModel model;
         DocumentModelItem item, username, groupname;

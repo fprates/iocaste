@@ -11,10 +11,8 @@ public class Registry {
      * @param name
      * @param model
      * @param state
-     * @throws Exception
      */
-    public static final void add(String name, String model, State state)
-            throws Exception {
+    public static final void add(String name, String model, State state) {
         ExtendedObject pkgitem = new ExtendedObject(
                 state.documents.getModel("PACKAGE_ITEM"));
         
@@ -32,10 +30,9 @@ public class Registry {
      * @param package_
      * @param function
      * @return
-     * @throws Exception
      */
     public static final ExtendedObject[] getEntries(String package_,
-            Function function) throws Exception {
+            Function function) {
         Documents documents = new Documents(function);
         String query = "from PACKAGE_ITEM where PACKAGE = ?";
         
