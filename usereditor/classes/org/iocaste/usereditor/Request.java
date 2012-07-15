@@ -46,10 +46,8 @@ public class Request {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void create(View view, Function function)
-            throws Exception {
+    public static final void create(View view, Function function) {
         DataForm form = view.getElement("selection");
         String username = form.get("USERNAME").get();
         
@@ -69,10 +67,8 @@ public class Request {
      * @param view
      * @param function
      * @param mode
-     * @throws Exception
      */
-    public static final void load(View view, Function function, byte mode)
-            throws Exception {
+    public static final void load(View view, Function function, byte mode) {
         ExtendedObject[] objects;
         DataForm form = view.getElement("selection");
         String username = form.get("USERNAME").get();
@@ -100,10 +96,8 @@ public class Request {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void save(View view, Function function)
-            throws Exception {
+    public static final void save(View view, Function function) {
         PackageTool pkgtool;
         Authority authority;
         Table itens;

@@ -26,10 +26,8 @@ public class Response {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void form(View view, Function function)
-            throws Exception {
+    public static final void form(View view, Function function) {
         Container tabcnt;
         Table profiles, tasks;
         TabbedPaneItem tabitem;
@@ -167,10 +165,8 @@ public class Response {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void selector(View view, Function function)
-            throws Exception {
+    public static final void selector(View view, Function function) {
         InputComponent input;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);

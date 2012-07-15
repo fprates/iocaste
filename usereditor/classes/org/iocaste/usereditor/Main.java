@@ -18,15 +18,15 @@ public class Main extends AbstractPage {
         Request.addtask(view);
     }
     
-    public final void create(View view) throws Exception {
+    public final void create(View view) {
         Request.create(view, this);
     }
     
-    public final void display(View view) throws Exception {
+    public final void display(View view) {
         Request.load(view, this, Common.DISPLAY);
     }
     
-    public final void form(View view) throws Exception {
+    public final void form(View view) {
         Response.form(view, this);
     }
     
@@ -34,7 +34,7 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
-    public final void main(View view) throws Exception {
+    public final void main(View view) {
         Response.selector(view, this);
     }
     
@@ -46,11 +46,11 @@ public class Main extends AbstractPage {
         Request.removetask(view);
     }
     
-    public final void save(View view) throws Exception {
+    public final void save(View view) {
         Request.save(view, this);
     }
     
-    public final void update(View view) throws Exception {
+    public final void update(View view) {
         Request.load(view, this, Common.UPDATE);
     }
 }
