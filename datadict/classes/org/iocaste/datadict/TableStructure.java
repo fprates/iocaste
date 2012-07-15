@@ -39,10 +39,8 @@ public class TableStructure {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void main(View view, Function function)
-            throws Exception {
+    public static final void main(View view, Function function) {
         Table itens;
         String name, title, modelname;
         TableColumn column;
@@ -125,10 +123,9 @@ public class TableStructure {
      * @param model
      * @param mode
      * @param function
-     * @throws Exception
      */
     private static final void prepareHeader(DataForm form, String modelname,
-            byte mode, Function function) throws Exception {
+            byte mode, Function function) {
         String name;
         DataItem dataitem;
         DataElement[] references = new DataElement[3];
@@ -187,11 +184,9 @@ public class TableStructure {
      * @param mode
      * @param model
      * @param function
-     * @throws Exception
      */
     private static final void prepareItens(Table itens, byte mode,
-            String modelname, Function function, View view)
-                    throws Exception {
+            String modelname, Function function, View view) {
         Map<Common.ItensNames, DataElement> references =
                 Common.getFieldReferences(function);
         Documents documents = new Documents(function);
@@ -209,7 +204,6 @@ public class TableStructure {
         else
             for (DocumentModelItem modelitem : usermodel.getItens()) {
                 itemconfig.setModelItem(modelitem);
-                
                 Common.insertItem(itemconfig);
             }
     }

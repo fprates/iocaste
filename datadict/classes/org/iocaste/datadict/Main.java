@@ -19,7 +19,7 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void add(View vdata) throws Exception {
+    public final void add(View vdata) {
         Add.main(vdata, this);
     }
     
@@ -34,18 +34,16 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void create(View view) throws Exception {
+    public final void create(View view) {
         Selection.create(view, this);
     }
     
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void delete(View view) throws Exception {
+    public final void delete(View view) {
         int op = Common.getTpObjectValue(view);
         
         switch (op) {
@@ -81,9 +79,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void detailsupdate(View view) throws Exception {
+    public final void detailsupdate(View view) {
         if (ItemDetails.update(view, this))
             back(view);
     }
@@ -93,7 +90,7 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public final void detailsview(View view) throws Exception {
+    public final void detailsview(View view) {
         ItemDetails.main(view, this);
     }
     
@@ -140,7 +137,7 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void main(View view) throws Exception {
+    public final void main(View view) {
         Selection.main(view, this);
     }
     
@@ -155,45 +152,40 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void renamedialog(View view) throws Exception {
+    public final void renamedialog(View view) {
         Rename.dialog(view, this);
     }
     
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void renameok(View view) throws Exception {
+    public final void renameok(View view) {
         Rename.ok(view, this);
     }
     
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void save(View view) throws Exception {
+    public final void save(View view) {
         Save.main(view, this);
     }
     
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void savesh(View view) throws Exception {
+    public final void savesh(View view) {
         SHStructure.save(view, this);
     }
     
     /**
      * 
-     * @param vdata
-     * @throws Exception 
+     * @param vdata 
      */
-    public final void show(View view) throws Exception {
+    public final void show(View view) {
         int op = Common.getTpObjectValue(view);
         
         switch (op) {
@@ -211,9 +203,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void shstructure(View vdata) throws Exception {
+    public final void shstructure(View vdata) {
         SHStructure.main(vdata, this);
     }
     
@@ -221,16 +212,15 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void tbstructure(View vdata) throws Exception {
+    public final void tbstructure(View vdata) {
         TableStructure.main(vdata, this);
     }
     
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void update(View view) throws Exception {
+    public final void update(View view) {
         int op = Common.getTpObjectValue(view);
         
         switch (op) {

@@ -20,10 +20,8 @@ public class Save {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void main(View view, Function function)
-            throws Exception {
+    public static final void main(View view, Function function) {
         DocumentModelItem modelitem, reference;
         DataElement dataelement;
         String value, modelref, itemref, itemname;

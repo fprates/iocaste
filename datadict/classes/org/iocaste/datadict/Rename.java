@@ -18,10 +18,8 @@ public class Rename {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void dialog(View view, Function function)
-            throws Exception {
+    public static final void dialog(View view, Function function) {
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "rename.form");
@@ -39,7 +37,6 @@ public class Rename {
         newname.setDataElement(delement);
         
         new Button(container, "renameok");
-        
         view.setFocus(newname);
     }
     
@@ -60,10 +57,8 @@ public class Rename {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void ok(View view, Function function)
-            throws Exception {
+    public static final void ok(View view, Function function) {
         DataForm form = view.getElement("rename.form");
         String oldname = form.get("oldname").get();
         String newname = form.get("newname").get();
@@ -75,8 +70,6 @@ public class Rename {
         }
         
         documents.renameModel(oldname, newname);
-        documents.commit();
-        
         view.message(Const.STATUS, "model.renamed.successfully");
         ((AbstractPage)function).back(view);
     }

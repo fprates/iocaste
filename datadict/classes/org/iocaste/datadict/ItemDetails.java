@@ -23,10 +23,8 @@ public class ItemDetails {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void main(View view, Function function)
-            throws Exception {
+    public static final void main(View view, Function function) {
         DataItem dataitem;
         String itemname = view.getParameter("item.name");
         String modelname = view.getParameter("model.name");
@@ -154,10 +152,8 @@ public class ItemDetails {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final boolean update(View view, Function function)
-            throws Exception {
+    public static final boolean update(View view, Function function) {
         DataItem refitem;
         InputComponent input;
         DocumentModel model;

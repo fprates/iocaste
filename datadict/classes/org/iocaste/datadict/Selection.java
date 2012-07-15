@@ -23,10 +23,8 @@ public class Selection {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void create(View view, Function function)
-            throws Exception {
+    public static final void create(View view, Function function) {
         SHLib shlib;
         Documents documents = new Documents(function);
         DataForm form = view.getElement("model");
@@ -66,10 +64,8 @@ public class Selection {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static void deletesh(View view, Function function)
-            throws Exception {
+    public static void deletesh(View view, Function function) {
         ExtendedObject[] shdata;
         SHLib shlib = new SHLib(function);
         DataForm form = view.getElement("model");
@@ -95,10 +91,8 @@ public class Selection {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static void deletetb(View view, Function function)
-            throws Exception {
+    public static void deletetb(View view, Function function) {
         Documents documents = new Documents(function);
         DataForm form = view.getElement("model");
         String name = form.get("name").get();
@@ -118,10 +112,8 @@ public class Selection {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void main(View view, Function function)
-            throws Exception {
+    public static final void main(View view, Function function) {
         RadioGroup group;
         RadioButton tpobj;
         Container tpobjcnt;
@@ -159,10 +151,8 @@ public class Selection {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void readtb(View view, Function function)
-            throws Exception {
+    public static final void readtb(View view, Function function) {
         DocumentModel model;
         DataForm form = view.getElement("model");
         String name = form.get("name").get();
@@ -174,7 +164,6 @@ public class Selection {
         }
         
         model = documents.getModel(name);
-        
         view.setReloadableView(true);
         view.export("model", model);
         view.redirect(null, "tbstructure");
@@ -184,10 +173,8 @@ public class Selection {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void readsh(View view, Function function)
-            throws Exception {
+    public static final void readsh(View view, Function function) {
         ExtendedObject[] shitens;
         SHLib shlib = new SHLib(function);
         DataForm form = view.getElement("model");

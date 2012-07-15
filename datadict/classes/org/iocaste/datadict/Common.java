@@ -65,10 +65,9 @@ public class Common {
      * 
      * @param function
      * @return
-     * @throws Exception
      */
     public static final Map<ItensNames, DataElement> getFieldReferences(
-            Function function) throws Exception {
+            Function function) {
         Map<ItensNames, DataElement> references =
                 new HashMap<ItensNames, DataElement>();
         Documents docs = new Documents(function);

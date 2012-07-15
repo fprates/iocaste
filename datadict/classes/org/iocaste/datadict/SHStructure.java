@@ -79,10 +79,8 @@ public class SHStructure {
     /**
      * 
      * @param view
-     * @param function
      */
-    public static final void main(View view, Function function)
-            throws Exception {
+    public static final void main(View view, Function function) {
         DataItem ditem;
         String name;
         ExtendedObject[] oitens;
@@ -184,10 +182,8 @@ public class SHStructure {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void save(View view, Function function)
-            throws Exception {
+    public static final void save(View view, Function function) {
         ExtendedObject[] oitens;
         int i = 0;
         SHLib shlib = new SHLib(function);

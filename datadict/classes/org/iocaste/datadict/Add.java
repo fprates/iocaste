@@ -10,10 +10,8 @@ public class Add {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void main(View view, Function function)
-            throws Exception {
+    public static final void main(View view, Function function) {
         ItemConfig config;
         byte mode = Common.getMode(view);
         
