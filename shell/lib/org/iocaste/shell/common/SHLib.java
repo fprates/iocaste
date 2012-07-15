@@ -22,14 +22,12 @@ public class SHLib extends AbstractServiceInterface {
     /**
      * Associa ajuda de pesquisa à um item de modelo.
      * @param item item de modelo
-     * @throws Exception
      */
-    public final void assign(DocumentModelItem item) throws Exception {
+    public final void assign(DocumentModelItem item) {
         Message message = new Message();
         
         message.setId("assign");
         message.add("model_item", item);
-        
         call(message);
     }
     
@@ -37,14 +35,12 @@ public class SHLib extends AbstractServiceInterface {
      * Retorna dados do ajuda de pesquisa.
      * @param name nome
      * @return dados da ajuda de pesquisa
-     * @throws Exception
      */
-    public final ExtendedObject[] get(String name) throws Exception {
+    public final ExtendedObject[] get(String name) {
         Message message = new Message();
         
         message.setId("get");
         message.add("name", name);
-        
         return call(message);
     }
     
@@ -52,14 +48,12 @@ public class SHLib extends AbstractServiceInterface {
      * Remove ajuda de pesquisa.
      * @param shname nome
      * @return 1, se removido com sucesso.
-     * @throws Exception
      */
-    public final int remove(String name) throws Exception {
+    public final int remove(String name) {
         Message message = new Message();
         
         message.setId("remove");
         message.add("shname", name);
-        
         return call(message);
     }
     
@@ -67,16 +61,13 @@ public class SHLib extends AbstractServiceInterface {
      * Grava ajuda de pesquisa.
      * @param header dados do cabeçalho.
      * @param itens itens da ajuda
-     * @throws Exception
      */
-    public final void save(ExtendedObject header, ExtendedObject...itens)
-            throws Exception {
+    public final void save(ExtendedObject header, ExtendedObject...itens) {
         Message message = new Message();
         
         message.setId("save");
         message.add("header", header);
         message.add("itens", itens);
-        
         call(message);
     }
     
@@ -84,14 +75,12 @@ public class SHLib extends AbstractServiceInterface {
      * Remove ajuda de pesquisa.
      * @param shname nome
      * @return 1, se removido com sucesso
-     * @throws Exception
      */
-    public final int unassign(String shname) throws Exception {
+    public final int unassign(String shname) {
         Message message = new Message();
         
         message.setId("unassign");
         message.add("name", shname);
-        
         return call(message);
     }
     
@@ -99,16 +88,13 @@ public class SHLib extends AbstractServiceInterface {
      * Atualiza ajuda de pesquisa
      * @param header cabeçalho
      * @param itens itens
-     * @throws Exception
      */
-    public final void update(ExtendedObject header, ExtendedObject... itens)
-            throws Exception {
+    public final void update(ExtendedObject header, ExtendedObject... itens) {
         Message message = new Message();
         
         message.setId("update");
         message.add("header", header);
         message.add("itens", itens);
-        
         call(message);
     }
 

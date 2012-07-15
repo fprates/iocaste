@@ -10,8 +10,7 @@ import org.iocaste.protocol.Iocaste;
 public class Style {
 
     private static final Object[] checkedSelect(Iocaste iocaste, String from,
-            Map<String, String[]> ijoin, String where, Object... criteria)
-                    throws Exception {
+            Map<String, String[]> ijoin, String where, Object... criteria) {
         Map<String, Object> parameters = new HashMap<String, Object>();
         
         parameters.put("from", from);
@@ -27,11 +26,10 @@ public class Style {
      * @param name
      * @param function
      * @return
-     * @throws Exception
      */
     @SuppressWarnings("unchecked")
     public static final Map<String, Map<String, String>> get(
-            String name, Function function) throws Exception {
+            String name, Function function) {
         String element;
         Object[] eobjects;
         Map<String, Object> oelement;

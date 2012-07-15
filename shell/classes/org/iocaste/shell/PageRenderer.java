@@ -141,10 +141,8 @@ public class PageRenderer extends AbstractRenderer {
      * 
      * @param contextdata
      * @return
-     * @throws Exception
      */
-    private final PageContext createPageContext(ContextData contextdata)
-            throws Exception {
+    private final PageContext createPageContext(ContextData contextdata) {
         AppContext appctx;
         PageContext pagectx;
         List<SessionContext> sessions;
@@ -233,10 +231,9 @@ public class PageRenderer extends AbstractRenderer {
      * 
      * @param input
      * @param inputdata
-     * @throws Exception
      */
     private static final void generateSearchHelp(InputComponent input,
-            InputData inputdata) throws Exception {
+            InputData inputdata) {
         SearchHelp sh;
         SHLib shlib = new SHLib(inputdata.function);
         String shname = input.getModelItem().getSearchHelp();
@@ -274,10 +271,9 @@ public class PageRenderer extends AbstractRenderer {
      * @param appname
      * @param complexid
      * @return
-     * @throws Exception
      */
     private final boolean isExecuteAuthorized(String appname, String complexid)
-            throws Exception {
+    {
         String url;
         Message message;
         Authorization authorization = new Authorization("APPLICATION.EXECUTE");
@@ -720,10 +716,8 @@ public class PageRenderer extends AbstractRenderer {
     /**
      * 
      * @param inputdata
-     * @throws Exception
      */
-    private static final void registerInputs(InputData inputdata)
-            throws Exception {
+    private static final void registerInputs(InputData inputdata) {
         RangeInputComponent rinput;
         Element[] elements;
         InputData inputdata_;
@@ -892,10 +886,9 @@ public class PageRenderer extends AbstractRenderer {
      * @param getSessionId()
      * @param view
      * @param function
-     * @throws Exception
      */
     public static final void updateView(String sessionid, View view,
-            Function function) throws Exception {
+            Function function) {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
         AppContext appcontext = apps.get(complexid[0]).get(logid).

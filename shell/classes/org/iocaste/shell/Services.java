@@ -18,13 +18,24 @@ public class Services extends AbstractFunction {
         export("update_view", "updateView");
     }
     
+    /**
+     * 
+     * @param name
+     * @param function
+     * @return
+     */
     public final static Map<String, Map<String, String>> getStyle(
-            String name, Function function) throws Exception {
+            String name, Function function) {
         return Style.get(name, function);
     }
     
+    /**
+     * 
+     * @param message
+     * @return
+     */
     public final Map<String, Map<String, String>> getStyleSheet(Message message)
-            throws Exception {
+    {
         String sessionid = message.getSessionid();
         String appname = message.getString("appname");
         
@@ -81,9 +92,8 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
-     * @throws Exception
      */
-    public final void updateView(Message message) throws Exception {
+    public final void updateView(Message message) {
         PageRenderer.updateView(message.getSessionid(),
                 (View)message.get("view"), this);
     }
