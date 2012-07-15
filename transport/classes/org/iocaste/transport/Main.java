@@ -45,11 +45,9 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void add(View view) throws Exception {
+    public final void add(View view) {
         Table objects = view.getElement("objects");
-        
         insertItem(objects);
     }
     
@@ -77,7 +75,6 @@ public class Main extends AbstractPage {
             list.add(breader.readLine());
         
         breader.close();
-        
         if (list.size() == 0)
             return FILE_IS_EMPTY;
         
@@ -86,7 +83,6 @@ public class Main extends AbstractPage {
         nitens = 0;
         model = null;
         documents = new Documents(this);
-        
         for (String line : list) {
             switch (pass) {
             case 0:
@@ -107,17 +103,13 @@ public class Main extends AbstractPage {
                 model.setClassName(parsed[2]);
                 
                 nitens = Integer.parseInt(parsed[3]);
-                
                 pass = 2;
-                
                 currentline = 0;
                 continue;
             case 2:
                 parsed = line.split(";");
-                
                 modelitem = new DocumentModelItem();
                 modelitem.setDocumentModel(model);
-
                 modelitem.setName(parsed[0]);
                 modelitem.setTableFieldName(parsed[1]);
                 modelitem.setAttributeName(parsed[2]);
@@ -131,7 +123,6 @@ public class Main extends AbstractPage {
                 dataelement.setUpcase(Boolean.parseBoolean(parsed[7]));
                 
                 modelitem.setDataElement(dataelement);
-                
                 if (Boolean.parseBoolean(parsed[8]))
                     model.add(new DocumentModelKey(modelitem));
                 
@@ -142,7 +133,6 @@ public class Main extends AbstractPage {
                 model.add(modelitem);
                 
                 currentline++;
-                
                 if (currentline != nitens)
                     continue;
                 
@@ -163,9 +153,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void download(View view) throws Exception {
+    public final void download(View view) {
         String filename = view.getParameter("instructionname");
         String[] lines = view.getParameter("list");
         
@@ -180,9 +169,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void generate(View view) throws Exception {
+    public final void generate(View view) {
         String name;
         Table objects = view.getElement("objects");
         List<String> lines, instructions = new ArrayList<String>();
@@ -192,12 +180,10 @@ public class Main extends AbstractPage {
         
         for (TableItem item : objects.getItens()) {
             name = ((InputComponent)item.get("object")).get();
-            
             if (name.equals(""))
                 continue;
             
             lines = getInstructions(name, documents);
-            
             if (lines == null) {
                 view.message(Const.ERROR, "model.not.found");
                 return;
@@ -224,10 +210,9 @@ public class Main extends AbstractPage {
      * @param name
      * @param documents
      * @return
-     * @throws Exception
      */
-    public final List<String> getInstructions(String name, Documents documents) 
-            throws Exception {
+    public final List<String> getInstructions(String name, Documents documents)
+    {
         DataElement dataelement;
         StringBuilder sb;
         List<String> lines;
@@ -289,7 +274,6 @@ public class Main extends AbstractPage {
             
             filename = getRealPath("WEB-INF", "pool",
                     ((Text)item.get("filename")).getName());
-            
             switch (build(filename, this)) {
             case FILE_IS_EMPTY:
                 view.message(Const.ERROR, "file.is.empty");
@@ -314,9 +298,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param table
-     * @throws Exception
      */
-    private final void insertItem(Table table) throws Exception {
+    private final void insertItem(Table table) {
         Documents documents = new Documents(this);
         TableItem item = new TableItem(table);
         TextField tfield = new TextField(table, "name");
@@ -328,7 +311,6 @@ public class Main extends AbstractPage {
         
         tfield.setDataElement(documents.getDataElement("MODEL.NAME"));
         tfield.setSearchHelp(sh);
-        
         item.add(tfield);
     }
     
@@ -344,9 +326,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public void list(View view) throws Exception {
+    public void list(View view) {
         String[] files = view.getParameter("files");
         Form container = new Form(view, "list");
         PageControl pagecontrol = new PageControl(container);
@@ -362,16 +343,14 @@ public class Main extends AbstractPage {
             new TableItem(table).add(new Text(table, file));
         
         new Button(container, "importitens");
-        
         view.setTitle("importable-build-instructions");
     }
     
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public void main(View view) throws Exception {
+    public void main(View view) {
         TableItem importtbitem;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
@@ -409,9 +388,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public void pool(View view) throws Exception {
+    public void pool(View view) {
         File file = new File(getRealPath("WEB-INF", "pool"));
         String[] files = file.list();
         
