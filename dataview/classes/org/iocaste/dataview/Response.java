@@ -23,10 +23,8 @@ public class Response {
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public static final void form(View vdata, Function function)
-            throws Exception {
+    public static final void form(View vdata, Function function) {
         DataElement dataelement;
         DataItem item;
         Form container = new Form(vdata, "form");
@@ -61,10 +59,8 @@ public class Response {
      * 
      * @param view
      * @param function
-     * @throws Exception
      */
-    public static final void main(View view, Function function)
-            throws Exception {
+    public static final void main(View view, Function function) {
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "model");
@@ -86,10 +82,8 @@ public class Response {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public static final void select(View view, Function function)
-            throws Exception {
+    public static final void select(View view, Function function) {
         boolean key;
         Form container = new Form(view, "dataview.container");
         PageControl pagecontrol = new PageControl(container);

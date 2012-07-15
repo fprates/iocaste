@@ -15,9 +15,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void delete(View vdata) throws Exception {
+    public final void delete(View vdata) {
         Request.delete(vdata, this);
     }
     
@@ -32,18 +31,16 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void edit(View vdata) throws Exception {
+    public final void edit(View vdata) {
         Request.edit(vdata, this);
     }
     
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void form(View vdata) throws Exception {
+    public final void form(View vdata) {
         Response.form(vdata, this);
     }
     
@@ -58,18 +55,16 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param vdata
-     * @throws Exception 
      */
-    public final void insertcancel(View vdata) throws Exception {
+    public final void insertcancel(View vdata) {
         back(vdata);
     }
     
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void insertitem(View vdata) throws Exception {
+    public final void insertitem(View vdata) {
         View selectview = getView(vdata, "select");
         
         Request.insertcommon(vdata, selectview, this);
@@ -81,9 +76,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void insertnext(View vdata) throws Exception {
+    public final void insertnext(View vdata) {
         View selectview = getView(vdata, "select");
         
         Request.insertnext(vdata, selectview, this);
@@ -102,36 +96,32 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void main(View vdata) throws Exception {
+    public final void main(View vdata) {
         Response.main(vdata, this);
     }
 
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void save(View vdata) throws Exception {
+    public final void save(View vdata) {
         Request.save(vdata, this);
     }
     
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void select(View vdata) throws Exception {
+    public final void select(View vdata) {
         Response.select(vdata, this);
     }
     
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void show(View vdata) throws Exception {
+    public final void show(View vdata) {
         Request.show(vdata, this);
     }
 }

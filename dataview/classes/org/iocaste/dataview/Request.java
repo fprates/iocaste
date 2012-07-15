@@ -19,10 +19,8 @@ public class Request {
      * 
      * @param vdata
      * @param function
-     * @throws Exception
      */
-    public static final void delete(View vdata, Function function)
-            throws Exception {
+    public static final void delete(View vdata, Function function) {
         Table table = vdata.getElement("selection_view");
         Documents documents = new Documents(function);
         
@@ -37,8 +35,6 @@ public class Request {
             
             table.remove(item);
         }
-
-        documents.commit();
         
         vdata.message(Const.STATUS, "delete.sucessful");
     }
@@ -48,13 +44,16 @@ public class Request {
      * @param vdata
      * @param function
      */
-    public static final void edit(View vdata, Function function)
-            throws Exception {
+    public static final void edit(View vdata, Function function) {
         ExtendedObject[] itens;
         DataForm form = vdata.getElement("model");
         String modelname = form.get("model.name").get();
         
         itens = getTableItens(modelname, function);
+        if (itens == null) {
+            vdata.message(Const.ERROR, "invalid.model");
+            return;
+        }
         
         vdata.clearExports();
         vdata.export("mode", "edit");
@@ -69,20 +68,18 @@ public class Request {
      * 
      * @param name
      * @return
-     * @throws Exception
      */
     private static final ExtendedObject[] getTableItens(String name,
-            Function function) throws Exception {
+            Function function) {
         ExtendedObject[] itens;
         String query;
         Documents documents = new Documents(function);
         
         if (documents.getModel(name) == null)
-            throw new Exception("invalid.model");
-            
+            return null;
+        
         query = new StringBuilder("from ").append(name).toString();
         itens = documents.select(query);
-        
         return itens;
     }
     
@@ -102,10 +99,9 @@ public class Request {
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
     public static final void insertcommon(View vdata, View selectview,
-            Function function) throws Exception {
+            Function function) {
         Table table;
         DataForm form = vdata.getElement("model.form");
         ExtendedObject object = form.getObject();
@@ -116,7 +112,6 @@ public class Request {
             return;
         }
         
-        documents.commit();
         table = selectview.getElement("selection_view");
         Common.addTableItem(table, object);
     }
@@ -126,7 +121,7 @@ public class Request {
      * @param vdata
      */
     public static final void insertnext(View vdata, View selectview,
-            Function function) throws Exception {
+            Function function) {
         DataForm form = vdata.getElement("model.form");
         
         insertcommon(vdata, selectview, function);
@@ -138,10 +133,8 @@ public class Request {
      * 
      * @param vdata
      * @param function
-     * @throws Exception
      */
-    public static final void save(View vdata, Function function)
-            throws Exception {
+    public static final void save(View vdata, Function function) {
         String value;
         InputComponent input;
         DocumentModelItem modelitem;
@@ -160,7 +153,6 @@ public class Request {
                 
                 input = (InputComponent)element;
                 modelitem = input.getModelItem();
-                
                 if (modelitem == null)
                     continue;
                 
@@ -179,26 +171,21 @@ public class Request {
             
             documents.modify(object);
         }
-        
-        documents.commit();
     }
     
     /**
      * 
      * @param vdata
      * @param function
-     * @throws Exception
      */
-    public static final void show(View vdata, Function function)
-            throws Exception {
+    public static final void show(View vdata, Function function) {
         ExtendedObject[] itens;
         String modelname = ((InputComponent)vdata.getElement("model.name")).
                 get();
         
-        try {
-            itens = getTableItens(modelname, function);
-        } catch (Exception e) {
-            vdata.message(Const.ERROR, e.getMessage());
+        itens = getTableItens(modelname, function);
+        if (itens == null) {
+            vdata.message(Const.ERROR, "invalid.model");
             return;
         }
         
