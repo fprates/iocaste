@@ -31,7 +31,7 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void authentic(View vdata) throws Exception {
+    public final void authentic(View vdata) {
         String name;
         InputComponent input;
         MessageSource messages;
