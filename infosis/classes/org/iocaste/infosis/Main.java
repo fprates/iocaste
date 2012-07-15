@@ -86,11 +86,11 @@ public class Main extends AbstractPage {
         
     }
     
-    public final void sysinfin(View view) throws Exception {
-        view.redirect(null, "sysinfout");
+    public final void sysinfin(View view) {
+        view.redirect("sysinfout");
     }
     
-    public final void sysinfout(View view) throws Exception {
+    public final void sysinfout(View view) {
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         Iocaste iocaste = new Iocaste(this);
