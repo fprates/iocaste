@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
 
@@ -48,7 +49,7 @@ public class Services extends AbstractFunction {
                 QUERIES[SELECT_PROFILE], 1, username, profilename);
         
         if (profiles == null)
-            throw new Exception(new StringBuilder(profilename).
+            throw new IocasteException(new StringBuilder(profilename).
                     append(" for ").
                     append(username).
                     append(" is an invalid profile.").toString());
@@ -84,13 +85,13 @@ public class Services extends AbstractFunction {
         ExtendedObject object = documents.getObject("LOGIN", username);
         
         if (object == null)
-            throw new Exception("Invalid user.");
+            throw new IocasteException("Invalid user.");
         
         userid = object.getValue("ID");
         
         object = documents.getObject("USER_PROFILE", profile);
         if (object == null)
-            throw new Exception("Invalid profile.");
+            throw new IocasteException("Invalid profile.");
         
         profileid = object.getValue("ID");
         id = (userid * 100) + profileid;
@@ -108,9 +109,8 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      * @return
-     * @throws Exception
      */
-    public final Authorization get(Message message) throws Exception {
+    public final Authorization get(Message message) {
         Authorization authorization;
         ExtendedObject[] parameters;
         String name = message.getString("name");
@@ -139,24 +139,21 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      * @return
-     * @throws Exception
      */
-    public final int remove(Message message) throws Exception {
+    public final int remove(Message message) {
         String name = message.getString("name");
         Documents documents = new Documents(this);
         
         documents.update(QUERIES[DEL_PROFILE_ITEM], name);
         documents.update(QUERIES[DEL_AUTH_ITENS], name);
-        
         return documents.update(QUERIES[DEL_AUTH], name);
     }
     
     /**
      * 
      * @param message
-     * @throws Exception
      */
-    public final void save(Message message) throws Exception {
+    public final void save(Message message) {
         ExtendedObject authobject;
         long ident, itemid;
         Map<String, String> parameters;
