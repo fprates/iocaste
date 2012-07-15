@@ -111,7 +111,6 @@ public class Model {
         saveDocumentHeader(iocaste, model);
         saveDocumentItens(iocaste, model);
         saveDocumentKeys(iocaste, model);
-        
         Common.parseQueries(model, cache.queries);
         
         name = model.getName();
@@ -144,7 +143,7 @@ public class Model {
         DocumentModel document = null;
         
         if (documentname == null)
-            throw new Exception("Document model not specified.");
+            throw new IocasteException("Document model not specified.");
         
         if (cache.models.containsKey(documentname))
             return cache.models.get(documentname);
@@ -156,7 +155,6 @@ public class Model {
         
         columns = (Map<String, Object>)lines[0];
         document = new DocumentModel();
-        
         document.setName((String)columns.get("DOCID"));
         document.setTableName((String)columns.get("TNAME"));
         document.setClassName((String)columns.get("CLASS"));
@@ -195,12 +193,10 @@ public class Model {
         }
         
         lines = iocaste.select(QUERIES[TABLE_INDEX], documentname);
-        
         if (lines != null)
             for (Object object : lines) {
                 columns = (Map<String, Object>)object;
                 composed = ((String)columns.get("INAME")).split("\\.");
-                
                 document.add(new DocumentModelKey(composed[1]));
             }
         
@@ -208,9 +204,7 @@ public class Model {
             Common.parseQueries(document, cache.queries);
         
         document.setQueries(cache.queries.get(documentname));
-        
         cache.models.put(documentname, document);
-        
         return document;
     }
     
@@ -399,7 +393,7 @@ public class Model {
             element = item.getDataElement();
             
             if (element == null)
-                throw new Exception(new StringBuilder(item.getName()).
+                throw new IocasteException(new StringBuilder(item.getName()).
                         append(" has null data element.").toString());
             
             if (iocaste.selectUpTo(
@@ -512,7 +506,7 @@ public class Model {
             
             if (iocaste.update(
                     QUERIES[INS_KEY], name, key.getModel().getName()) == 0)
-                throw new IocasteException("");
+                throw new IocasteException("Error through key insert.");
         }
         
         return 1;
@@ -587,12 +581,12 @@ public class Model {
                     throw new IocasteException("");
                 
                 if (insertModelItem(iocaste, item) == 0)
-                    throw new IocasteException("");
+                    throw new IocasteException("Error through model insert");
                 
                 addDBColumn(iocaste, item, refstmt);
             } else {
                 if (updateModelItem(iocaste, item, oldmodel) == 0)
-                    throw new IocasteException("");
+                    throw new IocasteException("Error through model update");
             }
         }
         
@@ -610,7 +604,6 @@ public class Model {
         }
         
         Common.parseQueries(model, cache.queries);
-        
         cache.models.remove(name);
         cache.models.put(name, model);
         

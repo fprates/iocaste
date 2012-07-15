@@ -23,10 +23,8 @@ public class Query {
      * @param iocaste
      * @param object
      * @return
-     * @throws Exception
      */
-    public static final int delete(Iocaste iocaste, ExtendedObject object)
-            throws Exception {
+    public static final int delete(Iocaste iocaste, ExtendedObject object) {
         int i = 0;
         DocumentModel model = object.getModel();
         Set<DocumentModelKey> keys = model.getKeys();
@@ -49,7 +47,7 @@ public class Query {
      */
     @SuppressWarnings("unchecked")
     public static final ExtendedObject get(DocumentModel model,
-            Object key, Function function) throws Exception {
+            Object key, Function function) {
         Iocaste iocaste = new Iocaste(function);
         String query = new StringBuilder("select * from ").
                 append(model.getTableName()).
@@ -177,14 +175,13 @@ public class Query {
         
         uargs.addAll(criteria);
         nrregs = 0;
-        
         query = model.getQuery("update");
         if (query != null)
             nrregs = iocaste.update(query, uargs.toArray());
         
         if (nrregs == 0)
             if (iocaste.update(model.getQuery("insert"), iargs.toArray()) == 0)
-                    throw new IocasteException("");
+                    throw new IocasteException("Error through object insert");
         
         return 1;
     }
@@ -194,10 +191,8 @@ public class Query {
      * @param object
      * @param function
      * @return
-     * @throws Exception
      */
-    public static final int save(ExtendedObject object, Function function)
-            throws Exception {
+    public static final int save(ExtendedObject object, Function function) {
         Object[] criteria;
         DocumentModel model = object.getModel();
         DocumentModelItem[] itens = model.getItens();
@@ -239,7 +234,6 @@ public class Query {
             return null;
         
         objects = new ExtendedObject[lines.length];
-        
         for (int i = 0; i < lines.length; i++) {
             line = (Map<String, Object>)lines[i];
             objects[i] = getExtendedObject2From(queryinfo, line, cache);

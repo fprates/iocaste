@@ -7,6 +7,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.RangeOption;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
+import org.iocaste.protocol.IocasteException;
 
 public class Parser {
     private static final byte SELECT = 0;
@@ -191,7 +192,8 @@ public class Parser {
             case 3:
                 queryinfo.model = Model.get(upcasetoken, cache);
                 if (queryinfo.model == null)
-                    throw new Exception(new StringBuilder("Document model ").
+                    throw new IocasteException(new StringBuilder(
+                            "Document model ").
                             append(upcasetoken).
                             append(" not found.").toString());
                 pass++;
@@ -214,7 +216,8 @@ public class Parser {
             case 6:
                 model = Model.get(upcasetoken, cache);
                 if (model == null)
-                    throw new Exception(new StringBuilder("Document model ").
+                    throw new IocasteException(new StringBuilder(
+                            "Document model ").
                             append(upcasetoken).
                             append(" not found.").toString());
                 queryinfo.join.put(model, new StringBuilder());
@@ -222,7 +225,7 @@ public class Parser {
                 continue;
             case 7:
                 if (!upcasetoken.equals("ON"))
-                    throw new Exception("\"ON\" expected.");
+                    throw new IocasteException("\"ON\" expected.");
                 
                 pass = 8;
                 continue;
