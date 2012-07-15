@@ -27,8 +27,7 @@ public class Request {
         return view;
     }
     
-    public static final void search(View view, Function function)
-            throws Exception {
+    public static final void search(View view, Function function) {
         ValueRange range;
         InputComponent input;
         Map<String, ValueRange> values = new HashMap<String, ValueRange>();

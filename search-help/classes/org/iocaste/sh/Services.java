@@ -31,9 +31,8 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      * @return
-     * @throws Exception
      */
-    public final int assign(Message message) throws Exception {
+    public final int assign(Message message) {
         DocumentModelItem item = message.get("model_item");
         Documents documents = new Documents(this);
         DocumentModel shref = documents.getModel("SH_REFERENCE");
@@ -61,7 +60,7 @@ public class Services extends AbstractFunction {
      * @param message
      * @return
      */
-    public final ExtendedObject[] get(Message message) throws Exception {
+    public final ExtendedObject[] get(Message message) {
         String name = message.getString("name");
         
         return load(name);
@@ -71,9 +70,8 @@ public class Services extends AbstractFunction {
      * 
      * @param name
      * @return
-     * @throws Exception
      */
-    private final ExtendedObject[] load(String name) throws Exception {
+    private final ExtendedObject[] load(String name) {
         Documents documents;
         ExtendedObject header;
         String value;
@@ -186,9 +184,8 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      * @return
-     * @throws Exception
      */
-    public final int unassign(Message message) throws Exception {
+    public final int unassign(Message message) {
         String shname = message.getString("name");
         String query = "delete from SH_REFERENCE where SEARCH_HELP = ?";
         
@@ -198,9 +195,8 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
-     * @throws Exception
      */
-    public final void update(Message message) throws Exception {
+    public final void update(Message message) {
         String model, export, shname, shitemname;
         ExtendedObject header = message.get("header");
         ExtendedObject[] itens = message.get("itens");

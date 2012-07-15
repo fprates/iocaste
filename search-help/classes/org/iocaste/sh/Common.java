@@ -14,11 +14,9 @@ public class Common {
      * @param function
      * @param criteria
      * @return
-     * @throws Exception
      */
     public static final ExtendedObject[] getResultsFrom(String modelname,
-            Documents documents, Map<String, ValueRange> criteria)
-                    throws Exception {
+            Documents documents, Map<String, ValueRange> criteria) {
         boolean started;
         StringBuilder sb = new StringBuilder("from ").append(modelname);
         

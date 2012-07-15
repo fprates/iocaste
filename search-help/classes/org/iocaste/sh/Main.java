@@ -20,11 +20,7 @@ public class Main extends AbstractPage {
     @Override
     public void back(View view) {
         String[] entry;
-        try {
-            entry = new Shell(this).popPage(view);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        entry = new Shell(this).popPage(view);
         
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
@@ -33,9 +29,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void choose(View vdata) throws Exception {
+    public final void choose(View vdata) {
         updateView(Request.choose(vdata));
         back(vdata);
     }
@@ -54,16 +49,15 @@ public class Main extends AbstractPage {
      * @param view
      * @throws Exception
      */
-    public void main(View view) throws Exception {
+    public void main(View view) {
         Response.main(view, this);
     }
     
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public void search(View view) throws Exception {
+    public void search(View view) {
         Request.search(view, this);
     }
 }

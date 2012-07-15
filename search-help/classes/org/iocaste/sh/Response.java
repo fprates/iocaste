@@ -26,8 +26,7 @@ import org.iocaste.shell.common.View;
 
 public class Response {
 
-    public static final void main(View view, Function function)
-            throws Exception {
+    public static final void main(View view, Function function) {
         ExtendedObject[] result;
         DataForm criteria;
         DataItem item;
