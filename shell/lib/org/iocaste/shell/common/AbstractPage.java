@@ -32,15 +32,10 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public void back(View view) {
         String[] entry;
-        try {
-            entry = new Shell(this).popPage(view);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
         
+        entry = new Shell(this).popPage(view);
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
-        
         if (view.getAppName().equals(entry[0]))
             return;
         
@@ -106,10 +101,8 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view visão atual
      * @param name identificador da visão
      * @return visão
-     * @throws Exception
      */
-    protected final View getView(View view, String name)
-            throws Exception {
+    protected final View getView(View view, String name) {
         return new Shell(this).getView(view, name);
     }
     
@@ -161,9 +154,8 @@ public abstract class AbstractPage extends AbstractFunction {
     /**
      * Retorna à página inicial.
      * @param view visão atual
-     * @throws Exception
      */
-    public void home(View view) throws Exception {
+    public void home(View view) {
         String[] entry = new Shell(this).home(view);
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
@@ -173,9 +165,8 @@ public abstract class AbstractPage extends AbstractFunction {
     /**
      * Atualiza uma visão, não necessariamente a visão atual.
      * @param view visão a ser atualizada.
-     * @throws Exception
      */
-    protected final void updateView(View view) throws Exception {
+    protected final void updateView(View view) {
         new Shell(this).updateView(view);
     }
 }

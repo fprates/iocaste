@@ -48,9 +48,8 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * Efetua commit.
-     * @throws Exception
      */
-    public final void commit() throws Exception {
+    public final void commit() {
         new Iocaste(function).commit();
     }
     
@@ -61,28 +60,24 @@ public class Documents extends AbstractServiceInterface {
      * 
      * @param model dados do modelo.
      * @return 1, se modelo foi registrado com sucesso.
-     * @throws Exception
      */
-    public final int createModel(DocumentModel model) throws Exception {
+    public final int createModel(DocumentModel model) {
         Message message = new Message();
         
         message.setId("create_model");
         message.add("model", model);
-        
         return call(message);
     }
     
     /**
      * Registra objeto de numeração.
      * @param name nome do objeto.
-     * @throws Exception
      */
-    public final void createNumberFactory(String name) throws Exception {
+    public final void createNumberFactory(String name) {
         Message message = new Message();
         
         message.setId("create_number_factory");
         message.add("name", name);
-        
         call(message);
     }
     
@@ -93,14 +88,12 @@ public class Documents extends AbstractServiceInterface {
      * 
      * @param object objeto extendido
      * @return 1, para remoção bem sucedida.
-     * @throws Exception
      */
-    public final int delete(ExtendedObject object) throws Exception {
+    public final int delete(ExtendedObject object) {
         Message message = new Message();
         
         message.setId("delete");
         message.add("object", object);
-        
         return call(message);
     }
     
@@ -118,14 +111,12 @@ public class Documents extends AbstractServiceInterface {
      * Retorna elemento de dados especificado.
      * @param name nome
      * @return elemento de dados, null se não encontrado
-     * @throws Exception
      */
-    public final DataElement getDataElement(String name) throws Exception {
+    public final DataElement getDataElement(String name) {
         Message message = new Message();
         
         message.setId("get_data_element");
         message.add("name", name);
-        
         return call(message);
     }
     
@@ -133,14 +124,12 @@ public class Documents extends AbstractServiceInterface {
      * Obtem instância do modelo de documento informado.
      * @param nome do modelo
      * @return modelo de documento
-     * @throws InvalidModel
      */
-    public final DocumentModel getModel(String name) throws Exception {
+    public final DocumentModel getModel(String name) {
         Message message = new Message();
         
         message.setId("get_document_model");
         message.add("name", name);
-        
         return call(message);
     }
     
@@ -148,14 +137,12 @@ public class Documents extends AbstractServiceInterface {
      * Obtem próximo número do range informado.
      * @param nome do range
      * @return número
-     * @throws InvalidRange
      */
-    public final long getNextNumber(String range) throws Exception {
+    public final long getNextNumber(String range) {
         Message message = new Message();
         
         message.setId("get_next_number");
         message.add("range", range);
-        
         return call(message);
     }
     
@@ -164,16 +151,13 @@ public class Documents extends AbstractServiceInterface {
      * @param modelname nome do modelo
      * @param key identificador (chave)
      * @return objeto encontrado ou null, se não encontrado.
-     * @throws Exception
      */
-    public final ExtendedObject getObject(String modelname, Object key)
-            throws Exception {
+    public final ExtendedObject getObject(String modelname, Object key) {
         Message message = new Message();
         
         message.setId("get_object");
         message.add("modelname", modelname);
         message.add("key", key);
-        
         return call(message);
     }
     
@@ -186,16 +170,13 @@ public class Documents extends AbstractServiceInterface {
      * @param model modelo
      * @param key chave
      * @return true, se entrada está bloqueada
-     * @throws Exception
      */
-    public final boolean isLocked(String model, String key)
-            throws Exception {
+    public final boolean isLocked(String model, String key) {
         Message message = new Message();
         
         message.setId("is_locked");
         message.add("model", model);
         message.add("key", key);
-        
         return call(message);
     }
     
@@ -209,15 +190,13 @@ public class Documents extends AbstractServiceInterface {
      * @param model
      * @param key
      * @return
-     * @throws Exception
      */
-    public final int lock(String model, String key) throws Exception {
+    public final int lock(String model, String key) {
         Message message = new Message();
         
         message.setId("lock");
         message.add("model", model);
         message.add("key", key);
-        
         return call(message);
     }
     
@@ -225,14 +204,12 @@ public class Documents extends AbstractServiceInterface {
      * Atualiza entrada especificada pelo objeto extendido.
      * @param object objeto a ser atualizado.
      * @return 1, se a entrada foi atualizada com sucesso.
-     * @throws Exception
      */
-    public final int modify(ExtendedObject object) throws Exception {
+    public final int modify(ExtendedObject object) {
         Message message = new Message();
         
         message.setId("modify");
         message.add("object", object);
-        
         return call(message);
     }
     
@@ -240,14 +217,12 @@ public class Documents extends AbstractServiceInterface {
      * Remove modelo de documento especificado.
      * @param name nome do modelo.
      * @return 1, se o modelo foi removido com sucesso.
-     * @throws Exception
      */
-    public final int removeModel(String name) throws Exception {
+    public final int removeModel(String name) {
         Message message = new Message();
         
         message.setId("remove_model");
         message.add("model_name", name);
-        
         return call(message);
     }
     
@@ -255,14 +230,12 @@ public class Documents extends AbstractServiceInterface {
      * Remove objeto de numeração especificado.
      * @param name nome do objeto.
      * @return 1, se o objeto foi removido com sucesso.
-     * @throws Exception
      */
-    public final int removeNumberFactory(String name) throws Exception {
+    public final int removeNumberFactory(String name) {
         Message message = new Message();
         
         message.setId("remove_number_factory");
         message.add("name", name);
-        
         return call(message);
     }
     
@@ -271,24 +244,20 @@ public class Documents extends AbstractServiceInterface {
      * @param oldname nome do modelo.
      * @param newname novo nome do modelo.
      * @return 1, se o modelo foi renomeado com sucesso.
-     * @throws Exception
      */
-    public final int renameModel(String oldname, String newname)
-            throws Exception {
+    public final int renameModel(String oldname, String newname) {
         Message message = new Message();
         
         message.setId("rename_model");
         message.add("oldname", oldname);
         message.add("newname", newname);
-        
         return call(message);
     }
     
     /**
      * Efetua rollback no banco.
-     * @throws Exception
      */
-    public final void rollback() throws Exception {
+    public final void rollback() {
         new Iocaste(function).rollback();
     }
     
@@ -296,14 +265,12 @@ public class Documents extends AbstractServiceInterface {
      * Insere entrada em tabela, especificado pelo objeto.
      * @param object objeto a ser inserido
      * @return 1, se o objeto foi inserido com sucesso.
-     * @throws Exception
      */
-    public final int save(ExtendedObject object) throws Exception {
+    public final int save(ExtendedObject object) {
         Message message = new Message();
         
         message.setId("save");
         message.add("object", object);
-        
         return call(message);
     }
     
@@ -315,10 +282,8 @@ public class Documents extends AbstractServiceInterface {
      * @param query Query SQL
      * @param criteria critérios de seleção.
      * @return entradas encontradas.
-     * @throws Exception
      */
-    public final ExtendedObject[] select(String query, Object... criteria)
-    		throws Exception {
+    public final ExtendedObject[] select(String query, Object... criteria) {
         return selectLimitedTo(query, 0, criteria);
     }
     
@@ -332,17 +297,15 @@ public class Documents extends AbstractServiceInterface {
      * @param rows quantidade de acertos
      * @param criteria critérios de seleção
      * @return entradas encontradas.
-     * @throws Exception
      */
     public final ExtendedObject[] selectLimitedTo(String query, int rows,
-            Object... criteria) throws Exception {
+            Object... criteria) {
         Message message = new Message();
         
         message.setId("select");
         message.add("query", query);
         message.add("criteria", criteria);
         message.add("rows", rows);
-        
         return call(message);
         
     }
@@ -355,15 +318,13 @@ public class Documents extends AbstractServiceInterface {
      * @param model modelo
      * @param key identificador da entrada
      * @return 1, se foi desbloqueado com sucesso.
-     * @throws Exception
      */
-    public final int unlock(String model, String key) throws Exception {
+    public final int unlock(String model, String key) {
         Message message = new Message();
         
         message.setId("unlock");
         message.add("model", model);
         message.add("key", key);
-        
         return call(message);
     }
     
@@ -372,16 +333,13 @@ public class Documents extends AbstractServiceInterface {
      * @param query declaração SQL
      * @param criteria critérios
      * @return quantidade de registros atualizados com sucesso.
-     * @throws Exception
      */
-    public final int update(String query, Object... criteria)
-            throws Exception {
+    public final int update(String query, Object... criteria) {
         Message message = new Message();
         
         message.setId("update");
         message.add("query", query);
         message.add("criteria", criteria);
-        
         return call(message);
     }
     
@@ -389,14 +347,12 @@ public class Documents extends AbstractServiceInterface {
      * Atualiza modelo de documento.
      * @param model dados do modelo de documento.
      * @return 1, se o modelo foi atualizado.
-     * @throws Exception
      */
-    public final int updateModel(DocumentModel model) throws Exception {
+    public final int updateModel(DocumentModel model) {
         Message message = new Message();
         
         message.setId("update_model");
         message.add("model", model);
-        
         return call(message);
     }
     
@@ -404,14 +360,12 @@ public class Documents extends AbstractServiceInterface {
      * - not ready, do not use -
      * @param model
      * @return
-     * @throws Exception
      */
-    public final int validate(DocumentModel model) throws Exception {
+    public final int validate(DocumentModel model) {
         Message message = new Message();
         
         message.setId("validate_model");
         message.add("model", model);
-        
         return call(message);
     }
 }

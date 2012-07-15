@@ -20,15 +20,13 @@ public class Authority extends AbstractServiceInterface {
      * 
      * @param username
      * @param profile
-     * @throws Exception
      */
-    public final void assign(String username, String profile) throws Exception {
+    public final void assign(String username, String profile) {
         Message message = new Message();
         
         message.setId("assign_profile");
         message.add("username", username);
         message.add("profile", profile);
-        
         call(message);
     }
     
@@ -37,17 +35,15 @@ public class Authority extends AbstractServiceInterface {
      * @param username
      * @param profile
      * @param authorization
-     * @throws Exception
      */
     public final void assign(String username, String profile,
-            Authorization authorization) throws Exception {
+            Authorization authorization) {
         Message message = new Message();
         
         message.setId("assign_authorization");
         message.add("username", username);
         message.add("profile", profile);
         message.add("authorization", authorization);
-        
         call(message);
     }
     
@@ -55,14 +51,12 @@ public class Authority extends AbstractServiceInterface {
      * 
      * @param name
      * @return
-     * @throws Exception
      */
-    public final Authorization get(String name) throws Exception {
+    public final Authorization get(String name) {
         Message message = new Message();
         
         message.setId("get");
         message.add("name", name);
-        
         return call(message);
     }
     
@@ -70,28 +64,24 @@ public class Authority extends AbstractServiceInterface {
      * 
      * @param name
      * @return
-     * @throws Exception
      */
-    public final int remove(String name) throws Exception {
+    public final int remove(String name) {
         Message message = new Message();
         
         message.setId("remove");
         message.add("name", name);
-        
         return call(message);
     }
     
     /**
      * 
      * @param authorization
-     * @throws Exception
      */
-    public final void save(Authorization authorization) throws Exception {
+    public final void save(Authorization authorization) {
         Message message = new Message();
         
         message.setId("save");
         message.add("authorization", authorization);
-        
         call(message);
     }
 }

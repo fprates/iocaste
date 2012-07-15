@@ -163,15 +163,12 @@ public class Shell extends AbstractServiceInterface {
      * Retorna folha de estilo associada à visão.
      * @param view visão
      * @return mapa com dados da folha de estilo.
-     * @throws Exception
      */
-    public final Map<String, Map<String, String>> getStyleSheet(View view)
-            throws Exception {
+    public final Map<String, Map<String, String>> getStyleSheet(View view) {
         Message message = new Message();
         
         message.setId("get_style_sheet");
         message.add("appname", view.getAppName());
-        
         return call(message);
     }
     
@@ -180,16 +177,13 @@ public class Shell extends AbstractServiceInterface {
      * @param view visão atual
      * @param pagename nome da visão
      * @return visão especificada.
-     * @throws Exception
      */
-    public final View getView(View view, String pagename)
-            throws Exception {
+    public final View getView(View view, String pagename) {
         Message message = new Message();
         
         message.setId("get_view");
         message.add("app_name", view.getAppName());
         message.add("page_name", pagename);
-        
         return call(message);
     }
     
@@ -197,13 +191,11 @@ public class Shell extends AbstractServiceInterface {
      * Retorna à página inicial.
      * @param view
      * @return
-     * @throws Exception
      */
-    public final String[] home(View view) throws Exception {
+    public final String[] home(View view) {
         Message message = new Message();
         
         message.setId("home");
-        
         return call(message);
     }
     
@@ -220,42 +212,36 @@ public class Shell extends AbstractServiceInterface {
      * Restaura página anterior.
      * @param view visão atual
      * @return dados da página anterior
-     * @throws Exception
      */
-    public final String[] popPage(View view) throws Exception {
+    public final String[] popPage(View view) {
         Message message = new Message();
         
         message.setId("pop_page");
-        
         return call(message);
     }
     
     /**
      * Salva página na pilha de páginas.
      * @param view visão.
-     * @throws Exception
      */
-    public final void pushPage(View view) throws Exception {
+    public final void pushPage(View view) {
         Message message = new Message();
         
         message.setId("push_page");
         message.add("app_name", view.getAppName());
         message.add("page_name", view.getPageName());
-        
         call(message);
     }
     
     /**
      * Atualiza visão na pilha de páginas.
      * @param view visão.
-     * @throws Exception
      */
-    public final void updateView(View view) throws Exception {
+    public final void updateView(View view) {
         Message message = new Message();
         
         message.setId("update_view");
         message.add("view", view);
-        
         call(message);
     }
 }

@@ -26,16 +26,13 @@ public class PackageTool extends AbstractServiceInterface {
      * 
      * @param group
      * @param username
-     * @throws Exception
      */
-    public final void assignTaskGroup(String group, String username)
-            throws Exception {
+    public final void assignTaskGroup(String group, String username) {
         Message message = new Message();
         
         message.setId("assign_task_group");
         message.add("group", group);
         message.add("username", username);
-        
         call(message);
     }
     
@@ -62,9 +59,8 @@ public class PackageTool extends AbstractServiceInterface {
      * 
      * @param name
      * @return
-     * @throws Exception
      */
-    public final InstallData getInstallData(String name) throws Exception {
+    public final InstallData getInstallData(String name) {
         String viewname = new StringBuilder("/").
                 append(name).
                 append("/view.html").toString();
@@ -96,9 +92,8 @@ public class PackageTool extends AbstractServiceInterface {
      * 
      * @param name
      * @return
-     * @throws Exception
      */
-    public final int install(String name) throws Exception {
+    public final int install(String name) {
         InstallData data = getInstallData(name);
         Message message = new Message();
         
@@ -106,7 +101,6 @@ public class PackageTool extends AbstractServiceInterface {
         message.clear();
         message.add("data", data);
         message.add("name", name);
-        
         return call(message);
     }
 
@@ -114,28 +108,24 @@ public class PackageTool extends AbstractServiceInterface {
      * 
      * @param name
      * @return
-     * @throws Exception
      */
-    public final boolean isInstalled(String name) throws Exception {
+    public final boolean isInstalled(String name) {
         Message message = new Message();
         
         message.setId("is_installed");
         message.add("package", name);
-        
         return call(message);
     }
     
     /**
      * 
      * @param name
-     * @throws Exception
      */
-    public final void uninstall(String name) throws Exception {
+    public final void uninstall(String name) {
         Message message = new Message();
         
         message.setId("uninstall");
         message.add("package", name);
-        
         call(message);
     }
 }

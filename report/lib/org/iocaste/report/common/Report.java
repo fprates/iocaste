@@ -15,15 +15,12 @@ public class Report extends AbstractServiceInterface {
      * 
      * @param parameters
      * @return
-     * @throws Exception
      */
-    public final byte[] getContent(ReportParameters parameters)
-            throws Exception {
+    public final byte[] getContent(ReportParameters parameters) {
         Message message = new Message();
         
         message.setId("get_content");
         message.add("parameters", parameters);
-        
         return call(message);
     }
 }
