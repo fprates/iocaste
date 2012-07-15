@@ -17,7 +17,7 @@ public class Common {
      * @throws Exception
      */
     public static final String[] parseCommand(String command, View view,
-            Function function) throws Exception {
+            Function function) {
         String[] parsed;
         ExtendedObject task = null;
         

@@ -10,9 +10,10 @@ public class Install {
     
     /**
      * 
+     * @param function
      * @return
      */
-    public static final InstallData init(Function function) throws Exception {
+    public static final InstallData init(Function function) {
         Map<String, String> messages;
         InstallData data = new InstallData();
         

@@ -46,10 +46,8 @@ public class Main extends AbstractPage {
      * 
      * @param locale
      * @return
-     * @throws Exception
      */
-    private final Map<String, Set<TaskEntry>> getLists(Locale locale)
-            throws Exception {
+    private final Map<String, Set<TaskEntry>> getLists(Locale locale) {
         Set<TaskEntry> entries;
         TaskEntry entry;
         ExtendedObject[] result, mobject;
@@ -92,9 +90,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    public final void grouprun(View view) throws Exception {
+    public final void grouprun(View view) {
         String command = ((InputComponent)view.getElement("groupcommand")).
                 get();
         String[] parsed = Common.parseCommand(command, view, this);
@@ -117,18 +114,16 @@ public class Main extends AbstractPage {
      * 
      * @param message
      * @return
-     * @throws Exception
      */
-    public final InstallData install(Message message) throws Exception {
+    public final InstallData install(Message message) {
         return Install.init(this);
     }
     
     /**
      * Visão geral de tarefas
      * @param view Visão
-     * @throws Exception
      */
-    public final void main(View view) throws Exception {
+    public final void main(View view) {
         Link link;
         NodeList groups, tasklist;
         Set<TaskEntry> entries;
@@ -184,9 +179,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param vdata
-     * @throws Exception
      */
-    public final void run(View vdata) throws Exception {
+    public final void run(View vdata) {
         String[] parsed;
         DataForm form = vdata.getElement("selector");
         DataItem cmdline = form.get("command");
@@ -208,9 +202,8 @@ public class Main extends AbstractPage {
     /**
      * 
      * @param view
-     * @throws Exception
      */
-    private final void setCustomStyleSheet(View view) throws Exception {
+    private final void setCustomStyleSheet(View view) {
         Map<String, Map<String, String>> defaultsheet;
         Map<String, String> style;
         
