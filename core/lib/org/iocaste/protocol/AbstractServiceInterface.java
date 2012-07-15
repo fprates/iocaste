@@ -18,10 +18,9 @@ public abstract class AbstractServiceInterface {
      * 
      * @param message
      * @return
-     * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    protected final <T> T call(Message message) throws Exception {
+    protected final <T> T call(Message message) {
         return (T)service.call(message);
     }
     
@@ -30,10 +29,9 @@ public abstract class AbstractServiceInterface {
      * @param function
      * @param params
      * @return
-     * @throws Exception
      */
     public final Object callAuthorized(String function,
-            Map<String, Object> params) throws Exception {
+            Map<String, Object> params) {
         Message message = new Message();
         
         message.setId(function);

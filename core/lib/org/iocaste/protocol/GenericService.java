@@ -6,7 +6,7 @@ public class GenericService extends AbstractServiceInterface {
         initService(function, servername);
     }
     
-    public final <T> T invoke(Message message) throws Exception {
+    public final <T> T invoke(Message message) {
         return call(message);
     }
 }

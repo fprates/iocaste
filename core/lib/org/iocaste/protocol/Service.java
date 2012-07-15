@@ -36,32 +36,42 @@ public class Service {
         return message;
     }
     
-    public static final Object callServer(String urlname, Message message)
-            throws Exception {
+    /**
+     * 
+     * @param urlname
+     * @param message
+     * @return
+     */
+    public static final Object callServer(String urlname, Message message) {
         Message response;
         ObjectOutputStream oos;
         ObjectInputStream ois;
-        URL url = new URL(urlname);
-        URLConnection urlcon = url.openConnection();
         
-        urlcon.setDoInput(true);
-        urlcon.setDoOutput(true);
-        
-        oos = new ObjectOutputStream(urlcon.getOutputStream());
-        oos.writeObject(message);
-        oos.close();
-        
-        ois = new ObjectInputStream(urlcon.getInputStream());
-        response = (Message)ois.readObject();
-        ois.close();
-        
-        if (response.getException() != null)
-            throw response.getException();
-        
-        return response.get("return");
+        try {
+            URL url = new URL(urlname);
+            URLConnection urlcon = url.openConnection();
+            
+            urlcon.setDoInput(true);
+            urlcon.setDoOutput(true);
+            
+            oos = new ObjectOutputStream(urlcon.getOutputStream());
+            oos.writeObject(message);
+            oos.close();
+            
+            ois = new ObjectInputStream(urlcon.getInputStream());
+            response = (Message)ois.readObject();
+            ois.close();
+            
+            if (response.getException() != null)
+                throw response.getException();
+            
+            return response.get("return");
+        } catch (Exception e) {
+            throw new RuntimeException (e);
+        }
     }
     
-    public final Object call(Message message) throws Exception {
+    public final Object call(Message message) {
         message.setSessionid(sessionid);
         
         return callServer(urlname, message);
