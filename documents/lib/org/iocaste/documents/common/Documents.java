@@ -241,6 +241,19 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
+     * 
+     * @param name
+     * @return
+     */
+    public final int removeComplexModel(String name) {
+        Message message = new Message();
+        
+        message.setId("remove_complex_model");
+        message.add("name", name);
+        return call(message);
+    }
+    
+    /**
      * Remove modelo de documento especificado.
      * @param name nome do modelo.
      * @return 1, se o modelo foi removido com sucesso.

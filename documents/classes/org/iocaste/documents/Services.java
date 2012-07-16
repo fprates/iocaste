@@ -34,6 +34,7 @@ public class Services extends AbstractFunction {
         export("is_locked", "isLocked");
         export("lock", "lock");
         export("modify", "modify");
+        export("remove_complex_model", "removeCModel");
         export("remove_model", "removeModel");
         export("remove_number_factory", "removeNumberFactory");
         export("rename_model", "renameModel");
@@ -45,8 +46,9 @@ public class Services extends AbstractFunction {
         export("validate_model", "validateModel");
     }
     
-    public final int createCModel(Message message) {
-        return 0;
+    public final int createCModel(Message message) throws Exception {
+        ComplexModel model = message.get("cmodel");
+        return CModel.create(model, cache);
     }
     
     /**
@@ -88,9 +90,11 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      * @return
+     * @throws Exception
      */
-    public final ComplexModel getCModel(Message message) {
-        return null;
+    public final ComplexModel getCModel(Message message) throws Exception {
+        String name = message.getString("name");
+        return CModel.get(name, cache);
     }
     
     /**
@@ -211,6 +215,19 @@ public class Services extends AbstractFunction {
         ExtendedObject object = message.get("object");
         
         return Query.modify(object, this);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final int removeCModel(Message message) throws Exception {
+        String name = message.getString("name");
+        ComplexModel model = CModel.get(name, cache);
+        
+        return CModel.remove(model, cache);
     }
     
     /**
