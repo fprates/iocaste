@@ -8,7 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
+import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.protocol.user.Authorization;
@@ -25,6 +27,7 @@ public class InstallData implements Serializable {
     private List<Authorization> authorizations;
     private Map<String, Set<String>> tasksgroups;
     private String[] dependencies;
+    private Set<ComplexModel> cmodels;
     
     public InstallData() {
         models = new LinkedHashMap<String, DocumentModel>();
@@ -36,6 +39,7 @@ public class InstallData implements Serializable {
         messages = new HashMap<String, Map<String, String>>();
         authorizations = new ArrayList<Authorization>();
         tasksgroups = new HashMap<String, Set<String>>();
+        cmodels = new TreeSet<ComplexModel>();
     }
     
     /**
@@ -44,6 +48,14 @@ public class InstallData implements Serializable {
      */
     public final void add(Authorization authorization) {
         authorizations.add(authorization);
+    }
+    
+    /**
+     * 
+     * @param cmodel
+     */
+    public final void add(ComplexModel cmodel) {
+        cmodels.add(cmodel);
     }
     
     /**
@@ -135,6 +147,14 @@ public class InstallData implements Serializable {
      * 
      * @return
      */
+    public final ComplexModel[] getCModels() {
+        return cmodels.toArray(new ComplexModel[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final String[] getDependencies() {
         return dependencies;
     }
@@ -177,9 +197,7 @@ public class InstallData implements Serializable {
         model.setName(name);
         model.setTableName(tablename);
         model.setClassName(classname);
-        
         add(model);
-        
         return model;
     }
     

@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.iocaste.authority.common.Authority;
+import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -68,6 +69,7 @@ public class Services extends AbstractFunction {
         Map<String, String> links;
         Map<String, Set<String>> tasksgroups;
         DocumentModel[] models;
+        ComplexModel[] cmodels;
         SearchHelpData[] shdata;
         Authorization[] authorizations;
         String[] dependencies;
@@ -89,11 +91,13 @@ public class Services extends AbstractFunction {
             dependencies = state.data.getDependencies();
             if (dependencies != null)
                 for (String pkgname : dependencies) {
-                    if (!isInstalled(pkgname))
-                        throw new Exception(new StringBuilder(state.pkgname).
-                                append(": required package ").
-                                append(pkgname).
-                                append(" not installed.").toString());
+                    if (isInstalled(pkgname))
+                        continue;
+                    
+                    throw new Exception(new StringBuilder(state.pkgname).
+                            append(": required package ").
+                            append(pkgname).
+                            append(" not installed.").toString());
                 }
             
             header = new ExtendedObject(state.documents.getModel("PACKAGE"));
@@ -109,6 +113,10 @@ public class Services extends AbstractFunction {
             models = state.data.getModels();
             if (models.length > 0)
                 installModels(models, state);
+            
+            cmodels = state.data.getCModels();
+            if (cmodels.length > 0)
+                installCModels(cmodels, state);
             
             /*
              * registra objetos de numeração
@@ -181,6 +189,18 @@ public class Services extends AbstractFunction {
         }
         
         new Iocaste(state.function).invalidateAuthCache();
+    }
+    
+    /**
+     * 
+     * @param cmodels
+     * @param state
+     */
+    private final void installCModels(ComplexModel[] cmodels, State state) {
+        for (ComplexModel cmodel : cmodels) {
+            state.documents.create(cmodel);
+            Registry.add(cmodel.getName(), "CMODEL", state);
+        }
     }
     
     /**
@@ -476,6 +496,13 @@ public class Services extends AbstractFunction {
             
             if (modeltype.equals("TSKITEM")) {
                 TaskSelector.removeTask(name, documents);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("CMODEL")) {
+                documents.removeComplexModel(name);
                 documents.delete(object);
                 
                 continue;
