@@ -54,6 +54,20 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
+     * Registra modelo complexo.
+     * 
+     * @param cmodel modelo complexo
+     * @return 1, se o modelo foi registrado com sucesso.
+     */
+    public final int create(ComplexModel cmodel) {
+        Message message = new Message();
+        
+        message.setId("create_complex_model");
+        message.add("cmodel", cmodel);
+        return call(message);
+    }
+    
+    /**
      * Registra modelo de documento.
      * 
      * Cria a tabela associada ao modelo.
@@ -94,6 +108,19 @@ public class Documents extends AbstractServiceInterface {
         
         message.setId("delete");
         message.add("object", object);
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final ComplexModel getComplexModel(String name) {
+        Message message = new Message();
+        
+        message.setId("get_complex_model");
+        message.add("name", name);
         return call(message);
     }
     

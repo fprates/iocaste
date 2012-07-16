@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
@@ -21,9 +22,11 @@ public class Services extends AbstractFunction {
         cache = new Cache(this);
         lockcache = new HashMap<String, Set<Lock>>();
         
+        export("create_complex_model", "createCModel");
         export("create_model", "createModel");
         export("create_number_factory", "createNumberFactory");
         export("delete", "delete");
+        export("get_complex_model", "getCModel");
         export("get_data_element", "getDataElement");
         export("get_next_number", "getNextNumber");
         export("get_object", "getObject");
@@ -40,6 +43,10 @@ public class Services extends AbstractFunction {
         export("update", "update");
         export("update_model", "updateModel");
         export("validate_model", "validateModel");
+    }
+    
+    public final int createCModel(Message message) {
+        return 0;
     }
     
     /**
@@ -75,6 +82,15 @@ public class Services extends AbstractFunction {
         Iocaste iocaste = new Iocaste(this);
         
         return Query.delete(iocaste, object);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final ComplexModel getCModel(Message message) {
+        return null;
     }
     
     /**
