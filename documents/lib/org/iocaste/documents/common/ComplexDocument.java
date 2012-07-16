@@ -16,6 +16,8 @@ public class ComplexDocument implements Serializable {
         this.cmodel = cmodel;
         header = new ExtendedObject(cmodel.getHeader());
         itens = new HashMap<String, ComplexDocumentItem>();
+        for (DocumentModel model : cmodel.getItens())
+            itens.put(model.getName(), new ComplexDocumentItem(model));
     }
     
     public final void add(ExtendedObject object) {
@@ -26,13 +28,7 @@ public class ComplexDocument implements Serializable {
             new RuntimeException("object model item is not allowed for " +
             		cmodel.getName());
         
-        if (itens.containsKey(model)) {
-            item = itens.get(model);
-        } else {
-            item = new ComplexDocumentItem(model);
-            itens.put(model.getName(), item);
-        }
-        
+        item = itens.get(model);
         item.add(object);
     }
     
