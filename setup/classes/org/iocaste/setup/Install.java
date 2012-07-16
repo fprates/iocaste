@@ -5,15 +5,27 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.protocol.Function;
 
 public class Install {
 
-    public static final InstallData init() {
+    public static final InstallData init(Function function) {
+        InstallData data = new InstallData();
+        Config config = new Config();
+        
+        config.function = function;
+        installCModel(data, config);
+        installCDocument(data, config);
+        
+        return data;
+    }
+    
+    public static final void installCModel(InstallData data, Config config) {
         DocumentModel model;
         DataElement element;
-        DocumentModelItem item, modelid, docid;
-        InstallData data = new InstallData();
+        DocumentModelItem modelname, item, modelid;
         
         /*
          * Modelo de documento complexo
@@ -38,13 +50,27 @@ public class Install {
         element = new DataElement();
         element.setName("COMPLEX_MODEL.ID");
         element.setType(DataType.NUMC);
-        element.setLength(5);
+        element.setLength(7);
         
         item = new DocumentModelItem();
         item.setName("ID");
         item.setTableFieldName("MDLID");
         item.setDataElement(element);
         model.add(item);
+        
+        // modelo
+        modelname = new Documents(config.function).getModel("MODEL").
+                getModelItem("NAME");
+        element = modelname.getDataElement();
+        
+        item = new DocumentModelItem();
+        item.setName("MODEL");
+        item.setTableFieldName("MODEL");
+        item.setDataElement(element);
+        item.setReference(modelname);
+        model.add(item);
+        
+        data.addNumberFactory("CMODEL_ID");
         
         /*
          * Item de modelo de documento complexo
@@ -69,10 +95,26 @@ public class Install {
         
         item = new DocumentModelItem();
         item.setName("COMPLEX_MODEL");
-        item.setTableFieldName("MODEL");
+        item.setTableFieldName("MDLNM");
         item.setDataElement(element);
         item.setReference(modelid);
         model.add(item);
+        
+        // modelo
+        element = modelname.getDataElement();
+        
+        item = new DocumentModelItem();
+        item.setName("MODEL");
+        item.setTableFieldName("MODEL");
+        item.setDataElement(element);
+        item.setReference(modelname);
+        model.add(item);
+    }
+    
+    public static final void installCDocument(InstallData data, Config config) {
+        DocumentModel model;
+        DataElement element;
+        DocumentModelItem item, docid;
         
         /*
          * Documento complexo
@@ -122,7 +164,9 @@ public class Install {
         item.setReference(docid);
         
         model.add(item);
-        
-        return data;
     }
+}
+
+class Config {
+    public Function function;
 }

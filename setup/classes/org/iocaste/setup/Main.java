@@ -11,6 +11,6 @@ public class Main extends AbstractPage {
     }
     
     public final InstallData install(Message message) {
-        return Install.init();
+        return Install.init(this);
     }
 }
