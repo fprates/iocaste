@@ -40,11 +40,11 @@ efetuar testes e avaliar necessidades
 redefinir módulo para gerar scripts de instalação
 
 - documents
-completar implementação de documentos complexos
+completar implementação de documentos complexos (feito)
 implementar bloqueio de registros (feito)
-suporte à inner join
+suporte à inner join (feito)
 implementar visão
-implementar range
+implementar range (feito)
 
 - shell
 diálogos modais

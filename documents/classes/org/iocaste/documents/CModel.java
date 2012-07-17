@@ -3,6 +3,7 @@ package org.iocaste.documents;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.IocasteException;
 
 public class CModel {
     private static final byte DEL_CMODEL_ITENS = 0;
@@ -14,6 +15,18 @@ public class CModel {
         "select * from COMPLEX_MODEL_ITEM where COMPLEX_MODEL = ?"
     };
     
+    private static final byte ITEM_SAVE = 0;
+    private static final String[] ERRORS = {
+        "error on complex model item saving"
+    };
+    
+    /**
+     * 
+     * @param model
+     * @param cache
+     * @return
+     * @throws Exception
+     */
     public static final int create(ComplexModel model, Cache cache)
             throws Exception {
         ExtendedObject item;
@@ -35,26 +48,40 @@ public class CModel {
             item.setValue("COMPLEX_MODEL", name);
             item.setValue("MODEL", modelitem.getName());
             if (Query.save(item, cache.function) == 0)
-                throw new Exception ("erro");
+                throw new IocasteException(ERRORS[ITEM_SAVE]);
         }
         
         return 1;
     }
     
+    /**
+     * 
+     * @param name
+     * @param cache
+     * @return
+     * @throws Exception
+     */
     public static final ComplexModel get(String name, Cache cache)
             throws Exception {
+        ComplexModel cmodel;
+        DocumentModel model;
+        ExtendedObject omodel;
         String modelname;
         ExtendedObject[] itens;
-        ComplexModel cmodel = new ComplexModel();
-        DocumentModel model = Model.get("COMPLEX_MODEL", cache);
-        ExtendedObject omodel = Query.get(model, name, cache.function);
         
+        if (cache.cmodels.containsKey(name))
+            return cache.cmodels.get(name);
+        
+        model = Model.get("COMPLEX_MODEL", cache);
+        omodel = Query.get(model, name, cache.function);
         if (omodel == null)
             return null;
         
         modelname = omodel.getValue("MODEL");
+        cmodel = new ComplexModel();
         cmodel.setName(name);
         cmodel.setHeader(Model.get(modelname, cache));
+        cache.cmodels.put(name, cmodel);
         itens = Query.select(QUERIES[CMODEL_ITENS], 0, cache, name);
         if (itens == null)
             return cmodel;
@@ -68,11 +95,23 @@ public class CModel {
         return cmodel;
     }
     
+    /**
+     * 
+     * @param cmodel
+     * @param cache
+     * @return
+     * @throws Exception
+     */
     public static final int remove(ComplexModel cmodel, Cache cache)
             throws Exception {
+        int error;
         String name = cmodel.getName();
         
         Query.update(QUERIES[DEL_CMODEL_ITENS], cache, name);
-        return Query.update(QUERIES[DEL_CMODEL], cache, name);
+        error = Query.update(QUERIES[DEL_CMODEL], cache, name);
+        if (error > 0)
+            cache.cmodels.remove(name);
+        
+        return error;
     }
 }
