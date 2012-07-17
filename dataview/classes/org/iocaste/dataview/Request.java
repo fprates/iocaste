@@ -42,50 +42,6 @@ public class Request {
     /**
      * 
      * @param vdata
-     * @param function
-     */
-    public static final void edit(View vdata, Function function) {
-        ExtendedObject[] itens;
-        DataForm form = vdata.getElement("model");
-        String modelname = form.get("model.name").get();
-        
-        itens = getTableItens(modelname, function);
-        if (itens == null) {
-            vdata.message(Const.ERROR, "invalid.model");
-            return;
-        }
-        
-        vdata.clearExports();
-        vdata.export("mode", "edit");
-        vdata.export("view.type", Const.SINGLE);
-        vdata.export("model.name", modelname);
-        vdata.export("model.regs", itens);
-        vdata.setReloadableView(true);
-        vdata.redirect("select");
-    }
-    
-    /**
-     * 
-     * @param name
-     * @return
-     */
-    private static final ExtendedObject[] getTableItens(String name,
-            Function function) {
-        ExtendedObject[] itens;
-        String query;
-        Documents documents = new Documents(function);
-        
-        if (documents.getModel(name) == null)
-            return null;
-        
-        query = new StringBuilder("from ").append(name).toString();
-        itens = documents.select(query);
-        return itens;
-    }
-    
-    /**
-     * 
-     * @param vdata
      */
     public static final void insert(View vdata) {
         String modelname = vdata.getParameter("model.name");
@@ -127,6 +83,35 @@ public class Request {
         insertcommon(vdata, selectview, function);
         form.clearInputs();
         vdata.message(Const.STATUS, "insert.successful");
+    }
+    
+    public static final void load(View view, Function function, byte mode) {
+        ExtendedObject[] itens;
+        InputComponent input = ((DataForm)view.getElement("model")).
+                get("model.name");
+        String query, modelname = input.get();
+        Documents documents = new Documents(function);
+        
+        if (documents.getModel(modelname) == null) {
+            view.message(Const.ERROR, "invalid.model");
+            return;
+        }
+        
+        query = new StringBuilder("from ").append(modelname).toString();
+        itens = documents.select(query);
+        if (itens == null) {
+            view.message(Const.ERROR, "no.entries");
+            return;
+        }
+        
+        view.clearExports();
+        view.export("mode", mode);
+        view.export("view.type", Const.SINGLE);
+        view.export("model.name", modelname);
+        view.export("model.regs", itens);
+        view.setReloadableView(true);
+        view.redirect("select");
+        
     }
     
     /**
@@ -171,31 +156,6 @@ public class Request {
             
             documents.modify(object);
         }
-    }
-    
-    /**
-     * 
-     * @param vdata
-     * @param function
-     */
-    public static final void show(View vdata, Function function) {
-        ExtendedObject[] itens;
-        String modelname = ((InputComponent)vdata.getElement("model.name")).
-                get();
-        
-        itens = getTableItens(modelname, function);
-        if (itens == null) {
-            vdata.message(Const.ERROR, "invalid.model");
-            return;
-        }
-        
-        vdata.clearExports();
-        vdata.export("mode", "show");
-        vdata.export("view.type", Const.SINGLE);
-        vdata.export("model.name", modelname);
-        vdata.export("model.regs", itens);
-        vdata.setReloadableView(true);
-        vdata.redirect("select");
     }
 
 }

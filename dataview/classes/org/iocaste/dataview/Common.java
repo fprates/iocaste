@@ -12,6 +12,9 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextField;
 
 public class Common {
+    public static final byte DISPLAY = 0;
+    public static final byte UPDATE = 1;
+    
     public static final void addTableItem(Table table, ExtendedObject object) {
         InputComponent input;
         String name;

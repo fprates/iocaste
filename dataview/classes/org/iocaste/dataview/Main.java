@@ -33,7 +33,7 @@ public class Main extends AbstractPage {
      * @param vdata
      */
     public final void edit(View vdata) {
-        Request.edit(vdata, this);
+        Request.load(vdata, this, Common.UPDATE);
     }
     
     /**
@@ -122,6 +122,6 @@ public class Main extends AbstractPage {
      * @param vdata
      */
     public final void show(View vdata) {
-        Request.show(vdata, this);
+        Request.load(vdata, this, Common.DISPLAY);
     }
 }
