@@ -36,7 +36,7 @@ public class TemplateForm extends AbstractPage {
      * @param view
      * @return
      */
-    public final void bind(View view) throws Exception {
+    public final void bind(View view) {
         // carrega a biblioteca
         Template template = new Template(this);
         

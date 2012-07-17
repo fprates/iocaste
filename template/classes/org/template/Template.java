@@ -21,7 +21,7 @@ public class Template extends AbstractServiceInterface {
      * @return
      * @throws Exception
      */
-    public final String getMessage() throws Exception {
+    public final String getMessage() {
         Message message = new Message();
         
         message.setId("get_message");

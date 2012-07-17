@@ -19,9 +19,8 @@ public class Template extends AbstractServiceInterface {
     /**
      * Método que chama a função "get_message" do servidor
      * @return
-     * @throws Exception
      */
-    public final String getMessage() throws Exception {
+    public final String getMessage() {
         Message message = new Message();
         
         message.setId("get_message");
