@@ -94,7 +94,7 @@ insert into DOCS006(iname, itref) values('MODELITEM.MODEL', 'MODEL.NAME');
 
 insert into DOCS001(docid, tname, class) values('TABLE_MODEL', 'DOCS005', '');
 insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('TABLE_MODEL.TABLE', 'TABLE_MODEL', 0, 'TNAME', 'MODEL.TABLE', 'tableName');
-insert into DOCS002(iname, docid, nritm, fname, ename, attrb, itref) values('TABLE_MODEL.MODEL', 'TABLE_MODEL', 1, 'MODEL', 'MODEL.NAME', 'model', 'MODEL.NAME');
+insert into DOCS002(iname, docid, nritm, fname, ename, attrb, itref) values('TABLE_MODEL.MODEL', 'TABLE_MODEL', 1, 'DOCID', 'MODEL.NAME', 'model', 'MODEL.NAME');
 insert into DOCS004(iname, docid) values('TABLE_MODEL.TABLE', 'TABLE_MODEL');
 insert into DOCS005(tname, docid) values('DOCS005', 'TABLE_MODEL');
 insert into DOCS006(iname, itref) values('TABLE_MODEL.MODEL', 'MODEL.NAME');
