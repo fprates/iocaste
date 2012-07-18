@@ -284,7 +284,7 @@ public class Model {
         
         for (DocumentModelItem item : model.getItens())
             if (removeModelItem(iocaste, item) == 0)
-                throw new IocasteException("");
+                throw new IocasteException("error on delete model item");
         
         tablename = model.getTableName();
         if (iocaste.update(QUERIES[DEL_MODEL_REF], tablename) == 0)
@@ -368,11 +368,11 @@ public class Model {
         
         model.setName(newname);
         if (Model.create(model, cache) == 0)
-            throw new IocasteException("");
+            throw new IocasteException("error on rename model (step 1)");
         
         model.setName(oldname);
         if (remove(model, cache) == 0)
-            throw new IocasteException("");
+            throw new IocasteException("error on rename model (step 2)");
         
         return 1;
     }
@@ -506,7 +506,7 @@ public class Model {
             
             if (iocaste.update(
                     QUERIES[INS_KEY], name, key.getModel().getName()) == 0)
-                throw new IocasteException("Error through key insert.");
+                throw new IocasteException("error on key insert.");
         }
         
         return 1;
@@ -581,12 +581,12 @@ public class Model {
                     throw new IocasteException("");
                 
                 if (insertModelItem(iocaste, item) == 0)
-                    throw new IocasteException("Error through model insert");
+                    throw new IocasteException("error on model insert");
                 
                 addDBColumn(iocaste, item, refstmt);
             } else {
                 if (updateModelItem(iocaste, item, oldmodel) == 0)
-                    throw new IocasteException("Error through model update");
+                    throw new IocasteException("error on model update");
             }
         }
         
@@ -596,11 +596,11 @@ public class Model {
             
             if (removeModelItem(iocaste, olditem) == 0)
                 throw new IocasteException(
-                        "Model.update(): removeModelItem() fail");
+                        "error on remove model item");
             
             if (removeDBColumn(iocaste, olditem) == 0)
                 throw new IocasteException(
-                        "Model.update():removeDBColumn() fail");
+                        "error on remove table column");
         }
         
         Common.parseQueries(model, cache.queries);
@@ -701,7 +701,7 @@ public class Model {
 
         if (iocaste.update(QUERIES[UPDATE_ELEMENT], criteria) == 0)
             throw new IocasteException(
-                    "Model.updateModelItem(): UPDATE_ELEMENT fail");
+                    "error on update data element");
         
         criteria = new Object[7];
         
@@ -716,7 +716,7 @@ public class Model {
         
         if (iocaste.update(QUERIES[UPDATE_ITEM], criteria) == 0)
             throw new IocasteException(
-                    "Model.updateModelItem(): UPDATE_ITEM fail");
+                    "error on update model item");
         
         shname = item.getSearchHelp();
         if (Common.isInitial(shname))
@@ -724,7 +724,7 @@ public class Model {
         
         if (iocaste.update(QUERIES[INS_SH_REF], criteria[6], shname) == 0)
             throw new IocasteException(
-                    "Model.updateModelItem(): INS_SH_REF fail");
+                    "error on insert sh reference");
         
         return 1;
     }
