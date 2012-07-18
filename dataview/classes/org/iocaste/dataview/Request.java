@@ -44,10 +44,10 @@ public class Request {
      * @param vdata
      */
     public static final void insert(View vdata) {
-        String modelname = vdata.getParameter("model.name");
+        DocumentModel model = vdata.getParameter("model");
         
         vdata.clearExports();
-        vdata.export("model.name", modelname);
+        vdata.export("model", model);
         vdata.setReloadableView(true);
         vdata.redirect("form");
     }
@@ -117,13 +117,12 @@ public class Request {
      * @param function
      */
     public static final void save(View vdata, Function function) {
-        String value;
+        Object value;
         InputComponent input;
         DocumentModelItem modelitem;
         ExtendedObject object;
-        String modelname = vdata.getParameter("model.name");
+        DocumentModel model = vdata.getParameter("model");
         Documents documents = new Documents(function);
-        DocumentModel model = documents.getModel(modelname);
         Table table = vdata.getElement("selection_view");
         
         for (TableItem item : table.getItens()) {
@@ -145,7 +144,7 @@ public class Request {
                 if (object == null)
                     object = new ExtendedObject(model);
                 
-                object.setValue(modelitem, input.get());
+                object.setValue(modelitem, value);
             }
             
             if (object == null)
@@ -153,6 +152,7 @@ public class Request {
             
             documents.modify(object);
         }
+        
+        vdata.message(Const.STATUS, "entries.saved");
     }
-
 }
