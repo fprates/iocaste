@@ -91,23 +91,20 @@ public class Request {
                 get("model.name");
         String query, modelname = input.get();
         Documents documents = new Documents(function);
+        DocumentModel model = documents.getModel(modelname);
         
-        if (documents.getModel(modelname) == null) {
+        if (model == null) {
             view.message(Const.ERROR, "invalid.model");
             return;
         }
         
         query = new StringBuilder("from ").append(modelname).toString();
         itens = documents.select(query);
-        if (itens == null) {
-            view.message(Const.ERROR, "no.entries");
-            return;
-        }
         
         view.clearExports();
         view.export("mode", mode);
         view.export("view.type", Const.SINGLE);
-        view.export("model.name", modelname);
+        view.export("model", model);
         view.export("model.regs", itens);
         view.setReloadableView(true);
         view.redirect("select");

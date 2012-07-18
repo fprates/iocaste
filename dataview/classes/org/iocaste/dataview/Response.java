@@ -88,9 +88,7 @@ public class Response {
         Form container = new Form(view, "dataview.container");
         PageControl pagecontrol = new PageControl(container);
         ExtendedObject[] itens = view.getParameter("model.regs");
-        Documents documents = new Documents(function);
-        String modelname = view.getParameter("model.name");
-        DocumentModel model = documents.getModel(modelname);
+        DocumentModel model = view.getParameter("model");
         Table table = new Table(container, "selection_view");
         Const viewtype = view.getParameter("view.type");
         
@@ -121,7 +119,7 @@ public class Response {
 //        new Button(container, "laterpage").setSubmit(true);
 //        new Button(container, "lastpage").setSubmit(true);
         
-        view.setTitle(modelname);
+        view.setTitle(model.getName());
     }
 
 }

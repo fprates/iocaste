@@ -24,7 +24,6 @@ public class Common {
         
         for (DocumentModelItem modelitem : model.getItens()) {
             name = modelitem.getName();
-            
             dataelement = modelitem.getDataElement();
             switch (dataelement.getType()) {
             case DataType.BOOLEAN:
@@ -36,7 +35,6 @@ public class Common {
             }
             
             input.setEnabled(!model.isKey(modelitem));
-            
             tableitem.add(input);
         }
         
