@@ -1,10 +1,8 @@
 package org.iocaste.packagetool;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.ComplexModel;
@@ -18,7 +16,6 @@ import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
-import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.SHLib;
@@ -112,18 +109,17 @@ public class Services extends AbstractFunction {
              */
             models = state.data.getModels();
             if (models.length > 0)
-                installModels(models, state);
+                InstallModels.init(models, state);
             
             cmodels = state.data.getCModels();
             if (cmodels.length > 0)
-                installCModels(cmodels, state);
+                InstallCModels.init(cmodels, state);
             
             /*
              * registra objetos de numeração
              */
             for (String factory : state.data.getNumberFactories()) {
                 state.documents.createNumberFactory(factory);
-    
                 Registry.add(factory, "NUMBER", state);
             }
             
@@ -132,7 +128,7 @@ public class Services extends AbstractFunction {
              */
             shdata = state.data.getSHData();
             if (shdata.length > 0)
-                installSH(shdata, state);
+                InstallSH.init(shdata, state);
             
             for (DataElement element : state.data.getElements())
                 Registry.add(element.getName(), "DATA_ELEMENT", state);
@@ -142,11 +138,11 @@ public class Services extends AbstractFunction {
              */
             state.messages = state.data.getMessages();
             if (state.messages.size() > 0)
-                installMessages(state);
+                InstallMessages.init(state);
             
             authorizations = state.data.getAuthorizations();
             if (authorizations.length > 0)
-                installAuthorizations(authorizations, state);
+                InstallAuthorizations.init(authorizations, state);
             
             /*
              * registra tarefas
@@ -154,11 +150,11 @@ public class Services extends AbstractFunction {
             tasks = state.documents.getModel("TASKS");
             links = state.data.getLinks();
             if (links.size() > 0)
-                installLinks(links, tasks, state);
+                InstallLinks.init(links, tasks, state);
             
             tasksgroups = state.data.getTasksGroups();
             if (tasksgroups.size() > 0)
-                installTasksGroups(tasksgroups, state);
+                InstallTasksGroups.init(tasksgroups, state);
             
             state.documents.commit();
         
@@ -166,232 +162,6 @@ public class Services extends AbstractFunction {
         } catch (Exception e) {
             state.documents.rollback();
             throw e;
-        }
-    }
-    
-    /**
-     * 
-     * @param authorizations
-     * @param state
-     */
-    private final void installAuthorizations(Authorization[] authorizations,
-            State state) {
-        String name;
-        Authority authority = new Authority(state.function);
-        
-        for (Authorization authorization : authorizations) {
-            name = authorization.getName();
-            if (authority.get(name) == null)
-                authority.save(authorization);
-            
-            authority.assign("ADMIN", "ALL", authorization);
-            Registry.add(name, "AUTHORIZATION", state);
-        }
-        
-        new Iocaste(state.function).invalidateAuthCache();
-    }
-    
-    /**
-     * 
-     * @param cmodels
-     * @param state
-     */
-    private final void installCModels(ComplexModel[] cmodels, State state) {
-        for (ComplexModel cmodel : cmodels) {
-            state.documents.create(cmodel);
-            Registry.add(cmodel.getName(), "CMODEL", state);
-        }
-    }
-    
-    /**
-     * 
-     * @param links
-     * @param tasks
-     * @param state
-     */
-    private final void installLinks(Map<String, String> links,
-            DocumentModel tasks, State state) {
-        ExtendedObject header;
-        
-        for (String link : links.keySet()) {
-            header = new ExtendedObject(tasks);
-            header.setValue("NAME", link.toUpperCase());
-            header.setValue("COMMAND", links.get(link));
-            
-            state.documents.save(header);
-            Registry.add(link, "TASK", state);
-        }
-    }
-    
-    /**
-     * 
-     * @param state
-     */
-    private final void installMessages(State state) {
-        long index;
-        int langcode;
-        String locale;
-        Map<String, String> messages;
-        ExtendedObject[] languages = state.documents.select("from LANGUAGES");
-        DocumentModel msgmodel = state.documents.getModel("MESSAGES");
-        ExtendedObject omessage = new ExtendedObject(msgmodel);
-        
-        for (String language : state.messages.keySet()) {
-            langcode = 0;
-            for (ExtendedObject olanguage : languages) {
-                locale = olanguage.getValue("LOCALE");
-                if (language.equals(locale)) {
-                    langcode = olanguage.getValue("CODE");
-                    break;
-                }
-            }
-            
-            messages = state.messages.get(language);
-            index = (langcode * 1000000000) + (state.pkgid / 100);
-            for (String msgcode : messages.keySet()) {
-                omessage.setValue("INDEX", index++);
-                omessage.setValue("NAME", msgcode);
-                omessage.setValue("LOCALE", language);
-                omessage.setValue("PACKAGE", state.pkgname);
-                omessage.setValue("TEXT", messages.get(msgcode));
-                
-                state.documents.save(omessage);
-            }
-        }
-        
-        Registry.add(null, "MESSAGE", state);
-    }
-    
-    /**
-     * 
-     * @param models
-     * @param state
-     * @throws Exception
-     */
-    private final void installModels(DocumentModel[] models, State state)
-            throws Exception {
-        String name;
-        Set<DocumentModelItem> itens;
-        int i;
-        List<Object[]> values;
-        ExtendedObject header;
-        
-        for (DocumentModel model : models) {
-            if (state.documents.getModel(model.getName()) != null) {
-                if (state.documents.updateModel(model) == 0)
-                    throw new IocasteException("update model error.");
-            } else {
-                if (state.documents.createModel(model) == 0)
-                    throw new IocasteException("create model error.");
-            }
-            
-            Registry.add(model.getName(), "MODEL", state);
-            
-            for (DocumentModelItem modelitem : model.getItens()) {
-                name = modelitem.getSearchHelp();
-                if (name == null)
-                    continue;
-                
-                if (state.shm.containsKey(name)) {
-                    itens = state.shm.get(name);
-                } else {
-                    itens = new TreeSet<DocumentModelItem>();
-                    state.shm.put(name, itens);
-                }
-                itens.add(modelitem);
-            }
-            
-            /*
-             * recupera modelo para trazer as queries.
-             */
-            model = state.documents.getModel(model.getName());
-            values = state.data.getValues(model);
-            
-            if (values == null)
-                continue;
-            
-            for (Object[] line : values) {
-                header = new ExtendedObject(model);
-                i = 0;
-                
-                for (DocumentModelItem modelitem : model.getItens())
-                    header.setValue(modelitem, line[i++]);
-                
-                state.documents.save(header);
-            }
-        }
-    }
-    
-    /**
-     * 
-     * @param shdata
-     * @param state
-     */
-    private final void installSH(SearchHelpData[] shdata, State state) {
-        Set<DocumentModelItem> shm;
-        ExtendedObject header;
-        String shname;
-        String[] shitens;
-        ExtendedObject[] itens;
-        int i;
-        SHLib shlib = new SHLib(this);
-        DocumentModel shmodel = state.documents.getModel("SEARCH_HELP");
-        DocumentModel shimodel = state.documents.getModel("SH_ITENS");
-        
-        for (SearchHelpData shd : shdata) {
-            shname = shd.getName();
-            header = new ExtendedObject(shmodel);
-            header.setValue("NAME", shname);
-            header.setValue("MODEL", shd.getModel());
-            header.setValue("EXPORT", shd.getExport());
-            
-            shitens = shd.getItens();
-            itens = new ExtendedObject[shitens.length];
-
-            i = 0;
-            for (String name : shitens) {
-                itens[i] = new ExtendedObject(shimodel);
-                itens[i].setValue("NAME", name);
-                itens[i].setValue("SEARCH_HELP", shname);
-                itens[i++].setValue("ITEM", name);
-            }
-            
-            shlib.save(header, itens);
-            shm = state.shm.get(shname);
-            if (shm != null)
-                for (DocumentModelItem modelitem : shm)
-                    shlib.assign(modelitem);
-
-            Registry.add(shname, "SH", state);
-        }
-    }
-    
-    /**
-     * 
-     * @param tasksgroups
-     * @param state
-     */
-    private final void installTasksGroups(Map<String, Set<String>> tasksgroups,
-            State state) {
-        Set<String> itens;
-        ExtendedObject task, group;
-        
-        for (String groupname : tasksgroups.keySet()) {
-            group = TaskSelector.getGroup(groupname, state);
-            if (group == null) {
-                group = TaskSelector.createGroup(groupname, state);
-                TaskSelector.assignGroup(group, "ADMIN", state);
-                Registry.add(groupname, "TSKGROUP", state);
-            }
-
-            itens = tasksgroups.get(groupname);
-            for (String taskname : itens) {
-                task = TaskSelector.addEntry(taskname, group, state);
-                if (state.messages.size() > 0)
-                    TaskSelector.addEntryMessage(task, group, state);
-                
-                Registry.add(taskname, "TSKITEM", state);
-            }
         }
     }
     
