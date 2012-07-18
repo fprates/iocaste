@@ -302,6 +302,20 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
+     * 
+     * @param document
+     * @return retorna código do documento, ou 
+     * 0, se erro na criação do documento;
+     */
+    public final long save(ComplexDocument document) {
+        Message message = new Message();
+        
+        message.setId("save_complex_document");
+        message.add("document", document);
+        return call(message);
+    }
+    
+    /**
      * Insere entrada em tabela, especificado pelo objeto.
      * @param object objeto a ser inserido
      * @return 1, se o objeto foi inserido com sucesso.

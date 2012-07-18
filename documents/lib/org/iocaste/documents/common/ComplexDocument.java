@@ -20,6 +20,10 @@ public class ComplexDocument implements Serializable {
             itens.put(model.getName(), new ComplexDocumentItem(model));
     }
     
+    /**
+     * 
+     * @param object
+     */
     public final void add(ExtendedObject object) {
         ComplexDocumentItem item;
         DocumentModel model = object.getModel();
@@ -32,14 +36,35 @@ public class ComplexDocument implements Serializable {
         item.add(object);
     }
     
+    /**
+     * 
+     * @return
+     */
     public final ExtendedObject getHeader() {
         return header;
     }
     
+    /**
+     * 
+     * @param name
+     * @return
+     */
     public final DocumentModel getItemModel(String name) {
         return itens.get(name).getModel();
     }
     
+    /**
+     * 
+     * @return
+     */
+    public final ComplexModel getModel() {
+        return cmodel;
+    }
+    
+    /**
+     * 
+     * @param header
+     */
     public final void setHeader(ExtendedObject header) {
         this.header = header;
     }

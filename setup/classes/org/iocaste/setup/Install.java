@@ -25,7 +25,7 @@ public class Install {
     public static final void installCModel(InstallData data, Config config) {
         DocumentModel model;
         DataElement element;
-        DocumentModelItem modelname, item, modelid;
+        DocumentModelItem modelname, item;
         
         /*
          * Modelo de documento complexo
@@ -39,18 +39,18 @@ public class Install {
         element.setUpcase(true);
         element.setLength(24);
         
-        modelid = new DocumentModelItem();
-        modelid.setName("NAME");
-        modelid.setTableFieldName("IDENT");
-        modelid.setDataElement(element);
-        model.add(modelid);
-        model.add(new DocumentModelKey(modelid));
+        config.cmodelname = new DocumentModelItem();
+        config.cmodelname.setName("NAME");
+        config.cmodelname.setTableFieldName("IDENT");
+        config.cmodelname.setDataElement(element);
+        model.add(config.cmodelname);
+        model.add(new DocumentModelKey(config.cmodelname));
 
         // índice
         element = new DataElement();
         element.setName("COMPLEX_MODEL.ID");
         element.setType(DataType.NUMC);
-        element.setLength(7);
+        element.setLength(4);
         
         item = new DocumentModelItem();
         item.setName("ID");
@@ -70,6 +70,18 @@ public class Install {
         item.setReference(modelname);
         model.add(item);
         
+        // último documento para este modelo
+        element = new DataElement();
+        element.setName("COMPLEX_DOCUMENT.ID");
+        element.setType(DataType.NUMC);
+        element.setLength(11);
+        
+        config.cdocumentid = new DocumentModelItem();
+        config.cdocumentid.setName("CURRENT");
+        config.cdocumentid.setTableFieldName("DOCID");
+        config.cdocumentid.setDataElement(element);
+        model.add(config.cdocumentid);
+        
         data.addNumberFactory("CMODEL_ID");
         
         /*
@@ -80,7 +92,7 @@ public class Install {
         // identificador
         element = new DataElement();
         element.setName("COMPLEX_MODEL_ITEM.ID");
-        element.setLength(10);
+        element.setLength(7);
         element.setType(DataType.NUMC);
         
         item = new DocumentModelItem();
@@ -91,13 +103,13 @@ public class Install {
         model.add(new DocumentModelKey(item));
         
         // modelo referência
-        element = modelid.getDataElement();
+        element = config.cmodelname.getDataElement();
         
         item = new DocumentModelItem();
         item.setName("COMPLEX_MODEL");
         item.setTableFieldName("MDLNM");
         item.setDataElement(element);
-        item.setReference(modelid);
+        item.setReference(config.cmodelname);
         model.add(item);
         
         // modelo
@@ -122,18 +134,20 @@ public class Install {
         model = data.getModel("COMPLEX_DOCUMENT", "CPLXDOC", null);
         
         // identificador
-        element = new DataElement();
-        element.setName("COMPLEX_DOCUMENT.ID");
-        element.setLength(10);
-        element.setType(DataType.NUMC);
-        
         docid = new DocumentModelItem();
         docid.setName("ID");
         docid.setTableFieldName("IDENT");
-        docid.setDataElement(element);
-        
+        docid.setDataElement(config.cdocumentid.getDataElement());
         model.add(docid);
         model.add(new DocumentModelKey(docid));
+        
+        // modelo de referência
+        item = new DocumentModelItem();
+        item.setName("COMPLEX_MODEL");
+        item.setTableFieldName("MODEL");
+        item.setDataElement(config.cmodelname.getDataElement());
+        item.setReference(config.cmodelname);
+        model.add(item);
         
         /*
          * Item de documento complexo
@@ -143,14 +157,13 @@ public class Install {
         // identificador
         element = new DataElement();
         element.setName("COMPLEX_DOCUMENT_ITEM.ID");
-        element.setLength(15);
+        element.setLength(16);
         element.setType(DataType.NUMC);
 
         item = new DocumentModelItem();
         item.setName("ID");
         item.setTableFieldName("IDENT");
         item.setDataElement(element);
-        
         model.add(item);
         model.add(new DocumentModelKey(item));
         
@@ -162,11 +175,11 @@ public class Install {
         item.setTableFieldName("DOCID");
         item.setDataElement(element);
         item.setReference(docid);
-        
         model.add(item);
     }
 }
 
 class Config {
     public Function function;
+    public DocumentModelItem cdocumentid, cmodelname;
 }

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
@@ -39,6 +40,7 @@ public class Services extends AbstractFunction {
         export("remove_number_factory", "removeNumberFactory");
         export("rename_model", "renameModel");
         export("save", "save");
+        export("save_complex_document", "saveCDocument");
         export("select", "select");
         export("unlock", "unlock");
         export("update", "update");
@@ -284,6 +286,17 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      * @return
+     * @throws Exception
+     */
+    public final long saveCDocument(Message message) throws Exception {
+        ComplexDocument document = message.get("document");
+        return CDocument.save(document, cache);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
      */
     public final ExtendedObject[] select(Message message) throws Exception {
         String query = message.getString("query");
@@ -293,6 +306,11 @@ public class Services extends AbstractFunction {
         return Query.select(query, rows, cache, criteria);
     }
     
+    /**
+     * 
+     * @param message
+     * @return
+     */
     public final int unlock(Message message) {
         Set<Lock> locks;
         Lock lock;
