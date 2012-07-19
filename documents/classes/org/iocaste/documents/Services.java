@@ -27,6 +27,7 @@ public class Services extends AbstractFunction {
         export("create_model", "createModel");
         export("create_number_factory", "createNumberFactory");
         export("delete", "delete");
+        export("get_complex_document", "getCDocument");
         export("get_complex_model", "getCModel");
         export("get_data_element", "getDataElement");
         export("get_next_number", "getNextNumber");
@@ -48,6 +49,12 @@ public class Services extends AbstractFunction {
         export("validate_model", "validateModel");
     }
     
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
     public final int createCModel(Message message) throws Exception {
         ComplexModel model = message.get("cmodel");
         return CModel.create(model, cache);
@@ -94,8 +101,23 @@ public class Services extends AbstractFunction {
      * @return
      * @throws Exception
      */
+    public final ComplexDocument getCDocument(Message message)
+            throws Exception {
+        String cdname = message.getString("name");
+        long id = message.getLong("id");
+        
+        return CDocument.get(cdname, id, cache);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
     public final ComplexModel getCModel(Message message) throws Exception {
         String name = message.getString("name");
+        
         return CModel.get(name, cache);
     }
     

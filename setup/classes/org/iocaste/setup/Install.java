@@ -50,7 +50,7 @@ public class Install {
         element = new DataElement();
         element.setName("COMPLEX_MODEL.ID");
         element.setType(DataType.NUMC);
-        element.setLength(4);
+        element.setLength(3);
         
         item = new DocumentModelItem();
         item.setName("ID");
@@ -82,6 +82,19 @@ public class Install {
         config.cdocumentid.setDataElement(element);
         model.add(config.cdocumentid);
         
+        // link documento-document complexo
+        element = new DataElement();
+        element.setName("COMPLEX_MODEL.CD_LINK");
+        element.setType(DataType.CHAR);
+        element.setLength(24);
+        element.setUpcase(true);
+        
+        item = new DocumentModelItem();
+        item.setName("CD_LINK");
+        item.setTableFieldName("CDLNK");
+        item.setDataElement(element);
+        model.add(item);
+        
         data.addNumberFactory("CMODEL_ID");
         
         /*
@@ -92,7 +105,7 @@ public class Install {
         // identificador
         element = new DataElement();
         element.setName("COMPLEX_MODEL_ITEM.ID");
-        element.setLength(7);
+        element.setLength(6);
         element.setType(DataType.NUMC);
         
         item = new DocumentModelItem();

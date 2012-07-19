@@ -11,6 +11,7 @@ public class ComplexDocument implements Serializable {
     private ComplexModel cmodel;
     private ExtendedObject header;
     private Map<String, ComplexDocumentItem> itens;
+    private long id;
     
     public ComplexDocument(ComplexModel cmodel) {
         this.cmodel = cmodel;
@@ -46,6 +47,14 @@ public class ComplexDocument implements Serializable {
     
     /**
      * 
+     * @return
+     */
+    public final long getId() {
+        return id;
+    }
+    
+    /**
+     * 
      * @param name
      * @return
      */
@@ -67,6 +76,14 @@ public class ComplexDocument implements Serializable {
      */
     public final void setHeader(ExtendedObject header) {
         this.header = header;
+    }
+    
+    /**
+     * 
+     * @param id
+     */
+    public final void setId(long id) {
+        this.id = id;
     }
 }
 

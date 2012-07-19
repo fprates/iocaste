@@ -2,6 +2,8 @@ package org.iocaste.documents;
 
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
 
@@ -29,28 +31,58 @@ public class CModel {
      */
     public static final int create(ComplexModel model, Cache cache)
             throws Exception {
-        ExtendedObject item;
+        DocumentModel cmlink;
+        DocumentModelItem reference, cmlinkitem;
         long cmodelid;
         DocumentModel hmodel = Model.get("COMPLEX_MODEL", cache);
         DocumentModel imodel = Model.get("COMPLEX_MODEL_ITEM", cache);
-        ExtendedObject header = new ExtendedObject(hmodel);
-        String name = model.getName();
+        ExtendedObject object = new ExtendedObject(hmodel);
+        String cminame, name = model.getName();
         
-        header.setValue("NAME", name);
+        object.setValue("NAME", name);
         cmodelid = NumberRange.getCurrent("CMODEL_ID", cache.function);
-        header.setValue("ID", cmodelid);
-        header.setValue("MODEL", model.getHeader().getName());
-        Query.save(header, cache.function);
+        object.setValue("ID", cmodelid);
+        hmodel = model.getHeader();
+        object.setValue("MODEL", hmodel.getName());
+        cminame = new StringBuilder("CMI_").append(name).toString();
+        object.setValue("CD_LINK", cminame);
+        Query.save(object, cache.function);
+        
         cmodelid *= 1000;
         for (DocumentModel modelitem : model.getItens()) {
-            item = new ExtendedObject(imodel);
-            item.setValue("ID", cmodelid++);
-            item.setValue("COMPLEX_MODEL", name);
-            item.setValue("MODEL", modelitem.getName());
-            if (Query.save(item, cache.function) == 0)
+            object = new ExtendedObject(imodel);
+            object.setValue("ID", cmodelid++);
+            object.setValue("COMPLEX_MODEL", name);
+            object.setValue("MODEL", modelitem.getName());
+            if (Query.save(object, cache.function) == 0)
                 throw new IocasteException(ERRORS[ITEM_SAVE]);
         }
         
+        cmlink = new DocumentModel();
+        cmlink.setName(cminame);
+        cmlink.setTableName("CMI_"+hmodel.getTableName());
+        
+        reference = hmodel.getModelItem("ID");
+        cmlinkitem = new DocumentModelItem();
+        cmlinkitem.setName("ID");
+        cmlinkitem.setTableFieldName("IDENT");
+        cmlinkitem.setDataElement(reference.getDataElement());
+        cmlinkitem.setReference(reference);
+        cmlink.add(cmlinkitem);
+        cmlink.add(new DocumentModelKey(cmlinkitem));
+        
+        for (DocumentModelKey key : hmodel.getKeys()) {
+            name = key.getModelItemName();
+            reference = hmodel.getModelItem(name);
+            cmlinkitem = new DocumentModelItem();
+            cmlinkitem.setName("Z"+name);
+            cmlinkitem.setTableFieldName("Z"+reference.getTableFieldName());
+            cmlinkitem.setDataElement(reference.getDataElement());
+            cmlinkitem.setReference(reference);
+            cmlink.add(cmlinkitem);
+        }
+        
+        Model.create(cmlink, cache);
         return 1;
     }
     
