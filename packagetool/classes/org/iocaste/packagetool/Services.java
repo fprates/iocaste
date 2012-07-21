@@ -42,8 +42,9 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
+     * @throws Exception
      */
-    public final void assignTaskGroup(Message message) {
+    public final void assignTaskGroup(Message message) throws Exception {
         ExtendedObject group;
         String groupname = message.getString("group");
         String username = message.getString("username");

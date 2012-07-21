@@ -11,9 +11,10 @@ public class InstallTasksGroups {
      * 
      * @param tasksgroups
      * @param state
+     * @throws Exception
      */
     public static final void init(Map<String, Set<String>> tasksgroups,
-            State state) {
+            State state) throws Exception {
         Set<String> itens;
         ExtendedObject task, group;
         

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.IocasteException;
 
 public class TaskSelector {
     private static final byte DEL_USR_TSK_GRP = 0;
@@ -87,13 +88,13 @@ public class TaskSelector {
     
     /**
      * 
-     * @param groupname
+     * @param group
      * @param username
      * @param state
-     * @return
+     * @throws Exception
      */
     public static final void assignGroup(ExtendedObject group,
-            String username, State state) {
+            String username, State state) throws Exception {
         long taskid;
         DocumentModel model;
         ExtendedObject object;
@@ -110,7 +111,8 @@ public class TaskSelector {
         object.setValue("ID", taskid);
         object.setValue("USERNAME", username);
         object.setValue("GROUP", groupname);
-        state.documents.save(object);
+        if (state.documents.save(object) == 0)
+            throw new IocasteException("error on assign group");
     }
     
     /**
