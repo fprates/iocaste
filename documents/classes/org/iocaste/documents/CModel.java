@@ -62,7 +62,7 @@ public class CModel {
         cmlink.setName(cminame);
         cmlink.setTableName("CMI_"+hmodel.getTableName());
         
-        reference = hmodel.getModelItem("ID");
+        reference = Model.get("COMPLEX_DOCUMENT", cache).getModelItem("ID");
         cmlinkitem = new DocumentModelItem();
         cmlinkitem.setName("ID");
         cmlinkitem.setTableFieldName("IDENT");
@@ -113,6 +113,7 @@ public class CModel {
         cmodel = new ComplexModel();
         cmodel.setName(name);
         cmodel.setHeader(Model.get(modelname, cache));
+        cmodel.setId((Integer)omodel.getValue("ID"));
         cache.cmodels.put(name, cmodel);
         itens = Query.select(QUERIES[CMODEL_ITENS], 0, cache, name);
         if (itens == null)

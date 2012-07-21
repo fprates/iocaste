@@ -7,6 +7,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
 
 public class CDocument {
+    private static final long MULTIPLIER = 100000000;
 
     /**
      * 
@@ -18,11 +19,16 @@ public class CDocument {
      */
     public static final ComplexDocument get(String cdname, long id, Cache cache)
             throws Exception {
+        ComplexDocument document;
         ComplexModel model = CModel.get(cdname, cache);
-        ComplexDocument document = new ComplexDocument(model);
         DocumentModel cdmodel = Model.get("COMPLEX_DOCUMENT", cache);
-        ExtendedObject object = Query.get(cdmodel, id, cache.function);
+        long cdocid = (model.getId() * MULTIPLIER) + id;
+        ExtendedObject object = Query.get(cdmodel, cdocid, cache.function);
         
+        if (object == null)
+            return null;
+
+        document = new ComplexDocument(model);
         document.setId((Long)object.getValue("ID"));
         object = new ExtendedObject(model.getHeader());
         document.setHeader(object);
@@ -49,7 +55,7 @@ public class CDocument {
         String cd2doclink = object.getValue("CD_LINK");
         
         if (current == 0)
-            current = cmodelid * 100000000;
+            current = cmodelid * MULTIPLIER;
         
         current++;
         object.setValue("CURRENT", current);
@@ -68,6 +74,6 @@ public class CDocument {
         if (Query.save(object, cache.function) == 0)
             throw new IocasteException("error on insert complex document link");
         
-        return current - cmodelid;
+        return current - (cmodelid * MULTIPLIER);
     }
 }

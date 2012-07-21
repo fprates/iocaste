@@ -11,6 +11,7 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
     private String name;
     private DocumentModel header;
     private Set<DocumentModel> itens;
+    private int id;
     
     public ComplexModel() {
         itens = new TreeSet<DocumentModel>();
@@ -54,6 +55,10 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
         return header;
     }
     
+    public final int getId() {
+        return id;
+    }
+    
     public final DocumentModel[] getItens() {
         return itens.toArray(new DocumentModel[0]);
     }
@@ -68,6 +73,10 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
     
     public final void setHeader(DocumentModel header) {
         this.header = header;
+    }
+    
+    public final void setId(int id) {
+        this.id = id;
     }
     
     public final void setName(String name) {
