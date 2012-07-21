@@ -5,6 +5,8 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
@@ -101,23 +103,29 @@ public class Request {
         PackageTool pkgtool;
         Authority authority;
         Table itens;
+        User user;
         byte mode = Common.getMode(view);
         DataForm form = view.getElement("identity");
         ExtendedObject object = form.getObject();
         Documents documents = new Documents(function);
-        String name, username = object.getValue("USERNAME");
+        String name;
+        String username = object.getValue("USERNAME");
+        String secret = object.getValue("SECRET");
+        
+        user = new User();
+        user.setUsername(username);
+        user.setSecret(secret);
         
         switch (mode) {
         case Common.CREATE:
-            documents.save(object);
-            
+            new Iocaste(function).create(user);
             mode = Common.UPDATE;
             view.export("mode", mode);
             view.setTitle(Common.TITLE[mode]);
             break;
             
         case Common.UPDATE:
-            documents.modify(object);
+            new Iocaste(function).update(user);
             documents.update(QUERIES[DEL_USR_AUTH], username);
             documents.update(QUERIES[DEL_USR_TASK], username);
             break;
