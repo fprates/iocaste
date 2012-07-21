@@ -24,11 +24,9 @@ public class Services extends AbstractFunction {
     private DBServices db;
     private String host;
     private Properties properties;
-    private static final byte INS_USER = 0;
-    private static final byte USERS = 1;
-    private static final byte USER = 2;
+    private static final byte USERS = 0;
+    private static final byte USER = 1;
     private static final String[] QUERIES = {
-        "insert into USERS001(uname, secrt) values(?, ?)",
         "select USERNAME, FIRSTNAME, SURNAME from USER",
         "select UNAME, SECRT from USERS001 where UNAME = ?",
         
@@ -58,6 +56,7 @@ public class Services extends AbstractFunction {
         export("select", "select");        
         export("set_context", "setContext");
         export("update", "update");
+        export("update_user", "updateUser");
     }
     
     /**
@@ -148,12 +147,14 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void createUser(Message message) throws Exception {
+        String sessionid;
         User user = message.get("userdata");
         
         if (user.getUsername() == null || user.getSecret() == null)
-            throw new Exception("Invalid username or password");
+            throw new IocasteException("Invalid username or password");
         
-        db.update(getDBConnection(message.getSessionid()), QUERIES[INS_USER]);
+        sessionid = message.getSessionid();
+        UserServices.add(user, getDBConnection(sessionid), db);
     }
     
     /**
@@ -165,7 +166,7 @@ public class Services extends AbstractFunction {
         String sessionid = message.getSessionid();
 
         if (sessionid == null)
-            throw new Exception("Null session not allowed.");
+            throw new IocasteException("Null session not allowed.");
         
         if (sessions.containsKey(sessionid))
             sessions.remove(sessionid);
@@ -563,4 +564,10 @@ public class Services extends AbstractFunction {
     	return db.update(connection, query, criteria);
     }
 
+    public final void updateUser(Message message) throws Exception {
+        User user = message.get("user");
+        String sessionid = message.getSessionid();
+        
+        UserServices.update(user, getDBConnection(sessionid), db);
+    }
 }

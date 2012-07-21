@@ -1,3 +1,7 @@
+create table USERS000 (
+   CRRNT numeric(5)
+);
+
 create table USERS001 (
    UNAME varchar(12) primary key,
    SECRT varchar(12),
@@ -49,6 +53,8 @@ create table USERS002(
 @mssql:PRFNM varchar(12) foreign key references AUTH003(PRFNM)
 @mysql:PRFNM varchar(12) references AUTH003(PRFNM)
 );
+
+insert into USERS000(crrnt) values (1);
 
 insert into USERS001(uname, secrt, fname, sname, usrid) values('ADMIN', 'iocaste', 'Administrator', '', 1);
 insert into AUTH001(autnm, objct, actio, autid) values('PACKAGE.EXECUTE', 'APPLICATION', 'EXECUTE', 1);

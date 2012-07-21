@@ -1,3 +1,8 @@
+insert into DOCS001(docid, tname) values ('USER_CONFIG', 'USERS000');
+insert into DOCS003(ename, decim, lngth, etype, upcas) values('USER_CONFIG.CURRENT', 0, 5, 3, 0);
+insert into DOCS002(iname, docid, nritm, fname, ename) values('USER_CONFIG.CURRENT', 'USER_CONFIG', 0, 'CRRNT', 'USER_CONFIG.CURRENT');
+insert into DOCS005(tname, docid) values('USERS000', 'USER_CONFIG');
+ 
 insert into DOCS001(docid, tname) values ('LOGIN', 'USERS001');
 insert into DOCS003(ename, decim, lngth, etype, upcas) values('LOGIN.USERNAME', 0, 12, 0, 1);
 insert into DOCS003(ename, decim, lngth, etype, upcas) values('LOGIN.SECRET', 0, 12, 0, 0);

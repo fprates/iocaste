@@ -46,7 +46,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * Criar usuário.
      * @param userdata nome do usuário
      */
-    public final void createUser(User user) {
+    public final void create(User user) {
         Message message = new Message();
         
         message.setId("create_user");
@@ -244,6 +244,18 @@ public final class Iocaste extends AbstractServiceInterface {
         message.setId("set_context");
         message.add("context_id", name);
         message.add("object", object);
+        call(message);
+    }
+    
+    /**
+     * 
+     * @param user
+     */
+    public final void update(User user) {
+        Message message = new Message();
+        
+        message.setId("update_user");
+        message.add("user", user);
         call(message);
     }
     
