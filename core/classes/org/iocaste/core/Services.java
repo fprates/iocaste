@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.IocasteException;
@@ -24,12 +26,9 @@ public class Services extends AbstractFunction {
     private DBServices db;
     private String host;
     private Properties properties;
-    private static final byte USERS = 0;
-    private static final byte USER = 1;
+    private static final byte USER = 0;
     private static final String[] QUERIES = {
-        "select USERNAME, FIRSTNAME, SURNAME from USER",
-        "select UNAME, SECRT from USERS001 where UNAME = ?",
-        
+        "select UNAME, SECRT from USERS001 where UNAME = ?"
     };
     
     public Services() {
@@ -41,13 +40,14 @@ public class Services extends AbstractFunction {
         export("commit", "commit");
         export("create_user", "createUser");
         export("disconnect", "disconnect");
+        export("get_connected_users", "getConnectedUsers");
         export("get_context", "getContext");
         export("get_host", "getHost");
         export("get_locale", "getLocale");
         export("get_system_info", "getSystemInfo");
         export("get_system_parameter", "getSystemParameter");
+        export("get_user_info", "getUserInfo");
         export("get_username", "getUsername");
-        export("get_users", "getUsers");
         export("invalidate_auth_cache", "invalidateAuthCache");
         export("is_authorized", "isAuthorized");
         export("is_connected", "isConnected");
@@ -92,12 +92,10 @@ public class Services extends AbstractFunction {
         StringBuilder sb = new StringBuilder("select ");
         
         sb.append((columns == null)? "*" : columns);
-        
         if (from == null)
             throw new IocasteException("Table not specified.");
         
         sb.append(" from ").append(from);
-        
         if (ijoin != null)
             for (String jointable : ijoin.keySet()) {
                 sb.append(" inner join ").
@@ -112,7 +110,6 @@ public class Services extends AbstractFunction {
         
         query = sb.toString();
         connection = db.instance();
-        
         results = db.select(connection, query, 0, criteria);
         connection.close();
         
@@ -170,6 +167,30 @@ public class Services extends AbstractFunction {
         
         if (sessions.containsKey(sessionid))
             sessions.remove(sessionid);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception 
+     */
+    public final String[] getConnectedUsers(Message message) throws Exception {
+        UserContext context;
+        User user;
+        Set<String> users;
+        
+        users = new TreeSet<String>();
+        for (String sessionid : sessions.keySet()) {
+            context = sessions.get(sessionid);
+            user = context.getUser();
+            if (user == null)
+                continue;
+            
+            users.add(user.getUsername());
+        }
+        
+        return users.toArray(new String[0]);
     }
     
     /**
@@ -258,6 +279,20 @@ public class Services extends AbstractFunction {
      * @return
      * @throws Exception
      */
+    public final Map<String, Object> getUserInfo(Message message)
+            throws Exception {
+        String username = message.getString("username");
+        Connection connection = getDBConnection(message.getSessionid());
+        
+        return UserServices.getUserInfo(username, connection, db, sessions);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
     public final String getUsername(Message message) throws Exception {
         String sessionid = message.getSessionid();
 
@@ -282,35 +317,6 @@ public class Services extends AbstractFunction {
         user.setSurname((String)columns.get("SNAME"));
         
         return user;
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
-     * @throws Exception 
-     */
-    @SuppressWarnings("unchecked")
-    public final User[] getUsers(Message message) throws Exception {
-        Map<String, Object> columns;
-        User[] users;
-        int t;
-        Object[] lines = db.select(getDBConnection(message.getSessionid()),
-                QUERIES[USERS], 0);
-        
-        t = lines.length;
-        if (t == 0)
-            return null;
-        
-        users = new User[t];
-        t = 0;
-        
-        for (Object object : lines) {
-            columns = (Map<String, Object>)object;
-            users[t++] = getUserFromColumns(columns);
-        }
-        
-        return users; 
     }
     
     /**
@@ -371,7 +377,6 @@ public class Services extends AbstractFunction {
         
         objauthorization = message.get("authorization");
         connection = db.instance();
-        
         usrauthorizations = AuthServices.getAuthorization(connection, db,
                 user.getUsername(), objauthorization.getObject(),
                 objauthorization.getAction());
@@ -441,8 +446,9 @@ public class Services extends AbstractFunction {
         Map<String, Object> columns;
         Connection connection;
         Locale locale;
+        int terminal;
         User user = null;
-        String[] locale_ = message.getString("locale").split("_");
+        String[] composed, locale_ = message.getString("locale").split("_");
         String username = message.getString("user");
         String secret = message.getString("secret");
         String sessionid = message.getSessionid();
@@ -454,11 +460,8 @@ public class Services extends AbstractFunction {
             return false;
 
         connection = db.instance();
-        
         lines = db.select(connection, QUERIES[USER], 1, username.toUpperCase());
-        
         connection.close();
-        
         if (lines == null)
             return false;
         
@@ -469,25 +472,25 @@ public class Services extends AbstractFunction {
         if (!user.getSecret().equals(secret))
             return false;
         
-        locale = (locale_.length == 1)?
-                new Locale(locale_[0]) : new Locale(locale_[0], locale_[1]);
+        if (locale_.length == 1)
+            locale = new Locale(locale_[0]);
+        else
+            locale = new Locale(locale_[0], locale_[1]);
                 
-        context = new UserContext();
+        context = new UserContext(locale);
         context.setUser(user);
-        context.setLocale(locale);
-        
         sessions.put(sessionid, context);
-        
-        sessionid = sessionid.split(":")[0];
+        composed = sessionid.split(":");
+        sessionid = composed[0];
+        terminal = Integer.parseInt(composed[1]);
+        context.setTerminal(terminal);
         if (sessions.containsKey(sessionid))
             return true;
         
-        context = new UserContext();
+        context = new UserContext(locale);
         context.setUser(null);
-        context.setLocale(locale);
-        
+        context.setTerminal(terminal);
         sessions.put(sessionid, context);
-        
         return true;
     }
     
@@ -505,7 +508,6 @@ public class Services extends AbstractFunction {
             return;
         
         connection = context.getConnection();
-        
         if (connection == null)
             return;
         
@@ -524,7 +526,6 @@ public class Services extends AbstractFunction {
         String query = message.getString("query");
         Object[] criteria = message.get("criteria");
         int rows = message.getInt("rows");
-        
         Connection connection = getDBConnection(message.getSessionid());
         
         return db.select(connection, query, rows, criteria);
@@ -564,6 +565,11 @@ public class Services extends AbstractFunction {
     	return db.update(connection, query, criteria);
     }
 
+    /**
+     * 
+     * @param message
+     * @throws Exception
+     */
     public final void updateUser(Message message) throws Exception {
         User user = message.get("user");
         String sessionid = message.getSessionid();

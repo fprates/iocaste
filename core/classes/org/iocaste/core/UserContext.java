@@ -1,6 +1,8 @@
 package org.iocaste.core;
 
 import java.sql.Connection;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -12,9 +14,17 @@ public class UserContext {
     private User user;
     private Connection connection;
     private Locale locale;
+    private int terminal;
+    private Date conndate;
     
-    public UserContext() {
+    public UserContext(Locale locale) {
         objects = new HashMap<String, Object>();
+        this.locale = locale;
+        conndate = Calendar.getInstance().getTime();
+    }
+    
+    public final Date getConnTime() {
+        return conndate;
     }
     
     /**
@@ -46,6 +56,14 @@ public class UserContext {
      * 
      * @return
      */
+    public final int getTerminal() {
+        return terminal;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final User getUser() {
         return user;
     }
@@ -60,14 +78,6 @@ public class UserContext {
     
     /**
      * 
-     * @param locale
-     */
-    public final void setLocale(Locale locale) {
-        this.locale = locale;
-    }
-    
-    /**
-     * 
      * @param name
      * @param object
      */
@@ -76,6 +86,14 @@ public class UserContext {
             objects.remove(name);
         
         objects.put(name, object);
+    }
+    
+    /**
+     * 
+     * @param terminal
+     */
+    public final void setTerminal(int terminal) {
+        this.terminal = terminal;
     }
     
     /**
