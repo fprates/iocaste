@@ -27,15 +27,17 @@ public class Response {
     public static final void form(View vdata, Function function) {
         DataElement dataelement;
         DataItem item;
+        DataForm form;
         Form container = new Form(vdata, "form");
         PageControl pagecontrol = new PageControl(container);
-        DataForm form = new DataForm(container, "model.form");
-        Documents documents = new Documents(function);
-        DocumentModel model = documents.getModel(
-                (String)vdata.getParameter("model.name"));
+        DocumentModel model = vdata.getParameter("model");
         
         pagecontrol.add("back");
         
+        new Button(container, "insertitem");
+        new Button(container, "insertnext");
+        
+        form = new DataForm(container, "model.form");
         form.importModel(model);
         form.setKeyRequired(true);
         
@@ -50,9 +52,6 @@ public class Response {
             
             item.setComponentType(Const.CHECKBOX);
         }
-        
-        new Button(container, "insertitem");
-        new Button(container, "insertnext");
     }
 
     /**
