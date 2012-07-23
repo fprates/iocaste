@@ -1,11 +1,13 @@
 package org.iocaste.infosis;
 
+import java.util.Map;
 import java.util.Properties;
 
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
@@ -27,7 +29,7 @@ public class Main extends AbstractPage {
     }
     
     public final void jvpropin(View view) {
-        view.redirect(null, "jvpropout");
+        view.redirect("jvpropout");
     }
     
     public final void jvpropout(View view) {
@@ -39,6 +41,36 @@ public class Main extends AbstractPage {
         report(container, properties);
         
         view.setTitle("java-properties");
+    }
+    
+    public final void list(View view) {
+        TableItem item;
+        Text text;
+        Table itens;
+        Form container = new Form(view, "main");
+        PageControl pagecontrol = new PageControl(container);
+        Object[][] users = view.getParameter("itens");
+
+        pagecontrol.add("back");
+        
+        new Button(container, "usrsrfrsh");
+        itens = new Table(container, "itens");
+        
+        new TableColumn(itens, "username");
+        new TableColumn(itens, "terminal");
+        new TableColumn(itens, "begin");
+        for (Object[] line : users) {
+            item = new TableItem(itens);
+            text = new Text(itens, "username");
+            text.setText((String)line[0]);
+            item.add(text);
+            text = new Text(itens, "terminal");
+            text.setText(line[1].toString());
+            item.add(text);
+            text = new Text(itens, "begin");
+            text.setText(line[2].toString());
+            item.add(text);
+        }
     }
     
     public final void main(View view) {
@@ -58,6 +90,10 @@ public class Main extends AbstractPage {
         
         link = new Link(table, "system-info", "sysinfin");
         link.setText("system-info");
+        new TableItem(table).add(link);
+        
+        link = new Link(table, "users-list", "usrslst");
+        link.setText("users-list");
         new TableItem(table).add(link);
         
         view.setTitle("infosis");
@@ -100,5 +136,42 @@ public class Main extends AbstractPage {
         report(container, properties);
         
         view.setTitle("system-info");
+    }
+    
+    /**
+     * 
+     * @param view
+     */
+    @SuppressWarnings("unchecked")
+    public final void usrslst(View view) {
+        Map<String, Object> info;
+        Object[] sessions;
+        Map<String, Object> session;
+        Iocaste iocaste = new Iocaste(this);
+        String[] users = iocaste.getConnectedUsers();
+        Object[][] itens = new Object[users.length][3];
+        int j, i = 0;
+        
+        for (String username: users) {
+            info = iocaste.getUserInfo(username);
+            sessions = (Object[])info.get("sessions");
+            j = 0;
+            for (Object object : sessions) {
+                session = (Map<String, Object>)object;
+                itens[i][j++] = username;
+                itens[i][j++] = session.get("terminal");
+                itens[i++][j] = session.get("connection.time");
+            }
+        }
+        
+        view.setReloadableView(true);
+        view.export("itens", itens);
+        view.redirect("list");
+        view.setTitle("users-list");
+    }
+    
+    public final void usrsrfrsh(View view) {
+        usrslst(view);
+        view.dontPushPage();
     }
 }

@@ -12,17 +12,22 @@ public class Install {
         InstallData data = new InstallData();
         Authorization authorization = new Authorization("INFOSIS.EXECUTE");
         Map<String, String> messages = new HashMap<String, String>();
-        
-        messages.put("jdbc_driver_version", "Versão do driver JDBC");
-        messages.put("jdbc_driver_name", "Nome do driver JDBC");
+
+        messages.put("begin", "Iniciado em");
         messages.put("db_product_version", "Versão do banco de dados");
         messages.put("db_product_name", "Nome do banco de dados");
-        messages.put("name", "Nome");
-        messages.put("value", "Valor");
-        messages.put("system-info", "Informações do servidor");
-        messages.put("java-properties", "Propriedades do ambiente java");
         messages.put("infosis", "Informações do sistema");
         messages.put("INFOSIS", "Informações do sistema");
+        messages.put("java-properties", "Propriedades do ambiente java");
+        messages.put("jdbc_driver_version", "Versão do driver JDBC");
+        messages.put("jdbc_driver_name", "Nome do driver JDBC");
+        messages.put("name", "Nome");
+        messages.put("system-info", "Informações do servidor");
+        messages.put("terminal", "Terminal");
+        messages.put("username", "Usuário");
+        messages.put("users-list", "Usuários conectados");
+        messages.put("users.refresh", "Atualizar");
+        messages.put("value", "Valor");
         data.setMessages("pt_BR", messages);
         
         authorization.setObject("APPLICATION");
