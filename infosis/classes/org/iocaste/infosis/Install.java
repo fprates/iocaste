@@ -26,7 +26,7 @@ public class Install {
         messages.put("terminal", "Terminal");
         messages.put("username", "Usuário");
         messages.put("users-list", "Usuários conectados");
-        messages.put("users.refresh", "Atualizar");
+        messages.put("usrsrfrsh", "Atualizar");
         messages.put("value", "Valor");
         data.setMessages("pt_BR", messages);
         

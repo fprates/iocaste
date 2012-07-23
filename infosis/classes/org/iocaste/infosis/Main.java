@@ -71,6 +71,7 @@ public class Main extends AbstractPage {
             text.setText(line[2].toString());
             item.add(text);
         }
+        view.setTitle("users-list");
     }
     
     public final void main(View view) {
@@ -167,7 +168,6 @@ public class Main extends AbstractPage {
         view.setReloadableView(true);
         view.export("itens", itens);
         view.redirect("list");
-        view.setTitle("users-list");
     }
     
     public final void usrsrfrsh(View view) {
