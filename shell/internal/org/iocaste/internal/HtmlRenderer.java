@@ -27,6 +27,7 @@ public class HtmlRenderer {
     private int logid;
     private Map<String, Map<String, String>> csselements;
     private MessageSource msgsource;
+    private long sequence;
     
     public HtmlRenderer() {
         String line;
@@ -186,8 +187,9 @@ public class HtmlRenderer {
         config.addMessageSource(vdata.getMessages());
         config.addMessageSource(msgsource);
         config.setPageTrack(new StringBuffer(vdata.getAppName()).append(".").
-                append(vdata.getPageName()).append(":").append(logid).
-                toString());
+                append(vdata.getPageName()).append(":").
+                append(logid).append(":").
+                append(sequence).toString());
         config.setDBName(dbname);
         
         html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
@@ -261,6 +263,14 @@ public class HtmlRenderer {
      */
     public final void setMessageType(Const msgtype) {
         this.msgtype = msgtype;
+    }
+    
+    /**
+     * 
+     * @param sequence
+     */
+    public final void setSequence(long sequence) {
+        this.sequence = sequence;
     }
     
     /**

@@ -173,7 +173,6 @@ public class PageRenderer extends AbstractRenderer {
         pagectx = new PageContext(contextdata.pagename);
         pagectx.setAppContext(appctx);
         pagectx.setLogid(contextdata.logid);
-        
         appctx.put(contextdata.pagename, pagectx);
         sessionctx.put(contextdata.appname, appctx);
         
@@ -210,7 +209,6 @@ public class PageRenderer extends AbstractRenderer {
                 contextdata.appname = sessionconnector;
                 contextdata.pagename = "authentic";
                 contextdata.logid = logid;
-                
                 pagectx = createPageContext(contextdata);
             }
             
@@ -264,32 +262,6 @@ public class PageRenderer extends AbstractRenderer {
     private final String getComplexId(String sessionid, int logid) {
         return new StringBuilder(getSessionId()).append(":").append(logid).
                 toString();
-    }
-    
-    /**
-     * 
-     * @param appname
-     * @param complexid
-     * @return
-     */
-    private final boolean isExecuteAuthorized(String appname, String complexid)
-    {
-        String url;
-        Message message;
-        Authorization authorization = new Authorization("APPLICATION.EXECUTE");
-        
-        authorization.setObject("APPLICATION");
-        authorization.setAction("EXECUTE");
-        authorization.add("APPNAME", appname);
-        
-        message = new Message();
-        message.setId("is_authorized");
-        message.add("authorization", authorization);
-        message.setSessionid(complexid);
-        
-        url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
-                toString();
-        return (Boolean)Service.callServer(url, message);
     }
     
     /**
@@ -386,6 +358,7 @@ public class PageRenderer extends AbstractRenderer {
         String[] pageparse;
         ServletFileUpload fileupload;
         int t, logid;
+        long sequence;
         PageContext pagectx;
         List<FileItem> files = null;
         String pagetrack = null;
@@ -420,13 +393,12 @@ public class PageRenderer extends AbstractRenderer {
             return null;
         
         pageparse = pagetrack.split(":");
-        logid = Integer.parseInt(pageparse[1]);
-        
         pagetrack = pageparse[0];
+        logid = Integer.parseInt(pageparse[1]);
+        sequence = Long.parseLong(pageparse[2]);
         pageparse = pagetrack.split("\\.");
         
         t = pageparse.length - 1;
-        
         for (int i = 1; i < t; i++)
             pageparse[0] += ("." + pageparse[i]);
         
@@ -437,14 +409,20 @@ public class PageRenderer extends AbstractRenderer {
         contextdata.appname = pageparse[0];
         contextdata.pagename = pageparse[1];
         contextdata.logid = logid;
-        
         pagectx = getPageContext(contextdata);
-        
         if (pagectx == null)
             return null;
         
         pagectx.setFiles(files);
+        if (sequence != pagectx.getSequence()) {
+            pageparse = home(getComplexId(contextdata.sessionid, logid));
+            contextdata.appname = pageparse[0];
+            contextdata.pagename = pageparse[1];
+            pagectx = getPageContext(contextdata);
+            pagectx.setViewData(null);
+        }
         
+        pagectx.setSequence(sequence+1);
         return pagectx;
     }
     
@@ -462,9 +440,10 @@ public class PageRenderer extends AbstractRenderer {
         
         appctx = sessions.get(contextdata.logid).getAppContext(
                 contextdata.appname);
+        if (appctx == null)
+            return null;
         
-        return (appctx == null)? null : appctx.getPageContext(
-                contextdata.pagename);
+        return appctx.getPageContext(contextdata.pagename);
     }
     
     public static final Map<String, Map<String, String>> getStyleSheet(
@@ -505,6 +484,32 @@ public class PageRenderer extends AbstractRenderer {
         int logid = Integer.parseInt(complexid[1]);
         
         return apps.get(complexid[0]).get(logid).home();
+    }
+    
+    /**
+     * 
+     * @param appname
+     * @param complexid
+     * @return
+     */
+    private final boolean isExecuteAuthorized(String appname, String complexid)
+    {
+        String url;
+        Message message;
+        Authorization authorization = new Authorization("APPLICATION.EXECUTE");
+        
+        authorization.setObject("APPLICATION");
+        authorization.setAction("EXECUTE");
+        authorization.add("APPNAME", appname);
+        
+        message = new Message();
+        message.setId("is_authorized");
+        message.add("authorization", authorization);
+        message.setSessionid(complexid);
+        
+        url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
+                toString();
+        return (Boolean)Service.callServer(url, message);
     }
     
     /**
@@ -617,13 +622,11 @@ public class PageRenderer extends AbstractRenderer {
         }
         
         pagectx.setError((byte)0);
-        
         contextdata = new ContextData();
         contextdata.sessionid = getSessionId();
         contextdata.appname = appname;
         contextdata.pagename = pagename;
         contextdata.logid = config.logid;
-        
         pagectx_ = getPageContext(contextdata);
         if (pagectx_ == null)
             pagectx_ = createPageContext(contextdata);
@@ -871,6 +874,7 @@ public class PageRenderer extends AbstractRenderer {
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
         renderer.setCssElements(appctx.getStyleSheet());
         renderer.setLogid(pagectx.getLogid());
+        renderer.setSequence(pagectx.getSequence());
         
         if (dbname == null)
             dbname = new Iocaste(this).getSystemParameter("dbname");

@@ -19,12 +19,14 @@ public class PageContext {
     private Set<String> actions;
     private int logid;
     private byte error;
+    private long sequence;
     
     public PageContext(String name) {
         parameters =  new HashMap<String, Object>();
         reloadable = false;
         actions = null;
         logid = 0;
+        sequence = 0;
         
         this.name = name;
     }
@@ -99,6 +101,14 @@ public class PageContext {
      */
     public final Map<String, Object> getParameters() {
         return parameters;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final long getSequence() {
+        return sequence;
     }
     
     /**
@@ -188,6 +198,14 @@ public class PageContext {
      */
     public final void setReloadableView(boolean reloadable) {
         this.reloadable = reloadable;
+    }
+    
+    /**
+     * 
+     * @param sequence
+     */
+    public final void setSequence(long sequence) {
+        this.sequence = sequence;
     }
     
     /**
