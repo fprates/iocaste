@@ -628,8 +628,10 @@ public class PageRenderer extends AbstractRenderer {
         contextdata.pagename = pagename;
         contextdata.logid = config.logid;
         pagectx_ = getPageContext(contextdata);
-        if (pagectx_ == null)
+        if (pagectx_ == null) {
             pagectx_ = createPageContext(contextdata);
+            pagectx_.setSequence(pagectx.getSequence()+1);
+        }
         
         pagectx_.setReloadableView(view.isReloadableView());
         pagectx_.setInitParameters(view.getInitParameters());
