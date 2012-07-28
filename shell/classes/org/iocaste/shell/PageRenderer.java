@@ -67,9 +67,9 @@ public class PageRenderer extends AbstractRenderer {
      * @throws Exception
      */
     private final View callController(ControllerData config) throws Exception {
-        View view;
         InputStatus status;
         Message message;
+        ControlComponent control;
         
         status = Controller.validate(config);
         if (status.fatal != null)
@@ -86,19 +86,26 @@ public class PageRenderer extends AbstractRenderer {
         for (String name : config.values.keySet())
             message.add(name, config.values.get(name));
 
-        try {
-            view = (View)Service.callServer(composeUrl(config.contextname),
-                    message);
-            if (view.getMessageType() == Const.ERROR)
+        control = config.view.getElement(message.getString("action"));
+        if (control != null && control.getType() == Const.SEARCH_HELP) {
+            config.view.setParameter("sh", control);
+            config.view.redirect("iocaste-search-help", "main");
+            config.view.setReloadableView(true);
+        } else {
+            try {
+                config.view = (View)Service.callServer(
+                        composeUrl(config.contextname), message);
+                if (config.view.getMessageType() == Const.ERROR)
+                    Common.rollback(getServerName(), config.sessionid);
+                else
+                    Common.commit(getServerName(), config.sessionid);
+            } catch (Exception e) {
                 Common.rollback(getServerName(), config.sessionid);
-            else
-                Common.commit(getServerName(), config.sessionid);
-        } catch (Exception e) {
-            Common.rollback(getServerName(), config.sessionid);
-            throw e;
+                throw e;
+            }
         }
         
-        return view;
+        return config.view;
     }
     
     /**
@@ -786,28 +793,33 @@ public class PageRenderer extends AbstractRenderer {
         String[] initparams;
         HtmlRenderer renderer;
         Map<String, Map<String, String>> userstyle;
-        String username, viewmessage, sessionid;
+        String username, viewmessage, sessionid, appname, pagename;
         Const messagetype;
         int logid;
         InputData inputdata;
         AppContext appctx;
-        View viewdata;
+        View view;
         Map<String, Object> iparams, parameters;
         Message message;
 
         appctx = pagectx.getAppContext();
-        viewdata = pagectx.getViewData();
-        if (viewdata != null) {
-            viewmessage = viewdata.getTranslatedMessage();
-            messagetype = viewdata.getMessageType();
+        view = pagectx.getViewData();
+        if (view != null) {
+            viewmessage = view.getTranslatedMessage();
+            messagetype = view.getMessageType();
         } else {
             viewmessage = null;
             messagetype = null;
         }
         
         if (pagectx.getError() == 0 &&
-                (viewdata == null || pagectx.isReloadableView())) {
+                (view == null || pagectx.isReloadableView())) {
+            appname = appctx.getName();
+            pagename = pagectx.getName();
             logid = pagectx.getLogid();
+            sessionid = getComplexId(getSessionId(), logid);
+            if (appname == null || pagename == null)
+                throw new IocasteException("page not especified.");
             
             if (appctx.getStyleSheet() == null) {
                 if (style == null)
@@ -816,11 +828,10 @@ public class PageRenderer extends AbstractRenderer {
                 appctx.setStyleSheet(style);
             }
             
-            sessionid = getComplexId(getSessionId(), logid);
+            view = new View(appname, pagename);
             message = new Message();
             message.setId("get_view_data");
-            message.add("app", appctx.getName());
-            message.add("page", pagectx.getName());
+            message.add("view", view);
             message.setSessionid(sessionid);
             
             initparams = pagectx.getInitParameters();
@@ -833,10 +844,11 @@ public class PageRenderer extends AbstractRenderer {
                     parameters.put(name, iparams.get(name));
                 pagectx.setInitParameters(null);
             }
-
-            message.add("parameters", parameters);
+            
+            for (String name : parameters.keySet())
+                view.export(name, parameters.get(name));
             try {
-                viewdata = (View)Service.callServer(
+                view = (View)Service.callServer(
                         composeUrl(appctx.getName()), message);
                 Common.commit(getServerName(), sessionid);
             } catch (Exception e) {
@@ -845,27 +857,27 @@ public class PageRenderer extends AbstractRenderer {
             }
             
             inputdata = new InputData();
-            inputdata.view = viewdata;
+            inputdata.view = view;
             inputdata.container = null;
             inputdata.function = this;
             
-            for (Container container : viewdata.getContainers()) {
+            for (Container container : view.getContainers()) {
                 inputdata.element = container;
                 registerInputs(inputdata);
             }
             
-            pagectx.setViewData(viewdata);
+            pagectx.setViewData(view);
         } else {
             parameters = pagectx.getParameters();
             for (String key : parameters.keySet())
-                viewdata.export(key, parameters.get(key));
+                view.export(key, parameters.get(key));
         }
 
         /*
          * ajusta o renderizador
          */
         username = pagectx.getUsername();
-        userstyle = viewdata.getStyleSheet();
+        userstyle = view.getStyleSheet();
         if (userstyle != null)
             appctx.setStyleSheet(userstyle);
         
@@ -882,7 +894,7 @@ public class PageRenderer extends AbstractRenderer {
             dbname = new Iocaste(this).getSystemParameter("dbname");
         
         renderer.setDBName(dbname);
-        render(viewdata);
+        render(view);
         
         pagectx.setActions(renderer.getActions());
     }

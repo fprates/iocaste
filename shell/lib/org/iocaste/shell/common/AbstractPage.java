@@ -2,11 +2,9 @@ package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
 import java.util.Locale;
-import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
-import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 /**
@@ -71,27 +69,18 @@ public abstract class AbstractPage extends AbstractFunction {
         String action, controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
         
-        /*
-         * TODO poderia ser feito algo melhor do que este hardcode?
-         */
-        if (control != null && control.getType() == Const.SEARCH_HELP) {
-            view.setParameter("sh", control);
-            view.redirect("iocaste-search-help", "main");
-            view.setReloadableView(true);
+        if (control == null) {
+            action = controlname;
         } else {
-            if (control == null) {
-                action = controlname;
-            } else {
-                action = control.getAction();
-                if (control.isEventAware()) {
-                    control.onEvent(EventAware.ON_CLICK, action);
-                    return view;
-                }
+            action = control.getAction();
+            if (control.isEventAware()) {
+                control.onEvent(EventAware.ON_CLICK, action);
+                return view;
             }
-            
-            method = this.getClass().getMethod(action, View.class);
-            method.invoke(this, view);
         }
+        
+        method = getClass().getMethod(action, View.class);
+        method.invoke(this, view);
         
         return view;
     }
@@ -115,30 +104,15 @@ public abstract class AbstractPage extends AbstractFunction {
     public final View getViewData(Message message) throws Exception {
         MessageSource messages;
         Method method;
-        View view;
-        Locale locale;
-        String page = message.getString("page");
-        String app = message.getString("app");
-        Map<String, Object> parameters = message.get("parameters");
+        View view = message.get("view");
+        Locale locale = new Iocaste(this).getLocale();
         
-        /*
-         * TODO pode ser movido para o servidor
-         */
-        if (app == null || page == null)
-            throw new IocasteException("page not especified.");
-        
-        locale = new Iocaste(this).getLocale();
-        view = new View(app, page);
         view.setLocale(locale);
-        
-        for (String name : parameters.keySet())
-            view.export(name, parameters.get(name));
-        
-        method = this.getClass().getMethod(page, View.class);
+        method = getClass().getMethod(view.getPageName(), View.class);
         method.invoke(this, view);
         if (view.getMessages() == null) {
             messages = new MessageSource();
-            messages.loadFromApplication(app, locale, this);
+            messages.loadFromApplication(view.getAppName(), locale, this);
             view.setMessages(messages);
         }
         
