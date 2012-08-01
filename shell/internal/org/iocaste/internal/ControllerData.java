@@ -11,5 +11,4 @@ public class ControllerData {
     public Function function;
     public String sessionid, contextname, servername;
     public int logid;
-    public long sequence;
 }

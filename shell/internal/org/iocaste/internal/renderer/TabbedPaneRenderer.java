@@ -42,24 +42,7 @@ public class TabbedPaneRenderer extends Renderer {
             
             button = new Button(tabbedpane, name);
             button.setStyleClass(classname);
-            button.setSubmit(false);
             button.setEventHandler(tabbedpane.getHandler());
-            
-            sb = new StringBuilder();
-            
-            for (String name_ : names) {
-                sb.append("setElementDisplay('").append(name_);
-                
-                if (name.equals(name_))
-                    sb.append(".tabitem', 'block'); setClassStyle('").
-                            append(name_).append("', 'tp_button_focused'); ");
-                else
-                    sb.append(".tabitem', 'none'); setClassStyle('").
-                            append(name_).append("', 'tp_button_unfocused'); ");
-            }
-            
-            sb.append("send('").append(name).append("', null, null)");
-            button.addEvent("onClick", sb.toString());
             tabbedtag.addChild(ButtonRenderer.render(button, config));
         }
         

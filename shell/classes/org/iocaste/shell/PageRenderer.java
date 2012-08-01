@@ -101,13 +101,12 @@ public class PageRenderer extends AbstractRenderer {
                  * decrementa a sequência manualmente para manter a
                  * sincronia entre a página e o contexto.
                  */
-                if (control != null && control.isEventAware()) {
+                if (control != null && control.isEventAware())
                     control.onEvent(EventAware.ON_CLICK, control.getAction());
-                    config.sequence--;
-                } else {
+                else
                     config.view = (View)Service.callServer(
                             composeUrl(config.contextname), message);
-                }
+                
                 if (config.view.getMessageType() == Const.ERROR)
                     Common.rollback(getServerName(), config.sessionid);
                 else
@@ -607,7 +606,6 @@ public class PageRenderer extends AbstractRenderer {
         config.logid = getLogid(pagetrack);
         config.sessionid = getComplexId(getSessionId(), config.logid);
         config.servername = getServerName();
-        config.sequence = pagectx.getSequence();
         
         view = callController(config);
         action = view.getElement(actionname);
@@ -615,7 +613,6 @@ public class PageRenderer extends AbstractRenderer {
                 !action.isCancellable() || action.allowStacking()))
             pushPage(config.sessionid, view.getAppName(), view.getPageName());
         
-        pagectx.setSequence(config.sequence);
         view.clearInputs();
         inputdata = new InputData();
         inputdata.view = view;
