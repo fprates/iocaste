@@ -69,19 +69,9 @@ public abstract class AbstractPage extends AbstractFunction {
         String action, controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
         
-        if (control == null) {
-            action = controlname;
-        } else {
-            action = control.getAction();
-            if (control.isEventAware()) {
-                control.onEvent(EventAware.ON_CLICK, action);
-                return view;
-            }
-        }
-        
+        action = (control == null)? controlname : control.getAction();
         method = getClass().getMethod(action, View.class);
         method.invoke(this, view);
-        
         return view;
     }
     

@@ -32,6 +32,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.EventAware;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipartElement;
@@ -93,8 +94,20 @@ public class PageRenderer extends AbstractRenderer {
             config.view.setReloadableView(true);
         } else {
             try {
-                config.view = (View)Service.callServer(
-                        composeUrl(config.contextname), message);
+                /*
+                 * quando a ação é chamada através de evento de um controle,
+                 * a página não sofre atualização (portanto, o pagetrack
+                 * é o mesmo), mas a sequência interna, sim.
+                 * decrementa a sequência manualmente para manter a
+                 * sincronia entre a página e o contexto.
+                 */
+                if (control != null && control.isEventAware()) {
+                    control.onEvent(EventAware.ON_CLICK, control.getAction());
+                    config.sequence--;
+                } else {
+                    config.view = (View)Service.callServer(
+                            composeUrl(config.contextname), message);
+                }
                 if (config.view.getMessageType() == Const.ERROR)
                     Common.rollback(getServerName(), config.sessionid);
                 else
@@ -594,6 +607,7 @@ public class PageRenderer extends AbstractRenderer {
         config.logid = getLogid(pagetrack);
         config.sessionid = getComplexId(getSessionId(), config.logid);
         config.servername = getServerName();
+        config.sequence = pagectx.getSequence();
         
         view = callController(config);
         action = view.getElement(actionname);
@@ -601,6 +615,7 @@ public class PageRenderer extends AbstractRenderer {
                 !action.isCancellable() || action.allowStacking()))
             pushPage(config.sessionid, view.getAppName(), view.getPageName());
         
+        pagectx.setSequence(config.sequence);
         view.clearInputs();
         inputdata = new InputData();
         inputdata.view = view;
