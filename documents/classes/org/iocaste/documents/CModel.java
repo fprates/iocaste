@@ -114,6 +114,8 @@ public class CModel {
         cmodel.setName(name);
         cmodel.setHeader(Model.get(modelname, cache));
         cmodel.setId((Integer)omodel.getValue("ID"));
+        model = Model.get((String)omodel.getValue("CD_LINK"), cache);
+        cmodel.setCDModelLink(model);
         cache.cmodels.put(name, cmodel);
         itens = Query.select(QUERIES[CMODEL_ITENS], 0, cache, name);
         if (itens == null)

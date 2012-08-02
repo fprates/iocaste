@@ -9,7 +9,7 @@ import org.iocaste.documents.common.DocumentModel;
 public class ComplexModel implements Serializable, Comparable<ComplexModel> {
     private static final long serialVersionUID = -2741081537248227705L;
     private String name;
-    private DocumentModel header;
+    private DocumentModel modellink, header;
     private Set<DocumentModel> itens;
     private int id;
     
@@ -63,12 +63,20 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
         return itens.toArray(new DocumentModel[0]);
     }
     
+    public final DocumentModel getCDModelLink() {
+        return modellink;
+    }
+    
     public final String getName() {
         return name;
     }
     
     public final boolean isItemInstanceof(DocumentModel model) {
         return itens.contains(model);
+    }
+    
+    public final void setCDModelLink(DocumentModel modellink) {
+        this.modellink = modellink;
     }
     
     public final void setHeader(DocumentModel header) {
