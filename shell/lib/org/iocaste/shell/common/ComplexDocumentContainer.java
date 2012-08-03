@@ -5,17 +5,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class ComplexDocumentContainer extends AbstractComponent {
     private static final long serialVersionUID = -4650930529587558455L;
-    public DataForm header;
-    public Map<String, CDContainerItem> itens;
+    private Map<String, CDContainerItem> itens;
+    private ComplexDocument document;
     
-    public ComplexDocumentContainer(Container container, String name) {
+    public ComplexDocumentContainer(ComplexDocument document,
+            Container container, String name) {
         super(container, Const.VIRTUAL, name);
         itens = new HashMap<String, CDContainerItem>();
+        this.document = document;
     }
 
     /**
@@ -55,24 +56,13 @@ public class ComplexDocumentContainer extends AbstractComponent {
     
     /**
      * 
-     * @param document
+     * @param header
      */
-    public final void setDocument(ComplexDocument document) {
+    public final void setHeaderForm(DataForm header) {
         ExtendedObject oheader = document.getHeader();
         
         header.importModel(oheader.getModel());
         header.setObject(oheader);
-        
-        for (String name : itens.keySet())
-            itens.get(name).set(document.getItemModel(name));
-    }
-    
-    /**
-     * 
-     * @param header
-     */
-    public final void setHeaderForm(DataForm header) {
-        this.header = header;
     }
     
     /**
@@ -81,9 +71,9 @@ public class ComplexDocumentContainer extends AbstractComponent {
      * @param table
      */
     public final void setItens(String modelname, Table table) {
-        CDContainerItem cditem = new CDContainerItem();
+        CDContainerItem cditem = new CDContainerItem(document);
         
-        cditem.setItens(table);
+        cditem.setItens(modelname, table);
         itens.put(modelname, cditem);
     }
 }
@@ -91,6 +81,11 @@ public class ComplexDocumentContainer extends AbstractComponent {
 class CDContainerItem implements Serializable {
     private static final long serialVersionUID = 750705218827427635L;
     private Table table;
+    private ComplexDocument document;
+    
+    public CDContainerItem(ComplexDocument document) {
+        this.document = document;
+    }
     
     public final void add(ExtendedObject object) {
         TableItem item = new TableItem(table);
@@ -100,8 +95,9 @@ class CDContainerItem implements Serializable {
                 item.add(new TextField(table, column.getName()));
         
         if (object == null)
-            return;
+            object = new ExtendedObject(table.getModel());
         
+        document.add(object);
         item.setObject(object);
     }
     
@@ -111,11 +107,8 @@ class CDContainerItem implements Serializable {
                 table.remove(item);
     }
     
-    public final void set(DocumentModel model) {
-        table.importModel(model);
-    }
-    
-    public final void setItens(Table table) {
+    public final void setItens(String modelname, Table table) {
         this.table = table;
+        table.importModel(document.getItemModel(modelname));
     }
 }
