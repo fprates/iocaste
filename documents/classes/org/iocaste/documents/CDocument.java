@@ -8,7 +8,8 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
 
 public class CDocument {
-    private static final long MULTIPLIER = 100000000;
+    private static final long HMULTIPLIER = 100000000;
+    private static final int IMULTIPLIER = 100000;
     private static final byte COMPLEX_MODEL = 0;
     private static final byte COMPLEX_DOCUMENT = 1;
     private static final byte LINK = 2;
@@ -28,7 +29,7 @@ public class CDocument {
         ComplexDocument document;
         ComplexModel model = CModel.get(cdname, cache);
         DocumentModel cdmodel = Model.get("COMPLEX_DOCUMENT", cache);
-        long cdocid = (model.getId() * MULTIPLIER) + id;
+        long cdocid = (model.getId() * HMULTIPLIER) + id;
         ExtendedObject object = Query.get(cdmodel, cdocid, cache.function);
         
         if (object == null)
@@ -75,7 +76,9 @@ public class CDocument {
     private static final void saveCDocument(ComplexDocument document,
             ExtendedObject[] objects, Cache cache) throws Exception {
         int cmodelid;
-        long current;
+        long id, current;
+        ExtendedObject[] itens;
+        ExtendedObject docitem;
         ComplexModel cmodel = document.getModel();
         String cmodelname = cmodel.getName();
         DocumentModel model = Model.get("COMPLEX_MODEL", cache);
@@ -85,7 +88,7 @@ public class CDocument {
         current = objects[COMPLEX_MODEL].getValue("CURRENT");
         
         if (current == 0)
-            current = cmodelid * MULTIPLIER;
+            current = cmodelid * HMULTIPLIER;
         
         current++;
         objects[0].setValue("CURRENT", current);
@@ -98,6 +101,19 @@ public class CDocument {
         objects[COMPLEX_DOCUMENT].setValue("COMPLEX_MODEL", cmodel.getName());
         if (Query.save(objects[COMPLEX_DOCUMENT], cache.function) == 0)
             throw new IocasteException("error on insert complex document");
+        
+        model = Model.get("COMPLEX_DOCUMENT_ITEM", cache);
+        id = current * IMULTIPLIER;
+        for (String modelname : document.getItensModels()) {
+            itens = document.getItens(modelname);
+            for (ExtendedObject item : itens) {
+                docitem = new ExtendedObject(model);
+                id++;
+                docitem.setValue("ID", id);
+                docitem.setValue("COMPLEX_DOCUMENT", current);
+                Query.save(docitem, cache.function);
+            }
+        }
     }
     
     private static final void saveDocument(ExtendedObject[] objects,
@@ -129,7 +145,7 @@ public class CDocument {
                 objects[LINK].setValue(item, current);
                 continue;
             }
-            current -= (cmodelid * MULTIPLIER);
+            current -= (cmodelid * HMULTIPLIER);
             objects[LINK].setValue(item, current);
             break;
         }
