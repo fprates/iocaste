@@ -110,5 +110,7 @@ class CDContainerItem implements Serializable {
     public final void setItens(String modelname, Table table) {
         this.table = table;
         table.importModel(document.getItemModel(modelname));
+        for (ExtendedObject object : document.getItens(modelname))
+            add(object);
     }
 }
