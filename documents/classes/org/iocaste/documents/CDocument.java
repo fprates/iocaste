@@ -16,12 +16,6 @@ public class CDocument {
     private static final byte COMPLEX_MODEL = 0;
     private static final byte COMPLEX_DOCUMENT = 1;
     private static final byte LINK = 2;
-    private static final byte CD_ITENS = 0;
-    private static final byte CM_ITENS = 1;
-    private static final String[] QUERIES = {
-        "from COMPLEX_DOCUMENT_ITEM where COMPLEX_DOCUMENT = ?",
-        "from COMPLEX_MODEL_ITEM where COMPLEX_MODEL = ?"
-    };
     
     /**
      * 
@@ -33,31 +27,49 @@ public class CDocument {
      */
     public static final ComplexDocument get(String cdname, long id, Cache cache)
             throws Exception {
-        ExtendedObject[] objects, cditens;
-        long key, docid;
+        StringBuilder sb;
+        ExtendedObject[] objects;
         ComplexDocument document;
-        String name;
-        DocumentModel model;
+        ExtendedObject header;
+        DocumentModel hmodel;
+        DocumentModelItem reference = null;
+        long key = 0;
         
         document = getHeader(cdname, id, cache);
         if (document == null)
             return null;
         
-        objects = Query.select(QUERIES[CM_ITENS], 0, cache, cdname);
-        if (objects == null)
-            return document;
+        header = document.getHeader();
+        hmodel = header.getModel();
+        for (DocumentModelKey modelkey : hmodel.getKeys()) {
+            reference = hmodel.getModelItem(modelkey.getModelItemName());
+            key = (Long)header.getValue(reference);
+            break;
+        }
         
-        docid = document.getId();
-        for (ExtendedObject object : objects) {
-            name = object.getValue("MODEL");
-            model = Model.get(name, cache);
+        for (DocumentModel model : document.getModel().getItens()) {
+            sb = new StringBuilder("from ").
+                    append(model.getName()).
+                    append(" where ");
             
-            cditens = Query.select(QUERIES[CD_ITENS], 0, cache, docid);
-            if (cditens == null)
+            for (DocumentModelItem modelitem : model.getItens()) {
+                if (model.isKey(modelitem) || reference == null)
+                    continue;
+                
+                if (!modelitem.getReference().equals(reference))
+                    continue;
+                
+                sb.append(modelitem.getName());
+                break;
+            }
+            
+            sb.append(" = ?");
+            objects = Query.select(sb.toString(), 0, cache, key);
+            if (objects == null)
                 continue;
             
-            for (ExtendedObject item : cditens)
-                document.add(new ExtendedObject(model));
+            for (ExtendedObject object  : objects)
+                document.add(object);
         }
         
         return document;
