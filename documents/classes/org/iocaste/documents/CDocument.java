@@ -32,7 +32,7 @@ public class CDocument {
         ComplexDocument document;
         ExtendedObject header;
         DocumentModel hmodel;
-        DocumentModelItem reference = null;
+        DocumentModelItem ireference, reference = null;
         long key = 0;
         
         document = getHeader(cdname, id, cache);
@@ -53,10 +53,11 @@ public class CDocument {
                     append(" where ");
             
             for (DocumentModelItem modelitem : model.getItens()) {
-                if (model.isKey(modelitem) || reference == null)
+                ireference = modelitem.getReference();
+                if (model.isKey(modelitem) || ireference == null)
                     continue;
                 
-                if (!modelitem.getReference().equals(reference))
+                if (!ireference.equals(reference))
                     continue;
                 
                 sb.append(modelitem.getName());
