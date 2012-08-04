@@ -1,9 +1,12 @@
 package org.iocaste.documents;
 
+import java.math.BigDecimal;
+
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
 
@@ -156,18 +159,42 @@ public class CDocument {
     
     private static final void saveDocument(ExtendedObject[] objects,
             ComplexDocument document, Cache cache) {
-        String name;
+        String zname, name;
+        long t;
+        Object hkeyvalue = null;
+        DocumentModelItem ikey, hkey = null;
         ExtendedObject header = document.getHeader();
         DocumentModel model = objects[LINK].getModel();
         
         for (DocumentModelItem item : model.getItens()) {
             if (model.isKey(item))
                 continue;
-            name = item.getName();
-            header.setValue(name.substring(1), objects[LINK].getValue(name));
+            
+            zname = item.getName();
+            name = zname.substring(1);
+            hkeyvalue = objects[LINK].getValue(zname);
+            header.setValue(name, hkeyvalue);
+            hkey = header.getModel().getModelItem(name);
+            break;
         }
-        
         Query.save(header, cache.function);
+        
+        for (String modelname : document.getItensModels())
+            for (ExtendedObject object : document.getItens(modelname)) {
+                setItemHeaderReference(object, hkey, hkeyvalue);
+                model = object.getModel();
+                for (DocumentModelKey key : model.getKeys()) {
+                    ikey = model.getModelItem(key.getModelItemName());
+                    t = ikey.getDataElement().getLength() -
+                            hkey.getDataElement().getLength();
+                    t = new BigDecimal(((Long)hkeyvalue) * Math.pow(10, t)).
+                            longValue();
+                    t += (Long)object.getValue(ikey);
+                    object.setValue(ikey, t);
+                    break;
+                }
+                Query.save(object, cache.function);
+            }
     }
     
     private static final long saveModelLink(ExtendedObject[] objects,
@@ -192,5 +219,25 @@ public class CDocument {
             throw new IocasteException("error on insert complex document link");
         
         return current;
+    }
+    
+    private static final void setItemHeaderReference(ExtendedObject object,
+            DocumentModelItem hkey, Object value) {
+        String name;
+        DocumentModelItem reference;
+        DocumentModel model = object.getModel();
+        
+        for (DocumentModelItem item : model.getItens()) {
+            reference = item.getReference();
+            if (model.isKey(item) || reference == null)
+                continue;
+            
+            name = reference.getName();
+            if (!name.equals(hkey.getName()))
+                continue;
+            
+            object.setValue(item, value);
+            break;
+        }
     }
 }
