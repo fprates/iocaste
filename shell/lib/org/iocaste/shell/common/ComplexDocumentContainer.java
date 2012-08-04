@@ -1,7 +1,9 @@
 package org.iocaste.shell.common;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
@@ -26,6 +28,28 @@ public class ComplexDocumentContainer extends AbstractComponent {
      */
     public final void add(String modelname, ExtendedObject object) {
         itens.get(modelname).add(object);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final ComplexDocument getDocument() {
+        CDContainerItem cditem;
+        ExtendedObject[] itens;
+        
+        document.remove();
+        for (String name : this.itens.keySet()) {
+            cditem = this.itens.get(name);
+            itens = cditem.getItens();
+            if (itens == null)
+                continue;
+            
+            for (ExtendedObject object : itens)
+                document.add(object);
+        }
+        
+        return document;
     }
     
     /*
@@ -99,6 +123,20 @@ class CDContainerItem implements Serializable {
         
         document.add(object);
         item.setObject(object);
+    }
+    
+    public final ExtendedObject[] getItens() {
+        List<ExtendedObject> itens;
+        int t = table.length();
+        
+        if (t == 0)
+            return null;
+        
+        itens = new ArrayList<ExtendedObject>();
+        for (TableItem item : table.getItens())
+            itens.add(item.getObject());
+        
+        return itens.toArray(new ExtendedObject[0]);
     }
     
     public final void remove() {
