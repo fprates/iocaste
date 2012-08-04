@@ -13,7 +13,13 @@ public class CDocument {
     private static final byte COMPLEX_MODEL = 0;
     private static final byte COMPLEX_DOCUMENT = 1;
     private static final byte LINK = 2;
-
+    private static final byte CD_ITENS = 0;
+    private static final byte CM_ITENS = 1;
+    private static final String[] QUERIES = {
+        "from COMPLEX_DOCUMENT_ITEM where COMPLEX_DOCUMENT = ?",
+        "from COMPLEX_MODEL_ITEM where COMPLEX_MODEL = ?"
+    };
+    
     /**
      * 
      * @param cdname
@@ -24,22 +30,54 @@ public class CDocument {
      */
     public static final ComplexDocument get(String cdname, long id, Cache cache)
             throws Exception {
+        ExtendedObject[] objects, cditens;
         long key, docid;
-        DocumentModel modellink;
         ComplexDocument document;
-        ComplexModel model = CModel.get(cdname, cache);
-        DocumentModel cdmodel = Model.get("COMPLEX_DOCUMENT", cache);
-        long cdocid = (model.getId() * HMULTIPLIER) + id;
-        ExtendedObject object = Query.get(cdmodel, cdocid, cache.function);
+        String name;
+        DocumentModel model;
+        
+        document = getHeader(cdname, id, cache);
+        if (document == null)
+            return null;
+        
+        objects = Query.select(QUERIES[CM_ITENS], 0, cache, cdname);
+        if (objects == null)
+            return document;
+        
+        docid = document.getId();
+        for (ExtendedObject object : objects) {
+            name = object.getValue("MODEL");
+            model = Model.get(name, cache);
+            
+            cditens = Query.select(QUERIES[CD_ITENS], 0, cache, docid);
+            if (cditens == null)
+                continue;
+            
+            for (ExtendedObject item : cditens)
+                document.add(new ExtendedObject(model));
+        }
+        
+        return document;
+    }
+    
+    private static final ComplexDocument getHeader(String name, long id,
+            Cache cache) throws Exception {
+        long key;
+        ComplexDocument document;
+        DocumentModel modellink;
+        ComplexModel cmmodel = CModel.get(name, cache);
+        long cdocid = (cmmodel.getId() * HMULTIPLIER) + id;
+        DocumentModel model = Model.get("COMPLEX_DOCUMENT", cache);
+        ExtendedObject object = Query.get(model, cdocid, cache.function);
         
         if (object == null)
             return null;
-
-        document = new ComplexDocument(model);
-        docid = object.getValue("ID");
-        document.setId(docid);
-        modellink = model.getCDModelLink();
-        object = Query.get(modellink, docid, cache.function);
+        
+        key = object.getValue("ID");
+        document = new ComplexDocument(cmmodel);
+        document.setId(key);
+        modellink = cmmodel.getCDModelLink();
+        object = Query.get(modellink, key, cache.function);
         key = 0;
         for (DocumentModelItem item : modellink.getItens()) {
             if (modellink.isKey(item))
@@ -48,7 +86,7 @@ public class CDocument {
             break;
         }
         
-        object = Query.get(model.getHeader(), key, cache.function);
+        object = Query.get(cmmodel.getHeader(), key, cache.function);
         document.setHeader(object);
         
         return document;
