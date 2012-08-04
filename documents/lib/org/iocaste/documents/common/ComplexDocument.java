@@ -106,6 +106,11 @@ public class ComplexDocument implements Serializable {
         return cmodel;
     }
     
+    public final void remove() {
+        for (String name : itens.keySet())
+            itens.get(name).remove();
+    }
+    
     /**
      * 
      * @param header
@@ -143,5 +148,9 @@ class ComplexDocumentItem implements Serializable {
     
     public final DocumentModel getModel() {
         return model;
+    }
+    
+    public final void remove() {
+        itens.clear();
     }
 }
