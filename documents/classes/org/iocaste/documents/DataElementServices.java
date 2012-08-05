@@ -59,6 +59,9 @@ public class DataElementServices {
         case DataType.DATE:
             element.setLength(10);
             break;
+        case DataType.TIME:
+            element.setLength(8);
+            break;
         }
         
         return iocaste.update(QUERIES[INS_ELEMENT], element.getName(),

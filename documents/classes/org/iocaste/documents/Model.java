@@ -532,7 +532,6 @@ public class Model {
             sb.append(")");
             
             break;
-            
         case DataType.DEC:
             sb.append(" decimal(");
             sb.append(ddelement.getLength());
@@ -549,11 +548,17 @@ public class Model {
             sb.append(" date");
             
             break;
+        case DataType.TIME:
+            ddelement.setLength(8);
+            ddelement.setDecimals(0);
+            ddelement.setUpcase(false);
+            sb.append(" time");
+            
+            break;
         case DataType.BOOLEAN:
             ddelement.setLength(1);
             ddelement.setDecimals(0);
             ddelement.setUpcase(false);
-            
             sb.append(" bit");
             
             break;
