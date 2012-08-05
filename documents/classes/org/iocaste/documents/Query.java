@@ -178,10 +178,12 @@ public class Query {
         query = model.getQuery("update");
         if (query != null)
             nrregs = iocaste.update(query, uargs.toArray());
+        else
+            return 0;
         
         if (nrregs == 0)
             if (iocaste.update(model.getQuery("insert"), iargs.toArray()) == 0)
-                    throw new IocasteException("Error through object insert");
+                    throw new IocasteException("Error on object insert");
         
         return 1;
     }
