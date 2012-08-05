@@ -575,5 +575,6 @@ public class Services extends AbstractFunction {
         String sessionid = message.getSessionid();
         
         UserServices.update(user, getDBConnection(sessionid), db);
+        AuthServices.invalidateCache(user.getUsername());
     }
 }

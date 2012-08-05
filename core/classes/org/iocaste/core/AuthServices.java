@@ -97,4 +97,8 @@ public class AuthServices {
     public static final void invalidateCache() {
         authorizations.clear();
     }
+    
+    public static final void invalidateCache(String username) {
+        authorizations.remove(username);
+    }
 }
