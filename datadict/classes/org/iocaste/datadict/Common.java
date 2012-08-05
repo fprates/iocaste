@@ -192,7 +192,6 @@ public class Common {
                 helper.value = (modelitem == null)?
                         null : modelitem.getTableFieldName();
                 helper.obligatory = true;
-                
                 newField(helper);
                 
                 continue;
@@ -203,7 +202,6 @@ public class Common {
                 helper.value = (modelitem == null)?
                         null : modelitem.getAttributeName();
                 helper.obligatory = false;
-                
                 newField(helper);
                 
                 continue;
@@ -228,7 +226,6 @@ public class Common {
                 helper.value = (modelitem == null)?
                         null : dataelement.getLength();
                 helper.obligatory = true;
-
                 newField(helper);
                 
                 continue;
@@ -239,7 +236,6 @@ public class Common {
                 helper.value = (modelitem == null)?
                         null : dataelement.getDecimals();
                 helper.obligatory = false;
-                
                 newField(helper);
                 
                 continue;
@@ -266,7 +262,6 @@ public class Common {
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (modelitem == null)?
                         null : dataelement.getName();
-                
                 newField(helper).setEnabled(false);
                 
                 continue;
@@ -284,6 +279,7 @@ public class Common {
                 list.add("dec", DataType.DEC);
                 list.add("date", DataType.DATE);
                 list.add("bool", DataType.BOOLEAN);
+                list.add("time", DataType.TIME);
                 
                 continue;
             }
@@ -308,7 +304,6 @@ public class Common {
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (itemref == null)? null : itemref.getName();
                 helper.obligatory = false;
-                
                 newField(helper);
                 
                 continue;
@@ -319,7 +314,6 @@ public class Common {
                 helper.value = (itemref == null)? null : itemref.
                       getDocumentModel().getName();
                 helper.obligatory = false;
-                
                 newField(helper);
                 
                 continue;
@@ -330,7 +324,6 @@ public class Common {
                 helper.value = (modelitem == null)? null :
                     modelitem.getSearchHelp();
                 helper.obligatory = false;
-                
                 newField(helper);
             }
         }
@@ -346,13 +339,11 @@ public class Common {
         Table table = helper.item.getTable();
         Element element = Shell.factory(table, helper.type, helper.name);
         
-        element.setEnabled((helper.mode == Common.SHOW)? false : true);
-        
+        element.setEnabled(helper.mode != Common.SHOW);
         input = (InputComponent)element;
         input.set(helper.value);
         input.setDataElement(helper.reference);
         input.setObligatory(helper.obligatory);
-        
         helper.item.add(element);
         
         return element;
