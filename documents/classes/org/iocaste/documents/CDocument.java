@@ -202,22 +202,25 @@ public class CDocument {
         }
         Query.save(header, cache.function);
         
-        for (String modelname : document.getItensModels())
+        for (String modelname : document.getItensModels()) {
+            model = document.getItemModel(modelname);
+            t = 0;
+            ikey = null;
+            for (DocumentModelKey key : model.getKeys()) {
+                ikey = model.getModelItem(key.getModelItemName());
+                t = ikey.getDataElement().getLength() -
+                        hkey.getDataElement().getLength();
+                t = new BigDecimal(((Long)hkeyvalue) * Math.pow(10, t)).
+                        longValue();
+                break;
+            }
+            
             for (ExtendedObject object : document.getItens(modelname)) {
                 setItemHeaderReference(object, hkey, hkeyvalue);
-                model = object.getModel();
-                for (DocumentModelKey key : model.getKeys()) {
-                    ikey = model.getModelItem(key.getModelItemName());
-                    t = ikey.getDataElement().getLength() -
-                            hkey.getDataElement().getLength();
-                    t = new BigDecimal(((Long)hkeyvalue) * Math.pow(10, t)).
-                            longValue();
-                    t += (Long)object.getValue(ikey);
-                    object.setValue(ikey, t);
-                    break;
-                }
+                object.setValue(ikey, t + (Long)object.getValue(ikey));
                 Query.save(object, cache.function);
             }
+        }
     }
     
     private static final long saveModelLink(ExtendedObject[] objects,
