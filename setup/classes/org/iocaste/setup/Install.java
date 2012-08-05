@@ -162,6 +162,43 @@ public class Install {
         item.setReference(config.cmodelname);
         model.add(item);
         
+        // data de criação
+        element = new DataElement();
+        element.setName("COMPLEX_DOCUMENT.DATA_CRIACAO");
+        element.setType(DataType.DATE);
+        element.setLength(10);
+        
+        item = new DocumentModelItem();
+        item.setName("DATA_CRIACAO");
+        item.setTableFieldName("DTDOC");
+        item.setDataElement(element);
+        model.add(item);
+        
+        // hora de criação
+        element = new DataElement();
+        element.setName("COMPLEX_DOCUMENT.HORA_CRIACAO");
+        element.setType(DataType.TIME);
+        element.setLength(8);
+        
+        item = new DocumentModelItem();
+        item.setName("HORA_CRIACAO");
+        item.setTableFieldName("HRDOC");
+        item.setDataElement(element);
+        model.add(item);
+        
+        // usuário de criação
+        element = new DataElement();
+        element.setName("COMPLEX_DOCUMENT.USUARIO_CRIACAO");
+        element.setType(DataType.CHAR);
+        element.setLength(12);
+        element.setUpcase(true);
+        
+        item = new DocumentModelItem();
+        item.setName("USUARIO_CRIACAO");
+        item.setTableFieldName("USDOC");
+        item.setDataElement(element);
+        model.add(item);
+        
         /*
          * Item de documento complexo
          */

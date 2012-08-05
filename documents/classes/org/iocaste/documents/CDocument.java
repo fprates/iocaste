@@ -1,6 +1,8 @@
 package org.iocaste.documents;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
@@ -8,6 +10,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 
 public class CDocument {
@@ -129,6 +132,8 @@ public class CDocument {
     
     private static final void saveCDocument(ComplexDocument document,
             ExtendedObject[] objects, Cache cache) throws Exception {
+        String username;
+        Date date;
         int cmodelid;
         long id, current;
         ExtendedObject[] itens;
@@ -153,6 +158,11 @@ public class CDocument {
         objects[COMPLEX_DOCUMENT] = new ExtendedObject(model);
         objects[COMPLEX_DOCUMENT].setValue("ID", current);
         objects[COMPLEX_DOCUMENT].setValue("COMPLEX_MODEL", cmodel.getName());
+        date = Calendar.getInstance().getTime();
+        username = new Iocaste(cache.function).getUsername();
+        objects[COMPLEX_DOCUMENT].setValue("DATA_CRIACAO", date);
+        objects[COMPLEX_DOCUMENT].setValue("HORA_CRIACAO", date);
+        objects[COMPLEX_DOCUMENT].setValue("USUARIO_CRIACAO", username);
         if (Query.save(objects[COMPLEX_DOCUMENT], cache.function) == 0)
             throw new IocasteException("error on insert complex document");
         
