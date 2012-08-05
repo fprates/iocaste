@@ -413,6 +413,19 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
+     * 
+     * @param document
+     * @return
+     */
+    public final int update(ComplexDocument document) {
+        Message message = new Message();
+        
+        message.setId("update_complex_document");
+        message.add("document", document);
+        return call(message);
+    }
+    
+    /**
      * Atualiza modelo de documento.
      * @param model dados do modelo de documento.
      * @return 1, se o modelo foi atualizado.

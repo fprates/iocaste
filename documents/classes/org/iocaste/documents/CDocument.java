@@ -253,4 +253,50 @@ public class CDocument {
             break;
         }
     }
+    
+    public static final int update(ComplexDocument document, Cache cache)
+            throws Exception {
+        ExtendedObject[] objects;
+        StringBuilder sb;
+        DocumentModelItem iref, href = null;
+        Object key = null;
+        ExtendedObject header = document.getHeader();
+        DocumentModel model = header.getModel();
+        
+        Query.modify(header, cache.function);
+        for (DocumentModelKey modelkey : model.getKeys()) {
+            href = model.getModelItem(modelkey.getModelItemName());
+            key = header.getValue(href);
+            break;
+        }
+        
+        for (String modelname : document.getItensModels()) {
+            model = document.getItemModel(modelname);
+            iref = null;
+            for (DocumentModelItem modelitem : model.getItens()) {
+                if (model.isKey(modelitem))
+                    continue;
+                iref = modelitem.getReference();
+                if (iref == null || !iref.getName().equals(href.getName()))
+                    continue;
+                iref = modelitem;
+                break;
+            }
+            
+            sb = new StringBuilder("delete from ").
+                    append(modelname).
+                    append(" where ").
+                    append(iref.getName()).
+                    append(" = ?");
+            Query.update(sb.toString(), cache, key);
+            
+            objects = document.getItens(modelname);
+            for (ExtendedObject object : objects) {
+                object.setValue(iref, key);
+                Query.save(object, cache.function);
+            }
+        }
+        
+        return 1;
+    }
 }

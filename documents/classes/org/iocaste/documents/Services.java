@@ -45,6 +45,7 @@ public class Services extends AbstractFunction {
         export("select", "select");
         export("unlock", "unlock");
         export("update", "update");
+        export("update_complex_document", "updateCDocument");
         export("update_model", "updateModel");
         export("validate_model", "validateModel");
     }
@@ -369,6 +370,18 @@ public class Services extends AbstractFunction {
         Object[] criteria = message.get("criteria");
         
         return Query.update(query, cache, criteria);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final int updateCDocument(Message message) throws Exception {
+        ComplexDocument document = message.get("document");
+        
+        return CDocument.update(document, cache);
     }
     
     /**
