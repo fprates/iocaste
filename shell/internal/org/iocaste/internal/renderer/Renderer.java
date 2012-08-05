@@ -225,7 +225,6 @@ public class Renderer {
         switch (element.getType()) {
         case DataType.DEC:
             numberformat = NumberFormat.getNumberInstance(locale);
-            
             return numberformat.format(value);
             
         case DataType.NUMC:
@@ -236,7 +235,6 @@ public class Renderer {
             
         case DataType.DATE:
             dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-            
             return dateformat.format(value);
             
         case DataType.BOOLEAN:
@@ -244,6 +242,11 @@ public class Renderer {
                 return ((Boolean)value)? "on" : "off";
             else
                 return Boolean.toString((Boolean)value);
+            
+        case DataType.TIME:
+            dateformat = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
+            return dateformat.format(value);
+            
         default:
             return (String)value;
         }

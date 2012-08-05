@@ -100,56 +100,59 @@ public class Controller {
         case DataType.DEC:
             if (Shell.isInitial(value))
                 return 0d;
-            else
-                try {
-                    numberformat = NumberFormat.getNumberInstance(locale);
-                    
-                    return numberformat.parse(value).doubleValue();
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
             
+            try {
+                numberformat = NumberFormat.getNumberInstance(locale);
+                return numberformat.parse(value).doubleValue();
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         case DataType.DATE:
             if (Shell.isInitial(value))
                 return null;
-            else
-                try {
-                    dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM,
-                            locale);
-                    return dateformat.parse(value);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
             
+            try {
+                dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM,
+                        locale);
+                return dateformat.parse(value);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        case DataType.TIME:
+            if (Shell.isInitial(value))
+                return null;
+            
+            try {
+                dateformat = DateFormat.getTimeInstance(DateFormat.MEDIUM,
+                        locale);
+                return dateformat.parse(value);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         case DataType.NUMC:
             if (Shell.isInitial(value)) {
                 if (dataelement.getLength() < DataType.MAX_INT_LEN)
                     return 0;
-                else
-                    return 0l;
-            } else {
-                if (dataelement.getLength() < DataType.MAX_INT_LEN)
-                    return Integer.parseInt(value);
-                else
-                    return Long.parseLong(value);
+                return 0l;
             }
             
+            if (dataelement.getLength() < DataType.MAX_INT_LEN)
+                return Integer.parseInt(value);
+            
+            return Long.parseLong(value);
         case DataType.CHAR:
-            if (Shell.isInitial(value)) {
+            if (Shell.isInitial(value))
                 return null;
-            } else {
-                if (dataelement.isUpcase())
-                    return value.toUpperCase();
-                else
-                    return value;
-            }
             
+            if (dataelement.isUpcase())
+                return value.toUpperCase();
+            
+            return value;
         case DataType.BOOLEAN:
             if (input.isBooleanComponent())
-                return (value.equals("off"))? false : true;
-            else
-                return value;
+                return !value.equals("off");
             
+            return value;
         default:
             return null;
         }
@@ -291,18 +294,24 @@ public class Controller {
             try {
                 numberformat = NumberFormat.getNumberInstance(locale);
                 numberformat.parse(value);
-                
                 return true;
             } catch (ParseException e) {
                 return false;
             }
-            
         case DataType.DATE:
             try {
                 dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM,
                         locale);
                 dateformat.parse(value);
-                
+                return true;
+            } catch (ParseException e) {
+                return false;
+            }
+        case DataType.TIME:
+            try {
+                dateformat = DateFormat.getTimeInstance(DateFormat.MEDIUM,
+                        locale);
+                dateformat.parse(value);
                 return true;
             } catch (ParseException e) {
                 return false;
