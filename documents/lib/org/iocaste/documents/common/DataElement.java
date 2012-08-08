@@ -36,10 +36,12 @@ import java.util.Date;
 public class DataElement implements Serializable {
     private static final long serialVersionUID = -2827176147542188319L;
     private String name;
-    private int decimals;
-    private int length;
-    private int type;
-    private boolean upcase;
+    private int decimals, length, type;
+    private boolean upcase, dummy;
+    
+    public DataElement() {
+        dummy = false;
+    }
     
     public Class<?> getClassType() {
         switch (type) {
@@ -93,6 +95,14 @@ public class DataElement implements Serializable {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final boolean isDummy() {
+        return dummy;
+    }
+    
+    /**
      * Indica se um campo deve ter seu valor convertido
      * para maiúscula.
      * @return true, se valor deve ser convertido para maiúscula.
@@ -107,6 +117,14 @@ public class DataElement implements Serializable {
      */
     public final void setDecimals(int decimals) {
         this.decimals = decimals;
+    }
+    
+    /**
+     * 
+     * @param dummy
+     */
+    public final void setDummy(boolean dummy) {
+        this.dummy = dummy;
     }
     
     /**

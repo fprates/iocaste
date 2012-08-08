@@ -36,6 +36,11 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     private String name, attribname, gettername, settername, fieldname, sh;
     private int index;
     private DocumentModelItem reference;
+    private boolean dummy;
+    
+    public DocumentModelItem() {
+        dummy = false;
+    }
     
     /*
      * (non-Javadoc)
@@ -164,15 +169,23 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return (name == null)? 0 : name.hashCode();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final boolean isDummy() {
+        return dummy;
     }
     
     /**
      * Define nome do atributo da classe.
      * @param attribname nome do atributo
      */
-    public void setAttributeName(String attribname) {
+    public final void setAttributeName(String attribname) {
         StringBuffer sb;
         this.attribname = attribname;
         
@@ -192,7 +205,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * Define elemento de dado.
      * @param elemento de dado
      */
-    public void setDataElement(DataElement dataelement) {
+    public final void setDataElement(DataElement dataelement) {
         this.dataelement = dataelement;
     }
     
@@ -200,8 +213,16 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * Define modelo de documento.
      * @param modelo de documento
      */
-    public void setDocumentModel(DocumentModel document) {
+    public final void setDocumentModel(DocumentModel document) {
         this.document = document;
+    }
+    
+    /**
+     * 
+     * @param dummy
+     */
+    public final void setDummy(boolean dummy) {
+        this.dummy = dummy;
     }
     
     /**
@@ -216,7 +237,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * Define nome do documento.
      * @param nome
      */
-    public void setName(String name) {
+    public final void setName(String name) {
         this.name = (name == null)? null : name.toUpperCase();
     }
     
@@ -232,7 +253,6 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
         DocumentModel model;
         
         this.reference = reference;
-        
         if (reference == null)
             return;
         

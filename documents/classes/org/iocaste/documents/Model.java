@@ -109,7 +109,7 @@ public class Model {
 
         saveDataElements(iocaste, model);
         saveDocumentHeader(iocaste, model);
-        saveDocumentItens(iocaste, model);
+        saveDocumentItens(model, cache, iocaste);
         saveDocumentKeys(iocaste, model);
         Common.parseQueries(model, cache.queries);
         
@@ -233,7 +233,6 @@ public class Model {
         DocumentModel model = item.getDocumentModel();
         
         dataelement = item.getDataElement();
-        
         tname = Documents.getComposedName(item);
         reference = item.getReference();
         itemref = (reference == null)?
@@ -248,10 +247,9 @@ public class Model {
                 itemref) == 0)
             return 0;
         
-        if (itemref != null) {
+        if (itemref != null)
             if (iocaste.update(QUERIES[INS_FOREIGN], tname, itemref) == 0)
                 return 0;
-        }
         
         shname = item.getSearchHelp();
         if (shname == null)
@@ -334,7 +332,6 @@ public class Model {
         String name = Documents.getComposedName(item);
         
         iocaste.update(QUERIES[DEL_FOREIGN], name);
-        
         iocaste.update(QUERIES[DEL_SH_REF], name);
 
         error = "there is search help dependence on item ";
@@ -391,7 +388,6 @@ public class Model {
         
         for (DocumentModelItem item : itens) {
             element = item.getDataElement();
-            
             if (element == null)
                 throw new IocasteException(new StringBuilder(item.getName()).
                         append(" has null data element.").toString());
@@ -430,13 +426,15 @@ public class Model {
     
     /**
      * 
-     * @param iocaste
      * @param model
+     * @param cache
+     * @param iocaste
      * @return
      * @throws Exception
      */
-    private static final int saveDocumentItens(Iocaste iocaste,
-            DocumentModel model) throws Exception {
+    private static final int saveDocumentItens(DocumentModel model, Cache cache,
+            Iocaste iocaste) throws Exception {
+        DocumentModel modelref;
         DataElement dataelement;
         DocumentModelItem reference;
         int size;
@@ -458,10 +456,14 @@ public class Model {
                 throw new IocasteException("Table field name is null.");
             
             sb.append(tname);
-            
             dataelement = item.getDataElement();
-            setDBFieldsString(sb, dataelement);
+            if (dataelement.isDummy()) {
+                dataelement = DataElementServices.
+                        get(iocaste, dataelement.getName());
+                item.setDataElement(dataelement);
+            }
             
+            setDBFieldsString(sb, dataelement);
             if (model.isKey(item)) {
                 if (sbk == null)
                     sbk = new StringBuilder(", primary key(");
@@ -472,11 +474,18 @@ public class Model {
             }
             
             reference = item.getReference();
-            if (reference != null)
+            if (reference != null) {
+                if (reference.isDummy()) {
+                    modelref = Model.
+                            get(reference.getDocumentModel().getName(), cache);
+                    reference = modelref.getModelItem(reference.getName());
+                }
+                
                 sb.append(refstmt).
                         append(reference.getDocumentModel().getTableName()).
                         append("(").
                         append(reference.getTableFieldName()).append(")");
+            }
             
             if (size != item.getIndex())
                 sb.append(", ");
