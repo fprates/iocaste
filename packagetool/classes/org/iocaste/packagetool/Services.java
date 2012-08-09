@@ -18,6 +18,7 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
+import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.SHLib;
 
 public class Services extends AbstractFunction {
@@ -64,6 +65,7 @@ public class Services extends AbstractFunction {
     public final Integer install(Message message) throws Exception {
         ExtendedObject header;
         DocumentModel tasks;
+        Set<User> users;
         Map<String, String> links;
         Map<String, Set<String>> tasksgroups;
         DocumentModel[] models;
@@ -102,6 +104,10 @@ public class Services extends AbstractFunction {
             header.setValue("NAME", state.pkgname);
             header.setValue("CODE", state.pkgid);
             state.documents.save(header);
+            
+            users = state.data.getUsers();
+            if (users.size() > 0)
+                InstallUsers.init(users, state);
             
             /*
              * gera modelos;

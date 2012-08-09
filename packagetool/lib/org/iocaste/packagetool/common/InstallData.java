@@ -14,6 +14,7 @@ import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.protocol.user.Authorization;
+import org.iocaste.protocol.user.User;
 
 public class InstallData implements Serializable {
     private static final long serialVersionUID = -4509980464670421174L;
@@ -28,6 +29,7 @@ public class InstallData implements Serializable {
     private Map<String, Set<String>> tasksgroups;
     private String[] dependencies;
     private Set<ComplexModel> cmodels;
+    private Set<User> users;
     
     public InstallData() {
         models = new LinkedHashMap<String, DocumentModel>();
@@ -40,6 +42,7 @@ public class InstallData implements Serializable {
         authorizations = new ArrayList<Authorization>();
         tasksgroups = new HashMap<String, Set<String>>();
         cmodels = new TreeSet<ComplexModel>();
+        users = new TreeSet<User>();
     }
     
     /**
@@ -85,6 +88,14 @@ public class InstallData implements Serializable {
      */
     public final void add(SearchHelpData shd) {
         shds.add(shd);
+    }
+    
+    /**
+     * 
+     * @param user
+     */
+    public final void add(User user) {
+        users.add(user);
     }
     
     /**
@@ -225,8 +236,20 @@ public class InstallData implements Serializable {
         return shds.toArray(new SearchHelpData[0]);
     }
     
+    /**
+     * 
+     * @return
+     */
     public final Map<String, Set<String>> getTasksGroups() {
         return tasksgroups;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Set<User> getUsers() {
+        return users;
     }
     
     /**

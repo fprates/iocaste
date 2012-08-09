@@ -2,12 +2,21 @@ package org.iocaste.protocol.user;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable, Comparable<User> {
     private static final long serialVersionUID = -6415620415288973044L;
     private String username;
     private String firstname;
     private String surname;
     private String secret;
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(User user) {
+        return username.compareTo(user.getUsername());
+    }
     
     /**
      * Nome real do usuário.
