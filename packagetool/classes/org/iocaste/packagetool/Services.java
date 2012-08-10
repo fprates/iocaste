@@ -19,6 +19,7 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
+import org.iocaste.protocol.user.UserProfile;
 import org.iocaste.shell.common.SHLib;
 
 public class Services extends AbstractFunction {
@@ -66,6 +67,7 @@ public class Services extends AbstractFunction {
         ExtendedObject header;
         DocumentModel tasks;
         Set<User> users;
+        Map<UserProfile, Set<User>> profiles;
         Map<String, String> links;
         Map<String, Set<String>> tasksgroups;
         DocumentModel[] models;
@@ -74,7 +76,6 @@ public class Services extends AbstractFunction {
         Authorization[] authorizations;
         String[] dependencies;
         State state;
-        
         
         /*
          * Registra instalação do pacote
@@ -87,89 +88,94 @@ public class Services extends AbstractFunction {
         state.shm = new HashMap<String, Set<DocumentModelItem>>();
         state.function = this;
         
-        try {
-            dependencies = state.data.getDependencies();
-            if (dependencies != null)
-                for (String pkgname : dependencies) {
-                    if (isInstalled(pkgname))
-                        continue;
-                    
-                    throw new Exception(new StringBuilder(state.pkgname).
-                            append(": required package ").
-                            append(pkgname).
-                            append(" not installed.").toString());
-                }
-            
-            header = new ExtendedObject(state.documents.getModel("PACKAGE"));
-            header.setValue("NAME", state.pkgname);
-            header.setValue("CODE", state.pkgid);
-            state.documents.save(header);
-            
-            users = state.data.getUsers();
-            if (users.size() > 0)
-                InstallUsers.init(users, state);
-            
-            /*
-             * gera modelos;
-             * insere registros;
-             * prepara dados para ajuda de pesquisa.
-             */
-            models = state.data.getModels();
-            if (models.length > 0)
-                InstallModels.init(models, state);
-            
-            cmodels = state.data.getCModels();
-            if (cmodels.length > 0)
-                InstallCModels.init(cmodels, state);
-            
-            /*
-             * registra objetos de numeração
-             */
-            for (String factory : state.data.getNumberFactories()) {
-                state.documents.createNumberFactory(factory);
-                Registry.add(factory, "NUMBER", state);
+        dependencies = state.data.getDependencies();
+        if (dependencies != null)
+            for (String pkgname : dependencies) {
+                if (isInstalled(pkgname))
+                    continue;
+                
+                throw new Exception(new StringBuilder(state.pkgname).
+                        append(": required package ").
+                        append(pkgname).
+                        append(" not installed.").toString());
             }
-            
-            /*
-             * gera ajudas de pesquisa
-             */
-            shdata = state.data.getSHData();
-            if (shdata.length > 0)
-                InstallSH.init(shdata, state);
-            
-            for (DataElement element : state.data.getElements())
-                Registry.add(element.getName(), "DATA_ELEMENT", state);
-            
-            /*
-             * registra mensagens
-             */
-            state.messages = state.data.getMessages();
-            if (state.messages.size() > 0)
-                InstallMessages.init(state);
-            
-            authorizations = state.data.getAuthorizations();
-            if (authorizations.length > 0)
-                InstallAuthorizations.init(authorizations, state);
-            
-            /*
-             * registra tarefas
-             */
-            tasks = state.documents.getModel("TASKS");
-            links = state.data.getLinks();
-            if (links.size() > 0)
-                InstallLinks.init(links, tasks, state);
-            
-            tasksgroups = state.data.getTasksGroups();
-            if (tasksgroups.size() > 0)
-                InstallTasksGroups.init(tasksgroups, state);
-            
-            state.documents.commit();
         
-            return 1;
-        } catch (Exception e) {
-            state.documents.rollback();
-            throw e;
+        header = new ExtendedObject(state.documents.getModel("PACKAGE"));
+        header.setValue("NAME", state.pkgname);
+        header.setValue("CODE", state.pkgid);
+        state.documents.save(header);
+        
+        /*
+         * insere usuários
+         */
+        users = state.data.getUsers();
+        if (users.size() > 0)
+            InstallUsers.init(users, state);
+        
+        /*
+         * gera modelos;
+         * insere registros;
+         * prepara dados para ajuda de pesquisa.
+         */
+        models = state.data.getModels();
+        if (models.length > 0)
+            InstallModels.init(models, state);
+        
+        cmodels = state.data.getCModels();
+        if (cmodels.length > 0)
+            InstallCModels.init(cmodels, state);
+        
+        /*
+         * registra objetos de numeração
+         */
+        for (String factory : state.data.getNumberFactories()) {
+            state.documents.createNumberFactory(factory);
+            Registry.add(factory, "NUMBER", state);
         }
+        
+        /*
+         * gera ajudas de pesquisa
+         */
+        shdata = state.data.getSHData();
+        if (shdata.length > 0)
+            InstallSH.init(shdata, state);
+        
+        for (DataElement element : state.data.getElements())
+            Registry.add(element.getName(), "DATA_ELEMENT", state);
+        
+        /*
+         * registra mensagens
+         */
+        state.messages = state.data.getMessages();
+        if (state.messages.size() > 0)
+            InstallMessages.init(state);
+        
+        /*
+         * instala autorizações, perfis
+         */
+        authorizations = state.data.getAuthorizations();
+        if (authorizations.length > 0)
+            InstallAuthorizations.init(authorizations, state);
+        
+        profiles = state.data.getUserProfiles();
+        if (profiles.size() > 0)
+            InstallAuthorizations.init(profiles, state);
+        
+        new Iocaste(state.function).invalidateAuthCache();
+        
+        /*
+         * registra tarefas
+         */
+        tasks = state.documents.getModel("TASKS");
+        links = state.data.getLinks();
+        if (links.size() > 0)
+            InstallLinks.init(links, tasks, state);
+        
+        tasksgroups = state.data.getTasksGroups();
+        if (tasksgroups.size() > 0)
+            InstallTasksGroups.init(tasksgroups, state);
+    
+        return 1;
     }
     
     /**

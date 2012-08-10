@@ -15,6 +15,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
+import org.iocaste.protocol.user.UserProfile;
 
 public class InstallData implements Serializable {
     private static final long serialVersionUID = -4509980464670421174L;
@@ -30,6 +31,7 @@ public class InstallData implements Serializable {
     private String[] dependencies;
     private Set<ComplexModel> cmodels;
     private Set<User> users;
+    private Map<UserProfile, Set<User>> uprofiles;
     
     public InstallData() {
         models = new LinkedHashMap<String, DocumentModel>();
@@ -43,6 +45,7 @@ public class InstallData implements Serializable {
         tasksgroups = new HashMap<String, Set<String>>();
         cmodels = new TreeSet<ComplexModel>();
         users = new TreeSet<User>();
+        uprofiles = new HashMap<UserProfile, Set<User>>();
     }
     
     /**
@@ -148,6 +151,24 @@ public class InstallData implements Serializable {
     
     /**
      * 
+     * @param profile
+     * @param user
+     */
+    public final void assign(UserProfile profile, User user) {
+        Set<User> userset;
+        
+        if (uprofiles.containsKey(profile)) {
+            userset = uprofiles.get(profile);
+        } else {
+            userset = new TreeSet<User>();
+            uprofiles.put(profile, userset);
+        }
+        
+        userset.add(user);
+    }
+    
+    /**
+     * 
      * @return
      */
     public final Authorization[] getAuthorizations() {
@@ -242,6 +263,14 @@ public class InstallData implements Serializable {
      */
     public final Map<String, Set<String>> getTasksGroups() {
         return tasksgroups;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Map<UserProfile, Set<User>> getUserProfiles() {
+        return uprofiles;
     }
     
     /**
