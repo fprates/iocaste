@@ -1,6 +1,8 @@
 package org.iocaste.authority;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
@@ -9,6 +11,7 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
+import org.iocaste.protocol.user.UserProfile;
 
 public class Services extends AbstractFunction {
     private static final byte SELECT_PROFILE = 0;
@@ -16,20 +19,25 @@ public class Services extends AbstractFunction {
     private static final byte DEL_AUTH_ITENS = 2;
     private static final byte DEL_AUTH = 3;
     private static final byte DEL_PROFILE_ITEM = 4;
+    private static final byte PROFILES = 5;
     private static final String[] QUERIES = {
         "select * from USER_AUTHORITY where USERNAME = ? and PROFILE = ?",
         "select * from AUTHORIZATION_ITEM where AUTHORIZATION = ?",
         "delete from AUTHORIZATION_ITEM where AUTHORIZATION = ?",
         "delete from AUTHORIZATION where NAME = ?",
-        "delete from USER_PROFILE_ITEM where NAME = ?"
+        "delete from USER_PROFILE_ITEM where NAME = ?",
+        "from USER_AUTHORITY where USERNAME = ?",
     };
     
     public Services() {
         export("assign_authorization", "assignAuthorization");
         export("assign_profile", "assignProfile");
         export("get", "get");
+        export("get_profile", "getProfile");
+        export("get_user_profiles", "getUserProfiles");
         export("remove", "remove");
         export("save", "save");
+        export("save_profile", "saveProfile");
     }
     
     /**
@@ -140,6 +148,46 @@ public class Services extends AbstractFunction {
      * @param message
      * @return
      */
+    public final UserProfile getProfile(Message message) {
+        UserProfile profile;
+        Documents documents = new Documents(this);
+        String name = message.getString("name");
+        ExtendedObject object = documents.getObject("USER_PROFILE", name);
+        
+        if (object == null)
+            return null;
+        
+        profile = new UserProfile(name);
+        return profile;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final Set<String> getUserProfiles(Message message) {
+        Set<String> names;
+        String username = message.getString("username");
+        Documents documents = new Documents(this);
+        ExtendedObject[] objects = documents.select(QUERIES[PROFILES],
+                username);
+        
+        if (objects == null)
+            return null;
+        
+        names = new TreeSet<String>();
+        for (ExtendedObject object : objects)
+            names.add((String)object.getValue("PROFILE"));
+        
+        return names;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
     public final int remove(Message message) {
         String name = message.getString("name");
         Documents documents = new Documents(this);
@@ -184,5 +232,23 @@ public class Services extends AbstractFunction {
             
             documents.save(authobject);
         }
+    }
+    
+    /**
+     * 
+     * @param message
+     */
+    public final void saveProfile(Message message) {
+        long profileid;
+        UserProfile profile = message.get("profile");
+        Documents documents = new Documents(this);
+        DocumentModel model = documents.getModel("USER_PROFILE");
+        ExtendedObject object = new ExtendedObject(model);
+        
+        object.setValue("NAME", profile.getName());
+        profileid = documents.getNextNumber("PROFILEINDEX");
+        object.setValue("ID", profileid);
+        object.setValue("CURRENT", profileid * 100);
+        documents.save(object);
     }
 }

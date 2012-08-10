@@ -1,9 +1,12 @@
 package org.iocaste.authority.common;
 
+import java.util.Set;
+
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
+import org.iocaste.protocol.user.UserProfile;
 
 public class Authority extends AbstractServiceInterface {
     private static final String SERVER = "/iocaste-authority/services.html";
@@ -65,6 +68,32 @@ public class Authority extends AbstractServiceInterface {
      * @param name
      * @return
      */
+    public final UserProfile getProfile(String name) {
+        Message message = new Message();
+        
+        message.setId("get_profile");
+        message.add("name", name);
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param username
+     * @return
+     */
+    public final Set<String> getUserProfiles(String username) {
+        Message message = new Message();
+        
+        message.setId("get_user_profiles");
+        message.add("username", username);
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
     public final int remove(String name) {
         Message message = new Message();
         
@@ -82,6 +111,18 @@ public class Authority extends AbstractServiceInterface {
         
         message.setId("save");
         message.add("authorization", authorization);
+        call(message);
+    }
+    
+    /**
+     * 
+     * @param profile
+     */
+    public final void save(UserProfile profile) {
+        Message message = new Message();
+        
+        message.setId("save_profile");
+        message.add("profile", profile);
         call(message);
     }
 }
