@@ -252,6 +252,9 @@ public class Services extends AbstractFunction {
         String name = message.getString("name");
         ComplexModel model = CModel.get(name, cache);
         
+        if (model == null)
+            return 0;
+        
         return CModel.remove(model, cache);
     }
     
@@ -264,6 +267,9 @@ public class Services extends AbstractFunction {
     public final int removeModel(Message message) throws Exception {
         String modelname = message.getString("model_name");
         DocumentModel model = Model.get(modelname, cache);
+        
+        if (model == null)
+            return 0;
         
         return Model.remove(model, cache);
     }
