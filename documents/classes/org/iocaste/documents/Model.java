@@ -277,20 +277,21 @@ public class Model {
             name = Documents.getComposedName(key.getModel().
                     getModelItem(key.getModelItemName()));
             if (iocaste.update(QUERIES[DEL_KEY], name) == 0)
-                throw new IocasteException("");
+                throw new IocasteException("error on removing model key");
         }
         
         for (DocumentModelItem item : model.getItens())
             if (removeModelItem(iocaste, item) == 0)
-                throw new IocasteException("error on delete model item");
+                throw new IocasteException("error on removing model item");
         
         tablename = model.getTableName();
         if (iocaste.update(QUERIES[DEL_MODEL_REF], tablename) == 0)
-            throw new IocasteException("error on delete model/table reference");
+            throw new IocasteException(
+                    "error on removing model/table reference");
         
         name = model.getName();
         if (iocaste.update(QUERIES[DEL_MODEL], name) == 0)
-            throw new IocasteException("error on delete header model data");
+            throw new IocasteException("error on removing header model data");
         
         query = new StringBuilder("drop table ").append(tablename).
                 toString();
