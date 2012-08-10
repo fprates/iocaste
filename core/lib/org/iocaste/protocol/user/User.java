@@ -14,15 +14,36 @@ public class User implements Serializable, Comparable<User> {
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     @Override
-    public int compareTo(User user) {
+    public final int compareTo(User user) {
         return username.compareTo(user.getUsername());
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public final boolean equals(Object object) {
+        User user;
+        
+        if (object == this)
+            return true;
+        
+        if (!(object instanceof User))
+            return false;
+        
+        user = (User)object;
+        if (!username.equals(user.getUsername()))
+            return false;
+        
+        return true;
     }
     
     /**
      * Nome real do usuário.
      * @return
      */
-    public String getFirstname() {
+    public final String getFirstname() {
         return firstname;
     }
     
@@ -30,7 +51,7 @@ public class User implements Serializable, Comparable<User> {
      * Retorna senha criptografada.
      * @return senha
      */
-    public String getSecret() {
+    public final String getSecret() {
         return secret;
     }
     
@@ -38,7 +59,7 @@ public class User implements Serializable, Comparable<User> {
      * Retorna sobrenome.
      * @return sobrenome
      */
-    public String getSurname() {
+    public final String getSurname() {
         return surname;
     }
     
@@ -46,15 +67,24 @@ public class User implements Serializable, Comparable<User> {
      * Retorna nome do usuário.
      * @return nome
      */
-    public String getUsername() {
+    public final String getUsername() {
         return username;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public final int hashCode() {
+        return username.hashCode();
     }
     
     /**
      * Ajusta primeiro nome do usuário.
      * @param firstname primeiro nome
      */
-    public void setFirstname(String firstname) {
+    public final void setFirstname(String firstname) {
         this.firstname = firstname;
     }
     
@@ -62,7 +92,7 @@ public class User implements Serializable, Comparable<User> {
      * Ajusta senha.
      * @param secret senha
      */
-    public void setSecret(String secret) {
+    public final void setSecret(String secret) {
         this.secret = secret;
     }
     

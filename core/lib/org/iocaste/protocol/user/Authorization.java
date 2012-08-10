@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Authorization implements Serializable {
+public class Authorization implements Serializable, Comparable<Authorization> {
     private static final long serialVersionUID = -8616148623961303024L;
     private String name;
     private String object;
@@ -18,6 +18,15 @@ public class Authorization implements Serializable {
     
     public final void add(String name, String value) {
         parameters.put(name, value);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(Authorization authorization) {
+        return name.compareTo(authorization.getName());
     }
     
     public final String getAction() {
@@ -43,5 +52,4 @@ public class Authorization implements Serializable {
     public final void setObject(String object) {
         this.object = object;
     }
-
 }
