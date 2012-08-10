@@ -92,14 +92,21 @@ insert into DOCS004(iname, docid) values('MODELITEM.NAME', 'MODELITEM');
 insert into DOCS005(tname, docid) values('DOCS002', 'MODELITEM');
 insert into DOCS006(iname, itref) values('MODELITEM.MODEL', 'MODEL.NAME');
 
-insert into DOCS001(docid, tname, class) values('TABLE_MODEL', 'DOCS005', '');
+insert into DOCS001(docid, tname) values('MODEL_KEYS', 'DOCS004');
+insert into DOCS002(iname, docid, nritm, fname, ename) values('MODEL_KEYS.NAME', 'MODEL_KEYS', 0, 'INAME', 'MODELITEM.NAME');
+insert into DOCS002(iname, docid, nritm, fname, ename) values('MODEL_KEYS.MODEL', 'MODEL_KEYS', 1, 'DOCID', 'MODEL.NAME');
+insert into DOCS004(iname, docid) values('MODEL_KEYS.NAME', 'MODEL_KEYS');
+insert into DOCS005(tname, docid) values('DOCS004', 'MODEL_KEYS');
+insert into DOCS006(iname, itref) values('MODEL_KEYS.MODEL', 'MODEL.NAME');
+
+insert into DOCS001(docid, tname) values('TABLE_MODEL', 'DOCS005');
 insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('TABLE_MODEL.TABLE', 'TABLE_MODEL', 0, 'TNAME', 'MODEL.TABLE', 'tableName');
 insert into DOCS002(iname, docid, nritm, fname, ename, attrb, itref) values('TABLE_MODEL.MODEL', 'TABLE_MODEL', 1, 'DOCID', 'MODEL.NAME', 'model', 'MODEL.NAME');
 insert into DOCS004(iname, docid) values('TABLE_MODEL.TABLE', 'TABLE_MODEL');
 insert into DOCS005(tname, docid) values('DOCS005', 'TABLE_MODEL');
 insert into DOCS006(iname, itref) values('TABLE_MODEL.MODEL', 'MODEL.NAME');
 
-insert into DOCS001(docid, tname, class) values('FOREIGN_KEY', 'DOCS006', '');
+insert into DOCS001(docid, tname) values('FOREIGN_KEY', 'DOCS006');
 insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('FOREIGN_KEY.ITEM_NAME', 'FOREIGN_KEY', 0, 'ITREF', 'MODELITEM.NAME', 'itemName');
 insert into DOCS002(iname, docid, nritm, fname, ename, attrb, itref) values('FOREIGN_KEY.REFERENCE', 'FOREIGN_KEY', 1, 'INAME', 'MODELITEM.NAME', 'reference', 'MODELITEM.NAME');
 insert into DOCS004(iname, docid) values('FOREIGN_KEY.ITEM_NAME', 'FOREIGN_KEY');
@@ -107,7 +114,7 @@ insert into DOCS005(tname, docid) values('DOCS006', 'FOREIGN_KEY');
 insert into DOCS006(iname, itref) values('FOREIGN_KEY.REFERENCE', 'MODELITEM.NAME');
 insert into DOCS006(iname, itref) values('FOREIGN_KEY.ITEM_NAME', 'MODELITEM.NAME');
 
-insert into DOCS001(docid, tname, class) values('NUMBER_RANGE', 'RANGE001', '');
+insert into DOCS001(docid, tname) values('NUMBER_RANGE', 'RANGE001');
 insert into DOCS003(ename, decim, lngth, etype, upcas) values('NUMBER_RANGE.IDENT', 0, 12, 0, 1);
 insert into DOCS003(ename, decim, lngth, etype, upcas) values('NUMBER_RANGE.CURRENT', 0, 12, 3, 0);
 insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('NUMBER_RANGE.IDENT', 'NUMBER_RANGE', 0, 'IDENT', 'NUMBER_RANGE.IDENT', '');
