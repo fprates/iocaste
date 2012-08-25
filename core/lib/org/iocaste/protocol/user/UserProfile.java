@@ -42,10 +42,7 @@ public class UserProfile implements Serializable, Comparable<UserProfile> {
             return false;
         
         profile = (UserProfile)object;
-        if (name.equals(profile.getName()))
-            return true;
-        
-        return false;
+        return name.equals(profile.getName());
     }
     
     public final String getName() {
