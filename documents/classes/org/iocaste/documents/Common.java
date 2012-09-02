@@ -18,7 +18,7 @@ public class Common {
      * @return
      */
     public static final boolean isInitial(String value) {
-        return (value == null || value.trim().length() == 0)? true : false;
+        return (value == null || value.trim().length() == 0);
     }
     
     /**
