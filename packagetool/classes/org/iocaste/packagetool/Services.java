@@ -13,6 +13,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
+import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
@@ -69,7 +70,7 @@ public class Services extends AbstractFunction {
         Set<User> users;
         Map<UserProfile, Set<User>> profiles;
         Map<String, String> links;
-        Map<String, Set<String>> tasksgroups;
+        Map<TaskGroup, Set<User>> tasksgroups;
         DocumentModel[] models;
         ComplexModel[] cmodels;
         SearchHelpData[] shdata;

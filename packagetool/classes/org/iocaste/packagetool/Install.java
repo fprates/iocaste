@@ -11,6 +11,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.Function;
 
 public class Install {
@@ -21,6 +22,7 @@ public class Install {
      * @return
      */
     public static final InstallData init(Function function) {
+        TaskGroup taskgroup;
         Map<String, String> messages;
         InstallData data = new InstallData();
         Models models = new Models();
@@ -46,7 +48,9 @@ public class Install {
         data.setMessages("pt_BR", messages);
         
         data.link("PACKAGE", "iocaste-packagetool");
-        data.addTaskGroup("ADMIN", "PACKAGE");
+        taskgroup = new TaskGroup("ADMIN");
+        taskgroup.add("PACKAGE");
+        data.add(taskgroup);
         
         return data;
     }

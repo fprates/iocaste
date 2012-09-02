@@ -27,7 +27,7 @@ public class InstallData implements Serializable {
     private List<DataElement> elements;
     private Map<String, Map<String, String>> messages;
     private List<Authorization> authorizations;
-    private Map<String, Set<String>> tasksgroups;
+    private Map<TaskGroup, Set<User>> tasksgroups;
     private String[] dependencies;
     private Set<ComplexModel> cmodels;
     private Set<User> users;
@@ -42,7 +42,7 @@ public class InstallData implements Serializable {
         elements = new ArrayList<DataElement>();
         messages = new HashMap<String, Map<String, String>>();
         authorizations = new ArrayList<Authorization>();
-        tasksgroups = new HashMap<String, Set<String>>();
+        tasksgroups = new HashMap<TaskGroup, Set<User>>();
         cmodels = new TreeSet<ComplexModel>();
         users = new TreeSet<User>();
         uprofiles = new HashMap<UserProfile, Set<User>>();
@@ -103,10 +103,10 @@ public class InstallData implements Serializable {
     
     /**
      * 
-     * @param name
+     * @param uprofile
      */
-    public final void addNumberFactory(String name) {
-        numbers.add(name);
+    public final void add(UserProfile uprofile) {
+        uprofiles.put(uprofile, new TreeSet<User>());
     }
     
     /**
@@ -114,20 +114,16 @@ public class InstallData implements Serializable {
      * @param group
      * @param task
      */
-    public final void addTaskGroup(String group, String task) {
-        Set<String> entries;
-        
-        if (!tasksgroups.containsKey(group)) {
-            entries = new HashSet<String>();
-            entries.add(task);
-                
-            tasksgroups.put(group, entries);
-        } else {
-            entries = tasksgroups.get(group);
-        }
-        
-        if (!entries.contains(task))
-            entries.add(task);
+    public final void add(TaskGroup taskgroup) {
+        tasksgroups.put(taskgroup, new TreeSet<User>());
+    }
+    
+    /**
+     * 
+     * @param name
+     */
+    public final void addNumberFactory(String name) {
+        numbers.add(name);
     }
     
     /**
@@ -155,16 +151,16 @@ public class InstallData implements Serializable {
      * @param user
      */
     public final void assign(UserProfile profile, User user) {
-        Set<User> userset;
-        
-        if (uprofiles.containsKey(profile)) {
-            userset = uprofiles.get(profile);
-        } else {
-            userset = new TreeSet<User>();
-            uprofiles.put(profile, userset);
-        }
-        
-        userset.add(user);
+        uprofiles.get(profile).add(user);
+    }
+    
+    /**
+     * 
+     * @param taskgroup
+     * @param user
+     */
+    public final void assign(TaskGroup taskgroup, User user) {
+        tasksgroups.get(taskgroup).add(user);
     }
     
     /**
@@ -261,7 +257,7 @@ public class InstallData implements Serializable {
      * 
      * @return
      */
-    public final Map<String, Set<String>> getTasksGroups() {
+    public final Map<TaskGroup, Set<User>> getTasksGroups() {
         return tasksgroups;
     }
     
