@@ -52,6 +52,7 @@ public class Install {
         messages.put("MODEL", "Modelo");
         messages.put("model.already.exist", "Modelo já existe");
         messages.put("model.name", "Modelo");
+        messages.put("model.not.found", "Modelo não encontrado.");
         messages.put("model.removed.sucessfully",
                 "Modelo removido com sucesso");
         messages.put("modelname", "Modelo");
