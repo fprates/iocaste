@@ -108,7 +108,7 @@ public class Model {
         Iocaste iocaste = new Iocaste(cache.function);
 
         saveDataElements(iocaste, model);
-        saveDocumentHeader(iocaste, model);
+        saveDocumentHeader(iocaste, model, cache);
         saveDocumentItens(model, cache, iocaste);
         saveDocumentKeys(iocaste, model);
         Common.parseQueries(model, cache.queries);
@@ -411,16 +411,31 @@ public class Model {
      * @throws Exception
      */
     private static final int saveDocumentHeader(Iocaste iocaste,
-            DocumentModel model) throws Exception {
+            DocumentModel model, Cache cache) throws Exception {
+        int l;
         String name = model.getName();
         String tablename = model.getTableName();
+        if (cache.mmodel == null)
+        	cache.mmodel = get("MODEL", cache);
+        
+        if (cache.mmodel != null) {
+            l = Common.getModelItemLen("NAME", cache);
+            if (tablename.length() > l)
+                throw new IocasteException(
+                        "invalid modelname length on document header");
+            
+            l = Common.getModelItemLen("TABLE", cache);
+            if (tablename.length() > l)
+                throw new IocasteException(
+                        "invalid tablename length on document header");
+        }
         
         if (iocaste.update(QUERIES[INS_HEADER],
                 name, tablename, model.getClassName()) == 0)
-            throw new IocasteException("document header generation error");
+            throw new IocasteException("document header insert error");
 
         if (iocaste.update(QUERIES[INS_MODEL_REF], tablename, name) == 0)
-            throw new IocasteException("document header generation error");
+            throw new IocasteException("header's model reference insert error");
         
         return 1;
     }

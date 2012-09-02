@@ -8,6 +8,10 @@ import org.iocaste.documents.common.DocumentModelItem;
 
 public class Common {
     
+	public static final int getModelItemLen(String name, Cache cache) {
+	    return cache.mmodel.getModelItem(name).getDataElement().getLength();
+	}
+    
     /**
      * 
      * @param value

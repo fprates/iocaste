@@ -12,6 +12,7 @@ public class Cache {
     public Map<String, Map<String, String>> queries;
     public Map<String, DocumentModel> models;
     public Map<String, ComplexModel> cmodels;
+    public DocumentModel mmodel;
     
     public Cache(Function function) {
         this.function = function;
