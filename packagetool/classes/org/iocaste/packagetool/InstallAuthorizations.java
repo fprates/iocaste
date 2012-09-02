@@ -46,7 +46,7 @@ public class InstallAuthorizations {
                 for (User user : users) {
                     username = user.getUsername();
                     uprofiles = authority.getUserProfiles(username);
-                    if (uprofiles == null || !uprofiles.contains(profile))
+                    if (uprofiles == null || !uprofiles.contains(profilename))
                         authority.assign(username, profilename);
                     
                     authority.assign(username, "BASE");
