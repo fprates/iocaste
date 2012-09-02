@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.user.Authorization;
 
 public class Install {
 
     public static final InstallData init() {
+        TaskGroup taskgroup;
         InstallData data = new InstallData();
         Authorization authorization = new Authorization("INFOSIS.EXECUTE");
         Map<String, String> messages = new HashMap<String, String>();
@@ -34,9 +36,11 @@ public class Install {
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", "iocaste-infosis");
         data.add(authorization);
-        
+
         data.link("INFOSIS", "iocaste-infosis");
-        data.addTaskGroup("ADMIN", "INFOSIS");
+        taskgroup = new TaskGroup("ADMIN");
+        taskgroup.add("INFOSIS");
+        data.add(taskgroup);
         
         return data;
     }

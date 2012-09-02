@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.user.Authorization;
 
 public class Install {
 
     public static final InstallData self() {
+        TaskGroup taskgroup;
         Map<String, String> messages;
         Authorization authorization;
         InstallData data = new InstallData();
@@ -33,7 +35,9 @@ public class Install {
         data.setMessages("pt_BR", messages);
         
         data.link("SE16", "iocaste-dataview");
-        data.addTaskGroup("DEVELOP", "SE16");
+        taskgroup = new TaskGroup("DEVELOP");
+        taskgroup.add("SE16");
+        data.add(taskgroup);
         
         return data;
     }

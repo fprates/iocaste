@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.user.Authorization;
 
 public class Install {
 
     public static final InstallData init() {
+        TaskGroup taskgroup;
         Map<String, String> messages;
         InstallData data = new InstallData();
         Authorization authorization = new Authorization("TRANSPORT.EXECUTE");
@@ -32,8 +34,11 @@ public class Install {
         messages.put("invalid.file", "Arquivo inválido.");
         data.setMessages("pt_BR", messages);
         
-        data.addTaskGroup("DEVELOP", "SE09");
+        
         data.link("SE09", "iocaste-transport");
+        taskgroup = new TaskGroup("DEVELOP");
+        taskgroup.add("SE09");
+        data.add(taskgroup);
         
         return data;
     }

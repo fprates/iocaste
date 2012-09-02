@@ -1,4 +1,4 @@
-package org.iocaste.datamigr;
+package org.iocaste.styleeditor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,27 +11,22 @@ public class Install {
 
     public static final InstallData init() {
         TaskGroup taskgroup;
-        Map<String, String> messages;
         Authorization authorization;
         InstallData data = new InstallData();
+        Map<String, String> messages = new HashMap<String, String>();
         
-        // mensagens
-        messages = new HashMap<String, String>();
-        messages.put("DATAMIGR", "Migração de dados");
-        messages.put("iocaste-datamigr", "Ferramenta de migração de dados");
+        messages.put("STYLE", "Editor de estilos");
         data.setMessages("pt_BR", messages);
         
-        // autorização de execução
-        authorization = new Authorization("DATAMIGR.EXECUTE");
+        authorization = new Authorization("STYLEEDITOR.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
-        authorization.add("APPNAME", "iocaste-datamigr");
+        authorization.add("APPNAME", "iocaste-styleeditor");
         data.add(authorization);
         
-        // link
-        data.link("DATAMIGR", "iocaste-datamigr");
+        data.link("STYLE", "iocaste-styleeditor");
         taskgroup = new TaskGroup("DEVELOP");
-        taskgroup.add("DATAMIGR");
+        taskgroup.add("STYLE");
         data.add(taskgroup);
         
         return data;

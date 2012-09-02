@@ -5,11 +5,13 @@ import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
+import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.user.Authorization;
 
 public class Install {
 
     public static final InstallData init() {
+        TaskGroup taskgroup;
         SearchHelpData sh;
         Authorization authorization;
         Map<String, String> messages;
@@ -49,7 +51,9 @@ public class Install {
         data.setMessages("pt_BR", messages);
         
         data.link("SU01", "iocaste-usereditor");
-        data.addTaskGroup("ADMIN", "SU01");
+        taskgroup = new TaskGroup("ADMIN");
+        taskgroup.add("SU01");
+        data.add(taskgroup);
         
         sh = new SearchHelpData();
         sh.setModel("LOGIN");

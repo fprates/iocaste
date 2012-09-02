@@ -20,11 +20,7 @@ public class Main extends AbstractPage {
     }
     
     public final InstallData install(Message message) {
-        InstallData data = new InstallData();
-        
-        data.link("STYLE", "iocaste-styleeditor");
-        
-        return data;
+        return Install.init();
     }
     
     public final void main(View view) throws Exception {
