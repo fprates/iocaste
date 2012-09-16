@@ -7,7 +7,6 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.EventAware;
 import org.iocaste.shell.common.View;
 
 public class Install extends AbstractFunction {
@@ -24,7 +23,7 @@ public class Install extends AbstractFunction {
      */
     public final View execAction(Message message) throws Exception {
         View view = message.get("view");
-        String action, controlname = message.getString("action");
+        String controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
         
         /*
@@ -35,22 +34,14 @@ public class Install extends AbstractFunction {
             view.redirect("iocaste-search-help", "main");
             view.setReloadableView(true);
         } else {
-            if (control == null) {
-                action = controlname;
-            } else {
-                action = control.getAction();
-                if (control.isEventAware()) {
-                    control.onEvent(EventAware.ON_CLICK, action);
-                    return view;
-                }
-            }
-            
             switch (Stages.valueOf(view.getPageName())) {
             case WELCOME:
                 Welcome.action(view);
                 break;
             case DBCONFIG:
                 DBConfig.action(view);
+                break;
+            default:
                 break;
             }
         }
