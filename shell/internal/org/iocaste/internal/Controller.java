@@ -599,16 +599,22 @@ public class Controller {
         element = config.view.getElement(controlname);
         if (element != null) {
             evhandler = element.getEventHandler();
-            if (evhandler != null) {
-                status.event = true;
-                evhandler.onEvent(EventHandler.ON_CLICK, null);
-                return status;
-            }
-            
             if (element.isControlComponent()) {
                 status.control = (ControlComponent)element;
-                if (!status.control.isCancellable())
-                    processInputs(config, status);
+                if (evhandler != null) {
+                    status.event = true;
+                    evhandler.onEvent(EventHandler.ON_CLICK,
+                            status.control.getAction());
+                } else {
+                    if (!status.control.isCancellable())
+                        processInputs(config, status);
+                }
+            } else {
+                if (evhandler != null) {
+                    status.event = true;
+                    evhandler.onEvent(EventHandler.ON_CLICK, null);
+                    return status;
+                }
             }
         } else {
             processInputs(config, status);

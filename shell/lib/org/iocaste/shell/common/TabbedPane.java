@@ -29,6 +29,7 @@ public class TabbedPane extends AbstractContainer {
     private final void init() {
         current = null;
         itens = new LinkedHashMap<String, TabbedPaneItem>();
+        setEventHandler(new OnClickHandler(this));
     }
     
     /**
@@ -75,5 +76,24 @@ public class TabbedPane extends AbstractContainer {
      */
     public final void setCurrent(String current) {
         this.current = current;
+    }
+}
+
+class OnClickHandler implements EventHandler {
+    private static final long serialVersionUID = -4167470559514121355L;
+    private TabbedPane pane;
+    
+    public OnClickHandler(TabbedPane pane) {
+        this.pane = pane;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.EventHandler#
+     *     onEvent(byte, java.lang.String)
+     */
+    @Override
+    public void onEvent(byte event, String args) {
+        pane.setCurrent(args);
     }
 }

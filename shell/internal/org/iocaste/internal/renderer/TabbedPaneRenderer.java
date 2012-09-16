@@ -42,6 +42,7 @@ public class TabbedPaneRenderer extends Renderer {
             
             button = new Button(tabbedpane, name);
             button.setStyleClass(classname);
+            button.setEventHandler(tabbedpane.getEventHandler());
             tabbedtag.addChild(ButtonRenderer.render(button, config));
         }
         

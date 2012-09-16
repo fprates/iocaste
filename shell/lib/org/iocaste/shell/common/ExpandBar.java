@@ -35,18 +35,11 @@ public class ExpandBar extends AbstractContainer {
     
     /**
      * 
-     * @return
-     */
-    public final EventHandler getHandler() {
-        return new ExpandBarHandler(this);
-    }
-    
-    /**
-     * 
      */
     private final void init() {
         expanded = true;
         setStyleClass("expand_bar");
+        setEventHandler(new ExpandBarHandler(this));
     }
     
     /**
