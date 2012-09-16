@@ -86,14 +86,43 @@ class OnClickHandler implements EventHandler {
     public OnClickHandler(TabbedPane pane) {
         this.pane = pane;
     }
-
+    
+    private final InputComponent getFirstInput(Container container) {
+        for (Element element : container.getElements()) {
+            if (element.isContainable()) {
+                element = getFirstInput((Container)element);
+                if (element != null)
+                    return (InputComponent)element;
+                
+                continue;
+            }
+                
+            if (!element.isDataStorable() ||
+                    (element.isDataStorable() && !element.isEnabled()))
+                continue;
+            
+            return (InputComponent)element;
+        }
+        
+        return null;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.EventHandler#
      *     onEvent(byte, java.lang.String)
      */
     @Override
-    public void onEvent(byte event, String args) {
+    public final void onEvent(byte event, String args) {
+        TabbedPaneItem paneitem = pane.get(args);
+        Element focus = paneitem.getFocus();
+        
+        if (focus == null) {
+            focus = getFirstInput(paneitem.getContainer());
+            paneitem.setFocus(focus);
+        }
+        
+        pane.getView().setFocus(focus);
         pane.setCurrent(args);
     }
 }
