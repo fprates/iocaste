@@ -12,6 +12,7 @@ public class TabbedPaneItem implements Serializable {
     private static final long serialVersionUID = 6583630385235074815L;
     private Container container;
     private String name;
+    private Element focus;
     
     public TabbedPaneItem(TabbedPane pane, String name) {
         this.name = name;
@@ -29,6 +30,14 @@ public class TabbedPaneItem implements Serializable {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final Element getFocus() {
+        return focus;
+    }
+    
+    /**
      * Retorna nome da aba.
      * @return nome da aba.
      */
@@ -42,5 +51,13 @@ public class TabbedPaneItem implements Serializable {
      */
     public final void setContainer(Container container) {
         this.container = container;
+    }
+    
+    /**
+     * 
+     * @param focus
+     */
+    public final void setFocus(Element focus) {
+        this.focus = focus;
     }
 }

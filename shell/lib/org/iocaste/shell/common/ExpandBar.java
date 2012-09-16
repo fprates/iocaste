@@ -37,7 +37,7 @@ public class ExpandBar extends AbstractContainer {
      * 
      * @return
      */
-    public final EventAware getHandler() {
+    public final EventHandler getHandler() {
         return new ExpandBarHandler(this);
     }
     
@@ -66,7 +66,7 @@ public class ExpandBar extends AbstractContainer {
     }
 }
 
-class ExpandBarHandler implements EventAware {
+class ExpandBarHandler implements EventHandler {
     private static final long serialVersionUID = -4701284786729026501L;
     private ExpandBar ebar;
     

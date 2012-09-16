@@ -21,7 +21,6 @@ public class ExpandBarRenderer extends Renderer {
         
         edge.setSubmit(false);
         edge.setStyleClass("eb_edge");
-        edge.setEventHandler(container.getHandler());
         edge.addEvent("onClick", new StringBuilder("revertElementDisplay('").
                 append(name).append("'); send ('").
                 append(edgename).append("', null, null);").toString());

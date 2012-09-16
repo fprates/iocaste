@@ -32,7 +32,6 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.EventAware;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipartElement;
@@ -76,8 +75,10 @@ public class PageRenderer extends AbstractRenderer {
         if (status.fatal != null)
             throw new IocasteException(status.fatal);
         
-        if (status.error > 0)
+        if (status.error > 0 || status.event) {
+            config.event = status.event;
             return config.view;
+        }
         
         message = new Message();
         message.setId("exec_action");
@@ -94,18 +95,8 @@ public class PageRenderer extends AbstractRenderer {
             config.view.setReloadableView(true);
         } else {
             try {
-                /*
-                 * quando a ação é chamada através de evento de um controle,
-                 * a página não sofre atualização (portanto, o pagetrack
-                 * é o mesmo), mas a sequência interna, sim.
-                 * decrementa a sequência manualmente para manter a
-                 * sincronia entre a página e o contexto.
-                 */
-                if (control != null && control.isEventAware())
-                    control.onEvent(EventAware.ON_CLICK, control.getAction());
-                else
-                    config.view = (View)Service.callServer(
-                            composeUrl(config.contextname), message);
+                config.view = (View)Service.callServer(
+                        composeUrl(config.contextname), message);
                 
                 if (config.view.getMessageType() == Const.ERROR)
                     Common.rollback(getServerName(), config.sessionid);
@@ -158,6 +149,21 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
+     * @param logid
+     * @return
+     */
+    private final PageContext createLoginContext(int logid) {
+        ContextData contextdata = new ContextData();
+        
+        contextdata.sessionid = getSessionId();
+        contextdata.appname = sessionconnector;
+        contextdata.pagename = "authentic";
+        contextdata.logid = logid;
+        return createPageContext(contextdata);
+    }
+    
+    /**
+     * 
      * @param contextdata
      * @return
      */
@@ -167,15 +173,14 @@ public class PageRenderer extends AbstractRenderer {
         List<SessionContext> sessions;
         SessionContext sessionctx;
         
-        if (!apps.containsKey(getSessionId())) {
+        if (!apps.containsKey(contextdata.sessionid)) {
             sessions = new ArrayList<SessionContext>();
-            apps.put(getSessionId(), sessions);
+            apps.put(contextdata.sessionid, sessions);
             
             sessionctx = new SessionContext();
             sessions.add(sessionctx);
         } else {
-            sessions = apps.get(getSessionId());
-            
+            sessions = apps.get(contextdata.sessionid);
             if (contextdata.logid >= sessions.size()) {
                 sessionctx = new SessionContext();
                 sessions.add(sessionctx);
@@ -208,33 +213,25 @@ public class PageRenderer extends AbstractRenderer {
     @Override
     protected final void entry(HttpServletRequest req, HttpServletResponse resp,
             boolean keepsession) throws Exception {
-        Iocaste iocaste;
-        ContextData contextdata;
+        String sessionid;
         int logid = 0;
         PageContext pagectx = null;
         
         req.setCharacterEncoding("UTF-8");
         
         try {
-            if (apps.containsKey(getSessionId())) {
+            sessionid = getSessionId();
+            if (apps.containsKey(sessionid)) {
                 if (keepsession)
-                    pagectx = getPageContext(req, getSessionId());
-                logid = apps.get(getSessionId()).size();
+                    pagectx = getPageContext(req, sessionid);
+                logid = apps.get(sessionid).size();
             }
             
-            if (pagectx == null) {
-                contextdata = new ContextData();
-                contextdata.sessionid = getSessionId();
-                contextdata.appname = sessionconnector;
-                contextdata.pagename = "authentic";
-                contextdata.logid = logid;
-                pagectx = createPageContext(contextdata);
-            }
+            if (pagectx == null)
+                pagectx = createLoginContext(logid);
             
-            if (pagectx.getViewData() != null) {
-                iocaste = new Iocaste(this);
-                pagectx = processController(iocaste, req, pagectx);
-            }
+            if (pagectx.getViewData() != null)
+                pagectx = processController(req, pagectx, sessionid, this);
             
             startRender(resp, pagectx);
         } catch (Exception e) {
@@ -385,23 +382,19 @@ public class PageRenderer extends AbstractRenderer {
         if (ServletFileUpload.isMultipartContent(req)) {
             fileupload = new ServletFileUpload(new DiskFileItemFactory());
             files = fileupload.parseRequest(req);
-            
             if (files == null)
                 return null;
             
             for (FileItem fileitem : files) {
                 pagetrack = null;
-                
                 if (!fileitem.isFormField())
                     continue;
             
                 pagetrack = fileitem.getFieldName();
-                
                 if (!pagetrack.equals("pagetrack"))
                     continue;
                 
                 pagetrack = fileitem.getString();
-                
                 break;
             }
         } else {
@@ -422,9 +415,8 @@ public class PageRenderer extends AbstractRenderer {
             pageparse[0] += ("." + pageparse[i]);
         
         pageparse[1] = pageparse[t];
-        
         contextdata = new ContextData();
-        contextdata.sessionid = getSessionId();
+        contextdata.sessionid = sessionid;
         contextdata.appname = pageparse[0];
         contextdata.pagename = pageparse[1];
         contextdata.logid = logid;
@@ -435,13 +427,15 @@ public class PageRenderer extends AbstractRenderer {
         pagectx.setFiles(files);
         if (sequence != pagectx.getSequence()) {
             pageparse = home(getComplexId(contextdata.sessionid, logid));
-            contextdata.appname = pageparse[0];
-            contextdata.pagename = pageparse[1];
-            pagectx = getPageContext(contextdata);
-            pagectx.setViewData(null);
+            if (pageparse != null) {
+                contextdata.appname = pageparse[0];
+                contextdata.pagename = pageparse[1];
+                pagectx = getPageContext(contextdata);
+                pagectx.setViewData(null);
+            }
         }
         
-        pagectx.setSequence(sequence+1);
+        pagectx.setSequence(sequence);
         return pagectx;
     }
     
@@ -555,14 +549,18 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
-     * @param iocaste
      * @param req
-     * @param pagepos
+     * @param pagectx
+     * @param sessionid
+     * @param function
      * @return
      * @throws Exception
      */
-    private final PageContext processController(Iocaste iocaste,
-            HttpServletRequest req, PageContext pagectx) throws Exception {
+    private final PageContext processController(HttpServletRequest req,
+            PageContext pagectx, String sessionid, Function function)
+                    throws Exception {
+        long sequence;
+        Iocaste iocaste;
         ControllerData config;
         ContextData contextdata;
         InputData inputdata;
@@ -597,14 +595,14 @@ public class PageRenderer extends AbstractRenderer {
             pagetrack = parameters.get("pagetrack")[0];
             parameters.remove("pagetrack");
         }
-
+        
         config = new ControllerData();
         config.view = pagectx.getViewData();
         config.values = parameters;
         config.function = this;
         config.contextname = pagectx.getAppContext().getName();
         config.logid = getLogid(pagetrack);
-        config.sessionid = getComplexId(getSessionId(), config.logid);
+        config.sessionid = getComplexId(sessionid, config.logid);
         config.servername = getServerName();
         
         view = callController(config);
@@ -641,17 +639,23 @@ public class PageRenderer extends AbstractRenderer {
         }
         
         pagectx.setError((byte)0);
+        sequence = pagectx.getSequence();
         contextdata = new ContextData();
-        contextdata.sessionid = getSessionId();
+        contextdata.sessionid = sessionid;
         contextdata.appname = appname;
         contextdata.pagename = pagename;
         contextdata.logid = config.logid;
+        
         pagectx_ = getPageContext(contextdata);
         if (pagectx_ == null) {
             pagectx_ = createPageContext(contextdata);
-            pagectx_.setSequence(pagectx.getSequence()+1);
+            pagectx_.setSequence(sequence);
         }
         
+        if (!config.event)
+            sequence++;
+            
+        pagectx_.setSequence(sequence);
         pagectx_.setReloadableView(view.isReloadableView());
         pagectx_.setInitParameters(view.getInitParameters());
         pagectx_.clearParameters();
@@ -659,6 +663,7 @@ public class PageRenderer extends AbstractRenderer {
             pagectx_.addParameter(name, view.getParameter(name));
         view.clearInitExports();
         
+        iocaste = new Iocaste(function);
         if (isSessionConnector(view.getAppName()) && iocaste.isConnected())
             pagectx_.setUsername((String)view.getParameter("username"));
         else
@@ -946,8 +951,6 @@ class InputData {
 }
 
 class ContextData {
-    public String sessionid;
-    public String appname;
-    public String pagename;
+    public String sessionid, appname, pagename;
     public int logid;
 }

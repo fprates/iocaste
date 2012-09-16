@@ -49,6 +49,12 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract String getEvent(String name);
     
     /**
+     * 
+     * @return
+     */
+    public abstract EventHandler getEventHandler();
+    
+    /**
      * Retorna nomes dos eventos adicionados.
      * @return nomes
      */
@@ -122,12 +128,6 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract boolean isEnabled();
     
     /**
-     * Indica se elemento é suscetível à eventos.
-     * @return true, se tem evento associado.
-     */
-    public abstract boolean isEventAware();
-    
-    /**
      * Retorna true se elemento é visível.
      * @return true, se visível.
      */
@@ -138,6 +138,12 @@ public interface Element extends Comparable<Element>, Serializable {
      * @param enabled true, para habilitar elemento
      */
     public abstract void setEnabled(boolean enabled);
+    
+    /**
+     * 
+     * @param evhandler
+     */
+    public abstract void setEventHandler(EventHandler evhandler);
     
     /**
      * Define um nome html.

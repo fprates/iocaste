@@ -44,6 +44,8 @@ public class TextFieldRenderer extends Renderer {
         inputtag.add("size", Integer.toString(length));
         inputtag.add("maxlength", Integer.toString(length));
         inputtag.add("value", value);
+        inputtag.add("onfocus", new StringBuilder("send('").append(name).
+                append("', '&event=onfocus', null)").toString());
         
         if (!textfield.isEnabled()) {
             inputtag.add("class", new StringBuilder(textfield.getStyleClass()).
@@ -54,9 +56,7 @@ public class TextFieldRenderer extends Renderer {
         }
         
         addEvents(inputtag, textfield);
-        
         tags.add(inputtag);
-        
         search = textfield.getSearchHelp();
         if (search != null)
             tags.add(renderSearchHelp(search, config));

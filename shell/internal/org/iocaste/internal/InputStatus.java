@@ -8,4 +8,5 @@ public class InputStatus {
     public int error = 0;
     public InputComponent input = null;
     public String fatal = null, message = null;
+    public boolean event = false;
 }

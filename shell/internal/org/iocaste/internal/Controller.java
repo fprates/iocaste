@@ -23,6 +23,7 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.Shell;
@@ -573,12 +574,12 @@ public class Controller {
      */
     public static final InputStatus validate(ControllerData config)
             throws Exception {
+        EventHandler evhandler;
         Element element;
         String controlname;
         InputStatus status = new InputStatus();
 
         controlname = getString(config.values, "action");
-        
         if (controlname == null) {
             status.fatal = "null control name.";
             return status;
@@ -590,17 +591,25 @@ public class Controller {
         }
         
         config.view.clearRedirect();
-        
         if (controlname.equals("")) {
             status.error = WINVALID_ACTION;
             return status;
         }
         
         element = config.view.getElement(controlname);
-        if (element != null && element.isControlComponent()) {
-            status.control = (ControlComponent)element;
-            if (!status.control.isCancellable())
-                processInputs(config, status);
+        if (element != null) {
+            evhandler = element.getEventHandler();
+            if (evhandler != null) {
+                status.event = true;
+                evhandler.onEvent(EventHandler.ON_CLICK, null);
+                return status;
+            }
+            
+            if (element.isControlComponent()) {
+                status.control = (ControlComponent)element;
+                if (!status.control.isCancellable())
+                    processInputs(config, status);
+            }
         } else {
             processInputs(config, status);
         }

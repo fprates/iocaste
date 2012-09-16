@@ -32,8 +32,14 @@ public abstract class AbstractInputComponent extends AbstractComponent
         obligatory = false;
         validatorcfg = new ValidatorConfig();
         validatorcfg.add(this);
+        setEventHandler(new OnFocus(this));
     }
     
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#
+     *     addValidatorInput(org.iocaste.shell.common.InputComponent)
+     */
     @Override
     public final void addValidatorInput(InputComponent input) {
         validatorcfg.add(input);
@@ -307,5 +313,24 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setValidator(Class<? extends Validator> validator) {
         validatorcfg.setValidator(validator);
+    }
+}
+
+class OnFocus implements EventHandler {
+    private static final long serialVersionUID = -6628615220035348184L;
+    private Element element;
+    
+    public OnFocus(Element element) {
+        this.element = element;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.EventHandler#
+     *     onEvent(byte, java.lang.String)
+     */
+    @Override
+    public void onEvent(byte event, String args) {
+        element.getView().setFocus(element);
     }
 }

@@ -26,13 +26,6 @@ public interface ControlComponent extends Element {
     public abstract boolean isCancellable();
     
     /**
-     * Define se o componente é suscetível à evento html.
-     * @param event evento html.
-     * @param args
-     */
-    public abstract void onEvent(byte event, String args);
-    
-    /**
      * Define uma ação, para quando ação for diferente do nome do componente.
      * @param action nome da ação.
      */
@@ -50,10 +43,4 @@ public interface ControlComponent extends Element {
      * @param cancellable true, para cancelável.
      */
     public abstract void setCancellable(boolean cancellable);
-    
-    /**
-     * Atribui manipulador de evento.
-     * @param eventhandler
-     */
-    public abstract void setEventHandler(EventAware eventhandler);
 }

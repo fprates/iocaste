@@ -62,14 +62,6 @@ public class TabbedPane extends AbstractContainer {
     }
     
     /**
-     * 
-     * @return
-     */
-    public final EventAware getHandler() {
-        return new TabbedPaneHandler(this);
-    }
-    
-    /**
      * Retorna nomes das abas.
      * @return nomes.
      */
@@ -84,23 +76,4 @@ public class TabbedPane extends AbstractContainer {
     public final void setCurrent(String current) {
         this.current = current;
     }
-}
-
-class TabbedPaneHandler implements EventAware {
-    private static final long serialVersionUID = -4701284786729026501L;
-    private TabbedPane tpane;
-    
-    public TabbedPaneHandler(TabbedPane tpane) {
-        this.tpane = tpane;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.EventAware#onEvent(byte, java.lang.String)
-     */
-    @Override
-    public void onEvent(byte event, String action) {
-        tpane.setCurrent(action);
-    }
-    
 }

@@ -43,6 +43,7 @@ public abstract class AbstractElement implements Element {
     private View view;
     private Map<String, String> events;
     private Locale locale;
+    private EventHandler evhandler;
     
     /**
      * 
@@ -113,6 +114,15 @@ public abstract class AbstractElement implements Element {
     @Override
     public final String getEvent(String name) {
         return events.get(name);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#getEventHandler()
+     */
+    @Override
+    public final EventHandler getEventHandler() {
+        return evhandler;
     }
     
     /*
@@ -207,15 +217,6 @@ public abstract class AbstractElement implements Element {
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Element#isEventAware()
-     */
-    @Override
-    public boolean isEventAware() {
-        return false;
-    }
-    
-    /*
-     * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#isVisible()
      */
     @Override
@@ -230,6 +231,16 @@ public abstract class AbstractElement implements Element {
     @Override
     public final void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#
+     *     setEventHandler(org.iocaste.shell.common.EventHandler)
+     */
+    @Override
+    public final void setEventHandler(EventHandler evhandler) {
+        this.evhandler = evhandler;
     }
     
     /*
