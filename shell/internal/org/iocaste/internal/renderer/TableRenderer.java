@@ -51,6 +51,8 @@ public class TableRenderer extends Renderer {
         String title, name;
         Parameter parameter;
         TableItem[] itens;
+        int vlines, lastline, topline;
+        TableItem item;
         XMLElement tag, trtag, thtag, tabletag = new XMLElement("table");
         List<InputComponent> hidden = new ArrayList<InputComponent>();
         List<XMLElement> tags = new ArrayList<XMLElement>();
@@ -101,7 +103,19 @@ public class TableRenderer extends Renderer {
         itens = table.getItens();
         if (itens.length > 0) {
             tag = new XMLElement("tbody");
-            for (TableItem item : itens) {
+            vlines = table.getVisibleLines();
+            topline = table.getTopLine();
+            
+            if (vlines == 0)
+                lastline = topline + itens.length;
+            else
+                lastline = topline + vlines;
+            
+            for (int i = topline; i < lastline; i++) {
+                if (i >= itens.length)
+                    continue;
+                
+                item = itens[i];
                 tags.clear();
                 tags.add(TableItemRenderer.render(table, item, config));
                 hidden.addAll(TableItemRenderer.getHidden());

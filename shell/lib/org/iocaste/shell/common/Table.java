@@ -49,6 +49,7 @@ public class Table extends AbstractContainer {
     private Container linecontrol;
     private String[] actions;
     private String text;
+    private int topline, vlines;
     
     public Table(View view, String name) {
         super(view, Const.TABLE, name);
@@ -195,11 +196,27 @@ public class Table extends AbstractContainer {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final int getTopLine() {
+        return topline;
+    }
+    
+    /**
      * Retorna título da tabela
      * @return título
      */
     public final String getText() {
         return text;
+    }
+    
+    /**
+     * Retorna quantidade de linhas visíveis
+     * @return
+     */
+    public final int getVisibleLines() {
+        return vlines;
     }
     
     /**
@@ -255,6 +272,8 @@ public class Table extends AbstractContainer {
         seltype = MULTIPLE;
         group = new RadioGroup(getName()+".mark");
         actions = new String[2];
+        topline = 0;
+        vlines = 0;
         
         column = new TableColumn(this, "");
         column.setMark(true);
@@ -333,6 +352,22 @@ public class Table extends AbstractContainer {
      */
     public final void setText(String text) {
         this.text = text;
+    }
+    
+    /**
+     * 
+     * @param topline
+     */
+    public final void setTopLine(int topline) {
+        this.topline = topline;
+    }
+    
+    /**
+     * Define quantidade de linhas visíveis
+     * @param vlines
+     */
+    public final void setVisibleLines(int vlines) {
+        this.vlines = vlines;
     }
     
     /**
