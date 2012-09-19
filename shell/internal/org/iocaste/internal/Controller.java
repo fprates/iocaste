@@ -464,6 +464,35 @@ public class Controller {
     
     /**
      * 
+     * @param element
+     * @param config
+     * @param status
+     * @throws Exception
+     */
+    private static final void processInputsStage(Element element,
+            ControllerData config, InputStatus status) throws Exception {
+        EventHandler evhandler = element.getEventHandler();
+        
+        status.event = (evhandler != null);
+        if (element.isControlComponent()) {
+            status.control = (ControlComponent)element;
+            
+            if (!status.control.isCancellable())
+                processInputs(config, status);
+            
+            if (status.event) {
+                evhandler.setInputError(status.error);
+                evhandler.onEvent(EventHandler.ON_CLICK,
+                        status.control.getAction());
+            }
+        } else {
+            if (status.event)
+                evhandler.onEvent(EventHandler.ON_CLICK, null);
+        }
+    }
+    
+    /**
+     * 
      * @param input
      * @param object
      * @param ri
@@ -574,7 +603,6 @@ public class Controller {
      */
     public static final InputStatus validate(ControllerData config)
             throws Exception {
-        EventHandler evhandler;
         Element element;
         String controlname;
         InputStatus status = new InputStatus();
@@ -597,28 +625,10 @@ public class Controller {
         }
         
         element = config.view.getElement(controlname);
-        if (element != null) {
-            evhandler = element.getEventHandler();
-            if (element.isControlComponent()) {
-                status.control = (ControlComponent)element;
-                if (evhandler != null) {
-                    status.event = true;
-                    evhandler.onEvent(EventHandler.ON_CLICK,
-                            status.control.getAction());
-                } else {
-                    if (!status.control.isCancellable())
-                        processInputs(config, status);
-                }
-            } else {
-                if (evhandler != null) {
-                    status.event = true;
-                    evhandler.onEvent(EventHandler.ON_CLICK, null);
-                    return status;
-                }
-            }
-        } else {
+        if (element != null)
+            processInputsStage(element, config, status);
+        else
             processInputs(config, status);
-        }
         
         if (status.input != null) {
             config.view.setFocus(status.input);

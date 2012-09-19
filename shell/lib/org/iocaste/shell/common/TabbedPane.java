@@ -79,7 +79,7 @@ public class TabbedPane extends AbstractContainer {
     }
 }
 
-class OnClickHandler implements EventHandler {
+class OnClickHandler extends AbstractEventHandler {
     private static final long serialVersionUID = -4167470559514121355L;
     private TabbedPane pane;
     
@@ -114,9 +114,14 @@ class OnClickHandler implements EventHandler {
      */
     @Override
     public final void onEvent(byte event, String args) {
-        TabbedPaneItem paneitem = pane.get(args);
-        Element focus = paneitem.getFocus();
+        TabbedPaneItem paneitem;
+        Element focus;
         
+        if (getInputError() != 0)
+            return;
+        
+        paneitem = pane.get(args);
+        focus = paneitem.getFocus();
         if (focus == null) {
             focus = getFirstInput(paneitem.getContainer());
             paneitem.setFocus(focus);

@@ -316,7 +316,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     }
 }
 
-class OnFocus implements EventHandler {
+class OnFocus extends AbstractEventHandler {
     private static final long serialVersionUID = -6628615220035348184L;
     private Element element;
     
@@ -330,7 +330,7 @@ class OnFocus implements EventHandler {
      *     onEvent(byte, java.lang.String)
      */
     @Override
-    public void onEvent(byte event, String args) {
+    public final void onEvent(byte event, String args) {
         element.getView().setFocus(element);
     }
 }

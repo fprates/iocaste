@@ -59,7 +59,7 @@ public class ExpandBar extends AbstractContainer {
     }
 }
 
-class ExpandBarHandler implements EventHandler {
+class ExpandBarHandler extends AbstractEventHandler {
     private static final long serialVersionUID = -4701284786729026501L;
     private ExpandBar ebar;
     
@@ -72,7 +72,7 @@ class ExpandBarHandler implements EventHandler {
      * @see org.iocaste.shell.common.EventAware#onEvent(byte, java.lang.String)
      */
     @Override
-    public void onEvent(byte event, String action) {
+    public final void onEvent(byte event, String action) {
         ebar.setExpanded(!ebar.isExpanded());
     }
 }
