@@ -30,6 +30,9 @@
         <ant antfile ="${basedir}/src/report/build.xml"/>
         
         <!-- aplicações começam a partir daqui -->
+    	<!-- globalconfig -->
+    	<ant antfile="${basedir}/src/globalconfig/build.xml"/>
+    	
         <!-- login -->
         <ant antfile="${basedir}/src/login/build.xml"/>
     	
@@ -80,6 +83,7 @@
     		<fileset dir="${builddir}/documents/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/shell/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/packagetool/lib" excludes="*.jar"/>
+    		<fileset dir="${builddir}/globalconfig/lib" excludes="*.jar"/>
     	</copy>
     	
     	<jar basedir="${basedir}/ext/common"
