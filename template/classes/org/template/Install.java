@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.user.Authorization;
 
 public class Install {
@@ -29,7 +30,9 @@ public class Install {
         
         // link
         data.link("TESTE", "iocaste-template");
-        data.addTaskGroup("TESTE", "TESTE");
+        taskgroup = new TaskGroup("TESTE");
+        taskgroup.add("TESTE");
+        data.add(taskgroup);
         
         return data;
     }
