@@ -20,7 +20,7 @@ public class GlobalConfig extends AbstractServiceInterface {
      * @param name
      * @param type
      */
-    public final void define(String name, byte type) {
+    public final void define(String name, Class<?> type) {
         define(name, type, null);
     }
     
@@ -30,7 +30,7 @@ public class GlobalConfig extends AbstractServiceInterface {
      * @param type
      * @param value
      */
-    public final void define(String name, byte type, Object value) {
+    public final void define(String name, Class<?> type, Object value) {
         Message message = new Message();
         
         message.setId("define");
@@ -50,6 +50,18 @@ public class GlobalConfig extends AbstractServiceInterface {
         message.setId("get");
         message.add("name", name);
         return call(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     */
+    public final void remove(String name) {
+        Message message = new Message();
+        
+        message.setId("remove");
+        message.add("name", name);
+        call(message);
     }
     
     /**

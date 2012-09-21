@@ -19,6 +19,9 @@
         
         <!-- authority -->
         <ant antfile="${basedir}/src/authority/build.xml"/>
+    	
+        <!-- globalconfig -->
+        <ant antfile="${basedir}/src/globalconfig/build.xml"/>
         
         <!-- packagetool -->
         <ant antfile="${basedir}/src/packagetool/build.xml"/>
@@ -30,8 +33,6 @@
         <ant antfile ="${basedir}/src/report/build.xml"/>
         
         <!-- aplicações começam a partir daqui -->
-    	<!-- globalconfig -->
-    	<ant antfile="${basedir}/src/globalconfig/build.xml"/>
     	
         <!-- login -->
         <ant antfile="${basedir}/src/login/build.xml"/>
