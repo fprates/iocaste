@@ -11,6 +11,8 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.globalconfig.common.GlobalConfig;
+import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.packagetool.common.TaskGroup;
@@ -68,6 +70,7 @@ public class Services extends AbstractFunction {
         ExtendedObject header;
         DocumentModel tasks;
         Set<User> users;
+        Set<GlobalConfigData> config;
         Map<UserProfile, Set<User>> profiles;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
@@ -176,6 +179,13 @@ public class Services extends AbstractFunction {
         if (tasksgroups.size() > 0)
             InstallTasksGroups.init(tasksgroups, state);
     
+        /*
+         * registra parâmetros de configuração
+         */
+        config = state.data.getGlobalConfigs();
+        if (config.size() > 0)
+            InstallGlobalConfig.init(config, state);
+        
         return 1;
     }
     
@@ -212,6 +222,7 @@ public class Services extends AbstractFunction {
         SHLib shlib;
         Authority authority;
         Documents documents;
+        GlobalConfig config; 
         String pkgname = message.getString("package");
         ExtendedObject[] objects = Registry.getEntries(pkgname, this);
         
@@ -221,6 +232,7 @@ public class Services extends AbstractFunction {
         authority = new Authority(this);
         shlib = new SHLib(this);
         documents = new Documents(this);
+        config = new GlobalConfig(this);
         for (int i = objects.length; i > 0; i--) {
             object = objects[i - 1];
             modeltype = object.getValue("MODEL");
@@ -287,6 +299,13 @@ public class Services extends AbstractFunction {
             
             if (modeltype.equals("CMODEL")) {
                 documents.removeComplexModel(name);
+                documents.delete(object);
+                
+                continue;
+            }
+            
+            if (modeltype.equals("CONFIG_ENTRY")) {
+                config.remove(name);
                 documents.delete(object);
                 
                 continue;

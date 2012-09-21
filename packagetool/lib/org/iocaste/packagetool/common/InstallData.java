@@ -32,20 +32,22 @@ public class InstallData implements Serializable {
     private Set<ComplexModel> cmodels;
     private Set<User> users;
     private Map<UserProfile, Set<User>> uprofiles;
+    private Set<GlobalConfigData> globalcfg;
     
     public InstallData() {
-        models = new LinkedHashMap<String, DocumentModel>();
-        values = new HashMap<DocumentModel, List<Object[]>>();
-        links = new HashMap<String, String>();
-        numbers = new HashSet<String>();
-        shds = new ArrayList<SearchHelpData>();
-        elements = new ArrayList<DataElement>();
-        messages = new HashMap<String, Map<String, String>>();
-        authorizations = new ArrayList<Authorization>();
-        tasksgroups = new HashMap<TaskGroup, Set<User>>();
-        cmodels = new TreeSet<ComplexModel>();
-        users = new TreeSet<User>();
-        uprofiles = new HashMap<UserProfile, Set<User>>();
+        models = new LinkedHashMap<>();
+        values = new HashMap<>();
+        links = new HashMap<>();
+        numbers = new HashSet<>();
+        shds = new ArrayList<>();
+        elements = new ArrayList<>();
+        messages = new HashMap<>();
+        authorizations = new ArrayList<>();
+        tasksgroups = new HashMap<>();
+        cmodels = new TreeSet<>();
+        users = new TreeSet<>();
+        uprofiles = new HashMap<>();
+        globalcfg = new HashSet<>();
     }
     
     /**
@@ -83,6 +85,14 @@ public class InstallData implements Serializable {
             throw new RuntimeException("can't add a duplicated model.");
         
         models.put(name, model);
+    }
+    
+    /**
+     * 
+     * @param config
+     */
+    public final void add(GlobalConfigData config) {
+        globalcfg.add(config);
     }
     
     /**
@@ -193,6 +203,14 @@ public class InstallData implements Serializable {
      */
     public final List<DataElement> getElements() {
         return elements;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Set<GlobalConfigData> getGlobalConfigs() {
+        return globalcfg;
     }
     
     /**
