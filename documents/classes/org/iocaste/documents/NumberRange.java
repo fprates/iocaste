@@ -3,6 +3,7 @@ package org.iocaste.documents;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
@@ -26,9 +27,17 @@ public class NumberRange {
      * @throws Exception
      */
     public static void create(String name, Cache cache) throws Exception {
+        ExtendedObject range;
         DocumentModel model = Model.get("NUMBER_RANGE", cache);
-        ExtendedObject range = new ExtendedObject(model);
+        DataElement element = model.getModelItem("IDENT").getDataElement();
+        int l = element.getLength();
         
+        if (name.length() > l)
+            throw new IocasteException(new StringBuilder(name).
+                    append(" has invalid range name length (").
+                    append(l).append(" bytes max).").toString());
+        
+        range = new ExtendedObject(model);
         range.setValue("IDENT", name);
         range.setValue("CURRENT", 0);
         
@@ -56,7 +65,8 @@ public class NumberRange {
         lines = iocaste.selectUpTo(QUERIES[RANGE], 1, ident);
         
         if (lines == null)
-            throw new IocasteException("Range \""+ident+"\" not found.");
+            throw new IocasteException(new StringBuilder("Range \"").
+                    append(ident).append("\" not found.").toString());
         
         columns = (Map<String, Object>)lines[0];
         current = ((BigDecimal)columns.get("CRRNT")).longValue() + 1;
