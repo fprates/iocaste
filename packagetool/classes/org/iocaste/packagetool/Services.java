@@ -4,38 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.globalconfig.common.GlobalConfig;
 import org.iocaste.packagetool.common.GlobalConfigData;
-import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
-import org.iocaste.shell.common.SHLib;
 
 public class Services extends AbstractFunction {
-    private static final byte DEL_MESSAGES = 0;
-    private static final byte DEL_PKG_ITEM = 1;
-    private static final byte DEL_TASKS = 2;
-    private static final byte DEL_PACKAGE = 3;
-    private static final String[] QUERIES = {
-        "delete from MESSAGES where PACKAGE = ?",
-        "delete from PACKAGE_ITEM where PACKAGE = ? and MODEL = ?",
-        "delete from TASKS where NAME = ?",
-        "delete from PACKAGE where NAME = ?"
-    };
 
     public Services() {
         export("assign_task_group", "assignTaskGroup");
@@ -80,113 +65,136 @@ public class Services extends AbstractFunction {
         Authorization[] authorizations;
         String[] dependencies;
         State state;
-        
-        /*
-         * Registra instalação do pacote
-         */
+        String name, modelname;
+
         state = new State();
         state.data = message.get("data");
         state.pkgname = message.getString("name");
         state.documents = new Documents(this);
         state.pkgid = state.documents.getNextNumber("PKGCODE") * 1000000;
-        state.shm = new HashMap<String, Set<DocumentModelItem>>();
+        state.shm = new HashMap<>();
         state.function = this;
         
-        dependencies = state.data.getDependencies();
-        if (dependencies != null)
-            for (String pkgname : dependencies) {
-                if (isInstalled(pkgname))
+        try {
+            dependencies = state.data.getDependencies();
+            if (dependencies != null)
+                for (String pkgname : dependencies) {
+                    if (isInstalled(pkgname))
+                        continue;
+                    
+                    throw new Exception(new StringBuilder(state.pkgname).
+                            append(": required package ").
+                            append(pkgname).
+                            append(" not installed.").toString());
+                }
+
+            /*
+             * Registra instalação do pacote
+             */
+            header = new ExtendedObject(state.documents.getModel("PACKAGE"));
+            header.setValue("NAME", state.pkgname);
+            header.setValue("CODE", state.pkgid);
+            state.log.add(header);
+            
+            /*
+             * gera modelos;
+             * insere registros;
+             * prepara dados para ajuda de pesquisa.
+             */
+            models = state.data.getModels();
+            if (models.length > 0)
+                InstallModels.init(models, state);
+            
+            state.documents.commit();
+            cmodels = state.data.getCModels();
+            if (cmodels.length > 0)
+                InstallCModels.init(cmodels, state);
+            
+            /*
+             * insere usuários
+             */
+            users = state.data.getUsers();
+            if (users.size() > 0)
+                InstallUsers.init(users, state);
+            
+            /*
+             * registra objetos de numeração
+             */
+            for (String factory : state.data.getNumberFactories()) {
+                state.documents.createNumberFactory(factory);
+                Registry.add(factory, "NUMBER", state);
+            }
+            
+            /*
+             * gera ajudas de pesquisa
+             */
+            shdata = state.data.getSHData();
+            if (shdata.length > 0)
+                InstallSH.init(shdata, state);
+            
+            for (DataElement element : state.data.getElements())
+                Registry.add(element.getName(), "DATA_ELEMENT", state);
+            
+            /*
+             * registra mensagens
+             */
+            state.messages = state.data.getMessages();
+            if (state.messages.size() > 0)
+                InstallMessages.init(state);
+            
+            /*
+             * instala autorizações, perfis
+             */
+            authorizations = state.data.getAuthorizations();
+            if (authorizations.length > 0)
+                InstallAuthorizations.init(authorizations, state);
+            
+            profiles = state.data.getUserProfiles();
+            if (profiles.size() > 0)
+                InstallAuthorizations.init(profiles, state);
+            
+            new Iocaste(state.function).invalidateAuthCache();
+            
+            /*
+             * registra tarefas
+             */
+            tasks = state.documents.getModel("TASKS");
+            links = state.data.getLinks();
+            if (links.size() > 0)
+                InstallLinks.init(links, tasks, state);
+            
+            tasksgroups = state.data.getTasksGroups();
+            if (tasksgroups.size() > 0)
+                InstallTasksGroups.init(tasksgroups, state);
+        
+            /*
+             * registra parâmetros de configuração
+             */
+            config = state.data.getGlobalConfigs();
+            if (config.size() > 0)
+                InstallGlobalConfig.init(config, state);
+            
+            /*
+             * grava itens instalados
+             */
+            for (ExtendedObject object : state.log)
+                state.documents.save(object);
+            
+            return 1;
+        } catch (Exception e) {
+            state.documents.rollback();
+            for (ExtendedObject object : state.log) {
+                Uninstall.item(object);
+                name = object.getValue("MODEL");
+                if (name == null || !name.equals("MODEL"))
                     continue;
                 
-                throw new Exception(new StringBuilder(state.pkgname).
-                        append(": required package ").
-                        append(pkgname).
-                        append(" not installed.").toString());
+                modelname = object.getValue("NAME");
+                state.documents.removeModel(modelname);
             }
-        
-        header = new ExtendedObject(state.documents.getModel("PACKAGE"));
-        header.setValue("NAME", state.pkgname);
-        header.setValue("CODE", state.pkgid);
-        state.documents.save(header);
-        
-        /*
-         * insere usuários
-         */
-        users = state.data.getUsers();
-        if (users.size() > 0)
-            InstallUsers.init(users, state);
-        
-        /*
-         * gera modelos;
-         * insere registros;
-         * prepara dados para ajuda de pesquisa.
-         */
-        models = state.data.getModels();
-        if (models.length > 0)
-            InstallModels.init(models, state);
-        
-        cmodels = state.data.getCModels();
-        if (cmodels.length > 0)
-            InstallCModels.init(cmodels, state);
-        
-        /*
-         * registra objetos de numeração
-         */
-        for (String factory : state.data.getNumberFactories()) {
-            state.documents.createNumberFactory(factory);
-            Registry.add(factory, "NUMBER", state);
+            
+            throw e;
         }
-        
-        /*
-         * gera ajudas de pesquisa
-         */
-        shdata = state.data.getSHData();
-        if (shdata.length > 0)
-            InstallSH.init(shdata, state);
-        
-        for (DataElement element : state.data.getElements())
-            Registry.add(element.getName(), "DATA_ELEMENT", state);
-        
-        /*
-         * registra mensagens
-         */
-        state.messages = state.data.getMessages();
-        if (state.messages.size() > 0)
-            InstallMessages.init(state);
-        
-        /*
-         * instala autorizações, perfis
-         */
-        authorizations = state.data.getAuthorizations();
-        if (authorizations.length > 0)
-            InstallAuthorizations.init(authorizations, state);
-        
-        profiles = state.data.getUserProfiles();
-        if (profiles.size() > 0)
-            InstallAuthorizations.init(profiles, state);
-        
-        new Iocaste(state.function).invalidateAuthCache();
-        
-        /*
-         * registra tarefas
-         */
-        tasks = state.documents.getModel("TASKS");
-        links = state.data.getLinks();
-        if (links.size() > 0)
-            InstallLinks.init(links, tasks, state);
-        
-        tasksgroups = state.data.getTasksGroups();
-        if (tasksgroups.size() > 0)
-            InstallTasksGroups.init(tasksgroups, state);
-    
-        /*
-         * registra parâmetros de configuração
-         */
-        config = state.data.getGlobalConfigs();
-        if (config.size() > 0)
-            InstallGlobalConfig.init(config, state);
-        
-        return 1;
     }
     
     /**
@@ -215,118 +223,14 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
+     * @throws Exception
      */
-    public final void uninstall(Message message) {
-        String modeltype, name;
-        ExtendedObject object;
-        SHLib shlib;
-        Authority authority;
-        Documents documents;
-        GlobalConfig config; 
+    public final void uninstall(Message message) throws Exception {
         String pkgname = message.getString("package");
-        ExtendedObject[] objects = Registry.getEntries(pkgname, this);
         
-        if (objects == null)
-            return;
+        if (pkgname == null)
+            throw new IocasteException("package name not specified.");
         
-        authority = new Authority(this);
-        shlib = new SHLib(this);
-        documents = new Documents(this);
-        config = new GlobalConfig(this);
-        for (int i = objects.length; i > 0; i--) {
-            object = objects[i - 1];
-            modeltype = object.getValue("MODEL");
-            name = object.getValue("NAME");
-            
-            if (modeltype.equals("MESSAGE")) {
-                name = object.getValue("PACKAGE");
-                documents.update(QUERIES[DEL_MESSAGES], name);
-                documents.update(QUERIES[DEL_PKG_ITEM], name, "MESSAGE");
-                documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("SH")) {
-                shlib.unassign(name);
-                shlib.remove(name);
-                documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("TASK")) {
-                documents.update(QUERIES[DEL_TASKS], name);
-                documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("MODEL")) {
-                documents.removeModel(name);
-                documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("NUMBER")) {
-                documents.removeNumberFactory(name);
-                documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("AUTHORIZATION")) {
-                authority.remove(name);
-                documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("TSKGROUP")) {
-                TaskSelector.removeGroup(name, documents);
-                documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("TSKITEM")) {
-                TaskSelector.removeTask(name, documents);
-                documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("CMODEL")) {
-                documents.removeComplexModel(name);
-                documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("CONFIG_ENTRY")) {
-                config.remove(name);
-                documents.delete(object);
-                
-                continue;
-            }
-            
-            if (modeltype.equals("DATA_ELEMENT"))
-                documents.delete(object);
-        }
-            
-        new Iocaste(this).invalidateAuthCache();
-        documents.update(QUERIES[DEL_PACKAGE], pkgname);
-        documents.commit();
+        Uninstall.init(pkgname, this);
     }
-}
-
-class State {
-    public Documents documents;
-    public long pkgid;
-    public String pkgname;
-    public Map<String, Set<DocumentModelItem>> shm;
-    public InstallData data;
-    public Function function;
-    public Map<String, Map<String, String>> messages;
 }

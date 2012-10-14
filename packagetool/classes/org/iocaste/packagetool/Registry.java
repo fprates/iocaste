@@ -22,7 +22,7 @@ public class Registry {
         pkgitem.setValue("MODEL", model);
 
         state.pkgid++;
-        state.documents.save(pkgitem);
+        state.log.add(pkgitem);
     }
     
     /**

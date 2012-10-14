@@ -12,14 +12,15 @@ import org.iocaste.protocol.IocasteException;
 public class InstallModels {
     public static final void init(DocumentModel[] models, State state)
             throws Exception {
-        String name;
+        String name, modelname;
         Set<DocumentModelItem> itens;
         int i;
         List<Object[]> values;
         ExtendedObject header;
         
         for (DocumentModel model : models) {
-            if (state.documents.getModel(model.getName()) != null) {
+            modelname = model.getName();
+            if (state.documents.getModel(modelname) != null) {
                 if (state.documents.updateModel(model) == 0)
                     throw new IocasteException("update model error.");
             } else {
@@ -27,7 +28,7 @@ public class InstallModels {
                     throw new IocasteException("create model error.");
             }
             
-            Registry.add(model.getName(), "MODEL", state);
+            Registry.add(modelname, "MODEL", state);
             
             for (DocumentModelItem modelitem : model.getItens()) {
                 name = modelitem.getSearchHelp();
