@@ -184,7 +184,6 @@ public class Services extends AbstractFunction {
         } catch (Exception e) {
             state.documents.rollback();
             for (ExtendedObject object : state.log) {
-                Uninstall.item(object);
                 name = object.getValue("MODEL");
                 if (name == null || !name.equals("MODEL"))
                     continue;
@@ -193,6 +192,7 @@ public class Services extends AbstractFunction {
                 state.documents.removeModel(modelname);
             }
             
+            state.documents.commit();
             throw e;
         }
     }

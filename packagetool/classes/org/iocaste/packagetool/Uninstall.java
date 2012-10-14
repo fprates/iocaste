@@ -20,10 +20,10 @@ public class Uninstall {
         "delete from TASKS where NAME = ?",
         "delete from PACKAGE where NAME = ?"
     };
-    public static final byte DOCS_LIB = 0;
-    public static final byte SH_LIB = 1;
-    public static final byte AUTH_LIB = 2;
-    public static final byte CONFIG_LIB = 3;
+    private static final byte DOCS_LIB = 0;
+    private static final byte SH_LIB = 1;
+    private static final byte AUTH_LIB = 2;
+    private static final byte CONFIG_LIB = 3;
     
     public static final void init(String pkgname, Function function) {
         ExtendedObject object;
@@ -47,7 +47,7 @@ public class Uninstall {
         ((Documents)services[DOCS_LIB]).update(QUERIES[DEL_PACKAGE], pkgname);
     }
 
-    public static final void item(ExtendedObject object,
+    private static final void item(ExtendedObject object,
             AbstractServiceInterface... services) {
         Documents documents = (Documents)services[DOCS_LIB];
         SHLib shlib = (SHLib)services[SH_LIB];
