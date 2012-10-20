@@ -92,6 +92,17 @@ public final class Iocaste extends AbstractServiceInterface {
      * 
      * @return
      */
+    public final String getCurrentApp() {
+        Message message = new Message();
+        
+        message.setId("get_current_app");
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final String getHost() {
         Message message = new Message();
         

@@ -16,6 +16,7 @@ public class UserContext {
     private Locale locale;
     private int terminal;
     private Date conndate;
+    private String currentapp;
     
     public UserContext(Locale locale) {
         objects = new HashMap<String, Object>();
@@ -23,6 +24,18 @@ public class UserContext {
         conndate = Calendar.getInstance().getTime();
     }
     
+    /**
+     * 
+     * @return
+     */
+    public final String getCurrentApp() {
+        return currentapp;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final Date getConnTime() {
         return conndate;
     }
@@ -74,6 +87,14 @@ public class UserContext {
      */
     public final void setConnection(Connection connection) {
         this.connection = connection;
+    }
+    
+    /**
+     * 
+     * @param currentapp
+     */
+    public final void setCurrentApp(String currentapp) {
+        this.currentapp = currentapp;
     }
     
     /**

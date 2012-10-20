@@ -42,6 +42,7 @@ public class Services extends AbstractFunction {
         export("disconnect", "disconnect");
         export("get_connected_users", "getConnectedUsers");
         export("get_context", "getContext");
+        export("get_current_app", "getCurrentApp");
         export("get_host", "getHost");
         export("get_locale", "getLocale");
         export("get_system_info", "getSystemInfo");
@@ -55,6 +56,7 @@ public class Services extends AbstractFunction {
         export("rollback", "rollback");
         export("select", "select");        
         export("set_context", "setContext");
+        export("set_current_app", "setCurrentApp");
         export("update", "update");
         export("update_user", "updateUser");
     }
@@ -204,6 +206,18 @@ public class Services extends AbstractFunction {
         String contextid = message.getString("context_id");
         
         return sessions.get(sessionid).getObject(contextid);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final String getCurrentApp(Message message) {
+        String sessionid = message.getSessionid();
+        String appname = sessions.get(sessionid).getCurrentApp();
+        
+        return appname;
     }
     
     /**
@@ -541,6 +555,17 @@ public class Services extends AbstractFunction {
         String contextid = message.getString("context_id");
         
         sessions.get(sessionid).setObject(contextid, message.get("object"));
+    }
+    
+    /**
+     * 
+     * @param message
+     */
+    public final void setCurrentApp(Message message) {
+        String sessionid = message.getSessionid();
+        String currentapp = message.getString("current_app");
+        
+        sessions.get(sessionid).setCurrentApp(currentapp);
     }
     
     /**
