@@ -242,6 +242,24 @@ public class PageRenderer extends AbstractRenderer {
 
     /**
      * 
+     * @param appname
+     * @param complexid
+     */
+    private final void execute(String appname, String complexid) {
+        String url;
+        Message message = new Message();
+        
+        message.setId("set_current_app");
+        message.add("current_app", appname);
+        message.setSessionid(complexid);
+        
+        url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
+                toString();
+        Service.callServer(url, message);
+    }
+    
+    /**
+     * 
      * @param input
      * @param inputdata
      */
@@ -458,6 +476,12 @@ public class PageRenderer extends AbstractRenderer {
         return appctx.getPageContext(contextdata.pagename);
     }
     
+    /**
+     * 
+     * @param sessionid
+     * @param appname
+     * @return
+     */
     public static final Map<String, Map<String, String>> getStyleSheet(
             String sessionid, String appname) {
         String[] complexid = sessionid.split(":");
@@ -663,10 +687,13 @@ public class PageRenderer extends AbstractRenderer {
         view.clearInitExports();
         
         iocaste = new Iocaste(function);
-        if (isSessionConnector(view.getAppName()) && iocaste.isConnected())
+        appname = view.getAppName();
+        if (isSessionConnector(appname) && iocaste.isConnected())
             pagectx_.setUsername((String)view.getParameter("username"));
         else
             pagectx_.setUsername(pagectx.getUsername());
+        
+        execute(appname, config.sessionid);
         
         return pagectx_;
     }
