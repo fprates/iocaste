@@ -15,8 +15,10 @@ public class InstallGlobalConfig {
         for (GlobalConfigData config : configs)
             for (GlobalConfigItemData item : config.getItens()) {
                 name = item.getName();
-                globalcfg.define(name, item.getType(), item.getValue());
-                Registry.add(name, "CONFIG_ENTRY", state);
+                globalcfg.define(state.pkgname, name, item.getType(),
+                        item.getValue());
             }
+        
+        Registry.add(state.pkgname, "CONFIG_ENTRY", state);
     }
 }

@@ -18,23 +18,27 @@ public class GlobalConfig extends AbstractServiceInterface {
     
     /**
      * 
+     * @param appname
      * @param name
      * @param type
      */
-    public final void define(String name, Class<?> type) {
-        define(name, type, null);
+    public final void define(String appname, String name, Class<?> type) {
+        define(appname, name, type, null);
     }
     
     /**
      * 
+     * @param appname
      * @param name
      * @param type
      * @param value
      */
-    public final void define(String name, Class<?> type, Object value) {
+    public final void define(String appname, String name, Class<?> type,
+            Object value) {
         Message message = new Message();
         
         message.setId("define");
+        message.add("appname", appname);
         message.add("name", name);
         message.add("type", type);
         message.add("value", value);

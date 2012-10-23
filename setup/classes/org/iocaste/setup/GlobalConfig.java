@@ -37,16 +37,16 @@ public class GlobalConfig {
         model.add(nmcfg);
         model.add(new DocumentModelKey(nmcfg));
         
-        // código
+        // id do último parâmetro
         element = new DataElement();
-        element.setName("GLOBAL_CONFIG.ID");
+        element.setName("GLOBAL_CONFIG_ITEM.ID");
         element.setType(DataType.NUMC);
-        element.setLength(5);
+        element.setLength(8);
         element.setUpcase(false);
         
         item = new DocumentModelItem();
-        item.setName("ID");
-        item.setTableFieldName("IDENT");
+        item.setName("CURRENT");
+        item.setTableFieldName("CRRID");
         item.setDataElement(element);
         model.add(item);
         
@@ -58,12 +58,6 @@ public class GlobalConfig {
         model = data.getModel("GLOBAL_CONFIG_ITEM", "GCNFGITM", null);
         
         // identificador
-        element = new DataElement();
-        element.setName("GLOBAL_CONFIG_ITEM.ID");
-        element.setType(DataType.NUMC);
-        element.setLength(8);
-        element.setUpcase(false);
-        
         idcfgit = new DocumentModelItem();
         idcfgit.setName("ID");
         idcfgit.setTableFieldName("IDENT");
@@ -77,6 +71,19 @@ public class GlobalConfig {
         item.setTableFieldName("IDCFG");
         item.setReference(nmcfg);
         item.setDataElement(nmcfg.getDataElement());
+        model.add(item);
+        
+        // nome do parâmetro
+        element = new DataElement();
+        element.setName("GLOBAL_CONFIG_ITEM.NAME");
+        element.setType(DataType.CHAR);
+        element.setLength(64);
+        element.setUpcase(true);
+        
+        item = new DocumentModelItem();
+        item.setName("NAME");
+        item.setTableFieldName("PNAME");
+        item.setDataElement(element);
         model.add(item);
         
         // tipo de dado
