@@ -8,6 +8,7 @@ import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.DummyElement;
 import org.iocaste.documents.common.DummyModelItem;
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.packagetool.common.SearchHelpData;
 
 public class GlobalConfig {
     
@@ -16,6 +17,7 @@ public class GlobalConfig {
      * @param data
      */
     public final static void install(InstallData data) {
+        SearchHelpData shd;
         DocumentModelItem item, reference, nmcfg, idcfgit;
         DataElement element;
         DocumentModel model;
@@ -34,6 +36,7 @@ public class GlobalConfig {
         nmcfg.setTableFieldName("NMCFG");
         nmcfg.setDataElement(element);
         nmcfg.setReference(reference);
+        nmcfg.setSearchHelp("SH_PKG_CONFIG");
         model.add(nmcfg);
         model.add(new DocumentModelKey(nmcfg));
         
@@ -125,5 +128,12 @@ public class GlobalConfig {
         item.setTableFieldName("VLCFG");
         item.setDataElement(element);
         model.add(item);
+        
+        shd = new SearchHelpData();
+        shd.setName("SH_PKG_CONFIG");
+        shd.setModel("GLOBAL_CONFIG");
+        shd.setExport("NAME");
+        shd.add("NAME");
+        data.add(shd);
     }
 }
