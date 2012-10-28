@@ -1,4 +1,4 @@
-package org.iocaste.globalconfig;
+package org.iocaste.gconfigview;
 
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
@@ -17,8 +17,23 @@ public class Main extends AbstractPage {
     }
     
     /**
-     * Rotina chamada pelo gerenciador de pacotes,
-     * para retorna informações de instalação do programa.
+     * 
+     * @param view
+     */
+    public final void display(View view) {
+        Request.display(view);
+    }
+    
+    /**
+     * 
+     * @param view
+     */
+    public final void edit(View view) {
+        Request.edit(view);
+    }
+    
+    /**
+     * 
      * @param message
      * @return
      */
@@ -31,6 +46,6 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void main(View view) {
-        
+        Response.main(view, this);
     }
 }

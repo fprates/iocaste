@@ -31,6 +31,7 @@ public class Services extends AbstractFunction {
      * 
      * @param type
      * @return
+     * @throws Exception
      */
     private final byte convertClassType(Class<?> type) {
         if (type == String.class)
@@ -43,8 +44,10 @@ public class Services extends AbstractFunction {
             return DataType.LONG;
         if (type == Boolean.class)
             return DataType.BOOLEAN;
+        if (type == Short.class)
+            return DataType.SHORT;
         
-        return DataType.SHORT;
+        throw new RuntimeException("invalid class type");
     }
     
     /**

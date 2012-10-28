@@ -19,13 +19,13 @@
         
         <!-- authority -->
         <ant antfile="${basedir}/src/authority/build.xml"/>
-    	
+        
         <!-- globalconfig -->
         <ant antfile="${basedir}/src/globalconfig/build.xml"/>
         
         <!-- packagetool -->
         <ant antfile="${basedir}/src/packagetool/build.xml"/>
-    	
+        
         <!-- search-help -->
         <ant antfile="${basedir}/src/search-help/build.xml"/>
         
@@ -75,6 +75,9 @@
         
         <!-- datamigr -->
         <ant antfile="${basedir}/src/datamigr/build.xml"/>
+        
+        <!-- gconfigview -->
+        <ant antfile="${basedir}/src/gconfigview/build.xml"/>
         
     	<!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
