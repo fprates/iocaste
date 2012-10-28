@@ -59,8 +59,9 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      * @return
+     * @throws Exception
      */
-    public final ExtendedObject[] get(Message message) {
+    public final ExtendedObject[] get(Message message) throws Exception {
         String name = message.getString("name");
         
         return load(name);
@@ -70,8 +71,9 @@ public class Services extends AbstractFunction {
      * 
      * @param name
      * @return
+     * @throws Exception
      */
-    private final ExtendedObject[] load(String name) {
+    private final ExtendedObject[] load(String name) throws Exception {
         Documents documents;
         ExtendedObject header;
         String value;
@@ -91,6 +93,8 @@ public class Services extends AbstractFunction {
         header.setValue("EXPORT", value.split("\\.")[1]);
         
         itens = documents.select("from SH_ITENS where SEARCH_HELP = ?", name);
+        if (itens == null)
+            throw new IocasteException("sh has no columns itens.");
         
         shdata = new ArrayList<ExtendedObject>();
         shdata.add(header);
@@ -144,22 +148,27 @@ public class Services extends AbstractFunction {
      */
     public final void save(Message message) throws Exception {
         String model, export, shname, shitemname, exmessage;
-        Documents documents = new Documents(this);
+        List<ExtendedObject> shdata;
+        Documents documents;
         ExtendedObject header = message.get("header");
         ExtendedObject[] itens = message.get("itens");
-        List<ExtendedObject> shdata = new ArrayList<ExtendedObject>();
-
+        
+        if (itens == null || itens.length == 0)
+            if (itens == null)
+                throw new IocasteException("sh has no columns itens.");
+        
+        shdata = new ArrayList<ExtendedObject>();
         shname = header.getValue("NAME");
         model = header.getValue("MODEL");
         export = composeName(model, header.getValue("EXPORT"));
-        
         header.setValue("EXPORT", export);
+        
+        documents = new Documents(this);
         if (documents.save(header) == 0)
             throw new Exception (new StringBuilder("Error saving header of " +
             		"sh ").append(shname).toString());
         
         shdata.add(header);
-        
         for (ExtendedObject item : itens) {
             shitemname = item.getValue("ITEM");
             
@@ -171,7 +180,7 @@ public class Services extends AbstractFunction {
                 exmessage = new StringBuilder("Error saving line of sh ").
                         append(item.getValue("NAME")).toString();
                 
-                throw new Exception(exmessage);
+                throw new IocasteException(exmessage);
             }
             
             shdata.add(item);
