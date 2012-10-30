@@ -16,12 +16,16 @@ public class Main extends AbstractPage {
         export("install", "install");
     }
     
+    public final void configform(View view) {
+        Response.configform(view);
+    }
+    
     /**
      * 
      * @param view
      */
     public final void display(View view) {
-        Request.display(view);
+        Request.display(view, this);
     }
     
     /**
@@ -29,7 +33,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void edit(View view) {
-        Request.edit(view);
+        Request.edit(view, this);
     }
     
     /**
