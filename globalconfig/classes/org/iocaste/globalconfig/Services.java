@@ -56,8 +56,8 @@ public class Services extends AbstractFunction {
      */
     public final void define(Message message) {
         Class<?> type;
-        long gconfigid;
-        int itemid, ptype;
+        long itemid, gconfigid;
+        int ptype;
         DocumentModel model;
         Object value;
         ExtendedObject object, globalconfig;
