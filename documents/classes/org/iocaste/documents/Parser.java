@@ -421,6 +421,7 @@ public class Parser {
     private static final String rebuildField(String field, QueryInfo queryinfo,
             Cache cache) throws Exception {
         DocumentModel model;
+        String name, fieldname;
         String[] composed = field.split("\\.");
         
         if (composed.length == 1)
@@ -428,13 +429,18 @@ public class Parser {
                     getTableFieldName();
         
         model = queryinfo.model;
-        if (!model.getName().equals(composed[0]))
+        name = model.getName();
+        if (!name.equals(composed[0]))
             model = Model.get(composed[0], cache);
         
+        fieldname = model.getModelItem(composed[1]).getTableFieldName();
+        if (fieldname == null)
+            throw new IocasteException(new StringBuilder(composed[1]).
+                    append(" not found for model ").
+                    append(name).toString());
+        
         return new StringBuilder(model.getTableName()).
-                append(".").
-                append(model.getModelItem(composed[1]).getTableFieldName()).
-                toString();
+                append(".").append(fieldname).toString();
     }
     
     /**
