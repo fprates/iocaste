@@ -36,8 +36,10 @@ public class Shell extends AbstractServiceInterface {
         TextField tfield;
         CheckBox cbox;
         ListBox lbox;
+        Const componenttype;
         
-        switch (inputitem.getComponentType()) {
+        componenttype = inputitem.getComponentType();
+        switch (componenttype) {
         case CHECKBOX:
             cbox = new CheckBox(container, name);
             cbox.set(inputitem.get());
@@ -93,7 +95,8 @@ public class Shell extends AbstractServiceInterface {
             return tfield;
             
         default:
-            return null;
+            throw new RuntimeException(new StringBuilder("Component type ").
+                    append(componenttype).append(" not supported.").toString());
         }
     }
     
