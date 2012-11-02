@@ -87,6 +87,15 @@ public class DataItem extends AbstractInputComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#isSelectable()
+     */
+    @Override
+    public final boolean isSelectable() {
+        return isBooleanComponent();
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.AbstractInputComponent#
      *     isValueRangeComponent()
      */
