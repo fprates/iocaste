@@ -80,6 +80,7 @@ public class Main extends AbstractPage {
      */
     public final void connect(View view) throws Exception {
         String username;
+        InputComponent input;
         PackageTool pkgtool = new PackageTool(this);
         DataForm form = view.getElement("login");
         Iocaste iocaste = new Iocaste(this);
@@ -100,8 +101,10 @@ public class Main extends AbstractPage {
         } else {
             view.message(Const.ERROR, "invalid.login");
         }
-
-        form.get("USERNAME").set(null);
+        
+        input = form.get("USERNAME");
+        view.setFocus(input);
+        input.set(null);
         form.get("SECRET").set(null);
     }
     
