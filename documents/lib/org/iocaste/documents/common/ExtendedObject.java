@@ -16,56 +16,59 @@ import java.util.Map;
  *
  */
 public class ExtendedObject implements Serializable {
-	private static final long serialVersionUID = -8700097929412206566L;
-	private Map<DocumentModelItem, Object> values;
-	private Map<String, DocumentModelItem> byname;
-	private DocumentModel model;
-	
-	public ExtendedObject(DocumentModel model) {
-		values = new HashMap<DocumentModelItem, Object>();
-		byname = new HashMap<String, DocumentModelItem>();
-		
-		for (DocumentModelItem item : model.getItens())
-		    byname.put(item.getName(), item);
-		
-		this.model = model;
-	}
-	
-	/**
-	 * Retorna o modelo de documento associado.
-	 * @return modelo
-	 */
-	public final DocumentModel getModel() {
-	    return model;
-	}
-	
-	/**
-	 * Retorna valor de um item do objeto.
-	 * @param name nome do item
-	 * @return valor
-	 */
-	public final <T> T getValue(String name) {
-	    return getValue(byname.get(name));
-	}
-	
-	/**
-	 * Retorna valor de um item do objeto.
-	 * @param item item do modelo
-	 * @return valor
-	 */
-	@SuppressWarnings("unchecked")
-	public final <T> T getValue(DocumentModelItem item) {
-		return (T)values.get(item);
-	}
-
-	/**
-	 * 
-	 * @param loose
-	 * @return
-	 * @throws Exception
-	 */
+    private static final long serialVersionUID = -8700097929412206566L;
+    private Map<DocumentModelItem, Object> values;
+    private Map<String, DocumentModelItem> byname;
+    private DocumentModel model;
+    
+    public ExtendedObject(DocumentModel model) {
+        if (model == null)
+            throw new RuntimeException("model not defined.");
+        
+        values = new HashMap<>();
+        byname = new HashMap<>();
+        
+        for (DocumentModelItem item : model.getItens())
+            byname.put(item.getName(), item);
+        
+        this.model = model;
+    }
+    
+    /**
+     * Retorna o modelo de documento associado.
+     * @return modelo
+     */
+    public final DocumentModel getModel() {
+        return model;
+    }
+    
+    /**
+     * Retorna valor de um item do objeto.
+     * @param name nome do item
+     * @return valor
+     */
+    public final <T> T getValue(String name) {
+        return getValue(byname.get(name));
+    }
+    
+    /**
+     * Retorna valor de um item do objeto.
+     * @param item item do modelo
+     * @return valor
+     */
     @SuppressWarnings("unchecked")
-	private final <T> T newInstance(boolean loose) throws Exception {
+    public final <T> T getValue(DocumentModelItem item) {
+        return (T)values.get(item);
+    }
+    
+    /**
+     * 
+     * @param loose
+     * @return
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    private final <T> T newInstance(boolean loose) throws Exception {
         Method method;
         Class<?> class_ = Class.forName(model.getClassName());
         T instance = (T)class_.newInstance();
@@ -86,50 +89,72 @@ public class ExtendedObject implements Serializable {
         }
         
         return instance;
-	}
-	
-	/**
+    }
+    
+    /**
      * Gera instancia baseada nos dados do objeto e classe associada.
      * 
      * Gera exceção se encontrar item não existente na classe associada.
-	 * @return instância da classe associada.
-	 * @throws Exception
-	 */
-	public final <T> T newInstance() throws Exception {
-	    return newInstance(false);
-	}
-
+     * @return instância da classe associada.
+     * @throws Exception
+     */
+    public final <T> T newInstance() throws Exception {
+        return newInstance(false);
+    }
+    
     /**
      * Gera instancia baseada nos dados do objeto e classe associada.
      * @param loose true, ignora campos que não existirem na classe.
      * @return instância da classe associada.
      * @throws Exception
      */
-	public final <T> T newLooseInstance() throws Exception {
-	    return newInstance(true);
-	}
-	
-	/**
-	 * Define valor do item do objeto extendido.
-	 * @param name nome do objeto
-	 * @param value valor
-	 */
-	public final void setValue(String name, Object value) {
-	    setValue(byname.get(name), value);
-	}
-	
-	/**
-	 * Define valor do item do objeto extendido.
-	 * @param item item de modelo
-	 * @param value valor
-	 */
-	public final void setValue(DocumentModelItem item, Object value) {
-	    if (!model.contains(item))
-	        return;
-	    
-	    if (values.containsKey(item))
-	        values.remove(item);
-	    
-	    values.put(item, value);
-	}
+    public final <T> T newLooseInstance() throws Exception {
+        return newInstance(true);
+    }
+    
+    /**
+     * Define valor do item do objeto extendido.
+     * @param name nome do objeto
+     * @param value valor
+     */
+    public final void setValue(String name, Object value) {
+        setValue(byname.get(name), value);
+    }
+    
+    /**
+     * Define valor do item do objeto extendido.
+     * @param item item de modelo
+     * @param value valor
+     */
+    public final void setValue(DocumentModelItem item, Object value) {
+        if (!model.contains(item))
+            return;
+        
+        if (values.containsKey(item))
+            values.remove(item);
+        
+        values.put(item, value);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public final String toString() {
+        String name = null;
+        StringBuilder sb = new StringBuilder("{");
+        
+        for (DocumentModelItem modelitem : values.keySet()) {
+            if (name != null)
+                sb.append(", ");
+            
+            name = modelitem.getName();
+            sb.append(name);
+            sb.append("=");
+            sb.append(values.get(modelitem));
+        }
+        
+        return sb.append("}").toString();
+    }
 }
