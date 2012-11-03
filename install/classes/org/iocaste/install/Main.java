@@ -16,6 +16,7 @@ import org.iocaste.internal.Controller;
 import org.iocaste.internal.ControllerData;
 import org.iocaste.internal.HtmlRenderer;
 import org.iocaste.internal.InputStatus;
+import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
@@ -575,6 +576,7 @@ public class Main extends AbstractRenderer {
      */
     private final void startRender(HttpServletResponse resp, PageContext pagectx)
             throws Exception {
+        TrackingData tracking;
         HtmlRenderer renderer;
         Map<String, Map<String, String>> userstyle;
         String username, viewmessage;
@@ -639,9 +641,11 @@ public class Main extends AbstractRenderer {
         renderer.setMessageType(messagetype);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
         renderer.setCssElements(appctx.getStyleSheet());
-        renderer.setLogid(pagectx.getLogid());
         
-        render(viewdata);
+        tracking = new TrackingData();
+        tracking.sessionid = getSessionId();
+        tracking.logid = pagectx.getLogid();
+        render(viewdata, tracking);
         
         pagectx.setActions(renderer.getActions());
     }

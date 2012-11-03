@@ -24,17 +24,13 @@ public class HtmlRenderer {
     private Const msgtype;
     private List<String> script;
     private Set<String> actions;
-    private int logid;
     private Map<String, Map<String, String>> csselements;
     private MessageSource msgsource;
-    private long sequence;
     
     public HtmlRenderer() {
         String line;
         BufferedReader reader;
         InputStream is = getClass().getResourceAsStream("/META-INF/shell.js");
-
-        logid = 0;
         
         if (is == null)
             return;
@@ -51,6 +47,14 @@ public class HtmlRenderer {
         } catch (IOException e) {
             new RuntimeException(e);
         }
+    }
+    
+    private final String composePageTrack(View view, TrackingData tracking) {
+        return new StringBuffer(view.getAppName()).append(".").
+                append(view.getPageName()).append(":").
+                append(tracking.sessionid).append(":").
+                append(tracking.logid).append(":").
+                append(tracking.sequence).toString();
     }
     
     /**
@@ -168,10 +172,10 @@ public class HtmlRenderer {
     
     /**
      * Retorna visão renderizada.
-     * @param vdata dados da visão
+     * @param view dados da visão
      * @return código html da visão
      */
-    public final String[] run(View vdata) {
+    public final String[] run(View view, TrackingData tracking) {
         String[] printlines;
         Config config;
         List<String> html = new ArrayList<String>();
@@ -181,35 +185,32 @@ public class HtmlRenderer {
         XMLElement bodytag = new XMLElement("body");
         
         config = new Config();
-        config.setView(vdata);
-        config.setUsername(username, logid);
+        config.setView(view);
+        config.setUsername(username, tracking.logid);
         config.setMessage(msgtype, msgtext);
-        config.addMessageSource(vdata.getMessages());
+        config.addMessageSource(view.getMessages());
         config.addMessageSource(msgsource);
-        config.setPageTrack(new StringBuffer(vdata.getAppName()).append(".").
-                append(vdata.getPageName()).append(":").
-                append(logid).append(":").
-                append(sequence).toString());
+        config.setPageTrack(composePageTrack(view, tracking));
         config.setDBName(dbname);
         
         html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
                 "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
         bodytag.add("onLoad", "initialize()");
-        for (Container container : vdata.getContainers())
+        for (Container container : view.getContainers())
             Renderer.renderContainer(bodycontent, container, config);
         
         bodytag.addChildren(bodycontent);
-        tags.add(renderHeader(vdata, config));
+        tags.add(renderHeader(view, config));
         tags.add(bodytag);
         msgtext = null;
         msgtype = Const.NONE;
         htmltag.addChildren(tags);
         
-        printlines = vdata.getPrintLines();
+        printlines = view.getPrintLines();
         if (printlines.length > 0)
             htmltag.addChild(renderPrintLines(printlines));
         
-        vdata.clearPrintLines();
+        view.clearPrintLines();
         html.add(htmltag.toString());
         actions = config.getActions();
         
@@ -250,27 +251,11 @@ public class HtmlRenderer {
     }
     
     /**
-     * 
-     * @param logid
-     */
-    public final void setLogid(int logid) {
-        this.logid = logid;
-    }
-    
-    /**
      * Ajusta tipo de mensagem da barra de mensagens.
      * @param msgtype
      */
     public final void setMessageType(Const msgtype) {
         this.msgtype = msgtype;
-    }
-    
-    /**
-     * 
-     * @param sequence
-     */
-    public final void setSequence(long sequence) {
-        this.sequence = sequence;
     }
     
     /**

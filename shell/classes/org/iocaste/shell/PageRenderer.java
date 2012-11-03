@@ -22,6 +22,7 @@ import org.iocaste.internal.Controller;
 import org.iocaste.internal.HtmlRenderer;
 import org.iocaste.internal.InputStatus;
 import org.iocaste.internal.ControllerData;
+import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
@@ -305,7 +306,7 @@ public class PageRenderer extends AbstractRenderer {
     private static final int getLogid(String pagetrack) {
         String[] parsed = pagetrack.split(":");
         
-        return Integer.parseInt(parsed[1]);
+        return Integer.parseInt(parsed[2]);
     }
     
     /**
@@ -422,9 +423,12 @@ public class PageRenderer extends AbstractRenderer {
             return null;
         
         pageparse = pagetrack.split(":");
+        if (!sessionid.equals(pageparse[1]))
+            return null;
+
         pagetrack = pageparse[0];
-        logid = Integer.parseInt(pageparse[1]);
-        sequence = Long.parseLong(pageparse[2]);
+        logid = Integer.parseInt(pageparse[2]);
+        sequence = Long.parseLong(pageparse[3]);
         pageparse = pagetrack.split("\\.");
         
         t = pageparse.length - 1;
@@ -833,6 +837,7 @@ public class PageRenderer extends AbstractRenderer {
      */
     private final void startRender(HttpServletResponse resp,
             PageContext pagectx) throws Exception {
+        TrackingData tracking;
         String[] initparams;
         HtmlRenderer renderer;
         Map<String, Map<String, String>> userstyle;
@@ -930,14 +935,16 @@ public class PageRenderer extends AbstractRenderer {
         renderer.setMessageType(messagetype);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
         renderer.setCssElements(appctx.getStyleSheet());
-        renderer.setLogid(pagectx.getLogid());
-        renderer.setSequence(pagectx.getSequence());
         
         if (dbname == null)
             dbname = new Iocaste(this).getSystemParameter("dbname");
         
         renderer.setDBName(dbname);
-        render(view);
+        tracking = new TrackingData();
+        tracking.logid = pagectx.getLogid();
+        tracking.sequence = pagectx.getSequence();
+        tracking.sessionid = getSessionId();
+        render(view, tracking);
         
         pagectx.setActions(renderer.getActions());
     }

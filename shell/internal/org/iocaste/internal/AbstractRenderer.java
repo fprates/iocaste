@@ -141,10 +141,11 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
     /**
      * 
      * @param view
-     * @param renderer
+     * @param tracking
      * @throws Exception
      */
-    protected final void render(View view) throws Exception {
+    protected final void render(View view, TrackingData tracking)
+            throws Exception {
         byte[] content;
         OutputStream os;
         String[] text;
@@ -179,7 +180,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
         }
         
         configResponse(resp, view);
-        text = renderer.run(view);
+        text = renderer.run(view, tracking);
         writer = resp.getWriter();
         if (text != null)
             for (String line : text)
