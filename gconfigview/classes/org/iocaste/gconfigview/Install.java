@@ -22,10 +22,17 @@ public class Install {
         data.add(authorization);
         
         messages = new HashMap<>();
+        messages.put("config.display", "Exibir configurações");
+        messages.put("config.edit","Editar configurações");
+        messages.put("config.select","Selecionar configuração");
         messages.put("display", "Exibir");
         messages.put("edit", "Editar");
         messages.put("GCONFIGVIEW", "Configurações globais");
         messages.put("NAME", "Aplicação");
+        messages.put("parameters.save.error",
+                "Erro na gravação dos parâmetros");
+        messages.put("save", "Gravar");
+        messages.put("save.successful", "Configurações salvas com sucesso.");
         data.setMessages("pt_BR", messages);
         
         data.link("GCONFIGVIEW", "iocaste-gconfigview");

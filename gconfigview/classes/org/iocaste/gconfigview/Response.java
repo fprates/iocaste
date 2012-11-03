@@ -24,6 +24,7 @@ public class Response {
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "package.config");
         ExtendedObject[] objects = view.getParameter("objects");
+        byte mode = Common.getMode(view);
         
         for (ExtendedObject object : objects) {
             name = object.getValue("NAME");
@@ -41,11 +42,15 @@ public class Response {
                 break;
             }
             
-            input.setEnabled(Common.getMode(view) == Common.EDIT);
+            input.setEnabled(mode == Common.EDIT);
         }
+        
+        if (mode == Common.EDIT)
+            new Button(container, "save");
         
         pagecontrol.add("home");
         pagecontrol.add("back");
+        view.setTitle(Common.TITLES[mode]);
     }
     
     /**
@@ -65,7 +70,9 @@ public class Response {
         input = form.get("NAME");
         input.setObligatory(true);
         input.setVisible(true);
+        
         view.setFocus(input);
+        view.setTitle(Common.TITLES[Common.SELECT]);
         
         new Button(container, "display");
         new Button(container, "edit");

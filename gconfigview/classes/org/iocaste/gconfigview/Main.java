@@ -52,4 +52,12 @@ public class Main extends AbstractPage {
     public final void main(View view) {
         Response.main(view, this);
     }
+    
+    /**
+     * 
+     * @param view
+     */
+    public final void save(View view) {
+        Request.save(view, this);
+    }
 }
