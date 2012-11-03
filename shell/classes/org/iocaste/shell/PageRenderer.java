@@ -691,14 +691,15 @@ public class PageRenderer extends AbstractRenderer {
         view.clearInitExports();
         
         iocaste = new Iocaste(function);
-        appname = view.getAppName();
-        if (isSessionConnector(appname) && iocaste.isConnected()) {
-            pagectx_.setUsername((String)view.getParameter("username"));
+        if (iocaste.isConnected()) {
+            appname = view.getAppName();
             execute(appname, config.sessionid);
-        } else {
-            pagectx_.setUsername(pagectx.getUsername());
+            if (isSessionConnector(appname))
+               pagectx_.setUsername((String)view.getParameter("username"));
+            return pagectx_;
         }
         
+        pagectx_.setUsername(pagectx.getUsername());
         return pagectx_;
     }
     
