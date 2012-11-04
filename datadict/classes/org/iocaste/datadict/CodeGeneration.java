@@ -125,7 +125,6 @@ public class CodeGeneration {
         code.add("}");
         
         view.export("code", code.toArray(new String[0]));
-        view.setReloadableView(true);
         view.redirect(null, "list");
     }
 }

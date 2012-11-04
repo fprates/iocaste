@@ -48,7 +48,6 @@ public class Request {
         
         vdata.clearExports();
         vdata.export("model", model);
-        vdata.setReloadableView(true);
         vdata.redirect("form");
     }
     
@@ -106,7 +105,6 @@ public class Request {
         view.export("view.type", Const.SINGLE);
         view.export("model", model);
         view.export("model.regs", itens);
-        view.setReloadableView(true);
         view.redirect("select");
         
     }

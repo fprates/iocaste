@@ -48,7 +48,6 @@ public class Rename {
         DataForm form = view.getElement("modelform");
         String oldname = form.get("modelname").get();
         
-        view.setReloadableView(true);
         view.export("oldname", oldname);
         view.redirect(null, "renamedialog");
     }

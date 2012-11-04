@@ -23,7 +23,6 @@ public class Request {
             return;
         }
         
-        view.setReloadableView(true);
         view.export("mode", Common.CREATE);
         view.redirect(null, "style");
     }
@@ -50,7 +49,6 @@ public class Request {
         query = "from STYLE_ELEMENT where STYLE = ?";
         oelements = documents.select(query, style);
         
-        view.setReloadableView(true);
         view.export("elements", oelements);
         view.export("mode", mode);
         view.redirect(null, "style");

@@ -58,7 +58,6 @@ public class Request {
             return;
         }
         
-        view.setReloadableView(true);
         view.export("username", username);
         view.export("mode", Common.CREATE);
         view.redirect("form");
@@ -88,7 +87,6 @@ public class Request {
         objects = documents.select(QUERIES[TASKS], username);
         view.export("tasks", objects);
         
-        view.setReloadableView(true);
         view.export("identity", object);
         view.export("mode", mode);
         view.redirect("form");

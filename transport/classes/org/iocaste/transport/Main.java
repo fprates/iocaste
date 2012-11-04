@@ -199,7 +199,6 @@ public class Main extends AbstractPage {
                 append(Calendar.getInstance().getTime().getTime()).
                 append(".txt").toString();
         
-        view.setReloadableView(true);
         view.export("list", instructions.toArray(new String[0]));
         view.export("instructionname", name);
         view.redirect(null, "download");
@@ -398,7 +397,6 @@ public class Main extends AbstractPage {
             return;
         }
         
-        view.setReloadableView(true);
         view.export("files", files);
         view.redirect(null, "list");
     }

@@ -44,7 +44,6 @@ public class Request {
             values.put(input.getModelItem().getName(), range);
         }
         
-        view.setReloadableView(true);
         view.export("criteria", values);
     }
 }

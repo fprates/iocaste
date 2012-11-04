@@ -41,7 +41,6 @@ public class Request {
             return;
         }
         
-        view.setReloadableView(true);
         view.export("objects", objects);
         view.export("mode", mode);
         view.redirect("configform");

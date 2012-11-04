@@ -23,7 +23,7 @@ public class PageContext {
     
     public PageContext(String name) {
         parameters =  new HashMap<String, Object>();
-        reloadable = false;
+        reloadable = true;
         actions = null;
         logid = 0;
         sequence = 0;

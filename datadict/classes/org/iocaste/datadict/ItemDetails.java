@@ -136,7 +136,6 @@ public class ItemDetails {
         classfield = Common.getTableValue(selected, "item.classfield");
         sh = Common.getTableValue(selected, "item.sh");
         
-        view.setReloadableView(true);
         view.export("mode", mode);
         view.export("model.name", modelname);
         view.export("item.name", itemname);

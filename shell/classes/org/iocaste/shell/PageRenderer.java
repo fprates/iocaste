@@ -142,7 +142,6 @@ public class PageRenderer extends AbstractRenderer {
         pagectx.addParameter("exception", exception);
         pagectx.addParameter("exview", expagectx.getViewData());
         pagectx.setUsername(expagectx.getUsername());
-        pagectx.setReloadableView(true);
         
         return pagectx;
     }

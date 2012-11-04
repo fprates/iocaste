@@ -36,8 +36,6 @@ public abstract class AbstractPage extends AbstractFunction {
         view.dontPushPage();
         if (view.getAppName().equals(entry[0]))
             return;
-        
-        view.setReloadableView(true);
     }
     
     /**
@@ -123,7 +121,6 @@ public abstract class AbstractPage extends AbstractFunction {
         String[] entry = new Shell(this).home(view);
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
-        view.setReloadableView(true);
     }
     
     /**

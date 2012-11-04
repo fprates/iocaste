@@ -96,7 +96,6 @@ public class Main extends AbstractPage {
                     pkgtool.install(pkgname);
             
             view.export("username", username);
-            view.setReloadableView(true);
             view.redirect("iocaste-tasksel", "main");
         } else {
             view.message(Const.ERROR, "invalid.login");

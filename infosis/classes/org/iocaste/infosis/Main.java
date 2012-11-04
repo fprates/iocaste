@@ -165,7 +165,6 @@ public class Main extends AbstractPage {
             }
         }
         
-        view.setReloadableView(true);
         view.export("itens", itens);
         view.redirect("list");
     }

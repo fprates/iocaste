@@ -32,7 +32,6 @@ public class Install extends AbstractFunction {
         if (control != null && control.getType() == Const.SEARCH_HELP) {
             view.export("sh", control);
             view.redirect("iocaste-search-help", "main");
-            view.setReloadableView(true);
         } else {
             switch (Stages.valueOf(view.getPageName())) {
             case WELCOME:

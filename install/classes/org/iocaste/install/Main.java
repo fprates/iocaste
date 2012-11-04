@@ -492,7 +492,6 @@ public class Main extends AbstractRenderer {
         if (pagectx_ == null)
             pagectx_ = createPageContext(contextdata);
         
-        pagectx_.setReloadableView(view.isReloadableView());
         pagectx_.clearParameters();
         for (String name : view.getExportable())
             pagectx_.addParameter(name, view.getParameter(name));

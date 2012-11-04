@@ -138,7 +138,6 @@ public class Main extends AbstractPage {
         emessage = new ExternalMessage();
         convertToMessage(result, emessage, null);
 
-        view.setReloadableView(true);
         view.export("map", emessage.toMap());
         view.redirect(null, "output");
     }
@@ -254,8 +253,6 @@ public class Main extends AbstractPage {
         new TableColumn(attributes, "value");
         
         new Button(container, "call");
-        
-        view.setReloadableView(true);
     }
     
     /**

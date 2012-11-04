@@ -56,7 +56,6 @@ public class Selection {
             break;
         }
         
-        view.setReloadableView(true);
         view.export("mode", Common.CREATE);
     }
 
@@ -164,7 +163,6 @@ public class Selection {
         }
         
         model = documents.getModel(name);
-        view.setReloadableView(true);
         view.export("model", model);
         view.redirect(null, "tbstructure");
     }
@@ -189,7 +187,6 @@ public class Selection {
         shitens = new ExtendedObject[shdata.length - 1];
         System.arraycopy(shdata, 1, shitens, 0, shitens.length);
         
-        view.setReloadableView(true);
         view.redirect(null, "shstructure");
         view.export("header", shdata[0]);
         view.export("itens", shitens);

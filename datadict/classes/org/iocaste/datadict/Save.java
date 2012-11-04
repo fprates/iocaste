@@ -107,7 +107,6 @@ public class Save {
             documents.createModel(model);
             view.export("model", model);
             view.export("mode", Common.UPDATE);
-            view.setReloadableView(true);
             
             break;
         }

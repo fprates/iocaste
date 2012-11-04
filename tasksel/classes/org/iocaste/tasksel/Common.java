@@ -75,7 +75,6 @@ public class Common {
         if (app == null)
             return;
         
-        view.setReloadableView(true);
         view.redirect(app, page);
     }
 

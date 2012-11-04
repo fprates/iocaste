@@ -62,6 +62,7 @@ public class View implements Serializable {
         containers = new ArrayList<Container>();
         mpelements = new ArrayList<MultipartElement>();
         dontpushpage = false;
+        reloadable = true;
         contenttype = null;
         initparams = new HashSet<String>();
         
@@ -133,7 +134,7 @@ public class View implements Serializable {
         rpage = null;
         messagetext = null;
         messagetype = null;
-        reloadable = false;
+        reloadable = true;
         pagecall = false;
         dontpushpage = false;
     }

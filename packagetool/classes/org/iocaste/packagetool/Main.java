@@ -46,7 +46,6 @@ public class Main extends AbstractPage {
                  * gera erro de serialização.
                  */
                 view.clearExports();
-                view.setReloadableView(true);
                 view.export("models", data.getModels());
                 view.export("authorizations", data.getAuthorizations());
                 view.export("links", data.getLinks());
@@ -122,7 +121,6 @@ public class Main extends AbstractPage {
         PackageTool pkgtool = new PackageTool(this);
         
         pkgtool.install(pkgname);
-        view.setReloadableView(true);
         view.message(Const.STATUS, "package.installed");
     }
     
@@ -136,7 +134,6 @@ public class Main extends AbstractPage {
         
         pkgtool.uninstall(pkgname);
 
-        view.setReloadableView(true);
         view.message(Const.STATUS, "package.uninstalled");
     }
     

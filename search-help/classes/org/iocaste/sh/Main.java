@@ -33,6 +33,7 @@ public class Main extends AbstractPage {
     public final void choose(View vdata) {
         updateView(Request.choose(vdata));
         back(vdata);
+        vdata.setReloadableView(false);
     }
     
     /**
