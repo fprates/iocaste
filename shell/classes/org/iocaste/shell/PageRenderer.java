@@ -676,6 +676,7 @@ public class PageRenderer extends AbstractRenderer {
         PageContext pagectx_;
         Map<String, String[]> parameters;
         View view;
+        boolean connected;
         String appname, pagename, key, pagetrack = null, actionname = null;
         
         /*
@@ -789,15 +790,16 @@ public class PageRenderer extends AbstractRenderer {
         view.clearInitExports();
         
         iocaste = new Iocaste(function);
-        if (iocaste.isConnected()) {
-            appname = view.getAppName();
+        appname = view.getAppName();
+        connected = iocaste.isConnected();
+        if (connected)
             execute(appname, config.sessionid);
-            if (isSessionConnector(appname))
-               pagectx_.setUsername((String)view.getParameter("username"));
-            return pagectx_;
-        }
         
-        pagectx_.setUsername(pagectx.getUsername());
+        if (connected && isSessionConnector(appname))
+            pagectx_.setUsername((String)view.getParameter("username"));
+        else
+            pagectx_.setUsername(pagectx.getUsername());
+        
         return pagectx_;
     }
     
