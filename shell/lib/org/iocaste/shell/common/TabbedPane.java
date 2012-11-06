@@ -114,6 +114,7 @@ class OnClickHandler extends AbstractEventHandler {
      */
     @Override
     public final void onEvent(byte event, String args) {
+        View view;
         TabbedPaneItem paneitem;
         Element focus;
         
@@ -127,7 +128,9 @@ class OnClickHandler extends AbstractEventHandler {
             paneitem.setFocus(focus);
         }
         
-        pane.getView().setFocus(focus);
+        view = pane.getView();
+        view.setReloadableView(false);
+        view.setFocus(focus);
         pane.setCurrent(args);
     }
 }
