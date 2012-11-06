@@ -632,6 +632,7 @@ public class Controller {
         
         if (status.input != null) {
             config.view.setFocus(status.input);
+            config.view.setReloadableView(false);
             
             switch (status.error) {
             case EINITIAL:
