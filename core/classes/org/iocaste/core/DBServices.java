@@ -173,8 +173,6 @@ public class DBServices {
         int cols = 1;
         PreparedStatement ps = connection.prepareStatement(query);
         
-        System.err.println(query);
-        
         try {
             if (criteria != null)
                 for (Object object : criteria)
@@ -211,7 +209,6 @@ public class DBServices {
         int i = 1;
         PreparedStatement ps = connection.prepareStatement(query);
         
-        System.err.println(query);
         try {
             if (criteria != null)
                 for (Object object : criteria)
