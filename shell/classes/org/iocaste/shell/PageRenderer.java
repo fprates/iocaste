@@ -302,7 +302,7 @@ public class PageRenderer extends AbstractRenderer {
                 pagectx = createLoginContext(logid);
             
             if (pagectx.getViewData() != null)
-                pagectx = processController(req, pagectx, sessionid, this);
+                pagectx = processController(req, pagectx, sessionid);
             
             startRender(resp, pagectx);
         } catch (Exception e) {
@@ -577,6 +577,25 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
+     * @param complexid
+     * @return
+     */
+    private final String getUsername(ContextData ctxdata) {
+        String url;
+        Message message;
+        String complexid = getComplexId(ctxdata.sessionid, ctxdata.logid);
+        
+        message = new Message();
+        message.setId("get_username");
+        message.setSessionid(complexid);
+        
+        url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
+                toString();
+        return (String)Service.callServer(url, message);
+    }
+    
+    /**
+     * 
      * @param getSessionId()
      * @param appname
      * @param pagename
@@ -608,6 +627,25 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
+     * @param ctxdata
+     * @return
+     */
+    private final boolean isConnected(ContextData ctxdata) {
+        String url;
+        Message message;
+        String complexid = getComplexId(ctxdata.sessionid, ctxdata.logid);
+        
+        message = new Message();
+        message.setId("is_connected");
+        message.setSessionid(complexid);
+        
+        url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
+                toString();
+        return (boolean)Service.callServer(url, message);
+    }
+    
+    /**
+     * 
      * @param appname
      * @param complexid
      * @return
@@ -634,15 +672,6 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
-     * @param name
-     * @return
-     */
-    private final boolean isSessionConnector(String name) {
-        return sessionconnector.equals(name);
-    }
-    
-    /**
-     * 
      * @param getSessionId()
      * @param logid
      * @return
@@ -659,15 +688,12 @@ public class PageRenderer extends AbstractRenderer {
      * @param req
      * @param pagectx
      * @param sessionid
-     * @param function
      * @return
      * @throws Exception
      */
     private final PageContext processController(HttpServletRequest req,
-            PageContext pagectx, String sessionid, Function function)
-                    throws Exception {
+            PageContext pagectx, String sessionid) throws Exception {
         long sequence;
-        Iocaste iocaste;
         ControllerData config;
         ContextData contextdata;
         InputData inputdata;
@@ -676,7 +702,6 @@ public class PageRenderer extends AbstractRenderer {
         PageContext pagectx_;
         Map<String, String[]> parameters;
         View view;
-        boolean connected;
         String appname, pagename, key, pagetrack = null, actionname = null;
         
         /*
@@ -789,16 +814,12 @@ public class PageRenderer extends AbstractRenderer {
             pagectx_.addParameter(name, view.getParameter(name));
         view.clearInitExports();
         
-        iocaste = new Iocaste(function);
-        appname = view.getAppName();
-        connected = iocaste.isConnected();
-        if (connected)
+        if (isConnected(contextdata)) {
             execute(appname, config.sessionid);
-        
-        if (connected && isSessionConnector(appname))
-            pagectx_.setUsername((String)view.getParameter("username"));
-        else
-            pagectx_.setUsername(pagectx.getUsername());
+            pagectx_.setUsername(getUsername(contextdata));
+        } else {
+            pagectx_.setUsername(null);
+        }
         
         return pagectx_;
     }
