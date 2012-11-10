@@ -778,6 +778,10 @@ public class PageRenderer extends AbstractRenderer {
         if (pagename == null)
             pagename = pagectx.getName();
         
+        if (config.view.getAppName().equals(appname) &&
+                (config.view.getPageName().equals(pagename)))
+            view.setReloadableView(false);
+        
         /*
          * testa autorização para execução e sequencia de telas
          */
