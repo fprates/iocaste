@@ -96,6 +96,7 @@ public abstract class AbstractPage extends AbstractFunction {
         Locale locale = new Iocaste(this).getLocale();
         
         view.setLocale(locale);
+        init(view);
         method = getClass().getMethod(view.getPageName(), View.class);
         method.invoke(this, view);
         if (view.getMessages() == null) {
@@ -122,6 +123,12 @@ public abstract class AbstractPage extends AbstractFunction {
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
     }
+    
+    /**
+     * 
+     * @param view
+     */
+    protected void init(View view) { }
     
     /**
      * Atualiza uma visão, não necessariamente a visão atual.
