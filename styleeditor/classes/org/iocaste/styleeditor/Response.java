@@ -10,6 +10,7 @@ import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.PageControl;
+import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -17,8 +18,8 @@ import org.iocaste.shell.common.View;
 
 public class Response {
 
-    public static final void selection(View view, Function function)
-            throws Exception {
+    public static final void selection(View view, Function function) {
+        SearchHelp sh;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "selection");
@@ -27,6 +28,12 @@ public class Response {
         pagecontrol.add("home");
         item.setModelItem(new Documents(function).getModel("STYLE").
                 getModelItem("NAME"));
+        
+        sh = new SearchHelp(form, "SH_STYLE");
+        sh.setModelName("STYLE");
+        sh.setExport("NAME");
+        sh.addModelItemName("NAME");
+        item.setSearchHelp(sh);
         
         item.setObligatory(true);
         
@@ -38,8 +45,7 @@ public class Response {
         view.setTitle("style-editor");
     }
     
-    public static final void style(View view, Function function)
-            throws Exception {
+    public static final void style(View view, Function function) {
         Table itens;
         ExtendedObject[] elements = view.getParameter("elements");
         Form container = new Form(view, "main");

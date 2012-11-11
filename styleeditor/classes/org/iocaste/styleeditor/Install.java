@@ -15,7 +15,11 @@ public class Install {
         InstallData data = new InstallData();
         Map<String, String> messages = new HashMap<String, String>();
         
+        messages.put("create", "Criar");
+        messages.put("estilo", "Estilo");
+        messages.put("show", "Exibir");
         messages.put("STYLE", "Editor de estilos");
+        messages.put("update", "Editar");
         data.setMessages("pt_BR", messages);
         
         authorization = new Authorization("STYLEEDITOR.EXECUTE");
