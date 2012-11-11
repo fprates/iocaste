@@ -49,7 +49,8 @@ public class IocasteServlet extends ServerServlet {
         
         if (function == null)
             throw new Exception("Invalid form class.");
-        
+
         register(function);
+        initialized = true;
     }
 }
