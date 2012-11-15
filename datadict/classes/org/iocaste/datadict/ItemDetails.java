@@ -18,26 +18,20 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 
 public class ItemDetails {
-
+    
     /**
      * 
      * @param view
      * @param function
+     * @param context
      */
-    public static final void main(View view, Function function) {
+    public static final void main(View view, Function function,
+            Context context) {
         DataItem dataitem;
-        String itemname = view.getParameter("item.name");
-        String modelname = view.getParameter("model.name");
-        String itemref = view.getParameter("item.reference");
-        String modelref = view.getParameter("model.reference");
-        boolean upcase = view.getParameter("item.upcase");
-        String sh = view.getParameter("item.sh");
-        String classfield = view.getParameter("item.classfield");
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         Frame techframe, fkframe = new Frame(container, "foreign.key");
         DataForm techform, fkform = new DataForm(fkframe, "fkform");
-        byte mode = Common.getMode(view);
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel("MODELITEM");
         
@@ -48,24 +42,24 @@ public class ItemDetails {
          */
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "model.name");
         dataitem.setModelItem(model.getModelItem("MODEL"));
-        dataitem.set(modelname);
+        dataitem.set(context.detail.modelname);
         dataitem.setEnabled(false);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "item.name");
         dataitem.setModelItem(model.getModelItem("NAME"));
-        dataitem.set(itemname);
+        dataitem.set(context.detail.itemname);
         dataitem.setEnabled(false);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.model");
         dataitem.setModelItem(model.getModelItem("MODEL"));
-        dataitem.set(modelref);
-        dataitem.setEnabled(mode != Common.SHOW);
+        dataitem.set(context.detail.modelref);
+        dataitem.setEnabled(context.mode != Common.SHOW);
         view.setFocus(dataitem);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.item");
         dataitem.setModelItem(model.getModelItem("NAME"));
-        dataitem.set(itemref);
-        dataitem.setEnabled(mode != Common.SHOW);
+        dataitem.set(context.detail.itemref);
+        dataitem.setEnabled(context.mode != Common.SHOW);
 
         /*
          * technical details
@@ -75,39 +69,36 @@ public class ItemDetails {
         
         dataitem = new DataItem(techform, Const.TEXT_FIELD, "item.classfield");
         dataitem.setModelItem(model.getModelItem("ATTRIB"));
-        dataitem.set(classfield);
-        dataitem.setEnabled(mode != Common.SHOW);
+        dataitem.set(context.detail.classfield);
+        dataitem.setEnabled(context.mode != Common.SHOW);
         
         dataitem = new DataItem(techform, Const.TEXT_FIELD, "item.sh");
         dataitem.setModelItem(documents.getModel("SH_REFERENCE").
                 getModelItem("NAME"));
-        dataitem.set(sh);
-        dataitem.setEnabled(mode != Common.SHOW);
+        dataitem.set(context.detail.sh);
+        dataitem.setEnabled(context.mode != Common.SHOW);
         
         dataitem = new DataItem(techform, Const.CHECKBOX, "item.upcase");
         dataitem.setModelItem(documents.getModel("DATAELEMENT").
                 getModelItem("UPCASE"));
-        dataitem.set(upcase);
-        dataitem.setEnabled(mode != Common.SHOW);
+        dataitem.set(context.detail.upcase);
+        dataitem.setEnabled(context.mode != Common.SHOW);
         
-        if (mode != Common.SHOW)
+        if (context.mode != Common.SHOW)
             new Button(container, "detailsupdate");
         
         view.setTitle("item-detail-editor");
     }
-
+    
     /**
      * 
      * @param view
+     * @param context
      */
-    public static final void select(View view) {
+    public static final void select(View view, Context context) {
         DataForm form = view.getElement("header");
-        String itemname, modelref, itemref, classfield, sh, modelname =
-                form.get("modelname").get();
-        boolean upcase;
-        TableItem selected = null;
         Table itens = view.getElement("itens");
-        byte mode = Common.getMode(view);
+        TableItem selected = null;
         
         for (TableItem item : itens.getItens()) {
             if (selected != null) {
@@ -129,22 +120,16 @@ public class ItemDetails {
             return;
         }
         
-        itemname = Common.getTableValue(selected, "item.name");
-        modelref = Common.getTableValue(selected,"model.reference");
-        itemref = Common.getTableValue(selected, "item.reference");
-        upcase = Common.getTableValue(selected, "item.upcase");
-        classfield = Common.getTableValue(selected, "item.classfield");
-        sh = Common.getTableValue(selected, "item.sh");
+        context.detail = new ItemDetail();
+        context.detail.modelname = form.get("modelname").get();
+        context.detail.itemname = Common.getTableValue(selected, "item.name");
+        context.detail.modelref = Common.getTableValue(selected,"model.reference");
+        context.detail.itemref = Common.getTableValue(selected, "item.reference");
+        context.detail.upcase = Common.getTableValue(selected, "item.upcase");
+        context.detail.classfield = Common.getTableValue(selected, "item.classfield");
+        context.detail.sh = Common.getTableValue(selected, "item.sh");
         
-        view.export("mode", mode);
-        view.export("model.name", modelname);
-        view.export("item.name", itemname);
-        view.export("model.reference", modelref);
-        view.export("item.reference", itemref);
-        view.export("item.upcase", upcase);
-        view.export("item.classfield", classfield);
-        view.export("item.sh", sh);
-        view.redirect(null, "detailsview");
+        view.redirect("detailsview");
     }
     
     /**

@@ -11,9 +11,8 @@ public class Add {
      * @param view
      * @param function
      */
-    public static final void main(View view, Function function) {
+    public static final void main(View view, Function function, byte mode) {
         ItemConfig config;
-        byte mode = Common.getMode(view);
         
         if (Common.hasItemDuplicated(view))
             return;

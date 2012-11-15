@@ -10,7 +10,7 @@ import org.iocaste.shell.common.View;
 
 public class CodeGeneration {
 
-    public static final void main(View view) {
+    public static final List<String> main(View view, Context context) {
         String settype;
         DataForm form = view.getElement("structure.form");
         Table itens = view.getElement("itens");
@@ -20,7 +20,6 @@ public class CodeGeneration {
         StringBuilder getter = new StringBuilder();
         StringBuilder setter = new StringBuilder();
         int t = parts.length - 1;
-        byte modo = Common.getMode(view);
         List<String> code = new ArrayList<String>();
         List<String> getters = new ArrayList<String>();
         List<String> setters = new ArrayList<String>();
@@ -48,7 +47,7 @@ public class CodeGeneration {
             setter.setLength(0);
             
             value = Common.getTableValue(item, "item.type");
-            if (modo == Common.SHOW) {
+            if (context.mode == Common.SHOW) {
                 if (value.equals("char"))
                     value = "0";
                 
@@ -115,16 +114,16 @@ public class CodeGeneration {
         
         sb.setLength(0);
         sb.append("    public ").append(classname).append("() { }");
+        
         code.add("");
         code.add(sb.toString());
-        
         code.add("");
         code.addAll(getters);
         code.addAll(setters);
-        
         code.add("}");
         
-        view.export("code", code.toArray(new String[0]));
-        view.redirect(null, "list");
+        view.redirect("list");
+        
+        return code;
     }
 }

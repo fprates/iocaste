@@ -19,7 +19,7 @@ public class Rename {
      * @param view
      * @param function
      */
-    public static final void dialog(View view, Function function) {
+    public static final void dialog(View view, Function function, String name) {
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "rename.form");
@@ -30,7 +30,7 @@ public class Rename {
         
         pagecontrol.add("back");
         oldname.setEnabled(false);
-        oldname.set(view.getParameter("oldname"));
+        oldname.set(name);
         oldname.setDataElement(delement);
         
         newname.setObligatory(true);
@@ -44,12 +44,11 @@ public class Rename {
      * 
      * @param view
      */
-    public static final void main(View view) {
+    public static final String main(View view) {
         DataForm form = view.getElement("modelform");
-        String oldname = form.get("modelname").get();
         
-        view.export("oldname", oldname);
-        view.redirect(null, "renamedialog");
+        view.redirect("renamedialog");
+        return form.get("modelname").get();
     }
     
     /**

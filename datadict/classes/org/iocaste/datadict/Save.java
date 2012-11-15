@@ -20,8 +20,9 @@ public class Save {
      * 
      * @param view
      * @param function
+     * @param context
      */
-    public static final void main(View view, Function function) {
+    public static final void main(View view, Function function, Context context) {
         DocumentModelItem modelitem, reference;
         DataElement dataelement;
         String value, modelref, itemref, itemname;
@@ -29,22 +30,21 @@ public class Save {
         Documents documents = new Documents(function);
         DataForm structure = view.getElement("header");
         Table itens = view.getElement("itens");
-        DocumentModel model = new DocumentModel();
-        byte modo = Common.getMode(view);
         
         if (Common.hasItemDuplicated(view))
             return;
         
-        model.setName((String)structure.get("modelname").get());
-        model.setClassName((String)structure.get("modelclass").get());
-        model.setTableName((String)structure.get("modeltable").get());
+        context.model = new DocumentModel();
+        context.model.setName((String)structure.get("modelname").get());
+        context.model.setClassName((String)structure.get("modelclass").get());
+        context.model.setTableName((String)structure.get("modeltable").get());
         
         for (TableItem item : itens.getItens()) {
             itemname = Common.getTableValue(item, "item.name");
             
             value = Common.getTableValue(item, "item.element");
             if (value == null) {
-                value = new StringBuilder(model.getName()).
+                value = new StringBuilder(context.model.getName()).
                         append(".").append(itemname).toString();
                 Common.setTableValue(item, "item.element", value);
             }
@@ -83,30 +83,29 @@ public class Save {
             modelitem.setSearchHelp((String)Common.
                     getTableValue(item, "item.sh"));
             
-            model.add(modelitem);
+            context.model.add(modelitem);
             
             key = item.get("item.key");
             if (!key.isSelected())
                 continue;
             
-            model.add(new DocumentModelKey(modelitem));
+            context.model.add(new DocumentModelKey(modelitem));
         }
         
-        switch (modo) {
+        switch (context.mode) {
         case Common.UPDATE:
-            documents.updateModel(model);
+            documents.updateModel(context.model);
             
             break;
         case Common.CREATE:
-            switch (documents.validate(model)) {
+            switch (documents.validate(context.model)) {
             case Documents.TABLE_ALREADY_ASSIGNED:
                 view.message(Const.ERROR, "table.already.assigned");
                 return;
             }
             
-            documents.createModel(model);
-            view.export("model", model);
-            view.export("mode", Common.UPDATE);
+            documents.createModel(context.model);
+            context.mode = Common.UPDATE;
             
             break;
         }

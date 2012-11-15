@@ -1,5 +1,7 @@
 package org.iocaste.datadict;
 
+import java.util.List;
+
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
@@ -11,7 +13,12 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
+    private List<String> code;
+    private String oldname;
+    private Context context;
+    
     public Main() {
+        context = new Context();
         export("install", "install");
     }
     
@@ -19,8 +26,8 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void add(View vdata) {
-        Add.main(vdata, this);
+    public final void add(View view) {
+        Add.main(view, this, context.mode);
     }
     
     /**
@@ -28,7 +35,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void addshitem(View view) {
-        SHStructure.insert(view);
+        SHStructure.insert(view, context);
     }
     
     /**
@@ -36,7 +43,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void create(View view) {
-        Selection.create(view, this);
+        Selection.create(view, this, context);
     }
     
     /**
@@ -91,15 +98,15 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void detailsview(View view) {
-        ItemDetails.main(view, this);
+        ItemDetails.main(view, this, context);
     }
     
     /**
      * 
      * @param vdata
      */
-    public final void generateclass(View vdata) {
-        CodeGeneration.main(vdata);
+    public final void generateclass(View view) {
+        code = CodeGeneration.main(view, context);
     }
     
     /**
@@ -116,7 +123,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void itemdetails(View view) {
-        ItemDetails.select(view);
+        ItemDetails.select(view, context);
     }
     
     /**
@@ -126,11 +133,10 @@ public class Main extends AbstractPage {
     public final void list(View view) {
         Form container = new Form(view, "list");
         PageControl pagecontrol = new PageControl(container);
-        String[] lines = view.getParameter("code");
-        HtmlTag code = new HtmlTag(container, "code");
+        HtmlTag codelist = new HtmlTag(container, "codelist");
         
         pagecontrol.add("back");
-        code.setLines(lines);
+        codelist.setLines(code.toArray(new String[0]));
     }
     
     /**
@@ -146,7 +152,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void rename(View view) {
-        Rename.main(view);
+        oldname = Rename.main(view);
     }
     
     /**
@@ -154,7 +160,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void renamedialog(View view) {
-        Rename.dialog(view, this);
+        Rename.dialog(view, this, oldname);
     }
     
     /**
@@ -170,7 +176,7 @@ public class Main extends AbstractPage {
      * @param vdata
      */
     public final void save(View view) {
-        Save.main(view, this);
+        Save.main(view, this, context);
     }
     
     /**
@@ -178,7 +184,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void savesh(View view) {
-        SHStructure.save(view, this);
+        SHStructure.save(view, this, context);
     }
     
     /**
@@ -190,30 +196,30 @@ public class Main extends AbstractPage {
         
         switch (op) {
         case Common.TABLE:
-            Selection.readtb(view, this);
+            Selection.readtb(view, this, context);
             break;
         case Common.SH:
-            Selection.readsh(view, this);
+            Selection.readsh(view, this, context);
             break;
         }
         
-        view.export("mode", Common.SHOW);
+        context.mode = Common.SHOW;
     }
     
     /**
      * 
      * @param vdata
      */
-    public final void shstructure(View vdata) {
-        SHStructure.main(vdata, this);
+    public final void shstructure(View view) {
+        SHStructure.main(view, this, context);
     }
     
     /**
      * 
-     * @param vdata
+     * @param view
      */
-    public final void tbstructure(View vdata) {
-        TableStructure.main(vdata, this);
+    public final void tbstructure(View view) {
+        TableStructure.main(view, this, context);
     }
     
     /**
@@ -225,13 +231,13 @@ public class Main extends AbstractPage {
         
         switch (op) {
         case Common.TABLE:
-            Selection.readtb(view, this);
+            Selection.readtb(view, this, context);
             break;
         case Common.SH:
-            Selection.readsh(view, this);
+            Selection.readsh(view, this, context);
             break;
         }
         
-        view.export("mode", Common.UPDATE);
+        context.mode = Common.UPDATE;
     }
 }

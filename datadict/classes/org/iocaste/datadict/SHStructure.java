@@ -79,8 +79,11 @@ public class SHStructure {
     /**
      * 
      * @param view
+     * @param function
+     * @param context
      */
-    public static final void main(View view, Function function) {
+    public static final void main(View view, Function function,
+            Context context) {
         DataItem ditem;
         String name;
         ExtendedObject[] oitens;
@@ -91,13 +94,12 @@ public class SHStructure {
         DocumentModel model = documents.getModel("SEARCH_HELP");
         DataForm header = new DataForm(container, "header");
         Table itens = new Table(container, "itens");
-        byte mode = Common.getMode(view);
         
         pagecontrol.add("home");
         pagecontrol.add("back");
         header.importModel(model);
         
-        if (mode != Common.CREATE)
+        if (context.mode != Common.CREATE)
             header.setObject((ExtendedObject)view.getParameter("header"));
         
         validatorcfg = new ValidatorConfig();
@@ -130,8 +132,8 @@ public class SHStructure {
                 ditem.setValidator(SHItemValidator.class);
             }
             
-            ditem.setObligatory(mode != Common.SHOW);
-            ditem.setEnabled(mode != Common.SHOW);
+            ditem.setObligatory(context.mode != Common.SHOW);
+            ditem.setEnabled(context.mode != Common.SHOW);
         }
         
         model = documents.getModel("SH_ITENS");
@@ -140,20 +142,20 @@ public class SHStructure {
         itens.getColumn("NAME").setVisible(false);
         itens.getColumn("SEARCH_HELP").setVisible(false);
         
-        switch (mode) {
+        switch (context.mode) {
         case Common.SHOW:
             itens.setMark(false);
             
             oitens = view.getParameter("itens");
             for (ExtendedObject item : oitens)
-                insertItem(mode, itens, view, item);
+                insertItem(context.mode, itens, view, item);
             
             break;
             
         case Common.CREATE:
             itens.setMark(true);
             
-            insertItem(mode, itens, view, null);
+            insertItem(context.mode, itens, view, null);
             
             new Button(container, "savesh");
             new Button(container, "addshitem");
@@ -166,7 +168,7 @@ public class SHStructure {
             
             oitens = view.getParameter("itens");
             for (ExtendedObject item : oitens)
-                insertItem(mode, itens, view, item);
+                insertItem(context.mode, itens, view, item);
             
             new Button(container, "savesh");
             new Button(container, "addshitem");
@@ -175,15 +177,17 @@ public class SHStructure {
             break;
         }
         
-        view.setTitle(TITLE[mode]);
+        view.setTitle(TITLE[context.mode]);
     }
     
     /**
      * 
      * @param view
      * @param function
+     * @param context
      */
-    public static final void save(View view, Function function) {
+    public static final void save(View view, Function function,
+            Context context) {
         ExtendedObject[] oitens;
         int i = 0;
         SHLib shlib = new SHLib(function);
@@ -191,15 +195,14 @@ public class SHStructure {
         ExtendedObject object = header.getObject();
         Table itens = view.getElement("itens");
         oitens = new ExtendedObject[itens.length()];
-        byte mode = Common.getMode(view);
         
         for (TableItem item : itens.getItens())
             oitens[i++] = item.getObject();
         
-        switch (mode) {
+        switch (context.mode) {
         case Common.CREATE:
             shlib.save(object, oitens);
-            view.export("mode", Common.UPDATE);
+            context.mode = Common.UPDATE;
             view.setTitle(TITLE[Common.UPDATE]);
             
             break;
@@ -216,9 +219,9 @@ public class SHStructure {
      * 
      * @param view
      */
-    public static final void insert(View view) {
+    public static final void insert(View view, Context context) {
         Table itens = view.getElement("itens");
         
-        insertItem(Common.getMode(view), itens, view, null);
+        insertItem(context.mode, itens, view, null);
     }
 }

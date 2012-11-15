@@ -19,32 +19,18 @@ import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.View;
 
 public class TableStructure {
-    
-    /**
-     * 
-     * @param vdata
-     * @return
-     */
-    private static final String getModelName(View vdata) {
-        byte mode = Common.getMode(vdata);
-        DocumentModel model = vdata.getParameter("model");
-        
-        if (mode == Common.CREATE)
-            return vdata.getParameter("modelname");
-        else
-            return model.getName();
-    }
 
     /**
      * 
      * @param view
      * @param function
+     * @param context
      */
-    public static final void main(View view, Function function) {
+    public static final void main(View view, Function function,
+            Context context) {
         Table itens;
-        String name, title, modelname;
+        String name, title;
         TableColumn column;
-        byte mode = Common.getMode(view);
         Form main = new Form(view, "datadict.structure");
         PageControl pagecontrol = new PageControl(main);
         DataForm structure = new DataForm(main, "header");
@@ -53,13 +39,12 @@ public class TableStructure {
         
         pagecontrol.add("home");
         pagecontrol.add("back");
-        modelname = getModelName(view);
         new DataItem(structure, Const.TEXT_FIELD, "modelname");
         view.setFocus(new DataItem(structure, Const.TEXT_FIELD, "modeltext"));
         new DataItem(structure, Const.TEXT_FIELD, "modelclass");
         new DataItem(structure, Const.TEXT_FIELD, "modeltable");
         
-        prepareHeader(structure, modelname, mode, function);
+        prepareHeader(structure, context, function);
         
         new Button(main, "itemdetails");
         
@@ -81,9 +66,9 @@ public class TableStructure {
         }
         
         itens.setMark(true);
-        prepareItens(itens, mode, modelname, function, view);
+        prepareItens(itens, context, function, view);
         
-        switch (mode) {
+        switch (context.mode) {
         case Common.UPDATE:
             itens.setMark(true);
             title = "datadict-update";
@@ -119,18 +104,16 @@ public class TableStructure {
     /**
      * 
      * @param form
-     * @param modelname
-     * @param model
-     * @param mode
+     * @param context
      * @param function
      */
-    private static final void prepareHeader(DataForm form, String modelname,
-            byte mode, Function function) {
+    private static final void prepareHeader(DataForm form, Context context,
+            Function function) {
         String name;
         DataItem dataitem;
         DataElement[] references = new DataElement[3];
         Documents docs = new Documents(function);
-        DocumentModel model = docs.getModel(modelname);
+        DocumentModel model = docs.getModel(context.modelname);
         
         references[Common.MODELNAME] = docs.getDataElement("MODEL.NAME");
         references[Common.MODELTABLE] = docs.getDataElement("MODEL.TABLE");
@@ -145,7 +128,7 @@ public class TableStructure {
             
             if (name.equals("modelname")) {
                 dataitem.setObligatory(false);
-                dataitem.set(modelname);
+                dataitem.set(context.modelname);
                 dataitem.setEnabled(false);
                 dataitem.setDataElement(references[Common.MODELNAME]);
                 
@@ -153,8 +136,8 @@ public class TableStructure {
             }
             
             if (name.equals("modeltable")) {
-                dataitem.setEnabled((mode == Common.CREATE)? true : false);
-                dataitem.setObligatory((mode == Common.CREATE)? true : false);
+                dataitem.setEnabled(context.mode == Common.CREATE);
+                dataitem.setObligatory(context.mode == Common.CREATE);
                 dataitem.setDataElement(references[Common.MODELTABLE]);
                 
                 if (model == null)
@@ -165,7 +148,7 @@ public class TableStructure {
             }
             
             if (name.equals("modelclass")) {
-                dataitem.setEnabled((mode == Common.SHOW)?false:true);
+                dataitem.setEnabled(!(context.mode == Common.SHOW));
                 dataitem.setObligatory(false);
                 dataitem.setDataElement(references[Common.MODELCLASS]);
                 
@@ -181,21 +164,21 @@ public class TableStructure {
     /**
      * 
      * @param itens
-     * @param mode
-     * @param model
+     * @param context
      * @param function
+     * @param view
      */
-    private static final void prepareItens(Table itens, byte mode,
-            String modelname, Function function, View view) {
+    private static final void prepareItens(Table itens, Context context,
+            Function function, View view) {
         Map<Common.ItensNames, DataElement> references =
                 Common.getFieldReferences(function);
         Documents documents = new Documents(function);
         DocumentModel model = documents.getModel("MODELITEM");
-        DocumentModel usermodel = documents.getModel(modelname);
+        DocumentModel usermodel = documents.getModel(context.modelname);
         ItemConfig itemconfig = new ItemConfig();
 
         itemconfig.setTable(itens);
-        itemconfig.setMode(mode);
+        itemconfig.setMode(context.mode);
         itemconfig.setModel(model);
         itemconfig.setReferences(references);
         

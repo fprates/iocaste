@@ -1,6 +1,5 @@
 package org.iocaste.datadict;
 
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
@@ -24,7 +23,8 @@ public class Selection {
      * @param view
      * @param function
      */
-    public static final void create(View view, Function function) {
+    public static final void create(View view, Function function,
+            Context context) {
         SHLib shlib;
         Documents documents = new Documents(function);
         DataForm form = view.getElement("model");
@@ -39,8 +39,8 @@ public class Selection {
             }
             
             view.redirect(null, "tbstructure");
-            view.export("modelname", name);
-            view.export("model", null);
+            context.modelname = name;
+            context.model = null;
             
             break;
         case Common.SH:
@@ -51,12 +51,12 @@ public class Selection {
             }
             
             view.redirect(null, "shstructure");
-            view.export("shname", name);
+            context.shname = name;
             
             break;
         }
         
-        view.export("mode", Common.CREATE);
+        context.mode = Common.CREATE;
     }
 
     /**
@@ -151,8 +151,8 @@ public class Selection {
      * @param view
      * @param function
      */
-    public static final void readtb(View view, Function function) {
-        DocumentModel model;
+    public static final void readtb(View view, Function function,
+            Context context) {
         DataForm form = view.getElement("model");
         String name = form.get("name").get();
         Documents documents = new Documents(function);
@@ -162,9 +162,9 @@ public class Selection {
             return;
         }
         
-        model = documents.getModel(name);
-        view.export("model", model);
-        view.redirect(null, "tbstructure");
+        context.modelname = name;
+        context.model = documents.getModel(name);
+        view.redirect("tbstructure");
     }
     
     /**
@@ -172,8 +172,8 @@ public class Selection {
      * @param view
      * @param function
      */
-    public static final void readsh(View view, Function function) {
-        ExtendedObject[] shitens;
+    public static final void readsh(View view, Function function,
+            Context context) {
         SHLib shlib = new SHLib(function);
         DataForm form = view.getElement("model");
         String name = form.get("name").get();
@@ -184,12 +184,11 @@ public class Selection {
             return;
         }
         
-        shitens = new ExtendedObject[shdata.length - 1];
-        System.arraycopy(shdata, 1, shitens, 0, shitens.length);
+        context.shitens = new ExtendedObject[shdata.length - 1];
+        System.arraycopy(shdata, 1, context.shitens, 0, context.shitens.length);
+        context.header = shdata[0];
+        context.shname = name;
         
-        view.redirect(null, "shstructure");
-        view.export("header", shdata[0]);
-        view.export("itens", shitens);
-        view.export("shname", name);
+        view.redirect("shstructure");
     }
 }
