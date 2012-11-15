@@ -1,5 +1,7 @@
 package org.iocaste.dataview;
 
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
@@ -7,6 +9,9 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
+    private ExtendedObject[] itens;
+    private DocumentModel model;
+    private Const viewtype;
     
     public Main() {
         export("install", "install");
@@ -30,10 +35,13 @@ public class Main extends AbstractPage {
     
     /**
      * 
-     * @param vdata
+     * @param view
      */
-    public final void edit(View vdata) {
-        Request.load(vdata, this, Common.UPDATE);
+    public final void edit(View view) {
+        viewtype = Const.SINGLE;
+        itens = Request.load(view, this);
+        if (itens != null)
+            model = itens[0].getModel();
     }
     
     /**
@@ -41,7 +49,7 @@ public class Main extends AbstractPage {
      * @param vdata
      */
     public final void form(View vdata) {
-        Response.form(vdata, this);
+        Response.form(vdata, model);
     }
     
     /**
@@ -113,8 +121,8 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void select(View vdata) {
-        Response.select(vdata, this);
+    public final void select(View view) {
+        Response.select(view, this, model, itens, viewtype);
     }
     
     /**
@@ -122,6 +130,9 @@ public class Main extends AbstractPage {
      * @param vdata
      */
     public final void show(View vdata) {
-        Request.load(vdata, this, Common.DISPLAY);
+        viewtype = Const.SINGLE;
+        itens = Request.load(vdata, this);
+        if (itens != null)
+            model = itens[0].getModel();
     }
 }

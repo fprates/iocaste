@@ -24,13 +24,12 @@ public class Response {
      * 
      * @param vdata
      */
-    public static final void form(View vdata, Function function) {
+    public static final void form(View view, DocumentModel model) {
         DataElement dataelement;
         DataItem item;
         DataForm form;
-        Form container = new Form(vdata, "form");
+        Form container = new Form(view, "form");
         PageControl pagecontrol = new PageControl(container);
-        DocumentModel model = vdata.getParameter("model");
         
         pagecontrol.add("back");
         
@@ -81,15 +80,17 @@ public class Response {
     /**
      * 
      * @param view
+     * @param function
+     * @param model
+     * @param itens
+     * @param viewtype
      */
-    public static final void select(View view, Function function) {
+    public static final void select(View view, Function function,
+            DocumentModel model, ExtendedObject[] itens, Const viewtype) {
         boolean key;
         Form container = new Form(view, "dataview.container");
         PageControl pagecontrol = new PageControl(container);
-        ExtendedObject[] itens = view.getParameter("model.regs");
-        DocumentModel model = view.getParameter("model");
         Table table = new Table(container, "selection_view");
-        Const viewtype = view.getParameter("view.type");
         
         pagecontrol.add("home");
         pagecontrol.add("back");

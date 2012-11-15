@@ -43,12 +43,8 @@ public class Request {
      * 
      * @param vdata
      */
-    public static final void insert(View vdata) {
-        DocumentModel model = vdata.getParameter("model");
-        
-        vdata.clearExports();
-        vdata.export("model", model);
-        vdata.redirect("form");
+    public static final void insert(View view) {
+        view.redirect("form");
     }
     
     /**
@@ -84,29 +80,24 @@ public class Request {
         vdata.message(Const.STATUS, "insert.successful");
     }
     
-    public static final void load(View view, Function function, byte mode) {
+    public static final ExtendedObject[] load(View view, Function function) {
         ExtendedObject[] itens;
         InputComponent input = ((DataForm)view.getElement("model")).
                 get("model.name");
         String query, modelname = input.get();
         Documents documents = new Documents(function);
-        DocumentModel model = documents.getModel(modelname);
         
-        if (model == null) {
+        if (documents.getModel(modelname) == null) {
             view.message(Const.ERROR, "invalid.model");
-            return;
+            return null;
         }
         
         query = new StringBuilder("from ").append(modelname).toString();
         itens = documents.select(query);
         
-        view.clearExports();
-        view.export("mode", mode);
-        view.export("view.type", Const.SINGLE);
-        view.export("model", model);
-        view.export("model.regs", itens);
         view.redirect("select");
         
+        return itens;
     }
     
     /**
