@@ -6,15 +6,14 @@ import org.iocaste.protocol.ServerServlet;
 
 public class IocasteServlet extends ServerServlet {
     private static final long serialVersionUID = 5705731493914203569L;
-    private boolean initialized;
-
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.ServerServlet#config()
      */
     @Override
     protected final void config() {
-        initialized = false;
+        setSingleton(false);
     }
     
     /**
@@ -41,16 +40,15 @@ public class IocasteServlet extends ServerServlet {
     @Override
     protected final void preRun(Message message) throws Exception {
         Function function;
+        String sessionid = message.getSessionid();
         
-        if (initialized)
+        if (isSessionRegistered(sessionid))
             return;
         
         function = initFunction("form");
-        
         if (function == null)
             throw new Exception("Invalid form class.");
 
-        register(function);
-        initialized = true;
+        register(sessionid, function);
     }
 }
