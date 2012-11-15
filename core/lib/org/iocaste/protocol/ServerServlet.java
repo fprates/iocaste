@@ -12,24 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class ServerServlet extends HttpServlet {
     private static final long serialVersionUID = 7408336035974886402L;
     private Map<String, Function> functions;
+    private Map<String, Map<String, Function>> sfunctions;
     private HttpServletRequest req;
     private HttpServletResponse resp;
     private Map<String, Map<String, Object[]>> authorized;
+    private boolean singleton;
     
     public ServerServlet() {
-        functions = new HashMap<String, Function>();
-        authorized = new HashMap<String, Map<String, Object[]>>();
-        
+        functions = new HashMap<>();
+        sfunctions = new HashMap<>();
+        authorized = new HashMap<>();
+        singleton = true;
         config();
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param function
-     */
-    private final void addFunction(String name, Function function) {
-        functions.put(name, function);
     }
     
     /**
@@ -70,14 +64,13 @@ public abstract class ServerServlet extends HttpServlet {
         Message message;
         Function function;
         Service service;
-        String functionid;
+        String functionid, complexid;
         String sessionid = req.getSession().getId();
         
         this.req = req;
         this.resp = resp;
         
         service = new Service(sessionid, getUrl());
-        
         configureStreams(service);
         
         try {
@@ -88,14 +81,21 @@ public abstract class ServerServlet extends HttpServlet {
         
         try {
             preRun(message);
-            
             functionid = message.getId();
             if (functionid == null)
                 throw new Exception("Function not specified.");
             
-            function = functions.get(functionid);
+            if (singleton) {
+                function = functions.get(functionid);
+            } else {
+                complexid = message.getSessionid();
+                function = sfunctions.get(complexid).get(functionid);
+            }
+            
             if (function == null)
-                throw new Exception("Function \""+functionid+"\" not registered.");
+                throw new Exception(new StringBuilder("Function \"").
+                        append(functionid).
+                        append("\" not registered.").toString());
             
             function.setServletContext(getServletContext());
             function.setServerName(getServerName());
@@ -158,6 +158,15 @@ public abstract class ServerServlet extends HttpServlet {
     
     /**
      * 
+     * @param sessionid
+     * @return
+     */
+    protected final boolean isSessionRegistered(String sessionid) {
+        return sfunctions.containsKey(sessionid);
+    }
+    
+    /**
+     * 
      * @param message
      * @throws Exception
      */
@@ -189,6 +198,28 @@ public abstract class ServerServlet extends HttpServlet {
      */
     protected void register(Function function) {
         for (String method : function.getMethods())
-            addFunction(method, function);
+            functions.put(method, function);
+    }
+    
+    /**
+     * 
+     * @param sessionid
+     * @param function
+     */
+    protected void register(String sessionid, Function function) {
+        Map<String, Function> functions = new HashMap<>();
+        
+        for (String method : function.getMethods())
+            functions.put(method, function);
+        
+        sfunctions.put(sessionid, functions);
+    }
+    
+    /**
+     * 
+     * @param singleton
+     */
+    protected final void setSingleton(boolean singleton) {
+        this.singleton = singleton;
     }
 }
