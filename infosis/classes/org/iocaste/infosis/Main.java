@@ -19,6 +19,7 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
+    private Object[][] users;
 
     public Main() {
         export("install", "install");
@@ -49,7 +50,6 @@ public class Main extends AbstractPage {
         Table itens;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
-        Object[][] users = view.getParameter("itens");
 
         pagecontrol.add("back");
         
@@ -149,23 +149,22 @@ public class Main extends AbstractPage {
         Object[] sessions;
         Map<String, Object> session;
         Iocaste iocaste = new Iocaste(this);
-        String[] users = iocaste.getConnectedUsers();
-        Object[][] itens = new Object[users.length][3];
+        String[] usernames = iocaste.getConnectedUsers();
         int j, i = 0;
-        
-        for (String username: users) {
+
+        users = new Object[usernames.length][3];
+        for (String username: usernames) {
             info = iocaste.getUserInfo(username);
             sessions = (Object[])info.get("sessions");
             j = 0;
             for (Object object : sessions) {
                 session = (Map<String, Object>)object;
-                itens[i][j++] = username;
-                itens[i][j++] = session.get("terminal");
-                itens[i++][j] = session.get("connection.time");
+                users[i][j++] = username;
+                users[i][j++] = session.get("terminal");
+                users[i++][j] = session.get("connection.time");
             }
         }
         
-        view.export("itens", itens);
         view.redirect("list");
     }
     
