@@ -9,6 +9,7 @@ import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     private Map<String, String> pkgsdata;
+    private InstallData data;
     
     public Main() {
         export("install", "install");
@@ -19,7 +20,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void info(View view) {
-        Request.info(view, this);
+        data = Request.info(view, this);
     }
 
     /*
@@ -70,6 +71,6 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void printinfo(View view) {
-        Response.printInfo(view);
+        Response.printInfo(view, data);
     }
 }

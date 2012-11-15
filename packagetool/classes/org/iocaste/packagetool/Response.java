@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.user.Authorization;
@@ -79,15 +80,16 @@ public class Response {
     /**
      * 
      * @param view
+     * @param data
      */
-    public final static void printInfo(View view) {
+    public final static void printInfo(View view, InstallData data) {
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
-        Map<String, String> links = view.getParameter("links");
-        DocumentModel[] models = view.getParameter("models");
-        Authorization[] authorizations = view.getParameter("authorizations");
-        String[] numbers = view.getParameter("numbers");
-        String[] dependencies = view.getParameter("dependencies");
+        Map<String, String> links = data.getLinks();
+        DocumentModel[] models = data.getModels();
+        Authorization[] authorizations = data.getAuthorizations();
+        String[] numbers = data.getNumberFactories();
+        String[] dependencies = data.getDependencies();
         
         pagecontrol.add("back");
         

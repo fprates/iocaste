@@ -13,30 +13,18 @@ import org.iocaste.shell.common.View;
 
 public class Request {
     
-    public static final void info(View view, Function function) {
-        InstallData data;
+    public static final InstallData info(View view, Function function) {
         String pkgname;
         Table table = view.getElement("packages");
         
         for (TableItem item : table.getItens())
             if (item.isSelected()) {
-                pkgname = ((Text)item.get("name")).getName();
-                data = new PackageTool(function).getInstallData(pkgname);
-                
-                /*
-                 * não passa InstallData, pois não é reconhecido pelo núcleo.
-                 * gera erro de serialização.
-                 */
-                view.clearExports();
-                view.export("models", data.getModels());
-                view.export("authorizations", data.getAuthorizations());
-                view.export("links", data.getLinks());
-                view.export("numbers", data.getNumberFactories());
-                view.export("dependencies", data.getDependencies());
                 view.redirect("printinfo");
-                
-                break;
+                pkgname = ((Text)item.get("name")).getName();
+                return new PackageTool(function).getInstallData(pkgname);
             }
+        
+        return null;
     }
     
     /**
