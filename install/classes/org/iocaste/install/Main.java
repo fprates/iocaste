@@ -215,7 +215,7 @@ public class Main extends AbstractRenderer {
     private static final int getLogid(String pagetrack) {
         String[] parsed = pagetrack.split(":");
         
-        return Integer.parseInt(parsed[1]);
+        return Integer.parseInt(parsed[2]);
     }
     
     /**
@@ -307,7 +307,7 @@ public class Main extends AbstractRenderer {
             return null;
         
         pageparse = pagetrack.split(":");
-        logid = Integer.parseInt(pageparse[1]);
+        logid = getLogid(pagetrack);
         
         pagetrack = pageparse[0];
         pageparse = pagetrack.split("\\.");
