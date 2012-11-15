@@ -65,27 +65,33 @@ public class ExtendedObject implements Serializable {
      * 
      * @param loose
      * @return
-     * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    private final <T> T newInstance(boolean loose) throws Exception {
+    private final <T> T newInstance(boolean loose) {
         Method method;
-        Class<?> class_ = Class.forName(model.getClassName());
-        T instance = (T)class_.newInstance();
+        Class<?> class_;
+        T instance;
         
-        for (DocumentModelItem item : values.keySet()) {
-            try {
-                method = instance.getClass().getMethod(
-                        item.getSetterName(), item.getDataElement().
-                        getClassType());
-            } catch (NoSuchMethodException e) {
-                if (loose)
-                    continue;
-                else
-                    throw e;
-            }
+        try {
+            class_ = Class.forName(model.getClassName());
+            instance = (T)class_.newInstance();
             
-            method.invoke(instance, values.get(item));
+            for (DocumentModelItem item : values.keySet()) {
+                try {
+                    method = instance.getClass().getMethod(
+                            item.getSetterName(), item.getDataElement().
+                            getClassType());
+                } catch (NoSuchMethodException e) {
+                    if (loose)
+                        continue;
+                    
+                    throw e;
+                }
+                
+                method.invoke(instance, values.get(item));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         
         return instance;
@@ -96,9 +102,8 @@ public class ExtendedObject implements Serializable {
      * 
      * Gera exceção se encontrar item não existente na classe associada.
      * @return instância da classe associada.
-     * @throws Exception
      */
-    public final <T> T newInstance() throws Exception {
+    public final <T> T newInstance() {
         return newInstance(false);
     }
     
