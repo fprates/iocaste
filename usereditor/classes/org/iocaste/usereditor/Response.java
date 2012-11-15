@@ -22,22 +22,15 @@ import org.iocaste.shell.common.View;
 
 public class Response {
 
-    /**
-     * 
-     * @param view
-     * @param function
-     */
-    public static final void form(View view, Function function) {
+    public static final void form(View view, Function function,
+            UserData userdata, byte mode) {
         Container tabcnt;
         Table profiles, tasks;
         TabbedPaneItem tabitem;
         Button save, addprofile, removeprofile, addtask, removetask;
         DataItem secret, confirm, username;
-        ExtendedObject object;
-        ExtendedObject[] objects;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
-        byte mode = Common.getMode(view);
         TabbedPane tabs = new TabbedPane(container, "tabs");
         DataForm form = new DataForm(tabs, "identity");
         Documents documents = new Documents(function);
@@ -111,7 +104,7 @@ public class Response {
             removetask.setEnabled(false);
             profiles.setMark(true);
             tasks.setMark(true);
-            username.set(view.getParameter("username"));
+            username.set(userdata.username);
             break;
             
         case Common.DISPLAY:
@@ -121,18 +114,15 @@ public class Response {
             removetask.setVisible(false);
             profiles.setMark(false);
             tasks.setMark(false);
-            object = view.getParameter("identity");
-            form.setObject(object);
+            form.setObject(userdata.identity);
             save.setVisible(false);
             
-            objects = view.getParameter("profiles");
-            if (objects != null)
-                for (ExtendedObject oprofile : objects)
+            if (userdata.profiles != null)
+                for (ExtendedObject oprofile : userdata.profiles)
                     Common.insertItem(profiles, oprofile, mode);
             
-            objects = view.getParameter("tasks");
-            if (objects != null)
-                for (ExtendedObject otask : objects)
+            if (userdata.tasks != null)
+                for (ExtendedObject otask : userdata.tasks)
                     Common.insertItem(tasks, otask, mode);
             break;
             
@@ -141,17 +131,14 @@ public class Response {
             addtask.setVisible(true);
             profiles.setMark(true);
             tasks.setMark(true);
-            object = view.getParameter("identity");
-            form.setObject(object);
+            form.setObject(userdata.identity);
             
-            objects = view.getParameter("profiles");
-            if (objects != null)
-                for (ExtendedObject oprofile : objects)
+            if (userdata.profiles != null)
+                for (ExtendedObject oprofile : userdata.profiles)
                     Common.insertItem(profiles, oprofile, mode);
             
-            objects = view.getParameter("tasks");
-            if (objects != null)
-                for (ExtendedObject otask : objects)
+            if (userdata.tasks != null)
+                for (ExtendedObject otask : userdata.tasks)
                     Common.insertItem(tasks, otask, mode);
             
             break;

@@ -6,28 +6,33 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
+    private byte mode;
+    private UserData userdata;
+    
     public Main() {
         export("install", "install");
     }
     
     public final void addprofile(View view) {
-        Request.addprofile(view);
+        Request.addprofile(view, mode);
     }
     
     public final void addtask(View view) {
-        Request.addtask(view);
+        Request.addtask(view, mode);
     }
     
     public final void create(View view) {
-        Request.create(view, this);
+        mode = Common.CREATE;
+        userdata = Request.create(view, this);
     }
     
     public final void display(View view) {
-        Request.load(view, this, Common.DISPLAY);
+        mode = Common.DISPLAY;
+        userdata = Request.load(view, this);
     }
     
     public final void form(View view) {
-        Response.form(view, this);
+        Response.form(view, this, userdata, mode);
     }
     
     public final InstallData install(Message message) {
@@ -47,10 +52,11 @@ public class Main extends AbstractPage {
     }
     
     public final void save(View view) {
-        Request.save(view, this);
+        Request.save(view, this, mode);
     }
     
     public final void update(View view) {
-        Request.load(view, this, Common.UPDATE);
+        mode = Common.UPDATE;
+        userdata = Request.load(view, this);
     }
 }

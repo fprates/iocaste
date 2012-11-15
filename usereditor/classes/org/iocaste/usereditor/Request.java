@@ -30,18 +30,18 @@ public class Request {
      * 
      * @param view
      */
-    public static final void addprofile(View view) {
+    public static final void addprofile(View view, byte mode) {
         Table profiles = view.getElement("profiles");
-        Common.insertItem(profiles, null, Common.getMode(view));
+        Common.insertItem(profiles, null, mode);
     }
     
     /**
      * 
      * @param view
      */
-    public static final void addtask(View view) {
+    public static final void addtask(View view, byte mode) {
         Table tasks = view.getElement("tasks");
-        Common.insertItem(tasks, null, Common.getMode(view));
+        Common.insertItem(tasks, null, mode);
     }
     
     /**
@@ -49,18 +49,45 @@ public class Request {
      * @param view
      * @param function
      */
-    public static final void create(View view, Function function) {
+    public static final UserData create(View view, Function function) {
+        UserData userdata;
         DataForm form = view.getElement("selection");
         String username = form.get("USERNAME").get();
         
         if (new Documents(function).getObject("LOGIN", username) != null) {
             view.message(Const.ERROR, "user.already.exists");
-            return;
+            return null;
         }
         
-        view.export("username", username);
-        view.export("mode", Common.CREATE);
+        userdata = new UserData();
+        userdata.username = username;
         view.redirect("form");
+        
+        return userdata;
+    }
+    
+    /**
+     * 
+     * @param view
+     * @param function
+     */
+    public static final UserData load(View view, Function function) {
+        DataForm form = view.getElement("selection");
+        String username = form.get("USERNAME").get();
+        Documents documents = new Documents(function);
+        UserData userdata = new UserData();
+        
+        userdata.identity = documents.getObject("LOGIN", username);
+        if (userdata.identity == null) {
+            view.message(Const.ERROR, "invalid.user");
+            return null;
+        }
+        
+        userdata.profiles = documents.select(QUERIES[PROFILES], username);
+        userdata.tasks = documents.select(QUERIES[TASKS], username);
+        view.redirect("form");
+        
+        return userdata;
     }
     
     /**
@@ -69,40 +96,11 @@ public class Request {
      * @param function
      * @param mode
      */
-    public static final void load(View view, Function function, byte mode) {
-        ExtendedObject[] objects;
-        DataForm form = view.getElement("selection");
-        String username = form.get("USERNAME").get();
-        Documents documents = new Documents(function);
-        ExtendedObject object = documents.getObject("LOGIN", username);
-        
-        if (object == null) {
-            view.message(Const.ERROR, "invalid.user");
-            return;
-        }
-        
-        objects = documents.select(QUERIES[PROFILES], username);
-        view.export("profiles", objects);
-        
-        objects = documents.select(QUERIES[TASKS], username);
-        view.export("tasks", objects);
-        
-        view.export("identity", object);
-        view.export("mode", mode);
-        view.redirect("form");
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param function
-     */
-    public static final void save(View view, Function function) {
+    public static final void save(View view, Function function, byte mode) {
         PackageTool pkgtool;
         Authority authority;
         Table itens;
         User user;
-        byte mode = Common.getMode(view);
         DataForm form = view.getElement("identity");
         ExtendedObject object = form.getObject();
         Documents documents = new Documents(function);
@@ -118,7 +116,6 @@ public class Request {
         case Common.CREATE:
             new Iocaste(function).create(user);
             mode = Common.UPDATE;
-            view.export("mode", mode);
             view.setTitle(Common.TITLE[mode]);
             break;
             

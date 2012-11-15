@@ -6,7 +6,6 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextField;
-import org.iocaste.shell.common.View;
 
 public class Common {
     public static final byte CREATE = 0;
@@ -17,10 +16,6 @@ public class Common {
         "usereditor-display",
         "usereditor-update"
     };
-    
-    public static final byte getMode(View view) {
-        return view.getParameter("mode");
-    }
     
     public static final void insertItem(Table itens, ExtendedObject object,
             byte mode) {
