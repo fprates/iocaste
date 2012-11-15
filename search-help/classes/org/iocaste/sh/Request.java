@@ -27,10 +27,11 @@ public class Request {
         return view;
     }
     
-    public static final void search(View view, Function function) {
+    public static final Map<String, ValueRange> search(
+            View view, Function function) {
         ValueRange range;
         InputComponent input;
-        Map<String, ValueRange> values = new HashMap<String, ValueRange>();
+        Map<String, ValueRange> values = new HashMap<>();
         DataForm form = view.getElement("criteria");
         
         for (Element element : form.getElements()) {
@@ -44,6 +45,6 @@ public class Request {
             values.put(input.getModelItem().getName(), range);
         }
         
-        view.export("criteria", values);
+        return values;
     }
 }

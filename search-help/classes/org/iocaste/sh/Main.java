@@ -1,5 +1,8 @@
 package org.iocaste.sh;
 
+import java.util.Map;
+
+import org.iocaste.documents.common.ValueRange;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
@@ -7,6 +10,7 @@ import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
+    private Map<String, ValueRange> criteria;
     
     public Main() {
         export("install", "install");
@@ -51,7 +55,7 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public void main(View view) {
-        Response.main(view, this);
+        Response.main(view, this, criteria);
     }
     
     /**
@@ -59,6 +63,6 @@ public class Main extends AbstractPage {
      * @param view
      */
     public void search(View view) {
-        Request.search(view, this);
+        criteria = Request.search(view, this);
     }
 }

@@ -26,7 +26,8 @@ import org.iocaste.shell.common.View;
 
 public class Response {
 
-    public static final void main(View view, Function function) {
+    public static final void main(View view, Function function,
+            Map<String, ValueRange> values) {
         ExtendedObject[] result;
         DataForm criteria;
         DataItem item;
@@ -41,7 +42,6 @@ public class Response {
         Parameter param;
         Form container = new Form(view, "main");
         SearchHelp sh = view.getParameter("sh");
-        Map<String, ValueRange> values = view.getParameter("criteria");
         Documents documents = new Documents(function);
         
         new PageControl(container).add("back");
