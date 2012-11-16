@@ -16,19 +16,22 @@ import org.iocaste.shell.common.View;
 
 public class Response {
 
-    public static final void configform(View view) {
+    /**
+     * 
+     * @param view
+     * @param mode
+     */
+    public static final void configform(View view, Context context) {
         InputComponent input;
         String name, value;
         int type;
         Form container = new Form(view, "container");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "package.config");
-        ExtendedObject[] objects = view.getParameter("objects");
-        byte mode = Common.getMode(view);
         
-        for (ExtendedObject object : objects) {
+        for (ExtendedObject object : context.objects) {
             name = object.getValue("NAME");
-            type = object.getValue("TYPE");
+            type = object.geti("TYPE");
             value = object.getValue("VALUE");
             
             switch (type) {
@@ -42,15 +45,15 @@ public class Response {
                 break;
             }
             
-            input.setEnabled(mode == Common.EDIT);
+            input.setEnabled(context.mode == Context.EDIT);
         }
         
-        if (mode == Common.EDIT)
+        if (context.mode == Context.EDIT)
             new Button(container, "save");
         
         pagecontrol.add("home");
         pagecontrol.add("back");
-        view.setTitle(Common.TITLES[mode]);
+        view.setTitle(Context.TITLES[context.mode]);
     }
     
     /**
@@ -72,7 +75,7 @@ public class Response {
         input.setVisible(true);
         
         view.setFocus(input);
-        view.setTitle(Common.TITLES[Common.SELECT]);
+        view.setTitle(Context.TITLES[Context.SELECT]);
         
         new Button(container, "display");
         new Button(container, "edit");

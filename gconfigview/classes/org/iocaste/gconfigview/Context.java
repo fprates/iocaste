@@ -1,8 +1,8 @@
 package org.iocaste.gconfigview;
 
-import org.iocaste.shell.common.View;
+import org.iocaste.documents.common.ExtendedObject;
 
-public class Common {
+public class Context {
     public static final byte DISPLAY = 0;
     public static final byte EDIT = 1;
     public static final byte SELECT = 2;
@@ -12,7 +12,6 @@ public class Common {
         "config.select"
     };
     
-    public static final byte getMode(View view) {
-        return view.getParameter("mode");
-    }
+    public byte mode;
+    public ExtendedObject[] objects;
 }

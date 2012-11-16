@@ -11,13 +11,15 @@ import org.iocaste.shell.common.View;
  *
  */
 public class Main extends AbstractPage {
-
+    private Context context;
+    
     public Main() {
+        context = new Context();
         export("install", "install");
     }
     
     public final void configform(View view) {
-        Response.configform(view);
+        Response.configform(view, context);
     }
     
     /**
@@ -25,7 +27,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void display(View view) {
-        Request.display(view, this);
+        Request.display(view, this, context);
     }
     
     /**
@@ -33,7 +35,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void edit(View view) {
-        Request.edit(view, this);
+        Request.edit(view, this, context);
     }
     
     /**
@@ -58,6 +60,6 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void save(View view) {
-        Request.save(view, this);
+        Request.save(view, this, context);
     }
 }

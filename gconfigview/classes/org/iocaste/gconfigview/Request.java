@@ -21,32 +21,35 @@ public class Request {
         "where GLOBAL_CONFIG_ITEM.GLOBAL_CONFIG = ?"
     };
     
-    public static final void display(View view, Function function) {
-        load(view, Common.DISPLAY, function);
+    public static final void display(View view, Function function,
+            Context context) {
+        context.mode = Context.DISPLAY;
+        load(view, function, context);
     }
     
-    public static final void edit(View view, Function function) {
-        load(view, Common.EDIT, function);
+    public static final void edit(View view, Function function,
+            Context context) {
+        context.mode = Context.EDIT;
+        load(view, function, context);
     }
     
-    private static final void load(View view, byte mode, Function function) {
-        ExtendedObject[] objects;
+    private static final void load(View view, Function function,
+            Context context) {
         DataForm pkgform = view.getElement("package");
         String program = pkgform.get("NAME").get();
         Documents documents = new Documents(function);
         
-        objects = documents.select(QUERIES[SEL_ITENS], program);
-        if (objects == null) {
+        context.objects = documents.select(QUERIES[SEL_ITENS], program);
+        if (context.objects == null) {
             view.message(Const.STATUS, "no.config");
             return;
         }
         
-        view.export("objects", objects);
-        view.export("mode", mode);
         view.redirect("configform");
     }
     
-    public static final void save(View view, Function function) {
+    public static final void save(View view, Function function,
+            Context context) {
         InputComponent input;
         ExtendedObject object;
         String value, name;
@@ -54,14 +57,13 @@ public class Request {
         Documents documents = new Documents(function);
         DataForm form = view.getElement("package.config");
         DocumentModel model = documents.getModel("GLOBAL_CONFIG_VALUES");
-        ExtendedObject[] objects = view.getParameter("objects");
         
         for (Element element : form.getElements()) {
             value = null;
             name = element.getName();
-            for (ExtendedObject item : objects)
+            for (ExtendedObject item : context.objects)
                 if (item.getValue("NAME").equals(name)) {
-                    id = item.getValue("ID");
+                    id = item.geti("ID");
                     input = (InputComponent)element;
                     value = input.get().toString();
                     item.setValue("VALUE", value);
@@ -79,7 +81,6 @@ public class Request {
             documents.modify(object);
         }
         
-        view.export("objects", objects);
         view.message(Const.STATUS, "save.successful");
     }
 
