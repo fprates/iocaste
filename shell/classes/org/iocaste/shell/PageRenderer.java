@@ -214,20 +214,27 @@ public class PageRenderer extends AbstractRenderer {
             view.export(name, parameters.get(name));
         try {
             view = (View)Service.callServer(composeUrl(appname), message);
+            
+            inputdata = new InputData();
+            inputdata.view = view;
+            inputdata.container = null;
+            inputdata.function = this;
+            
+            /*
+             * deixa registerInputs() antes do commit(),
+             * para que a conexão seja encerrada.
+             */
+            for (Container container : view.getContainers()) {
+                inputdata.element = container;
+                registerInputs(inputdata);
+            }
+            
             Common.commit(getServerName(), sessionid);
+            new Iocaste(this).commit();
         } catch (Exception e) {
             Common.rollback(getServerName(), sessionid);
+            new Iocaste(this).rollback();
             throw e;
-        }
-        
-        inputdata = new InputData();
-        inputdata.view = view;
-        inputdata.container = null;
-        inputdata.function = this;
-        
-        for (Container container : view.getContainers()) {
-            inputdata.element = container;
-            registerInputs(inputdata);
         }
         
         return view;
