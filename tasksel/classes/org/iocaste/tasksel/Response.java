@@ -68,7 +68,7 @@ public class Response {
             }
             
             taskname = object.getValue("NAME");
-            taskid = object.getValue("ID");
+            taskid = object.geti("ID");
             entry = new TaskEntry();
             entry.setName(taskname);
             entries.add(entry);

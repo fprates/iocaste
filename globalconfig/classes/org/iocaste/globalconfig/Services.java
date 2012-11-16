@@ -56,8 +56,8 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void define(Message message) throws Exception {
-        long gconfigid;
-        int itemid, ptype;
+        long itemid, gconfigid;
+        int ptype;
         DocumentModel model;
         Object value;
         ExtendedObject object, globalconfig;
@@ -74,7 +74,7 @@ public class Services extends AbstractFunction {
             documents.save(globalconfig);
         }
         
-        itemid = globalconfig.getValue("CURRENT");
+        itemid = globalconfig.getl("CURRENT");
         model = documents.getModel("GLOBAL_CONFIG_ITEM");
         value = message.get("value");
         
@@ -114,7 +114,8 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final Object get(Message message) throws Exception {
-        int type, itemid;
+        long itemid;
+        int type;
         String value;
         ExtendedObject[] objects;
         Iocaste iocaste = new Iocaste(this);
@@ -126,8 +127,8 @@ public class Services extends AbstractFunction {
         if (objects == null)
             return null;
         
-        itemid = objects[0].getValue("ID");
-        type = objects[0].getValue("TYPE");
+        itemid = objects[0].getl("ID");
+        type = objects[0].geti("TYPE");
         objects[0] = documents.getObject("GLOBAL_CONFIG_VALUES", itemid);
         if (objects[0] == null)
             return null;

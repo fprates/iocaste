@@ -32,8 +32,8 @@ public class TaskSelector {
     public static final ExtendedObject addEntry(String taskname,
             ExtendedObject group, State state) {
         ExtendedObject object;
-        int entryid = group.getValue("CURRENT");
-        int groupid = group.getValue("ID");
+        int entryid = group.geti("CURRENT");
+        int groupid = group.geti("ID");
         DocumentModel model = state.documents.getModel("TASK_ENTRY");
         
         if (entryid == 0)
@@ -64,7 +64,7 @@ public class TaskSelector {
         DocumentModel model;
         ExtendedObject object;
         Map<String, String> messages;
-        int taskid = task.getValue("ID");
+        int taskid = task.geti("ID");
         int msgid = taskid * 100;
         
         model = state.documents.getModel("TASK_ENTRY_TEXT");
@@ -102,8 +102,8 @@ public class TaskSelector {
         String groupname = group.getValue("NAME");
         
         object = state.documents.getObject("LOGIN", username);
-        userid = object.getValue("ID");
-        groupid = group.getValue("ID");
+        userid = object.geti("ID");
+        groupid = group.geti("ID");
         taskid = (userid * 1000) + groupid;
         model = state.documents.getModel("USER_TASKS_GROUPS");
         
@@ -170,7 +170,7 @@ public class TaskSelector {
         if (task == null)
             return;
         
-        taskid = task[0].getValue("ID");
+        taskid = task[0].geti("ID");
         documents.update(QUERIES[DEL_TASK_TEXT], taskid);
         documents.update(QUERIES[DEL_TASK], taskid);
     }

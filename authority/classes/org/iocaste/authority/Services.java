@@ -63,7 +63,7 @@ public class Services extends AbstractFunction {
                     append(" is an invalid profile.").toString());
         
         profiles[0] = documents.getObject("USER_PROFILE", profilename);
-        itemid = profiles[0].getValue("CURRENT");
+        itemid = profiles[0].geti("CURRENT");
         itemid++;
         
         model = documents.getModel("USER_PROFILE_ITEM");
@@ -95,13 +95,13 @@ public class Services extends AbstractFunction {
         if (object == null)
             throw new IocasteException("Invalid user.");
         
-        userid = object.getValue("ID");
+        userid = object.geti("ID");
         
         object = documents.getObject("USER_PROFILE", profile);
         if (object == null)
             throw new IocasteException("Invalid profile.");
         
-        profileid = object.getValue("ID");
+        profileid = object.geti("ID");
         id = (userid * 100) + profileid;
 
         model = documents.getModel("USER_AUTHORITY");

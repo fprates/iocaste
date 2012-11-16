@@ -25,7 +25,7 @@ public class InstallMessages {
             for (ExtendedObject olanguage : languages) {
                 locale = olanguage.getValue("LOCALE");
                 if (language.equals(locale)) {
-                    langcode = olanguage.getValue("CODE");
+                    langcode = olanguage.geti("CODE");
                     break;
                 }
             }
