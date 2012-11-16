@@ -46,7 +46,8 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private Set<DocumentModelKey> keys;
     private Map<String, String> queries;
     
-    public DocumentModel() {
+    public DocumentModel(String name) {
+        this.name = name;
         itens = new TreeSet<DocumentModelItem>();
         keys = new TreeSet<DocumentModelKey>();
         queries = new HashMap<String, String>();
@@ -224,14 +225,6 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
-     * Define nome do documento.
-     * @param nome.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    /**
      * Atribui queries SQL ao modelo.
      * 
      * O formato da entrada no mapa é <nome da query, query>
@@ -248,5 +241,14 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      */
     public void setTableName(String tablename) {
         this.tablename = tablename;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public final String toString() {
+        return name;
     }
 }

@@ -1,6 +1,7 @@
 package org.iocaste.documents;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
@@ -154,8 +155,7 @@ public class Model {
             return null;
         
         columns = (Map<String, Object>)lines[0];
-        document = new DocumentModel();
-        document.setName((String)columns.get("DOCID"));
+        document = new DocumentModel((String)columns.get("DOCID"));
         document.setTableName((String)columns.get("TNAME"));
         document.setClassName((String)columns.get("CLASS"));
         
@@ -165,9 +165,8 @@ public class Model {
             name = (String)columns.get("INAME");
             composed = name.split("\\.");
             
-            item = new DocumentModelItem();
+            item = new DocumentModelItem(composed[1]);
             item.setDocumentModel(document);
-            item.setName(composed[1]);
             item.setAttributeName((String)columns.get("ATTRB"));
             item.setTableFieldName((String)columns.get("FNAME"));
             item.setDataElement(DataElementServices.get(iocaste,
@@ -362,14 +361,36 @@ public class Model {
      */
     public static final int rename(String oldname, String newname, Cache cache)
             throws Exception {
-        DocumentModel model = Model.get(oldname, cache);
+        DocumentModelItem newitem;
+        Map<String, String> queries;
+        DocumentModel newmodel, oldmodel = Model.get(oldname, cache);
         
-        model.setName(newname);
-        if (Model.create(model, cache) == 0)
+        newmodel = new DocumentModel(newname);
+        newmodel.setTableName(oldmodel.getTableName());
+        newmodel.setClassName(oldmodel.getClassName());
+        for (DocumentModelItem olditem : oldmodel.getItens()) {
+            newitem = new DocumentModelItem(olditem.getName());
+            newitem.setAttributeName(olditem.getAttributeName());
+            newitem.setDataElement(olditem.getDataElement());
+            newitem.setDummy(olditem.isDummy());
+            newitem.setReference(olditem.getReference());
+            newitem.setSearchHelp(olditem.getSearchHelp());
+            newitem.setTableFieldName(olditem.getTableFieldName());
+            
+            newmodel.add(newitem);
+            if (oldmodel.isKey(olditem))
+                newmodel.add(new DocumentModelKey(newitem));
+        }
+        
+        queries = new HashMap<>();
+        for (String name : new String[] {"insert", "delete", "update"})
+            queries.put(name, oldmodel.getQuery(name));
+        newmodel.setQueries(queries);
+        
+        if (Model.create(newmodel, cache) == 0)
             throw new IocasteException("error on rename model (step 1)");
         
-        model.setName(oldname);
-        if (remove(model, cache) == 0)
+        if (remove(oldmodel, cache) == 0)
             throw new IocasteException("error on rename model (step 2)");
         
         return 1;

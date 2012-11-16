@@ -2,6 +2,7 @@ package org.iocaste.documents.common;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +59,34 @@ public class ExtendedObject implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public final <T> T getValue(DocumentModelItem item) {
-        return (T)values.get(item);
+        Object object, value;
+        T numvalue;
+        
+        if (item == null)
+            return null;
+        
+        value = values.get(item);
+        switch (item.getDataElement().getType()) {
+        case DataType.NUMC:
+            if (!(value instanceof BigDecimal))
+                break;
+            
+            try {
+                object = ((BigDecimal)value).intValue();
+                numvalue = (T)object; // testa se retorno do método é int
+                value = numvalue;
+            } catch (ClassCastException e) {
+                value = ((BigDecimal)value).longValue();
+            }
+            
+            break;
+        case DataType.DEC:
+            if (value instanceof BigDecimal)
+                value = ((BigDecimal)value).doubleValue();
+            break;
+        }
+        
+        return (T)value;
     }
     
     /**

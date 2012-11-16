@@ -58,13 +58,11 @@ public class CModel {
                 throw new IocasteException(ERRORS[ITEM_SAVE]);
         }
         
-        cmlink = new DocumentModel();
-        cmlink.setName(cminame);
+        cmlink = new DocumentModel(cminame);
         cmlink.setTableName("CMI_"+hmodel.getTableName());
         
         reference = Model.get("COMPLEX_DOCUMENT", cache).getModelItem("ID");
-        cmlinkitem = new DocumentModelItem();
-        cmlinkitem.setName("ID");
+        cmlinkitem = new DocumentModelItem("ID");
         cmlinkitem.setTableFieldName("IDENT");
         cmlinkitem.setDataElement(reference.getDataElement());
         cmlinkitem.setReference(reference);
@@ -74,8 +72,7 @@ public class CModel {
         for (DocumentModelKey key : hmodel.getKeys()) {
             name = key.getModelItemName();
             reference = hmodel.getModelItem(name);
-            cmlinkitem = new DocumentModelItem();
-            cmlinkitem.setName("Z"+name);
+            cmlinkitem = new DocumentModelItem("Z"+name);
             cmlinkitem.setTableFieldName("Z"+reference.getTableFieldName());
             cmlinkitem.setDataElement(reference.getDataElement());
             cmlinkitem.setReference(reference);

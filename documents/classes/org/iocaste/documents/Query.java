@@ -1,13 +1,10 @@
 package org.iocaste.documents;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -72,27 +69,10 @@ public class Query {
     private static final ExtendedObject getExtendedObjectFrom(
             DocumentModel model, Map<String, Object> line) {
         Object value;
-        DataElement element;
         ExtendedObject object = new ExtendedObject(model);
         
         for (DocumentModelItem modelitem : model.getItens()) {
             value = line.get(modelitem.getTableFieldName());
-            element = modelitem.getDataElement();
-            
-            switch (element.getType()) {
-            case DataType.NUMC:
-                if (element.getLength() < DataType.MAX_INT_LEN)
-                    value = (value == null)? 0 : ((BigDecimal)value).intValue();
-                else
-                    value = (value == null)?
-                            0l : ((BigDecimal)value).longValue();
-                break;
-                
-            case DataType.DEC:
-                value = ((BigDecimal)value).doubleValue();
-                break;
-            }
-            
             object.setValue(modelitem, value);
         }
         
@@ -116,13 +96,12 @@ public class Query {
         if (queryinfo.join.size() == 0)
             return getExtendedObjectFrom(queryinfo.model, line);
 
-        model = new DocumentModel();
+        model = new DocumentModel(null);
         i = 0;
         for (String column : queryinfo.columns) {
-            item = new DocumentModelItem();
             composed = column.split("\\.");
+            item = new DocumentModelItem(composed[1]);
             itemref = Model.get(composed[0], cache).getModelItem(composed[1]);
-            item.setName(composed[1]);
             item.setTableFieldName(itemref.getTableFieldName());
             item.setIndex(i++);
             item.setDataElement(itemref.getDataElement());

@@ -38,7 +38,11 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     private DocumentModelItem reference;
     private boolean dummy;
     
-    public DocumentModelItem() {
+    public DocumentModelItem(String name) {
+        if (name == null)
+            throw new RuntimeException("item name can not be null.");
+        
+        this.name = name.toUpperCase();
         dummy = false;
     }
     
@@ -234,14 +238,6 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
     }
     
     /**
-     * Define nome do documento.
-     * @param nome
-     */
-    public final void setName(String name) {
-        this.name = (name == null)? null : name.toUpperCase();
-    }
-    
-    /**
      * Define referência do item.
      * 
      * Pode ser utilizado como referência estrangeira em validação
@@ -282,6 +278,24 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      */
     public void setTableFieldName(String fieldname) {
         this.fieldname = (fieldname == null)? null : fieldname.toUpperCase();
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public final String toString() {
+        String docname;
+        
+        if (document == null)
+            return name;
+        
+        docname = document.getName();
+        if (docname == null)
+            return name;
+        
+        return new StringBuilder(docname).append(".").append(name).toString();
     }
 
 }
