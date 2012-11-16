@@ -46,7 +46,7 @@ public class CDocument {
         hmodel = header.getModel();
         for (DocumentModelKey modelkey : hmodel.getKeys()) {
             reference = hmodel.getModelItem(modelkey.getModelItemName());
-            key = (Long)header.getValue(reference);
+            key = header.getl(reference.getName());
             break;
         }
         
@@ -92,7 +92,7 @@ public class CDocument {
         if (object == null)
             return null;
         
-        key = object.getValue("ID");
+        key = object.getl("ID");
         document = new ComplexDocument(cmmodel);
         document.setId(key);
         modellink = cmmodel.getCDModelLink();
@@ -101,7 +101,7 @@ public class CDocument {
         for (DocumentModelItem item : modellink.getItens()) {
             if (modellink.isKey(item))
                 continue;
-            key = object.getValue(item);
+            key = object.getl(item.getName());
             break;
         }
         
@@ -143,8 +143,8 @@ public class CDocument {
         DocumentModel model = Model.get("COMPLEX_MODEL", cache);
         
         objects[COMPLEX_MODEL] = Query.get(model, cmodelname, cache.function);
-        cmodelid = objects[COMPLEX_MODEL].getValue("ID");
-        current = objects[COMPLEX_MODEL].getValue("CURRENT");
+        cmodelid = objects[COMPLEX_MODEL].geti("ID");
+        current = objects[COMPLEX_MODEL].getl("CURRENT");
         
         if (current == 0)
             current = cmodelid * HMULTIPLIER;
@@ -170,16 +170,21 @@ public class CDocument {
         id = current * IMULTIPLIER;
         for (String modelname : document.getItensModels()) {
             itens = document.getItens(modelname);
-            for (ExtendedObject item : itens) {
+            for (int i = 0; i < itens.length; i++) {
                 docitem = new ExtendedObject(model);
-                id++;
-                docitem.setValue("ID", id);
+                docitem.setValue("ID", (id + i + 1));
                 docitem.setValue("COMPLEX_DOCUMENT", current);
                 Query.save(docitem, cache.function);
             }
         }
     }
     
+    /**
+     * 
+     * @param objects
+     * @param document
+     * @param cache
+     */
     private static final void saveDocument(ExtendedObject[] objects,
             ComplexDocument document, Cache cache) {
         String zname, name;
@@ -215,9 +220,10 @@ public class CDocument {
                 break;
             }
             
+            name = (ikey != null)? ikey.getName() : null;
             for (ExtendedObject object : document.getItens(modelname)) {
                 setItemHeaderReference(object, hkey, hkeyvalue);
-                object.setValue(ikey, t + (Long)object.getValue(ikey));
+                object.setValue(ikey, t + object.getl(name));
                 Query.save(object, cache.function);
             }
         }
@@ -225,8 +231,8 @@ public class CDocument {
     
     private static final long saveModelLink(ExtendedObject[] objects,
             Cache cache) throws Exception {
-        long current = objects[COMPLEX_MODEL].getValue("CURRENT");
-        int cmodelid = objects[COMPLEX_MODEL].getValue("ID");
+        long current = objects[COMPLEX_MODEL].getl("CURRENT");
+        int cmodelid = objects[COMPLEX_MODEL].geti("ID");
         String modellinkname = objects[COMPLEX_MODEL].getValue("CD_LINK");
         DocumentModel modellink = Model.get(modellinkname, cache);
         

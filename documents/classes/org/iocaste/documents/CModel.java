@@ -110,7 +110,7 @@ public class CModel {
         cmodel = new ComplexModel();
         cmodel.setName(name);
         cmodel.setHeader(Model.get(modelname, cache));
-        cmodel.setId((Integer)omodel.getValue("ID"));
+        cmodel.setId(omodel.geti("ID"));
         model = Model.get((String)omodel.getValue("CD_LINK"), cache);
         cmodel.setCDModelLink(model);
         cache.cmodels.put(name, cmodel);

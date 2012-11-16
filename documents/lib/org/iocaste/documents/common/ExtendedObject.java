@@ -35,6 +35,43 @@ public class ExtendedObject implements Serializable {
         this.model = model;
     }
     
+    public final double getd(String name) {
+        Object value = getValue(name);
+        
+        if (!(value instanceof BigDecimal))
+            return (double)value;
+        
+        return ((BigDecimal)value).doubleValue();
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final int geti(String name) {
+        Object value = getValue(name);
+        
+        if (!(value instanceof BigDecimal))
+            return (int)value;
+        
+        return ((BigDecimal)value).intValue();
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final long getl(String name) {
+        Object value = getValue(name);
+        
+        if (!(value instanceof BigDecimal))
+            return (long)value;
+        
+        return ((BigDecimal)value).longValue();
+    }
+    
     /**
      * Retorna o modelo de documento associado.
      * @return modelo
@@ -59,34 +96,7 @@ public class ExtendedObject implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public final <T> T getValue(DocumentModelItem item) {
-        Object object, value;
-        T numvalue;
-        
-        if (item == null)
-            return null;
-        
-        value = values.get(item);
-        switch (item.getDataElement().getType()) {
-        case DataType.NUMC:
-            if (!(value instanceof BigDecimal))
-                break;
-            
-            try {
-                object = ((BigDecimal)value).intValue();
-                numvalue = (T)object; // testa se retorno do método é int
-                value = numvalue;
-            } catch (ClassCastException e) {
-                value = ((BigDecimal)value).longValue();
-            }
-            
-            break;
-        case DataType.DEC:
-            if (value instanceof BigDecimal)
-                value = ((BigDecimal)value).doubleValue();
-            break;
-        }
-        
-        return (T)value;
+        return (T)values.get(item);
     }
     
     /**
