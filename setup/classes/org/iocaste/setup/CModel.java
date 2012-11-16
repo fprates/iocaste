@@ -32,8 +32,7 @@ public class CModel {
         element.setUpcase(true);
         element.setLength(24);
         
-        config.cmodelname = new DocumentModelItem();
-        config.cmodelname.setName("NAME");
+        config.cmodelname = new DocumentModelItem("NAME");
         config.cmodelname.setTableFieldName("IDENT");
         config.cmodelname.setDataElement(element);
         model.add(config.cmodelname);
@@ -45,8 +44,7 @@ public class CModel {
         element.setType(DataType.NUMC);
         element.setLength(3);
         
-        item = new DocumentModelItem();
-        item.setName("ID");
+        item = new DocumentModelItem("ID");
         item.setTableFieldName("MDLID");
         item.setDataElement(element);
         model.add(item);
@@ -56,8 +54,7 @@ public class CModel {
                 getModelItem("NAME");
         element = modelname.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("MODEL");
+        item = new DocumentModelItem("MODEL");
         item.setTableFieldName("MODEL");
         item.setDataElement(element);
         item.setReference(modelname);
@@ -69,8 +66,7 @@ public class CModel {
         element.setType(DataType.NUMC);
         element.setLength(11);
         
-        config.cdocumentid = new DocumentModelItem();
-        config.cdocumentid.setName("CURRENT");
+        config.cdocumentid = new DocumentModelItem("CURRENT");
         config.cdocumentid.setTableFieldName("DOCID");
         config.cdocumentid.setDataElement(element);
         model.add(config.cdocumentid);
@@ -82,8 +78,7 @@ public class CModel {
         element.setLength(24);
         element.setUpcase(true);
         
-        item = new DocumentModelItem();
-        item.setName("CD_LINK");
+        item = new DocumentModelItem("CD_LINK");
         item.setTableFieldName("CDLNK");
         item.setDataElement(element);
         model.add(item);
@@ -101,8 +96,7 @@ public class CModel {
         element.setLength(6);
         element.setType(DataType.NUMC);
         
-        item = new DocumentModelItem();
-        item.setName("ID");
+        item = new DocumentModelItem("ID");
         item.setTableFieldName("IDENT");
         item.setDataElement(element);
         model.add(item);
@@ -111,8 +105,7 @@ public class CModel {
         // modelo referência
         element = config.cmodelname.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("COMPLEX_MODEL");
+        item = new DocumentModelItem("COMPLEX_MODEL");
         item.setTableFieldName("MDLNM");
         item.setDataElement(element);
         item.setReference(config.cmodelname);
@@ -121,8 +114,7 @@ public class CModel {
         // modelo
         element = modelname.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("MODEL");
+        item = new DocumentModelItem("MODEL");
         item.setTableFieldName("MODEL");
         item.setDataElement(element);
         item.setReference(modelname);

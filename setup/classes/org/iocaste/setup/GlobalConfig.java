@@ -31,8 +31,7 @@ public class GlobalConfig {
         reference = new DummyModelItem("PACKAGE", "NAME");
         element = new DummyElement("PACKAGE.NAME");
         
-        nmcfg = new DocumentModelItem();
-        nmcfg.setName("NAME");
+        nmcfg = new DocumentModelItem("NAME");
         nmcfg.setTableFieldName("NMCFG");
         nmcfg.setDataElement(element);
         nmcfg.setReference(reference);
@@ -47,8 +46,7 @@ public class GlobalConfig {
         element.setLength(8);
         element.setUpcase(false);
         
-        item = new DocumentModelItem();
-        item.setName("CURRENT");
+        item = new DocumentModelItem("CURRENT");
         item.setTableFieldName("CRRID");
         item.setDataElement(element);
         model.add(item);
@@ -61,16 +59,14 @@ public class GlobalConfig {
         model = data.getModel("GLOBAL_CONFIG_ITEM", "GCNFGITM", null);
         
         // identificador
-        idcfgit = new DocumentModelItem();
-        idcfgit.setName("ID");
+        idcfgit = new DocumentModelItem("ID");
         idcfgit.setTableFieldName("IDENT");
         idcfgit.setDataElement(element);
         model.add(idcfgit);
         model.add(new DocumentModelKey(idcfgit));
         
         // cabeçalho
-        item = new DocumentModelItem();
-        item.setName("GLOBAL_CONFIG");
+        item = new DocumentModelItem("GLOBAL_CONFIG");
         item.setTableFieldName("IDCFG");
         item.setReference(nmcfg);
         item.setDataElement(nmcfg.getDataElement());
@@ -83,8 +79,7 @@ public class GlobalConfig {
         element.setLength(64);
         element.setUpcase(true);
         
-        item = new DocumentModelItem();
-        item.setName("NAME");
+        item = new DocumentModelItem("NAME");
         item.setTableFieldName("PNAME");
         item.setDataElement(element);
         model.add(item);
@@ -96,8 +91,7 @@ public class GlobalConfig {
         element.setLength(2);
         element.setUpcase(false);
         
-        item = new DocumentModelItem();
-        item.setName("TYPE");
+        item = new DocumentModelItem("TYPE");
         item.setTableFieldName("DTYPE");
         item.setDataElement(element);
         model.add(item);
@@ -108,8 +102,7 @@ public class GlobalConfig {
         model = data.getModel("GLOBAL_CONFIG_VALUES", "GCNFGVAL", null);
         
         // identificador
-        item = new DocumentModelItem();
-        item.setName("ID");
+        item = new DocumentModelItem("ID");
         item.setTableFieldName("IDENT");
         item.setReference(idcfgit);
         item.setDataElement(idcfgit.getDataElement());
@@ -123,8 +116,7 @@ public class GlobalConfig {
         element.setLength(256);
         element.setUpcase(false);
         
-        item = new DocumentModelItem();
-        item.setName("VALUE");
+        item = new DocumentModelItem("VALUE");
         item.setTableFieldName("VLCFG");
         item.setDataElement(element);
         model.add(item);

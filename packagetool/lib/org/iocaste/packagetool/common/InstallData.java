@@ -238,9 +238,8 @@ public class InstallData implements Serializable {
      */
     public final DocumentModel getModel(String name, String tablename,
             String classname) {
-        DocumentModel model = new DocumentModel();
+        DocumentModel model = new DocumentModel(name);
         
-        model.setName(name);
         model.setTableName(tablename);
         model.setClassName(classname);
         add(model);

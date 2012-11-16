@@ -73,8 +73,7 @@ public class Install {
         element.setLength(5);
         element.setUpcase(false);
         
-        item = new DocumentModelItem();
-        item.setName("LOCALE");
+        item = new DocumentModelItem("LOCALE");
         item.setDataElement(element);
         item.setTableFieldName("LOCAL");
         
@@ -86,8 +85,7 @@ public class Install {
         element.setType(DataType.NUMC);
         element.setLength(3);
         
-        item = new DocumentModelItem();
-        item.setName("CODE");
+        item = new DocumentModelItem("CODE");
         item.setDataElement(element);
         item.setTableFieldName("LCODE");
         
@@ -127,8 +125,7 @@ public class Install {
         element.setType(DataType.NUMC);
         element.setLength(13);
         
-        item = new DocumentModelItem();
-        item.setName("INDEX");
+        item = new DocumentModelItem("INDEX");
         item.setDataElement(element);
         item.setTableFieldName("MSGNR");
         
@@ -144,8 +141,7 @@ public class Install {
         element.setLength(64);
         element.setUpcase(false);
         
-        item = new DocumentModelItem();
-        item.setName("NAME");
+        item = new DocumentModelItem("NAME");
         item.setDataElement(element);
         item.setTableFieldName("MSGNM");
         
@@ -157,8 +153,7 @@ public class Install {
         reference = models.languages.getModelItem("LOCALE");
         element = reference.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("LOCALE");
+        item = new DocumentModelItem("LOCALE");
         item.setDataElement(element);
         item.setTableFieldName("LOCAL");
         item.setReference(reference);
@@ -172,8 +167,7 @@ public class Install {
         reference = documents.getModel("PACKAGE").getModelItem("NAME"); 
         element = reference.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("PACKAGE");
+        item = new DocumentModelItem("PACKAGE");
         item.setDataElement(element);
         item.setTableFieldName("PKGNM");
         item.setReference(reference);
@@ -189,8 +183,7 @@ public class Install {
         element.setLength(255);
         element.setUpcase(false);
         
-        item = new DocumentModelItem();
-        item.setName("TEXT");
+        item = new DocumentModelItem("TEXT");
         item.setDataElement(element);
         item.setTableFieldName("MSGTX");
         
@@ -216,8 +209,7 @@ public class Install {
         element.setType(DataType.CHAR);
         element.setUpcase(true);
         
-        item = new DocumentModelItem();
-        item.setName("NAME");
+        item = new DocumentModelItem("NAME");
         item.setTableFieldName("TSKNM");
         item.setDataElement(element);
         
@@ -229,8 +221,7 @@ public class Install {
         element.setLength(128);
         element.setType(DataType.CHAR);
         
-        item = new DocumentModelItem();
-        item.setName("COMMAND");
+        item = new DocumentModelItem("COMMAND");
         item.setTableFieldName("CMDLN");
         item.setDataElement(element);
         
@@ -261,8 +252,7 @@ public class Install {
         element.setLength(12);
         element.setUpcase(true);
         
-        groupname = new DocumentModelItem();
-        groupname.setName("NAME");
+        groupname = new DocumentModelItem("NAME");
         groupname.setTableFieldName("GRPID");
         groupname.setDataElement(element);
         group.add(groupname);
@@ -274,8 +264,7 @@ public class Install {
         element.setType(DataType.NUMC);
         element.setLength(3);
         
-        item = new DocumentModelItem();
-        item.setName("ID");
+        item = new DocumentModelItem("ID");
         item.setTableFieldName("IDENT");
         item.setDataElement(element);
         group.add(item);
@@ -286,8 +275,7 @@ public class Install {
         element.setType(DataType.NUMC);
         element.setLength(6);
         
-        item = new DocumentModelItem();
-        item.setName("CURRENT");
+        item = new DocumentModelItem("CURRENT");
         item.setTableFieldName("CRRNT");
         item.setDataElement(element);
         group.add(item);
@@ -305,8 +293,7 @@ public class Install {
         element.setType(DataType.NUMC);
         element.setLength(8);
         
-        entryid = new DocumentModelItem();
-        entryid.setName("ID");
+        entryid = new DocumentModelItem("ID");
         entryid.setTableFieldName("IDENT");
         entryid.setDataElement(element);
         model.add(entryid);
@@ -319,8 +306,7 @@ public class Install {
         element.setLength(12);
         element.setUpcase(true);
         
-        item = new DocumentModelItem();
-        item.setName("NAME");
+        item = new DocumentModelItem("NAME");
         item.setTableFieldName("ENTRY");
         item.setDataElement(element);
         model.add(item);
@@ -328,8 +314,7 @@ public class Install {
         // grupo
         element = groupname.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("GROUP");
+        item = new DocumentModelItem("GROUP");
         item.setTableFieldName("GRPID");
         item.setDataElement(element);
         item.setReference(groupname);
@@ -347,8 +332,7 @@ public class Install {
         element.setType(DataType.NUMC);
         element.setLength(10);
         
-        item = new DocumentModelItem();
-        item.setName("ID");
+        item = new DocumentModelItem("ID");
         item.setTableFieldName("IDENT");
         item.setDataElement(element);
         model.add(item);
@@ -357,8 +341,7 @@ public class Install {
         // tarefa do grupo
         element = entryid.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("TASK");
+        item = new DocumentModelItem("TASK");
         item.setTableFieldName("ENTRY");
         item.setDataElement(element);
         item.setReference(entryid);
@@ -368,8 +351,7 @@ public class Install {
         language = models.languages.getModelItem("LOCALE");
         element = language.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("LANGUAGE");
+        item = new DocumentModelItem("LANGUAGE");
         item.setTableFieldName("LANGU");
         item.setDataElement(element);
         item.setReference(language);
@@ -379,8 +361,7 @@ public class Install {
         text = models.messages.getModelItem("TEXT");
         element = text.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("TEXT");
+        item = new DocumentModelItem("TEXT");
         item.setTableFieldName("TEXT");
         item.setDataElement(element);
         model.add(item);
@@ -408,8 +389,7 @@ public class Install {
         element.setType(DataType.NUMC);
         element.setLength(8);
         
-        item = new DocumentModelItem();
-        item.setName("ID");
+        item = new DocumentModelItem("ID");
         item.setTableFieldName("IDENT");
         item.setDataElement(element);
         model.add(item);
@@ -420,8 +400,7 @@ public class Install {
                 getModelItem("USERNAME");
         element = username.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("USERNAME");
+        item = new DocumentModelItem("USERNAME");
         item.setTableFieldName("UNAME");
         item.setDataElement(element);
         item.setReference(username);
@@ -431,8 +410,7 @@ public class Install {
         groupname = models.group.getModelItem("NAME");
         element = groupname.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("GROUP");
+        item = new DocumentModelItem("GROUP");
         item.setTableFieldName("GRPID");
         item.setDataElement(element);
         item.setReference(groupname);

@@ -25,16 +25,14 @@ public class CDocument {
         model = data.getModel("COMPLEX_DOCUMENT", "CPLXDOC", null);
         
         // identificador
-        docid = new DocumentModelItem();
-        docid.setName("ID");
+        docid = new DocumentModelItem("ID");
         docid.setTableFieldName("IDENT");
         docid.setDataElement(config.cdocumentid.getDataElement());
         model.add(docid);
         model.add(new DocumentModelKey(docid));
         
         // modelo de referência
-        item = new DocumentModelItem();
-        item.setName("COMPLEX_MODEL");
+        item = new DocumentModelItem("COMPLEX_MODEL");
         item.setTableFieldName("MODEL");
         item.setDataElement(config.cmodelname.getDataElement());
         item.setReference(config.cmodelname);
@@ -46,8 +44,7 @@ public class CDocument {
         element.setType(DataType.DATE);
         element.setLength(10);
         
-        item = new DocumentModelItem();
-        item.setName("DATA_CRIACAO");
+        item = new DocumentModelItem("DATA_CRIACAO");
         item.setTableFieldName("DTDOC");
         item.setDataElement(element);
         model.add(item);
@@ -58,8 +55,7 @@ public class CDocument {
         element.setType(DataType.TIME);
         element.setLength(8);
         
-        item = new DocumentModelItem();
-        item.setName("HORA_CRIACAO");
+        item = new DocumentModelItem("HORA_CRIACAO");
         item.setTableFieldName("HRDOC");
         item.setDataElement(element);
         model.add(item);
@@ -71,8 +67,7 @@ public class CDocument {
         element.setLength(12);
         element.setUpcase(true);
         
-        item = new DocumentModelItem();
-        item.setName("USUARIO_CRIACAO");
+        item = new DocumentModelItem("USUARIO_CRIACAO");
         item.setTableFieldName("USDOC");
         item.setDataElement(element);
         model.add(item);
@@ -88,8 +83,7 @@ public class CDocument {
         element.setLength(16);
         element.setType(DataType.NUMC);
 
-        item = new DocumentModelItem();
-        item.setName("ID");
+        item = new DocumentModelItem("ID");
         item.setTableFieldName("IDENT");
         item.setDataElement(element);
         model.add(item);
@@ -98,8 +92,7 @@ public class CDocument {
         // documento referência
         element = docid.getDataElement();
         
-        item = new DocumentModelItem();
-        item.setName("COMPLEX_DOCUMENT");
+        item = new DocumentModelItem("COMPLEX_DOCUMENT");
         item.setTableFieldName("DOCID");
         item.setDataElement(element);
         item.setReference(docid);
