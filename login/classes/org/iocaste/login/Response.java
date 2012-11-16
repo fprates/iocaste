@@ -105,9 +105,8 @@ public class Response {
      */
     private static final DocumentModel modelInstance() {
         DocumentModelItem item;
-        DocumentModel model = new DocumentModel();
+        DocumentModel model = new DocumentModel("login");
         
-        model.setName("login");
         model.setClassName(Login.class.getCanonicalName());
         
         item = modelItemInstance(model, "username", 0);
@@ -133,10 +132,9 @@ public class Response {
      */
     private static final DocumentModelItem modelItemInstance(
             DocumentModel model, String name, int index) {
-        DocumentModelItem item = new DocumentModelItem();
+        DocumentModelItem item = new DocumentModelItem(name);
         
         item.setDocumentModel(model);
-        item.setName(name);
         item.setAttributeName(name);
         item.setIndex(index);
         

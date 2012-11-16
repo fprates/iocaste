@@ -34,8 +34,8 @@ public class Save {
         if (Common.hasItemDuplicated(view))
             return;
         
-        context.model = new DocumentModel();
-        context.model.setName((String)structure.get("modelname").get());
+        context.model = new DocumentModel(
+                (String)structure.get("modelname").get());
         context.model.setClassName((String)structure.get("modelclass").get());
         context.model.setTableName((String)structure.get("modeltable").get());
         
@@ -63,8 +63,7 @@ public class Save {
             upcase = item.get("item.upcase");
             dataelement.setUpcase(upcase.isSelected());
             
-            modelitem = new DocumentModelItem();
-            modelitem.setName(itemname);
+            modelitem = new DocumentModelItem(itemname);
             modelitem.setTableFieldName((String)Common.getTableValue(
                     item, "item.tablefield"));
             
