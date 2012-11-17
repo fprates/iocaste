@@ -1,5 +1,7 @@
 package org.iocaste.infosis;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -19,7 +21,7 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-    private Object[][] users;
+    private List<Map<String, Object>> users;
 
     public Main() {
         export("install", "install");
@@ -59,16 +61,16 @@ public class Main extends AbstractPage {
         new TableColumn(itens, "username");
         new TableColumn(itens, "terminal");
         new TableColumn(itens, "begin");
-        for (Object[] line : users) {
+        for (Map<String, Object> user : users) {
             item = new TableItem(itens);
             text = new Text(itens, "username");
-            text.setText((String)line[0]);
+            text.setText(user.get("username").toString());
             item.add(text);
             text = new Text(itens, "terminal");
-            text.setText(line[1].toString());
+            text.setText(user.get("terminal").toString());
             item.add(text);
             text = new Text(itens, "begin");
-            text.setText(line[2].toString());
+            text.setText(user.get("connection.time").toString());
             item.add(text);
         }
         view.setTitle("users-list");
@@ -143,27 +145,13 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    @SuppressWarnings("unchecked")
     public final void usrslst(View view) {
-        Map<String, Object> info;
-        Object[] sessions;
-        Map<String, Object> session;
         Iocaste iocaste = new Iocaste(this);
-        String[] usernames = iocaste.getConnectedUsers();
-        int j, i = 0;
+        String[] sessionids = iocaste.getSessions();
 
-        users = new Object[usernames.length][3];
-        for (String username: usernames) {
-            info = iocaste.getUserInfo(username);
-            sessions = (Object[])info.get("sessions");
-            j = 0;
-            for (Object object : sessions) {
-                session = (Map<String, Object>)object;
-                users[i][j++] = username;
-                users[i][j++] = session.get("terminal");
-                users[i++][j] = session.get("connection.time");
-            }
-        }
+        users = new ArrayList<>();
+        for (int i = 0; i < sessionids.length; i++)
+            users.add(iocaste.getSessionInfo(sessionids[i]));
         
         view.redirect("list");
     }
