@@ -40,14 +40,14 @@ public class Services extends AbstractFunction {
         export("commit", "commit");
         export("create_user", "createUser");
         export("disconnect", "disconnect");
-        export("get_connected_users", "getConnectedUsers");
         export("get_context", "getContext");
         export("get_current_app", "getCurrentApp");
         export("get_host", "getHost");
         export("get_locale", "getLocale");
+        export("get_session_info", "getSessionInfo");
+        export("get_sessions", "getSessions");
         export("get_system_info", "getSystemInfo");
         export("get_system_parameter", "getSystemParameter");
-        export("get_user_info", "getUserInfo");
         export("get_username", "getUsername");
         export("invalidate_auth_cache", "invalidateAuthCache");
         export("is_authorized", "isAuthorized");
@@ -175,30 +175,6 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      * @return
-     * @throws Exception 
-     */
-    public final String[] getConnectedUsers(Message message) throws Exception {
-        UserContext context;
-        User user;
-        Set<String> users;
-        
-        users = new TreeSet<String>();
-        for (String sessionid : sessions.keySet()) {
-            context = sessions.get(sessionid);
-            user = context.getUser();
-            if (user == null)
-                continue;
-            
-            users.add(user.getUsername());
-        }
-        
-        return users.toArray(new String[0]);
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
      * @throws Exception
      */
     public final Object getContext(Message message) throws Exception {
@@ -262,6 +238,45 @@ public class Services extends AbstractFunction {
      * @return
      * @throws Exception
      */
+    public final Map<String, Object> getSessionInfo(Message message)
+            throws Exception {
+        String sessionid = message.getString("sessionid");
+        Connection connection = getDBConnection(message.getSessionid());
+        
+        return UserServices.getSessionInfo(sessions.get(sessionid),
+                connection, db);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception 
+     */
+    public final String[] getSessions(Message message) throws Exception {
+        UserContext context;
+        User user;
+        Set<String> users;
+        
+        users = new TreeSet<String>();
+        for (String sessionid : sessions.keySet()) {
+            context = sessions.get(sessionid);
+            user = context.getUser();
+            if (user == null)
+                continue;
+            
+            users.add(sessionid);
+        }
+        
+        return users.toArray(new String[0]);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
     public final Properties getSystemInfo(Message message)
             throws Exception {
         Properties dbprops = new Properties();
@@ -285,20 +300,6 @@ public class Services extends AbstractFunction {
         String name = message.getString("parameter");
         
         return properties.getProperty(name);
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
-     * @throws Exception
-     */
-    public final Map<String, Object> getUserInfo(Message message)
-            throws Exception {
-        String username = message.getString("username");
-        Connection connection = getDBConnection(message.getSessionid());
-        
-        return UserServices.getUserInfo(username, connection, db, sessions);
     }
     
     /**

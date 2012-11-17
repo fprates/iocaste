@@ -2,9 +2,7 @@ package org.iocaste.core;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.iocaste.protocol.user.User;
@@ -44,34 +42,25 @@ public class UserServices {
         db.update(connection, QUERIES[UPD_USRID], userid);
     }
     
-    public static final Map<String, Object> getUserInfo(String username,
-            Connection connection, DBServices db,
-            Map<String, UserContext> sessions) throws Exception {
-        User user;
-        Map<String, Object> info, session;
-        UserContext context;
-        List<Map<String, Object>> connsessions;
-        Object[] objects = db.select(connection, QUERIES[USER], 1, username);
+    public static final Map<String, Object> getSessionInfo(UserContext usrctx,
+            Connection connection, DBServices db) throws Exception {
+        Map<String, Object> info;
+        Object[] objects;
+        String username;
         
+        if (usrctx == null)
+            return null;
+        
+        username = usrctx.getUser().getUsername();
+        objects = db.select(connection, QUERIES[USER], 1, username);
         if (objects == null)
             return null;
         
-        connsessions = new ArrayList<Map<String, Object>>();
-        for (String sessionid : sessions.keySet()) {
-            context = sessions.get(sessionid);
-            user = context.getUser();
-            if ((user == null) || (!user.getUsername().equals(username)))
-                continue;
-            
-            session = new HashMap<String, Object>();
-            session.put("terminal", context.getTerminal()); 
-            session.put("connection.time", context.getConnTime());
-            connsessions.add(session);
-            break;
-        }
-        
         info = new HashMap<String, Object>();
-        info.put("sessions", connsessions.toArray());
+        info.put("username", username);
+        info.put("terminal", usrctx.getTerminal()); 
+        info.put("connection.time", usrctx.getConnTime());
+        
         return info;
     }
     

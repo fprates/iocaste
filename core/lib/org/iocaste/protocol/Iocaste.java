@@ -65,17 +65,6 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
-     * Retorna usuários conectados.
-     * @return usuários conectados
-     */
-    public final String[] getConnectedUsers() {
-        Message message = new Message();
-        
-        message.setId("get_connected_users");
-        return call(message);
-    }
-    
-    /**
      * Retorna objeto do contexto informado.
      * @param name nome do contexto
      * @return contexto
@@ -123,6 +112,30 @@ public final class Iocaste extends AbstractServiceInterface {
     
     /**
      * 
+     * @param username
+     * @return
+     */
+    public final Map<String, Object> getSessionInfo(String sessionid) {
+        Message message = new Message();
+        
+        message.setId("get_session_info");
+        message.add("sessionid", sessionid);
+        return call(message);
+    }
+    
+    /**
+     * Retorna sessões ativas
+     * @return
+     */
+    public final String[] getSessions() {
+        Message message = new Message();
+        
+        message.setId("get_sessions");
+        return call(message);
+    }
+    
+    /**
+     * 
      * @return
      */
     public final Properties getSystemInfo() {
@@ -142,19 +155,6 @@ public final class Iocaste extends AbstractServiceInterface {
         
         message.setId("get_system_parameter");
         message.add("parameter", name);
-        return call(message);
-    }
-    
-    /**
-     * 
-     * @param username
-     * @return
-     */
-    public final Map<String, Object> getUserInfo(String username) {
-        Message message = new Message();
-        
-        message.setId("get_user_info");
-        message.add("username", username);
         return call(message);
     }
     
