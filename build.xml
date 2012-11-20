@@ -88,6 +88,7 @@
     		<fileset dir="${builddir}/shell/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/packagetool/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/globalconfig/lib" excludes="*.jar"/>
+    		<fileset dir="${builddir}/external/lib" excludes="*.jar"/>
     	</copy>
     	
     	<jar basedir="${basedir}/ext/common"
