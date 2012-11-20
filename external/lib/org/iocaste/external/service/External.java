@@ -38,7 +38,7 @@ public class External extends AbstractServiceInterface {
         message.setId("call_service");
         message.add("function", function);
         message.add("parameters", parameters);
-        message.add("wsdl_content", ws.getWSDLContent());
+        message.add("wsdl", ws.getWSDL());
         message.add("url", ws.getWSURL());
         
         return call(message); 
