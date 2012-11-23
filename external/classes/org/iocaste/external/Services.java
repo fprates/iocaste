@@ -2,7 +2,6 @@ package org.iocaste.external;
 
 import java.util.Map;
 
-import org.apache.axiom.om.OMElement;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
