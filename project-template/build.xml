@@ -1,7 +1,8 @@
 <project name="template" default="compile">
     <property name="builddir" value="${basedir}/build"/>
     <property name="debug.status" value="true"/>
-    <property name="server.class" value="org.project.${ant.project.name}.Servlet"/>
+    <property name="vendor" value="aegis"/>
+    <property name="server.class" value="org.${vendor}.${ant.project.name}.Servlet"/>
     <property name="warfilename" value="${basedir}/${ant.project.name}.war"/>
     
     <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
