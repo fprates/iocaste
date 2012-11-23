@@ -97,8 +97,7 @@ public class Main extends AbstractPage {
                 if (parsed.length != 4)
                     return INVALID_HEADER;
                 
-                model = new DocumentModel();
-                model.setName(parsed[0]);
+                model = new DocumentModel(parsed[0]);
                 model.setTableName(parsed[1]);
                 model.setClassName(parsed[2]);
                 
@@ -108,9 +107,8 @@ public class Main extends AbstractPage {
                 continue;
             case 2:
                 parsed = line.split(";");
-                modelitem = new DocumentModelItem();
+                modelitem = new DocumentModelItem(parsed[0]);
                 modelitem.setDocumentModel(model);
-                modelitem.setName(parsed[0]);
                 modelitem.setTableFieldName(parsed[1]);
                 modelitem.setAttributeName(parsed[2]);
                 modelitem.setIndex(currentline);
@@ -199,8 +197,8 @@ public class Main extends AbstractPage {
                 append(Calendar.getInstance().getTime().getTime()).
                 append(".txt").toString();
         
-        view.export("list", instructions.toArray(new String[0]));
-        view.export("instructionname", name);
+//        view.export("list", instructions.toArray(new String[0]));
+//        view.export("instructionname", name);
         view.redirect(null, "download");
     }
     
@@ -397,7 +395,7 @@ public class Main extends AbstractPage {
             return;
         }
         
-        view.export("files", files);
+//        view.export("files", files);
         view.redirect(null, "list");
     }
     
