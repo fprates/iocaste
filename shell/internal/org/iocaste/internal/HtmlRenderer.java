@@ -135,6 +135,10 @@ public class HtmlRenderer {
         XMLElement pretag = new XMLElement("pre");
         
         pretag.add("class", "output_list");
+        for (int i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].replaceAll("[<]", "&lt");
+            lines[i] = lines[i].replaceAll("[>]", "&gt");
+        }
         pretag.addInner(lines);
         
         return pretag;
