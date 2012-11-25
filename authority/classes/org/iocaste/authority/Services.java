@@ -244,11 +244,26 @@ public class Services extends AbstractFunction {
         Documents documents = new Documents(this);
         DocumentModel model = documents.getModel("USER_PROFILE");
         ExtendedObject object = new ExtendedObject(model);
+        String profilename = profile.getName();
+        Authorization[] authorizations = profile.getAuthorizations();
         
-        object.setValue("NAME", profile.getName());
+        object.setValue("NAME", profilename);
         profileid = documents.getNextNumber("PROFILEINDEX");
         object.setValue("ID", profileid);
-        object.setValue("CURRENT", profileid * 100);
+        profileid = (profileid * 100) + authorizations.length;
+        object.setValue("CURRENT", profileid);
         documents.save(object);
+        
+        model = documents.getModel("USER_PROFILE_ITEM");
+        for (Authorization authorization : authorizations) {
+            object = new ExtendedObject(model);
+            profileid++;
+            object.setValue("ID", profileid);
+            object.setValue("PROFILE", profilename);
+            object.setValue("NAME", authorization.getName());
+            object.setValue("OBJECT", authorization.getObject());
+            object.setValue("ACTION", authorization.getAction());
+            documents.save(object);
+        }
     }
 }
