@@ -65,7 +65,23 @@ public class WSClient {
     
     private static final OMElement getMethod(OMFactory factory,
             OMNamespace ns, CallData calldata) {
-        return factory.createOMElement(calldata.function, ns); 
+        OMElement method, parameter;
+        ExtendedObject object = calldata.wsdl.get("operations").
+                get(calldata.function)[0];
+        String name = object.getValue("INPUT_MSG");
+        
+        object = calldata.wsdl.get("messages").get(name)[0];
+        name = object.getValue("ELEMENT");
+        
+        method = factory.createOMElement(calldata.function, ns);
+        for (ExtendedObject object_ : calldata.wsdl.get("types").get(name)) {
+            name = object_.getValue("NAME");
+            parameter = factory.createOMElement(name, ns);
+            parameter.setText(calldata.parameters.get(name).toString());
+            method.addChild(parameter);
+        }
+        
+        return method;
     }
     
     private static final OMNamespace getNamespace(CallData calldata,
