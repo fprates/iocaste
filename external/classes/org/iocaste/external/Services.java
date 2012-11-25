@@ -10,16 +10,24 @@ public class Services extends AbstractFunction {
 
     public Services() {
         export("call_service", "callService");
+        export("get_ws_data", "getWSData");
     }
     
     public final ExtendedObject callService(Message message) throws Exception {
-        String url = message.getString("url");
-        Map<String, Object> parameters = message.get("parameters");
-        String wsdl = message.getString("wsdl");
-        String function = message.getString("function");
-        ExtendedObject response = WSClient.
-                call(url, function, parameters, wsdl);
+        CallData calldata = new CallData();
         
-        return response;
+        calldata.url = message.getString("url");
+        calldata.parameters = message.get("parameters");
+        calldata.function = message.getString("function");
+        calldata.wsdl = message.get("wsdl");
+        
+        return WSClient.call(calldata);
+    }
+    
+    public final Map<String, Map<String, String[]>> getWSData(Message message)
+            throws Exception {
+        String wsdl = message.getString("wsdl");
+        
+        return WSClient.getWSDLContext(wsdl);
     }
 }

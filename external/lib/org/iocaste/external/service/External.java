@@ -38,9 +38,28 @@ public class External extends AbstractServiceInterface {
         message.setId("call_service");
         message.add("function", function);
         message.add("parameters", parameters);
-        message.add("wsdl", ws.getWSDL());
+        message.add("wsdl", ws.getData());
         message.add("url", ws.getWSURL());
         
         return call(message); 
+    }
+    
+    public final WebService getWSData(String wsdl, String wsurl) {
+        WebService ws;
+        Map<String, Map<String, String[]>> wsdata;
+        Message message = new Message();
+        
+        message.setId("get_ws_data");
+        message.add("wsdl", wsdl);
+        message.add("url", wsurl);
+        
+        wsdata = call(message);
+        if (wsdata == null)
+            return null;
+        
+        ws = new WebService(wsdl, wsurl);
+        ws.setData(wsdata);
+        
+        return ws;
     }
 }
