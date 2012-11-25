@@ -24,8 +24,8 @@ public class Services extends AbstractFunction {
         return WSClient.call(calldata);
     }
     
-    public final Map<String, Map<String, String[]>> getWSData(Message message)
-            throws Exception {
+    public final Map<String, Map<String, ExtendedObject[]>> getWSData(
+            Message message) throws Exception {
         String wsdl = message.getString("wsdl");
         
         return WSClient.getWSDLContext(wsdl);

@@ -46,7 +46,7 @@ public class External extends AbstractServiceInterface {
     
     public final WebService getWSData(String wsdl, String wsurl) {
         WebService ws;
-        Map<String, Map<String, String[]>> wsdata;
+        Map<String, Map<String, ExtendedObject[]>> wsdata;
         Message message = new Message();
         
         message.setId("get_ws_data");

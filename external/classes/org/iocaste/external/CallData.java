@@ -2,8 +2,10 @@ package org.iocaste.external;
 
 import java.util.Map;
 
+import org.iocaste.documents.common.ExtendedObject;
+
 public class CallData {
     public String url, function;
     public Map<String, Object> parameters;
-    public Map<String, Map<String, String[]>> wsdl;
+    public Map<String, Map<String, ExtendedObject[]>> wsdl;
 }

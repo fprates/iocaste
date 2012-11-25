@@ -29,12 +29,6 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
 
 public class WSClient {
-    private static final byte INPUT = 0;
-    private static final byte INPUT_MSG = 1;
-    private static final byte OUTPUT = 2;
-    private static final byte OUTPUT_MSG = 3;
-    private static final byte TARGET_NS = 0;
-    private static final byte SVCNAME = 1;
 
     public static final ExtendedObject call(CallData calldata)
             throws Exception {
@@ -51,8 +45,8 @@ public class WSClient {
             
             options = new Options();
             options.setTo(new EndpointReference(calldata.url));
-            options.setAction(calldata.wsdl.get("operations").
-                    get(calldata.function)[INPUT]);
+            options.setAction((String)calldata.wsdl.get("operations").
+                    get(calldata.function)[0].getValue("INPUT"));
             options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
             
             client = new ServiceClient();
@@ -72,24 +66,33 @@ public class WSClient {
         return object;
     }
     
-    private static final String[] getComplexType(OMElement element) {
-        OMElement child;
-        Iterator<?> ite;
-        List<String> types = new ArrayList<>();
+    private static final ExtendedObject[] getComplexType(OMElement element) {
+        ExtendedObject type;
+        Iterator<?> it, ite;
+        DocumentModel model;
+        List<ExtendedObject> types = new ArrayList<>();
         String namespace = element.getNamespaceURI();
-        QName qname = new QName(namespace, "sequence");
-        Iterator<?> it = element.getChildrenWithName(qname);
+        QName qname = new QName(namespace, "complexType");
+        OMElement child = element.getFirstChildWithName(qname);
         
+        qname = new QName(namespace, "sequence");
+        it = child.getChildrenWithName(qname);
+        model = null;
         qname = new QName(namespace, "element");
         while (it.hasNext()) {
             child = (OMElement)it.next();
             ite = child.getChildrenWithName(qname);
             while (ite.hasNext()) {
                 child = (OMElement)ite.next();
+                if (model == null)
+                    model = getPrimitiveTypeModel(child);
+                
+                type = getPrimitiveType(child, model);
+                types.add(type);
             }
         }
         
-        return types.toArray(new String[0]);
+        return types.toArray(new ExtendedObject[0]);
     }
     
     private static final OMElement getMethod(OMFactory factory,
@@ -99,89 +102,136 @@ public class WSClient {
     
     private static final OMNamespace getNamespace(CallData calldata,
             OMFactory factory) {
-        String[] ns = calldata.wsdl.get("wsdata").get("namespace");
+        ExtendedObject[] ns = calldata.wsdl.get("wsdata").get("namespace");
             
-        return factory.createOMNamespace(ns[TARGET_NS], ns[SVCNAME]);
+        return factory.createOMNamespace(
+                (String)ns[0].getValue("TARGETNAMESPACE"),
+                (String)ns[0].getValue("NAME"));
     }
 
-    private static final Map<String, String[]> getMessage(OMElement element) {
+    private static final Map<String, ExtendedObject[]> getMessage(
+            OMElement element) {
         OMElement child;
         String name;
-        String[] part;
-        Map<String, String[]> parts;
+        ExtendedObject[] part;
+        Map<String, ExtendedObject[]> parts;
+        String[] names = {"name", "element"};
+        DocumentModel model = new DocumentModel(null);
+        
+        for (String name_ : names)
+            model.add(new DocumentModelItem(name_));
         
         name = element.getNamespaceURI();
         child = element.getFirstChildWithName(new QName(name, "part"));
         
-        part = new String[2];
+        part = new ExtendedObject[1];
+        part[0] = new ExtendedObject(model);
         name = element.getAttributeValue(new QName("name"));
         parts = new HashMap<>();
         parts.put(name, part);
         
-        part[0] = child.getAttributeValue(new QName("name"));
-        part[1] = child.getAttributeValue(new QName("element"));
+        for (String name_ : names)
+            part[0].setValue(name_.toUpperCase(),
+                    child.getAttributeValue(new QName(name_)));
         
         return parts;
     }
     
-    private static Map<String, String[]> getOperations(OMElement element) {
-        String[] operation;
+    private static Map<String, ExtendedObject[]> getOperations(
+            OMElement element) {
+        ExtendedObject[] operation;
         OMElement child, input, output;
         String name, ns;
+        String[] names = {"input", "input_msg", "output", "output_msg"};
         Iterator<?> it = element.getChildElements();
-        Map<String, String[]> operations = new HashMap<>();
+        Map<String, ExtendedObject[]> operations = new HashMap<>();
         QName attribname = new QName("name");
+        DocumentModel model = new DocumentModel(null);
+        
+        for (String name_ : names)
+            model.add(new DocumentModelItem(name_));
         
         ns = element.getNamespaceURI();
         it = element.getChildrenWithName(new QName(ns, "operation"));
         while (it.hasNext()) {
             child = (OMElement)it.next();
             name = child.getAttributeValue(attribname);
-            operation = new String[4];
+            operation = new ExtendedObject[1];
+            operation[0] = new ExtendedObject(model);
             operations.put(name, operation);
             
             input = child.getFirstChildWithName(new QName(ns, "input"));
-            setOperationAttribs(operation, input, INPUT, INPUT_MSG);
+            setOperationAttribs(operation[0], input, "INPUT", "INPUT_MSG");
             
             output = child.getFirstChildWithName(new QName(ns, "output"));
-            setOperationAttribs(operation, output, OUTPUT, OUTPUT_MSG);
+            setOperationAttribs(operation[0], output, "OUTPUT", "OUTPUT_MSG");
         }
         
         return operations;
     }
     
-    private static final String[] getPrimitiveType(OMElement element) {
-        String[] types = new String[4];
+    private static final ExtendedObject getPrimitiveType(OMElement element,
+            DocumentModel model) {
+        OMAttribute attrib;
+        String name;
+        ExtendedObject type;
+        Iterator<?> it;
         
-        return types;
+        if (model == null)
+            model = getPrimitiveTypeModel(element);
+        
+        type = new ExtendedObject(model);
+        it = element.getAllAttributes();
+        while (it.hasNext()) {
+            attrib = (OMAttribute)it.next();
+            name = attrib.getLocalName().toUpperCase();
+            type.setValue(name, attrib.getAttributeValue());
+        }
+        
+        return type;
     }
     
-    private static final Map<String, String[]> getTypes(OMElement element) {
+    private static final DocumentModel getPrimitiveTypeModel(
+            OMElement element) {
+        OMAttribute attrib;
+        String name;
+        DocumentModel model = new DocumentModel(null);
+        Iterator<?> it = element.getAllAttributes();
+        
+        while (it.hasNext()) {
+            attrib = (OMAttribute)it.next();
+            name = attrib.getLocalName();
+            model.add(new DocumentModelItem(name));
+        }
+        
+        return model;
+    }
+    
+    private static final Map<String, ExtendedObject[]> getTypes(
+            OMElement element) {
         OMElement child;
         String namespace, name;
-        QName qname;
-        String[] type;
+        QName qname, attribname;
+        ExtendedObject[] type;
         Iterator<?> ite;
-        Map<String, String[]> types = new HashMap<>();
+        Map<String, ExtendedObject[]> types = new HashMap<>();
         Iterator<?> it = element.getChildrenWithLocalName("schema");
-        QName targetns = new QName("targetNamespace");
         
+        attribname = new QName("name");
         while (it.hasNext()) {
             child = (OMElement)it.next();
             namespace = child.getNamespaceURI();
             qname = new QName(namespace, "element");
             ite = child.getChildrenWithName(qname);
+            qname = new QName(namespace, "complexType");
             while (ite.hasNext()) {
                 child = (OMElement)ite.next();
-                
-                qname = new QName(namespace, "complexType");
                 if (child.getFirstChildWithName(qname) != null)
                     type = getComplexType(child);
                 else
-                    type = getPrimitiveType(child);
+                    type = new ExtendedObject[] {getPrimitiveType(child, null)};
                 
-                qname = new QName(namespace, "name");
-                name = child.getAttributeValue(qname);
+                name = child.getAttributeValue(attribname);
                 types.put(name, type);
             }
         }
@@ -189,14 +239,14 @@ public class WSClient {
         return types;
     }
     
-    public static final Map<String, Map<String, String[]>> getWSDLContext(
-            String wsdlname) throws Exception {
+    public static final Map<String, Map<String, ExtendedObject[]>>
+            getWSDLContext(String wsdlname) throws Exception {
         OMElement child;
         String name;
         Iterator<?> it;
         OMElement wsdl;
-        Map<String, String[]> ns;
-        Map<String, Map<String, String[]>> context;
+        Map<String, ExtendedObject[]> ns;
+        Map<String, Map<String, ExtendedObject[]>> context;
         FileInputStream fis = new FileInputStream(wsdlname);
         
         try {
@@ -239,16 +289,26 @@ public class WSClient {
         return element;
     }
     
-    private static final String[] parseNamespace(OMElement wsdl) {
-        String[] ns = new String[2];
+    private static final ExtendedObject[] parseNamespace(OMElement wsdl) {
+        QName qname;
+        String[] names = {"targetNamespace", "name"};
+        ExtendedObject[] ns = new ExtendedObject[1];
+        DocumentModel model = new DocumentModel(null);
         
-        ns[0] = wsdl.getAttributeValue(new QName("targetNamespace"));
-        ns[1] = wsdl.getAttributeValue(new QName("name"));
+        for (String name : names)
+            model.add(new DocumentModelItem(name));
+        
+        ns[0] = new ExtendedObject(model);
+        for (String name : names) {
+            qname = new QName(name);
+            ns[0].setValue(name.toUpperCase(), wsdl.getAttributeValue(qname));
+        }
+        
         return ns;
     }
     
-    private static final void setOperationAttribs(String[] operation,
-            OMElement element, byte op, byte msg) {
+    private static final void setOperationAttribs(ExtendedObject operation,
+            OMElement element, String op, String msg) {
         OMAttribute attrib;
         Iterator<?> it = element.getAllAttributes();
         
@@ -256,10 +316,10 @@ public class WSClient {
             attrib = (OMAttribute)it.next();
             switch (attrib.getLocalName().toLowerCase()) {
             case "action":
-                operation[op] = attrib.getAttributeValue();
+                operation.setValue(op, attrib.getAttributeValue());
                 break;
             case "message":
-                operation[msg] = attrib.getAttributeValue();
+                operation.setValue(msg, attrib.getAttributeValue());
                 break;
             }
         }
