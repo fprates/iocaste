@@ -1,14 +1,16 @@
 package org.iocaste.external.service;
 
+import java.net.URL;
 import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
 
 public class WebService {
-    private String wsdl, wsurl;
+    private URL wsdl;
+    String wsurl;
     private Map<String, Map<String, ExtendedObject[]>> wsdata;
     
-    public WebService(String wsdl, String wsurl) {
+    public WebService(URL wsdl, String wsurl) {
         this.wsdl = wsdl;
         this.wsurl = wsurl;
     }
@@ -17,7 +19,7 @@ public class WebService {
         return wsdata;
     }
     
-    public final String getWSDL() {
+    public final URL getWSDL() {
         return wsdl;
     }
     

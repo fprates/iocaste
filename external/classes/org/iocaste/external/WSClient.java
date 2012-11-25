@@ -1,6 +1,7 @@
 package org.iocaste.external;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -94,17 +95,17 @@ public class WSClient {
     }
     
     public static final Map<String, Map<String, ExtendedObject[]>>
-            getWSDLContext(String wsdlname) throws Exception {
+            getWSDLContext(URL wsdlname) throws Exception {
         OMElement child;
         String name;
         Iterator<?> it;
         OMElement wsdl;
         Map<String, ExtendedObject[]> ns, messages;
         Map<String, Map<String, ExtendedObject[]>> context;
-        FileInputStream fis = new FileInputStream(wsdlname);
+        InputStream is = wsdlname.openStream();
         
         try {
-            wsdl = getWSDLObject(fis);
+            wsdl = getWSDLObject(is);
             ns = new HashMap<>();
             ns.put("namespace", parseNamespace(wsdl));
             
@@ -132,13 +133,13 @@ public class WSClient {
         } catch (OMException e) {
             throw new IocasteException(e.getMessage());
         } finally {
-            fis.close();
+            is.close();
         }
         
         return context;
     }
     
-    private static final OMElement getWSDLObject(FileInputStream fis)
+    private static final OMElement getWSDLObject(InputStream fis)
             throws Exception {
         XMLInputFactory xif = XMLInputFactory.newInstance();
         XMLStreamReader reader = xif.createXMLStreamReader(fis);

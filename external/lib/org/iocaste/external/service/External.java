@@ -1,5 +1,6 @@
 package org.iocaste.external.service;
 
+import java.net.URL;
 import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
@@ -44,7 +45,7 @@ public class External extends AbstractServiceInterface {
         return call(message); 
     }
     
-    public final WebService getWSData(String wsdl, String wsurl) {
+    public final WebService getWSData(URL wsdl, String wsurl) {
         WebService ws;
         Map<String, Map<String, ExtendedObject[]>> wsdata;
         Message message = new Message();

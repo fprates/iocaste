@@ -1,5 +1,6 @@
 package org.iocaste.external;
 
+import java.net.URL;
 import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
@@ -26,7 +27,7 @@ public class Services extends AbstractFunction {
     
     public final Map<String, Map<String, ExtendedObject[]>> getWSData(
             Message message) throws Exception {
-        String wsdl = message.getString("wsdl");
+        URL wsdl = message.get("wsdl");
         
         return WSClient.getWSDLContext(wsdl);
     }
