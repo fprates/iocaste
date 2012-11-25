@@ -228,10 +228,7 @@ public class Renderer {
             return numberformat.format(value);
             
         case DataType.NUMC:
-            if (element.getLength() < DataType.MAX_INT_LEN)
-                return Integer.toString((Integer)value);
-            else
-                return Long.toString((Long)value);
+            return value.toString();
             
         case DataType.DATE:
             dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
