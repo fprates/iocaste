@@ -127,8 +127,9 @@ public abstract class AbstractPage extends AbstractFunction {
     /**
      * 
      * @param view
+     * @throws Exception
      */
-    protected void init(View view) { }
+    protected void init(View view) throws Exception { }
     
     /**
      * Atualiza uma visão, não necessariamente a visão atual.
