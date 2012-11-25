@@ -103,14 +103,15 @@ public class Request {
     /**
      * 
      * @param vdata
+     * @param model
      * @param function
      */
-    public static final void save(View vdata, Function function) {
+    public static final void save(View vdata, DocumentModel model,
+            Function function) {
         Object value;
         InputComponent input;
         DocumentModelItem modelitem;
         ExtendedObject object;
-        DocumentModel model = vdata.getParameter("model");
         Documents documents = new Documents(function);
         Table table = vdata.getElement("selection_view");
         

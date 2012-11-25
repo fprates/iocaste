@@ -114,7 +114,7 @@ public class Main extends AbstractPage {
      * @param vdata
      */
     public final void save(View vdata) {
-        Request.save(vdata, this);
+        Request.save(vdata, model, this);
     }
     
     /**
