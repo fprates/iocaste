@@ -250,8 +250,8 @@ public class Services extends AbstractFunction {
         object.setValue("NAME", profilename);
         profileid = documents.getNextNumber("PROFILEINDEX");
         object.setValue("ID", profileid);
-        profileid = (profileid * 100) + authorizations.length;
-        object.setValue("CURRENT", profileid);
+        profileid *= 100;
+        object.setValue("CURRENT", profileid + authorizations.length);
         documents.save(object);
         
         model = documents.getModel("USER_PROFILE_ITEM");
