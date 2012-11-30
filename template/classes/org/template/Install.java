@@ -10,6 +10,7 @@ import org.iocaste.protocol.user.Authorization;
 public class Install {
 
     public static final InstallData init() {
+        TaskGroup taskgroup;
         Map<String, String> messages;
         Authorization authorization;
         InstallData data = new InstallData();
