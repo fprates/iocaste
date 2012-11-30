@@ -18,6 +18,7 @@ public class Operations {
         ExtendedObject[] operation;
         OMElement child, input, output;
         String name, ns;
+        QName inputname, outputname;
         String[] names = {"input", "input_msg", "output", "output_msg"};
         Iterator<?> it = element.getChildElements();
         Map<String, ExtendedObject[]> operations = new HashMap<>();
@@ -28,6 +29,8 @@ public class Operations {
             model.add(new DocumentModelItem(name_));
         
         ns = element.getNamespaceURI();
+        inputname = new QName(ns, "input");
+        outputname = new QName(ns, "output");
         it = element.getChildrenWithName(new QName(ns, "operation"));
         while (it.hasNext()) {
             child = (OMElement)it.next();
@@ -36,10 +39,10 @@ public class Operations {
             operation[0] = new ExtendedObject(model);
             operations.put(name, operation);
             
-            input = child.getFirstChildWithName(new QName(ns, "input"));
+            input = child.getFirstChildWithName(inputname);
             setOperationAttribs(operation[0], input, "INPUT", "INPUT_MSG");
             
-            output = child.getFirstChildWithName(new QName(ns, "output"));
+            output = child.getFirstChildWithName(outputname);
             setOperationAttribs(operation[0], output, "OUTPUT", "OUTPUT_MSG");
         }
         

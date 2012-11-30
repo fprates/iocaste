@@ -100,6 +100,7 @@ public class WSClient {
         String name;
         Iterator<?> it;
         OMElement wsdl;
+        QName ename;
         Map<String, ExtendedObject[]> ns, messages;
         Map<String, Map<String, ExtendedObject[]>> context;
         InputStream is = wsdlname.openStream();
@@ -121,10 +122,11 @@ public class WSClient {
 
             messages = new HashMap<>();
             context.put("messages", messages);
+            ename = new QName("name");
             it = wsdl.getChildrenWithName(new QName(name, "message"));
             while (it.hasNext()) {
                 child = (OMElement)it.next();
-                name = child.getAttributeValue(new QName("name"));
+                name = child.getAttributeValue(ename);
                 messages.put(name, Messages.get(child));
             }
             
@@ -173,6 +175,7 @@ public class WSClient {
         DocumentModel model;
         ExtendedObject object;
         String name, ns;
+        QName vname;
         
         object = calldata.wsdl.get("operations").get(calldata.function)[0];
         name = object.getValue("OUTPUT_MSG");
@@ -186,8 +189,9 @@ public class WSClient {
         
         ns = element.getNamespaceURI();
         object = new ExtendedObject(model);
+        vname = new QName(ns, name);
         for (DocumentModelItem item : model.getItens()) {
-            child = element.getFirstChildWithName(new QName(ns, name));
+            child = element.getFirstChildWithName(vname);
             object.setValue(item, child.getText());
             break;
         }
