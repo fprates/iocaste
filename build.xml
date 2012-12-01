@@ -79,7 +79,10 @@
         <!-- gconfigview -->
         <ant antfile="${basedir}/src/gconfigview/build.xml"/>
         
-    	<!-- template -->
+    	<!-- workbench -->
+        <ant antfile="${basedir}/src/workbench/build.xml"/>
+        
+        <!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
     	
     	<copy todir="${basedir}/ext/common">
