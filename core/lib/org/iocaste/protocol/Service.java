@@ -56,10 +56,10 @@ public class Service {
             
             oos = new ObjectOutputStream(urlcon.getOutputStream());
             oos.writeObject(message);
-            oos.close();
             
             ois = new ObjectInputStream(urlcon.getInputStream());
             response = (Message)ois.readObject();
+            oos.close();
             ois.close();
             
             if (response.getException() != null)

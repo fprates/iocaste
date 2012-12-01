@@ -69,6 +69,7 @@ public abstract class ServerServlet extends HttpServlet {
         
         this.req = req;
         this.resp = resp;
+        resp.reset();
         
         service = new Service(sessionid, getUrl());
         configureStreams(service);
