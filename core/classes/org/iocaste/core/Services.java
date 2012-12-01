@@ -21,7 +21,7 @@ import org.iocaste.protocol.user.User;
 
 public class Services extends AbstractFunction {
     private static final int USERNAME_MAX_LEN = 12;
-    private static final String CONFIG_FILE = "core.properties";
+    private static final String CONFIG_FILE = "/.iocaste/core.properties";
     private Map<String, UserContext> sessions;
     private DBServices db;
     private String host;
@@ -341,7 +341,6 @@ public class Services extends AbstractFunction {
         BufferedReader reader;
         FileInputStream fis;
         String path = new StringBuilder(System.getProperty("user.home")).
-                append(System.getProperty("file.separator")).
                 append(CONFIG_FILE).toString();
         File file = new File(path);
         

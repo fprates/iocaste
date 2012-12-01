@@ -20,6 +20,7 @@ import org.iocaste.shell.common.View;
 
 public class DBConfigRequest {
     private static final String CONFIG_FILE = "core.properties";
+    private static final String IOCASTE_DIR = ".iocaste";
     private static final byte MSSQL = 0;
     private static final byte MYSQL = 1;
     private static final byte HSQLDB = 2;
@@ -244,12 +245,17 @@ public class DBConfigRequest {
     }
     
     private static final void saveConfig(Config config) throws Exception {
+        File file;
+        BufferedWriter writer;
         Properties properties = new Properties();
         String path = new StringBuilder(System.getProperty("user.home")).
-                append(System.getProperty("file.separator")).
-                append(CONFIG_FILE).toString();
-        File file = new File(path);
-        BufferedWriter writer = new BufferedWriter(
+                append(File.separator).
+                append(IOCASTE_DIR).toString();
+        
+        new File(path).mkdir();
+        file = new File(new StringBuilder(path).
+                append(File.separator).append(CONFIG_FILE).toString());
+        writer = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(file)));
         
         properties.put("dbdriver", config.dbdriver);
