@@ -45,14 +45,13 @@ public class Response {
         view.setTitle("style-editor");
     }
     
-    public static final void style(View view, Function function) {
+    public static final void style(View view, Function function,
+            Context context) {
         Table itens;
-        ExtendedObject[] elements = view.getParameter("elements");
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "newstyle");
         DataItem style = new DataItem(form, Const.TEXT_FIELD, "style");
-        byte mode = Common.getMode(view);
         
         pagecontrol.add("home");
         pagecontrol.add("back");
@@ -60,8 +59,8 @@ public class Response {
         style.setModelItem(new Documents(function).getModel("STYLE").
                 getModelItem("NAME"));
         
-        switch (mode) {
-        case Common.CREATE:
+        switch (context.mode) {
+        case Context.CREATE:
             new Button(container, "addstyle");
             
             itens = new Table(container, "elements");
@@ -69,22 +68,22 @@ public class Response {
             
             break;
             
-        case Common.SHOW:
+        case Context.SHOW:
             itens = new Table(container, "elements");
             new TableColumn(itens, "element");
             
-            for (ExtendedObject element :  elements)
+            for (ExtendedObject element :  context.elements)
                 new TableItem(itens).add(new Link(itens,
                         (String)element.getValue("NAME"), "element"));
             
             break;
-        case Common.UPDATE:
+        case Context.UPDATE:
             new Button(container, "addstyle");
             
             itens = new Table(container, "elements");
             new TableColumn(itens, "element");
             
-            for (ExtendedObject element :  elements)
+            for (ExtendedObject element :  context.elements)
                 new TableItem(itens).add(new Link(itens,
                         (String)element.getValue("NAME"), "element"));
             

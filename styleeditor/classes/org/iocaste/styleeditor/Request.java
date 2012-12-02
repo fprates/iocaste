@@ -23,7 +23,6 @@ public class Request {
             return;
         }
         
-        view.export("mode", Common.CREATE);
         view.redirect(null, "style");
     }
     
@@ -31,10 +30,9 @@ public class Request {
         return view.getParameter("mode");
     }
     
-    public static final void load(View view, Function function, byte mode)
+    public static final ExtendedObject[] load(View view, Function function)
             throws Exception {
         ExtendedObject ostyle;
-        ExtendedObject[] oelements;
         Documents documents = new Documents(function);
         String query, style = ((DataForm)view.getElement("selection")).
                 get("estilo").get();
@@ -43,14 +41,11 @@ public class Request {
         
         if (ostyle == null) {
             view.message(Const.ERROR, "invalid.style");
-            return;
+            return null;
         }
         
-        query = "from STYLE_ELEMENT where STYLE = ?";
-        oelements = documents.select(query, style);
-        
-        view.export("elements", oelements);
-        view.export("mode", mode);
         view.redirect(null, "style");
+        query = "from STYLE_ELEMENT where STYLE = ?";
+        return documents.select(query, style);
     }
 }

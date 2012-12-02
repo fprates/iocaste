@@ -6,8 +6,10 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-
+    private Context context;
+    
     public Main() {
+        context = new Context();
         export("install", "install");
     }
     
@@ -16,6 +18,7 @@ public class Main extends AbstractPage {
     }
     
     public final void create(View view) throws Exception {
+        context.mode = Context.CREATE;
         Request.create(view, this);
     }
     
@@ -28,14 +31,16 @@ public class Main extends AbstractPage {
     }
     
     public final void show(View view) throws Exception {
-        Request.load(view, this, Common.SHOW);
+        context.mode = Context.SHOW;
+        Request.load(view, this);
     }
     
     public final void style(View view) throws Exception {
-        Response.style(view, this);
+        Response.style(view, this, context);
     }
     
     public final void update(View view) throws Exception {
-        Request.load(view, this, Common.UPDATE);
+        context.mode = Context.UPDATE;
+        context.elements = Request.load(view, this);
     }
 }
