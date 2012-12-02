@@ -83,7 +83,8 @@ public class DBServices {
      * @param connection
      * @throws SQLException 
      */
-    public final void commit(Connection connection) throws SQLException {
+    public final void commit(Connection connection)
+            throws SQLException {
         connection.commit();
     }
     
@@ -124,6 +125,8 @@ public class DBServices {
             throw new SQLException(e.getMessage());
         } catch (MySQLSyntaxErrorException e) {
             throw new SQLException(e.getMessage());
+        } catch (MySQLNonTransientConnectionException e) {
+            throw new SQLException(e.getMessage());
         } catch (SQLException e) {
             throw new SQLException(e.getMessage());
         }
@@ -155,7 +158,8 @@ public class DBServices {
      * @param connection
      * @throws SQLException
      */
-    public final void rollback(Connection connection) throws SQLException {
+    public final void rollback(Connection connection)
+            throws SQLException {
         connection.rollback();
     }
     
