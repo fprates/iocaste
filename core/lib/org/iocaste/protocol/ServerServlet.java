@@ -13,15 +13,15 @@ public abstract class ServerServlet extends HttpServlet {
     private static final long serialVersionUID = 7408336035974886402L;
     private Map<String, Function> functions;
     private Map<String, Map<String, Function>> sfunctions;
-    private HttpServletRequest req;
-    private HttpServletResponse resp;
     private Map<String, Map<String, Object[]>> authorized;
+    private Map<String, HttpServletRequest> requests;
     private boolean singleton;
     
     public ServerServlet() {
         functions = new HashMap<>();
         sfunctions = new HashMap<>();
         authorized = new HashMap<>();
+        requests = new HashMap<>();
         singleton = true;
         config();
     }
@@ -46,9 +46,10 @@ public abstract class ServerServlet extends HttpServlet {
      * @param service
      * @throws IOException
      */
-    protected final void configureStreams(Service service) throws IOException {
-        service.setInputStream(req.getInputStream());
-        service.setOutputStream(resp.getOutputStream());
+    protected final void configureStreams(Service service, Context context)
+            throws IOException {
+        service.setInputStream(context.req.getInputStream());
+        service.setOutputStream(context.resp.getOutputStream());
     }
 
     /*
@@ -64,15 +65,17 @@ public abstract class ServerServlet extends HttpServlet {
         Message message;
         Function function;
         Service service;
+        Context context;
         String functionid, complexid;
         String sessionid = req.getSession().getId();
         
-        this.req = req;
-        this.resp = resp;
         resp.reset();
         
-        service = new Service(sessionid, getUrl());
-        configureStreams(service);
+        service = new Service(sessionid, getUrl(req));
+        context = new Context();
+        context.req = req;
+        context.resp = resp;
+        configureStreams(service, context);
         
         try {
             message = service.getMessage();
@@ -81,17 +84,18 @@ public abstract class ServerServlet extends HttpServlet {
         }
         
         try {
+            complexid = message.getSessionid();
+            requests.put(complexid, req);
             preRun(message);
+            
             functionid = message.getId();
             if (functionid == null)
                 throw new Exception("Function not specified.");
             
-            if (singleton) {
+            if (singleton)
                 function = functions.get(functionid);
-            } else {
-                complexid = message.getSessionid();
+            else
                 function = sfunctions.get(complexid).get(functionid);
-            }
             
             if (function == null)
                 throw new Exception(new StringBuilder("Function \"").
@@ -99,8 +103,8 @@ public abstract class ServerServlet extends HttpServlet {
                         append("\" not registered.").toString());
             
             function.setServletContext(getServletContext());
-            function.setServerName(getServerName());
-            function.setSessionid(sessionid);
+            function.setServerName(getServerName(req));
+            function.setSessionid(complexid);
             function.setAuthorizedCall(isAuthorized(message));
             
             service.messageReturn(message, function.run(message));
@@ -115,18 +119,24 @@ public abstract class ServerServlet extends HttpServlet {
      * 
      * @return
      */
-    public final String getServerName() {
+    public final String getServerName(HttpServletRequest req) {
         return new StringBuffer(req.getScheme()).append("://")
                 .append(req.getServerName()).append(":")
                 .append(req.getServerPort()).toString();
+    }
+    
+    protected final String getServerName(String sessionid) {
+        HttpServletRequest req = requests.get(sessionid);
+        
+        return getServerName(req);
     }
     
     /**
      * 
      * @return
      */
-    private final String getUrl() {
-        return new StringBuffer(getServerName())
+    private final String getUrl(HttpServletRequest req) {
+        return new StringBuffer(getServerName(req))
             .append(req.getContextPath())
             .append(req.getServletPath()).toString();
     }
@@ -174,18 +184,19 @@ public abstract class ServerServlet extends HttpServlet {
     protected void preRun(Message message) throws Exception {
         boolean connected;
         Message test;
-        String url;
+        String url, sessionid;
         
         if (isAuthorized(message))
             return;
         
+        sessionid = message.getSessionid();
         test = new Message();
-        url = new StringBuffer(getServerName())
+        url = new StringBuffer(getServerName(sessionid))
             .append(Iocaste.SERVERNAME).toString();
         
         test.setId("is_connected");
-        test.add("sessionid", message.getSessionid());
-        test.setSessionid(message.getSessionid());
+        test.add("sessionid", sessionid);
+        test.setSessionid(sessionid);
         
         connected = (Boolean)Service.callServer(url, test);
         
@@ -223,4 +234,9 @@ public abstract class ServerServlet extends HttpServlet {
     protected final void setSingleton(boolean singleton) {
         this.singleton = singleton;
     }
+}
+
+class Context {
+    public HttpServletRequest req;
+    public HttpServletResponse resp;
 }

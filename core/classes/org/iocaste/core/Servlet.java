@@ -53,7 +53,7 @@ public class Servlet extends ServerServlet {
             services.init();
         }
         
-        services.setHost(getServerName());
+        services.setHost(getServerName(message.getSessionid()));
         
         if (isAuthorized(message))
             return;

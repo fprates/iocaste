@@ -27,11 +27,10 @@ public class Service {
         this.os = os;
     }
     
-    public final Message getMessage() throws IOException, ClassNotFoundException {
+    public final Message getMessage() throws IOException,
+            ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream(is);
         Message message = (Message)ois.readObject();
-        
-        ois.close();
         
         return message;
     }
@@ -59,8 +58,6 @@ public class Service {
             
             ois = new ObjectInputStream(urlcon.getInputStream());
             response = (Message)ois.readObject();
-            oos.close();
-            ois.close();
             
             if (response.getException() != null)
                 throw response.getException();
@@ -87,7 +84,6 @@ public class Service {
         message.setException(ex);
         
         oos.writeObject(message);
-        oos.close();
     }
     
     public final void messageReturn(
