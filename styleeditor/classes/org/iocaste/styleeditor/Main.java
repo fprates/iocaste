@@ -32,7 +32,7 @@ public class Main extends AbstractPage {
     
     public final void show(View view) throws Exception {
         context.mode = Context.SHOW;
-        Request.load(view, this);
+        context.elements = Request.load(view, this);
     }
     
     public final void style(View view) throws Exception {
