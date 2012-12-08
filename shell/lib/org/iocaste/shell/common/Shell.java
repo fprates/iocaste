@@ -163,19 +163,6 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
-     * Retorna folha de estilo associada à visão.
-     * @param view visão
-     * @return mapa com dados da folha de estilo.
-     */
-    public final Map<String, Map<String, String>> getStyleSheet(View view) {
-        Message message = new Message();
-        
-        message.setId("get_style_sheet");
-        message.add("appname", view.getAppName());
-        return call(message);
-    }
-    
-    /**
      * Retorna visão especificada.
      * @param view visão atual
      * @param pagename nome da visão

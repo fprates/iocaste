@@ -194,6 +194,8 @@ public class PageRenderer extends AbstractRenderer {
         }
         
         view = new View(appname, pagename);
+        view.setStyleSheet(appctx.getStyleSheet());
+        
         message = new Message();
         message.setId("get_view_data");
         message.add("view", view);
@@ -565,21 +567,6 @@ public class PageRenderer extends AbstractRenderer {
             return null;
         
         return appctx.getPageContext(contextdata.pagename);
-    }
-    
-    /**
-     * 
-     * @param sessionid
-     * @param appname
-     * @return
-     */
-    public static final Map<String, Map<String, String>> getStyleSheet(
-            String sessionid, String appname) {
-        String[] complexid = sessionid.split(":");
-        int logid = Integer.parseInt(complexid[1]);
-        
-        return apps.get(complexid[0]).get(logid).getAppContext(appname).
-                getStyleSheet();
     }
     
     /**

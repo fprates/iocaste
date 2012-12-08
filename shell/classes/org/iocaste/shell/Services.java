@@ -10,7 +10,6 @@ import org.iocaste.shell.common.View;
 public class Services extends AbstractFunction {
 
     public Services() {
-        export("get_style_sheet", "getStyleSheet");
         export("get_view", "getView");
         export("home", "home");
         export("pop_page", "popPage");
@@ -27,19 +26,6 @@ public class Services extends AbstractFunction {
     public final static Map<String, Map<String, String>> getStyle(
             String name, Function function) {
         return Style.get(name, function);
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
-     */
-    public final Map<String, Map<String, String>> getStyleSheet(Message message)
-    {
-        String sessionid = message.getSessionid();
-        String appname = message.getString("appname");
-        
-        return PageRenderer.getStyleSheet(sessionid, appname);
     }
     
     /**
