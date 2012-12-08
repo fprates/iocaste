@@ -21,7 +21,6 @@ import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
-import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
 
 public class Response {
@@ -113,7 +112,7 @@ public class Response {
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("help", PageControl.EXTERNAL);
-        setCustomStyleSheet(view, function);
+        setCustomStyleSheet(view);
         
         /*
          * linha de comando
@@ -157,8 +156,7 @@ public class Response {
      * @param view
      * @param function
      */
-    private static final void setCustomStyleSheet(View view,
-            Function function) {
+    private static final void setCustomStyleSheet(View view) {
         Map<String, Map<String, String>> defaultsheet;
         Map<String, String> style;
         
@@ -166,7 +164,7 @@ public class Response {
         style.put("padding", "0px");
         style.put("margin", "0px");
         
-        defaultsheet = new Shell(function).getStyleSheet(view);
+        defaultsheet = view.getStyleSheet();
         defaultsheet.put(".groups", style);
         
         style = new HashMap<String, String>();
