@@ -26,8 +26,7 @@ public class CModel {
         model = data.getModel("COMPLEX_MODEL", "CPLXMODEL", null);
         
         // identificador
-        element = new DataElement();
-        element.setName("COMPLEX_MODEL.NAME");
+        element = new DataElement("COMPLEX_MODEL.NAME");
         element.setType(DataType.CHAR);
         element.setUpcase(true);
         element.setLength(24);
@@ -39,8 +38,7 @@ public class CModel {
         model.add(new DocumentModelKey(config.cmodelname));
 
         // índice
-        element = new DataElement();
-        element.setName("COMPLEX_MODEL.ID");
+        element = new DataElement("COMPLEX_MODEL.ID");
         element.setType(DataType.NUMC);
         element.setLength(3);
         
@@ -61,8 +59,7 @@ public class CModel {
         model.add(item);
         
         // último documento para este modelo
-        element = new DataElement();
-        element.setName("COMPLEX_DOCUMENT.ID");
+        element = new DataElement("COMPLEX_DOCUMENT.ID");
         element.setType(DataType.NUMC);
         element.setLength(11);
         
@@ -72,8 +69,7 @@ public class CModel {
         model.add(config.cdocumentid);
         
         // link documento-document complexo
-        element = new DataElement();
-        element.setName("COMPLEX_MODEL.CD_LINK");
+        element = new DataElement("COMPLEX_MODEL.CD_LINK");
         element.setType(DataType.CHAR);
         element.setLength(24);
         element.setUpcase(true);
@@ -91,8 +87,7 @@ public class CModel {
         model = data.getModel("COMPLEX_MODEL_ITEM", "CPLXMITEM", null);
         
         // identificador
-        element = new DataElement();
-        element.setName("COMPLEX_MODEL_ITEM.ID");
+        element = new DataElement("COMPLEX_MODEL_ITEM.ID");
         element.setLength(6);
         element.setType(DataType.NUMC);
         

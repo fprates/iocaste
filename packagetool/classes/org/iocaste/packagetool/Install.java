@@ -66,9 +66,8 @@ public class Install {
         String tag, country;
         DocumentModelItem item;
         DocumentModel model = data.getModel("LANGUAGES", "LANG", null);
-        DataElement element = new DataElement();
+        DataElement element = new DataElement("LANGUAGES.LOCALE");
         
-        element.setName("LANGUAGES.LOCALE");
         element.setType(DataType.CHAR);
         element.setLength(5);
         element.setUpcase(false);
@@ -80,8 +79,7 @@ public class Install {
         model.add(item);
         model.add(new DocumentModelKey(item));
         
-        element = new DataElement();
-        element.setName("LANGUAGES.CODE");
+        element = new DataElement("LANGUAGES.CODE");
         element.setType(DataType.NUMC);
         element.setLength(3);
         
@@ -113,15 +111,16 @@ public class Install {
      */
     private static final void installMessages(InstallData data, Models models,
             Function function) {
+        DataElement element;
         Documents documents;
         DocumentModelItem item, reference;
         DocumentModel model = data.getModel("MESSAGES", "MSGSRC", null);
-        DataElement element = new DataElement();
+
         
         /*
          * índice
          */
-        element.setName("INDEX");
+        element = new DataElement("INDEX");
         element.setType(DataType.NUMC);
         element.setLength(13);
         
@@ -135,8 +134,7 @@ public class Install {
         /*
          * nome
          */
-        element = new DataElement();
-        element.setName("MESSAGES.NAME");
+        element = new DataElement("MESSAGES.NAME");
         element.setType(DataType.CHAR);
         element.setLength(64);
         element.setUpcase(false);
@@ -177,8 +175,7 @@ public class Install {
         /*
          * mensagem
          */
-        element = new DataElement();
-        element.setName("MESSAGES.TEXT");
+        element = new DataElement("MESSAGES.TEXT");
         element.setType(DataType.CHAR);
         element.setLength(255);
         element.setUpcase(false);
@@ -203,8 +200,7 @@ public class Install {
         
         tasks = data.getModel("TASKS", "TASKS", null);
 
-        element = new DataElement();
-        element.setName("TASKS.NAME");
+        element = new DataElement("TASKS.NAME");
         element.setLength(18);
         element.setType(DataType.CHAR);
         element.setUpcase(true);
@@ -216,8 +212,7 @@ public class Install {
         tasks.add(item);
         tasks.add(new DocumentModelKey(item));
         
-        element = new DataElement();
-        element.setName("TASKS.COMMAND");
+        element = new DataElement("TASKS.COMMAND");
         element.setLength(128);
         element.setType(DataType.CHAR);
         
@@ -246,8 +241,7 @@ public class Install {
         group = data.getModel("TASKS_GROUPS", "TASKSGRP", null);
         
         // nome do grupo
-        element = new DataElement();
-        element.setName("TASKS_GROUPS.NAME");
+        element = new DataElement("TASKS_GROUPS.NAME");
         element.setType(DataType.CHAR);
         element.setLength(12);
         element.setUpcase(true);
@@ -259,8 +253,7 @@ public class Install {
         group.add(new DocumentModelKey(groupname));
         
         // índice do grupo
-        element = new DataElement();
-        element.setName("TASKS_GROUPS.ID");
+        element = new DataElement("TASKS_GROUPS.ID");
         element.setType(DataType.NUMC);
         element.setLength(3);
         
@@ -270,8 +263,7 @@ public class Install {
         group.add(item);
         
         // último item do grupo
-        element = new DataElement();
-        element.setName("TASKS_GROUPS.CURRENT");
+        element = new DataElement("TASKS_GROUPS.CURRENT");
         element.setType(DataType.NUMC);
         element.setLength(6);
         
@@ -288,8 +280,7 @@ public class Install {
         model = data.getModel("TASK_ENTRY", "TASKENTRY", null);
         
         // identificador
-        element = new DataElement();
-        element.setName("TASK_ENTRY.ID");
+        element = new DataElement("TASK_ENTRY.ID");
         element.setType(DataType.NUMC);
         element.setLength(8);
         
@@ -300,8 +291,7 @@ public class Install {
         model.add(new DocumentModelKey(entryid));
         
         // nome da entrada
-        element = new DataElement();
-        element.setName("TASK_ENTRY.NAME");
+        element = new DataElement("TASK_ENTRY.NAME");
         element.setType(DataType.CHAR);
         element.setLength(12);
         element.setUpcase(true);
@@ -327,8 +317,7 @@ public class Install {
         model = data.getModel("TASK_ENTRY_TEXT", "TASKENTRYTXT", null);
 
         // identificador
-        element = new DataElement();
-        element.setName("TASK_ENTRY_TEXT.ID");
+        element = new DataElement("TASK_ENTRY_TEXT.ID");
         element.setType(DataType.NUMC);
         element.setLength(10);
         
@@ -384,8 +373,7 @@ public class Install {
         model = data.getModel("USER_TASKS_GROUPS", "USRTASKGRP", null);
         
         // identificador
-        element = new DataElement();
-        element.setName("USER_TASKS_GROUPS.ID");
+        element = new DataElement("USER_TASKS_GROUPS.ID");
         element.setType(DataType.NUMC);
         element.setLength(8);
         

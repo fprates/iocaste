@@ -71,9 +71,8 @@ public class Response {
      */
     private static final DataElement dataElementInstance(
             String name, int datatype, int length, boolean upcase) {
-        DataElement dataelement = new DataElement();
+        DataElement dataelement = new DataElement(name);
         
-        dataelement.setName(name);
         dataelement.setType(datatype);
         dataelement.setLength(length);
         dataelement.setDecimals(0);

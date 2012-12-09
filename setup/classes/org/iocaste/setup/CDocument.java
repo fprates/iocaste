@@ -39,8 +39,7 @@ public class CDocument {
         model.add(item);
         
         // data de criação
-        element = new DataElement();
-        element.setName("COMPLEX_DOCUMENT.DATA_CRIACAO");
+        element = new DataElement("COMPLEX_DOCUMENT.DATA_CRIACAO");
         element.setType(DataType.DATE);
         element.setLength(10);
         
@@ -50,8 +49,7 @@ public class CDocument {
         model.add(item);
         
         // hora de criação
-        element = new DataElement();
-        element.setName("COMPLEX_DOCUMENT.HORA_CRIACAO");
+        element = new DataElement("COMPLEX_DOCUMENT.HORA_CRIACAO");
         element.setType(DataType.TIME);
         element.setLength(8);
         
@@ -61,8 +59,7 @@ public class CDocument {
         model.add(item);
         
         // usuário de criação
-        element = new DataElement();
-        element.setName("COMPLEX_DOCUMENT.USUARIO_CRIACAO");
+        element = new DataElement("COMPLEX_DOCUMENT.USUARIO_CRIACAO");
         element.setType(DataType.CHAR);
         element.setLength(12);
         element.setUpcase(true);
@@ -78,8 +75,7 @@ public class CDocument {
         model = data.getModel("COMPLEX_DOCUMENT_ITEM", "CPLXDITEM", null);
         
         // identificador
-        element = new DataElement();
-        element.setName("COMPLEX_DOCUMENT_ITEM.ID");
+        element = new DataElement("COMPLEX_DOCUMENT_ITEM.ID");
         element.setLength(16);
         element.setType(DataType.NUMC);
 

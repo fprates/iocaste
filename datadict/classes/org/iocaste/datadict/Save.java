@@ -49,8 +49,7 @@ public class Save {
                 Common.setTableValue(item, "item.element", value);
             }
             
-            dataelement = new DataElement();
-            dataelement.setName(value);
+            dataelement = new DataElement(value);
             dataelement.setLength((Integer)Common.getTableValue(
                     item, "item.length"));
             

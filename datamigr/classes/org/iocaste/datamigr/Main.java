@@ -60,8 +60,8 @@ public class Main extends AbstractPage {
             text.add(sb.toString());
         }
         
-        view.export("filename", table.concat(".txt"));
-        view.export("text", text);
+//        view.export("filename", table.concat(".txt"));
+//        view.export("text", text);
         view.redirect("export");
     }
     
@@ -99,7 +99,7 @@ public class Main extends AbstractPage {
         DataForm form = new DataForm(container, "entryform");
         pagecontrol.add("home");
         
-        delement = new DataElement();
+        delement = new DataElement("TABLE_NAME");
         delement.setType(DataType.CHAR);
         delement.setLength(20);
         delement.setUpcase(true);

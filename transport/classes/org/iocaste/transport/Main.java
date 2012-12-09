@@ -113,8 +113,7 @@ public class Main extends AbstractPage {
                 modelitem.setAttributeName(parsed[2]);
                 modelitem.setIndex(currentline);
                 
-                dataelement = new DataElement();
-                dataelement.setName(parsed[3]);
+                dataelement = new DataElement(parsed[3]);
                 dataelement.setType(Integer.parseInt(parsed[4]));
                 dataelement.setLength(Integer.parseInt(parsed[5]));
                 dataelement.setDecimals(Integer.parseInt(parsed[6]));
