@@ -36,8 +36,7 @@ public class DataElementServices {
             return null;
         
         columns = (Map<String, Object>)lines[0];
-        element = new DataElement();
-        element.setName(name);
+        element = new DataElement(name);
         element.setType(((BigDecimal)columns.get("ETYPE")).intValue());
         element.setLength(((BigDecimal)columns.get("LNGTH")).intValue());
         element.setDecimals(((BigDecimal)columns.get("DECIM")).intValue());

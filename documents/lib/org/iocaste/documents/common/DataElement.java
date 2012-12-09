@@ -39,7 +39,8 @@ public class DataElement implements Serializable {
     private int decimals, length, type;
     private boolean upcase, dummy;
     
-    public DataElement() {
+    public DataElement(String name) {
+        this.name = name;
         dummy = false;
     }
     
@@ -133,14 +134,6 @@ public class DataElement implements Serializable {
      */
     public final void setLength(int length) {
         this.length = length;
-    }
-    
-    /**
-     * Define nome do elemento.
-     * @param name
-     */
-    public final void setName(String name) {
-        this.name = name;
     }
     
     /**
