@@ -284,20 +284,24 @@ public class Model {
                 throw new IocasteException("error on removing model item");
         
         tablename = model.getTableName();
-        if (iocaste.update(QUERIES[DEL_MODEL_REF], tablename) == 0)
+        if ((tablename != null) &&
+                (iocaste.update(QUERIES[DEL_MODEL_REF], tablename) == 0))
             throw new IocasteException(
-                    "error on removing model/table reference");
+                        "error on removing model/table reference");
         
         name = model.getName();
         if (iocaste.update(QUERIES[DEL_MODEL], name) == 0)
             throw new IocasteException("error on removing header model data");
         
+        cache.queries.remove(name);
+        cache.models.remove(name);
+        
+        if (tablename == null)
+            return 1;
+        
         query = new StringBuilder("drop table ").append(tablename).
                 toString();
         iocaste.update(query);
-        
-        cache.queries.remove(name);
-        cache.models.remove(name);
         
         return 1;
     }
@@ -441,22 +445,26 @@ public class Model {
         
         if (cache.mmodel != null) {
             l = Common.getModelItemLen("NAME", cache);
-            if (tablename.length() > l)
+            if (name.length() > l)
                 throw new IocasteException(
                         "invalid modelname length on document header");
             
-            l = Common.getModelItemLen("TABLE", cache);
-            if (tablename.length() > l)
-                throw new IocasteException(
-                        "invalid tablename length on document header");
+            if (tablename != null) {
+                l = Common.getModelItemLen("TABLE", cache);
+                if (tablename.length() > l)
+                    throw new IocasteException(
+                            "invalid tablename length on document header");
+            }
         }
         
         if (iocaste.update(QUERIES[INS_HEADER],
                 name, tablename, model.getClassName()) == 0)
             throw new IocasteException("document header insert error");
 
-        if (iocaste.update(QUERIES[INS_MODEL_REF], tablename, name) == 0)
-            throw new IocasteException("header's model reference insert error");
+        if (tablename != null)
+            if (iocaste.update(QUERIES[INS_MODEL_REF], tablename, name) == 0)
+                throw new IocasteException(
+                        "header's model reference insert error");
         
         return 1;
     }
@@ -471,66 +479,75 @@ public class Model {
      */
     private static final int saveDocumentItens(DocumentModel model, Cache cache,
             Iocaste iocaste) throws Exception {
-        DocumentModel modelref;
+        DocumentModel refmodel;
         DataElement dataelement;
         DocumentModelItem reference;
         int size;
-        StringBuilder sb, sbk = null;
-        String tname, query;
+        StringBuilder sb = null, sbk = null;
+        String tname, query, tablename;
         DocumentModelItem[] itens = model.getItens();
         String refstmt = getReferenceStatement(iocaste);
         
-        sb = new StringBuilder("create table ").append(model.getTableName()).
-                append("(");
+        tablename = model.getTableName();
+        if (tablename != null)
+            sb = new StringBuilder("create table ").append(
+                    model.getTableName()).append("(");
         
         size = itens.length - 1;
         
         for (DocumentModelItem item : itens) {
             insertModelItem(iocaste, item);
-            
+
             tname = item.getTableFieldName();
-            if (tname == null)
-                throw new IocasteException("Table field name is null.");
+            if (tablename != null) {
+                if (tname == null)
+                    throw new IocasteException("Table field name is null.");
+                
+                sb.append(tname);
+            }
             
-            sb.append(tname);
             dataelement = item.getDataElement();
             if (dataelement.isDummy()) {
                 dataelement = DataElementServices.
                         get(iocaste, dataelement.getName());
                 item.setDataElement(dataelement);
             }
-            
+
             setDBFieldsString(sb, dataelement);
-            if (model.isKey(item)) {
-                if (sbk == null)
-                    sbk = new StringBuilder(", primary key(");
-                else
-                    sbk.append(", ");
-                
-                sbk.append(tname);
-            }
+            if (tablename != null)
+                if (model.isKey(item)) {
+                    if (sbk == null)
+                        sbk = new StringBuilder(", primary key(");
+                    else
+                        sbk.append(", ");
+                    
+                    sbk.append(tname);
+                }
             
             reference = item.getReference();
             if (reference != null) {
                 if (reference.isDummy()) {
-                    modelref = Model.
-                            get(reference.getDocumentModel().getName(), cache);
-                    reference = modelref.getModelItem(reference.getName());
+                    refmodel = Model.get(reference.getDocumentModel().getName(),
+                            cache);
+                    reference = refmodel.getModelItem(reference.getName());
                 }
                 
-                sb.append(refstmt).
-                        append(reference.getDocumentModel().getTableName()).
-                        append("(").
-                        append(reference.getTableFieldName()).append(")");
+                if (tablename != null)
+                    sb.append(refstmt).append(reference.getDocumentModel().
+                            getTableName()).append("(").
+                            append(reference.getTableFieldName()).append(")");
             }
             
-            if (size != item.getIndex())
+            if (size != item.getIndex() && tablename != null)
                 sb.append(", ");
         }
         
+        if (tablename == null)
+            return 1;
+        
         if (sbk != null)
             sb.append(sbk).append(")");
-        
+
         query = sb.append(")").toString();
         return iocaste.update(query);
     }
@@ -567,18 +584,24 @@ public class Model {
             DataElement ddelement) {
         switch (ddelement.getType()) {
         case DataType.CHAR:
+            if (sb == null)
+                break;
             sb.append(" varchar(");
             sb.append(ddelement.getLength());
             sb.append(")");
             
             break;
         case DataType.NUMC:
+            if (sb == null)
+                break;
             sb.append(" numeric(");
             sb.append(ddelement.getLength());
             sb.append(")");
             
             break;
         case DataType.DEC:
+            if (sb == null)
+                break;
             sb.append(" decimal(");
             sb.append(ddelement.getLength());
             sb.append(",");
@@ -590,7 +613,9 @@ public class Model {
             ddelement.setLength(10);
             ddelement.setDecimals(0);
             ddelement.setUpcase(false);
-            
+
+            if (sb == null)
+                break;
             sb.append(" date");
             
             break;
@@ -598,6 +623,9 @@ public class Model {
             ddelement.setLength(8);
             ddelement.setDecimals(0);
             ddelement.setUpcase(false);
+
+            if (sb == null)
+                break;
             sb.append(" time");
             
             break;
@@ -605,6 +633,9 @@ public class Model {
             ddelement.setLength(1);
             ddelement.setDecimals(0);
             ddelement.setUpcase(false);
+
+            if (sb == null)
+                break;
             sb.append(" bit");
             
             break;
