@@ -18,7 +18,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private Object value;
     private DocumentModelItem modelitem;
     private boolean secret, obligatory;
-    private int length;
+    private int length, vlength;
     private Const type;
     private DataElement dataelement;
     private SearchHelp search;
@@ -116,6 +116,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final ValidatorConfig getValidatorConfig() {
         return validatorcfg;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getVisibleLength()
+     */
+    @Override
+    public final int getVisibleLength() {
+        return vlength;
     }
     
     /*
@@ -313,6 +322,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setValidator(Class<? extends Validator> validator) {
         validatorcfg.setValidator(validator);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setVisibleLength(int)
+     */
+    @Override
+    public final void setVisibleLength(int vlength) {
+        this.vlength = vlength;
     }
 }
 

@@ -25,7 +25,7 @@ public class TextFieldRenderer extends Renderer {
         Text text;
         SearchHelp search;
         DataElement dataelement = Shell.getDataElement(textfield);
-        int length = (dataelement == null)?textfield.getLength() :
+        int length = (dataelement == null)? textfield.getLength() :
             dataelement.getLength();
         String name = textfield.getHtmlName(), value = toString(textfield);
         XMLElement spantag, inputtag = new XMLElement("input");
@@ -41,7 +41,7 @@ public class TextFieldRenderer extends Renderer {
         
         inputtag.add("name", name);
         inputtag.add("id", name);
-        inputtag.add("size", Integer.toString(length));
+        inputtag.add("size", Integer.toString(textfield.getVisibleLength()));
         inputtag.add("maxlength", Integer.toString(length));
         inputtag.add("value", value);
         inputtag.add("onfocus", new StringBuilder("send('").append(name).

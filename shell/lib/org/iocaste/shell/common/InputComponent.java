@@ -19,6 +19,12 @@ public interface InputComponent extends Component {
      * @param input
      */
     public abstract void addValidatorInput(InputComponent input);
+    
+    /**
+     * Retorna conteúdo do componente.
+     * @return conteúdo
+     */
+    public abstract <T> T get();
 
     /**
      * Retorna tipo de componente.
@@ -43,12 +49,6 @@ public interface InputComponent extends Component {
      * @return item do modelo
      */
     public abstract DocumentModelItem getModelItem();
-    
-    /**
-     * Retorna conteúdo do componente.
-     * @return conteúdo
-     */
-    public abstract <T> T get();
 
     /**
      * Retorna ajuda de pesquisa associada.
@@ -67,6 +67,12 @@ public interface InputComponent extends Component {
      * @return configuração
      */
     public abstract ValidatorConfig getValidatorConfig();
+    
+    /**
+     * 
+     * @return
+     */
+    public abstract int getVisibleLength();
     
     /**
      * Indica se é o valor é booleano.
@@ -181,4 +187,10 @@ public interface InputComponent extends Component {
      * @param validator rotina de validação.
      */
     public abstract void setValidator(Class<? extends Validator> validator);
+    
+    /**
+     * 
+     * @param vlength
+     */
+    public abstract void setVisibleLength(int vlength);
 }

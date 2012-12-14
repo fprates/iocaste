@@ -152,12 +152,16 @@ public class DataForm extends AbstractContainer {
     @Override
     public final void importModel(DocumentModel model) {
         DataItem dataitem;
+        int length;
         
         clear();
         
         for (DocumentModelItem item : model.getItens()) {
             dataitem = new DataItem(this, Const.TEXT_FIELD, item.getName());
             dataitem.setModelItem(item);
+            length = item.getDataElement().getLength();
+            dataitem.setLength(length);
+            dataitem.setVisibleLength(length);
         }
         
         super.importModel(model);

@@ -84,6 +84,7 @@ public class Shell extends AbstractServiceInterface {
             tfield.setObligatory(inputitem.isObligatory());
             tfield.setSecret(inputitem.isSecret());
             tfield.setLength(inputitem.getLength());
+            tfield.setVisibleLength(inputitem.getVisibleLength());
             tfield.set(inputitem.get());
             tfield.setModelItem(inputitem.getModelItem());
             tfield.setEnabled(inputitem.isEnabled());

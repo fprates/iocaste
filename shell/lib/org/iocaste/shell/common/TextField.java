@@ -14,6 +14,7 @@ public class TextField extends AbstractInputComponent {
     public TextField(Container container, String name) {
         super(container, Const.TEXT_FIELD, null, name);
         setLength(20);
+        setVisibleLength(20);
         setStyleClass("text_field");
     }
 }
