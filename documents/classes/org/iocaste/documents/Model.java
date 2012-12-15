@@ -106,22 +106,85 @@ public class Model {
     public static final int create(DocumentModel model, Cache cache)
             throws Exception {
         String name;
-        Iocaste iocaste = new Iocaste(cache.function);
-
-        saveDataElements(iocaste, model);
-        saveDocumentHeader(iocaste, model, cache);
-        saveDocumentItens(model, cache, iocaste);
-        saveDocumentKeys(iocaste, model);
-        Common.parseQueries(model, cache.queries);
+        
+        registerModel(model, cache);
+        if (model.getTableName() != null)
+            createTable(model, cache);
         
         name = model.getName();
-        if (cache.models.containsKey(name))
-            cache.models.remove(name);
-        
         model.setQueries(cache.queries.get(name));
         cache.models.put(name, model);
         
         return 1;
+    }
+    
+    /**
+     * 
+     * @param model
+     * @param cache
+     * @return
+     * @throws Exception
+     */
+    private static final int createTable(DocumentModel model,
+            Cache cache) throws Exception {
+        DocumentModel refmodel;
+        DataElement dataelement;
+        DocumentModelItem reference;
+        StringBuilder sb = null, sbk = null;
+        String tname, query;
+        DocumentModelItem[] itens = model.getItens();
+        Iocaste iocaste = new Iocaste(cache.function);
+        String refstmt = getReferenceStatement(iocaste);
+        int size = itens.length - 1;
+        
+        sb = new StringBuilder("create table ").append(
+                model.getTableName()).append("(");
+        
+        for (DocumentModelItem item : itens) {
+            tname = item.getTableFieldName();
+            if (tname == null)
+                throw new IocasteException("Table field name is null.");
+            
+            sb.append(tname);
+            dataelement = item.getDataElement();
+            if (dataelement.isDummy()) {
+                dataelement = DataElementServices.
+                        get(iocaste, dataelement.getName());
+                item.setDataElement(dataelement);
+            }
+
+            setDBFieldsString(sb, dataelement);
+            if (model.isKey(item)) {
+                if (sbk == null)
+                    sbk = new StringBuilder(", primary key(");
+                else
+                    sbk.append(", ");
+                
+                sbk.append(tname);
+            }
+            
+            reference = item.getReference();
+            if (reference != null) {
+                if (reference.isDummy()) {
+                    refmodel = Model.get(reference.getDocumentModel().getName(),
+                            cache);
+                    reference = refmodel.getModelItem(reference.getName());
+                }
+                
+                sb.append(refstmt).append(reference.getDocumentModel().
+                        getTableName()).append("(").
+                        append(reference.getTableFieldName()).append(")");
+            }
+            
+            if (size != item.getIndex())
+                sb.append(", ");
+        }
+        
+        if (sbk != null)
+            sb.append(sbk).append(")");
+
+        query = sb.append(")").toString();
+        return iocaste.update(query);
     }
     
     /**
@@ -262,6 +325,164 @@ public class Model {
     
     /**
      * 
+     * @param iocaste
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    private static final int registerDataElements(Iocaste iocaste,
+            DocumentModel model) throws Exception {
+        DataElement element;
+        DocumentModelItem[] itens = model.getItens();
+        
+        for (DocumentModelItem item : itens) {
+            element = item.getDataElement();
+            if (element == null)
+                throw new IocasteException(new StringBuilder(item.getName()).
+                        append(" has null data element.").toString());
+
+            switch (element.getType()) {
+            case DataType.DATE:
+                element.setLength(10);
+                element.setDecimals(0);
+                element.setUpcase(false);
+                
+                break;
+            case DataType.TIME:
+                element.setLength(8);
+                element.setDecimals(0);
+                element.setUpcase(false);
+                
+                break;
+            case DataType.BOOLEAN:
+                element.setLength(1);
+                element.setDecimals(0);
+                element.setUpcase(false);
+                
+                break;
+            }
+            
+            if (iocaste.selectUpTo(
+                    QUERIES[ELEMENT], 1, element.getName()) != null)
+                continue;
+            
+            DataElementServices.insert(iocaste, element);
+        }
+        
+        return 1;
+    }
+    /**
+     * 
+     * @param iocaste
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    private static final int registerDocumentHeader(Iocaste iocaste,
+            DocumentModel model, Cache cache) throws Exception {
+        int l;
+        String name = model.getName();
+        String tablename = model.getTableName();
+        if (cache.mmodel == null)
+            cache.mmodel = get("MODEL", cache);
+        
+        if (cache.mmodel != null) {
+            l = Common.getModelItemLen("NAME", cache);
+            if (name.length() > l)
+                throw new IocasteException(
+                        "invalid modelname length on document header");
+            
+            if (tablename != null) {
+                l = Common.getModelItemLen("TABLE", cache);
+                if (tablename.length() > l)
+                    throw new IocasteException(
+                            "invalid tablename length on document header");
+            }
+        }
+        
+        if (iocaste.update(QUERIES[INS_HEADER],
+                name, tablename, model.getClassName()) == 0)
+            throw new IocasteException("document header insert error");
+
+        if (tablename != null)
+            if (iocaste.update(QUERIES[INS_MODEL_REF], tablename, name) == 0)
+                throw new IocasteException(
+                        "header's model reference insert error");
+        
+        return 1;
+    }
+    
+    /**
+     * 
+     * @param model
+     * @param cache
+     * @param iocaste
+     * @return
+     * @throws Exception
+     */
+    private static final int registerDocumentItens(DocumentModel model,
+            Cache cache, Iocaste iocaste) throws Exception {
+        DataElement dataelement;
+        DocumentModelItem[] itens = model.getItens();
+        
+        for (DocumentModelItem item : itens) {
+            insertModelItem(iocaste, item);
+            
+            dataelement = item.getDataElement();
+            if (!dataelement.isDummy())
+                continue;
+            
+            dataelement = DataElementServices.
+                    get(iocaste, dataelement.getName());
+            item.setDataElement(dataelement);
+        }
+        
+        return 1;
+    }
+    
+    /**
+     * 
+     * @param iocaste
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    private static int registerDocumentKeys(Iocaste iocaste,
+            DocumentModel model) throws Exception {
+        String modelname, name;
+        
+        modelname = model.getName();
+        for (DocumentModelKey key : model.getKeys()) {
+            name = Documents.getComposedName(model.
+                    getModelItem(key.getModelItemName()));
+            
+            if (iocaste.update(QUERIES[INS_KEY], name, modelname) == 0)
+                throw new IocasteException("error on key insert.");
+        }
+        
+        return 1;
+    }
+    
+    /**
+     * 
+     * @param model
+     * @param cache
+     * @throws Exception
+     */
+    private static final void registerModel(DocumentModel model, Cache cache)
+            throws Exception {
+        Iocaste iocaste = new Iocaste(cache.function);
+
+        registerDataElements(iocaste, model);
+        registerDocumentHeader(iocaste, model, cache);
+        registerDocumentItens(model, cache, iocaste);
+        registerDocumentKeys(iocaste, model);
+        Common.parseQueries(model, cache.queries);
+        
+    }
+    
+    /**
+     * 
      * @param model
      * @param cache
      * @return
@@ -269,12 +490,17 @@ public class Model {
      */
     public static final int remove(DocumentModel model, Cache cache)
             throws Exception {
-        Iocaste iocaste = new Iocaste(cache.function);
-        String tablename, name, query;
+        String tablename, modelname, name, query;
+        Iocaste iocaste;
         
+        modelname = model.getName();
+        if (get(modelname, cache) == null)
+            return 0;
+        
+        iocaste = new Iocaste(cache.function);
         for (DocumentModelKey key : model.getKeys()) {
-            name = Documents.getComposedName(key.getModel().
-                    getModelItem(key.getModelItemName()));
+            name = Documents.getComposedName(model.getModelItem(
+                    key.getModelItemName()));
             if (iocaste.update(QUERIES[DEL_KEY], name) == 0)
                 throw new IocasteException("error on removing model key");
         }
@@ -289,12 +515,11 @@ public class Model {
             throw new IocasteException(
                         "error on removing model/table reference");
         
-        name = model.getName();
-        if (iocaste.update(QUERIES[DEL_MODEL], name) == 0)
+        if (iocaste.update(QUERIES[DEL_MODEL], modelname) == 0)
             throw new IocasteException("error on removing header model data");
         
-        cache.queries.remove(name);
-        cache.models.remove(name);
+        cache.queries.remove(modelname);
+        cache.models.remove(modelname);
         
         if (tablename == null)
             return 1;
@@ -402,181 +627,6 @@ public class Model {
     
     /**
      * 
-     * @param iocaste
-     * @param model
-     * @return
-     * @throws Exception
-     */
-    private static final int saveDataElements(Iocaste iocaste,
-            DocumentModel model) throws Exception {
-        DataElement element;
-        DocumentModelItem[] itens = model.getItens();
-        
-        for (DocumentModelItem item : itens) {
-            element = item.getDataElement();
-            if (element == null)
-                throw new IocasteException(new StringBuilder(item.getName()).
-                        append(" has null data element.").toString());
-            
-            if (iocaste.selectUpTo(
-                    QUERIES[ELEMENT], 1, element.getName()) != null)
-                continue;
-            
-            DataElementServices.insert(iocaste, element);
-        }
-        
-        return 1;
-    }
-    
-    /**
-     * 
-     * @param iocaste
-     * @param model
-     * @return
-     * @throws Exception
-     */
-    private static final int saveDocumentHeader(Iocaste iocaste,
-            DocumentModel model, Cache cache) throws Exception {
-        int l;
-        String name = model.getName();
-        String tablename = model.getTableName();
-        if (cache.mmodel == null)
-        	cache.mmodel = get("MODEL", cache);
-        
-        if (cache.mmodel != null) {
-            l = Common.getModelItemLen("NAME", cache);
-            if (name.length() > l)
-                throw new IocasteException(
-                        "invalid modelname length on document header");
-            
-            if (tablename != null) {
-                l = Common.getModelItemLen("TABLE", cache);
-                if (tablename.length() > l)
-                    throw new IocasteException(
-                            "invalid tablename length on document header");
-            }
-        }
-        
-        if (iocaste.update(QUERIES[INS_HEADER],
-                name, tablename, model.getClassName()) == 0)
-            throw new IocasteException("document header insert error");
-
-        if (tablename != null)
-            if (iocaste.update(QUERIES[INS_MODEL_REF], tablename, name) == 0)
-                throw new IocasteException(
-                        "header's model reference insert error");
-        
-        return 1;
-    }
-    
-    /**
-     * 
-     * @param model
-     * @param cache
-     * @param iocaste
-     * @return
-     * @throws Exception
-     */
-    private static final int saveDocumentItens(DocumentModel model, Cache cache,
-            Iocaste iocaste) throws Exception {
-        DocumentModel refmodel;
-        DataElement dataelement;
-        DocumentModelItem reference;
-        int size;
-        StringBuilder sb = null, sbk = null;
-        String tname, query, tablename;
-        DocumentModelItem[] itens = model.getItens();
-        String refstmt = getReferenceStatement(iocaste);
-        
-        tablename = model.getTableName();
-        if (tablename != null)
-            sb = new StringBuilder("create table ").append(
-                    model.getTableName()).append("(");
-        
-        size = itens.length - 1;
-        
-        for (DocumentModelItem item : itens) {
-            insertModelItem(iocaste, item);
-
-            tname = item.getTableFieldName();
-            if (tablename != null) {
-                if (tname == null)
-                    throw new IocasteException("Table field name is null.");
-                
-                sb.append(tname);
-            }
-            
-            dataelement = item.getDataElement();
-            if (dataelement.isDummy()) {
-                dataelement = DataElementServices.
-                        get(iocaste, dataelement.getName());
-                item.setDataElement(dataelement);
-            }
-
-            setDBFieldsString(sb, dataelement);
-            if (tablename != null)
-                if (model.isKey(item)) {
-                    if (sbk == null)
-                        sbk = new StringBuilder(", primary key(");
-                    else
-                        sbk.append(", ");
-                    
-                    sbk.append(tname);
-                }
-            
-            reference = item.getReference();
-            if (reference != null) {
-                if (reference.isDummy()) {
-                    refmodel = Model.get(reference.getDocumentModel().getName(),
-                            cache);
-                    reference = refmodel.getModelItem(reference.getName());
-                }
-                
-                if (tablename != null)
-                    sb.append(refstmt).append(reference.getDocumentModel().
-                            getTableName()).append("(").
-                            append(reference.getTableFieldName()).append(")");
-            }
-            
-            if (size != item.getIndex() && tablename != null)
-                sb.append(", ");
-        }
-        
-        if (tablename == null)
-            return 1;
-        
-        if (sbk != null)
-            sb.append(sbk).append(")");
-
-        query = sb.append(")").toString();
-        return iocaste.update(query);
-    }
-
-    /**
-     * 
-     * @param iocaste
-     * @param model
-     * @return
-     * @throws Exception
-     */
-    private static int saveDocumentKeys(Iocaste iocaste, DocumentModel model)
-            throws Exception {
-        String name;
-        
-        for (DocumentModelKey key : model.getKeys()) {
-            name = Documents.getComposedName(model.
-                    getModelItem(key.getModelItemName()));
-            
-            if (iocaste.update(
-                    QUERIES[INS_KEY], name, key.getModel().getName()) == 0)
-                throw new IocasteException("error on key insert.");
-        }
-        
-        return 1;
-    }
-    
-    /**
-     * 
      * @param sb
      * @param ddelement
      */
@@ -584,24 +634,18 @@ public class Model {
             DataElement ddelement) {
         switch (ddelement.getType()) {
         case DataType.CHAR:
-            if (sb == null)
-                break;
             sb.append(" varchar(");
             sb.append(ddelement.getLength());
             sb.append(")");
             
             break;
         case DataType.NUMC:
-            if (sb == null)
-                break;
             sb.append(" numeric(");
             sb.append(ddelement.getLength());
             sb.append(")");
             
             break;
         case DataType.DEC:
-            if (sb == null)
-                break;
             sb.append(" decimal(");
             sb.append(ddelement.getLength());
             sb.append(",");
@@ -610,32 +654,14 @@ public class Model {
             
             break;
         case DataType.DATE:
-            ddelement.setLength(10);
-            ddelement.setDecimals(0);
-            ddelement.setUpcase(false);
-
-            if (sb == null)
-                break;
             sb.append(" date");
             
             break;
         case DataType.TIME:
-            ddelement.setLength(8);
-            ddelement.setDecimals(0);
-            ddelement.setUpcase(false);
-
-            if (sb == null)
-                break;
             sb.append(" time");
             
             break;
         case DataType.BOOLEAN:
-            ddelement.setLength(1);
-            ddelement.setDecimals(0);
-            ddelement.setUpcase(false);
-
-            if (sb == null)
-                break;
             sb.append(" bit");
             
             break;
