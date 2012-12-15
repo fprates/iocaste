@@ -2,6 +2,7 @@ package org.iocaste.workbench;
 
 import java.io.File;
 
+import org.iocaste.documents.common.Documents;
 import org.iocaste.globalconfig.common.GlobalConfig;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
@@ -15,11 +16,11 @@ import org.iocaste.shell.common.View;
  *
  */
 public class Main extends AbstractPage {
-    private String repository;
-    private boolean validrepo;
-    private Project project;
+    private Context context;
     
     public Main() {
+        context = new Context();
+        context.function = this;
         export("install", "install");
     }
     
@@ -29,7 +30,8 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void activate(View view) throws Exception {
-        Request.activate(view, project);
+        context.view = view;
+        Request.activate(context);
     }
     
     /**
@@ -45,7 +47,8 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void createproject(View view) {
-        project = Request.createproject(view, this);
+        context.view = view;
+        Request.createproject(context);
     }
     
     /**
@@ -53,11 +56,16 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void editor(View view) {
-        Response.editor(view, validrepo, project);
+        context.view = view;
+        Response.editor(context);
     }
     
+    /**
+     * 
+     * @param view
+     */
     public final void editscreen(View view) {
-        Request.editscreen(view, project);
+        Request.editscreen(context);
     }
     
     /*
@@ -68,16 +76,18 @@ public class Main extends AbstractPage {
     @Override
     public final void init(View view) {
         File file;
+        Documents documents;
         
-        repository = new GlobalConfig(this).get("repository");
-        file = new File(repository);
+        context.repository = new GlobalConfig(this).get("repository");
         
-        if (file.isDirectory()) {
-            validrepo = true;
-            return;
-        }
+        file = new File(context.repository);
+        context.validrepo = (file.isDirectory())? true : file.mkdir();
         
-        validrepo = file.mkdir();
+        documents = new Documents(this);
+        context.editorhdrmodel = documents.getModel("ICSTPRJ_EDITOR_HEADER");
+        context.projectmodel = documents.getModel("ICSTPRJ_HEADER");
+        context.packagemodel = documents.getModel("ICSTPRJ_PACKAGES");
+        context.sourcemodel = documents.getModel("ICSTPRJ_SOURCES");
     }
     
     /**
@@ -89,10 +99,20 @@ public class Main extends AbstractPage {
     }
     
     /**
+     * 
+     * @param view
+     */
+    public final void loadproject(View view) {
+        context.view = view;
+        Request.loadproject(context);
+    }
+    
+    /**
      * @param view
      */
     public final void main(View view) {
-        Response.main(view);
+        context.view = view;
+        Response.main(context);
     }
     
     /**
@@ -101,7 +121,8 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void save(View view) throws Exception {
-        Request.save(view, repository, project);
+        context.view = view;
+        Request.save(context);
         view.message(Const.STATUS, "project.saved");
     }
     
@@ -110,6 +131,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void screeneditor(View view) {
-        Response.screeneditor(view, project);
+        context.view = view;
+        Response.screeneditor(context);
     }
 }
