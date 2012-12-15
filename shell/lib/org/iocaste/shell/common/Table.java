@@ -252,6 +252,7 @@ public class Table extends AbstractContainer {
             column.setMark(false);
             column.setVisible(true);
             column.setModelItem(item);
+            column.setLength(item.getDataElement().getLength());
             
             columns.put(name, column);
         }

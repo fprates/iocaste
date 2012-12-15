@@ -53,6 +53,7 @@ public class TableItem implements Serializable {
      */
     public final void add(Element element) {
         DocumentModelItem modelitem;
+        InputComponent input;
         int i = elements.size();
         
         if (i == table.width())
@@ -62,8 +63,11 @@ public class TableItem implements Serializable {
         element.setLocale(locale);
         
         modelitem = columns[i].getModelItem();
-        if (element.isDataStorable() && modelitem != null)
-            ((InputComponent)element).setModelItem(modelitem);
+        if (element.isDataStorable() && modelitem != null) {
+            input = (InputComponent)element;
+            input.setModelItem(modelitem);
+            input.setVisibleLength(columns[i].getLength());
+        }
     }
     
     /**

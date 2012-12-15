@@ -17,6 +17,7 @@ public class TableColumn implements Serializable {
     private String name;
     private DocumentModelItem modelitem;
     private DataElement de;
+    private int length;
     
     public TableColumn(Table table, String name) {
         visible = true;
@@ -33,6 +34,14 @@ public class TableColumn implements Serializable {
      */
     public final DataElement getDataElement() {
         return (modelitem == null)? de : modelitem.getDataElement();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final int getLength() {
+        return length;
     }
     
     /**
@@ -81,6 +90,14 @@ public class TableColumn implements Serializable {
      */
     public final void setDataElement(DataElement de) {
         this.de = de;
+    }
+    
+    /**
+     * 
+     * @param length
+     */
+    public final void setLength(int length) {
+        this.length = length;
     }
     
     /**
