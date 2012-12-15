@@ -4,12 +4,15 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.CheckBox;
+import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextField;
+import org.iocaste.shell.common.View;
 
 public class Common {
     public static final byte DISPLAY = 0;
@@ -39,5 +42,13 @@ public class Common {
         }
         
         tableitem.setObject(object);
+    }
+    
+    public static final DocumentModel getModelFromView(View view,
+            Documents documents) {
+        DataForm form = (DataForm)view.getElement("model");
+        String modelname = form.get("model.name").get();
+        
+        return documents.getModel(modelname);
     }
 }

@@ -80,22 +80,13 @@ public class Request {
         vdata.message(Const.STATUS, "insert.successful");
     }
     
-    public static final ExtendedObject[] load(View view, Function function) {
+    public static final ExtendedObject[] load(String modelname,
+            Documents documents) {
         ExtendedObject[] itens;
-        InputComponent input = ((DataForm)view.getElement("model")).
-                get("model.name");
-        String query, modelname = input.get();
-        Documents documents = new Documents(function);
-        
-        if (documents.getModel(modelname) == null) {
-            view.message(Const.ERROR, "invalid.model");
-            return null;
-        }
+        String query;
         
         query = new StringBuilder("from ").append(modelname).toString();
         itens = documents.select(query);
-        
-        view.redirect("select");
         
         return itens;
     }

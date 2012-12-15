@@ -1,6 +1,7 @@
 package org.iocaste.dataview;
 
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
@@ -38,10 +39,17 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void edit(View view) {
+        Documents documents = new Documents(this);
+        
+        model = Common.getModelFromView(view, documents);
+        if (model == null) {
+            view.message(Const.ERROR, "invalid.model");
+            return;
+        }
+        
         viewtype = Const.SINGLE;
-        itens = Request.load(view, this);
-        if (itens != null)
-            model = itens[0].getModel();
+        itens = Request.load(model.getName(), documents);
+        view.redirect("select");
     }
     
     /**
@@ -123,16 +131,5 @@ public class Main extends AbstractPage {
      */
     public final void select(View view) {
         Response.select(view, this, model, itens, viewtype);
-    }
-    
-    /**
-     * 
-     * @param vdata
-     */
-    public final void show(View vdata) {
-        viewtype = Const.SINGLE;
-        itens = Request.load(vdata, this);
-        if (itens != null)
-            model = itens[0].getModel();
     }
 }
