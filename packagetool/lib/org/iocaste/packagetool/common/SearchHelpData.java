@@ -9,7 +9,8 @@ public class SearchHelpData implements Serializable {
     private String export, model, name;
     private List<String> itens;
     
-    public SearchHelpData() {
+    public SearchHelpData(String name) {
+        this.name = name;
         itens = new ArrayList<String>();
     }
     
@@ -39,9 +40,5 @@ public class SearchHelpData implements Serializable {
     
     public final void setModel(String model) {
         this.model = model;
-    }
-    
-    public final void setName(String name) {
-        this.name = name;
     }
 }

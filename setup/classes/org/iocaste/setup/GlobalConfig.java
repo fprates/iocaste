@@ -117,8 +117,7 @@ public class GlobalConfig {
         item.setDataElement(element);
         model.add(item);
         
-        shd = new SearchHelpData();
-        shd.setName("SH_PKG_CONFIG");
+        shd = new SearchHelpData("SH_PKG_CONFIG");
         shd.setModel("GLOBAL_CONFIG");
         shd.setExport("NAME");
         shd.add("NAME");

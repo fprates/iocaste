@@ -55,24 +55,21 @@ public class Install {
         taskgroup.add("SU01");
         data.add(taskgroup);
         
-        sh = new SearchHelpData();
+        sh = new SearchHelpData("SH_USER");
         sh.setModel("LOGIN");
         sh.setExport("USERNAME");
-        sh.setName("SH_USER");
         sh.add("USERNAME");
         data.add(sh);
         
-        sh = new SearchHelpData();
+        sh = new SearchHelpData("SH_USER_PROFILE");
         sh.setModel("USER_PROFILE");
         sh.setExport("NAME");
-        sh.setName("SH_USER_PROFILE");
         sh.add("NAME");
         data.add(sh);
         
-        sh = new SearchHelpData();
+        sh = new SearchHelpData("SH_TASKS_GROUPS");
         sh.setModel("TASKS_GROUPS");
         sh.setExport("NAME");
-        sh.setName("SH_TASKS_GROUPS");
         sh.add("NAME");
         data.add(sh);
         
