@@ -39,7 +39,8 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void addscreen(View view) {
-        Request.addscreen(view);
+        context.view = view;
+        Request.addscreen(context);
     }
     
     /**
@@ -65,7 +66,13 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void editscreen(View view) {
+        context.view = view;
         Request.editscreen(context);
+    }
+    
+    public final void editsource(View view) {
+        context.view = view;
+        Request.editsource(context);
     }
     
     /*
@@ -88,6 +95,7 @@ public class Main extends AbstractPage {
         context.projectmodel = documents.getModel("ICSTPRJ_HEADER");
         context.packagemodel = documents.getModel("ICSTPRJ_PACKAGES");
         context.sourcemodel = documents.getModel("ICSTPRJ_SOURCES");
+        context.srccodemodel = documents.getModel("ICSTPRJ_SRCCODE");
     }
     
     /**

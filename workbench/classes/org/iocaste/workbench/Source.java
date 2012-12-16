@@ -3,6 +3,6 @@ package org.iocaste.workbench;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class Source {
-    public String text;
+    public String code;
     public ExtendedObject header;
 }

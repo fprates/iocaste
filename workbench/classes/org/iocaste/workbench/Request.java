@@ -30,6 +30,8 @@ import org.iocaste.shell.common.TextArea;
 import org.iocaste.shell.common.View;
 
 public class Request {
+    private static final boolean NO_CODE = false;
+    private static final boolean WITH_CODE = true;
     private static final byte SEL_PACKAGES = 0;
     private static final byte SEL_SOURCES = 1;
     private static final String[] QUERIES = {
@@ -79,13 +81,12 @@ public class Request {
 //        fmngr.close();
     }
 
-    public static final void addscreen(View view) {
-        view.redirect("screeneditor");
+    public static final void addscreen(Context context) {
+        context.view.redirect("screeneditor");
     }
     
     public static final void createproject(Context context) {
         ProjectPackage projectpackage;
-        List<ProjectPackage> projectpackages;
         String projectname, packagename;
         InputComponent input = ((DataForm)context.view.getElement("project")).
                 get("NAME");
@@ -114,15 +115,49 @@ public class Request {
 //        view.redirect("screeneditor");
     }
     
-    public static final void loadproject(Context context) {
-        Source source;
-        ExtendedObject header;
+    public static final void editsource(Context context) {
+        String sourcename = ((Parameter)context.view.
+                getElement("sourcename")).get();
+        String packagename = ((Parameter)context.view.
+                getElement("packagename")).get();
+        ProjectPackage projectpackage = context.project.packages.
+                get(packagename);
+        DataForm form = context.view.getElement("project");
+        
+        form.get("PACKAGE").set(packagename);
+        form.get("CLASS").set(sourcename);
+        
+        loadSource(sourcename, projectpackage, WITH_CODE);
+    }
+    
+    private static final void loadPackages(ExtendedObject[] packages,
+            Context context, Documents documents) {
+        ExtendedObject[] sources;
         ProjectPackage projectpackage;
-        ExtendedObject[] packages, sources;
-        List<ProjectPackage> projectpackages;
+        String packagename, sourcename;
+        
+        for (ExtendedObject object : packages) {
+            projectpackage = new ProjectPackage();
+            packagename = object.getValue("NAME");
+            context.project.packages.put(packagename, projectpackage);
+            
+            sources = documents.select(QUERIES[SEL_SOURCES], packagename);
+            if (sources == null)
+                continue;
+            
+            for (ExtendedObject object_ : sources) {
+                sourcename = object_.getValue("NAME");
+                loadSource(sourcename, projectpackage, NO_CODE);
+            }
+        }
+    }
+    
+    public static final void loadproject(Context context) {
+        ExtendedObject header;
+        ExtendedObject[] packages;
         Documents documents = new Documents(context.function);
         DataForm form = (DataForm)context.view.getElement("project");
-        String packagename, sourcename, name = form.get("NAME").get();
+        String name = form.get("NAME").get();
         
         header = documents.getObject("ICSTPRJ_HEADER", name);
         if (header == null) {
@@ -136,26 +171,19 @@ public class Request {
         
         packages = documents.select(QUERIES[SEL_PACKAGES], name);
         if (packages != null)
-            for (ExtendedObject object : packages) {
-                projectpackage = new ProjectPackage();
-                packagename = object.getValue("NAME");
-                context.project.packages.put(packagename, projectpackage);
-                
-                sources = documents.select(QUERIES[SEL_SOURCES], packagename);
-                if (sources == null)
-                    continue;
-                
-                for (ExtendedObject object_ : sources) {
-                    source = new Source();
-                    sourcename = object_.getValue("NAME");
-                    
-                    projectpackage.sources.put(sourcename, source);
-                }
-            }
-        
+            loadPackages(packages, context, documents);
         
         context.view.redirect("editor");
         context.mode = Context.LOAD;
+    }
+    
+    private static final void loadSource(String sourcename,
+            ProjectPackage projectpackage, boolean sourcecode) {
+        Source source = new Source();
+        
+        projectpackage.sources.put(sourcename, source);
+        if (!sourcecode)
+            return;
     }
     
     private static final ExtendedObject packageObject(String packagename,
@@ -166,6 +194,19 @@ public class Request {
         object.setValue("PROJECT", context.project.header.getValue("NAME"));
         
         return object;
+    }
+    
+    private static final void registerCodeLine(String codeline, int i,
+            String sourceid, NumberFormat formatter, Context context,
+            Documents documents) {
+        String srccodeid = new StringBuilder(formatter.format(i)).
+                append(sourceid).toString();
+        ExtendedObject object = new ExtendedObject(context.srccodemodel);
+        
+        object.setValue("IDENT", srccodeid);
+        object.setValue("SOURCE", sourceid);
+        object.setValue("LINE", codeline);
+        documents.save(object);
     }
     
     private static final void registerPackage(String name, Context context,
@@ -185,8 +226,11 @@ public class Request {
     
     private static final void registerSource(String name, int i,
             String packagename, Context context, Documents documents) {
-        String sourceid;
+        String[] codelines;
+        int lines, codelinepos, codelineindex;
+        String sourceid, code, partline;
         ExtendedObject object;
+        ProjectPackage projectpackage;
         NumberFormat formatter = DecimalFormat.getInstance();
         
         formatter.setMinimumIntegerDigits(3);
@@ -197,8 +241,32 @@ public class Request {
         object.setValue("IDENT", sourceid);
         object.setValue("PACKAGE", packagename);
         object.setValue("NAME", name);
-        
         documents.save(object);
+        
+        projectpackage = context.project.packages.get(packagename);
+        code = projectpackage.sources.get(name).code;
+        if (code == null)
+            return;
+
+        formatter.setMinimumIntegerDigits(3);
+        codelines = code.split("[\r\n]");
+        codelineindex = 0;
+        for (String codeline : codelines) {
+            lines = codeline.length() / 80;
+            for (int l = 0; l < lines; l++) {
+                codelineindex++;
+                codelinepos = l * 80;
+                partline = codeline.substring(codelinepos, codelinepos + 80);
+                registerCodeLine(partline, codelineindex, sourceid, formatter,
+                        context, documents);
+            }
+            
+            if ((codeline.length() % 80) > 0) {
+                codelineindex++;
+                registerCodeLine(codeline, codelineindex, sourceid,
+                        formatter, context, documents);
+            }
+        }
     }
     
     public static final void save(Context context) throws Exception {
@@ -206,25 +274,19 @@ public class Request {
 //        File file;
 //        OutputStream os;
 //        String packagedir, package_, class_;
+        String package_, source_, projectname;
         Documents documents;
         DataForm projecthdr = context.view.getElement("project");
-//        String text = ((TextArea)view.getElement("editor")).get();
-        ExtendedObject project, object;
-        ProjectPackage projectpackage;
+        String text = ((TextArea)context.view.getElement("editor")).get();
+        ExtendedObject project;
         
         documents = new Documents(context.function);
+        projectname = projecthdr.get("NAME").get();
         project = new ExtendedObject(context.projectmodel);
-        project.setValue("NAME", projecthdr.get("NAME").get());
-//        
-        if (context.mode == Context.LOAD) {
-            for (String packagename : context.project.packages.keySet()) {
-                projectpackage = context.project.packages.get(packagename);
-                
-                object = packageObject(packagename, context);
-                documents.delete(object);
-            }
-            
-            documents.delete(project);
+        project.setValue("NAME", projectname);
+        
+        if (context.mode == Context.LOAD)
+            unregisterProject(projectname, context, documents);
             
 //            project.name = form.get("NAME").get();
 //            package_ = source.getValue("PACKAGE");
@@ -242,7 +304,10 @@ public class Request {
 //            project.classfile = new StringBuilder(packagedir).
 //                    append(File.separator).append(class_).
 //                    append(".java").toString();
-        }
+        
+        package_ = projecthdr.get("PACKAGE").get();
+        source_ = projecthdr.get("CLASS").get();
+        context.project.packages.get(package_).sources.get(source_).code = text;
         
         documents.save(project);
         for (String packagename : context.project.packages.keySet())
@@ -256,5 +321,34 @@ public class Request {
 //        os.write(text.getBytes());
 //        os.flush();
 //        os.close();
+    }
+    
+    /**
+     * 
+     * @param projectname
+     * @param context
+     * @param documents
+     */
+    private static final void unregisterProject(String projectname,
+            Context context, Documents documents) {
+        ProjectPackage projectpackage;
+        ExtendedObject object;
+        
+        for (String packagename : context.project.packages.keySet()) {
+            projectpackage = context.project.packages.get(packagename);
+            for (String sourcename : projectpackage.sources.keySet())
+                documents.update(
+                        "delete from ICSTPRJ_SRCCODE where SOURCE = ?",
+                        sourcename);
+            
+            documents.update(
+                    "delete from ICSTPRJ_SOURCES where PACKAGE = ?",
+                    packagename);
+            object = packageObject(packagename, context);
+            documents.delete(object);
+        }
+        
+        documents.update("delete from ICSTPRJ_PACKAGES where PROJECT = ?",
+                projectname);
     }
 }

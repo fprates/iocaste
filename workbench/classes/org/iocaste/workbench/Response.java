@@ -29,8 +29,8 @@ public class Response {
         Map<String, String> csspane;
         Container navpane, fontpane;
         DataForm form;
-//        Link screenlink;
-//        Parameter screenname;
+        Link screenlink, sourcelink;
+        Parameter screenname, sourcename, packagename;
         ProjectPackage projectpackage;
         NodeList objlist, screenlist, commandlist, packagelist, sourcelist;
         InputComponent input;
@@ -66,16 +66,19 @@ public class Response {
 //        
 //        commandlist = new NodeList(objlist, "commandlist");
 //        commandlist.setListType(NodeList.DEFINITION);
-        
+
+        sourcename = new Parameter(container, "sourcename");
+        packagename = new Parameter(container, "packagename");
         packagelist = new NodeList(objlist, "packagelist");
         packagelist.setListType(NodeList.DEFINITION);
-        for (String packagename : context.project.packages.keySet()) {
-            projectpackage = context.project.packages.get(packagename);
-            sourcelist = new NodeList(packagelist, packagename);
+        for (String package_ : context.project.packages.keySet()) {
+            projectpackage = context.project.packages.get(package_);
+            sourcelist = new NodeList(packagelist, package_);
             sourcelist.setListType(NodeList.DEFINITION);
-            for (String sourcename : projectpackage.sources.keySet()) {
-                sourcelist.add(new Text(sourcelist, sourcename));
-                packagelist.add(sourcelist);
+            for (String name : projectpackage.sources.keySet()) {
+                sourcelink = new Link(sourcelist, name, "editsource");
+                sourcelink.add(sourcename, name);
+                sourcelink.add(packagename, package_);
             }
         }
         
