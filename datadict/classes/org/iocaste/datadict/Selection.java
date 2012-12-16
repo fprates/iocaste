@@ -1,19 +1,21 @@
 package org.iocaste.datadict;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.RadioGroup;
 import org.iocaste.shell.common.SHLib;
-import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.View;
 
 public class Selection {
@@ -113,9 +115,10 @@ public class Selection {
      * @param function
      */
     public static final void main(View view, Function function) {
+        Map<String, String> css;
         RadioGroup group;
         RadioButton tpobj;
-        Container tpobjcnt;
+        NodeList optlist;
         Form main = new Form(view, "datadict.main");
         PageControl pagecontrol = new PageControl(main);
         DataForm modelform = new DataForm(main, "model");
@@ -127,13 +130,18 @@ public class Selection {
                 getModelItem("NAME"));
         modelname.setObligatory(true);
         
-        tpobjcnt = new StandardContainer(main, "tpobjcnt");
+        css = new HashMap<>();
+        css.put("list-style-type", "none");
+        view.getStyleSheet().put(".optlist", css);
+        
+        optlist = new NodeList(main, "optlist");
+        optlist.setStyleClass("optlist");
         group = new RadioGroup("tpobject");
-        tpobj = new RadioButton(tpobjcnt, "tpobjtable", group);
+        tpobj = new RadioButton(optlist, "tpobjtable", group);
         tpobj.setText("table");
         tpobj.setSelected(true);
         
-        tpobj = new RadioButton(tpobjcnt, "tpobjsh", group);
+        tpobj = new RadioButton(optlist, "tpobjsh", group);
         tpobj.setText("search.help");
         
         new Button(main, "create");
