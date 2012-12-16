@@ -199,8 +199,13 @@ public class Request {
         
         source = projectpackage.sources.get(sourcename);
         sb = new StringBuilder();
-        for (ExtendedObject object : objects)
+        for (ExtendedObject object : objects) {
+            if (sb.length() > 0 &&
+                    (boolean)object.getValue("PARAGRAPH") == true)
+                sb.append("\r\n");
+                
             sb.append(object.getValue("LINE"));
+        }
         
         source.code = sb.toString();
     }
@@ -215,19 +220,26 @@ public class Request {
         return object;
     }
     
-    private static final void registerCodeLine(String codeline, int i,
-            String sourceid, NumberFormat formatter, Context context,
-            Documents documents) {
+    private static final void registerCodeLine(boolean paragraph,
+            String codeline, int i, String sourceid, NumberFormat formatter,
+            Context context, Documents documents) {
         String srccodeid = new StringBuilder(formatter.format(i)).
                 append(sourceid).toString();
         ExtendedObject object = new ExtendedObject(context.srccodemodel);
         
         object.setValue("IDENT", srccodeid);
         object.setValue("SOURCE", sourceid);
+        object.setValue("PARAGRAPH", paragraph);
         object.setValue("LINE", codeline);
         documents.save(object);
     }
     
+    /**
+     * 
+     * @param name
+     * @param context
+     * @param documents
+     */
     private static final void registerPackage(String name, Context context,
             Documents documents) {
         ExtendedObject object;
@@ -243,8 +255,17 @@ public class Request {
             
     }
     
+    /**
+     * 
+     * @param name
+     * @param i
+     * @param packagename
+     * @param context
+     * @param documents
+     */
     private static final void registerSource(String name, int i,
             String packagename, Context context, Documents documents) {
+        boolean paragraph;
         String[] codelines;
         int lines, codelinepos, codelineindex;
         String sourceid, code, partline;
@@ -272,17 +293,20 @@ public class Request {
         codelineindex = 0;
         for (String codeline : codelines) {
             lines = codeline.length() / 80;
+            paragraph = true;
             for (int l = 0; l < lines; l++) {
                 codelineindex++;
                 codelinepos = l * 80;
                 partline = codeline.substring(codelinepos, codelinepos + 80);
-                registerCodeLine(partline, codelineindex, sourceid, formatter,
-                        context, documents);
+                registerCodeLine(paragraph, partline, codelineindex, sourceid,
+                        formatter, context, documents);
+                paragraph = false;
             }
             
             if ((codeline.length() % 80) > 0) {
                 codelineindex++;
-                registerCodeLine(codeline, codelineindex, sourceid,
+                paragraph = true;
+                registerCodeLine(paragraph, codeline, codelineindex, sourceid,
                         formatter, context, documents);
             }
         }

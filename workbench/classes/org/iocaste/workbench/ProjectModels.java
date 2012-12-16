@@ -166,6 +166,16 @@ public class ProjectModels {
         
         model.add(item);
         
+        // parágrafo
+        element = new DataElement("ICSTPRJ_SRCCODE.PARAGRAPH");
+        element.setType(DataType.BOOLEAN);
+        
+        item = new DocumentModelItem("PARAGRAPH");
+        item.setTableFieldName("PGRPH");
+        item.setDataElement(element);
+        
+        model.add(item);
+        
         // line
         element = new DataElement("ICSTPRJ_SRCCODE.LINE");
         element.setType(DataType.CHAR);
