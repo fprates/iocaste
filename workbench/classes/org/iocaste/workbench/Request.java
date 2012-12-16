@@ -220,18 +220,21 @@ public class Request {
         return object;
     }
     
-    private static final void registerCodeLine(boolean paragraph,
-            String codeline, int i, String sourceid, NumberFormat formatter,
-            Context context, Documents documents) {
-        String srccodeid = new StringBuilder(formatter.format(i)).
-                append(sourceid).toString();
-        ExtendedObject object = new ExtendedObject(context.srccodemodel);
+    /**
+     * 
+     * @param helper
+     */
+    private static final void registerCodeLine(CodeLineHelper helper) {
+        String srccodeid = new StringBuilder(helper.formatter.format(helper.i)).
+                append(helper.sourceid).toString();
+        ExtendedObject object = new ExtendedObject(helper.context.srccodemodel);
         
         object.setValue("IDENT", srccodeid);
-        object.setValue("SOURCE", sourceid);
-        object.setValue("PARAGRAPH", paragraph);
-        object.setValue("LINE", codeline);
-        documents.save(object);
+        object.setValue("SOURCE", helper.sourceid);
+        object.setValue("PARAGRAPH", helper.paragraph);
+        object.setValue("PACKAGE", helper.packagename);
+        object.setValue("LINE", helper.codeline);
+        helper.documents.save(object);
     }
     
     /**
@@ -265,10 +268,10 @@ public class Request {
      */
     private static final void registerSource(String name, int i,
             String packagename, Context context, Documents documents) {
-        boolean paragraph;
+        CodeLineHelper codelinehelper;
         String[] codelines;
-        int lines, codelinepos, codelineindex;
-        String sourceid, code, partline;
+        int lines, codelinepos;
+        String sourceid, code;
         ExtendedObject object;
         ProjectPackage projectpackage;
         NumberFormat formatter = DecimalFormat.getInstance();
@@ -290,24 +293,33 @@ public class Request {
 
         formatter.setMinimumIntegerDigits(3);
         codelines = code.split("[\r\n]");
-        codelineindex = 0;
+        
+        codelinehelper = new CodeLineHelper();
+        codelinehelper.formatter = formatter;
+        codelinehelper.context = context;
+        codelinehelper.documents = documents;
+        codelinehelper.i = 0;
+        codelinehelper.sourceid = sourceid;
+        codelinehelper.packagename = packagename;
+        
         for (String codeline : codelines) {
             lines = codeline.length() / 80;
-            paragraph = true;
+            codelinehelper.paragraph = true;
             for (int l = 0; l < lines; l++) {
-                codelineindex++;
+                codelinehelper.i++;
                 codelinepos = l * 80;
-                partline = codeline.substring(codelinepos, codelinepos + 80);
-                registerCodeLine(paragraph, partline, codelineindex, sourceid,
-                        formatter, context, documents);
-                paragraph = false;
+                
+                codelinehelper.codeline = codeline.
+                        substring(codelinepos, codelinepos + 80);
+                registerCodeLine(codelinehelper);
+                codelinehelper.paragraph = false;
             }
             
             if ((codeline.length() % 80) > 0) {
-                codelineindex++;
-                paragraph = true;
-                registerCodeLine(paragraph, codeline, codelineindex, sourceid,
-                        formatter, context, documents);
+                codelinehelper.i++;
+                codelinehelper.paragraph = true;
+                codelinehelper.codeline = codeline;
+                registerCodeLine(codelinehelper);
             }
         }
     }
@@ -374,24 +386,23 @@ public class Request {
      */
     private static final void unregisterProject(String projectname,
             Context context, Documents documents) {
-        ProjectPackage projectpackage;
-        ExtendedObject object;
-        
         for (String packagename : context.project.packages.keySet()) {
-            projectpackage = context.project.packages.get(packagename);
-            for (String sourcename : projectpackage.sources.keySet())
-                documents.update(
-                        "delete from ICSTPRJ_SRCCODE where SOURCE = ?",
-                        sourcename);
-            
-            documents.update(
-                    "delete from ICSTPRJ_SOURCES where PACKAGE = ?",
+            documents.update("delete from ICSTPRJ_SRCCODE where PACKAGE = ?",
                     packagename);
-            object = packageObject(packagename, context);
-            documents.delete(object);
+            documents.update("delete from ICSTPRJ_SOURCES where PACKAGE = ?",
+                    packagename);
         }
         
         documents.update("delete from ICSTPRJ_PACKAGES where PROJECT = ?",
                 projectname);
     }
+}
+
+class CodeLineHelper {
+    public boolean paragraph;
+    public String codeline, sourceid, packagename;
+    public int i;
+    public NumberFormat formatter;
+    public Context context;
+    public Documents documents;
 }

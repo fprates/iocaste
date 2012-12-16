@@ -166,6 +166,14 @@ public class ProjectModels {
         
         model.add(item);
         
+        // pacote
+        item = new DocumentModelItem("PACKAGE");
+        item.setTableFieldName("PKGNM");
+        item.setDataElement(packagename.getDataElement());
+        item.setReference(packagename);
+        
+        model.add(item);
+        
         // parágrafo
         element = new DataElement("ICSTPRJ_SRCCODE.PARAGRAPH");
         element.setType(DataType.BOOLEAN);
