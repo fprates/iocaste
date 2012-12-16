@@ -70,6 +70,10 @@ public class Main extends AbstractPage {
         Request.editscreen(context);
     }
     
+    /**
+     * 
+     * @param view
+     */
     public final void editsource(View view) {
         context.view = view;
         Request.editsource(context);

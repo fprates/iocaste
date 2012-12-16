@@ -30,8 +30,6 @@ import org.iocaste.shell.common.TextArea;
 import org.iocaste.shell.common.View;
 
 public class Request {
-    private static final boolean NO_CODE = false;
-    private static final boolean WITH_CODE = true;
     private static final byte SEL_PACKAGES = 0;
     private static final byte SEL_SOURCES = 1;
     private static final String[] QUERIES = {
@@ -116,6 +114,7 @@ public class Request {
     }
     
     public static final void editsource(Context context) {
+        TextArea area;
         String sourcename = ((Parameter)context.view.
                 getElement("sourcename")).get();
         String packagename = ((Parameter)context.view.
@@ -127,7 +126,11 @@ public class Request {
         form.get("PACKAGE").set(packagename);
         form.get("CLASS").set(sourcename);
         
-        loadSource(sourcename, projectpackage, WITH_CODE);
+        loadSource(sourcename, packagename, projectpackage,
+                new Documents(context.function));
+        
+        area = context.view.getElement("editor");
+        area.set(projectpackage.sources.get(sourcename).code);
     }
     
     private static final void loadPackages(ExtendedObject[] packages,
@@ -147,7 +150,7 @@ public class Request {
             
             for (ExtendedObject object_ : sources) {
                 sourcename = object_.getValue("NAME");
-                loadSource(sourcename, projectpackage, NO_CODE);
+                projectpackage.sources.put(sourcename, new Source());
             }
         }
     }
@@ -177,13 +180,29 @@ public class Request {
         context.mode = Context.LOAD;
     }
     
-    private static final void loadSource(String sourcename,
-            ProjectPackage projectpackage, boolean sourcecode) {
-        Source source = new Source();
+    private static final void loadSource(String sourcename, String packagename,
+            ProjectPackage projectpackage, Documents documents) {
+        StringBuilder sb;
+        Source source;
+        ExtendedObject[] objects = documents.select(
+                "from ICSTPRJ_SOURCES where PACKAGE = ? and " +
+                "name = ?", packagename, sourcename);
         
-        projectpackage.sources.put(sourcename, source);
-        if (!sourcecode)
+        if (objects == null)
             return;
+        
+        objects = documents.select("from ICSTPRJ_SRCCODE where SOURCE = ?",
+                objects[0].getValue("IDENT"));
+        
+        if (objects == null)
+            return;
+        
+        source = projectpackage.sources.get(sourcename);
+        sb = new StringBuilder();
+        for (ExtendedObject object : objects)
+            sb.append(object.getValue("LINE"));
+        
+        source.code = sb.toString();
     }
     
     private static final ExtendedObject packageObject(String packagename,
