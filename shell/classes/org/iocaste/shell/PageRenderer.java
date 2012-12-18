@@ -997,7 +997,7 @@ public class PageRenderer extends AbstractRenderer {
         if (userstyle != null)
             appctx.setStyleSheet(userstyle);
         
-        renderer = getRenderer();
+        renderer = new HtmlRenderer();
         renderer.setMessageSource(msgsource);
         renderer.setMessageText(viewmessage);
         renderer.setMessageType(messagetype);
@@ -1012,7 +1012,7 @@ public class PageRenderer extends AbstractRenderer {
         tracking.logid = pagectx.getLogid();
         tracking.sequence = pagectx.getSequence();
         tracking.sessionid = getSessionId();
-        render(view, tracking);
+        render(renderer, view, tracking);
         
         pagectx.setActions(renderer.getActions());
     }

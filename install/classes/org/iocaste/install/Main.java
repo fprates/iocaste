@@ -634,7 +634,7 @@ public class Main extends AbstractRenderer {
         if (userstyle != null)
             appctx.setStyleSheet(userstyle);
         
-        renderer = getRenderer();
+        renderer = new HtmlRenderer();
         renderer.setMessageSource(msgsource);
         renderer.setMessageText(viewmessage);
         renderer.setMessageType(messagetype);
@@ -644,7 +644,7 @@ public class Main extends AbstractRenderer {
         tracking = new TrackingData();
         tracking.sessionid = getSessionId();
         tracking.logid = pagectx.getLogid();
-        render(viewdata, tracking);
+        render(renderer, viewdata, tracking);
         
         pagectx.setActions(renderer.getActions());
     }
