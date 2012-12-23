@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.Properties;
 
 import org.iocaste.install.dictionary.Core;
+import org.iocaste.install.dictionary.Documents;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.View;
@@ -103,8 +104,10 @@ public class DBConfigRequest {
     
     private static final void createTables(Statement ps, Config config)
             throws Exception {
+        byte dbtype = DBNames.names.get(config.dbtype);
         
-        Core.install(DBNames.names.get(config.dbtype), ps);
+        new Core().install(dbtype, ps);
+        new Documents().install(dbtype, ps);
     }
     
     private static final String[] getDBInitializator(Config config) {
