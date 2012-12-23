@@ -9,20 +9,21 @@ import java.util.Map;
 public abstract class Module {
     public static final byte NUMC = 0;
     public static final byte CHAR = 1;
+    public static final byte BOOLEAN = 2;
     public static final byte INSERT = 0;
-    private static List<Table> tables = new ArrayList<>();
-    private static List<Query> queries = new ArrayList<>();
-    private static Map<String, Authorization> authorizations = new HashMap<>();
-    private static Map<String, Profile> profiles = new HashMap<>();
+    private List<Table> tables = new ArrayList<>();
+    private List<Query> queries = new ArrayList<>();
+    private Map<String, Authorization> authorizations = new HashMap<>();
+    private Map<String, Profile> profiles = new HashMap<>();
     
-    protected static final Table tableInstance(String name) {
+    protected final Table tableInstance(String name) {
         Table table = new Table(name);
         tables.add(table);
         
         return table;
     }
     
-    protected static final void compile(Statement ps) throws Exception {
+    protected final void compile(Statement ps) throws Exception {
         String sql;
         
         for (Table table : tables) {
@@ -36,9 +37,11 @@ public abstract class Module {
             System.out.println(sql);
             ps.addBatch(sql);
         }
+        
+        ps.clearBatch();
     }
     
-    protected static final void compileAuthorizationProfile(Table auth003,
+    protected final void compileAuthorizationProfile(Table auth003,
             Table auth004, String prfnm) {
         int ident;
         Authorization authorization;
@@ -62,11 +65,11 @@ public abstract class Module {
         }
     }
     
-    protected static final void insert(Table table) {
+    protected final void insert(Table table) {
         queries.add(new Query(INSERT, table));
     }
     
-    protected static final void insertAuthorizationProfile(String prfnm) {
+    protected final void insertAuthorizationProfile(String prfnm) {
         Profile profile = new Profile();
 
         profile.prfid = profiles.size() + 1;
@@ -74,7 +77,7 @@ public abstract class Module {
         profiles.put(prfnm, profile);
     }
     
-    protected static final void insertExecuteAuthorization(Table auth001,
+    protected final void insertExecuteAuthorization(Table auth001,
             Table auth002, String autnm, String appnm) {
         Authorization authorization = new Authorization();
         
@@ -97,12 +100,20 @@ public abstract class Module {
         insert(auth002);
     }
     
-    protected static final void linkAuthorizationToProfile(String prfnm,
-            String autnm) {
+    protected final void linkAuthorizationToProfile(String prfnm, String autnm)
+    {
         Profile profile = profiles.get(prfnm);
         
         profile.crrnt++;
         profile.authorizations.add(autnm);
+    }
+    
+    protected final void linkUserToProfile(Table users002, String username,
+            int userid, String profile) {
+        users002.set("ident", userid);
+        users002.set("uname", username);
+        users002.set("prfnm", profile);
+        insert(users002);
     }
 }
 

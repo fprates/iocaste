@@ -4,7 +4,7 @@ import java.sql.Statement;
 
 public class Core extends Module {
 
-    public static final void install(byte sqldb, Statement ps)
+    public final void install(byte sqldb, Statement ps)
             throws Exception {
         Table users000, users001, users002, auth001, auth002, auth003, auth004;
         
@@ -79,8 +79,9 @@ public class Core extends Module {
         linkAuthorizationToProfile("BASE", "EXHANDLER.EXECUTE");
         compileAuthorizationProfile(auth003, auth004, "BASE");
 
-//            insert into USERS002(ident, uname, prfnm) values(101, 'ADMIN', 'ALL');
-//            insert into USERS002(ident, uname, prfnm) values(102, 'ADMIN', 'BASE');
+        linkUserToProfile(users002, "ADMIN", 101, "ALL");
+        linkUserToProfile(users002, "ADMIN", 102, "BASE");
+        
         compile(ps);
     }
 }
