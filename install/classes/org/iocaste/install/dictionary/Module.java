@@ -11,10 +11,18 @@ public abstract class Module {
     public static final byte CHAR = 1;
     public static final byte BOOLEAN = 2;
     public static final byte INSERT = 0;
-    private List<Table> tables = new ArrayList<>();
-    private List<Query> queries = new ArrayList<>();
-    private Map<String, Authorization> authorizations = new HashMap<>();
-    private Map<String, Profile> profiles = new HashMap<>();
+    private List<Table> tables;
+    private List<Query> queries;
+    private Map<String, Authorization> authorizations;
+    private Map<String, Profile> profiles;
+    private int nritm;
+    
+    public Module() {
+        tables = new ArrayList<>();
+        queries = new ArrayList<>();
+        authorizations = new HashMap<>();
+        profiles = new HashMap<>();
+    }
     
     protected final Table tableInstance(String name) {
         Table table = new Table(name);
@@ -77,6 +85,16 @@ public abstract class Module {
         profiles.put(prfnm, profile);
     }
     
+    protected final void insertElement(Table docs003, String name, int decim,
+            int len, int type, boolean upcase) {
+        docs003.set("ename", name);
+        docs003.set("decim", decim);
+        docs003.set("lngth", len);
+        docs003.set("etype", type);
+        docs003.set("upcas", upcase);
+        insert(docs003);
+    }
+    
     protected final void insertExecuteAuthorization(Table auth001,
             Table auth002, String autnm, String appnm) {
         Authorization authorization = new Authorization();
@@ -98,6 +116,57 @@ public abstract class Module {
         auth002.set("param", "APPNAME");
         auth002.set("value", appnm);
         insert(auth002);
+    }
+
+    protected final void insertModel(Table docs001, Table docs005, String docid,
+            String tname, String class_) {
+        docs001.set("docid", docid);
+        docs001.set("tname", tname);
+        docs001.set("class", class_);
+        insert(docs001);
+        
+        docs005.set("tname", tname);
+        docs005.set("docid", docid);
+        insert(docs005);
+        
+        nritm = 0;
+    }
+    
+    protected final void insertModelItem(Table docs002, String iname,
+            String docid, String fname, String ename, String attrb) {
+        insertModelItem(docs002, null, iname, docid, fname, ename, attrb,
+                null);
+        
+    }
+    
+    protected final void insertModelItem(Table docs002, Table docs006,
+            String iname, String docid, String fname, String ename,
+            String attrb, String itref) {
+        docs002.set("iname", iname);
+        docs002.set("docid", docid);
+        docs002.set("nritm", nritm++);
+        docs002.set("fname", fname);
+        docs002.set("ename", ename);
+        docs002.set("attrb", attrb);
+        docs002.set("itref", itref);
+        insert(docs002);
+        
+        if (itref == null)
+            return;
+
+        docs006.set("iname", iname);
+        docs006.set("itref", itref);
+        insert(docs006);
+    }
+    
+    protected final void insertModelKey (Table docs002, Table docs004,
+            String iname, String docid, String fname, String ename,
+            String attrb) {
+        insertModelItem(docs002, iname, docid, fname, ename, attrb);
+        
+        docs004.set("iname", iname);
+        docs004.set("docid", docid);
+        insert(docs004);
     }
     
     protected final void linkAuthorizationToProfile(String prfnm, String autnm)
@@ -141,6 +210,7 @@ class Query {
      */
     @Override
     public String toString() {
+        Object value;
         StringBuilder _into, _values, sb = new StringBuilder();
         
         switch (command) {
@@ -153,14 +223,20 @@ class Query {
                     _into.append(",");
                     _values.append(",");
                 }
-                
+                value = values.get(field);
                 _into.append(field);
                 switch (types.get(field)) {
                 case Module.CHAR:
-                    _values.append("'").append(values.get(field)).append("'");
+                    if (value == null)
+                        _values.append("null");
+                    else
+                        _values.append("'").append(value).append("'");
+                    break;
+                case Module.BOOLEAN:
+                    _values.append((boolean)value? 1 : 0);
                     break;
                 case Module.NUMC:
-                    _values.append(values.get(field));
+                    _values.append(value);
                     break;
                 }
             }
