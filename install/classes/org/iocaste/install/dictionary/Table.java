@@ -87,9 +87,12 @@ public class Table {
             case Module.CHAR:
                 sb.append(" varchar(");
                 break;
+            case Module.BOOLEAN:
+                sb.append(" bit");
+                break;
             }
             
-            if (field.len > 0)
+            if (field.len > 0 && field.type != Module.BOOLEAN)
                 sb.append(field.len).append(")");
             
             if (field.tableref != null) {
