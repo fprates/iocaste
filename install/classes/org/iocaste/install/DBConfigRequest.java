@@ -1,19 +1,15 @@
 package org.iocaste.install;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
+import org.iocaste.install.dictionary.Core;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.View;
@@ -28,17 +24,6 @@ public class DBConfigRequest {
         "com.microsoft.sqlserver.jdbc.SQLServerDriver",
         "com.mysql.jdbc.Driver",
         "org.hsqldb.jdbcDriver"
-    };
-    
-    private static final String[] SCRIPTS = {
-        "/META-INF/db-install-10-core.sql",
-        "/META-INF/db-install-15-documents.sql",
-        "/META-INF/db-install-16-numbers.sql",
-        "/META-INF/db-install-20-shell.sql",
-        "/META-INF/db-install-25-login.sql",
-        "/META-INF/db-install-30-sh.sql",
-        "/META-INF/db-install-31-sh.sql",
-        "/META-INF/db-install-35-package.sql"
     };
     
     private static final String[] MSSQL_INIT = {
@@ -74,7 +59,7 @@ public class DBConfigRequest {
             if (!dbtype.isSelected())
                 continue;
             
-            config.dbtype = Config.dbtypes.valueOf(dbtype.getName());
+            config.dbtype = dbtype.getName();
             init = getDBInitializator(config);
             
             break;
@@ -116,59 +101,17 @@ public class DBConfigRequest {
         view.redirect("FINISH");
     }
     
-    private static final void createTables(Statement ps, Config config) throws Exception {
-        String line, dbtype;
-        InputStream is;
-        BufferedReader reader;
-        List<String> formated, script;
+    private static final void createTables(Statement ps, Config config)
+            throws Exception {
         
-        dbtype = new StringBuilder("@").
-                append(config.dbtype.toString()).
-                append(":").toString();
-        
-        script = new ArrayList<String>();
-        for (String name : SCRIPTS) {
-            is = config.getClass().getResourceAsStream(name);
-            reader = new BufferedReader(new InputStreamReader(is));
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.length() == 0)
-                    continue;
-                if (line.startsWith("@")) {
-                    if (!line.startsWith(dbtype))
-                        continue;
-                    line = line.substring(dbtype.length());
-                }
-                    
-                script.add(line);
-            }
-            
-            reader.close();
-        }
-        
-        formated = new ArrayList<String>();
-        line = "";
-        for (String scriptline : script) {
-            for (char c : scriptline.toCharArray()) {
-                line += c;
-                if (c != ';')
-                    continue;
-                
-                formated.add(line);
-                line = "";
-                break;
-            }
-        }
-        
-        for (String scriptline : formated)
-            ps.addBatch(scriptline);
+        Core.install(DBNames.names.get(config.dbtype), ps);
     }
     
     private static final String[] getDBInitializator(Config config) {
         String[] init = null;
         
-        switch (config.dbtype) {
-        case mssql:
+        switch (DBNames.names.get(config.dbtype)) {
+        case DBNames.MSSQL:
             config.dbdriver = DRIVERS[MSSQL];
             config.iurl = "jdbc:sqlserver://".concat(config.host);
             config.url = new StringBuilder(config.iurl).
@@ -199,7 +142,7 @@ public class DBConfigRequest {
             }
             
             break;
-        case hsqldb:
+        case DBNames.HSQLDB:
             config.dbdriver = DRIVERS[HSQLDB];
             config.iurl = new StringBuilder("jdbc:hsqldb:hsql://").
                     append(config.host).
@@ -216,7 +159,7 @@ public class DBConfigRequest {
             }
             
             break;
-        case mysql:
+        case DBNames.MYSQL:
             config.dbdriver = DRIVERS[MYSQL];
             config.iurl = "jdbc:mysql://".concat(config.host);
             config.url = new StringBuilder(config.iurl).
@@ -273,20 +216,7 @@ public class DBConfigRequest {
 }
 
 class Config {
-    public enum dbtypes {
-        hsqldb,
-        mssql,
-        mysql
-    };
-    
     public byte option;
-    public String iurl = null;
-    public String dbdriver = null;
-    public String host = null; 
-    public String url = null;
-    public String username = null;
-    public String secret = null;
-    public String dbname = null;
-    public dbtypes dbtype = null;
+    public String iurl, dbdriver, host, url, username, secret, dbname, dbtype;
 }
 

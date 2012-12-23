@@ -20,7 +20,6 @@ public class DBConfigResponse {
     };
     
     public static final void render(View view) {
-        String name;
         Container dbtypecnt;
         DataItem item;
         DataForm dbinfo;
@@ -46,10 +45,8 @@ public class DBConfigResponse {
         item.add("newbase", DBConfig.NEW_BASE);
         
         dbtypecnt = new StandardContainer(container, "dbtypecnt");
-        for (Config.dbtypes dbtype: Config.dbtypes.values()) {
-            name = dbtype.toString();
-            new RadioButton(dbtypecnt, name, rbgroup).setText(name);
-        }
+        for (String dbname : DBNames.names.keySet())
+            new RadioButton(dbtypecnt, dbname, rbgroup).setText(dbname);
         
         new Button(container, "continue");
         new Parameter(container, "nextstage").set("DBCREATE");
@@ -57,3 +54,4 @@ public class DBConfigResponse {
         view.setTitle("db-config");
     }
 }
+    
