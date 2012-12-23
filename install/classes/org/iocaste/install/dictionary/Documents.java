@@ -44,75 +44,83 @@ public class Documents extends Module {
         docs006.key("INAME", CHAR, 48);
         docs006.ref("ITREF", CHAR, 48, "DOCS002", "INAME");
 
-//             insert into DOCS001(docid, tname, class) values('MODEL', 'DOCS001', 'org.iocaste.documents.common.DocumentModel');
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('MODEL.NAME', 0, 24, 0, 1);
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('MODEL.TABLE', 0, 12, 0, 1);
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('MODEL.CLASS', 0, 255, 0, 0);
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('MODEL.NAME', 'MODEL', 0, 'DOCID', 'MODEL.NAME', 'name');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('MODEL.TABLE', 'MODEL', 1, 'TNAME', 'MODEL.TABLE', 'tableName');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('MODEL.CLASS', 'MODEL', 2, 'CLASS', 'MODEL.CLASS', 'className');
-//             insert into DOCS004(iname, docid) values('MODEL.NAME', 'MODEL');
-//             insert into DOCS005(tname, docid) values('DOCS001', 'MODEL');
-//
-//             insert into DOCS001(docid, tname, class) values('DATAELEMENT', 'DOCS003', 'org.iocaste.documents.common.DataElement');
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.NAME', 0, 48, 0, 1);
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.DECIMALS', 0, 2, 3, 0);
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.LENGTH', 0, 4, 3, 0);
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.TYPE', 0, 1, 3, 0);
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('DATAELEMENT.UPCASE', 0, 1, 5, 0);
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('DATAELEMENT.NAME', 'DATAELEMENT', 0, 'ENAME', 'DATAELEMENT.NAME', 'name');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('DATAELEMENT.DECIMALS', 'DATAELEMENT', 1, 'DECIM', 'DATAELEMENT.DECIMALS', 'decimals');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('DATAELEMENT.LENGTH', 'DATAELEMENT', 2, 'LNGTH', 'DATAELEMENT.LENGTH', 'length');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('DATAELEMENT.TYPE', 'DATAELEMENT', 3, 'ETYPE', 'DATAELEMENT.TYPE', 'type');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('DATAELEMENT.UPCASE', 'DATAELEMENT', 4, 'UPCAS', 'DATAELEMENT.UPCASE', 'upcase');
-//             insert into DOCS004(iname, docid) values('DATAELEMENT.NAME', 'DATAELEMENT');
-//             insert into DOCS005(tname, docid) values('DOCS003', 'DATAELEMENT');
-//
-//             insert into DOCS001(docid, tname, class) values('MODELITEM', 'DOCS002', 'org.iocaste.documents.common.DocumentModelItem');
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('MODELITEM.NAME', 0, 48, 0, 1);
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('MODELITEM.INDEX', 1, 3, 3, 0);
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('MODELITEM.FIELDNAME', 0, 12, 0, 1);
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('MODELITEM.ATTRIB', 0, 64, 0, 0);
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('MODELITEM.NAME', 'MODELITEM', 0, 'INAME', 'MODELITEM.NAME', 'name');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb, itref) values('MODELITEM.MODEL', 'MODELITEM', 1, 'DOCID', 'MODEL.NAME', 'documentModel', 'MODEL.NAME');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('MODELITEM.INDEX', 'MODELITEM', 2, 'NRITM', 'MODELITEM.INDEX', 'nritm');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('MODELITEM.FIELDNAME', 'MODELITEM', 3, 'FNAME', 'MODELITEM.FIELDNAME', 'tableFieldName');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('MODELITEM.ELEMENT', 'MODELITEM', 4, 'ENAME', 'DATAELEMENT.NAME', 'dataElement');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('MODELITEM.ATTRIB', 'MODELITEM', 5, 'ATTRB', 'MODELITEM.ATTRIB', 'attributeName');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('MODELITEM.ITEM_REF', 'MODELITEM', 6, 'ITREF', 'MODELITEM.NAME', 'itemReference');
-//             insert into DOCS004(iname, docid) values('MODELITEM.NAME', 'MODELITEM');
-//             insert into DOCS005(tname, docid) values('DOCS002', 'MODELITEM');
-//             insert into DOCS006(iname, itref) values('MODELITEM.MODEL', 'MODEL.NAME');
-//
-//             insert into DOCS001(docid, tname) values('MODEL_KEYS', 'DOCS004');
-//             insert into DOCS002(iname, docid, nritm, fname, ename) values('MODEL_KEYS.NAME', 'MODEL_KEYS', 0, 'INAME', 'MODELITEM.NAME');
-//             insert into DOCS002(iname, docid, nritm, fname, ename) values('MODEL_KEYS.MODEL', 'MODEL_KEYS', 1, 'DOCID', 'MODEL.NAME');
-//             insert into DOCS004(iname, docid) values('MODEL_KEYS.NAME', 'MODEL_KEYS');
-//             insert into DOCS005(tname, docid) values('DOCS004', 'MODEL_KEYS');
-//             insert into DOCS006(iname, itref) values('MODEL_KEYS.MODEL', 'MODEL.NAME');
-//
-//             insert into DOCS001(docid, tname) values('TABLE_MODEL', 'DOCS005');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('TABLE_MODEL.TABLE', 'TABLE_MODEL', 0, 'TNAME', 'MODEL.TABLE', 'tableName');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb, itref) values('TABLE_MODEL.MODEL', 'TABLE_MODEL', 1, 'DOCID', 'MODEL.NAME', 'model', 'MODEL.NAME');
-//             insert into DOCS004(iname, docid) values('TABLE_MODEL.TABLE', 'TABLE_MODEL');
-//             insert into DOCS005(tname, docid) values('DOCS005', 'TABLE_MODEL');
-//             insert into DOCS006(iname, itref) values('TABLE_MODEL.MODEL', 'MODEL.NAME');
-//
-//             insert into DOCS001(docid, tname) values('FOREIGN_KEY', 'DOCS006');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('FOREIGN_KEY.ITEM_NAME', 'FOREIGN_KEY', 0, 'ITREF', 'MODELITEM.NAME', 'itemName');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb, itref) values('FOREIGN_KEY.REFERENCE', 'FOREIGN_KEY', 1, 'INAME', 'MODELITEM.NAME', 'reference', 'MODELITEM.NAME');
-//             insert into DOCS004(iname, docid) values('FOREIGN_KEY.ITEM_NAME', 'FOREIGN_KEY');
-//             insert into DOCS005(tname, docid) values('DOCS006', 'FOREIGN_KEY');
-//             insert into DOCS006(iname, itref) values('FOREIGN_KEY.REFERENCE', 'MODELITEM.NAME');
-//             insert into DOCS006(iname, itref) values('FOREIGN_KEY.ITEM_NAME', 'MODELITEM.NAME');
-//
-//             insert into DOCS001(docid, tname) values('NUMBER_RANGE', 'RANGE001');
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('NUMBER_RANGE.IDENT', 0, 12, 0, 1);
-//             insert into DOCS003(ename, decim, lngth, etype, upcas) values('NUMBER_RANGE.CURRENT', 0, 12, 3, 0);
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('NUMBER_RANGE.IDENT', 'NUMBER_RANGE', 0, 'IDENT', 'NUMBER_RANGE.IDENT', '');
-//             insert into DOCS002(iname, docid, nritm, fname, ename, attrb) values('NUMBER_RANGE.CURRENT', 'NUMBER_RANGE', 1, 'CRRNT', 'NUMBER_RANGE.CURRENT', '');
-//             insert into DOCS004(iname, docid) values('NUMBER_RANGE.IDENT', 'NUMBER_RANGE');
-//             insert into DOCS005(tname, docid) values('RANGE001', 'NUMBER_RANGE');
+        insertModel(docs001, docs005, "MODEL", "DOCS001",
+                "org.iocaste.documents.common.DocumentModel");
+        insertElement(docs003, "MODEL.NAME", 0, 24, 0, true);
+        insertElement(docs003, "MODEL.TABLE", 0, 12, 0, true);
+        insertElement(docs003, "MODEL.CLASS", 0, 255, 0, false);
+        insertModelKey(docs002, docs004, "MODEL", "MODEL.NAME", "DOCID",
+                "MODEL.NAME", "name");
+        insertModelItem(docs002, "MODEL.TABLE", "MODEL", "TNAME",
+                "MODEL.TABLE", "tableName");
+        insertModelItem(docs002, "MODEL.CLASS", "MODEL", "CLASS",
+                "MODEL.CLASS", "className");
+
+        insertModel(docs001, docs005, "DATAELEMENT", "DOCS003",
+                "org.iocaste.documents.common.DataElement");
+        insertElement(docs003, "DATAELEMENT.NAME", 0, 48, 0, true);
+        insertElement(docs003, "DATAELEMENT.DECIMALS", 0, 2, 3, false);
+        insertElement(docs003, "DATAELEMENT.LENGTH", 0, 4, 3, false);
+        insertElement(docs003, "DATAELEMENT.TYPE", 0, 1, 3, false);
+        insertElement(docs003, "DATAELEMENT.UPCASE", 0, 1, 5, false);
+        insertModelKey(docs002, docs004, "DATAELEMENT.NAME", "DATAELEMENT",
+                "ENAME", "DATAELEMENT.NAME", "name");
+        insertModelItem(docs002, "DATAELEMENT.DECIMALS", "DATAELEMENT",
+                "DECIM", "DATAELEMENT.DECIMALS", "decimals");
+        insertModelItem(docs002, "DATAELEMENT.LENGTH", "DATAELEMENT",
+                "LNGTH", "DATAELEMENT.LENGTH", "length");
+        insertModelItem(docs002, "DATAELEMENT.TYPE", "DATAELEMENT",
+                "ETYPE", "DATAELEMENT.TYPE", "type");
+        insertModelItem(docs002, "DATAELEMENT.UPCASE", "DATAELEMENT",
+                "UPCAS", "DATAELEMENT.UPCASE", "upcase");
+
+        insertModel(docs001, docs005, "MODELITEM", "DOCS002", "org.iocaste.documents.common.DocumentModelItem");
+        insertElement(docs003, "MODELITEM.NAME", 0, 48, 0, true);
+        insertElement(docs003, "MODELITEM.INDEX", 1, 3, 3, false);
+        insertElement(docs003, "MODELITEM.FIELDNAME", 0, 12, 0, true);
+        insertElement(docs003, "MODELITEM.ATTRIB", 0, 64, 0, false);
+        insertModelKey(docs002, docs004, "MODELITEM.NAME", "MODELITEM",
+                "INAME", "MODELITEM.NAME", "name");
+        insertModelItem(docs002, docs006, "MODELITEM.MODEL", "MODELITEM",
+                "DOCID", "MODEL.NAME", "documentModel", "MODEL.NAME");
+        insertModelItem(docs002, "MODELITEM.INDEX", "MODELITEM", "NRITM",
+                "MODELITEM.INDEX", "nritm");
+        insertModelItem(docs002, "MODELITEM.FIELDNAME", "MODELITEM",
+                "FNAME", "MODELITEM.FIELDNAME", "tableFieldName");
+        insertModelItem(docs002, "MODELITEM.ELEMENT", "MODELITEM",
+                "ENAME", "DATAELEMENT.NAME", "dataElement");
+        insertModelItem(docs002, "MODELITEM.ATTRIB", "MODELITEM",
+                "ATTRB", "MODELITEM.ATTRIB", "attributeName");
+        insertModelItem(docs002, "MODELITEM.ITEM_REF", "MODELITEM",
+                "ITREF", "MODELITEM.NAME", "itemReference");
+
+        insertModel(docs001, docs005, "MODEL_KEYS", "DOCS004", null);
+        insertModelKey(docs002, docs004, "MODEL_KEYS.NAME", "MODEL_KEYS",
+                "INAME", "MODELITEM.NAME", null);
+        insertModelItem(docs002, "MODEL_KEYS.MODEL", "MODEL_KEYS",
+                "DOCID", "MODEL.NAME", null);
+
+        insertModel(docs001, docs005, "TABLE_MODEL", "DOCS005", null);
+        insertModelKey(docs002, docs004, "TABLE_MODEL.TABLE", "TABLE_MODEL",
+                "TNAME", "MODEL.TABLE", "tableName");
+        insertModelItem(docs002, docs006, "TABLE_MODEL.MODEL", "TABLE_MODEL",
+                "DOCID", "MODEL.NAME", "model", "MODEL.NAME");
+
+        insertModel(docs001, docs005, "FOREIGN_KEY", "DOCS006", null);
+        insertModelKey(docs002, docs004, "FOREIGN_KEY.ITEM_NAME", "FOREIGN_KEY",
+                "ITREF", "MODELITEM.NAME", "itemName");
+        insertModelItem(docs002, docs006, "FOREIGN_KEY.REFERENCE",
+                "FOREIGN_KEY", "INAME", "MODELITEM.NAME", "reference",
+                "MODELITEM.NAME");
+
+        insertModel(docs001, docs005, "NUMBER_RANGE", "RANGE001", null);
+        insertElement(docs003, "NUMBER_RANGE.IDENT", 0, 12, 0, true);
+        insertElement(docs003, "NUMBER_RANGE.CURRENT", 0, 12, 3, false);
+        insertModelKey(docs002, docs004, "NUMBER_RANGE.IDENT", "NUMBER_RANGE",
+                "IDENT", "NUMBER_RANGE.IDENT", null);
+        insertModelItem(docs002, "NUMBER_RANGE.CURRENT", "NUMBER_RANGE",
+                "CRRNT", "NUMBER_RANGE.CURRENT", null);
+             
         compile(ps);
     }
 }
