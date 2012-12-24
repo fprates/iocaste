@@ -13,7 +13,7 @@ public class Core extends Module {
      * @see org.iocaste.install.dictionary.Module#install()
      */
     @Override
-    public final List<String> install() throws Exception {
+    public final List<String> install() {
         Table users000, users001, users002, auth001, auth002, auth003, auth004;
         
         users000 = tableInstance("USERS000");

@@ -30,7 +30,7 @@ public abstract class Module {
         sindx = 0;
     }
     
-    protected final List<String> compile() throws Exception {
+    protected final List<String> compile() {
         String sql;
         List<String> batch = new ArrayList<>();
         
@@ -206,7 +206,7 @@ public abstract class Module {
         
     }
     
-    public abstract List<String> install() throws Exception;
+    public abstract List<String> install();
     
     protected final void linkAuthorizationToProfile(String prfnm, String autnm)
     {

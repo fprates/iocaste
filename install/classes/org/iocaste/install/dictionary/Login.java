@@ -13,7 +13,7 @@ public class Login extends Module {
      * @see org.iocaste.install.dictionary.Module#install()
      */
     @Override
-    public final List<String> install() throws Exception {
+    public final List<String> install() {
         Table docs001, docs002, docs003, docs004, docs005;
         
         docs001 = getTable("DOCS001");

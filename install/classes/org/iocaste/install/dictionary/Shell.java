@@ -13,7 +13,7 @@ public class Shell extends Module {
      * @see org.iocaste.install.dictionary.Module#install()
      */
     @Override
-    public List<String> install() throws Exception {
+    public List<String> install() {
         Table shell001, shell002, shell003, docs001, docs002, docs003, docs004;
         Table docs005;
         
