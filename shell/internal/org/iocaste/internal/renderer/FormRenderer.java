@@ -14,7 +14,8 @@ public class FormRenderer extends Renderer {
      */
     public static final XMLElement render(Form container, Config config) {
         Parameter parameter;
-        XMLElement hiddentag, formtag = new XMLElement("form");
+        XMLElement hiddentag, content, pagecontrol;
+        XMLElement formtag = new XMLElement("form");
         String enctype = container.getEnctype();
         String currentaction = container.getAction();
         String htmlname = container.getHtmlName();
@@ -27,6 +28,10 @@ public class FormRenderer extends Renderer {
         formtag.add("id", htmlname);
         formtag.add("name", htmlname);
 
+        content = new XMLElement("div");
+        content.add("class", container.getStyleClass());
+        content.addChildren(renderElements(container.getElements(), config));
+        
         addEvents(formtag, container);
         
         if (enctype != null)
@@ -37,7 +42,11 @@ public class FormRenderer extends Renderer {
         hiddentag = ParameterRenderer.render(parameter);
         
         formtag.addInner(hiddentag.toString());
-        formtag.addChildren(renderElements(container.getElements(), config));
+        pagecontrol = config.getPageControl();
+        if (pagecontrol != null)
+            formtag.addChild(pagecontrol);
+        
+        formtag.addChild(content);
         
         return formtag;
     }

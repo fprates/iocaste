@@ -18,9 +18,9 @@ public class Config {
     private Set<String> actions;
     private List<String> onload; 
     private List<XMLElement> toform;
-    private boolean pcstarted;
     private View view;
     private Const msgtype;
+    private XMLElement pagecontrol;
     
     public Config() {
         actions = new HashSet<String>();
@@ -147,6 +147,14 @@ public class Config {
      * 
      * @return
      */
+    public final XMLElement getPageControl() {
+        return pagecontrol;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final String getPageTrack() {
         return pagetrack;
     }
@@ -200,14 +208,6 @@ public class Config {
     
     /**
      * 
-     * @return
-     */
-    public final boolean isPageControlStarted() {
-        return pcstarted;
-    }
-    
-    /**
-     * 
      * @param currentaction
      */
     public final void setCurrentAction(String currentaction) {
@@ -242,10 +242,10 @@ public class Config {
     
     /**
      * 
-     * @param pcstarted
+     * @param pagecontrol
      */
-    public final void setPageControlStarted(boolean pcstarted) {
-        this.pcstarted = pcstarted;
+    public final void setPageControl(XMLElement pagecontrol) {
+        this.pagecontrol = pagecontrol;
     }
     
     /**

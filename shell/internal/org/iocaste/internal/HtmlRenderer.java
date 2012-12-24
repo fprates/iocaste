@@ -182,9 +182,9 @@ public class HtmlRenderer {
     public final String[] run(View view, TrackingData tracking) {
         String[] printlines;
         Config config;
-        List<String> html = new ArrayList<String>();
-        List<XMLElement> tags = new ArrayList<XMLElement>();
-        List<XMLElement> bodycontent = new ArrayList<XMLElement>();
+        List<String> html = new ArrayList<>();
+        List<XMLElement> tags = new ArrayList<>();
+        List<XMLElement> bodycontent = new ArrayList<>();
         XMLElement htmltag = new XMLElement("html");
         XMLElement bodytag = new XMLElement("body");
         

@@ -85,8 +85,6 @@ public class PageControlRenderer extends Renderer {
         pctag = new XMLElement("div");
         pctag.add("class", pagecontrol.getStyleClass());
         
-        config.setPageControlStarted(true);
-        
         text = new Text(statusarea, "navbar.title");
         text.setStyleClass("title");
         text.setText((title == null)? view.getAppName() : title);

@@ -59,10 +59,10 @@ public class Renderer {
         
         switch (container.getType()) {
         case PAGE_CONTROL:
-            if (config.isPageControlStarted())
+            if (config.getPageControl() != null)
                 break;
             
-            tags.add(PageControlRenderer.render(
+            config.setPageControl(PageControlRenderer.render(
                     (PageControl)container, config));
             break;
             

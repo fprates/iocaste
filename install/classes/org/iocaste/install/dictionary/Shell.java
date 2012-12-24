@@ -103,8 +103,16 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "background-color", "#000000");
         insertStyleProperty(shell003, "padding", "10px");
         insertStyleProperty(shell003, "margin-bottom", "5px");
+        insertStyleProperty(shell003, "margin-right", "10px");
         insertStyleProperty(shell003, "border-style", "none");
-
+        insertStyleProperty(shell003, "position", "fixed");
+        insertStyleProperty(shell003, "height", "120px");
+        insertStyleProperty(shell003, "width", "100%");
+        insertStyleProperty(shell003, "top", "0px");
+        
+        insertStyleElement(shell002, ".form_content");
+        insertStyleProperty(shell003, "padding-top", "150px");
+        
         insertStyleElement(shell002, ".form_cell");
         insertStyleProperty(shell003, "vertical-align", "middle");
         insertStyleProperty(shell003, "background-color", "#000000");
