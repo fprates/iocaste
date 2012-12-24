@@ -16,6 +16,7 @@ import org.iocaste.install.dictionary.Core;
 import org.iocaste.install.dictionary.Documents;
 import org.iocaste.install.dictionary.Login;
 import org.iocaste.install.dictionary.Module;
+import org.iocaste.install.dictionary.SH;
 import org.iocaste.install.dictionary.Shell;
 import org.iocaste.install.dictionary.Table;
 import org.iocaste.shell.common.DataForm;
@@ -111,7 +112,7 @@ public class DBConfigRequest {
     
     private static final void createTables(Statement ps, Config config)
             throws Exception {
-        Module documents, shell, login;
+        Module documents, shell, login, sh;
         Map<String, Table> tables;
         byte dbtype = DBNames.names.get(config.dbtype);
         List<String> sqllist = new ArrayList<>();
@@ -129,6 +130,10 @@ public class DBConfigRequest {
         login = new Login(dbtype);
         login.putTables(tables);
         sqllist.addAll(login.install());
+        
+        sh = new SH(dbtype);
+        sh.putTables(tables);
+        sqllist.addAll(sh.install());
         
         for (String sql : sqllist)
             ps.addBatch(sql);
