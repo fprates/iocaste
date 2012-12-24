@@ -58,7 +58,7 @@ public class Documents extends Module {
         insertElement(docs003, "MODEL.NAME", 0, 24, 0, true);
         insertElement(docs003, "MODEL.TABLE", 0, 12, 0, true);
         insertElement(docs003, "MODEL.CLASS", 0, 255, 0, false);
-        insertModelKey(docs002, docs004, "MODEL", "MODEL.NAME", "DOCID",
+        insertModelKey(docs002, docs004, "MODEL.NAME", "MODEL", "DOCID",
                 "MODEL.NAME", "name");
         insertModelItem(docs002, "MODEL.TABLE", "MODEL", "TNAME",
                 "MODEL.TABLE", "tableName");
