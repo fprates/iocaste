@@ -9,12 +9,15 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.iocaste.install.dictionary.Core;
 import org.iocaste.install.dictionary.Documents;
+import org.iocaste.install.dictionary.Login;
 import org.iocaste.install.dictionary.Module;
 import org.iocaste.install.dictionary.Shell;
+import org.iocaste.install.dictionary.Table;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.View;
@@ -108,7 +111,8 @@ public class DBConfigRequest {
     
     private static final void createTables(Statement ps, Config config)
             throws Exception {
-        Module documents, shell;
+        Module documents, shell, login;
+        Map<String, Table> tables;
         byte dbtype = DBNames.names.get(config.dbtype);
         List<String> sqllist = new ArrayList<>();
         
@@ -116,10 +120,15 @@ public class DBConfigRequest {
 
         documents = new Documents(dbtype);
         sqllist.addAll(documents.install());
-
+        tables = documents.getTables();
+        
         shell = new Shell(dbtype);
-        shell.putTables(documents.getTables());
+        shell.putTables(tables);
         sqllist.addAll(shell.install());
+        
+        login = new Login(dbtype);
+        login.putTables(tables);
+        sqllist.addAll(login.install());
         
         for (String sql : sqllist)
             ps.addBatch(sql);
