@@ -1,8 +1,8 @@
 package org.iocaste.install.dictionary;
 
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,42 +11,42 @@ public abstract class Module {
     public static final byte CHAR = 1;
     public static final byte BOOLEAN = 2;
     public static final byte INSERT = 0;
-    private List<Table> tables;
+    private Map<String, Table> tables, extra;
     private List<Query> queries;
     private Map<String, Authorization> authorizations;
     private Map<String, Profile> profiles;
     private int nritm;
+    private byte dbtype;
+    private String sname;
+    private long sindx, eindx, pindx;
     
-    public Module() {
-        tables = new ArrayList<>();
+    public Module(byte dbtype) {
+        tables = new LinkedHashMap<>();
+        extra = new HashMap<>();
         queries = new ArrayList<>();
         authorizations = new HashMap<>();
         profiles = new HashMap<>();
+        this.dbtype = dbtype;
+        sindx = 0;
     }
     
-    protected final Table tableInstance(String name) {
-        Table table = new Table(name);
-        tables.add(table);
-        
-        return table;
-    }
-    
-    protected final void compile(Statement ps) throws Exception {
+    protected final List<String> compile() throws Exception {
         String sql;
+        List<String> batch = new ArrayList<>();
         
-        for (Table table : tables) {
-            sql = table.toString();
+        for (String name : tables.keySet()) {
+            sql = tables.get(name).toString();
             System.out.println(sql);
-            ps.addBatch(sql);
+            batch.add(sql);
         }
         
         for (Query query : queries) {
             sql = query.toString();
             System.out.println(sql);
-            ps.addBatch(sql);
+            batch.add(sql);
         }
         
-        ps.clearBatch();
+        return batch;
     }
     
     protected final void compileAuthorizationProfile(Table auth003,
@@ -71,6 +71,14 @@ public abstract class Module {
             auth004.set("actio", authorization.actio);
             insert(auth004);
         }
+    }
+    
+    protected final Table getTable(String name) {
+        return extra.get(name);
+    }
+    
+    public final Map<String, Table> getTables() {
+        return tables;
     }
     
     protected final void insert(Table table) {
@@ -169,6 +177,37 @@ public abstract class Module {
         insert(docs004);
     }
     
+    protected final void insertStyle(Table shell001, String name) {
+        sindx += 100000000;
+        eindx = sindx;
+        sname = name;
+        shell001.set("sname", name);
+        shell001.set("sindx", sindx);
+        insert(shell001);
+    }
+    
+    protected final void insertStyleElement(Table shell002, String name) {
+        eindx += 10000;
+        pindx = eindx;
+        shell002.set("eindx", eindx);
+        shell002.set("sname", sname);
+        shell002.set("ename", name);
+        insert(shell002);
+    }
+    
+    protected final void insertStyleProperty(
+            Table shell003, String name, String value) {
+        pindx++;
+        shell003.set("pindx", pindx);
+        shell003.set("eindx", eindx);
+        shell003.set("pname", name);
+        shell003.set("value", value);
+        insert(shell003);
+        
+    }
+    
+    public abstract List<String> install() throws Exception;
+    
     protected final void linkAuthorizationToProfile(String prfnm, String autnm)
     {
         Profile profile = profiles.get(prfnm);
@@ -183,6 +222,19 @@ public abstract class Module {
         users002.set("uname", username);
         users002.set("prfnm", profile);
         insert(users002);
+    }
+    
+    public final void putTables(Map<String, Table> tables) {
+        extra.putAll(tables);
+    }
+    
+    protected final Table tableInstance(String name) {
+        Table table = new Table(name);
+        
+        table.setSQLDB(dbtype);
+        tables.put(name, table);
+        
+        return table;
     }
 }
 

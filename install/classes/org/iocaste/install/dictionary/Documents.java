@@ -1,10 +1,19 @@
 package org.iocaste.install.dictionary;
 
-import java.sql.Statement;
+import java.util.List;
 
 public class Documents extends Module {
 
-    public final void install(byte dbtype, Statement ps) throws Exception {
+    public Documents(byte dbtype) {
+        super(dbtype);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.install.dictionary.Module#install()
+     */
+    @Override
+    public final List<String> install() throws Exception {
         Table range001, docs001, docs002, docs003, docs004, docs005, docs006;
         
         range001 = tableInstance("RANGE001");
@@ -120,7 +129,15 @@ public class Documents extends Module {
                 "IDENT", "NUMBER_RANGE.IDENT", null);
         insertModelItem(docs002, "NUMBER_RANGE.CURRENT", "NUMBER_RANGE",
                 "CRRNT", "NUMBER_RANGE.CURRENT", null);
-             
-        compile(ps);
+        
+        range001.set("ident", "AUTHINDEX");
+        range001.set("crrnt", 5);
+        insert(range001);
+        
+        range001.set("ident", "PROFILEINDEX");
+        range001.set("crrnt", 2);
+        insert(range001);
+        
+        return compile();
     }
 }

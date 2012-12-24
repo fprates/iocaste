@@ -1,11 +1,19 @@
 package org.iocaste.install.dictionary;
 
-import java.sql.Statement;
+import java.util.List;
 
 public class Core extends Module {
 
-    public final void install(byte sqldb, Statement ps)
-            throws Exception {
+    public Core(byte dbtype) {
+        super(dbtype);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.install.dictionary.Module#install()
+     */
+    @Override
+    public final List<String> install() throws Exception {
         Table users000, users001, users002, auth001, auth002, auth003, auth004;
         
         users000 = tableInstance("USERS000");
@@ -82,6 +90,6 @@ public class Core extends Module {
         linkUserToProfile(users002, "ADMIN", 101, "ALL");
         linkUserToProfile(users002, "ADMIN", 102, "BASE");
         
-        compile(ps);
+        return compile();
     }
 }

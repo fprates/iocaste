@@ -7,10 +7,14 @@ import java.io.OutputStreamWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.iocaste.install.dictionary.Core;
 import org.iocaste.install.dictionary.Documents;
+import org.iocaste.install.dictionary.Module;
+import org.iocaste.install.dictionary.Shell;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.View;
@@ -104,10 +108,21 @@ public class DBConfigRequest {
     
     private static final void createTables(Statement ps, Config config)
             throws Exception {
+        Module documents, shell;
         byte dbtype = DBNames.names.get(config.dbtype);
+        List<String> sqllist = new ArrayList<>();
         
-        new Core().install(dbtype, ps);
-        new Documents().install(dbtype, ps);
+        sqllist.addAll(new Core(dbtype).install());
+
+        documents = new Documents(dbtype);
+        sqllist.addAll(documents.install());
+
+        shell = new Shell(dbtype);
+        shell.putTables(documents.getTables());
+        sqllist.addAll(shell.install());
+        
+        for (String sql : sqllist)
+            ps.addBatch(sql);
     }
     
     private static final String[] getDBInitializator(Config config) {
