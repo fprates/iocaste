@@ -17,12 +17,15 @@ public class PageControl extends AbstractContainer {
     private static final long serialVersionUID = 462408931862107155L;
     public static final boolean EXTERNAL = true;
     public static final boolean NATIVE = false;
-    private Set<String> extern, actions;
+    public static final byte ACTION = 0;
+    public static final byte REQUEST = 1;
+    private Set<String> extern, actions, components;
     
     public PageControl(Form form) {
         super(form, Const.PAGE_CONTROL, "navbar");
-        actions = new LinkedHashSet<String>();
-        extern = new HashSet<String>();
+        actions = new LinkedHashSet<>();
+        components = new LinkedHashSet<>();
+        extern = new HashSet<>();
         setStyleClass("header");
     }
     
@@ -40,9 +43,24 @@ public class PageControl extends AbstractContainer {
      * @param extern true, se a ação chama outra aplicação.
      */
     public final void add(String action, boolean extern) {
-        actions.add(action);
-        if (extern)
-            this.extern.add(action);
+        add(action, ACTION, extern);
+    }
+    
+    public final void add(String action, byte type) {
+        add(action, type, false);
+    }
+    
+    public final void add(String action, byte type, boolean extern) {
+        switch (type) {
+        case REQUEST:
+            components.add(action);
+            break;
+        case ACTION:
+            actions.add(action);
+            if (extern)
+                this.extern.add(action);
+            break;
+        }
     }
     
     /**
@@ -53,6 +71,14 @@ public class PageControl extends AbstractContainer {
         return actions.toArray(new String[0]);
     }
 
+    /**
+     * 
+     * @return
+     */
+    public final String[] getComponents() {
+        return components.toArray(new String[0]);
+    }
+    
     /**
      * Indica se a ação especificada é externa.
      * @param name nome da ação.

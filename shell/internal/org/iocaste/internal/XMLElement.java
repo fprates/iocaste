@@ -14,9 +14,9 @@ public class XMLElement {
     
     public XMLElement(String name) {
         this.name = name;
-        elements = new ArrayList<XMLElement>();
-        attributes = new HashMap<String, String>();
-        inner = new ArrayList<String>();
+        elements = new ArrayList<>();
+        attributes = new HashMap<>();
+        inner = new ArrayList<>();
     }
     
     /**

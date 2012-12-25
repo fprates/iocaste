@@ -1,6 +1,7 @@
 package org.iocaste.internal.renderer;
 
 import org.iocaste.internal.XMLElement;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
@@ -61,9 +62,8 @@ public class PageControlRenderer extends Renderer {
      */
     public static final XMLElement render(
             PageControl pagecontrol, Config config) {
-        String[] actions;
-        StandardContainer linkarea;
-        StandardContainer statusarea;
+        String[] actions, components;
+        StandardContainer linkarea, statusarea, componentarea;
         XMLElement pctag;
         Const msgtype;
         Text text;
@@ -102,6 +102,14 @@ public class PageControlRenderer extends Renderer {
             msgtype = config.getMessageType();
             setMessage(text, (msgtype == null)? Const.STATUS : msgtype,
                     message);
+        }
+
+        components = pagecontrol.getComponents();
+        if (components.length > 0) {
+            componentarea = new StandardContainer(pagecontrol, "navbar.components");
+            componentarea.setStyleClass("navbar_components");
+            for (String component : components)
+                componentarea.add(new Button(componentarea, component));
         }
         
         pctag.addChildren(Renderer.renderElements(
