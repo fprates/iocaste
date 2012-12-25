@@ -8,7 +8,6 @@ import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.user.Authorization;
-import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.PageControl;
@@ -52,10 +51,10 @@ public class Response {
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         Parameter parameter = new Parameter(container, "package");
-        Button info = new Button(container, "info");
         Table table = new Table(container, "packages");
         
         pagecontrol.add("home");
+
         table.setMark(true);
         table.setSelectionType(Table.SINGLE);
         
@@ -72,8 +71,10 @@ public class Response {
             link.add(parameter, name);
             item.add(link);
         }
+
+        if (table.length() > 0)
+            pagecontrol.add("info", PageControl.REQUEST);
         
-        info.setVisible(table.length() > 0);
         view.setTitle("package-manager");
     }
     
