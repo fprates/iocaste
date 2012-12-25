@@ -117,20 +117,26 @@ class OnClickHandler extends AbstractEventHandler {
         View view;
         TabbedPaneItem paneitem;
         Element focus;
+        Container container;
         
         if (getInputError() != 0)
             return;
-        
-        paneitem = pane.get(args);
-        focus = paneitem.getFocus();
-        if (focus == null) {
-            focus = getFirstInput(paneitem.getContainer());
-            paneitem.setFocus(focus);
-        }
-        
+
         view = pane.getView();
         view.setReloadableView(false);
-        view.setFocus(focus);
+        
+        paneitem = pane.get(args);
+        container = paneitem.getContainer();
+        if (container != null) {
+            focus = paneitem.getFocus();
+            if (focus == null) {
+                focus = getFirstInput(container);
+                paneitem.setFocus(focus);
+            }
+            
+            view.setFocus(focus);
+        }
+        
         pane.setCurrent(args);
     }
 }

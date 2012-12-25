@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.iocaste.internal.XMLElement;
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
@@ -70,8 +71,10 @@ public class TabbedPaneRenderer extends Renderer {
     private static final List<XMLElement> renderTabbedPaneItem(
             TabbedPaneItem tabbedpaneitem, Config config) {
         List<XMLElement> elements = new ArrayList<XMLElement>();
+        Container container = tabbedpaneitem.getContainer();
         
-        renderContainer(elements, tabbedpaneitem.getContainer(), config);
+        if (container != null)
+            renderContainer(elements, container, config);
         
         return elements;
     }
