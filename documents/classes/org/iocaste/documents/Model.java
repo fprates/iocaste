@@ -389,14 +389,14 @@ public class Model {
         if (cache.mmodel != null) {
             l = Common.getModelItemLen("NAME", cache);
             if (name.length() > l)
-                throw new IocasteException(
-                        "invalid modelname length on document header");
+                throw new IocasteException(name.concat(": " +
+                		"invalid modelname length on document header"));
             
             if (tablename != null) {
                 l = Common.getModelItemLen("TABLE", cache);
                 if (tablename.length() > l)
-                    throw new IocasteException(
-                            "invalid tablename length on document header");
+                    throw new IocasteException(tablename.concat(": " +
+                    		"invalid tablename length on document header"));
             }
         }
         
