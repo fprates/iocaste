@@ -18,6 +18,7 @@ import java.util.Properties;
 import org.hsqldb.HsqlException;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
@@ -234,6 +235,8 @@ public class DBServices {
         } catch (MySQLSyntaxErrorException e) {
             throw new SQLException(e.getMessage());
         } catch (MySQLNonTransientConnectionException e) {
+            throw new SQLException(e.getMessage());
+        } catch (MysqlDataTruncation e) {
             throw new SQLException(e.getMessage());
         } catch (SQLDataException e) {
             throw new SQLDataException(e.getMessage());
