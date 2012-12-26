@@ -103,6 +103,19 @@ public class Authority extends AbstractServiceInterface {
     }
     
     /**
+     * Remove perfil de autorizações
+     * @param name nome do perfil
+     * @return 1, se removido com sucesso.
+     */
+    public final int removeProfile(String name) {
+        Message message = new Message();
+        
+        message.setId("remove_profile");
+        message.add("name", name);
+        return call(message);
+    }
+    
+    /**
      * 
      * @param authorization
      */

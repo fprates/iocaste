@@ -20,6 +20,8 @@ public class Services extends AbstractFunction {
     private static final byte DEL_AUTH = 3;
     private static final byte DEL_PROFILE_ITEM = 4;
     private static final byte PROFILES = 5;
+    private static final byte DEL_USER_PROFILE = 6;
+    private static final byte DEL_USER_PROFILE_ITEM = 7;
     private static final String[] QUERIES = {
         "select * from USER_AUTHORITY where USERNAME = ? and PROFILE = ?",
         "select * from AUTHORIZATION_ITEM where AUTHORIZATION = ?",
@@ -27,6 +29,8 @@ public class Services extends AbstractFunction {
         "delete from AUTHORIZATION where NAME = ?",
         "delete from USER_PROFILE_ITEM where NAME = ?",
         "from USER_AUTHORITY where USERNAME = ?",
+        "delete from USER_PROFILE where NAME = ?",
+        "delete from USER_PROFILE_ITEM where PROFILE = ?"
     };
     
     public Services() {
@@ -36,6 +40,7 @@ public class Services extends AbstractFunction {
         export("get_profile", "getProfile");
         export("get_user_profiles", "getUserProfiles");
         export("remove", "remove");
+        export("remove_profile", "removeProfile");
         export("save", "save");
         export("save_profile", "saveProfile");
     }
@@ -195,6 +200,19 @@ public class Services extends AbstractFunction {
         documents.update(QUERIES[DEL_PROFILE_ITEM], name);
         documents.update(QUERIES[DEL_AUTH_ITENS], name);
         return documents.update(QUERIES[DEL_AUTH], name);
+    }
+    
+    /**
+     * Remove o perfil e associações de autorizações
+     * @param message dados do perfil
+     * @return 1, se a autorização foi removida com sucesso.
+     */
+    public final int removeProfile(Message message) {
+        String name = message.getString("name");
+        Documents documents = new Documents(this);
+        
+        documents.update(QUERIES[DEL_USER_PROFILE_ITEM], name);
+        return documents.update(QUERIES[DEL_USER_PROFILE], name);
     }
     
     /**
