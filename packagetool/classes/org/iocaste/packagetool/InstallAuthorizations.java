@@ -38,8 +38,10 @@ public class InstallAuthorizations {
         
         for (UserProfile profile : profiles.keySet()) {
             profilename = profile.getName();
-            if (authority.getProfile(profilename) == null)
+            if (authority.getProfile(profilename) == null) {
                 authority.save(profile);
+                Registry.add(profilename, "AUTH_PROFILE", state);
+            }
             
             for (Authorization authorization : profile.getAuthorizations()) {
                 users = profiles.get(profile);

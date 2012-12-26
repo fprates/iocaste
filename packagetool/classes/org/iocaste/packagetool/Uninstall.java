@@ -95,6 +95,12 @@ public class Uninstall {
             return;
         }
         
+        if (modeltype.equals("AUTH_PROFILE")) {
+            authority.removeProfile(name);
+            documents.delete(object);
+            return;
+        }
+        
         if (modeltype.equals("TSKGROUP")) {
             TaskSelector.removeGroup(name, documents);
             documents.delete(object);
