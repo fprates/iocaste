@@ -19,7 +19,7 @@ public class Common {
     public static final String[] parseCommand(String command, View view,
             Function function) {
         String[] parsed;
-        ExtendedObject task = null;
+        ExtendedObject task;
         
         parsed = command.trim().split("\\s");
         view.clearExports();

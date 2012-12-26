@@ -19,6 +19,7 @@ public class Request {
                 get();
         String[] parsed = Common.parseCommand(command, view, function);
         
+        parsed = parsed[0].split("\\s");
         Common.run(view, parsed);
     }
 
