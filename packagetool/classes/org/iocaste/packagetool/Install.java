@@ -28,12 +28,12 @@ public class Install {
         Models models = new Models();
 
         installLanguages(data, models);
-        installTasks(data);
+        installTasks(data, models);
         installMessages(data, models, function);
         installTasksGroups(data, models);
         installUserTasksGroups(data, models, function);
         
-        messages = new HashMap<String, String>();
+        messages = new HashMap<>();
         messages.put("package.installed", "Pacote instalado com sucesso.");
         messages.put("package.uninstalled", "Pacote desinstalado com sucesso.");
         messages.put("package-manager", "Gerenciador de pacotes");
@@ -193,12 +193,11 @@ public class Install {
      * 
      * @param data
      */
-    private static final void installTasks(InstallData data) {
+    private static final void installTasks(InstallData data, Models models) {
         DataElement element;
-        DocumentModel tasks;
         DocumentModelItem item;
         
-        tasks = data.getModel("TASKS", "TASKS", null);
+        models.tasks = data.getModel("TASKS", "TASKS", null);
 
         element = new DataElement("TASKS.NAME");
         element.setLength(18);
@@ -209,8 +208,8 @@ public class Install {
         item.setTableFieldName("TSKNM");
         item.setDataElement(element);
         
-        tasks.add(item);
-        tasks.add(new DocumentModelKey(item));
+        models.tasks.add(item);
+        models.tasks.add(new DocumentModelKey(item));
         
         element = new DataElement("TASKS.COMMAND");
         element.setLength(128);
@@ -220,7 +219,7 @@ public class Install {
         item.setTableFieldName("CMDLN");
         item.setDataElement(element);
         
-        tasks.add(item);
+        models.tasks.add(item);
     }
     
     /**
@@ -233,7 +232,7 @@ public class Install {
             Models models) {
         DataElement element;
         DocumentModel model, group;
-        DocumentModelItem item, groupname, entryid, language, text;
+        DocumentModelItem item, groupname, entryid, language, text, reference;
         
         /*
          * grupos de tarefas
@@ -291,14 +290,11 @@ public class Install {
         model.add(new DocumentModelKey(entryid));
         
         // nome da entrada
-        element = new DataElement("TASK_ENTRY.NAME");
-        element.setType(DataType.CHAR);
-        element.setLength(12);
-        element.setUpcase(true);
-        
+        reference = models.tasks.getModelItem("NAME");
         item = new DocumentModelItem("NAME");
         item.setTableFieldName("ENTRY");
-        item.setDataElement(element);
+        item.setDataElement(reference.getDataElement());
+        item.setReference(reference);
         model.add(item);
         
         // grupo
@@ -407,5 +403,5 @@ public class Install {
 }
 
 class Models {
-    public DocumentModel languages, messages, group;
+    public DocumentModel languages, messages, group, tasks;
 }
