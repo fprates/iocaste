@@ -157,17 +157,19 @@ public class Services extends AbstractFunction {
             if (itens == null)
                 throw new IocasteException("sh has no columns itens.");
         
-        shdata = new ArrayList<ExtendedObject>();
-        shname = header.getValue("NAME");
+        documents = new Documents(this);
         model = header.getValue("MODEL");
+        if (documents.getModel(model) == null)
+            throw new IocasteException(model.concat(" is an invalid model."));
+
+        shname = header.getValue("NAME");
         export = composeName(model, header.getValue("EXPORT"));
         header.setValue("EXPORT", export);
-        
-        documents = new Documents(this);
         if (documents.save(header) == 0)
             throw new Exception (new StringBuilder("Error saving header of " +
             		"sh ").append(shname).toString());
-        
+
+        shdata = new ArrayList<>();
         shdata.add(header);
         for (ExtendedObject item : itens) {
             shitemname = item.getValue("ITEM");
