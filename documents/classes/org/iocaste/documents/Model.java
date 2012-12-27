@@ -131,7 +131,7 @@ public class Model {
         DataElement dataelement;
         DocumentModelItem reference;
         StringBuilder sb = null, sbk = null;
-        String tname, query;
+        String tname, query, refname;
         DocumentModelItem[] itens = model.getItens();
         Iocaste iocaste = new Iocaste(cache.function);
         String refstmt = getReferenceStatement(iocaste);
@@ -166,9 +166,15 @@ public class Model {
             reference = item.getReference();
             if (reference != null) {
                 if (reference.isDummy()) {
-                    refmodel = Model.get(reference.getDocumentModel().getName(),
-                            cache);
+                    refname = reference.getDocumentModel().getName();
+                    refmodel = Model.get(refname, cache);
+                    
+                    refname = Documents.getComposedName(reference);
                     reference = refmodel.getModelItem(reference.getName());
+                    if (reference == null)
+                        throw new IocasteException(new StringBuilder(refname).
+                                append(": is an invalid reference.").
+                                toString());
                 }
                 
                 sb.append(refstmt).append(reference.getDocumentModel().
