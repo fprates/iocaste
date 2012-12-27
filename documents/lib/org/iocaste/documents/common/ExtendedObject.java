@@ -52,10 +52,14 @@ public class ExtendedObject implements Serializable {
     public final int geti(String name) {
         Object value = getValue(name);
         
-        if (!(value instanceof BigDecimal))
-            return (int)value;
+        if (value instanceof BigDecimal)
+            return ((BigDecimal)value).intValue();
         
-        return ((BigDecimal)value).intValue();
+        try {
+            return (int)value;
+        } catch (ClassCastException e) {
+            return Integer.parseInt(value.toString());
+        }
     }
     
     /**
@@ -66,10 +70,14 @@ public class ExtendedObject implements Serializable {
     public final long getl(String name) {
         Object value = getValue(name);
         
-        if (!(value instanceof BigDecimal))
-            return (long)value;
+        if (value instanceof BigDecimal)
+            return ((BigDecimal)value).longValue();
         
-        return ((BigDecimal)value).longValue();
+        try {
+            return (long)value;
+        } catch (ClassCastException e) {
+            return Long.parseLong(value.toString());
+        }
     }
     
     /**
