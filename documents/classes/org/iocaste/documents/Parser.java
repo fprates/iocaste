@@ -182,7 +182,11 @@ public class Parser {
                     pass = 2;
                 }
                 
-                continue;
+                if (pass > 0)
+                    continue;
+                
+                throw new IocasteException(new StringBuilder(query).
+                        append(": invalid query.").toString());
             case 1:
                 pass = parseColumns(upcasetoken, queryinfo);
                 continue;
