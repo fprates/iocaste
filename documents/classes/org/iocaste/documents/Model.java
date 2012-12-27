@@ -130,7 +130,7 @@ public class Model {
         DocumentModel refmodel;
         DataElement dataelement;
         DocumentModelItem reference;
-        StringBuilder sb = null, sbk = null;
+        StringBuilder sb, sbk = null;
         String tname, query, refname;
         DocumentModelItem[] itens = model.getItens();
         Iocaste iocaste = new Iocaste(cache.function);
@@ -338,6 +338,7 @@ public class Model {
      */
     private static final int registerDataElements(Iocaste iocaste,
             DocumentModel model) throws Exception {
+        String name;
         DataElement element;
         DocumentModelItem[] itens = model.getItens();
         
@@ -346,7 +347,7 @@ public class Model {
             if (element == null)
                 throw new IocasteException(new StringBuilder(item.getName()).
                         append(" has null data element.").toString());
-
+            
             switch (element.getType()) {
             case DataType.DATE:
                 element.setLength(10);
@@ -368,9 +369,13 @@ public class Model {
                 break;
             }
             
-            if (iocaste.selectUpTo(
-                    QUERIES[ELEMENT], 1, element.getName()) != null)
+            name = element.getName();
+            if (iocaste.selectUpTo(QUERIES[ELEMENT], 1, name) != null)
                 continue;
+            
+            if (element.isDummy())
+                throw new IocasteException(new StringBuilder(name).
+                        append(": is an invalid data element.").toString());
             
             DataElementServices.insert(iocaste, element);
         }
