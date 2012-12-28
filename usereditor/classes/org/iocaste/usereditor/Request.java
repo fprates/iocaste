@@ -106,11 +106,13 @@ public class Request {
         Documents documents = new Documents(function);
         String name;
         String username = object.getValue("USERNAME");
-        String secret = object.getValue("SECRET");
         
         user = new User();
         user.setUsername(username);
-        user.setSecret(secret);
+        user.setSecret((String)object.getValue("SECRET"));
+        user.setFirstname((String)object.getValue("FIRSTNAME"));
+        user.setSurname((String)object.getValue("SURNAME"));
+        user.setInitialSecret((boolean)object.getValue("INIT"));
         
         switch (mode) {
         case Common.CREATE:

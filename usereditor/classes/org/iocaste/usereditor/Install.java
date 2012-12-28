@@ -28,6 +28,7 @@ public class Install {
         messages.put("addtask", "Adicionar");
         messages.put("create", "Criar");
         messages.put("display", "Exibir");
+        messages.put("FIRSTNAME", "Nome");
         messages.put("GROUP", "Grupo de tarefas");
         messages.put("idtab", "Identificação");
         messages.put("invalid.user", "Usuário inválido.");
@@ -39,6 +40,7 @@ public class Install {
         messages.put("SECRET", "Senha");
         messages.put("secret.confirm", "Confirmação");
         messages.put("SU01", "Gerenciamento de usuários");
+        messages.put("SURNAME", "Sobrenome");
         messages.put("taskstab", "Tarefas");
         messages.put("update", "Atualizar");
         messages.put("user.saved.successfully", "Usuário gravado com sucesso.");

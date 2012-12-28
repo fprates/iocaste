@@ -28,7 +28,7 @@ public class Response {
         Table profiles, tasks;
         TabbedPaneItem tabitem;
         Button save, addprofile, removeprofile, addtask, removetask;
-        DataItem secret, confirm, username;
+        DataItem secret, username;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         TabbedPane tabs = new TabbedPane(container, "tabs");
@@ -44,18 +44,12 @@ public class Response {
          */
         form.importModel(model);
         form.get("ID").setVisible(false);
+        secret = form.get("INIT");
+        secret.setComponentType(Const.CHECKBOX);
         secret = form.get("SECRET");
         secret.setSecret(true);
         username = form.get("USERNAME");
         username.setEnabled(false);
-        confirm = new DataItem(form, Const.TEXT_FIELD, "secret.confirm");
-        confirm.setSecret(true);
-        confirm.setModelItem(secret.getModelItem());
-        
-        if (mode == Common.DISPLAY) {
-            secret.setEnabled(false);
-            confirm.setEnabled(false);
-        }
         
         tabitem = new TabbedPaneItem(tabs, "idtab");
         tabitem.setContainer(form);
@@ -116,6 +110,9 @@ public class Response {
             tasks.setMark(false);
             form.setObject(userdata.identity);
             save.setVisible(false);
+            
+            for (Element element : form.getElements())
+                element.setEnabled(false);
             
             if (userdata.profiles != null)
                 for (ExtendedObject oprofile : userdata.profiles)
