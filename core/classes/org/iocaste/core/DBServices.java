@@ -161,7 +161,11 @@ public class DBServices {
      */
     public final void rollback(Connection connection)
             throws SQLException {
-        connection.rollback();
+        try {
+            connection.rollback();
+        } catch (MySQLNonTransientConnectionException e) {
+            throw new SQLException(e.getMessage());
+        }
     }
     
     /**
