@@ -29,11 +29,11 @@ public class Services extends AbstractFunction {
     private Properties properties;
     private static final byte USER = 0;
     private static final String[] QUERIES = {
-        "select UNAME, SECRT from USERS001 where UNAME = ?"
+        "select UNAME, SECRT, INIT from USERS001 where UNAME = ?"
     };
     
     public Services() {
-        sessions = new HashMap<String, UserContext>();
+        sessions = new HashMap<>();
         db = new DBServices();
 
         export("call_procedure", "callProcedure");
@@ -53,11 +53,13 @@ public class Services extends AbstractFunction {
         export("invalidate_auth_cache", "invalidateAuthCache");
         export("is_authorized", "isAuthorized");
         export("is_connected", "isConnected");
+        export("is_initial_secret", "isInitialSecret");
         export("login", "login");
         export("rollback", "rollback");
         export("select", "select");        
         export("set_context", "setContext");
         export("set_current_app", "setCurrentApp");
+        export("set_user_password", "setUserPassword");
         export("update", "update");
         export("update_user", "updateUser");
     }
@@ -311,9 +313,9 @@ public class Services extends AbstractFunction {
      */
     public final String getUsername(Message message) throws Exception {
         String sessionid = message.getSessionid();
-
+        
         if (sessionid == null)
-            throw new Exception("Null session not allowed.");
+            throw new IocasteException("Null session not allowed.");
         
         if (!sessions.containsKey(sessionid))
             return null;
@@ -453,6 +455,18 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      * @return
+     */
+    public final boolean isInitialSecret(Message message) {
+        String sessionid = message.getSessionid();
+        UserContext context = sessions.get(sessionid);
+        
+        return context.getUser().isInitialSecret();
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
@@ -484,7 +498,7 @@ public class Services extends AbstractFunction {
         columns = (Map<String, Object>)lines[0];
         user = getUserFromColumns(columns);
         user.setSecret((String)columns.get("SECRT"));
-        
+        user.setInitialSecret((boolean)columns.get("INIT"));
         if (!user.getSecret().equals(secret))
             return false;
         
@@ -581,6 +595,22 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
+     * @throws Exception
+     */
+    public final void setUserPassword(Message message) throws Exception {
+        String sessionid = message.getSessionid();
+        String secret = message.getString("secret");
+        User user = sessions.get(sessionid).getUser();
+        
+        user.setSecret(secret);
+        user.setInitialSecret(false);
+        
+        updateUser(user, sessionid);
+    }
+    
+    /**
+     * 
+     * @param message
      * @return
      * @throws Exception
      */
@@ -594,6 +624,18 @@ public class Services extends AbstractFunction {
 
     /**
      * 
+     * @param user
+     * @param sessionid
+     * @throws Exception
+     */
+    private final void updateUser(User user, String sessionid)
+            throws Exception {
+        UserServices.update(user, getDBConnection(sessionid), db);
+        AuthServices.invalidateCache(user.getUsername());
+    }
+    
+    /**
+     * 
      * @param message
      * @throws Exception
      */
@@ -601,7 +643,6 @@ public class Services extends AbstractFunction {
         User user = message.get("user");
         String sessionid = message.getSessionid();
         
-        UserServices.update(user, getDBConnection(sessionid), db);
-        AuthServices.invalidateCache(user.getUsername());
+        updateUser(user, sessionid);
     }
 }

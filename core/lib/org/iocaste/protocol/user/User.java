@@ -4,10 +4,8 @@ import java.io.Serializable;
 
 public class User implements Serializable, Comparable<User> {
     private static final long serialVersionUID = -6415620415288973044L;
-    private String username;
-    private String firstname;
-    private String surname;
-    private String secret;
+    private String username, firstname, surname, secret;
+    private boolean initial;
 
     /*
      * (non-Javadoc)
@@ -80,12 +78,24 @@ public class User implements Serializable, Comparable<User> {
         return username.hashCode();
     }
     
+    public final boolean isInitialSecret() {
+        return initial;
+    }
+    
     /**
      * Ajusta primeiro nome do usuário.
      * @param firstname primeiro nome
      */
     public final void setFirstname(String firstname) {
         this.firstname = firstname;
+    }
+    
+    /**
+     * 
+     * @param initial
+     */
+    public final void setInitialSecret(boolean initial) {
+        this.initial = initial;
     }
     
     /**

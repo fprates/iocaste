@@ -25,6 +25,7 @@ public class Core extends Module {
         users001.add("FNAME", CHAR, 64);
         users001.add("SNAME", CHAR, 64);
         users001.add("USRID", NUMC, 5);
+        users001.add("INIT", BOOLEAN, 1);
 
         auth001 = tableInstance("AUTH001");
         auth001.key("AUTNM", CHAR, 24);
@@ -63,6 +64,7 @@ public class Core extends Module {
         users001.set("fname", "Administrator");
         users001.set("sname", "");
         users001.set("usrid", 1);
+        users001.set("init", true);
         insert(users001);
         
         insertExecuteAuthorization(auth001, auth002, "PACKAGE.EXECUTE",

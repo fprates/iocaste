@@ -2,6 +2,8 @@ package org.iocaste.install.dictionary;
 
 import java.util.List;
 
+import org.iocaste.documents.common.DataType;
+
 public class Login extends Module {
 
     public Login(byte dbtype) {
@@ -29,16 +31,25 @@ public class Login extends Module {
                 "USER_CONFIG.CURRENT", null);
          
         insertModel(docs001, docs005, "LOGIN", "USERS001", null);
-        insertElement(docs003, "LOGIN.USERNAME", 0, 12, 0, true);
-        insertElement(docs003, "LOGIN.SECRET", 0, 12, 0, false);
-        insertElement(docs003, "LOGIN.ID", 0, 5, 3, false);
+        insertElement(docs003, "LOGIN.USERNAME", 0, 12, DataType.CHAR, true);
+        insertElement(docs003, "LOGIN.SECRET", 0, 12, DataType.CHAR, false);
+        insertElement(docs003, "LOGIN.ID", 0, 5, DataType.NUMC, false);
+        insertElement(docs003, "LOGIN.FIRSTNAME", 0, 64, DataType.CHAR, false);
+        insertElement(docs003, "LOGIN.SURNAME", 0, 64, DataType.CHAR, false);
+        insertElement(docs003, "LOGIN.INIT", 0, 1, DataType.BOOLEAN, false);
         insertModelKey(docs002, docs004, "LOGIN.USERNAME", "LOGIN", "UNAME",
                 "LOGIN.USERNAME", null);
         insertModelItem(docs002, "LOGIN.SECRET", "LOGIN", "SECRT",
                 "LOGIN.SECRET", null);
         insertModelItem(docs002, "LOGIN.ID", "LOGIN", "USRID", "LOGIN.ID",
                 null);
-    
+        insertModelItem(docs002, "LOGIN.FIRSTNAME", "LOGIN", "FNAME",
+                "LOGIN.FIRSTNAME", null);
+        insertModelItem(docs002, "LOGIN.SURNAME", "LOGIN", "SNAME",
+                "LOGIN.SURNAME", null);
+        insertModelItem(docs002, "LOGIN.INIT", "LOGIN", "INIT", "LOGIN.INIT",
+                null);
+        
         insertModel(docs001, docs005, "AUTHORIZATION", "AUTH001", null);
         insertElement(docs003, "AUTHORIZATION.NAME", 0, 24, 0, true);
         insertElement(docs003, "AUTHORIZATION.OBJECT", 0, 12, 0, true);

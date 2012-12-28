@@ -203,6 +203,13 @@ public final class Iocaste extends AbstractServiceInterface {
         return call(message);
     }
     
+    public final boolean isInitialSecret() {
+        Message message = new Message();
+        
+        message.setId("is_initial_secret");
+        return call(message);
+    }
+    
     /**
      * Conecta usuário à sessão.
      * @param user nome do usuário
@@ -268,6 +275,18 @@ public final class Iocaste extends AbstractServiceInterface {
         message.setId("set_context");
         message.add("context_id", name);
         message.add("object", object);
+        call(message);
+    }
+    
+    /**
+     * 
+     * @param secret
+     */
+    public final void setUserPassword(String secret) {
+        Message message = new Message();
+        
+        message.setId("set_user_password");
+        message.add("secret", secret);
         call(message);
     }
     
