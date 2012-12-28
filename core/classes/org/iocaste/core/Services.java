@@ -261,7 +261,7 @@ public class Services extends AbstractFunction {
         User user;
         Set<String> users;
         
-        users = new TreeSet<String>();
+        users = new TreeSet<>();
         for (String sessionid : sessions.keySet()) {
             context = sessions.get(sessionid);
             user = context.getUser();
@@ -490,7 +490,8 @@ public class Services extends AbstractFunction {
             return false;
 
         connection = db.instance();
-        lines = db.select(connection, QUERIES[USER], 1, username.toUpperCase());
+        lines = db.select(
+                connection, QUERIES[USER], 1, username.toUpperCase());
         connection.close();
         if (lines == null)
             return false;
@@ -498,9 +499,12 @@ public class Services extends AbstractFunction {
         columns = (Map<String, Object>)lines[0];
         user = getUserFromColumns(columns);
         user.setSecret((String)columns.get("SECRT"));
-        user.setInitialSecret((boolean)columns.get("INIT"));
         if (!user.getSecret().equals(secret))
             return false;
+        
+        user.setInitialSecret((boolean)columns.get("INIT"));
+        user.setFirstname((String)columns.get("FNAME"));
+        user.setSurname((String)columns.get("SNAME"));
         
         if (locale_.length == 1)
             locale = new Locale(locale_[0]);

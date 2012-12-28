@@ -17,7 +17,8 @@ public class UserServices {
         "insert into USERS001(uname, secrt, usrid) values(?, ?, ?)",
         "select CRRNT from USERS000",
         "update USERS000 set CRRNT = ?",
-        "update USERS001 set SECRT = ?, INIT = ? where UNAME = ?",
+        "update USERS001 set SECRT = ?, INIT = ?, FNAME = ?, SNAME = ? " +
+                "where UNAME = ?",
         "select * from USERS001 where UNAME = ?"
     };
     
@@ -76,7 +77,10 @@ public class UserServices {
         String username = user.getUsername();
         String secret = user.getSecret();
         boolean init = user.isInitialSecret();
+        String firstname = user.getFirstname();
+        String surname = user.getSurname();
         
-        db.update(connection, QUERIES[UPD_USER], secret, init, username);
+        db.update(connection, QUERIES[UPD_USER],
+                secret, init, firstname, surname, username);
     }
 }
