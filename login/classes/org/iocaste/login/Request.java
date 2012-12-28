@@ -1,5 +1,6 @@
 package org.iocaste.login;
 
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
@@ -16,6 +17,20 @@ public class Request {
         "iocaste-search-help"
         };
     
+    public static final void changesecret(View view, Context context) {
+        DataForm form = view.getElement("chgscrt");
+        String secret = form.get("SECRET").get();
+        String confirm = form.get("CONFIRM").get();
+        
+        if (secret.equals(confirm)) {
+            new Iocaste(context.function).setUserPassword(secret);
+            view.redirect("iocaste-tasksel", "main");
+            return;
+        }
+        
+        view.message(Const.ERROR, "password.mismatch");
+    }
+    
     /**
      * 
      * @param view
@@ -23,16 +38,18 @@ public class Request {
      * @return
      */
     public static final void connect(View view, Function function) {
-        String username;
+        String username, secret, locale;
         InputComponent input;
         PackageTool pkgtool = new PackageTool(function);
         DataForm form = view.getElement("login");
         Iocaste iocaste = new Iocaste(function);
-        Login login = form.getObject().newInstance();
+        ExtendedObject login = form.getObject();
         
         view.clearExports();
-        username = login.getUsername();
-        if (iocaste.login(username, login.getSecret(), login.getLocale())) {
+        username = login.getValue("USERNAME");
+        secret = login.getValue("SECRET");
+        locale = login.getValue("LOCALE");
+        if (iocaste.login(username, secret, locale)) {
             pkgtool = new PackageTool(function);
             
             for (String pkgname : PACKAGES)
@@ -40,7 +57,10 @@ public class Request {
                     pkgtool.install(pkgname);
             
             view.export("username", username);
-            view.redirect("iocaste-tasksel", "main");
+            if (iocaste.isInitialSecret())
+                view.redirect("changesecretform");
+            else
+                view.redirect("iocaste-tasksel", "main");
         } else {
             view.message(Const.ERROR, "invalid.login");
         }

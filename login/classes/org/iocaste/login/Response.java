@@ -62,6 +62,31 @@ public class Response {
         loginform.get("SECRET").setSecret(true);
     }
     
+    public static final void changesecretform(View view, Context context) {
+        MessageSource messages;
+        DataForm form;
+        InputComponent item;
+        Form container = new Form(view, "main");
+        
+        new PageControl(container);
+        
+        form = new DataForm(container, "chgscrt");
+        form.importModel(context.chgscrtmodel);
+        
+        for (Element element : form.getElements()) {
+            item = (InputComponent)element;
+            item.setSecret(true);
+            item.setObligatory(true);
+        }
+        
+        messages = new MessageSource();
+        messages.setMessages(getMessages());
+        view.setMessages(messages);
+        view.setTitle("password.change");
+        view.setFocus(form.getElement("SECRET"));
+        new Button(container, "changesecret").setSubmit(true);
+    }
+    
     /**
      * 
      * @param name
@@ -89,11 +114,15 @@ public class Response {
         Properties messages = new Properties();
         
         messages.put("authentic", "Autenticação");
+        messages.put("changesecret", "Alterar");
+        messages.put("CONFIRM", "Repita a senha");
         messages.put("connect", "Conectar");
         messages.put("invalid.login", "Usuário ou senha inválidos.");
+        messages.put("LOCALE", "Idioma");
+        messages.put("password.change", "Alteração de senha");
+        messages.put("password.mismatch", "Senhas não são iguais.");
         messages.put("SECRET", "Senha");
         messages.put("USERNAME", "Usuário");
-        messages.put("LOCALE", "Idioma");
         
         return messages;
     }
@@ -104,19 +133,17 @@ public class Response {
      */
     private static final DocumentModel modelInstance() {
         DocumentModelItem item;
-        DocumentModel model = new DocumentModel("login");
+        DocumentModel model = new DocumentModel("LOGIN");
         
-        model.setClassName(Login.class.getCanonicalName());
-        
-        item = modelItemInstance(model, "username", 0);
+        item = modelItemInstance(model, "USERNAME", 0);
         item.setDataElement(dataElementInstance(
                 "CHAR12", DataType.CHAR, 12, DataType.UPPERCASE));
         
-        item = modelItemInstance(model, "secret", 1);
+        item = modelItemInstance(model, "SECRET", 1);
         item.setDataElement(dataElementInstance(
                 "CHAR12", DataType.CHAR, 12, DataType.KEEPCASE));
         
-        item = modelItemInstance(model, "locale", 2);
+        item = modelItemInstance(model, "LOCALE", 2);
         item.setDataElement(dataElementInstance(
                 "CHAR5", DataType.CHAR, 5, DataType.KEEPCASE));
         
