@@ -14,7 +14,8 @@ public class UserServices {
     private static final byte UPD_USER = 3;
     private static final byte USER = 4;
     private static final String[] QUERIES = {
-        "insert into USERS001(uname, secrt, usrid) values(?, ?, ?)",
+        "insert into USERS001(uname, secrt, fname, sname, init, usrid) " +
+                "values(?, ?, ?, ?, ?, ?)",
         "select CRRNT from USERS000",
         "update USERS000 set CRRNT = ?",
         "update USERS001 set SECRT = ?, INIT = ?, FNAME = ?, SNAME = ? " +
@@ -27,8 +28,6 @@ public class UserServices {
             DBServices db) throws Exception {
         int userid;
         Map<String, Object> line;
-        String username = user.getUsername();
-        String secret = user.getSecret();
         Object[] objects = db.select(connection, QUERIES[USER_ID], 1);
         
         if (objects == null) {
@@ -39,7 +38,12 @@ public class UserServices {
         }
         
         userid++;
-        db.update(connection, QUERIES[INS_USER], username, secret, userid);
+        db.update(connection, QUERIES[INS_USER], user.getUsername(),
+                user.getSecret(),
+                user.getFirstname(),
+                user.getSurname(),
+                user.isInitialSecret(),
+                userid);
         db.update(connection, QUERIES[UPD_USRID], userid);
     }
     
