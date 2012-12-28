@@ -24,6 +24,7 @@ public class Request {
         
         if (secret.equals(confirm)) {
             new Iocaste(context.function).setUserPassword(secret);
+            view.dontPushPage(); // não queremos que essa seja a página inicial
             view.redirect("iocaste-tasksel", "main");
             return;
         }
