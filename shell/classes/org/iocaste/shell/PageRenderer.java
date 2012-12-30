@@ -49,11 +49,14 @@ public class PageRenderer extends AbstractRenderer {
     private static final String NOT_CONNECTED = "not.connected";
     private static final String EXCEPTION_HANDLER = "iocaste-exhandler";
     private static final byte AUTHORIZATION_ERROR = 1;
-    private static Map<String, List<SessionContext>> apps =
-            new HashMap<String, List<SessionContext>>();
+    private static Map<String, List<SessionContext>> apps;
     private String sessionconnector, dbname;
     private Map<String, Map<String, String>> style;
     private MessageSource msgsource;
+    
+    static {
+        apps = new HashMap<>();
+    }
     
     public PageRenderer() {
         style = null;
@@ -71,6 +74,7 @@ public class PageRenderer extends AbstractRenderer {
         InputStatus status;
         Message message;
         ControlComponent control;
+        Service service;
         
         status = Controller.validate(config);
         if (status.fatal != null)
@@ -95,8 +99,9 @@ public class PageRenderer extends AbstractRenderer {
             config.view.setReloadableView(true);
         } else {
             try {
-                config.view = (View)Service.callServer(
-                        composeUrl(config.contextname), message);
+                service = new Service(config.sessionid,
+                        composeUrl(config.contextname));
+                config.view = (View)service.call(message);
                 
                 if (config.view.getMessageType() == Const.ERROR)
                     Common.rollback(getServerName(), config.sessionid);
@@ -128,12 +133,12 @@ public class PageRenderer extends AbstractRenderer {
      * @return
      * @throws Exception
      */
-    private final PageContext createExceptionContext(PageContext expagectx,
-            Exception exception) throws Exception {
+    private final PageContext createExceptionContext(String sessionid,
+            PageContext expagectx, Exception exception) throws Exception {
         PageContext pagectx;
         ContextData contextdata = new ContextData();
         
-        contextdata.sessionid = getSessionId();
+        contextdata.sessionid = sessionid;
         contextdata.appname = EXCEPTION_HANDLER;
         contextdata.pagename = "main";
         contextdata.logid = expagectx.getLogid();
@@ -151,10 +156,10 @@ public class PageRenderer extends AbstractRenderer {
      * @param logid
      * @return
      */
-    private final PageContext createLoginContext(int logid) {
+    private final PageContext createLoginContext(String sessionid, int logid) {
         ContextData contextdata = new ContextData();
         
-        contextdata.sessionid = getSessionId();
+        contextdata.sessionid = sessionid;
         contextdata.appname = sessionconnector;
         contextdata.pagename = "authentic";
         contextdata.logid = logid;
@@ -163,12 +168,14 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
+     * @param sessionid
      * @param pagectx
      * @return
      * @throws Exception
      */
-    private final View createView(PageContext pagectx) throws Exception {
-        String sessionid, appname, pagename;
+    private final View createView(String sessionid, PageContext pagectx)
+            throws Exception {
+        String complexid, appname, pagename;
         int logid;
         InputData inputdata;
         Message message;
@@ -176,12 +183,13 @@ public class PageRenderer extends AbstractRenderer {
         String[] initparams;
         AppContext appctx;
         View view;
+        Service service;
         
         appctx = pagectx.getAppContext();
         appname = appctx.getName();
         pagename = pagectx.getName();
         logid = pagectx.getLogid();
-        sessionid = getComplexId(getSessionId(), logid);
+        complexid = getComplexId(sessionid, logid);
         
         if (appname == null || pagename == null)
             throw new IocasteException("page not especified.");
@@ -199,13 +207,13 @@ public class PageRenderer extends AbstractRenderer {
         message = new Message();
         message.setId("get_view_data");
         message.add("view", view);
-        message.setSessionid(sessionid);
+        message.setSessionid(complexid);
         
         initparams = pagectx.getInitParameters();
         if (initparams == null || initparams.length == 0) {
             parameters = pagectx.getParameters();
         } else {
-            parameters = new HashMap<String, Object>();
+            parameters = new HashMap<>();
             iparams = pagectx.getParameters();
             for (String name : initparams)
                 parameters.put(name, iparams.get(name));
@@ -215,7 +223,8 @@ public class PageRenderer extends AbstractRenderer {
         for (String name : parameters.keySet())
             view.export(name, parameters.get(name));
         try {
-            view = (View)Service.callServer(composeUrl(appname), message);
+            service = new Service(complexid, composeUrl(appname));
+            view = (View)service.call(message);
             
             inputdata = new InputData();
             inputdata.view = view;
@@ -231,10 +240,10 @@ public class PageRenderer extends AbstractRenderer {
                 registerInputs(inputdata);
             }
             
-            Common.commit(getServerName(), sessionid);
+            Common.commit(getServerName(), complexid);
             new Iocaste(this).commit();
         } catch (Exception e) {
-            Common.rollback(getServerName(), sessionid);
+            Common.rollback(getServerName(), complexid);
             new Iocaste(this).rollback();
             throw e;
         }
@@ -298,26 +307,26 @@ public class PageRenderer extends AbstractRenderer {
         PageContext pagectx = null;
         
         req.setCharacterEncoding("UTF-8");
+        sessionid = req.getSession().getId();
         
         try {
-            sessionid = getSessionId();
             if (apps.containsKey(sessionid)) {
                 if (keepsession)
-                    pagectx = getPageContext(req, sessionid);
+                    pagectx = getPageContext(req);
                 logid = apps.get(sessionid).size();
             }
             
             if (pagectx == null)
-                pagectx = createLoginContext(logid);
+                pagectx = createLoginContext(sessionid, logid);
             
             if (pagectx.getViewData() != null)
                 pagectx = processController(req, pagectx, sessionid);
             
-            startRender(resp, pagectx);
+            startRender(sessionid, resp, pagectx);
         } catch (Exception e) {
-            pagectx = createExceptionContext(pagectx, e);
+            pagectx = createExceptionContext(sessionid, pagectx, e);
             resp.reset();
-            startRender(resp, pagectx);
+            startRender(sessionid, resp, pagectx);
         }
     }
 
@@ -328,6 +337,7 @@ public class PageRenderer extends AbstractRenderer {
      */
     private final void execute(String appname, String complexid) {
         String url;
+        Service service;
         Message message = new Message();
         
         message.setId("set_current_app");
@@ -336,7 +346,8 @@ public class PageRenderer extends AbstractRenderer {
         
         url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
                 toString();
-        Service.callServer(url, message);
+        service = new Service(complexid, url);
+        service.call(message);
     }
     
     /**
@@ -365,28 +376,6 @@ public class PageRenderer extends AbstractRenderer {
         }
         
         input.setSearchHelp(sh);
-    }
-    
-    /**
-     * 
-     * @param getSessionId()
-     * @param logid
-     * @return
-     */
-    private final String getComplexId(String sessionid, int logid) {
-        return new StringBuilder(getSessionId()).append(":").append(logid).
-                toString();
-    }
-    
-    /**
-     * 
-     * @param pagetrack
-     * @return
-     */
-    private static final int getLogid(String pagetrack) {
-        String[] parsed = pagetrack.split(":");
-        
-        return Integer.parseInt(parsed[2]);
     }
     
     /**
@@ -466,8 +455,8 @@ public class PageRenderer extends AbstractRenderer {
      * @return
      */
     @SuppressWarnings("unchecked")
-    private final PageContext getPageContext(HttpServletRequest req,
-            String sessionid) throws Exception {
+    private final PageContext getPageContext(HttpServletRequest req)
+            throws Exception {
         ContextData contextdata;
         String[] pageparse;
         ServletFileUpload fileupload;
@@ -475,7 +464,7 @@ public class PageRenderer extends AbstractRenderer {
         long sequence;
         PageContext pagectx;
         List<FileItem> files = null;
-        String pagetrack = null;
+        String pagetrack = null, sessionid = req.getSession().getId();
         
         /*
          * Obtem rastreamento da sessão
@@ -556,7 +545,7 @@ public class PageRenderer extends AbstractRenderer {
      */
     private final PageContext getPageContext(ContextData contextdata) {
         AppContext appctx;
-        List<SessionContext> sessions = apps.get(getSessionId());
+        List<SessionContext> sessions = apps.get(contextdata.sessionid);
         
         if (contextdata.logid >= sessions.size())
             return null;
@@ -577,6 +566,7 @@ public class PageRenderer extends AbstractRenderer {
     private final String getUsername(ContextData ctxdata) {
         String url;
         Message message;
+        Service service;
         String complexid = getComplexId(ctxdata.sessionid, ctxdata.logid);
         
         message = new Message();
@@ -585,7 +575,8 @@ public class PageRenderer extends AbstractRenderer {
         
         url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
                 toString();
-        return (String)Service.callServer(url, message);
+        service = new Service(complexid, url);
+        return (String)service.call(message);
     }
     
     /**
@@ -627,6 +618,7 @@ public class PageRenderer extends AbstractRenderer {
     private final boolean isConnected(ContextData ctxdata) {
         String url;
         Message message;
+        Service service;
         String complexid = getComplexId(ctxdata.sessionid, ctxdata.logid);
         
         message = new Message();
@@ -635,7 +627,8 @@ public class PageRenderer extends AbstractRenderer {
         
         url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
                 toString();
-        return (boolean)Service.callServer(url, message);
+        service = new Service(complexid, url);
+        return (boolean)service.call(message);
     }
     
     /**
@@ -648,6 +641,7 @@ public class PageRenderer extends AbstractRenderer {
     {
         String url;
         Message message;
+        Service service;
         Authorization authorization = new Authorization("APPLICATION.EXECUTE");
         
         authorization.setObject("APPLICATION");
@@ -661,7 +655,8 @@ public class PageRenderer extends AbstractRenderer {
         
         url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
                 toString();
-        return (Boolean)Service.callServer(url, message);
+        service = new Service(complexid, url);
+        return (Boolean)service.call(message);
     }
     
     /**
@@ -955,7 +950,7 @@ public class PageRenderer extends AbstractRenderer {
      * @param pagectx
      * @throws Exception
      */
-    private final void startRender(HttpServletResponse resp,
+    private final void startRender(String sessionid, HttpServletResponse resp,
             PageContext pagectx) throws Exception {
         TrackingData tracking;
         HtmlRenderer renderer;
@@ -980,7 +975,7 @@ public class PageRenderer extends AbstractRenderer {
         
         if (pagectx.getError() == 0 &&
                 (view == null || pagectx.isReloadableView())) {
-            view = createView(pagectx);
+            view = createView(sessionid, pagectx);
             pagectx.setViewData(view);
         } else {
             parameters = pagectx.getParameters();
@@ -1011,8 +1006,8 @@ public class PageRenderer extends AbstractRenderer {
         tracking = new TrackingData();
         tracking.logid = pagectx.getLogid();
         tracking.sequence = pagectx.getSequence();
-        tracking.sessionid = getSessionId();
-        render(renderer, view, tracking);
+        tracking.sessionid = sessionid;
+        render(renderer, resp, view, tracking);
         
         pagectx.setActions(renderer.getActions());
     }

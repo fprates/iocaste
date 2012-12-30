@@ -16,13 +16,12 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.View;
 
-public abstract class AbstractRenderer extends HttpServlet implements Function{
+public abstract class AbstractRenderer extends HttpServlet implements Function {
     private static final long serialVersionUID = -7711799346205632679L;
     private static final boolean NEW_SESSION = false;
     private static final boolean KEEP_SESSION = true;
     private static final String STD_CONTENT = "text/html";
-    private String sessionid, servername;
-    private HttpServletResponse resp;
+    private String servername;
     
     /**
      * 
@@ -47,11 +46,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
     @Override
     protected final void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        sessionid = req.getSession().getId();
         servername = new StringBuffer(req.getScheme()).append("://").
                         append(req.getServerName()).append(":").
                         append(req.getServerPort()).toString();
-        this.resp = resp;
         
         try {
             entry(req, resp, NEW_SESSION);
@@ -68,11 +65,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
     @Override
     protected final void doPost(HttpServletRequest req,
             HttpServletResponse resp) throws ServletException, IOException {
-        sessionid = req.getSession().getId();
         servername = new StringBuffer(req.getScheme()).append("://").
                         append(req.getServerName()).append(":").
                         append(req.getServerPort()).toString();
-        this.resp = resp;
         
         try {
             entry(req, resp, KEEP_SESSION);
@@ -91,6 +86,28 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
     protected abstract void entry(HttpServletRequest req,
             HttpServletResponse resp, boolean keepsession) throws Exception;
     
+    /**
+     * 
+     * @param sessionid
+     * @param logid
+     * @return
+     */
+    protected final String getComplexId(String sessionid, int logid) {
+        return new StringBuilder(sessionid).append(":").append(logid).
+                toString();
+    }
+    
+    /**
+     * 
+     * @param pagetrack
+     * @return
+     */
+    protected static final int getLogid(String pagetrack) {
+        String[] parsed = pagetrack.split(":");
+        
+        return Integer.parseInt(parsed[2]);
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#getMethods()
@@ -106,14 +123,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
      */
     protected final String getServerName() {
         return servername;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    protected final String getSessionId() {
-        return sessionid;
     }
     
     /*
@@ -132,8 +141,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
      * @param tracking
      * @throws Exception
      */
-    protected final void render(HtmlRenderer renderer, View view,
-            TrackingData tracking) throws Exception {
+    protected final void render(HtmlRenderer renderer, HttpServletResponse resp,
+            View view, TrackingData tracking) throws Exception {
         byte[] content;
         OutputStream os;
         String[] text;
@@ -147,6 +156,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
          * usar OutputStream novamente (já é utilizado em
          * Service.callServer()).
          */
+        
         if (view.getContentType() != null) {
             resp.reset();
             configResponse(resp, view);
@@ -217,7 +227,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function{
     public final Service serviceInstance(String path) {
         String url = new StringBuffer(servername).append(path).toString();
         
-        return new Service(sessionid, url);
+        return new Service(null, url);
     }
 
     /*
