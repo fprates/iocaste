@@ -17,7 +17,7 @@ public class PageContext {
     private byte error;
     
     public PageContext(String name) {
-        parameters =  new HashMap<String, Object>();
+        parameters =  new HashMap<>();
         reloadable = false;
         actions = null;
         logid = 0;

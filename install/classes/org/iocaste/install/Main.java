@@ -39,11 +39,14 @@ public class Main extends AbstractRenderer {
     private static final long serialVersionUID = -8143025594178489781L;
     private static final String NOT_CONNECTED = "not.connected";
     private static final String INSTALLER = "iocaste-install";
-    private static Map<String, List<SessionContext>> apps =
-            new HashMap<String, List<SessionContext>>();
+    private static Map<String, List<SessionContext>> apps;
     private Stages stage;
     private MessageSource msgsource;
     private Function installapp;
+    
+    static {
+        apps = new HashMap<>();
+    }
     
     public Main() {
         stage = Stages.WELCOME;
@@ -95,14 +98,14 @@ public class Main extends AbstractRenderer {
         List<SessionContext> sessions;
         SessionContext sessionctx;
         
-        if (!apps.containsKey(getSessionId())) {
-            sessions = new ArrayList<SessionContext>();
-            apps.put(getSessionId(), sessions);
+        if (!apps.containsKey(contextdata.sessionid)) {
+            sessions = new ArrayList<>();
+            apps.put(contextdata.sessionid, sessions);
             
             sessionctx = new SessionContext();
             sessions.add(sessionctx);
         } else {
-            sessions = apps.get(getSessionId());
+            sessions = apps.get(contextdata.sessionid);
             
             if (contextdata.logid >= sessions.size()) {
                 sessionctx = new SessionContext();
@@ -140,18 +143,19 @@ public class Main extends AbstractRenderer {
         ContextData contextdata;
         int logid = 0;
         PageContext pagectx = null;
+        String sessionid = req.getSession().getId();
         
         req.setCharacterEncoding("UTF-8");
         
-        if (apps.containsKey(getSessionId())) {
+        if (apps.containsKey(sessionid)) {
             if (keepsession)
-                pagectx = getPageContext(req, getSessionId());
-            logid = apps.get(getSessionId()).size();
+                pagectx = getPageContext(req, sessionid);
+            logid = apps.get(sessionid).size();
         }
         
         if (pagectx == null) {
             contextdata = new ContextData();
-            contextdata.sessionid = getSessionId();
+            contextdata.sessionid = sessionid;
             contextdata.appname = INSTALLER;
             contextdata.pagename = stage.toString();
             contextdata.logid = logid;
@@ -164,7 +168,7 @@ public class Main extends AbstractRenderer {
             pagectx = processController(iocaste, req, pagectx);
         }
         
-        startRender(resp, pagectx);
+        startRender(sessionid, resp, pagectx);
     }
 
     /**
@@ -194,28 +198,6 @@ public class Main extends AbstractRenderer {
         }
         
         input.setSearchHelp(sh);
-    }
-    
-    /**
-     * 
-     * @param getSessionId()
-     * @param logid
-     * @return
-     */
-    private final String getComplexId(String sessionid, int logid) {
-        return new StringBuilder(getSessionId()).append(":").append(logid).
-                toString();
-    }
-    
-    /**
-     * 
-     * @param pagetrack
-     * @return
-     */
-    private static final int getLogid(String pagetrack) {
-        String[] parsed = pagetrack.split(":");
-        
-        return Integer.parseInt(parsed[2]);
     }
     
     /**
@@ -320,7 +302,7 @@ public class Main extends AbstractRenderer {
         pageparse[1] = pageparse[t];
         
         contextdata = new ContextData();
-        contextdata.sessionid = getSessionId();
+        contextdata.sessionid = sessionid;
         contextdata.appname = pageparse[0];
         contextdata.pagename = pageparse[1];
         contextdata.logid = logid;
@@ -340,7 +322,7 @@ public class Main extends AbstractRenderer {
      */
     private final PageContext getPageContext(ContextData contextdata) {
         AppContext appctx;
-        List<SessionContext> sessions = apps.get(getSessionId());
+        List<SessionContext> sessions = apps.get(contextdata.sessionid);
         
         if (contextdata.logid >= sessions.size())
             return null;
@@ -424,8 +406,9 @@ public class Main extends AbstractRenderer {
         Map<String, String[]> parameters;
         View view;
         String appname, pagename, key, pagetrack = null, actionname = null;
+        String sessionid = req.getSession().getId();
         
-        parameters = new HashMap<String, String[]>();
+        parameters = new HashMap<>();
         parameternames = req.getParameterNames();
         while (parameternames.hasMoreElements()) {
             key = (String)parameternames.nextElement();
@@ -451,7 +434,7 @@ public class Main extends AbstractRenderer {
         config.values = parameters;
         config.contextname = pagectx.getAppContext().getName();
         config.logid = getLogid(pagetrack);
-        config.sessionid = getComplexId(getSessionId(), config.logid);
+        config.sessionid = getComplexId(sessionid, config.logid);
         view = callController(config);
         
         action = view.getElement(actionname);
@@ -483,7 +466,7 @@ public class Main extends AbstractRenderer {
         pagectx.setError((byte)0);
         
         contextdata = new ContextData();
-        contextdata.sessionid = getSessionId();
+        contextdata.sessionid = sessionid;
         contextdata.appname = appname;
         contextdata.pagename = pagename;
         contextdata.logid = config.logid;
@@ -573,8 +556,8 @@ public class Main extends AbstractRenderer {
      * @param pagectx
      * @throws Exception
      */
-    private final void startRender(HttpServletResponse resp, PageContext pagectx)
-            throws Exception {
+    private final void startRender(String sessionid, HttpServletResponse resp,
+            PageContext pagectx) throws Exception {
         TrackingData tracking;
         HtmlRenderer renderer;
         Map<String, Map<String, String>> userstyle;
@@ -605,7 +588,7 @@ public class Main extends AbstractRenderer {
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
             message.add("parameters", pagectx.getParameters());
-            message.setSessionid(getComplexId(getSessionId(), logid));
+            message.setSessionid(getComplexId(sessionid, logid));
             
             viewdata = (View)installapp.run(message);
             
@@ -642,9 +625,9 @@ public class Main extends AbstractRenderer {
         renderer.setCssElements(appctx.getStyleSheet());
         
         tracking = new TrackingData();
-        tracking.sessionid = getSessionId();
+        tracking.sessionid = sessionid;
         tracking.logid = pagectx.getLogid();
-        render(renderer, viewdata, tracking);
+        render(renderer, resp, viewdata, tracking);
         
         pagectx.setActions(renderer.getActions());
     }
