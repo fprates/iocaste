@@ -69,18 +69,19 @@ public abstract class ServerServlet extends HttpServlet {
         String functionid, complexid;
         String sessionid = req.getSession().getId();
         
-        resp.reset();
-        
         service = new Service(sessionid, getUrl(req));
         context = new Context();
         context.req = req;
         context.resp = resp;
-        configureStreams(service, context);
         
         try {
+            configureStreams(service, context);
             message = service.getMessage();
-        } catch (ClassNotFoundException e) {
-            throw new ServletException(e);
+        } catch (Exception e) {
+            message = new Message();
+            service.messageException(message, e);
+            req.getSession().invalidate();
+            return;
         }
         
         try {
@@ -182,6 +183,7 @@ public abstract class ServerServlet extends HttpServlet {
      * @throws Exception
      */
     protected void preRun(Message message) throws Exception {
+        Service service;
         boolean connected;
         Message test;
         String url, sessionid;
@@ -198,7 +200,8 @@ public abstract class ServerServlet extends HttpServlet {
         test.add("sessionid", sessionid);
         test.setSessionid(sessionid);
         
-        connected = (Boolean)Service.callServer(url, test);
+        service = new Service(sessionid, url);
+        connected = (Boolean)service.call(test);
         
         if (!connected)
             throw new IocasteException("protocol.pre-run: invalid session");
