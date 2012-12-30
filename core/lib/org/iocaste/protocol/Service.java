@@ -35,16 +35,12 @@ public class Service {
         return message;
     }
     
-    /**
-     * 
-     * @param urlname
-     * @param message
-     * @return
-     */
-    public static final Object callServer(String urlname, Message message) {
+    public final Object call(Message message) {
         Message response;
         ObjectOutputStream oos;
         ObjectInputStream ois;
+        
+        message.setSessionid(sessionid);
         
         try {
             URL url = new URL(urlname);
@@ -55,9 +51,12 @@ public class Service {
             
             oos = new ObjectOutputStream(urlcon.getOutputStream());
             oos.writeObject(message);
+            oos.flush();
             
             ois = new ObjectInputStream(urlcon.getInputStream());
             response = (Message)ois.readObject();
+            ois.close();
+            oos.close();
             
             if (response.getException() != null)
                 throw response.getException();
@@ -66,12 +65,6 @@ public class Service {
         } catch (Exception e) {
             throw new RuntimeException (e);
         }
-    }
-    
-    public final Object call(Message message) {
-        message.setSessionid(sessionid);
-        
-        return callServer(urlname, message);
     }
     
     private final void messageSend(
@@ -84,6 +77,7 @@ public class Service {
         message.setException(ex);
         
         oos.writeObject(message);
+        oos.flush();
     }
     
     public final void messageReturn(
