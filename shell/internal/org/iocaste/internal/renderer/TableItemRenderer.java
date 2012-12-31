@@ -37,9 +37,9 @@ public class TableItemRenderer extends Renderer {
         TableColumn[] columns = table.getColumns();
         int i = 0;
         XMLElement tdtag, trtag = new XMLElement("tr");
-        List<XMLElement> tags = new ArrayList<XMLElement>();
+        List<XMLElement> tags = new ArrayList<>();
         
-        hidden = new ArrayList<InputComponent>();
+        hidden = new ArrayList<>();
         
         for (Element element : item.getElements()) {
             column = columns[i++];

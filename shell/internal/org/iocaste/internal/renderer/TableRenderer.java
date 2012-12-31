@@ -2,6 +2,7 @@ package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.iocaste.internal.XMLElement;
 import org.iocaste.shell.common.Container;
@@ -48,14 +49,15 @@ public class TableRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(Table table, Config config) {
+        Locale locale;
         String title, name;
         Parameter parameter;
         TableItem[] itens;
         int vlines, lastline, topline;
         TableItem item;
         XMLElement tag, trtag, thtag, tabletag = new XMLElement("table");
-        List<InputComponent> hidden = new ArrayList<InputComponent>();
-        List<XMLElement> tags = new ArrayList<XMLElement>();
+        List<InputComponent> hidden = new ArrayList<>();
+        List<XMLElement> tags = new ArrayList<>();
 
         tabletag.add("class", "table_area");
         addEvents(tabletag, table);
@@ -128,9 +130,11 @@ public class TableRenderer extends Renderer {
          * componentes de entrada de colunas invisíveis são tratados
          * como parâmetros, pois precisam ter seu conteúdo armazenado.
          */
+        locale = table.getLocale();
         for (InputComponent input : hidden) {
             parameter = new Parameter(null, input.getHtmlName());
             parameter.setModelItem(input.getModelItem());
+            parameter.setLocale(locale);
             
             if (input.isBooleanComponent())
                 parameter.set((input.isSelected())? "on" : "off");
