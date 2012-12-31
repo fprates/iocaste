@@ -13,7 +13,7 @@ efetuar testes e avaliar necessidades
 - authority
 
 - usereditor
-confirmação de validade de senha
+confirmação de validade de senha (feito)
 incluir grupos de tarefas (feito)
 implementar grupos de usuários
 
@@ -48,8 +48,8 @@ implementar range (feito)
 
 - shell
 diálogos modais
-fixar cabeçalho
-alinhamento de componentes em container
+fixar cabeçalho (feito)
+alinhamento de componentes em container (através de custom. css)
 implementar componente de detalhe
 implementar informações técnicas do elemento
 permitir anexar documentação à mensagem de erro
