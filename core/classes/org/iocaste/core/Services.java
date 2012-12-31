@@ -29,7 +29,7 @@ public class Services extends AbstractFunction {
     private Properties properties;
     private static final byte USER = 0;
     private static final String[] QUERIES = {
-        "select UNAME, SECRT, INIT from USERS001 where UNAME = ?"
+        "select UNAME, SECRT, FNAME, SNAME, INIT from USERS001 where UNAME = ?"
     };
     
     public Services() {
