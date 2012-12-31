@@ -21,7 +21,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     private static final boolean NEW_SESSION = false;
     private static final boolean KEEP_SESSION = true;
     private static final String STD_CONTENT = "text/html";
-    private String servername;
+    private String jsessionid, servername;
     
     /**
      * 
@@ -46,6 +46,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     @Override
     protected final void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        jsessionid = req.getSession().getId();
         servername = new StringBuffer(req.getScheme()).append("://").
                         append(req.getServerName()).append(":").
                         append(req.getServerPort()).toString();
@@ -65,6 +66,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     @Override
     protected final void doPost(HttpServletRequest req,
             HttpServletResponse resp) throws ServletException, IOException {
+        jsessionid = req.getSession().getId();
         servername = new StringBuffer(req.getScheme()).append("://").
                         append(req.getServerName()).append(":").
                         append(req.getServerPort()).toString();
@@ -227,7 +229,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     public final Service serviceInstance(String path) {
         String url = new StringBuffer(servername).append(path).toString();
         
-        return new Service(null, url);
+        return new Service(jsessionid, url);
     }
 
     /*

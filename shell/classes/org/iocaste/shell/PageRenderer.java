@@ -263,7 +263,7 @@ public class PageRenderer extends AbstractRenderer {
         SessionContext sessionctx;
         
         if (!apps.containsKey(contextdata.sessionid)) {
-            sessions = new ArrayList<SessionContext>();
+            sessions = new ArrayList<>();
             apps.put(contextdata.sessionid, sessions);
             
             sessionctx = new SessionContext();
@@ -389,7 +389,7 @@ public class PageRenderer extends AbstractRenderer {
         SearchHelp sh;
         Table table;
         TableColumn[] columns;
-        List<Element> elements = new ArrayList<Element>();
+        List<Element> elements = new ArrayList<>();
         String name, linename, htmlname, markname = null;
         int i = 0;
         
@@ -699,7 +699,7 @@ public class PageRenderer extends AbstractRenderer {
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagectx);
         } else {
-            parameters = new HashMap<String, String[]>();
+            parameters = new HashMap<>();
             parameternames = req.getParameterNames();
             while (parameternames.hasMoreElements()) {
                 key = (String)parameternames.nextElement();
@@ -830,7 +830,7 @@ public class PageRenderer extends AbstractRenderer {
         FileItem fileitem;
         Map<String, String[]> parameters;
         
-        parameters = new HashMap<String, String[]>();
+        parameters = new HashMap<>();
         elements = pagectx.getViewData().getMultipartElements();
         
         for (MultipartElement element : elements) {
