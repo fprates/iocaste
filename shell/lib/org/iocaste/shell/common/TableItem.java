@@ -170,15 +170,23 @@ public class TableItem implements Serializable {
         Object value;
         InputComponent input;
         DocumentModelItem modelitem;
+        Component component;
         
         for (TableColumn column : columns) {
             if (column.isMark())
                 continue;
             
             element = elements.get(column.getName());
+            if (element == null)
+                throw new RuntimeException("no component defined for " +
+                		"this table item");
             
-            if (!element.isDataStorable())
+            if (!element.isDataStorable()) {
+                component = (Component)element;
+                value = object.getValue(column.getModelItem());
+                component.setText((value == null)? null : value.toString());
                 continue;
+            }
             
             input = (InputComponent)element;
             modelitem = column.getModelItem();
