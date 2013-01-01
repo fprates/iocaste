@@ -44,13 +44,8 @@ public abstract class AbstractPage extends AbstractFunction {
     public final ValidatorConfig customValidation(Message message)
             throws Exception {
         ValidatorConfig config = message.get("config");
-        Validator validator = (Validator)Class.forName(config.getClassName()).
-                newInstance();
         
-        validator.setFunction(this);
-        config.setMessage(null);
-        validator.validate(config);
-        return config;
+        return validate(config);
     }
     
     /**
@@ -135,5 +130,39 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     protected final void updateView(View view) {
         new Shell(this).updateView(view);
+    }
+    
+    /**
+     * 
+     * @param config
+     * @return
+     * @throws Exception
+     */
+    private final ValidatorConfig validate(ValidatorConfig config)
+            throws Exception {
+        Validator validator = (Validator)Class.forName(config.getClassName()).
+                newInstance();
+        
+        validator.setFunction(this);
+        config.setMessage(null);
+        validator.validate(config);
+        
+        return config;
+        
+    }
+    
+    /**
+     * 
+     * @param input
+     * @return
+     */
+    public final ValidatorConfig validate(InputComponent input) {
+        ValidatorConfig config = input.getValidatorConfig();
+        
+        try {
+            return validate(config);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
