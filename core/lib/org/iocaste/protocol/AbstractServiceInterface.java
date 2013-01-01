@@ -11,6 +11,9 @@ public abstract class AbstractServiceInterface {
      * @param path
      */
     protected final void initService(Function function, String path) {
+        if (function == null)
+            throw new RuntimeException("function instance must be referenced.");
+        
         service = function.serviceInstance(path);
     }
     
