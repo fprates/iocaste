@@ -184,7 +184,7 @@ public class TableItem implements Serializable {
             if (!element.isDataStorable()) {
                 component = (Component)element;
                 value = object.getValue(column.getModelItem());
-                component.setText((value == null)? null : value.toString());
+                component.setText((value == null)? "" : value.toString());
                 continue;
             }
             
