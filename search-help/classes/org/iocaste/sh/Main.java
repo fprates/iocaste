@@ -28,16 +28,16 @@ public class Main extends AbstractPage {
         
         view.redirect(entry[0], entry[1]);
         view.dontPushPage();
+        view.setReloadableView(false);
     }
     
     /**
      * 
      * @param vdata
      */
-    public final void choose(View vdata) {
-        updateView(Request.choose(vdata));
-        back(vdata);
-        vdata.setReloadableView(false);
+    public final void choose(View view) {
+        updateView(Request.choose(view));
+        back(view);
     }
     
     /**
