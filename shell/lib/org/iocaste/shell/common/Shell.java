@@ -242,17 +242,22 @@ public class Shell extends AbstractServiceInterface {
         NumberFormat numberformat;
         
         if (element == null)
-            return value.toString();
+            return (value == null)? "" : value.toString();
         
         switch (element.getType()) {
         case DataType.DEC:
             numberformat = NumberFormat.getNumberInstance(locale);
-            return numberformat.format(value);
+            numberformat.setMaximumFractionDigits(element.getDecimals());
+            numberformat.setGroupingUsed(true);
+            return numberformat.format((value == null)? 0 : value);
             
         case DataType.NUMC:
-            return value.toString();
+            return (value == null)? "0" : value.toString();
             
         case DataType.DATE:
+            if (value == null)
+                return "";
+            
             dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
             return dateformat.format(value);
             
@@ -263,11 +268,14 @@ public class Shell extends AbstractServiceInterface {
                 return Boolean.toString((Boolean)value);
             
         case DataType.TIME:
+            if (value == null)
+                return "";
+            
             dateformat = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
             return dateformat.format(value);
             
         default:
-            return (String)value;
+            return (value == null)? "" : value.toString();
         }
     }
     
