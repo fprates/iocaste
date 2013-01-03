@@ -1,8 +1,12 @@
 package org.iocaste.shell.common;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
@@ -222,6 +226,49 @@ public class Shell extends AbstractServiceInterface {
         message.add("app_name", view.getAppName());
         message.add("page_name", view.getPageName());
         call(message);
+    }
+    
+    /**
+     * 
+     * @param value
+     * @param element
+     * @param locale
+     * @param boolconvert
+     * @return
+     */
+    public static final String toString(Object value, DataElement element,
+            Locale locale, boolean boolconvert) {
+        DateFormat dateformat;
+        NumberFormat numberformat;
+        
+        if (element == null)
+            return value.toString();
+        
+        switch (element.getType()) {
+        case DataType.DEC:
+            numberformat = NumberFormat.getNumberInstance(locale);
+            return numberformat.format(value);
+            
+        case DataType.NUMC:
+            return value.toString();
+            
+        case DataType.DATE:
+            dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+            return dateformat.format(value);
+            
+        case DataType.BOOLEAN:
+            if (boolconvert)
+                return ((Boolean)value)? "on" : "off";
+            else
+                return Boolean.toString((Boolean)value);
+            
+        case DataType.TIME:
+            dateformat = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
+            return dateformat.format(value);
+            
+        default:
+            return (String)value;
+        }
     }
     
     /**

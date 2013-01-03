@@ -1,13 +1,9 @@
 package org.iocaste.internal.renderer;
 
-import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
 import org.iocaste.internal.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
@@ -203,49 +199,7 @@ public class Renderer {
         if (element == null || value == null)
             return (String)value;
         
-        return toString(value, element, input.getLocale(),
+        return Shell.toString(value, element, input.getLocale(),
                 input.isBooleanComponent());
-    }
-    
-    /**
-     * 
-     * @param value
-     * @param element
-     * @param locale
-     * @return
-     */
-    protected static final String toString(Object value, DataElement element,
-            Locale locale, boolean boolconvert) {
-        DateFormat dateformat;
-        NumberFormat numberformat;
-        
-        if (element == null)
-            return value.toString();
-        
-        switch (element.getType()) {
-        case DataType.DEC:
-            numberformat = NumberFormat.getNumberInstance(locale);
-            return numberformat.format(value);
-            
-        case DataType.NUMC:
-            return value.toString();
-            
-        case DataType.DATE:
-            dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-            return dateformat.format(value);
-            
-        case DataType.BOOLEAN:
-            if (boolconvert)
-                return ((Boolean)value)? "on" : "off";
-            else
-                return Boolean.toString((Boolean)value);
-            
-        case DataType.TIME:
-            dateformat = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
-            return dateformat.format(value);
-            
-        default:
-            return (String)value;
-        }
     }
 }

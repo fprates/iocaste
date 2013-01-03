@@ -35,8 +35,8 @@ public class ListBoxRenderer extends Renderer {
         else
             for (String option : entriesnames) {
                 optiontag = new XMLElement("option");
-                value = toString(list.get(option), Shell.getDataElement(list),
-                        list.getLocale(), false);
+                value = Shell.toString(list.get(option),
+                        Shell.getDataElement(list), list.getLocale(), false);
                 
                 optiontag.add("value", value);
                 
