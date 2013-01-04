@@ -23,9 +23,11 @@ public class Install {
         authorization.add("APPNAME", "iocaste-usereditor");
         data.add(authorization);
         
-        messages = new HashMap<String, String>();
-        messages.put("addprofile", "Adicionar");
-        messages.put("addtask", "Adicionar");
+        messages = new HashMap<>();
+        messages.put("acceptprofiles", "Aceitar");
+        messages.put("accepttasks", "Aceitar");
+        messages.put("addprofiles", "Adicionar");
+        messages.put("addtasks", "Adicionar");
         messages.put("create", "Criar");
         messages.put("display", "Exibir");
         messages.put("FIRSTNAME", "Nome");
@@ -34,8 +36,8 @@ public class Install {
         messages.put("invalid.user", "Usuário inválido.");
         messages.put("PROFILE", "Perfil");
         messages.put("profiletab", "Perfis");
-        messages.put("removeprofile", "Remover");
-        messages.put("removetask", "Remover");
+        messages.put("removeprofiles", "Remover");
+        messages.put("removetasks", "Remover");
         messages.put("save", "Salvar");
         messages.put("SECRET", "Senha");
         messages.put("secret.confirm", "Confirmação");

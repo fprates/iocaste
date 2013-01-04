@@ -29,24 +29,6 @@ public class Request {
     /**
      * 
      * @param view
-     */
-    public static final void addprofile(View view, byte mode) {
-        Table profiles = view.getElement("profiles");
-        Common.insertItem(profiles, null, mode);
-    }
-    
-    /**
-     * 
-     * @param view
-     */
-    public static final void addtask(View view, byte mode) {
-        Table tasks = view.getElement("tasks");
-        Common.insertItem(tasks, null, mode);
-    }
-    
-    /**
-     * 
-     * @param view
      * @param function
      */
     public static final UserData create(View view, Function function) {
@@ -96,15 +78,15 @@ public class Request {
      * @param function
      * @param mode
      */
-    public static final void save(View view, Function function, byte mode) {
+    public static final void save(View view, Context context) {
         PackageTool pkgtool;
         Authority authority;
         Table itens;
         User user;
+        String name;
         DataForm form = view.getElement("identity");
         ExtendedObject object = form.getObject();
-        Documents documents = new Documents(function);
-        String name;
+        Documents documents = new Documents(context.function);
         String username = object.getValue("USERNAME");
         
         user = new User();
@@ -114,53 +96,39 @@ public class Request {
         user.setSurname((String)object.getValue("SURNAME"));
         user.setInitialSecret((boolean)object.getValue("INIT"));
         
-        switch (mode) {
-        case Common.CREATE:
-            new Iocaste(function).create(user);
-            mode = Common.UPDATE;
-            view.setTitle(Common.TITLE[mode]);
+        switch (context.mode) {
+        case Context.CREATE:
+            new Iocaste(context.function).create(user);
+            context.mode = Context.UPDATE;
+            view.setTitle(Context.TITLE[context.mode]);
             break;
             
-        case Common.UPDATE:
-            new Iocaste(function).update(user);
+        case Context.UPDATE:
+            new Iocaste(context.function).update(user);
             documents.update(QUERIES[DEL_USR_AUTH], username);
             documents.update(QUERIES[DEL_USR_TASK], username);
             break;
         }
         
-        authority = new Authority(function);
+        authority = new Authority(context.function);
         itens = view.getElement("profiles");
         for (TableItem item : itens.getItens()) {
             name = ((InputComponent)item.get("PROFILE")).get();
+            if (name == null)
+                continue;
             authority.assign(username, name);
         }
         
         itens = view.getElement("tasks");
         if (itens.length() > 0) {
-            pkgtool = new PackageTool(function);
+            pkgtool = new PackageTool(context.function);
             for (TableItem item : itens.getItens()) {
                 name = ((InputComponent)item.get("GROUP")).get();
+                if (name == null)
+                    continue;
                 pkgtool.assignTaskGroup(name, username);
             }
         }
         view.message(Const.STATUS, "user.saved.successfully");
-    }
-    
-    /**
-     * 
-     * @param view
-     */
-    public static final void removeprofile(View view) {
-        Table profiles = view.getElement("profiles");
-        Common.removeItem(profiles);
-    }
-    
-    /**
-     * 
-     * @param view
-     */
-    public static final void removetask(View view) {
-        Table tasks = view.getElement("tasks");
-        Common.removeItem(tasks);
     }
 }
