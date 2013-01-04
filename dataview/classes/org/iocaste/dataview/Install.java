@@ -6,11 +6,13 @@ import java.util.Map;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.user.Authorization;
+import org.iocaste.protocol.user.UserProfile;
 
 public class Install {
 
-    public static final InstallData self() {
+    public static final InstallData init() {
         TaskGroup taskgroup;
+        UserProfile profile;
         Map<String, String> messages;
         Authorization authorization;
         InstallData data = new InstallData();
@@ -21,17 +23,17 @@ public class Install {
         authorization.add("APPNAME", "iocaste-dataview");
         data.add(authorization);
         
-        messages = new HashMap<String, String>();
+        profile = new UserProfile("DEVELOP");
+        profile.add(authorization);
+        data.add(profile);
+        
+        messages = new HashMap<>();
         messages.put("dataview-selection", "Seleção de modelo");
-        messages.put("delete", "Remover");
-        messages.put("edit", "Editar");
-        messages.put("insert", "Inserir");
-        messages.put("insert.successful", "Item inserido com sucesso.");
-        messages.put("insertitem", "Inserir");
-        messages.put("insertnext", "Próximo");
-        messages.put("model.name", "Modelo");
-        messages.put("save", "Salvar");
+        messages.put("invalid.model", "Modelo inválido.");
+        messages.put("is.reference.model", "Modelo apenas para referência.");
+        messages.put("NAME", "Modelo");
         messages.put("SE16", "Visão de entradas em modelos");
+        messages.put("select", "Selecionar");
         data.setMessages("pt_BR", messages);
         
         data.link("SE16", "iocaste-dataview");
