@@ -30,6 +30,7 @@ public class Response {
         
         input = form.get("NAME");
         input.setVisible(true);
+        input.setObligatory(true);
         view.setFocus(input);
         view.setTitle("dataview-selection");
     }
