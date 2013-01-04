@@ -54,7 +54,11 @@ public class Main extends AbstractPage {
         
         documents = new Documents(this);
         context.tasksmodel = documents.getModel("USER_TASKS_GROUPS");
+        context.tasksmodel.getModelItem("GROUP").
+                setSearchHelp("SH_TASKS_GROUPS");
         context.profilesmodel = documents.getModel("USER_AUTHORITY");
+        context.profilesmodel.getModelItem("PROFILE").
+                setSearchHelp("SH_USER_PROFILE");
         context.usermodel = documents.getModel("LOGIN");
     }
     
