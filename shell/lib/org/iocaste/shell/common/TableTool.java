@@ -14,7 +14,6 @@ public class TableTool {
     public static final byte ADD = 0;
     public static final byte REMOVE = 1;
     public static final byte ACCEPT = 2;
-    public static final byte CREATE = 0;
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
     private String[] buttons;
