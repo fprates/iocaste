@@ -1,12 +1,10 @@
 package org.iocaste.dataeditor;
 
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
@@ -47,63 +45,36 @@ public class Request {
         view.redirect("form");
     }
     
-    /**
-     * 
-     * @param vdata
-     */
-    public static final void insertcommon(View vdata, View selectview,
-            Function function) {
-        Table table;
-        DataForm form = vdata.getElement("model.form");
-        ExtendedObject object = form.getObject();
-        Documents documents = new Documents(function);
-        
-        if (documents.save(object) == 0) {
-            vdata.message(Const.ERROR, "duplicated.entry");
-            return;
-        }
-        
-        table = selectview.getElement("selection_view");
-        Common.addTableItem(table, object);
-    }
-    
-    /**
-     * 
-     * @param vdata
-     */
-    public static final void insertnext(View vdata, View selectview,
-            Function function) {
-        DataForm form = vdata.getElement("model.form");
-        
-        insertcommon(vdata, selectview, function);
-        form.clearInputs();
-        vdata.message(Const.STATUS, "insert.successful");
-    }
-    
-    public static final ExtendedObject[] load(String modelname,
-            Documents documents) {
-        ExtendedObject[] itens;
+    public static final String load(String modelname, Context context) {
         String query;
+        Documents documents = new Documents(context.function);
+        
+        context.model = documents.getModel(modelname);
+        if (context.model == null)
+            return "invalid.model";
+        
+        if (context.model.getTableName() == null)
+            return "is.reference.model";
+        
+        context.viewtype = Const.SINGLE;
         
         query = new StringBuilder("from ").append(modelname).toString();
-        itens = documents.select(query);
+        context.itens = documents.select(query);
         
-        return itens;
+        return null;
     }
     
     /**
      * 
      * @param vdata
-     * @param model
-     * @param function
+     * @param context
      */
-    public static final void save(View vdata, DocumentModel model,
-            Function function) {
+    public static final void save(View vdata, Context context) {
         Object value;
         InputComponent input;
         DocumentModelItem modelitem;
         ExtendedObject object;
-        Documents documents = new Documents(function);
+        Documents documents = new Documents(context.function);
         Table table = vdata.getElement("selection_view");
         
         for (TableItem item : table.getItens()) {
@@ -119,11 +90,11 @@ public class Request {
                     continue;
                 
                 value = input.get();
-                if (value == null && model.isKey(modelitem))
+                if (value == null && context.model.isKey(modelitem))
                     break;
                 
                 if (object == null)
-                    object = new ExtendedObject(model);
+                    object = new ExtendedObject(context.model);
                 
                 object.setValue(modelitem, value);
             }

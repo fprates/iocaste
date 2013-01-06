@@ -1,21 +1,26 @@
 package org.iocaste.dataeditor;
 
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-    private ExtendedObject[] itens;
-    private DocumentModel model;
-    private Const viewtype;
+    private Context context;
     
     public Main() {
         export("install", "install");
+    }
+    
+    public final void acceptitens(View view) {
+        context.tablehelper.accept(view);
+    }
+    
+    public final void additens(View view) {
+        context.tablehelper.add(view);
     }
     
     /**
@@ -26,22 +31,18 @@ public class Main extends AbstractPage {
         Request.delete(vdata, this);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void edit(View view) {
-        Documents documents = new Documents(this);
+    public final void display(View view) {
+        DataForm form = view.getElement("model");
+        String modelname = form.get("NAME").get();
+        String message = Request.load(modelname, context);
         
-        model = Common.getModelFromView(view, documents);
-        if (model == null) {
-            view.message(Const.ERROR, "invalid.model");
+        if (message != null) {
+            view.message(Const.ERROR, message);
             return;
         }
         
-        viewtype = Const.SINGLE;
-        itens = Request.load(model.getName(), documents);
-        view.redirect("select");
+        context.mode = Context.DISPLAY;
+        view.redirect("itens");
     }
     
     /**
@@ -49,7 +50,20 @@ public class Main extends AbstractPage {
      * @param vdata
      */
     public final void form(View vdata) {
-        Response.form(vdata, model);
+        Response.form(vdata, context);
+    }
+    
+    @Override
+    public final void init(View view) {
+        Documents documents;
+        
+        if (!view.getPageName().equals("main"))
+            return;
+        
+        documents = new Documents(this);
+        context = new Context();
+        context.modelmodel = documents.getModel("MODEL");
+        context.function = this;
     }
     
     /**
@@ -70,30 +84,6 @@ public class Main extends AbstractPage {
     
     /**
      * 
-     * @param vdata
-     */
-    public final void insertitem(View vdata) {
-        View selectview = getView(vdata, "select");
-        
-        Request.insertcommon(vdata, selectview, this);
-        updateView(selectview);
-        vdata.message(Const.STATUS, "insert.successful");
-        back(vdata);
-    }
-    
-    /**
-     * 
-     * @param vdata
-     */
-    public final void insertnext(View vdata) {
-        View selectview = getView(vdata, "select");
-        
-        Request.insertnext(vdata, selectview, this);
-        updateView(selectview);
-    }
-    
-    /**
-     * 
      * @param message
      * @return
      */
@@ -105,23 +95,45 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void main(View vdata) {
-        Response.main(vdata, this);
-    }
-
-    /**
-     * 
-     * @param vdata
-     */
-    public final void save(View vdata) {
-        Request.save(vdata, model, this);
+    public final void itens(View view) {
+        Response.itens(view, context);
     }
     
     /**
      * 
      * @param vdata
      */
-    public final void select(View view) {
-        Response.select(view, this, model, itens, viewtype);
+    public final void main(View vdata) {
+        Response.main(vdata, context);
+    }
+
+    public final void remove(View view) {
+        context.tablehelper.remove(view);
+    }
+    
+    /**
+     * 
+     * @param vdata
+     */
+    public final void save(View vdata) {
+        Request.save(vdata, context);
+    }
+    
+    /**
+     * 
+     * @param view
+     */
+    public final void update(View view) {
+        DataForm form = view.getElement("model");
+        String modelname = form.get("NAME").get();
+        String message = Request.load(modelname, context);
+        
+        if (message != null) {
+            view.message(Const.ERROR, message);
+            return;
+        }
+        
+        context.mode = Context.UPDATE;
+        view.redirect("itens");
     }
 }

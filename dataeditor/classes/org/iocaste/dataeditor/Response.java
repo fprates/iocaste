@@ -2,20 +2,17 @@ package org.iocaste.dataeditor;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
-import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.Documents;
-import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
-import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.TableTool;
 import org.iocaste.shell.common.View;
 
 public class Response {
@@ -24,7 +21,7 @@ public class Response {
      * 
      * @param vdata
      */
-    public static final void form(View view, DocumentModel model) {
+    public static final void form(View view, Context context) {
         DataElement dataelement;
         DataItem item;
         DataForm form;
@@ -37,7 +34,7 @@ public class Response {
         new Button(container, "insertnext");
         
         form = new DataForm(container, "model.form");
-        form.importModel(model);
+        form.importModel(context.model);
         form.setKeyRequired(true);
         
         for (Element element : form.getElements()) {
@@ -58,21 +55,24 @@ public class Response {
      * @param view
      * @param function
      */
-    public static final void main(View view, Function function) {
+    public static final void main(View view, Context context) {
+        InputComponent input;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "model");
-        DataItem formitem = new DataItem(form, Const.TEXT_FIELD, "model.name");
         
         pagecontrol.add("home");
+        form.importModel(context.modelmodel);
+        for (Element element : form.getElements())
+            element.setVisible(false);
         
-        formitem.setModelItem(new Documents(function).getModel("MODEL").
-                getModelItem("NAME"));
-        formitem.setObligatory(true);
-        view.setFocus(formitem);
+        input = form.get("NAME");
+        input.setObligatory(true);
+        input.setVisible(true);
+        view.setFocus(input);
         
-        new Button(container, "edit");
-//        form.addAction("show");
+        new Button(container, "display");
+        new Button(container, "update");
         
         view.setTitle("dataeditor-selection");
     }
@@ -80,46 +80,32 @@ public class Response {
     /**
      * 
      * @param view
-     * @param function
-     * @param model
-     * @param itens
-     * @param viewtype
+     * @param context
      */
-    public static final void select(View view, Function function,
-            DocumentModel model, ExtendedObject[] itens, Const viewtype) {
-        boolean key;
+    public static final void itens(View view, Context context) {
+        Table itens;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
-        Table table = new Table(container, "selection_view");
         
         pagecontrol.add("home");
         pagecontrol.add("back");
+        pagecontrol.add("save", PageControl.REQUEST);
         
-        table.setMark(true);
-        table.importModel(model);
+        context.tablehelper = new TableTool(container, "itens");
+        itens = context.tablehelper.getTable();
+        itens.importModel(context.model);
+        itens.setVisibleLines(0);
+        TableTool.setObjects(itens, context.itens);
+        view.setTitle(context.model.getName());
         
-        for (TableColumn column: table.getColumns()) {
-            if (column.isMark())
-                continue;
-            
-            key = model.isKey(column.getModelItem());
-            if (!key && (viewtype == Const.DETAILED))
-                column.setVisible(false);
+        switch (context.mode) {
+        case Context.DISPLAY:
+            context.tablehelper.setMode(TableTool.DISPLAY, view);
+            break;
+        case Context.UPDATE:
+            context.tablehelper.setMode(TableTool.UPDATE, view);
+            break;
         }
-        
-        if (itens != null)
-            for (ExtendedObject item : itens)
-                Common.addTableItem(table, item);
-        
-        new Button(container, "save");
-        new Button(container, "insert");
-        new Button(container, "delete");
-//        new Button(container, "firstpage").setSubmit(true);
-//        new Button(container, "earlierpage").setSubmit(true);
-//        new Button(container, "laterpage").setSubmit(true);
-//        new Button(container, "lastpage").setSubmit(true);
-        
-        view.setTitle(model.getName());
     }
 
 }

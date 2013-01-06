@@ -28,16 +28,15 @@ public class Install {
         data.add(profile);
         
         messages = new HashMap<>();
+        messages.put("acceptitens", "Aceitar");
+        messages.put("additens", "Adicionar");
         messages.put("dataeditor-selection", "Seleção de modelo");
-        messages.put("delete", "Remover");
-        messages.put("edit", "Editar");
-        messages.put("insert", "Inserir");
-        messages.put("insert.successful", "Item inserido com sucesso.");
-        messages.put("insertitem", "Inserir");
-        messages.put("insertnext", "Próximo");
-        messages.put("model.name", "Modelo");
+        messages.put("display", "Exibir");
+        messages.put("NAME", "Modelo");
+        messages.put("removeitens", "Remover");
         messages.put("save", "Salvar");
         messages.put("SM30", "Editor de entradas em modelos");
+        messages.put("update", "Atualizar");
         data.setMessages("pt_BR", messages);
         
         data.link("SM30", "iocaste-dataeditor");
