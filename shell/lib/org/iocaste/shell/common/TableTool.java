@@ -1,5 +1,7 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
@@ -66,13 +68,25 @@ public class TableTool {
     }
     
     public static final void additem(Table table, ExtendedObject object) {
+        DataElement element;
+        InputComponent input;
         TableItem item = new TableItem(table);
         
         for (TableColumn column : table.getColumns()) {
             if (column.isMark())
                 continue;
+
+            element = column.getModelItem().getDataElement();
+            switch (element.getType()) {
+            case DataType.BOOLEAN:
+                input = new CheckBox(table, column.getName());
+                break;
+            default:
+                input = new TextField(table, column.getName());
+                break;
+            }
             
-            item.add(new TextField(table, column.getName()));
+            item.add(input);
         }
         
         if (object == null)
