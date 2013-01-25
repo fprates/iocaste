@@ -88,7 +88,14 @@ public class Table {
                 sb.append(" varchar(");
                 break;
             case Module.BOOLEAN:
-                sb.append(" bit");
+                switch (sqldb) {
+                case DBNames.POSTGRES:
+                    sb.append(" boolean");
+                    break;
+                default:
+                    sb.append(" bit");
+                    break;
+                }
                 break;
             }
             
@@ -102,6 +109,7 @@ public class Table {
                     sb.append(" foreign key references ");
                     break;
                 case DBNames.MYSQL:
+                case DBNames.POSTGRES:
                     sb.append(" references ");
                     break;
                 }

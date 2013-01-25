@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.install.DBNames;
+
 public abstract class Module {
     public static final byte NUMC = 0;
     public static final byte CHAR = 1;
@@ -82,7 +84,7 @@ public abstract class Module {
     }
     
     protected final void insert(Table table) {
-        queries.add(new Query(INSERT, table));
+        queries.add(new Query(INSERT, table, dbtype));
     }
     
     protected final void insertAuthorizationProfile(String prfnm) {
@@ -239,13 +241,14 @@ public abstract class Module {
 }
 
 class Query {
-    public byte command;
-    public String tablename;
-    public Map<String, Object> values;
-    public Map<String, Byte> types;
+    private byte command, dbtype;
+    private String tablename;
+    private Map<String, Object> values;
+    private Map<String, Byte> types;
     
-    public Query(byte command, Table table) {
+    public Query(byte command, Table table, byte dbtype) {
         this.command = command;
+        this.dbtype = dbtype;
         tablename = table.getName();
         
         values = new HashMap<>();
@@ -285,7 +288,14 @@ class Query {
                         _values.append("'").append(value).append("'");
                     break;
                 case Module.BOOLEAN:
-                    _values.append((boolean)value? 1 : 0);
+                    switch (dbtype) {
+                    case DBNames.POSTGRES:
+                        _values.append((boolean)value? "'1'" : "'0'");
+                        break;
+                    default:
+                        _values.append((boolean)value? 1 : 0);
+                        break;
+                    }
                     break;
                 case Module.NUMC:
                     _values.append(value);

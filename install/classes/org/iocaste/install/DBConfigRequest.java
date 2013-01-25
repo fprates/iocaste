@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -27,14 +28,6 @@ import org.iocaste.shell.common.View;
 public class DBConfigRequest {
     private static final String CONFIG_FILE = "core.properties";
     private static final String IOCASTE_DIR = ".iocaste";
-    private static final byte MSSQL = 0;
-    private static final byte MYSQL = 1;
-    private static final byte HSQLDB = 2;
-    private static final String[] DRIVERS = {
-        "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-        "com.mysql.jdbc.Driver",
-        "org.hsqldb.jdbcDriver"
-    };
     
     private static final String[] MSSQL_INIT = {
         "use master;",
@@ -63,7 +56,7 @@ public class DBConfigRequest {
         config.username = dbinfo.get("username").get();
         config.secret = dbinfo.get("secret").get();
         config.dbname = dbinfo.get("dbname").get();
-        config.dbname = config.dbname.toUpperCase();
+//        config.dbname = config.dbname.toUpperCase();
         
         for (RadioButton dbtype : rb.getGroup().getComponents()) {
             if (!dbtype.isSelected())
@@ -80,7 +73,7 @@ public class DBConfigRequest {
         case DBConfig.NEW_BASE:
             Class.forName(config.dbdriver).newInstance();
             connection = DriverManager.getConnection(
-                    config.iurl.toString(), config.username, config.secret);
+                    config.iurl, config.username, config.secret);
             connection.setAutoCommit(false);
             
             try {
@@ -90,7 +83,13 @@ public class DBConfigRequest {
                         ps.addBatch(sql);
                 
                 createTables(ps, config);
-                ps.executeBatch();
+                try {
+                    ps.executeBatch();
+                } catch (BatchUpdateException e) {
+                    if (config.nex)
+                        throw e.getNextException();
+                    throw e;
+                }
                 saveConfig(config);
                 
                 connection.commit();
@@ -149,7 +148,7 @@ public class DBConfigRequest {
         
         switch (DBNames.names.get(config.dbtype)) {
         case DBNames.MSSQL:
-            config.dbdriver = DRIVERS[MSSQL];
+            config.dbdriver = DBNames.DRIVERS[DBNames.MSSQL];
             config.iurl = "jdbc:sqlserver://".concat(config.host);
             config.url = new StringBuilder(config.iurl).
                     append(";databaseName=").
@@ -180,7 +179,7 @@ public class DBConfigRequest {
             
             break;
         case DBNames.HSQLDB:
-            config.dbdriver = DRIVERS[HSQLDB];
+            config.dbdriver = DBNames.DRIVERS[DBNames.HSQLDB];
             config.iurl = new StringBuilder("jdbc:hsqldb:hsql://").
                     append(config.host).
                     append("/").
@@ -197,7 +196,7 @@ public class DBConfigRequest {
             
             break;
         case DBNames.MYSQL:
-            config.dbdriver = DRIVERS[MYSQL];
+            config.dbdriver = DBNames.DRIVERS[DBNames.MYSQL];
             config.iurl = "jdbc:mysql://".concat(config.host);
             config.url = new StringBuilder(config.iurl).
                     append("/").
@@ -217,6 +216,15 @@ public class DBConfigRequest {
                 
                 break;
             }
+            
+            break;
+        case DBNames.POSTGRES:
+            config.dbdriver = DBNames.DRIVERS[DBNames.POSTGRES];
+            config.iurl = new StringBuilder("jdbc:postgresql://").
+                    append(config.host).append("/").
+                    append(config.dbname).toString();
+            config.url = config.iurl;
+            config.nex = true;
             
             break;
         }
@@ -254,6 +262,7 @@ public class DBConfigRequest {
 
 class Config {
     public byte option;
+    public boolean nex;
     public String iurl, dbdriver, host, url, username, secret, dbname, dbtype;
 }
 
