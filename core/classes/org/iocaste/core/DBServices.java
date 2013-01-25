@@ -138,13 +138,14 @@ public class DBServices {
         Map<String, Object> line;
         ResultSetMetaData metadata = results.getMetaData();
         int cols = metadata.getColumnCount();
-        List<Map<String, Object>> lines = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> lines = new ArrayList<>();
         
         while (results.next()) {
-            line = new HashMap<String, Object>();
+            line = new HashMap<>();
             
             for (int i = 1; i <= cols; i++)
-                line.put(metadata.getColumnName(i), results.getObject(i));
+                line.put(metadata.getColumnName(i).toUpperCase(),
+                        results.getObject(i));
             
             lines.add(line);
         }
