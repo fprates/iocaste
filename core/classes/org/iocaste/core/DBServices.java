@@ -222,14 +222,11 @@ public class DBServices {
         int i = 1;
         PreparedStatement ps = connection.prepareStatement(query);
         
-        System.out.println(query);
         try {
             if (criteria != null)
-                for (Object object : criteria) {
+                for (Object object : criteria)
                     ps.setObject(i++, object);
-                    System.out.print(object+";");
-                }
-            System.out.println();
+                    
             return ps.executeUpdate();
         } catch (HsqlException e) {
             throw new SQLException(e.getMessage());
