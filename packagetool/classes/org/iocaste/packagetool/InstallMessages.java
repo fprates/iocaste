@@ -31,7 +31,7 @@ public class InstallMessages {
             }
             
             messages = state.messages.get(language);
-            index = (langcode * 1000000000) + (state.pkgid / 100);
+            index = (langcode * 10000000) + (state.pkgid / 100);
             for (String msgcode : messages.keySet()) {
                 omessage.setValue("INDEX", index++);
                 omessage.setValue("NAME", msgcode);
