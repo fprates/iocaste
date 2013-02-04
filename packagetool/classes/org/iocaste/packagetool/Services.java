@@ -94,7 +94,7 @@ public class Services extends AbstractFunction {
             header = new ExtendedObject(state.documents.getModel("PACKAGE"));
             header.setValue("NAME", state.pkgname);
             header.setValue("CODE", state.pkgid);
-            state.log.add(header);
+            state.documents.save(header);
             
             /*
              * gera modelos;
