@@ -23,7 +23,7 @@ import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class DBServices {
-    Config config;
+    private Config config;
     
     public DBServices() {
         config = new Config();
@@ -100,6 +100,7 @@ public class DBServices {
         config.url = properties.getProperty("url");
         config.username = properties.getProperty("username");
         config.secret = properties.getProperty("secret");
+        config.dbtype = properties.getProperty("dbtype");
         
         Class.forName(driver);
     }
@@ -160,8 +161,7 @@ public class DBServices {
      * @param connection
      * @throws SQLException
      */
-    public final void rollback(Connection connection)
-            throws SQLException {
+    public final void rollback(Connection connection) throws SQLException {
         try {
             connection.rollback();
         } catch (MySQLNonTransientConnectionException e) {
@@ -222,11 +222,14 @@ public class DBServices {
         int i = 1;
         PreparedStatement ps = connection.prepareStatement(query);
         
+        System.out.println(query);
         try {
             if (criteria != null)
-                for (Object object : criteria)
+                for (Object object : criteria) {
                     ps.setObject(i++, object);
-            
+                    System.out.print(object+";");
+                }
+            System.out.println();
             return ps.executeUpdate();
         } catch (HsqlException e) {
             throw new SQLException(e.getMessage());
@@ -248,6 +251,14 @@ public class DBServices {
         } catch (SQLSyntaxErrorException e) {
             throw e;
         } catch (SQLException e) {
+            if (config.dbtype.equals("hsqldb")) {
+                i = e.getErrorCode();
+                switch(i) {
+                case -177:
+                    throw e;
+                }
+                    
+            }
             return 0;
         } finally {
             ps.close();
@@ -256,7 +267,8 @@ public class DBServices {
 }
 
 class Config {
-    public String url = null;
-    public String username = null;
-    public String secret = null;
+    public String url;
+    public String username;
+    public String secret;
+    public String dbtype;
 }
