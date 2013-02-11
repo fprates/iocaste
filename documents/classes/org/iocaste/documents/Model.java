@@ -77,14 +77,15 @@ public class Model {
      * @throws Exception
      */
     private static final int addDBColumn(Iocaste iocaste,
-            DocumentModelItem item, String refstmt) throws Exception {
+            DocumentModelItem item, String refstmt, String dbtype)
+                    throws Exception {
         DocumentModelItem reference;
         String modelname = item.getDocumentModel().getTableName();
         StringBuilder sb = new StringBuilder("alter table ").append(modelname);
         DataElement ddelement = item.getDataElement();
         
         sb.append(" add column ").append(item.getTableFieldName());
-        setDBFieldsString(sb, ddelement);
+        setDBFieldsString(sb, ddelement, dbtype);
         
         reference = item.getReference();
         if (reference != null)
@@ -135,6 +136,7 @@ public class Model {
         DocumentModelItem[] itens = model.getItens();
         Iocaste iocaste = new Iocaste(cache.function);
         String refstmt = getReferenceStatement(iocaste);
+        String dbtype = iocaste.getSystemParameter("dbtype");
         int size = itens.length - 1;
         
         sb = new StringBuilder("create table ").append(
@@ -153,7 +155,7 @@ public class Model {
                 item.setDataElement(dataelement);
             }
 
-            setDBFieldsString(sb, dataelement);
+            setDBFieldsString(sb, dataelement, dbtype);
             if (model.isKey(item)) {
                 if (sbk == null)
                     sbk = new StringBuilder(", primary key(");
@@ -280,7 +282,7 @@ public class Model {
             throws Exception {
         String dbtype = iocaste.getSystemParameter("dbtype");
         
-        if (dbtype.equals("mysql"))
+        if (dbtype.equals("mysql") || dbtype.equals("postgres"))
             return " references ";
         else
             return " foreign key references ";
@@ -642,7 +644,7 @@ public class Model {
      * @param ddelement
      */
     public static void setDBFieldsString(StringBuilder sb,
-            DataElement ddelement) {
+            DataElement ddelement, String dbtype) {
         switch (ddelement.getType()) {
         case DataType.CHAR:
             sb.append(" varchar(");
@@ -673,7 +675,10 @@ public class Model {
             
             break;
         case DataType.BOOLEAN:
-            sb.append(" bit");
+            if (dbtype.equals("postgres"))
+                sb.append(" boolean");
+            else
+                sb.append(" bit");
             
             break;
         }
@@ -692,6 +697,7 @@ public class Model {
         DocumentModel oldmodel = get(name, cache);
         Iocaste iocaste = new Iocaste(cache.function);
         String refstmt = getReferenceStatement(iocaste);
+        String dbtype = iocaste.getSystemParameter("dbtype");
         
         for (DocumentModelItem item : model.getItens()) {
             if (!oldmodel.contains(item)) {
@@ -702,7 +708,7 @@ public class Model {
                 if (insertModelItem(iocaste, item) == 0)
                     throw new IocasteException("error on model insert");
                 
-                addDBColumn(iocaste, item, refstmt);
+                addDBColumn(iocaste, item, refstmt, dbtype);
             } else {
                 if (updateModelItem(iocaste, item, oldmodel) == 0)
                     throw new IocasteException("error on model update");
@@ -739,16 +745,17 @@ public class Model {
      */
     private static final int updateModelItem(Iocaste iocaste,
             DocumentModelItem item, DocumentModel oldmodel) throws Exception {
+        String query, shname;
         StringBuilder sb;
         DataElement ddelement;
         Object[] criteria;
         DocumentModel model = item.getDocumentModel();
         DocumentModelItem reference, olditem = oldmodel.
                 getModelItem(item.getName());
-        
-        String query, shname, tablename = model.getTableName(),
-                oldfieldname = olditem.getTableFieldName(),
-                fieldname = item.getTableFieldName();
+        String tablename = model.getTableName();
+        String oldfieldname = olditem.getTableFieldName();
+        String fieldname = item.getTableFieldName();
+        String dbtype = iocaste.getSystemParameter("dbtype");
         
         iocaste.update(QUERIES[DEL_SH_REF],
                 Documents.getComposedName(olditem));
@@ -776,7 +783,7 @@ public class Model {
         sb.append(fieldname);
         
         ddelement = item.getDataElement();
-        setDBFieldsString(sb, ddelement);
+        setDBFieldsString(sb, ddelement, dbtype);
         
         query = sb.toString();
         iocaste.update(query);

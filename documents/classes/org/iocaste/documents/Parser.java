@@ -308,7 +308,7 @@ public class Parser {
         int argnr = 0;
         int i = 0;
         String lastlogic = null;
-        List<Components> args = new ArrayList<Components>();
+        List<Components> args = new ArrayList<>();
         char[] buffer = criteria.trim().toCharArray();
         Components components = new Components();
         
@@ -388,7 +388,7 @@ public class Parser {
             components = new Components();
         }
         
-        parameters = new ArrayList<Object>();
+        parameters = new ArrayList<>();
         sb = new StringBuilder();
         for (Components component : args) {
             if (lastlogic != null)
