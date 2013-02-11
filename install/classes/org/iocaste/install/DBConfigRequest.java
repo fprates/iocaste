@@ -43,6 +43,11 @@ public class DBConfigRequest {
         "use "
     };
     
+    private static final String[] POSTGRES_INIT = {
+        "drop database ",
+        "create database "
+    };
+    
     public static final void action(View view) throws Exception {
         Statement ps;
         Connection connection;
@@ -56,7 +61,6 @@ public class DBConfigRequest {
         config.username = dbinfo.get("username").get();
         config.secret = dbinfo.get("secret").get();
         config.dbname = dbinfo.get("dbname").get();
-//        config.dbname = config.dbname.toUpperCase();
         
         for (RadioButton dbtype : rb.getGroup().getComponents()) {
             if (!dbtype.isSelected())
@@ -74,27 +78,49 @@ public class DBConfigRequest {
             Class.forName(config.dbdriver).newInstance();
             connection = DriverManager.getConnection(
                     config.iurl, config.username, config.secret);
-            connection.setAutoCommit(false);
-            
+            connection.setAutoCommit(true);
+            ps = connection.createStatement();
+            if (init != null)
+                for (String sql : init)
+                    ps.addBatch(sql);
             try {
-                ps = connection.createStatement();
-                if (init != null)
-                    for (String sql : init)
-                        ps.addBatch(sql);
-                
-                createTables(ps, config);
-                try {
-                    ps.executeBatch();
-                } catch (BatchUpdateException e) {
-                    if (config.nex)
-                        throw e.getNextException();
-                    throw e;
+                ps.executeBatch();
+            } catch (BatchUpdateException e) {
+                if (config.nex) {
+                    e.printStackTrace();
+                    throw e.getNextException();
                 }
-                saveConfig(config);
-                
-                connection.commit();
-                ps.close();
+                throw e;
+            }
+
+            if (config.secconn) {
                 connection.close();
+                connection = DriverManager.getConnection(
+                        config.url, config.username, config.secret);
+                connection.setAutoCommit(false);
+                ps = connection.createStatement();
+            }
+            
+            ps.clearBatch();
+            connection.setAutoCommit(false);
+            createTables(ps, config);
+            try {
+                ps.executeBatch();
+                saveConfig(config);
+                connection.commit();
+                connection.close();
+                ps.close();
+            } catch (BatchUpdateException e) {
+                if (config.nex) {
+                    e.printStackTrace();
+                    connection.rollback();
+                    connection.close();
+                    throw e.getNextException();
+                }
+                
+                connection.rollback();
+                connection.close();
+                throw e;
             } catch (Exception e) {
                 connection.rollback();
                 connection.close();
@@ -148,6 +174,7 @@ public class DBConfigRequest {
         
         switch (DBNames.names.get(config.dbtype)) {
         case DBNames.MSSQL:
+            config.dbname = config.dbname.toUpperCase();
             config.dbdriver = DBNames.DRIVERS[DBNames.MSSQL];
             config.iurl = "jdbc:sqlserver://".concat(config.host);
             config.url = new StringBuilder(config.iurl).
@@ -179,6 +206,7 @@ public class DBConfigRequest {
             
             break;
         case DBNames.HSQLDB:
+            config.dbname = config.dbname.toUpperCase();
             config.dbdriver = DBNames.DRIVERS[DBNames.HSQLDB];
             config.iurl = new StringBuilder("jdbc:hsqldb:hsql://").
                     append(config.host).
@@ -196,6 +224,7 @@ public class DBConfigRequest {
             
             break;
         case DBNames.MYSQL:
+            config.dbname = config.dbname.toUpperCase();
             config.dbdriver = DBNames.DRIVERS[DBNames.MYSQL];
             config.iurl = "jdbc:mysql://".concat(config.host);
             config.url = new StringBuilder(config.iurl).
@@ -221,10 +250,20 @@ public class DBConfigRequest {
         case DBNames.POSTGRES:
             config.dbdriver = DBNames.DRIVERS[DBNames.POSTGRES];
             config.iurl = new StringBuilder("jdbc:postgresql://").
+                    append(config.host).append("/template1").toString();
+            config.url = new StringBuilder("jdbc:postgresql://").
                     append(config.host).append("/").
                     append(config.dbname).toString();
-            config.url = config.iurl;
             config.nex = true;
+            
+            switch (config.option) {
+            case DBConfig.NEW_BASE:
+                init = new String[2];
+                init[0] = POSTGRES_INIT[0].concat(config.dbname);
+                init[1] = POSTGRES_INIT[1].concat(config.dbname);
+                config.secconn = true;
+                break;
+            }
             
             break;
         }
@@ -262,7 +301,7 @@ public class DBConfigRequest {
 
 class Config {
     public byte option;
-    public boolean nex;
+    public boolean nex, secconn;
     public String iurl, dbdriver, host, url, username, secret, dbname, dbtype;
 }
 
