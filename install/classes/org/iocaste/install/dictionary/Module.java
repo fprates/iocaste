@@ -33,20 +33,13 @@ public abstract class Module {
     }
     
     protected final List<String> compile() {
-        String sql;
         List<String> batch = new ArrayList<>();
         
-        for (String name : tables.keySet()) {
-            sql = tables.get(name).toString();
-            System.out.println(sql);
-            batch.add(sql);
-        }
+        for (String name : tables.keySet())
+            batch.add(tables.get(name).toString());
         
-        for (Query query : queries) {
-            sql = query.toString();
-            System.out.println(sql);
-            batch.add(sql);
-        }
+        for (Query query : queries)
+            batch.add(query.toString());
         
         return batch;
     }
