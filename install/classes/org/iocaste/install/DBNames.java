@@ -21,6 +21,13 @@ public class DBNames {
         names.put("mysql", MYSQL);
         names.put("mssql", MSSQL);
         names.put("hsqldb", HSQLDB);
-        names.put("postgres", POSTGRES);
+        /*
+         * on postgres, we must commit() or rollback() changes if a
+         * SQLException is raised, while in iocaste a transaction continues
+         * even so.
+         * 
+         * until we find a solution out, temporally disable postgresql.
+         */
+//        names.put("postgres", POSTGRES);
     }
 }
