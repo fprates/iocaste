@@ -10,8 +10,8 @@ public class DBNames {
     public static final byte POSTGRES = 3;
     public static Map<String, Byte> names;
     public static final String[] DRIVERS = {
-        "com.microsoft.sqlserver.jdbc.SQLServerDriver",
         "com.mysql.jdbc.Driver",
+        "com.microsoft.sqlserver.jdbc.SQLServerDriver",
         "org.hsqldb.jdbcDriver",
         "org.postgresql.Driver"
     };
