@@ -20,6 +20,21 @@ public class Authority extends AbstractServiceInterface {
     }
     
     /**
+     * Adds authorization to a profile
+     * @param profile authorizations' profile
+     * @param authorization authorization
+     */
+    public final void addAuthorization(String profile,
+            Authorization authorization) {
+        Message message = new Message();
+        
+        message.setId("add_authorization");
+        message.add("profile", profile);
+        message.add("authorization", authorization);
+        call(message);
+    }
+    
+    /**
      * 
      * @param username
      * @param profile

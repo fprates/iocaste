@@ -34,6 +34,7 @@ public class Services extends AbstractFunction {
     };
     
     public Services() {
+        export("add_authorization", "addAuthorization");
         export("assign_authorization", "assignAuthorization");
         export("assign_profile", "assignProfile");
         export("get", "get");
@@ -46,15 +47,55 @@ public class Services extends AbstractFunction {
     }
     
     /**
-     * 
+     * Adds an authorization to a profile.
+     * @param message
+     */
+    public final void addAuthorization(Message message) {
+        Authorization authorization = message.get("authorization");
+        String profile = message.getString("profile");
+        
+        addAuthorization(profile, authorization);
+    }
+    
+    /**
+     * INTERNAL: adds an authorization to a profile.
+     * @param name
+     * @param authorization
+     */
+    private final void addAuthorization(String name,
+    		Authorization authorization) {
+	    int itemid;
+	    DocumentModel model;
+	    ExtendedObject profileitem;
+        Documents documents = new Documents(this);
+        ExtendedObject profile = documents.getObject("USER_PROFILE", name);
+        
+        if (profile == null)
+            throw new RuntimeException(new StringBuilder(name).
+                    append(" is an invalid profile.").toString());
+        
+        itemid = profile.geti("CURRENT") + 1;
+        model = documents.getModel("USER_PROFILE_ITEM");
+        profileitem = new ExtendedObject(model);
+        
+        profileitem.setValue("ID", itemid);
+        profileitem.setValue("PROFILE", name);
+        profileitem.setValue("NAME", authorization.getName());
+        profileitem.setValue("OBJECT", authorization.getObject());
+        profileitem.setValue("ACTION", authorization.getAction());
+        documents.save(profileitem);
+        
+        profile.setValue("CURRENT", itemid);
+        documents.modify(profile);
+    }
+    
+    /**
+     * Adds an authorization to a profile, checking
      * @param message
      * @throws Exception
      */
     public final void assignAuthorization(Message message) throws Exception {
-        DocumentModel model;
-        ExtendedObject profileitem;
-        int itemid;
-        Authorization authorization = message.get("authorization");
+        Authorization authorization;
         String username = message.getString("username");
         String profilename = message.getString("profile");
         Documents documents = new Documents(this);
@@ -67,21 +108,8 @@ public class Services extends AbstractFunction {
                     append(username).
                     append(" is an invalid profile.").toString());
         
-        profiles[0] = documents.getObject("USER_PROFILE", profilename);
-        itemid = profiles[0].geti("CURRENT");
-        itemid++;
-        
-        model = documents.getModel("USER_PROFILE_ITEM");
-        profileitem = new ExtendedObject(model);
-        profileitem.setValue("ID", itemid);
-        profileitem.setValue("PROFILE", profilename);
-        profileitem.setValue("NAME", authorization.getName());
-        profileitem.setValue("OBJECT", authorization.getObject());
-        profileitem.setValue("ACTION", authorization.getAction());
-        documents.save(profileitem);
-        
-        profiles[0].setValue("CURRENT", itemid);
-        documents.modify(profiles[0]);
+        authorization = message.get("authorization");
+        addAuthorization(profilename, authorization);
     }
     
     /**
