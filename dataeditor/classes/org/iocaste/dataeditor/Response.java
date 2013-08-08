@@ -92,7 +92,6 @@ public class Response {
         
         pagecontrol.add("home");
         pagecontrol.add("back");
-        pagecontrol.add("save", PageControl.REQUEST);
         
         context.tablehelper = new TableTool(container, "itens");
         itens = context.tablehelper.getTable();
@@ -109,6 +108,7 @@ public class Response {
                     item.get(mitem.getName()).setEnabled(false);
             break;
         case Context.UPDATE:
+            pagecontrol.add("save", PageControl.REQUEST);
             context.tablehelper.setMode(TableTool.UPDATE, view);
             for (TableItem item : itens.getItens())
                 for (DocumentModelKey key : context.model.getKeys())
