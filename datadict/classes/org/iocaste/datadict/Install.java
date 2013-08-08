@@ -6,21 +6,33 @@ import java.util.Map;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.user.Authorization;
+import org.iocaste.protocol.user.UserProfile;
 
 public class Install {
 
     public static InstallData self() {
         TaskGroup taskgroup;
-        Authorization authorization;
+        UserProfile profile;
         Map<String, String> messages;
+        Authorization authorization;
         InstallData data = new InstallData();
+        
+        authorization = new Authorization("DDICT.EXECUTE");
+        authorization.setObject("APPLICATION");
+        authorization.setAction("EXECUTE");
+        authorization.add("APPNAME", "iocaste-datadict");
+        data.add(authorization);
+        
+        profile = new UserProfile("DEVELOP");
+        profile.add(authorization);
+        data.add(profile);
         
         data.link("SE11", "iocaste-datadict");
         taskgroup = new TaskGroup("DEVELOP");
         taskgroup.add("SE11");
         data.add(taskgroup);
         
-        messages = new HashMap<String, String>();
+        messages = new HashMap<>();
         messages.put("add", "Adicionar");
         messages.put("addshitem", "Adicionar");
         messages.put("choose.one.item",
@@ -79,13 +91,6 @@ public class Install {
         messages.put("technical.details", "Detalhes técnicos");
         messages.put("update", "Atualizar");
         data.setMessages("pt_BR", messages);
-        
-        authorization = new Authorization("DDICT.EXECUTE");
-        authorization.setObject("APPLICATION");
-        authorization.setAction("EXECUTE");
-        authorization.add("APPNAME", "iocaste-datadict");
-        
-        data.add(authorization);
         
         return data;
     }
