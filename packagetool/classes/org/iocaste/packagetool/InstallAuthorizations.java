@@ -42,9 +42,11 @@ public class InstallAuthorizations {
                 authority.save(profile);
                 Registry.add(profilename, "AUTH_PROFILE", state);
             }
-            
+
+            users = profiles.get(profile);
             for (Authorization authorization : profile.getAuthorizations()) {
-                users = profiles.get(profile);
+                authority.addAuthorization(profilename, authorization);
+                
                 for (User user : users) {
                     username = user.getUsername();
                     uprofiles = authority.getUserProfiles(username);
@@ -52,7 +54,6 @@ public class InstallAuthorizations {
                         authority.assign(username, profilename);
                     
                     authority.assign(username, "BASE");
-                    authority.assign(username, profilename, authorization);
                 }
             }
         }
