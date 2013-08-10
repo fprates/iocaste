@@ -71,15 +71,9 @@
         	<lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
-
-        <condition property="manager_url" value="${url}/manager/text" else="${url}/manager">
-            <equals arg1="${tomcat_version}" arg2="7"/>
-        </condition>
-        
-        <undeploy url="${manager_url}" username="${username}" password="${password}"
-            path="/iocaste-${ant.project.name}" failonerror="false"/>
-        <deploy url="${manager_url}" username="${username}" password="${password}"
-            path="/iocaste-${ant.project.name}" war="file:${warfilename}"
-            failonerror="false"/>
+    	
+    	<ant antfile="${basedir}/src/deploy.xml">
+    		<property name="app.name" value="${ant.project.name}"/>
+        </ant>
     </target>
 </project>
