@@ -31,7 +31,7 @@ public class Main extends AbstractPage {
      */
     public final void activate(View view) throws Exception {
         context.view = view;
-        Request.activate(context);
+        Activation.start(context);
     }
     
     /**

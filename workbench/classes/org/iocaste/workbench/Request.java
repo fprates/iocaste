@@ -20,15 +20,6 @@ public class Request {
         "from ICSTPRJ_PACKAGES where PROJECT = ?",
         "from ICSTPRJ_SOURCES where PACKAGE = ?"
     };
-    
-    /**
-     * 
-     * @param context
-     * @throws Exception
-     */
-    public static final void activate(Context context) throws Exception {
-        Activation.start(context);
-    }
 
     public static final void addscreen(Context context) {
         context.view.redirect("screeneditor");
