@@ -1,15 +1,20 @@
 package org.iocaste.workbench;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -24,9 +29,39 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.View;
 
 public class Activation {
-    
-    private static final void buildWebArchive() {
+    private static final void addJarItems(JarOutputStream jar, String path,
+            String base) throws Exception {
+        InputStream is;
+        String jaritem;
+        byte[] buffer = null;
+        int size = 0, pos = 0, read = 0;
         
+        for (File file : new File(path).listFiles()) {
+            jaritem = file.getPath().substring(base.length());
+            if (file.isDirectory()) {
+                jar.putNextEntry(new JarEntry(jaritem.concat(File.separator)));
+                addJarItems(jar, file.getPath(), base);
+                continue;
+            }
+            
+            if (buffer == null) {
+                buffer = new byte[64*1024];
+                size = buffer.length;
+            }
+
+            jar.putNextEntry(new JarEntry(jaritem));
+            is = new BufferedInputStream(new FileInputStream(file));
+            while (read >= 0) {
+                pos += read;
+                read = is.read(buffer, pos, size);
+                if (read < size)
+                    read = -1;
+                jar.write(buffer);
+            }
+            
+            jar.closeEntry();
+            is.close();
+        }
     }
     
     private static final void compileProject(Context context) throws Exception {
@@ -141,8 +176,21 @@ public class Activation {
         }
     }
     
-    private static final void deployApplication() {
+    private static final void deployApplication(Context context)
+            throws Exception {
+        String jarname = context.project.header.getValue("NAME");
+        String dest = new StringBuilder(System.getProperty("catalina.home")).
+                append(File.separator).append("webapps").
+                append(File.separator).append(jarname).
+                append(".war").toString();
+        OutputStream os = new FileOutputStream(dest);
+        JarOutputStream jar = new JarOutputStream(os);
+        String bindir = new StringBuilder(context.project.dir).
+                append(File.separator).append("bin").toString();
         
+        addJarItems(jar, bindir, bindir);
+        jar.close();
+        os.close();
     }
 
     private static final void removeCompleteDir(String dir) {
@@ -159,8 +207,7 @@ public class Activation {
         updateCurrentSource(context);
         createProjectFiles(context);
         compileProject(context);
-        buildWebArchive();
-        deployApplication();        
+        deployApplication(context);
     }
     
     private static final void updateCurrentSource(Context context) {
