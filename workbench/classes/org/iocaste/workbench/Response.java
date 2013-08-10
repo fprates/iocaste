@@ -25,66 +25,78 @@ import org.iocaste.shell.common.View;
 public class Response {
 
     public static final void editor(Context context) {
-        Map<String, Map<String, String>> css;
-        Map<String, String> csspane;
-        Container navpane, fontpane;
+//        Map<String, String> css;
+//        Container actionpane, navpane, fontpane;
         DataForm form;
-        Link screenlink, sourcelink;
-        Parameter screenname, sourcename, packagename;
-        ProjectPackage projectpackage;
-        NodeList objlist, screenlist, commandlist, packagelist, sourcelist;
+//        Link screenlink, sourcelink;
+//        Parameter screenname, sourcename, packagename;
+//        ProjectPackage projectpackage;
+//        NodeList objlist, screenlist, commandlist, packagelist, sourcelist;
+//        NodeList actionlist;
         InputComponent input;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("home");
         pagecontrol.add("back");
-        
-        if (!context.validrepo) {
-            context.view.message(Const.ERROR, "invalid.repository");
-            return;
-        }
-        
-        css = context.view.getStyleSheet();
-        csspane = new HashMap<>();
-        csspane.put("float", "left");
-        css.put(".pane", csspane);
-        
-        navpane = new StandardContainer(container, "navpane");
-        navpane.setStyleClass("pane");
-        objlist = new NodeList(navpane, "objlist");
 //        
-//        screenlist = new NodeList(objlist, "screenlist");
-//        screenlist.setListType(NodeList.DEFINITION);
-//        screenname = new Parameter(screenlist, "screenname");
-//        for (String name : project.views.keySet()) {
-//            screenlink = new Link(screenlist, name, "editscreen");
-//            screenlink.add(screenname, name);
+//        if (!context.validrepo) {
+//            context.view.message(Const.ERROR, "invalid.repository");
+//            return;
 //        }
 //        
-//        new Button(screenlist, "addscreen");
+//        css = new HashMap<>();
+//        css.put("float", "left");
+//        context.view.getStyleSheet().put(".pane", css);
 //        
-//        commandlist = new NodeList(objlist, "commandlist");
-//        commandlist.setListType(NodeList.DEFINITION);
-
-        sourcename = new Parameter(container, "sourcename");
-        packagename = new Parameter(container, "packagename");
-        packagelist = new NodeList(objlist, "packagelist");
-        packagelist.setListType(NodeList.DEFINITION);
-        for (String package_ : context.project.packages.keySet()) {
-            projectpackage = context.project.packages.get(package_);
-            sourcelist = new NodeList(packagelist, package_);
-            sourcelist.setListType(NodeList.DEFINITION);
-            for (String name : projectpackage.sources.keySet()) {
-                sourcelink = new Link(sourcelist, name, "editsource");
-                sourcelink.add(sourcename, name);
-                sourcelink.add(packagename, package_);
-            }
-        }
-        
-        fontpane = new StandardContainer(container, "fontpane");    
-        fontpane.setStyleClass("pane");
-        form = new DataForm(fontpane, "project");
+//        css = new HashMap<>();
+//        css.put("list-style-type", "none");
+//        context.view.getStyleSheet().put(".objlist", css);
+//        
+//        actionpane = new StandardContainer(container, "actionpane");
+//        actionpane.setStyleClass("pane");
+//        actionlist = new NodeList(actionpane, "actionlist");
+//        actionlist.setStyleClass("objlist");
+//        new Button(actionlist, "save");
+//        new Button(actionlist, "activate");
+//        
+//        navpane = new StandardContainer(container, "navpane");
+//        navpane.setStyleClass("pane");
+//        
+//        objlist = new NodeList(navpane, "objlist");
+////        
+////        screenlist = new NodeList(objlist, "screenlist");
+////        screenlist.setListType(NodeList.DEFINITION);
+////        screenname = new Parameter(screenlist, "screenname");
+////        for (String name : project.views.keySet()) {
+////            screenlink = new Link(screenlist, name, "editscreen");
+////            screenlink.add(screenname, name);
+////        }
+////        
+////        new Button(screenlist, "addscreen");
+////        
+////        commandlist = new NodeList(objlist, "commandlist");
+////        commandlist.setListType(NodeList.DEFINITION);
+//
+//        sourcename = new Parameter(container, "sourcename");
+//        packagename = new Parameter(container, "packagename");
+//        packagelist = new NodeList(objlist, "packagelist");
+//        packagelist.setListType(NodeList.DEFINITION);
+//        for (String package_ : context.project.packages.keySet()) {
+//            projectpackage = context.project.packages.get(package_);
+//            sourcelist = new NodeList(packagelist, package_);
+//            sourcelist.setListType(NodeList.DEFINITION);
+//            for (String name : projectpackage.sources.keySet()) {
+//                sourcelink = new Link(sourcelist, name, "editsource");
+//                sourcelink.add(sourcename, name);
+//                sourcelink.add(packagename, package_);
+//            }
+//        }
+//        
+//        fontpane = new StandardContainer(container, "fontpane");    
+//        fontpane.setStyleClass("pane");
+//        form = new DataForm(fontpane, "project");
+        form = new DataForm(container, "project");
         form.importModel(context.editorhdrmodel);
         form.setObject(context.project.header);
         
@@ -93,12 +105,12 @@ public class Response {
         for (Element element : form.getElements())
             element.setEnabled(false);
         
-        new TextArea(fontpane, "editor");
-        
-        new Button(container, "save");
-//        new Button(fontpane, "activate");
-        
-        context.view.setTitle(Context.TITLES[context.mode]);
+//        new TextArea(fontpane, "editor");
+        pagecontrol.add("save", PageControl.REQUEST);
+        pagecontrol.add("activate", PageControl.REQUEST);
+        new TextArea(container, "editor");
+//        
+//        context.view.setTitle(Context.TITLES[context.mode]);
     }
     
     public static final void main(Context context) {

@@ -34,7 +34,7 @@ public class ProjectModels {
         shd = new SearchHelpData("SH_IOCASTE_PROJECT");
         shd.setExport("NAME");
         shd.add("NAME");
-        shd.setModel("IOCASTE_PROJECT_HEADER");
+        shd.setModel("ICSTPRJ_HEADER");
         data.add(shd);
         
         /*

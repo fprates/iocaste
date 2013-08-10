@@ -1,27 +1,11 @@
 package org.iocaste.workbench;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler.CompilationTask;
-
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
@@ -43,40 +27,7 @@ public class Request {
      * @throws Exception
      */
     public static final void activate(Context context) throws Exception {
-//        String[] errortext;
-//        CompilationTask task;
-//        Writer writer;
-//        StandardJavaFileManager fmngr;
-//        File[] files;
-//        Iterable<? extends JavaFileObject> cunits;
-//        JavaCompiler compiler;
-//        
-//        if (!project.created) {
-//            view.message(Const.ERROR, "project.not.created");
-//            return;
-//        }
-//
-//        compiler = ToolProvider.getSystemJavaCompiler();
-//        if (compiler == null) {
-//            view.message(Const.ERROR, "compiler.unavailable");
-//            return;
-//        }
-//
-//        fmngr = compiler.getStandardFileManager(null, view.getLocale(), null);
-//        files = new File[1];
-//        files[0] = new File(project.classfile);
-//        cunits = fmngr.getJavaFileObjects(files);
-//        
-//        writer = new StringWriter();
-//        task = compiler.getTask(writer, fmngr, null, null, null, cunits);
-//        if (task.call())
-//            view.message(Const.STATUS, "compiling.successful");
-//        else {
-//            errortext = writer.toString().split("[\n]");
-//            view.message(Const.ERROR, errortext[0]);
-//        }
-//        
-//        fmngr.close();
+        Activation.start(context);
     }
 
     public static final void addscreen(Context context) {
@@ -97,10 +48,10 @@ public class Request {
         
         packagename = new StringBuilder("org.").append(projectname).toString();
         context.project.header.setValue("PACKAGE", packagename);
-        context.project.header.setValue("CLASS", "Main");
+        context.project.header.setValue("CLASS", "Main.java");
         
         projectpackage = new ProjectPackage();
-        projectpackage.sources.put("Main", new Source());
+        projectpackage.sources.put("Main.java", new Source());
         projectpackage.views.put("main", new View(projectname, "main"));
         context.project.packages.put(packagename, projectpackage);
         
@@ -159,7 +110,7 @@ public class Request {
         ExtendedObject header;
         ExtendedObject[] packages;
         Documents documents = new Documents(context.function);
-        DataForm form = (DataForm)context.view.getElement("project");
+        DataForm form = context.view.getElement("project");
         String name = form.get("NAME").get();
         
         header = documents.getObject("ICSTPRJ_HEADER", name);
@@ -325,10 +276,6 @@ public class Request {
     }
     
     public static final void save(Context context) throws Exception {
-//        DocumentModel model;
-//        File file;
-//        OutputStream os;
-//        String packagedir, package_, class_;
         String package_, source_, projectname;
         Documents documents;
         DataForm projecthdr = context.view.getElement("project");
@@ -339,43 +286,19 @@ public class Request {
         projectname = projecthdr.get("NAME").get();
         project = new ExtendedObject(context.projectmodel);
         project.setValue("NAME", projectname);
-        
-        if (context.mode == Context.LOAD)
-            unregisterProject(projectname, context, documents);
-            
-//            project.name = form.get("NAME").get();
-//            package_ = source.getValue("PACKAGE");
-//            class_ = source.getValue("CLASS");
-//            project.dir = new StringBuilder(repository).
-//                    append(File.separator).
-//                    append(project.name).toString();
-//            
-//            new File(project.dir).mkdir();
-//            packagedir = package_.replaceAll("[\\.]", File.separator);
-//            packagedir = new StringBuilder(project.dir).
-//                    append(File.separator).append(packagedir).toString();
-//            new File(packagedir).mkdirs();
-//            
-//            project.classfile = new StringBuilder(packagedir).
-//                    append(File.separator).append(class_).
-//                    append(".java").toString();
-        
+//        
+//        if (context.mode == Context.LOAD)
+//            unregisterProject(projectname, context, documents);
+//        
         package_ = projecthdr.get("PACKAGE").get();
         source_ = projecthdr.get("CLASS").get();
         context.project.packages.get(package_).sources.get(source_).code = text;
         
         documents.save(project);
-        for (String packagename : context.project.packages.keySet())
-            registerPackage(packagename, context, documents);
-        
-        context.mode = Context.LOAD;
+//        for (String packagename : context.project.packages.keySet())
+//            registerPackage(packagename, context, documents);
 //        
-//        file = new File(project.classfile);
-//        file.createNewFile();
-//        os = new FileOutputStream(file, false);
-//        os.write(text.getBytes());
-//        os.flush();
-//        os.close();
+//        context.mode = Context.LOAD;
     }
     
     /**

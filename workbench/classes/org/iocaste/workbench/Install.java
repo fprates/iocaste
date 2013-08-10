@@ -22,7 +22,7 @@ public class Install {
         InstallData data = new InstallData();
         
         // mensagens
-        messages = new HashMap<String, String>();
+        messages = new HashMap<>();
         messages.put("iocaste-workbench", "Workbench");
         messages.put("WORKBENCH", "Workbench");
         data.setMessages("pt_BR", messages);
