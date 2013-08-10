@@ -11,10 +11,26 @@ package org.iocaste.shell.common;
  */
 public class TextArea extends AbstractInputComponent {
     private static final long serialVersionUID = 4848464288942587299L;
-
+    private int w, h;
+    
     public TextArea(Container container, String name) {
         super(container, Const.TEXT_AREA, null, name);
         
         setStyleClass("textarea");
+        w = 20;
+        h = 10;
+    }
+    
+    public final int getHeight() {
+        return h;
+    }
+    
+    public final int getWidth() {
+        return w;
+    }
+    
+    public final void setSize(int w, int h) {
+        this.w = w;
+        this.h = h;
     }
 }

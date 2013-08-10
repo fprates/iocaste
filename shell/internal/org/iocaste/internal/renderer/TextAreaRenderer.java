@@ -13,11 +13,13 @@ public class TextAreaRenderer extends Renderer {
         areatag.add("id", name);
         areatag.add("name", name);
         areatag.add("class", area.getStyleClass());
+        areatag.add("cols", Integer.toString(area.getWidth()));
+        areatag.add("rows", Integer.toString(area.getHeight()));
+        
         if (!area.isEnabled())
             areatag.add("disabled", "disabled");
         
         areatag.addInner((value == null)? "" : value);
-        
         return areatag;
     }
 }
