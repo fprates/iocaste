@@ -1,12 +1,8 @@
 <project name="iocaste" default="compile">
     <property name="builddir" value="${basedir}/build"/>
 	<property name="debug.status" value="on"/>
-
-    <target name="clean">
-        <delete dir="${builddir}"/>
-    </target>
-        
-    <target name="compile" depends="clean">
+	
+    <target name="compile.base">
         <!-- bibliotecas base do sistema -->
     	<!-- core -->
         <ant antfile="${basedir}/src/core/build.xml"/>
@@ -31,8 +27,29 @@
         
         <!-- report -->
         <ant antfile ="${basedir}/src/report/build.xml"/>
-        
-        <!-- aplicações começam a partir daqui -->
+    </target>
+
+    <target name="clean">
+        <delete dir="${builddir}"/>
+    </target>
+	
+	<!-- compilação e deploy individual -->
+    <target name="unit">
+    	<ant antfile="${basedir}/src/build.xml" target="compile.base">
+    		<property name="auto.deploy" value="false"/>
+    	</ant>
+    	
+    	<ant antfile="${basedir}/src/${unit}/build.xml">
+    		<property name="auto.deploy" value="true"/>
+        </ant>
+    	
+    	<ant antfile="${basedir}/src/build.xml" target="clean"/>
+    </target>
+
+    <!-- aplicações começam a partir daqui -->
+    <target name="compile">
+    	<property name="auto.deploy" value="true"/>
+    	<ant antfile="${basedir}/src/build.xml" target="compile.base"/>
     	
         <!-- login -->
         <ant antfile="${basedir}/src/login/build.xml"/>
@@ -85,6 +102,9 @@
     	<!-- workbench -->
         <ant antfile="${basedir}/src/workbench/build.xml"/>
         
+        <!-- examples -->
+        <!-- <ant antfile="${basedir}/src/examples/build.xml"/> -->
+        
         <!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
     	
@@ -95,12 +115,13 @@
     		<fileset dir="${builddir}/packagetool/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/globalconfig/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/external/lib" excludes="*.jar"/>
+    	<!-- <fileset dir="${builddir}/report/lib" excludes="*.jar"/> -->
     	</copy>
     	
     	<jar basedir="${basedir}/ext/common"
     		destfile="${basedir}/ext/iocaste.jar"/>
     	
     	<delete dir="${basedir}/ext/common"/>
-    	<delete dir="${builddir}"/>
+    	<ant antfile="${basedir}/src/build.xml" target="clean"/>
     </target>
 </project>

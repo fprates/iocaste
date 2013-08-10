@@ -1,5 +1,5 @@
 <project name="deployer" default="deploy">
-	<target name="deploy">
+	<target name="deploy" if="${auto.deploy}">
 		<condition property="manager_url" value="${url}/manager/text"
 				else="${url}/manager">
 		    <equals arg1="${tomcat_version}" arg2="7"/>
