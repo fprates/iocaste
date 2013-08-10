@@ -14,7 +14,7 @@ public class Context {
     public View view;
     public Function function;
     public Project project;
-    public String repository;
+    public String repository, path;
     public boolean validrepo;
     public DocumentModel editorhdrmodel, projectmodel, packagemodel;
     public DocumentModel sourcemodel, srccodemodel;

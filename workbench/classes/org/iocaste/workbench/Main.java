@@ -31,6 +31,7 @@ public class Main extends AbstractPage {
      */
     public final void activate(View view) throws Exception {
         context.view = view;
+        context.path = getRealPath("");
         Activation.start(context);
     }
     

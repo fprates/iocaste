@@ -2,11 +2,13 @@ package org.iocaste.workbench;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.tools.JavaCompiler;
@@ -28,16 +30,19 @@ public class Activation {
     }
     
     private static final void compileProject(Context context) throws Exception {
+        String prefix;
+        StringBuilder cp;
         ProjectPackage package_;
         Source source;
-        String[] errortext;
         CompilationTask task;
         Writer writer;
         StandardJavaFileManager fmngr;
         List<File> files;
+        List<String> options;
         Iterable<? extends JavaFileObject> cunits;
         JavaCompiler compiler;
         InputComponent input;
+        File file;
         View view = context.view;
 //      
 //      if (!project.created) {
@@ -50,8 +55,7 @@ public class Activation {
             view.message(Const.ERROR, "compiler.unavailable");
             return;
         }
-
-        fmngr = compiler.getStandardFileManager(null, view.getLocale(), null);
+        
         files = new ArrayList<>();
         for (String packagename : context.project.packages.keySet()) {
             package_ = context.project.packages.get(packagename);
@@ -60,11 +64,25 @@ public class Activation {
                 files.add(new File(source.filename));
             }
         }
+
+        fmngr = compiler.getStandardFileManager(null, view.getLocale(), null);
+        cunits = fmngr.getJavaFileObjects(files.toArray(new File[0])); 
+        prefix = new StringBuilder(context.path).append("/WEB-INF/lib/").
+                toString();
+        file = new File(prefix);
+        cp = new StringBuilder();
+        for (String filename : file.list(new JarFilter())) {
+            if (cp.length() > 0)
+                cp.append(":");
         
-        cunits = fmngr.getJavaFileObjects(files.toArray(new File[0]));      
+            cp.append(prefix).append(filename);
+        }
+        
+        options = new ArrayList<>();
+        options.addAll(Arrays.asList("-cp", cp.toString()));
+        input = context.view.getElement("output");     
         writer = new StringWriter();
-        input = context.view.getElement("output");
-        task = compiler.getTask(writer, fmngr, null, null, null, cunits);
+        task = compiler.getTask(writer, fmngr, null, options, null, cunits);
         if (task.call()) {
             input.set(null);
             view.message(Const.STATUS, "compiling.successful");
@@ -135,4 +153,13 @@ public class Activation {
         
         source.code = input.get(); 
     }
+}
+
+class JarFilter implements FilenameFilter {
+
+    @Override
+    public boolean accept(File arg0, String name) {
+        return name.toLowerCase().endsWith(".jar");
+    }
+    
 }
