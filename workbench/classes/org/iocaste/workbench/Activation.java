@@ -80,6 +80,8 @@ public class Activation {
         
         options = new ArrayList<>();
         options.addAll(Arrays.asList("-cp", cp.toString()));
+        options.addAll(Arrays.asList("-d", context.project.dir+
+                "/bin/WEB-INF/classes"));
         input = context.view.getElement("output");     
         writer = new StringWriter();
         task = compiler.getTask(writer, fmngr, null, options, null, cunits);
@@ -101,6 +103,7 @@ public class Activation {
         String dir;
         ProjectPackage package_;
         Source source;
+        StringBuilder bindir;
         DataForm form = context.view.getElement("project");
         String projectname = form.get("NAME").get();
         
@@ -108,11 +111,17 @@ public class Activation {
             context.project.dir = new StringBuilder(context.repository).
                   append(File.separator).append(projectname).toString();
         
+        removeCompleteDir(context.project.dir);
         new File(context.project.dir).mkdir();
+        bindir = new StringBuilder(context.project.dir);
+        for (String dirname : new String[] {"bin", "WEB-INF", "classes"})
+            new File(bindir.append(File.separator).
+                    append(dirname).toString()).mkdir();
         
         for (String packagename : context.project.packages.keySet()) {
             dir = packagename.replaceAll("[\\.]", File.separator);
             dir = new StringBuilder(context.project.dir).
+                    append(File.separator).append("src").
                     append(File.separator).append(dir).toString();
             new File(dir).mkdirs();
             
@@ -136,6 +145,16 @@ public class Activation {
         
     }
 
+    private static final void removeCompleteDir(String dir) {
+        for (File file : new File(dir).listFiles()) {
+            if (file.isDirectory())
+                removeCompleteDir(file.getAbsolutePath());
+            file.delete();
+        }
+        
+        new File(dir).delete();
+    }
+    
     public static final void start(Context context) throws Exception {
         updateCurrentSource(context);
         createProjectFiles(context);
