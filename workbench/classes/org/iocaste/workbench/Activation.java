@@ -37,6 +37,7 @@ public class Activation {
         List<File> files;
         Iterable<? extends JavaFileObject> cunits;
         JavaCompiler compiler;
+        InputComponent input;
         View view = context.view;
 //      
 //      if (!project.created) {
@@ -62,12 +63,14 @@ public class Activation {
         
         cunits = fmngr.getJavaFileObjects(files.toArray(new File[0]));      
         writer = new StringWriter();
+        input = context.view.getElement("output");
         task = compiler.getTask(writer, fmngr, null, null, null, cunits);
-        if (task.call())
+        if (task.call()) {
+            input.set(null);
             view.message(Const.STATUS, "compiling.successful");
-        else {
-            errortext = writer.toString().split("[\n]");
-            view.message(Const.ERROR, errortext[0]);
+        } else {
+            input.set(writer.toString());
+            view.message(Const.ERROR, "compiling.error");
         }
       
         fmngr.close();

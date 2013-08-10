@@ -108,8 +108,9 @@ public class Response {
 //        new TextArea(fontpane, "editor");
         pagecontrol.add("save", PageControl.REQUEST);
         pagecontrol.add("activate", PageControl.REQUEST);
-        new TextArea(container, "editor");
-//        
+        new TextArea(container, "editor").setSize(80, 20);
+        new TextArea(container, "output").setEnabled(false);
+        
 //        context.view.setTitle(Context.TITLES[context.mode]);
     }
     
