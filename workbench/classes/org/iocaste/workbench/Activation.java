@@ -1,15 +1,15 @@
 package org.iocaste.workbench;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,15 +26,14 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.View;
 
 public class Activation {
     private static final void addJarItems(JarOutputStream jar, String path,
             String base) throws Exception {
-        InputStream is;
         String jaritem;
-        byte[] buffer = null;
-        int size = 0, pos = 0, read = 0;
+        FileChannel channel;
+        int limit;
+        ByteBuffer buffer = null;
         
         for (File file : new File(path).listFiles()) {
             jaritem = file.getPath().substring(base.length());
@@ -44,41 +43,32 @@ public class Activation {
                 continue;
             }
             
-            if (buffer == null) {
-                buffer = new byte[64*1024];
-                size = buffer.length;
-            }
-
             jar.putNextEntry(new JarEntry(jaritem));
-            is = new BufferedInputStream(new FileInputStream(file));
-            while (read >= 0) {
-                pos += read;
-                read = is.read(buffer, pos, size);
-                if (read < size)
-                    read = -1;
-                jar.write(buffer);
+            channel = new FileInputStream(file).getChannel();
+            
+            if (buffer == null)
+                buffer = ByteBuffer.allocate(64*1024);
+            
+            buffer.rewind();
+            while ((limit = channel.read(buffer)) > 0) {
+                buffer.flip();
+                if (buffer.hasArray())
+                    jar.write(buffer.array(), 0, limit);
+                buffer.clear();
             }
             
+            channel.close();
             jar.closeEntry();
-            is.close();
         }
     }
     
     private static final void compileProject(Context context) throws Exception {
-        String prefix;
-        StringBuilder cp;
         ProjectPackage package_;
         Source source;
-        CompilationTask task;
-        Writer writer;
-        StandardJavaFileManager fmngr;
         List<File> files;
-        List<String> options;
-        Iterable<? extends JavaFileObject> cunits;
         JavaCompiler compiler;
+        String message;
         InputComponent input;
-        File file;
-        View view = context.view;
 //      
 //      if (!project.created) {
 //          view.message(Const.ERROR, "project.not.created");
@@ -87,7 +77,7 @@ public class Activation {
 //
         compiler = ToolProvider.getSystemJavaCompiler();
         if (compiler == null) {
-            view.message(Const.ERROR, "compiler.unavailable");
+            context.view.message(Const.ERROR, "compiler.unavailable");
             return;
         }
         
@@ -100,10 +90,40 @@ public class Activation {
             }
         }
 
-        fmngr = compiler.getStandardFileManager(null, view.getLocale(), null);
+        input = context.view.getElement("output");
+        message = compileSources(files, compiler, context);
+        if (message != null) {
+            input.set(message);
+            context.view.message(Const.ERROR, "compiling.error");
+            return;
+        }
+        
+        copyLibraries(context);
+        
+        input.set(null);
+        context.view.message(Const.STATUS, "successful.compiling");
+    }
+    
+    private static final String compileSources(List<File> files,
+            JavaCompiler compiler, Context context) throws Exception {
+        CompilationTask task;
+        Writer writer;
+        List<String> options;
+        StringBuilder cp;
+        StandardJavaFileManager fmngr;
+        Iterable<? extends JavaFileObject> cunits;
+        String prefix;
+        File file;
+        
+        fmngr = compiler.getStandardFileManager(
+                null, context.view.getLocale(), null);
+        
         cunits = fmngr.getJavaFileObjects(files.toArray(new File[0])); 
-        prefix = new StringBuilder(context.path).append("/WEB-INF/lib/").
-                toString();
+        prefix = new StringBuilder(context.path).
+                append(File.separator).append("WEB-INF").
+                append(File.separator).append("lib").
+                append(File.separator).toString();
+        
         file = new File(prefix);
         cp = new StringBuilder();
         for (String filename : file.list(new JarFilter())) {
@@ -115,20 +135,42 @@ public class Activation {
         
         options = new ArrayList<>();
         options.addAll(Arrays.asList("-cp", cp.toString()));
-        options.addAll(Arrays.asList("-d", context.project.dir+
-                "/bin/WEB-INF/classes"));
-        input = context.view.getElement("output");     
+        options.addAll(Arrays.asList("-d",
+                new StringBuilder(context.project.dir).
+                append(File.separator).append("bin").
+                append(File.separator).append("WEB-INF").
+                append(File.separator).append("classes").toString()));
+        
         writer = new StringWriter();
         task = compiler.getTask(writer, fmngr, null, options, null, cunits);
-        if (task.call()) {
-            input.set(null);
-            view.message(Const.STATUS, "compiling.successful");
-        } else {
-            input.set(writer.toString());
-            view.message(Const.ERROR, "compiling.error");
-        }
-      
+        prefix = (task.call())? null : writer.toString();
+        writer.close();
         fmngr.close();
+        
+        return prefix;
+    }
+    
+    private static final void copyFile(File to, File from) throws Exception {
+        FileInputStream is = new FileInputStream(from);
+        FileChannel fcfrom = is.getChannel();
+        FileOutputStream os = new FileOutputStream(to);
+        FileChannel fcto = os.getChannel();
+        
+        to.createNewFile();
+        fcto.transferFrom(fcfrom, 0, fcfrom.size());
+        fcfrom.close();
+        fcto.close();
+        os.close();
+        is.close();
+    }
+    
+    private static final void copyLibraries(Context context) throws Exception {
+        String libfrom = context.path+"/WEB-INF/lib";
+        String libto = context.project.dir+"/bin/WEB-INF/lib";
+        
+        new File(libto).mkdir();
+        for (File file : new File(libfrom).listFiles())
+            copyFile(new File(libto+File.separator+file.getName()), file);
     }
     
     private static final void createProjectFiles(Context context)
