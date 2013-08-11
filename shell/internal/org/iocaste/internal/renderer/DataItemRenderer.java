@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.internal.XMLElement;
+import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.InputComponent;

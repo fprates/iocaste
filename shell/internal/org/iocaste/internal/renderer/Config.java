@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.iocaste.internal.XMLElement;
+import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;

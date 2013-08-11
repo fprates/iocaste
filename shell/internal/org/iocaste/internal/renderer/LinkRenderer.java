@@ -2,7 +2,7 @@ package org.iocaste.internal.renderer;
 
 import java.util.Map;
 
-import org.iocaste.internal.XMLElement;
+import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 

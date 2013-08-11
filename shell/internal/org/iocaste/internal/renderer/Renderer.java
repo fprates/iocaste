@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.internal.XMLElement;
+import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Container;

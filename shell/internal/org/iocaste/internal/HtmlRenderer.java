@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.iocaste.internal.renderer.Config;
 import org.iocaste.internal.renderer.Renderer;
+import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;

@@ -2,7 +2,7 @@ package org.iocaste.internal.renderer;
 
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
-import org.iocaste.internal.XMLElement;
+import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.RangeField;
 import org.iocaste.shell.common.Text;

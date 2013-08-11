@@ -1,6 +1,6 @@
 package org.iocaste.internal.renderer;
 
-import org.iocaste.internal.XMLElement;
+import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.FileEntry;
 
 public class FileEntryRenderer extends Renderer {

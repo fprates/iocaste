@@ -1,4 +1,4 @@
-package org.iocaste.internal;
+package org.iocaste.protocol.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;

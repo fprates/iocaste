@@ -1,6 +1,6 @@
 package org.iocaste.internal.renderer;
 
-import org.iocaste.internal.XMLElement;
+import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Parameter;
 
