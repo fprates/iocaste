@@ -40,6 +40,7 @@ public class Request {
         packagename = new StringBuilder("org.").append(projectname).toString();
         context.project.header.setValue("PACKAGE", packagename);
         context.project.header.setValue("CLASS", "Main.java");
+        context.project.entryclass = packagename.concat(".Main");
         
         projectpackage = new ProjectPackage();
         projectpackage.sources.put("Main.java", new Source());

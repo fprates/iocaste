@@ -23,6 +23,7 @@ import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler.CompilationTask;
 
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
@@ -99,6 +100,7 @@ public class Activation {
         }
         
         copyLibraries(context);
+        createWebXML(context);
         
         input.set(null);
         context.view.message(Const.STATUS, "successful.compiling");
@@ -119,10 +121,7 @@ public class Activation {
                 null, context.view.getLocale(), null);
         
         cunits = fmngr.getJavaFileObjects(files.toArray(new File[0])); 
-        prefix = new StringBuilder(context.path).
-                append(File.separator).append("WEB-INF").
-                append(File.separator).append("lib").
-                append(File.separator).toString();
+        prefix = composeFileName(context.path, "WEB-INF", "lib", "");
         
         file = new File(prefix);
         cp = new StringBuilder();
@@ -135,11 +134,8 @@ public class Activation {
         
         options = new ArrayList<>();
         options.addAll(Arrays.asList("-cp", cp.toString()));
-        options.addAll(Arrays.asList("-d",
-                new StringBuilder(context.project.dir).
-                append(File.separator).append("bin").
-                append(File.separator).append("WEB-INF").
-                append(File.separator).append("classes").toString()));
+        options.addAll(Arrays.asList("-d", composeFileName(
+                context.project.dir, "bin", "WEB-INF", "classes")));
         
         writer = new StringWriter();
         task = compiler.getTask(writer, fmngr, null, options, null, cunits);
@@ -148,6 +144,19 @@ public class Activation {
         fmngr.close();
         
         return prefix;
+    }
+    
+    private static final String composeFileName(String... names) {
+        StringBuilder sb = new StringBuilder();
+        
+        for (String name : names) {
+            if (sb.length() > 0)
+                sb.append(File.separator);
+        
+            sb.append(name);
+        }
+        
+        return sb.toString();
     }
     
     private static final void copyFile(File to, File from) throws Exception {
@@ -165,12 +174,13 @@ public class Activation {
     }
     
     private static final void copyLibraries(Context context) throws Exception {
-        String libfrom = context.path+"/WEB-INF/lib";
-        String libto = context.project.dir+"/bin/WEB-INF/lib";
+        String libfrom = composeFileName(context.path, "WEB-INF", "lib");
+        String libto = composeFileName(
+                context.project.dir, "bin", "WEB-INF", "lib");
         
         new File(libto).mkdir();
         for (File file : new File(libfrom).listFiles())
-            copyFile(new File(libto+File.separator+file.getName()), file);
+            copyFile(new File(composeFileName(libto, file.getName())), file);
     }
     
     private static final void createProjectFiles(Context context)
@@ -185,8 +195,8 @@ public class Activation {
         String projectname = form.get("NAME").get();
         
         if (context.project.dir == null)
-            context.project.dir = new StringBuilder(context.repository).
-                  append(File.separator).append(projectname).toString();
+            context.project.dir = composeFileName(
+                    context.repository, projectname);
         
         removeCompleteDir(context.project.dir);
         new File(context.project.dir).mkdir();
@@ -197,16 +207,13 @@ public class Activation {
         
         for (String packagename : context.project.packages.keySet()) {
             dir = packagename.replaceAll("[\\.]", File.separator);
-            dir = new StringBuilder(context.project.dir).
-                    append(File.separator).append("src").
-                    append(File.separator).append(dir).toString();
+            dir = composeFileName(context.project.dir, "src", dir);
             new File(dir).mkdirs();
             
             package_ = context.project.packages.get(packagename);
             for (String sourcename : package_.sources.keySet()) {
                 source = package_.sources.get(sourcename);                
-                source.filename = new StringBuilder(dir).
-                        append(File.separator).append(sourcename).toString();
+                source.filename = composeFileName(dir, sourcename);
                 
                 file = new File(source.filename);
                 file.createNewFile();
@@ -218,17 +225,96 @@ public class Activation {
         }
     }
     
+    private static final void createWebXML(Context context) throws Exception {
+        File file;
+        OutputStream os;
+        String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+        XMLElement welcome, welcomefile;
+        XMLElement webapp = new XMLElement("web-app");
+        
+        webapp.add("id", (String)context.project.header.getValue("NAME"));
+        webapp.add("xmlns", "http://java.sun.com/xml/ns/javaee");
+        webapp.add("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        webapp.add("xsi:schemaLocation", "http://java.sun.com/xml/ns/javaee "
+                + "http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd");
+        webapp.add("version", "2.5");
+//        
+//            <description>Programming Workbench</description>
+//            <display-name>Iocaste Programming Workbench</display-name>
+        
+        if (context.project.service != null)
+            createWebXMLServlet(webapp,
+                    "iocaste_server",
+                    context.project.service,
+                    "/services.html", null, null);
+        
+        if (context.project.entryclass != null)
+            createWebXMLServlet(webapp,
+                    "iocaste_servlet",
+                    "org.iocaste.shell.common.IocasteServlet",
+                    "/view.html", "form", context.project.entryclass);
+        
+        welcome = new XMLElement("welcome-file-list");
+        welcomefile = new XMLElement("welcome-file");
+        welcomefile.addInner("index.html");
+        welcome.addChild(welcomefile);
+        webapp.addChild(welcome);
+        
+        xml = new StringBuilder(xml).append(System.lineSeparator()).
+                append(webapp.toString()).toString();
+        file = new File(composeFileName(
+                context.project.dir, "bin", "WEB-INF", "web.xml"));
+        os = new FileOutputStream(file);
+        
+        os.write(xml.getBytes());
+        os.flush();
+        os.close();
+    }
+    
+    private static final void createWebXMLServlet(XMLElement webapp,
+            String name, String classname, String url, String param,
+            String value) {
+        XMLElement urlpattern, initparam, paramname, paramvalue;
+        XMLElement servlet = new XMLElement("servlet");
+        XMLElement servletname = new XMLElement("servlet-name");
+        XMLElement servletclass = new XMLElement("servlet-class");
+        XMLElement servletmapping = new XMLElement("servlet-mapping");
+        
+        servletname.addInner(name);
+        servlet.addChild(servletname);
+        
+        servletclass.addInner(classname);
+        servlet.addChild(servletclass);
+        webapp.addChild(servlet);
+
+        urlpattern = new XMLElement("url-pattern");
+        urlpattern.addInner(url);
+        
+        servletmapping.addChild(servletname);
+        servletmapping.addChild(urlpattern);
+        
+        if (param == null)
+            return;
+        
+        initparam = new XMLElement("init-param");
+        paramname = new XMLElement("param-name");
+        paramname.addInner(param);
+        paramvalue = new XMLElement("param-value");
+        paramvalue.addInner(value);
+        initparam.addChild(paramname);
+        initparam.addChild(paramvalue);
+        servlet.addChild(initparam);
+        webapp.addChild(servletmapping);
+    }
+    
     private static final void deployApplication(Context context)
             throws Exception {
         String jarname = context.project.header.getValue("NAME");
-        String dest = new StringBuilder(System.getProperty("catalina.home")).
-                append(File.separator).append("webapps").
-                append(File.separator).append(jarname).
-                append(".war").toString();
+        String dest = composeFileName(System.getProperty("catalina.home"),
+                "webapps", jarname.concat(".war"));
         OutputStream os = new FileOutputStream(dest);
         JarOutputStream jar = new JarOutputStream(os);
-        String bindir = new StringBuilder(context.project.dir).
-                append(File.separator).append("bin").toString();
+        String bindir = composeFileName(context.project.dir, "bin");
         
         addJarItems(jar, bindir, bindir);
         jar.close();
