@@ -14,6 +14,7 @@ public class ProjectModels {
         DocumentModel model;
         DataElement element;
         DocumentModelItem item, projectname, packagename, sourceid;
+        DocumentModelItem projectid, packageid;
         SearchHelpData shd;
         
         /*
@@ -21,85 +22,73 @@ public class ProjectModels {
          */
         model = data.getModel("ICSTPRJ_HEADER", "IPHEADER", null);
         
+        // identificador do projeto
+        element = new DataElement("PROJECT.ID");
+        element.setType(DataType.NUMC);
+        element.setLength(6);
+        projectid = new DocumentModelItem("ID");
+        projectid.setTableFieldName("IDENT");
+        projectid.setDataElement(element);
+        model.add(projectid);
+        model.add(new DocumentModelKey(projectid));
+        
+        data.addNumberFactory("IP_PRJID");
+        
+        /*
+         * Nomes de projeto
+         */
+        model = data.getModel("ICSTPRJ_PROJECT_NAMES", "IPPRJNAMES", null);
+        
         // nome do projeto
         element = new DummyElement("PACKAGE.NAME");
-        
         projectname = new DocumentModelItem("NAME");
         projectname.setTableFieldName("PRJNM");
         projectname.setDataElement(element);
-        
         model.add(projectname);
         model.add(new DocumentModelKey(projectname));
+        
+        item = new DocumentModelItem("ID");
+        item.setTableFieldName("IDENT");
+        item.setDataElement(projectid.getDataElement());
+        item.setReference(projectid);
+        model.add(item);
         
         shd = new SearchHelpData("SH_IOCASTE_PROJECT");
         shd.setExport("NAME");
         shd.add("NAME");
-        shd.setModel("ICSTPRJ_HEADER");
+        shd.setModel("ICSTPRJ_PROJECT_NAMES");
         data.add(shd);
-        
-        /*
-         * Visões do projeto
-         */
-        model = data.getModel("ICSTPRJ_VIEWS", "IPVIEWS", null);
-        
-        // identificador da visão
-        element = new DataElement("ICSTPRJ_VIEWS.IDENT");
-        element.setType(DataType.CHAR);
-        element.setLength(69);
-        element.setUpcase(false);
-        
-        item = new DocumentModelItem("IDENT");
-        item.setTableFieldName("IDENT");
-        item.setDataElement(element);
-        
-        model.add(item);
-        model.add(new DocumentModelKey(item));
-        
-        // projeto da visão
-        item = new DocumentModelItem("PROJECT");
-        item.setTableFieldName("PRJNM");
-        item.setDataElement(projectname.getDataElement());
-        item.setReference(projectname);
-        
-        model.add(item);
-        
-        // nome da visão
-        element = new DataElement("ICSTPRJ_VIEWS.NAME");
-        element.setType(DataType.CHAR);
-        element.setLength(30);
-        element.setUpcase(false);
-        
-        item = new DocumentModelItem("NAME");
-        item.setTableFieldName("PJVNM");
-        item.setDataElement(element);
-        
-        model.add(item);
         
         /*
          * Pacotes
          */
         model = data.getModel("ICSTPRJ_PACKAGES", "IPPROJECTS", null);
         
-        // nome do pacote
-        element = new DataElement("ICSTPRJ_PACKAGES.NAME");
-        element.setType(DataType.CHAR);
-        element.setLength(60);
-        element.setUpcase(false);
-        
-        packagename = new DocumentModelItem("NAME");
-        packagename.setTableFieldName("PKGNM");
-        packagename.setDataElement(element);
-        
-        model.add(packagename);
-        model.add(new DocumentModelKey(packagename));
+        // identificador do pacote
+        element = new DataElement("ICSTPRJ_PACKAGES.ID");
+        element.setType(DataType.NUMC);
+        element.setLength(9);
+        packageid = new DocumentModelItem("ID");
+        packageid.setTableFieldName("IDENT");
+        packageid.setDataElement(element);
+        model.add(packageid);
+        model.add(new DocumentModelKey(packageid));
         
         // projeto referência
         item = new DocumentModelItem("PROJECT");
-        item.setTableFieldName("PRJNM");
-        item.setDataElement(projectname.getDataElement());
-        item.setReference(projectname);
-        
+        item.setTableFieldName("PRJID");
+        item.setDataElement(projectid.getDataElement());
         model.add(item);
+        
+        // nome do pacote
+        element = new DataElement("ICSTPRJ_PACKAGES.NAME");
+        element.setType(DataType.CHAR);
+        element.setLength(128);
+        element.setUpcase(false);
+        packagename = new DocumentModelItem("NAME");
+        packagename.setTableFieldName("PKGNM");
+        packagename.setDataElement(element);
+        model.add(packagename);
         
         /*
          * fontes
@@ -107,37 +96,30 @@ public class ProjectModels {
         model = data.getModel("ICSTPRJ_SOURCES", "IPSOURCES", null);
         
         // identificador
-        element = new DataElement("ICSTPRJ_SOURCES.IDENT");
-        element.setType(DataType.CHAR);
-        element.setLength(69);
-        element.setUpcase(false);
-        
-        sourceid = new DocumentModelItem("IDENT");
+        element = new DataElement("ICSTPRJ_SOURCES.ID");
+        element.setType(DataType.NUMC);
+        element.setLength(12);
+        sourceid = new DocumentModelItem("ID");
         sourceid.setTableFieldName("IDENT");
         sourceid.setDataElement(element);
-        
         model.add(sourceid);
         model.add(new DocumentModelKey(sourceid));
         
         // pacote referência
         item = new DocumentModelItem("PACKAGE");
-        item.setTableFieldName("PKGNM");
-        item.setDataElement(packagename.getDataElement());
-        item.setReference(packagename);
-        
+        item.setTableFieldName("PKGID");
+        item.setDataElement(packageid.getDataElement());
+        item.setReference(packageid);
         model.add(item);
-        model.add(new DocumentModelKey(item));
         
         // nome
         element = new DataElement("ICSTPRJ_SOURCES.NAME");
         element.setType(DataType.CHAR);
         element.setLength(60);
         element.setUpcase(false);
-        
         item = new DocumentModelItem("NAME");
         item.setTableFieldName("SRCNM");
         item.setDataElement(element);
-        
         model.add(item);
         
         /*
@@ -146,15 +128,12 @@ public class ProjectModels {
         model = data.getModel("ICSTPRJ_SRCCODE", "IPSRCCODE", null);
         
         // identificador
-        element = new DataElement("ICSTPRJ_SRCCODE.IDENT");
-        element.setType(DataType.CHAR);
-        element.setLength(69);
-        element.setUpcase(false);
-        
-        item = new DocumentModelItem("IDENT");
+        element = new DataElement("ICSTPRJ_SRCCODE.ID");
+        element.setType(DataType.NUMC);
+        element.setLength(16);
+        item = new DocumentModelItem("ID");
         item.setTableFieldName("IDENT");
         item.setDataElement(element);
-        
         model.add(item);
         model.add(new DocumentModelKey(item));
         
@@ -163,25 +142,21 @@ public class ProjectModels {
         item.setTableFieldName("SRCID");
         item.setReference(sourceid);
         item.setDataElement(sourceid.getDataElement());
-        
         model.add(item);
         
         // pacote
         item = new DocumentModelItem("PACKAGE");
-        item.setTableFieldName("PKGNM");
-        item.setDataElement(packagename.getDataElement());
-        item.setReference(packagename);
-        
+        item.setTableFieldName("PKGID");
+        item.setDataElement(packageid.getDataElement());
+        item.setReference(packageid);
         model.add(item);
         
         // parágrafo
         element = new DataElement("ICSTPRJ_SRCCODE.PARAGRAPH");
         element.setType(DataType.BOOLEAN);
-        
         item = new DocumentModelItem("PARAGRAPH");
         item.setTableFieldName("PGRPH");
         item.setDataElement(element);
-        
         model.add(item);
         
         // line
@@ -189,11 +164,9 @@ public class ProjectModels {
         element.setType(DataType.CHAR);
         element.setLength(80);
         element.setUpcase(false);
-        
         item = new DocumentModelItem("LINE");
         item.setTableFieldName("SLINE");
         item.setDataElement(element);
-        
         model.add(item);
     }
 

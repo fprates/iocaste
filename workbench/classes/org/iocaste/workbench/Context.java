@@ -17,6 +17,6 @@ public class Context {
     public String repository, path;
     public boolean validrepo;
     public DocumentModel editorhdrmodel, projectmodel, packagemodel;
-    public DocumentModel sourcemodel, srccodemodel;
+    public DocumentModel projectnamemodel, sourcemodel, srccodemodel;
     public byte mode;
 }

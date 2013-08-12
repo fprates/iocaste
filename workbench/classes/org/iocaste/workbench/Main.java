@@ -32,6 +32,7 @@ public class Main extends AbstractPage {
     public final void activate(View view) throws Exception {
         context.view = view;
         context.path = getRealPath("");
+        Common.updateCurrentSource(context);
         Activation.start(context);
     }
     
@@ -98,6 +99,7 @@ public class Main extends AbstractPage {
         documents = new Documents(this);
         context.editorhdrmodel = documents.getModel("ICSTPRJ_EDITOR_HEADER");
         context.projectmodel = documents.getModel("ICSTPRJ_HEADER");
+        context.projectnamemodel = documents.getModel("ICSTPRJ_PROJECT_NAMES");
         context.packagemodel = documents.getModel("ICSTPRJ_PACKAGES");
         context.sourcemodel = documents.getModel("ICSTPRJ_SOURCES");
         context.srccodemodel = documents.getModel("ICSTPRJ_SRCCODE");
@@ -135,6 +137,7 @@ public class Main extends AbstractPage {
      */
     public final void save(View view) throws Exception {
         context.view = view;
+        Common.updateCurrentSource(context);
         Request.save(context);
         view.message(Const.STATUS, "project.saved");
     }

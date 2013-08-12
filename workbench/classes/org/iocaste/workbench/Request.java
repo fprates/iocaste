@@ -1,9 +1,5 @@
 package org.iocaste.workbench;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Map;
-
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
@@ -27,24 +23,25 @@ public class Request {
     
     public static final void createproject(Context context) {
         ProjectPackage projectpackage;
-        String projectname, packagename;
+        String packagename;
         InputComponent input = ((DataForm)context.view.getElement("project")).
                 get("NAME");
         
         context.project = new Project();
         context.project.header = new ExtendedObject(context.editorhdrmodel);
+        context.project.name = input.get();
+        context.project.header.setValue("NAME", context.project.name);
         
-        projectname = input.get();
-        context.project.header.setValue("NAME", projectname);
-        
-        packagename = new StringBuilder("org.").append(projectname).toString();
+        packagename = new StringBuilder("org.").append(context.project.name).
+                toString();
         context.project.header.setValue("PACKAGE", packagename);
         context.project.header.setValue("CLASS", "Main.java");
         context.project.entryclass = packagename.concat(".Main");
         
         projectpackage = new ProjectPackage();
         projectpackage.sources.put("Main.java", new Source());
-        projectpackage.views.put("main", new View(projectname, "main"));
+        projectpackage.views.put("main", new View(
+                context.project.name, "main"));
         context.project.packages.put(packagename, projectpackage);
         
         context.view.redirect("editor");
@@ -153,29 +150,17 @@ public class Request {
         source.code = sb.toString();
     }
     
-    private static final ExtendedObject packageObject(String packagename,
-            Context context) {
-        ExtendedObject object = new ExtendedObject(context.packagemodel);
-        
-        object.setValue("NAME", packagename);
-        object.setValue("PROJECT", context.project.header.getValue("NAME"));
-        
-        return object;
-    }
-    
     /**
      * 
      * @param helper
      */
     private static final void registerCodeLine(CodeLineHelper helper) {
-        String srccodeid = new StringBuilder(helper.formatter.format(helper.i)).
-                append(helper.sourceid).toString();
         ExtendedObject object = new ExtendedObject(helper.context.srccodemodel);
         
-        object.setValue("IDENT", srccodeid);
+        object.setValue("ID", helper.i);
         object.setValue("SOURCE", helper.sourceid);
         object.setValue("PARAGRAPH", helper.paragraph);
-        object.setValue("PACKAGE", helper.packagename);
+        object.setValue("PACKAGE", helper.packageid);
         object.setValue("LINE", helper.codeline);
         helper.documents.save(object);
     }
@@ -186,18 +171,24 @@ public class Request {
      * @param context
      * @param documents
      */
-    private static final void registerPackage(String name, Context context,
-            Documents documents) {
+    private static final void registerPackages(Context context,
+            Documents documents, long projectid) {
+        ProjectPackage package_;
         ExtendedObject object;
-        int sourceid;
-        Map<String, ProjectPackage> packages = context.project.packages;
-        
-        object = packageObject(name, context);
-        documents.save(object);
-        
-        sourceid = 0;
-        for (String sourcename : packages.get(name).sources.keySet())
-            registerSource(sourcename, sourceid++, name, context, documents);
+        long packageid;
+
+        packageid = (projectid * 1000);
+        for (String packagename : context.project.packages.keySet()) {
+            packageid++;
+            object = new ExtendedObject(context.packagemodel);
+            object.setValue("ID", packageid);
+            object.setValue("PROJECT", projectid);
+            object.setValue("NAME", packagename);
+            documents.save(object);
+
+            package_ = context.project.packages.get(packagename);
+            registerSources(context, documents, package_, packageid);
+        }
             
     }
     
@@ -209,56 +200,53 @@ public class Request {
      * @param context
      * @param documents
      */
-    private static final void registerSource(String name, int i,
-            String packagename, Context context, Documents documents) {
+    private static final void registerSources(Context context,
+            Documents documents, ProjectPackage package_, long packageid) {
         CodeLineHelper codelinehelper;
+        ExtendedObject object;
+        String code;
         String[] codelines;
         int lines, codelinepos;
-        String sourceid, code;
-        ExtendedObject object;
-        ProjectPackage projectpackage;
-        NumberFormat formatter = DecimalFormat.getInstance();
+        long sourceid = packageid * 1000;
         
-        formatter.setMinimumIntegerDigits(3);
-        sourceid = new StringBuilder(formatter.format(i)).append(packagename).
-                toString();
-        
-        object = new ExtendedObject(context.sourcemodel);
-        object.setValue("IDENT", sourceid);
-        object.setValue("PACKAGE", packagename);
-        object.setValue("NAME", name);
-        documents.save(object);
-        
-        projectpackage = context.project.packages.get(packagename);
-        code = projectpackage.sources.get(name).code;
-        if (code == null)
-            return;
-
-        formatter.setMinimumIntegerDigits(3);
-        codelines = code.split("[\r\n]");
-        
-        codelinehelper = new CodeLineHelper();
-        codelinehelper.formatter = formatter;
-        codelinehelper.context = context;
-        codelinehelper.documents = documents;
-        codelinehelper.i = 0;
-        codelinehelper.sourceid = sourceid;
-        codelinehelper.packagename = packagename;
-        
-        for (String codeline : codelines) {
-            lines = codeline.length() / 80;
-            codelinehelper.paragraph = true;
-            for (int l = 0; l < lines; l++) {
-                codelinehelper.i++;
-                codelinepos = l * 80;
-                
-                codelinehelper.codeline = codeline.
-                        substring(codelinepos, codelinepos + 80);
-                registerCodeLine(codelinehelper);
-                codelinehelper.paragraph = false;
-            }
+        for (String sourcename : package_.sources.keySet()) {
+            sourceid++;
             
-            if ((codeline.length() % 80) > 0) {
+            object = new ExtendedObject(context.sourcemodel);
+            object.setValue("ID", sourceid);
+            object.setValue("PACKAGE", packageid);
+            object.setValue("NAME", sourcename);
+            documents.save(object);
+            
+            code = package_.sources.get(sourcename).code;
+            if (code == null)
+                return;
+            
+            codelines = code.split("[\r\n]");
+            
+            codelinehelper = new CodeLineHelper();
+            codelinehelper.context = context;
+            codelinehelper.documents = documents;
+            codelinehelper.i = sourceid * 10000;
+            codelinehelper.sourceid = sourceid;
+            codelinehelper.packageid = packageid;
+            
+            for (String codeline : codelines) {
+                lines = codeline.length() / 80;
+                codelinehelper.paragraph = true;
+                for (int l = 0; l < lines; l++) {
+                    codelinehelper.i++;
+                    codelinepos = l * 80;
+                    
+                    codelinehelper.codeline = codeline.
+                            substring(codelinepos, codelinepos + 80);
+                    registerCodeLine(codelinehelper);
+                    codelinehelper.paragraph = false;
+                }
+                
+                if ((codeline.length() % 80) == 0)
+                    continue;
+                
                 codelinehelper.i++;
                 codelinehelper.paragraph = true;
                 codelinehelper.codeline = codeline;
@@ -268,25 +256,40 @@ public class Request {
     }
     
     public static final void save(Context context) throws Exception {
-        String package_, source_, projectname;
-        Documents documents;
-        DataForm projecthdr = context.view.getElement("project");
-        String text = ((TextArea)context.view.getElement("editor")).get();
-        ExtendedObject project;
+        long projectid;
+//        String package_, source_, projectname;
+//        DataForm projecthdr = context.view.getElement("project");
+//        String text = ((TextArea)context.view.getElement("editor")).get();
+        ExtendedObject project, projectname;
+        Documents documents = new Documents(context.function);
         
-        documents = new Documents(context.function);
-        projectname = projecthdr.get("NAME").get();
-        project = new ExtendedObject(context.projectmodel);
-        project.setValue("NAME", projectname);
+        switch (context.mode) {
+        case Context.CREATE:
+            project = new ExtendedObject(context.projectmodel);
+            projectid = documents.getNextNumber("IP_PRJID");
+            project.setValue("ID", projectid);
+            documents.save(project);
+            
+            projectname = new ExtendedObject(context.projectnamemodel);
+            projectname.setValue("NAME", context.project.name);
+            projectname.setValue("ID", projectid);
+            documents.save(projectname);
+            
+            registerPackages(context, documents, projectid);
+            context.mode = Context.LOAD;
+            break;
+        }
+//        projectname = projecthdr.get("NAME").get();
+//        project.setValue("NAME", projectname);
 //        
 //        if (context.mode == Context.LOAD)
 //            unregisterProject(projectname, context, documents);
 //        
-        package_ = projecthdr.get("PACKAGE").get();
-        source_ = projecthdr.get("CLASS").get();
-        context.project.packages.get(package_).sources.get(source_).code = text;
-        
-        documents.save(project);
+//        package_ = projecthdr.get("PACKAGE").get();
+//        source_ = projecthdr.get("CLASS").get();
+//        context.project.packages.get(package_).sources.get(source_).code = text;
+//        
+//        documents.save(project);
 //        for (String packagename : context.project.packages.keySet())
 //            registerPackage(packagename, context, documents);
 //        
@@ -315,9 +318,8 @@ public class Request {
 
 class CodeLineHelper {
     public boolean paragraph;
-    public String codeline, sourceid, packagename;
-    public int i;
-    public NumberFormat formatter;
+    public String codeline;
+    public long sourceid, packageid, i;
     public Context context;
     public Documents documents;
 }
