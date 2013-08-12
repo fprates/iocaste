@@ -218,8 +218,7 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
      * @param modelo de documento
      */
     public final void setDocumentModel(DocumentModel document) {
-        if ((document != null) && !this.document.getName().equals(
-                document.getName()))
+        if ((this.document != null) && !this.document.equals(document))
             throw new RuntimeException(name.concat(" can't be assigned to "
                     + "another document model."));
         
