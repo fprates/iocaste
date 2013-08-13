@@ -3,6 +3,7 @@ package org.iocaste.workbench;
 import java.io.File;
 
 import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.globalconfig.common.GlobalConfig;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
@@ -77,8 +78,8 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void editsource(View view) {
-        context.view = view;
-        Request.editsource(context);
+//        context.view = view;
+//        Request.editsource(context);
     }
     
     /*
@@ -103,6 +104,11 @@ public class Main extends AbstractPage {
         context.packagemodel = documents.getModel("ICSTPRJ_PACKAGES");
         context.sourcemodel = documents.getModel("ICSTPRJ_SOURCES");
         context.srccodemodel = documents.getModel("ICSTPRJ_SRCCODE");
+
+        if (context.project == null) {
+            context.project = new Project();
+            context.project.header = new ExtendedObject(context.editorhdrmodel);
+        }
     }
     
     /**

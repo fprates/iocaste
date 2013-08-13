@@ -33,7 +33,10 @@ public class Response {
 //        ProjectPackage projectpackage;
 //        NodeList objlist, screenlist, commandlist, packagelist, sourcelist;
 //        NodeList actionlist;
+        Source source;
         InputComponent input;
+        TextArea editor;
+        String packagename, sourcename;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         
@@ -108,7 +111,14 @@ public class Response {
 //        new TextArea(fontpane, "editor");
         pagecontrol.add("save", PageControl.REQUEST);
         pagecontrol.add("activate", PageControl.REQUEST);
-        new TextArea(container, "editor").setSize(80, 20);
+        
+        packagename = context.project.header.getValue("PACKAGE");
+        sourcename = context.project.header.getValue("CLASS");
+        source = context.project.packages.get(packagename).
+                sources.get(sourcename);
+        editor = new TextArea(container, "editor");
+        editor.setSize(80, 20);
+        editor.set(source.code);
         new TextArea(container, "output").setEnabled(false);
         
 //        context.view.setTitle(Context.TITLES[context.mode]);
@@ -131,7 +141,7 @@ public class Response {
                 input = (InputComponent)element;
                 input.setObligatory(true);
                 context.view.setFocus(input);
-             }
+            }
         
         new Button(container, "loadproject");
         new Button(container, "createproject");

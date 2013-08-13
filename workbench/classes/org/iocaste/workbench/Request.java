@@ -12,9 +12,11 @@ import org.iocaste.shell.common.View;
 public class Request {
     private static final byte SEL_PACKAGES = 0;
     private static final byte SEL_SOURCES = 1;
+    private static final byte SEL_SRCCODE = 2;
     private static final String[] QUERIES = {
         "from ICSTPRJ_PACKAGES where PROJECT = ?",
-        "from ICSTPRJ_SOURCES where PACKAGE = ?"
+        "from ICSTPRJ_SOURCES where PACKAGE = ?",
+        "from ICSTPRJ_SRCCODE where SOURCE = ?"
     };
 
     public static final void addscreen(Context context) {
@@ -27,8 +29,6 @@ public class Request {
         InputComponent input = ((DataForm)context.view.getElement("project")).
                 get("NAME");
         
-        context.project = new Project();
-        context.project.header = new ExtendedObject(context.editorhdrmodel);
         context.project.name = input.get();
         context.project.header.setValue("NAME", context.project.name);
         
@@ -53,101 +53,109 @@ public class Request {
 //        view.redirect("screeneditor");
     }
     
-    public static final void editsource(Context context) {
-        TextArea area;
-        String sourcename = ((Parameter)context.view.
-                getElement("sourcename")).get();
-        String packagename = ((Parameter)context.view.
-                getElement("packagename")).get();
-        ProjectPackage projectpackage = context.project.packages.
-                get(packagename);
-        DataForm form = context.view.getElement("project");
-        
-        form.get("PACKAGE").set(packagename);
-        form.get("CLASS").set(sourcename);
-        
-        loadSource(sourcename, packagename, projectpackage,
-                new Documents(context.function));
-        
-        area = context.view.getElement("editor");
-        area.set(projectpackage.sources.get(sourcename).code);
-    }
+//    public static final void editsource(Context context) {
+//        TextArea area;
+//        String sourcename = ((Parameter)context.view.
+//                getElement("sourcename")).get();
+//        String packagename = ((Parameter)context.view.
+//                getElement("packagename")).get();
+//        ProjectPackage projectpackage = context.project.packages.
+//                get(packagename);
+//        DataForm form = context.view.getElement("project");
+//        
+//        form.get("PACKAGE").set(packagename);
+//        form.get("CLASS").set(sourcename);
+//        
+//        loadSource(sourcename, packagename, projectpackage,
+//                new Documents(context.function));
+//        
+//        area = context.view.getElement("editor");
+//        area.set(projectpackage.sources.get(sourcename).code);
+//    }
     
     private static final void loadPackages(ExtendedObject[] packages,
             Context context, Documents documents) {
-        ExtendedObject[] sources;
-        ProjectPackage projectpackage;
-        String packagename, sourcename;
+        ProjectPackage package_;
+        String packagename;
+        long packageid = 0;
         
         for (ExtendedObject object : packages) {
-            projectpackage = new ProjectPackage();
+            package_ = new ProjectPackage();
             packagename = object.getValue("NAME");
-            context.project.packages.put(packagename, projectpackage);
+            if (packageid == 0)
+                context.project.header.setValue("PACKAGE", packagename);
+                
+            packageid = object.getl("ID");
+            context.project.packages.put(packagename, package_);
             
-            sources = documents.select(QUERIES[SEL_SOURCES], packagename);
-            if (sources == null)
+            loadSource(packageid, documents, context, package_);
+        }
+    }
+    
+    private static final void loadSource(long packageid, Documents documents,
+            Context context, ProjectPackage package_) {
+        ExtendedObject[] sources, srccode;
+        String sourcename;
+        StringBuilder code;
+        Source source;
+        boolean paragraph;
+        long sourceid = 0;
+        
+        sources = documents.select(QUERIES[SEL_SOURCES], packageid);
+        if (sources == null)
+            return;
+        
+        for (ExtendedObject object_ : sources) {
+            sourcename = object_.getValue("NAME");
+            if (sourceid == 0)
+                context.project.header.setValue("CLASS", sourcename);
+            
+            sourceid = object_.getl("ID");
+            source = new Source();
+            package_.sources.put(sourcename, source);
+            
+            srccode = documents.select(QUERIES[SEL_SRCCODE], sourceid);
+            if (srccode == null)
                 continue;
             
-            for (ExtendedObject object_ : sources) {
-                sourcename = object_.getValue("NAME");
-                projectpackage.sources.put(sourcename, new Source());
+            code = new StringBuilder();
+            for (ExtendedObject linecode : srccode) {
+                paragraph = linecode.getValue("PARAGRAPH");
+                if (code.length() > 0 && paragraph == true)
+                    code.append("\r\n");
+                    
+                code.append(linecode.getValue("LINE"));
             }
+
+            source.code = code.toString();
         }
     }
     
     public static final void loadproject(Context context) {
         ExtendedObject header;
         ExtendedObject[] packages;
+        long projectid;
         Documents documents = new Documents(context.function);
         DataForm form = context.view.getElement("project");
-        String name = form.get("NAME").get();
         
-        header = documents.getObject("ICSTPRJ_HEADER", name);
+        context.project.name = form.get("NAME").get();
+        header = documents.getObject("ICSTPRJ_PROJECT_NAMES",
+                context.project.name);
         if (header == null) {
             context.view.message(Const.ERROR, "invalid.project");
             return;
         }
         
-        context.project = new Project();
-        context.project.header = new ExtendedObject(context.editorhdrmodel);
-        context.project.header.setValue("NAME", name);
+        projectid = header.getl("ID");
+        header = documents.getObject("ICSTPRJ_HEADER", projectid);
+        context.project.header.setValue("NAME", context.project.name);
         
-        packages = documents.select(QUERIES[SEL_PACKAGES], name);
+        packages = documents.select(QUERIES[SEL_PACKAGES], projectid);
         if (packages != null)
             loadPackages(packages, context, documents);
         
         context.view.redirect("editor");
         context.mode = Context.LOAD;
-    }
-    
-    private static final void loadSource(String sourcename, String packagename,
-            ProjectPackage projectpackage, Documents documents) {
-        StringBuilder sb;
-        Source source;
-        ExtendedObject[] objects = documents.select(
-                "from ICSTPRJ_SOURCES where PACKAGE = ? and " +
-                "name = ?", packagename, sourcename);
-        
-        if (objects == null)
-            return;
-        
-        objects = documents.select("from ICSTPRJ_SRCCODE where SOURCE = ?",
-                objects[0].getValue("IDENT"));
-        
-        if (objects == null)
-            return;
-        
-        source = projectpackage.sources.get(sourcename);
-        sb = new StringBuilder();
-        for (ExtendedObject object : objects) {
-            if (sb.length() > 0 &&
-                    (boolean)object.getValue("PARAGRAPH") == true)
-                sb.append("\r\n");
-                
-            sb.append(object.getValue("LINE"));
-        }
-        
-        source.code = sb.toString();
     }
     
     /**
