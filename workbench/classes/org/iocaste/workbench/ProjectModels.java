@@ -112,6 +112,13 @@ public class ProjectModels {
         item.setReference(packageid);
         model.add(item);
         
+        // projeto referência
+        item = new DocumentModelItem("PROJECT");
+        item.setTableFieldName("PRJID");
+        item.setDataElement(projectid.getDataElement());
+        item.setReference(projectid);
+        model.add(item);
+        
         // nome
         element = new DataElement("ICSTPRJ_SOURCES.NAME");
         element.setType(DataType.CHAR);
@@ -149,6 +156,13 @@ public class ProjectModels {
         item.setTableFieldName("PKGID");
         item.setDataElement(packageid.getDataElement());
         item.setReference(packageid);
+        model.add(item);
+        
+        // projeto
+        item = new DocumentModelItem("PROJECT");
+        item.setTableFieldName("PRJID");
+        item.setDataElement(projectid.getDataElement());
+        item.setReference(projectid);
         model.add(item);
         
         // parágrafo

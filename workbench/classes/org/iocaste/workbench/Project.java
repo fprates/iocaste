@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class Project {
+    long id;
     public ExtendedObject header;
     public String name, dir, entryclass, service;
     public Map<String, ProjectPackage> packages;
