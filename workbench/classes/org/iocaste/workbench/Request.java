@@ -27,12 +27,20 @@ public class Request {
     }
     
     public static final void createproject(Context context) {
+        ExtendedObject header;
         ProjectPackage projectpackage;
         String packagename;
         InputComponent input = ((DataForm)context.view.getElement("project")).
                 get("NAME");
+        Documents documents = new Documents(context.function);
         
         context.project.name = input.get();
+        header = loadProjectHeader(context.project.name, documents);
+        if (header != null) {
+            context.view.message(Const.ERROR, "project.exists");
+            return;
+        }
+        
         context.project.header.setValue("NAME", context.project.name);
         
         packagename = new StringBuilder("org.").append(context.project.name).
@@ -105,6 +113,41 @@ public class Request {
     
     /**
      * 
+     * @param context
+     */
+    public static final void loadproject(Context context) {
+        ExtendedObject header;
+        ExtendedObject[] packages;
+        Documents documents = new Documents(context.function);
+        DataForm form = context.view.getElement("project");
+        
+        context.project.name = form.get("NAME").get();
+        header = loadProjectHeader(context.project.name, documents);
+        if (header == null) {
+            context.view.message(Const.ERROR, "invalid.project");
+            return;
+        }
+        
+        context.project.header.setValue("NAME", context.project.name);
+        context.project.id = header.getl("ID");
+        packages = documents.select(QUERIES[SEL_PACKAGES], context.project.id);
+        if (packages != null)
+            loadPackages(packages, context, documents);
+        
+        context.view.redirect("editor");
+        context.mode = Context.LOAD;
+    }
+    
+    private static ExtendedObject loadProjectHeader(String project,
+            Documents documents) {
+        ExtendedObject header = documents.getObject("ICSTPRJ_PROJECT_NAMES",
+                project);
+        
+        return (header == null)? null : header;
+    }
+    
+    /**
+     * 
      * @param packageid
      * @param documents
      * @param context
@@ -147,36 +190,6 @@ public class Request {
 
             source.code = code.toString();
         }
-    }
-    
-    /**
-     * 
-     * @param context
-     */
-    public static final void loadproject(Context context) {
-        ExtendedObject header;
-        ExtendedObject[] packages;
-        Documents documents = new Documents(context.function);
-        DataForm form = context.view.getElement("project");
-        
-        context.project.name = form.get("NAME").get();
-        header = documents.getObject("ICSTPRJ_PROJECT_NAMES",
-                context.project.name);
-        if (header == null) {
-            context.view.message(Const.ERROR, "invalid.project");
-            return;
-        }
-        
-        context.project.id = header.getl("ID");
-        header = documents.getObject("ICSTPRJ_HEADER", context.project.id);
-        context.project.header.setValue("NAME", context.project.name);
-        
-        packages = documents.select(QUERIES[SEL_PACKAGES], context.project.id);
-        if (packages != null)
-            loadPackages(packages, context, documents);
-        
-        context.view.redirect("editor");
-        context.mode = Context.LOAD;
     }
     
     /**

@@ -24,7 +24,6 @@ import javax.tools.JavaCompiler.CompilationTask;
 
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
 
 public class Activation {
@@ -69,12 +68,7 @@ public class Activation {
         JavaCompiler compiler;
         String message;
         InputComponent input;
-//      
-//      if (!project.created) {
-//          view.message(Const.ERROR, "project.not.created");
-//          return;
-//      }
-//
+
         compiler = ToolProvider.getSystemJavaCompiler();
         if (compiler == null) {
             context.view.message(Const.ERROR, "compiler.unavailable");
@@ -190,12 +184,10 @@ public class Activation {
         ProjectPackage package_;
         Source source;
         StringBuilder bindir;
-        DataForm form = context.view.getElement("project");
-        String projectname = form.get("NAME").get();
         
         if (context.project.dir == null)
             context.project.dir = composeFileName(
-                    context.repository, projectname);
+                    context.repository, context.project.name);
         
         removeCompleteDir(context.project.dir);
         new File(context.project.dir).mkdir();
