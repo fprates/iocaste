@@ -22,7 +22,6 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler.CompilationTask;
 
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -322,13 +321,17 @@ public class Activation {
     }
 
     private static final void removeCompleteDir(String dir) {
-        for (File file : new File(dir).listFiles()) {
-            if (file.isDirectory())
-                removeCompleteDir(file.getAbsolutePath());
-            file.delete();
-        }
+        File origin = new File(dir);
+        File[] files = origin.listFiles();
         
-        new File(dir).delete();
+        if (files != null)
+            for (File file : files) {
+                if (file.isDirectory())
+                    removeCompleteDir(file.getAbsolutePath());
+                file.delete();
+            }
+        
+        origin.delete();
     }
     
     public static final void start(Context context) throws Exception {
