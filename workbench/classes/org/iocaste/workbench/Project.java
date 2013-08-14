@@ -8,7 +8,7 @@ import org.iocaste.documents.common.ExtendedObject;
 public class Project {
     long id;
     public ExtendedObject header;
-    public String name, dir, entryclass, service;
+    public String name, dir, entryclass, service, defaultpackage;
     public Map<String, ProjectPackage> packages;
     
     public Project() {

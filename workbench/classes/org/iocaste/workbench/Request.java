@@ -29,33 +29,44 @@ public class Request {
     public static final void createproject(Context context) {
         ExtendedObject header;
         ProjectPackage projectpackage;
-        String packagename;
-        InputComponent input = ((DataForm)context.view.getElement("project")).
-                get("NAME");
-        Documents documents = new Documents(context.function);
+        String defaultpackage;
+        InputComponent input;
+        Documents documents;
         
-        context.project.name = input.get();
-        header = loadProjectHeader(context.project.name, documents);
-        if (header != null) {
-            context.view.message(Const.ERROR, "project.exists");
-            return;
+        switch (context.mode) {
+        case Context.CREATE0:
+            defaultpackage = ((DataForm)context.view.
+                    getElement("defaultpackage")).get("NAME").get();
+            context.project.defaultpackage = defaultpackage;
+            context.project.header.setValue("NAME", context.project.name);
+            context.project.header.setValue("PACKAGE", defaultpackage);
+            context.project.header.setValue("CLASS", "Main.java");
+            context.project.entryclass = defaultpackage.concat(".Main");
+            context.project.packages.clear();
+            
+            projectpackage = new ProjectPackage();
+            projectpackage.sources.put("Main.java", new Source());
+            context.project.packages.put(defaultpackage, projectpackage);
+            
+            context.view.dontPushPage();
+            context.view.redirect("editor");
+            context.mode = Context.CREATE;
+            break;
+        default:
+            input = ((DataForm)context.view.getElement("project")).get("NAME");
+            documents = new Documents(context.function);
+            
+            context.project.name = input.get();
+            header = loadProjectHeader(context.project.name, documents);
+            if (header != null) {
+                context.view.message(Const.ERROR, "project.exists");
+                return;
+            }
+            
+            context.view.redirect("defaultpackage");
+            context.mode = Context.CREATE0;
+            break;
         }
-        
-        context.project.header.setValue("NAME", context.project.name);
-        
-        packagename = new StringBuilder("org.").append(context.project.name).
-                toString();
-        context.project.header.setValue("PACKAGE", packagename);
-        context.project.header.setValue("CLASS", "Main.java");
-        context.project.entryclass = packagename.concat(".Main");
-        context.project.packages.clear();
-        
-        projectpackage = new ProjectPackage();
-        projectpackage.sources.put("Main.java", new Source());
-        context.project.packages.put(packagename, projectpackage);
-        
-        context.view.redirect("editor");
-        context.mode = Context.CREATE;
     }
     
     public static final void editscreen(Context context) {
