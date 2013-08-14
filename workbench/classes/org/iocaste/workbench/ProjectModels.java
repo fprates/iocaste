@@ -18,6 +18,32 @@ public class ProjectModels {
         SearchHelpData shd;
         
         /*
+         * Para cabeçalho do editor
+         */
+        model = data.getModel("ICSTPRJ_EDITOR_HEADER", null, null);
+        element = new DummyElement("PACKAGE.NAME");
+        item = new DocumentModelItem("NAME");
+        item.setDataElement(element);
+        item.setSearchHelp("SH_PROJECT_HEADER");
+        model.add(item);
+        
+        element = new DataElement("ICSTPRJ_EDITOR_HEADER.PACKAGE");
+        element.setType(DataType.CHAR);
+        element.setLength(128);
+        element.setUpcase(false);
+        item = new DocumentModelItem("PACKAGE");
+        item.setDataElement(element);
+        model.add(item);
+        
+        element = new DataElement("ICSTPRJ_EDITOR_HEADER.CLASS");
+        element.setType(DataType.CHAR);
+        element.setLength(64);
+        element.setUpcase(false);
+        item = new DocumentModelItem("CLASS");
+        item.setDataElement(element);
+        model.add(item);
+        
+        /*
          * Cabeçalho do projeto iocaste
          */
         model = data.getModel("ICSTPRJ_HEADER", "IPHEADER", null);

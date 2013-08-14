@@ -7,20 +7,6 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
 
 public class Request {
-    private static final byte SEL_PACKAGES = 0;
-    private static final byte SEL_SOURCES = 1;
-    private static final byte SEL_SRCCODE = 2;
-    private static final byte DEL_SRCCODE = 3;
-    private static final byte DEL_SOURCES = 4;
-    private static final byte DEL_PACKAGES = 5;
-    private static final String[] QUERIES = {
-        "from ICSTPRJ_PACKAGES where PROJECT = ?",
-        "from ICSTPRJ_SOURCES where PACKAGE = ?",
-        "from ICSTPRJ_SRCCODE where SOURCE = ?",
-        "delete from ICSTPRJ_SRCCODE where PROJECT = ?",
-        "delete from ICSTPRJ_SOURCES where PROJECT = ?",
-        "delete from ICSTPRJ_PACKAGES where PROJECT = ?"
-    };
 
     public static final void addscreen(Context context) {
         context.view.redirect("screeneditor");
@@ -32,6 +18,7 @@ public class Request {
         String defaultpackage;
         InputComponent input;
         Documents documents;
+        Source source;
         
         switch (context.mode) {
         case Context.CREATE0:
@@ -44,8 +31,11 @@ public class Request {
             context.project.entryclass = defaultpackage.concat(".Main");
             context.project.packages.clear();
             
+            source = new Source();
+            source.code = getMainTemplate(context);
+            
             projectpackage = new ProjectPackage();
-            projectpackage.sources.put("Main.java", new Source());
+            projectpackage.sources.put("Main.java", source);
             context.project.packages.put(defaultpackage, projectpackage);
             
             context.view.dontPushPage();
@@ -54,9 +44,9 @@ public class Request {
             break;
         default:
             input = ((DataForm)context.view.getElement("project")).get("NAME");
-            documents = new Documents(context.function);
-            
             context.project.name = input.get();
+            
+            documents = new Documents(context.function);
             header = loadProjectHeader(context.project.name, documents);
             if (header != null) {
                 context.view.message(Const.ERROR, "project.exists");
@@ -69,30 +59,30 @@ public class Request {
         }
     }
     
-    public static final void editscreen(Context context) {
-//        project.viewname = ((Parameter)view.getElement("screenname")).get();
-//        view.redirect("screeneditor");
+    private static final String getMainTemplate(Context context) {
+        String[] template = {
+                "package " + context.project.defaultpackage + ";\n\n",
+                "import org.iocaste.packagetool.common.InstallData;\n",
+                "import org.iocaste.protocol.Message;\n",
+                "import org.iocaste.shell.common.AbstractPage;\n",
+                "import org.iocaste.shell.common.View;\n\n",
+                "public class Main extends AbstractPage {\n",
+                "   public Main() {\n",
+                "      export(\"install\", \"install\");\n",
+                "   }\n\n",
+                "   public final InstallData main(Message message) {\n",
+                "      return new InstallData();\n",
+                "   }\n\n",
+                "   public final void main(View view) {\n",
+                "   }\n",
+                "}"};
+        StringBuilder sb = new StringBuilder();
+        
+        for (String line : template)
+            sb.append(line);
+        
+        return sb.toString();
     }
-    
-//    public static final void editsource(Context context) {
-//        TextArea area;
-//        String sourcename = ((Parameter)context.view.
-//                getElement("sourcename")).get();
-//        String packagename = ((Parameter)context.view.
-//                getElement("packagename")).get();
-//        ProjectPackage projectpackage = context.project.packages.
-//                get(packagename);
-//        DataForm form = context.view.getElement("project");
-//        
-//        form.get("PACKAGE").set(packagename);
-//        form.get("CLASS").set(sourcename);
-//        
-//        loadSource(sourcename, packagename, projectpackage,
-//                new Documents(context.function));
-//        
-//        area = context.view.getElement("editor");
-//        area.set(projectpackage.sources.get(sourcename).code);
-//    }
     
     /**
      * 
@@ -141,7 +131,8 @@ public class Request {
         
         context.project.header.setValue("NAME", context.project.name);
         context.project.id = header.getl("ID");
-        packages = documents.select(QUERIES[SEL_PACKAGES], context.project.id);
+        packages = documents.select(
+                Common.QUERIES[Common.SEL_PACKAGES], context.project.id);
         if (packages != null)
             loadPackages(packages, context, documents);
         
@@ -173,7 +164,8 @@ public class Request {
         boolean paragraph;
         long sourceid = 0;
         
-        sources = documents.select(QUERIES[SEL_SOURCES], packageid);
+        sources = documents.select(
+                Common.QUERIES[Common.SEL_SOURCES], packageid);
         if (sources == null)
             return;
         
@@ -186,7 +178,8 @@ public class Request {
             source = new Source();
             package_.sources.put(sourcename, source);
             
-            srccode = documents.select(QUERIES[SEL_SRCCODE], sourceid);
+            srccode = documents.select(
+                    Common.QUERIES[Common.SEL_SRCCODE], sourceid);
             if (srccode == null)
                 continue;
             
@@ -201,148 +194,6 @@ public class Request {
 
             source.code = code.toString();
         }
-    }
-    
-    private static final void registerLineCode(CodeLineHelper helper, int pos) {
-        ExtendedObject object;
-        String codeline;
-        int linepos = pos * 80;
-        
-        if (helper.line.length() < 80)
-            codeline = helper.line.substring(linepos);
-        else
-            codeline = helper.line.substring(linepos, linepos + 80);
-        
-        helper.i++;
-        object = new ExtendedObject(helper.context.srccodemodel);
-        object.setValue("ID", helper.i);
-        object.setValue("SOURCE", helper.sourceid);
-        object.setValue("PARAGRAPH", helper.paragraph);
-        object.setValue("PACKAGE", helper.packageid);
-        object.setValue("LINE", codeline);
-        object.setValue("PROJECT", helper.context.project.id);
-        helper.documents.save(object);
-    }
-    
-    /**
-     * 
-     * @param context
-     * @param documents
-     * @param projectid
-     */
-    private static final void registerPackages(Context context,
-            Documents documents) {
-        ProjectPackage package_;
-        ExtendedObject object;
-        long packageid;
-
-        packageid = (context.project.id * 1000);
-        for (String packagename : context.project.packages.keySet()) {
-            packageid++;
-            object = new ExtendedObject(context.packagemodel);
-            object.setValue("ID", packageid);
-            object.setValue("PROJECT", context.project.id);
-            object.setValue("NAME", packagename);
-            documents.save(object);
-
-            package_ = context.project.packages.get(packagename);
-            registerSources(context, documents, package_, packageid);
-        }
-            
-    }
-    
-    /**
-     * 
-     * @param context
-     * @param documents
-     * @param package_
-     * @param packageid
-     */
-    private static final void registerSources(Context context,
-            Documents documents, ProjectPackage package_, long packageid) {
-        ExtendedObject object;
-        String code;
-        String[] codelines;
-        int lines;
-        long sourceid = packageid * 1000;
-        CodeLineHelper codelinehelper = new CodeLineHelper();
-        
-        codelinehelper.context = context;
-        codelinehelper.documents = documents;
-        
-        for (String sourcename : package_.sources.keySet()) {
-            sourceid++;
-            
-            object = new ExtendedObject(context.sourcemodel);
-            object.setValue("ID", sourceid);
-            object.setValue("PACKAGE", packageid);
-            object.setValue("NAME", sourcename);
-            object.setValue("PROJECT", context.project.id);
-            documents.save(object);
-            
-            code = package_.sources.get(sourcename).code;
-            if (code == null)
-                return;
-            
-            codelinehelper.i = sourceid * 10000;
-            codelinehelper.sourceid = sourceid;
-            codelinehelper.packageid = packageid;
-            
-            codelines = code.split("\r\n");
-            for (String codeline : codelines) {
-                codelinehelper.paragraph = true;
-                codelinehelper.line = codeline;
-
-                lines = codeline.length() / 80;
-                if (lines == 0) {
-                    registerLineCode(codelinehelper, lines);
-                    continue;
-                }
-                
-                for (int l = 0; l < lines; l++) {
-                    registerLineCode(codelinehelper, l);
-                    codelinehelper.paragraph = false;
-                }
-            }
-        }
-    }
-    
-    public static final void save(Context context) throws Exception {
-        ExtendedObject project, projectname;
-        Documents documents = new Documents(context.function);
-        
-        switch (context.mode) {
-        case Context.CREATE:
-            project = new ExtendedObject(context.projectmodel);
-            context.project.id = documents.getNextNumber("IP_PRJID");
-            project.setValue("ID", context.project.id);
-            documents.save(project);
-            
-            projectname = new ExtendedObject(context.projectnamemodel);
-            projectname.setValue("NAME", context.project.name);
-            projectname.setValue("ID", context.project.id);
-            documents.save(projectname);
-            
-            context.mode = Context.LOAD;
-            break;
-        default:
-            unregisterPackages(context, documents);
-            break;
-        }
-        
-        registerPackages(context, documents);
-    }
-    
-    /**
-     * 
-     * @param context
-     * @param documents
-     */
-    private static final void unregisterPackages(Context context,
-            Documents documents) {
-        documents.update(QUERIES[DEL_SRCCODE], context.project.id);
-        documents.update(QUERIES[DEL_SOURCES], context.project.id);
-        documents.update(QUERIES[DEL_PACKAGES], context.project.id);
     }
 }
 

@@ -41,7 +41,6 @@ public class Install {
         /*
          * modelos
          */
-        Editor.install(data);
         ProjectModels.install(data);
         
         /*

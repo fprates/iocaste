@@ -55,6 +55,10 @@ public class Main extends AbstractPage {
         Request.createproject(context);
     }
     
+    /**
+     * 
+     * @param view
+     */
     public final void defaultpackage(View view) {
         context.view = view;
         DefaultPackage.render(context);
@@ -66,25 +70,7 @@ public class Main extends AbstractPage {
      */
     public final void editor(View view) {
         context.view = view;
-        Response.editor(context);
-    }
-    
-    /**
-     * 
-     * @param view
-     */
-    public final void editscreen(View view) {
-        context.view = view;
-        Request.editscreen(context);
-    }
-    
-    /**
-     * 
-     * @param view
-     */
-    public final void editsource(View view) {
-//        context.view = view;
-//        Request.editsource(context);
+        Editor.render(context);
     }
     
     /*
@@ -149,7 +135,7 @@ public class Main extends AbstractPage {
     public final void save(View view) throws Exception {
         context.view = view;
         Common.updateCurrentSource(context);
-        Request.save(context);
+        Editor.save(context);
         view.message(Const.STATUS, "project.saved");
     }
 }
