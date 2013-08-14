@@ -192,18 +192,23 @@ public class Request {
         }
     }
     
-    /**
-     * 
-     * @param helper
-     */
-    private static final void registerCodeLine(CodeLineHelper helper) {
-        ExtendedObject object = new ExtendedObject(helper.context.srccodemodel);
+    private static final void registerLineCode(CodeLineHelper helper, int pos) {
+        ExtendedObject object;
+        String codeline;
+        int linepos = pos * 80;
         
+        if (helper.line.length() < 80)
+            codeline = helper.line.substring(linepos);
+        else
+            codeline = helper.line.substring(linepos, linepos + 80);
+        
+        helper.i++;
+        object = new ExtendedObject(helper.context.srccodemodel);
         object.setValue("ID", helper.i);
         object.setValue("SOURCE", helper.sourceid);
         object.setValue("PARAGRAPH", helper.paragraph);
         object.setValue("PACKAGE", helper.packageid);
-        object.setValue("LINE", helper.codeline);
+        object.setValue("LINE", codeline);
         object.setValue("PROJECT", helper.context.project.id);
         helper.documents.save(object);
     }
@@ -247,7 +252,7 @@ public class Request {
         ExtendedObject object;
         String code;
         String[] codelines;
-        int lines, codelinepos;
+        int lines;
         long sourceid = packageid * 1000;
         CodeLineHelper codelinehelper = new CodeLineHelper();
         
@@ -268,32 +273,25 @@ public class Request {
             if (code == null)
                 return;
             
-            codelines = code.split("[\r\n]");
-            
             codelinehelper.i = sourceid * 10000;
             codelinehelper.sourceid = sourceid;
             codelinehelper.packageid = packageid;
             
+            codelines = code.split("\r\n");
             for (String codeline : codelines) {
-                lines = codeline.length() / 80;
                 codelinehelper.paragraph = true;
-                for (int l = 0; l < lines; l++) {
-                    codelinehelper.i++;
-                    codelinepos = l * 80;
-                    
-                    codelinehelper.codeline = codeline.
-                            substring(codelinepos, codelinepos + 80);
-                    registerCodeLine(codelinehelper);
-                    codelinehelper.paragraph = false;
+                codelinehelper.line = codeline;
+
+                lines = codeline.length() / 80;
+                if (lines == 0) {
+                    registerLineCode(codelinehelper, lines);
+                    continue;
                 }
                 
-                if ((codeline.length() % 80) == 0)
-                    continue;
-                
-                codelinehelper.i++;
-                codelinehelper.paragraph = true;
-                codelinehelper.codeline = codeline;
-                registerCodeLine(codelinehelper);
+                for (int l = 0; l < lines; l++) {
+                    registerLineCode(codelinehelper, l);
+                    codelinehelper.paragraph = false;
+                }
             }
         }
     }
@@ -339,7 +337,7 @@ public class Request {
 
 class CodeLineHelper {
     public boolean paragraph;
-    public String codeline;
+    public String line;
     public long sourceid, packageid, i;
     public Context context;
     public Documents documents;
