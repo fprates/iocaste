@@ -1,5 +1,6 @@
 package org.iocaste.external;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -35,8 +36,10 @@ import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
+    Context context;
     
     public Main() {
+        context = new Context();
         export("install", "install");
     }
     
@@ -91,10 +94,11 @@ public class Main extends AbstractPage {
         Options options;
         InputComponent input;
         String name;
-        String namespace = Common.getInput(view, "namespace");
-        String service = Common.getInput(view, "service");
-        String url = Common.getInput(view, "url");
-        String method = Common.getInput(view, "method");
+        DataForm selection = view.getElement("selection");
+        String namespace = selection.get("namespace").get();
+        String service = selection.get("service").get();
+        String url = selection.get("url").get();
+        String method = selection.get("method").get();
         Table attributes = view.getElement("attribs");
         
         try {
@@ -119,12 +123,13 @@ public class Main extends AbstractPage {
                 emessage.add(eproperty);
             }
             
-            addMessage(factory, ping, emessage);
+//            addMessage(factory, ping, emessage);
             
             options = new Options();
             options.setTo(epr);
             options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
-            
+            options.setAction(new StringBuilder(namespace).
+                    append(method).toString());
             client = new ServiceClient();
             client.setOptions(options);
             
@@ -135,11 +140,24 @@ public class Main extends AbstractPage {
             throw new Exception(e.getMessage());
         }
         
-        emessage = new ExternalMessage();
-        convertToMessage(result, emessage, null);
-
-        view.export("map", emessage.toMap());
+        context.values.clear();
+        mapServiceResult(context.values, result, null);
+//        emessage = new ExternalMessage();
+//        convertToMessage(result, emessage, null);
+//
+//        view.export("map", emessage.toMap());
         view.redirect(null, "output");
+    }
+    
+    private final void mapServiceResult(Map<String, Object> result,
+            OMElement element, String name) {
+        Iterator<?> it = element.getChildElements();
+        
+        name = (name == null)? element.getLocalName() : new StringBuilder(name).
+                append(".").append(element.getLocalName()).toString();
+        result.put(name, element.getText());
+        while (it.hasNext())
+            mapServiceResult(result, (OMElement)it.next(), name);
     }
     
     /**
@@ -230,8 +248,7 @@ public class Main extends AbstractPage {
         pagecontrol.add("home");
         
         dataitem = new DataItem(form, Const.TEXT_FIELD, "namespace");
-        dataitem.setLength(80);
-        dataitem.set("http://service.external.iocaste.org");
+        dataitem.setLength(128);
         dataitem.setObligatory(true);
 
         dataitem = new DataItem(form, Const.TEXT_FIELD, "service");
@@ -242,7 +259,9 @@ public class Main extends AbstractPage {
         dataitem.setLength(80);
         dataitem.setObligatory(true);
         
-        new DataItem(form, Const.TEXT_FIELD, "method").setObligatory(true);
+        dataitem = new DataItem(form, Const.TEXT_FIELD, "method");
+        dataitem.setLength(128);
+        dataitem.setObligatory(true);
         
         new Button(container, "add");
         new Button(container, "remove");
@@ -262,12 +281,13 @@ public class Main extends AbstractPage {
     public final void output(View view) {
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
-        Map<String, String> map = view.getParameter("map");
         
         pagecontrol.add("back");
         
-        for (String key : map.keySet())
-            view.print(key+": "+map.get(key));
+        for (String key : context.values.keySet())
+            view.print(new StringBuilder(key).
+                    append(": ").
+                    append(context.values.get(key)).toString());
     }
     
     /**
