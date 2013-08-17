@@ -67,18 +67,28 @@ public class Main extends AbstractPage {
     }
     
     private final Type processComplexType(ElementDetail element) {
-        Type type = null;
+        Type type, ctype;
         
         if (element.children.size() == 0)
             return null;
 
+        type = new Type();
+        type.name = element.attributes.get("name");
         for (ElementDetail sequence : element.children)
             for (ElementDetail eelement : sequence.children) {
-                type = new Type();
-                type.name = eelement.attributes.get("name");
-                type.min = eelement.attributes.get("minOccurs");
-                type.max = eelement.attributes.get("maxOccurs");
-                type.ctype = eelement.attributes.get("type");
+                if (type.name == null) {
+                    type.name = eelement.attributes.get("name");
+                    type.min = eelement.attributes.get("minOccurs");
+                    type.max = eelement.attributes.get("maxOccurs");
+                    type.ctype = eelement.attributes.get("type");
+                } else {
+                    ctype = new Type();
+                    ctype.name = eelement.attributes.get("name");
+                    ctype.min = eelement.attributes.get("minOccurs");
+                    ctype.max = eelement.attributes.get("maxOccurs");
+                    ctype.ctype = eelement.attributes.get("type");
+                    type.fields.put(ctype.name, ctype);
+                }
             }
         
         return type;
@@ -107,7 +117,7 @@ public class Main extends AbstractPage {
                     
                     if (type == null)
                         continue;
-                    types_.put(type.name, type);
+                    types_.put(eelement.attributes.get("name"), type);
                 }
         
         return types_;
@@ -166,6 +176,7 @@ public class Main extends AbstractPage {
                         continue;
                     
                     messagename = messagename.split(":")[1];
+                    
                     types = messages.get(messagename).parameters;
                     if (types == null)
                         continue;
@@ -282,6 +293,7 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void output(View view) {
+        Type type;
         Operation operation;
         Port port;
         Form container = new Form(view, "main");
@@ -294,8 +306,15 @@ public class Main extends AbstractPage {
             for (String operationname : port.operations.keySet()) {
                 view.print("-- ".concat(operationname));
                 operation = port.operations.get(operationname);
-                for (String parameter: operation.parameters.keySet())
-                    view.print("--- ".concat(parameter));
+                for (String parameter: operation.parameters.keySet()) {
+                    view.print(new StringBuilder("--- ").
+                            append(parameter).toString());
+                    type = operation.parameters.get(parameter);
+                    for (String fieldname : type.fields.keySet())
+                        view.print(new StringBuilder("---- ").
+                                append(type.fields.get(fieldname).name).
+                                toString());
+                }
             }
         }
     }
