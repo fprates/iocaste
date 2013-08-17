@@ -1,23 +1,11 @@
 package org.iocaste.external;
 
+import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.axiom.om.OMAbstractFactory;
-import org.apache.axiom.om.OMAttribute;
 import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMException;
-import org.apache.axiom.om.OMFactory;
-import org.apache.axiom.om.OMNamespace;
-import org.apache.axiom.om.OMNode;
-import org.apache.axis2.AxisFault;
-import org.apache.axis2.Constants;
-import org.apache.axis2.addressing.EndpointReference;
-import org.apache.axis2.client.Options;
-import org.apache.axis2.client.ServiceClient;
-import org.iocaste.external.service.ExternalMessage;
-import org.iocaste.external.service.ExternalProperty;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
@@ -26,11 +14,8 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
-import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
-import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.View;
@@ -57,176 +42,214 @@ public class Main extends AbstractPage {
     
     /**
      * 
-     * @param factory
-     * @param method
-     * @param message
-     */
-    private final void addMessage(OMFactory factory, OMElement method,
-            ExternalMessage message) {
-        OMElement xmlvalues;
-        OMNamespace ns = method.getNamespace();
-        OMElement xmlmessage = factory.createOMElement("message", ns);
-        
-        for (ExternalProperty property : message.getValues()) {
-            xmlvalues = factory.createOMElement("values", ns);
-            
-            for (OMElement xmlproperty : getProperty(factory, ns, property))
-                xmlvalues.addChild(xmlproperty);
-            
-            xmlmessage.addChild(xmlvalues);
-        }
-        
-        method.addChild(xmlmessage);
-    }
-    
-    /**
-     * 
      * @param view
      */
     public final void call(View view) throws Exception {
-        EndpointReference epr;
-        OMFactory factory;
-        OMElement ping;
-        ExternalMessage emessage;
-        ExternalProperty eproperty;
-        ServiceClient client;
         OMElement result;
-        Options options;
-        InputComponent input;
-        String name;
         DataForm selection = view.getElement("selection");
-        String namespace = selection.get("namespace").get();
-        String service = selection.get("service").get();
-        String url = selection.get("url").get();
-        String method = selection.get("method").get();
-        Table attributes = view.getElement("attribs");
+        String wsdl = selection.get("wsdl").get();
+        URL url_ = new URL(wsdl);
+        Map<String, List<ElementDetail>> values = new HashMap<>();
         
-        try {
-            epr = new EndpointReference(url);
-            factory = OMAbstractFactory.getOMFactory();
-            ping = getMethod(factory, method, namespace, service);
-            
-            emessage = new ExternalMessage();
-            for (TableItem item : attributes.getItens()) {
-                input = (InputComponent)item.get("name");
-                name = input.get();
-                
-                if (Shell.isInitial(name))
-                    continue;
-                
-                eproperty = new ExternalProperty();
-                eproperty.setName(name);
-                
-                input = (InputComponent)item.get("value");
-                eproperty.setValue((String)input.get());
-                
-                emessage.add(eproperty);
-            }
-            
-//            addMessage(factory, ping, emessage);
-            
-            options = new Options();
-            options.setTo(epr);
-            options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
-            options.setAction(new StringBuilder(namespace).
-                    append(method).toString());
-            client = new ServiceClient();
-            client.setOptions(options);
-            
-            result = client.sendReceive(ping);
-        } catch (AxisFault e) {
-            throw new Exception(e.getMessage());
-        } catch (OMException e) {
-            throw new Exception(e.getMessage());
-        }
+        result = WSClient.getWSDLObject(url_.openStream());
+        Context.convertXmlToMap(values, result, null);
         
-        context.values.clear();
-        mapServiceResult(context.values, result, null);
-//        emessage = new ExternalMessage();
-//        convertToMessage(result, emessage, null);
-//
-//        view.export("map", emessage.toMap());
+        recoverPorts(context, values);
         view.redirect(null, "output");
     }
     
-    private final void mapServiceResult(Map<String, Object> result,
-            OMElement element, String name) {
-        Iterator<?> it = element.getChildElements();
+    private final Type getPrimitive(String name) {
+        Type type = new Type();
         
-        name = (name == null)? element.getLocalName() : new StringBuilder(name).
-                append(".").append(element.getLocalName()).toString();
-        result.put(name, element.getText());
-        while (it.hasNext())
-            mapServiceResult(result, (OMElement)it.next(), name);
+        type.name = name;
+        
+        return type;
     }
     
-    /**
-     * 
-     * @param node
-     * @param message
-     * @param property
-     */
-    private final void convertToMessage(OMNode node,
-            ExternalMessage message, ExternalProperty property) {
-        OMNode node_;
-        OMElement element;
-        String name;
-        OMAttribute attribute;
-        Iterator<?> it;
+    private final Type processComplexType(ElementDetail element) {
+        Type type = null;
         
-        if (node.getType() != 1)
-            return;
+        if (element.children.size() == 0)
+            return null;
+
+        for (ElementDetail sequence : element.children)
+            for (ElementDetail eelement : sequence.children) {
+                type = new Type();
+                type.name = eelement.attributes.get("name");
+                type.min = eelement.attributes.get("minOccurs");
+                type.max = eelement.attributes.get("maxOccurs");
+                type.ctype = eelement.attributes.get("type");
+            }
         
-        element = (OMElement)node;
-        name = element.getLocalName();
-        if (name.equals("name"))
-            property.setName(element.getText());
+        return type;
+    }
+    
+    private final Map<String, Type> processTypes(List<ElementDetail> types) {
+        Type type;
+        Map<String, Type> types_ = new HashMap<>();
         
-        if (name.equals("value"))
-            property.setValue(element.getText());
+        types_.put("string", getPrimitive("string"));
         
-        it = element.getAllAttributes();
-        while (it.hasNext()) {
-            attribute = (OMAttribute)it.next();
-            if (!attribute.getLocalName().equals("type"))
-                continue;
+        for (ElementDetail etype : types)
+            for (ElementDetail eschema : etype.children)
+                for (ElementDetail eelement : eschema.children) {
+                    type = null;
+                    
+                    switch (eelement.name) {
+                    case "definitions.types.schema.element":
+                        for (ElementDetail ctype : eelement.children)
+                            type = processComplexType(ctype);
+                        break;
+                    case "definitions.types.schema.complexType":
+                        type = processComplexType(eelement);
+                        break;
+                    }
+                    
+                    if (type == null)
+                        continue;
+                    types_.put(type.name, type);
+                }
+        
+        return types_;
+    }
+    
+    private final Map<String, OpMessage> processOpMessages(
+            List<ElementDetail> messages, Map<String, Type> types) {
+        Type type;
+        String partelement;
+        OpMessage opmessage;
+        Map<String, OpMessage> messages_ = new HashMap<>();
+        
+        for (ElementDetail emessage : messages) {
+            opmessage = new OpMessage();
+            opmessage.name = emessage.attributes.get("name");
+            messages_.put(opmessage.name, opmessage);
             
-            name = attribute.getAttributeValue().split(":")[1];
-            if (name.equals("ExternalMessage"))
-                continue;
-            
-            if (name.equals("ExternalProperty")) {
-                property = new ExternalProperty();
-                message.add(property);
+            for (ElementDetail part : emessage.children) {
+                partelement = part.attributes.get("element");
+                if (partelement != null)
+                    partelement = partelement.split(":")[1];
+                else
+                    partelement = part.attributes.get("type").split(":")[1];
+                
+                type = types.get(partelement);
+                if (type == null)
+                    continue;
+                
+                opmessage.parameters.add(type);
             }
         }
         
-        it = element.getChildren();
-        while (it.hasNext()) {
-            node_ = (OMNode)it.next();
-            convertToMessage(node_, message, property);
+        return messages_;
+    }
+    
+    private final Map<String, PortType> processPortTypes(
+            List<ElementDetail> porttypes, Map<String, OpMessage> messages) {
+        String messagename, opname;
+        Operation operation;
+        PortType porttype;
+        List<Type> types;
+        Map<String, PortType> porttypes_ = new HashMap<>();
+        
+        for (ElementDetail eporttype : porttypes) {
+            porttype = new PortType();
+            porttype.name = eporttype.attributes.get("name");
+            porttypes_.put(porttype.name, porttype);
+            for (ElementDetail eoperation : eporttype.children) {
+                opname = eoperation.attributes.get("name");
+                operation = new Operation();
+                operation.name = opname;
+                porttype.operations.put(opname, operation);
+                for (ElementDetail eopitem : eoperation.children) {
+                    messagename = eopitem.attributes.get("message");
+                    if (messagename == null)
+                        continue;
+                    
+                    messagename = messagename.split(":")[1];
+                    types = messages.get(messagename).parameters;
+                    if (types == null)
+                        continue;
+                    
+                    for (Type type : types)
+                        operation.parameters.put(type.name, type);
+                }
+            }
         }
+        
+        return porttypes_;
     }
     
-    private final OMElement getMethod(OMFactory factory, String methodname,
-            String namespace, String service) {
-        OMNamespace ns = factory.createOMNamespace(namespace, service);
+    private final Map<String, Binding> processBindings(
+            List<ElementDetail> details, Map<String, PortType> porttypes) {
+        Binding binding;
+        String operationname, porttypename;
+        Map<String, Binding> bindings_ = new HashMap<>();
         
-        return factory.createOMElement(methodname, ns); 
+        for (ElementDetail ebinding : details) {
+            binding = new Binding();
+            binding.name = ebinding.attributes.get("name");
+            porttypename = ebinding.attributes.get("type").split(":")[1];
+            for (ElementDetail eoperation : ebinding.children) {
+                operationname = eoperation.attributes.get("name");
+                binding.porttypes.put(operationname,
+                        porttypes.get(porttypename));
+            }
+            bindings_.put(binding.name, binding);
+        }
+        
+        return bindings_;
     }
     
-    private final OMElement[] getProperty(OMFactory factory, OMNamespace ns,
-            ExternalProperty property) {
-        OMElement[] xmlproperty = new OMElement[2];
+    private final Map<String, Port> processService(
+            List<ElementDetail> services, Map<String, Binding> bindings) {
+        Port port;
+        String bindingname;
+        Binding binding;
+        Map<String, Port> ports = new HashMap<>();
         
-        xmlproperty[0] = factory.createOMElement("name", ns);
-        xmlproperty[0].addChild(factory.createOMText(property.getName()));
+        for (ElementDetail service : services) {
+            for (ElementDetail eport : service.children) {
+                bindingname = eport.attributes.get("binding").split(":")[1];
+                binding = bindings.get(bindingname);
+                
+                port = new Port();
+                port.name = eport.attributes.get("name");
+                ports.put(port.name, port);
+                
+                for (String porttypename : binding.porttypes.keySet())
+                    port.operations.putAll(binding.porttypes.
+                            get(porttypename).operations);
+            }
+        }
         
-        xmlproperty[1] = factory.createOMElement("value", ns);
-        xmlproperty[1].addChild(factory.createOMText(
-                (String)property.getValue()));
+        return ports;
+    }
+    
+    private final void recoverPorts(Context context,
+            Map<String, List<ElementDetail>> values) {
+        List<ElementDetail> details;
+        Map<String, Type> types;
+        Map<String, OpMessage> messages;
+        Map<String, PortType> porttypes;
+        Map<String, Binding> bindings;
+
+        porttypes = new HashMap<>();
+        bindings = new HashMap<>();
         
-        return xmlproperty;
+        details = values.get("definitions.types");
+        types = processTypes(details);
+        
+        details = values.get("definitions.message");
+        messages = processOpMessages(details, types);
+        
+        details = values.get("definitions.portType");
+        porttypes = processPortTypes(details, messages);
+        
+        details = values.get("definitions.binding");
+        bindings = processBindings(details, porttypes);
+        
+        details = values.get("definitions.service");
+        context.ports = processService(details, bindings);
     }
     
     public final InstallData install(Message message) {
@@ -239,37 +262,17 @@ public class Main extends AbstractPage {
      * @throws Exception
      */
     public final void main(View view) throws Exception {
-        Table attributes;
         DataItem dataitem;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "selection");
         
         pagecontrol.add("home");
-        
-        dataitem = new DataItem(form, Const.TEXT_FIELD, "namespace");
+        dataitem = new DataItem(form, Const.TEXT_FIELD, "wsdl");
         dataitem.setLength(128);
-        dataitem.setObligatory(true);
-
-        dataitem = new DataItem(form, Const.TEXT_FIELD, "service");
+        dataitem.setVisibleLength(128);
         dataitem.setObligatory(true);
         view.setFocus(dataitem);
-        
-        dataitem = new DataItem(form, Const.TEXT_FIELD, "url");
-        dataitem.setLength(80);
-        dataitem.setObligatory(true);
-        
-        dataitem = new DataItem(form, Const.TEXT_FIELD, "method");
-        dataitem.setLength(128);
-        dataitem.setObligatory(true);
-        
-        new Button(container, "add");
-        new Button(container, "remove");
-        
-        attributes = new Table(container, "attribs");
-        attributes.setMark(true);
-        new TableColumn(attributes, "name");
-        new TableColumn(attributes, "value");
         
         new Button(container, "call");
     }
@@ -279,15 +282,22 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void output(View view) {
+        Operation operation;
+        Port port;
         Form container = new Form(view, "main");
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("back");
-        
-        for (String key : context.values.keySet())
-            view.print(new StringBuilder(key).
-                    append(": ").
-                    append(context.values.get(key)).toString());
+        for (String portname : context.ports.keySet()) {
+            view.print(portname);
+            port = context.ports.get(portname);
+            for (String operationname : port.operations.keySet()) {
+                view.print("-- ".concat(operationname));
+                operation = port.operations.get(operationname);
+                for (String parameter: operation.parameters.keySet())
+                    view.print("--- ".concat(parameter));
+            }
+        }
     }
     
     /**

@@ -141,7 +141,7 @@ public class WSClient {
         return context;
     }
     
-    private static final OMElement getWSDLObject(InputStream fis)
+    public static final OMElement getWSDLObject(InputStream fis)
             throws Exception {
         XMLInputFactory xif = XMLInputFactory.newInstance();
         XMLStreamReader reader = xif.createXMLStreamReader(fis);
