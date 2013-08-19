@@ -11,6 +11,7 @@ import org.apache.axiom.om.OMElement;
 
 public class Context {
     public Map<String, Port> ports;
+    public Map<String, Type> types;
     
     public Context() {
         ports = new HashMap<>();
@@ -51,5 +52,16 @@ public class Context {
         it = xml.getChildElements();
         while (it.hasNext())
             convertXmlToMap(map, (OMElement)it.next(), detail);
+    }
+    
+    public static String extractValue(ElementDetail element, String name) {
+        String[] values;
+        String value = element.attributes.get(name);
+        
+        if (value == null)
+            return null;
+        
+        values = value.split(":", 2);
+        return (values.length == 1)? values[0] : values[1];
     }
 }

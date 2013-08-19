@@ -74,22 +74,26 @@ public class Main extends AbstractPage {
 
         type = new Type();
         type.name = element.attributes.get("name");
-        for (ElementDetail sequence : element.children)
+        for (ElementDetail sequence : element.children) {
+            if (!sequence.name.endsWith(".complexType.sequence"))
+                continue;
+            
             for (ElementDetail eelement : sequence.children) {
                 if (type.name == null) {
                     type.name = eelement.attributes.get("name");
                     type.min = eelement.attributes.get("minOccurs");
                     type.max = eelement.attributes.get("maxOccurs");
-                    type.ctype = eelement.attributes.get("type");
+                    type.ctype = Context.extractValue(eelement, "type");
                 } else {
                     ctype = new Type();
                     ctype.name = eelement.attributes.get("name");
                     ctype.min = eelement.attributes.get("minOccurs");
                     ctype.max = eelement.attributes.get("maxOccurs");
-                    ctype.ctype = eelement.attributes.get("type");
+                    ctype.ctype = Context.extractValue(eelement, "type");
                     type.fields.put(ctype.name, ctype);
                 }
             }
+        }
         
         return type;
     }
@@ -99,6 +103,9 @@ public class Main extends AbstractPage {
         Map<String, Type> types_ = new HashMap<>();
         
         types_.put("string", getPrimitive("string"));
+        types_.put("short", getPrimitive("short"));
+        types_.put("string", getPrimitive("int"));
+        types_.put("short", getPrimitive("float"));
         
         for (ElementDetail etype : types)
             for (ElementDetail eschema : etype.children)
@@ -136,11 +143,9 @@ public class Main extends AbstractPage {
             messages_.put(opmessage.name, opmessage);
             
             for (ElementDetail part : emessage.children) {
-                partelement = part.attributes.get("element");
-                if (partelement != null)
-                    partelement = partelement.split(":")[1];
-                else
-                    partelement = part.attributes.get("type").split(":")[1];
+                partelement = Context.extractValue(part, "element");
+                if (partelement == null)
+                    partelement = Context.extractValue(part, "type");
                 
                 type = types.get(partelement);
                 if (type == null)
@@ -171,11 +176,9 @@ public class Main extends AbstractPage {
                 operation.name = opname;
                 porttype.operations.put(opname, operation);
                 for (ElementDetail eopitem : eoperation.children) {
-                    messagename = eopitem.attributes.get("message");
+                    messagename = Context.extractValue(eopitem, "message");
                     if (messagename == null)
                         continue;
-                    
-                    messagename = messagename.split(":")[1];
                     
                     types = messages.get(messagename).parameters;
                     if (types == null)
@@ -199,7 +202,7 @@ public class Main extends AbstractPage {
         for (ElementDetail ebinding : details) {
             binding = new Binding();
             binding.name = ebinding.attributes.get("name");
-            porttypename = ebinding.attributes.get("type").split(":")[1];
+            porttypename = Context.extractValue(ebinding, "type");
             for (ElementDetail eoperation : ebinding.children) {
                 operationname = eoperation.attributes.get("name");
                 binding.porttypes.put(operationname,
@@ -220,7 +223,10 @@ public class Main extends AbstractPage {
         
         for (ElementDetail service : services) {
             for (ElementDetail eport : service.children) {
-                bindingname = eport.attributes.get("binding").split(":")[1];
+                if (!eport.name.equals("definitions.service.port"))
+                    continue;
+                
+                bindingname = Context.extractValue(eport, "binding");
                 binding = bindings.get(bindingname);
                 
                 port = new Port();
@@ -239,7 +245,6 @@ public class Main extends AbstractPage {
     private final void recoverPorts(Context context,
             Map<String, List<ElementDetail>> values) {
         List<ElementDetail> details;
-        Map<String, Type> types;
         Map<String, OpMessage> messages;
         Map<String, PortType> porttypes;
         Map<String, Binding> bindings;
@@ -248,10 +253,10 @@ public class Main extends AbstractPage {
         bindings = new HashMap<>();
         
         details = values.get("definitions.types");
-        types = processTypes(details);
+        context.types = processTypes(details);
         
         details = values.get("definitions.message");
-        messages = processOpMessages(details, types);
+        messages = processOpMessages(details, context.types);
         
         details = values.get("definitions.portType");
         porttypes = processPortTypes(details, messages);
@@ -288,12 +293,26 @@ public class Main extends AbstractPage {
         new Button(container, "call");
     }
     
+    private final void printParameter(String parameter, View view,
+            Map<String, Type> types, String ident) {
+        StringBuilder sb = new StringBuilder(ident).append(parameter);
+        Type type = types.get(parameter);
+        
+        if (type == null) {
+            view.print(sb.toString());
+            return;
+        }
+        
+        view.print(sb.append(": ").append(type.ctype).toString());
+        for (String fieldname : type.fields.keySet())
+            printParameter(fieldname, view, types, ident+"-");
+    }
+    
     /**
      * 
      * @param view
      */
     public final void output(View view) {
-        Type type;
         Operation operation;
         Port port;
         Form container = new Form(view, "main");
@@ -306,15 +325,8 @@ public class Main extends AbstractPage {
             for (String operationname : port.operations.keySet()) {
                 view.print("-- ".concat(operationname));
                 operation = port.operations.get(operationname);
-                for (String parameter: operation.parameters.keySet()) {
-                    view.print(new StringBuilder("--- ").
-                            append(parameter).toString());
-                    type = operation.parameters.get(parameter);
-                    for (String fieldname : type.fields.keySet())
-                        view.print(new StringBuilder("---- ").
-                                append(type.fields.get(fieldname).name).
-                                toString());
-                }
+                for (String parameter: operation.parameters.keySet())
+                    printParameter(parameter, view, context.types, "---");
             }
         }
     }
