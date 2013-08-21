@@ -1,19 +1,32 @@
 package org.iocaste.external;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 
 public class Operation {
-
-    public String name;
-    public Map<String, Type> parameters;
+    private OperationData opdata;
     
-    public Operation() {
-        parameters = new HashMap<>();
+    public Operation(OperationData opdata) {
+        this.opdata = opdata;
+    }
+    
+    public final Type getInput(String parameter) {
+        return opdata.input.get(parameter);
+    }
+    
+    public final Set<String> getInputKeys() {
+        return opdata.input.keySet();
+    }
+    
+    public final Type getOutput(String parameter) {
+        return opdata.output.get(parameter);
+    }
+    
+    public final Set<String> getOutputKeys() {
+        return opdata.output.keySet();
     }
     
     @Override
     public String toString() {
-        return name;
+        return opdata.name;
     }
 }
