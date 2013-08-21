@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -30,21 +31,25 @@ public class WSClient {
 
     public static final ExtendedObject call(CallData calldata)
             throws Exception {
+        Type resulttype;
         ExtendedObject object;
         OMNamespace ns;
         OMElement request, response;
         ServiceClient client;
         Options options;
+        Map<String, List<ElementDetail>> result;
+        Operation operation;
+        List<ElementDetail> details;
+        String responsename, svalue;
         OMFactory factory = OMAbstractFactory.getOMFactory();
         
         object = null;
         try {
-            ns = getNamespace(calldata, factory);
+            ns = getNamespace(calldata.service, factory);
             
             options = new Options();
             options.setTo(new EndpointReference(calldata.url));
-            options.setAction((String)calldata.wsdl.get("operations").
-                    get(calldata.function)[0].getValue("INPUT"));
+            options.setAction(calldata.service.getAction(calldata.function));
             options.setTransportInProtocol(Constants.TRANSPORT_HTTP);
             
             client = new ServiceClient();
@@ -53,8 +58,34 @@ public class WSClient {
             request = getMethod(factory, ns, calldata);
             response = client.sendReceive(request);
             
-            if (response != null)
-                object = xml2eobj(response, calldata);
+            if (response == null)
+                return null;
+            
+            result = new HashMap<>();
+            Context.convertXmlToMap(result, response, null);
+            operation = calldata.service.getOperation(
+                    calldata.port, calldata.function);
+            svalue = null;
+            for (String name : operation.getOutputKeys()) {
+                resulttype = operation.getOutput(name);
+                responsename = resulttype.getAbsoluteName();
+                details = result.get(responsename);
+                for (ElementDetail edetail : details) {
+                    svalue = edetail.text;
+                    break;
+                }
+                
+                if (svalue == null)
+                    return null;
+                
+                break;
+            }
+            
+//            switch (resulttype.getValueType()) {
+//            case "string":
+//                return
+//            }
+            
         } catch (AxisFault e) {
             throw new IocasteException(e.getMessage());
         } catch (OMException e) {
@@ -66,32 +97,38 @@ public class WSClient {
     
     private static final OMElement getMethod(OMFactory factory,
             OMNamespace ns, CallData calldata) {
+        Type type;
         OMElement method, parameter;
-        ExtendedObject object = calldata.wsdl.get("operations").
-                get(calldata.function)[0];
-        String name = object.getValue("INPUT_MSG");
-        
-        object = calldata.wsdl.get("messages").get(name)[0];
-        name = object.getValue("ELEMENT");
+//        DocumentModel model;
+        Operation operation;
+//        ExtendedObject object = calldata.wsdl.get("operations").
+//                get(calldata.function)[0];
+//        String name = object.getValue("INPUT_MSG");
+//        
+//        object = calldata.wsdl.get("messages").get(name)[0];
+//        name = object.getValue("ELEMENT");
         
         method = factory.createOMElement(calldata.function, ns);
-        for (ExtendedObject object_ : calldata.wsdl.get("types").get(name)) {
-            name = object_.getValue("NAME");
+//        model = calldata.parameter.getModel();
+        operation = calldata.service.getOperation(
+                calldata.port, calldata.function);
+        for (String name : operation.getInputKeys()) {
+            type = operation.getInput(name);
+            if (type == null)
+                continue;
+            
             parameter = factory.createOMElement(name, ns);
-            parameter.setText(calldata.parameters.get(name).toString());
+            parameter.setText((String)calldata.parameter.getValue(name));
             method.addChild(parameter);
         }
         
         return method;
     }
     
-    private static final OMNamespace getNamespace(CallData calldata,
+    private static final OMNamespace getNamespace(Service service,
             OMFactory factory) {
-        ExtendedObject[] ns = calldata.wsdl.get("wsdata").get("namespace");
-            
-        return factory.createOMNamespace(
-                (String)ns[0].getValue("TARGETNAMESPACE"),
-                (String)ns[0].getValue("NAME"));
+        return factory.createOMNamespace(service.getNamespace(),
+                service.getName());
     }
     
     public static final Map<String, Map<String, ExtendedObject[]>>
@@ -167,35 +204,5 @@ public class WSClient {
         }
         
         return ns;
-    }
-
-    private static final ExtendedObject xml2eobj(OMElement element,
-            CallData calldata) {
-        OMElement child;
-        DocumentModel model;
-        ExtendedObject object;
-        String name, ns;
-        QName vname;
-        
-        object = calldata.wsdl.get("operations").get(calldata.function)[0];
-        name = object.getValue("OUTPUT_MSG");
-        object = calldata.wsdl.get("messages").get(name)[0];
-        name = object.getValue("ELEMENT");
-        object = calldata.wsdl.get("types").get(name)[0];
-        
-        model = new DocumentModel(null);
-        name = (String)object.getValue("NAME");
-        model.add(new DocumentModelItem(name));
-        
-        ns = element.getNamespaceURI();
-        object = new ExtendedObject(model);
-        vname = new QName(ns, name);
-        for (DocumentModelItem item : model.getItens()) {
-            child = element.getFirstChildWithName(vname);
-            object.setValue(item, child.getText());
-            break;
-        }
-        
-        return object;
     }
 }

@@ -22,6 +22,9 @@ public class Install {
         taskgroup.add("SE37");
         data.add(taskgroup);
         
+        data.link("SE38", "iocaste-external @external");
+        taskgroup.add("SE38");
+        
         return data;
     }
 }
