@@ -644,42 +644,53 @@ public class Model {
      * @param ddelement
      */
     public static void setDBFieldsString(StringBuilder sb,
-            DataElement ddelement, String dbtype) {
+            DataElement ddelement, String dbtype) throws Exception {
+        int length = ddelement.getLength();
+        
         switch (ddelement.getType()) {
         case DataType.CHAR:
-            sb.append(" varchar(");
-            sb.append(ddelement.getLength());
-            sb.append(")");
+            if (length == 0)
+                throw new IocasteException(new StringBuilder("Invalid "
+                        + "length for data element ").
+                        append(ddelement.getName()).toString());
             
+            sb.append(" varchar(");
+            sb.append(length);
+            sb.append(")");
             break;
         case DataType.NUMC:
-            sb.append(" numeric(");
-            sb.append(ddelement.getLength());
-            sb.append(")");
+            if (length == 0)
+                throw new IocasteException(new StringBuilder("Invalid "
+                        + "length for data element ").
+                        append(ddelement.getName()).toString());
             
+            sb.append(" numeric(");
+            sb.append(length);
+            sb.append(")");
             break;
         case DataType.DEC:
+            if (length == 0)
+                throw new IocasteException(new StringBuilder("Invalid "
+                        + "length for data element ").
+                        append(ddelement.getName()).toString());
+            
             sb.append(" decimal(");
-            sb.append(ddelement.getLength());
+            sb.append(length);
             sb.append(",");
             sb.append(ddelement.getDecimals());
             sb.append(")");
-            
             break;
         case DataType.DATE:
             sb.append(" date");
-            
             break;
         case DataType.TIME:
             sb.append(" time");
-            
             break;
         case DataType.BOOLEAN:
             if (dbtype.equals("postgres"))
                 sb.append(" boolean");
             else
                 sb.append(" bit");
-            
             break;
         }
     }

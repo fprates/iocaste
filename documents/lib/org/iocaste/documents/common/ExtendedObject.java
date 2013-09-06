@@ -178,6 +178,9 @@ public class ExtendedObject implements Serializable {
      * @param value valor
      */
     public final void setValue(DocumentModelItem item, Object value) {
+        if (item == null)
+            throw new RuntimeException("Invalid null model item key.");
+        
         if (!model.contains(item))
             return;
         

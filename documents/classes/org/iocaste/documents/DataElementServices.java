@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.IocasteException;
 
 public class DataElementServices {
     private static final byte ELEMENT = 0;
@@ -54,19 +55,29 @@ public class DataElementServices {
      */
     public static final int insert(Iocaste iocaste, DataElement element)
             throws Exception {
-        switch (element.getType()) {
+        String name = element.getName();
+        int length = element.getLength();
+        int type = element.getType();
+        
+        switch (type) {
         case DataType.DATE:
-            element.setLength(10);
+            length = 10;
+            element.setLength(length);
             break;
+            
         case DataType.TIME:
-            element.setLength(8);
+            length = 8;
+            element.setLength(length);
+            break;
+            
+        default:
+            if (length == 0)
+                throw new IocasteException(new StringBuilder("Invalid length "
+                        + "for data element ").append(name).toString());
             break;
         }
         
-        return iocaste.update(QUERIES[INS_ELEMENT], element.getName(),
-                element.getDecimals(),
-                element.getLength(),
-                element.getType(),
-                element.isUpcase());
+        return iocaste.update(QUERIES[INS_ELEMENT], name,
+                element.getDecimals(), length, type, element.isUpcase());
     }
 }
