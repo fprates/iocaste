@@ -102,15 +102,15 @@ public class Response {
         
         switch (context.mode) {
         case Context.DISPLAY:
-            context.tablehelper.setMode(TableTool.DISPLAY, view);
-            for (TableItem item : itens.getItens())
+            context.tablehelper.setMode(TableTool.DISPLAY);
+            for (TableItem item : itens.getItems())
                 for (DocumentModelItem mitem : context.model.getItens())
                     item.get(mitem.getName()).setEnabled(false);
             break;
         case Context.UPDATE:
             pagecontrol.add("save", PageControl.REQUEST);
-            context.tablehelper.setMode(TableTool.UPDATE, view);
-            for (TableItem item : itens.getItens())
+            context.tablehelper.setMode(TableTool.UPDATE);
+            for (TableItem item : itens.getItems())
                 for (DocumentModelKey key : context.model.getKeys())
                     item.get(key.getModelItemName()).setEnabled(false);
             break;

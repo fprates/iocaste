@@ -196,7 +196,7 @@ public class SHStructure {
         Table itens = view.getElement("itens");
         oitens = new ExtendedObject[itens.length()];
         
-        for (TableItem item : itens.getItens())
+        for (TableItem item : itens.getItems())
             oitens[i++] = item.getObject();
         
         switch (context.mode) {

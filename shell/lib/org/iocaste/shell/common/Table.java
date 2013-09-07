@@ -166,7 +166,7 @@ public class Table extends AbstractContainer {
      * Retorna linhas da tabela.
      * @return linhas.
      */
-    public final TableItem[] getItens() {
+    public final TableItem[] getItems() {
         return itens.toArray(new TableItem[0]);
     }
     

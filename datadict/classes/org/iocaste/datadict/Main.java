@@ -70,7 +70,7 @@ public class Main extends AbstractPage {
     public final void deleteitem(View vdata) {
         Table itens = vdata.getElement("itens");
         
-        for (TableItem item : itens.getItens())
+        for (TableItem item : itens.getItems())
             if (item.isSelected())
                 itens.remove(item);
     }

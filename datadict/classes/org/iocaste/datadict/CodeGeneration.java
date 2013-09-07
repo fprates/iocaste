@@ -20,9 +20,9 @@ public class CodeGeneration {
         StringBuilder getter = new StringBuilder();
         StringBuilder setter = new StringBuilder();
         int t = parts.length - 1;
-        List<String> code = new ArrayList<String>();
-        List<String> getters = new ArrayList<String>();
-        List<String> setters = new ArrayList<String>();
+        List<String> code = new ArrayList<>();
+        List<String> getters = new ArrayList<>();
+        List<String> setters = new ArrayList<>();
         
         for (int i = 0; i < parts.length; i++) {
             if (i == t) {
@@ -41,7 +41,7 @@ public class CodeGeneration {
         sb.append("public class ").append(classname).append(" {");
         code.add(sb.toString());
         
-        for (TableItem item : itens.getItens()) {
+        for (TableItem item : itens.getItems()) {
             sb.setLength(0);
             getter.setLength(0);
             setter.setLength(0);

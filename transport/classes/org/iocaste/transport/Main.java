@@ -175,7 +175,7 @@ public class Main extends AbstractPage {
         
         instructions.add(IDTAG);
         
-        for (TableItem item : objects.getItens()) {
+        for (TableItem item : objects.getItems()) {
             name = ((InputComponent)item.get("object")).get();
             if (name.equals(""))
                 continue;
@@ -264,7 +264,7 @@ public class Main extends AbstractPage {
         String filename = null;
         Table table = view.getElement("pool");
         
-        for (TableItem item : table.getItens()) {
+        for (TableItem item : table.getItems()) {
             if (!item.isSelected())
                 continue;
             

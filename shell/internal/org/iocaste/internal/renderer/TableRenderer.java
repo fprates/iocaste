@@ -102,7 +102,7 @@ public class TableRenderer extends Renderer {
             tabletag.addChild(trtag);
         }
         
-        itens = table.getItens();
+        itens = table.getItems();
         if (itens.length > 0) {
             tag = new XMLElement("tbody");
             vlines = table.getVisibleLines();

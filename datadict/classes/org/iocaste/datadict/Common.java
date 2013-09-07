@@ -114,12 +114,12 @@ public class Common {
         String testname, testclassfield, testtablefield;
         Table itens = vdata.getElement("itens");
         
-        for (TableItem item : itens.getItens()) {
+        for (TableItem item : itens.getItems()) {
             name = getTableValue(item, "item.name");
             classfield = getTableValue(item, "item.classfield");
             tablefield = getTableValue(item, "item.tablefield");
             
-            for (TableItem test : itens.getItens()) {
+            for (TableItem test : itens.getItems()) {
                 if (item == test)
                     continue;
                 

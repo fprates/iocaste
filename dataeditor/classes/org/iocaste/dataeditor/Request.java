@@ -22,7 +22,7 @@ public class Request {
         Table table = vdata.getElement("selection_view");
         Documents documents = new Documents(function);
         
-        for (TableItem item : table.getItens()) {
+        for (TableItem item : table.getItems()) {
             if (!item.isSelected())
                 continue;
             
@@ -77,7 +77,7 @@ public class Request {
         Documents documents = new Documents(context.function);
         Table table = vdata.getElement("selection_view");
         
-        for (TableItem item : table.getItens()) {
+        for (TableItem item : table.getItems()) {
             object = null;
             
             for (Element element: item.getElements()) {

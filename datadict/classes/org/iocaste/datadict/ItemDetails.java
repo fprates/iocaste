@@ -100,7 +100,7 @@ public class ItemDetails {
         Table itens = view.getElement("itens");
         TableItem selected = null;
         
-        for (TableItem item : itens.getItens()) {
+        for (TableItem item : itens.getItems()) {
             if (selected != null) {
                 view.message(Const.ERROR, "choose.one.item.only");
                 return;
@@ -176,7 +176,7 @@ public class ItemDetails {
         upcase = form.get("item.upcase").isSelected();
         classfield = form.get("item.classfield").get();
         
-        for (TableItem item : itens.getItens()) {
+        for (TableItem item : itens.getItems()) {
             input = item.get("item.name");
             
             if (!input.get().equals(itemname))

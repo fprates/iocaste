@@ -36,8 +36,14 @@ public class ExtendedObject implements Serializable {
     }
     
     public final double getd(String name) {
-        Object value = getValue(name);
+        Object value;
         
+        if (!byname.containsKey(name))
+            throw new RuntimeException(new StringBuilder(name).
+                    append(" isn't a valid field name for ").
+                    append(model.getName()).toString());
+        
+        value = getValue(name);
         if (!(value instanceof BigDecimal))
             return (double)value;
         
@@ -50,8 +56,14 @@ public class ExtendedObject implements Serializable {
      * @return
      */
     public final int geti(String name) {
-        Object value = getValue(name);
+        Object value;
         
+        if (!byname.containsKey(name))
+            throw new RuntimeException(new StringBuilder(
+                    "Invalid field name for ").
+                    append(model.getName()).toString());
+        
+        value = getValue(name);
         if (value instanceof BigDecimal)
             return ((BigDecimal)value).intValue();
         
@@ -68,8 +80,14 @@ public class ExtendedObject implements Serializable {
      * @return
      */
     public final long getl(String name) {
-        Object value = getValue(name);
+        Object value;
         
+        if (!byname.containsKey(name))
+            throw new RuntimeException(new StringBuilder(
+                    "Invalid field name for ").
+                    append(model.getName()).toString());
+        
+        value = getValue(name);
         if (value instanceof BigDecimal)
             return ((BigDecimal)value).longValue();
         

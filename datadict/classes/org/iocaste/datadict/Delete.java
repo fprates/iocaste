@@ -13,7 +13,7 @@ public class Delete {
     public static final void shitem(View view) {
         Table itens = view.getElement("itens");
         
-        for (TableItem item : itens.getItens()) {
+        for (TableItem item : itens.getItems()) {
             if (!item.isSelected())
                 continue;
             

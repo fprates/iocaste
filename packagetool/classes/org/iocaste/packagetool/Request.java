@@ -17,7 +17,7 @@ public class Request {
         String pkgname;
         Table table = view.getElement("packages");
         
-        for (TableItem item : table.getItens())
+        for (TableItem item : table.getItems())
             if (item.isSelected()) {
                 view.redirect("printinfo");
                 pkgname = ((Text)item.get("name")).getName();
@@ -68,7 +68,7 @@ public class Request {
         Link link;
         Table table = view.getElement("packages");
         
-        for (TableItem item : table.getItens()) {
+        for (TableItem item : table.getItems()) {
             link = item.get("action");
             if (!link.getName().equals(pkgname))
                 continue;

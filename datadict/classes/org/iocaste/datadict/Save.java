@@ -39,7 +39,7 @@ public class Save {
         context.model.setClassName((String)structure.get("modelclass").get());
         context.model.setTableName((String)structure.get("modeltable").get());
         
-        for (TableItem item : itens.getItens()) {
+        for (TableItem item : itens.getItems()) {
             itemname = Common.getTableValue(item, "item.name");
             
             value = Common.getTableValue(item, "item.element");

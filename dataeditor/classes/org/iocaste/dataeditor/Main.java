@@ -16,11 +16,13 @@ public class Main extends AbstractPage {
     }
     
     public final void acceptitens(View view) {
-        context.tablehelper.accept(view);
+        context.tablehelper.refresh(view);
+        context.tablehelper.accept();
     }
     
     public final void additens(View view) {
-        context.tablehelper.add(view);
+        context.tablehelper.refresh(view);
+        context.tablehelper.add();
     }
     
     /**
@@ -108,7 +110,8 @@ public class Main extends AbstractPage {
     }
 
     public final void remove(View view) {
-        context.tablehelper.remove(view);
+        context.tablehelper.refresh(view);
+        context.tablehelper.remove();
     }
     
     /**

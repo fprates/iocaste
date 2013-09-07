@@ -133,14 +133,14 @@ class CDContainerItem implements Serializable {
             return null;
         
         itens = new ArrayList<ExtendedObject>();
-        for (TableItem item : table.getItens())
+        for (TableItem item : table.getItems())
             itens.add(item.getObject());
         
         return itens.toArray(new ExtendedObject[0]);
     }
     
     public final void remove() {
-        for (TableItem item : table.getItens())
+        for (TableItem item : table.getItems())
             if (item.isSelected())
                 table.remove(item);
     }

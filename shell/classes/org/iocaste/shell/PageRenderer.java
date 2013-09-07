@@ -406,7 +406,7 @@ public class PageRenderer extends AbstractRenderer {
         columns = table.getColumns();
         elements = new ArrayList<Element>();
         
-        for (TableItem item : table.getItens()) {
+        for (TableItem item : table.getItems()) {
             linename = new StringBuilder(name).append(".").append(i++).
                     append(".").toString();
             
