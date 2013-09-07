@@ -38,6 +38,10 @@ public interface InputComponent extends Component {
      */
     public abstract DataElement getDataElement();
     
+    public abstract int geti();
+    
+    public abstract long getl();
+    
     /**
      * Retorna comprimento máximo de entrada.
      * @return comprimento

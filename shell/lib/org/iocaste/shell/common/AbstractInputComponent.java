@@ -1,5 +1,7 @@
 package org.iocaste.shell.common;
 
+import java.math.BigDecimal;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 
@@ -71,6 +73,24 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final DataElement getDataElement() {
         return dataelement;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#geti()
+     */
+    @Override
+    public final int geti() {
+        return ((BigDecimal)value).intValue();
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getl()
+     */
+    @Override
+    public final long getl() {
+        return ((BigDecimal)value).longValue();
     }
     
     /*

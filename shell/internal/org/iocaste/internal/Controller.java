@@ -1,5 +1,6 @@
 package org.iocaste.internal;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -131,16 +132,10 @@ public class Controller {
                 throw new RuntimeException(e);
             }
         case DataType.NUMC:
-            if (Shell.isInitial(value)) {
-                if (dataelement.getLength() < DataType.MAX_INT_LEN)
-                    return 0;
-                return 0l;
-            }
+            if (Shell.isInitial(value))
+                return new BigDecimal(0);
             
-            if (dataelement.getLength() < DataType.MAX_INT_LEN)
-                return Integer.parseInt(value);
-            
-            return Long.parseLong(value);
+            return new BigDecimal(value);
         case DataType.CHAR:
             if (Shell.isInitial(value))
                 return null;
@@ -246,14 +241,11 @@ public class Controller {
         
         switch (dataelement.getType()) {
         case DataType.NUMC:
-            if (boolcomponent) {
+            if (boolcomponent)
                 return (Boolean)value;
-            } else {
-                if (dataelement.getLength() < DataType.MAX_INT_LEN)
-                    return ((Integer)value == 0)? true : false;
-                else
-                    return ((Long)value == 0l)? true : false;
-            }
+            else
+                return (((BigDecimal)value).longValue() == 0l)? true : false;
+            
         case DataType.DEC:
             return (((Number)value).doubleValue() == 0)? true : false;
 
