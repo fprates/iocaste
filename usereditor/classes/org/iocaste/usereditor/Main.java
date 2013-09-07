@@ -14,19 +14,23 @@ public class Main extends AbstractPage {
     }
     
     public final void acceptprofiles(View view) {
-        context.profileshelper.accept(view);
+        context.profileshelper.refresh(view);
+        context.profileshelper.accept();
     }
     
     public final void accepttasks(View view) {
-        context.taskshelper.accept(view);
+        context.taskshelper.refresh(view);
+        context.taskshelper.accept();
     }
     
     public final void addprofiles(View view) {
-        context.profileshelper.add(view);
+        context.profileshelper.refresh(view);
+        context.profileshelper.add();
     }
     
     public final void addtasks(View view) {
-        context.taskshelper.add(view);
+        context.taskshelper.refresh(view);
+        context.taskshelper.add();
     }
     
     public final void create(View view) {
@@ -71,11 +75,13 @@ public class Main extends AbstractPage {
     }
     
     public final void removeprofiles(View view) {
-        context.profileshelper.remove(view);
+        context.profileshelper.refresh(view);
+        context.profileshelper.remove();
     }
     
     public final void removetasks(View view) {
-        context.taskshelper.remove(view);
+        context.taskshelper.refresh(view);
+        context.taskshelper.remove();
     }
     
     public final void save(View view) {

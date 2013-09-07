@@ -25,6 +25,7 @@ public class TableTool {
     private Set<String> disabled;
     private Container container;
     private Table table;
+    private View view;
     
     public TableTool(Container container, String name) {
         this.container = new StandardContainer(container, name.concat("cnt"));
@@ -41,22 +42,21 @@ public class TableTool {
         table.setMark(true);
         table.setVisibleLines(15);
         disabled = new HashSet<>();
+        view = container.getView();
     }
     
-    public final void accept(View view) {
+    public final void accept() {
         Button[] buttons = getButtons(view);
         
-        refresh(view);
         buttons[ACCEPT].setVisible(false);
         buttons[ADD].setVisible(true);
         buttons[REMOVE].setVisible(true);
         table.setTopLine(0);
     }
     
-    public final void add(View view) {
+    public final void add() {
         Button[] buttons = getButtons(view);
 
-        refresh(view);
         buttons[ACCEPT].setVisible(true);
         buttons[ADD].setVisible(false);
         buttons[REMOVE].setVisible(false);
@@ -128,23 +128,26 @@ public class TableTool {
         return container;
     }
     
+    public final TableItem[] getItems() {
+        return table.getItems();
+    }
+    
     public final Table getTable() {
         return table;
     }
     
     public final void refresh(View view) {
         table = view.getElement(this.table.getName());
+        this.view = view;
     }
     
-    public final void remove(View view) {
-        refresh(view);
+    public final void remove() {
         removeitems(table);
     }
     
-    public final void setMode(byte mode, View view) {
+    public final void setMode(byte mode) {
         Button[] buttons = getButtons(view);
         
-        refresh(view);
         switch (mode) {
         case UPDATE:
             buttons[ACCEPT].setVisible(false);
@@ -159,7 +162,7 @@ public class TableTool {
             buttons[REMOVE].setVisible(false);
             table.setMark(false);
             
-            for (TableItem item : table.getItens())
+            for (TableItem item : table.getItems())
                 for (Element element : item.getElements())
                     element.setEnabled(false);
             break;
@@ -177,7 +180,7 @@ public class TableTool {
     }
     
     public static final void removeitems(Table table) {
-        for (TableItem item : table.getItens())
+        for (TableItem item : table.getItems())
             if (item.isSelected())
                 table.remove(item);
     }
