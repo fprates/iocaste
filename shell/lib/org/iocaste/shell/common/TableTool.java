@@ -1,5 +1,8 @@
 package org.iocaste.shell.common;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.ExtendedObject;
@@ -19,6 +22,7 @@ public class TableTool {
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
     private String[] buttons;
+    private Set<String> disabled;
     private Container container;
     private Table table;
     
@@ -36,6 +40,7 @@ public class TableTool {
         table = new Table(this.container, name);
         table.setMark(true);
         table.setVisibleLines(15);
+        disabled = new HashSet<>();
     }
     
     public final void accept(View view) {
@@ -55,36 +60,41 @@ public class TableTool {
         buttons[ACCEPT].setVisible(true);
         buttons[ADD].setVisible(false);
         buttons[REMOVE].setVisible(false);
-        additems(table);
+        additems();
     }
     
-    public static final void additems(Table table) {
+    public final void additems() {
         int total = table.length();
         
         for (int i = 0; i < table.getVisibleLines(); i++)
-            additem(table, null);
+            additem(null);
         
         table.setTopLine(total);
     }
     
-    public static final void additem(Table table, ExtendedObject object) {
+    public final void additem(ExtendedObject object) {
         DataElement element;
         InputComponent input;
+        String name;
         TableItem item = new TableItem(table);
         
         for (TableColumn column : table.getColumns()) {
             if (column.isMark())
                 continue;
 
+            name = column.getName();
             element = column.getModelItem().getDataElement();
             switch (element.getType()) {
             case DataType.BOOLEAN:
-                input = new CheckBox(table, column.getName());
+                input = new CheckBox(table, name);
                 break;
             default:
-                input = new TextField(table, column.getName());
+                input = new TextField(table, name);
                 break;
             }
+            
+            if (disabled.contains(name))
+                input.setEnabled(false);
             
             item.add(input);
         }
@@ -93,6 +103,12 @@ public class TableTool {
             return;
         
         item.setObject(object);
+    }
+    
+    public final void disable(String... columns) {
+        disabled.clear();
+        for (String column : columns)
+            disabled.add(column);
     }
     
     public final String getButtonName(byte code) {
@@ -166,11 +182,11 @@ public class TableTool {
                 table.remove(item);
     }
     
-    public static final void setObjects(Table table, ExtendedObject[] objects) {
+    public final void setObjects(ExtendedObject[] objects) {
         if (objects == null || objects.length == 0)
-            additems(table);
+            additems();
         else
             for (ExtendedObject object : objects)
-                additem(table, object);
+                additem(object);
     }
 }

@@ -52,7 +52,7 @@ public class Response {
         tasks = context.taskshelper.getTable();
         tasks.importModel(context.tasksmodel);
         context.taskshelper.visible("GROUP");
-        TableTool.setObjects(tasks, context.userdata.tasks);
+        context.taskshelper.setObjects(context.userdata.tasks);
         
         tabitem = new TabbedPaneItem(tabs, "taskstab");
         tabitem.setContainer(context.taskshelper.getContainer());
@@ -64,7 +64,7 @@ public class Response {
         profiles = context.profileshelper.getTable();
         profiles.importModel(context.profilesmodel);
         context.profileshelper.visible("PROFILE");
-        TableTool.setObjects(profiles, context.userdata.profiles);
+        context.profileshelper.setObjects(context.userdata.profiles);
         
         tabitem = new TabbedPaneItem(tabs, "profiletab");
         tabitem.setContainer(context.profileshelper.getContainer());

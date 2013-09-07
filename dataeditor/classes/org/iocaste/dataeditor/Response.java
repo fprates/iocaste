@@ -97,7 +97,7 @@ public class Response {
         itens = context.tablehelper.getTable();
         itens.importModel(context.model);
         itens.setVisibleLines(0);
-        TableTool.setObjects(itens, context.itens);
+        context.tablehelper.setObjects(context.itens);
         view.setTitle(context.model.getName());
         
         switch (context.mode) {
