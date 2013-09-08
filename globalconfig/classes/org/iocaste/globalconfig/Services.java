@@ -16,9 +16,15 @@ import org.iocaste.protocol.Message;
  */
 public class Services extends AbstractFunction {
     private static final byte SEL_CONFIG = 0;
+    private static final byte DEL_CFG_VALUES = 1;
+    private static final byte DEL_CFG_ITEMS = 2;
+    private static final byte DEL_GLOBAL_CFG = 3;
     private static final String[] QUERIES = {
         "from GLOBAL_CONFIG_ITEM where GLOBAL_CONFIG = ? and " +
-        "NAME = ?"
+        "NAME = ?",
+        "delete from GLOBAL_CONFIG_VALUES where GLOBAL_CONFIG = ?",
+        "delete from GLOBAL_CONFIG_ITEM where GLOBAL_CONFIG = ?",
+        "delete from GLOBAL_CONFIG where NAME = ?"
     };
     
     public Services() {
@@ -89,6 +95,7 @@ public class Services extends AbstractFunction {
         model = documents.getModel("GLOBAL_CONFIG_VALUES");
         object = new ExtendedObject(model);
         object.setValue("ID", itemid + 1);
+        object.setValue("GLOBAL_CONFIG", appname);
         switch (ptype) {
         case DataType.CHAR:
             object.setValue("VALUE", (value == null)? null : value.toString());
@@ -147,7 +154,16 @@ public class Services extends AbstractFunction {
     }
     
     public final void remove(Message message) {
+        Documents documents;
+        String appname = message.getString("name");
         
+        if (appname == null)
+            return;
+
+        documents = new Documents(this);
+        documents.update(QUERIES[DEL_CFG_VALUES], appname);
+        documents.update(QUERIES[DEL_CFG_ITEMS], appname);
+        documents.update(QUERIES[DEL_GLOBAL_CFG], appname);
     }
     
     public final void set(Message message) {

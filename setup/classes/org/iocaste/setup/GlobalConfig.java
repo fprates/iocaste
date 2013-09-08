@@ -106,6 +106,13 @@ public class GlobalConfig {
         model.add(item);
         model.add(new DocumentModelKey(item));
         
+        // configuração global
+        item = new DocumentModelItem("GLOBAL_CONFIG");
+        item.setTableFieldName("IDCFG");
+        item.setDataElement(nmcfg.getDataElement());
+        item.setReference(nmcfg);
+        model.add(item);
+        
         // valor
         element = new DataElement("GLOBAL_CONFIG_VALUES.VALUE");
         element.setType(DataType.CHAR);
