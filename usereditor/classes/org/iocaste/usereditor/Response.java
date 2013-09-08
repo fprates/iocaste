@@ -73,23 +73,23 @@ public class Response {
         case Context.CREATE:
             username.set(context.userdata.username);
             pagecontrol.add("save", PageControl.REQUEST);
-            context.taskshelper.setMode(TableTool.UPDATE);
-            context.profileshelper.setMode(TableTool.UPDATE);
+            context.taskshelper.setMode(TableTool.UPDATE, view);
+            context.profileshelper.setMode(TableTool.UPDATE, view);
             break;
             
         case Context.DISPLAY:
             form.setObject(context.userdata.identity);
             for (Element element : form.getElements())
                 element.setEnabled(false);
-            context.taskshelper.setMode(TableTool.DISPLAY);
-            context.profileshelper.setMode(TableTool.DISPLAY);
+            context.taskshelper.setMode(TableTool.DISPLAY, view);
+            context.profileshelper.setMode(TableTool.DISPLAY, view);
             break;
             
         case Context.UPDATE:
             form.setObject(context.userdata.identity);
             pagecontrol.add("save", PageControl.REQUEST);
-            context.taskshelper.setMode(TableTool.UPDATE);
-            context.profileshelper.setMode(TableTool.UPDATE);
+            context.taskshelper.setMode(TableTool.UPDATE, view);
+            context.profileshelper.setMode(TableTool.UPDATE, view);
             break;
         }
         

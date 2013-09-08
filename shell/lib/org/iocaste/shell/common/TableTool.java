@@ -145,7 +145,7 @@ public class TableTool {
         removeitems(table);
     }
     
-    public final void setMode(byte mode) {
+    public final void setMode(byte mode, View view) {
         Button[] buttons = getButtons(view);
         
         switch (mode) {
