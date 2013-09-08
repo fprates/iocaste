@@ -80,12 +80,14 @@ public class Services extends AbstractFunction {
             documents.save(globalconfig);
         }
         
-        itemid = globalconfig.getl("CURRENT");
+        itemid = globalconfig.getl("CURRENT") + 1;
+        globalconfig.setValue("CURRENT", itemid);
+        documents.modify(globalconfig);
+        
         model = documents.getModel("GLOBAL_CONFIG_ITEM");
         value = message.get("value");
-        
         object = new ExtendedObject(model);
-        object.setValue("ID", itemid + 1);
+        object.setValue("ID", itemid);
         object.setValue("GLOBAL_CONFIG", appname);
         object.setValue("NAME", message.getString("name"));
         ptype = convertClassType(value.getClass());
@@ -94,7 +96,7 @@ public class Services extends AbstractFunction {
         
         model = documents.getModel("GLOBAL_CONFIG_VALUES");
         object = new ExtendedObject(model);
-        object.setValue("ID", itemid + 1);
+        object.setValue("ID", itemid);
         object.setValue("GLOBAL_CONFIG", appname);
         switch (ptype) {
         case DataType.CHAR:
