@@ -90,7 +90,8 @@ public class Services extends AbstractFunction {
         object.setValue("ID", itemid);
         object.setValue("GLOBAL_CONFIG", appname);
         object.setValue("NAME", message.getString("name"));
-        ptype = convertClassType(value.getClass());
+        
+        ptype = convertClassType((Class<?>)message.get("type"));
         object.setValue("TYPE", ptype);
         documents.save(object);
         
