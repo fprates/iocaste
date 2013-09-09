@@ -248,6 +248,7 @@ public class Shell extends AbstractServiceInterface {
         case DataType.DEC:
             numberformat = NumberFormat.getNumberInstance(locale);
             numberformat.setMaximumFractionDigits(element.getDecimals());
+            numberformat.setMinimumFractionDigits(element.getDecimals());
             numberformat.setGroupingUsed(true);
             return numberformat.format((value == null)? 0 : value);
             
