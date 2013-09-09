@@ -41,6 +41,8 @@ public class Response {
                 break;
             default:
                 input = new DataItem(form, Const.TEXT_FIELD, name);
+                input.setLength(256);
+                input.setVisibleLength(20);
                 input.set(value);
                 break;
             }
