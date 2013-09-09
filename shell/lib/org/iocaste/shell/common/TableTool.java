@@ -28,7 +28,7 @@ public class TableTool {
     private Container container;
     private Table table;
     private View view;
-    private Map<String, Class<? extends Validator>> validators;
+    private Map<String, ValidatorData> validators;
     
     public TableTool(Container container, String name) {
         this.container = new StandardContainer(container, name.concat("cnt"));
@@ -80,6 +80,7 @@ public class TableTool {
         DataElement element;
         InputComponent input;
         String name;
+        ValidatorData vdata;
         Class<? extends Validator> validator;
         TableItem item = new TableItem(table);
         
@@ -95,7 +96,10 @@ public class TableTool {
                 break;
             default:
                 input = new TextField(table, name);
-                validator = validators.get(name);
+                if (!validators.containsKey(name))
+                    break;
+                
+                validator = validators.get(name).validator;
                 if (validator != null)
                     input.setValidator(validator);
                 
@@ -106,6 +110,16 @@ public class TableTool {
                 input.setEnabled(false);
             
             item.add(input);
+        }
+        
+        for (String vname : validators.keySet()) {
+            input = item.get(vname);
+            vdata = validators.get(vname);
+            if (vdata.inputs == null)
+                continue;
+            
+            for (String vinputname : vdata.inputs)
+                input.addValidatorInput((InputComponent)item.get(vinputname));
         }
         
         if (object == null)
@@ -180,8 +194,12 @@ public class TableTool {
     }
     
     public final void setValidator(String field,
-            Class<? extends Validator> validator) {
-        validators.put(field, validator);
+            Class<? extends Validator> validator, String... inputs) {
+        ValidatorData vdata = new ValidatorData();
+        
+        vdata.validator = validator;
+        vdata.inputs = inputs;
+        validators.put(field, vdata);
     }
     
     public final void visible(String... columns) {
@@ -206,4 +224,9 @@ public class TableTool {
             for (ExtendedObject object : objects)
                 additem(object);
     }
+}
+
+class ValidatorData {
+    public Class<? extends Validator> validator;
+    public String[] inputs;
 }
