@@ -1,6 +1,8 @@
 package org.iocaste.shell.common;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
@@ -26,6 +28,7 @@ public class TableTool {
     private Container container;
     private Table table;
     private View view;
+    private Map<String, Class<? extends Validator>> validators;
     
     public TableTool(Container container, String name) {
         this.container = new StandardContainer(container, name.concat("cnt"));
@@ -43,6 +46,7 @@ public class TableTool {
         table.setVisibleLines(15);
         disabled = new HashSet<>();
         view = container.getView();
+        validators = new HashMap<>();
     }
     
     public final void accept() {
@@ -76,6 +80,7 @@ public class TableTool {
         DataElement element;
         InputComponent input;
         String name;
+        Class<? extends Validator> validator;
         TableItem item = new TableItem(table);
         
         for (TableColumn column : table.getColumns()) {
@@ -90,6 +95,10 @@ public class TableTool {
                 break;
             default:
                 input = new TextField(table, name);
+                validator = validators.get(name);
+                if (validator != null)
+                    input.setValidator(validator);
+                
                 break;
             }
             
@@ -168,6 +177,11 @@ public class TableTool {
             break;
         }
         
+    }
+    
+    public final void setValidator(String field,
+            Class<? extends Validator> validator) {
+        validators.put(field, validator);
     }
     
     public final void visible(String... columns) {
