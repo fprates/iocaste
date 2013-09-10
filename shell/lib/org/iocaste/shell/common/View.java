@@ -50,24 +50,22 @@ public class View implements Serializable {
     private Map<String, Object> parameters;
     private Map<String, String> headervalues;
     private Map<String, Map<String, String>> sheet;
-    private boolean reloadable, dontpushpage, pagecall;
+    private boolean reloadable, dontpushpage, pagecall, initialized;
     private Const messagetype;
     private Locale locale;
     
     public View(String appname, String pagename) {
-        inputs = new ArrayList<String>();
-        lines = new ArrayList<String>();
-        parameters = new HashMap<String, Object>();
-        headervalues = new HashMap<String, String>();
-        containers = new ArrayList<Container>();
-        mpelements = new ArrayList<MultipartElement>();
-        dontpushpage = false;
-        reloadable = true;
-        contenttype = null;
-        initparams = new HashSet<String>();
+        inputs = new ArrayList<>();
+        lines = new ArrayList<>();
+        parameters = new HashMap<>();
+        headervalues = new HashMap<>();
+        containers = new ArrayList<>();
+        mpelements = new ArrayList<>();
+        initparams = new HashSet<>();
         
         this.appname = appname;
         this.pagename = pagename;
+        reloadable = true;
         
         clearRedirect();
     }
@@ -432,6 +430,12 @@ public class View implements Serializable {
         return pagecall;
     }
     
+    public final boolean isInitialized() {
+        boolean initialized = this.initialized;
+        this.initialized = true;
+        return initialized;
+    }
+    
     /**
      * Indica se foi solicitada recarga da visão.
      * @return
@@ -456,6 +460,10 @@ public class View implements Serializable {
      */
     public final void print(String line) {
         lines.add(line);
+    }
+    
+    public final void ready() {
+        initialized = false;
     }
     
     /**

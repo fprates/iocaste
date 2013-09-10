@@ -89,7 +89,9 @@ public abstract class AbstractPage extends AbstractFunction {
         Locale locale = new Iocaste(this).getLocale();
         
         view.setLocale(locale);
-        init(view);
+        if (!view.isInitialized())
+            init(view);
+        
         method = getClass().getMethod(view.getPageName(), View.class);
         method.invoke(this, view);
         if (view.getMessages() == null) {
