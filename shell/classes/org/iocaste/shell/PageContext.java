@@ -13,7 +13,7 @@ public class PageContext {
     private View view;
     private AppContext appctx;
     private String name, username;
-    private boolean reloadable;
+    private boolean reloadable, initialize;
     private Map<String, Object> parameters;
     private List<FileItem> files;
     private Set<String> actions;
@@ -69,6 +69,14 @@ public class PageContext {
      */
     public final List<FileItem> getFiles() {
         return files;
+    }
+    
+    /**
+     * Indica se a visão foi inicializada.
+     * @return true, se a visão foi inicializada.
+     */
+    public final boolean isInitializableView() {
+        return initialize;
     }
     
     /**
@@ -174,6 +182,14 @@ public class PageContext {
      */
     public final void setFiles(List<FileItem> files) {
         this.files = files;
+    }
+    
+    /**
+     * Define estado da inicialização da visão.
+     * @param initialized: true, para visão inicializada.
+     */
+    public final void setInitialize(boolean initialize) {
+        this.initialize = initialize;
     }
     
     /**

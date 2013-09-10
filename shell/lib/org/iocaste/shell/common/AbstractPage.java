@@ -86,10 +86,11 @@ public abstract class AbstractPage extends AbstractFunction {
         MessageSource messages;
         Method method;
         View view = message.get("view");
+        boolean initializable = message.getBoolean("init");
         Locale locale = new Iocaste(this).getLocale();
         
         view.setLocale(locale);
-        if (!view.isInitialized())
+        if (initializable)
             init(view);
         
         method = getClass().getMethod(view.getPageName(), View.class);

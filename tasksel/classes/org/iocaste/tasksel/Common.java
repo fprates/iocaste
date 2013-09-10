@@ -75,8 +75,7 @@ public class Common {
         if (app == null)
             return;
         
-        view.ready();
-        view.redirect(app, page);
+        view.redirect(app, page, View.INITIALIZE);
     }
 
 }

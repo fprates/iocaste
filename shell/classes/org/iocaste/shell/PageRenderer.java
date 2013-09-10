@@ -207,6 +207,7 @@ public class PageRenderer extends AbstractRenderer {
         message = new Message();
         message.setId("get_view_data");
         message.add("view", view);
+        message.add("init", pagectx.isInitializableView());
         message.setSessionid(complexid);
         
         initparams = pagectx.getInitParameters();
@@ -798,7 +799,8 @@ public class PageRenderer extends AbstractRenderer {
         
         if (!config.event)
             sequence++;
-            
+        
+        pagectx_.setInitialize(view.isInitializable());
         pagectx_.setSequence(sequence);
         pagectx_.setReloadableView(view.isReloadableView());
         pagectx_.setInitParameters(view.getInitParameters());

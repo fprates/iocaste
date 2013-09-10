@@ -9,7 +9,6 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-    private Map<String, Set<TaskEntry>> lists;
     
     public Main() {
         export("install", "install");
@@ -34,16 +33,6 @@ public class Main extends AbstractPage {
         vdata.redirect("iocaste-help", "view");
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractPage#init(
-     *     org.iocaste.shell.common.View)
-     */
-    @Override
-    protected final void init(View view) {
-        lists = Response.init(view, this);
-    }
-    
     /**
      * 
      * @param message
@@ -58,6 +47,7 @@ public class Main extends AbstractPage {
      * @param view Visão
      */
     public final void main(View view) {
+        Map<String, Set<TaskEntry>> lists = Response.init(view, this);
         Response.main(view, lists, this);
     }
     

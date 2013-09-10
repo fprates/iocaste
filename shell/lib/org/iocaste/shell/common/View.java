@@ -38,6 +38,7 @@ import java.util.Set;
  */
 public class View implements Serializable {
     private static final long serialVersionUID = -8331879385859372046L;
+    public static final boolean INITIALIZE = true;
     private byte[] content;
     private Element elementfocus;
     private String title, appname, pagename;
@@ -50,7 +51,7 @@ public class View implements Serializable {
     private Map<String, Object> parameters;
     private Map<String, String> headervalues;
     private Map<String, Map<String, String>> sheet;
-    private boolean reloadable, dontpushpage, pagecall, initialized;
+    private boolean reloadable, dontpushpage, pagecall, initialize;
     private Const messagetype;
     private Locale locale;
     
@@ -430,10 +431,12 @@ public class View implements Serializable {
         return pagecall;
     }
     
-    public final boolean isInitialized() {
-        boolean initialized = this.initialized;
-        this.initialized = true;
-        return initialized;
+    /**
+     * Indica se executou o procedimento de inicialização da visão.
+     * @return true, se visão foi inicializada.
+     */
+    public final boolean isInitializable() {
+        return initialize;
     }
     
     /**
@@ -462,13 +465,10 @@ public class View implements Serializable {
         lines.add(line);
     }
     
-    public final void ready() {
-        initialized = false;
-    }
-    
     /**
      * Redireciona visão.
-     * @param page visão.
+     * Não inicializa a visão.
+     * @param page página.
      */
     public final void redirect(String page) {
         redirect(null, page);
@@ -476,12 +476,24 @@ public class View implements Serializable {
     
     /**
      * Redireciona aplicação e visão.
+     * Não inicializa a visão.
      * @param app aplicação
-     * @param page visão
+     * @param page página
      */
     public final void redirect(String app, String page) {
+        redirect(app, page, false);
+    }
+    
+    /**
+     * Redireciona aplicação e visão.
+     * @param app aplicação
+     * @param page página
+     * @param initialize true, para inicializar a visão.
+     */
+    public final void redirect(String app, String page, boolean initialize) {
         rapp = app;
         rpage = page;
+        this.initialize = initialize;
         
         if (!dontpushpage)
             pagecall = true;
