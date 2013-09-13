@@ -26,6 +26,19 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
+     * Adiciona tíquete de acesso
+     * @param ticket
+     * @return
+     */
+    public final String addTicket(AccessTicket ticket) {
+        Message message = new Message();
+        
+        message.setId("add_ticket");
+        message.add("ticket", ticket);
+        return call(message);
+    }
+    
+    /**
      * Copia componentes de entrada.
      * 
      * @param container conteiner

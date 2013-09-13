@@ -7,6 +7,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +43,7 @@ import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.View;
 
 public class PageRenderer extends AbstractRenderer {
@@ -50,6 +52,7 @@ public class PageRenderer extends AbstractRenderer {
     private static final String EXCEPTION_HANDLER = "iocaste-exhandler";
     private static final byte AUTHORIZATION_ERROR = 1;
     private static Map<String, List<SessionContext>> apps;
+    private static Map<String, AccessTicket> tickets;
     private String sessionconnector, dbname;
     private Map<String, Map<String, String>> style;
     private MessageSource msgsource;
@@ -62,6 +65,28 @@ public class PageRenderer extends AbstractRenderer {
         style = null;
         sessionconnector = "iocaste-login";
         msgsource = Messages.getMessages();
+    }
+    
+    public static final String addTicket(Function function, AccessTicket ticket) {
+        Iocaste iocaste;
+        String ticketcode = UUID.randomUUID().toString();
+        
+        if (tickets == null)
+            tickets = new HashMap<>();
+            
+        tickets.put(ticketcode, ticket);
+        iocaste = new Iocaste(function);
+        iocaste.update(new StringBuilder(
+                "insert into SHELL004(TKTID, APPNM, PAGEN, USRNM, SECRT, LOCAL)"
+                + " values ('").
+                append(ticketcode).append("', '").
+                append(ticket.getAppname()).append("', '").
+                append(ticket.getPagename()).append("', '").
+                append(ticket.getUsername()).append("', '").
+                append(ticket.getSecret()).append("', '").
+                append(ticket.getLocale()).append("')").toString());
+        
+        return ticketcode;
     }
     
     /**
@@ -152,7 +177,8 @@ public class PageRenderer extends AbstractRenderer {
     }
     
     /**
-     * 
+     * Cria uma página de context para conexão.
+     * @param sessionid
      * @param logid
      * @return
      */
@@ -197,7 +223,6 @@ public class PageRenderer extends AbstractRenderer {
         if (appctx.getStyleSheet() == null) {
             if (style == null)
                 style = Style.get("DEFAULT", this);
-                
             appctx.setStyleSheet(style);
         }
         
@@ -287,9 +312,29 @@ public class PageRenderer extends AbstractRenderer {
         pagectx = new PageContext(contextdata.pagename);
         pagectx.setAppContext(appctx);
         pagectx.setLogid(contextdata.logid);
+        pagectx.setInitialize(contextdata.initialize);
         appctx.put(contextdata.pagename, pagectx);
         sessionctx.put(contextdata.appname, appctx);
         
+        return pagectx;
+    }
+    
+    private final PageContext createTicketContext(HttpServletRequest req,
+            String sessionid, int logid, Function function) {
+        PageContext pagectx;
+        ContextData contextdata = new ContextData();
+        AccessTicket ticket = tickets.get(req.getParameter("ticket"));
+        
+        contextdata.appname = ticket.getAppname();
+        contextdata.pagename = ticket.getPagename();
+        contextdata.logid = logid;
+        contextdata.sessionid = sessionid;
+        contextdata.initialize = true;
+        
+        pagectx = createPageContext(contextdata);
+        pagectx.addParameter("username", ticket.getUsername());
+        pagectx.addParameter("secret", ticket.getSecret());
+        pagectx.addParameter("locale", ticket.getLocale());
         return pagectx;
     }
     
@@ -317,8 +362,12 @@ public class PageRenderer extends AbstractRenderer {
                 logid = apps.get(sessionid).size();
             }
             
-            if (pagectx == null)
-                pagectx = createLoginContext(sessionid, logid);
+            if (pagectx == null) {
+                if (!hasTicket(req))
+                    pagectx = createLoginContext(sessionid, logid);
+                else
+                    pagectx = createTicketContext(req, sessionid, logid, this);
+            }
             
             if (pagectx.getViewData() != null)
                 pagectx = processController(req, pagectx, sessionid);
@@ -601,6 +650,23 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
+     * @param req
+     * @return
+     */
+    private final boolean hasTicket(HttpServletRequest req) {
+        String ticket = req.getParameter("ticket");
+        
+        if (ticket == null)
+            return false;
+        
+        if (tickets == null)
+            tickets = loadTickets(this);
+        
+        return tickets.containsKey(ticket);
+    }
+    
+    /**
+     * 
      * @param getSessionId()
      * @return
      */
@@ -658,6 +724,33 @@ public class PageRenderer extends AbstractRenderer {
                 toString();
         service = new Service(complexid, url);
         return (Boolean)service.call(message);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private final Map<String, AccessTicket> loadTickets(Function function) {
+        AccessTicket ticket;
+        Map<String, Object> record;
+        Object[] lines;
+        Map<String, AccessTicket> tickets = new HashMap<>();
+        CheckedSelect select = new CheckedSelect(this);
+        
+        select.setFrom("SHELL004");
+        lines = select.execute();
+        if (lines == null)
+            return tickets;
+        
+        for (Object line : lines) {
+            record = (Map<String, Object>)line;
+            ticket = new AccessTicket();
+            ticket.setAppname((String)record.get("APPNM"));
+            ticket.setPagename((String)record.get("PAGEN"));
+            ticket.setUsername((String)record.get("USRNM"));
+            ticket.setSecret((String)record.get("SECRT"));
+            ticket.setLocale((String)record.get("LOCAL"));
+            tickets.put((String)record.get("TKTID"), ticket);
+        }
+            
+        return tickets;
     }
     
     /**
@@ -984,7 +1077,6 @@ public class PageRenderer extends AbstractRenderer {
             for (String key : parameters.keySet())
                 view.export(key, parameters.get(key));
         }
-
         /*
          * ajusta e chama o renderizador
          */
@@ -1051,4 +1143,5 @@ class InputData {
 class ContextData {
     public String sessionid, appname, pagename;
     public int logid;
+    public boolean initialize;
 }

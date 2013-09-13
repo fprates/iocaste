@@ -28,7 +28,7 @@ public class Servlet extends ServerServlet {
         
         parameters = new HashMap<String, Object[]>();
         parameters.put("from",
-                new String[] {"SHELL001", "SHELL002", "SHELL003"});
+                new String[] {"SHELL001", "SHELL002", "SHELL003", "SHELL004"});
         authorize("checked_select", parameters);
         
         authorize("get_host", null);

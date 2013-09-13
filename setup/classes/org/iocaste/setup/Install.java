@@ -18,6 +18,7 @@ public class Install {
         CModel.install(data, config);
         CDocument.install(data, config);
         GlobalConfig.install(data);
+        Shell.install(data);
         
         return data;
     }

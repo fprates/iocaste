@@ -5,11 +5,13 @@ import java.util.Map;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.View;
 
 public class Services extends AbstractFunction {
 
     public Services() {
+        export("add_ticket", "addTicket");
         export("get_view", "getView");
         export("home", "home");
         export("pop_page", "popPage");
@@ -18,10 +20,21 @@ public class Services extends AbstractFunction {
     }
     
     /**
-     * 
-     * @param name
-     * @param function
-     * @return
+     * Adiciona tíquete de acesso à lista de iocaste-shell.
+     * @param message:
+     * - ticket (TicketData): tíquete de acesso
+     * @return código do tíquete
+     */
+    public final String addTicket(Message message) {
+        AccessTicket ticket = message.get("ticket");
+        return PageRenderer.addTicket(this, ticket);
+    }
+    
+    /**
+     * Seleciona mapa css do estilo especificado.
+     * @param name nome do estilo
+     * @param function instância da função
+     * @return mapa com estilos dos componentes.
      */
     public final static Map<String, Map<String, String>> getStyle(
             String name, Function function) {
@@ -29,9 +42,11 @@ public class Services extends AbstractFunction {
     }
     
     /**
-     * 
-     * @param message
-     * @return
+     * Retorna a visão atual da sessão.
+     * @param message:
+     * - app_name (String): aplicação
+     * - page_name (String): página
+     * @return visão
      */
     public final View getView(Message message) {
         String sessionid = message.getSessionid();
