@@ -105,6 +105,7 @@ public class Main extends AbstractPage {
     private final void report(Container container, Properties properties) {
         TableItem item;
         Text text;
+        String name;
         Table table = new Table(container, "properties");
         
         new TableColumn(table, "name");
@@ -112,14 +113,15 @@ public class Main extends AbstractPage {
         
         table.setMark(false);
         
-        for (Object name : properties.keySet()) {
+        for (Object oname : properties.keySet()) {
+            name = oname.toString();
             item = new TableItem(table);
-            text = new Text(table, (String)name);
-            text.setText((String)name);
+            text = new Text(table, name);
+            text.setText(name);
             item.add(text);
             
-            text = new Text(table, name+"_value");
-            text.setText((String)properties.get(name));
+            text = new Text(table, name.concat("_value"));
+            text.setText(properties.getProperty(name));
             item.add(text);
         }
         
