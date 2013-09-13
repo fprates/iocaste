@@ -1,5 +1,7 @@
 package org.iocaste.globalconfig;
 
+import java.math.BigDecimal;
+
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
@@ -148,7 +150,7 @@ public class Services extends AbstractFunction {
         case DataType.CHAR:
             return value;
         case DataType.NUMC:
-            return Long.parseLong(value);
+            return new BigDecimal(value);
         case DataType.BOOLEAN:
             return Boolean.parseBoolean(value);
         }

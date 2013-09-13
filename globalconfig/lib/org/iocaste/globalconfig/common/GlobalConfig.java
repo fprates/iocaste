@@ -1,5 +1,7 @@
 package org.iocaste.globalconfig.common;
 
+import java.math.BigDecimal;
+
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
@@ -55,6 +57,32 @@ public class GlobalConfig extends AbstractServiceInterface {
         message.setId("get");
         message.add("name", name);
         return call(message);
+    }
+    
+    /**
+     * Retorna o valor inteiro de um parâmetro global.
+     * @param name nome do parâmetro
+     * @return valor inteiro
+     */
+    public final int geti(String name) {
+        Object value = get(name);
+        if (value == null)
+            return 0;
+        
+        return ((BigDecimal)value).intValue();
+    }
+    
+    /**
+     * Retorno o valor inteiro longo de um parâmetro global.
+     * @param name nome do parâmetro
+     * @return valor inteiro longo
+     */
+    public final long getl(String name) {
+        Object value = get(name);
+        if (value == null)
+            return 0l;
+        
+        return ((BigDecimal)value).longValue();
     }
     
     /**
