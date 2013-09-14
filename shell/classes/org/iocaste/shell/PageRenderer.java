@@ -323,7 +323,8 @@ public class PageRenderer extends AbstractRenderer {
             String sessionid, int logid, Function function) {
         PageContext pagectx;
         ContextData contextdata = new ContextData();
-        AccessTicket ticket = tickets.get(req.getParameter("ticket"));
+        String ticketcode = req.getParameter("ticket");
+        AccessTicket ticket = tickets.get(ticketcode);
         
         contextdata.appname = ticket.getAppname();
         contextdata.pagename = ticket.getPagename();
@@ -335,6 +336,7 @@ public class PageRenderer extends AbstractRenderer {
         pagectx.addParameter("username", ticket.getUsername());
         pagectx.addParameter("secret", ticket.getSecret());
         pagectx.addParameter("locale", ticket.getLocale());
+        pagectx.addParameter("ticket", ticketcode);
         return pagectx;
     }
     
