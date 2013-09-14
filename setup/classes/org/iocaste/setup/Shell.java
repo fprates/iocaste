@@ -15,7 +15,7 @@ public class Shell {
         DataElement element;
         DocumentModel model = data.getModel("SHELL_TICKETS", "SHELL004", null);
         
-        element = new DataElement("TICKET_ID");
+        element = new DataElement("SHELL_TICKET_ID");
         element.setType(DataType.CHAR);
         element.setLength(64);
         item = new DocumentModelItem("ID");
