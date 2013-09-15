@@ -35,35 +35,28 @@ public class ExtendedObject implements Serializable {
         this.model = model;
     }
     
+    /**
+     * Retorna valor do campo especificado no formato double.
+     * @param name nome do campo
+     * @return valor do campo do tipo double
+     */
     public final double getd(String name) {
-        Object value;
+        Object value = getNumericValue(name);
         
-        if (!byname.containsKey(name))
-            throw new RuntimeException(new StringBuilder(name).
-                    append(" isn't a valid field name for ").
-                    append(model.getName()).toString());
-        
-        value = getValue(name);
         if (!(value instanceof BigDecimal))
             return (double)value;
         
         return ((BigDecimal)value).doubleValue();
     }
-    
+
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna valor do campo especificado no formato int.
+     * @param name nome do campo
+     * @return valor do campo do tipo int
      */
     public final int geti(String name) {
-        Object value;
+        Object value = getNumericValue(name);
         
-        if (!byname.containsKey(name))
-            throw new RuntimeException(new StringBuilder(
-                    "Invalid field name for ").
-                    append(model.getName()).toString());
-        
-        value = getValue(name);
         if (value instanceof BigDecimal)
             return ((BigDecimal)value).intValue();
         
@@ -73,21 +66,15 @@ public class ExtendedObject implements Serializable {
             return Integer.parseInt(value.toString());
         }
     }
-    
+
     /**
-     * 
-     * @param name
-     * @return
+     * Retorna valor do campo especificado no formato long.
+     * @param name nome do campo
+     * @return valor do campo do tipo long
      */
     public final long getl(String name) {
-        Object value;
+        Object value = getNumericValue(name);
         
-        if (!byname.containsKey(name))
-            throw new RuntimeException(new StringBuilder(
-                    "Invalid field name for ").
-                    append(model.getName()).toString());
-        
-        value = getValue(name);
         if (value instanceof BigDecimal)
             return ((BigDecimal)value).longValue();
         
@@ -104,6 +91,23 @@ public class ExtendedObject implements Serializable {
      */
     public final DocumentModel getModel() {
         return model;
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    private final Object getNumericValue(String name) {
+        Object value;
+        
+        if (!byname.containsKey(name))
+            throw new RuntimeException(new StringBuilder(name).
+                    append(" isn't a valid field name for ").
+                    append(model.getName()).toString());
+        
+        value = getValue(name);
+        return (value == null)? 0 : value;
     }
     
     /**
