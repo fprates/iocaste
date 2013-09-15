@@ -53,10 +53,9 @@ public class MessageSource implements Serializable {
      * @param app aplicação.
      * @param locale localização
      * @param function função.
-     * @throws Exception
      */
     public final void loadFromApplication(String app, Locale locale,
-            Function function) throws Exception {
+            Function function) {
         ExtendedObject[] objects;
         String tag, message;
         Documents documents;
