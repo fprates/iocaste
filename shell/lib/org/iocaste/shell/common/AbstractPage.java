@@ -87,8 +87,9 @@ public abstract class AbstractPage extends AbstractFunction {
         Method method;
         View view = message.get("view");
         boolean initializable = message.getBoolean("init");
-        Locale locale = new Iocaste(this).getLocale();
-        
+        Iocaste iocaste = new Iocaste(this);
+        Locale locale = iocaste.getLocale();
+
         view.setLocale(locale);
         if (initializable)
             init(view);
@@ -96,6 +97,16 @@ public abstract class AbstractPage extends AbstractFunction {
         method = getClass().getMethod(view.getPageName(), View.class);
         method.invoke(this, view);
         if (view.getMessages() == null) {
+            /*
+             * há alguma chance que getViewData() tenha sido chamada
+             * a partir de um ticket, que nesse caso teria a localização
+             * definida (provavelmente) apenas depois da chamada da visão.
+             */
+            if (locale == null) {
+                locale = iocaste.getLocale();
+                view.setLocale(locale);
+            }
+            
             messages = new MessageSource();
             messages.loadFromApplication(view.getAppName(), locale, this);
             view.setMessages(messages);
