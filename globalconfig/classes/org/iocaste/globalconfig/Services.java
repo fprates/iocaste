@@ -43,17 +43,17 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     private final byte convertClassType(Class<?> type) {
-        if (type == String.class)
-            return DataType.CHAR;
-        
-        if (type == Integer.class ||
-                type == Byte.class ||
-                type == Long.class ||
-                type == Short.class)
+        switch (type.getName()) {
+        case "java.lang.Integer":
+        case "java.lang.Byte":
+        case "java.lang.Long":
+        case "Short":
             return DataType.NUMC;
-        
-        if (type == Boolean.class)
+        case "java.lang.String":
+            return DataType.CHAR;
+        case "java.lang.Boolean":
             return DataType.BOOLEAN;
+        }
         
         throw new RuntimeException("invalid class type");
     }
@@ -152,7 +152,7 @@ public class Services extends AbstractFunction {
         case DataType.NUMC:
             return new BigDecimal(value);
         case DataType.BOOLEAN:
-            return Boolean.parseBoolean(value);
+            return (value == null)? false : Boolean.parseBoolean(value);
         }
         
         throw new IocasteException("invalid data type definition.");
