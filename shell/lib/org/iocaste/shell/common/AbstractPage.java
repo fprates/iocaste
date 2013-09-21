@@ -105,6 +105,8 @@ public abstract class AbstractPage extends AbstractFunction {
             if (locale == null) {
                 locale = iocaste.getLocale();
                 view.setLocale(locale);
+                for (Container container : view.getContainers())
+                    setLocaleForElement(container, view.getLocale());
             }
             
             messages = new MessageSource();
@@ -113,6 +115,18 @@ public abstract class AbstractPage extends AbstractFunction {
         }
         
         return view;
+    }
+    
+    private void setLocaleForElement(Element element, Locale locale) {
+        Container container;
+        
+        element.setLocale(locale);
+        if (!element.isContainable())
+            return;
+        
+        container = (Container)element;
+        for (Element element_ : container.getElements())
+            setLocaleForElement(element_, locale);
     }
     
     /**
