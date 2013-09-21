@@ -51,7 +51,7 @@ public class Response {
         context.taskshelper = new TableTool(tabs, "tasks");
         tasks = context.taskshelper.getTable();
         tasks.importModel(context.tasksmodel);
-        context.taskshelper.visible("GROUP");
+        context.taskshelper.setVisibility(true, "GROUP");
         context.taskshelper.setObjects(context.userdata.tasks);
         
         tabitem = new TabbedPaneItem(tabs, "taskstab");
@@ -63,7 +63,7 @@ public class Response {
         context.profileshelper = new TableTool(tabs, "profiles");
         profiles = context.profileshelper.getTable();
         profiles.importModel(context.profilesmodel);
-        context.profileshelper.visible("PROFILE");
+        context.profileshelper.setVisibility(true, "PROFILE");
         context.profileshelper.setObjects(context.userdata.profiles);
         
         tabitem = new TabbedPaneItem(tabs, "profiletab");

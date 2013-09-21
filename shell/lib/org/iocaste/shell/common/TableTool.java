@@ -193,6 +193,14 @@ public class TableTool {
         
     }
     
+    public final void setObjects(ExtendedObject[] objects) {
+        if (objects == null || objects.length == 0)
+            additems();
+        else
+            for (ExtendedObject object : objects)
+                additem(object);
+    }
+    
     public final void setValidator(String field,
             Class<? extends Validator> validator, String... inputs) {
         ValidatorData vdata = new ValidatorData();
@@ -202,27 +210,19 @@ public class TableTool {
         validators.put(field, vdata);
     }
     
-    public final void visible(String... columns) {
+    public final void setVisibility(boolean visible, String... columns) {
         for (TableColumn column : table.getColumns())
             if (!column.isMark())
-                column.setVisible(false);
+                column.setVisible(!visible);
         
         for (String column : columns)
-            table.getColumn(column).setVisible(true);
+            table.getColumn(column).setVisible(visible);
     }
     
     public static final void removeitems(Table table) {
         for (TableItem item : table.getItems())
             if (item.isSelected())
                 table.remove(item);
-    }
-    
-    public final void setObjects(ExtendedObject[] objects) {
-        if (objects == null || objects.length == 0)
-            additems();
-        else
-            for (ExtendedObject object : objects)
-                additem(object);
     }
 }
 
