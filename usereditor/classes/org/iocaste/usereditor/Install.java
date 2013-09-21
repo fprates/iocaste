@@ -29,6 +29,7 @@ public class Install {
         messages.put("addprofiles", "Adicionar");
         messages.put("addtasks", "Adicionar");
         messages.put("create", "Criar");
+        messages.put("delete", "Remover");
         messages.put("display", "Exibir");
         messages.put("FIRSTNAME", "Nome");
         messages.put("GROUP", "Grupo de tarefas");
@@ -45,8 +46,9 @@ public class Install {
         messages.put("SURNAME", "Sobrenome");
         messages.put("taskstab", "Tarefas");
         messages.put("update", "Atualizar");
-        messages.put("user.saved.successfully", "Usuário gravado com sucesso.");
         messages.put("user.already.exists", "Usuário já existe.");
+        messages.put("user.dropped", "Usuário removido com sucesso.");
+        messages.put("user.saved.successfully", "Usuário gravado com sucesso.");
         messages.put("user-selection", "Seleção de usuário");
         messages.put("usereditor-create", "Criar usuário");
         messages.put("usereditor-display", "Exibir usuário");

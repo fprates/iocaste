@@ -28,24 +28,40 @@ public class Request {
     
     /**
      * 
-     * @param view
-     * @param function
+     * @param context
      */
-    public static final UserData create(View view, Function function) {
-        UserData userdata;
-        DataForm form = view.getElement("selection");
+    public static final void create(Context context) {
+        DataForm form = context.view.getElement("selection");
         String username = form.get("USERNAME").get();
         
-        if (new Documents(function).getObject("LOGIN", username) != null) {
-            view.message(Const.ERROR, "user.already.exists");
-            return null;
+        context.userdata = null;
+        if (exists(username, context)) {
+            context.view.message(Const.ERROR, "user.already.exists");
+            return;
         }
         
-        userdata = new UserData();
-        userdata.username = username;
-        view.redirect("form");
+        context.userdata = new UserData();
+        context.userdata.username = username;
+        context.view.redirect("form");
+    }
+    
+    public static final void delete(Context context) {
+        DataForm form = context.view.getElement("selection");
+        String username = form.get("USERNAME").get();
         
-        return userdata;
+        if (!exists(username, context)) {
+            context.view.message(Const.ERROR, "user.not.exists");
+            return;
+        }
+        
+        new Iocaste(context.function).dropUser(username);
+        context.view.message(Const.STATUS, "user.dropped");
+    }
+    
+    private static final boolean exists(String username, Context context) {
+        Documents documents = new Documents(context.function);
+        
+        return (documents.getObject("LOGIN", username) != null); 
     }
     
     /**

@@ -35,7 +35,13 @@ public class Main extends AbstractPage {
     
     public final void create(View view) {
         context.mode = Context.CREATE;
-        context.userdata = Request.create(view, this);
+        context.view = view;
+        Request.create(context);
+    }
+    
+    public final void delete(View view) {
+        context.view = view;
+        Request.delete(context);
     }
     
     public final void display(View view) {

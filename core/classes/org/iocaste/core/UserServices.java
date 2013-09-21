@@ -13,6 +13,7 @@ public class UserServices {
     private static final byte UPD_USRID = 2;
     private static final byte UPD_USER = 3;
     private static final byte USER = 4;
+    private static final byte DEL_USER = 5;
     private static final String[] QUERIES = {
         "insert into USERS001(uname, secrt, fname, sname, init, usrid) " +
                 "values(?, ?, ?, ?, ?, ?)",
@@ -20,7 +21,8 @@ public class UserServices {
         "update USERS000 set CRRNT = ?",
         "update USERS001 set SECRT = ?, INIT = ?, FNAME = ?, SNAME = ? " +
                 "where UNAME = ?",
-        "select * from USERS001 where UNAME = ?"
+        "select * from USERS001 where UNAME = ?",
+        "delete from USERS001 where UNAME = ?"
     };
     
     @SuppressWarnings("unchecked")
@@ -47,6 +49,26 @@ public class UserServices {
         db.update(connection, QUERIES[UPD_USRID], userid);
     }
     
+    /**
+     * 
+     * @param username
+     * @param connection
+     * @param db
+     * @throws Exception
+     */
+    public static final void drop(String username, Connection connection,
+            DBServices db) throws Exception {
+        db.update(connection, QUERIES[DEL_USER], username);
+    }
+    
+    /**
+     * 
+     * @param usrctx
+     * @param connection
+     * @param db
+     * @return
+     * @throws Exception
+     */
     public static final Map<String, Object> getSessionInfo(UserContext usrctx,
             Connection connection, DBServices db) throws Exception {
         Map<String, Object> info;

@@ -65,6 +65,18 @@ public final class Iocaste extends AbstractServiceInterface {
     }
     
     /**
+     * 
+     * @param username
+     */
+    public final void dropUser(String username) {
+        Message message = new Message();
+        
+        message.setId("drop_user");
+        message.add("username", username);
+        call(message);
+    }
+    
+    /**
      * Retorna objeto do contexto informado.
      * @param name nome do contexto
      * @return contexto

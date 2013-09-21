@@ -3,6 +3,7 @@ package org.iocaste.usereditor;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.TableTool;
+import org.iocaste.shell.common.View;
 
 public class Context {
     public static final byte CREATE = 0;
@@ -19,4 +20,5 @@ public class Context {
     public Function function;
     public TableTool taskshelper, profileshelper;
     public DocumentModel usermodel, tasksmodel, profilesmodel;
+    public View view;
 }

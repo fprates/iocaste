@@ -125,6 +125,7 @@ public class Response {
         new Button(container, "create");
         new Button(container, "display");
         new Button(container, "update");
+        new Button(container, "delete");
         
         view.setTitle("user-selection");
     }

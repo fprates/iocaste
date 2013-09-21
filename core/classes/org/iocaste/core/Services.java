@@ -41,6 +41,7 @@ public class Services extends AbstractFunction {
         export("commit", "commit");
         export("create_user", "createUser");
         export("disconnect", "disconnect");
+        export("drop_user", "dropUser");
         export("get_context", "getContext");
         export("get_current_app", "getCurrentApp");
         export("get_host", "getHost");
@@ -172,6 +173,17 @@ public class Services extends AbstractFunction {
         
         if (sessions.containsKey(sessionid))
             sessions.remove(sessionid);
+    }
+    
+    /**
+     * 
+     * @param message
+     */
+    public final void dropUser(Message message) throws Exception {
+        String sessionid = message.getSessionid();
+        String username = message.getString("username");
+        
+        UserServices.drop(username, getDBConnection(sessionid), db);
     }
     
     /**
