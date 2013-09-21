@@ -7,7 +7,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,10 +51,10 @@ public class PageRenderer extends AbstractRenderer {
     private static final String EXCEPTION_HANDLER = "iocaste-exhandler";
     private static final byte AUTHORIZATION_ERROR = 1;
     private static Map<String, List<SessionContext>> apps;
-    private static Map<String, AccessTicket> tickets;
     private String sessionconnector, dbname;
     private Map<String, Map<String, String>> style;
     private MessageSource msgsource;
+    private static TicketControl tickets;
     
     static {
         apps = new HashMap<>();
@@ -67,26 +66,12 @@ public class PageRenderer extends AbstractRenderer {
         msgsource = Messages.getMessages();
     }
     
-    public static final String addTicket(Function function, AccessTicket ticket) {
-        Iocaste iocaste;
-        String ticketcode = UUID.randomUUID().toString();
-        
+    public static final String addTicket(Function function, AccessTicket ticket)
+    {
         if (tickets == null)
-            tickets = new HashMap<>();
-            
-        tickets.put(ticketcode, ticket);
-        iocaste = new Iocaste(function);
-        iocaste.update(new StringBuilder(
-                "insert into SHELL004(TKTID, APPNM, PAGEN, USRNM, SECRT, LOCAL)"
-                + " values ('").
-                append(ticketcode).append("', '").
-                append(ticket.getAppname()).append("', '").
-                append(ticket.getPagename()).append("', '").
-                append(ticket.getUsername()).append("', '").
-                append(ticket.getSecret()).append("', '").
-                append(ticket.getLocale()).append("')").toString());
+            tickets = new TicketControl();
         
-        return ticketcode;
+        return tickets.add(ticket, function);
     }
     
     /**
@@ -661,10 +646,12 @@ public class PageRenderer extends AbstractRenderer {
         if (ticket == null)
             return false;
         
-        if (tickets == null)
-            tickets = loadTickets(this);
+        if (tickets == null) {
+            tickets = new TicketControl();
+            tickets.load(this);
+        }
         
-        return tickets.containsKey(ticket);
+        return tickets.has(ticket);
     }
     
     /**
@@ -726,33 +713,6 @@ public class PageRenderer extends AbstractRenderer {
                 toString();
         service = new Service(complexid, url);
         return (Boolean)service.call(message);
-    }
-    
-    @SuppressWarnings("unchecked")
-    private final Map<String, AccessTicket> loadTickets(Function function) {
-        AccessTicket ticket;
-        Map<String, Object> record;
-        Object[] lines;
-        Map<String, AccessTicket> tickets = new HashMap<>();
-        CheckedSelect select = new CheckedSelect(this);
-        
-        select.setFrom("SHELL004");
-        lines = select.execute();
-        if (lines == null)
-            return tickets;
-        
-        for (Object line : lines) {
-            record = (Map<String, Object>)line;
-            ticket = new AccessTicket();
-            ticket.setAppname((String)record.get("APPNM"));
-            ticket.setPagename((String)record.get("PAGEN"));
-            ticket.setUsername((String)record.get("USRNM"));
-            ticket.setSecret((String)record.get("SECRT"));
-            ticket.setLocale((String)record.get("LOCAL"));
-            tickets.put((String)record.get("TKTID"), ticket);
-        }
-            
-        return tickets;
     }
     
     /**
@@ -1039,6 +999,11 @@ public class PageRenderer extends AbstractRenderer {
         if (inputdata.element.hasMultipartSupport())
             inputdata.view.addMultipartElement(
                     (MultipartElement)inputdata.element);
+    }
+    
+    public static final void removeTicket(String ticketcode, Function function)
+    {
+        tickets.remove(ticketcode, function);
     }
     
     /**

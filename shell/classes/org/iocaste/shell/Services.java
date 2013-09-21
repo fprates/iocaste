@@ -16,6 +16,7 @@ public class Services extends AbstractFunction {
         export("home", "home");
         export("pop_page", "popPage");
         export("push_page", "pushPage");
+        export("remove_ticket", "removeTicket");
         export("update_view", "updateView");
     }
     
@@ -88,6 +89,16 @@ public class Services extends AbstractFunction {
         String pagename = message.getString("page_name");
         
         PageRenderer.pushPage(sessionid, appname, pagename);
+    }
+    
+    /**
+     * 
+     * @param message
+     */
+    public final void removeTicket(Message message) {
+        String ticket = message.getString("ticket");
+        
+        PageRenderer.removeTicket(ticket, this);
     }
     
     /**

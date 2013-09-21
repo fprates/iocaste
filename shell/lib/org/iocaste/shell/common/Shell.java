@@ -242,6 +242,18 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
+     * Remove ticket da lista de acessos.
+     * @param ticket código do ticket de acesso.
+     */
+    public final void removeTicket(String ticket) {
+        Message message = new Message();
+        
+        message.setId("remove_ticket");
+        message.add("ticket", ticket);
+        call(message);
+    }
+    
+    /**
      * 
      * @param value
      * @param element
