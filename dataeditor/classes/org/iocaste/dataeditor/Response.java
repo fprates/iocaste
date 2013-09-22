@@ -13,7 +13,6 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Shell;
-import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TableTool;
 import org.iocaste.shell.common.View;
@@ -86,7 +85,6 @@ public class Response {
      * @param context
      */
     public static final void itens(Context context) {
-        Table itens;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         
@@ -94,23 +92,22 @@ public class Response {
         pagecontrol.add("back");
         
         context.tablehelper = new TableTool(container, "itens");
-        itens = context.tablehelper.getTable();
-        itens.importModel(context.model);
-        itens.setVisibleLines(0);
+        context.tablehelper.model(context.model);
+        context.tablehelper.setVisibleLines(0);
         context.tablehelper.setObjects(context.itens);
         context.view.setTitle(context.model.getName());
         
         switch (context.mode) {
         case Context.DISPLAY:
             context.tablehelper.setMode(TableTool.DISPLAY, context.view);
-            for (TableItem item : itens.getItems())
+            for (TableItem item : context.tablehelper.getItems())
                 for (DocumentModelItem mitem : context.model.getItens())
                     item.get(mitem.getName()).setEnabled(false);
             break;
         case Context.UPDATE:
             pagecontrol.add("save", PageControl.REQUEST);
             context.tablehelper.setMode(TableTool.UPDATE, context.view);
-            for (TableItem item : itens.getItems())
+            for (TableItem item : context.tablehelper.getItems())
                 for (DocumentModelKey key : context.model.getKeys())
                     item.get(key.getModelItemName()).setEnabled(false);
             break;

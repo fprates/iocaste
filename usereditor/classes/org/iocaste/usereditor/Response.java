@@ -12,14 +12,12 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
-import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableTool;
 import org.iocaste.shell.common.View;
 
 public class Response {
 
     public static final void form(View view, Context context) {
-        Table profiles, tasks;
         TabbedPaneItem tabitem;
         DataItem secret, username;
         Form container = new Form(view, "main");
@@ -49,8 +47,7 @@ public class Response {
          * tarefas
          */
         context.taskshelper = new TableTool(tabs, "tasks");
-        tasks = context.taskshelper.getTable();
-        tasks.importModel(context.tasksmodel);
+        context.taskshelper.model(context.tasksmodel);
         context.taskshelper.setVisibility(true, "GROUP");
         context.taskshelper.setObjects(context.userdata.tasks);
         
@@ -61,8 +58,7 @@ public class Response {
          * perfis
          */
         context.profileshelper = new TableTool(tabs, "profiles");
-        profiles = context.profileshelper.getTable();
-        profiles.importModel(context.profilesmodel);
+        context.profileshelper.model(context.profilesmodel);
         context.profileshelper.setVisibility(true, "PROFILE");
         context.profileshelper.setObjects(context.userdata.profiles);
         

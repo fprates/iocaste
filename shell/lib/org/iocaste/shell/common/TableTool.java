@@ -1,12 +1,11 @@
 package org.iocaste.shell.common;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
@@ -24,7 +23,7 @@ public class TableTool {
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
     private String[] buttons;
-    private Set<String> disabled;
+    private Map<String, Column> columns;
     private Container container;
     private Table table;
     private View view;
@@ -44,7 +43,7 @@ public class TableTool {
         table = new Table(this.container, name);
         table.setMark(true);
         table.setVisibleLines(15);
-        disabled = new HashSet<>();
+        columns = new HashMap<>();
         view = container.getView();
         validators = new HashMap<>();
     }
@@ -77,6 +76,7 @@ public class TableTool {
     }
     
     public final void additem(ExtendedObject object) {
+        Column column;
         DataElement element;
         InputComponent input;
         String name;
@@ -84,29 +84,36 @@ public class TableTool {
         Class<? extends Validator> validator;
         TableItem item = new TableItem(table);
         
-        for (TableColumn column : table.getColumns()) {
-            if (column.isMark())
+        for (TableColumn tcolumn : table.getColumns()) {
+            if (tcolumn.isMark())
                 continue;
 
-            name = column.getName();
-            element = column.getModelItem().getDataElement();
+            name = tcolumn.getName();
+            column = columns.get(name);
+            element = tcolumn.getModelItem().getDataElement();
             switch (element.getType()) {
             case DataType.BOOLEAN:
                 input = new CheckBox(table, name);
                 break;
             default:
-                input = new TextField(table, name);
+                switch (column.type) {
+                case LIST_BOX:
+                    input = new ListBox(table, name);
+                    break;
+                default:
+                    input = new TextField(table, name);
+                    break;
+                }
+                
                 if (!validators.containsKey(name))
                     break;
                 
                 validator = validators.get(name).validator;
                 if (validator != null)
                     input.setValidator(validator);
-                
-                break;
             }
             
-            if (disabled.contains(name))
+            if (column.disabled)
                 input.setEnabled(false);
             
             item.add(input);
@@ -128,14 +135,16 @@ public class TableTool {
         item.setObject(object);
     }
     
-    public final void disable(String... columns) {
-        disabled.clear();
-        for (String column : columns)
-            disabled.add(column);
+    public final void disable(String... tcolumns) {
+        for (String name :  columns.keySet())
+            columns.get(name).disabled = false;
+        
+        for (String column : tcolumns)
+            columns.get(column).disabled = true;
         
         for (TableItem item : table.getItems())
             for (Element element : item.getElements())
-                element.setEnabled(!disabled.contains(element.getName()));
+                element.setEnabled(!columns.get(element.getName()).disabled);
     }
     
     public final String getButtonName(byte code) {
@@ -159,8 +168,16 @@ public class TableTool {
         return table.getItems();
     }
     
-    public final Table getTable() {
-        return table;
+    public final void model(DocumentModel model) {
+        Column column;
+        
+        table.importModel(model);
+        columns.clear();
+        for (TableColumn tcolumn : table.getColumns()) {
+            column = new Column();
+            column.type = Const.TEXT_FIELD;
+            columns.put(tcolumn.getName(), column);
+        }
     }
     
     public final void refresh(View view) {
@@ -170,6 +187,10 @@ public class TableTool {
     
     public final void remove() {
         removeitems(table);
+    }
+    
+    public final void setColumnType(String column, Const type) {
+        columns.get(column).type = type;
     }
     
     public final void setMode(byte mode, View view) {
@@ -222,6 +243,10 @@ public class TableTool {
             table.getColumn(column).setVisible(visible);
     }
     
+    public final void setVisibleLines(int lines) {
+        table.setVisibleLines(lines);
+    }
+    
     public static final void removeitems(Table table) {
         for (TableItem item : table.getItems())
             if (item.isSelected())
@@ -232,4 +257,9 @@ public class TableTool {
 class ValidatorData {
     public Class<? extends Validator> validator;
     public String[] inputs;
+}
+
+class Column {
+    public boolean disabled;
+    public Const type;
 }
