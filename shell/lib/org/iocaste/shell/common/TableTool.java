@@ -95,6 +95,11 @@ public class TableTool {
                 switch (column.type) {
                 case LIST_BOX:
                     input = new ListBox(table, name);
+                    if (column.values == null)
+                        break;
+                    
+                    for (String vname : column.values.keySet())
+                        ((ListBox)input).add(vname, column.values.get(vname));
                     break;
                 default:
                     input = new TextField(table, name);
@@ -188,6 +193,11 @@ public class TableTool {
         columns.get(column).type = type;
     }
     
+    public final void setColumnValues(String column, Map<String, Object> values)
+    {
+        columns.get(column).values = values;
+    }
+    
     public final void setMode(byte mode, View view) {
         Button[] buttons = getButtons(view);
         
@@ -258,4 +268,5 @@ class Column {
     public boolean disabled;
     public Const type;
     public ValidatorData validator;
+    public Map<String, Object> values;
 }
