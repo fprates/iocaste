@@ -27,7 +27,6 @@ public class TableTool {
     private Container container;
     private Table table;
     private View view;
-    private Map<String, ValidatorData> validators;
     
     public TableTool(Container container, String name) {
         this.container = new StandardContainer(container, name.concat("cnt"));
@@ -45,7 +44,6 @@ public class TableTool {
         table.setVisibleLines(15);
         columns = new HashMap<>();
         view = container.getView();
-        validators = new HashMap<>();
     }
     
     public final void accept() {
@@ -80,8 +78,6 @@ public class TableTool {
         DataElement element;
         InputComponent input;
         String name;
-        ValidatorData vdata;
-        Class<? extends Validator> validator;
         TableItem item = new TableItem(table);
         
         for (TableColumn tcolumn : table.getColumns()) {
@@ -105,12 +101,17 @@ public class TableTool {
                     break;
                 }
                 
-                if (!validators.containsKey(name))
+                if (column.validator == null)
                     break;
                 
-                validator = validators.get(name).validator;
-                if (validator != null)
-                    input.setValidator(validator);
+                input.setValidator(column.validator.validator);
+                if (column.validator.inputs == null)
+                    break;
+                
+                for (String vinputname : column.validator.inputs)
+                    input.addValidatorInput(
+                            (InputComponent)item.get(vinputname));
+                break;
             }
             
             if (column.disabled)
@@ -119,20 +120,14 @@ public class TableTool {
             item.add(input);
         }
         
-        for (String vname : validators.keySet()) {
-            input = item.get(vname);
-            vdata = validators.get(vname);
-            if (vdata.inputs == null)
-                continue;
-            
-            for (String vinputname : vdata.inputs)
-                input.addValidatorInput((InputComponent)item.get(vinputname));
-        }
-        
         if (object == null)
             return;
         
         item.setObject(object);
+    }
+    
+    public final void clear() {
+        table.clear();
     }
     
     public final void disable(String... tcolumns) {
@@ -231,7 +226,7 @@ public class TableTool {
         
         vdata.validator = validator;
         vdata.inputs = inputs;
-        validators.put(field, vdata);
+        columns.get(field).validator = vdata;
     }
     
     public final void setVisibility(boolean visible, String... columns) {
@@ -262,4 +257,5 @@ class ValidatorData {
 class Column {
     public boolean disabled;
     public Const type;
+    public ValidatorData validator;
 }
