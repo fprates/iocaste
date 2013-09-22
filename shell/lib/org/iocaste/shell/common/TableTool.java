@@ -136,15 +136,22 @@ public class TableTool {
     }
     
     public final void disable(String... tcolumns) {
-        for (String name :  columns.keySet())
-            columns.get(name).disabled = false;
+        String name;
+        
+        for (String cname :  columns.keySet())
+            columns.get(cname).disabled = false;
         
         for (String column : tcolumns)
             columns.get(column).disabled = true;
         
         for (TableItem item : table.getItems())
-            for (Element element : item.getElements())
-                element.setEnabled(!columns.get(element.getName()).disabled);
+            for (TableColumn column : table.getColumns()) {
+                if (column.isMark())
+                    continue;
+                
+                name = column.getName();
+                item.get(name).setEnabled(!columns.get(name).disabled);
+            }
     }
     
     public final String getButtonName(byte code) {
