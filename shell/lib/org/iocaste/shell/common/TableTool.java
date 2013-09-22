@@ -132,6 +132,10 @@ public class TableTool {
         disabled.clear();
         for (String column : columns)
             disabled.add(column);
+        
+        for (TableItem item : table.getItems())
+            for (Element element : item.getElements())
+                element.setEnabled(!disabled.contains(element.getName()));
     }
     
     public final String getButtonName(byte code) {
@@ -190,7 +194,6 @@ public class TableTool {
                     element.setEnabled(false);
             break;
         }
-        
     }
     
     public final void setObjects(ExtendedObject[] objects) {
