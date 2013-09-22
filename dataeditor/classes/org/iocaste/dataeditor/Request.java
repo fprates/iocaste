@@ -1,41 +1,11 @@
 package org.iocaste.dataeditor;
 
-import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 
 public class Request {
-    
-    /**
-     * 
-     * @param vdata
-     * @param function
-     */
-    public static final void delete(View vdata, Function function) {
-        Table table = vdata.getElement("selection_view");
-        Documents documents = new Documents(function);
-        
-        for (TableItem item : table.getItems()) {
-            if (!item.isSelected())
-                continue;
-            
-            if (documents.delete(item.getObject()) == 0) {
-                vdata.message(Const.ERROR, "error.on.delete");
-                return;
-            }
-            
-            table.remove(item);
-        }
-        
-        vdata.message(Const.STATUS, "delete.sucessful");
-    }
     
     /**
      * 
@@ -69,42 +39,16 @@ public class Request {
      * @param vdata
      * @param context
      */
-    public static final void save(View vdata, Context context) {
-        Object value;
-        InputComponent input;
-        DocumentModelItem modelitem;
-        ExtendedObject object;
+    public static final void save(Context context) {
         Documents documents = new Documents(context.function);
-        Table table = vdata.getElement("selection_view");
         
-        for (TableItem item : table.getItems()) {
-            object = null;
-            
-            for (Element element: item.getElements()) {
-                if (!element.isDataStorable())
-                    continue;
-                
-                input = (InputComponent)element;
-                modelitem = input.getModelItem();
-                if (modelitem == null)
-                    continue;
-                
-                value = input.get();
-                if (value == null && context.model.isKey(modelitem))
-                    break;
-                
-                if (object == null)
-                    object = new ExtendedObject(context.model);
-                
-                object.setValue(modelitem, value);
-            }
-            
-            if (object == null)
-                continue;
-            
-            documents.modify(object);
-        }
+        for (TableItem item : context.deleted)
+            documents.delete(item.getObject());
         
-        vdata.message(Const.STATUS, "entries.saved");
+        context.deleted.clear();
+        for (TableItem item : context.tablehelper.getItems())
+            documents.modify(item.getObject());
+        
+        context.view.message(Const.STATUS, "entries.saved");
     }
 }

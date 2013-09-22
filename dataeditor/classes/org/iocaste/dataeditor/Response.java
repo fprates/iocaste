@@ -22,13 +22,13 @@ public class Response {
     
     /**
      * 
-     * @param vdata
+     * @param context
      */
-    public static final void form(View view, Context context) {
+    public static final void form(Context context) {
         DataElement dataelement;
         DataItem item;
         DataForm form;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("back");
@@ -85,9 +85,9 @@ public class Response {
      * @param view
      * @param context
      */
-    public static final void itens(View view, Context context) {
+    public static final void itens(Context context) {
         Table itens;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("home");
@@ -98,18 +98,18 @@ public class Response {
         itens.importModel(context.model);
         itens.setVisibleLines(0);
         context.tablehelper.setObjects(context.itens);
-        view.setTitle(context.model.getName());
+        context.view.setTitle(context.model.getName());
         
         switch (context.mode) {
         case Context.DISPLAY:
-            context.tablehelper.setMode(TableTool.DISPLAY, view);
+            context.tablehelper.setMode(TableTool.DISPLAY, context.view);
             for (TableItem item : itens.getItems())
                 for (DocumentModelItem mitem : context.model.getItens())
                     item.get(mitem.getName()).setEnabled(false);
             break;
         case Context.UPDATE:
             pagecontrol.add("save", PageControl.REQUEST);
-            context.tablehelper.setMode(TableTool.UPDATE, view);
+            context.tablehelper.setMode(TableTool.UPDATE, context.view);
             for (TableItem item : itens.getItems())
                 for (DocumentModelKey key : context.model.getKeys())
                     item.get(key.getModelItemName()).setEnabled(false);

@@ -6,6 +6,7 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
@@ -23,14 +24,6 @@ public class Main extends AbstractPage {
     public final void additens(View view) {
         context.tablehelper.refresh(view);
         context.tablehelper.add();
-    }
-    
-    /**
-     * 
-     * @param vdata
-     */
-    public final void delete(View vdata) {
-        Request.delete(vdata, this);
     }
     
     public final void display(View view) {
@@ -51,18 +44,15 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void form(View vdata) {
-        Response.form(vdata, context);
+    public final void form(View view) {
+        context.view = view;
+        Response.form(context);
     }
     
     @Override
     public final void init(View view) {
-        Documents documents;
+        Documents documents = new Documents(this);
         
-        if (!view.getPageName().equals("main"))
-            return;
-        
-        documents = new Documents(this);
         context = new Context();
         context.modelmodel = documents.getModel("MODEL");
         context.function = this;
@@ -98,7 +88,8 @@ public class Main extends AbstractPage {
      * @param vdata
      */
     public final void itens(View view) {
-        Response.itens(view, context);
+        context.view = view;
+        Response.itens(context);
     }
     
     /**
@@ -109,8 +100,15 @@ public class Main extends AbstractPage {
         Response.main(vdata, context);
     }
 
-    public final void remove(View view) {
+    /**
+     * 
+     * @param view
+     */
+    public final void removeitens(View view) {
         context.tablehelper.refresh(view);
+        for (TableItem item : context.tablehelper.getItems())
+            if (item.isSelected())
+                context.deleted.add(item);
         context.tablehelper.remove();
     }
     
@@ -118,8 +116,9 @@ public class Main extends AbstractPage {
      * 
      * @param vdata
      */
-    public final void save(View vdata) {
-        Request.save(vdata, context);
+    public final void save(View view) {
+        context.view = view;
+        Request.save(context);
     }
     
     /**
