@@ -19,7 +19,10 @@ public class TextRenderer extends Renderer {
 
         addEvents(ptag, text);
         
-        ptag.addInner(config.getText(text.getText(), text.getName()));
+        if (text.isTranslatable())
+            ptag.addInner(config.getText(text.getText(), text.getName()));
+        else
+            ptag.addInner(text.getText());
         
         return ptag;
     }

@@ -13,6 +13,7 @@ import org.iocaste.shell.common.TableItem;
 
 public class ReportTool {
     private Table table;
+    private boolean translate;
     
     public ReportTool(Container container, String name) {
         table = new Table(container, name);
@@ -54,11 +55,16 @@ public class ReportTool {
                     stext = Shell.toString(value, element, locale, false);
                     component = new Text(table, name);
                     component.setText(stext);
+                    component.setTranslatable(translate);
                     item.add(component);
                     break;
                 }
             }
         }
+    }
+    
+    public final void setTranslatable(boolean translate) {
+        this.translate = translate;
     }
     
     public final void visible(String... columns) {

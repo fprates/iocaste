@@ -35,11 +35,13 @@ public abstract class AbstractComponent extends AbstractElement
     private static final long serialVersionUID = -5327168368336946819L;
     private Container container;
     private String text;
+    private boolean translate;
     
     public AbstractComponent(Container container, Const type, String name) {
         super(type, name);
         
         this.container = container;
+        this.translate = true;
         
         if (container != null)
             container.add(this);
@@ -77,5 +79,23 @@ public abstract class AbstractComponent extends AbstractElement
      */
     public final void setText(String text) {
         this.text = text;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.Component#isTranslatable()
+     */
+    @Override
+    public final boolean isTranslatable() {
+        return translate;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.Component#setTranslatable(boolean)
+     */
+    @Override
+    public final void setTranslatable(boolean translate) {
+        this.translate = translate;
     }
 }
