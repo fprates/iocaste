@@ -65,6 +65,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     public final Const getComponentType() {
         return type;
     }
+
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getd()
+     */
+    @Override
+    public final double getd() {
+        return ((BigDecimal)value).doubleValue();
+    }
     
     /*
      * (non-Javadoc)

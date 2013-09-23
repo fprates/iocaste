@@ -38,8 +38,22 @@ public interface InputComponent extends Component {
      */
     public abstract DataElement getDataElement();
     
+    /**
+     * Retorna valor numérico do componente.
+     * @return valor em ponto flutuante de precisão dupla.
+     */
+    public abstract double getd();
+    
+    /**
+     * Retorna valor numérico do componente.
+     * @return valor numérico em inteiro.
+     */
     public abstract int geti();
     
+    /**
+     * Retorna valor numérico do componente.
+     * @return valor numérico em inteiro longo.
+     */
     public abstract long getl();
     
     /**
