@@ -9,12 +9,13 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.AccessTicket;
 
 public class TicketControl {
+    private boolean loaded;
     private Map<String, AccessTicket> tickets;
     private byte INSERT = 0;
     private byte DELETE = 1;
     private String[] QUERIES = {
         "insert into SHELL004(TKTID, APPNM, PAGEN, USRNM, SECRT, LOCAL)"
-            + " values (?, ?, ?, ?, ?)",
+            + " values (?, ?, ?, ?, ?, ?)",
         "delete from SHELL004 where TKTID = ?"
     };
     
@@ -49,7 +50,13 @@ public class TicketControl {
         AccessTicket ticket;
         Map<String, Object> record;
         Object[] lines;
-        CheckedSelect select = new CheckedSelect(function);
+        CheckedSelect select;
+        
+        if (loaded)
+            return;
+        
+        loaded = true;
+        select = new CheckedSelect(function);
         
         select.setFrom("SHELL004");
         lines = select.execute();

@@ -58,6 +58,7 @@ public class PageRenderer extends AbstractRenderer {
     
     static {
         apps = new HashMap<>();
+        tickets = new TicketControl();
     }
     
     public PageRenderer() {
@@ -68,9 +69,6 @@ public class PageRenderer extends AbstractRenderer {
     
     public static final String addTicket(Function function, AccessTicket ticket)
     {
-        if (tickets == null)
-            tickets = new TicketControl();
-        
         return tickets.add(ticket, function);
     }
     
@@ -350,6 +348,7 @@ public class PageRenderer extends AbstractRenderer {
             }
             
             if (pagectx == null) {
+                tickets.load(this);
                 if (!hasTicket(req))
                     pagectx = createLoginContext(sessionid, logid);
                 else
@@ -644,12 +643,7 @@ public class PageRenderer extends AbstractRenderer {
         String ticket = req.getParameter("ticket");
         
         if (ticket == null)
-            return false;
-        
-        if (tickets == null) {
-            tickets = new TicketControl();
-            tickets.load(this);
-        }
+            return false; 
         
         return tickets.has(ticket);
     }
