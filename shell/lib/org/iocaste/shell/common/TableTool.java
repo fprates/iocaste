@@ -17,12 +17,14 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 
 public class TableTool {
-    public static final byte ADD = 0;
-    public static final byte REMOVE = 1;
-    public static final byte ACCEPT = 2;
+    public static final String ADD = "add";
+    public static final String REMOVE = "remove";
+    public static final String ACCEPT = "accept";
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
-    private String[] buttons;
+    public static final byte DISABLED = 0;
+    public static final byte ENABLED = 1;
+    private Map<String, Control> controls;
     private Map<String, Column> columns;
     private Container container;
     private Table table;
@@ -30,14 +32,10 @@ public class TableTool {
     
     public TableTool(Container container, String name) {
         this.container = new StandardContainer(container, name.concat("cnt"));
-        buttons = new String[] {
-                "add".concat(name),
-                "remove".concat(name),
-                "accept".concat(name)
-        };
-        
-        for (String button : buttons)
-            new Button(this.container, button);
+        controls = new HashMap<>();
+        controls.put(ADD, new Control(this.container, "add", name));
+        controls.put(REMOVE, new Control(this.container, "remove", name));
+        controls.put(ACCEPT, new Control(this.container, "accept", name));
         
         table = new Table(this.container, name);
         table.setMark(true);
@@ -47,20 +45,20 @@ public class TableTool {
     }
     
     public final void accept() {
-        Button[] buttons = getButtons(view);
+        updateControlsView(view);
         
-        buttons[ACCEPT].setVisible(false);
-        buttons[ADD].setVisible(true);
-        buttons[REMOVE].setVisible(true);
+        controls.get(ACCEPT).setVisible(false);
+        controls.get(ADD).setVisible(true);
+        controls.get(REMOVE).setVisible(true);
         table.setTopLine(0);
     }
     
     public final void add() {
-        Button[] buttons = getButtons(view);
+        updateControlsView(view);
 
-        buttons[ACCEPT].setVisible(true);
-        buttons[ADD].setVisible(false);
-        buttons[REMOVE].setVisible(false);
+        controls.get(ACCEPT).setVisible(true);
+        controls.get(ADD).setVisible(false);
+        controls.get(REMOVE).setVisible(false);
         additems();
     }
     
@@ -131,6 +129,22 @@ public class TableTool {
         item.setObject(object);
     }
     
+    public final void controls(byte state, String... controls) {
+        switch (state) {
+        case ENABLED:
+        case DISABLED:
+            if ((controls == null) || (controls.length == 0)) {
+                for (String control : this.controls.keySet())
+                    this.controls.get(control).setVisible(state == ENABLED);
+                break;
+            }
+            
+            for (String control : controls)
+                this.controls.get(control).setVisible(state == ENABLED);
+            break;
+        }
+    }
+    
     public final void clear() {
         table.clear();
     }
@@ -152,19 +166,6 @@ public class TableTool {
                 name = column.getName();
                 item.get(name).setEnabled(!columns.get(name).disabled);
             }
-    }
-    
-    public final String getButtonName(byte code) {
-        return buttons[code];
-    }
-    
-    private final Button[] getButtons(View view) {
-        Button[] buttons = new Button[this.buttons.length];
-        
-        for (int i = 0; i < buttons.length; i++)
-            buttons[i] = view.getElement(this.buttons[i]);
-        
-        return buttons;
     }
     
     public final Container getContainer() {
@@ -206,20 +207,20 @@ public class TableTool {
     }
     
     public final void setMode(byte mode, View view) {
-        Button[] buttons = getButtons(view);
+        updateControlsView(view);
         
         switch (mode) {
         case UPDATE:
-            buttons[ACCEPT].setVisible(false);
-            buttons[ADD].setVisible(true);
-            buttons[REMOVE].setVisible(true);
+            controls.get(ACCEPT).setVisible(false);
+            controls.get(ADD).setVisible(true);
+            controls.get(REMOVE).setVisible(true);
             table.setMark(true);
             break;
             
         case DISPLAY:
-            buttons[ACCEPT].setVisible(false);
-            buttons[ADD].setVisible(false);
-            buttons[REMOVE].setVisible(false);
+            controls.get(ACCEPT).setVisible(false);
+            controls.get(ADD).setVisible(false);
+            controls.get(REMOVE).setVisible(false);
             table.setMark(false);
             
             for (TableItem item : table.getItems())
@@ -263,6 +264,27 @@ public class TableTool {
         for (TableItem item : table.getItems())
             if (item.isSelected())
                 table.remove(item);
+    }
+    
+    private final void updateControlsView(View view) {
+        for (String name : controls.keySet())
+            controls.get(name).setView(view);
+    }
+}
+
+class Control {
+    private Button button;
+    
+    public Control(Container container, String name, String tname) {
+        button = new Button(container, name.concat(tname));
+    }
+    
+    public final void setView(View view) {
+        button = view.getElement(button.getName());
+    }
+    
+    public final void setVisible(boolean visible) {
+        button.setVisible(visible);
     }
 }
 
