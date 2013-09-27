@@ -14,6 +14,7 @@ public class UserServices {
     private static final byte UPD_USER = 3;
     private static final byte USER = 4;
     private static final byte DEL_USER = 5;
+    private static final byte DEL_USER_AUTH = 6;
     private static final String[] QUERIES = {
         "insert into USERS001(uname, secrt, fname, sname, init, usrid) " +
                 "values(?, ?, ?, ?, ?, ?)",
@@ -22,7 +23,8 @@ public class UserServices {
         "update USERS001 set SECRT = ?, INIT = ?, FNAME = ?, SNAME = ? " +
                 "where UNAME = ?",
         "select * from USERS001 where UNAME = ?",
-        "delete from USERS001 where UNAME = ?"
+        "delete from USERS001 where UNAME = ?",
+        "delete from USERS002 where UNAME = ?"
     };
     
     @SuppressWarnings("unchecked")
@@ -59,6 +61,7 @@ public class UserServices {
     public static final void drop(String username, Connection connection,
             DBServices db) throws Exception {
         db.update(connection, QUERIES[DEL_USER], username);
+        db.update(connection, QUERIES[DEL_USER_AUTH], username);
     }
     
     /**
@@ -83,7 +86,7 @@ public class UserServices {
         if (objects == null)
             return null;
         
-        info = new HashMap<String, Object>();
+        info = new HashMap<>();
         info.put("username", username);
         info.put("terminal", usrctx.getTerminal()); 
         info.put("connection.time", usrctx.getConnTime());
