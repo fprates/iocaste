@@ -182,6 +182,9 @@ public class TableTool {
         table.importModel(model);
         columns.clear();
         for (TableColumn tcolumn : table.getColumns()) {
+            if (tcolumn.isMark())
+                continue;
+            
             column = new Column();
             column.type = Const.TEXT_FIELD;
             columns.put(tcolumn.getName(), column);
