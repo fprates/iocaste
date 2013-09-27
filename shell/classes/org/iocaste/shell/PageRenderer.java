@@ -740,7 +740,7 @@ public class PageRenderer extends AbstractRenderer {
         Enumeration<?> parameternames;
         PageContext pagectx_;
         Map<String, String[]> parameters;
-        View view;
+        View view, pagectxview;
         String appname, pagename, key, pagetrack = null, actionname = null;
         
         /*
@@ -854,6 +854,12 @@ public class PageRenderer extends AbstractRenderer {
         pagectx_.setReloadableView(view.isReloadableView());
         pagectx_.setInitParameters(view.getInitParameters());
         pagectx_.clearParameters();
+        pagectxview = pagectx_.getViewData();
+        
+        if (pagectxview != null)
+            pagectxview.message(view.getMessageType(),
+                view.getTranslatedMessage());
+        
         for (String name : view.getExportable())
             pagectx_.addParameter(name, view.getParameter(name));
         view.clearInitExports();
