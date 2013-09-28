@@ -218,4 +218,17 @@ public class TableItem implements Serializable {
     public final void setVisible(boolean visible) {
         this.visible = visible;
     }
+    
+    public final String toString() {
+        StringBuilder sb = new StringBuilder();
+        
+        for (TableColumn column : columns) {
+            if (sb.length() > 0)
+                sb.append(", ");
+            
+            sb.append(column.getName());
+        }
+        
+        return sb.toString();
+    }
 }

@@ -139,4 +139,9 @@ public class TableColumn implements Serializable {
     public final void setVisible(boolean visible) {
         this.visible = visible;
     }
+    
+    @Override
+    public final String toString() {
+        return name;
+    }
 }

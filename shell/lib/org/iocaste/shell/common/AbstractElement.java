@@ -288,4 +288,9 @@ public abstract class AbstractElement implements Element {
     public final void setVisible(boolean visible) {
         this.visible = visible;
     }
+    
+    @Override
+    public final String toString() {
+        return name;
+    }
 }
