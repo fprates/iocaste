@@ -4,9 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.PackageTool;
-import org.iocaste.protocol.Function;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
@@ -16,15 +14,14 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.View;
 
 public class Response {
     
-    public static final Map<String, String> init(Function function) {
+    public static final void init(Context context) {
         String[] packages = PackageTool.getAvailablePackages();
-        PackageTool pkgtool = new PackageTool(function);
-        Map<String, String> pkgsdata = new LinkedHashMap<>();
+        PackageTool pkgtool = new PackageTool(context.function);
         
+        context.pkgsdata = new LinkedHashMap<>();
         for (String name : packages) {
             try {
                 pkgtool.getInstallData(name);
@@ -32,11 +29,9 @@ public class Response {
                 continue;
             }
             
-            pkgsdata.put(name, pkgtool.isInstalled(name)?
+            context.pkgsdata.put(name, pkgtool.isInstalled(name)?
                     "packageuninstall" : "packageinstall");
         }
-        
-        return pkgsdata;
     }
     
     /**
@@ -44,11 +39,11 @@ public class Response {
      * @param view
      * @param packages
      */
-    public static final void main(View view, Map<String, String> packages) {
+    public static final void main(Context context) {
         Link link;
         TableItem item;
         String action;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         Parameter parameter = new Parameter(container, "package");
         Table table = new Table(container, "packages");
@@ -61,8 +56,8 @@ public class Response {
         new TableColumn(table, "name");
         new TableColumn(table, "action");
         
-        for (String name : packages.keySet()) {
-            action = packages.get(name);
+        for (String name : context.pkgsdata.keySet()) {
+            action = context.pkgsdata.get(name);
             item = new TableItem(table);
             item.add(new Text(table, name));
             
@@ -75,7 +70,7 @@ public class Response {
         if (table.length() > 0)
             pagecontrol.add("info", PageControl.REQUEST);
         
-        view.setTitle("package-manager");
+        context.view.setTitle("package-manager");
     }
     
     /**
@@ -83,52 +78,52 @@ public class Response {
      * @param view
      * @param data
      */
-    public final static void printInfo(View view, InstallData data) {
-        Form container = new Form(view, "main");
+    public final static void printInfo(Context context) {
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
-        Map<String, String> links = data.getLinks();
-        DocumentModel[] models = data.getModels();
-        Authorization[] authorizations = data.getAuthorizations();
-        String[] numbers = data.getNumberFactories();
-        String[] dependencies = data.getDependencies();
+        Map<String, String> links = context.data.getLinks();
+        DocumentModel[] models = context.data.getModels();
+        Authorization[] authorizations = context.data.getAuthorizations();
+        String[] numbers = context.data.getNumberFactories();
+        String[] dependencies = context.data.getDependencies();
         
         pagecontrol.add("back");
         
         if (authorizations.length > 0) {
-            view.print("- Autorizações");
+            context.view.print("- Autorizações");
             for (Authorization authorization : authorizations)
-                view.print(authorization.getName());
+                context.view.print(authorization.getName());
         }
         
         if (links.size() > 0) {
-            view.print("\n- Links");
+            context.view.print("\n- Links");
             for (String key : links.keySet())
-                view.print(new StringBuilder(key).append(": ").
+                context.view.print(new StringBuilder(key).append(": ").
                         append(links.get(key)).toString());
         }
             
         if (models.length > 0) {
-            view.print("\n- Modelos");
+            context.view.print("\n- Modelos");
             for (DocumentModel model : models)
-                view.print(model.getName());
+                context.view.print(model.getName());
         }
         
         if (numbers.length > 0) {
-            view.print("\n- Objetos de numeração");
+            context.view.print("\n- Objetos de numeração");
             for (String number : numbers)
-                view.print(number);
+                context.view.print(number);
         }
         
-        if (view.getPrintLines().length == 0)
-            view.print("Sem conteúdo instalável");
+        if (context.view.getPrintLines().length == 0)
+            context.view.print("Sem conteúdo instalável");
         
         if (dependencies != null) {
-            view.print("\n- Dependências");
+            context.view.print("\n- Dependências");
             for (String dependency : dependencies)
-                view.print(dependency);
+                context.view.print(dependency);
         }
         
-        view.setTitle("package-contents");
+        context.view.setTitle("package-contents");
     }
 
 }

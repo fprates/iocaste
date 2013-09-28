@@ -4,6 +4,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
@@ -14,21 +15,16 @@ public class Main extends AbstractPage {
     }
     
     /*
-     * (non-Javadoc)
+     * (não-Javadoc)
      * @see org.iocaste.shell.common.AbstractPage#init(
      *     org.iocaste.shell.common.View)
      */
     @Override
-    public final void init(View view) {
-        Documents documents;
-        
-        if (!view.getPageName().equals("main"))
-            return;
-        
-        documents = new Documents(this);
+    public final PageContext init(View view) {
         context = new Context();
-        context.modelmodel = documents.getModel("MODEL");
-        context.function = this;
+        context.modelmodel = new Documents(this).getModel("MODEL");
+        
+        return context;
     }
     
     /**
@@ -40,27 +36,15 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
-    /**
-     * 
-     * @param vdata
-     */
-    public final void list(View view) {
-        Response.list(view, context);
+    public final void list() {
+        Response.list(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void main(View view) {
-        Response.main(view, context);
+    public final void main() {
+        Response.main(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void select(View view) {
-        Request.select(view, context);
+    public final void select() {
+        Request.select(context);
     }
 }

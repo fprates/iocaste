@@ -1,112 +1,71 @@
 package org.iocaste.datadict;
 
-import java.util.List;
-
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.HtmlTag;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-    private List<String> code;
-    private String oldname;
     private Context context;
     
     public Main() {
-        context = new Context();
         export("install", "install");
     }
     
-    /**
-     * 
-     * @param vdata
-     */
-    public final void add(View view) {
-        Add.main(view, this, context.mode);
+    public final void add() {
+        Add.main(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void addshitem(View view) {
-        SHStructure.insert(view, context);
+    public final void addshitem() {
+        SHStructure.insert(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void create(View view) {
-        Selection.create(view, this, context);
+    public final void create() {
+        Selection.create(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void delete(View view) {
-        int op = Common.getTpObjectValue(view);
+    public final void delete() {
+        int op = Common.getTpObjectValue(context.view);
         
         switch (op) {
         case Common.TABLE:
-            Selection.deletetb(view, this);
+            Selection.deletetb(context);
             break;
         case Common.SH:
-            Selection.deletesh(view, this);
+            Selection.deletesh(context);
             break;
         }
     }
     
-    /**
-     * 
-     * @param vdata
-     */
-    public final void deleteitem(View vdata) {
-        Table itens = vdata.getElement("itens");
+    public final void deleteitem() {
+        Table itens = context.view.getElement("itens");
         
         for (TableItem item : itens.getItems())
             if (item.isSelected())
                 itens.remove(item);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void deleteshitem(View view) {
-        Delete.shitem(view);
+    public final void deleteshitem() {
+        Delete.shitem(context.view);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void detailsupdate(View view) {
-        if (ItemDetails.update(view, this))
-            back(view);
+    public final void detailsupdate() {
+        if (ItemDetails.update(context))
+            back();
     }
     
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void detailsview(View view) {
-        ItemDetails.main(view, this, context);
+    public final void detailsview() {
+        ItemDetails.main(context);
     }
     
-    /**
-     * 
-     * @param vdata
-     */
-    public final void generateclass(View view) {
-        code = CodeGeneration.main(view, context);
+    public final void generateclass() {
+        CodeGeneration.main(context);
     }
     
     /**
@@ -118,123 +77,89 @@ public class Main extends AbstractPage {
         return Install.self();
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void itemdetails(View view) {
-        ItemDetails.select(view, context);
+    @Override
+    public final PageContext init(View view) {
+        context = new Context();
+        
+        return context;
     }
     
-    /**
-     * 
-     * @param vdata
-     */
-    public final void list(View view) {
-        Form container = new Form(view, "list");
+    public final void itemdetails() {
+        ItemDetails.select(context);
+    }
+    
+    public final void list() {
+        Form container = new Form(context.view, "list");
         PageControl pagecontrol = new PageControl(container);
         HtmlTag codelist = new HtmlTag(container, "codelist");
         
         pagecontrol.add("back");
-        codelist.setLines(code.toArray(new String[0]));
+        codelist.setLines(context.code.toArray(new String[0]));
     }
     
     /**
      * 
-     * @param view
      */
-    public final void main(View view) {
-        Selection.main(view, this);
+    public final void main() {
+        Selection.main(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void rename(View view) {
-        oldname = Rename.main(view);
+    public final void rename() {
+        Rename.main(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void renamedialog(View view) {
-        Rename.dialog(view, this, oldname);
+    public final void renamedialog() {
+        Rename.dialog(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void renameok(View view) {
-        Rename.ok(view, this);
+    public final void renameok() {
+        Rename.ok(context);
     }
     
-    /**
-     * 
-     * @param vdata
-     */
-    public final void save(View view) {
-        Save.main(view, this, context);
+    public final void save() {
+        Save.main(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void savesh(View view) {
-        SHStructure.save(view, this, context);
+    public final void savesh() {
+        SHStructure.save(context);
     }
     
-    /**
-     * 
-     * @param vdata 
-     */
-    public final void show(View view) {
-        int op = Common.getTpObjectValue(view);
+    public final void show() {
+        int op = Common.getTpObjectValue(context.view);
         
         switch (op) {
         case Common.TABLE:
-            Selection.readtb(view, this, context);
+            Selection.readtb(context);
             break;
         case Common.SH:
-            Selection.readsh(view, this, context);
+            Selection.readsh(context);
             break;
         }
         
         context.mode = Common.SHOW;
     }
     
-    /**
-     * 
-     * @param vdata
-     */
-    public final void shstructure(View view) {
-        SHStructure.main(view, this, context);
+    public final void shstructure() {
+        SHStructure.main(context);
+    }
+    
+    public final void tbstructure() {
+        TableStructure.main(context);
     }
     
     /**
      * 
      * @param view
      */
-    public final void tbstructure(View view) {
-        TableStructure.main(view, this, context);
-    }
-    
-    /**
-     * 
-     * @param view
-     */
-    public final void update(View view) {
-        int op = Common.getTpObjectValue(view);
+    public final void update() {
+        int op = Common.getTpObjectValue(context.view);
         
         switch (op) {
         case Common.TABLE:
-            Selection.readtb(view, this, context);
+            Selection.readtb(context);
             break;
         case Common.SH:
-            Selection.readsh(view, this, context);
+            Selection.readsh(context);
             break;
         }
         

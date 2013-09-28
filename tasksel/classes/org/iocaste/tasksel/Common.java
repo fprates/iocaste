@@ -2,8 +2,8 @@ package org.iocaste.tasksel;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
 
 public class Common {
@@ -11,29 +11,27 @@ public class Common {
     /**
      * 
      * @param command
-     * @param view
-     * @param function
+     * @param context
      * @return
-     * @throws Exception
      */
-    public static final String[] parseCommand(String command, View view,
-            Function function) {
+    public static final String[] parseCommand(String command,
+            PageContext context) {
         String[] parsed;
         ExtendedObject task;
         
         parsed = command.trim().split("\\s");
-        view.clearExports();
+        context.view.clearExports();
 
         if (parsed[0].length() >= 19) {
-            view.message(Const.ERROR, "command.not.found");
+            context.view.message(Const.ERROR, "command.not.found");
             return null;
         }
         
-        task = new Documents(function).
+        task = new Documents(context.function).
                 getObject("TASKS", parsed[0].toUpperCase());
         
         if (task == null) {
-            view.message(Const.ERROR, "command.not.found");
+            context.view.message(Const.ERROR, "command.not.found");
             return null;
         }
 

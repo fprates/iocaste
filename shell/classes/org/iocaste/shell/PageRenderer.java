@@ -103,7 +103,7 @@ public class PageRenderer extends AbstractRenderer {
         control = config.view.getElement(message.getString("action"));
         if (control != null && control.getType() == Const.SEARCH_HELP) {
             config.view.setParameter("sh", control);
-            config.view.redirect("iocaste-search-help", "main");
+            config.view.redirect("iocaste-search-help", "main", true);
             config.view.setReloadableView(true);
         } else {
             try {
@@ -150,6 +150,7 @@ public class PageRenderer extends AbstractRenderer {
         contextdata.appname = EXCEPTION_HANDLER;
         contextdata.pagename = "main";
         contextdata.logid = expagectx.getLogid();
+        contextdata.initialize = true;
         
         pagectx = createPageContext(contextdata);
         pagectx.addParameter("exception", exception);
@@ -172,6 +173,8 @@ public class PageRenderer extends AbstractRenderer {
         contextdata.appname = sessionconnector;
         contextdata.pagename = "authentic";
         contextdata.logid = logid;
+        contextdata.initialize = true;
+        
         return createPageContext(contextdata);
     }
     

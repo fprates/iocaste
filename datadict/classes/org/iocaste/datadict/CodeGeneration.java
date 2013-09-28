@@ -6,24 +6,23 @@ import java.util.List;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.View;
 
 public class CodeGeneration {
 
-    public static final List<String> main(View view, Context context) {
+    public static final void main(Context context) {
         String settype;
-        DataForm form = view.getElement("structure.form");
-        Table itens = view.getElement("itens");
+        DataForm form = context.view.getElement("structure.form");
+        Table itens = context.view.getElement("itens");
         String value, classname = form.get("modelclass").get();
         String[] parts = classname.split("\\.");
         StringBuilder sb = new StringBuilder("package ");
         StringBuilder getter = new StringBuilder();
         StringBuilder setter = new StringBuilder();
         int t = parts.length - 1;
-        List<String> code = new ArrayList<>();
         List<String> getters = new ArrayList<>();
         List<String> setters = new ArrayList<>();
-        
+
+        context.code = new ArrayList<>();
         for (int i = 0; i < parts.length; i++) {
             if (i == t) {
                 classname = parts[i];
@@ -34,12 +33,12 @@ public class CodeGeneration {
             sb.append((i == (t - 1))? ";" : ".");
         }
         
-        code.add(sb.toString());
-        code.add("");
+        context.code.add(sb.toString());
+        context.code.add("");
         
         sb.setLength(0);
         sb.append("public class ").append(classname).append(" {");
-        code.add(sb.toString());
+        context.code.add(sb.toString());
         
         for (TableItem item : itens.getItems()) {
             sb.setLength(0);
@@ -77,7 +76,7 @@ public class CodeGeneration {
             
             value = Common.getTableValue(item, "item.classfield");
             sb.append(value).append(";");
-            code.add(sb.toString());
+            context.code.add(sb.toString());
             
             /*
              *  public final ? get?() {
@@ -115,15 +114,12 @@ public class CodeGeneration {
         sb.setLength(0);
         sb.append("    public ").append(classname).append("() { }");
         
-        code.add("");
-        code.add(sb.toString());
-        code.add("");
-        code.addAll(getters);
-        code.addAll(setters);
-        code.add("}");
-        
-        view.redirect("list");
-        
-        return code;
+        context.code.add("");
+        context.code.add(sb.toString());
+        context.code.add("");
+        context.code.addAll(getters);
+        context.code.addAll(setters);
+        context.code.add("}");
+        context.view.redirect("list");
     }
 }

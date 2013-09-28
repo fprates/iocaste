@@ -6,18 +6,12 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.ReportTool;
-import org.iocaste.shell.common.View;
 
 public class Response {
 
-    /**
-     * 
-     * @param view
-     * @param function
-     */
-    public static final void main(View view, Context context) {
+    public static final void main(Context context) {
         InputComponent input;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "model");
         
@@ -31,20 +25,12 @@ public class Response {
         input = form.get("NAME");
         input.setVisible(true);
         input.setObligatory(true);
-        view.setFocus(input);
-        view.setTitle("dataview-selection");
+        context.view.setFocus(input);
+        context.view.setTitle("dataview-selection");
     }
     
-    /**
-     * 
-     * @param view
-     * @param function
-     * @param model
-     * @param itens
-     * @param viewtype
-     */
-    public static final void list(View view, Context context) {
-        Form container = new Form(view, "main");
+    public static final void list(Context context) {
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         ReportTool reporttool = new ReportTool(container, "items");
         
@@ -52,7 +38,7 @@ public class Response {
         pagecontrol.add("back");
         
         reporttool.setItens(context.items);
-        view.setTitle(context.model.getName());
+        context.view.setTitle(context.model.getName());
     }
 
 }

@@ -14,7 +14,6 @@ import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.View;
 
 public class TableTool {
     public static final String ADD = "add";
@@ -27,25 +26,27 @@ public class TableTool {
     private Map<String, Control> controls;
     private Map<String, Column> columns;
     private Container container;
-    private Table table;
-    private View view;
+    private String tablename;
+    private PageContext context;
     
     public TableTool(Container container, String name) {
+        Table table;
+        
         this.container = new StandardContainer(container, name.concat("cnt"));
         controls = new HashMap<>();
         controls.put(ADD, new Control(this.container, "add", name));
         controls.put(REMOVE, new Control(this.container, "remove", name));
         controls.put(ACCEPT, new Control(this.container, "accept", name));
         
-        table = new Table(this.container, name);
+        tablename = name;
+        table = new Table(this.container, tablename);
         table.setMark(true);
         table.setVisibleLines(15);
         columns = new HashMap<>();
-        view = container.getView();
     }
     
     public final void accept() {
-        updateControlsView(view);
+        Table table = context.view.getElement(tablename);
         
         controls.get(ACCEPT).setVisible(false);
         controls.get(ADD).setVisible(true);
@@ -54,24 +55,46 @@ public class TableTool {
     }
     
     public final void add() {
-        updateControlsView(view);
-
+        Table table = context.view.getElement(tablename);
+        
         controls.get(ACCEPT).setVisible(true);
         controls.get(ADD).setVisible(false);
         controls.get(REMOVE).setVisible(false);
-        additems();
+        additems(table, null);
     }
     
     public final void additems() {
+        Table table = context.view.getElement(tablename);
+        
+        additems(table, null);
+    }
+    
+    private final void additems(Table table, ExtendedObject[] items) {
+        int vlines = table.getVisibleLines();
         int total = table.length();
         
-        for (int i = 0; i < table.getVisibleLines(); i++)
-            additem(null);
+        if (items == null) {
+            for (int i = 0; i < vlines; i++)
+                additem(table, null);
+        } else {
+            for (int i = 0; i < items.length; i++) {
+                if (vlines == items.length)
+                    break;
+                
+                additem(table, items[i]);
+            }
+        }
         
         table.setTopLine(total);
     }
     
     public final void additem(ExtendedObject object) {
+        Table table = context.view.getElement(tablename);
+        
+        additem(table, object);
+    }
+    
+    private void additem(Table table, ExtendedObject object) {
         Column column;
         DataElement element;
         InputComponent input;
@@ -146,11 +169,14 @@ public class TableTool {
     }
     
     public final void clear() {
+        Table table = context.view.getElement(tablename);
+        
         table.clear();
     }
     
     public final void disable(String... tcolumns) {
         String name;
+        Table table = context.view.getElement(tablename);
         
         for (String cname :  columns.keySet())
             columns.get(cname).disabled = false;
@@ -173,11 +199,14 @@ public class TableTool {
     }
     
     public final TableItem[] getItems() {
+        Table table = context.view.getElement(tablename);
+        
         return table.getItems();
     }
     
     public final void model(DocumentModel model) {
         Column column;
+        Table table = context.view.getElement(tablename);
         
         table.importModel(model);
         columns.clear();
@@ -191,13 +220,12 @@ public class TableTool {
         }
     }
     
-    public final void refresh(View view) {
-        table = view.getElement(this.table.getName());
-        this.view = view;
-    }
-    
     public final void remove() {
-        removeitems(table);
+        Table table = context.view.getElement(tablename);
+        
+        for (TableItem item : table.getItems())
+            if (item.isSelected())
+                table.remove(item);
     }
     
     public final void setColumnType(String column, Const type) {
@@ -209,8 +237,18 @@ public class TableTool {
         columns.get(column).values = values;
     }
     
-    public final void setMode(byte mode, View view) {
-        updateControlsView(view);
+    /**
+     * 
+     * @param context
+     */
+    public final void setContext(PageContext context) {
+        this.context = context;
+        for (String name : controls.keySet())
+            controls.get(name).setContext(context);
+    }
+    
+    public final void setMode(byte mode) {
+        Table table = context.view.getElement(tablename);
         
         switch (mode) {
         case UPDATE:
@@ -234,11 +272,12 @@ public class TableTool {
     }
     
     public final void setObjects(ExtendedObject[] objects) {
+        Table table = context.view.getElement(tablename);
+        
         if (objects == null || objects.length == 0)
-            additems();
+            additems(table, null);
         else
-            for (ExtendedObject object : objects)
-                additem(object);
+            additems(table, objects);
     }
     
     public final void setValidator(String field,
@@ -251,6 +290,8 @@ public class TableTool {
     }
     
     public final void setVisibility(boolean visible, String... columns) {
+        Table table = context.view.getElement(tablename);
+        
         for (TableColumn column : table.getColumns())
             if (!column.isMark())
                 column.setVisible(!visible);
@@ -260,34 +301,27 @@ public class TableTool {
     }
     
     public final void setVisibleLines(int lines) {
+        Table table = context.view.getElement(tablename);
+        
         table.setVisibleLines(lines);
-    }
-    
-    public static final void removeitems(Table table) {
-        for (TableItem item : table.getItems())
-            if (item.isSelected())
-                table.remove(item);
-    }
-    
-    private final void updateControlsView(View view) {
-        for (String name : controls.keySet())
-            controls.get(name).setView(view);
     }
 }
 
 class Control {
-    private Button button;
+    private String buttonname;
+    private PageContext context;
     
     public Control(Container container, String name, String tname) {
-        button = new Button(container, name.concat(tname));
+        buttonname = name.concat(tname);
+        new Button(container, buttonname);
     }
     
-    public final void setView(View view) {
-        button = view.getElement(button.getName());
+    public final void setContext(PageContext context) {
+        this.context = context;
     }
     
     public final void setVisible(boolean visible) {
-        button.setVisible(visible);
+        context.view.getElement(buttonname).setVisible(visible);
     }
 }
 

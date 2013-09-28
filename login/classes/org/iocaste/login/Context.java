@@ -1,9 +1,8 @@
 package org.iocaste.login;
 
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.protocol.Function;
+import org.iocaste.shell.common.PageContext;
 
-public class Context {
+public class Context extends PageContext {
     public DocumentModel chgscrtmodel;
-    public Function function;
 }

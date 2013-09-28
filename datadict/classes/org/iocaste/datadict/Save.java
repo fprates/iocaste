@@ -5,33 +5,25 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.View;
 
 public class Save {
 
-    /**
-     * 
-     * @param view
-     * @param function
-     * @param context
-     */
-    public static final void main(View view, Function function, Context context) {
+    public static final void main(Context context) {
         DocumentModelItem modelitem, reference;
         DataElement dataelement;
         String value, modelref, itemref, itemname;
         CheckBox upcase, key;
-        Documents documents = new Documents(function);
-        DataForm structure = view.getElement("header");
-        Table itens = view.getElement("itens");
+        Documents documents = new Documents(context.function);
+        DataForm structure = context.view.getElement("header");
+        Table itens = context.view.getElement("itens");
         
-        if (Common.hasItemDuplicated(view))
+        if (Common.hasItemDuplicated(context.view))
             return;
         
         context.model = new DocumentModel(
@@ -98,7 +90,7 @@ public class Save {
         case Common.CREATE:
             switch (documents.validate(context.model)) {
             case Documents.TABLE_ALREADY_ASSIGNED:
-                view.message(Const.ERROR, "table.already.assigned");
+                context.view.message(Const.ERROR, "table.already.assigned");
                 return;
             }
             
@@ -110,7 +102,7 @@ public class Save {
         
         documents.commit();
         
-        view.message(Const.STATUS, "table.saved.successfully");
+        context.view.message(Const.STATUS, "table.saved.successfully");
     }
 
 }

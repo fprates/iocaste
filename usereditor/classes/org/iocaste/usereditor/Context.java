@@ -1,11 +1,10 @@
 package org.iocaste.usereditor;
 
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.protocol.Function;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.TableTool;
-import org.iocaste.shell.common.View;
 
-public class Context {
+public class Context extends PageContext {
     public static final byte CREATE = 0;
     public static final byte DISPLAY = 1;
     public static final byte UPDATE = 2;
@@ -17,8 +16,6 @@ public class Context {
     
     public byte mode;
     public UserData userdata;
-    public Function function;
     public TableTool taskshelper, profileshelper;
     public DocumentModel usermodel, tasksmodel, profilesmodel;
-    public View view;
 }

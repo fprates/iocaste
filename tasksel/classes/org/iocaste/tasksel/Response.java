@@ -3,13 +3,11 @@ package org.iocaste.tasksel;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
@@ -19,6 +17,7 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.View;
@@ -37,25 +36,25 @@ public class Response {
     
     /**
      * 
-     * @param locale
+     * @param context
      * @return
      */
-    private static final Map<String, Set<TaskEntry>> getLists(Locale locale,
-            Function function) {
+    private static final Map<String, Set<TaskEntry>> getLists(
+            PageContext context) {
         Set<TaskEntry> entries;
         TaskEntry entry;
         ExtendedObject[] result, mobject;
         Map<String, Set<TaskEntry>> lists;
         int taskid;
         String groupname, language, taskname, username;
-        Documents documents = new Documents(function);
+        Documents documents = new Documents(context.function);
         
-        username = new Iocaste(function).getUsername();
+        username = new Iocaste(context.function).getUsername();
         result = documents.select(QUERIES[USER_ENTRIES], username);
         if (result == null)
             return null;
         
-        language = locale.toString(); 
+        language = context.view.getLocale().toString(); 
         lists = new LinkedHashMap<String, Set<TaskEntry>>();
         for (ExtendedObject object : result) {
             groupname = object.getValue("GROUP");
@@ -81,26 +80,25 @@ public class Response {
         return lists;
     }
     
-    public static final void grouprun(View view, Function function) {
-        InputComponent input = view.getElement("groupcommand");
+    public static final void grouprun(PageContext context) {
+        InputComponent input = context.view.getElement("groupcommand");
         String command = input.get();
-        String[] parsed = Common.parseCommand(command, view, function);
+        String[] parsed = Common.parseCommand(command, context);
         
-        Common.run(view, parsed);
+        Common.run(context.view, parsed);
     }
 
-    public static final Map<String, Set<TaskEntry>> init(
-            View view, Function function) {
-        return getLists(view.getLocale(), function);
+    public static final Map<String, Set<TaskEntry>> init(PageContext context) {
+        return getLists(context);
     }
     
     /**
      * 
-     * @param view
-     * @param function
+     * @param lists
+     * @param context
      */
-    public static final void main(View view, Map<String, Set<TaskEntry>> lists,
-            Function function) {
+    public static final void main(Map<String, Set<TaskEntry>> lists,
+            PageContext context) {
         Link link;
         NodeList groups, tasklist;
         Set<TaskEntry> entries;
@@ -108,11 +106,11 @@ public class Response {
         DataItem cmdline;
         Parameter groupcommand;
         String taskname, text;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("help", PageControl.EXTERNAL);
-        setCustomStyleSheet(view);
+        setCustomStyleSheet(context.view);
         
         /*
          * linha de comando
@@ -147,8 +145,8 @@ public class Response {
             }
         }
         
-        view.setFocus(cmdline);
-        view.setTitle("task-selector");
+        context.view.setFocus(cmdline);
+        context.view.setTitle("task-selector");
     }
     
     /**

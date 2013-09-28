@@ -16,6 +16,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.View;
 
@@ -25,28 +26,29 @@ import org.iocaste.shell.common.View;
  *
  */
 public class Main extends AbstractPage {
-
+    private Context context;
+    
     public Main() {
         export("install", "install");
     }
     
     @SuppressWarnings("unchecked")
-    public final void download(View view) throws Exception {
+    public final void download() throws Exception {
         Map<String, Object> line;
         List<String> text;
         Object value;
         StringBuilder sb;
-        InputComponent input = ((DataForm)view.getElement("entryform")).
+        InputComponent input = ((DataForm)context.view.getElement("entryform")).
                 get("table");
         String table = input.get();
         Object[] lines = new Iocaste(this).select("select * from "+table);
         
         if (lines == null) {
-            view.message(Const.ERROR, "no.records");
+            context.view.message(Const.ERROR, "no.records");
             return;
         }
         
-        text = new ArrayList<String>();
+        text = new ArrayList<>();
         for (Object object : lines) {
             line = (Map<String, Object>)object;
             
@@ -62,7 +64,7 @@ public class Main extends AbstractPage {
         
 //        view.export("filename", table.concat(".txt"));
 //        view.export("text", text);
-        view.redirect("export");
+        context.view.redirect("export");
     }
     
     public final void export(View view) {
@@ -77,6 +79,13 @@ public class Main extends AbstractPage {
                 new StringBuilder("attachment; filename=\"").
                         append(filename).
                         append("\"").toString());
+    }
+    
+    @Override
+    public final PageContext init(View view) {
+        context = new Context();
+        
+        return context;
     }
     
     /**
@@ -111,3 +120,5 @@ public class Main extends AbstractPage {
         new Button(container, "download");
     }
 }
+
+class Context extends PageContext { }

@@ -4,7 +4,6 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -18,7 +17,6 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.ValidatorConfig;
-import org.iocaste.shell.common.View;
 
 public class SHStructure {
     private final static String[] TITLE = {
@@ -27,21 +25,14 @@ public class SHStructure {
         "sh-editor-update"
     };
     
-    /**
-     * 
-     * @param mode
-     * @param itens
-     * @param view
-     * @param object
-     */
-    private static void insertItem(byte mode, Table itens, View view,
+    private static void insertItem(Context context, Table itens,
             ExtendedObject object) {
         TextField tfield;
         String name;
         TableItem item = new TableItem(itens);
         DocumentModel model = itens.getModel();
-        InputComponent modelinput = ((DataForm)view.getElement("header")).
-                get("MODEL");
+        InputComponent modelinput = ((DataForm)context.view.
+                getElement("header")).get("MODEL");
         
         for (DocumentModelItem modelitem : model.getItens()) {
             name = modelitem.getName();
@@ -50,7 +41,7 @@ public class SHStructure {
             item.add(tfield);
             tfield.getModelItem().setReference(null);
             
-            switch (mode) {
+            switch (context.mode) {
             case Common.SHOW:
                 tfield.setEnabled(false);
                 if (name.equals("NAME"))
@@ -67,7 +58,7 @@ public class SHStructure {
             if (name.equals("ITEM")) {
                 tfield.setValidator(SHItemValidator.class);
                 tfield.addValidatorInput(modelinput);
-                view.setFocus(tfield);
+                context.view.setFocus(tfield);
                 modelitem.getDataElement().setLength(24);
             }
         }
@@ -76,21 +67,14 @@ public class SHStructure {
             item.setObject(object);
     }
 
-    /**
-     * 
-     * @param view
-     * @param function
-     * @param context
-     */
-    public static final void main(View view, Function function,
-            Context context) {
+    public static final void main(Context context) {
         DataItem ditem;
         String name;
         ExtendedObject[] oitens;
         ValidatorConfig validatorcfg;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
-        Documents documents = new Documents(function);
+        Documents documents = new Documents(context.function);
         DocumentModel model = documents.getModel("SEARCH_HELP");
         DataForm header = new DataForm(container, "header");
         Table itens = new Table(container, "itens");
@@ -100,7 +84,8 @@ public class SHStructure {
         header.importModel(model);
         
         if (context.mode != Common.CREATE)
-            header.setObject((ExtendedObject)view.getParameter("header"));
+            header.setObject((ExtendedObject)context.view.
+                    getParameter("header"));
         
         validatorcfg = new ValidatorConfig();
         validatorcfg.setValidator(SHExportValidator.class);
@@ -113,7 +98,7 @@ public class SHStructure {
             name = ditem.getName();
             
             if (name.equals("NAME")) {
-                ditem.set(view.getParameter("shname"));
+                ditem.set(context.view.getParameter("shname"));
                 ditem.setEnabled(false);
                 
                 continue;
@@ -121,7 +106,7 @@ public class SHStructure {
             
             if (name.equals("MODEL")) {
                 validatorcfg.add(ditem);
-                view.setFocus(ditem);
+                context.view.setFocus(ditem);
             }
             
             if (name.equals("EXPORT")) {
@@ -146,16 +131,16 @@ public class SHStructure {
         case Common.SHOW:
             itens.setMark(false);
             
-            oitens = view.getParameter("itens");
+            oitens = context.view.getParameter("itens");
             for (ExtendedObject item : oitens)
-                insertItem(context.mode, itens, view, item);
+                insertItem(context, itens, item);
             
             break;
             
         case Common.CREATE:
             itens.setMark(true);
             
-            insertItem(context.mode, itens, view, null);
+            insertItem(context, itens, null);
             
             new Button(container, "savesh");
             new Button(container, "addshitem");
@@ -166,9 +151,9 @@ public class SHStructure {
         case Common.UPDATE:
             itens.setMark(true);
             
-            oitens = view.getParameter("itens");
+            oitens = context.view.getParameter("itens");
             for (ExtendedObject item : oitens)
-                insertItem(context.mode, itens, view, item);
+                insertItem(context, itens, item);
             
             new Button(container, "savesh");
             new Button(container, "addshitem");
@@ -177,23 +162,16 @@ public class SHStructure {
             break;
         }
         
-        view.setTitle(TITLE[context.mode]);
+        context.view.setTitle(TITLE[context.mode]);
     }
     
-    /**
-     * 
-     * @param view
-     * @param function
-     * @param context
-     */
-    public static final void save(View view, Function function,
-            Context context) {
+    public static final void save(Context context) {
         ExtendedObject[] oitens;
         int i = 0;
-        SHLib shlib = new SHLib(function);
-        DataForm header = view.getElement("header");
+        SHLib shlib = new SHLib(context.function);
+        DataForm header = context.view.getElement("header");
         ExtendedObject object = header.getObject();
-        Table itens = view.getElement("itens");
+        Table itens = context.view.getElement("itens");
         oitens = new ExtendedObject[itens.length()];
         
         for (TableItem item : itens.getItems())
@@ -203,7 +181,7 @@ public class SHStructure {
         case Common.CREATE:
             shlib.save(object, oitens);
             context.mode = Common.UPDATE;
-            view.setTitle(TITLE[Common.UPDATE]);
+            context.view.setTitle(TITLE[Common.UPDATE]);
             
             break;
         case Common.UPDATE:
@@ -212,16 +190,16 @@ public class SHStructure {
             break;
         }
         
-        view.message(Const.STATUS, "search.help.saved.successfully");
+        context.view.message(Const.STATUS, "search.help.saved.successfully");
     }
     
     /**
      * 
      * @param view
      */
-    public static final void insert(View view, Context context) {
-        Table itens = view.getElement("itens");
+    public static final void insert(Context context) {
+        Table itens = context.view.getElement("itens");
         
-        insertItem(context.mode, itens, view, null);
+        insertItem(context, itens, null);
     }
 }

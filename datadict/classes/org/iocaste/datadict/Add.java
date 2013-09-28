@@ -1,27 +1,20 @@
 package org.iocaste.datadict;
 
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Table;
-import org.iocaste.shell.common.View;
 
 public class Add {
 
-    /**
-     * 
-     * @param view
-     * @param function
-     */
-    public static final void main(View view, Function function, byte mode) {
+    public static final void main(Context context) {
         ItemConfig config;
         
-        if (Common.hasItemDuplicated(view))
+        if (Common.hasItemDuplicated(context.view))
             return;
 
         config = new ItemConfig();
-        config.setTable((Table)view.getElement("itens"));
-        config.setMode(mode);
-        config.setView(view);
-        config.setReferences(Common.getFieldReferences(function));
+        config.setTable((Table)context.view.getElement("itens"));
+        config.setMode(context.mode);
+        config.setView(context.view);
+        config.setReferences(Common.getFieldReferences(context.function));
         
         Common.insertItem(config);
     }

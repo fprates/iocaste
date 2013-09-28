@@ -15,7 +15,6 @@ import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TableTool;
-import org.iocaste.shell.common.View;
 
 public class Response {
     
@@ -54,12 +53,11 @@ public class Response {
 
     /**
      * 
-     * @param view
-     * @param function
+     * @param context
      */
-    public static final void main(View view, Context context) {
+    public static final void main(Context context) {
         InputComponent input;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "model");
         
@@ -71,12 +69,12 @@ public class Response {
         input = form.get("NAME");
         input.setObligatory(true);
         input.setVisible(true);
-        view.setFocus(input);
+        context.view.setFocus(input);
         
         new Button(container, "display");
         new Button(container, "update");
         
-        view.setTitle("dataeditor-selection");
+        context.view.setTitle("dataeditor-selection");
     }
     
     /**
@@ -92,6 +90,7 @@ public class Response {
         pagecontrol.add("back");
         
         context.tablehelper = new TableTool(container, "itens");
+        context.tablehelper.setContext(context);
         context.tablehelper.model(context.model);
         context.tablehelper.setVisibleLines(0);
         context.tablehelper.setObjects(context.itens);
@@ -99,14 +98,14 @@ public class Response {
         
         switch (context.mode) {
         case Context.DISPLAY:
-            context.tablehelper.setMode(TableTool.DISPLAY, context.view);
+            context.tablehelper.setMode(TableTool.DISPLAY);
             for (TableItem item : context.tablehelper.getItems())
                 for (DocumentModelItem mitem : context.model.getItens())
                     item.get(mitem.getName()).setEnabled(false);
             break;
         case Context.UPDATE:
             pagecontrol.add("save", PageControl.REQUEST);
-            context.tablehelper.setMode(TableTool.UPDATE, context.view);
+            context.tablehelper.setMode(TableTool.UPDATE);
             for (TableItem item : context.tablehelper.getItems())
                 for (DocumentModelKey key : context.model.getKeys())
                     item.get(key.getModelItemName()).setEnabled(false);

@@ -1,15 +1,13 @@
 package org.iocaste.packagetool;
 
-import java.util.Map;
-
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-    private Map<String, String> pkgsdata;
-    private InstallData data;
+    private Context context;
     
     public Main() {
         export("install", "install");
@@ -19,18 +17,17 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void info(View view) {
-        data = Request.info(view, this);
+    public final void info() {
+        Request.info(context);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractPage#init(
-     *     org.iocaste.shell.common.View)
-     */
     @Override
-    protected final void init(View view) {
-        pkgsdata = Response.init(this);
+    protected final PageContext init(View view) {
+        context = new Context();
+        context.function = this;
+        Response.init(context);
+        
+        return context;
     }
     
     /**
@@ -46,31 +43,31 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void main(View view) {
-        Response.main(view, pkgsdata);
+    public final void main() {
+        Response.main(context);
     }
     
     /**
      * 
      * @param view
      */
-    public final void packageinstall(View view) {
-        Request.packageInstall(view, this);
+    public final void packageinstall() {
+        Request.packageInstall(context);
     }
     
     /**
      * 
      * @param view
      */
-    public final void packageuninstall(View view) {
-        Request.packageUninstall(view, this);
+    public final void packageuninstall() {
+        Request.packageUninstall(context);
     }
     
     /**
      * 
      * @param view
      */
-    public final void printinfo(View view) {
-        Response.printInfo(view, data);
+    public final void printinfo() {
+        Response.printInfo(context);
     }
 }

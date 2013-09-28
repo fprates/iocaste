@@ -1,8 +1,6 @@
 package org.iocaste.packagetool;
 
-import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.PackageTool;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
@@ -13,48 +11,39 @@ import org.iocaste.shell.common.View;
 
 public class Request {
     
-    public static final InstallData info(View view, Function function) {
+    public static final void info(Context context) {
         String pkgname;
-        Table table = view.getElement("packages");
+        Table table = context.view.getElement("packages");
         
         for (TableItem item : table.getItems())
             if (item.isSelected()) {
-                view.redirect("printinfo");
+                context.view.redirect("printinfo");
                 pkgname = ((Text)item.get("name")).getName();
-                return new PackageTool(function).getInstallData(pkgname);
+                context.data = new PackageTool(context.function).
+                        getInstallData(pkgname);
             }
-        
-        return null;
     }
     
-    /**
-     * 
-     * @param view
-     * @param function
-     */
-    public static final void packageInstall(View view, Function function) {
-        String pkgname = ((InputComponent)view.getElement("package")).get();
-        PackageTool pkgtool = new PackageTool(function);
+    public static final void packageInstall(Context context) {
+        String pkgname = ((InputComponent)context.view.getElement("package")).
+                get();
+        PackageTool pkgtool = new PackageTool(context.function);
         
         pkgtool.install(pkgname);
-        updatePackageAction(view, pkgname, "packageuninstall");
+        updatePackageAction(context.view, pkgname, "packageuninstall");
         
-        view.message(Const.STATUS, "package.installed");
+        context.view.message(Const.STATUS, "package.installed");
     }
     
-    /**
-     * 
-     * @param view
-     * @param function
-     */
-    public static final void packageUninstall(View view, Function function) {
-        String pkgname = ((InputComponent)view.getElement("package")).get();
-        PackageTool pkgtool = new PackageTool(function);
+    public static final void packageUninstall(Context context) {
+        String pkgname = ((InputComponent)context.view.getElement("package")).
+                get();
+        PackageTool pkgtool = new PackageTool(context.function);
         
         pkgtool.uninstall(pkgname);
-        updatePackageAction(view, pkgname, "packageinstall");
+        updatePackageAction(context.view, pkgname, "packageinstall");
         
-        view.message(Const.STATUS, "package.uninstalled");
+        context.view.message(Const.STATUS, "package.uninstalled");
     }
     
     /**

@@ -5,6 +5,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
@@ -35,23 +36,26 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void authentic(View view) {
-        Response.authentic(view);
+    public final void authentic() {
+        Response.authentic(context.view);
     }
     
-    public final void changesecret(View view) {
-        Request.changesecret(view, context);
+    public final void changesecret() {
+        Request.changesecret(context);
     }
     
-    public final void changesecretform(View view) {
-        Response.changesecretform(view, context);
+    public final void changesecretform() {
+        Response.changesecretform(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void connect(View view) {
-        Request.connect(view, this);
+    public final void connect() {
+        Request.connect(context);
+    }
+    
+    @Override
+    public final PageContext init(View view) {
+        context = new Context();
+        
+        return context;
     }
 }

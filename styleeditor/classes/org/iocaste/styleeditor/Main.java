@@ -3,13 +3,13 @@ package org.iocaste.styleeditor;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     private Context context;
     
     public Main() {
-        context = new Context();
         export("install", "install");
     }
     
@@ -20,6 +20,13 @@ public class Main extends AbstractPage {
     public final void create(View view) throws Exception {
         context.mode = Context.CREATE;
         Request.create(view, this);
+    }
+    
+    @Override
+    public final PageContext init(View view) {
+        context = new Context();
+        
+        return context;
     }
     
     public final InstallData install(Message message) {

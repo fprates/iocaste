@@ -3,6 +3,7 @@ package org.iocaste.gconfigview;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
 
 /**
@@ -14,28 +15,28 @@ public class Main extends AbstractPage {
     private Context context;
     
     public Main() {
-        context = new Context();
         export("install", "install");
     }
     
-    public final void configform(View view) {
-        Response.configform(view, context);
+    public final void configform() {
+        Response.configform(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void display(View view) {
-        Request.display(view, this, context);
+    public final void display() {
+        context.mode = Context.DISPLAY;
+        Request.load(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void edit(View view) {
-        Request.edit(view, this, context);
+    public final void edit() {
+        context.mode = Context.EDIT;
+        Request.load(context);
+    }
+    
+    @Override
+    public final PageContext init(View view) {
+        context = new Context();
+        
+        return context;
     }
     
     /**
@@ -47,19 +48,11 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void main(View view) {
-        Response.main(view, this);
+    public final void main() {
+        Response.main(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void save(View view) {
-        Request.save(view, this, context);
+    public final void save() {
+        Request.save(context);
     }
 }

@@ -1,16 +1,14 @@
 package org.iocaste.sh;
 
-import java.util.Map;
-
-import org.iocaste.documents.common.ValueRange;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-    private Map<String, ValueRange> criteria;
+    private Context context;
     
     public Main() {
         export("install", "install");
@@ -22,22 +20,25 @@ public class Main extends AbstractPage {
      * @param view
      */
     @Override
-    public void back(View view) {
+    public void back() {
         String[] entry;
-        entry = new Shell(this).popPage(view);
+        entry = new Shell(this).popPage(context.view);
         
-        view.redirect(entry[0], entry[1]);
-        view.dontPushPage();
-        view.setReloadableView(false);
+        context.view.redirect(entry[0], entry[1]);
+        context.view.dontPushPage();
+        context.view.setReloadableView(false);
     }
     
-    /**
-     * 
-     * @param vdata
-     */
-    public final void choose(View view) {
-        updateView(Request.choose(view));
-        back(view);
+    public final void choose() {
+        updateView(Request.choose(context.view));
+        back();
+    }
+    
+    @Override
+    public final PageContext init(View view) {
+        context = new Context();
+        
+        return context;
     }
     
     /**
@@ -49,20 +50,11 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public void main(View view) {
-        Response.main(view, this, criteria);
+    public void main() {
+        Response.main(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public void search(View view) {
-        criteria = Request.search(view, this);
+    public void search() {
+        Request.search(context);
     }
 }

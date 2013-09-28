@@ -1,32 +1,18 @@
 package org.iocaste.exhandler;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-    private Map<String, String> messages;
-    
-    public Main() {
-        messages = new HashMap<String, String>();
-        messages.put("unknown", "desconhecido");
-        messages.put("page", "Página");
-        messages.put("module", "Módulo");
-        messages.put("exception-handler", "Erro durante execução");
-        messages.put("view-info", "Visão afetada");
-        messages.put("stack-trace", "Pilha de chamadas");
-        messages.put("parameters", "Parâmetros");
-        messages.put("exception", "Exceção");
-        messages.put("view-elements", "Elementos da visão afetada");
-        messages.put("no.view.information", "Sem informações da visão\n");
-    }
+    private Context context;
     
     /**
      * 
@@ -34,7 +20,7 @@ public class Main extends AbstractPage {
      * @return
      */
     private final String checkunknown(String value) {
-        return (value == null)? messages.get("unknown") : value;
+        return (value == null)? context.messages.get("unknown") : value;
     }
     
     /**
@@ -51,16 +37,33 @@ public class Main extends AbstractPage {
         return sb.toString();
     }
     
+    public final PageContext init(View view) {
+        context = new Context();
+        context.messages = new HashMap<>();
+        context.messages.put("unknown", "desconhecido");
+        context.messages.put("page", "Página");
+        context.messages.put("module", "Módulo");
+        context.messages.put("exception-handler", "Erro durante execução");
+        context.messages.put("view-info", "Visão afetada");
+        context.messages.put("stack-trace", "Pilha de chamadas");
+        context.messages.put("parameters", "Parâmetros");
+        context.messages.put("exception", "Exceção");
+        context.messages.put("view-elements", "Elementos da visão afetada");
+        context.messages.put("no.view.information",
+                "Sem informações da visão\n");
+        
+        return context;
+    }
     /**
      * 
      * @param view
      */
-    public void main(View view) {
+    public void main() {
         Container[] containers;
         PageControl pagecontrol;
-        Exception ex = view.getParameter("exception");
-        View exview = view.getParameter("exview");
-        Form form = new Form(view, "main");
+        Exception ex = context.view.getParameter("exception");
+        View exview = context.view.getParameter("exview");
+        Form form = new Form(context.view, "main");
         
         pagecontrol = new PageControl(form);
         pagecontrol.add("home");
@@ -68,38 +71,38 @@ public class Main extends AbstractPage {
         /*
          * exceção
          */
-        view.print(messages.get("exception"));
-        printException(view, ex);
+        context.view.print(context.messages.get("exception"));
+        printException(context.view, ex);
         
         /*
          * dados do programa interrompido
          */
-        view.print(messages.get("view-info"));
+        context.view.print(context.messages.get("view-info"));
         if (exview == null)
-            view.print(messages.get("no.view.information"));
+            context.view.print(context.messages.get("no.view.information"));
         else
-            printOffensiveView(view, exview);
+            printOffensiveView(context.view, exview);
         
         /*
          * pilha de chamadas
          */
-        view.print(messages.get("stack-trace"));
-        printStackTrace(view, ex);
+        context.view.print(context.messages.get("stack-trace"));
+        printStackTrace(context.view, ex);
         
         /*
          * elementos da visão
          */
-        view.print(messages.get("view-elements"));
+        context.view.print(context.messages.get("view-elements"));
         if (exview == null) {
-            view.print(messages.get("no.view.information"));
+            context.view.print(context.messages.get("no.view.information"));
         } else {
             containers = exview.getContainers();
             if (containers.length > 0)
                 for (Container container : containers)
-                    printViewContainer(view, container, "-");
+                    printViewContainer(context.view, container, "-");
         }
         
-        view.setTitle(messages.get("exception-handler"));
+        context.view.setTitle(context.messages.get("exception-handler"));
     }
     
     /**
@@ -131,14 +134,14 @@ public class Main extends AbstractPage {
     private void printOffensiveView(View view, View exview) {
         String[] keys;
         
-        view.print(concatenate(messages.get("module"), ": ",
+        view.print(concatenate(context.messages.get("module"), ": ",
                 checkunknown(exview.getAppName())));
-        view.print(concatenate(messages.get("page"), ": ",
+        view.print(concatenate(context.messages.get("page"), ": ",
                 checkunknown(exview.getPageName())));
         
         keys = exview.getExportable();
         if (keys.length > 0) {
-            view.print(messages.get("parameters"));
+            view.print(context.messages.get("parameters"));
             
             for (String key : keys)
                 view.print(concatenate("- ", key, ": ",

@@ -62,11 +62,11 @@ public class Response {
         loginform.get("SECRET").setSecret(true);
     }
     
-    public static final void changesecretform(View view, Context context) {
+    public static final void changesecretform(Context context) {
         MessageSource messages;
         DataForm form;
         InputComponent item;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         
         new PageControl(container);
         
@@ -81,9 +81,9 @@ public class Response {
         
         messages = new MessageSource();
         messages.setMessages(getMessages());
-        view.setMessages(messages);
-        view.setTitle("password.change");
-        view.setFocus(form.getElement("SECRET"));
+        context.view.setMessages(messages);
+        context.view.setTitle("password.change");
+        context.view.setFocus(form.getElement("SECRET"));
         new Button(container, "changesecret").setSubmit(true);
     }
     

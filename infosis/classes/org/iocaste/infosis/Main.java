@@ -1,7 +1,6 @@
 package org.iocaste.infosis;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -13,6 +12,7 @@ import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
@@ -21,36 +21,43 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-    private List<Map<String, Object>> users;
-
+    private Context context;
+    
     public Main() {
         export("install", "install");
+    }
+    
+    @Override
+    public final PageContext init(View view) {
+        context = new Context();
+        
+        return context;
     }
     
     public final InstallData install(Message message) {
         return Install.init();
     }
     
-    public final void jvpropin(View view) {
-        view.redirect("jvpropout");
+    public final void jvpropin() {
+        context.view.redirect("jvpropout");
     }
     
-    public final void jvpropout(View view) {
+    public final void jvpropout() {
         Properties properties = System.getProperties();
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("back");
         report(container, properties);
         
-        view.setTitle("java-properties");
+        context.view.setTitle("java-properties");
     }
     
-    public final void list(View view) {
+    public final void list() {
         TableItem item;
         Text text;
         Table itens;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
 
         pagecontrol.add("back");
@@ -61,7 +68,7 @@ public class Main extends AbstractPage {
         new TableColumn(itens, "username");
         new TableColumn(itens, "terminal");
         new TableColumn(itens, "begin");
-        for (Map<String, Object> user : users) {
+        for (Map<String, Object> user : context.users) {
             item = new TableItem(itens);
             text = new Text(itens, "username");
             text.setText(user.get("username").toString());
@@ -73,12 +80,13 @@ public class Main extends AbstractPage {
             text.setText(user.get("connection.time").toString());
             item.add(text);
         }
-        view.setTitle("users-list");
+        
+        context.view.setTitle("users-list");
     }
     
-    public final void main(View view) {
+    public final void main() {
         Link link;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         Table table = new Table(container, "links");
         
@@ -99,7 +107,7 @@ public class Main extends AbstractPage {
         link.setText("users-list");
         new TableItem(table).add(link);
         
-        view.setTitle("infosis");
+        context.view.setTitle("infosis");
     }
     
     private final void report(Container container, Properties properties) {
@@ -127,12 +135,12 @@ public class Main extends AbstractPage {
         
     }
     
-    public final void sysinfin(View view) {
-        view.redirect("sysinfout");
+    public final void sysinfin() {
+        context.view.redirect("sysinfout");
     }
     
-    public final void sysinfout(View view) {
-        Form container = new Form(view, "main");
+    public final void sysinfout() {
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         Iocaste iocaste = new Iocaste(this);
         Properties properties = iocaste.getSystemInfo();
@@ -140,26 +148,22 @@ public class Main extends AbstractPage {
         pagecontrol.add("back");
         report(container, properties);
         
-        view.setTitle("system-info");
+        context.view.setTitle("system-info");
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void usrslst(View view) {
+    public final void usrslst() {
         Iocaste iocaste = new Iocaste(this);
         String[] sessionids = iocaste.getSessions();
 
-        users = new ArrayList<>();
+        context.users = new ArrayList<>();
         for (int i = 0; i < sessionids.length; i++)
-            users.add(iocaste.getSessionInfo(sessionids[i]));
+            context.users.add(iocaste.getSessionInfo(sessionids[i]));
         
-        view.redirect("list");
+        context.view.redirect("list");
     }
     
-    public final void usrsrfrsh(View view) {
-        usrslst(view);
-        view.dontPushPage();
+    public final void usrsrfrsh() {
+        usrslst();
+        context.view.dontPushPage();
     }
 }

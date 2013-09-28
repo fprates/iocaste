@@ -1,10 +1,8 @@
 package org.iocaste.sh;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.iocaste.documents.common.ValueRange;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
@@ -27,12 +25,12 @@ public class Request {
         return view;
     }
     
-    public static final Map<String, ValueRange> search(
-            View view, Function function) {
+    public static void search(Context context) {
         ValueRange range;
         InputComponent input;
-        Map<String, ValueRange> values = new HashMap<>();
-        DataForm form = view.getElement("criteria");
+        DataForm form = context.view.getElement("criteria");
+        
+        context.criteria = new HashMap<>();
         
         for (Element element : form.getElements()) {
             if (!element.isDataStorable())
@@ -42,9 +40,7 @@ public class Request {
             range = input.get();
             if (range == null)
                 continue;
-            values.put(input.getModelItem().getName(), range);
+            context.criteria.put(input.getModelItem().getName(), range);
         }
-        
-        return values;
     }
 }

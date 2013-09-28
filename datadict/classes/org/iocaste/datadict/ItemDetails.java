@@ -3,7 +3,6 @@ package org.iocaste.datadict;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -19,20 +18,13 @@ import org.iocaste.shell.common.View;
 
 public class ItemDetails {
     
-    /**
-     * 
-     * @param view
-     * @param function
-     * @param context
-     */
-    public static final void main(View view, Function function,
-            Context context) {
+    public static final void main(Context context) {
         DataItem dataitem;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         Frame techframe, fkframe = new Frame(container, "foreign.key");
         DataForm techform, fkform = new DataForm(fkframe, "fkform");
-        Documents documents = new Documents(function);
+        Documents documents = new Documents(context.function);
         DocumentModel model = documents.getModel("MODELITEM");
         
         pagecontrol.add("back");
@@ -54,7 +46,7 @@ public class ItemDetails {
         dataitem.setModelItem(model.getModelItem("MODEL"));
         dataitem.set(context.detail.modelref);
         dataitem.setEnabled(context.mode != Common.SHOW);
-        view.setFocus(dataitem);
+        context.view.setFocus(dataitem);
         
         dataitem = new DataItem(fkform, Const.TEXT_FIELD, "reference.item");
         dataitem.setModelItem(model.getModelItem("NAME"));
@@ -87,22 +79,17 @@ public class ItemDetails {
         if (context.mode != Common.SHOW)
             new Button(container, "detailsupdate");
         
-        view.setTitle("item-detail-editor");
+        context.view.setTitle("item-detail-editor");
     }
     
-    /**
-     * 
-     * @param view
-     * @param context
-     */
-    public static final void select(View view, Context context) {
-        DataForm form = view.getElement("header");
-        Table itens = view.getElement("itens");
+    public static final void select(Context context) {
+        DataForm form = context.view.getElement("header");
+        Table itens = context.view.getElement("itens");
         TableItem selected = null;
         
         for (TableItem item : itens.getItems()) {
             if (selected != null) {
-                view.message(Const.ERROR, "choose.one.item.only");
+                context.view.message(Const.ERROR, "choose.one.item.only");
                 return;
             }
                 
@@ -116,62 +103,60 @@ public class ItemDetails {
         }
         
         if (selected == null) {
-            view.message(Const.ERROR, "choose.one.item");
+            context.view.message(Const.ERROR, "choose.one.item");
             return;
         }
         
         context.detail = new ItemDetail();
         context.detail.modelname = form.get("modelname").get();
         context.detail.itemname = Common.getTableValue(selected, "item.name");
-        context.detail.modelref = Common.getTableValue(selected,"model.reference");
-        context.detail.itemref = Common.getTableValue(selected, "item.reference");
+        context.detail.modelref = Common.getTableValue(selected,
+                "model.reference");
+        context.detail.itemref = Common.getTableValue(selected,
+                "item.reference");
         context.detail.upcase = Common.getTableValue(selected, "item.upcase");
-        context.detail.classfield = Common.getTableValue(selected, "item.classfield");
+        context.detail.classfield = Common.getTableValue(selected,
+                "item.classfield");
         context.detail.sh = Common.getTableValue(selected, "item.sh");
         
-        view.redirect("detailsview");
+        context.view.redirect("detailsview");
     }
     
-    /**
-     * 
-     * @param view
-     * @param function
-     */
-    public static final boolean update(View view, Function function) {
+    public static final boolean update(Context context) {
         DataItem refitem;
         InputComponent input;
         DocumentModel model;
         DocumentModelItem modelitemref;
         boolean upcase; 
-        DataForm form = view.getElement("fkform");
+        DataForm form = context.view.getElement("fkform");
         String itemname = form.get("item.name").get();
         String shname, classfield, modelref = null, itemref = null;
-        Shell shell = new Shell(function);
-        View structview = shell.getView(view, "tbstructure");
+        Shell shell = new Shell(context.function);
+        View structview = shell.getView(context.view, "tbstructure");
         Table itens = structview.getElement("itens");
         
         input = form.get("reference.model");
         if (input.get() != null) {
             modelref = input.get();
-            model = new Documents(function).getModel(modelref);
+            model = new Documents(context.function).getModel(modelref);
             refitem = form.get("reference.item");
             itemref = refitem.get();
             modelitemref = model.getModelItem(itemref);
             
             if (modelitemref == null) {
-                view.message(Const.ERROR, "reference.doesnt.exists");
-                view.setFocus(refitem);
+                context.view.message(Const.ERROR, "reference.doesnt.exists");
+                context.view.setFocus(refitem);
                 return false;
             }
                 
             if (!model.isKey(modelitemref)) {
-                view.message(Const.ERROR, "reference.isnot.key");
-                view.setFocus(refitem);
+                context.view.message(Const.ERROR, "reference.isnot.key");
+                context.view.setFocus(refitem);
                 return false;
             }
         }
         
-        form = view.getElement("techform");
+        form = context.view.getElement("techform");
         shname = form.get("item.sh").get();
         upcase = form.get("item.upcase").isSelected();
         classfield = form.get("item.classfield").get();
@@ -192,7 +177,7 @@ public class ItemDetails {
         }
         
         shell.updateView(structview);
-        view.message(Const.STATUS, "reference.updated");
+        context.view.message(Const.STATUS, "reference.updated");
         
         return true;
     }

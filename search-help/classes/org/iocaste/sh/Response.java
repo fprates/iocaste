@@ -1,13 +1,9 @@
 package org.iocaste.sh;
 
-import java.util.Map;
-
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.documents.common.ValueRange;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -22,12 +18,10 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.View;
 
 public class Response {
 
-    public static final void main(View view, Function function,
-            Map<String, ValueRange> values) {
+    public static final void main(Context context) {
         ExtendedObject[] result;
         DataForm criteria;
         DataItem item;
@@ -40,9 +34,9 @@ public class Response {
         DocumentModel model;
         Table table;
         Parameter param;
-        Form container = new Form(view, "main");
-        SearchHelp sh = view.getParameter("sh");
-        Documents documents = new Documents(function);
+        Form container = new Form(context.view, "main");
+        SearchHelp sh = context.view.getParameter("sh");
+        Documents documents = new Documents(context.function);
         
         new PageControl(container).add("back");
         name = sh.getModelName();
@@ -57,8 +51,8 @@ public class Response {
             item = (DataItem)element;
             if (sh.contains(item.getName())) {
                 item.setComponentType(Const.RANGE_FIELD);
-                if (view.getFocus() == null)
-                    view.setFocus(item);
+                if (context.view.getFocus() == null)
+                    context.view.setFocus(item);
                 continue;
             }
             
@@ -67,10 +61,10 @@ public class Response {
         
         new Button(container, "search");
         
-        result = Common.getResultsFrom(name, documents, values);
+        result = Common.getResultsFrom(name, documents, context.criteria);
         if (result == null) {
             text = new Text(container, "no.results.found");
-            view.setTitle(sh.getText());
+            context.view.setTitle(sh.getText());
             return;
         }
         
@@ -107,6 +101,6 @@ public class Response {
             tableitem.setObject(object);
         }
         
-        view.setTitle(sh.getText());
+        context.view.setTitle(sh.getText());
     }
 }

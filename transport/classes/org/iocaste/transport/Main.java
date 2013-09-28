@@ -23,6 +23,7 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Frame;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
@@ -291,6 +292,10 @@ public class Main extends AbstractPage {
         view.message(Const.STATUS, "importing-successful");
     }
     
+    public final PageContext init(View view) {
+        return new Context();
+    }
+    
     /**
      * 
      * @param table
@@ -436,4 +441,8 @@ public class Main extends AbstractPage {
         
         view.message(Const.STATUS, "model.imported.successfully");
     }
+}
+
+class Context extends PageContext {
+    
 }

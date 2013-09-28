@@ -6,9 +6,11 @@ import java.util.Set;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
+    private Context context;
     
     public Main() {
         export("install", "install");
@@ -18,8 +20,8 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void grouprun(View view) {
-        Request.grouprun(view, this);
+    public final void grouprun() {
+        Request.grouprun(context);
     }
     
     /*
@@ -28,9 +30,15 @@ public class Main extends AbstractPage {
      *     org.iocaste.shell.common.ViewData)
      */
     @Override
-    public final void help(View vdata) {
-        vdata.setParameter("topic", "tasksel-index");
-        vdata.redirect("iocaste-help", "view");
+    public final void help() {
+        context.view.setParameter("topic", "tasksel-index");
+        context.view.redirect("iocaste-help", "view");
+    }
+    
+    @Override
+    public final PageContext init(View view) {
+        context = new Context(); 
+        return context;
     }
     
     /**
@@ -46,16 +54,19 @@ public class Main extends AbstractPage {
      * Visão geral de tarefas
      * @param view Visão
      */
-    public final void main(View view) {
-        Map<String, Set<TaskEntry>> lists = Response.init(view, this);
-        Response.main(view, lists, this);
+    public final void main() {
+        Map<String, Set<TaskEntry>> lists = Response.init(context);
+        Response.main(lists, context);
     }
     
     /**
      * 
-     * @param view
      */
-    public final void run(View view) {
-        Request.run(view, this);
+    public final void run() {
+        Request.run(context);
     }
+}
+
+class Context extends PageContext {
+    
 }

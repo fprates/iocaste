@@ -4,6 +4,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
@@ -13,56 +14,45 @@ public class Main extends AbstractPage {
         export("install", "install");
     }
     
-    public final void acceptprofiles(View view) {
-        context.profileshelper.refresh(view);
+    public final void acceptprofiles() {
         context.profileshelper.accept();
     }
     
-    public final void accepttasks(View view) {
-        context.taskshelper.refresh(view);
+    public final void accepttasks() {
         context.taskshelper.accept();
     }
     
-    public final void addprofiles(View view) {
-        context.profileshelper.refresh(view);
+    public final void addprofiles() {
         context.profileshelper.add();
     }
     
-    public final void addtasks(View view) {
-        context.taskshelper.refresh(view);
+    public final void addtasks() {
         context.taskshelper.add();
     }
     
-    public final void create(View view) {
+    public final void create() {
         context.mode = Context.CREATE;
-        context.view = view;
         Request.create(context);
     }
     
-    public final void delete(View view) {
-        context.view = view;
+    public final void delete() {
         Request.delete(context);
     }
     
-    public final void display(View view) {
+    public final void display() {
         context.mode = Context.DISPLAY;
-        context.userdata = Request.load(view, this);
+        context.userdata = Request.load(context);
     }
     
-    public final void form(View view) {
-        Response.form(view, context);
+    public final void form() {
+        Response.form(context);
     }
     
-    public final void init(View view) {
-        Documents documents;
-        
-        if (!view.getPageName().equals("main"))
-            return;
+    @Override
+    public final PageContext init(View view) {
+        Documents documents = new Documents(this);
         
         context = new Context();
-        context.function = this;
-        
-        documents = new Documents(this);
         context.tasksmodel = documents.getModel("USER_TASKS_GROUPS");
         context.tasksmodel.getModelItem("GROUP").
                 setSearchHelp("SH_TASKS_GROUPS");
@@ -70,32 +60,32 @@ public class Main extends AbstractPage {
         context.profilesmodel.getModelItem("PROFILE").
                 setSearchHelp("SH_USER_PROFILE");
         context.usermodel = documents.getModel("LOGIN");
+        
+        return context;
     }
     
     public final InstallData install(Message message) {
         return Install.init();
     }
     
-    public final void main(View view) {
-        Response.selector(view, this);
+    public final void main() {
+        Response.selector(context);
     }
     
-    public final void removeprofiles(View view) {
-        context.profileshelper.refresh(view);
+    public final void removeprofiles() {
         context.profileshelper.remove();
     }
     
-    public final void removetasks(View view) {
-        context.taskshelper.refresh(view);
+    public final void removetasks() {
         context.taskshelper.remove();
     }
     
-    public final void save(View view) {
-        Request.save(view, context);
+    public final void save() {
+        Request.save(context);
     }
     
-    public final void update(View view) {
+    public final void update() {
         context.mode = Context.UPDATE;
-        context.userdata = Request.load(view, this);
+        context.userdata = Request.load(context);
     }
 }

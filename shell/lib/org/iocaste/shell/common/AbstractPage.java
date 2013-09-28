@@ -17,6 +17,7 @@ import org.iocaste.protocol.Message;
  *
  */
 public abstract class AbstractPage extends AbstractFunction {
+    private PageContext context;
     
     public AbstractPage() {
         export("get_view_data", "getViewData");
@@ -28,12 +29,12 @@ public abstract class AbstractPage extends AbstractFunction {
      * Retorna a página anterior.
      * @param view visão atual
      */
-    public void back(View view) {
+    public void back() {
         String[] entry;
         
-        entry = new Shell(this).popPage(view);
-        view.redirect(entry[0], entry[1]);
-        view.dontPushPage();
+        entry = new Shell(this).popPage(context.view);
+        context.view.redirect(entry[0], entry[1]);
+        context.view.dontPushPage();
     }
     
     /**
@@ -60,9 +61,12 @@ public abstract class AbstractPage extends AbstractFunction {
         String action, controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
         
+        context.view = view;
+        context.function = this;
+        
         action = (control == null)? controlname : control.getAction();
-        method = getClass().getMethod(action, View.class);
-        method.invoke(this, view);
+        method = getClass().getMethod(action);
+        method.invoke(this);
         return view;
     }
     
@@ -72,8 +76,8 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param name identificador da visão
      * @return visão
      */
-    protected final View getView(View view, String name) {
-        return new Shell(this).getView(view, name);
+    protected final View getView(String name) {
+        return new Shell(this).getView(context.view, name);
     }
     
     /**
@@ -90,12 +94,18 @@ public abstract class AbstractPage extends AbstractFunction {
         Iocaste iocaste = new Iocaste(this);
         Locale locale = iocaste.getLocale();
 
-        view.setLocale(locale);
-        if (initializable)
-            init(view);
+        if (context != null)
+            context.view = view;
         
-        method = getClass().getMethod(view.getPageName(), View.class);
-        method.invoke(this, view);
+        view.setLocale(locale);
+        if (initializable) {
+            context = init(view);
+            context.view = view;
+            context.function = this;
+        }
+        
+        method = getClass().getMethod(view.getPageName());
+        method.invoke(this);
         if (view.getMessages() == null) {
             /*
              * há alguma chance que getViewData() tenha sido chamada
@@ -117,6 +127,37 @@ public abstract class AbstractPage extends AbstractFunction {
         return view;
     }
     
+    /**
+     * Chama visão de ajuda.
+     * @param view
+     */
+    public void help() { }
+    
+    /**
+     * Retorna à página inicial.
+     * @param view visão atual
+     */
+    public void home() {
+        String[] entry = new Shell(this).home(context.view);
+        context.view.redirect(entry[0], entry[1]);
+        context.view.dontPushPage();
+    }
+    
+    /**
+     * 
+     * @param view
+     * @throws Exception
+     */
+    protected abstract PageContext init(View view) throws Exception;
+    
+    /**
+     * Atualiza uma visão, não necessariamente a visão atual.
+     * @param view visão a ser atualizada.
+     */
+    protected final void updateView(View view) {
+        new Shell(this).updateView(view);
+    }
+    
     private void setLocaleForElement(Element element, Locale locale) {
         Container container;
         
@@ -127,37 +168,6 @@ public abstract class AbstractPage extends AbstractFunction {
         container = (Container)element;
         for (Element element_ : container.getElements())
             setLocaleForElement(element_, locale);
-    }
-    
-    /**
-     * Chama visão de ajuda.
-     * @param view
-     */
-    public void help(View view) { }
-    
-    /**
-     * Retorna à página inicial.
-     * @param view visão atual
-     */
-    public void home(View view) {
-        String[] entry = new Shell(this).home(view);
-        view.redirect(entry[0], entry[1]);
-        view.dontPushPage();
-    }
-    
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    protected void init(View view) throws Exception { }
-    
-    /**
-     * Atualiza uma visão, não necessariamente a visão atual.
-     * @param view visão a ser atualizada.
-     */
-    protected final void updateView(View view) {
-        new Shell(this).updateView(view);
     }
     
     /**

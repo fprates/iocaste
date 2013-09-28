@@ -3,7 +3,6 @@ package org.iocaste.gconfigview;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -12,7 +11,6 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
-import org.iocaste.shell.common.View;
 
 public class Response {
 
@@ -21,11 +19,11 @@ public class Response {
      * @param view
      * @param mode
      */
-    public static final void configform(View view, Context context) {
+    public static final void configform(Context context) {
         InputComponent input;
         String name, value;
         int type;
-        Form container = new Form(view, "container");
+        Form container = new Form(context.view, "container");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "package.config");
         
@@ -55,20 +53,21 @@ public class Response {
         
         pagecontrol.add("home");
         pagecontrol.add("back");
-        view.setTitle(Context.TITLES[context.mode]);
+        context.view.setTitle(Context.TITLES[context.mode]);
     }
     
     /**
      * @param args
      */
-    public static final void main(View view, Function function) {
+    public static final void main(Context context) {
         InputComponent input;
-        Form container = new Form(view, "container");
+        Form container = new Form(context.view, "container");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "package");
         
         pagecontrol.add("home");
-        form.importModel(new Documents(function).getModel("GLOBAL_CONFIG"));
+        form.importModel(new Documents(context.function).
+                getModel("GLOBAL_CONFIG"));
         for (Element element : form.getElements())
             element.setVisible(false);
         
@@ -76,8 +75,8 @@ public class Response {
         input.setObligatory(true);
         input.setVisible(true);
         
-        view.setFocus(input);
-        view.setTitle(Context.TITLES[Context.SELECT]);
+        context.view.setFocus(input);
+        context.view.setTitle(Context.TITLES[Context.SELECT]);
         
         new Button(container, "display");
         new Button(container, "edit");

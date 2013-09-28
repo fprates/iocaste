@@ -3,12 +3,10 @@ package org.iocaste.gconfigview;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.View;
 
 public class Request {
     private static final byte SEL_ITENS = 0;
@@ -21,41 +19,27 @@ public class Request {
         "where GLOBAL_CONFIG_ITEM.GLOBAL_CONFIG = ?"
     };
     
-    public static final void display(View view, Function function,
-            Context context) {
-        context.mode = Context.DISPLAY;
-        load(view, function, context);
-    }
-    
-    public static final void edit(View view, Function function,
-            Context context) {
-        context.mode = Context.EDIT;
-        load(view, function, context);
-    }
-    
-    private static final void load(View view, Function function,
-            Context context) {
-        DataForm pkgform = view.getElement("package");
+    public static final void load(Context context) {
+        DataForm pkgform = context.view.getElement("package");
         String program = pkgform.get("NAME").get();
-        Documents documents = new Documents(function);
+        Documents documents = new Documents(context.function);
         
         context.objects = documents.select(QUERIES[SEL_ITENS], program);
         if (context.objects == null) {
-            view.message(Const.STATUS, "no.config");
+            context.view.message(Const.STATUS, "no.config");
             return;
         }
         
-        view.redirect("configform");
+        context.view.redirect("configform");
     }
     
-    public static final void save(View view, Function function,
-            Context context) {
+    public static final void save(Context context) {
         InputComponent input;
         ExtendedObject object;
         String value, name;
         int id = 0;
-        Documents documents = new Documents(function);
-        DataForm form = view.getElement("package.config");
+        Documents documents = new Documents(context.function);
+        DataForm form = context.view.getElement("package.config");
         DocumentModel model = documents.getModel("GLOBAL_CONFIG_VALUES");
         
         for (Element element : form.getElements()) {
@@ -71,7 +55,7 @@ public class Request {
                 }
             
             if (value == null) {
-                view.message(Const.ERROR, "parameters.save.error");
+                context.view.message(Const.ERROR, "parameters.save.error");
                 return;
             }
             
@@ -81,7 +65,7 @@ public class Request {
             documents.modify(object);
         }
         
-        view.message(Const.STATUS, "save.successful");
+        context.view.message(Const.STATUS, "save.successful");
     }
 
 }

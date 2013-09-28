@@ -6,7 +6,6 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -16,35 +15,28 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
-import org.iocaste.shell.common.View;
 
 public class TableStructure {
 
-    /**
-     * 
-     * @param view
-     * @param function
-     * @param context
-     */
-    public static final void main(View view, Function function,
-            Context context) {
+    public static final void main(Context context) {
         Table itens;
         String name, title;
         TableColumn column;
-        Form main = new Form(view, "datadict.structure");
+        Form main = new Form(context.view, "datadict.structure");
         PageControl pagecontrol = new PageControl(main);
         DataForm structure = new DataForm(main, "header");
         Map<Common.ItensNames, DataElement> references =
-                Common.getFieldReferences(function);
+                Common.getFieldReferences(context.function);
         
         pagecontrol.add("home");
         pagecontrol.add("back");
         new DataItem(structure, Const.TEXT_FIELD, "modelname");
-        view.setFocus(new DataItem(structure, Const.TEXT_FIELD, "modeltext"));
+        context.view.setFocus(new DataItem(structure, Const.TEXT_FIELD,
+                "modeltext"));
         new DataItem(structure, Const.TEXT_FIELD, "modelclass");
         new DataItem(structure, Const.TEXT_FIELD, "modeltable");
         
-        prepareHeader(structure, context, function);
+        prepareHeader(structure, context);
         
         new Button(main, "itemdetails");
         
@@ -66,7 +58,7 @@ public class TableStructure {
         }
         
         itens.setMark(true);
-        prepareItens(itens, context, function, view);
+        prepareItens(itens, context);
         
         switch (context.mode) {
         case Common.UPDATE:
@@ -98,21 +90,14 @@ public class TableStructure {
             title = null;
         }
         
-        view.setTitle(title);
+        context.view.setTitle(title);
     }
     
-    /**
-     * 
-     * @param form
-     * @param context
-     * @param function
-     */
-    private static final void prepareHeader(DataForm form, Context context,
-            Function function) {
+    private static final void prepareHeader(DataForm form, Context context) {
         String name;
         DataItem dataitem;
         DataElement[] references = new DataElement[3];
-        Documents docs = new Documents(function);
+        Documents docs = new Documents(context.function);
         DocumentModel model = docs.getModel(context.modelname);
         
         references[Common.MODELNAME] = docs.getDataElement("MODEL.NAME");
@@ -161,18 +146,10 @@ public class TableStructure {
         }
     }
     
-    /**
-     * 
-     * @param itens
-     * @param context
-     * @param function
-     * @param view
-     */
-    private static final void prepareItens(Table itens, Context context,
-            Function function, View view) {
+    private static final void prepareItens(Table itens, Context context) {
         Map<Common.ItensNames, DataElement> references =
-                Common.getFieldReferences(function);
-        Documents documents = new Documents(function);
+                Common.getFieldReferences(context.function);
+        Documents documents = new Documents(context.function);
         DocumentModel model = documents.getModel("MODELITEM");
         DocumentModel usermodel = documents.getModel(context.modelname);
         ItemConfig itemconfig = new ItemConfig();
