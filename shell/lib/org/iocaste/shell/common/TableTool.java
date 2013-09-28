@@ -96,19 +96,21 @@ public class TableTool {
     
     private void additem(Table table, ExtendedObject object) {
         Column column;
-        DataElement element;
+        Element element;
+        DataElement delement;
         InputComponent input;
         String name;
         TableItem item = new TableItem(table);
+        TableColumn[] tcolumns = table.getColumns();
         
-        for (TableColumn tcolumn : table.getColumns()) {
+        for (TableColumn tcolumn : tcolumns) {
             if (tcolumn.isMark())
                 continue;
 
             name = tcolumn.getName();
             column = columns.get(name);
-            element = tcolumn.getModelItem().getDataElement();
-            switch (element.getType()) {
+            delement = tcolumn.getModelItem().getDataElement();
+            switch (delement.getType()) {
             case DataType.BOOLEAN:
                 input = new CheckBox(table, name);
                 break;
@@ -126,24 +128,39 @@ public class TableTool {
                     input = new TextField(table, name);
                     break;
                 }
-                
-                if (column.validator == null)
-                    break;
-                
-                input.setValidator(column.validator.validator);
-                if (column.validator.inputs == null)
-                    break;
-                
-                for (String vinputname : column.validator.inputs)
-                    input.addValidatorInput(
-                            (InputComponent)item.get(vinputname));
-                break;
             }
             
             if (column.disabled)
                 input.setEnabled(false);
             
             item.add(input);
+        }
+        
+        /*
+         * só podemos tratar os validadores quando todos os
+         * componentes de entrada estiverem definidos.
+         * por isso não podemos tratar no loop anterior.
+         */
+        for (TableColumn tcolumn : tcolumns) {
+            if (tcolumn.isMark())
+                continue;
+            
+            name = tcolumn.getName();
+            element = item.get(name);
+            if (!element.isDataStorable())
+                continue;
+            
+            column = columns.get(name);
+            if (column.validator == null)
+                continue;
+            
+            input = (InputComponent)element; 
+            input.setValidator(column.validator.validator);
+            if (column.validator.inputs == null)
+                continue;
+            
+            for (String vinputname : column.validator.inputs)
+                input.addValidatorInput((InputComponent)item.get(vinputname));
         }
         
         if (object == null)
