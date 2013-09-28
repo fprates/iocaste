@@ -32,7 +32,7 @@ public class Main extends AbstractPage {
     @Override
     public final void help() {
         context.view.setParameter("topic", "tasksel-index");
-        context.view.redirect("iocaste-help", "view");
+        context.view.redirect("iocaste-help", "view", true);
     }
     
     @Override
