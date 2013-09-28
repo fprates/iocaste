@@ -72,6 +72,9 @@ public abstract class AbstractInputComponent extends AbstractComponent
      */
     @Override
     public final double getd() {
+        if (!(value instanceof BigDecimal))
+            return (double)value;
+        
         return ((BigDecimal)value).doubleValue();
     }
     
@@ -90,6 +93,9 @@ public abstract class AbstractInputComponent extends AbstractComponent
      */
     @Override
     public final int geti() {
+        if (!(value instanceof BigDecimal))
+            return (int)value;
+        
         return ((BigDecimal)value).intValue();
     }
     
@@ -99,6 +105,9 @@ public abstract class AbstractInputComponent extends AbstractComponent
      */
     @Override
     public final long getl() {
+        if (!(value instanceof BigDecimal))
+            return (long)value;
+        
         return ((BigDecimal)value).longValue();
     }
     
