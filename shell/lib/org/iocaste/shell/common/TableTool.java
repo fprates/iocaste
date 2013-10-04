@@ -233,6 +233,7 @@ public class TableTool {
             
             column = new Column();
             column.type = Const.TEXT_FIELD;
+            column.tcolumn = tcolumn;
             columns.put(tcolumn.getName(), column);
         }
     }
@@ -243,6 +244,10 @@ public class TableTool {
         for (TableItem item : table.getItems())
             if (item.isSelected())
                 table.remove(item);
+    }
+    
+    public final void setColumnSize(String column, int size) {
+        columns.get(column).tcolumn.setLength(size);
     }
     
     public final void setColumnType(String column, Const type) {
@@ -352,4 +357,5 @@ class Column {
     public Const type;
     public ValidatorData validator;
     public Map<String, Object> values;
+    public TableColumn tcolumn;
 }
