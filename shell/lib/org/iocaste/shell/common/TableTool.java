@@ -19,10 +19,12 @@ public class TableTool {
     public static final String ADD = "add";
     public static final String REMOVE = "remove";
     public static final String ACCEPT = "accept";
+    public static final byte CONTINUOUS_UPDATE = 0;
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
+    private byte mode;
     private Map<String, Control> controls;
     private Map<String, Column> columns;
     private Container container;
@@ -55,12 +57,28 @@ public class TableTool {
     }
     
     public final void add() {
+        int i = 0;
         Table table = context.view.getElement(tablename);
         
-        controls.get(ACCEPT).setVisible(true);
-        controls.get(ADD).setVisible(false);
-        controls.get(REMOVE).setVisible(false);
-        additems(table, null);
+        switch (mode) {
+        case CONTINUOUS_UPDATE:
+            for (TableItem item_ : table.getItems()) {
+                if (!item_.isSelected()) {
+                    i++;
+                    continue;
+                }
+                break;
+            }
+            
+            additem(table, null, i);
+            break;
+        default:
+            controls.get(ACCEPT).setVisible(true);
+            controls.get(ADD).setVisible(false);
+            controls.get(REMOVE).setVisible(false);
+            additems(table, null);
+            break;
+        }
     }
     
     public final void additems() {
@@ -75,13 +93,13 @@ public class TableTool {
         
         if (items == null) {
             for (int i = 0; i < vlines; i++)
-                additem(table, null);
+                additem(table, null, -1);
         } else {
             for (int i = 0; i < items.length; i++) {
                 if (vlines == items.length)
                     break;
                 
-                additem(table, items[i]);
+                additem(table, items[i], -1);
             }
         }
         
@@ -91,16 +109,16 @@ public class TableTool {
     public final void additem(ExtendedObject object) {
         Table table = context.view.getElement(tablename);
         
-        additem(table, object);
+        additem(table, object, -1);
     }
     
-    private void additem(Table table, ExtendedObject object) {
+    private void additem(Table table, ExtendedObject object, int pos) {
         Column column;
         Element element;
         DataElement delement;
         InputComponent input;
         String name;
-        TableItem item = new TableItem(table);
+        TableItem item = new TableItem(table, pos);
         TableColumn[] tcolumns = table.getColumns();
         
         for (TableColumn tcolumn : tcolumns) {
@@ -272,7 +290,9 @@ public class TableTool {
     public final void setMode(byte mode) {
         Table table = context.view.getElement(tablename);
         
+        this.mode = mode;
         switch (mode) {
+        case CONTINUOUS_UPDATE:
         case UPDATE:
             controls.get(ACCEPT).setVisible(false);
             controls.get(ADD).setVisible(true);

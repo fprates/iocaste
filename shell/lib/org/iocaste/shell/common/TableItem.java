@@ -23,9 +23,17 @@ public class TableItem implements Serializable {
     private boolean visible;
     
     public TableItem(Table table) {
+        this(table, -1);
+    }
+    
+    public TableItem(Table table, int pos) {
         String markname;
         RadioButton mark;
-        table.add(this);
+        
+        if (pos < 0)
+            table.add(this);
+        else
+            table.add(this, pos);
         
         this.table = table;
         columns = table.getColumns();
@@ -46,7 +54,6 @@ public class TableItem implements Serializable {
             break;
         }
     }
-    
     /**
      * Adiciona elemento para linha.
      * @param element elemento

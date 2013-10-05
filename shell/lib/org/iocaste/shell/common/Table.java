@@ -81,6 +81,16 @@ public class Table extends AbstractContainer {
     }
     
     /**
+     * 
+     * @param item
+     * @param pos
+     */
+    public final void add(TableItem item, int pos) {
+        itens.add(pos, item);
+        item.setLocale(getLocale());
+    }
+    
+    /**
      * Adiciona coluna à tabela.
      * @param column coluna
      */
@@ -134,7 +144,7 @@ public class Table extends AbstractContainer {
     public final Element[] getElements() {
         InputComponent input;
         SearchHelp sh;
-        List<Element> elements = new ArrayList<Element>();
+        List<Element> elements = new ArrayList<>();
         
         for (TableItem item : itens)
             for (Element element : item.getElements()) {
@@ -268,8 +278,8 @@ public class Table extends AbstractContainer {
         
         header = true;
         mark = false;
-        itens = new ArrayList<TableItem>();
-        columns = new LinkedHashMap<String, TableColumn>();
+        itens = new ArrayList<>();
+        columns = new LinkedHashMap<>();
         seltype = MULTIPLE;
         group = new RadioGroup(getName()+".mark");
         actions = new String[2];
