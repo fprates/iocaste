@@ -211,20 +211,27 @@ public class TableTool {
     
     public final void disable(String... tcolumns) {
         String name;
+        Column column;
         Table table = context.view.getElement(tablename);
         
         for (String cname :  columns.keySet())
             columns.get(cname).disabled = false;
         
-        for (String column : tcolumns)
-            columns.get(column).disabled = true;
+        for (String cname : tcolumns) {
+            column = columns.get(cname);
+            if (column == null)
+                throw new RuntimeException(cname.concat(
+                        " is an invalid column."));
+            
+            column.disabled = true;
+        }
         
         for (TableItem item : table.getItems())
-            for (TableColumn column : table.getColumns()) {
-                if (column.isMark())
+            for (TableColumn tcolumn : table.getColumns()) {
+                if (tcolumn.isMark())
                     continue;
                 
-                name = column.getName();
+                name = tcolumn.getName();
                 item.get(name).setEnabled(!columns.get(name).disabled);
             }
     }
