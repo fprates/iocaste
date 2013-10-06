@@ -10,28 +10,6 @@ import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
     private Context context;
-    
-    public Main() {
-        DocumentModelItem item;
-        DataElement element;
-
-        element = new DataElement("SECRET");
-        element.setType(DataType.CHAR);
-        element.setLength(12);
-        element.setUpcase(false);
-        
-        context = new Context();
-        context.function = this;
-        context.chgscrtmodel = new DocumentModel("CHANGE_SECRET");
-        
-        item = new DocumentModelItem("SECRET");
-        item.setDataElement(element);
-        context.chgscrtmodel.add(item);
-        
-        item = new DocumentModelItem("CONFIRM");
-        item.setDataElement(element);
-        context.chgscrtmodel.add(item);
-    }
     /**
      * 
      * @param view
@@ -54,7 +32,25 @@ public class Main extends AbstractPage {
     
     @Override
     public final PageContext init(View view) {
+        DocumentModelItem item;
+        DataElement element;
+
+        element = new DataElement("SECRET");
+        element.setType(DataType.CHAR);
+        element.setLength(12);
+        element.setUpcase(false);
+        
         context = new Context();
+        context.function = this;
+        context.chgscrtmodel = new DocumentModel("CHANGE_SECRET");
+        
+        item = new DocumentModelItem("SECRET");
+        item.setDataElement(element);
+        context.chgscrtmodel.add(item);
+        
+        item = new DocumentModelItem("CONFIRM");
+        item.setDataElement(element);
+        context.chgscrtmodel.add(item);
         
         return context;
     }

@@ -28,7 +28,7 @@ public class Request {
              * não queremos que essa seja a página inicial
              */
             context.view.dontPushPage();
-            context.view.redirect("iocaste-tasksel", "main");
+            context.view.redirect("iocaste-tasksel", "main", INITIALIZE);
             return;
         }
         
