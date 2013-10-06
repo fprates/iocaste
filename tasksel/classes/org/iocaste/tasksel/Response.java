@@ -55,13 +55,13 @@ public class Response {
             return null;
         
         language = context.view.getLocale().toString(); 
-        lists = new LinkedHashMap<String, Set<TaskEntry>>();
+        lists = new LinkedHashMap<>();
         for (ExtendedObject object : result) {
             groupname = object.getValue("GROUP");
             if (lists.containsKey(groupname)) {
                 entries = lists.get(groupname);
             } else {
-                entries = new LinkedHashSet<TaskEntry>();
+                entries = new LinkedHashSet<>();
                 lists.put(groupname, entries);
             }
             
@@ -158,14 +158,14 @@ public class Response {
         Map<String, Map<String, String>> defaultsheet;
         Map<String, String> style;
         
-        style = new HashMap<String, String>();
+        style = new HashMap<>();
         style.put("padding", "0px");
         style.put("margin", "0px");
         
         defaultsheet = view.getStyleSheet();
         defaultsheet.put(".groups", style);
         
-        style = new HashMap<String, String>();
+        style = new HashMap<>();
         style.put("float", "left");
         style.put("position", "relative");
         style.put("display", "inline");
