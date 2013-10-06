@@ -1,27 +1,42 @@
 package org.iocaste.texteditor.common;
 
 import java.io.Serializable;
-
-import org.iocaste.shell.common.TextArea;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class TextEditor implements Serializable {
     private static final long serialVersionUID = 8099830107603124518L;
-    private TextArea textarea;
-    private String id;
+    private int size;
+    private String name;
+    private Map<String, String> pages;
     
-    public TextEditor(TextArea textarea) {
-        this.textarea = textarea;
+    public TextEditor(String name) {
+        this.name = name;
+        size = 80;
+        pages = new LinkedHashMap<>();
     }
     
-    public final String getId() {
-        return id;
+    public final void commit(String page, String text) {
+        pages.put(page, text);
     }
     
-    public final String getString() {
-        return textarea.getText();
+    public final int getLineSize() {
+        return size;
     }
     
-    public final void setId(String id) {
-        this.id = id;
+    public final String getName() {
+        return name;
+    }
+    
+    public final String[] getPages() {
+        return pages.keySet().toArray(new String[0]);
+    }
+    
+    public final String getString(String page) {
+        return pages.get(page);
+    }
+    
+    public final void setLineSize(int size) {
+        this.size = size;
     }
 }

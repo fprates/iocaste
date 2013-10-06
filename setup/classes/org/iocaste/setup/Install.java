@@ -19,6 +19,7 @@ public class Install {
         CDocument.install(data, config);
         GlobalConfig.install(data);
         Shell.install(data);
+        TextEditor.install(data);
         
         return data;
     }

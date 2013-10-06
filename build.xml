@@ -25,8 +25,11 @@
         <!-- search-help -->
         <ant antfile="${basedir}/src/search-help/build.xml"/>
         
+    	<!-- text editor -->
+    	<ant antfile="${basedir}/src/texteditor/build.xml"/>
+    	
         <!-- report -->
-        <ant antfile ="${basedir}/src/report/build.xml"/>
+        <!-- <ant antfile ="${basedir}/src/report/build.xml"/> -->
     </target>
 
     <target name="clean">
@@ -64,7 +67,7 @@
         <ant antfile="${basedir}/src/tasksel/build.xml"/>
 
         <!-- external -->
-        <ant antfile="${basedir}/src/external/build.xml"/>
+        <!-- <ant antfile="${basedir}/src/external/build.xml"/> -->
           
         <!-- transport -->
         <ant antfile="${basedir}/src/transport/build.xml"/>
@@ -100,7 +103,7 @@
         <ant antfile="${basedir}/src/gconfigview/build.xml"/>
         
     	<!-- workbench -->
-        <ant antfile="${basedir}/src/workbench/build.xml"/>
+        <!-- <ant antfile="${basedir}/src/workbench/build.xml"/> -->
         
         <!-- examples -->
         <!-- <ant antfile="${basedir}/src/examples/build.xml"/> -->
@@ -114,8 +117,10 @@
     		<fileset dir="${builddir}/shell/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/packagetool/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/globalconfig/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/external/lib" excludes="*.jar"/>
-    	<!-- <fileset dir="${builddir}/report/lib" excludes="*.jar"/> -->
+    		<fileset dir="${builddir}/authority/lib" excludes="*.jar"/>
+    		<fileset dir="${builddir}/texteditor/lib" excludes="*.jar"/>
+    	<!--    <fileset dir="${builddir}/external/lib" excludes="*.jar"/> -->
+    	<!--    <fileset dir="${builddir}/report/lib" excludes="*.jar"/> -->
     	</copy>
     	
     	<jar basedir="${basedir}/ext/common"
