@@ -7,20 +7,18 @@ import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
-    private Context context;
     
     public Main() {
         export("install", "install");
     }
     
+    @Override
     public final PageContext init(View view) {
-        context = new Context();
-        
-        return context;
+        return new Context();
     }
     
     public final InstallData install(Message message) {
-        return Install.init(context.function);
+        return Install.init(this);
     }
 }
 
