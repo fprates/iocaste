@@ -55,11 +55,23 @@ public class TicketControl {
         if (loaded)
             return;
         
-        loaded = true;
         select = new CheckedSelect(function);
-        
         select.setFrom("SHELL004");
-        lines = select.execute();
+        
+        /*
+         * se precisa explicar código com comentário,
+         * é porque não é algo bom:
+         * usaremos try/catch aqui. é possível que SHELL004 ainda não
+         * esteja instalada. Exception é bem ampla, mas execute() não
+         * lança SQLException. Vamos negociar assim, por enquanto.
+         */
+        try {
+            lines = select.execute();
+        } catch (Exception e) {
+            return;
+        }
+        
+        loaded = true;
         if (lines == null)
             return;
         
