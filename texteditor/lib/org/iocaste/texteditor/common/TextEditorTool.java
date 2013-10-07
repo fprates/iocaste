@@ -1,8 +1,11 @@
 package org.iocaste.texteditor.common;
 
+import java.util.Map;
+
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.TextArea;
 
@@ -17,7 +20,7 @@ public class TextEditorTool extends AbstractServiceInterface {
         this.context = context;
     }
     
-    public final void commit(String page, TextEditor editor) {
+    public final void commit(TextEditor editor, String page) {
         TextArea textarea = context.view.getElement(editor.getName());
         editor.commit(page, (String)textarea.get());
     }
@@ -28,11 +31,34 @@ public class TextEditorTool extends AbstractServiceInterface {
         return new TextEditor(name);
     }
     
-    public final void save(String id, TextEditor editor) {
+    public final void load(TextEditor editor, String textnm, String pagenm) {
+        InputComponent input;
+        Map<String, String> pages;
+        Message message = new Message();
+        
+        message.setId("load");
+        message.add("textname", textnm);
+        message.add("pagename", pagenm);
+        pages = call(message);
+        
+        if (pages == null)
+            return;
+        
+        for (String name : pages.keySet())
+            editor.commit(name, pages.get(name));
+        
+        if (pagenm == null)
+            return;
+        
+        input = context.view.getElement(editor.getName());
+        input.set(pages.get(pagenm));
+    }
+    
+    public final void save(TextEditor editor, String textnm) {
         Message message = new Message();
         
         message.setId("save");
-        message.add("id", id);
+        message.add("textname", textnm);
         message.add("editor", editor);
         call(message);
     }

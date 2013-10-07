@@ -12,49 +12,57 @@ public class TextEditor {
     public static final void install(InstallData data) {
         DataElement element;
         DocumentModel model;
-        DocumentModelItem item, textid, pageid;
+        DocumentModelItem item, textnm, pagenm;
         
         /*
          * cabeçalho
          */
         model = data.getModel("TXTEDITOR_HEAD", "TXTED_HEAD", null);
-        element = new DataElement("TXTED_ID");
+        element = new DataElement("TXTED_TEXTNAME");
         element.setType(DataType.CHAR);
         element.setLength(24);
         element.setUpcase(true);
-        textid = new DocumentModelItem("TEXT_ID");
-        textid.setTableFieldName("TXTID");
-        textid.setDataElement(element);
-        model.add(textid);
-        model.add(new DocumentModelKey(textid));
+        textnm = new DocumentModelItem("TEXT_NAME");
+        textnm.setTableFieldName("TXTNM");
+        textnm.setDataElement(element);
+        model.add(textnm);
+        model.add(new DocumentModelKey(textnm));
+        
+        element = new DataElement("TXTED_TEXT_ID");
+        element.setType(DataType.NUMC);
+        element.setLength(6);
+        item = new DocumentModelItem("TEXT_ID");
+        item.setTableFieldName("TXTID");
+        item.setDataElement(element);
+        model.add(item);
         
         /*
          * páginas
          */
         model = data.getModel("TXTEDITOR_PAGE", "TXTED_PAGE", null);
-        element = new DataElement("TXTED_PAGE");
+        element = new DataElement("TXTED_PAGE_ID");
         element.setType(DataType.NUMC);
         element.setLength(9);
-        pageid = new DocumentModelItem("PAGE_ID");
-        pageid.setTableFieldName("PAGID");
-        pageid.setDataElement(element);
-        model.add(pageid);
-        model.add(new DocumentModelKey(pageid));
+        item = new DocumentModelItem("PAGE_ID");
+        item.setTableFieldName("PAGID");
+        item.setDataElement(element);
+        model.add(item);
+        model.add(new DocumentModelKey(item));
         
-        item = new DocumentModelItem("TEXT_ID");
-        item.setTableFieldName("TXTID");
-        item.setDataElement(textid.getDataElement());
-        item.setReference(textid);
+        item = new DocumentModelItem("TEXT_NAME");
+        item.setTableFieldName("TXTNM");
+        item.setDataElement(textnm.getDataElement());
+        item.setReference(textnm);
         model.add(item);
         
         element = new DataElement("TXTED_PAGE_NAME");
         element.setType(DataType.CHAR);
-        element.setLength(128);
+        element.setLength(64);
         element.setUpcase(false);
-        item = new DocumentModelItem("NAME");
-        item.setTableFieldName("PAGNM");
-        item.setDataElement(element);
-        model.add(item);
+        pagenm = new DocumentModelItem("PAGE_NAME");
+        pagenm.setTableFieldName("PAGNM");
+        pagenm.setDataElement(element);
+        model.add(pagenm);
         
         /*
          * itens
@@ -69,16 +77,22 @@ public class TextEditor {
         model.add(item);
         model.add(new DocumentModelKey(item));
         
-        item = new DocumentModelItem("PAGE_ID");
-        item.setTableFieldName("PAGID");
-        item.setDataElement(pageid.getDataElement());
-        item.setReference(pageid);
+        item = new DocumentModelItem("TEXT_NAME");
+        item.setTableFieldName("TXTNM");
+        item.setDataElement(textnm.getDataElement());
+        item.setReference(textnm);
         model.add(item);
         
-        item = new DocumentModelItem("TEXT_ID");
-        item.setTableFieldName("TXTID");
-        item.setDataElement(textid.getDataElement());
-        item.setReference(textid);
+        item = new DocumentModelItem("PAGE_NAME");
+        item.setTableFieldName("PAGNM");
+        item.setDataElement(pagenm.getDataElement());
+        model.add(item);
+        
+        element = new DataElement("TXTED_PARAGRAPH");
+        element.setType(DataType.BOOLEAN);
+        item = new DocumentModelItem("PARAGRAPH");
+        item.setTableFieldName("PARAG");
+        item.setDataElement(element);
         model.add(item);
         
         element = new DataElement("TXTED_LINE");
@@ -90,6 +104,6 @@ public class TextEditor {
         item.setDataElement(element);
         model.add(item);
         
-        data.addNumberFactory("TXTED_PAGEID");
+        data.addNumberFactory("TXTED_TEXTID");
     }
 }
