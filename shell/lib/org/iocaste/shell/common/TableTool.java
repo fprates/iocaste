@@ -188,12 +188,16 @@ public class TableTool {
     }
     
     public final void controls(byte state, String... controls) {
+        Table table = context.view.getElement(tablename);
+        
         switch (state) {
         case ENABLED:
         case DISABLED:
             if ((controls == null) || (controls.length == 0)) {
                 for (String control : this.controls.keySet())
                     this.controls.get(control).setVisible(state == ENABLED);
+                
+                table.setMark(state == ENABLED);
                 break;
             }
             
