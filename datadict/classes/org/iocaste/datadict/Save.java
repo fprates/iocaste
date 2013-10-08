@@ -32,9 +32,9 @@ public class Save {
         context.model.setTableName((String)structure.get("modeltable").get());
         
         for (TableItem item : itens.getItems()) {
-            itemname = Common.getTableValue(item, "item.name");
+            itemname = Common.getTableInput(item, "item.name").get();
             
-            value = Common.getTableValue(item, "item.element");
+            value = Common.getTableInput(item, "item.element").get();
             if (value == null) {
                 value = new StringBuilder(context.model.getName()).
                         append(".").append(itemname).toString();
@@ -42,36 +42,36 @@ public class Save {
             }
             
             dataelement = new DataElement(value);
-            dataelement.setLength((Integer)Common.getTableValue(
-                    item, "item.length"));
+            dataelement.setLength(Common.
+                    getTableInput(item, "item.length").geti());
             
-            dataelement.setDecimals((Integer)Common.getTableValue(
-                    item, "item.dec"));
+            dataelement.setDecimals(Common.getTableInput(
+                    item, "item.dec").geti());
             
-            dataelement.setType((Integer)Common.getTableValue(
-                    item, "item.type"));
+            dataelement.setType(Common.getTableInput(
+                    item, "item.type").geti());
             
             upcase = item.get("item.upcase");
             dataelement.setUpcase(upcase.isSelected());
             
             modelitem = new DocumentModelItem(itemname);
-            modelitem.setTableFieldName((String)Common.getTableValue(
-                    item, "item.tablefield"));
+            modelitem.setTableFieldName((String)Common.getTableInput(
+                    item, "item.tablefield").get());
             
-            modelitem.setAttributeName((String)Common.getTableValue(
-                    item, "item.classfield"));
+            modelitem.setAttributeName((String)Common.getTableInput(
+                    item, "item.classfield").get());
             
             modelitem.setDataElement(dataelement);
             
-            modelref = Common.getTableValue(item, "model.reference");
+            modelref = Common.getTableInput(item, "model.reference").get();
             if (!Shell.isInitial(modelref)) {
-                itemref = Common.getTableValue(item, "item.reference");
+                itemref = Common.getTableInput(item, "item.reference").get();
                 reference = documents.getModel(modelref).getModelItem(itemref);
                 modelitem.setReference(reference);
             }
             
             modelitem.setSearchHelp((String)Common.
-                    getTableValue(item, "item.sh"));
+                    getTableInput(item, "item.sh").get());
             
             context.model.add(modelitem);
             

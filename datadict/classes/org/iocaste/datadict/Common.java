@@ -85,10 +85,9 @@ public class Common {
      * @param name
      * @return
      */
-    public static final <T> T getTableValue(TableItem item, String name) {
-        InputComponent input = item.get(name);
-        
-        return input.get();
+    public static final InputComponent getTableInput(TableItem item,
+            String name) {
+        return item.get(name);
     }
     
     /**
@@ -115,17 +114,17 @@ public class Common {
         Table itens = vdata.getElement("itens");
         
         for (TableItem item : itens.getItems()) {
-            name = getTableValue(item, "item.name");
-            classfield = getTableValue(item, "item.classfield");
-            tablefield = getTableValue(item, "item.tablefield");
+            name = getTableInput(item, "item.name").get();
+            classfield = getTableInput(item, "item.classfield").get();
+            tablefield = getTableInput(item, "item.tablefield").get();
             
             for (TableItem test : itens.getItems()) {
                 if (item == test)
                     continue;
                 
-                testname = getTableValue(test, "item.name");
-                testclassfield = getTableValue(test, "item.classfield");
-                testtablefield = getTableValue(test, "item.tablefield");
+                testname = getTableInput(test, "item.name").get();
+                testclassfield = getTableInput(test, "item.classfield").get();
+                testtablefield = getTableInput(test, "item.tablefield").get();
                 
                 if (name.equals(testname)) {
                     vdata.message(Const.ERROR, "item.name.duplicated");

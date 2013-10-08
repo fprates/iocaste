@@ -45,7 +45,7 @@ public class CodeGeneration {
             getter.setLength(0);
             setter.setLength(0);
             
-            value = Common.getTableValue(item, "item.type");
+            value = Common.getTableInput(item, "item.type").get();
             if (context.mode == Common.SHOW) {
                 if (value.equals("char"))
                     value = "0";
@@ -74,7 +74,7 @@ public class CodeGeneration {
                 break;
             }
             
-            value = Common.getTableValue(item, "item.classfield");
+            value = Common.getTableInput(item, "item.classfield").get();
             sb.append(value).append(";");
             context.code.add(sb.toString());
             

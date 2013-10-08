@@ -109,15 +109,17 @@ public class ItemDetails {
         
         context.detail = new ItemDetail();
         context.detail.modelname = form.get("modelname").get();
-        context.detail.itemname = Common.getTableValue(selected, "item.name");
-        context.detail.modelref = Common.getTableValue(selected,
-                "model.reference");
-        context.detail.itemref = Common.getTableValue(selected,
-                "item.reference");
-        context.detail.upcase = Common.getTableValue(selected, "item.upcase");
-        context.detail.classfield = Common.getTableValue(selected,
-                "item.classfield");
-        context.detail.sh = Common.getTableValue(selected, "item.sh");
+        context.detail.itemname = Common.getTableInput(selected,
+                "item.name").get();
+        context.detail.modelref = Common.getTableInput(selected,
+                "model.reference").get();
+        context.detail.itemref = Common.getTableInput(selected,
+                "item.reference").get();
+        context.detail.upcase = Common.getTableInput(selected,
+                "item.upcase").get();
+        context.detail.classfield = Common.getTableInput(selected,
+                "item.classfield").get();
+        context.detail.sh = Common.getTableInput(selected, "item.sh").get();
         
         context.view.redirect("detailsview");
     }
