@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.RangeOption;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
@@ -424,16 +425,22 @@ public class Parser {
      */
     private static final String rebuildField(String field, QueryInfo queryinfo,
             Cache cache) throws Exception {
-        DocumentModel model;
         String name, fieldname;
+        DocumentModelItem item;
         String[] composed = field.split("\\.");
+        DocumentModel model = queryinfo.model;
         
-        if (composed.length == 1)
-            return queryinfo.model.getModelItem(composed[0]).
-                    getTableFieldName();
-        
-        model = queryinfo.model;
         name = model.getName();
+        if (composed.length == 1) {
+            item = queryinfo.model.getModelItem(composed[0]);
+            if (item == null)
+                throw new IocasteException(new StringBuilder(composed[0]).
+                        append(" not found for model ").
+                        append(name).toString());
+            
+            return item.getTableFieldName();
+        }
+        
         if (!name.equals(composed[0]))
             model = Model.get(composed[0], cache);
         
