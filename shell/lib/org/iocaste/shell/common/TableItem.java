@@ -203,7 +203,7 @@ public class TableItem implements Serializable {
             if (modelitem == null)
                 continue;
             
-            value = object.getValue(modelitem);
+            value = object.getValue(modelitem.getName());
             input.set(value);
         }
     }
