@@ -181,7 +181,7 @@ public class Common {
                 helper.type = Const.TEXT_FIELD;
                 helper.value = (modelitem == null)?
                         null : modelitem.getTableFieldName();
-                helper.obligatory = true;
+                helper.obligatory = false;
                 newField(helper);
                 
                 continue;

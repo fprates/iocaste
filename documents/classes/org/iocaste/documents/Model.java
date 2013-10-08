@@ -712,14 +712,12 @@ public class Model {
         
         for (DocumentModelItem item : model.getItens()) {
             if (!oldmodel.contains(item)) {
-                if (DataElementServices.
-                        insert(iocaste, item.getDataElement()) == 0)
-                    throw new IocasteException("");
-                
+                DataElementServices.insert(iocaste, item.getDataElement());                
                 if (insertModelItem(iocaste, item) == 0)
                     throw new IocasteException("error on model insert");
                 
-                addDBColumn(iocaste, item, refstmt, dbtype);
+                if (item.getTableFieldName() != null)
+                    addDBColumn(iocaste, item, refstmt, dbtype);
             } else {
                 if (updateModelItem(iocaste, item, oldmodel) == 0)
                     throw new IocasteException("error on model update");
@@ -731,12 +729,11 @@ public class Model {
                 continue;
             
             if (removeModelItem(iocaste, olditem) == 0)
-                throw new IocasteException(
-                        "error on remove model item");
+                throw new IocasteException("error on remove model item");
             
-            if (removeDBColumn(iocaste, olditem) == 0)
-                throw new IocasteException(
-                        "error on remove table column");
+            if (olditem.getTableFieldName() != null)
+                if (removeDBColumn(iocaste, olditem) == 0)
+                    throw new IocasteException("error on remove table column");
         }
         
         Common.parseQueries(model, cache.queries);
