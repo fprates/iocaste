@@ -19,7 +19,9 @@ public class PageControl extends AbstractContainer {
     public static final boolean NATIVE = false;
     public static final byte ACTION = 0;
     public static final byte REQUEST = 1;
+    public static final byte SUBMIT = 2;
     private Set<String> extern, actions, components;
+    private String submit;
     
     public PageControl(Form form) {
         super(form, Const.PAGE_CONTROL, "navbar");
@@ -52,6 +54,8 @@ public class PageControl extends AbstractContainer {
     
     public final void add(String action, byte type, boolean extern) {
         switch (type) {
+        case SUBMIT:
+            submit = action;
         case REQUEST:
             components.add(action);
             break;
@@ -77,6 +81,10 @@ public class PageControl extends AbstractContainer {
      */
     public final String[] getComponents() {
         return components.toArray(new String[0]);
+    }
+    
+    public final String getSubmitComponent() {
+        return submit;
     }
     
     /**

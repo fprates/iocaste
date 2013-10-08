@@ -62,13 +62,14 @@ public class PageControlRenderer extends Renderer {
      */
     public static final XMLElement render(
             PageControl pagecontrol, Config config) {
+        Button button;
         String[] actions, components;
         StandardContainer linkarea, statusarea, componentarea;
         XMLElement pctag;
         Const msgtype;
         Text text;
         View view = config.getView();
-        String message, title = view.getTitle();
+        String message, submit, title = view.getTitle();
         
         pagecontrol.clear();
         
@@ -106,10 +107,17 @@ public class PageControlRenderer extends Renderer {
 
         components = pagecontrol.getComponents();
         if (components.length > 0) {
-            componentarea = new StandardContainer(pagecontrol, "navbar.components");
+            componentarea = new StandardContainer(pagecontrol,
+                    "navbar.components");
+            submit = pagecontrol.getSubmitComponent();
             componentarea.setStyleClass("navbar_components");
-            for (String component : components)
-                componentarea.add(new Button(componentarea, component));
+            for (String component : components) {
+                button = new Button(componentarea, component);
+                if (submit != null && submit.equals(component))
+                    button.setSubmit(true);
+                
+                componentarea.add(button);
+            }
         }
         
         pctag.addChildren(Renderer.renderElements(
