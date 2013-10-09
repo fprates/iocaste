@@ -316,12 +316,15 @@ public class TableTool {
             controls.get(ADD).setVisible(false);
             controls.get(REMOVE).setVisible(false);
             table.setMark(false);
-            
-            for (TableItem item : table.getItems())
-                for (Element element : item.getElements())
-                    element.setEnabled(false);
             break;
         }
+        
+        for (TableItem item : table.getItems())
+            for (Element element : item.getElements())
+                element.setEnabled(mode != DISPLAY);
+        
+        for (String column : columns.keySet())
+            columns.get(column).disabled = (mode == DISPLAY);
     }
     
     public final void setObjects(ExtendedObject[] objects) {
