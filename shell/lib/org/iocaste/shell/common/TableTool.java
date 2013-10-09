@@ -227,33 +227,6 @@ public class TableTool {
         table.clear();
     }
     
-    public final void disable(String... tcolumns) {
-        String name;
-        Column column;
-        Table table = context.view.getElement(tablename);
-        
-        for (String cname :  columns.keySet())
-            columns.get(cname).disabled = false;
-        
-        for (String cname : tcolumns) {
-            column = columns.get(cname);
-            if (column == null)
-                throw new RuntimeException(cname.concat(
-                        " is an invalid column."));
-            
-            column.disabled = true;
-        }
-        
-        for (TableItem item : table.getItems())
-            for (TableColumn tcolumn : table.getColumns()) {
-                if (tcolumn.isMark())
-                    continue;
-                
-                name = tcolumn.getName();
-                item.get(name).setEnabled(!columns.get(name).disabled);
-            }
-    }
-    
     public final Container getContainer() {
         return container;
     }
@@ -302,6 +275,35 @@ public class TableTool {
         
         column.type = type;
         column.action = action;
+    }
+    
+    public final void setColumnStatus(byte status, String... tcolumns) {
+        String name;
+        Column column;
+        Table table = context.view.getElement(tablename);
+        
+        if (tcolumns == null || tcolumns.length == 0) {
+            for (String cname :  columns.keySet())
+                columns.get(cname).disabled = (status == DISABLED);
+        } else {
+            for (String cname : tcolumns) {
+                column = columns.get(cname);
+                if (column == null)
+                    throw new RuntimeException(cname.concat(
+                            " is an invalid column."));
+                
+                column.disabled = (status == DISABLED);
+            }
+        }
+        
+        for (TableItem item : table.getItems())
+            for (TableColumn tcolumn : table.getColumns()) {
+                if (tcolumn.isMark())
+                    continue;
+                
+                name = tcolumn.getName();
+                item.get(name).setEnabled(!columns.get(name).disabled);
+            }
     }
     
     public final void setColumnValues(String name, Map<String, Object> values)
