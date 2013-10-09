@@ -130,28 +130,35 @@ public class TableTool {
             delement = tcolumn.getModelItem().getDataElement();
             switch (delement.getType()) {
             case DataType.BOOLEAN:
-                input = new CheckBox(table, name);
+                element = new CheckBox(table, name);
                 break;
             default:
                 switch (column.type) {
                 case LIST_BOX:
                     input = new ListBox(table, name);
+                    element = input;
                     if (column.values == null)
                         break;
                     
                     for (String vname : column.values.keySet())
                         ((ListBox)input).add(vname, column.values.get(vname));
                     break;
-                default:
-                    input = new TextField(table, name);
+                case TEXT_FIELD:
+                    element = new TextField(table, name);
                     break;
+                case LINK:
+                    element = new Link(table, name, column.action);
+                    break;
+                default:
+                    throw new RuntimeException("component type not supported"
+                            + "in this version.");
                 }
             }
             
             if (column.disabled)
-                input.setEnabled(false);
+                element.setEnabled(false);
             
-            item.add(input);
+            item.add(element);
         }
         
         /*
@@ -188,21 +195,28 @@ public class TableTool {
     }
     
     public final void controls(byte state, String... controls) {
+        Control control;
         Table table = context.view.getElement(tablename);
         
         switch (state) {
         case ENABLED:
         case DISABLED:
             if ((controls == null) || (controls.length == 0)) {
-                for (String control : this.controls.keySet())
-                    this.controls.get(control).setVisible(state == ENABLED);
+                for (String name : this.controls.keySet())
+                    this.controls.get(name).setVisible(state == ENABLED);
                 
                 table.setMark(state == ENABLED);
                 break;
             }
             
-            for (String control : controls)
-                this.controls.get(control).setVisible(state == ENABLED);
+            for (String name : controls) {
+                control = this.controls.get(name);
+                if (control == null)
+                    throw new RuntimeException(name.
+                            concat(" is an invalid control."));
+                
+                control.setVisible(state == ENABLED);
+            }
             break;
         }
     }
@@ -279,13 +293,20 @@ public class TableTool {
         columns.get(column).tcolumn.setLength(size);
     }
     
-    public final void setColumnType(String column, Const type) {
-        columns.get(column).type = type;
+    public final void setColumnType(String name, Const type) {
+        setColumnType(name, type, null);
     }
     
-    public final void setColumnValues(String column, Map<String, Object> values)
+    public final void setColumnType(String name, Const type, String action) {
+        Column column = columns.get(name);
+        
+        column.type = type;
+        column.action = action;
+    }
+    
+    public final void setColumnValues(String name, Map<String, Object> values)
     {
-        columns.get(column).values = values;
+        columns.get(name).values = values;
     }
     
     /**
@@ -392,4 +413,5 @@ class Column {
     public ValidatorData validator;
     public Map<String, Object> values;
     public TableColumn tcolumn;
+    public String action;
 }
