@@ -37,7 +37,7 @@ public class TableItem implements Serializable {
         
         this.table = table;
         columns = table.getColumns();
-        elements = new LinkedHashMap<String, Element>();
+        elements = new LinkedHashMap<>();
         visible = true;
         
         switch (table.getSelectionType()) {
@@ -173,17 +173,21 @@ public class TableItem implements Serializable {
      * @param object objeto extendido.
      */
     public final void setObject(ExtendedObject object) {
+        Parameter parameter;
+        Link link;
         Element element;
         Object value;
         InputComponent input;
         DocumentModelItem modelitem;
         Component component;
+        String name;
         
         for (TableColumn column : columns) {
             if (column.isMark())
                 continue;
             
-            element = elements.get(column.getName());
+            name = column.getName();
+            element = elements.get(name);
             if (element == null)
                 throw new RuntimeException("no component defined for " +
                 		"this table item");
@@ -192,6 +196,16 @@ public class TableItem implements Serializable {
                 component = (Component)element;
                 value = object.getValue(column.getModelItem());
                 component.setText((value == null)? "" : value.toString());
+                if (element.getType() == Const.LINK) {
+                    link = (Link)element;
+                    parameter = column.getParameter();
+                    if (parameter == null) {
+                        parameter = new Parameter(table.getContainer(), name);
+                        column.setParameter(parameter);
+                    }
+                    
+                    link.add(parameter, value);
+                }
                 continue;
             }
             

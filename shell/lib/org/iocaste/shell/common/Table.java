@@ -50,6 +50,7 @@ public class Table extends AbstractContainer {
     private String[] actions;
     private String text;
     private int topline, vlines;
+    private Container container;
     
     public Table(View view, String name) {
         super(view, Const.TABLE, name);
@@ -60,6 +61,7 @@ public class Table extends AbstractContainer {
     public Table(Container container, String name) {
         super(container, Const.TABLE, name);
         
+        this.container = container;
         init();
     }
     
@@ -134,6 +136,10 @@ public class Table extends AbstractContainer {
      */
     public final TableColumn[] getColumns() {
         return columns.values().toArray(new TableColumn[0]);
+    }
+    
+    public final Container getContainer() {
+        return container;
     }
     
     /*
