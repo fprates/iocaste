@@ -17,8 +17,9 @@ public class ExpandBarRenderer extends Renderer {
         String name = container.getName();
         String edgename = new StringBuilder(name).append(".edge").toString();
         Button edge = new Button(container, edgename);
-        List<XMLElement> ebtags, tags = new ArrayList<XMLElement>();
+        List<XMLElement> ebtags, tags = new ArrayList<>();
         
+        edge.setText(name);
         edge.setSubmit(false);
         edge.setStyleClass("eb_edge");
         edge.setEventHandler(container.getEventHandler());
@@ -29,7 +30,7 @@ public class ExpandBarRenderer extends Renderer {
         tags.add(ButtonRenderer.render(edge, config));
         
         ebtag = new XMLElement("div");
-        ebtags = new ArrayList<XMLElement>();
+        ebtags = new ArrayList<>();
         
         for (Element element : container.getElements()) {
             if (element.getName().equals(edgename) &&
@@ -41,7 +42,10 @@ public class ExpandBarRenderer extends Renderer {
         
         ebtag.add("class", container.getStyleClass());
         ebtag.add("id", name);
-        ebtag.addChildren(ebtags);
+        if (ebtags.size() == 0)
+            ebtag.addInner("");
+        else
+            ebtag.addChildren(ebtags);
         
         tags.add(ebtag);
         
