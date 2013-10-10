@@ -10,6 +10,7 @@ package org.iocaste.shell.common;
 public class ExpandBar extends AbstractContainer {
     private static final long serialVersionUID = -4962118925903091404L;
     private boolean expanded;
+    private String text;
     
     /**
      * 
@@ -31,6 +32,10 @@ public class ExpandBar extends AbstractContainer {
         super(view, Const.EXPAND_BAR, name);
         
         init();
+    }
+    
+    public final String getText() {
+        return text;
     }
     
     /**
@@ -56,6 +61,10 @@ public class ExpandBar extends AbstractContainer {
      */
     public final void setExpanded(boolean expanded) {
         this.expanded = expanded;
+    }
+    
+    public final void setText(String text) {
+        this.text = text;
     }
 }
 

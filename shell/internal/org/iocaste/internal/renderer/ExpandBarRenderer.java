@@ -18,8 +18,9 @@ public class ExpandBarRenderer extends Renderer {
         String edgename = new StringBuilder(name).append(".edge").toString();
         Button edge = new Button(container, edgename);
         List<XMLElement> ebtags, tags = new ArrayList<>();
+        String text = container.getText();
         
-        edge.setText(name);
+        edge.setText((text == null)? name : text);
         edge.setSubmit(false);
         edge.setStyleClass("eb_edge");
         edge.setEventHandler(container.getEventHandler());
