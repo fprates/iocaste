@@ -13,8 +13,8 @@ public class DataElementServices {
     private static final byte INS_ELEMENT = 1;
     private static final String[] QUERIES = {
         "select * from DOCS003 where ename = ?",
-        "insert into DOCS003(ename, decim, lngth, etype, upcas) " +
-                "values(?, ?, ?, ?, ?)"
+        "insert into DOCS003(ename, decim, lngth, etype, upcas, atype) " +
+                "values(?, ?, ?, ?, ?, ?)"
     };
     
     /**
@@ -32,7 +32,6 @@ public class DataElementServices {
         Map<String, Object> columns;
         
         lines = iocaste.select(QUERIES[ELEMENT], name);
-        
         if (lines == null)
             return null;
         
@@ -41,6 +40,7 @@ public class DataElementServices {
         element.setType(((BigDecimal)columns.get("ETYPE")).intValue());
         element.setLength(((BigDecimal)columns.get("LNGTH")).intValue());
         element.setDecimals(((BigDecimal)columns.get("DECIM")).intValue());
+        element.setAttributeType(((BigDecimal)columns.get("ATYPE")).intValue());
         element.setUpcase((Boolean)columns.get("UPCAS"));
         
         return element;
@@ -78,6 +78,7 @@ public class DataElementServices {
         }
         
         return iocaste.update(QUERIES[INS_ELEMENT], name,
-                element.getDecimals(), length, type, element.isUpcase());
+                element.getDecimals(), length, type, element.isUpcase(),
+                element.getAttributeType());
     }
 }

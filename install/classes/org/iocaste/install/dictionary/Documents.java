@@ -31,6 +31,7 @@ public class Documents extends Module {
         docs003.add("LNGTH", NUMC, 4);
         docs003.add("ETYPE", NUMC, 1);
         docs003.add("UPCAS", BOOLEAN, 1);
+        docs003.add("ATYPE", NUMC, 2);
 
         docs002 = tableInstance("DOCS002");
         docs002.key("INAME", CHAR, 48);
@@ -72,6 +73,7 @@ public class Documents extends Module {
         insertElement(docs003, "DATAELEMENT.LENGTH", 0, 4, 3, false);
         insertElement(docs003, "DATAELEMENT.TYPE", 0, 1, 3, false);
         insertElement(docs003, "DATAELEMENT.UPCASE", 0, 1, 5, false);
+        insertElement(docs003, "DATAELEMENT.ATTRIBTYPE", 0, 1, 3, false);
         insertModelKey(docs002, docs004, "DATAELEMENT.NAME", "DATAELEMENT",
                 "ENAME", "DATAELEMENT.NAME", "name");
         insertModelItem(docs002, "DATAELEMENT.DECIMALS", "DATAELEMENT",
@@ -82,8 +84,11 @@ public class Documents extends Module {
                 "ETYPE", "DATAELEMENT.TYPE", "type");
         insertModelItem(docs002, "DATAELEMENT.UPCASE", "DATAELEMENT",
                 "UPCAS", "DATAELEMENT.UPCASE", "upcase");
+        insertModelItem(docs002, "DATAELEMENT.ATTRIBTYPE", "DATAELEMENT",
+                "ATYPE", "DATAELEMENT.ATTRIBTYPE", "attributeType");
 
-        insertModel(docs001, docs005, "MODELITEM", "DOCS002", "org.iocaste.documents.common.DocumentModelItem");
+        insertModel(docs001, docs005, "MODELITEM", "DOCS002",
+                "org.iocaste.documents.common.DocumentModelItem");
         insertElement(docs003, "MODELITEM.NAME", 0, 48, 0, true);
         insertElement(docs003, "MODELITEM.INDEX", 1, 3, 3, false);
         insertElement(docs003, "MODELITEM.FIELDNAME", 0, 12, 0, true);

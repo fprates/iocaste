@@ -34,6 +34,11 @@ public class DataType {
     public static final int NUMC = 3;
     public static final int TIME = 4;
     public static final int BOOLEAN = 5;
+    public static final int BYTE = 6;
+    public static final int INT = 7;
+    public static final int LONG = 8;
+    public static final int SHORT = 9;
+    
     public static final boolean UPPERCASE = true;
     public static final boolean KEEPCASE = false;
     public static final byte MAX_INT_LEN = 10;

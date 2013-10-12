@@ -95,6 +95,7 @@ public abstract class Module {
         docs003.set("lngth", len);
         docs003.set("etype", type);
         docs003.set("upcas", upcase);
+        docs003.set("atype", -1);
         insert(docs003);
     }
     

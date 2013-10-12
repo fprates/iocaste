@@ -36,31 +36,47 @@ import java.util.Date;
 public class DataElement implements Serializable {
     private static final long serialVersionUID = -2827176147542188319L;
     private String name;
-    private int decimals, length, type;
+    private int decimals, length, type, atype;
     private boolean upcase, dummy;
     
     public DataElement(String name) {
         this.name = name;
         dummy = false;
+        atype = -1;
     }
     
-    public Class<?> getClassType() {
+    public final int getAttributeType() {
+        return atype;
+    }
+    
+    public final Class<?> getClassType() {  
         switch (type) {
         case DataType.BOOLEAN:
-            return Boolean.class;
+            return boolean.class;
         case DataType.CHAR:
             return String.class;
         case DataType.DATE:
             return Date.class;
         case DataType.DEC:
-            return Double.class;
+            return double.class;
         case DataType.NUMC:
-            return Integer.class;
+            switch (atype) {
+            case DataType.BYTE:
+                return byte.class;
+            case DataType.INT:
+                return int.class;
+            case DataType.LONG:
+                return long.class;
+            case DataType.SHORT:
+                return short.class;
+            default:
+                return int.class;
+            }
         case DataType.TIME:
             return Time.class;
-        default:
-            return null;
         }
+        
+        return null;
     }
     
     /**
@@ -110,6 +126,10 @@ public class DataElement implements Serializable {
      */
     public final boolean isUpcase() {
     	return upcase;
+    }
+    
+    public final void setAttributeType(int type) {
+        atype = type;
     }
     
     /**

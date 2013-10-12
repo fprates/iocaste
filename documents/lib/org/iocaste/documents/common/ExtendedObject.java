@@ -35,6 +35,19 @@ public class ExtendedObject implements Serializable {
         this.model = model;
     }
     
+    public final byte getb(String name) {
+        Object value = getNumericValue(name);
+        
+        if (value instanceof BigDecimal)
+            return ((BigDecimal)value).byteValue();
+        
+        try {
+            return (byte)value;
+        } catch (ClassCastException e) {
+            return Byte.parseByte(value.toString());
+        }
+    }
+    
     /**
      * Retorna valor do campo especificado no formato double.
      * @param name nome do campo
@@ -110,6 +123,19 @@ public class ExtendedObject implements Serializable {
         return (value == null)? 0 : value;
     }
     
+    public final short getsh(String name) {
+        Object value = getNumericValue(name);
+        
+        if (value instanceof BigDecimal)
+            return ((BigDecimal)value).shortValue();
+        
+        try {
+            return (short)value;
+        } catch (ClassCastException e) {
+            return Short.parseShort(value.toString());
+        }
+    }
+    
     /**
      * Retorna valor de um item do objeto.
      * @param name nome do item
@@ -136,6 +162,8 @@ public class ExtendedObject implements Serializable {
      */
     @SuppressWarnings("unchecked")
     private final <T> T newInstance(boolean loose) {
+        String settername;
+        Object value;
         Method method;
         Class<?> class_;
         T instance;
@@ -146,9 +174,11 @@ public class ExtendedObject implements Serializable {
             
             for (DocumentModelItem item : values.keySet()) {
                 try {
-                    method = instance.getClass().getMethod(
-                            item.getSetterName(), item.getDataElement().
-                            getClassType());
+                    class_ = item.getDataElement().getClassType();
+                    settername = item.getSetterName();
+                    if (settername == null)
+                        continue;
+                    method = instance.getClass().getMethod(settername, class_);
                 } catch (NoSuchMethodException e) {
                     if (loose)
                         continue;
@@ -156,7 +186,25 @@ public class ExtendedObject implements Serializable {
                     throw e;
                 }
                 
-                method.invoke(instance, values.get(item));
+                switch (class_.getName()) {
+                case "byte":
+                    value = getb(item.getName());
+                    break;
+                case "int":
+                    value = geti(item.getName());
+                    break;
+                case "long":
+                    value = getl(item.getName());
+                    break;
+                case "short":
+                    value = getsh(item.getName());
+                    break;
+                default:
+                    value = values.get(item);
+                    break;
+                }
+                
+                method.invoke(instance, value);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -179,9 +227,8 @@ public class ExtendedObject implements Serializable {
      * Gera instancia baseada nos dados do objeto e classe associada.
      * @param loose true, ignora campos que não existirem na classe.
      * @return instância da classe associada.
-     * @throws Exception
      */
-    public final <T> T newLooseInstance() throws Exception {
+    public final <T> T newLooseInstance() {
         return newInstance(true);
     }
     
