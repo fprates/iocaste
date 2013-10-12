@@ -66,6 +66,7 @@ public abstract class AbstractPage extends AbstractFunction {
             context.function = this;
         }
         
+        validate();
         action = (control == null)? controlname : control.getAction();
         method = getClass().getMethod(action);
         method.invoke(this);
@@ -74,7 +75,6 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * Retorna visão especificada.
-     * @param view visão atual
      * @param name identificador da visão
      * @return visão
      */
@@ -171,6 +171,8 @@ public abstract class AbstractPage extends AbstractFunction {
         for (Element element_ : container.getElements())
             setLocaleForElement(element_, locale);
     }
+    
+    protected void validate() { }
     
     /**
      * 
