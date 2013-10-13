@@ -1,6 +1,7 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -173,16 +174,15 @@ public class ExtendedObject implements Serializable {
             instance = (T)class_.newInstance();
             
             for (DocumentModelItem item : values.keySet()) {
+                class_ = item.getDataElement().getClassType();
+                settername = item.getSetterName();
+                if (settername == null)
+                    continue;
                 try {
-                    class_ = item.getDataElement().getClassType();
-                    settername = item.getSetterName();
-                    if (settername == null)
-                        continue;
                     method = instance.getClass().getMethod(settername, class_);
                 } catch (NoSuchMethodException e) {
                     if (loose)
                         continue;
-                    
                     throw e;
                 }
                 
@@ -230,6 +230,40 @@ public class ExtendedObject implements Serializable {
      */
     public final <T> T newLooseInstance() {
         return newInstance(true);
+    }
+    
+    public final void setInstance(Object object) {
+        Class<?> class_;
+        Method method;
+        Object value;
+        String classname, getter;
+        String modelclassname = model.getClassName();
+        
+        if ((object == null) || (modelclassname == null))
+            return;
+        
+        class_ = object.getClass();
+        classname = class_.getName();
+        if (!model.getClassName().equals(classname))
+            throw new RuntimeException(new StringBuilder(classname).
+                    append(" isn't compatible with model class ").
+                    append(modelclassname).toString());
+        
+        for (DocumentModelItem item : model.getItens()) {
+            getter = item.getGetterName();
+            if (getter == null)
+                continue;
+            try {
+                method = class_.getMethod(getter);
+                value = method.invoke(object);
+            } catch (NoSuchMethodException | SecurityException |
+                    IllegalAccessException | IllegalArgumentException |
+                    InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+            
+            setValue(item, value);
+        }
     }
     
     /**
