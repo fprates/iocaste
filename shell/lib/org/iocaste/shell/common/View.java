@@ -41,7 +41,7 @@ public class View implements Serializable {
     public static final boolean INITIALIZE = true;
     private byte[] content;
     private Element elementfocus;
-    private String title, appname, pagename;
+    private String title, appname, pagename, actioncontrol;
     private String contenttype, rapp, rpage, messagetext;
     private MessageSource messages;
     private Set<String> initparams;
@@ -219,6 +219,10 @@ public class View implements Serializable {
         }
         
         return null;
+    }
+    
+    public final String getActionControl() {
+        return actioncontrol;
     }
     
     /**
@@ -497,6 +501,10 @@ public class View implements Serializable {
         
         if (!dontpushpage)
             pagecall = true;
+    }
+    
+    public final void setActionControl(String actioncontrol) {
+        this.actioncontrol = actioncontrol;
     }
     
     /**
