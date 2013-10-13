@@ -38,6 +38,7 @@ public class Main extends AbstractPage {
     private static final int FILE_IS_EMPTY = 1;
     private static final int INVALID_FILE = 2;
     private static final int INVALID_HEADER = 3;
+    private Context context;
     
     public Main() {
         export("install", "install");
@@ -47,8 +48,8 @@ public class Main extends AbstractPage {
      * 
      * @param view
      */
-    public final void add(View view) {
-        Table objects = view.getElement("objects");
+    public final void add() {
+        Table objects = context.view.getElement("objects");
         insertItem(objects);
     }
     
@@ -70,7 +71,7 @@ public class Main extends AbstractPage {
         File file = new File(filename);
         FileReader freader = new FileReader(file);
         BufferedReader breader = new BufferedReader(freader);
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         
         while (breader.ready())
             list.add(breader.readLine());
@@ -148,58 +149,48 @@ public class Main extends AbstractPage {
         return 0;
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void download(View view) {
-        String filename = view.getParameter("instructionname");
-        String[] lines = view.getParameter("list");
+    public final void download() {
+        for (String line : context.instructions)
+            context.view.print(line+"\n");
         
-        for (String line : lines)
-            view.print(line+"\n");
-        
-        view.setContentType("text/plain");
-        view.setHeader("Content-Disposition", "attachment; filename=\"" +
-                filename + "\"");
+        context.view.setContentType("text/plain");
+        context.view.setHeader("Content-Disposition",
+                new StringBuilder("attachment; filename=\"").
+                append(context.instructionname).append("\"").toString());
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void generate(View view) {
+    public final void generate() {
         String name;
-        Table objects = view.getElement("objects");
-        List<String> lines, instructions = new ArrayList<String>();
+        Table objects = context.view.getElement("objects");
+        List<String> lines;
         Documents documents = new Documents(this);
         
-        instructions.add(IDTAG);
+        context.instructions.clear();
+        context.instructions.add(IDTAG);
         
         for (TableItem item : objects.getItems()) {
             name = ((InputComponent)item.get("object")).get();
-            if (name.equals(""))
+            if (name.length() == 0)
                 continue;
             
             lines = getInstructions(name, documents);
             if (lines == null) {
-                view.message(Const.ERROR, "model.not.found");
+                context.view.message(Const.ERROR, "model.not.found");
                 return;
             }
             
-            instructions.addAll(lines);
+            context.instructions.addAll(lines);
         }
         
-        if (instructions.size() == 1)
+        if (context.instructions.size() == 1)
             return;
         
-        name = new StringBuilder("IOCASTE_BUILD_INSTRUCTIONS_").
+        context.instructionname = new StringBuilder(
+                "IOCASTE_BUILD_INSTRUCTIONS_").
                 append(Calendar.getInstance().getTime().getTime()).
                 append(".txt").toString();
         
-//        view.export("list", instructions.toArray(new String[0]));
-//        view.export("instructionname", name);
-        view.redirect(null, "download");
+        context.view.redirect("download");
     }
     
     /**
@@ -221,7 +212,7 @@ public class Main extends AbstractPage {
         if (model == null)
             return null;
         
-        lines = new ArrayList<String>();
+        lines = new ArrayList<>();
         itens = model.getItens();
         
         sb = new StringBuilder(model.getName()).append(";").
@@ -255,15 +246,10 @@ public class Main extends AbstractPage {
         
         return lines;
     }
-
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void importitens(View view) throws Exception {
+    
+    public final void importitens() throws Exception {
         String filename = null;
-        Table table = view.getElement("pool");
+        Table table = context.view.getElement("pool");
         
         for (TableItem item : table.getItems()) {
             if (!item.isSelected())
@@ -273,15 +259,15 @@ public class Main extends AbstractPage {
                     ((Text)item.get("filename")).getName());
             switch (build(filename, this)) {
             case FILE_IS_EMPTY:
-                view.message(Const.ERROR, "file.is.empty");
+                context.view.message(Const.ERROR, "file.is.empty");
                 return;
                 
             case INVALID_FILE:
-                view.message(Const.ERROR, "invalid.file");
+                context.view.message(Const.ERROR, "invalid.file");
                 return;
                 
             case INVALID_HEADER:
-                view.message(Const.ERROR, "invalid.header");
+                context.view.message(Const.ERROR, "invalid.header");
                 return;
             }
         }
@@ -289,11 +275,14 @@ public class Main extends AbstractPage {
         if (filename == null)
             return;
         
-        view.message(Const.STATUS, "importing-successful");
+        context.view.message(Const.STATUS, "importing-successful");
     }
     
+    @Override
     public final PageContext init(View view) {
-        return new Context();
+        context = new Context();
+        
+        return context;
     }
     
     /**
@@ -324,13 +313,9 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public void list(View view) {
-        String[] files = view.getParameter("files");
-        Form container = new Form(view, "list");
+    public void list() {
+        String[] files = context.view.getParameter("files");
+        Form container = new Form(context.view, "list");
         PageControl pagecontrol = new PageControl(container);
         Table table = new Table(container, "pool");
         
@@ -344,18 +329,18 @@ public class Main extends AbstractPage {
             new TableItem(table).add(new Text(table, file));
         
         new Button(container, "importitens");
-        view.setTitle("importable-build-instructions");
+        context.view.setTitle("importable-build-instructions");
     }
     
     /**
      * 
      * @param view
      */
-    public void main(View view) {
+    public void main() {
         TableItem importtbitem;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
-        Form uploadcontainer = new Form(view, "upldcntr");
+        Form uploadcontainer = new Form(context.view, "upldcntr");
         Frame exportframe = new Frame(container, "export");
         Frame importframe = new Frame(uploadcontainer, "import");
         Table importtable, objects = new Table(exportframe, "objects");
@@ -383,66 +368,65 @@ public class Main extends AbstractPage {
         importtbitem = new TableItem(importtable);
         importtbitem.add(new Link(importtable, "frompool", "pool"));
         
-        view.setTitle("transport-utility");
+        context.view.setTitle("transport-utility");
     }
     
     /**
      * 
      * @param view
      */
-    public void pool(View view) {
+    public void pool() {
         File file = new File(getRealPath("WEB-INF", "pool"));
         String[] files = file.list();
         
         if (files == null) {
-            view.message(Const.ERROR, "no.files");
+            context.view.message(Const.ERROR, "no.files");
             return;
         }
         
-//        view.export("files", files);
-        view.redirect(null, "list");
+        context.view.redirect("list");
     }
     
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public void upload(View view) throws Exception {
+    public void upload() throws Exception {
         FileEntry fileentry = null;
         String filename = null;
-        Table table = view.getElement("importtable");
+        Table table = context.view.getElement("importtable");
         
         fileentry = (FileEntry)table.get(0).get("a");
         filename = fileentry.get();
         
         switch (fileentry.getError()) {
         case FileEntry.FILE_NOT_FOUND:
-            view.message(Const.ERROR, "file.not.found");
+            context.view.message(Const.ERROR, "file.not.found");
             return;
         case FileEntry.EMPTY_FILE_NAME:
-            view.message(Const.ERROR, "filename.is.obligatory");
+            context.view.message(Const.ERROR, "filename.is.obligatory");
             return;
         }
         
         switch (build(filename, this)) {
         case FILE_IS_EMPTY:
-            view.message(Const.ERROR, "file.is.empty");
+            context.view.message(Const.ERROR, "file.is.empty");
             return;
             
         case INVALID_FILE:
-            view.message(Const.ERROR, "invalid.file");
+            context.view.message(Const.ERROR, "invalid.file");
             return;
             
         case INVALID_HEADER:
-            view.message(Const.ERROR, "invalid.header");
+            context.view.message(Const.ERROR, "invalid.header");
             return;
         }
         
-        view.message(Const.STATUS, "model.imported.successfully");
+        context.view.message(Const.STATUS, "model.imported.successfully");
     }
 }
 
 class Context extends PageContext {
+    public String instructionname;
+    public List<String> instructions;
     
+    public Context() {
+        instructions = new ArrayList<>();
+    }
 }
