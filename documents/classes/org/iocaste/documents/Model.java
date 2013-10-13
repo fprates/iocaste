@@ -771,9 +771,16 @@ public class Model {
         /*
          * renomeia campo da tabela
          */
-        query = new StringBuilder("alter table ").
-                append(tablename).
-                append(" alter column ").toString();
+        sb = new StringBuilder("alter table ").append(tablename);
+        dbtype = iocaste.getSystemParameter("dbtype");
+        switch (dbtype) {
+        case "hsqldb":
+            query = sb.append(" alter column ").toString();
+            break;
+        default:
+            query = sb.append(" modify column ").toString();
+            break;
+        }
         
         if (!fieldname.equals(oldfieldname)) {
             sb = new StringBuilder(query).
