@@ -400,14 +400,14 @@ public class Shell extends Module {
         
         insertModel(docs001, docs005, "STYLE", "SHELL001", null);
         insertElement(docs003, "STYLE.NAME", 0, 12, 0, true);
-        insertElement(docs003, "STYLE.INDEX", 0, 12, 3, true);
+        insertElement(docs003, "STYLE.INDEX", 0, 12, 3, false);
         insertModelKey(docs002, docs004, "STYLE.NAME", "STYLE", "SNAME",
                 "STYLE.NAME", null);
         insertModelItem(docs002, "STYLE.INDEX", "STYLE", "SINDX", "STYLE.INDEX",
                 null);
 
         insertModel(docs001, docs005, "STYLE_ELEMENT", "SHELL002", null);
-        insertElement(docs003, "STYLE_ELEMENT.NAME", 0, 12, 0, true); 
+        insertElement(docs003, "STYLE_ELEMENT.NAME", 0, 12, 0, true);
         insertModelKey(docs002, docs004, "STYLE_ELEMENT.INDEX", "STYLE_ELEMENT",
                 "EINDX", "STYLE.INDEX", null);
         insertModelItem(docs002, "STYLE_ELEMENT.NAME", "STYLE_ELEMENT", "ENAME",
@@ -415,6 +415,19 @@ public class Shell extends Module {
         insertModelItem(docs002, "STYLE_ELEMENT.STYLE", "STYLE_ELEMENT",
                 "SNAME", "STYLE.NAME", null);
         
+        insertModel(docs001, docs005, "STYLE_ELEMENT_DETAIL", "SHELL003", null);
+        insertElement(docs003, "STYLE_ELEMENT_DETAIL.PROPERTY", 0, 60, 0, true);
+        insertElement(docs003, "STYLE_ELEMENT_DETAIL.VALUE", 0, 60, 0, true);
+        insertModelKey(docs002, docs004, "STYLE_ELEMENT_DETAIL.INDEX",
+                "STYLE_ELEMENT_DETAIL", "PINDX", "STYLE.INDEX", null);
+        insertModelItem(docs002, "STYLE_ELEMENT_DETAIL.ELEMENT",
+                "STYLE_ELEMENT_DETAIL", "EINDX", "STYLE.INDEX", null);
+        insertModelItem(docs002, "STYLE_ELEMENT_DETAIL.PROPERTY",
+                "STYLE_ELEMENT_DETAIL", "PNAME",
+                "STYLE_ELEMENT_DETAIL.PROPERTY", null);
+        insertModelItem(docs002, "STYLE_ELEMENT_DETAIL.VALUE",
+                "STYLE_ELEMENT_DETAIL", "VALUE",
+                "STYLE_ELEMENT_DETAIL.VALUE", null);
         return compile();
     }
     
