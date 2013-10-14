@@ -1,32 +1,45 @@
 package org.iocaste.styleeditor;
 
 import org.iocaste.documents.common.Documents;
-import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.SearchHelp;
-import org.iocaste.shell.common.Table;
-import org.iocaste.shell.common.TableColumn;
-import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.TableTool;
 
 public class Response {
 
-    public static final void selection(View view, Function function) {
+    public static final void detail(Context context) {
+        Form container = new Form(context.view, "main");
+        PageControl pagecontrol = new PageControl(container);
+        Documents documents = new Documents(context.function);
+        
+        pagecontrol.add("back");
+
+        context.properties = new TableTool(container, "details");
+        context.properties.setContext(context);
+        context.properties.model(documents.getModel("STYLE_ELEMENT_DETAIL"));
+        context.properties.setObjects(context.eproperties);
+        context.properties.setVisibleLines(0);
+        context.properties.setVisibility(false, "INDEX", "ELEMENT");
+        context.properties.setColumnStatus(TableTool.DISABLED, "PROPERTY");
+        context.view.setTitle(context.element);
+    }
+    
+    public static final void selection(Context context) {
         SearchHelp sh;
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm form = new DataForm(container, "selection");
         DataItem item = new DataItem(form, Const.TEXT_FIELD, "estilo");
         
         pagecontrol.add("home");
-        item.setModelItem(new Documents(function).getModel("STYLE").
+        item.setModelItem(new Documents(context.function).getModel("STYLE").
                 getModelItem("NAME"));
         
         sh = new SearchHelp(form, "SH_STYLE");
@@ -41,55 +54,41 @@ public class Response {
         new Button(container, "show");
         new Button(container, "update");
         
-        view.setFocus(item);
-        view.setTitle("style-editor");
+        context.view.setFocus(item);
+        context.view.setTitle("style-editor");
     }
     
-    public static final void style(View view, Function function,
-            Context context) {
-        Table itens;
-        Form container = new Form(view, "main");
+    public static final void style(Context context) {
+        Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
-        DataForm form = new DataForm(container, "newstyle");
-        DataItem style = new DataItem(form, Const.TEXT_FIELD, "style");
+        DataForm header = new DataForm(container, "header");
+        Documents documents = new Documents(context.function);
         
-        pagecontrol.add("home");
         pagecontrol.add("back");
-        
-        style.setModelItem(new Documents(function).getModel("STYLE").
-                getModelItem("NAME"));
-        
-        switch (context.mode) {
-        case Context.CREATE:
-            new Button(container, "addstyle");
-            
-            itens = new Table(container, "elements");
-            new TableColumn(itens, "element");
-            
-            break;
-            
-        case Context.SHOW:
-            itens = new Table(container, "elements");
-            new TableColumn(itens, "element");
-            
-            for (ExtendedObject element :  context.elements)
-                new TableItem(itens).add(new Link(itens,
-                        (String)element.getValue("NAME"), "element"));
-            
-            break;
-        case Context.UPDATE:
-            new Button(container, "addstyle");
-            
-            itens = new Table(container, "elements");
-            new TableColumn(itens, "element");
-            
-            for (ExtendedObject element :  context.elements)
-                new TableItem(itens).add(new Link(itens,
-                        (String)element.getValue("NAME"), "element"));
-            
-            break;
+        header.importModel(documents.getModel("STYLE"));
+        header.setObject(context.header);
+        for (Element element : header.getElements()) {
+            if (!element.getName().equals("NAME"))
+                element.setVisible(false);
+            ((InputComponent)element).setEnabled(false);
         }
         
-        view.setFocus(style);
+        context.items = new TableTool(container, "elements");
+        context.items.setContext(context);
+        context.items.model(documents.getModel("STYLE_ELEMENT"));
+        context.items.setVisibility(false, "INDEX", "STYLE");
+        context.items.setColumnType("NAME", Const.LINK, "element");
+        context.items.setVisibleLines(0);
+        context.items.setMode(TableTool.UPDATE);
+        
+        switch (context.mode) {
+        case Context.SHOW:
+            context.items.controls(TableTool.DISABLED);
+            context.items.setObjects(context.elements);
+            break;
+        case Context.UPDATE:
+            context.items.setObjects(context.elements);
+            break;
+        }
     }
 }

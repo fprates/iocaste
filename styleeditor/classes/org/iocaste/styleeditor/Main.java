@@ -13,13 +13,17 @@ public class Main extends AbstractPage {
         export("install", "install");
     }
     
-    public final void addstyle(View view) {
-        Request.addstyle(view);
+    public final void create() {
+        context.mode = Context.CREATE;
+        Request.create(context);
     }
     
-    public final void create(View view) throws Exception {
-        context.mode = Context.CREATE;
-        Request.create(view, this);
+    public final void detail() {
+        Response.detail(context);
+    }
+    
+    public final void element() {
+        Request.element(context);
     }
     
     @Override
@@ -33,21 +37,21 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
-    public final void main(View view) throws Exception {
-        Response.selection(view, this);
+    public final void main() {
+        Response.selection(context);
     }
     
-    public final void show(View view) throws Exception {
+    public final void show() {
         context.mode = Context.SHOW;
-        context.elements = Request.load(view, this);
+        context.elements = Request.load(context);
     }
     
-    public final void style(View view) throws Exception {
-        Response.style(view, this, context);
+    public final void style() {
+        Response.style(context);
     }
     
-    public final void update(View view) throws Exception {
+    public final void update() {
         context.mode = Context.UPDATE;
-        context.elements = Request.load(view, this);
+        context.elements = Request.load(context);
     }
 }
