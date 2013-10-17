@@ -134,6 +134,9 @@ public class TableTool {
                 break;
             default:
                 switch (column.type) {
+                case TEXT:
+                    element = new Text(table, name);
+                    break;
                 case LIST_BOX:
                     input = new ListBox(table, name);
                     element = input;
@@ -151,7 +154,7 @@ public class TableTool {
                     break;
                 default:
                     throw new RuntimeException("component type not supported"
-                            + "in this version.");
+                            + " in this version.");
                 }
             }
             
