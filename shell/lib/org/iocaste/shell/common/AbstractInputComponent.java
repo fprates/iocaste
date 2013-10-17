@@ -73,7 +73,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final double getd() {
         if (!(value instanceof BigDecimal))
-            return (double)value;
+            return (value == null)? 0 : (double)value;
         
         return ((BigDecimal)value).doubleValue();
     }
@@ -87,6 +87,13 @@ public abstract class AbstractInputComponent extends AbstractComponent
         return dataelement;
     }
     
+    public final byte getb() {
+        if (!(value instanceof BigDecimal))
+            return (value == null)? 0 : (byte)value;
+        
+        return ((BigDecimal)value).byteValue();
+    }
+    
     /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#geti()
@@ -94,7 +101,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final int geti() {
         if (!(value instanceof BigDecimal))
-            return (int)value;
+            return (value == null)? 0 : (int)value;
         
         return ((BigDecimal)value).intValue();
     }
@@ -106,7 +113,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final long getl() {
         if (!(value instanceof BigDecimal))
-            return (long)value;
+            return (value == null)? 0 : (long)value;
         
         return ((BigDecimal)value).longValue();
     }

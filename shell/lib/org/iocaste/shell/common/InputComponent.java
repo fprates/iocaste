@@ -37,6 +37,12 @@ public interface InputComponent extends Component {
      * @return elemento de dados
      */
     public abstract DataElement getDataElement();
+
+    /**
+     * Retorna valor numérico do componente.
+     * @return valor numérico em byte.
+     */
+    public abstract byte getb();
     
     /**
      * Retorna valor numérico do componente.
