@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
@@ -17,13 +18,11 @@ import org.iocaste.protocol.Message;
  *
  */
 public class Services extends AbstractFunction {
-    private static final byte SEL_CONFIG = 0;
     private static final byte DEL_CFG_VALUES = 1;
     private static final byte DEL_CFG_ITEMS = 2;
     private static final byte DEL_GLOBAL_CFG = 3;
     private static final String[] QUERIES = {
-        "from GLOBAL_CONFIG_ITEM where GLOBAL_CONFIG = ? and " +
-        "NAME = ?",
+        "",
         "delete from GLOBAL_CONFIG_VALUES where GLOBAL_CONFIG = ?",
         "delete from GLOBAL_CONFIG_ITEM where GLOBAL_CONFIG = ?",
         "delete from GLOBAL_CONFIG where NAME = ?"
@@ -126,6 +125,7 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final Object get(Message message) throws Exception {
+        Query query;
         long itemid;
         int type;
         String value;
@@ -134,8 +134,12 @@ public class Services extends AbstractFunction {
         String appname = iocaste.getCurrentApp();
         Documents documents = new Documents(this);
         String name = message.getString("name");
-        
-        objects = documents.select(QUERIES[SEL_CONFIG], appname, name);
+
+        query = new Query();
+        query.setModel("GLOBAL_CONFIG_ITEM");
+        query.addEqual("GLOBAL_CONFIG", appname);
+        query.andEqual("NAME", name);
+        objects = documents.select(query);
         if (objects == null)
             return null;
         

@@ -3,6 +3,7 @@ package org.iocaste.usereditor;
 import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
@@ -13,14 +14,12 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 
 public class Request {
-    private static final byte PROFILES = 0;
     private static final byte DEL_USR_AUTH = 1;
-    private static final byte TASKS = 2;
     private static final byte DEL_USR_TASK = 3;
     private static final String[] QUERIES = {
-        "from USER_AUTHORITY where USERNAME = ?",
+        "",
         "delete from USER_AUTHORITY where USERNAME = ?",
-        "from USER_TASKS_GROUPS where USERNAME = ?",
+        "",
         "delete from USER_TASKS_GROUPS where USERNAME = ?"
     };
     
@@ -68,6 +67,7 @@ public class Request {
      * @return
      */
     public static final UserData load(Context context) {
+        Query query;
         DataForm form = context.view.getElement("selection");
         String username = form.get("USERNAME").get();
         Documents documents = new Documents(context.function);
@@ -79,8 +79,15 @@ public class Request {
             return null;
         }
         
-        userdata.profiles = documents.select(QUERIES[PROFILES], username);
-        userdata.tasks = documents.select(QUERIES[TASKS], username);
+        query = new Query();
+        query.setModel("USER_AUTHORITY");
+        query.addEqual("USERNAME", username);
+        userdata.profiles = documents.select(query);
+        
+        query = new Query();
+        query.setModel("USER_TASKS_GROUPS");
+        query.addEqual("USERNAME", username);
+        userdata.tasks = documents.select(query);
         context.view.redirect("form");
         
         return userdata;

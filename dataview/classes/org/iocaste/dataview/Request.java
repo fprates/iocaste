@@ -2,6 +2,7 @@ package org.iocaste.dataview;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 
@@ -9,13 +10,9 @@ public class Request {
     
     private static final ExtendedObject[] load(String modelname,
             Documents documents) {
-        ExtendedObject[] itens;
-        String query;
-        
-        query = new StringBuilder("from ").append(modelname).toString();
-        itens = documents.select(query);
-        
-        return itens;
+        Query query = new Query();
+        query.setModel(modelname);
+        return documents.select(query);
     }
     
     public static final void select(Context context) {

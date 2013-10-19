@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
 
 public class TaskSelector {
@@ -13,13 +14,11 @@ public class TaskSelector {
     private static final byte DEL_TASK = 1;
     private static final byte DEL_TASK_TEXT = 2;
     private static final byte DEL_TSK_GRP = 3;
-    private static final byte TASK = 4;
     private static final String[] QUERIES = {
         "delete from USER_TASKS_GROUPS where GROUP = ?",
         "delete from TASK_ENTRY where ID = ?",
         "delete from TASK_ENTRY_TEXT where TASK = ?",
-        "delete from TASKS_GROUPS where NAME = ?",
-        "from TASK_ENTRY where NAME = ?"
+        "delete from TASKS_GROUPS where NAME = ?"
     };
     
     /**
@@ -165,8 +164,12 @@ public class TaskSelector {
     public static final void removeTask(String taskname, Documents documents) {
         int taskid;
         ExtendedObject[] task;
+        Query query = new Query();
         
-        task = documents.selectLimitedTo(QUERIES[TASK], 1, taskname);
+        query.setModel("TASK_ENTRY");
+        query.addEqual("NAME", taskname);
+        query.setMaxResults(1);
+        task = documents.select(query);
         if (task == null)
             return;
         

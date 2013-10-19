@@ -9,6 +9,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
@@ -17,7 +18,7 @@ public class Services extends AbstractFunction {
     private Map<String, ExtendedObject[]> cache;
     
     public Services() {
-        cache = new HashMap<String, ExtendedObject[]>();
+        cache = new HashMap<>();
         
         export("get", "get");
         export("save", "save");
@@ -74,6 +75,7 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     private final ExtendedObject[] load(String name) throws Exception {
+        Query query;
         Documents documents;
         ExtendedObject header;
         String value;
@@ -92,11 +94,14 @@ public class Services extends AbstractFunction {
         value = header.getValue("EXPORT");
         header.setValue("EXPORT", value.split("\\.")[1]);
         
-        itens = documents.select("from SH_ITENS where SEARCH_HELP = ?", name);
+        query = new Query();
+        query.setModel("SH_ITENS");
+        query.addEqual("SEARCH_HELP", name);
+        itens = documents.select(query);
         if (itens == null)
             throw new IocasteException("sh has no columns itens.");
         
-        shdata = new ArrayList<ExtendedObject>();
+        shdata = new ArrayList<>();
         shdata.add(header);
         
         for (ExtendedObject item : itens) {
@@ -119,25 +124,25 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final int remove(Message message) throws Exception {
+        Query query;
         ExtendedObject[] shdata;
         Documents documents = new Documents(this);
-        String query, shname = message.getString("shname");
+        String shname = message.getString("shname");
         
-        query = "from SH_REFERENCE where SEARCH_HELP = ?";
-        shdata = documents.select(query, shname);
-        if (shdata != null) {
-            query = new StringBuilder("Search help has pendence on  ").
-                    append(shdata[0].getValue("MODEL_ITEM")).toString();
-            throw new IocasteException(query);
-        }
+        query = new Query();
+        query.setModel("SH_REFERENCE");
+        query.addEqual("SEARCH_HELP", shname);
+        shdata = documents.select(query);
+        if (shdata != null)
+            throw new IocasteException(new StringBuilder(
+                    "Search help has pendence on  ").
+                    append(shdata[0].getValue("MODEL_ITEM")).toString());
         
         shdata = load(shname);
-        
         for (int i = 1; i < shdata.length; i++)
             documents.delete(shdata[i]);
         
         cache.remove(shname);
-        
         return documents.delete(shdata[0]);
     }
     

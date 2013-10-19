@@ -6,17 +6,12 @@ import java.util.Map;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.texteditor.common.TextEditor;
 
 public class Services extends AbstractFunction {
-    private static final byte SEL_LINES1 = 0;
-    private static final byte SEL_LINES2 = 1;
-    private static final String[] QUERIES = {
-            "select * from TXTEDITOR_LINE where TEXT_NAME = ?",
-            "select * from TXTEDITOR_LINE where TEXT_NAME = ? and PAGE_NAME = ?"
-    };
 
     public Services() {
         export("load", "load");
@@ -32,12 +27,14 @@ public class Services extends AbstractFunction {
         String textname = message.get("textname");
         String pagename = message.get("pagename");
         Documents documents = new Documents(this);
+        Query query = new Query();
         
-        if (pagename == null)
-            olines = documents.select(QUERIES[SEL_LINES1], textname);
-        else
-            olines = documents.select(QUERIES[SEL_LINES2], textname, pagename);
+        query.setModel("TXTEDITOR_LINE");
+        query.addEqual("TEXT_NAME", textname);
+        if (pagename != null)
+            query.andEqual("PAGE_NAME", pagename);
         
+        olines = documents.select(query);
         if (olines == null)
             return null;
         

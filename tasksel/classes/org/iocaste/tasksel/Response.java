@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
@@ -23,16 +24,6 @@ import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.View;
 
 public class Response {
-    private static final byte TASK_TEXT = 0;
-    private static final byte USER_ENTRIES = 1;
-    private static final String[] QUERIES = {
-        "from TASK_ENTRY_TEXT where TASK = ? and LANGUAGE = ?",
-        "select TASK_ENTRY.GROUP,TASK_ENTRY.NAME,TASK_ENTRY.ID " +
-            "from USER_TASKS_GROUPS " +
-            "inner join TASK_ENTRY on " +
-            "USER_TASKS_GROUPS.GROUP = TASK_ENTRY.GROUP " +
-            "where USERNAME = ?"
-    };
     
     /**
      * 
@@ -41,6 +32,7 @@ public class Response {
      */
     private static final Map<String, Set<TaskEntry>> getLists(
             PageContext context) {
+        Query query;
         Set<TaskEntry> entries;
         TaskEntry entry;
         ExtendedObject[] result, mobject;
@@ -50,7 +42,14 @@ public class Response {
         Documents documents = new Documents(context.function);
         
         username = new Iocaste(context.function).getUsername();
-        result = documents.select(QUERIES[USER_ENTRIES], username);
+        query = new Query();
+        query.addColumns("TASK_ENTRY.GROUP",
+                "TASK_ENTRY.NAME",
+                "TASK_ENTRY.ID");
+        query.setModel("USER_TASKS_GROUPS");
+        query.join("TASK_ENTRY", "USER_TASKS_GROUPS.GROUP", "GROUP");
+        query.addEqual("USERNAME", username);
+        result = documents.select(query);
         if (result == null)
             return null;
         
@@ -70,9 +69,13 @@ public class Response {
             entry = new TaskEntry();
             entry.setName(taskname);
             entries.add(entry);
-            mobject = documents.selectLimitedTo(QUERIES[TASK_TEXT], 1,
-                    taskid, language);
             
+            query = new Query();
+            query.setModel("TASK_ENTRY_TEXT");
+            query.andEqual("TASK", taskid);
+            query.addEqual("LANGUAGE", language);
+            query.setMaxResults(1);
+            mobject = documents.select(query);
             if (mobject != null)
                 entry.setText((String)mobject[0].getValue("TEXT"));
         }

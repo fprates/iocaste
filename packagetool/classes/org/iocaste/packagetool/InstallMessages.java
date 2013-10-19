@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 
 public class InstallMessages {
     
@@ -12,14 +13,18 @@ public class InstallMessages {
      * @param state
      */
     public static final void init(State state) {
+        Query query;
         long index;
         int langcode;
         String locale;
         Map<String, String> messages;
-        ExtendedObject[] languages = state.documents.select("from LANGUAGES");
+        ExtendedObject[] languages;
         DocumentModel msgmodel = state.documents.getModel("MESSAGES");
         ExtendedObject omessage = new ExtendedObject(msgmodel);
-        
+
+        query = new Query();
+        query.setModel("LANGUAGES");
+        languages = state.documents.select(query);
         for (String language : state.messages.keySet()) {
             langcode = 0;
             for (ExtendedObject olanguage : languages) {

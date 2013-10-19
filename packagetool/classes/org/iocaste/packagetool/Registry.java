@@ -2,6 +2,7 @@ package org.iocaste.packagetool;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Function;
 
 public class Registry {
@@ -33,9 +34,10 @@ public class Registry {
      */
     public static final ExtendedObject[] getEntries(String package_,
             Function function) {
-        Documents documents = new Documents(function);
-        String query = "from PACKAGE_ITEM where PACKAGE = ?";
+        Query query = new Query();
         
-        return documents.select(query, package_);
+        query.setModel("PACKAGE_ITEM");
+        query.addEqual("PACKAGE", package_);
+        return new Documents(function).select(query);
     }
 }

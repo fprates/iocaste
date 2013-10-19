@@ -1,6 +1,7 @@
 package org.iocaste.dataeditor;
 
 import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
@@ -16,7 +17,7 @@ public class Request {
     }
     
     public static final String load(String modelname, Context context) {
-        String query;
+        Query query;
         Documents documents = new Documents(context.function);
         
         context.model = documents.getModel(modelname);
@@ -27,8 +28,8 @@ public class Request {
             return "is.reference.model";
         
         context.viewtype = Const.SINGLE;
-        
-        query = new StringBuilder("from ").append(modelname).toString();
+        query = new Query();
+        query.setModel(modelname);
         context.itens = documents.select(query);
         
         return null;

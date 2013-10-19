@@ -26,8 +26,18 @@ public class Response {
         context.properties.model(documents.getModel("STYLE_ELEMENT_DETAIL"));
         context.properties.setObjects(context.eproperties);
         context.properties.setVisibleLines(0);
-        context.properties.setVisibility(false, "INDEX", "ELEMENT");
-        context.properties.setColumnStatus(TableTool.DISABLED, "PROPERTY");
+        switch (context.mode) {
+        case Context.SHOW:
+            context.properties.setMode(TableTool.DISPLAY);
+            context.properties.setVisibility(false, "INDEX", "ELEMENT");
+            break;
+        case Context.UPDATE:
+            context.properties.setMode(TableTool.UPDATE);
+            context.properties.controls(TableTool.DISABLED);
+            context.properties.setVisibility(false, "INDEX", "ELEMENT");
+            context.properties.setColumnStatus(TableTool.DISABLED, "PROPERTY");
+            break;
+        }
         context.view.setTitle(context.element);
     }
     
@@ -80,13 +90,15 @@ public class Response {
         context.items.setColumnType("NAME", Const.LINK, "element");
         context.items.setVisibleLines(0);
         context.items.setMode(TableTool.UPDATE);
+        context.items.controls(TableTool.DISABLED);
         
         switch (context.mode) {
-        case Context.SHOW:
-            context.items.controls(TableTool.DISABLED);
-            context.items.setObjects(context.elements);
+        case Context.CREATE:
+            pagecontrol.add("save", PageControl.REQUEST);
             break;
         case Context.UPDATE:
+            pagecontrol.add("save", PageControl.REQUEST);
+        default:
             context.items.setObjects(context.elements);
             break;
         }

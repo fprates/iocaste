@@ -41,7 +41,7 @@ public class NumberRange {
         range.setValue("IDENT", name);
         range.setValue("CURRENT", 0);
         
-        Query.save(range, cache.function);
+        Save.init(range, cache.function);
     }
     
     /**
@@ -83,6 +83,6 @@ public class NumberRange {
      * @throws Exception
      */
     public static int remove(String name, Cache cache) throws Exception {
-        return Query.update(QUERIES[DEL_RANGE], cache, name);
+        return Update.init(QUERIES[DEL_RANGE], cache, name);
     }
 }

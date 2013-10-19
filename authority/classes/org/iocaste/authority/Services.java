@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
@@ -14,21 +15,18 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.UserProfile;
 
 public class Services extends AbstractFunction {
-    private static final byte SELECT_PROFILE = 0;
-    private static final byte AUTH_ITENS = 1;
     private static final byte DEL_AUTH_ITENS = 2;
     private static final byte DEL_AUTH = 3;
     private static final byte DEL_PROFILE_ITEM = 4;
-    private static final byte PROFILES = 5;
     private static final byte DEL_USER_PROFILE = 6;
     private static final byte DEL_USER_PROFILE_ITEM = 7;
     private static final String[] QUERIES = {
-        "select * from USER_AUTHORITY where USERNAME = ? and PROFILE = ?",
-        "select * from AUTHORIZATION_ITEM where AUTHORIZATION = ?",
+        "",
+        "",
         "delete from AUTHORIZATION_ITEM where AUTHORIZATION = ?",
         "delete from AUTHORIZATION where NAME = ?",
         "delete from USER_PROFILE_ITEM where NAME = ?",
-        "from USER_AUTHORITY where USERNAME = ?",
+        "",
         "delete from USER_PROFILE where NAME = ?",
         "delete from USER_PROFILE_ITEM where PROFILE = ?"
     };
@@ -77,7 +75,6 @@ public class Services extends AbstractFunction {
         itemid = profile.geti("CURRENT") + 1;
         model = documents.getModel("USER_PROFILE_ITEM");
         profileitem = new ExtendedObject(model);
-        
         profileitem.setValue("ID", itemid);
         profileitem.setValue("PROFILE", name);
         profileitem.setValue("NAME", authorization.getName());
@@ -95,13 +92,19 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void assignAuthorization(Message message) throws Exception {
+        Query query;
         Authorization authorization;
         String username = message.getString("username");
         String profilename = message.getString("profile");
         Documents documents = new Documents(this);
-        ExtendedObject[] profiles = documents.selectLimitedTo(
-                QUERIES[SELECT_PROFILE], 1, username, profilename);
+        ExtendedObject[] profiles;
         
+        query = new Query();
+        query.setModel("USER_AUTHORITY");
+        query.andEqual("USERNAME", username);
+        query.addEqual("PROFILE", profilename);
+        query.setMaxResults(1);
+        profiles = documents.select(query);
         if (profiles == null)
             throw new IocasteException(new StringBuilder(profilename).
                     append(" for ").
@@ -129,7 +132,6 @@ public class Services extends AbstractFunction {
             throw new IocasteException("Invalid user.");
         
         userid = object.geti("ID");
-        
         object = documents.getObject("USER_PROFILE", profile);
         if (object == null)
             throw new IocasteException("Invalid profile.");
@@ -152,6 +154,7 @@ public class Services extends AbstractFunction {
      * @return
      */
     public final Authorization get(Message message) {
+        Query query;
         Authorization authorization;
         ExtendedObject[] parameters;
         String name = message.getString("name");
@@ -165,8 +168,11 @@ public class Services extends AbstractFunction {
         authorization = new Authorization(name);
         authorization.setObject((String)authobject.getValue("OBJECT"));
         authorization.setAction((String)authobject.getValue("ACTION"));
-        
-        parameters = documents.select(QUERIES[AUTH_ITENS], name);
+
+        query = new Query();
+        query.setModel("AUTHORIZATION_ITEM");
+        query.addEqual("AUTHORIZATION", name);
+        parameters = documents.select(query);
         if (parameters != null)
             for (ExtendedObject parameter : parameters) {
                 name = parameter.getValue("NAME");
@@ -200,12 +206,16 @@ public class Services extends AbstractFunction {
      * @return
      */
     public final Set<String> getUserProfiles(Message message) {
+        Query query;
         Set<String> names;
+        ExtendedObject[] objects;
         String username = message.getString("username");
         Documents documents = new Documents(this);
-        ExtendedObject[] objects = documents.select(QUERIES[PROFILES],
-                username);
         
+        query = new Query();
+        query.setModel("USER_AUTHORITY");
+        query.addEqual("USERNAME", username);
+        objects = documents.select(query);
         if (objects == null)
             return null;
         
@@ -263,7 +273,6 @@ public class Services extends AbstractFunction {
         authobject.setValue("OBJECT", authorization.getObject());
         authobject.setValue("ACTION", authorization.getAction());
         authobject.setValue("INDEX", ident);
-        
         documents.save(authobject);
         
         itemid = 100 * ident;
@@ -275,7 +284,6 @@ public class Services extends AbstractFunction {
             authobject.setValue("AUTHORIZATION", name);
             authobject.setValue("NAME", key);
             authobject.setValue("VALUE", parameters.get(key));
-            
             documents.save(authobject);
         }
     }

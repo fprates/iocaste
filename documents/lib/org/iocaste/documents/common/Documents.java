@@ -39,7 +39,7 @@ public class Documents extends AbstractServiceInterface {
     private static final String SERVERNAME =
             "/iocaste-documents/services.html";
     public static final int TABLE_ALREADY_ASSIGNED = 1;
-    Function function;
+    private Function function;
     
     public Documents(Function function) {
         this.function = function;
@@ -344,39 +344,17 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
-     * Seleciona entradas a partir de query e critérios.
-     * 
-     * Devem ser especificados modelo e (opcionalmente) itens de modelo.
+     * Seleciona entradas de tabela a partir de query.
      * 
      * @param query Query SQL
-     * @param criteria critérios de seleção.
      * @return entradas encontradas.
      */
-    public final ExtendedObject[] select(String query, Object... criteria) {
-        return selectLimitedTo(query, 0, criteria);
-    }
-    
-    /**
-     * Seleciona entradas a partir de query e critérios, até um limite
-     * especificado.
-     * 
-     * Devem ser especificadoss modelo e (opcionalmente) itens de modelo.
-     * 
-     * @param query Query SQL
-     * @param rows quantidade de acertos
-     * @param criteria critérios de seleção
-     * @return entradas encontradas.
-     */
-    public final ExtendedObject[] selectLimitedTo(String query, int rows,
-            Object... criteria) {
+    public final ExtendedObject[] select(Query query) {
         Message message = new Message();
         
         message.setId("select");
         message.add("query", query);
-        message.add("criteria", criteria);
-        message.add("rows", rows);
         return call(message);
-        
     }
     
     /**

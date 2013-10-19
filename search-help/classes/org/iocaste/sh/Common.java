@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.documents.common.ValueRange;
 
 public class Common {
@@ -18,22 +19,24 @@ public class Common {
     public static final ExtendedObject[] getResultsFrom(String modelname,
             Documents documents, Map<String, ValueRange> criteria) {
         boolean started;
-        StringBuilder sb = new StringBuilder("from ").append(modelname);
+        Query query = new Query();
         
+        query.setModel(modelname);
         if (criteria == null || criteria.size() == 0) {
-            return documents.select(sb.toString());
+            return documents.select(query);
         } else {
             started = false;
-            sb.append(" where");
             for (String name : criteria.keySet()) {
-                if (started)
-                    sb.append(" and");
-                else
-                    started = true;
+                if (started) {
+                    query.addIn(name, criteria.values().toArray());
+                    continue;
+                }
                 
-                sb.append(" ").append(name).append(" in ?");
+                started = true;
+                query.andIn(name, criteria.values().toArray());
             }
-            return documents.select(sb.toString(), criteria.values().toArray());
+            
+            return documents.select(query);
         }
     }
 }

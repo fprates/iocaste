@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Function;
 
 /**
@@ -19,10 +20,6 @@ import org.iocaste.protocol.Function;
 public class MessageSource implements Serializable {
     private static final long serialVersionUID = 7937205136041189687L;
     private Properties messages;
-    private static final byte MESSAGES = 0;
-    private static final String[] QUERIES = {
-            "from MESSAGES where LOCALE = ? and PACKAGE = ?"
-    };
     
     public MessageSource() {
         messages = new Properties();
@@ -56,22 +53,24 @@ public class MessageSource implements Serializable {
      */
     public final void loadFromApplication(String app, Locale locale,
             Function function) {
+        Query query;
         ExtendedObject[] objects;
         String tag, message;
-        Documents documents;
         
         if (locale == null)
             return;
         
-        documents = new Documents(function);
-        objects = documents.select(QUERIES[MESSAGES], locale.toString(), app);
+        query = new Query();
+        query.setModel("MESSAGES");
+        query.andEqual("LOCALE", locale.toString());
+        query.addEqual("PACKAGE", app);
+        objects = new Documents(function).select(query);
         if (objects == null)
             return;
         
         for (ExtendedObject object : objects) {
             tag = object.getValue("NAME");
             message = object.getValue("TEXT");
-            
             messages.put(tag, message);
         }
     }

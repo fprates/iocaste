@@ -10,6 +10,7 @@ import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
@@ -93,7 +94,7 @@ public class Services extends AbstractFunction {
         ExtendedObject object = message.get("object");
         Iocaste iocaste = new Iocaste(this);
         
-        return Query.delete(iocaste, object);
+        return Delete.init(iocaste, object);
     }
     
     /**
@@ -161,7 +162,7 @@ public class Services extends AbstractFunction {
         if (model == null)
             throw new IocasteException("invalid model.");
         
-        return Query.get(model, key, this);
+        return Select.get(model, key, this);
     }
     
     /**
@@ -239,7 +240,7 @@ public class Services extends AbstractFunction {
     public final int modify(Message message) throws Exception {
         ExtendedObject object = message.get("object");
         
-        return Query.modify(object, this);
+        return Modify.init(object, this);
     }
     
     /**
@@ -308,7 +309,7 @@ public class Services extends AbstractFunction {
     public final int save(Message message) throws Exception {
         ExtendedObject object = message.get("object");
         
-        return Query.save(object, this);
+        return Save.init(object, this);
     }
     
     /**
@@ -328,11 +329,9 @@ public class Services extends AbstractFunction {
      * @return
      */
     public final ExtendedObject[] select(Message message) throws Exception {
-        String query = message.getString("query");
-        Object[] criteria = message.get("criteria");
-        int rows = message.getInt("rows");
+        Query query = message.get("query");
         
-        return Query.select(query, rows, cache, criteria);
+        return Select.init(query, cache);
     }
     
     /**
@@ -375,7 +374,7 @@ public class Services extends AbstractFunction {
         String query = message.getString("query");
         Object[] criteria = message.get("criteria");
         
-        return Query.update(query, cache, criteria);
+        return Update.init(query, cache, criteria);
     }
     
     /**

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.user.User;
@@ -27,12 +28,15 @@ public class InstallTasksGroups {
      */
     public static final void init(Map<TaskGroup, Set<User>> tasksgroups,
             State state) throws Exception {
+        Query query;
         String groupname;
         Set<String> itens;
         ExtendedObject task, group;
         ExtendedObject[] tasks;
         
-        tasks = state.documents.select("from TASKS");
+        query = new Query();
+        query.setModel("TASKS");
+        tasks = state.documents.select(query);
         for (TaskGroup taskgroup : tasksgroups.keySet()) {
             groupname = taskgroup.getName();
             group = TaskSelector.getGroup(groupname, state);

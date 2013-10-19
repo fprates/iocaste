@@ -2,6 +2,7 @@ package org.iocaste.styleeditor;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
@@ -24,7 +25,7 @@ public class Request {
     
     public static final void element(Context context) {
         String element;
-        String query = "select * from STYLE_ELEMENT_DETAIL where ELEMENT = ?";
+        Query query;
         InputComponent input = context.view.getElement("NAME");
         Documents documents = new Documents(context.function);
         
@@ -35,7 +36,10 @@ public class Request {
                 continue;
 
             input = item.get("INDEX");
-            context.eproperties = documents.select(query, input.get());
+            query = new Query();
+            query.setModel("STYLE_ELEMENT_DETAIL");
+            query.addEqual("ELEMENT", input.get());
+            context.eproperties = documents.select(query);
             break;
         }
         
@@ -43,7 +47,8 @@ public class Request {
     }
     
     public static final ExtendedObject[] load(Context context) {
-        String query, style;
+        String style;
+        Query query;
         Documents documents = new Documents(context.function);
         
         style = ((DataForm)context.view.getElement("selection")).
@@ -56,7 +61,9 @@ public class Request {
         }
         
         context.view.redirect("style");
-        query = "from STYLE_ELEMENT where STYLE = ?";
-        return documents.select(query, style);
+        query = new Query();
+        query.setModel("STYLE_ELEMENT");
+        query.addEqual("STYLE", style);
+        return documents.select(query);
     }
 }

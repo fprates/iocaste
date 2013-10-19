@@ -880,7 +880,7 @@ public class Model {
     public static final int validate(DocumentModel model, Cache cache)
             throws Exception {
         DocumentModel tablemodel = Model.get("TABLE_MODEL", cache);
-        ExtendedObject link = Query.get(tablemodel, model.getTableName(),
+        ExtendedObject link = Select.get(tablemodel, model.getTableName(),
                 cache.function);
         
         return (link != null)? Documents.TABLE_ALREADY_ASSIGNED : 0;

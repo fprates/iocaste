@@ -10,6 +10,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 
@@ -30,7 +31,7 @@ public class CDocument {
      */
     public static final ComplexDocument get(String cdname, long id, Cache cache)
             throws Exception {
-        StringBuilder sb;
+        Query query;
         ExtendedObject[] objects;
         ComplexDocument document;
         ExtendedObject header;
@@ -51,10 +52,8 @@ public class CDocument {
         }
         
         for (DocumentModel model : document.getModel().getItens()) {
-            sb = new StringBuilder("from ").
-                    append(model.getName()).
-                    append(" where ");
-            
+            query = new Query();
+            query.setModel(model.getName());
             for (DocumentModelItem modelitem : model.getItens()) {
                 ireference = modelitem.getReference();
                 if (model.isKey(modelitem) || ireference == null)
@@ -62,13 +61,11 @@ public class CDocument {
                 
                 if (!ireference.equals(reference))
                     continue;
-                
-                sb.append(modelitem.getName());
+                query.addEqual(modelitem.getName(), key);
                 break;
             }
             
-            sb.append(" = ?");
-            objects = Query.select(sb.toString(), 0, cache, key);
+            objects = Select.init(query, cache);
             if (objects == null)
                 continue;
             
@@ -87,7 +84,7 @@ public class CDocument {
         ComplexModel cmmodel = CModel.get(name, cache);
         long cdocid = (cmmodel.getId() * HMULTIPLIER) + id;
         DocumentModel model = Model.get("COMPLEX_DOCUMENT", cache);
-        ExtendedObject object = Query.get(model, cdocid, cache.function);
+        ExtendedObject object = Select.get(model, cdocid, cache.function);
         
         if (object == null)
             return null;
@@ -96,7 +93,7 @@ public class CDocument {
         document = new ComplexDocument(cmmodel);
         document.setId(key);
         modellink = cmmodel.getCDModelLink();
-        object = Query.get(modellink, key, cache.function);
+        object = Select.get(modellink, key, cache.function);
         key = 0;
         for (DocumentModelItem item : modellink.getItens()) {
             if (modellink.isKey(item))
@@ -105,7 +102,7 @@ public class CDocument {
             break;
         }
         
-        object = Query.get(cmmodel.getHeader(), key, cache.function);
+        object = Select.get(cmmodel.getHeader(), key, cache.function);
         document.setHeader(object);
         
         return document;
@@ -142,7 +139,7 @@ public class CDocument {
         String cmodelname = cmodel.getName();
         DocumentModel model = Model.get("COMPLEX_MODEL", cache);
         
-        objects[COMPLEX_MODEL] = Query.get(model, cmodelname, cache.function);
+        objects[COMPLEX_MODEL] = Select.get(model, cmodelname, cache.function);
         cmodelid = objects[COMPLEX_MODEL].geti("ID");
         current = objects[COMPLEX_MODEL].getl("CURRENT");
         
@@ -151,7 +148,7 @@ public class CDocument {
         
         current++;
         objects[0].setValue("CURRENT", current);
-        if (Query.modify(objects[COMPLEX_MODEL], cache.function) == 0)
+        if (Modify.init(objects[COMPLEX_MODEL], cache.function) == 0)
             throw new IocasteException("error on complex model update");
 
         model = Model.get("COMPLEX_DOCUMENT", cache);
@@ -163,7 +160,7 @@ public class CDocument {
         objects[COMPLEX_DOCUMENT].setValue("DATA_CRIACAO", date);
         objects[COMPLEX_DOCUMENT].setValue("HORA_CRIACAO", date);
         objects[COMPLEX_DOCUMENT].setValue("USUARIO_CRIACAO", username);
-        if (Query.save(objects[COMPLEX_DOCUMENT], cache.function) == 0)
+        if (Save.init(objects[COMPLEX_DOCUMENT], cache.function) == 0)
             throw new IocasteException("error on insert complex document");
         
         model = Model.get("COMPLEX_DOCUMENT_ITEM", cache);
@@ -174,7 +171,7 @@ public class CDocument {
                 docitem = new ExtendedObject(model);
                 docitem.setValue("ID", (id + i + 1));
                 docitem.setValue("COMPLEX_DOCUMENT", current);
-                Query.save(docitem, cache.function);
+                Save.init(docitem, cache.function);
             }
         }
     }
@@ -205,7 +202,7 @@ public class CDocument {
             hkey = header.getModel().getModelItem(name);
             break;
         }
-        Query.save(header, cache.function);
+        Save.init(header, cache.function);
         
         for (String modelname : document.getItensModels()) {
             model = document.getItemModel(modelname);
@@ -224,7 +221,7 @@ public class CDocument {
             for (ExtendedObject object : document.getItens(modelname)) {
                 setItemHeaderReference(object, hkey, hkeyvalue);
                 object.setValue(ikey, t + object.getl(name));
-                Query.save(object, cache.function);
+                Save.init(object, cache.function);
             }
         }
     }
@@ -247,7 +244,7 @@ public class CDocument {
             break;
         }
         
-        if (Query.save(objects[LINK], cache.function) == 0)
+        if (Save.init(objects[LINK], cache.function) == 0)
             throw new IocasteException("error on insert complex document link");
         
         return current;
@@ -282,7 +279,7 @@ public class CDocument {
         ExtendedObject header = document.getHeader();
         DocumentModel model = header.getModel();
         
-        Query.modify(header, cache.function);
+        Modify.init(header, cache.function);
         for (DocumentModelKey modelkey : model.getKeys()) {
             href = model.getModelItem(modelkey.getModelItemName());
             key = header.getValue(href);
@@ -307,12 +304,12 @@ public class CDocument {
                     append(" where ").
                     append(iref.getName()).
                     append(" = ?");
-            Query.update(sb.toString(), cache, key);
+            Update.init(sb.toString(), cache, key);
             
             objects = document.getItens(modelname);
             for (ExtendedObject object : objects) {
                 object.setValue(iref, key);
-                Query.save(object, cache.function);
+                Save.init(object, cache.function);
             }
         }
         

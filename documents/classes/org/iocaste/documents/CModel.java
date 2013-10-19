@@ -5,16 +5,15 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
 
 public class CModel {
     private static final byte DEL_CMODEL_ITENS = 0;
     private static final byte DEL_CMODEL = 1;
-    private static final byte CMODEL_ITENS = 2;
     private static final String[] QUERIES = {
         "delete from COMPLEX_MODEL_ITEM where COMPLEX_MODEL = ?",
-        "delete from COMPLEX_MODEL where NAME = ?",
-        "select * from COMPLEX_MODEL_ITEM where COMPLEX_MODEL = ?"
+        "delete from COMPLEX_MODEL where NAME = ?"
     };
     
     private static final byte ITEM_SAVE = 0;
@@ -46,7 +45,7 @@ public class CModel {
         object.setValue("MODEL", hmodel.getName());
         cminame = new StringBuilder("CMI_").append(name).toString();
         object.setValue("CD_LINK", cminame);
-        Query.save(object, cache.function);
+        Save.init(object, cache.function);
         
         cmodelid *= 1000;
         for (DocumentModel modelitem : model.getItens()) {
@@ -54,7 +53,7 @@ public class CModel {
             object.setValue("ID", cmodelid++);
             object.setValue("COMPLEX_MODEL", name);
             object.setValue("MODEL", modelitem.getName());
-            if (Query.save(object, cache.function) == 0)
+            if (Save.init(object, cache.function) == 0)
                 throw new IocasteException(ERRORS[ITEM_SAVE]);
         }
         
@@ -92,6 +91,7 @@ public class CModel {
      */
     public static final ComplexModel get(String name, Cache cache)
             throws Exception {
+        Query query;
         ComplexModel cmodel;
         DocumentModel model;
         ExtendedObject omodel;
@@ -102,7 +102,7 @@ public class CModel {
             return cache.cmodels.get(name);
         
         model = Model.get("COMPLEX_MODEL", cache);
-        omodel = Query.get(model, name, cache.function);
+        omodel = Select.get(model, name, cache.function);
         if (omodel == null)
             return null;
         
@@ -114,7 +114,11 @@ public class CModel {
         model = Model.get((String)omodel.getValue("CD_LINK"), cache);
         cmodel.setCDModelLink(model);
         cache.cmodels.put(name, cmodel);
-        itens = Query.select(QUERIES[CMODEL_ITENS], 0, cache, name);
+        
+        query = new Query();
+        query.setModel("COMPLEX_MODEL_ITEM");
+        query.addEqual("COMPLEX_MODEL", name);
+        itens = Select.init(query, cache);
         if (itens == null)
             return cmodel;
         
@@ -139,8 +143,8 @@ public class CModel {
         int error;
         String name = cmodel.getName();
         
-        Query.update(QUERIES[DEL_CMODEL_ITENS], cache, name);
-        error = Query.update(QUERIES[DEL_CMODEL], cache, name);
+        Update.init(QUERIES[DEL_CMODEL_ITENS], cache, name);
+        error = Update.init(QUERIES[DEL_CMODEL], cache, name);
         if (error > 0)
             cache.cmodels.remove(name);
         
