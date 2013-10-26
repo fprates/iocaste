@@ -63,7 +63,7 @@ public class MessageSource implements Serializable {
         query = new Query();
         query.setModel("MESSAGES");
         query.andEqual("LOCALE", locale.toString());
-        query.addEqual("PACKAGE", app);
+        query.andEqual("PACKAGE", app);
         objects = new Documents(function).select(query);
         if (objects == null)
             return;

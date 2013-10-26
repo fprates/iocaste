@@ -84,7 +84,7 @@ public class NumberRange {
     public static int remove(String name, Cache cache) throws Exception {
         Query query = new Query("delete");
         query.setModel("NUMBER_RANGE");
-        query.addEqual("IDENT", name);
+        query.andEqual("IDENT", name);
         return Update.init(query, cache);
     }
 }

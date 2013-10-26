@@ -34,20 +34,32 @@ public class Query implements Serializable {
         this.columns = columns;
     }
     
-    public final void addEqual(String field, Object value) {
-        add(field, WhereClause.EQ, value, null);
-    }
-    
-    public final void addIn(String field, Object... values) {
-        add(field, WhereClause.IN, values, null);
-    }
-    
     public final void andEqual(String field, Object value) {
         add(field, WhereClause.EQ, value, "and");
+    }
+
+    public final void andGE(String field, Object value) {
+        add(field, WhereClause.GE, value, "and");
+    }
+    
+    public final void andGT(String field, Object value) {
+        add(field, WhereClause.GT, value, "and");
     }
     
     public final void andIn(String field, Object... values) {
         add(field, WhereClause.IN, values, "and");
+    }
+
+    public final void andLE(String field, Object value) {
+        add(field, WhereClause.LE, value, "and");
+    }
+    
+    public final void andLT(String field, Object value) {
+        add(field, WhereClause.LT, value, "and");
+    }
+    
+    public final void andNot(String field, Object value) {
+        add(field, WhereClause.NE, value, "and");
     }
     
     public final String[] getColumns() {
@@ -99,6 +111,34 @@ public class Query implements Serializable {
     
     public final boolean mustSkipError() {
         return skiperror;
+    }
+    
+    public final void orEqual(String field, Object value) {
+        add(field, WhereClause.EQ, value, "or");
+    }
+
+    public final void orGE(String field, Object value) {
+        add(field, WhereClause.GE, value, "or");
+    }
+    
+    public final void orGT(String field, Object value) {
+        add(field, WhereClause.GT, value, "or");
+    }
+    
+    public final void orIn(String field, Object... values) {
+        add(field, WhereClause.IN, values, "or");
+    }
+
+    public final void orLE(String field, Object value) {
+        add(field, WhereClause.LE, value, "or");
+    }
+    
+    public final void orLT(String field, Object value) {
+        add(field, WhereClause.LT, value, "or");
+    }
+    
+    public final void orNot(String field, Object value) {
+        add(field, WhereClause.NE, value, "or");
     }
     
     public final void setMaxResults(int max) {

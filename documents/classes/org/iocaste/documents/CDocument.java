@@ -61,7 +61,7 @@ public class CDocument {
                 
                 if (!ireference.equals(reference))
                     continue;
-                query.addEqual(modelitem.getName(), key);
+                query.andEqual(modelitem.getName(), key);
                 break;
             }
             
@@ -301,7 +301,7 @@ public class CDocument {
             
             query = new Query("delete");
             query.setModel(modelname);
-            query.addEqual(iref.getName(), key);
+            query.andEqual(iref.getName(), key);
             Update.init(query, cache);
             
             objects = document.getItens(modelname);

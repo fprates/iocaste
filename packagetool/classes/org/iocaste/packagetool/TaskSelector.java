@@ -144,11 +144,11 @@ public class TaskSelector {
         
         queries[0] = new Query("delete");
         queries[0].setModel("USER_TASKS_GROUPS");
-        queries[0].addEqual("GROUP", groupname);
+        queries[0].andEqual("GROUP", groupname);
         
         queries[1] = new Query("delete");
         queries[1].setModel("TASKS_GROUPS");
-        queries[1].addEqual("NAME", groupname);
+        queries[1].andEqual("NAME", groupname);
         documents.update(queries);
     }
     
@@ -164,7 +164,7 @@ public class TaskSelector {
         Query query = new Query();
         
         query.setModel("TASK_ENTRY");
-        query.addEqual("NAME", taskname);
+        query.andEqual("NAME", taskname);
         query.setMaxResults(1);
         task = documents.select(query);
         if (task == null)
@@ -174,11 +174,11 @@ public class TaskSelector {
         queries = new Query[2];
         queries[0] = new Query("delete");
         queries[0].setModel("TASK_ENTRY_TEXT");
-        queries[0].addEqual("TASK", taskid);
+        queries[0].andEqual("TASK", taskid);
         
         queries[1] = new Query("delete");
         queries[1].setModel("TASK_ENTRY");
-        queries[1].addEqual("ID", taskid);
+        queries[1].andEqual("ID", taskid);
         documents.update(queries);
     }
 }

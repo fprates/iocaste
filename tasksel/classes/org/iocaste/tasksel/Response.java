@@ -48,7 +48,7 @@ public class Response {
                 "TASK_ENTRY.ID");
         query.setModel("USER_TASKS_GROUPS");
         query.join("TASK_ENTRY", "USER_TASKS_GROUPS.GROUP", "GROUP");
-        query.addEqual("USERNAME", username);
+        query.andEqual("USERNAME", username);
         result = documents.select(query);
         if (result == null)
             return null;
@@ -73,7 +73,7 @@ public class Response {
             query = new Query();
             query.setModel("TASK_ENTRY_TEXT");
             query.andEqual("TASK", taskid);
-            query.addEqual("LANGUAGE", language);
+            query.andEqual("LANGUAGE", language);
             query.setMaxResults(1);
             mobject = documents.select(query);
             if (mobject != null)

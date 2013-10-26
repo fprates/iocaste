@@ -37,7 +37,7 @@ public class Registry {
         Query query = new Query();
         
         query.setModel("PACKAGE_ITEM");
-        query.addEqual("PACKAGE", package_);
+        query.andEqual("PACKAGE", package_);
         return new Documents(function).select(query);
     }
 }

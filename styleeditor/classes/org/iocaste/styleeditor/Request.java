@@ -38,7 +38,7 @@ public class Request {
             input = item.get("INDEX");
             query = new Query();
             query.setModel("STYLE_ELEMENT_DETAIL");
-            query.addEqual("ELEMENT", input.get());
+            query.andEqual("ELEMENT", input.get());
             context.eproperties = documents.select(query);
             break;
         }
@@ -63,7 +63,7 @@ public class Request {
         context.view.redirect("style");
         query = new Query();
         query.setModel("STYLE_ELEMENT");
-        query.addEqual("STYLE", style);
+        query.andEqual("STYLE", style);
         return documents.select(query);
     }
 }

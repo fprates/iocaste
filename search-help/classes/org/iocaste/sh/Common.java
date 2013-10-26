@@ -28,7 +28,7 @@ public class Common {
             started = false;
             for (String name : criteria.keySet()) {
                 if (started) {
-                    query.addIn(name, criteria.values().toArray());
+                    query.andIn(name, criteria.values().toArray());
                     continue;
                 }
                 

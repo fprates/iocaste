@@ -38,7 +38,7 @@ public class Uninstall {
         new Iocaste(function).invalidateAuthCache();
         query = new Query("delete");
         query.setModel("PACKAGE");
-        query.addEqual("NAME", pkgname);
+        query.andEqual("NAME", pkgname);
         ((Documents)services[DOCS_LIB]).update(query);
     }
 
@@ -58,12 +58,12 @@ public class Uninstall {
             queries = new Query[2];
             queries[0] = new Query("delete");
             queries[0].setModel("MESSAGES");
-            queries[0].addEqual("PACKAGE", name);
+            queries[0].andEqual("PACKAGE", name);
             
             queries[1] = new Query("delete");
             queries[1].setModel("PACKAGE_ITEM");
             queries[1].andEqual("PACKAGE", name);
-            queries[1].addEqual("MODEL", "MESSAGE");
+            queries[1].andEqual("MODEL", "MESSAGE");
             documents.update(queries);
             
             documents.delete(object);
@@ -80,7 +80,7 @@ public class Uninstall {
         if (modeltype.equals("TASK")) {
             query = new Query("delete");
             query.setModel("TASKS");
-            query.addEqual("NAME", name);
+            query.andEqual("NAME", name);
             documents.update(query);
             documents.delete(object);
             return;

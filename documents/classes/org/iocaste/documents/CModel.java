@@ -110,7 +110,7 @@ public class CModel {
         
         query = new Query();
         query.setModel("COMPLEX_MODEL_ITEM");
-        query.addEqual("COMPLEX_MODEL", name);
+        query.andEqual("COMPLEX_MODEL", name);
         itens = Select.init(query, cache);
         if (itens == null)
             return cmodel;
@@ -139,12 +139,12 @@ public class CModel {
         
         query = new Query("delete");
         query.setModel("COMPLEX_MODEL_ITEM");
-        query.addEqual("COMPLEX_MODEL", name);
+        query.andEqual("COMPLEX_MODEL", name);
         Update.init(query, cache);
         
         query = new Query("delete");
         query.setModel("COMPLEX_MODEL");
-        query.addEqual("NAME", name);
+        query.andEqual("NAME", name);
         error = Update.init(query, cache);
         if (error > 0)
             cache.cmodels.remove(name);

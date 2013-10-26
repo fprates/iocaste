@@ -128,7 +128,7 @@ public class Services extends AbstractFunction {
 
         query = new Query();
         query.setModel("GLOBAL_CONFIG_ITEM");
-        query.addEqual("GLOBAL_CONFIG", appname);
+        query.andEqual("GLOBAL_CONFIG", appname);
         query.andEqual("NAME", name);
         objects = documents.select(query);
         if (objects == null)
@@ -163,15 +163,15 @@ public class Services extends AbstractFunction {
         queries = new Query[3];
         queries[0] = new Query("delete");
         queries[0].setModel("GLOBAL_CONFIG_VALUES");
-        queries[0].addEqual("GLOBAL_CONFIG", appname);
+        queries[0].andEqual("GLOBAL_CONFIG", appname);
         
         queries[1] = new Query("delete");
         queries[1].setModel("GLOBAL_CONFIG_ITEM");
-        queries[1].addEqual("GLOBAL_CONFIG", appname);
+        queries[1].andEqual("GLOBAL_CONFIG", appname);
         
         queries[2] = new Query("delete");
         queries[2].setModel("GLOBAL_CONFIG");
-        queries[2].addEqual("NAME", appname);
+        queries[2].andEqual("NAME", appname);
         new Documents(this).update(queries);
     }
     

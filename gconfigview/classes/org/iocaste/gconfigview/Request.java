@@ -24,7 +24,7 @@ public class Request {
                 "GLOBAL_CONFIG_VALUES.VALUE");
         query.setModel("GLOBAL_CONFIG_ITEM");
         query.join("GLOBAL_CONFIG_VALUES", "GLOBAL_CONFIG_ITEM.ID", "ID");
-        query.addEqual("GLOBAL_CONFIG_ITEM.GLOBAL_CONFIG", program);
+        query.andEqual("GLOBAL_CONFIG_ITEM.GLOBAL_CONFIG", program);
         context.objects = documents.select(query);
         if (context.objects == null) {
             context.view.message(Const.STATUS, "no.config");

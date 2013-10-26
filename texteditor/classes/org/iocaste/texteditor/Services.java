@@ -30,7 +30,7 @@ public class Services extends AbstractFunction {
         Query query = new Query();
         
         query.setModel("TXTEDITOR_LINE");
-        query.addEqual("TEXT_NAME", textname);
+        query.andEqual("TEXT_NAME", textname);
         if (pagename != null)
             query.andEqual("PAGE_NAME", pagename);
         

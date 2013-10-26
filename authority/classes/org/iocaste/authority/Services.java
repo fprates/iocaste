@@ -87,7 +87,7 @@ public class Services extends AbstractFunction {
         query = new Query();
         query.setModel("USER_AUTHORITY");
         query.andEqual("USERNAME", username);
-        query.addEqual("PROFILE", profilename);
+        query.andEqual("PROFILE", profilename);
         query.setMaxResults(1);
         profiles = documents.select(query);
         if (profiles == null)
@@ -156,7 +156,7 @@ public class Services extends AbstractFunction {
 
         query = new Query();
         query.setModel("AUTHORIZATION_ITEM");
-        query.addEqual("AUTHORIZATION", name);
+        query.andEqual("AUTHORIZATION", name);
         parameters = documents.select(query);
         if (parameters != null)
             for (ExtendedObject parameter : parameters) {
@@ -199,7 +199,7 @@ public class Services extends AbstractFunction {
         
         query = new Query();
         query.setModel("USER_AUTHORITY");
-        query.addEqual("USERNAME", username);
+        query.andEqual("USERNAME", username);
         objects = documents.select(query);
         if (objects == null)
             return null;
@@ -223,15 +223,15 @@ public class Services extends AbstractFunction {
         
         queries[0] = new Query("delete");
         queries[0].setModel("USER_PROFILE_ITEM");
-        queries[0].addEqual("NAME", name);
+        queries[0].andEqual("NAME", name);
 
         queries[1] = new Query("delete");
         queries[1].setModel("AUTHORIZATION_ITEM");
-        queries[1].addEqual("AUTHORIZATION", name);
+        queries[1].andEqual("AUTHORIZATION", name);
 
         queries[2] = new Query("delete");
         queries[2].setModel("AUTHORIZATION");
-        queries[2].addEqual("NAME", name);
+        queries[2].andEqual("NAME", name);
         return documents.update(queries);
     }
     
@@ -247,11 +247,11 @@ public class Services extends AbstractFunction {
         
         queries[0] = new Query("delete");
         queries[0].setModel("USER_PROFILE_ITEM");
-        queries[0].addEqual("PROFILE", name);
+        queries[0].andEqual("PROFILE", name);
         
         queries[1] = new Query("delete");
         queries[1].setModel("USER_PROFILE");
-        queries[1].addEqual("NAME", name);
+        queries[1].andEqual("NAME", name);
         return documents.update(queries);
     }
     

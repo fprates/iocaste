@@ -73,12 +73,12 @@ public class Request {
         
         query = new Query();
         query.setModel("USER_AUTHORITY");
-        query.addEqual("USERNAME", username);
+        query.andEqual("USERNAME", username);
         userdata.profiles = documents.select(query);
         
         query = new Query();
         query.setModel("USER_TASKS_GROUPS");
-        query.addEqual("USERNAME", username);
+        query.andEqual("USERNAME", username);
         userdata.tasks = documents.select(query);
         context.view.redirect("form");
         
@@ -122,11 +122,11 @@ public class Request {
             queries = new Query[2];
             queries[0] = new Query("delete");
             queries[0].setModel("USER_AUTHORITY");
-            queries[0].addEqual("USERNAME", username);
+            queries[0].andEqual("USERNAME", username);
             
             queries[1] = new Query("delete");
             queries[1].setModel("USER_TASKS_GROUPS");
-            queries[1].addEqual("USERNAME", username);
+            queries[1].andEqual("USERNAME", username);
             documents.update(queries);
             break;
         }

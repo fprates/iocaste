@@ -96,7 +96,7 @@ public class Services extends AbstractFunction {
         
         query = new Query();
         query.setModel("SH_ITENS");
-        query.addEqual("SEARCH_HELP", name);
+        query.andEqual("SEARCH_HELP", name);
         itens = documents.select(query);
         if (itens == null)
             throw new IocasteException("sh has no columns itens.");
@@ -131,7 +131,7 @@ public class Services extends AbstractFunction {
         
         query = new Query();
         query.setModel("SH_REFERENCE");
-        query.addEqual("SEARCH_HELP", shname);
+        query.andEqual("SEARCH_HELP", shname);
         shdata = documents.select(query);
         if (shdata != null)
             throw new IocasteException(new StringBuilder(
@@ -206,7 +206,7 @@ public class Services extends AbstractFunction {
         Query query = new Query("delete");
         
         query.setModel("SH_REFERENCE");
-        query.addEqual("SEARCH_HELP", shname);
+        query.andEqual("SEARCH_HELP", shname);
         return new Documents(this).update(query);
     }
     
@@ -232,7 +232,7 @@ public class Services extends AbstractFunction {
         
         query = new Query("delete");
         query.setModel("SH_ITENS");
-        query.addEqual("SEARCH_HELP", shname);
+        query.andEqual("SEARCH_HELP", shname);
         documents.update(query);
         for (ExtendedObject item : itens) {
             shitemname = item.getValue("ITEM");
