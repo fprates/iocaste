@@ -24,6 +24,6 @@ public class Update {
         
         values = new ArrayList<>();
         String sql = Parser.parseQuery(query, cache, values);
-        return new Iocaste(cache.function).update(sql, values);
+        return new Iocaste(cache.function).update(sql, values.toArray());
     }
 }
