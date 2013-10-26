@@ -8,14 +8,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
 
-public class CModel {
-    private static final byte DEL_CMODEL_ITENS = 0;
-    private static final byte DEL_CMODEL = 1;
-    private static final String[] QUERIES = {
-        "delete from COMPLEX_MODEL_ITEM where COMPLEX_MODEL = ?",
-        "delete from COMPLEX_MODEL where NAME = ?"
-    };
-    
+public class CModel {    
     private static final byte ITEM_SAVE = 0;
     private static final String[] ERRORS = {
         "error on complex model item saving"
@@ -140,11 +133,19 @@ public class CModel {
      */
     public static final int remove(ComplexModel cmodel, Cache cache)
             throws Exception {
+        Query query;
         int error;
         String name = cmodel.getName();
         
-        Update.init(QUERIES[DEL_CMODEL_ITENS], cache, name);
-        error = Update.init(QUERIES[DEL_CMODEL], cache, name);
+        query = new Query("delete");
+        query.setModel("COMPLEX_MODEL_ITEM");
+        query.addEqual("COMPLEX_MODEL", name);
+        Update.init(query, cache);
+        
+        query = new Query("delete");
+        query.setModel("COMPLEX_MODEL");
+        query.addEqual("NAME", name);
+        error = Update.init(query, cache);
         if (error > 0)
             cache.cmodels.remove(name);
         

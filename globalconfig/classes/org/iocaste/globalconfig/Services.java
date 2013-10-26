@@ -18,15 +18,6 @@ import org.iocaste.protocol.Message;
  *
  */
 public class Services extends AbstractFunction {
-    private static final byte DEL_CFG_VALUES = 1;
-    private static final byte DEL_CFG_ITEMS = 2;
-    private static final byte DEL_GLOBAL_CFG = 3;
-    private static final String[] QUERIES = {
-        "",
-        "delete from GLOBAL_CONFIG_VALUES where GLOBAL_CONFIG = ?",
-        "delete from GLOBAL_CONFIG_ITEM where GLOBAL_CONFIG = ?",
-        "delete from GLOBAL_CONFIG where NAME = ?"
-    };
     
     public Services() {
         export("define", "define");
@@ -163,16 +154,25 @@ public class Services extends AbstractFunction {
     }
     
     public final void remove(Message message) {
-        Documents documents;
+        Query[] queries;
         String appname = message.getString("name");
         
         if (appname == null)
             return;
 
-        documents = new Documents(this);
-        documents.update(QUERIES[DEL_CFG_VALUES], appname);
-        documents.update(QUERIES[DEL_CFG_ITEMS], appname);
-        documents.update(QUERIES[DEL_GLOBAL_CFG], appname);
+        queries = new Query[3];
+        queries[0] = new Query("delete");
+        queries[0].setModel("GLOBAL_CONFIG_VALUES");
+        queries[0].addEqual("GLOBAL_CONFIG", appname);
+        
+        queries[1] = new Query("delete");
+        queries[1].setModel("GLOBAL_CONFIG_ITEM");
+        queries[1].addEqual("GLOBAL_CONFIG", appname);
+        
+        queries[2] = new Query("delete");
+        queries[2].setModel("GLOBAL_CONFIG");
+        queries[2].addEqual("NAME", appname);
+        new Documents(this).update(queries);
     }
     
     public final void set(Message message) {

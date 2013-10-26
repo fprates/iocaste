@@ -1,6 +1,11 @@
 package org.iocaste.documents;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.IocasteException;
 
 public class Update {
     
@@ -8,14 +13,17 @@ public class Update {
      * 
      * @param query
      * @param cache
-     * @param criteria
      * @return
      * @throws Exception
      */
-    public static final int init(String query, Cache cache,
-            Object... criteria) throws Exception {
-        QueryInfo queryinfo = Parser.parseQuery(query, criteria, cache);
+    public static final int init(Query query, Cache cache) throws Exception {
+        List<Object> values;
         
-        return new Iocaste(cache.function).update(queryinfo.query, criteria);
+        if (query.getStatement() == null)
+            throw new IocasteException("query statement not defined.");
+        
+        values = new ArrayList<>();
+        String sql = Parser.parseQuery(query, cache, values);
+        return new Iocaste(cache.function).update(sql, values);
     }
 }

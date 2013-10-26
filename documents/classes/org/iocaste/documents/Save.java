@@ -15,13 +15,11 @@ public class Save {
      * @return
      */
     public static final int init(ExtendedObject object, Function function) {
-        Object[] criteria;
         DocumentModel model = object.getModel();
         DocumentModelItem[] itens = model.getItens();
         int i = itens.length;
         Iocaste iocaste = new Iocaste(function);
-        
-        criteria = (i > 0)? new Object[i] : null;
+        Object[] criteria = (i > 0)? new Object[i] : null;
         
         i = 0;
         for (DocumentModelItem item : model.getItens())

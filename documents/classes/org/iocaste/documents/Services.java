@@ -22,7 +22,7 @@ public class Services extends AbstractFunction {
     
     public Services() {
         cache = new Cache(this);
-        lockcache = new HashMap<String, Set<Lock>>();
+        lockcache = new HashMap<>();
         
         export("create_complex_model", "createCModel");
         export("create_model", "createModel");
@@ -46,6 +46,7 @@ public class Services extends AbstractFunction {
         export("select", "select");
         export("unlock", "unlock");
         export("update", "update");
+        export("update_m", "updateMultiple");
         export("update_complex_document", "updateCDocument");
         export("update_model", "updateModel");
         export("validate_model", "validateModel");
@@ -371,10 +372,9 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final int update(Message message) throws Exception {
-        String query = message.getString("query");
-        Object[] criteria = message.get("criteria");
+        Query query = message.get("query");
         
-        return Update.init(query, cache, criteria);
+        return Update.init(query, cache);
     }
     
     /**
@@ -399,6 +399,27 @@ public class Services extends AbstractFunction {
         DocumentModel model = message.get("model");
         
         return Model.update(model, cache);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final int updateMultiple(Message message) throws Exception {
+        int err;
+        Query[] queries = message.get("queries");
+        
+        for (Query query : queries) {
+            err = Update.init(query, cache);
+            if (err > 0)
+                continue;
+            
+            throw new IocasteException("multiple update error");
+        }
+        
+        return 1;
     }
     
     /**

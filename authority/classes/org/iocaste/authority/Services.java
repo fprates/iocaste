@@ -15,21 +15,6 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.UserProfile;
 
 public class Services extends AbstractFunction {
-    private static final byte DEL_AUTH_ITENS = 2;
-    private static final byte DEL_AUTH = 3;
-    private static final byte DEL_PROFILE_ITEM = 4;
-    private static final byte DEL_USER_PROFILE = 6;
-    private static final byte DEL_USER_PROFILE_ITEM = 7;
-    private static final String[] QUERIES = {
-        "",
-        "",
-        "delete from AUTHORIZATION_ITEM where AUTHORIZATION = ?",
-        "delete from AUTHORIZATION where NAME = ?",
-        "delete from USER_PROFILE_ITEM where NAME = ?",
-        "",
-        "delete from USER_PROFILE where NAME = ?",
-        "delete from USER_PROFILE_ITEM where PROFILE = ?"
-    };
     
     public Services() {
         export("add_authorization", "addAuthorization");
@@ -232,12 +217,22 @@ public class Services extends AbstractFunction {
      * @return
      */
     public final int remove(Message message) {
+        Query[] queries = new Query[3];
         String name = message.getString("name");
         Documents documents = new Documents(this);
         
-        documents.update(QUERIES[DEL_PROFILE_ITEM], name);
-        documents.update(QUERIES[DEL_AUTH_ITENS], name);
-        return documents.update(QUERIES[DEL_AUTH], name);
+        queries[0] = new Query("delete");
+        queries[0].setModel("USER_PROFILE_ITEM");
+        queries[0].addEqual("NAME", name);
+
+        queries[1] = new Query("delete");
+        queries[1].setModel("AUTHORIZATION_ITEM");
+        queries[1].addEqual("AUTHORIZATION", name);
+
+        queries[2] = new Query("delete");
+        queries[2].setModel("AUTHORIZATION");
+        queries[2].addEqual("NAME", name);
+        return documents.update(queries);
     }
     
     /**
@@ -246,11 +241,18 @@ public class Services extends AbstractFunction {
      * @return 1, se a autorização foi removida com sucesso.
      */
     public final int removeProfile(Message message) {
+        Query[] queries = new Query[2];
         String name = message.getString("name");
         Documents documents = new Documents(this);
         
-        documents.update(QUERIES[DEL_USER_PROFILE_ITEM], name);
-        return documents.update(QUERIES[DEL_USER_PROFILE], name);
+        queries[0] = new Query("delete");
+        queries[0].setModel("USER_PROFILE_ITEM");
+        queries[0].addEqual("PROFILE", name);
+        
+        queries[1] = new Query("delete");
+        queries[1].setModel("USER_PROFILE");
+        queries[1].addEqual("NAME", name);
+        return documents.update(queries);
     }
     
     /**

@@ -10,16 +10,6 @@ import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
 
 public class TaskSelector {
-    private static final byte DEL_USR_TSK_GRP = 0;
-    private static final byte DEL_TASK = 1;
-    private static final byte DEL_TASK_TEXT = 2;
-    private static final byte DEL_TSK_GRP = 3;
-    private static final String[] QUERIES = {
-        "delete from USER_TASKS_GROUPS where GROUP = ?",
-        "delete from TASK_ENTRY where ID = ?",
-        "delete from TASK_ENTRY_TEXT where TASK = ?",
-        "delete from TASKS_GROUPS where NAME = ?"
-    };
     
     /**
      * 
@@ -46,7 +36,6 @@ public class TaskSelector {
         object.setValue("ID", entryid);
         object.setValue("NAME", taskname);
         object.setValue("GROUP", group.getValue("NAME"));
-        
         state.documents.save(object);
         return object;
     }
@@ -129,7 +118,6 @@ public class TaskSelector {
         object.setValue("NAME", name);
         object.setValue("ID", id);
         object.setValue("CURRENT", 0);
-        
         state.documents.save(object);
         
         return object;
@@ -152,8 +140,16 @@ public class TaskSelector {
      */
     public static final void removeGroup(String groupname, Documents documents)
     {
-        documents.update(QUERIES[DEL_USR_TSK_GRP], groupname);
-        documents.update(QUERIES[DEL_TSK_GRP], groupname);
+        Query[] queries = new Query[2];
+        
+        queries[0] = new Query("delete");
+        queries[0].setModel("USER_TASKS_GROUPS");
+        queries[0].addEqual("GROUP", groupname);
+        
+        queries[1] = new Query("delete");
+        queries[1].setModel("TASKS_GROUPS");
+        queries[1].addEqual("NAME", groupname);
+        documents.update(queries);
     }
     
     /**
@@ -162,6 +158,7 @@ public class TaskSelector {
      * @param documents
      */
     public static final void removeTask(String taskname, Documents documents) {
+        Query[] queries;
         int taskid;
         ExtendedObject[] task;
         Query query = new Query();
@@ -174,7 +171,14 @@ public class TaskSelector {
             return;
         
         taskid = task[0].geti("ID");
-        documents.update(QUERIES[DEL_TASK_TEXT], taskid);
-        documents.update(QUERIES[DEL_TASK], taskid);
+        queries = new Query[2];
+        queries[0] = new Query("delete");
+        queries[0].setModel("TASK_ENTRY_TEXT");
+        queries[0].addEqual("TASK", taskid);
+        
+        queries[1] = new Query("delete");
+        queries[1].setModel("TASK_ENTRY");
+        queries[1].addEqual("ID", taskid);
+        documents.update(queries);
     }
 }

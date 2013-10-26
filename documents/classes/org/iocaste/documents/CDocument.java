@@ -272,8 +272,8 @@ public class CDocument {
     
     public static final int update(ComplexDocument document, Cache cache)
             throws Exception {
+        Query query;
         ExtendedObject[] objects;
-        StringBuilder sb;
         DocumentModelItem iref, href = null;
         Object key = null;
         ExtendedObject header = document.getHeader();
@@ -299,12 +299,10 @@ public class CDocument {
                 break;
             }
             
-            sb = new StringBuilder("delete from ").
-                    append(modelname).
-                    append(" where ").
-                    append(iref.getName()).
-                    append(" = ?");
-            Update.init(sb.toString(), cache, key);
+            query = new Query("delete");
+            query.setModel(modelname);
+            query.addEqual(iref.getName(), key);
+            Update.init(query, cache);
             
             objects = document.getItens(modelname);
             for (ExtendedObject object : objects) {

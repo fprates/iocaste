@@ -14,14 +14,6 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 
 public class Request {
-    private static final byte DEL_USR_AUTH = 1;
-    private static final byte DEL_USR_TASK = 3;
-    private static final String[] QUERIES = {
-        "",
-        "delete from USER_AUTHORITY where USERNAME = ?",
-        "",
-        "delete from USER_TASKS_GROUPS where USERNAME = ?"
-    };
     
     /**
      * 
@@ -100,6 +92,7 @@ public class Request {
      * @param mode
      */
     public static final void save(Context context) {
+        Query[] queries;
         PackageTool pkgtool;
         Authority authority;
         Table itens;
@@ -126,8 +119,15 @@ public class Request {
             
         case Context.UPDATE:
             new Iocaste(context.function).update(user);
-            documents.update(QUERIES[DEL_USR_AUTH], username);
-            documents.update(QUERIES[DEL_USR_TASK], username);
+            queries = new Query[2];
+            queries[0] = new Query("delete");
+            queries[0].setModel("USER_AUTHORITY");
+            queries[0].addEqual("USERNAME", username);
+            
+            queries[1] = new Query("delete");
+            queries[1].setModel("USER_TASKS_GROUPS");
+            queries[1].addEqual("USERNAME", username);
+            documents.update(queries);
             break;
         }
         

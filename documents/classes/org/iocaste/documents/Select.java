@@ -8,12 +8,9 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.documents.common.JoinClause;
 import org.iocaste.documents.common.Query;
-import org.iocaste.documents.common.WhereClause;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
-import org.iocaste.protocol.IocasteException;
 
 public class Select {
     
@@ -111,124 +108,18 @@ public class Select {
     @SuppressWarnings("unchecked")
     public static final ExtendedObject[] init(Query query, Cache cache)
             throws Exception {
-        boolean afterfirst;
-        List<Object> values;
         Object[] lines;
         Map<String, Object> line;
         ExtendedObject[] objects;
-        String[] columns, joinmember;
-        String statement, operator;
-        StringBuilder sb;
-        DocumentModel tablemodel, model;
-        String modelname = query.getModel();
+        List<Object> values;
+        String statement;
         
-        if (modelname == null)
-            throw new IocasteException("model unspecified.");
-        
-        tablemodel = Model.get(modelname, cache);
-        if (tablemodel == null)
-            throw new IocasteException(new StringBuilder(modelname).
-                    append(" is an invalid model.").toString());
-            
-        sb = new StringBuilder();
-        columns = query.getColumns();
-        if (columns != null) {
-            sb.append("select ");
-            afterfirst = false;
-            for (String column : columns) {
-                if (afterfirst)
-                    sb.append(", ");
-                else
-                    afterfirst = true;
-                
-                joinmember = column.split("\\.");
-                if (joinmember.length > 1) {
-                    model = Model.get(joinmember[0], cache);
-                    sb.append(model.getTableName()).append(".");
-                    column = joinmember[1];
-                } else {
-                    model = tablemodel;
-                }
-                
-                sb.append(model.getModelItem(column).getTableFieldName());
-            }
-        } else {
-            sb.append("select *");
-        }
-        
-        sb.append(" from ").append(tablemodel.getTableName());
-        for (String name : query.getJoins()) {
-            sb.append(" inner join ");
-            sb.append(Model.get(name, cache).getTableName());
-            sb.append(" on ");
-            afterfirst = false;
-            for (JoinClause clause : query.getJoinClauses(name)) {
-                if (afterfirst)
-                    sb.append(" and ");
-                else
-                    afterfirst = true;
-                
-                columns = clause.getOperator(0).split("\\.");
-                model = Model.get(columns[0], cache);
-                sb.append(model.getTableName());
-                sb.append(".");
-                sb.append(model.getModelItem(columns[1]).
-                        getTableFieldName());
-                sb.append("=");
-                model = Model.get(name, cache);
-                sb.append(model.getTableName());
-                sb.append(".");
-                sb.append(model.getModelItem(clause.getOperator(1)).
-                        getTableFieldName());
-            }
-        }
-        
-        afterfirst = false;
-        values = null;
-        operator = null;
-        for (WhereClause clause : query.getWhere()) {
-            if (!afterfirst) {
-                afterfirst = true;
-                sb.append(" where");
-                values = new ArrayList<>();
-            } else {
-                if (operator != null)
-                    sb.append(" ").append(operator);
-            }
-            
-            sb.append(" ").append(tablemodel.getModelItem(clause.getField()).
-                    getTableFieldName());
-            switch (clause.getCondition()) {
-            case WhereClause.EQ:
-                sb.append(" = ?");
-                break;
-            case WhereClause.NE:
-                sb.append(" <> ?");
-                break;
-            case WhereClause.LT:
-                sb.append(" < ?");
-                break;
-            case WhereClause.LE:
-                sb.append(" <= ?");
-                break;
-            case WhereClause.GT:
-                sb.append(" > ?");
-                break;
-            case WhereClause.GE:
-                sb.append(" >= ?");
-                break;
-            case WhereClause.IN:
-                sb.append(" in ");
-                break;
-            }
-            
-            values.add(clause.getValue());
-            operator = clause.getOperator();
-        }
-        
-        statement = sb.toString();
-        System.out.println(statement);
-        if (values == null)
+        if (query.getStatement() != null)
+            throw new Exception("statement for select must be null.");
+
+        values = new ArrayList<>();
+        statement = Parser.parseQuery(query, cache, values);
+        if (values.size() == 0)
             lines = new Iocaste(cache.function).
                 selectUpTo(statement, query.getMaxResults());
         else

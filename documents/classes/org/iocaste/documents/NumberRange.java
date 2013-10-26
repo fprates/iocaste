@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
@@ -13,11 +14,9 @@ import org.iocaste.protocol.IocasteException;
 public class NumberRange {
     private static final byte RANGE = 0;
     private static final byte UPDATE_RANGE = 1;
-    private static final byte DEL_RANGE = 2;
     private static final String[] QUERIES = {
         "select CRRNT from RANGE001 where ident = ?",
-        "update RANGE001 set crrnt = ? where ident = ?",
-        "delete from NUMBER_RANGE where IDENT = ?"
+        "update RANGE001 set crrnt = ? where ident = ?"
     };
     
     /**
@@ -83,6 +82,9 @@ public class NumberRange {
      * @throws Exception
      */
     public static int remove(String name, Cache cache) throws Exception {
-        return Update.init(QUERIES[DEL_RANGE], cache, name);
+        Query query = new Query("delete");
+        query.setModel("NUMBER_RANGE");
+        query.addEqual("IDENT", name);
+        return Update.init(query, cache);
     }
 }

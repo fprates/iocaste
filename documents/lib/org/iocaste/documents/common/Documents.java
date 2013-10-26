@@ -381,12 +381,25 @@ public class Documents extends AbstractServiceInterface {
      * @param criteria critérios
      * @return quantidade de registros atualizados com sucesso.
      */
-    public final int update(String query, Object... criteria) {
+    public final int update(Query query) {
         Message message = new Message();
         
         message.setId("update");
         message.add("query", query);
-        message.add("criteria", criteria);
+        return call(message);
+    }
+    
+    /**
+     * Atualiza uma entrada especificada por declaração SQL e critérios.
+     * @param query declaração SQL
+     * @param criteria critérios
+     * @return quantidade de registros atualizados com sucesso.
+     */
+    public final int update(Query[] queries) {
+        Message message = new Message();
+        
+        message.setId("update_m");
+        message.add("queries", queries);
         return call(message);
     }
     

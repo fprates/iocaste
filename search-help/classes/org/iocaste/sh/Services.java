@@ -203,9 +203,11 @@ public class Services extends AbstractFunction {
      */
     public final int unassign(Message message) {
         String shname = message.getString("name");
-        String query = "delete from SH_REFERENCE where SEARCH_HELP = ?";
+        Query query = new Query("delete");
         
-        return new Documents(this).update(query, shname);
+        query.setModel("SH_REFERENCE");
+        query.addEqual("SEARCH_HELP", shname);
+        return new Documents(this).update(query);
     }
     
     /**
@@ -213,11 +215,12 @@ public class Services extends AbstractFunction {
      * @param message
      */
     public final void update(Message message) {
+        Query query;
         String model, export, shname, shitemname;
         ExtendedObject header = message.get("header");
         ExtendedObject[] itens = message.get("itens");
         Documents documents = new Documents(this);
-        List<ExtendedObject> shdata = new ArrayList<ExtendedObject>();
+        List<ExtendedObject> shdata = new ArrayList<>();
         
         shname = header.getValue("NAME");
         model = header.getValue("MODEL");
@@ -227,7 +230,10 @@ public class Services extends AbstractFunction {
         documents.modify(header);
         shdata.add(header);
         
-        documents.update("delete from SH_ITENS where SEARCH_HELP = ?", shname);
+        query = new Query("delete");
+        query.setModel("SH_ITENS");
+        query.addEqual("SEARCH_HELP", shname);
+        documents.update(query);
         for (ExtendedObject item : itens) {
             shitemname = item.getValue("ITEM");
             

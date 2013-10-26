@@ -9,15 +9,19 @@ import java.util.Set;
 
 public class Query implements Serializable {
     private static final long serialVersionUID = -5600137702519280069L;
-    private String model;
+    private String model, statement;
     private List<WhereClause> where;
     private String[] columns;
     private Map<String, List<JoinClause>> join;
     private int maxresults;
     
     public Query() {
-        where = new ArrayList<>();
-        join = new LinkedHashMap<>();
+        init();
+    }
+    
+    public Query(String statement) {
+        init();
+        this.statement = statement;
     }
     
     private final void add(String field, byte condition, Object value,
@@ -65,8 +69,17 @@ public class Query implements Serializable {
         return model;
     }
     
+    public final String getStatement() {
+        return statement;
+    }
+    
     public final List<WhereClause> getWhere() {
         return where;
+    }
+    
+    private final void init() {
+        where = new ArrayList<>();
+        join = new LinkedHashMap<>();
     }
     
     public final void join(String model, String field1, String field2) {
