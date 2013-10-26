@@ -14,6 +14,7 @@ public class Query implements Serializable {
     private String[] columns;
     private Map<String, List<JoinClause>> join;
     private int maxresults;
+    private boolean skiperror;
     
     public Query() {
         init();
@@ -80,6 +81,7 @@ public class Query implements Serializable {
     private final void init() {
         where = new ArrayList<>();
         join = new LinkedHashMap<>();
+        skiperror = true;
     }
     
     public final void join(String model, String field1, String field2) {
@@ -95,11 +97,19 @@ public class Query implements Serializable {
         clauses.add(new JoinClause(field1, field2));
     }
     
+    public final boolean mustSkipError() {
+        return skiperror;
+    }
+    
     public final void setMaxResults(int max) {
         maxresults = max;
     }
     
     public final void setModel(String model) {
         this.model = model;
+    }
+    
+    public final void setSkipError(boolean skiperror) {
+        this.skiperror = skiperror;
     }
 }

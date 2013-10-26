@@ -220,7 +220,7 @@ public class Services extends AbstractFunction {
         if (lockcache.containsKey(modelname)) {
             locks = lockcache.get(modelname);
         } else {
-            locks = new HashSet<Lock>();
+            locks = new HashSet<>();
             lockcache.put(modelname, locks);
         }
         
@@ -408,15 +408,18 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final int updateMultiple(Message message) throws Exception {
-        int err;
+        int err, c = -1;
         Query[] queries = message.get("queries");
         
         for (Query query : queries) {
+            c++;
             err = Update.init(query, cache);
-            if (err > 0)
+            if (err > 0 || query.mustSkipError())
                 continue;
             
-            throw new IocasteException("multiple update error");
+            throw new IocasteException(
+                    new StringBuilder("multiple update error for query ").
+                    append(c).toString());
         }
         
         return 1;
