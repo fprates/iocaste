@@ -50,11 +50,11 @@ public class Uninstall {
         SHLib shlib = (SHLib)services[SH_LIB];
         Authority authority = (Authority)services[AUTH_LIB];
         GlobalConfig config = (GlobalConfig)services[CONFIG_LIB];
-        String modeltype = object.getValue("MODEL");
-        String name = object.getValue("NAME");
+        String modeltype = object.get("MODEL");
+        String name = object.get("NAME");
         
         if (modeltype.equals("MESSAGE")) {
-            name = object.getValue("PACKAGE");
+            name = object.get("PACKAGE");
             queries = new Query[2];
             queries[0] = new Query("delete");
             queries[0].setModel("MESSAGES");

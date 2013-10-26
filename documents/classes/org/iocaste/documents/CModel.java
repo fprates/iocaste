@@ -31,21 +31,21 @@ public class CModel {
         ExtendedObject object = new ExtendedObject(hmodel);
         String cminame, name = model.getName();
         
-        object.setValue("NAME", name);
+        object.set("NAME", name);
         cmodelid = NumberRange.getCurrent("CMODEL_ID", cache.function);
-        object.setValue("ID", cmodelid);
+        object.set("ID", cmodelid);
         hmodel = model.getHeader();
-        object.setValue("MODEL", hmodel.getName());
+        object.set("MODEL", hmodel.getName());
         cminame = new StringBuilder("CMI_").append(name).toString();
-        object.setValue("CD_LINK", cminame);
+        object.set("CD_LINK", cminame);
         Save.init(object, cache.function);
         
         cmodelid *= 1000;
         for (DocumentModel modelitem : model.getItens()) {
             object = new ExtendedObject(imodel);
-            object.setValue("ID", cmodelid++);
-            object.setValue("COMPLEX_MODEL", name);
-            object.setValue("MODEL", modelitem.getName());
+            object.set("ID", cmodelid++);
+            object.set("COMPLEX_MODEL", name);
+            object.set("MODEL", modelitem.getName());
             if (Save.init(object, cache.function) == 0)
                 throw new IocasteException(ERRORS[ITEM_SAVE]);
         }
@@ -99,12 +99,12 @@ public class CModel {
         if (omodel == null)
             return null;
         
-        modelname = omodel.getValue("MODEL");
+        modelname = omodel.get("MODEL");
         cmodel = new ComplexModel();
         cmodel.setName(name);
         cmodel.setHeader(Model.get(modelname, cache));
         cmodel.setId(omodel.geti("ID"));
-        model = Model.get((String)omodel.getValue("CD_LINK"), cache);
+        model = Model.get((String)omodel.get("CD_LINK"), cache);
         cmodel.setCDModelLink(model);
         cache.cmodels.put(name, cmodel);
         
@@ -116,7 +116,7 @@ public class CModel {
             return cmodel;
         
         for (ExtendedObject item : itens) {
-            modelname = item.getValue("MODEL");
+            modelname = item.get("MODEL");
             model = Model.get(modelname, cache);
             cmodel.add(model);
         }

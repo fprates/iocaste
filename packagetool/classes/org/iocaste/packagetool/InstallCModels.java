@@ -20,7 +20,7 @@ public class InstallCModels {
             Registry.add(name, "CMODEL", state);
             
             object = state.documents.getObject("COMPLEX_MODEL", name);
-            name = object.getValue("CD_LINK");
+            name = object.get("CD_LINK");
             Registry.add(name, "MODEL", state);
         }
     }

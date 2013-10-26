@@ -39,8 +39,8 @@ public class Services extends AbstractFunction {
         DocumentModel shref = documents.getModel("SH_REFERENCE");
         ExtendedObject reference = new ExtendedObject(shref);
         
-        reference.setValue("MODEL_ITEM", Documents.getComposedName(item));
-        reference.setValue("SEARCH_HELP", item.getSearchHelp());
+        reference.set("MODEL_ITEM", Documents.getComposedName(item));
+        reference.set("SEARCH_HELP", item.getSearchHelp());
         
         return documents.save(reference);
     }
@@ -91,8 +91,8 @@ public class Services extends AbstractFunction {
         if (header == null)
             return null;
         
-        value = header.getValue("EXPORT");
-        header.setValue("EXPORT", value.split("\\.")[1]);
+        value = header.get("EXPORT");
+        header.set("EXPORT", value.split("\\.")[1]);
         
         query = new Query();
         query.setModel("SH_ITENS");
@@ -105,8 +105,8 @@ public class Services extends AbstractFunction {
         shdata.add(header);
         
         for (ExtendedObject item : itens) {
-            value = item.getValue("ITEM");
-            item.setValue("ITEM", value.split("\\.")[1]);
+            value = item.get("ITEM");
+            item.set("ITEM", value.split("\\.")[1]);
             
             shdata.add(item);
         }
@@ -136,7 +136,7 @@ public class Services extends AbstractFunction {
         if (shdata != null)
             throw new IocasteException(new StringBuilder(
                     "Search help has pendence on  ").
-                    append(shdata[0].getValue("MODEL_ITEM")).toString());
+                    append(shdata[0].get("MODEL_ITEM")).toString());
         
         shdata = load(shname);
         for (int i = 1; i < shdata.length; i++)
@@ -163,13 +163,13 @@ public class Services extends AbstractFunction {
                 throw new IocasteException("sh has no columns itens.");
         
         documents = new Documents(this);
-        model = header.getValue("MODEL");
+        model = header.get("MODEL");
         if (documents.getModel(model) == null)
             throw new IocasteException(model.concat(" is an invalid model."));
 
-        shname = header.getValue("NAME");
-        export = composeName(model, header.getValue("EXPORT"));
-        header.setValue("EXPORT", export);
+        shname = header.get("NAME");
+        export = composeName(model, header.get("EXPORT"));
+        header.set("EXPORT", export);
         if (documents.save(header) == 0)
             throw new Exception (new StringBuilder("Error saving header of " +
             		"sh ").append(shname).toString());
@@ -177,15 +177,15 @@ public class Services extends AbstractFunction {
         shdata = new ArrayList<>();
         shdata.add(header);
         for (ExtendedObject item : itens) {
-            shitemname = item.getValue("ITEM");
+            shitemname = item.get("ITEM");
             
-            item.setValue("NAME", composeName(shname, shitemname));
-            item.setValue("ITEM", composeName(model, shitemname));
-            item.setValue("SEARCH_HELP", shname);
+            item.set("NAME", composeName(shname, shitemname));
+            item.set("ITEM", composeName(model, shitemname));
+            item.set("SEARCH_HELP", shname);
             
             if (documents.save(item) == 0) {
                 exmessage = new StringBuilder("Error saving line of sh ").
-                        append(item.getValue("NAME")).toString();
+                        append(item.get("NAME")).toString();
                 
                 throw new IocasteException(exmessage);
             }
@@ -222,11 +222,11 @@ public class Services extends AbstractFunction {
         Documents documents = new Documents(this);
         List<ExtendedObject> shdata = new ArrayList<>();
         
-        shname = header.getValue("NAME");
-        model = header.getValue("MODEL");
-        export = composeName(model, header.getValue("EXPORT"));
+        shname = header.get("NAME");
+        model = header.get("MODEL");
+        export = composeName(model, header.get("EXPORT"));
         
-        header.setValue("EXPORT", export);
+        header.set("EXPORT", export);
         documents.modify(header);
         shdata.add(header);
         
@@ -235,11 +235,11 @@ public class Services extends AbstractFunction {
         query.andEqual("SEARCH_HELP", shname);
         documents.update(query);
         for (ExtendedObject item : itens) {
-            shitemname = item.getValue("ITEM");
+            shitemname = item.get("ITEM");
             
-            item.setValue("NAME", composeName(shname, shitemname));
-            item.setValue("ITEM", composeName(model, shitemname));
-            item.setValue("SEARCH_HELP", shname);
+            item.set("NAME", composeName(shname, shitemname));
+            item.set("ITEM", composeName(model, shitemname));
+            item.set("SEARCH_HELP", shname);
             
             documents.save(item);
             shdata.add(item);

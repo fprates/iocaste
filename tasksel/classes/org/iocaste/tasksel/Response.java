@@ -56,7 +56,7 @@ public class Response {
         language = context.view.getLocale().toString(); 
         lists = new LinkedHashMap<>();
         for (ExtendedObject object : result) {
-            groupname = object.getValue("GROUP");
+            groupname = object.get("GROUP");
             if (lists.containsKey(groupname)) {
                 entries = lists.get(groupname);
             } else {
@@ -64,7 +64,7 @@ public class Response {
                 lists.put(groupname, entries);
             }
             
-            taskname = object.getValue("NAME");
+            taskname = object.get("NAME");
             taskid = object.geti("ID");
             entry = new TaskEntry();
             entry.setName(taskname);
@@ -77,7 +77,7 @@ public class Response {
             query.setMaxResults(1);
             mobject = documents.select(query);
             if (mobject != null)
-                entry.setText((String)mobject[0].getValue("TEXT"));
+                entry.setText((String)mobject[0].get("TEXT"));
         }
         
         return lists;

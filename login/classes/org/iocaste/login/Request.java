@@ -48,9 +48,9 @@ public class Request {
         ExtendedObject login = form.getObject();
         
         context.view.clearExports();
-        username = login.getValue("USERNAME");
-        secret = login.getValue("SECRET");
-        locale = login.getValue("LOCALE");
+        username = login.get("USERNAME");
+        secret = login.get("SECRET");
+        locale = login.get("LOCALE");
         if (iocaste.login(username, secret, locale)) {
             pkgtool = new PackageTool(context.function);
             

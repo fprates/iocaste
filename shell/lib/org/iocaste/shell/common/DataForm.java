@@ -138,7 +138,7 @@ public class DataForm extends AbstractContainer {
             if (model.getModelItem(name) == null)
                 continue;
             
-        	object.setValue(name, input.get());
+        	object.set(name, input.get());
         }
     	
     	return object;
@@ -216,7 +216,7 @@ public class DataForm extends AbstractContainer {
             item = (DataItem)element;
             name = item.getName();
             
-            item.set(object.getValue(name));
+            item.set(object.get(name));
         }
     }
 }

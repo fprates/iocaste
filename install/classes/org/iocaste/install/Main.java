@@ -51,7 +51,6 @@ public class Main extends AbstractRenderer {
     public Main() {
         stage = Stages.WELCOME;
         installapp = new Install();
-//        msgsource = Messages.getMessages();
     }
     
     /**
@@ -189,11 +188,11 @@ public class Main extends AbstractRenderer {
         
         sh = new SearchHelp(inputdata.container, input.getName()+".sh");
         sh.setHtmlName(input.getHtmlName()+".sh");
-        sh.setModelName((String)shdata[0].getValue("MODEL"));
-        sh.setExport((String)shdata[0].getValue("EXPORT"));
+        sh.setModelName((String)shdata[0].get("MODEL"));
+        sh.setExport((String)shdata[0].get("EXPORT"));
         
         for (int i = 1; i < shdata.length; i++) {
-            shname = shdata[i].getValue("ITEM");
+            shname = shdata[i].get("ITEM");
             sh.addModelItemName(shname);
         }
         

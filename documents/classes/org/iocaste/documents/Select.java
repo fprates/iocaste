@@ -87,7 +87,7 @@ public class Select {
         
         for (DocumentModelItem modelitem : model.getItens()) {
             value = line.get(modelitem.getTableFieldName());
-            object.setValue(modelitem, value);
+            object.set(modelitem, value);
         }
         
         return object;

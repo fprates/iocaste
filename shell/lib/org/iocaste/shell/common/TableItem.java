@@ -125,7 +125,7 @@ public class TableItem implements Serializable {
             if (modelitem == null)
                 continue;
             
-            object.setValue(modelitem, input.get());
+            object.set(modelitem, input.get());
         }
         
         return object;
@@ -194,7 +194,7 @@ public class TableItem implements Serializable {
             
             if (!element.isDataStorable()) {
                 component = (Component)element;
-                value = object.getValue(column.getModelItem());
+                value = object.get(column.getModelItem());
                 component.setText((value == null)? "" : value.toString());
                 if (element.getType() == Const.LINK) {
                     link = (Link)element;
@@ -217,7 +217,7 @@ public class TableItem implements Serializable {
             if (modelitem == null)
                 continue;
             
-            value = object.getValue(modelitem.getName());
+            value = object.get(modelitem.getName());
             input.set(value);
         }
     }

@@ -42,7 +42,7 @@ public class ReportTool {
                     continue;
 
                 name  = column.getName();
-                value = oitem.getValue(name);
+                value = oitem.get(name);
                 element = column.getModelItem().getDataElement();
                 switch (element.getType()) {
                 case DataType.BOOLEAN:

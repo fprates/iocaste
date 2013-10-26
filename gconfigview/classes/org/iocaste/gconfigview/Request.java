@@ -47,11 +47,11 @@ public class Request {
             value = null;
             name = element.getName();
             for (ExtendedObject item : context.objects)
-                if (item.getValue("NAME").equals(name)) {
+                if (item.get("NAME").equals(name)) {
                     id = item.geti("ID");
                     input = (InputComponent)element;
                     value = input.get().toString();
-                    item.setValue("VALUE", value);
+                    item.set("VALUE", value);
                     break;
                 }
             
@@ -61,8 +61,8 @@ public class Request {
             }
             
             object = new ExtendedObject(model);
-            object.setValue("ID", id);
-            object.setValue("VALUE", value);
+            object.set("ID", id);
+            object.set("VALUE", value);
             documents.modify(object);
         }
         

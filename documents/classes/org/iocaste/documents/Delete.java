@@ -16,8 +16,8 @@ public class Delete {
         Object[] criteria = new Object[keys.size()];
         
         for (DocumentModelKey key : keys)
-            criteria[i++] = object.getValue(model.
-                    getModelItem(key.getModelItemName()));
+            criteria[i++] = object.get(model.getModelItem(
+                    key.getModelItemName()));
         
         return iocaste.update(model.getQuery("delete"), criteria);
     }

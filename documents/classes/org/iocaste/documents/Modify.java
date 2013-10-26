@@ -31,7 +31,7 @@ public class Modify {
         Iocaste iocaste = new Iocaste(function);
         
         for (DocumentModelItem item : model.getItens()) {
-            value = object.getValue(item);
+            value = object.get(item);
             
             iargs.add(value);
             if (model.isKey(item))

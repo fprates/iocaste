@@ -36,6 +36,25 @@ public class ExtendedObject implements Serializable {
         this.model = model;
     }
     
+    /**
+     * Retorna valor de um item do objeto.
+     * @param name nome do item
+     * @return valor
+     */
+    public final <T> T get(String name) {
+        return get(byname.get(name));
+    }
+    
+    /**
+     * Retorna valor de um item do objeto.
+     * @param item item do modelo
+     * @return valor
+     */
+    @SuppressWarnings("unchecked")
+    public final <T> T get(DocumentModelItem item) {
+        return (T)values.get(item);
+    }
+    
     public final byte getb(String name) {
         Object value = getNumericValue(name);
         
@@ -120,7 +139,7 @@ public class ExtendedObject implements Serializable {
                     append(" isn't a valid field name for ").
                     append(model.getName()).toString());
         
-        value = getValue(name);
+        value = get(name);
         return (value == null)? 0 : value;
     }
     
@@ -135,25 +154,6 @@ public class ExtendedObject implements Serializable {
         } catch (ClassCastException e) {
             return Short.parseShort(value.toString());
         }
-    }
-    
-    /**
-     * Retorna valor de um item do objeto.
-     * @param name nome do item
-     * @return valor
-     */
-    public final <T> T getValue(String name) {
-        return getValue(byname.get(name));
-    }
-    
-    /**
-     * Retorna valor de um item do objeto.
-     * @param item item do modelo
-     * @return valor
-     */
-    @SuppressWarnings("unchecked")
-    public final <T> T getValue(DocumentModelItem item) {
-        return (T)values.get(item);
     }
     
     /**
@@ -262,7 +262,7 @@ public class ExtendedObject implements Serializable {
                 throw new RuntimeException(e);
             }
             
-            setValue(item, value);
+            set(item, value);
         }
     }
     
@@ -271,8 +271,8 @@ public class ExtendedObject implements Serializable {
      * @param name nome do objeto
      * @param value valor
      */
-    public final void setValue(String name, Object value) {
-        setValue(byname.get(name), value);
+    public final void set(String name, Object value) {
+        set(byname.get(name), value);
     }
     
     /**
@@ -280,7 +280,7 @@ public class ExtendedObject implements Serializable {
      * @param item item de modelo
      * @param value valor
      */
-    public final void setValue(DocumentModelItem item, Object value) {
+    public final void set(DocumentModelItem item, Object value) {
         if (item == null)
             throw new RuntimeException("Invalid null model item key.");
         

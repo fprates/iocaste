@@ -66,7 +66,7 @@ public class Selection {
         }
         
         try {
-            shlib.remove((String)shdata[0].getValue("NAME"));
+            shlib.remove((String)shdata[0].get("NAME"));
         } catch (Exception e){
             context.view.message(Const.ERROR, e.getCause().getMessage());
             return;

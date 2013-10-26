@@ -29,9 +29,9 @@ public class InstallSH {
         for (SearchHelpData shd : shdata) {
             shname = shd.getName();
             header = new ExtendedObject(shmodel);
-            header.setValue("NAME", shname);
-            header.setValue("MODEL", shd.getModel());
-            header.setValue("EXPORT", shd.getExport());
+            header.set("NAME", shname);
+            header.set("MODEL", shd.getModel());
+            header.set("EXPORT", shd.getExport());
             
             shitens = shd.getItens();
             itens = new ExtendedObject[shitens.length];
@@ -39,9 +39,9 @@ public class InstallSH {
             i = 0;
             for (String name : shitens) {
                 itens[i] = new ExtendedObject(shimodel);
-                itens[i].setValue("NAME", name);
-                itens[i].setValue("SEARCH_HELP", shname);
-                itens[i++].setValue("ITEM", name);
+                itens[i].set("NAME", name);
+                itens[i].set("SEARCH_HELP", shname);
+                itens[i++].set("ITEM", name);
             }
             
             shlib.save(header, itens);

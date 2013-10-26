@@ -28,7 +28,7 @@ public class InstallMessages {
         for (String language : state.messages.keySet()) {
             langcode = 0;
             for (ExtendedObject olanguage : languages) {
-                locale = olanguage.getValue("LOCALE");
+                locale = olanguage.get("LOCALE");
                 if (language.equals(locale)) {
                     langcode = olanguage.geti("CODE");
                     break;
@@ -38,11 +38,11 @@ public class InstallMessages {
             messages = state.messages.get(language);
             index = (langcode * 10000000) + (state.pkgid / 100);
             for (String msgcode : messages.keySet()) {
-                omessage.setValue("INDEX", index++);
-                omessage.setValue("NAME", msgcode);
-                omessage.setValue("LOCALE", language);
-                omessage.setValue("PACKAGE", state.pkgname);
-                omessage.setValue("TEXT", messages.get(msgcode));
+                omessage.set("INDEX", index++);
+                omessage.set("NAME", msgcode);
+                omessage.set("LOCALE", language);
+                omessage.set("PACKAGE", state.pkgname);
+                omessage.set("TEXT", messages.get(msgcode));
                 
                 state.documents.save(omessage);
             }

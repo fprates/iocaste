@@ -67,40 +67,39 @@ public class Services extends AbstractFunction {
             gconfigid = documents.getNextNumber("GLOBALCFG");
             model = documents.getModel("GLOBAL_CONFIG");
             globalconfig = new ExtendedObject(model);
-            globalconfig.setValue("NAME", appname);
-            globalconfig.setValue("CURRENT", gconfigid * 1000);
+            globalconfig.set("NAME", appname);
+            globalconfig.set("CURRENT", gconfigid * 1000);
             documents.save(globalconfig);
         }
         
         itemid = globalconfig.getl("CURRENT") + 1;
-        globalconfig.setValue("CURRENT", itemid);
+        globalconfig.set("CURRENT", itemid);
         documents.modify(globalconfig);
         
         model = documents.getModel("GLOBAL_CONFIG_ITEM");
         value = message.get("value");
         object = new ExtendedObject(model);
-        object.setValue("ID", itemid);
-        object.setValue("GLOBAL_CONFIG", appname);
-        object.setValue("NAME", message.getString("name"));
+        object.set("ID", itemid);
+        object.set("GLOBAL_CONFIG", appname);
+        object.set("NAME", message.getString("name"));
         
         ptype = convertClassType((Class<?>)message.get("type"));
-        object.setValue("TYPE", ptype);
+        object.set("TYPE", ptype);
         documents.save(object);
         
         model = documents.getModel("GLOBAL_CONFIG_VALUES");
         object = new ExtendedObject(model);
-        object.setValue("ID", itemid);
-        object.setValue("GLOBAL_CONFIG", appname);
+        object.set("ID", itemid);
+        object.set("GLOBAL_CONFIG", appname);
         switch (ptype) {
         case DataType.CHAR:
-            object.setValue("VALUE", (value == null)? null : value.toString());
+            object.set("VALUE", (value == null)? null : value.toString());
             break;
         case DataType.NUMC:
-            object.setValue("VALUE", (value == null)? "0" : value.toString());
+            object.set("VALUE", (value == null)? "0" : value.toString());
             break;
         case DataType.BOOLEAN:
-            object.setValue("VALUE", (value == null)?
-                    "false" : value.toString());
+            object.set("VALUE", (value == null)? "false" : value.toString());
             break;
         default:
             throw new IocasteException("invalid datatype definition.");
@@ -140,7 +139,7 @@ public class Services extends AbstractFunction {
         if (objects[0] == null)
             return null;
         
-        value = objects[0].getValue("VALUE");
+        value = objects[0].get("VALUE");
         switch (type) {
         case DataType.CHAR:
             return value;

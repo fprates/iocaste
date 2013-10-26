@@ -39,7 +39,7 @@ public class ComplexDocument implements Serializable {
             if (!model.isKey(modelitem))
                 continue;
             
-            value = object.getValue(modelitem);
+            value = object.get(modelitem);
             index = (value == null)? 0 : (Long)value;
             if (index > 0) {
                 if (index > last)
@@ -48,7 +48,7 @@ public class ComplexDocument implements Serializable {
             }
             
             last++;
-            object.setValue(modelitem, last);
+            object.set(modelitem, last);
             break;
         }
         

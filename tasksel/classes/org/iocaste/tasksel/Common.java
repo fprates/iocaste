@@ -35,7 +35,7 @@ public class Common {
             return null;
         }
 
-        parsed[0] = task.getValue("COMMAND");
+        parsed[0] = task.get("COMMAND");
         
         return parsed;
     }

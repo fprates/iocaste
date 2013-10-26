@@ -14,7 +14,7 @@ public class InstallTasksGroups {
     private static final boolean containsTask(String name,
             ExtendedObject[] tasks) {
         for (ExtendedObject task : tasks)
-            if (task.getValue("NAME").equals(name))
+            if (task.get("NAME").equals(name))
                 return true;
         
         return false;

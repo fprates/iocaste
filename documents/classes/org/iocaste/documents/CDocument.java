@@ -147,19 +147,19 @@ public class CDocument {
             current = cmodelid * HMULTIPLIER;
         
         current++;
-        objects[0].setValue("CURRENT", current);
+        objects[0].set("CURRENT", current);
         if (Modify.init(objects[COMPLEX_MODEL], cache.function) == 0)
             throw new IocasteException("error on complex model update");
 
         model = Model.get("COMPLEX_DOCUMENT", cache);
         objects[COMPLEX_DOCUMENT] = new ExtendedObject(model);
-        objects[COMPLEX_DOCUMENT].setValue("ID", current);
-        objects[COMPLEX_DOCUMENT].setValue("COMPLEX_MODEL", cmodel.getName());
+        objects[COMPLEX_DOCUMENT].set("ID", current);
+        objects[COMPLEX_DOCUMENT].set("COMPLEX_MODEL", cmodel.getName());
         date = Calendar.getInstance().getTime();
         username = new Iocaste(cache.function).getUsername();
-        objects[COMPLEX_DOCUMENT].setValue("DATA_CRIACAO", date);
-        objects[COMPLEX_DOCUMENT].setValue("HORA_CRIACAO", date);
-        objects[COMPLEX_DOCUMENT].setValue("USUARIO_CRIACAO", username);
+        objects[COMPLEX_DOCUMENT].set("DATA_CRIACAO", date);
+        objects[COMPLEX_DOCUMENT].set("HORA_CRIACAO", date);
+        objects[COMPLEX_DOCUMENT].set("USUARIO_CRIACAO", username);
         if (Save.init(objects[COMPLEX_DOCUMENT], cache.function) == 0)
             throw new IocasteException("error on insert complex document");
         
@@ -169,8 +169,8 @@ public class CDocument {
             itens = document.getItens(modelname);
             for (int i = 0; i < itens.length; i++) {
                 docitem = new ExtendedObject(model);
-                docitem.setValue("ID", (id + i + 1));
-                docitem.setValue("COMPLEX_DOCUMENT", current);
+                docitem.set("ID", (id + i + 1));
+                docitem.set("COMPLEX_DOCUMENT", current);
                 Save.init(docitem, cache.function);
             }
         }
@@ -197,8 +197,8 @@ public class CDocument {
             
             zname = item.getName();
             name = zname.substring(1);
-            hkeyvalue = objects[LINK].getValue(zname);
-            header.setValue(name, hkeyvalue);
+            hkeyvalue = objects[LINK].get(zname);
+            header.set(name, hkeyvalue);
             hkey = header.getModel().getModelItem(name);
             break;
         }
@@ -220,7 +220,7 @@ public class CDocument {
             name = (ikey != null)? ikey.getName() : null;
             for (ExtendedObject object : document.getItens(modelname)) {
                 setItemHeaderReference(object, hkey, hkeyvalue);
-                object.setValue(ikey, t + object.getl(name));
+                object.set(ikey, t + object.getl(name));
                 Save.init(object, cache.function);
             }
         }
@@ -230,17 +230,17 @@ public class CDocument {
             Cache cache) throws Exception {
         long current = objects[COMPLEX_MODEL].getl("CURRENT");
         int cmodelid = objects[COMPLEX_MODEL].geti("ID");
-        String modellinkname = objects[COMPLEX_MODEL].getValue("CD_LINK");
+        String modellinkname = objects[COMPLEX_MODEL].get("CD_LINK");
         DocumentModel modellink = Model.get(modellinkname, cache);
         
         objects[LINK] = new ExtendedObject(modellink);
         for (DocumentModelItem item : modellink.getItens()) {
             if (modellink.isKey(item)) {
-                objects[LINK].setValue(item, current);
+                objects[LINK].set(item, current);
                 continue;
             }
             current -= (cmodelid * HMULTIPLIER);
-            objects[LINK].setValue(item, current);
+            objects[LINK].set(item, current);
             break;
         }
         
@@ -265,7 +265,7 @@ public class CDocument {
             if (!name.equals(hkey.getName()))
                 continue;
             
-            object.setValue(item, value);
+            object.set(item, value);
             break;
         }
     }
@@ -282,7 +282,7 @@ public class CDocument {
         Modify.init(header, cache.function);
         for (DocumentModelKey modelkey : model.getKeys()) {
             href = model.getModelItem(modelkey.getModelItemName());
-            key = header.getValue(href);
+            key = header.get(href);
             break;
         }
         
@@ -306,7 +306,7 @@ public class CDocument {
             
             objects = document.getItens(modelname);
             for (ExtendedObject object : objects) {
-                object.setValue(iref, key);
+                object.set(iref, key);
                 Save.init(object, cache.function);
             }
         }

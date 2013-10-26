@@ -23,7 +23,7 @@ public class Save {
         
         i = 0;
         for (DocumentModelItem item : model.getItens())
-            criteria[i++] = object.getValue(item);
+            criteria[i++] = object.get(item);
         
         return iocaste.update(model.getQuery("insert"), criteria);
     }

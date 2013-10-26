@@ -17,10 +17,10 @@ public class Registry {
         ExtendedObject pkgitem = new ExtendedObject(
                 state.documents.getModel("PACKAGE_ITEM"));
         
-        pkgitem.setValue("CODE", state.pkgid);
-        pkgitem.setValue("NAME", name);
-        pkgitem.setValue("PACKAGE", state.pkgname);
-        pkgitem.setValue("MODEL", model);
+        pkgitem.set("CODE", state.pkgid);
+        pkgitem.set("NAME", name);
+        pkgitem.set("PACKAGE", state.pkgname);
+        pkgitem.set("MODEL", model);
 
         state.pkgid++;
         state.log.add(pkgitem);

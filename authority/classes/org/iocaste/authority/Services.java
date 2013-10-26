@@ -60,14 +60,14 @@ public class Services extends AbstractFunction {
         itemid = profile.geti("CURRENT") + 1;
         model = documents.getModel("USER_PROFILE_ITEM");
         profileitem = new ExtendedObject(model);
-        profileitem.setValue("ID", itemid);
-        profileitem.setValue("PROFILE", name);
-        profileitem.setValue("NAME", authorization.getName());
-        profileitem.setValue("OBJECT", authorization.getObject());
-        profileitem.setValue("ACTION", authorization.getAction());
+        profileitem.set("ID", itemid);
+        profileitem.set("PROFILE", name);
+        profileitem.set("NAME", authorization.getName());
+        profileitem.set("OBJECT", authorization.getObject());
+        profileitem.set("ACTION", authorization.getAction());
         documents.save(profileitem);
         
-        profile.setValue("CURRENT", itemid);
+        profile.set("CURRENT", itemid);
         documents.modify(profile);
     }
     
@@ -126,9 +126,9 @@ public class Services extends AbstractFunction {
 
         model = documents.getModel("USER_AUTHORITY");
         object = new ExtendedObject(model);
-        object.setValue("ID", id);
-        object.setValue("USERNAME", username);
-        object.setValue("PROFILE", profile);
+        object.set("ID", id);
+        object.set("USERNAME", username);
+        object.set("PROFILE", profile);
         
         documents.save(object);
     }
@@ -149,10 +149,10 @@ public class Services extends AbstractFunction {
         if (authobject == null)
             return null;
         
-        name = authobject.getValue("NAME");
+        name = authobject.get("NAME");
         authorization = new Authorization(name);
-        authorization.setObject((String)authobject.getValue("OBJECT"));
-        authorization.setAction((String)authobject.getValue("ACTION"));
+        authorization.setObject((String)authobject.get("OBJECT"));
+        authorization.setAction((String)authobject.get("ACTION"));
 
         query = new Query();
         query.setModel("AUTHORIZATION_ITEM");
@@ -160,7 +160,7 @@ public class Services extends AbstractFunction {
         parameters = documents.select(query);
         if (parameters != null)
             for (ExtendedObject parameter : parameters) {
-                name = parameter.getValue("NAME");
+                name = parameter.get("NAME");
                 authorization.add(name, null);
             }
         
@@ -206,7 +206,7 @@ public class Services extends AbstractFunction {
         
         names = new TreeSet<String>();
         for (ExtendedObject object : objects)
-            names.add((String)object.getValue("PROFILE"));
+            names.add((String)object.get("PROFILE"));
         
         return names;
     }
@@ -271,10 +271,10 @@ public class Services extends AbstractFunction {
         
         ident = documents.getNextNumber("AUTHINDEX");
         authobject = new ExtendedObject(model);
-        authobject.setValue("NAME", name);
-        authobject.setValue("OBJECT", authorization.getObject());
-        authobject.setValue("ACTION", authorization.getAction());
-        authobject.setValue("INDEX", ident);
+        authobject.set("NAME", name);
+        authobject.set("OBJECT", authorization.getObject());
+        authobject.set("ACTION", authorization.getAction());
+        authobject.set("INDEX", ident);
         documents.save(authobject);
         
         itemid = 100 * ident;
@@ -282,10 +282,10 @@ public class Services extends AbstractFunction {
         for (String key : parameters.keySet()) {
             itemid++;
             authobject = new ExtendedObject(modelitem);
-            authobject.setValue("ID", itemid);
-            authobject.setValue("AUTHORIZATION", name);
-            authobject.setValue("NAME", key);
-            authobject.setValue("VALUE", parameters.get(key));
+            authobject.set("ID", itemid);
+            authobject.set("AUTHORIZATION", name);
+            authobject.set("NAME", key);
+            authobject.set("VALUE", parameters.get(key));
             documents.save(authobject);
         }
     }
@@ -303,22 +303,22 @@ public class Services extends AbstractFunction {
         String profilename = profile.getName();
         Authorization[] authorizations = profile.getAuthorizations();
         
-        object.setValue("NAME", profilename);
+        object.set("NAME", profilename);
         profileid = documents.getNextNumber("PROFILEINDEX");
-        object.setValue("ID", profileid);
+        object.set("ID", profileid);
         profileid *= 100;
-        object.setValue("CURRENT", profileid + authorizations.length);
+        object.set("CURRENT", profileid + authorizations.length);
         documents.save(object);
         
         model = documents.getModel("USER_PROFILE_ITEM");
         for (Authorization authorization : authorizations) {
             object = new ExtendedObject(model);
             profileid++;
-            object.setValue("ID", profileid);
-            object.setValue("PROFILE", profilename);
-            object.setValue("NAME", authorization.getName());
-            object.setValue("OBJECT", authorization.getObject());
-            object.setValue("ACTION", authorization.getAction());
+            object.set("ID", profileid);
+            object.set("PROFILE", profilename);
+            object.set("NAME", authorization.getName());
+            object.set("OBJECT", authorization.getObject());
+            object.set("ACTION", authorization.getAction());
             documents.save(object);
         }
     }

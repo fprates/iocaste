@@ -28,9 +28,9 @@ public class Response {
         DataForm form = new DataForm(container, "package.config");
         
         for (ExtendedObject object : context.objects) {
-            name = object.getValue("NAME");
+            name = object.get("NAME");
             type = object.geti("TYPE");
-            value = object.getValue("VALUE");
+            value = object.get("VALUE");
             
             switch (type) {
             case DataType.BOOLEAN:

@@ -78,7 +78,7 @@ public class Response {
             for (DocumentModelItem modelitem : model.getItens()) {
                 name = modelitem.getName();
                 column = table.getColumn(name);
-                value = object.getValue(modelitem);
+                value = object.get(modelitem);
                 export = sh.getExport();
                 
                 if (export != null && export.equals(name)) {

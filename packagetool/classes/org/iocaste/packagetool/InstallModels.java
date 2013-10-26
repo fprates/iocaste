@@ -58,7 +58,7 @@ public class InstallModels {
                 i = 0;
                 
                 for (DocumentModelItem modelitem : model.getItens())
-                    header.setValue(modelitem, line[i++]);
+                    header.set(modelitem, line[i++]);
                 
                 state.documents.save(header);
             }

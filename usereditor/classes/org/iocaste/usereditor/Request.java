@@ -101,14 +101,14 @@ public class Request {
         DataForm form = context.view.getElement("identity");
         ExtendedObject object = form.getObject();
         Documents documents = new Documents(context.function);
-        String username = object.getValue("USERNAME");
+        String username = object.get("USERNAME");
         
         user = new User();
         user.setUsername(username);
-        user.setSecret((String)object.getValue("SECRET"));
-        user.setFirstname((String)object.getValue("FIRSTNAME"));
-        user.setSurname((String)object.getValue("SURNAME"));
-        user.setInitialSecret((boolean)object.getValue("INIT"));
+        user.setSecret((String)object.get("SECRET"));
+        user.setFirstname((String)object.get("FIRSTNAME"));
+        user.setSurname((String)object.get("SURNAME"));
+        user.setInitialSecret((boolean)object.get("INIT"));
         
         switch (context.mode) {
         case Context.CREATE:

@@ -29,13 +29,13 @@ public class TaskSelector {
             entryid = groupid * 1000;
         
         entryid++;
-        group.setValue("CURRENT", entryid);
+        group.set("CURRENT", entryid);
         state.documents.modify(group);
         
         object = new ExtendedObject(model);
-        object.setValue("ID", entryid);
-        object.setValue("NAME", taskname);
-        object.setValue("GROUP", group.getValue("NAME"));
+        object.set("ID", entryid);
+        object.set("NAME", taskname);
+        object.set("GROUP", group.get("NAME"));
         state.documents.save(object);
         return object;
     }
@@ -56,7 +56,7 @@ public class TaskSelector {
         int msgid = taskid * 100;
         
         model = state.documents.getModel("TASK_ENTRY_TEXT");
-        name = task.getValue("NAME");
+        name = task.get("NAME");
         
         for (String locale : state.messages.keySet()) {
             messages = state.messages.get(locale);
@@ -66,10 +66,10 @@ public class TaskSelector {
             
             msgid++;
             object = new ExtendedObject(model);
-            object.setValue("ID", msgid);
-            object.setValue("TASK", taskid);
-            object.setValue("LANGUAGE", locale);
-            object.setValue("TEXT", messages.get(name));
+            object.set("ID", msgid);
+            object.set("TASK", taskid);
+            object.set("LANGUAGE", locale);
+            object.set("TEXT", messages.get(name));
             state.documents.save(object);
         }
     }
@@ -87,7 +87,7 @@ public class TaskSelector {
         DocumentModel model;
         ExtendedObject object;
         int userid, groupid = 0;
-        String groupname = group.getValue("NAME");
+        String groupname = group.get("NAME");
         
         object = state.documents.getObject("LOGIN", username);
         userid = object.geti("ID");
@@ -96,9 +96,9 @@ public class TaskSelector {
         model = state.documents.getModel("USER_TASKS_GROUPS");
         
         object = new ExtendedObject(model);
-        object.setValue("ID", taskid);
-        object.setValue("USERNAME", username);
-        object.setValue("GROUP", groupname);
+        object.set("ID", taskid);
+        object.set("USERNAME", username);
+        object.set("GROUP", groupname);
         if (state.documents.save(object) == 0)
             throw new IocasteException("error on assign group");
     }
@@ -115,9 +115,9 @@ public class TaskSelector {
         int id = new BigDecimal(state.documents.getNextNumber("TSKGROUP")).
                 intValue();
         
-        object.setValue("NAME", name);
-        object.setValue("ID", id);
-        object.setValue("CURRENT", 0);
+        object.set("NAME", name);
+        object.set("ID", id);
+        object.set("CURRENT", 0);
         state.documents.save(object);
         
         return object;

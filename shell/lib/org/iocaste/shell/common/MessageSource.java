@@ -69,8 +69,8 @@ public class MessageSource implements Serializable {
             return;
         
         for (ExtendedObject object : objects) {
-            tag = object.getValue("NAME");
-            message = object.getValue("TEXT");
+            tag = object.get("NAME");
+            message = object.get("TEXT");
             messages.put(tag, message);
         }
     }

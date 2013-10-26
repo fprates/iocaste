@@ -92,8 +92,8 @@ public class Services extends AbstractFunction {
              * Registra instalação do pacote
              */
             header = new ExtendedObject(state.documents.getModel("PACKAGE"));
-            header.setValue("NAME", state.pkgname);
-            header.setValue("CODE", state.pkgid);
+            header.set("NAME", state.pkgname);
+            header.set("CODE", state.pkgid);
             state.documents.save(header);
             
             /*
@@ -184,11 +184,11 @@ public class Services extends AbstractFunction {
         } catch (Exception e) {
             state.documents.rollback();
             for (ExtendedObject object : state.log) {
-                name = object.getValue("MODEL");
+                name = object.get("MODEL");
                 if (name == null || !name.equals("MODEL"))
                     continue;
                 
-                modelname = object.getValue("NAME");
+                modelname = object.get("NAME");
                 state.documents.removeModel(modelname);
             }
             

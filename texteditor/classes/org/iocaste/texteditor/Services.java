@@ -42,7 +42,7 @@ public class Services extends AbstractFunction {
         page = null;
         pages = new HashMap<>();
         for (ExtendedObject oline : olines) {
-            pageid = oline.getValue("PAGE_NAME");
+            pageid = oline.get("PAGE_NAME");
             if (!pageid.equals(pageid_)) {
                 if (pageid_.length() > 0)
                     pages.put(pageid, page.toString());
@@ -51,11 +51,11 @@ public class Services extends AbstractFunction {
                 pageid_ = pageid;
             }
             
-            paragraph = oline.getValue("PARAGRAPH");
+            paragraph = oline.get("PARAGRAPH");
             if (page.length() > 0 && paragraph == true)
                 page.append("\r\n");
                 
-            page.append(oline.getValue("LINE"));
+            page.append(oline.get("LINE"));
         }
         
         if (pageid_.length() > 0)
@@ -76,11 +76,11 @@ public class Services extends AbstractFunction {
         
         helper.i++;
         object = new ExtendedObject(helper.textlinemodel);
-        object.setValue("LINE_ID", helper.i);
-        object.setValue("PAGE_NAME", helper.pagename);
-        object.setValue("TEXT_NAME", helper.textname);
-        object.setValue("PARAGRAPH", helper.paragraph);
-        object.setValue("LINE", line);
+        object.set("LINE_ID", helper.i);
+        object.set("PAGE_NAME", helper.pagename);
+        object.set("TEXT_NAME", helper.textname);
+        object.set("PARAGRAPH", helper.paragraph);
+        object.set("LINE", line);
         
         return object;
     }
@@ -99,9 +99,9 @@ public class Services extends AbstractFunction {
         linehelper = new LineHelper();
         linehelper.textname = message.get("textname");
         object = new ExtendedObject(documents.getModel("TXTEDITOR_HEAD"));
-        object.setValue("TEXT_NAME", linehelper.textname);
+        object.set("TEXT_NAME", linehelper.textname);
         textid = documents.getNextNumber("TXTED_TEXTID");
-        object.setValue("TEXT_ID", textid);
+        object.set("TEXT_ID", textid);
         documents.save(object);
         
         pagemodel = documents.getModel("TXTEDITOR_PAGE");
@@ -111,9 +111,9 @@ public class Services extends AbstractFunction {
             pageid++;
             linehelper.pagename = page;
             object = new ExtendedObject(pagemodel);
-            object.setValue("PAGE_ID", pageid);
-            object.setValue("TEXT_NAME", linehelper.textname);
-            object.setValue("PAGE_NAME", linehelper.pagename);
+            object.set("PAGE_ID", pageid);
+            object.set("TEXT_NAME", linehelper.textname);
+            object.set("PAGE_NAME", linehelper.pagename);
             documents.save(object);
 
             linehelper.i = pageid * 10000;

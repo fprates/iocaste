@@ -37,8 +37,8 @@ public class NumberRange {
                     append(l).append(" bytes max).").toString());
         
         range = new ExtendedObject(model);
-        range.setValue("IDENT", name);
-        range.setValue("CURRENT", 0);
+        range.set("IDENT", name);
+        range.set("CURRENT", 0);
         
         Save.init(range, cache.function);
     }
