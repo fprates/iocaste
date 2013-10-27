@@ -9,7 +9,11 @@ import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
+import org.iocaste.workbench.editor.Editor;
+import org.iocaste.workbench.project.Project;
+import org.iocaste.workbench.project.ProjectData;
 
 /**
  * 
@@ -20,56 +24,32 @@ public class Main extends AbstractPage {
     private Context context;
     
     public Main() {
-        context = new Context();
-        context.function = this;
         export("install", "install");
     }
     
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void activate(View view) throws Exception {
-        context.view = view;
+    public final void activate() throws Exception {
         context.path = getRealPath("");
         Common.updateCurrentSource(context);
         Activation.start(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void addscreen(View view) {
-        context.view = view;
+    public final void addscreen() {
         Request.addscreen(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void createproject(View view) {
-        context.view = view;
-        Request.createproject(context);
+    public final void createdefaultpackage() {
+        Project.createDefaultPackage(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void defaultpackage(View view) {
-        context.view = view;
-        DefaultPackage.render(context);
+    public final void createproject() {
+        Project.create(context);
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void editor(View view) {
-        context.view = view;
+    public final void defaultpackage() {
+        Project.defaultPackage(context);
+    }
+    
+    public final void editor() {
         Editor.render(context);
     }
     
@@ -79,10 +59,11 @@ public class Main extends AbstractPage {
      *     org.iocaste.shell.common.View)
      */
     @Override
-    public final void init(View view) {
+    public final PageContext init(View view) {
         File file;
         Documents documents;
-        
+
+        context = new Context();
         context.repository = new GlobalConfig(this).get("repository");
         
         file = new File(context.repository);
@@ -95,11 +76,14 @@ public class Main extends AbstractPage {
         context.packagemodel = documents.getModel("ICSTPRJ_PACKAGES");
         context.sourcemodel = documents.getModel("ICSTPRJ_SOURCES");
         context.srccodemodel = documents.getModel("ICSTPRJ_SRCCODE");
+        context.installmodel = documents.getModel("ICSTPRJ_INSTALL");
 
         if (context.project == null) {
-            context.project = new Project();
+            context.project = new ProjectData();
             context.project.header = new ExtendedObject(context.editorhdrmodel);
         }
+        
+        return context;
     }
     
     /**
@@ -110,32 +94,17 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
-    /**
-     * 
-     * @param view
-     */
-    public final void loadproject(View view) {
-        context.view = view;
-        Request.loadproject(context);
+    public final void loadproject() {
+        Project.load(context);
     }
     
-    /**
-     * @param view
-     */
-    public final void main(View view) {
-        context.view = view;
-        Response.main(context);
+    public final void main() {
+        Project.select(context);
     }
     
-    /**
-     * 
-     * @param view
-     * @throws Exception
-     */
-    public final void save(View view) throws Exception {
-        context.view = view;
+    public final void save() throws Exception {
         Common.updateCurrentSource(context);
         Editor.save(context);
-        view.message(Const.STATUS, "project.saved");
+        context.view.message(Const.STATUS, "project.saved");
     }
 }

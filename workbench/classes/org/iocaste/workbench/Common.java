@@ -6,7 +6,6 @@ import org.iocaste.shell.common.InputComponent;
 public class Common {
     public static final byte SEL_PACKAGES = 0;
     public static final byte SEL_SOURCES = 1;
-    public static final byte SEL_SRCCODE = 2;
     public static final byte DEL_SRCCODE = 3;
     public static final byte DEL_SOURCES = 4;
     public static final byte DEL_PACKAGES = 5;
@@ -20,12 +19,12 @@ public class Common {
     };
     
     public static final void updateCurrentSource(Context context) {
-        ExtendedObject header = context.project.header;
-        InputComponent input = context.view.getElement("editor");
-        ProjectPackage package_ = context.project.packages.get(
-                header.getValue("PACKAGE"));
-        Source source = package_.sources.get(header.getValue("CLASS"));
-        
-        source.code = input.get(); 
+//        ExtendedObject header = context.project.header;
+//        InputComponent input = context.view.getElement("editor");
+//        ProjectPackage package_ = context.project.packages.get(
+//                header.get("PACKAGE"));
+//        Source source = package_.sources.get(header.get("CLASS"));
+//        
+//        source.code = input.get(); 
     }
 }

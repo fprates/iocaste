@@ -178,42 +178,42 @@ public class Activation {
     
     private static final void createProjectFiles(Context context)
             throws IOException {
-        OutputStream os;
-        File file;
-        String dir;
-        ProjectPackage package_;
-        Source source;
-        StringBuilder bindir;
-        
-        if (context.project.dir == null)
-            context.project.dir = composeFileName(
-                    context.repository, context.project.name);
-        
-        removeCompleteDir(context.project.dir);
-        new File(context.project.dir).mkdir();
-        bindir = new StringBuilder(context.project.dir);
-        for (String dirname : new String[] {"bin", "WEB-INF", "classes"})
-            new File(bindir.append(File.separator).
-                    append(dirname).toString()).mkdir();
-        
-        for (String packagename : context.project.packages.keySet()) {
-            dir = packagename.replaceAll("[\\.]", File.separator);
-            dir = composeFileName(context.project.dir, "src", dir);
-            new File(dir).mkdirs();
-            
-            package_ = context.project.packages.get(packagename);
-            for (String sourcename : package_.sources.keySet()) {
-                source = package_.sources.get(sourcename);                
-                source.filename = composeFileName(dir, sourcename);
-                
-                file = new File(source.filename);
-                file.createNewFile();
-                os = new FileOutputStream(file, false);
-                os.write(source.code.getBytes());
-                os.flush();
-                os.close();
-            }
-        }
+//        OutputStream os;
+//        File file;
+//        String dir;
+//        ProjectPackage package_;
+//        Source source;
+//        StringBuilder bindir;
+//        
+//        if (context.project.dir == null)
+//            context.project.dir = composeFileName(
+//                    context.repository, context.project.name);
+//        
+//        removeCompleteDir(context.project.dir);
+//        new File(context.project.dir).mkdir();
+//        bindir = new StringBuilder(context.project.dir);
+//        for (String dirname : new String[] {"bin", "WEB-INF", "classes"})
+//            new File(bindir.append(File.separator).
+//                    append(dirname).toString()).mkdir();
+//        
+//        for (String packagename : context.project.packages.keySet()) {
+//            dir = packagename.replaceAll("[\\.]", File.separator);
+//            dir = composeFileName(context.project.dir, "src", dir);
+//            new File(dir).mkdirs();
+//            
+//            package_ = context.project.packages.get(packagename);
+//            for (String sourcename : package_.sources.keySet()) {
+//                source = package_.sources.get(sourcename);                
+//                source.filename = composeFileName(dir, sourcename);
+//                
+//                file = new File(source.filename);
+//                file.createNewFile();
+//                os = new FileOutputStream(file, false);
+//                os.write(source.code.getBytes());
+//                os.flush();
+//                os.close();
+//            }
+//        }
     }
     
     private static final void createWebXML(Context context) throws Exception {
@@ -223,7 +223,7 @@ public class Activation {
         XMLElement welcome, welcomefile;
         XMLElement webapp = new XMLElement("web-app");
         
-        webapp.add("id", (String)context.project.header.getValue("NAME"));
+        webapp.add("id", (String)context.project.header.get("NAME"));
         webapp.add("xmlns", "http://java.sun.com/xml/ns/javaee");
         webapp.add("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         webapp.add("xsi:schemaLocation", "http://java.sun.com/xml/ns/javaee "
@@ -300,7 +300,7 @@ public class Activation {
     
     private static final void deployApplication(Context context)
             throws Exception {
-        String jarname = context.project.header.getValue("NAME");
+        String jarname = context.project.header.get("NAME");
         String dest = composeFileName(System.getProperty("catalina.home"),
                 "webapps", jarname.concat(".war"));
         OutputStream os = new FileOutputStream(dest);

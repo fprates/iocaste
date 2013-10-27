@@ -1,0 +1,18 @@
+import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.View;
+
+public class Main extends AbstractPage {
+
+    public Main() {
+        export("install", "install");
+    }
+    
+    public final InstallData main(Message message) {
+        return new InstallData();
+    }
+    
+    public final void main(View view) {
+    }
+}

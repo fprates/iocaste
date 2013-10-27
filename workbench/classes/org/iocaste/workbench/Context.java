@@ -1,23 +1,24 @@
 package org.iocaste.workbench;
 
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.protocol.Function;
-import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.PageContext;
+import org.iocaste.texteditor.common.TextEditorTool;
+import org.iocaste.workbench.project.ProjectData;
 
-public class Context {
+public class Context extends PageContext {
     public static final byte CREATE = 0;
     public static final byte LOAD = 1;
-    public static final byte CREATE0 = 2;
     public static final String[] TITLES = {
         "project.create",
         "project.update"
     };
-    public View view;
-    public Function function;
-    public Project project;
+    
+    public ProjectData project;
     public String repository, path;
     public boolean validrepo;
     public DocumentModel editorhdrmodel, projectmodel, packagemodel;
     public DocumentModel projectnamemodel, sourcemodel, srccodemodel;
+    public DocumentModel installmodel;
     public byte mode;
+    public TextEditorTool editor;
 }

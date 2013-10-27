@@ -103,7 +103,7 @@
         <ant antfile="${basedir}/src/gconfigview/build.xml"/>
         
     	<!-- workbench -->
-        <!-- <ant antfile="${basedir}/src/workbench/build.xml"/> -->
+        <ant antfile="${basedir}/src/workbench/build.xml"/>
         
         <!-- examples -->
         <!-- <ant antfile="${basedir}/src/examples/build.xml"/> -->

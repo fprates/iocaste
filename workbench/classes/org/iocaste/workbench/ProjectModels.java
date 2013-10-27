@@ -43,6 +43,12 @@ public class ProjectModels {
         item.setDataElement(element);
         model.add(item);
         
+        model = data.getModel("ICSTPRJ_INSTALL", null, null);
+        element = new DummyElement("TASKS.NAME");
+        item = new DocumentModelItem("TASK");
+        item.setDataElement(element);
+        model.add(item);
+        
         /*
          * Cabeçalho do projeto iocaste
          */
