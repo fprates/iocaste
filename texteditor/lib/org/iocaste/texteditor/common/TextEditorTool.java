@@ -63,6 +63,12 @@ public class TextEditorTool extends AbstractServiceInterface {
         call(message);
     }
     
+    public final void set(TextEditor editor, String page, String text) {
+        TextArea textarea = context.view.getElement(editor.getName());
+        textarea.set(text);
+        editor.commit(page, text);
+    }
+    
     public final void setEnabled(TextEditor editor, boolean enabled) {
         context.view.getElement(editor.getName()).setEnabled(enabled);
     }
