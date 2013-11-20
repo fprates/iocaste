@@ -12,6 +12,7 @@ import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.TableTool;
+import org.iocaste.shell.common.TableToolData;
 
 public class Response {
 
@@ -22,6 +23,7 @@ public class Response {
     public static final void form(Context context) {
         TabbedPaneItem tabitem;
         DataItem secret, username;
+        TableToolData ttdata;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         TabbedPane tabs = new TabbedPane(container, "tabs");
@@ -48,8 +50,11 @@ public class Response {
         /*
          * tarefas
          */
-        context.taskshelper = new TableTool(tabs, "tasks");
-        context.taskshelper.setContext(context);
+        ttdata = new TableToolData();
+        ttdata.container = tabs;
+        ttdata.name = "tasks";
+        ttdata.context = context;
+        context.taskshelper = new TableTool(ttdata);
         context.taskshelper.model(context.tasksmodel);
         context.taskshelper.setVisibility(true, "GROUP");
         context.taskshelper.setObjects(context.userdata.tasks);
@@ -60,8 +65,11 @@ public class Response {
         /*
          * perfis
          */
-        context.profileshelper = new TableTool(tabs, "profiles");
-        context.profileshelper.setContext(context);
+        ttdata = new TableToolData();
+        ttdata.container = tabs;
+        ttdata.name = "profiles";
+        ttdata.context = context;
+        context.profileshelper = new TableTool(ttdata);
         context.profileshelper.model(context.profilesmodel);
         context.profileshelper.setVisibility(true, "PROFILE");
         context.profileshelper.setObjects(context.userdata.profiles);

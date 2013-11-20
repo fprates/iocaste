@@ -11,18 +11,22 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.TableTool;
+import org.iocaste.shell.common.TableToolData;
 
 public class Response {
 
     public static final void detail(Context context) {
+        TableToolData ttdata;
         Form container = new Form(context.view, "main");
-        PageControl pagecontrol = new PageControl(container);
         Documents documents = new Documents(context.function);
+        PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("back");
-
-        context.properties = new TableTool(container, "details");
-        context.properties.setContext(context);
+        ttdata = new TableToolData();
+        ttdata.context = context;
+        ttdata.container = container;
+        ttdata.name = "details";
+        context.properties = new TableTool(ttdata);
         context.properties.model(documents.getModel("STYLE_ELEMENT_DETAIL"));
         context.properties.setObjects(context.eproperties);
         context.properties.setVisibleLines(0);
@@ -69,6 +73,7 @@ public class Response {
     }
     
     public static final void style(Context context) {
+        TableToolData ttdata;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm header = new DataForm(container, "header");
@@ -82,9 +87,12 @@ public class Response {
                 element.setVisible(false);
             ((InputComponent)element).setEnabled(false);
         }
-        
-        context.items = new TableTool(container, "elements");
-        context.items.setContext(context);
+
+        ttdata = new TableToolData();
+        ttdata.context = context;
+        ttdata.container = container;
+        ttdata.name = "elements";
+        context.items = new TableTool(ttdata);
         context.items.model(documents.getModel("STYLE_ELEMENT"));
         context.items.setVisibility(false, "INDEX", "STYLE");
         context.items.setColumnType("NAME", Const.LINK, "element");

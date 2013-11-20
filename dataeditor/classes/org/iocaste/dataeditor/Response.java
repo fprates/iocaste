@@ -15,6 +15,7 @@ import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TableTool;
+import org.iocaste.shell.common.TableToolData;
 
 public class Response {
     
@@ -83,14 +84,18 @@ public class Response {
      * @param context
      */
     public static final void itens(Context context) {
+        TableToolData ttdata;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("home");
         pagecontrol.add("back");
-        
-        context.tablehelper = new TableTool(container, "itens");
-        context.tablehelper.setContext(context);
+
+        ttdata = new TableToolData();
+        ttdata.context = context;
+        ttdata.container = container;
+        ttdata.name = "itens";
+        context.tablehelper = new TableTool(ttdata);
         context.tablehelper.model(context.model);
         context.tablehelper.setVisibleLines(0);
         context.tablehelper.setObjects(context.itens);

@@ -28,27 +28,30 @@ public class TableTool {
     private Map<String, Control> controls;
     private Map<String, Column> columns;
     private Container container;
-    private String tablename;
-    private PageContext context;
+    private TableToolData data;
     
-    public TableTool(Container container, String name) {
+    public TableTool(TableToolData data) {
         Table table;
         
-        this.container = new StandardContainer(container, name.concat("cnt"));
+        this.data = data;
+        this.container = new StandardContainer(data.container,
+                data.name.concat("cnt"));
         controls = new HashMap<>();
-        controls.put(ADD, new Control(this.container, "add", name));
-        controls.put(REMOVE, new Control(this.container, "remove", name));
-        controls.put(ACCEPT, new Control(this.container, "accept", name));
+        controls.put(ADD, new Control(this.container, "add", data.name));
+        controls.put(REMOVE, new Control(this.container, "remove", data.name));
+        controls.put(ACCEPT, new Control(this.container, "accept", data.name));
         
-        tablename = name;
-        table = new Table(this.container, tablename);
+        table = new Table(this.container, data.name);
         table.setMark(true);
         table.setVisibleLines(15);
         columns = new HashMap<>();
+        
+        for (String name : controls.keySet())
+            controls.get(name).setContext(data.context);
     }
     
     public final void accept() {
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         controls.get(ACCEPT).setVisible(false);
         controls.get(ADD).setVisible(true);
@@ -58,7 +61,7 @@ public class TableTool {
     
     public final void add() {
         int i = 0;
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         switch (mode) {
         case CONTINUOUS_UPDATE:
@@ -82,7 +85,7 @@ public class TableTool {
     }
     
     public final void additems() {
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         additems(table, null);
     }
@@ -107,7 +110,7 @@ public class TableTool {
     }
     
     public final void additem(ExtendedObject object) {
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         additem(table, object, -1);
     }
@@ -199,7 +202,7 @@ public class TableTool {
     
     public final void controls(byte state, String... controls) {
         Control control;
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         switch (state) {
         case ENABLED:
@@ -225,7 +228,7 @@ public class TableTool {
     }
     
     public final void clear() {
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         table.clear();
     }
@@ -235,14 +238,18 @@ public class TableTool {
     }
     
     public final TableItem[] getItems() {
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         return table.getItems();
     }
     
+    private final Table getTable() {        
+        return data.context.view.getElement(data.name);
+    }
+    
     public final void model(DocumentModel model) {
         Column column;
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         table.importModel(model);
         columns.clear();
@@ -258,7 +265,7 @@ public class TableTool {
     }
     
     public final void remove() {
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         for (TableItem item : table.getItems())
             if (item.isSelected())
@@ -283,7 +290,7 @@ public class TableTool {
     public final void setColumnStatus(byte status, String... tcolumns) {
         String name;
         Column column;
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         if (tcolumns == null || tcolumns.length == 0) {
             for (String cname :  columns.keySet())
@@ -314,18 +321,13 @@ public class TableTool {
         columns.get(name).values = values;
     }
     
-    /**
-     * 
-     * @param context
-     */
-    public final void setContext(PageContext context) {
-        this.context = context;
-        for (String name : controls.keySet())
-            controls.get(name).setContext(context);
+    public final void setMark(boolean mark) {
+        Table table = getTable();
+        table.setMark(mark);
     }
     
     public final void setMode(byte mode) {
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         this.mode = mode;
         switch (mode) {
@@ -354,7 +356,7 @@ public class TableTool {
     }
     
     public final void setObjects(ExtendedObject[] objects) {
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         if (objects == null || objects.length == 0)
             additems(table, null);
@@ -372,7 +374,7 @@ public class TableTool {
     }
     
     public final void setVisibility(boolean visible, String... columns) {
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         for (TableColumn column : table.getColumns())
             if (!column.isMark())
@@ -383,7 +385,7 @@ public class TableTool {
     }
     
     public final void setVisibleLines(int lines) {
-        Table table = context.view.getElement(tablename);
+        Table table = getTable();
         
         table.setVisibleLines(lines);
     }
