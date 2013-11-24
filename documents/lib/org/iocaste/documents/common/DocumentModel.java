@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
@@ -42,15 +43,15 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private String name;
     private String tablename;
     private String classname;
-    private Set<DocumentModelItem> itens;
+    private Map<String, DocumentModelItem> itens;
     private Set<DocumentModelKey> keys;
     private Map<String, String> queries;
     
     public DocumentModel(String name) {
         this.name = name;
-        itens = new TreeSet<DocumentModelItem>();
-        keys = new TreeSet<DocumentModelKey>();
-        queries = new HashMap<String, String>();
+        itens = new TreeMap<>();
+        keys = new TreeSet<>();
+        queries = new HashMap<>();
     }
     
     /**
@@ -60,7 +61,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     public final void add(DocumentModelItem item) {
         item.setIndex(itens.size());
         item.setDocumentModel(this);
-        itens.add(item);
+        itens.put(item.getName(), item);
     }
     
     /**
@@ -90,7 +91,11 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * @return true, se item faz parte do modelo.
      */
     public final boolean contains(DocumentModelItem item) {
-        return itens.contains(item);
+        return itens.containsKey(item.getName());
+    }
+    
+    public final boolean contains(String name) {
+        return itens.containsValue(name);
     }
     
     /*
@@ -125,10 +130,13 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * @return itens
      */
     public DocumentModelItem[] getItens() {
+        DocumentModelItem item;
         DocumentModelItem[] ordered = new DocumentModelItem[itens.size()];
         
-        for (DocumentModelItem item : itens)
+        for (String name : itens.keySet()) {
+            item = itens.get(name);
             ordered[item.getIndex()] = item;
+        }
         
         return ordered;
     }
@@ -147,11 +155,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * @return item.
      */
     public final DocumentModelItem getModelItem(String name) {
-        for (DocumentModelItem item : itens)
-            if (item.getName().equals(name))
-                return item;
-        
-        return null;
+        return itens.get(name);
     }
     
     /**
@@ -210,10 +214,12 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     
     /**
      * Define itens do documento.
-     * @param itens itens
+     * @param items itens
      */
-    protected void setItens(Set<DocumentModelItem> itens) {
-        this.itens = itens;
+    protected void setItens(Set<DocumentModelItem> items) {
+        itens.clear();
+        for (DocumentModelItem item : items)
+            itens.put(item.getName(), item);
     }
     
     /**
