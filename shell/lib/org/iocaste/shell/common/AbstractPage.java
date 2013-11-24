@@ -66,9 +66,10 @@ public abstract class AbstractPage extends AbstractFunction {
             context.function = this;
         }
         
+        action = (control == null)? controlname : control.getName();
+        view.setActionControl(action);
         validate();
         action = (control == null)? controlname : control.getAction();
-        view.setActionControl(controlname);
         method = getClass().getMethod(action);
         method.invoke(this);
         return view;
