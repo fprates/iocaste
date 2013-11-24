@@ -156,6 +156,10 @@ public class ExtendedObject implements Serializable {
         }
     }
     
+    public final String getst(String name) {
+        return get(name).toString();
+    }
+    
     /**
      * 
      * @param loose
