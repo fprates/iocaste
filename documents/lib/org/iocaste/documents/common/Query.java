@@ -62,6 +62,21 @@ public class Query implements Serializable {
         add(field, WhereClause.NE, value, "and");
     }
     
+    public final void beginEnclose() {
+        enclose(true);
+    }
+    
+    private final void enclose(boolean begin) {
+        if (begin)
+            add(null, WhereClause.BE, null, null);
+        else
+            add(null, WhereClause.EE, null, null);
+    }
+    
+    public final void endEnclose() {
+        enclose(false);
+    }
+    
     public final String[] getColumns() {
         return columns;
     }

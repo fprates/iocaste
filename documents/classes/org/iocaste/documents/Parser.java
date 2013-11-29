@@ -120,51 +120,78 @@ public class Parser {
     private static final String where(List<WhereClause> clauses,
             DocumentModel tablemodel, List<Object> values, Cache cache)
                     throws IocasteException {
+        Object value;
+        String field;
         DocumentModel model;
         DocumentModelItem item;
         String[] composed;
         StringBuilder sb = null;
         boolean afterfirst = false;
         String operator = null;
+        int enclose = 0, level = 0;
         
         for (WhereClause clause : clauses) {
+            field = clause.getField();
             if (!afterfirst) {
                 afterfirst = true;
                 sb = new StringBuilder(" where");
             } else {
-                if (operator != null)
+                if (field != null && operator != null)
                     sb.append(" ").append(operator);
             }
             
-            composed = clause.getField().split("\\.", 2);
-            if (composed.length > 1) {
-                model = cache.models.get(composed[0]);
-                if (model == null)
-                    throw new IocasteException(new StringBuilder(composed[0]).
-                            append(" is an invalid model.").toString());
-                
-                item = model.getModelItem(composed[1]);
-                if (item == null)
-                    throw new IocasteException(new StringBuilder(composed[1]).
-                            append(" is an invalid item for ").
-                            append(composed[0]).toString());
-                
-                operator = new StringBuilder(model.getTableName()).
-                        append(".").
-                        append(item.getTableFieldName()).toString();
-            } else {
-                item = tablemodel.getModelItem(composed[0]);
-                if (item == null)
-                    throw new IocasteException(new StringBuilder(composed[0]).
-                            append(" is an invalid item for ").
-                            append(tablemodel.getTableName()).toString());
-                operator = item.getTableFieldName();
+            if (enclose > level) {
+                sb.append(" (");
+                level = enclose;
             }
             
+            if (field != null) {
+                composed = field.split("\\.", 2);
+                if (composed.length > 1) {
+                    model = cache.models.get(composed[0]);
+                    if (model == null)
+                        throw new IocasteException(new StringBuilder(composed[0]).
+                                append(" is an invalid model.").toString());
+                    
+                    item = model.getModelItem(composed[1]);
+                    if (item == null)
+                        throw new IocasteException(new StringBuilder(composed[1]).
+                                append(" is an invalid item for ").
+                                append(composed[0]).toString());
+                    
+                    operator = new StringBuilder(model.getTableName()).
+                            append(".").
+                            append(item.getTableFieldName()).toString();
+                } else {
+                    item = tablemodel.getModelItem(composed[0]);
+                    if (item == null)
+                        throw new IocasteException(new StringBuilder(composed[0]).
+                                append(" is an invalid item for ").
+                                append(tablemodel.getTableName()).toString());
+                    operator = item.getTableFieldName();
+                }
+            } else {
+                switch (clause.getCondition()) {
+                case WhereClause.BE:
+                    enclose++;
+                    continue;
+                case WhereClause.EE:
+                    enclose--;
+                    break;
+                }
+            }
+            
+            if (enclose < level) {
+                sb.append(" )");
+                level = enclose;
+                continue;
+            }
+            
+            value = clause.getValue();
             sb.append(" ").append(operator);
             switch (clause.getCondition()) {
             case WhereClause.EQ:
-                sb.append(" = ?");
+                sb.append((value == null)? " is NULL" : " = ?");
                 break;
             case WhereClause.NE:
                 sb.append(" <> ?");
@@ -186,7 +213,8 @@ public class Parser {
                 break;
             }
             
-            values.add(clause.getValue());
+            if (value != null)
+                values.add(value);
             operator = clause.getOperator();
         }
         

@@ -17,8 +17,8 @@ public class QueryInfo {
     public StringBuilder where;
     
     public QueryInfo() {
-        columns = new LinkedHashSet<String>();
-        join = new HashMap<DocumentModel, StringBuilder>();
+        columns = new LinkedHashSet<>();
+        join = new HashMap<>();
         where = new StringBuilder();
     }
 }
