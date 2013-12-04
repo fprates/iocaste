@@ -72,7 +72,7 @@ public class Services extends AbstractFunction {
         int lines;
         ExtendedObject object;
         Documents documents = new Documents(this);
-        String name = message.get("textname");
+        String name = message.get("name");
         long id = documents.getNextNumber("TXTED_TEXTID");
         
         object = new ExtendedObject(documents.getModel("TXTEDITOR_HEAD"));

@@ -28,7 +28,7 @@ public class InstallTexts {
                 InstallData.TXTEDITOR_SERVERNAME);
         Message message = new Message();
         
-        message.setId("unrgister");
+        message.setId("unregister");
         message.add("name", name);
         service.invoke(message);
     }
