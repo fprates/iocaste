@@ -72,4 +72,13 @@ public class TextEditorTool extends AbstractServiceInterface {
     public final void setEnabled(TextEditor editor, boolean enabled) {
         context.view.getElement(editor.getName()).setEnabled(enabled);
     }
+    
+    public final void update(TextEditor editor, String textnm) {
+        Message message = new Message();
+        
+        message.setId("update");
+        message.add("textname", textnm);
+        message.add("editor", editor);
+        call(message);
+    }
 }
