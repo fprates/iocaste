@@ -16,8 +16,9 @@ public class Services extends AbstractFunction {
 
     public Services() {
         export("load", "load");
-        export("save", "save");
+        export("register", "register");
         export("update", "update");
+        export("unregister", "unregister");
     }
     
     public final Map<String, String> load(Message message) {
@@ -67,47 +68,22 @@ public class Services extends AbstractFunction {
         return pages;
     }
     
-    private final ExtendedObject registerLine(LineHelper helper, int pos) {
-        ExtendedObject object;
-        String line;
-        int linepos = pos * helper.size;
-        
-        if (helper.line.length() < helper.size)
-            line = helper.line.substring(linepos);
-        else
-            line = helper.line.substring(linepos, linepos + helper.size);
-        
-        helper.i++;
-        object = new ExtendedObject(helper.textlinemodel);
-        object.set("LINE_ID", helper.i);
-        object.set("PAGE_NAME", helper.pagename);
-        object.set("TEXT_NAME", helper.textname);
-        object.set("PARAGRAPH", helper.paragraph);
-        object.set("LINE", line);
-        
-        return object;
-    }
-    
-    public final void save(Message message) throws Exception {
+    public final void register(Message message) throws Exception {
         int lines;
-        LineHelper linehelper;
         ExtendedObject object;
         Documents documents = new Documents(this);
-
-        linehelper = new LineHelper();
-        linehelper.editor = message.get("editor");
-        linehelper.textname = message.get("textname");
-        object = new ExtendedObject(documents.getModel("TXTEDITOR_HEAD"));
-        object.set("TEXT_NAME", linehelper.textname);
-        linehelper.textid = documents.getNextNumber("TXTED_TEXTID");
-        object.set("TEXT_ID", linehelper.textid);
-        lines = documents.save(object);
-        if (lines == 0)
-            throw new IocasteException(new StringBuilder("Text ").
-                    append(linehelper.textname).
-                    append(" has already exists.").toString());
+        String name = message.get("textname");
+        long id = documents.getNextNumber("TXTED_TEXTID");
         
-        saveDetails(linehelper);
+        object = new ExtendedObject(documents.getModel("TXTEDITOR_HEAD"));
+        object.set("TEXT_NAME", name);
+        object.set("TEXT_ID", id);
+        lines = documents.save(object);
+        if (lines > 0)
+            return;
+        
+        throw new IocasteException(new StringBuilder("Text ").
+                append(name).append(" has already exists.").toString());
     }
     
     private final void saveDetails(LineHelper linehelper) {
@@ -139,16 +115,53 @@ public class Services extends AbstractFunction {
 
                 lines = textline.length() / linehelper.size;
                 if (lines == 0) {
-                    documents.modify(registerLine(linehelper, lines));
+                    documents.modify(saveLine(linehelper, lines));
                     continue;
                 }
                 
                 for (int l = 0; l < lines; l++) {
-                    documents.modify(registerLine(linehelper, l));
+                    documents.modify(saveLine(linehelper, l));
                     linehelper.paragraph = false;
                 }
             }
         }
+    }
+    
+    private final ExtendedObject saveLine(LineHelper helper, int pos) {
+        ExtendedObject object;
+        String line;
+        int linepos = pos * helper.size;
+        
+        if (helper.line.length() < helper.size)
+            line = helper.line.substring(linepos);
+        else
+            line = helper.line.substring(linepos, linepos + helper.size);
+        
+        helper.i++;
+        object = new ExtendedObject(helper.textlinemodel);
+        object.set("LINE_ID", helper.i);
+        object.set("PAGE_NAME", helper.pagename);
+        object.set("TEXT_NAME", helper.textname);
+        object.set("PARAGRAPH", helper.paragraph);
+        object.set("LINE", line);
+        
+        return object;
+    }
+    
+    public final void unregister(Message message) {
+        String name = message.get("name");
+        Query[] queries = new Query[3];
+        
+        queries[0] = new Query("delete");
+        queries[0].setModel("TXTEDITOR_LINE");
+        queries[0].andEqual("TEXT_NAME", name);
+        queries[1] = new Query("delete");
+        queries[1].setModel("TXTEDITOR_PAGE");
+        queries[1].andEqual("TEXT_NAME", name);
+        queries[2] = new Query("delete");
+        queries[2].setModel("TXTEDITOR_HEAD");
+        queries[2].andEqual("TEXT_NAME", name);
+        new Documents(this).update(queries);
     }
     
     public final void update(Message message) throws Exception {
@@ -175,10 +188,10 @@ public class Services extends AbstractFunction {
         linehelper.textid = objects[0].getl("TEXT_ID");
         
         queries[0] = new Query("delete");
-        queries[0].setModel("TXTEDITOR_PAGE");
+        queries[0].setModel("TXTEDITOR_LINE");
         queries[0].andEqual("TEXT_NAME", linehelper.textname);
         queries[1] = new Query("delete");
-        queries[1].setModel("TXTEDITOR_LINE");
+        queries[1].setModel("TXTEDITOR_PAGE");
         queries[1].andEqual("TEXT_NAME", linehelper.textname);
         documents.update(queries);
         

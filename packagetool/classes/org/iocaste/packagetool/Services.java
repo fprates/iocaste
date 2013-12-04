@@ -66,6 +66,7 @@ public class Services extends AbstractFunction {
         String[] dependencies;
         State state;
         String name, modelname;
+        Set<String> texts;
 
         state = new State();
         state.data = message.get("data");
@@ -173,6 +174,13 @@ public class Services extends AbstractFunction {
             config = state.data.getGlobalConfigs();
             if (config.size() > 0)
                 InstallGlobalConfig.init(config, state);
+            
+            /*
+             * registra textos da aplicação
+             */
+            texts = state.data.getTexts();
+            if (texts.size() > 0)
+                InstallTexts.init(texts, state);
             
             /*
              * grava itens instalados

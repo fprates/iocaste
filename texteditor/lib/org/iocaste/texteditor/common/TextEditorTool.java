@@ -2,6 +2,7 @@ package org.iocaste.texteditor.common;
 
 import java.util.Map;
 
+import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Container;
@@ -10,13 +11,11 @@ import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.TextArea;
 
 public class TextEditorTool extends AbstractServiceInterface {
-    private static final String SERVER_NAME =
-            "/iocaste-texteditor/services.html";
     private PageContext context;
     public TextEditorTool tetool;
     
     public TextEditorTool(PageContext context) {
-        initService(context.function, SERVER_NAME);
+        initService(context.function, InstallData.TXTEDITOR_SERVERNAME);
         this.context = context;
     }
     
@@ -52,15 +51,6 @@ public class TextEditorTool extends AbstractServiceInterface {
         
         input = context.view.getElement(editor.getName());
         input.set(pages.get(pagenm));
-    }
-    
-    public final void save(TextEditor editor, String textnm) {
-        Message message = new Message();
-        
-        message.setId("save");
-        message.add("textname", textnm);
-        message.add("editor", editor);
-        call(message);
     }
     
     public final void set(TextEditor editor, String page, String text) {

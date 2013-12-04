@@ -18,6 +18,8 @@ import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
 
 public class InstallData implements Serializable {
+    public static final String TXTEDITOR_SERVERNAME =
+            "/iocaste-texteditor/services.html";
     private static final long serialVersionUID = -4509980464670421174L;
     private Map<String, DocumentModel> models;
     private Map<DocumentModel, List<Object[]>> values;
@@ -33,6 +35,7 @@ public class InstallData implements Serializable {
     private Set<User> users;
     private Map<UserProfile, Set<User>> uprofiles;
     private Set<GlobalConfigData> globalcfg;
+    private Set<String> texts;
     
     public InstallData() {
         models = new LinkedHashMap<>();
@@ -48,6 +51,7 @@ public class InstallData implements Serializable {
         users = new TreeSet<>();
         uprofiles = new HashMap<>();
         globalcfg = new HashSet<>();
+        texts = new HashSet<>();
     }
     
     /**
@@ -134,6 +138,10 @@ public class InstallData implements Serializable {
      */
     public final void addNumberFactory(String name) {
         numbers.add(name);
+    }
+    
+    public final void addText(String name) {
+        texts.add(name);
     }
     
     /**
@@ -276,6 +284,14 @@ public class InstallData implements Serializable {
      */
     public final Map<TaskGroup, Set<User>> getTasksGroups() {
         return tasksgroups;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Set<String> getTexts() {
+        return texts;
     }
     
     /**

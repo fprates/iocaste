@@ -32,7 +32,7 @@ public class Uninstall {
         services[CONFIG_LIB] = new GlobalConfig(function);
         for (int i = objects.length; i > 0; i--) {
             object = objects[i - 1];
-            item(object, services);
+            item(object, function, services);
         }
             
         new Iocaste(function).invalidateAuthCache();
@@ -42,7 +42,7 @@ public class Uninstall {
         ((Documents)services[DOCS_LIB]).update(query);
     }
 
-    private static final void item(ExtendedObject object,
+    private static final void item(ExtendedObject object, Function function,
             AbstractServiceInterface... services) {
         Query query;
         Query[] queries;
@@ -130,6 +130,12 @@ public class Uninstall {
         
         if (modeltype.equals("CONFIG_ENTRY")) {
             config.remove(name);
+            documents.delete(object);
+            return;
+        }
+        
+        if (modeltype.equals("PACKAGE_TEXT")) {
+            InstallTexts.uninstall(name, function);
             documents.delete(object);
             return;
         }
