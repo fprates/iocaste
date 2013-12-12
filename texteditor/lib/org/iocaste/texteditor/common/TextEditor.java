@@ -8,7 +8,7 @@ public class TextEditor implements Serializable {
     private static final long serialVersionUID = 8099830107603124518L;
     private int size;
     private String name;
-    private Map<String, String> pages;
+    private Map<Long, String> pages;
     
     public TextEditor(String name) {
         this.name = name;
@@ -16,7 +16,7 @@ public class TextEditor implements Serializable {
         pages = new LinkedHashMap<>();
     }
     
-    public final void commit(String page, String text) {
+    public final void commit(long page, String text) {
         pages.put(page, text);
     }
     
@@ -28,11 +28,11 @@ public class TextEditor implements Serializable {
         return name;
     }
     
-    public final String[] getPages() {
-        return pages.keySet().toArray(new String[0]);
+    public final Long[] getPages() {
+        return pages.keySet().toArray(new Long[0]);
     }
     
-    public final String getString(String page) {
+    public final String getString(long page) {
         return pages.get(page);
     }
     

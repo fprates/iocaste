@@ -12,7 +12,7 @@ public class TextEditor {
     public static final void install(InstallData data) {
         DataElement element;
         DocumentModel model;
-        DocumentModelItem item, textnm, pagenm;
+        DocumentModelItem item, textnm, pagenr;
         
         /*
          * cabeçalho
@@ -42,7 +42,7 @@ public class TextEditor {
         model = data.getModel("TXTEDITOR_PAGE", "TXTED_PAGE", null);
         element = new DataElement("TXTED_PAGE_ID");
         element.setType(DataType.NUMC);
-        element.setLength(9);
+        element.setLength(12);
         item = new DocumentModelItem("PAGE_ID");
         item.setTableFieldName("PAGID");
         item.setDataElement(element);
@@ -55,14 +55,13 @@ public class TextEditor {
         item.setReference(textnm);
         model.add(item);
         
-        element = new DataElement("TXTED_PAGE_NAME");
-        element.setType(DataType.CHAR);
-        element.setLength(64);
-        element.setUpcase(false);
-        pagenm = new DocumentModelItem("PAGE_NAME");
-        pagenm.setTableFieldName("PAGNM");
-        pagenm.setDataElement(element);
-        model.add(pagenm);
+        element = new DataElement("TXTED_PAGE_NR");
+        element.setType(DataType.NUMC);
+        element.setLength(6);
+        pagenr = new DocumentModelItem("PAGE_NR");
+        pagenr.setTableFieldName("PAGNR");
+        pagenr.setDataElement(element);
+        model.add(pagenr);
         
         /*
          * itens
@@ -83,9 +82,9 @@ public class TextEditor {
         item.setReference(textnm);
         model.add(item);
         
-        item = new DocumentModelItem("PAGE_NAME");
-        item.setTableFieldName("PAGNM");
-        item.setDataElement(pagenm.getDataElement());
+        item = new DocumentModelItem("PAGE_NR");
+        item.setTableFieldName("PAGNR");
+        item.setDataElement(pagenr.getDataElement());
         model.add(item);
         
         element = new DataElement("TXTED_PARAGRAPH");

@@ -21,49 +21,52 @@ public class Services extends AbstractFunction {
         export("unregister", "unregister");
     }
     
-    public final Map<String, String> load(Message message) {
-        ExtendedObject[] olines;
+    public final Map<Long, String> load(Message message) {
+        ExtendedObject[] olines, opages;
         StringBuilder page;
         boolean paragraph;
-        Map<String, String> pages;
-        String pageid, pageid_;
+        Map<Long, String> pages;
+        long pagenr_;
         Query query;
         String textname = message.get("textname");
-        String pagename = message.get("pagename");
+        long pagenr = message.getLong("pagenr");
         Documents documents = new Documents(this);
+        
+        query = new Query();
+        query.setModel("TXTEDITOR_PAGE");
+        query.andEqual("TEXT_NAME", textname);
+        if (pagenr > 0)
+            query.andEqual("PAGE_NR", pagenr);
+        opages = documents.select(query);
+        if (opages == null)
+            return null;
         
         query = new Query();
         query.setModel("TXTEDITOR_LINE");
         query.andEqual("TEXT_NAME", textname);
-        if (pagename != null)
-            query.andEqual("PAGE_NAME", pagename);
-        
+        if (pagenr > 0)
+            query.andEqual("PAGE_NR", pagenr);
         olines = documents.select(query);
         if (olines == null)
             return null;
         
-        pageid_ = "";
-        page = null;
         pages = new HashMap<>();
-        for (ExtendedObject oline : olines) {
-            pageid = oline.get("PAGE_NAME");
-            if (!pageid.equals(pageid_)) {
-                if (pageid_.length() > 0)
-                    pages.put(pageid, page.toString());
+        for (ExtendedObject opage : opages) {
+            pagenr = opage.getl("PAGE_NR");
+            page = new StringBuilder();
+            for (ExtendedObject oline : olines) {
+                pagenr_ = oline.getl("PAGE_NR");
+                if (pagenr != pagenr_)
+                    continue;
                 
-                page = new StringBuilder();
-                pageid_ = pageid;
+                paragraph = oline.get("PARAGRAPH");
+                if (page.length() > 0 && paragraph == true)
+                    page.append("\r\n");
+                    
+                page.append(oline.get("LINE"));
             }
-            
-            paragraph = oline.get("PARAGRAPH");
-            if (page.length() > 0 && paragraph == true)
-                page.append("\r\n");
-                
-            page.append(oline.get("LINE"));
+            pages.put(pagenr, page.toString());
         }
-        
-        if (pageid_.length() > 0)
-            pages.put(pageid_, page.toString());
         
         return pages;
     }
@@ -91,18 +94,18 @@ public class Services extends AbstractFunction {
         ExtendedObject object;
         String text;
         String[] textlines;
-        long pageid = linehelper.textid * 1000;
+        long pageid = linehelper.textid * 1000000;
         Documents documents = new Documents(this);
         DocumentModel pagemodel = documents.getModel("TXTEDITOR_PAGE");
 
         linehelper.textlinemodel = documents.getModel("TXTEDITOR_LINE");
-        for (String page : linehelper.editor.getPages()) {
-            pageid++;
-            linehelper.pagename = page;
+        for (long page : linehelper.editor.getPages()) {
+            pageid += page;
+            linehelper.pagenr = page;
             object = new ExtendedObject(pagemodel);
             object.set("PAGE_ID", pageid);
             object.set("TEXT_NAME", linehelper.textname);
-            object.set("PAGE_NAME", linehelper.pagename);
+            object.set("PAGE_NR", linehelper.pagenr);
             documents.modify(object);
 
             linehelper.i = pageid * 10000;
@@ -140,7 +143,7 @@ public class Services extends AbstractFunction {
         helper.i++;
         object = new ExtendedObject(helper.textlinemodel);
         object.set("LINE_ID", helper.i);
-        object.set("PAGE_NAME", helper.pagename);
+        object.set("PAGE_NR", helper.pagenr);
         object.set("TEXT_NAME", helper.textname);
         object.set("PARAGRAPH", helper.paragraph);
         object.set("LINE", line);
@@ -185,24 +188,28 @@ public class Services extends AbstractFunction {
                     append(linehelper.textname).
                     append(" doesn't exist.").toString());
         
+        for (long pagenr : linehelper.editor.getPages()) {
+            queries[0] = new Query("delete");
+            queries[0].setModel("TXTEDITOR_LINE");
+            queries[0].andEqual("TEXT_NAME", linehelper.textname);
+            queries[0].andEqual("PAGE_NR", pagenr);
+            
+            queries[1] = new Query("delete");
+            queries[1].setModel("TXTEDITOR_PAGE");
+            queries[1].andEqual("TEXT_NAME", linehelper.textname);
+            queries[1].andEqual("PAGE_NR", pagenr);
+            documents.update(queries);
+        }
+        
         linehelper.textid = objects[0].getl("TEXT_ID");
-        
-        queries[0] = new Query("delete");
-        queries[0].setModel("TXTEDITOR_LINE");
-        queries[0].andEqual("TEXT_NAME", linehelper.textname);
-        queries[1] = new Query("delete");
-        queries[1].setModel("TXTEDITOR_PAGE");
-        queries[1].andEqual("TEXT_NAME", linehelper.textname);
-        documents.update(queries);
-        
         saveDetails(linehelper);
     }
 }
 
 class LineHelper {
     public boolean paragraph;
-    public String textname, pagename, line;
-    public long i, textid;
+    public String textname, line;
+    public long i, textid, pagenr;
     public int size;
     public DocumentModel textlinemodel;
     public TextEditor editor;

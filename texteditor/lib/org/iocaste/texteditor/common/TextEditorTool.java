@@ -19,7 +19,7 @@ public class TextEditorTool extends AbstractServiceInterface {
         this.context = context;
     }
     
-    public final void commit(TextEditor editor, String page) {
+    public final void commit(TextEditor editor, long page) {
         TextArea textarea = context.view.getElement(editor.getName());
         editor.commit(page, (String)textarea.get());
     }
@@ -30,30 +30,30 @@ public class TextEditorTool extends AbstractServiceInterface {
         return new TextEditor(name);
     }
     
-    public final void load(TextEditor editor, String textnm, String pagenm) {
+    public final void load(TextEditor editor, String textnm, long page) {
         InputComponent input;
-        Map<String, String> pages;
+        Map<Long, String> pages;
         Message message = new Message();
         
         message.setId("load");
         message.add("textname", textnm);
-        message.add("pagename", pagenm);
+        message.add("pagenr", page);
         pages = call(message);
         
         if (pages == null)
             return;
         
-        for (String name : pages.keySet())
-            editor.commit(name, pages.get(name));
+        for (long pagenr : pages.keySet())
+            editor.commit(pagenr, pages.get(pagenr));
         
-        if (pagenm == null)
+        if (page == 0)
             return;
         
         input = context.view.getElement(editor.getName());
-        input.set(pages.get(pagenm));
+        input.set(pages.get(page));
     }
     
-    public final void set(TextEditor editor, String page, String text) {
+    public final void set(TextEditor editor, int page, String text) {
         TextArea textarea = context.view.getElement(editor.getName());
         textarea.set(text);
         editor.commit(page, text);
