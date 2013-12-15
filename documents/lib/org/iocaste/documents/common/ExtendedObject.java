@@ -17,7 +17,8 @@ import java.util.Map;
  * @author francisco.prates
  *
  */
-public class ExtendedObject implements Serializable {
+public class ExtendedObject implements Comparable<ExtendedObject>,
+      Serializable {
     private static final long serialVersionUID = -8700097929412206566L;
     private Map<DocumentModelItem, Object> values;
     private Map<String, DocumentModelItem> byname;
@@ -34,6 +35,25 @@ public class ExtendedObject implements Serializable {
             byname.put(item.getName(), item);
         
         this.model = model;
+    }
+
+    @Override
+    public int compareTo(ExtendedObject object) {
+        int diff;
+        String name;
+        Object value1, value2;
+        
+        for (DocumentModelKey key : model.getKeys()) {
+            name = key.getModelItemName();
+            value1 = get(name);
+            value2 = object.get(name);
+            diff = value1.toString().compareTo(value2.toString());
+            if (diff == 0)
+                continue;
+            
+            return diff;
+        }
+        return 0;
     }
     
     /**

@@ -23,10 +23,10 @@ package org.iocaste.documents.common;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 /**
  * Implementação de modelo de documento
@@ -50,7 +50,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     public DocumentModel(String name) {
         this.name = name;
         itens = new TreeMap<>();
-        keys = new TreeSet<>();
+        keys = new LinkedHashSet<>();
         queries = new HashMap<>();
     }
     
