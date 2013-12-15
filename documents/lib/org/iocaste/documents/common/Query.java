@@ -11,7 +11,7 @@ public class Query implements Serializable {
     private static final long serialVersionUID = -5600137702519280069L;
     private String model, statement;
     private List<WhereClause> where;
-    private String[] columns;
+    private String[] orderby, columns;
     private Map<String, List<JoinClause>> join;
     private int maxresults;
     private boolean skiperror;
@@ -97,6 +97,10 @@ public class Query implements Serializable {
         return model;
     }
     
+    public final String[] getOrderBy() {
+        return orderby;
+    }
+    
     public final String getStatement() {
         return statement;
     }
@@ -126,6 +130,10 @@ public class Query implements Serializable {
     
     public final boolean mustSkipError() {
         return skiperror;
+    }
+    
+    public final void orderBy(String... fields) {
+        orderby = fields;
     }
     
     public final void orEqual(String field, Object value) {

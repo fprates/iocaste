@@ -72,6 +72,22 @@ public class Parser {
         return sb.toString();
     }
     
+    private static final String orderby(String[] fields, DocumentModel model) {
+        boolean started = false;
+        StringBuilder sb = new StringBuilder(" order by ");
+        
+        for (String field : fields) {
+            if (!started)
+                started = true;
+            else
+                sb.append(", ");
+            
+            sb.append(model.getModelItem(field).getTableFieldName());
+        }
+        
+        return sb.toString();
+    }
+    
     /**
      * 
      * @param query
@@ -81,6 +97,7 @@ public class Parser {
      */
     public static final String parseQuery(Query query, Cache cache,
             List<Object> values) throws Exception {
+        String[] fields;
         List<WhereClause> clauses;
         String statement;
         StringBuilder sb;
@@ -113,6 +130,10 @@ public class Parser {
         clauses = query.getWhere();
         if (clauses.size() > 0)
             sb.append(where(clauses, tablemodel, values, cache));
+
+        fields = query.getOrderBy();
+        if (fields != null)
+            sb.append(orderby(fields, tablemodel));
         
         return sb.toString();
     }
