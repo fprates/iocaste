@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.SearchHelp;
@@ -21,6 +22,7 @@ public class TextFieldRenderer extends Renderer {
      */
     public static final List<XMLElement> render(TextField textfield,
             Config config) {
+        StringBuilder sb;
         String tftext;
         Text text;
         SearchHelp search;
@@ -47,13 +49,21 @@ public class TextFieldRenderer extends Renderer {
         inputtag.add("onfocus", new StringBuilder("send('").append(name).
                 append("', '&event=onfocus', null)").toString());
         
+        sb = new StringBuilder(textfield.getStyleClass());
         if (!textfield.isEnabled()) {
-            inputtag.add("class", new StringBuilder(textfield.getStyleClass()).
-                    append("_disabled").toString());
+            sb.append("_disabled");
             inputtag.add("readonly", "readonly");
-        } else {
-            inputtag.add("class", textfield.getStyleClass());
         }
+        
+        if (dataelement != null)
+            switch (dataelement.getType()) {
+            case DataType.NUMC:
+            case DataType.DEC:
+                sb.append("_right");
+                break;
+            }
+        
+        inputtag.add("class", sb.toString());
         
         addEvents(inputtag, textfield);
         tags.add(inputtag);

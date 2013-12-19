@@ -132,10 +132,20 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "background-color", "#ffffff"); 
         insertStyleProperty(shell003, "padding", "3px");
         insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "border-style", "none"); 
-        insertStyleProperty(shell003, "font-size", "12pt"); 
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "monospace");
         insertStyleProperty(shell003, "color", "#000000");
+
+        insertStyleElement(shell002, ".text_field_right");
+        insertStyleProperty(shell003, "background-color", "#ffffff");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "monospace");
+        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "text-align", "right");
 
         insertStyleElement(shell002, ".warning_message");
         insertStyleProperty(shell003, "font-size", "12pt");
@@ -300,13 +310,23 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "text-align", "left");
 
         insertStyleElement(shell002, ".text_field_disabled");
-        insertStyleProperty(shell003, "background-color", "#ffffff"); 
+        insertStyleProperty(shell003, "background-color", "#ffffff");
         insertStyleProperty(shell003, "padding", "3px");
         insertStyleProperty(shell003, "margin", "0px");
         insertStyleProperty(shell003, "border-style", "none");
-        insertStyleProperty(shell003, "font-size", "12pt"); 
+        insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "monospace");
         insertStyleProperty(shell003, "color", "#808080");
+
+        insertStyleElement(shell002, ".text_field_disabled_right");
+        insertStyleProperty(shell003, "background-color", "#ffffff");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "monospace");
+        insertStyleProperty(shell003, "color", "#808080");
+        insertStyleProperty(shell003, "text-align", "right");
 
         insertStyleElement(shell002, ".list_box");
         insertStyleProperty(shell003, "background-color", "#ffffff"); 
