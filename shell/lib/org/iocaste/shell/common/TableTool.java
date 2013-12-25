@@ -29,6 +29,9 @@ public class TableTool {
     private Map<String, Column> columns;
     private Container container;
     private TableToolData data;
+    private int increment;
+    private long last;
+    private String itemcolumn;
     
     public TableTool(TableToolData data) {
         Table table;
@@ -45,6 +48,8 @@ public class TableTool {
         table.setMark(true);
         table.setVisibleLines(15);
         columns = new HashMap<>();
+        increment = 1;
+        last = 0;
         
         for (String name : controls.keySet())
             controls.get(name).setContext(data.context);
@@ -161,6 +166,17 @@ public class TableTool {
                 }
             }
             
+            if (object == null && itemcolumn != null && name.
+                    equals(itemcolumn)) {
+                last += increment;
+                if (element.isDataStorable()) {
+                    input = (InputComponent)element;
+                    input.set(last);
+                } else {
+                    ((Text)element).setText(Long.toString(last));
+                }
+            }
+            
             if (column.disabled)
                 element.setEnabled(false);
             
@@ -196,6 +212,11 @@ public class TableTool {
         
         if (object == null)
             return;
+        
+        if (itemcolumn != null) {
+            last += increment; 
+            object.set(itemcolumn, last);
+        }
         
         item.setObject(object);
     }
@@ -319,6 +340,14 @@ public class TableTool {
     public final void setColumnValues(String name, Map<String, Object> values)
     {
         columns.get(name).values = values;
+    }
+    
+    public final void setItemColumn(String name) {
+        itemcolumn = name;
+    }
+    
+    public final void setItemIncrement(int increment) {
+        this.increment = increment;
     }
     
     public final void setMark(boolean mark) {
