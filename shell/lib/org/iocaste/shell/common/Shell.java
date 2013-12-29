@@ -1,5 +1,6 @@
 package org.iocaste.shell.common;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -214,6 +215,31 @@ public class Shell extends AbstractServiceInterface {
      */
     public static final boolean isInitial(String value) {
         return (value == null || value.trim().length() == 0)? true : false;
+    }
+    
+    public static final boolean isInitial(InputComponent input) {
+        DataElement element;
+        Object value = input.get();
+        if (value == null)
+            return true;
+        
+        element = getDataElement(input);
+        if (element == null)
+            return Shell.isInitial((String)value);
+        
+        switch (element.getType()) {
+        case DataType.BOOLEAN:
+            return (boolean)value;
+            
+        case DataType.NUMC:
+            return (((BigDecimal)value).longValue() == 0l);
+            
+        case DataType.DEC:
+            return (((Number)value).doubleValue() == 0);
+
+        default:
+            return Shell.isInitial(value.toString());
+        }
     }
     
     /**
