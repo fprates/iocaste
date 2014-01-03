@@ -104,65 +104,65 @@ public class Editor {
     }
     
     public static final void render(Context context) {
-        ProjectPackage projectpackage;
-        DataForm form;
-        Source source;
-        InputComponent input;
-        TextEditor editor;
-//        String packagename, sourcename;
-        TabbedPane mainpane;
-        Container editorcontainer, installcontainer;
-        Form container = new Form(context.view, "main");
-        PageControl pagecontrol = new PageControl(container);
-        
-        pagecontrol.add("home");
-        pagecontrol.add("back");
-        pagecontrol.add("save", PageControl.REQUEST);
-        pagecontrol.add("activate", PageControl.REQUEST);
-        
-//        packagename = context.project.header.get("PACKAGE");
-//        sourcename = context.project.header.get("CLASS");
-//        source = context.project.packages.get(packagename).
-//                sources.get(sourcename);
-        
-        mainpane = new TabbedPane(container, "mainpane");
-        editorcontainer = new StandardContainer(mainpane, "editorcontainer");
-        form = new DataForm(editorcontainer, "project");
-        form.importModel(context.editorhdrmodel);
-        form.setObject(context.project.header);
-        input = form.get("PACKAGE");
-        input.setVisibleLength(60);
-        for (Element element : form.getElements())
-            element.setEnabled(false);
-        
-        context.editor = new TextEditorTool(context);
-        editor = context.editor.instance(editorcontainer, "editor");
-        switch (context.mode) {
-        case Context.CREATE:
-            context.project.header.set("CLASS", "Main.java");
-            context.project.entryclass = context.project.defaultpackage.
-                    concat(".Main");
-            context.project.currentsource = context.project.entryclass;
-            context.editor.set(editor, context.project.currentsource,
-                    Project.getMainTemplate(context));
-            projectpackage = context.project.packages.
-                    get(context.project.defaultpackage);
-            source = new Source();
-            projectpackage.sources.put(context.project.currentsource, source);
-            break;
-        }
-        
-        editor.setLineSize(80);
-        
-        new TextArea(editorcontainer, "output").setEnabled(false);
-        new TabbedPaneItem(mainpane, "source").setContainer(editorcontainer);
-        
-        installcontainer = new StandardContainer(mainpane, "installcontainer");
-        new DataForm(installcontainer, "link").importModel(
-                context.installmodel);
-        
-        new TabbedPaneItem(mainpane, "install").setContainer(installcontainer);
-//        context.view.setTitle(Context.TITLES[context.mode]);
+//        ProjectPackage projectpackage;
+//        DataForm form;
+//        Source source;
+//        InputComponent input;
+//        TextEditor editor;
+////        String packagename, sourcename;
+//        TabbedPane mainpane;
+//        Container editorcontainer, installcontainer;
+//        Form container = new Form(context.view, "main");
+//        PageControl pagecontrol = new PageControl(container);
+//        
+//        pagecontrol.add("home");
+//        pagecontrol.add("back");
+//        pagecontrol.add("save", PageControl.REQUEST);
+//        pagecontrol.add("activate", PageControl.REQUEST);
+//        
+////        packagename = context.project.header.get("PACKAGE");
+////        sourcename = context.project.header.get("CLASS");
+////        source = context.project.packages.get(packagename).
+////                sources.get(sourcename);
+//        
+//        mainpane = new TabbedPane(container, "mainpane");
+//        editorcontainer = new StandardContainer(mainpane, "editorcontainer");
+//        form = new DataForm(editorcontainer, "project");
+//        form.importModel(context.editorhdrmodel);
+//        form.setObject(context.project.header);
+//        input = form.get("PACKAGE");
+//        input.setVisibleLength(60);
+//        for (Element element : form.getElements())
+//            element.setEnabled(false);
+//        
+//        context.editor = new TextEditorTool(context);
+//        editor = context.editor.instance(editorcontainer, "editor");
+//        switch (context.mode) {
+//        case Context.CREATE:
+//            context.project.header.set("CLASS", "Main.java");
+//            context.project.entryclass = context.project.defaultpackage.
+//                    concat(".Main");
+//            context.project.currentsource = context.project.entryclass;
+//            context.editor.set(editor, context.project.currentsource,
+//                    Project.getMainTemplate(context));
+//            projectpackage = context.project.packages.
+//                    get(context.project.defaultpackage);
+//            source = new Source();
+//            projectpackage.sources.put(context.project.currentsource, source);
+//            break;
+//        }
+//        
+//        editor.setLineSize(80);
+//        
+//        new TextArea(editorcontainer, "output").setEnabled(false);
+//        new TabbedPaneItem(mainpane, "source").setContainer(editorcontainer);
+//        
+//        installcontainer = new StandardContainer(mainpane, "installcontainer");
+//        new DataForm(installcontainer, "link").importModel(
+//                context.installmodel);
+//        
+//        new TabbedPaneItem(mainpane, "install").setContainer(installcontainer);
+////        context.view.setTitle(Context.TITLES[context.mode]);
     }
     
     public static final void save(Context context) throws Exception {

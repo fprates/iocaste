@@ -1,10 +1,8 @@
-package org.iocaste.workbench;
+package org.iocaste.workbench.install;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.user.Authorization;
@@ -12,13 +10,11 @@ import org.iocaste.protocol.user.UserProfile;
 
 public class Install {
 
-    public static final InstallData init() {
-        String repository;
+    public static final InstallData execute() {
         UserProfile profile;
         TaskGroup taskgroup;
         Map<String, String> messages;
         Authorization authorization;
-        GlobalConfigData config;
         InstallData data = new InstallData();
         
         // mensagens
@@ -37,21 +33,6 @@ public class Install {
         profile = new UserProfile("DEVELOPER");
         profile.add(authorization);
         data.add(profile);
-        
-        /*
-         * modelos
-         */
-        ProjectModels.install(data);
-        
-        /*
-         * configurações
-         */
-        config = new GlobalConfigData();
-        repository = new StringBuilder(System.getProperty("user.home")).
-                append(File.separator).append(".iocaste").
-                append(File.separator).append("workbench").toString();
-        config.define("repository", String.class, repository);
-        data.add(config);
         
         /*
          *  link
