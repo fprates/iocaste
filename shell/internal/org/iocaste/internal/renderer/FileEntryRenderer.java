@@ -17,7 +17,7 @@ public class FileEntryRenderer extends Renderer {
         filetag.add("type", "file");
         filetag.add("name", name);
         filetag.add("id", name);
-        
+        filetag.add("value", (String)file.get());
         return filetag;
     }
 }

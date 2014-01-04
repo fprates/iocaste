@@ -118,6 +118,10 @@ public class View implements Serializable {
         initparams.clear();
     }
     
+    public final void clearMultipartElements() {
+        mpelements.clear();
+    }
+    
     /**
      * Limpa lista de saída.
      */

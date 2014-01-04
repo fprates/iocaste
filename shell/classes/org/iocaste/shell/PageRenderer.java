@@ -1,7 +1,5 @@
 package org.iocaste.shell;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -240,6 +238,7 @@ public class PageRenderer extends AbstractRenderer {
             
             inputdata = new InputData();
             inputdata.view = view;
+            inputdata.view.clearMultipartElements();
             inputdata.container = null;
             inputdata.function = this;
             
@@ -799,6 +798,7 @@ public class PageRenderer extends AbstractRenderer {
         view.clearInputs();
         inputdata = new InputData();
         inputdata.view = view;
+        inputdata.view.clearMultipartElements();
         inputdata.container = null;
         inputdata.function = this;
         for (Container container : view.getContainers()) {
@@ -912,17 +912,14 @@ public class PageRenderer extends AbstractRenderer {
                     continue;
                 
                 filename = fileitem.getName();
-                
-                try {
-                    if (filename.equals("")) {
-                        element.setError(MultipartElement.EMPTY_FILE_NAME);
-                    } else {
-                        fileitem.write(new File(
-                                element.getDestiny(), filename));
+                if (filename.equals("")) {
+                    element.setError(MultipartElement.EMPTY_FILE_NAME);
+                } else {
+                    if (element.isEnabled()) {
+                        element.set(filename);
+                        element.setContent(fileitem.get());
                         element.setError(0);
                     }
-                } catch (FileNotFoundException e) {
-                    element.setError(MultipartElement.FILE_NOT_FOUND);
                 }
                 
                 parameters.put(fieldname, new String[] {filename});
@@ -1091,6 +1088,7 @@ public class PageRenderer extends AbstractRenderer {
         InputData inputdata = new InputData();
         
         inputdata.view = view;
+        inputdata.view.clearMultipartElements();
         inputdata.container = null;
         inputdata.function = function;
         

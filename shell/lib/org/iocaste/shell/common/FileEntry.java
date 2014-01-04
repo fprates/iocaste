@@ -9,25 +9,20 @@ package org.iocaste.shell.common;
 public class FileEntry extends AbstractInputComponent
             implements MultipartElement {
     private static final long serialVersionUID = -3285030860250606539L;
-    private String destiny;
     private int error;
+    private byte[] content;
     
     public FileEntry(Container container, String name) {
         super(container, Const.FILE_ENTRY, null, name);
         
-        destiny = null;
         error = 0;
     }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.MultipartElement#getDestiny()
-     */
-    @Override
-    public final String getDestiny() {
-        return destiny;
-    }
 
+    @Override
+    public final byte[] getContent() {
+        return content;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.MultipartElement#getError()
@@ -46,14 +41,9 @@ public class FileEntry extends AbstractInputComponent
         return true;
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.MultipartElement#setDestiny(
-     *      java.lang.String)
-     */
     @Override
-    public final void setDestiny(String destiny) {
-        this.destiny = destiny;
+    public final void setContent(byte[] content) {
+        this.content = content;
     }
     
     /*

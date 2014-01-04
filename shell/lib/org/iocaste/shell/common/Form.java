@@ -29,6 +29,7 @@ package org.iocaste.shell.common;
  */
 public class Form extends AbstractContainer {
     private static final long serialVersionUID = -4049409929220114810L;
+    public static final String MULTIPART_ENCODE = "multipart/form-data";
     private String enctype;
     private Parameter action;
     
