@@ -17,7 +17,9 @@ public class FileEntryRenderer extends Renderer {
         filetag.add("type", "file");
         filetag.add("name", name);
         filetag.add("id", name);
-        filetag.add("value", (String)file.get());
+        if (!file.isEnabled())
+            filetag.add("disabled", "disabled");
+        
         return filetag;
     }
 }

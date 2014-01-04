@@ -893,21 +893,21 @@ public class PageRenderer extends AbstractRenderer {
         parameters = new HashMap<>();
         elements = pagectx.getViewData().getMultipartElements();
         
-        for (MultipartElement element : elements) {
-            for (Object object : pagectx.getFiles()) {
-            	fileitem = (FileItem)object;
-                fieldname = fileitem.getFieldName();
+        for (Object object : pagectx.getFiles()) {
+        	fileitem = (FileItem)object;
+            fieldname = fileitem.getFieldName();
+            
+            if (fileitem.isFormField()) {
+                if (pagectx.isAction(fieldname))
+                    fieldname = "action";
                 
-                if (fileitem.isFormField()) {
-                    if (pagectx.isAction(fieldname))
-                        fieldname = "action";
-                    
-                    parameters.put(fieldname,
-                    		new String[] {fileitem.getString()});
-                    
-                    continue;
-                }
+                parameters.put(fieldname,
+                		new String[] {fileitem.getString()});
                 
+                continue;
+            }
+
+            for (MultipartElement element : elements) {
                 if (!fieldname.equals(element.getHtmlName()))
                     continue;
                 
