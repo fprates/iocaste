@@ -34,7 +34,7 @@ public class WorkbenchShell {
         tokens = cmdline.get().toString().split("\\s");
         switch (tokens[0]) {
         case "project":
-            Project.execute(tokens);
+            output = Project.execute(tokens, context);
             break;
         case "exit":
             ((AbstractPage)context.function).home();

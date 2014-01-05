@@ -17,13 +17,11 @@ public class Install {
         Authorization authorization;
         InstallData data = new InstallData();
         
-        // mensagens
         messages = new HashMap<>();
         messages.put("iocaste-workbench", "Workbench");
         messages.put("WORKBENCH", "Workbench");
         data.setMessages("pt_BR", messages);
         
-        // autorização de execução
         authorization = new Authorization("WORKBENCH.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
@@ -34,13 +32,12 @@ public class Install {
         profile.add(authorization);
         data.add(profile);
         
-        /*
-         *  link
-         */
         data.link("WORKBENCH", "iocaste-workbench");
         taskgroup = new TaskGroup("DEVELOP");
         taskgroup.add("WORKBENCH");
         data.add(taskgroup);
+        
+        Models.install(data);
         
         return data;
     }
