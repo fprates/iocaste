@@ -39,6 +39,9 @@ public class WorkbenchShell {
         case "package":
             output = Package.execute(tokens, context);
             break;
+        case "source":
+            output = Source.execute(tokens, context);
+            break;
         case "exit":
             ((AbstractPage)context.function).home();
             break;

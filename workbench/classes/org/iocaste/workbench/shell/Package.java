@@ -1,5 +1,7 @@
 package org.iocaste.workbench.shell;
 
+import java.util.Map;
+
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -17,15 +19,10 @@ public class Package {
         ExtendedObject[] objects;
         DocumentModel model;
         Documents documents;
+        Map<String, String> parameters;
         
-        project = null;
-        for (int i = 0; i < tokens.length; i++) {
-            if (!tokens[i].startsWith("--project="))
-                continue;
-            project = tokens[i].split("=")[1];
-            break;
-        }
-
+        parameters = Common.getParameters(tokens, "--project");
+        project = parameters.get("--project");
         if (project == null)
             return "project.unspecified";
 

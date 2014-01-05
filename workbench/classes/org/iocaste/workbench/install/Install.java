@@ -37,6 +37,8 @@ public class Install {
         taskgroup.add("WORKBENCH");
         data.add(taskgroup);
         
+        data.addText("WB_SOURCES");
+        
         Models.install(data);
         
         return data;

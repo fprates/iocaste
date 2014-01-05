@@ -11,7 +11,7 @@ public class Models {
     public static final void install(InstallData data) {
         DataElement element;
         DocumentModel model;
-        DocumentModelItem item, projectname;
+        DocumentModelItem item, projectname, packageid;
         
         /*
          * Projeto
@@ -43,12 +43,40 @@ public class Models {
          */
         model = data.getModel("WB_PACKAGE", "WB_PACKAGE", null);
         
+        element = new DataElement("WB_PACKAGE_ID");
+        element.setType(DataType.NUMC);
+        element.setLength(9);
+        packageid = new DocumentModelItem("PACKAGE_ID");
+        packageid.setTableFieldName("PKGID");
+        packageid.setDataElement(element);
+        model.add(new DocumentModelKey(packageid));
+        model.add(packageid);
+        
+        item = new DocumentModelItem("PROJECT_NAME");
+        item.setTableFieldName("PRJNM");
+        item.setDataElement(projectname.getDataElement());
+        item.setReference(projectname);
+        model.add(item);
+        
         element = new DataElement("WB_PACKAGE_NAME");
         element.setType(DataType.CHAR);
         element.setLength(128);
         element.setUpcase(false);
         item = new DocumentModelItem("PACKAGE_NAME");
         item.setTableFieldName("PKGNM");
+        item.setDataElement(element);
+        model.add(item);
+        
+        /*
+         * Fonte
+         */
+        model = data.getModel("WB_SOURCE", "WB_SOURCE", null);
+
+        element = new DataElement("WB_SOURCE_ID");
+        element.setType(DataType.NUMC);
+        element.setLength(6);
+        item = new DocumentModelItem("SOURCE_ID");
+        item.setTableFieldName("SRCID");
         item.setDataElement(element);
         model.add(new DocumentModelKey(item));
         model.add(item);
@@ -58,12 +86,19 @@ public class Models {
         item.setDataElement(projectname.getDataElement());
         item.setReference(projectname);
         model.add(item);
-        
-        element = new DataElement("WB_PACKAGE_ID");
-        element.setType(DataType.NUMC);
-        element.setLength(9);
+
         item = new DocumentModelItem("PACKAGE_ID");
         item.setTableFieldName("PKGID");
+        item.setDataElement(packageid.getDataElement());
+        item.setReference(packageid);
+        model.add(item);
+
+        element = new DataElement("WB_SOURCE_NAME");
+        element.setType(DataType.CHAR);
+        element.setLength(128);
+        element.setUpcase(false);
+        item = new DocumentModelItem("SOURCE_NAME");
+        item.setTableFieldName("SRCNM");
         item.setDataElement(element);
         model.add(item);
     }

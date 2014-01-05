@@ -8,6 +8,8 @@ import org.iocaste.shell.common.View;
 import org.iocaste.workbench.install.Install;
 import org.iocaste.workbench.shell.WorkbenchShell;
 
+import org.iocaste.workbench.shell.source.Editor;
+
 /**
  * 
  * @author francisco.prates
@@ -37,5 +39,13 @@ public class Main extends AbstractPage {
     
     public final void run() {
         WorkbenchShell.run(context);
+    }
+    
+    public final void save() {
+        Editor.save(context);
+    }
+    
+    public final void source() {
+        Editor.output(context);
     }
 }
