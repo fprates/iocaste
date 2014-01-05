@@ -11,19 +11,22 @@ public class Models {
     public static final void install(InstallData data) {
         DataElement element;
         DocumentModel model;
-        DocumentModelItem item;
+        DocumentModelItem item, projectname;
         
+        /*
+         * Projeto
+         */
         model = data.getModel("WB_PROJECT", "WB_PROJECT", null);
         
         element = new DataElement("WB_PROJECT_NAME");
         element.setType(DataType.CHAR);
         element.setLength(32);
         element.setUpcase(true);
-        item = new DocumentModelItem("PROJECT_NAME");
-        item.setTableFieldName("PRJNM");
-        item.setDataElement(element);
-        model.add(new DocumentModelKey(item));
-        model.add(item);
+        projectname = new DocumentModelItem("PROJECT_NAME");
+        projectname.setTableFieldName("PRJNM");
+        projectname.setDataElement(element);
+        model.add(new DocumentModelKey(projectname));
+        model.add(projectname);
         
         element = new DataElement("WB_PROJECT_ID");
         element.setType(DataType.NUMC);
@@ -34,5 +37,34 @@ public class Models {
         model.add(item);
         
         data.addNumberFactory("WBPROJECTID");
+        
+        /*
+         * Pacote
+         */
+        model = data.getModel("WB_PACKAGE", "WB_PACKAGE", null);
+        
+        element = new DataElement("WB_PACKAGE_NAME");
+        element.setType(DataType.CHAR);
+        element.setLength(128);
+        element.setUpcase(false);
+        item = new DocumentModelItem("PACKAGE_NAME");
+        item.setTableFieldName("PKGNM");
+        item.setDataElement(element);
+        model.add(new DocumentModelKey(item));
+        model.add(item);
+        
+        item = new DocumentModelItem("PROJECT_NAME");
+        item.setTableFieldName("PRJNM");
+        item.setDataElement(projectname.getDataElement());
+        item.setReference(projectname);
+        model.add(item);
+        
+        element = new DataElement("WB_PACKAGE_ID");
+        element.setType(DataType.NUMC);
+        element.setLength(9);
+        item = new DocumentModelItem("PACKAGE_ID");
+        item.setTableFieldName("PKGID");
+        item.setDataElement(element);
+        model.add(item);
     }
 }
