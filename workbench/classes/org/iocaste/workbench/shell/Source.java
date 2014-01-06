@@ -16,7 +16,6 @@ public class Source {
         String[] packagetokens;
         StringBuilder sb;
         ExtendedObject[] objects;
-        long sourceid;
         Documents documents = new Documents(context.function);
         
         switch (tokens[1]) {
@@ -62,19 +61,21 @@ public class Source {
             query.orderBy("PACKAGE_ID");
             query.andEqual("PACKAGE_ID", context.packageid);
             objects = documents.select(query);
-            sourceid = context.packageid;
+            context.sourceid = context.packageid;
             if (objects != null)
                 for (ExtendedObject object : objects) {
                     context.fullsourcename = object.get("SOURCE_NAME");
-                    if (context.fullsourcename == tokens[2])
+                    if (context.fullsourcename.equals(tokens[2]))
                         return "duplicate.source.name";
                     
-                    sourceid = object.geti("SOURCE_ID");
-                    context.sources.put(context.fullsourcename, sourceid);
+                    context.sourceid = object.geti("SOURCE_ID");
+                    context.sources.put(context.fullsourcename,
+                            context.sourceid);
                 }
             
             context.fullsourcename = tokens[2];
-            context.sources.put(context.fullsourcename, sourceid + 1);
+            context.sourceid++;
+            context.sources.put(context.fullsourcename, context.sourceid);
             context.view.redirect("source");
             break;
         }

@@ -14,9 +14,13 @@ public class WorkbenchShell {
     public static final void output(Context context) {
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
+        TextField cmdline;
         
         new TextArea(container, "output").setEnabled(false);
-        new TextField(container, "cmdline").setLength(100);
+        cmdline = new TextField(container, "cmdline");
+        cmdline.setLength(100);
+        cmdline.setVisibleLength(100);
+        context.view.setFocus(cmdline);
         
         pagecontrol.add("home");
         pagecontrol.add("run", PageControl.SUBMIT);
