@@ -2,21 +2,18 @@ package org.iocaste.workbench.shell;
 
 import java.util.Map;
 
-import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.documents.common.Query;
 import org.iocaste.workbench.Context;
 
 public class Source {
 
     public static final String execute(String[] tokens, Context context) {
-        Query query;
         Map<String, String> parameters;
         String packagename;
         String[] packagetokens;
         StringBuilder sb;
+        ExtendedObject object;
         ExtendedObject[] objects;
-        Documents documents = new Documents(context.function);
 
         /*
          * recupera dados do projeto
@@ -26,11 +23,7 @@ public class Source {
         if (context.project == null)
             return "unspecified.project";
         
-        query = new Query();
-        query.setModel("WB_PROJECT");
-        query.andEqual("PROJECT_NAME", context.project);
-        objects = documents.select(query);
-        if (objects == null)
+        if (Common.getProject(context.project, context) == null)
             return "invalid.project";
         
         /*
@@ -49,31 +42,22 @@ public class Source {
             sb.append(packagetokens[i]);
         }
         packagename = sb.toString();
-        
-        query = new Query();
-        query.setModel("WB_PACKAGE");
-        query.andEqual("PROJECT_NAME", context.project);
-        query.andEqual("PACKAGE_NAME", packagename);
-        objects = documents.select(query);
-        if (objects == null)
+        object = Common.getPackage(packagename, context.project, context);
+        if (object == null)
             return "invalid.package";
         
-        context.sources.clear();
-        context.packageid = objects[0].getl("PACKAGE_ID");
-        query = new Query();
-        query.setModel("WB_SOURCE");
-        query.orderBy("PACKAGE_ID");
-        query.andEqual("PACKAGE_ID", context.packageid);
-        objects = documents.select(query);
+        context.packageid = object.getl("PACKAGE_ID");
+        objects = Common.getSources(context.packageid, context);
         
         /*
          * recupera dados dos fontes
          */
+        context.sources.clear();
         context.sourceid = context.packageid;
         if (objects != null)
-            for (ExtendedObject object : objects) {
-                context.fullsourcename = object.get("SOURCE_NAME");
-                context.sourceid = object.geti("SOURCE_ID");
+            for (ExtendedObject object_ : objects) {
+                context.fullsourcename = object_.get("SOURCE_NAME");
+                context.sourceid = object_.geti("SOURCE_ID");
                 context.sources.put(context.fullsourcename, context.sourceid);
             }
         
