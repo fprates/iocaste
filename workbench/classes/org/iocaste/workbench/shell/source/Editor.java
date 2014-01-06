@@ -27,13 +27,15 @@ public class Editor {
         DocumentModel model;
         Documents documents = new Documents(context.function);
         
-        model = documents.getModel("WB_SOURCE");
-        object = new ExtendedObject(model);
-        object.set("SOURCE_NAME", context.fullsourcename);
-        object.set("PACKAGE_ID", context.packageid);
-        object.set("PROJECT_NAME", context.project);
-        object.set("SOURCE_ID", context.sourceid);
-        documents.save(object);
+        if (context.editormode == Context.NEW) {
+            model = documents.getModel("WB_SOURCE");
+            object = new ExtendedObject(model);
+            object.set("SOURCE_NAME", context.fullsourcename);
+            object.set("PACKAGE_ID", context.packageid);
+            object.set("PROJECT_NAME", context.project);
+            object.set("SOURCE_ID", context.sourceid);
+            documents.save(object);
+        }
         
         context.tetool.commit(context.editor, context.sourceid);
         context.tetool.update(context.editor, "WB_SOURCES");
