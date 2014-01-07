@@ -88,6 +88,15 @@ public class PackageTool extends AbstractServiceInterface {
         return false;
     }
     
+    public final int install(InstallData data, String appname) {
+        Message message = new Message();
+        
+        message.setId("install");
+        message.add("data", data);
+        message.add("name", appname);
+        return call(message);
+    }
+    
     /**
      * 
      * @param name
@@ -95,13 +104,7 @@ public class PackageTool extends AbstractServiceInterface {
      */
     public final int install(String name) {
         InstallData data = getInstallData(name);
-        Message message = new Message();
-        
-        message.setId("install");
-        message.clear();
-        message.add("data", data);
-        message.add("name", name);
-        return call(message);
+        return install(data, name);
     }
 
     /**

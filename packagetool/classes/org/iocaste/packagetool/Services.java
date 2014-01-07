@@ -9,6 +9,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.packagetool.common.TaskGroup;
@@ -45,6 +46,42 @@ public class Services extends AbstractFunction {
         TaskSelector.assignGroup(group, username, state);
     }
     
+    private final ExtendedObject getPackageHeader(State state) {
+        ExtendedObject[] objects;
+        Query query = new Query();
+        
+        query.setMaxResults(1);
+        query.setModel("PACKAGE");
+        query.andEqual("NAME", state.pkgname);
+        objects = state.documents.select(query);
+        return (objects == null)? null : objects[0];
+    }
+    
+    private final ExtendedObject getPackageHeaderInstance(State state) {
+        ExtendedObject header;
+        long pkgid = state.documents.getNextNumber("PKGCODE") * 1000000;
+        
+        header = new ExtendedObject(state.documents.getModel("PACKAGE"));
+        header.set("NAME", state.pkgname);
+        header.set("CODE", pkgid);
+        return header;
+    }
+    
+    private final long getPackageLastItem(State state) {
+        ExtendedObject[] objects;
+        Query query = new Query();
+        
+        query.setModel("PACKAGE_ITEM");
+        query.setMaxResults(1);
+        query.orderBy("CODE");
+        query.descending();
+        objects = state.documents.select(query);
+        if (objects == null)
+            return state.pkgid;
+        
+        return objects[0].getl("CODE");
+    }
+    
     /**
      * 
      * @param message
@@ -67,12 +104,11 @@ public class Services extends AbstractFunction {
         State state;
         String name, modelname;
         Set<String> texts;
-
+        
         state = new State();
         state.data = message.get("data");
         state.pkgname = message.getString("name");
         state.documents = new Documents(this);
-        state.pkgid = state.documents.getNextNumber("PKGCODE") * 1000000;
         state.shm = new HashMap<>();
         state.function = this;
         
@@ -92,10 +128,15 @@ public class Services extends AbstractFunction {
             /*
              * Registra instalação do pacote
              */
-            header = new ExtendedObject(state.documents.getModel("PACKAGE"));
-            header.set("NAME", state.pkgname);
-            header.set("CODE", state.pkgid);
-            state.documents.save(header);
+            if (isInstalled(state.pkgname)) {
+                header = getPackageHeader(state);
+                state.pkgid = header.getl("CODE");
+                state.pkgid = getPackageLastItem(state) + 1;
+            } else {
+                header = getPackageHeaderInstance(state);
+                state.documents.save(header);
+                state.pkgid = header.getl("CODE");
+            }
             
             /*
              * gera modelos;
@@ -103,10 +144,11 @@ public class Services extends AbstractFunction {
              * prepara dados para ajuda de pesquisa.
              */
             models = state.data.getModels();
-            if (models.length > 0)
+            if (models.length > 0) {
                 InstallModels.init(models, state);
+                state.documents.commit();
+            }
             
-            state.documents.commit();
             cmodels = state.data.getCModels();
             if (cmodels.length > 0)
                 InstallCModels.init(cmodels, state);
