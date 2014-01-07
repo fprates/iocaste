@@ -7,7 +7,6 @@ import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.View;
 import org.iocaste.workbench.install.Install;
 import org.iocaste.workbench.shell.WorkbenchShell;
-
 import org.iocaste.workbench.shell.source.Editor;
 
 /**
@@ -32,7 +31,7 @@ public class Main extends AbstractPage {
         
         context.repository = Common.composeFileName(
                 System.getProperty("user.dir"),
-                "workbench");
+                ".iocaste", "workbench");
                 
         return context;
     }

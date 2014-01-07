@@ -15,55 +15,69 @@ public class Compile {
     
     private static final void createProjectFiles(Context context)
             throws IOException {
-          OutputStream os;
-          File file;
-          String dir, code;
-          long packageid, sourceid;
-          ExtendedObject source;
-          StringBuilder bindir;
-          Map<Long, String> sources;
-          ExtendedObject[] packages;
-          TextEditorTool tetool = new TextEditorTool(context);
-          
-          removeCompleteDir(context.projectdir);
-          new File(context.projectdir).mkdir();
-          bindir = new StringBuilder(context.projectdir);
-          for (String dirname : new String[] {"bin", "WEB-INF", "classes"})
-              new File(bindir.append(File.separator).
-                      append(dirname).toString()).mkdir();
-          
-          packages = Common.getPackages(context.project, context);
-          for (ExtendedObject package_ : packages) {
-              dir = package_.getst("PACKAGE_NAME");
-              dir = dir.replaceAll("[\\.]", File.separator);
-              dir = Common.composeFileName(context.projectdir, "src", dir);
-              new File(dir).mkdirs();
-                  
-              packageid = package_.getl("PACKAGE_ID");
-              context.sources = Common.getSources(packageid, context);
-              for (String sourcename : context.sources.keySet()) {
-                  source = context.sources.get(sourcename);
-                  if (packageid != source.getl("PACKAGE_ID"))
-                      continue;
-                  
-                  sourceid = source.getl("SOURCE_ID");
-                  sources = tetool.get("WB_SOURCES", sourceid);
-                  code = sources.get(sourceid);
-                  
-                  sourcename = sourcename.replaceAll("[\\.]", File.separator);
-                  file = new File(sourcename);
-                  file.createNewFile();
-                  os = new FileOutputStream(file, false);
-                  os.write(code.getBytes());
-                  os.flush();
-                  os.close();
-              }
-          }
+        String[] tokens;
+        OutputStream os;
+        File file;
+        String dir, code;
+        long packageid, sourceid;
+        ExtendedObject source;
+        StringBuilder bindir;
+        Map<Long, String> sources;
+        ExtendedObject[] packages;
+        TextEditorTool tetool = new TextEditorTool(context);
+        
+        file = new File(context.repository);
+        if (!file.exists())
+            file.mkdir();
+        
+        removeCompleteDir(context.projectdir);
+        new File(context.projectdir).mkdir();
+        bindir = new StringBuilder(context.projectdir);
+        for (String dirname : new String[] {"bin", "WEB-INF", "classes"})
+            new File(bindir.append(File.separator).
+                    append(dirname).toString()).mkdir();
+        
+        packages = Common.getPackages(context.project, context);
+        for (ExtendedObject package_ : packages) {
+            dir = package_.getst("PACKAGE_NAME");
+            dir = dir.replaceAll("[\\.]", File.separator);
+            dir = Common.composeFileName(context.projectdir, "src", dir);
+            new File(dir).mkdirs();
+                
+            packageid = package_.getl("PACKAGE_ID");
+            context.sources = Common.getSources(packageid, context);
+            for (String sourcename : context.sources.keySet()) {
+                source = context.sources.get(sourcename);
+                if (packageid != source.getl("PACKAGE_ID"))
+                    continue;
+                
+                sourceid = source.getl("SOURCE_ID");
+                sources = tetool.get(context.sourceobj, sourceid);
+                code = sources.get(sourceid);
+                
+                tokens = sourcename.split("\\.");
+                sourcename = tokens[tokens.length - 1];
+                sourcename = Common.composeFileName(dir, sourcename);
+                file = new File(sourcename.concat(".java"));
+                file.createNewFile();
+                os = new FileOutputStream(file, false);
+                os.write(code.getBytes());
+                os.flush();
+                os.close();
+            }
+        }
     }
 
     public static final String execute(String project, Context context)
             throws Exception {
+        ExtendedObject object;
         context.project = project;
+        
+        object = Common.getProject(project, context);
+        if (object == null)
+            return "invalid.project";
+        
+        context.sourceobj = object.get("SOURCE_OBJ");
         createProjectFiles(context);
         
         return "project.compiled";
