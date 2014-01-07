@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
+import org.iocaste.workbench.Common;
 import org.iocaste.workbench.Context;
 
 public class Package {
@@ -67,7 +68,7 @@ public class Package {
     
     private static final String list(String name, Context context) {
         StringBuilder sb;
-        ExtendedObject[] objects;
+        Map<String, ExtendedObject> objects;
         ExtendedObject object;
         
         object = Common.getPackage(name, context.project, context);
@@ -79,7 +80,7 @@ public class Package {
             return "package.has.no.sources";
         
         sb = new StringBuilder();
-        for (ExtendedObject object_ : objects) {
+        for (ExtendedObject object_ : objects.values()) {
             if (sb.length() > 0)
                 sb.append('\n');
             

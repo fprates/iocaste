@@ -30,6 +30,10 @@ public class Main extends AbstractPage {
     protected PageContext init(View view) throws Exception {
         context = new Context();
         
+        context.repository = Common.composeFileName(
+                System.getProperty("user.dir"),
+                "workbench");
+                
         return context;
     }
     
@@ -37,7 +41,7 @@ public class Main extends AbstractPage {
         WorkbenchShell.output(context);
     }
     
-    public final void run() {
+    public final void run() throws Exception {
         WorkbenchShell.run(context);
     }
     

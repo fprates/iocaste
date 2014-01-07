@@ -1,31 +1,5 @@
 package org.iocaste.workbench;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
-
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler.CompilationTask;
-
-import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.InputComponent;
-
 public class Activation {
 //    private static final void addJarItems(JarOutputStream jar, String path,
 //            String base) throws Exception {
@@ -310,20 +284,6 @@ public class Activation {
 //        addJarItems(jar, bindir, bindir);
 //        jar.close();
 //        os.close();
-//    }
-//
-//    private static final void removeCompleteDir(String dir) {
-//        File origin = new File(dir);
-//        File[] files = origin.listFiles();
-//        
-//        if (files != null)
-//            for (File file : files) {
-//                if (file.isDirectory())
-//                    removeCompleteDir(file.getAbsolutePath());
-//                file.delete();
-//            }
-//        
-//        origin.delete();
 //    }
 //    
 //    public static final void start(Context context) throws Exception {

@@ -26,7 +26,7 @@ public class WorkbenchShell {
         pagecontrol.add("run", PageControl.SUBMIT);
     }
     
-    public static final void run(Context context) {
+    public static final void run(Context context) throws Exception {
         String[] tokens;
         String output = null;
         InputComponent stdout = context.view.getElement("output");

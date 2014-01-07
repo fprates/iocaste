@@ -4,9 +4,12 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
+import org.iocaste.workbench.Common;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.compiler.Compile;
 
 public class Project {
+    
     private static final String create(String project, Context context) {
         DocumentModel model;
         ExtendedObject object;
@@ -23,7 +26,11 @@ public class Project {
         return "project.created";
     }
     
-    public static final String execute(String[] tokens, Context context) {
+    public static final String execute(String[] tokens, Context context)
+            throws Exception {
+        context.projectdir = Common.composeFileName(
+                context.repository, tokens[2]);
+        
         switch (tokens[1]) {
         case "list":
             return list(tokens[2], context);
@@ -31,6 +38,8 @@ public class Project {
             return create(tokens[2], context);
         case "remove":
             return remove(tokens[2]);
+        case "compile":
+            return Compile.execute(tokens[2], context);
         default:
             return "invalid.project.operation";
         }
