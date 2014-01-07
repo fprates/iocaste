@@ -14,7 +14,7 @@ public class Query implements Serializable {
     private String[] orderby, columns;
     private Map<String, List<JoinClause>> join;
     private int maxresults;
-    private boolean skiperror;
+    private boolean skiperror, descending;
     
     public Query() {
         init();
@@ -66,6 +66,10 @@ public class Query implements Serializable {
         enclose(true);
     }
     
+    public final void descending() {
+        descending = true;
+    }
+    
     private final void enclose(boolean begin) {
         if (begin)
             add(null, WhereClause.BE, null, null);
@@ -113,6 +117,10 @@ public class Query implements Serializable {
         where = new ArrayList<>();
         join = new LinkedHashMap<>();
         skiperror = true;
+    }
+    
+    public final boolean isDescending() {
+        return descending;
     }
     
     public final void join(String model, String field1, String field2) {

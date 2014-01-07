@@ -85,6 +85,7 @@ public class Parser {
             sb.append(model.getModelItem(field).getTableFieldName());
         }
         
+        
         return sb.toString();
     }
     
@@ -132,8 +133,11 @@ public class Parser {
             sb.append(where(clauses, tablemodel, values, cache));
 
         fields = query.getOrderBy();
-        if (fields != null)
+        if (fields != null) {
             sb.append(orderby(fields, tablemodel));
+            if (query.isDescending())
+                sb.append(" desc");
+        }
         
         return sb.toString();
     }
