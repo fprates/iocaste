@@ -11,7 +11,8 @@ public class Context extends PageContext {
     public static final byte NEW = 0;
     public static final byte EDIT = 1;
     public byte editormode;
-    public String project, fullsourcename, sourcename, projectdir, repository;
+    public String project, fullsourcename, sourcename, projectdir, repository,
+        sourceobj;
     public long packageid, sourceid;
     public TextEditorTool tetool;
     public TextEditor editor;

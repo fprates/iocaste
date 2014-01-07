@@ -5,11 +5,12 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.DummyElement;
 import org.iocaste.packagetool.common.InstallData;
 
 public class Models {
     public static final void install(InstallData data) {
-        DataElement element;
+        DataElement element, sourceid;
         DocumentModel model;
         DocumentModelItem item, projectname, packageid;
         
@@ -30,9 +31,22 @@ public class Models {
         
         element = new DataElement("WB_PROJECT_ID");
         element.setType(DataType.NUMC);
-        element.setLength(6);
+        element.setLength(3);
         item = new DocumentModelItem("PROJECT_ID");
         item.setTableFieldName("PRJID");
+        item.setDataElement(element);
+        model.add(item);
+        
+        item = new DocumentModelItem("SOURCE_OBJ");
+        item.setTableFieldName("SRCOB");
+        item.setDataElement(new DummyElement("TXTED_TEXTNAME"));
+        model.add(item);
+
+        sourceid = new DataElement("WB_SOURCE_ID");
+        sourceid.setType(DataType.NUMC);
+        sourceid.setLength(6);
+        item = new DocumentModelItem("SOURCE_ID");
+        item.setTableFieldName("SRCID");
         item.setDataElement(element);
         model.add(item);
         
@@ -45,7 +59,7 @@ public class Models {
         
         element = new DataElement("WB_PACKAGE_ID");
         element.setType(DataType.NUMC);
-        element.setLength(9);
+        element.setLength(6);
         packageid = new DocumentModelItem("PACKAGE_ID");
         packageid.setTableFieldName("PKGID");
         packageid.setDataElement(element);
@@ -71,13 +85,10 @@ public class Models {
          * Fonte
          */
         model = data.getModel("WB_SOURCE", "WB_SOURCE", null);
-
-        element = new DataElement("WB_SOURCE_ID");
-        element.setType(DataType.NUMC);
-        element.setLength(6);
+        
         item = new DocumentModelItem("SOURCE_ID");
         item.setTableFieldName("SRCID");
-        item.setDataElement(element);
+        item.setDataElement(sourceid);
         model.add(new DocumentModelKey(item));
         model.add(item);
         

@@ -81,10 +81,10 @@ public class Common {
     
     public static final Map<String, ExtendedObject> getSources(long packageid,
             Context context) {
-        Map<String, ExtendedObject> sources;
         String fullsourcename;
         ExtendedObject[] objects;
         Documents documents = new Documents(context.function);
+        Map<String, ExtendedObject> sources = new HashMap<>();
         Query query = new Query();
         
         query.setModel("WB_SOURCE");
@@ -92,9 +92,8 @@ public class Common {
         query.andEqual("PACKAGE_ID", packageid);
         objects = documents.select(query);
         if (objects == null)
-            return null;
+            return sources;
         
-        sources = new HashMap<>();
         for (ExtendedObject object_ : objects) {
             fullsourcename = object_.get("SOURCE_NAME");
             sources.put(fullsourcename, object_);

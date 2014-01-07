@@ -16,6 +16,7 @@ public class Source {
         String[] packagetokens;
         StringBuilder sb;
         ExtendedObject object;
+        long lastsrcid;
 
         /*
          * recupera dados do projeto
@@ -25,8 +26,12 @@ public class Source {
         if (context.project == null)
             return "unspecified.project";
         
-        if (Common.getProject(context.project, context) == null)
+        object = Common.getProject(context.project, context);
+        if (object == null)
             return "invalid.project";
+
+        context.sourceobj = object.get("SOURCE_OBJ");
+        lastsrcid = object.getl("SOURCE_ID");
         
         /*
          * recupera dados do pacote
@@ -54,14 +59,15 @@ public class Source {
         /*
          * recupera dados dos fontes
          */
-        context.sourceid = context.packageid;
-        
         context.fullsourcename = tokens[2];
         switch (tokens[1]) {
         case "edit":
+            object = context.sources.get(context.fullsourcename);
+            if (object == null)
+                return "source.not.found";
+            
             context.editormode = Context.EDIT;
-            context.sourceid = context.sources.get(context.fullsourcename).
-                    getl("SOURCE_ID");
+            context.sourceid = object.getl("SOURCE_ID");
             context.view.redirect("source");
             return "source.edited";
         case "create":
@@ -69,7 +75,7 @@ public class Source {
                 return "duplicate.source.name";
 
             context.editormode = Context.NEW;
-            context.sourceid++;
+            context.sourceid = lastsrcid + 1;
             object = getSourceInstance(context);
             context.sources.put(context.fullsourcename, object);
             context.view.redirect("source");
