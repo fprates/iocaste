@@ -25,20 +25,24 @@ public class TextEditorTool extends AbstractServiceInterface {
     }
     
     public final TextEditor instance(Container container, String name) {
-        new TextArea(container, name);
+        TextEditor editor = new TextEditor(name);
         
-        return new TextEditor(name);
+        editor.setElement(new TextArea(container, name));
+        return editor;
     }
     
-    public final void load(TextEditor editor, String textnm, long page) {
-        InputComponent input;
-        Map<Long, String> pages;
+    public final Map<Long, String> get(String textnm, long page) {
         Message message = new Message();
         
         message.setId("load");
         message.add("textname", textnm);
         message.add("pagenr", page);
-        pages = call(message);
+        return call(message);
+    }
+    
+    public final void load(TextEditor editor, String textnm, long page) {
+        InputComponent input;
+        Map<Long, String> pages = get(textnm, page);
         
         if (pages == null)
             return;
