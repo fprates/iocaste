@@ -3,7 +3,9 @@ package org.iocaste.texteditor.common;
 import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.AbstractServiceInterface;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
@@ -24,13 +26,6 @@ public class TextEditorTool extends AbstractServiceInterface {
         editor.commit(page, (String)textarea.get());
     }
     
-    public final TextEditor instance(Container container, String name) {
-        TextEditor editor = new TextEditor(name);
-        
-        editor.setElement(new TextArea(container, name));
-        return editor;
-    }
-    
     public final Map<Long, String> get(String textnm, long page) {
         Message message = new Message();
         
@@ -38,6 +33,13 @@ public class TextEditorTool extends AbstractServiceInterface {
         message.add("textname", textnm);
         message.add("pagenr", page);
         return call(message);
+    }
+    
+    public final TextEditor instance(Container container, String name) {
+        TextEditor editor = new TextEditor(name);
+        
+        editor.setElement(new TextArea(container, name));
+        return editor;
     }
     
     public final void load(TextEditor editor, String textnm, long page) {
@@ -55,6 +57,16 @@ public class TextEditorTool extends AbstractServiceInterface {
         
         input = context.view.getElement(editor.getName());
         input.set(pages.get(page));
+    }
+    
+    public final void register(String name) {
+        String app;
+        Iocaste iocaste = new Iocaste(context.function);
+        InstallData data = new InstallData();
+        
+        data.addText(name);
+        app = iocaste.getCurrentApp();
+        new PackageTool(context.function).install(data, app);
     }
     
     public final void set(TextEditor editor, int page, String text) {
