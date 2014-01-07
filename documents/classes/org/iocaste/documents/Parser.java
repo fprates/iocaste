@@ -2,7 +2,9 @@ package org.iocaste.documents;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.JoinClause;
@@ -125,6 +127,9 @@ public class Parser {
             case "delete":
                 sb.append(columns(query, cache));
                 break;
+            case "update":
+                sb.append(" ").append(tablemodel.getTableName());
+                sb.append(set(query, tablemodel));
             }
         }
         
@@ -137,6 +142,35 @@ public class Parser {
             sb.append(orderby(fields, tablemodel));
             if (query.isDescending())
                 sb.append(" desc");
+        }
+        
+        return sb.toString();
+    }
+    
+    private static final String set(Query query, DocumentModel model) {
+        DocumentModelItem item;
+        Object value;
+        Map<String, Object> values = query.getValues();
+        StringBuilder sb = new StringBuilder(" set ");
+        
+        for (String name : values.keySet()) {
+            if (sb.length() > 5)
+                sb.append(", ");
+            
+            item = model.getModelItem(name);
+            sb.append(item.getTableFieldName()).
+                append("=");
+            
+            value = values.get(name);
+            switch(item.getDataElement().getType()) {
+            case DataType.CHAR:
+            case DataType.BOOLEAN:
+                sb.append("'").append(value).append("'");
+                break;
+            default:
+                sb.append(value);
+                break;
+            }
         }
         
         return sb.toString();

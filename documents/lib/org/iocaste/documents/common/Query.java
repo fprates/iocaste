@@ -2,6 +2,7 @@ package org.iocaste.documents.common;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ public class Query implements Serializable {
     private Map<String, List<JoinClause>> join;
     private int maxresults;
     private boolean skiperror, descending;
+    private Map<String, Object> values;
     
     public Query() {
         init();
@@ -23,6 +25,7 @@ public class Query implements Serializable {
     public Query(String statement) {
         init();
         this.statement = statement;
+        values = new HashMap<>();
     }
     
     private final void add(String field, byte condition, Object value,
@@ -109,6 +112,10 @@ public class Query implements Serializable {
         return statement;
     }
     
+    public final Map<String, Object> getValues() {
+        return values;
+    }
+    
     public final List<WhereClause> getWhere() {
         return where;
     }
@@ -182,5 +189,9 @@ public class Query implements Serializable {
     
     public final void setSkipError(boolean skiperror) {
         this.skiperror = skiperror;
+    }
+    
+    public final void values(String name, Object value) {
+        values.put(name, value);
     }
 }
