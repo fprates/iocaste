@@ -72,11 +72,11 @@ public class Source {
             context.projectsourceid = object.getl("SOURCE_ID");
             context.view.redirect("source");
             context.projectdefsource = parameters.get("--default");
-            return "source.edited";
+            return "source.modified";
         case "create":
             if (context.projectsources.containsKey(
                     context.projectfullsourcename))
-                return "duplicate.source.name";
+                return "duplicated.source.name";
 
             context.editormode = Context.NEW;
             context.projectsourceid = lastsrcid + 1;
