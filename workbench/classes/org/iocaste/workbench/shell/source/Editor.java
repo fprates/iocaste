@@ -17,6 +17,8 @@ public class Editor {
         
         context.tetool = new TextEditorTool(context);
         context.editor = context.tetool.instance(container, "editor");
+        context.editor.setWidth(80);
+        context.editor.setHeight(40);
         context.tetool.load(context.editor, context.projectsourceobj,
                 context.projectsourceid);
         
