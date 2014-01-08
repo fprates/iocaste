@@ -8,11 +8,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
@@ -28,6 +31,39 @@ import org.iocaste.workbench.Common;
 import org.iocaste.workbench.Context;
 
 public class Compile {
+    private static final void addJarItems(JarOutputStream jar, String path,
+            String base) throws Exception {
+        String jaritem;
+        FileChannel channel;
+        int limit;
+        ByteBuffer buffer = null;
+        
+        for (File file : new File(path).listFiles()) {
+            jaritem = file.getPath().substring(base.length());
+            if (file.isDirectory()) {
+                jar.putNextEntry(new JarEntry(jaritem.concat(File.separator)));
+                addJarItems(jar, file.getPath(), base);
+                continue;
+            }
+            
+            jar.putNextEntry(new JarEntry(jaritem));
+            channel = new FileInputStream(file).getChannel();
+            
+            if (buffer == null)
+                buffer = ByteBuffer.allocate(64*1024);
+            
+            buffer.rewind();
+            while ((limit = channel.read(buffer)) > 0) {
+                buffer.flip();
+                if (buffer.hasArray())
+                    jar.write(buffer.array(), 0, limit);
+                buffer.clear();
+            }
+            
+            channel.close();
+            jar.closeEntry();
+        }
+    }
     
     private static final String compileProject(CompileData data)
             throws Exception {
@@ -48,7 +84,7 @@ public class Compile {
         
         copyLibraries(data);
         createWebXML(data);
-        return "successful.compiling";
+        return null;
     }
 
     private static final String compileSources(List<File> files,
@@ -253,6 +289,23 @@ public class Compile {
         webapp.addChild(servletmapping);
     }
 
+  
+    private static final void deployApplication(CompileData data)
+            throws Exception {
+        String jarname = data.context.projectname;
+        String dest = Common.composeFileName(
+                System.getProperty("catalina.home"),
+                "webapps",
+                jarname.concat(".war"));
+        OutputStream os = new FileOutputStream(dest);
+        JarOutputStream jar = new JarOutputStream(os);
+        String bindir = Common.composeFileName(data.context.projectdir, "bin");
+        
+        addJarItems(jar, bindir, bindir);
+        jar.close();
+        os.close();
+    }
+    
     public static final String execute(String project, Context context)
             throws Exception {
         CompileData data;
@@ -280,6 +333,7 @@ public class Compile {
         if (error != null)
             return error;
         
+        deployApplication(data);
         return "project.compiled";
     }
     
