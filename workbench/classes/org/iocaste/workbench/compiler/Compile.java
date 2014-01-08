@@ -3,6 +3,7 @@ package org.iocaste.workbench.compiler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -21,11 +22,10 @@ import javax.tools.ToolProvider;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.texteditor.common.TextEditorTool;
 import org.iocaste.workbench.Common;
 import org.iocaste.workbench.Context;
-
-import sun.misc.JarFilter;
 
 public class Compile {
     
@@ -67,7 +67,7 @@ public class Compile {
       
         cunits = fmngr.getJavaFileObjects(files.toArray(new File[0]));
         prefix = Common.composeFileName(
-                data.context.projectdir, "WEB-INF", "lib", "");
+                data.workbenchpath, "WEB-INF", "lib", "");
         
         file = new File(prefix);
         cp = new StringBuilder();
@@ -109,7 +109,7 @@ public class Compile {
     
     private static final void copyLibraries(CompileData data) throws Exception {
         String libfrom = Common.composeFileName(
-                data.context.projectdir, "WEB-INF", "lib");
+                data.workbenchpath, "WEB-INF", "lib");
         String libto = Common.composeFileName(
                 data.context.projectdir, "bin", "WEB-INF", "lib");
       
@@ -264,11 +264,16 @@ public class Compile {
             return "invalid.project";
 
         data = new CompileData();
-        data.packages = Common.getPackages(context.projectname, context);
+        data.packages = Common.getPackages(project, context);
+        if (data.packages == null)
+            return "project.has.no.packages";
+        
         data.context = context;
         data.entryclass = object.get("ENTRY_CLASS");
-        context.projectsourceobj = object.get("SOURCE_OBJ");
+        data.workbenchpath = ((AbstractPage)data.context.function).
+                getRealPath("");
         context.projectname = project;
+        context.projectsourceobj = object.get("SOURCE_OBJ");
         
         createProjectFiles(data);
         error = compileProject(data);
@@ -297,9 +302,18 @@ class CompileData {
     public ExtendedObject[] packages;
     public Context context;
     public List<String> sourcefiles;
-    public String entryclass, serviceclass;
+    public String entryclass, serviceclass, workbenchpath;
     
     public CompileData() {
         sourcefiles = new ArrayList<>();
     }
+}
+
+class JarFilter implements FilenameFilter {
+
+    @Override
+    public boolean accept(File arg0, String name) {
+        return name.toLowerCase().endsWith(".jar");
+    }
+    
 }

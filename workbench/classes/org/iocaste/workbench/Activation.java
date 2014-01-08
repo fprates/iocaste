@@ -55,12 +55,3 @@ public class Activation {
 //        deployApplication(context);
 //    }
 }
-/*
-class JarFilter implements FilenameFilter {
-
-    @Override
-    public boolean accept(File arg0, String name) {
-        return name.toLowerCase().endsWith(".jar");
-    }
-    
-}*/

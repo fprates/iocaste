@@ -22,7 +22,7 @@ public class Source {
          * recupera dados do projeto
          */
         parameters = Common.getParameters(tokens, "--project", "--default");
-        context.projectname = (String)parameters.get("--project");
+        context.projectname = parameters.get("--project");
         if (context.projectname == null)
             return "unspecified.project";
         

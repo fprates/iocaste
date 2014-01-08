@@ -32,7 +32,7 @@ public class Common {
         
         query.setModel("WB_PACKAGE");
         query.setMaxResults(1);
-        query.andEqual("PROJECT_NAME", context.projectname);
+        query.andEqual("PROJECT_NAME", project);
         query.andEqual("PACKAGE_NAME", name);
         objects = documents.select(query);
         return (objects == null)? null : objects[0];
@@ -44,7 +44,7 @@ public class Common {
         Query query = new Query();
         
         query.setModel("WB_PACKAGE");
-        query.andEqual("PROJECT_NAME", context.projectname);
+        query.andEqual("PROJECT_NAME", project);
         return documents.select(query);
     }
     
