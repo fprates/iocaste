@@ -109,7 +109,7 @@ public class Services extends AbstractFunction {
             documents.modify(object);
 
             linehelper.i = pageid * 10000;
-            linehelper.size = linehelper.editor.getLineSize();
+            linehelper.size = linehelper.editor.getWidth();
             text = linehelper.editor.getString(page);
             textlines = text.split("\r\n");
             for (String textline : textlines) {

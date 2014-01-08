@@ -8,14 +8,12 @@ import org.iocaste.shell.common.TextArea;
 
 public class TextEditor implements Serializable {
     private static final long serialVersionUID = 8099830107603124518L;
-    private int size;
     private String name;
     private Map<Long, String> pages;
     private TextArea element;
     
     public TextEditor(String name) {
         this.name = name;
-        size = 80;
         pages = new LinkedHashMap<>();
     }
     
@@ -27,8 +25,12 @@ public class TextEditor implements Serializable {
         return element;
     }
     
-    public final int getLineSize() {
-        return size;
+    public final int getHeight() {
+        return element.getHeight();
+    }
+    
+    public final int getWidth() {
+        return element.getWidth();
     }
     
     public final String getName() {
@@ -47,7 +49,11 @@ public class TextEditor implements Serializable {
         this.element = element;
     }
     
-    public final void setLineSize(int size) {
-        this.size = size;
+    public final void setHeight(int height) {
+        element.setSize(element.getWidth(), height);
+    }
+    
+    public final void setWidth(int width) {
+        element.setSize(width, element.getHeight());
     }
 }
