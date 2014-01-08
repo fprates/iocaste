@@ -18,16 +18,16 @@ public class Package {
         DocumentModel model;
         Documents documents;
 
-        object = Common.getProject(context.project, context);
+        object = Common.getProject(context.projectname, context);
         if (object == null)
             return "invalid.project";
 
         projectid = object.geti("PROJECT_ID");
-        object = Common.getPackage(name, context.project, context);
+        object = Common.getPackage(name, context.projectname, context);
         if (object != null)
             return "package.has.already.exist";
 
-        objects = Common.getPackages(context.project, context);
+        objects = Common.getPackages(context.projectname, context);
         if (objects == null)
             packageid = (projectid * 1000) + 1;
         else
@@ -37,7 +37,7 @@ public class Package {
         model = documents.getModel("WB_PACKAGE");
         object = new ExtendedObject(model);
         object.set("PACKAGE_NAME", name);
-        object.set("PROJECT_NAME", context.project);
+        object.set("PROJECT_NAME", context.projectname);
         object.set("PACKAGE_ID", packageid);
         documents.save(object);
         
@@ -48,8 +48,8 @@ public class Package {
         Map<String, String> parameters;
 
         parameters = Common.getParameters(tokens, "--project");
-        context.project = parameters.get("--project");
-        if (context.project == null)
+        context.projectname = parameters.get("--project");
+        if (context.projectname == null)
             return "project.unspecified";
         
         switch (tokens[1]) {
@@ -67,7 +67,7 @@ public class Package {
         Map<String, ExtendedObject> objects;
         ExtendedObject object;
         
-        object = Common.getPackage(name, context.project, context);
+        object = Common.getPackage(name, context.projectname, context);
         if (object == null)
             return "invalid.package";
         
