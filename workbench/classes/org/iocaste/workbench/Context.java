@@ -11,10 +11,17 @@ public class Context extends PageContext {
     public static final byte NEW = 0;
     public static final byte EDIT = 1;
     public byte editormode;
-    public String project, fullsourcename, sourcename, projectdir, repository,
-        sourceobj;
-    public long packageid, sourceid;
+    public String repository;
     public TextEditorTool tetool;
     public TextEditor editor;
-    public Map<String, ExtendedObject> sources;
+    
+    public String projectname;
+    public String projectdir;
+    public String projectsourceobj;
+    public String projectfullsourcename;
+    public String projectsourcename;
+    public String projectdefsource;
+    public long projectpackageid;
+    public long projectsourceid;
+    public Map<String, ExtendedObject> projectsources;
 }

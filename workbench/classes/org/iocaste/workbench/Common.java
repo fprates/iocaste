@@ -32,7 +32,7 @@ public class Common {
         
         query.setModel("WB_PACKAGE");
         query.setMaxResults(1);
-        query.andEqual("PROJECT_NAME", context.project);
+        query.andEqual("PROJECT_NAME", context.projectname);
         query.andEqual("PACKAGE_NAME", name);
         objects = documents.select(query);
         return (objects == null)? null : objects[0];
@@ -44,22 +44,27 @@ public class Common {
         Query query = new Query();
         
         query.setModel("WB_PACKAGE");
-        query.andEqual("PROJECT_NAME", context.project);
+        query.andEqual("PROJECT_NAME", context.projectname);
         return documents.select(query);
     }
     
     public static final Map<String, String> getParameters(
             String[] tokens, String... names) {
-        String absname;
+        String parname;
         Map<String, String> parameters = new HashMap<>();
         
         for (String name : names) {
-            absname = new StringBuilder(name).append('=').toString();
+            parname = new StringBuilder(name).append('=').toString();
             for (int i = 0; i < tokens.length; i++) {
-                if (!tokens[i].startsWith(absname))
-                    continue;
-                parameters.put(name, tokens[i].split("=")[1]);
-                break;
+                if (tokens[i].startsWith(parname)) {
+                    parameters.put(name, tokens[i].split("=")[1]);
+                    break;
+                }
+                
+                if (tokens[i].equals(name)) {
+                    parameters.put(name, "true");
+                    break;
+                }
             }
         }
         

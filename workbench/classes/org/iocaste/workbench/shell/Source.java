@@ -21,16 +21,16 @@ public class Source {
         /*
          * recupera dados do projeto
          */
-        parameters = Common.getParameters(tokens, "--project");
-        context.project = parameters.get("--project");
-        if (context.project == null)
+        parameters = Common.getParameters(tokens, "--project", "--default");
+        context.projectname = (String)parameters.get("--project");
+        if (context.projectname == null)
             return "unspecified.project";
         
-        object = Common.getProject(context.project, context);
+        object = Common.getProject(context.projectname, context);
         if (object == null)
             return "invalid.project";
 
-        context.sourceobj = object.get("SOURCE_OBJ");
+        context.projectsourceobj = object.get("SOURCE_OBJ");
         lastsrcid = object.getl("SOURCE_ID");
         
         /*
@@ -40,7 +40,7 @@ public class Source {
         sb = new StringBuilder();
         for (int i = 0; i < packagetokens.length; i++) {
             if (i == (packagetokens.length - 1)) {
-                context.sourcename = packagetokens[i];
+                context.projectsourcename = packagetokens[i];
                 continue;
             }
             
@@ -49,35 +49,40 @@ public class Source {
             sb.append(packagetokens[i]);
         }
         packagename = sb.toString();
-        object = Common.getPackage(packagename, context.project, context);
+        object = Common.getPackage(packagename, context.projectname, context);
         if (object == null)
             return "invalid.package";
         
-        context.packageid = object.getl("PACKAGE_ID");
-        context.sources = Common.getSources(context.packageid, context);
+        context.projectpackageid = object.getl("PACKAGE_ID");
+        context.projectsources = Common.getSources(
+                context.projectpackageid, context);
         
         /*
          * recupera dados dos fontes
          */
-        context.fullsourcename = tokens[2];
+        context.projectfullsourcename = tokens[2];
         switch (tokens[1]) {
         case "edit":
-            object = context.sources.get(context.fullsourcename);
+            object = context.projectsources.get(
+                    context.projectfullsourcename);
             if (object == null)
                 return "source.not.found";
             
             context.editormode = Context.EDIT;
-            context.sourceid = object.getl("SOURCE_ID");
+            context.projectsourceid = object.getl("SOURCE_ID");
             context.view.redirect("source");
+            context.projectdefsource = parameters.get("--default");
             return "source.edited";
         case "create":
-            if (context.sources.containsKey(context.fullsourcename))
+            if (context.projectsources.containsKey(
+                    context.projectfullsourcename))
                 return "duplicate.source.name";
 
             context.editormode = Context.NEW;
-            context.sourceid = lastsrcid + 1;
+            context.projectsourceid = lastsrcid + 1;
+            context.projectdefsource = parameters.get("--default");
             object = getSourceInstance(context);
-            context.sources.put(context.fullsourcename, object);
+            context.projectsources.put(context.projectfullsourcename, object);
             context.view.redirect("source");
             return "source.created";
         default:
@@ -90,10 +95,10 @@ public class Source {
                 getModel("WB_SOURCE");
         ExtendedObject object = new ExtendedObject(model);
         
-        object.set("SOURCE_NAME", context.fullsourcename);
-        object.set("PACKAGE_ID", context.packageid);
-        object.set("PROJECT_NAME", context.project);
-        object.set("SOURCE_ID", context.sourceid);
+        object.set("SOURCE_NAME", context.projectfullsourcename);
+        object.set("PACKAGE_ID", context.projectpackageid);
+        object.set("PROJECT_NAME", context.projectname);
+        object.set("SOURCE_ID", context.projectsourceid);
         return object;
     }
 }

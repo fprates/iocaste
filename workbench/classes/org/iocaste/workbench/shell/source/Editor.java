@@ -17,14 +17,14 @@ public class Editor {
         
         context.tetool = new TextEditorTool(context);
         context.editor = context.tetool.instance(container, "editor");
-        context.tetool.load(context.editor, context.sourceobj,
-                context.sourceid);
+        context.tetool.load(context.editor, context.projectsourceobj,
+                context.projectsourceid);
         
         pagecontrol.add("back");
         pagecontrol.add("save", PageControl.REQUEST);
         
         context.view.setFocus(context.editor.getElement());
-        context.view.setTitle(context.fullsourcename);
+        context.view.setTitle(context.projectfullsourcename);
     }
     
     public static final void save(Context context) {
@@ -33,18 +33,35 @@ public class Editor {
         Documents documents = new Documents(context.function);
         
         if (context.editormode == Context.NEW) {
-            object = context.sources.get(context.fullsourcename);
+            object = context.projectsources.get(
+                    context.projectfullsourcename);
             documents.save(object);
             
+            /*
+             * opcionalmente, marca fonte como default do projeto
+             */
             query = new Query("update");
-            query.values("SOURCE_ID", object.getl("SOURCE_ID"));
+            query.values("SOURCE_ID", context.projectsourceid);
+            if (context.projectdefsource != null)
+                query.values("ENTRY_CLASS", context.projectfullsourcename);
             query.setModel("WB_PROJECT");
-            query.andEqual("PROJECT_NAME", context.project);
+            query.andEqual("PROJECT_NAME", context.projectname);
             documents.update(query);
+        } else {
+            /*
+             * opcionalmente, marca fonte como default do projeto
+             */
+            if (context.projectdefsource != null) {
+                query = new Query("update");
+                query.values("ENTRY_CLASS", context.projectfullsourcename);
+                query.setModel("WB_PROJECT");
+                query.andEqual("PROJECT_NAME", context.projectname);
+                documents.update(query);
+            }
         }
         
-        context.tetool.commit(context.editor, context.sourceid);
-        context.tetool.update(context.editor, context.sourceobj);
+        context.tetool.commit(context.editor, context.projectsourceid);
+        context.tetool.update(context.editor, context.projectsourceobj);
         context.view.message(Const.STATUS, "project.saved");
     }
 }

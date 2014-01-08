@@ -10,7 +10,7 @@ import org.iocaste.packagetool.common.InstallData;
 
 public class Models {
     public static final void install(InstallData data) {
-        DataElement element, sourceid;
+        DataElement element, sourceid, sourcename;
         DocumentModel model;
         DocumentModelItem item, projectname, packageid;
         
@@ -47,6 +47,24 @@ public class Models {
         sourceid.setLength(6);
         item = new DocumentModelItem("SOURCE_ID");
         item.setTableFieldName("SRCID");
+        item.setDataElement(element);
+        model.add(item);
+
+        sourcename = new DataElement("WB_SOURCE_NAME");
+        sourcename.setType(DataType.CHAR);
+        sourcename.setLength(128);
+        sourcename.setUpcase(false);
+        item = new DocumentModelItem("ENTRY_CLASS");
+        item.setTableFieldName("ENTRY");
+        item.setDataElement(sourcename);
+        model.add(item);
+        
+        element = new DataElement("WB_SERVICE_CLASS");
+        element.setType(DataType.CHAR);
+        element.setLength(128);
+        element.setUpcase(false);
+        item = new DocumentModelItem("SERVICE_CLASS");
+        item.setTableFieldName("SRVCL");
         item.setDataElement(element);
         model.add(item);
         
@@ -104,13 +122,9 @@ public class Models {
         item.setReference(packageid);
         model.add(item);
 
-        element = new DataElement("WB_SOURCE_NAME");
-        element.setType(DataType.CHAR);
-        element.setLength(128);
-        element.setUpcase(false);
         item = new DocumentModelItem("SOURCE_NAME");
         item.setTableFieldName("SRCNM");
-        item.setDataElement(element);
+        item.setDataElement(sourcename);
         model.add(item);
     }
 }
