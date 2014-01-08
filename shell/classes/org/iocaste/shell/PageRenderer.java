@@ -902,7 +902,7 @@ public class PageRenderer extends AbstractRenderer {
                     fieldname = "action";
                 
                 parameters.put(fieldname,
-                		new String[] {fileitem.getString()});
+                		new String[] {fileitem.getString("UTF-8")});
                 
                 continue;
             }
