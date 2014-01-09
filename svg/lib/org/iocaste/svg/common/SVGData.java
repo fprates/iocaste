@@ -16,8 +16,8 @@ public class SVGData implements Serializable {
         SVGDataItem item = new SVGDataItem();
         
         item.type = SVGMethods.CIRCLE;
-        item.cx = cx;
-        item.cy = cy;
+        item.x1 = cx;
+        item.y1 = cy;
         item.r = r;
         items.add(item);
     }
@@ -62,6 +62,16 @@ public class SVGData implements Serializable {
         
         item.type = SVGMethods.STYLE;
         item.style = style;
+        items.add(item);
+    }
+    
+    public final void text(int x, int y, String text) {
+        SVGDataItem item = new SVGDataItem();
+        
+        item.type = SVGMethods.TEXT;
+        item.x1 = x;
+        item.y1 = y;
+        item.text = text;
         items.add(item);
     }
 }

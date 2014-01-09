@@ -7,5 +7,6 @@ public enum SVGMethods implements Serializable {
     DIMENSION,
     CIRCLE,
     LINE,
-    RECTANGLE
+    RECTANGLE,
+    TEXT
 }

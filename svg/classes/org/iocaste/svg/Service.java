@@ -22,8 +22,8 @@ public class Service extends AbstractFunction {
             switch (item.type) {
             case CIRCLE:
                 xmlitem = new XMLElement("circle");
-                xmlitem.add("cx", item.cx);
-                xmlitem.add("cy", item.cy);
+                xmlitem.add("cx", item.x1);
+                xmlitem.add("cy", item.y1);
                 xmlitem.add("r", item.r);
                 xmlitem.add("style", style);
                 xml.addChild(xmlitem);
@@ -52,6 +52,14 @@ public class Service extends AbstractFunction {
                 break;
             case STYLE:
                 style = item.style;
+                break;
+            case TEXT:
+                xmlitem = new XMLElement("text");
+                xmlitem.add("x", item.x1);
+                xmlitem.add("y", item.y1);
+                xmlitem.add("style", style);
+                xmlitem.addInner(item.text);
+                xml.addChild(xmlitem);
                 break;
             }
         }
