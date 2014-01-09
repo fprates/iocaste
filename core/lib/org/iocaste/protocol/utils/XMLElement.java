@@ -24,8 +24,8 @@ public class XMLElement {
      * @param name
      * @param value
      */
-    public final void add(String name, String value) {
-        attributes.put(name, value);
+    public final void add(String name, Object value) {
+        attributes.put(name, (value == null)? null : value.toString());
     }
     
     /**
