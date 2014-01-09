@@ -8,5 +8,6 @@ public enum SVGMethods implements Serializable {
     CIRCLE,
     LINE,
     RECTANGLE,
-    TEXT
+    TEXT,
+    AXLINK
 }

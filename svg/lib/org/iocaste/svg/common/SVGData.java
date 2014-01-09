@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iocaste.shell.common.Form;
+
 public class SVGData implements Serializable {
     private static final long serialVersionUID = 3565051111567721139L;
     private List<SVGDataItem> items;
@@ -12,14 +14,18 @@ public class SVGData implements Serializable {
         items = new ArrayList<>();
     }
     
-    public final void circle(int cx, int cy, int r) {
+    public final void axlink(SVGDataItem dataitem, Form form, String action) {
         SVGDataItem item = new SVGDataItem();
         
-        item.type = SVGMethods.CIRCLE;
-        item.x1 = cx;
-        item.y1 = cy;
-        item.r = r;
+        item.type = SVGMethods.AXLINK;
+        item.dataitem = dataitem;
+        item.action = action;
+        item.form = form;
         items.add(item);
+    }
+    
+    public final void circle(int cx, int cy, int r) {
+        items.add(scircle(cx, cy, r));
     }
     
     public final List<SVGDataItem> get() {
@@ -27,25 +33,21 @@ public class SVGData implements Serializable {
     }
     
     public final void line(int x1, int y1, int x2, int y2) {
-        SVGDataItem item = new SVGDataItem();
-        
-        item.type = SVGMethods.LINE;
-        item.x1 = x1;
-        item.y1 = y1;
-        item.x2 = x2;
-        item.y2 = y2;
-        items.add(item);
+        items.add(sline(x1, y1, x2, y2));
     }
     
     public final void rectangle(int x, int y, int w, int h) {
+        items.add(srectangle(x, y, w, h));
+    }
+    
+    public static final SVGDataItem scircle(int cx, int cy, int r) {
         SVGDataItem item = new SVGDataItem();
         
-        item.type = SVGMethods.RECTANGLE;
-        item.x1 = x;
-        item.y1 = y;
-        item.w = w;
-        item.h = h;
-        items.add(item);
+        item.type = SVGMethods.CIRCLE;
+        item.x1 = cx;
+        item.y1 = cy;
+        item.r = r;
+        return item;
     }
     
     public final void setDimension(int w, int h) {
@@ -64,8 +66,30 @@ public class SVGData implements Serializable {
         item.style = style;
         items.add(item);
     }
+
+    public static final SVGDataItem sline(int x1, int y1, int x2, int y2) {
+        SVGDataItem item = new SVGDataItem();
+        
+        item.type = SVGMethods.LINE;
+        item.x1 = x1;
+        item.y1 = y1;
+        item.x2 = x2;
+        item.y2 = y2;
+        return item;
+    }
+
+    public static final SVGDataItem srectangle(int x, int y, int w, int h) {
+        SVGDataItem item = new SVGDataItem();
+        
+        item.type = SVGMethods.RECTANGLE;
+        item.x1 = x;
+        item.y1 = y;
+        item.w = w;
+        item.h = h;
+        return item;
+    }
     
-    public final void text(int x, int y, String text) {
+    public final SVGDataItem text(int x, int y, String text) {
         SVGDataItem item = new SVGDataItem();
         
         item.type = SVGMethods.TEXT;
@@ -73,5 +97,6 @@ public class SVGData implements Serializable {
         item.y1 = y;
         item.text = text;
         items.add(item);
+        return item;
     }
 }
