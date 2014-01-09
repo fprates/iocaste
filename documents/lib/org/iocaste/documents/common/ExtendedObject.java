@@ -177,7 +177,7 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
     }
     
     public final String getst(String name) {
-        return get(name).toString();
+        return (String)get(name);
     }
     
     /**
