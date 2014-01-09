@@ -6,6 +6,7 @@ import java.util.List;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.Canvas;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
@@ -119,6 +120,10 @@ public class Renderer {
         switch (element.getType()) {
         case BUTTON:
             tags.add(ButtonRenderer.render((Button)element, config));
+            break;
+            
+        case CANVAS:
+            tags.add(CanvasRenderer.render((Canvas)element, config));
             break;
             
         case CHECKBOX:
