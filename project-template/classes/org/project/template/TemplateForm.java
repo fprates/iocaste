@@ -6,6 +6,7 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
@@ -16,7 +17,8 @@ import org.iocaste.shell.common.View;
  *
  */
 public class TemplateForm extends AbstractPage {
-
+    private Context context;
+    
     public TemplateForm() {
         export("install", "install");
     }
@@ -36,22 +38,27 @@ public class TemplateForm extends AbstractPage {
      * @param view
      * @return
      */
-    public final void bind(View view) {
+    public final void bind() {
         // carrega a biblioteca
         Template template = new Template(this);
         
         // exibe mensagem de status no cabeçalho
-        view.message(Const.STATUS, template.getMessage());
+        context.view.message(Const.STATUS, template.getMessage());
     }
     
+    @Override
+    public final PageContext init(View view) {
+        context = new Context();
+        return context;
+    }
     /**
      * Este é o ponto de entrada do programa
      * @param view
      */
-    public final void main(View view) {
+    public final void main() {
         Text text;
         // cria um formulário html
-        Form container = new Form(view, "main");
+        Form container = new Form(context.view, "main");
         
         /*
          * gera a barra do cabeçalho padrão da aplicação;
@@ -69,6 +76,10 @@ public class TemplateForm extends AbstractPage {
         new Button(container, "bind");
         
         // ajusta o título da visão
-        view.setTitle("iocaste-template");
+        context.view.setTitle("iocaste-template");
     }
+}
+
+class Context extends PageContext {
+    
 }

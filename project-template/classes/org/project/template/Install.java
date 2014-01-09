@@ -16,7 +16,7 @@ public class Install {
         InstallData data = new InstallData();
         
         // mensagens
-        messages = new HashMap<String, String>();
+        messages = new HashMap<>();
         messages.put("TESTE", "Aplicação template");
         messages.put("iocaste-template", "Módulo template");
         messages.put("server.test", "Clique no botão para testar o servidor.");
