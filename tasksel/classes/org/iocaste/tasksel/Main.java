@@ -58,13 +58,6 @@ public class Main extends AbstractPage {
         Map<String, Set<TaskEntry>> lists = Response.init(context);
         Response.main(lists, context);
     }
-    
-    /**
-     * 
-     */
-    public final void run() {
-        Request.run(context);
-    }
 }
 
 class Context extends PageContext {

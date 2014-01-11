@@ -10,10 +10,6 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Iocaste;
-import org.iocaste.shell.common.Button;
-import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
@@ -105,8 +101,6 @@ public class Response {
         Link link;
         NodeList groups, tasklist;
         Set<TaskEntry> entries;
-        DataForm form;
-        DataItem cmdline;
         Parameter groupcommand;
         String taskname, text;
         Form container = new Form(context.view, "main");
@@ -114,14 +108,6 @@ public class Response {
         
         pagecontrol.add("help", PageControl.EXTERNAL);
         setCustomStyleSheet(context.view);
-        
-        /*
-         * linha de comando
-         */
-        form = new DataForm(container, "selector");
-        cmdline = new DataItem(form, Const.TEXT_FIELD, "command");
-        cmdline.setLength(80);
-        new Button(container, "run");
         
         /*
          * tarefas pré-definidas
@@ -148,7 +134,6 @@ public class Response {
             }
         }
         
-        context.view.setFocus(cmdline);
         context.view.setTitle("task-selector");
     }
     
