@@ -11,7 +11,7 @@ import org.iocaste.workbench.compiler.Compile;
 
 public class Project {
     
-    private static final String create(String project, Context context) {
+    public static final String create(String project, Context context) {
         DocumentModel model;
         ExtendedObject object;
         long projectid;

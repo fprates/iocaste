@@ -122,6 +122,7 @@
     		<fileset dir="${builddir}/globalconfig/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/authority/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/texteditor/lib" excludes="*.jar"/>
+    		<fileset dir="${builddir}/workbench/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/svg/lib" excludes="*.jar"/>
     	<!--    <fileset dir="${builddir}/external/lib" excludes="*.jar"/> -->
     	<!--    <fileset dir="${builddir}/report/lib" excludes="*.jar"/> -->

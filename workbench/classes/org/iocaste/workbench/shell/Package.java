@@ -10,7 +10,7 @@ import org.iocaste.workbench.Context;
 
 public class Package {
 
-    private static final String create(String name, Context context) {
+    public static final String create(String name, Context context) {
         int projectid;
         long packageid;
         ExtendedObject object;
