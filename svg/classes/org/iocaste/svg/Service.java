@@ -1,8 +1,11 @@
 package org.iocaste.svg;
 
+import java.util.Map;
+
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Parameter;
 import org.iocaste.svg.common.SVGData;
 import org.iocaste.svg.common.SVGDataItem;
 
@@ -36,6 +39,8 @@ public class Service extends AbstractFunction {
     }
     
     private final XMLElement compileItem(SVGDataItem item, Context context) {
+        Map<Parameter, Object> parameters;
+        StringBuilder onclick;
         XMLElement xmlitem;
         String href;
         
@@ -48,6 +53,17 @@ public class Service extends AbstractFunction {
                     append("');").toString();
             xmlitem = new XMLElement("a");
             xmlitem.add("xlink:href", href);
+            
+            parameters = item.linkvalues;
+            if (parameters.size() > 0) {
+                onclick = new StringBuilder();
+                for (Parameter parameter : parameters.keySet())
+                    onclick.append("setValue('").append(parameter.getHtmlName()).
+                            append("', '").append(parameters.get(parameter)).
+                            append("');");
+                xmlitem.add("onClick", onclick.toString());
+            }
+            
             xmlitem.addInner(compileItem(item.dataitem, context).toString());
             return xmlitem;
         case CIRCLE:

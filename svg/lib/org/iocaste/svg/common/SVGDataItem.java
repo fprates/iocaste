@@ -1,8 +1,11 @@
 package org.iocaste.svg.common;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Parameter;
 
 public class SVGDataItem implements Serializable {
     private static final long serialVersionUID = -425079007035764899L;
@@ -14,4 +17,9 @@ public class SVGDataItem implements Serializable {
     public SVGDataItem dataitem;
     public String action;
     public Form form;
+    public Map<Parameter, Object> linkvalues;
+    
+    public SVGDataItem() {
+        linkvalues = new HashMap<>();
+    }
 }

@@ -3,8 +3,10 @@ package org.iocaste.svg.common;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Parameter;
 
 public class SVGData implements Serializable {
     private static final long serialVersionUID = 3565051111567721139L;
@@ -14,13 +16,15 @@ public class SVGData implements Serializable {
         items = new ArrayList<>();
     }
     
-    public final void axlink(SVGDataItem dataitem, Form form, String action) {
+    public final void axlink(SVGDataItem dataitem, Form form, String action,
+            Map<Parameter, Object> parameters) {
         SVGDataItem item = new SVGDataItem();
         
         item.type = SVGMethods.AXLINK;
         item.dataitem = dataitem;
         item.action = action;
         item.form = form;
+        item.linkvalues = parameters;
         items.add(item);
     }
     
