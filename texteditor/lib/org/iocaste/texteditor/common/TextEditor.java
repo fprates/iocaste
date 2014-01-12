@@ -53,6 +53,10 @@ public class TextEditor implements Serializable {
         element.setSize(element.getWidth(), height);
     }
     
+    public final void setVisible(boolean visible) {
+        element.setVisible(visible);
+    }
+    
     public final void setWidth(int width) {
         element.setSize(width, element.getHeight());
     }
