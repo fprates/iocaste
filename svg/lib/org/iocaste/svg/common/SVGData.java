@@ -32,6 +32,10 @@ public class SVGData implements Serializable {
         items.add(scircle(cx, cy, r));
     }
     
+    public final void clear() {
+        items.clear();
+    }
+    
     public final List<SVGDataItem> get() {
         return items;
     }
