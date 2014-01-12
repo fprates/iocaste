@@ -146,6 +146,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     }
     
     /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getst()
+     */
+    @Override
+    public final String getst() {
+        return (String)value;
+    }
+    
+    /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#getStackComponents()
      */

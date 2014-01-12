@@ -80,6 +80,8 @@ public interface InputComponent extends Component {
      */
     public abstract SearchHelp getSearchHelp();
     
+    public abstract String getst();
+    
     /**
      * 
      * @return
