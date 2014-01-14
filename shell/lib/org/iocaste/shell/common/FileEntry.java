@@ -14,7 +14,7 @@ public class FileEntry extends AbstractInputComponent
     
     public FileEntry(Container container, String name) {
         super(container, Const.FILE_ENTRY, null, name);
-        
+        setStyleClass("button");
         error = 0;
     }
 
