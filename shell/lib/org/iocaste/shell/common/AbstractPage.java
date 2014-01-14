@@ -70,8 +70,11 @@ public abstract class AbstractPage extends AbstractFunction {
         view.setActionControl(action);
         validate();
         action = (control == null)? controlname : control.getAction();
-        method = getClass().getMethod(action);
-        method.invoke(this);
+        if (!action.equals("validate")) {
+            method = getClass().getMethod(action);
+            method.invoke(this);
+        }
+        
         return view;
     }
     
