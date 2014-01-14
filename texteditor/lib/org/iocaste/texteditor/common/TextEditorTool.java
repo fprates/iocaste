@@ -23,7 +23,7 @@ public class TextEditorTool extends AbstractServiceInterface {
     
     public final void commit(TextEditor editor, long page) {
         TextArea textarea = context.view.getElement(editor.getName());
-        editor.commit(page, (String)textarea.get());
+        editor.commit(page, textarea.getst());
     }
     
     public final Map<Long, String> get(String textnm, long page) {
@@ -85,6 +85,18 @@ public class TextEditorTool extends AbstractServiceInterface {
         message.setId("update");
         message.add("textname", textnm);
         message.add("editor", editor);
+        call(message);
+    }
+    
+    public final void update(String textobj, long page, String text,
+            long linesize) {
+        Message message = new Message();
+        
+        message.setId("update_text");
+        message.add("textobj", textobj);
+        message.add("page", page);
+        message.add("text", text);
+        message.add("line_size", linesize);
         call(message);
     }
 }

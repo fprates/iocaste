@@ -18,6 +18,7 @@ public class Services extends AbstractFunction {
         export("load", "load");
         export("register", "register");
         export("update", "update");
+        export("update_text", "updateText");
         export("unregister", "unregister");
     }
     
@@ -99,7 +100,7 @@ public class Services extends AbstractFunction {
         DocumentModel pagemodel = documents.getModel("TXTEDITOR_PAGE");
 
         linehelper.textlinemodel = documents.getModel("TXTEDITOR_LINE");
-        for (long page : linehelper.editor.getPages()) {
+        for (long page : linehelper.pages.keySet()) {
             pageid += page;
             linehelper.pagenr = page;
             object = new ExtendedObject(pagemodel);
@@ -109,8 +110,8 @@ public class Services extends AbstractFunction {
             documents.modify(object);
 
             linehelper.i = pageid * 10000;
-            linehelper.size = linehelper.editor.getWidth();
-            text = linehelper.editor.getString(page);
+            linehelper.size = linehelper.linesize;
+            text = linehelper.pages.get(page);
             textlines = text.split("\r\n");
             for (String textline : textlines) {
                 linehelper.paragraph = true;
@@ -168,14 +169,25 @@ public class Services extends AbstractFunction {
     }
     
     public final void update(Message message) throws Exception {
+        String textname = message.get("textname");
+        TextEditor editor = message.get("editor");
+        Map<Long, String> pages = new HashMap<>();
+        
+        for (long page : editor.getPages())
+            pages.put(page, editor.getString(page));
+        
+        update(textname, pages, editor.getWidth());
+    }
+    
+    private final void update(String textobj, Map<Long, String> pages,
+            int linesize) throws Exception {
         ExtendedObject[] objects;
         Query[] queries;
         LineHelper linehelper;
         Documents documents = new Documents(this);
-
+        
         linehelper = new LineHelper();
-        linehelper.textname = message.get("textname");
-        linehelper.editor = message.get("editor");
+        linehelper.textname = textobj;
         
         queries = new Query[2];
         queries[0] = new Query();
@@ -188,7 +200,7 @@ public class Services extends AbstractFunction {
                     append(linehelper.textname).
                     append(" doesn't exist.").toString());
         
-        for (long pagenr : linehelper.editor.getPages()) {
+        for (long pagenr : pages.keySet()) {
             queries[0] = new Query("delete");
             queries[0].setModel("TXTEDITOR_LINE");
             queries[0].andEqual("TEXT_NAME", linehelper.textname);
@@ -202,7 +214,20 @@ public class Services extends AbstractFunction {
         }
         
         linehelper.textid = objects[0].getl("TEXT_ID");
+        linehelper.pages = pages;
+        linehelper.linesize = linesize;
         saveDetails(linehelper);
+    }
+    
+    public final void updateText(Message message) throws Exception {
+        String textobj = message.get("textobj");
+        long page = message.get("page");
+        String text = message.get("text");
+        int linesize = message.get("line_size");
+        Map<Long, String> pages = new HashMap<>();
+        
+        pages.put(page, text);
+        update(textobj, pages, linesize);
     }
 }
 
@@ -210,7 +235,7 @@ class LineHelper {
     public boolean paragraph;
     public String textname, line;
     public long i, textid, pagenr;
-    public int size;
+    public int size, linesize;
     public DocumentModel textlinemodel;
-    public TextEditor editor;
+    public Map<Long, String> pages;
 }
