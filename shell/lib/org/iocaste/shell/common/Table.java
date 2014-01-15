@@ -287,11 +287,12 @@ public class Table extends AbstractContainer {
         itens = new ArrayList<>();
         columns = new LinkedHashMap<>();
         seltype = MULTIPLE;
-        group = new RadioGroup(getName()+".mark");
+        group = new RadioGroup(getName().concat(".mark"));
         actions = new String[2];
         topline = 0;
         vlines = 0;
         
+        setStyleClass("table_area");
         column = new TableColumn(this, "");
         column.setMark(true);
         column.setVisible(true);
