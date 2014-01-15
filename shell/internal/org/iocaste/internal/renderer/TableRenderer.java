@@ -59,7 +59,7 @@ public class TableRenderer extends Renderer {
         List<InputComponent> hidden = new ArrayList<>();
         List<XMLElement> tags = new ArrayList<>();
 
-        tabletag.add("class", "table_area");
+        tabletag.add("class", table.getStyleClass());
         addEvents(tabletag, table);
         
         title = table.getText();
@@ -99,7 +99,7 @@ public class TableRenderer extends Renderer {
                 trtag.addChild(thtag);
             }
             
-            tabletag.addChild(trtag);
+            tabletag.addChild(tag);
         }
         
         itens = table.getItems();
