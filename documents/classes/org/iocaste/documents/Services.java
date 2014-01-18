@@ -107,7 +107,7 @@ public class Services extends AbstractFunction {
     public final ComplexDocument getCDocument(Message message)
             throws Exception {
         String cdname = message.getString("name");
-        long id = message.getLong("id");
+        long id = message.getl("id");
         
         return CDocument.get(cdname, id, cache);
     }

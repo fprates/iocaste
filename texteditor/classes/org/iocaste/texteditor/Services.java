@@ -30,7 +30,7 @@ public class Services extends AbstractFunction {
         long pagenr_;
         Query query;
         String textname = message.get("textname");
-        long pagenr = message.getLong("pagenr");
+        long pagenr = message.getl("pagenr");
         Documents documents = new Documents(this);
         
         query = new Query();

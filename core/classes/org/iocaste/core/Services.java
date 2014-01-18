@@ -571,7 +571,7 @@ public class Services extends AbstractFunction {
     public final Object[] select(Message message) throws Exception {
         String query = message.getString("query");
         Object[] criteria = message.get("criteria");
-        int rows = message.getInt("rows");
+        int rows = message.geti("rows");
         Connection connection = getDBConnection(message.getSessionid());
         
         return db.select(connection, query, rows, criteria);

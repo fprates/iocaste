@@ -86,7 +86,7 @@ public class Services extends AbstractFunction {
         else
             sourceid = object.getl("SOURCE_ID");
         
-        linesize = message.get("line_size");
+        linesize = message.getl("line_size");
         context.tetool = new TextEditorTool(context);
         context.tetool.update(sourceobj, sourceid, source.getCode(), linesize);
         return null;
