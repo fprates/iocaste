@@ -1,8 +1,13 @@
 package org.iocaste.workbench;
 
+import java.util.Map;
+
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
+import org.iocaste.texteditor.common.TextEditorTool;
 import org.iocaste.workbench.common.Project;
+import org.iocaste.workbench.common.Source;
 import org.iocaste.workbench.compiler.Compile;
 import org.iocaste.workbench.shell.Package;
 
@@ -44,7 +49,39 @@ public class Services extends AbstractFunction {
         return new Project();
     }
     
-    public final void save(Message message) {
-//        Save.execute();
+    public final String save(Message message) {
+        Map<String, ExtendedObject> sources;
+        long packageid, sourceid, linesize;
+        ExtendedObject object;
+        String sourceobj;
+        Source source = message.get("source");
+        Context context = new Context();
+        
+        context.function = this;
+        object = Common.getProject(context.projectname, context);
+        if (object == null)
+            return "invalid.project";
+        
+        packageid = object.getl("PROJECT_ID");
+        sourceid = object.getl("SOURCE_ID");
+        sourceobj = object.get("SOURCE_OBJ");
+
+        context.projectdefsource = (source.isDefault())? "true" : null;
+        context.editormode = Context.NEW;
+        context.projectfullsourcename = source.getName();
+        context.projectname = source.getProject();
+        org.iocaste.workbench.shell.Source.register(context);
+
+        sources = Common.getSources(packageid, context);
+        object = sources.get(context.projectfullsourcename);
+        if (object == null)
+            sourceid++;
+        else
+            sourceid = object.getl("SOURCE_ID");
+        
+        linesize = message.get("line_size");
+        context.tetool = new TextEditorTool(context);
+        context.tetool.update(sourceobj, sourceid, source.getCode(), linesize);
+        return null;
     }
 }

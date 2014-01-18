@@ -44,11 +44,11 @@ public class Workbench extends AbstractServiceInterface {
         return call(message);
     }
     
-    public final void save(Project project) {
+    public final String save(Source source) {
         Message message = new Message();
         
         message.setId("save");
-        message.add("project", project);
-        call(message);
+        message.add("source", source);
+        return call(message);
     }
 }
