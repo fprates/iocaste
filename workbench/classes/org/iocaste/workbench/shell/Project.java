@@ -1,37 +1,13 @@
 package org.iocaste.workbench.shell;
 
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
-import org.iocaste.texteditor.common.TextEditorTool;
 import org.iocaste.workbench.Common;
 import org.iocaste.workbench.Context;
 import org.iocaste.workbench.compiler.Compile;
 
 public class Project {
-    
-    public static final String create(String project, Context context) {
-        DocumentModel model;
-        ExtendedObject object;
-        long projectid;
-        String textname;
-        Documents documents = new Documents(context.function);
-        TextEditorTool tetool = new TextEditorTool(context);
-        
-        projectid = documents.getNextNumber("WBPROJECTID");
-        textname = new StringBuilder("WBPRJ").append(projectid).toString();
-        tetool.register(textname);
-        
-        model = documents.getModel("WB_PROJECT");
-        object = new ExtendedObject(model);
-        object.set("PROJECT_NAME", project.toUpperCase());
-        object.set("PROJECT_ID", projectid);
-        object.set("SOURCE_OBJ", textname);
-        documents.save(object);
-        
-        return "project.created";
-    }
     
     public static final String execute(String[] tokens, Context context)
             throws Exception {
@@ -42,7 +18,7 @@ public class Project {
         case "list":
             return list(tokens[2], context);
         case "create":
-            return create(tokens[2], context);
+            return Common.createProject(tokens[2], context);
         case "remove":
             return remove(tokens[2]);
         case "compile":

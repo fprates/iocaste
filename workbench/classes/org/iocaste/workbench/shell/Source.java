@@ -2,7 +2,6 @@ package org.iocaste.workbench.shell;
 
 import java.util.Map;
 
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
@@ -116,24 +115,12 @@ public class Source {
             context.editormode = Context.NEW;
             context.projectsourceid = lastsrcid + 1;
             context.projectdefsource = parameters.get("--default");
-            object = getSourceInstance(context);
+            object = Common.getSourceInstance(context);
             context.projectsources.put(context.projectfullsourcename, object);
             context.view.redirect("source");
             return "source.created";
         default:
             return "invalid.operation";
         }
-    }
-    
-    private static final ExtendedObject getSourceInstance(Context context) {
-        DocumentModel model = new Documents(context.function).
-                getModel("WB_SOURCE");
-        ExtendedObject object = new ExtendedObject(model);
-        
-        object.set("SOURCE_NAME", context.projectfullsourcename);
-        object.set("PACKAGE_ID", context.projectpackageid);
-        object.set("PROJECT_NAME", context.projectname);
-        object.set("SOURCE_ID", context.projectsourceid);
-        return object;
     }
 }

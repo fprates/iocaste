@@ -4,9 +4,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
+import org.iocaste.texteditor.common.TextEditorTool;
 
 public class Common {
 
@@ -21,6 +23,28 @@ public class Common {
         }
         
         return sb.toString();
+    }
+    
+    public static final String createProject(String project, Context context) {
+        DocumentModel model;
+        ExtendedObject object;
+        long projectid;
+        String textname;
+        Documents documents = new Documents(context.function);
+        TextEditorTool tetool = new TextEditorTool(context);
+        
+        projectid = documents.getNextNumber("WBPROJECTID");
+        textname = new StringBuilder("WBPRJ").append(projectid).toString();
+        tetool.register(textname);
+        
+        model = documents.getModel("WB_PROJECT");
+        object = new ExtendedObject(model);
+        object.set("PROJECT_NAME", project.toUpperCase());
+        object.set("PROJECT_ID", projectid);
+        object.set("SOURCE_OBJ", textname);
+        documents.save(object);
+        
+        return "project.created";
     }
     
     public static final ExtendedObject getPackage(String name, String project,
@@ -105,5 +129,17 @@ public class Common {
         }
         
         return sources;
+    }
+    
+    public static final ExtendedObject getSourceInstance(Context context) {
+        DocumentModel model = new Documents(context.function).
+                getModel("WB_SOURCE");
+        ExtendedObject object = new ExtendedObject(model);
+        
+        object.set("SOURCE_NAME", context.projectfullsourcename);
+        object.set("PACKAGE_ID", context.projectpackageid);
+        object.set("PROJECT_NAME", context.projectname);
+        object.set("SOURCE_ID", context.projectsourceid);
+        return object;
     }
 }

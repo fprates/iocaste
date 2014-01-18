@@ -42,7 +42,7 @@ public class Services extends AbstractFunction {
         Context context = new Context();
         
         context.function = this;
-        return org.iocaste.workbench.shell.Project.create(name, context);
+        return Common.createProject(name, context);
     }
     
     public final Project load(Message message) {
@@ -58,6 +58,7 @@ public class Services extends AbstractFunction {
         Context context = new Context();
         
         context.function = this;
+        context.projectname = source.getProject();
         object = Common.getProject(context.projectname, context);
         if (object == null)
             return "invalid.project";
@@ -67,9 +68,15 @@ public class Services extends AbstractFunction {
         sourceobj = object.get("SOURCE_OBJ");
 
         context.projectdefsource = (source.isDefault())? "true" : null;
-        context.editormode = Context.NEW;
         context.projectfullsourcename = source.getName();
-        context.projectname = source.getProject();
+        context.projectsources = Common.getSources(packageid, context);
+        if (!context.projectsources.containsKey(context.projectfullsourcename)) {
+            object = Common.getSourceInstance(context);
+            context.editormode = Context.NEW;
+            context.projectsources.put(context.projectfullsourcename, object);
+        } else {
+            context.editormode = Context.EDIT;
+        }
         org.iocaste.workbench.shell.Source.register(context);
 
         sources = Common.getSources(packageid, context);
