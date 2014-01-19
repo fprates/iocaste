@@ -48,7 +48,8 @@ public class Services extends AbstractFunction {
     }
     
     public final String save(Message message) {
-        long packageid, sourceid, linesize;
+        long packageid, sourceid;
+        int linesize;
         ExtendedObject object;
         String sourceobj;
         Source source = message.get("source");
@@ -79,7 +80,7 @@ public class Services extends AbstractFunction {
         }
         
         Common.register(context);
-        linesize = message.getl("line_size");
+        linesize = message.geti("line_size");
         context.tetool = new TextEditorTool(context);
         context.tetool.update(sourceobj, sourceid, source.getCode(), linesize);
         return null;
