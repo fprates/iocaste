@@ -89,7 +89,7 @@ public class TextEditorTool extends AbstractServiceInterface {
     }
     
     public final void update(String textobj, long page, String text,
-            long linesize) {
+            int linesize) {
         Message message = new Message();
         
         message.setId("update_text");
