@@ -1,7 +1,5 @@
 package org.iocaste.workbench;
 
-import java.util.Map;
-
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
@@ -50,7 +48,6 @@ public class Services extends AbstractFunction {
     }
     
     public final String save(Message message) {
-        Map<String, ExtendedObject> sources;
         long packageid, sourceid, linesize;
         ExtendedObject object;
         String sourceobj;
@@ -74,18 +71,14 @@ public class Services extends AbstractFunction {
             object = Common.getSourceInstance(context);
             context.editormode = Context.NEW;
             context.projectsources.put(context.projectfullsourcename, object);
+            sourceid++;
         } else {
             context.editormode = Context.EDIT;
-        }
-        org.iocaste.workbench.shell.Source.register(context);
-
-        sources = Common.getSources(packageid, context);
-        object = sources.get(context.projectfullsourcename);
-        if (object == null)
-            sourceid++;
-        else
+            object = context.projectsources.get(context.projectfullsourcename);
             sourceid = object.getl("SOURCE_ID");
+        }
         
+        Common.register(context);
         linesize = message.getl("line_size");
         context.tetool = new TextEditorTool(context);
         context.tetool.update(sourceobj, sourceid, source.getCode(), linesize);

@@ -2,47 +2,11 @@ package org.iocaste.workbench.shell;
 
 import java.util.Map;
 
-import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.documents.common.Query;
 import org.iocaste.workbench.Common;
 import org.iocaste.workbench.Context;
 
 public class Source {
-    
-    public static final void register(Context context) {
-        Query query;
-        ExtendedObject object;
-        Documents documents = new Documents(context.function);
-        
-        if (context.editormode == Context.NEW) {
-            object = context.projectsources.get(
-                    context.projectfullsourcename);
-            documents.save(object);
-            
-            /*
-             * opcionalmente, marca fonte como default do projeto
-             */
-            query = new Query("update");
-            query.values("SOURCE_ID", context.projectsourceid);
-            if (context.projectdefsource != null)
-                query.values("ENTRY_CLASS", context.projectfullsourcename);
-            query.setModel("WB_PROJECT");
-            query.andEqual("PROJECT_NAME", context.projectname);
-            documents.update(query);
-        } else {
-            /*
-             * opcionalmente, marca fonte como default do projeto
-             */
-            if (context.projectdefsource != null) {
-                query = new Query("update");
-                query.values("ENTRY_CLASS", context.projectfullsourcename);
-                query.setModel("WB_PROJECT");
-                query.andEqual("PROJECT_NAME", context.projectname);
-                documents.update(query);
-            }
-        }
-    }
     
     public static final String execute(String[] tokens, Context context) {
         Map<String, String> parameters;

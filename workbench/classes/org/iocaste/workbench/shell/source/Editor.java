@@ -4,8 +4,8 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.texteditor.common.TextEditorTool;
+import org.iocaste.workbench.Common;
 import org.iocaste.workbench.Context;
-import org.iocaste.workbench.shell.Source;
 
 public class Editor {
     public static final void output(Context context) {
@@ -27,7 +27,7 @@ public class Editor {
     }
     
     public static final void save(Context context) {
-        Source.register(context);
+        Common.register(context);
         context.tetool.commit(context.editor, context.projectsourceid);
         context.tetool.update(context.editor, context.projectsourceobj);
         context.view.message(Const.STATUS, "project.saved");
