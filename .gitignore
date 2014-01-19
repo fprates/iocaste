@@ -1,0 +1,7 @@
+bin/
+ext/
+lib/
+lib-external/
+lib-shell/
+lib-report/
+*.war
