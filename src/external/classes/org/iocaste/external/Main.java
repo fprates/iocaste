@@ -8,6 +8,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
@@ -119,11 +120,11 @@ public class Main extends AbstractPage {
      * @param view
      */
     public final void remove(View view) {
-        Table attributes = view.getElement("attribs");
-        
-        for (TableItem item : attributes.getItens())
-            if (item.isSelected())
-                attributes.remove(item);
+//        Table attributes = view.getElement("attribs");
+//        
+//        for (TableItem item : attributes.getItens())
+//            if (item.isSelected())
+//                attributes.remove(item);
     }
     
     public final void external(View view) throws Exception {
@@ -147,5 +148,11 @@ public class Main extends AbstractPage {
 //        calldata.parameter.setValue("message", "teste");
         
         WSClient.call(calldata);
+    }
+
+    @Override
+    protected PageContext init(View view) throws Exception {
+        // TODO Stub de método gerado automaticamente
+        return null;
     }
 }

@@ -97,32 +97,33 @@ public class WSClient {
     
     private static final OMElement getMethod(OMFactory factory,
             OMNamespace ns, CallData calldata) {
-        Type type;
-        OMElement method, parameter;
-//        DocumentModel model;
-        Operation operation;
-//        ExtendedObject object = calldata.wsdl.get("operations").
-//                get(calldata.function)[0];
-//        String name = object.getValue("INPUT_MSG");
+//        Type type;
+//        OMElement method, parameter;
+////        DocumentModel model;
+//        Operation operation;
+////        ExtendedObject object = calldata.wsdl.get("operations").
+////                get(calldata.function)[0];
+////        String name = object.getValue("INPUT_MSG");
+////        
+////        object = calldata.wsdl.get("messages").get(name)[0];
+////        name = object.getValue("ELEMENT");
 //        
-//        object = calldata.wsdl.get("messages").get(name)[0];
-//        name = object.getValue("ELEMENT");
-        
-        method = factory.createOMElement(calldata.function, ns);
-//        model = calldata.parameter.getModel();
-        operation = calldata.service.getOperation(
-                calldata.port, calldata.function);
-        for (String name : operation.getInputKeys()) {
-            type = operation.getInput(name);
-            if (type == null)
-                continue;
-            
-            parameter = factory.createOMElement(name, ns);
-            parameter.setText((String)calldata.parameter.getValue(name));
-            method.addChild(parameter);
-        }
-        
-        return method;
+//        method = factory.createOMElement(calldata.function, ns);
+////        model = calldata.parameter.getModel();
+//        operation = calldata.service.getOperation(
+//                calldata.port, calldata.function);
+//        for (String name : operation.getInputKeys()) {
+//            type = operation.getInput(name);
+//            if (type == null)
+//                continue;
+//            
+//            parameter = factory.createOMElement(name, ns);
+//            parameter.setText((String)calldata.parameter.getValue(name));
+//            method.addChild(parameter);
+//        }
+//        
+//        return method;
+        return null;
     }
     
     private static final OMNamespace getNamespace(Service service,
@@ -190,19 +191,20 @@ public class WSClient {
     
     private static final ExtendedObject[] parseNamespace(OMElement wsdl) {
         QName qname;
-        String[] names = {"targetNamespace", "name"};
-        ExtendedObject[] ns = new ExtendedObject[1];
-        DocumentModel model = new DocumentModel(null);
-        
-        for (String name : names)
-            model.add(new DocumentModelItem(name));
-        
-        ns[0] = new ExtendedObject(model);
-        for (String name : names) {
-            qname = new QName(name);
-            ns[0].setValue(name.toUpperCase(), wsdl.getAttributeValue(qname));
-        }
-        
-        return ns;
+//        String[] names = {"targetNamespace", "name"};
+//        ExtendedObject[] ns = new ExtendedObject[1];
+//        DocumentModel model = new DocumentModel(null);
+//        
+//        for (String name : names)
+//            model.add(new DocumentModelItem(name));
+//        
+//        ns[0] = new ExtendedObject(model);
+//        for (String name : names) {
+//            qname = new QName(name);
+//            ns[0].setValue(name.toUpperCase(), wsdl.getAttributeValue(qname));
+//        }
+//        
+//        return ns;
+        return null;
     }
 }

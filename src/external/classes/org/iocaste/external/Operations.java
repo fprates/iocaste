@@ -51,21 +51,21 @@ public class Operations {
     
     private static final void setOperationAttribs(ExtendedObject operation,
             OMElement element, String op, String msg) {
-        String[] values;
-        OMAttribute attrib;
-        Iterator<?> it = element.getAllAttributes();
-        
-        while (it.hasNext()) {
-            attrib = (OMAttribute)it.next();
-            switch (attrib.getLocalName().toLowerCase()) {
-            case "action":
-                operation.setValue(op, attrib.getAttributeValue());
-                break;
-            case "message":
-                values = attrib.getAttributeValue().split("[:]");
-                operation.setValue(msg, values[values.length-1]);
-                break;
-            }
-        }
+//        String[] values;
+//        OMAttribute attrib;
+//        Iterator<?> it = element.getAllAttributes();
+//        
+//        while (it.hasNext()) {
+//            attrib = (OMAttribute)it.next();
+//            switch (attrib.getLocalName().toLowerCase()) {
+//            case "action":
+//                operation.setValue(op, attrib.getAttributeValue());
+//                break;
+//            case "message":
+//                values = attrib.getAttributeValue().split("[:]");
+//                operation.setValue(msg, values[values.length-1]);
+//                break;
+//            }
+//        }
     }
 }

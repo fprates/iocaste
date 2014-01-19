@@ -78,23 +78,24 @@ public class Types {
     
     private static final ExtendedObject getPrimitiveType(OMElement element,
             DocumentModel model) {
-        OMAttribute attrib;
-        String name;
-        ExtendedObject type;
-        Iterator<?> it;
-        
-        if (model == null)
-            model = getPrimitiveTypeModel(element);
-        
-        type = new ExtendedObject(model);
-        it = element.getAllAttributes();
-        while (it.hasNext()) {
-            attrib = (OMAttribute)it.next();
-            name = attrib.getLocalName().toUpperCase();
-            type.setValue(name, attrib.getAttributeValue());
-        }
-        
-        return type;
+//        OMAttribute attrib;
+//        String name;
+//        ExtendedObject type;
+//        Iterator<?> it;
+//        
+//        if (model == null)
+//            model = getPrimitiveTypeModel(element);
+//        
+//        type = new ExtendedObject(model);
+//        it = element.getAllAttributes();
+//        while (it.hasNext()) {
+//            attrib = (OMAttribute)it.next();
+//            name = attrib.getLocalName().toUpperCase();
+//            type.setValue(name, attrib.getAttributeValue());
+//        }
+//        
+//        return type;
+        return null;
     }
     
     private static final DocumentModel getPrimitiveTypeModel(

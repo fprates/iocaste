@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="autheditor/classes/|authority/classes/|authority/lib/|core-utils/classes/|core-utils/classes/|core-utils/lib/|core-utils/lib/|core-utils/web/|core-utils/web/|core/|core/|core/classes/|core/classes/|core/lib/|core/lib/|core/web/|core/web/|datadict/classes/|datadict/web/|dataeditor/classes/|datamigr/classes/|dataview/classes/|dataview/web/|documents/classes/|documents/lib/|documents/lib/org/iocaste/documents/common/|documents/web/|examples/classes/|exhandler/classes/|external/classes/|external/lib/|external/web/|firstrun/classes/|gconfigview/classes/|globalconfig/classes/|globalconfig/lib/|help/classes/|help/web/|infosis/|infosis/classes/|infosis/classes/|infosis/web/|infosis/web/|install/classes/|login/classes/|login/classes/|login/web/|login/web/|office/classes/|office/classes/|office/lib/|office/web/|packagetool/classes/|packagetool/lib/|packagetool/web/|project-template/|project-template/classes/|project-template/classes/|project-template/classes/|report/classes/|report/lib/|search-help/classes/|search-help/classes/|search-help/lib/|search-help/lib/|search-help/lib/|search-help/web/|search-help/web/|setup/classes/|shell/|shell/classes/|shell/classes/|shell/internal/|shell/internal/|shell/lib/|shell/lib/|shell/web/|shell/web/|styleeditor/classes/|styleeditor/web/|tasksel/classes/|tasksel/lib/|tasksel/lib/|tasksel/web/|template|template/classes/|template/classes/|template/classes/|template/classes/|template/web/|texteditor/classes/|texteditor/lib/|transport/classes/|transport/lib/|transport/web/|usereditor/classes/|workbench/classes/|svg/classes/|svg/lib/|workbench/lib/" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/workbench/lib"/>
+	<classpathentry kind="src" path="src/svg/lib"/>
+	<classpathentry kind="src" path="src/svg/classes"/>
+	<classpathentry kind="src" path="src/examples/classes"/>
+	<classpathentry kind="src" path="src/workbench/classes"/>
+	<classpathentry kind="src" path="src/gconfigview/classes"/>
+	<classpathentry kind="src" path="src/globalconfig/classes"/>
+	<classpathentry kind="src" path="src/datamigr/classes"/>
+	<classpathentry kind="src" path="src/install/classes"/>
+	<classpathentry kind="src" path="src/setup/classes"/>
+	<classpathentry kind="src" path="src/exhandler/classes"/>
+	<classpathentry kind="src" path="src/report/classes"/>
+	<classpathentry kind="src" path="src/authority/classes"/>
+	<classpathentry kind="src" path="src/usereditor/classes"/>
+	<classpathentry kind="src" path="src/styleeditor/classes"/>
+	<classpathentry kind="src" path="src/packagetool/classes"/>
+	<classpathentry kind="src" path="src/datadict/classes"/>
+	<classpathentry kind="src" path="src/transport/classes"/>
+	<classpathentry kind="src" path="src/help/classes"/>
+	<classpathentry kind="src" path="src/documents/lib"/>
+	<classpathentry excluding="hibernate.cfg.xml" kind="src" path="src/shell/classes"/>
+	<classpathentry kind="src" path="src/shell/lib"/>
+	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/core/classes"/>
+	<classpathentry kind="src" path="src/core/lib"/>
+	<classpathentry kind="src" path="src/infosis/classes"/>
+	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/login/classes"/>
+	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/tasksel/classes"/>
+	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/documents/classes"/>
+	<classpathentry kind="src" path="src/external/classes"/>
+	<classpathentry kind="src" path="src/external/lib"/>
+	<classpathentry kind="src" path="src/search-help/classes"/>
+	<classpathentry kind="src" path="src/dataview/classes"/>
+	<classpathentry kind="src" path="src/packagetool/lib"/>
+	<classpathentry kind="src" path="src/authority/lib"/>
+	<classpathentry kind="src" path="src/report/lib"/>
+	<classpathentry kind="src" path="src/shell/internal"/>
+	<classpathentry kind="src" path="src/globalconfig/lib"/>
+	<classpathentry kind="src" path="src/dataeditor/classes"/>
+	<classpathentry kind="src" path="src/texteditor/classes"/>
+	<classpathentry kind="src" path="src/texteditor/lib"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/francisco.prates/workspace/iocaste/lib-shell/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib-external/axiom-api-1.2.12.jar"/>
+	<classpathentry kind="lib" path="lib-external/axis2-kernel-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
+	<classpathentry kind="lib" path="lib-report/jasperreports-4.6.0.jar"/>
+	<classpathentry kind="lib" path="lib-report/iText-2.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.17.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-jdbc-9.2.1002.jar"/>
+	<classpathentry kind="lib" path="/home/francisco.prates/Downloads/apache-tomcat/lib/servlet-api.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
