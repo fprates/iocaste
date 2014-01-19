@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="core/classes/|core/lib/|documents/classes/|documents/lib/|login/classes/|shell/classes/|shell/lib/|tasksel/classes/" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/shell/classes"/>
+	<classpathentry kind="src" path="src/core/classes"/>
+	<classpathentry kind="src" path="src/documents/classes"/>
+	<classpathentry kind="src" path="src/documents/lib"/>
+	<classpathentry kind="src" path="src/login/classes"/>
+	<classpathentry kind="src" path="src/shell/lib"/>
+	<classpathentry kind="src" path="src/tasksel/classes"/>
+	<classpathentry kind="src" path="src/core/lib"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="ext/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib-shell/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
