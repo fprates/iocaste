@@ -10,11 +10,7 @@ suporte a stacktrace no nível de chamada de funções
 - report
 efetuar testes e avaliar necessidades
 
-- authority
-
 - usereditor
-confirmação de validade de senha (feito)
-incluir grupos de tarefas (feito)
 implementar grupos de usuários
 
 - styleeditor
@@ -40,25 +36,18 @@ efetuar testes e avaliar necessidades
 redefinir módulo para gerar scripts de instalação
 
 - documents
-completar implementação de documentos complexos (feito)
-implementar bloqueio de registros (feito)
-suporte à inner join (feito)
 implementar visão
-implementar range (feito)
+implementar range (revisar)
 
 - shell
 diálogos modais
-fixar cabeçalho (feito)
-alinhamento de componentes em container (através de custom. css)
 implementar componente de detalhe
 implementar informações técnicas do elemento
 permitir anexar documentação à mensagem de erro
 implementar calendário para campos tipo data
-implementar componente para faixa de valores (feito)
 
 - core
 informação sobre versão do núcleo
-implementar cache de autorizações (feito)
 
 - infosis
 implementar formato para impressão
@@ -69,22 +58,15 @@ melhorar seleção de idiomas
 suporte à conexão segura
 suporte à criptografia
 
-- tasksel
-dispor grupos horizontalmente, para melhor uso de espaço (feito)
-
 - external
 permitir configurar interface do webservice
 implementar protocolo para leitura de telas
 implementar comunicação de webservice com o módulo
 
 - search-help
-implementar critérios de consulta (feito)
 implementar exibição modal (depende do shell)
 
 - não relacionados
-  retirar commit() de getView() em AbstractPage. deixa ciclo de vida da conexão
-iniciada em getView() se extender até execAction(). (feito)
-unificar pacotes de protocolo
 implementar importação/exportação de dados
 implementar log de eventos
 melhorar documentação das APIs

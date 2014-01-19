@@ -16,8 +16,5 @@ LICENCA.txt contém os termos da licença.
 Este software acompanha bibliotecas de terceiros sob os termos de suas
 respectivas licenças.
 
-* Instalação
-Consulte INSTALL.txt para informações de instalação.
-
-Copyright (c) 2011, Francisco de Assis Prates.
+Copyright (c) 2011-2014, Francisco de Assis Prates.
 Bibliotecas de terceiros sob seus respectivos direitos de cópia.
