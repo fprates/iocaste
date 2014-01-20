@@ -6,13 +6,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.fileupload.FileItem;
+import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.View;
 
 public class PageContext {
     private String[] initparams;
     private View view;
     private AppContext appctx;
-    private String name, username;
+    private String name, username, contexturl;
     private boolean reloadable, initialize;
     private Map<String, Object> parameters;
     private List<FileItem> files;
@@ -20,9 +21,10 @@ public class PageContext {
     private int logid;
     private byte error;
     private long sequence;
+    private ControlComponent shcontrol;
     
     public PageContext(String name) {
-        parameters =  new HashMap<String, Object>();
+        parameters =  new HashMap<>();
         reloadable = true;
         actions = null;
         logid = 0;
@@ -59,6 +61,14 @@ public class PageContext {
      * 
      * @return
      */
+    public final String getContextUrl() {
+        return contexturl;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final byte getError() {
         return error;
     }
@@ -69,6 +79,14 @@ public class PageContext {
      */
     public final List<FileItem> getFiles() {
         return files;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final ControlComponent getShControl() {
+        return shcontrol;
     }
     
     /**
@@ -170,6 +188,14 @@ public class PageContext {
     
     /**
      * 
+     * @param contexturl
+     */
+    public final void setContextUrl(String contexturl) {
+        this.contexturl = contexturl;
+    }
+    
+    /**
+     * 
      * @param error
      */
     public final void setError(byte error) {
@@ -222,6 +248,14 @@ public class PageContext {
      */
     public final void setSequence(long sequence) {
         this.sequence = sequence;
+    }
+    
+    /**
+     * 
+     * @param shcontrol
+     */
+    public final void setShControl(ControlComponent shcontrol) {
+        this.shcontrol = shcontrol;
     }
     
     /**

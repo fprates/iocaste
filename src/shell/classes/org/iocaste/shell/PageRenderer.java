@@ -76,7 +76,7 @@ public class PageRenderer extends AbstractRenderer {
      * @return
      * @throws Exception
      */
-    private final View callController(ControllerData config) throws Exception {
+    private final void callController(ControllerData config) throws Exception {
         InputStatus status;
         Message message;
         ControlComponent control;
@@ -88,7 +88,7 @@ public class PageRenderer extends AbstractRenderer {
         
         config.event = status.event;
         if (status.error > 0 || status.event)
-            return config.view;
+            return;
         
         message = new Message();
         message.setId("exec_action");
@@ -100,9 +100,8 @@ public class PageRenderer extends AbstractRenderer {
 
         control = config.view.getElement(message.getString("action"));
         if (control != null && control.getType() == Const.SEARCH_HELP) {
-            config.view.setParameter("sh", control);
-            config.view.redirect("iocaste-search-help", "main", true);
-            config.view.setReloadableView(true);
+            config.shcontrol = control;
+            config.contexturl = composeUrl("iocaste-search-help");
         } else {
             try {
                 service = new Service(config.sessionid,
@@ -118,8 +117,6 @@ public class PageRenderer extends AbstractRenderer {
                 throw e;
             }
         }
-        
-        return config.view;
     }
     
     /**
@@ -784,12 +781,12 @@ public class PageRenderer extends AbstractRenderer {
         config.logid = getLogid(pagetrack);
         config.sessionid = getComplexId(sessionid, config.logid);
         config.servername = getServerName();
-        
-        view = callController(config);
+        callController(config);
         
         /*
          * processa atualização na visão após chamada do controlador
          */
+        view = config.view;
         action = view.getElement(actionname);
         if (view.hasPageCall() && (action == null ||
                 !action.isCancellable() || action.allowStacking()))
@@ -835,6 +832,8 @@ public class PageRenderer extends AbstractRenderer {
             return pagectx;
         }
         
+        pagectx.setShControl(config.shcontrol);
+        pagectx.setContextUrl(config.contexturl);
         pagectx.setError((byte)0);
         sequence = pagectx.getSequence();
         contextdata = new ContextData();
@@ -1064,10 +1063,12 @@ public class PageRenderer extends AbstractRenderer {
             dbname = new Iocaste(this).getSystemParameter("dbname");
         
         renderer.setDBName(dbname);
+        renderer.setShControl(pagectx.getShControl());
         tracking = new TrackingData();
         tracking.logid = pagectx.getLogid();
         tracking.sequence = pagectx.getSequence();
         tracking.sessionid = sessionid;
+        tracking.contexturl = pagectx.getContextUrl();
         render(renderer, resp, view, tracking);
         
         pagectx.setActions(renderer.getActions());

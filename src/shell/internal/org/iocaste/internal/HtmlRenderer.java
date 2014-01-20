@@ -11,9 +11,12 @@ import java.util.Set;
 
 import org.iocaste.internal.renderer.Config;
 import org.iocaste.internal.renderer.Renderer;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
@@ -27,6 +30,7 @@ public class HtmlRenderer {
     private Set<String> actions;
     private Map<String, Map<String, String>> csselements;
     private MessageSource msgsource;
+    private ControlComponent shcontrol;
     
     public HtmlRenderer() {
         String line;
@@ -37,7 +41,7 @@ public class HtmlRenderer {
             return;
         
         reader = new BufferedReader(new InputStreamReader(is));
-        script = new ArrayList<String>();
+        script = new ArrayList<>();
         
         try {
             while ((line = reader.readLine()) != null)
@@ -145,6 +149,23 @@ public class HtmlRenderer {
         return pretag;
     }
     
+    private final List<XMLElement> renderSh(TrackingData tracking,
+            Config config) {
+        List<XMLElement> tags = new ArrayList<>();
+        Service service = new Service(tracking.sessionid, tracking.contexturl);
+        Message message = new Message();
+        View view = new View("iocaste-search-help", "main");
+        
+        view.setParameter("sh", shcontrol);
+        message.setId("get_view_data");
+        message.add("view", view);
+        message.add("init", true);
+        view = (View)service.call(message);
+        for (Container container : view.getContainers())
+            Renderer.renderContainer(tags, container, config);
+        return tags;
+    }
+    
     /**
      * 
      * @param csselements
@@ -206,6 +227,10 @@ public class HtmlRenderer {
         
         bodytag.addChildren(bodycontent);
         tags.add(renderHeader(view, config));
+        
+        if (shcontrol != null)
+            tags.addAll(renderSh(tracking, config));
+        
         tags.add(bodytag);
         msgtext = null;
         msgtype = Const.NONE;
@@ -261,6 +286,14 @@ public class HtmlRenderer {
      */
     public final void setMessageType(Const msgtype) {
         this.msgtype = msgtype;
+    }
+    
+    /**
+     * 
+     * @param shcontrol
+     */
+    public final void setShControl(ControlComponent shcontrol) {
+        this.shcontrol = shcontrol;
     }
     
     /**
