@@ -5,8 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
 
@@ -21,6 +23,8 @@ public class Config {
     private View view;
     private Const msgtype;
     private XMLElement pagecontrol;
+    private ControlComponent shcontrol;
+    private TrackingData tracking;
     
     public Config() {
         actions = new HashSet<String>();
@@ -161,6 +165,14 @@ public class Config {
     
     /**
      * 
+     * @return
+     */
+    public final ControlComponent getShControl() {
+        return shcontrol;
+    }
+    
+    /**
+     * 
      * @param tag
      * @param fail
      * @return
@@ -188,6 +200,14 @@ public class Config {
      */
     public final List<XMLElement> getToForm() {
         return toform;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final TrackingData getTracking() {
+        return tracking;
     }
     
     /**
@@ -254,6 +274,22 @@ public class Config {
      */
     public final void setPageTrack(String pagetrack) {
         this.pagetrack = pagetrack;
+    }
+    
+    /**
+     * 
+     * @param shcontrol
+     */
+    public final void setShControl(ControlComponent shcontrol) {
+        this.shcontrol = shcontrol;
+    }
+    
+    /**
+     * 
+     * @param tracking
+     */
+    public final void setTracking(TrackingData tracking) {
+        this.tracking = tracking;
     }
     
     /**

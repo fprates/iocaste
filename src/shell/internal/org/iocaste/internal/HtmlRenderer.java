@@ -11,8 +11,6 @@ import java.util.Set;
 
 import org.iocaste.internal.renderer.Config;
 import org.iocaste.internal.renderer.Renderer;
-import org.iocaste.protocol.Message;
-import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -28,7 +26,6 @@ public class HtmlRenderer {
     private Const msgtype;
     private List<String> script;
     private Set<String> actions;
-    private Map<String, Map<String, String>> csselements;
     private MessageSource msgsource;
     private ControlComponent shcontrol;
     
@@ -75,9 +72,10 @@ public class HtmlRenderer {
      * @param vdata
      * @return
      */
-    private final XMLElement renderHeader(View vdata, Config config) {
-        Element focus = vdata.getFocus();
-        String focusname, title = vdata.getTitle();
+    private final XMLElement renderHeader(View view, Config config) {
+        Map<String, Map<String, String>> stylesheet;
+        Element focus = view.getFocus();
+        String focusname, title = view.getTitle();
         XMLElement headtag = new XMLElement("head");
         XMLElement metatag = new XMLElement("meta");
         XMLElement titletag = new XMLElement("title");
@@ -103,8 +101,9 @@ public class HtmlRenderer {
         headtag.addChild(titletag);
         if (script != null)
             headtag.addChild(renderJavaScript(script, config));
-        if (csselements != null)
-            headtag.addChild(renderStyleSheet(csselements));
+        stylesheet = view.getStyleSheet();
+        if (stylesheet != null)
+            headtag.addChild(renderStyleSheet(stylesheet));
         
         return headtag;
     }
@@ -147,23 +146,6 @@ public class HtmlRenderer {
         pretag.addInner(lines);
         
         return pretag;
-    }
-    
-    private final List<XMLElement> renderSh(TrackingData tracking,
-            Config config) {
-        List<XMLElement> tags = new ArrayList<>();
-        Service service = new Service(tracking.sessionid, tracking.contexturl);
-        Message message = new Message();
-        View view = new View("iocaste-search-help", "main");
-        
-        view.setParameter("sh", shcontrol);
-        message.setId("get_view_data");
-        message.add("view", view);
-        message.add("init", true);
-        view = (View)service.call(message);
-        for (Container container : view.getContainers())
-            Renderer.renderContainer(tags, container, config);
-        return tags;
     }
     
     /**
@@ -218,19 +200,16 @@ public class HtmlRenderer {
         config.addMessageSource(msgsource);
         config.setPageTrack(composePageTrack(view, tracking));
         config.setDBName(dbname);
+        config.setShControl(shcontrol);
+        config.setTracking(tracking);
         
-        html.add("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" " +
-                "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
+        html.add("<!DOCTYPE html>");
         bodytag.add("onLoad", "initialize()");
         for (Container container : view.getContainers())
             Renderer.renderContainer(bodycontent, container, config);
         
         bodytag.addChildren(bodycontent);
         tags.add(renderHeader(view, config));
-        
-        if (shcontrol != null)
-            tags.addAll(renderSh(tracking, config));
-        
         tags.add(bodytag);
         msgtext = null;
         msgtype = Const.NONE;
@@ -245,15 +224,6 @@ public class HtmlRenderer {
         actions = config.getActions();
         
         return html.toArray(new String[0]);
-    }
-
-    /**
-     * 
-     * @param elements
-     */
-    public final void setCssElements(Map<String,
-            Map<String, String>> csselements) {
-        this.csselements = csselements;
     }
     
     /**

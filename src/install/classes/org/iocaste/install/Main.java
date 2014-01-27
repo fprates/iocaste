@@ -621,7 +621,6 @@ public class Main extends AbstractRenderer {
         renderer.setMessageText(viewmessage);
         renderer.setMessageType(messagetype);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
-        renderer.setCssElements(appctx.getStyleSheet());
         
         tracking = new TrackingData();
         tracking.sessionid = sessionid;

@@ -10,7 +10,7 @@ public class AppContext {
     
     public AppContext(String name) {
         this.name = name;
-        pages = new HashMap<String, PageContext>();
+        pages = new HashMap<>();
     }
     
     /**

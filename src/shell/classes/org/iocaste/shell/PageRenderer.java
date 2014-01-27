@@ -1057,7 +1057,6 @@ public class PageRenderer extends AbstractRenderer {
         renderer.setMessageText(viewmessage);
         renderer.setMessageType(messagetype);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
-        renderer.setCssElements(appctx.getStyleSheet());
         
         if (dbname == null)
             dbname = new Iocaste(this).getSystemParameter("dbname");

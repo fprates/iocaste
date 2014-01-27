@@ -1,8 +1,16 @@
 package org.iocaste.internal.renderer;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.iocaste.internal.TrackingData;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.View;
 
 public class FormRenderer extends Renderer {
     
@@ -45,10 +53,33 @@ public class FormRenderer extends Renderer {
         pagecontrol = config.getPageControl();
         if (pagecontrol != null)
             formtag.addChild(pagecontrol);
-        
+
+        if (config.getShControl() != null)
+            formtag.addChildren(renderSh(config));
         formtag.addChild(content);
         
         return formtag;
+    }
+    
+    private static final List<XMLElement> renderSh(Config config) {
+        List<XMLElement> tags = new ArrayList<>();
+        TrackingData tracking = config.getTracking();
+        Service service = new Service(tracking.sessionid, tracking.contexturl);
+        Message message = new Message();
+        View view = new View("iocaste-search-help", "main");
+        
+        view.setParameter("sh", config.getShControl());
+        view.setStyleSheet(config.getView().getStyleSheet());
+        
+        message.setId("get_view_data");
+        message.add("view", view);
+        message.add("init", true);
+        view = (View)service.call(message);
+        config.getView().setStyleSheet(view.getStyleSheet());
+        for (Container container : view.getContainers())
+            Renderer.renderContainer(tags, container, config);
+        
+        return tags;
     }
 
 }
