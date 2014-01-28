@@ -22,7 +22,6 @@ public class Config {
     private List<XMLElement> toform;
     private View view;
     private Const msgtype;
-    private XMLElement pagecontrol;
     private ControlComponent shcontrol;
     private TrackingData tracking;
     
@@ -151,14 +150,6 @@ public class Config {
      * 
      * @return
      */
-    public final XMLElement getPageControl() {
-        return pagecontrol;
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final String getPageTrack() {
         return pagetrack;
     }
@@ -258,14 +249,6 @@ public class Config {
     public final void setMessage(Const msgtype, String message) {
         this.msgtype = msgtype;
         this.message = message;
-    }
-    
-    /**
-     * 
-     * @param pagecontrol
-     */
-    public final void setPageControl(XMLElement pagecontrol) {
-        this.pagecontrol = pagecontrol;
     }
     
     /**

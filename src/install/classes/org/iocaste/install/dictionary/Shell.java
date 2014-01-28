@@ -40,7 +40,12 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "font-family", "sans-serif");
         insertStyleProperty(shell003, "font-size", "10pt");
         insertStyleProperty(shell003, "background-color", "#333333");
-        insertStyleProperty(shell003, "margin", "10px");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "position", "absolute");
+        insertStyleProperty(shell003, "height", "100%");
+        insertStyleProperty(shell003, "width", "99%");
+        insertStyleProperty(shell003, "top", "0px");
+        insertStyleProperty(shell003, "overflow", "hidden");
 
         insertStyleElement(shell002, ".button");
         insertStyleProperty(shell003, "font-size", "12pt");
@@ -101,12 +106,9 @@ public class Shell extends Module {
                         
         insertStyleElement(shell002, ".header");
         insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "padding", "10px");
         insertStyleProperty(shell003, "margin-bottom", "5px");
         insertStyleProperty(shell003, "margin-right", "10px");
         insertStyleProperty(shell003, "border-style", "none");
-        insertStyleProperty(shell003, "position", "fixed");
-        insertStyleProperty(shell003, "height", "135px");
         insertStyleProperty(shell003, "width", "100%");
         insertStyleProperty(shell003, "top", "0px");
         
@@ -115,8 +117,9 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "margin-top", "5px");
         
         insertStyleElement(shell002, ".form_content");
-        insertStyleProperty(shell003, "padding-top", "155px");
-        insertStyleProperty(shell003, "top", "0px");
+        insertStyleProperty(shell003, "position", "relative");
+        insertStyleProperty(shell003, "height", "90%");
+        insertStyleProperty(shell003, "overflow", "auto");
         
         insertStyleElement(shell002, ".form_cell");
         insertStyleProperty(shell003, "vertical-align", "middle");

@@ -20,7 +20,6 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.NodeList;
-import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.RangeField;
@@ -55,14 +54,6 @@ public class Renderer {
         XMLElement xmltag;
         
         switch (container.getType()) {
-        case PAGE_CONTROL:
-            if (config.getPageControl() != null)
-                break;
-            
-            config.setPageControl(PageControlRenderer.render(
-                    (PageControl)container, config));
-            break;
-            
         case FORM:
             config.setCurrentForm(container.getHtmlName());
             xmltag = FormRenderer.render((Form)container, config);
@@ -184,7 +175,7 @@ public class Renderer {
      */
     protected static final List<XMLElement> renderElements(Element[] elements,
             Config config) {
-        List<XMLElement> tags = new ArrayList<XMLElement>();
+        List<XMLElement> tags = new ArrayList<>();
         
         for (Element element : elements) 
             renderElement(tags, element, config);

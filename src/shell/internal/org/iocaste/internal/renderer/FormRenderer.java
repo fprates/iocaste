@@ -7,8 +7,11 @@ import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.View;
 
@@ -30,18 +33,23 @@ public class FormRenderer extends Renderer {
         
         config.setCurrentAction(currentaction);
         config.addAction(currentaction);
+
+        for (Element element : container.getElements()) {
+            if (element.getType() != Const.PAGE_CONTROL)
+                continue;
+            pagecontrol = PageControlRenderer.
+                    render((PageControl)element, config);
+            formtag.addChild(pagecontrol);
+            break;
+        }
         
         formtag.add("method", "post");
         formtag.add("action", "index.html");
         formtag.add("id", htmlname);
         formtag.add("name", htmlname);
-
-        content = new XMLElement("div");
-        content.add("class", container.getStyleClass());
-        content.addChildren(renderElements(container.getElements(), config));
+        formtag.add("style", "height: 100%");
         
         addEvents(formtag, container);
-        
         if (enctype != null)
             formtag.add("enctype", enctype);
         
@@ -50,12 +58,13 @@ public class FormRenderer extends Renderer {
         hiddentag = ParameterRenderer.render(parameter);
         
         formtag.addInner(hiddentag.toString());
-        pagecontrol = config.getPageControl();
-        if (pagecontrol != null)
-            formtag.addChild(pagecontrol);
 
         if (config.getShControl() != null)
             formtag.addChildren(renderSh(config));
+
+        content = new XMLElement("div");
+        content.add("class", container.getStyleClass());        
+        content.addChildren(renderElements(container.getElements(), config));
         formtag.addChild(content);
         
         return formtag;
