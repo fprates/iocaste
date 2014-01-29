@@ -1,3 +1,8 @@
+function closeSh() {
+	var sh = document.getElementById('shstdcnt');
+	sh.style.display='none';
+}
+
 function defineAction(action, actionname) {
 	setValue(action, actionname);
 }
@@ -51,6 +56,11 @@ function setClassStyle(id, classname) {
 
 function setElementDisplay(id, state) {
     document.getElementById(id).style.display = state;
+}
+
+function setFieldSh(name, value) {
+	setValue(name, value);
+	closeSh();
 }
 
 function setValue(name, value) {
