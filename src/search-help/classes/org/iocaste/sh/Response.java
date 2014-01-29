@@ -129,6 +129,5 @@ public class Response {
         }
         
         addItems(sh, stdcnt, name, model, result);
-        context.view.setTitle(sh.getText());
     }
 }
