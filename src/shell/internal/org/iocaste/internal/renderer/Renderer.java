@@ -80,7 +80,7 @@ public class Renderer {
             break;
             
         case EXPAND_BAR:
-            tags.addAll(ExpandBarRenderer.render((ExpandBar)container, config));
+            tags.add(ExpandBarRenderer.render((ExpandBar)container, config));
             break;
         
         case NODE_LIST:

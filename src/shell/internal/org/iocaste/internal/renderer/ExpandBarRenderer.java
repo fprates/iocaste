@@ -11,14 +11,17 @@ import org.iocaste.shell.common.ExpandBar;
 
 public class ExpandBarRenderer extends Renderer {
 
-    public static final List<XMLElement> render(ExpandBar container,
+    public static final XMLElement render(ExpandBar container,
             Config config) {
-        XMLElement ebtag;
+        XMLElement ebarea, ebtag;
         String name = container.getName();
+        List<XMLElement> ebtags;
         String edgename = new StringBuilder(name).append(".edge").toString();
         Button edge = new Button(container, edgename);
-        List<XMLElement> ebtags, tags = new ArrayList<>();
         String text = container.getText();
+        
+        ebarea = new XMLElement("div");
+        ebarea.add("class", "eb_area");
         
         edge.setText((text == null)? name : text);
         edge.setSubmit(false);
@@ -27,12 +30,11 @@ public class ExpandBarRenderer extends Renderer {
         edge.addEvent("onClick", new StringBuilder("revertElementDisplay('").
                 append(name).append("'); send ('").
                 append(edgename).append("', null, null);").toString());
-        
-        tags.add(ButtonRenderer.render(edge, config));
+        edge.setEnabled(container.isEnabled());
+        ebarea.addChild(ButtonRenderer.render(edge, config));
         
         ebtag = new XMLElement("div");
         ebtags = new ArrayList<>();
-        
         for (Element element : container.getElements()) {
             if (element.getName().equals(edgename) &&
                     element.getType() == Const.BUTTON)
@@ -48,12 +50,12 @@ public class ExpandBarRenderer extends Renderer {
         else
             ebtag.addChildren(ebtags);
         
-        tags.add(ebtag);
+        ebarea.addChild(ebtag);
         
         if (!container.isExpanded())
             config.addOnload(new StringBuilder("setElementDisplay('").
                     append(name).append("', 'none');").toString());
         
-        return tags;
+        return ebarea;
     }
 }
