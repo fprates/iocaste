@@ -1,6 +1,5 @@
 package org.iocaste.tasksel;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -10,14 +9,17 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.shell.common.ExpandBar;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
-import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.StyleSheet;
+import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.TableItem;
 
 public class Response {
     
@@ -39,9 +41,8 @@ public class Response {
         
         username = new Iocaste(context.function).getUsername();
         query = new Query();
-        query.addColumns("TASK_ENTRY.GROUP",
-                "TASK_ENTRY.NAME",
-                "TASK_ENTRY.ID");
+        query.addColumns(
+                "TASK_ENTRY.GROUP", "TASK_ENTRY.NAME", "TASK_ENTRY.ID");
         query.setModel("USER_TASKS_GROUPS");
         query.join("TASK_ENTRY", "USER_TASKS_GROUPS.GROUP", "GROUP");
         query.andEqual("USERNAME", username);
@@ -98,68 +99,50 @@ public class Response {
      */
     public static final void main(Map<String, Set<TaskEntry>> lists,
             PageContext context) {
+        Table table;
+        ExpandBar group;
         Link link;
-        NodeList groups, tasklist;
         Set<TaskEntry> entries;
         Parameter groupcommand;
         String taskname, text;
+        StyleSheet stylesheet;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("help", PageControl.EXTERNAL);
-        setCustomStyleSheet(context.view);
+        stylesheet = context.view.styleSheetInstance();
+        stylesheet.put(".eb_area", "float", "left");
+        stylesheet.put(".eb_area", "display", "inline");
+        stylesheet.put(".eb_area", "margin-top", "10px");
+        stylesheet.put(".eb_area", "margin-right", "10px");
+        stylesheet.put(".table_area", "border-style", "none");
         
         /*
          * tarefas pré-definidas
          */
         if (lists != null) {
-            groups = new NodeList(container, "groups");
-            groups.setStyleClass("groups");
-            groups.setStyleClass(NodeList.ITEM, "group_item");
-            
             for (String groupname : lists.keySet()) {
-                entries = lists.get(groupname);
-                tasklist = new NodeList(groups, groupname);
-                tasklist.setListType(NodeList.DEFINITION);
+                group = new ExpandBar(container, groupname);
+                group.setExpanded(true);
+                group.setEnabled(false);
+                table = new Table(group, groupname.concat(".table"));
+                table.setHeader(false);
+                new TableColumn(table, "link");
                 
+                entries = lists.get(groupname);
                 for (TaskEntry entry : entries) {
                     groupcommand = new Parameter(container, "groupcommand");
                     taskname = entry.getName();
                     text = entry.getText();
-                    
-                    link = new Link(tasklist, taskname, "grouprun");
+                    link = new Link(table, taskname, "grouprun");
                     link.setText((text == null)? taskname : text);
                     link.add(groupcommand, taskname);
+                    new TableItem(table).add(link);
                 }
             }
         }
         
         context.view.setTitle("task-selector");
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param function
-     */
-    private static final void setCustomStyleSheet(View view) {
-        Map<String, Map<String, String>> defaultsheet;
-        Map<String, String> style;
-        
-        style = new HashMap<>();
-        style.put("padding", "0px");
-        style.put("margin", "0px");
-        
-        defaultsheet = view.getStyleSheet();
-        defaultsheet.put(".groups", style);
-        
-        style = new HashMap<>();
-        style.put("float", "left");
-        style.put("position", "relative");
-        style.put("display", "inline");
-        defaultsheet.put(".group_item", style);
-        
-        view.setStyleSheet(defaultsheet);
     }
 
 }
