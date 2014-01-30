@@ -1,6 +1,7 @@
 package org.iocaste.shell.common;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class StyleSheet implements Serializable {
@@ -11,7 +12,16 @@ public class StyleSheet implements Serializable {
         this.stylesheet = stylesheet;
     }
     
-    public void put(String element, String property, String value) {
+    public final void clone(String to, String from) {
+        Map<String, String> clone = new HashMap<>(stylesheet.get(from));
+        stylesheet.put(to, clone);
+    }
+    
+    public final void newElement(String name) {
+        stylesheet.put(name, new HashMap<String, String>());
+    }
+    
+    public final void put(String element, String property, String value) {
         Map<String, String> properties = stylesheet.get(element);
         
         properties.put(property, value);
