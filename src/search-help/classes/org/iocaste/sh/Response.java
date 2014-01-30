@@ -1,8 +1,5 @@
 package org.iocaste.sh;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
@@ -13,6 +10,7 @@ import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.StandardContainer;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -101,17 +99,19 @@ public class Response {
         Container stdcnt;
         SearchHelp sh;
         Documents documents = new Documents(context.function);
-        Map<String, Map<String, String>> stylesheet = context.view.
-                getStyleSheet();
-        Map<String, String> style = new HashMap<>();
+        StyleSheet stylesheet = context.view.styleSheetInstance();
         
-        style.put("position", "relative");
-        style.put("background-color", "black");
-        style.put("float", "left");
-        style.put("overflow", "auto");
-        style.put("height", "85%");
-        style.put("width", "20%");
-        stylesheet.put(".shcnt", style);
+        stylesheet.newElement(".shcnt");
+        stylesheet.put(".shcnt", "position", "relative");
+        stylesheet.put(".shcnt", "background-color", "#f0f0f0");
+        stylesheet.put(".shcnt", "float", "left");
+        stylesheet.put(".shcnt", "overflow", "auto");
+        stylesheet.put(".shcnt", "height", "85%");
+        stylesheet.put(".shcnt", "width", "20%");
+        stylesheet.put(".shcnt", "border-style", "solid");
+        stylesheet.put(".shcnt", "border-color", "rgb(176, 176, 176)");
+        stylesheet.put(".shcnt", "border-width", "2px"); 
+        
         stdcnt = new StandardContainer(context.view, "shstdcnt");
         stdcnt.setStyleClass("shcnt");
 
