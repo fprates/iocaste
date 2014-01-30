@@ -24,7 +24,9 @@ public class FormRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(Form container, Config config) {
+        String[] printlines;
         Parameter parameter;
+        View view;
         XMLElement hiddentag, content, pagecontrol;
         XMLElement formtag = new XMLElement("form");
         String enctype = container.getEnctype();
@@ -56,18 +58,41 @@ public class FormRenderer extends Renderer {
         parameter = new Parameter(null, "pagetrack");
         parameter.set(config.getPageTrack());
         hiddentag = ParameterRenderer.render(parameter);
-        
         formtag.addInner(hiddentag.toString());
 
-        if (config.getShControl() != null)
-            formtag.addChildren(renderSh(config));
-
         content = new XMLElement("div");
-        content.add("class", container.getStyleClass());        
+        content.add("class", container.getStyleClass());
+        if (config.getShControl() != null)
+            content.addChildren(renderSh(config));
         content.addChildren(renderElements(container.getElements(), config));
-        formtag.addChild(content);
+
+        view = config.getView();
+        printlines = view.getPrintLines();
+        if (printlines.length > 0) {
+            content.addChild(renderPrintLines(printlines));
+            view.clearPrintLines();
+        }
         
+        formtag.addChild(content);
         return formtag;
+    }
+    
+    /**
+     * 
+     * @param line
+     * @return
+     */
+    private static final XMLElement renderPrintLines(String[] lines) {
+        XMLElement pretag = new XMLElement("pre");
+        
+        pretag.add("class", "output_list");
+        for (int i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].replaceAll("[<]", "&lt");
+            lines[i] = lines[i].replaceAll("[>]", "&gt");
+        }
+        pretag.addInner(lines);
+        
+        return pretag;
     }
     
     private static final List<XMLElement> renderSh(Config config) {

@@ -132,24 +132,6 @@ public class HtmlRenderer {
     
     /**
      * 
-     * @param line
-     * @return
-     */
-    private final XMLElement renderPrintLines(String[] lines) {
-        XMLElement pretag = new XMLElement("pre");
-        
-        pretag.add("class", "output_list");
-        for (int i = 0; i < lines.length; i++) {
-            lines[i] = lines[i].replaceAll("[<]", "&lt");
-            lines[i] = lines[i].replaceAll("[>]", "&gt");
-        }
-        pretag.addInner(lines);
-        
-        return pretag;
-    }
-    
-    /**
-     * 
      * @param csselements
      * @return
      */
@@ -184,7 +166,6 @@ public class HtmlRenderer {
      * @return código html da visão
      */
     public final String[] run(View view, TrackingData tracking) {
-        String[] printlines;
         Config config;
         List<String> html = new ArrayList<>();
         List<XMLElement> tags = new ArrayList<>();
@@ -215,11 +196,6 @@ public class HtmlRenderer {
         msgtype = Const.NONE;
         htmltag.addChildren(tags);
         
-        printlines = view.getPrintLines();
-        if (printlines.length > 0)
-            htmltag.addChild(renderPrintLines(printlines));
-        
-        view.clearPrintLines();
         html.add(htmltag.toString());
         actions = config.getActions();
         
