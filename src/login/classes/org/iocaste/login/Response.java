@@ -7,12 +7,15 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.PageControl;
+import org.iocaste.shell.common.StandardContainer;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public class Response {
@@ -25,15 +28,30 @@ public class Response {
         InputComponent input;
         MessageSource messages;
         Form form = new Form(view, "main");
-        new PageControl(form);
-        DataForm loginform = new DataForm(form, "login");
+        Container loginbox = new StandardContainer(form, "loginbox");
+        DataForm loginform = new DataForm(loginbox, "login");
+        StyleSheet stylesheet = view.styleSheetInstance();
         
+        new PageControl(form);
+        
+        stylesheet.newElement(".logincnt");
+        stylesheet.put(".logincnt", "margin-left", "auto");
+        stylesheet.put(".logincnt", "margin-right", "auto");
+        stylesheet.put(".logincnt", "margin-top", "10%");
+        stylesheet.put(".logincnt", "width", "240px");
+        loginbox.setStyleClass("logincnt");
         /*
          * não podemos utilizar getModel() de Documents aqui para recuperar
          * o modelo "login". ainda não estamos autenticados pelo iocaste.
          */
+        stylesheet.clone(".loginform", ".form");
+        stylesheet.put(".loginform", "padding", "5px");
+        stylesheet.put(".loginform", "border-radius", "4px");
+        stylesheet.put(".loginform", "box-shadow",
+                "0px 4px 10px -1px rgba(200, 200, 200, 0.7)");
+        loginform.setStyleClass("loginform");
         loginform.importModel(modelInstance());
-        new Button(form, "connect").setSubmit(true);
+        new Button(loginbox, "connect").setSubmit(true);
         
         for (Element element : loginform.getElements()) {
             if (!element.isDataStorable())
