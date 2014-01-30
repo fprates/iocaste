@@ -35,11 +35,8 @@ public class Shell extends Module {
         insertStyle(shell001, "DEFAULT");
         insertStyleElement(shell002, "body");
         insertStyleProperty(shell003, "font-family", "sans-serif");
-        
-        insertStyleElement(shell002, "body");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
         insertStyleProperty(shell003, "font-size", "10pt");
-        insertStyleProperty(shell003, "background-color", "#333333");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
         insertStyleProperty(shell003, "margin", "0px");
         insertStyleProperty(shell003, "position", "absolute");
         insertStyleProperty(shell003, "height", "100%");
@@ -62,15 +59,23 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "margin-bottom", "3px");
         insertStyleProperty(shell003, "border-radius", "4px");
 
-        insertStyleElement(shell002, ".item_form_name");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "text-align", "right");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "vertical-align", "middle");
+        insertStyleElement(shell002, ".eb_area");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        
+        insertStyleElement(shell002, ".eb_edge");
         insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "background-color", "#808080");
+        insertStyleProperty(shell003, "border-width", "0px");
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "border-collapse", "collapse");
+        insertStyleProperty(shell003, "border-color", "#000000");
         insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin-bottom", "0px");
+        insertStyleProperty(shell003, "width", "100%");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-weight", "normal");
+        insertStyleProperty(shell003, "text-align", "left");
 
         insertStyleElement(shell002, ".error_message");
         insertStyleProperty(shell003, "font-size", "12pt");
@@ -80,96 +85,148 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "padding", "3px");
         insertStyleProperty(shell003, "margin", "0px");
 
-        insertStyleElement(shell002, ".status");
-        insertStyleProperty(shell003, "font-size", "10pt");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "background-color", "#000000");
+        insertStyleElement(shell002, ".expand_bar");
         insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "border-style", "none");
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "margin", "0px");
-                        
-        insertStyleElement(shell002, ".title");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "font-size", "26pt");
-        insertStyleProperty(shell003, "font-weight", "bold");
-        insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-                        
+        insertStyleProperty(shell003, "background-color", "transparent");
+        insertStyleProperty(shell003, "border-width", "1px");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-collapse", "collapse");
+        insertStyleProperty(shell003, "border-color", "#808080");
+        insertStyleProperty(shell003, "padding-top", "3px");
+        insertStyleProperty(shell003, "padding-bottom", "0px");
+        insertStyleProperty(shell003, "padding-left", "3px");
+        insertStyleProperty(shell003, "padding-right", "3px");
+        insertStyleProperty(shell003, "margin-bottom", "3px");
+        insertStyleProperty(shell003, "overflow", "auto");
+        
         insertStyleElement(shell002, ".form");
         insertStyleProperty(shell003, "padding", "0px");
         insertStyleProperty(shell003, "border-collapse", "collapse");
-        insertStyleProperty(shell003, "border-width", "5px");
+        insertStyleProperty(shell003, "border-width", "1px");
         insertStyleProperty(shell003, "border-style", "solid");
-        insertStyleProperty(shell003, "border-color", "#000000");
+        insertStyleProperty(shell003, "border-color", "rgb(176, 176, 176)");
         insertStyleProperty(shell003, "margin-bottom", "5px");
-                        
-        insertStyleElement(shell002, ".header");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "margin-bottom", "5px");
-        insertStyleProperty(shell003, "margin-right", "10px");
-        insertStyleProperty(shell003, "border-style", "none");
-        insertStyleProperty(shell003, "width", "100%");
-        insertStyleProperty(shell003, "top", "0px");
         
-        insertStyleElement(shell002, ".navbar_components");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "margin-top", "5px");
+        insertStyleElement(shell002, ".form_cell");
+        insertStyleProperty(shell003, "vertical-align", "middle");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        insertStyleProperty(shell003, "padding", "0px");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-width", "0px");
+        insertStyleProperty(shell003, "border-color", "#000000");
+        insertStyleProperty(shell003, "color", "#000000");
         
         insertStyleElement(shell002, ".form_content");
         insertStyleProperty(shell003, "position", "relative");
         insertStyleProperty(shell003, "height", "90%");
+        insertStyleProperty(shell003, "width", "80%");
         insertStyleProperty(shell003, "overflow", "auto");
-        
-        insertStyleElement(shell002, ".form_cell");
-        insertStyleProperty(shell003, "vertical-align", "middle");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "padding", "0px");
-        insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "border-style", "solid");
-        insertStyleProperty(shell003, "border-width", "5px");
-        insertStyleProperty(shell003, "border-color", "#000000");
-        insertStyleProperty(shell003, "color", "#ffffff");
-
-        insertStyleElement(shell002, ".text_field");
-        insertStyleProperty(shell003, "background-color", "#ffffff"); 
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "border-style", "none");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "monospace");
-        insertStyleProperty(shell003, "color", "#000000");
-
-        insertStyleElement(shell002, ".text_field_right");
         insertStyleProperty(shell003, "background-color", "#ffffff");
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "margin", "auto");
+
+        insertStyleElement(shell002, ".frame");
+        insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleProperty(shell003, "background-color", "#000000");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-size", "11pt");
+        insertStyleProperty(shell003, "font-weight", "normal");
+        insertStyleProperty(shell003, "margin-bottom", "5px");
+        
+        insertStyleElement(shell002, ".header");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        insertStyleProperty(shell003, "margin", "auto");
         insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "width", "80%");
+
+        insertStyleElement(shell002, ".imglink:link");
+        insertStyleProperty(shell003, "color", "transparent");
+        insertStyleElement(shell002, ".imglink:visited");
+        insertStyleProperty(shell003, "color", "transparent");
+        insertStyleElement(shell002, ".imglink:hover");
+        insertStyleProperty(shell003, "color", "transparent");
+        insertStyleElement(shell002, ".imglink:active");
+        insertStyleProperty(shell003, "color", "transparent");
+
+        insertStyleElement(shell002, ".item_form_name");
         insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "monospace");
-        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
         insertStyleProperty(shell003, "text-align", "right");
-
-        insertStyleElement(shell002, ".warning_message");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "background-color", "#ffff00");
-        insertStyleProperty(shell003, "color", "#000000");
-        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        insertStyleProperty(shell003, "vertical-align", "middle");
+        insertStyleProperty(shell003, "color", "#505050");
         insertStyleProperty(shell003, "margin", "0px");
-
-        insertStyleElement(shell002, ".status_message");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "background-color", "#00ff00");
-        insertStyleProperty(shell003, "color", "#000000");
         insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "margin", "0px");
+
+        insertStyleElement(shell002, ".link:link");
+        insertStyleProperty(shell003, "color", "blue");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-weight", "normal");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "text-decoration", "underline");
+
+        insertStyleElement(shell002, ".link:visited");
+        insertStyleProperty(shell003, "color", "red");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-weight", "normal");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "text-decoration", "underline");
+
+        insertStyleElement(shell002, ".link:hover");
+        insertStyleProperty(shell003, "color", "#505050");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-weight", "normal");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "text-decoration", "none");
+
+        insertStyleElement(shell002, ".link:active");
+        insertStyleProperty(shell003, "color", "blue");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-weight", "normal");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "text-decoration", "underline");
+
+        insertStyleElement(shell002, ".list_box");
+        insertStyleProperty(shell003, "background-color", "#ffffff");
+        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-weight", "normal");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "padding", "3px");
+
+        insertStyleElement(shell002, ".list_box_disabled");
+        insertStyleProperty(shell003, "background-color", "#ffffff");
+        insertStyleProperty(shell003, "color", "#808080");
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-weight", "normal");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "padding", "3px");
+        
+        insertStyleElement(shell002, ".navbar_components");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        insertStyleProperty(shell003, "margin-top", "5px");
 
         insertStyleElement(shell002, ".navbar_link");
         insertStyleProperty(shell003, "font-size", "10pt");
         insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "color", "#000000");
+
+        insertStyleElement(shell002, ".nlitem");
         insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleProperty(shell003, "background-color", "transparent");
+
+        insertStyleElement(shell002, ".nlnode");
+        insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleProperty(shell003, "background-color", "transparent");
+
+        insertStyleElement(shell002, ".output_list");
+        insertStyleProperty(shell003, "background-color", "transparent");
+        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "font-family", "monospace");
+        insertStyleProperty(shell003, "font-weight", "normal");
+        insertStyleProperty(shell003, "font-size", "10pt");
 
         insertStyleElement(shell002, ".sh_button");
         insertStyleProperty(shell003, "font-size", "12pt");
@@ -184,6 +241,137 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "margin", "0px");
         insertStyleProperty(shell003, "border-radius", "11px");
         insertStyleProperty(shell003, "display", "inline");
+
+        insertStyleElement(shell002, ".status");
+        insertStyleProperty(shell003, "font-size", "10pt");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "background-color", "#000000");
+        insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
+
+        insertStyleElement(shell002, ".status_message");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "background-color", "#00ff00");
+        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
+
+        insertStyleElement(shell002, ".table_area");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-collapse", "collapse");
+        insertStyleProperty(shell003, "margin-bottom", "5px");
+        insertStyleProperty(shell003, "padding", "0px");
+        insertStyleProperty(shell003, "border-width", "1px");
+        insertStyleProperty(shell003, "border-color", "#808080");
+
+        insertStyleElement(shell002, ".table_cell");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
+
+        insertStyleElement(shell002, ".table_header");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "text-align", "center");
+        insertStyleProperty(shell003, "background-color", "#808080");
+        insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleProperty(shell003, "font-weight", "normal");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
+
+        insertStyleElement(shell002, ".tbcaption");
+        insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleProperty(shell003, "background-color", "#000000");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-align", "left");
+
+        insertStyleElement(shell002, ".text");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "text-align", "left");
+        insertStyleProperty(shell003, "background-color", "transparent");
+        insertStyleProperty(shell003, "vertical-align", "middle");
+        insertStyleProperty(shell003, "color", "#505050");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "padding", "3px");
+
+        insertStyleElement(shell002, ".text_h");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "text-align", "left");
+        insertStyleProperty(shell003, "background-color", "transparent");
+        insertStyleProperty(shell003, "vertical-align", "middle");
+        insertStyleProperty(shell003, "color", "#505050");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "display", "inline");
+
+        insertStyleElement(shell002, ".text_field");
+        insertStyleProperty(shell003, "background-color", "#ffffff"); 
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-color", "rgb(176, 176, 176)");
+        insertStyleProperty(shell003, "border-width", "1px");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "monospace");
+        insertStyleProperty(shell003, "color", "#000000");
+
+        insertStyleElement(shell002, ".text_field_disabled");
+        insertStyleProperty(shell003, "background-color", "#ffffff");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "monospace");
+        insertStyleProperty(shell003, "color", "#808080");
+
+        insertStyleElement(shell002, ".text_field_disabled_right");
+        insertStyleProperty(shell003, "background-color", "#ffffff");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "monospace");
+        insertStyleProperty(shell003, "color", "#808080");
+        insertStyleProperty(shell003, "text-align", "right");
+
+        insertStyleElement(shell002, ".text_field_right");
+        insertStyleProperty(shell003, "background-color", "#ffffff");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "monospace");
+        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "text-align", "right");
+
+        insertStyleElement(shell002, ".textarea");
+        insertStyleProperty(shell003, "width", "100%");
+
+        insertStyleElement(shell002, ".tftext");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "text-align", "left");
+        insertStyleProperty(shell003, "background-color", "transparent");
+        insertStyleProperty(shell003, "vertical-align", "middle");
+        insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "display", "inline");
+        
+        insertStyleElement(shell002, ".title");
+        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "font-size", "26pt");
+        insertStyleProperty(shell003, "font-weight", "bold");
+        insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
 
         insertStyleElement(shell002, ".tp_item");
         insertStyleProperty(shell003, "background-color", "#000000");
@@ -222,198 +410,13 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "padding-right", "20px");
         insertStyleProperty(shell003, "margin", "0px");
 
-        insertStyleElement(shell002, ".table_header");
+        insertStyleElement(shell002, ".warning_message");
         insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "text-align", "center");
-        insertStyleProperty(shell003, "background-color", "#808080");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "margin", "0px");
-
-        insertStyleElement(shell002, ".table_cell");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "margin", "0px");
-
-        insertStyleElement(shell002, ".table_area");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "border-style", "solid");
-        insertStyleProperty(shell003, "border-collapse", "collapse");
-        insertStyleProperty(shell003, "margin-bottom", "5px");
-        insertStyleProperty(shell003, "padding", "0px");
-        insertStyleProperty(shell003, "border-width", "1px");
-        insertStyleProperty(shell003, "border-color", "#808080");
-
-        insertStyleElement(shell002, ".link:link");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "text-decoration", "underline");
-
-        insertStyleElement(shell002, ".link:visited");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "text-decoration", "underline");
-
-        insertStyleElement(shell002, ".link:hover");
-        insertStyleProperty(shell003, "color", "#808080");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "text-decoration", "none");
-
-        insertStyleElement(shell002, ".link:active");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "text-decoration", "underline");
-
-        insertStyleElement(shell002, ".frame");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "font-size", "11pt");
-        insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "margin-bottom", "5px");
-
-        insertStyleElement(shell002, ".expand_bar");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "border-width", "1px");
-        insertStyleProperty(shell003, "border-style", "solid");
-        insertStyleProperty(shell003, "border-collapse", "collapse");
-        insertStyleProperty(shell003, "border-color", "#808080");
-        insertStyleProperty(shell003, "padding-top", "3px");
-        insertStyleProperty(shell003, "padding-bottom", "0px");
-        insertStyleProperty(shell003, "padding-left", "3px");
-        insertStyleProperty(shell003, "padding-right", "3px");
-        insertStyleProperty(shell003, "margin-bottom", "3px");
-        insertStyleProperty(shell003, "overflow", "auto");
-
-        insertStyleElement(shell002, ".eb_edge");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "background-color", "#808080");
-        insertStyleProperty(shell003, "border-width", "0px");
-        insertStyleProperty(shell003, "border-style", "none");
-        insertStyleProperty(shell003, "border-collapse", "collapse");
-        insertStyleProperty(shell003, "border-color", "#000000");
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "margin-bottom", "0px");
-        insertStyleProperty(shell003, "width", "100%");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "text-align", "left");
-
-        insertStyleElement(shell002, ".text_field_disabled");
-        insertStyleProperty(shell003, "background-color", "#ffffff");
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "border-style", "none");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "monospace");
-        insertStyleProperty(shell003, "color", "#808080");
-
-        insertStyleElement(shell002, ".text_field_disabled_right");
-        insertStyleProperty(shell003, "background-color", "#ffffff");
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "border-style", "none");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "monospace");
-        insertStyleProperty(shell003, "color", "#808080");
-        insertStyleProperty(shell003, "text-align", "right");
-
-        insertStyleElement(shell002, ".list_box");
-        insertStyleProperty(shell003, "background-color", "#ffffff"); 
+        insertStyleProperty(shell003, "background-color", "#ffff00");
         insertStyleProperty(shell003, "color", "#000000");
-        insertStyleProperty(shell003, "border-style", "none");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "padding", "3px");
-
-        insertStyleElement(shell002, ".list_box_disabled");
-        insertStyleProperty(shell003, "background-color", "#ffffff");
-        insertStyleProperty(shell003, "color", "#808080");
-        insertStyleProperty(shell003, "border-style", "none");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "padding", "3px");
-
-        insertStyleElement(shell002, ".output_list");
-        insertStyleProperty(shell003, "background-color", "transparent");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "font-family", "monospace");
-        insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "font-size", "10pt");
-
-        insertStyleElement(shell002, ".text");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "text-align", "left");
-        insertStyleProperty(shell003, "background-color", "transparent");
-        insertStyleProperty(shell003, "vertical-align", "middle");
-        insertStyleProperty(shell003, "color", "#ffffff");
         insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "padding", "3px");
-
-        insertStyleElement(shell002, ".tftext");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "text-align", "left");
-        insertStyleProperty(shell003, "background-color", "transparent");
-        insertStyleProperty(shell003, "vertical-align", "middle");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "display", "inline");
-
-        insertStyleElement(shell002, ".imglink:link");
-        insertStyleProperty(shell003, "color", "transparent");
-        insertStyleElement(shell002, ".imglink:visited");
-        insertStyleProperty(shell003, "color", "transparent");
-        insertStyleElement(shell002, ".imglink:hover");
-        insertStyleProperty(shell003, "color", "transparent");
-        insertStyleElement(shell002, ".imglink:active");
-        insertStyleProperty(shell003, "color", "transparent");
-
-        insertStyleElement(shell002, ".nlnode");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "background-color", "transparent");
-
-        insertStyleElement(shell002, ".nlitem");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "background-color", "transparent");
-
-        insertStyleElement(shell002, ".textarea");
-        insertStyleProperty(shell003, "width", "100%");
-
-        insertStyleElement(shell002, ".tbcaption");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "font-align", "left");
-
-        insertStyleElement(shell002, ".text_h");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "text-align", "left");
-        insertStyleProperty(shell003, "background-color", "transparent");
-        insertStyleProperty(shell003, "vertical-align", "middle");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "display", "inline");
 
         docs001 = getTable("DOCS001");
         docs002 = getTable("DOCS002");
