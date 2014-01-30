@@ -58,9 +58,6 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "padding-right", "20px");
         insertStyleProperty(shell003, "margin-bottom", "3px");
         insertStyleProperty(shell003, "border-radius", "4px");
-
-        insertStyleElement(shell002, ".eb_area");
-        insertStyleProperty(shell003, "background-color", "#f0f0f0");
         
         insertStyleElement(shell002, ".eb_edge");
         insertStyleProperty(shell003, "color", "#ffffff");
@@ -87,7 +84,7 @@ public class Shell extends Module {
 
         insertStyleElement(shell002, ".expand_bar");
         insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "background-color", "transparent");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
         insertStyleProperty(shell003, "border-width", "1px");
         insertStyleProperty(shell003, "border-style", "solid");
         insertStyleProperty(shell003, "border-collapse", "collapse");
@@ -189,7 +186,9 @@ public class Shell extends Module {
         insertStyleElement(shell002, ".list_box");
         insertStyleProperty(shell003, "background-color", "#ffffff");
         insertStyleProperty(shell003, "color", "#000000");
-        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-color", "rgb(176, 176, 176)");
+        insertStyleProperty(shell003, "border-width", "1px");
         insertStyleProperty(shell003, "font-family", "sans-serif");
         insertStyleProperty(shell003, "font-weight", "normal");
         insertStyleProperty(shell003, "font-size", "12pt");
@@ -327,7 +326,9 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "background-color", "#ffffff");
         insertStyleProperty(shell003, "padding", "3px");
         insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-color", "rgb(176, 176, 176)");
+        insertStyleProperty(shell003, "border-width", "1px");
         insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "monospace");
         insertStyleProperty(shell003, "color", "#808080");
@@ -336,7 +337,9 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "background-color", "#ffffff");
         insertStyleProperty(shell003, "padding", "3px");
         insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-color", "rgb(176, 176, 176)");
+        insertStyleProperty(shell003, "border-width", "1px");
         insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "monospace");
         insertStyleProperty(shell003, "color", "#808080");
@@ -346,7 +349,9 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "background-color", "#ffffff");
         insertStyleProperty(shell003, "padding", "3px");
         insertStyleProperty(shell003, "margin", "0px");
-        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-color", "rgb(176, 176, 176)");
+        insertStyleProperty(shell003, "border-width", "1px");
         insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "monospace");
         insertStyleProperty(shell003, "color", "#000000");
@@ -373,23 +378,19 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "margin", "0px");
         insertStyleProperty(shell003, "font-family", "sans-serif");
 
-        insertStyleElement(shell002, ".tp_item");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "margin-bottom", "3px");
-        insertStyleProperty(shell003, "padding-top", "3px");
-        insertStyleProperty(shell003, "padding-bottom", "0px");
-        insertStyleProperty(shell003, "padding-left", "3px");
-        insertStyleProperty(shell003, "padding-right", "3px");
-        insertStyleProperty(shell003, "overflow", "auto");
-
         insertStyleElement(shell002, ".tp_button_focused");
         insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "sans-serif");
         insertStyleProperty(shell003, "text-align", "center");
-        insertStyleProperty(shell003, "background-color", "#000000");
-        insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        insertStyleProperty(shell003, "color", "#000000");
         insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-top-width", "2px");
+        insertStyleProperty(shell003, "border-left-width", "2px");
+        insertStyleProperty(shell003, "border-right-width", "2px");
+        insertStyleProperty(shell003, "border-bottom-width", "0px");
+        insertStyleProperty(shell003, "border-color", "#a0a0a0");
         insertStyleProperty(shell003, "padding-top", "3px");
         insertStyleProperty(shell003, "padding-bottom", "3px");
         insertStyleProperty(shell003, "padding-left", "20px");
@@ -400,15 +401,32 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "sans-serif");
         insertStyleProperty(shell003, "text-align", "center");
-        insertStyleProperty(shell003, "background-color", "#808080");
-        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        insertStyleProperty(shell003, "color", "#a0a0a0");
         insertStyleProperty(shell003, "font-weight", "normal");
-        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-top-width", "1px");
+        insertStyleProperty(shell003, "border-left-width", "1px");
+        insertStyleProperty(shell003, "border-right-width", "1px");
+        insertStyleProperty(shell003, "border-bottom-width", "0px");
+        insertStyleProperty(shell003, "border-color", "#a0a0a0");
         insertStyleProperty(shell003, "padding-top", "3px");
         insertStyleProperty(shell003, "padding-bottom", "3px");
         insertStyleProperty(shell003, "padding-left", "20px");
         insertStyleProperty(shell003, "padding-right", "20px");
         insertStyleProperty(shell003, "margin", "0px");
+
+        insertStyleElement(shell002, ".tp_item");
+        insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        insertStyleProperty(shell003, "margin-bottom", "3px");
+        insertStyleProperty(shell003, "padding-top", "3px");
+        insertStyleProperty(shell003, "padding-bottom", "0px");
+        insertStyleProperty(shell003, "padding-left", "3px");
+        insertStyleProperty(shell003, "padding-right", "3px");
+        insertStyleProperty(shell003, "overflow", "auto");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-width", "2px");
+        insertStyleProperty(shell003, "border-color", "#A0A0A0");
 
         insertStyleElement(shell002, ".warning_message");
         insertStyleProperty(shell003, "font-size", "12pt");
