@@ -31,6 +31,8 @@ public class ButtonRenderer extends Renderer {
         buttontag.add("class", button.getStyleClass());
         buttontag.add("value", config.getText(text_, name));
         buttontag.add("onClick", onclick.toString());
+        if (!button.isEnabled())
+            buttontag.add("disabled", "disabled");
         
         addEvents(buttontag, button);
         
