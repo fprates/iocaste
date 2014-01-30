@@ -111,11 +111,15 @@ public class Response {
         
         pagecontrol.add("help", PageControl.EXTERNAL);
         stylesheet = context.view.styleSheetInstance();
-        stylesheet.put(".eb_area", "float", "left");
-        stylesheet.put(".eb_area", "display", "inline");
-        stylesheet.put(".eb_area", "margin-top", "10px");
-        stylesheet.put(".eb_area", "margin-right", "10px");
-        stylesheet.put(".table_area", "border-style", "none");
+        stylesheet.clone(".tasksel_eb", ".expand_bar");
+        stylesheet.put(".tasksel_eb", "float", "left");
+        stylesheet.put(".tasksel_eb", "display", "inline");
+        stylesheet.put(".tasksel_eb", "margin-top", "10px");
+        stylesheet.put(".tasksel_eb", "margin-right", "10px");
+        stylesheet.remove(".tasksel_eb", "padding");
+        stylesheet.remove(".tasksel_eb", "margin-bottom");
+        stylesheet.clone(".tasksel_table_area", ".table_area");
+        stylesheet.put(".tasksel_table_area", "border-style", "none");
         
         /*
          * tarefas pré-definidas
@@ -125,8 +129,10 @@ public class Response {
                 group = new ExpandBar(container, groupname);
                 group.setExpanded(true);
                 group.setEnabled(false);
+                group.setStyleClass("tasksel_eb");
                 table = new Table(group, groupname.concat(".table"));
                 table.setHeader(false);
+                table.setStyleClass("tasksel_table_area");
                 new TableColumn(table, "link");
                 
                 entries = lists.get(groupname);
