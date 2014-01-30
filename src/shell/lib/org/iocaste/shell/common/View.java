@@ -600,4 +600,8 @@ public class View implements Serializable {
     public final void setTitle(String title) {
         this.title = title;
     }
+    
+    public final StyleSheet styleSheetInstance() {
+        return new StyleSheet(sheet);
+    }
 }
