@@ -26,4 +26,10 @@ public class StyleSheet implements Serializable {
         
         properties.put(property, value);
     }
+    
+    public final void remove(String element, String property) {
+        Map<String, String> properties = stylesheet.get(element);
+        
+        properties.remove(property);
+    }
 }
