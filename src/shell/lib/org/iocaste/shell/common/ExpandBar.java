@@ -10,7 +10,7 @@ package org.iocaste.shell.common;
 public class ExpandBar extends AbstractContainer {
     private static final long serialVersionUID = -4962118925903091404L;
     private boolean expanded;
-    private String text;
+    private String text, edgestyle, internalstyle;
     
     /**
      * 
@@ -34,6 +34,26 @@ public class ExpandBar extends AbstractContainer {
         init();
     }
     
+    /**
+     * Retorna o estilo da barra
+     * @return nome do estilo
+     */
+    public final String getEdgeStyle() {
+        return edgestyle;
+    }
+    
+    /**
+     * Retorna o estilo da área internal
+     * @return nome do estilo
+     */
+    public final String getInternalStyle() {
+        return internalstyle;
+    }
+    
+    /**
+     * Retorna texto da barra
+     * @return texto
+     */
     public final String getText() {
         return text;
     }
@@ -43,7 +63,9 @@ public class ExpandBar extends AbstractContainer {
      */
     private final void init() {
         expanded = true;
-        setStyleClass("expand_bar");
+        internalstyle = "eb_internal";
+        edgestyle = "eb_edge";
+        setStyleClass("eb_external");
         setEventHandler(new ExpandBarHandler(this));
     }
     
@@ -56,6 +78,14 @@ public class ExpandBar extends AbstractContainer {
     }
 
     /**
+     * Define estilo da barra
+     * @param edgestyle nome do estilo
+     */
+    public final void setEdgeStyle(String edgestyle) {
+        this.edgestyle = edgestyle;
+    }
+    
+    /**
      * Ajusta estado da expansão da área.
      * @param expanded true, se área está expandida.
      */
@@ -63,6 +93,18 @@ public class ExpandBar extends AbstractContainer {
         this.expanded = expanded;
     }
     
+    /**
+     * Define estilo da área interna
+     * @param internalstyle nome do estilo
+     */
+    public final void setInternalStyle(String internalstyle) {
+        this.internalstyle = internalstyle;
+    }
+    
+    /**
+     * Define texto da barra
+     * @param text texto
+     */
     public final void setText(String text) {
         this.text = text;
     }

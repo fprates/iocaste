@@ -21,11 +21,11 @@ public class ExpandBarRenderer extends Renderer {
         String text = container.getText();
         
         ebarea = new XMLElement("div");
-        ebarea.add("class", "eb_area");
+        ebarea.add("class", container.getStyleClass());
         
         edge.setText((text == null)? name : text);
         edge.setSubmit(false);
-        edge.setStyleClass("eb_edge");
+        edge.setStyleClass(container.getEdgeStyle());
         edge.setEventHandler(container.getEventHandler());
         edge.addEvent("onClick", new StringBuilder("revertElementDisplay('").
                 append(name).append("'); send ('").
@@ -43,7 +43,7 @@ public class ExpandBarRenderer extends Renderer {
             Renderer.renderElement(ebtags, element, config);
         }
         
-        ebtag.add("class", container.getStyleClass());
+        ebtag.add("class", container.getInternalStyle());
         ebtag.add("id", name);
         if (ebtags.size() == 0)
             ebtag.addInner("");

@@ -74,17 +74,13 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "font-weight", "normal");
         insertStyleProperty(shell003, "text-align", "left");
 
-        insertStyleElement(shell002, ".error_message");
-        insertStyleProperty(shell003, "font-size", "12pt");
-        insertStyleProperty(shell003, "font-family", "sans-serif");
-        insertStyleProperty(shell003, "background-color", "#ff0000");
-        insertStyleProperty(shell003, "color", "#000000");
-        insertStyleProperty(shell003, "padding", "3px");
-        insertStyleProperty(shell003, "margin", "0px");
-
-        insertStyleElement(shell002, ".expand_bar");
-        insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleElement(shell002, ".eb_external");
         insertStyleProperty(shell003, "background-color", "#f0f0f0");
+        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "margin-bottom", "3px");
+
+        insertStyleElement(shell002, ".eb_internal");
+        insertStyleProperty(shell003, "background-color", "transparent");
         insertStyleProperty(shell003, "border-width", "1px");
         insertStyleProperty(shell003, "border-style", "solid");
         insertStyleProperty(shell003, "border-collapse", "collapse");
@@ -93,8 +89,15 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "padding-bottom", "0px");
         insertStyleProperty(shell003, "padding-left", "3px");
         insertStyleProperty(shell003, "padding-right", "3px");
-        insertStyleProperty(shell003, "margin-bottom", "3px");
         insertStyleProperty(shell003, "overflow", "auto");
+
+        insertStyleElement(shell002, ".error_message");
+        insertStyleProperty(shell003, "font-size", "12pt");
+        insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "background-color", "#ff0000");
+        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "padding", "3px");
+        insertStyleProperty(shell003, "margin", "0px");
         
         insertStyleElement(shell002, ".form");
         insertStyleProperty(shell003, "padding", "0px");
@@ -116,15 +119,15 @@ public class Shell extends Module {
         
         insertStyleElement(shell002, ".form_content");
         insertStyleProperty(shell003, "position", "relative");
-        insertStyleProperty(shell003, "height", "90%");
+        insertStyleProperty(shell003, "height", "85%");
         insertStyleProperty(shell003, "width", "80%");
         insertStyleProperty(shell003, "overflow", "auto");
         insertStyleProperty(shell003, "background-color", "#ffffff");
         insertStyleProperty(shell003, "margin", "auto");
 
         insertStyleElement(shell002, ".frame");
-        insertStyleProperty(shell003, "color", "#ffffff");
-        insertStyleProperty(shell003, "background-color", "#000000");
+        insertStyleProperty(shell003, "color", "#000000");
+        insertStyleProperty(shell003, "background-color", "transparent");
         insertStyleProperty(shell003, "font-family", "sans-serif");
         insertStyleProperty(shell003, "font-size", "11pt");
         insertStyleProperty(shell003, "font-weight", "normal");
@@ -197,7 +200,9 @@ public class Shell extends Module {
         insertStyleElement(shell002, ".list_box_disabled");
         insertStyleProperty(shell003, "background-color", "#ffffff");
         insertStyleProperty(shell003, "color", "#808080");
-        insertStyleProperty(shell003, "border-style", "none");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-color", "rgb(176, 176, 176)");
+        insertStyleProperty(shell003, "border-width", "1px");
         insertStyleProperty(shell003, "font-family", "sans-serif");
         insertStyleProperty(shell003, "font-weight", "normal");
         insertStyleProperty(shell003, "font-size", "12pt");
@@ -359,6 +364,10 @@ public class Shell extends Module {
 
         insertStyleElement(shell002, ".textarea");
         insertStyleProperty(shell003, "width", "100%");
+        insertStyleProperty(shell003, "background-color", "#ffffff");
+        insertStyleProperty(shell003, "border-style", "solid");
+        insertStyleProperty(shell003, "border-width", "1px");
+        insertStyleProperty(shell003, "border-color", "rgb(176, 176, 176)");
 
         insertStyleElement(shell002, ".tftext");
         insertStyleProperty(shell003, "font-size", "12pt");
