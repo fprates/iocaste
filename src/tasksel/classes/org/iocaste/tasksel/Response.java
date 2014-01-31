@@ -100,6 +100,7 @@ public class Response {
      */
     public static final void main(Map<String, Set<TaskEntry>> lists,
             PageContext context) {
+        short i;
         StandardContainer groups;
         Table table;
         ExpandBar group;
@@ -126,19 +127,27 @@ public class Response {
         stylesheet.put(".tasksel_eb", "display", "inline");
         stylesheet.put(".tasksel_eb", "margin-top", "10px");
         stylesheet.put(".tasksel_eb", "margin-right", "10px");
-        stylesheet.remove(".tasksel_eb", "padding");
-        stylesheet.remove(".tasksel_eb", "margin-bottom");
+        stylesheet.put(".tasksel_eb", "width", "250px");
         stylesheet.clone(".tasksel_table_area", ".table_area");
         stylesheet.put(".tasksel_table_area", "border-style", "none");
         
         stylesheet.newElement(".tasksel_groups");
         stylesheet.put(".tasksel_groups", "margin", "auto");
         stylesheet.put(".tasksel_groups", "background-color", "transparent");
-        stylesheet.put(".tasksel_groups", "width", "90%");
+        stylesheet.put(".tasksel_groups", "width", "1100px");
+        stylesheet.put(".tasksel_groups", "display", "table");
         
-        groups = new StandardContainer(container, "groups");
-        groups.setStyleClass("tasksel_groups");
+        i = 0;
+        groups = null;
         for (String groupname : lists.keySet()) {
+            if ((i % 4) == 0) {
+                groups = new StandardContainer(container,
+                        new StringBuilder("groups.").
+                        append(i).toString());
+                groups.setStyleClass("tasksel_groups");
+            }
+            i++;
+            
             group = new ExpandBar(groups, groupname);
             group.setExpanded(true);
             group.setEnabled(false);
