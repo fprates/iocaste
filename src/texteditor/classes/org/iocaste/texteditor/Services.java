@@ -112,6 +112,9 @@ public class Services extends AbstractFunction {
             linehelper.i = pageid * 10000;
             linehelper.size = linehelper.linesize;
             text = linehelper.pages.get(page);
+            if (text == null)
+                continue;
+            
             textlines = text.split("\r\n");
             for (String textline : textlines) {
                 linehelper.paragraph = true;
