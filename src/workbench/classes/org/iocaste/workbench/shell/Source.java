@@ -11,10 +11,7 @@ public class Source {
     public static final String execute(String[] tokens, Context context) {
         Map<String, String> parameters;
         String packagename;
-        String[] packagetokens;
-        StringBuilder sb;
         ExtendedObject object;
-        long lastsrcid;
 
         /*
          * recupera dados do projeto
@@ -29,24 +26,14 @@ public class Source {
             return "invalid.project";
 
         context.projectsourceobj = object.get("SOURCE_OBJ");
-        lastsrcid = object.getl("SOURCE_ID");
         
         /*
          * recupera dados do pacote
          */
-        packagetokens = tokens[2].split("\\.");
-        sb = new StringBuilder();
-        for (int i = 0; i < packagetokens.length; i++) {
-            if (i == (packagetokens.length - 1)) {
-                context.projectsourcename = packagetokens[i];
-                continue;
-            }
-            
-            if (i > 0)
-                sb.append(".");
-            sb.append(packagetokens[i]);
-        }
-        packagename = sb.toString();
+        packagename = Common.extractPackageName(tokens[2]);
+        context.projectsourcename = tokens[2].
+                substring(packagename.length() + 1);
+        
         object = Common.getPackage(packagename, context.projectname, context);
         if (object == null)
             return "invalid.package";
@@ -77,7 +64,6 @@ public class Source {
                 return "duplicated.source.name";
 
             context.editormode = Context.NEW;
-            context.projectsourceid = lastsrcid + 1;
             context.projectdefsource = parameters.get("--default");
             object = Common.getSourceInstance(context);
             context.projectsources.put(context.projectfullsourcename, object);

@@ -42,9 +42,26 @@ public class Common {
         object.set("PROJECT_NAME", project.toUpperCase());
         object.set("PROJECT_ID", projectid);
         object.set("SOURCE_OBJ", textname);
+        object.set("SOURCE_ID", projectid * 100000);
         documents.save(object);
         
         return "project.created";
+    }
+    
+    public static final String extractPackageName(String classname) {
+        String[] packagetokens = classname.split("\\.");
+        StringBuilder sb = new StringBuilder();
+        
+        for (int i = 0; i < packagetokens.length; i++) {
+            if (i == (packagetokens.length - 1))
+                continue;
+            
+            if (i > 0)
+                sb.append(".");
+            sb.append(packagetokens[i]);
+        }
+        
+        return sb.toString();
     }
     
     public static final ExtendedObject getPackage(String name, String project,
@@ -151,6 +168,8 @@ public class Common {
         if (context.editormode == Context.NEW) {
             object = context.projectsources.get(
                     context.projectfullsourcename);
+            context.projectsourceid = context.projectlastsrcid + 1;
+            object.set("SOURCE_ID", context.projectsourceid);
             documents.save(object);
             
             /*

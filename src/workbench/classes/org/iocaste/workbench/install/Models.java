@@ -44,10 +44,10 @@ public class Models {
 
         sourceid = new DataElement("WB_SOURCE_ID");
         sourceid.setType(DataType.NUMC);
-        sourceid.setLength(6);
+        sourceid.setLength(9);
         item = new DocumentModelItem("SOURCE_ID");
         item.setTableFieldName("SRCID");
-        item.setDataElement(element);
+        item.setDataElement(sourceid);
         model.add(item);
 
         sourcename = new DataElement("WB_SOURCE_NAME");

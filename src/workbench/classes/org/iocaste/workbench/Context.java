@@ -23,5 +23,6 @@ public class Context extends PageContext {
     public String projectdefsource;
     public long projectpackageid;
     public long projectsourceid;
+    public long projectlastsrcid;
     public Map<String, ExtendedObject> projectsources;
 }
