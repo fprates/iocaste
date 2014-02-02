@@ -1,9 +1,6 @@
 package org.iocaste.shell;
 
-import java.util.Map;
-
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.View;
@@ -29,17 +26,6 @@ public class Services extends AbstractFunction {
     public final String addTicket(Message message) {
         AccessTicket ticket = message.get("ticket");
         return PageRenderer.addTicket(this, ticket);
-    }
-    
-    /**
-     * Seleciona mapa css do estilo especificado.
-     * @param name nome do estilo
-     * @param function instância da função
-     * @return mapa com estilos dos componentes.
-     */
-    public final static Map<String, Map<String, String>> getStyle(
-            String name, Function function) {
-        return Style.get(name, function);
     }
     
     /**

@@ -402,14 +402,6 @@ public class View implements Serializable {
     }
     
     /**
-     * Retorna folha de estilos.
-     * @return nome
-     */
-    public final Map<String, Map<String, String>> getStyleSheet() {
-        return sheet;
-    }
-    
-    /**
      * Retorna título da página.
      * @return título
      */

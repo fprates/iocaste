@@ -19,6 +19,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.RangeInputComponent;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public class HtmlRenderer {
@@ -73,7 +74,7 @@ public class HtmlRenderer {
      * @return
      */
     private final XMLElement renderHeader(View view, Config config) {
-        Map<String, Map<String, String>> stylesheet;
+        StyleSheet stylesheet;
         Element focus = view.getFocus();
         String focusname, title = view.getTitle();
         XMLElement headtag = new XMLElement("head");
@@ -101,9 +102,9 @@ public class HtmlRenderer {
         headtag.addChild(titletag);
         if (script != null)
             headtag.addChild(renderJavaScript(script, config));
-        stylesheet = view.getStyleSheet();
+        stylesheet = view.styleSheetInstance();
         if (stylesheet != null)
-            headtag.addChild(renderStyleSheet(stylesheet));
+            headtag.addChild(renderStyleSheet(stylesheet.getElements()));
         
         return headtag;
     }

@@ -612,7 +612,7 @@ public class Main extends AbstractRenderer {
          * ajusta o renderizador
          */
         username = pagectx.getUsername();
-        userstyle = viewdata.getStyleSheet();
+        userstyle = viewdata.styleSheetInstance().getElements();
         if (userstyle != null)
             appctx.setStyleSheet(userstyle);
         

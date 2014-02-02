@@ -13,6 +13,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public class FormRenderer extends Renderer {
@@ -101,15 +102,16 @@ public class FormRenderer extends Renderer {
         Service service = new Service(tracking.sessionid, tracking.contexturl);
         Message message = new Message();
         View view = new View("iocaste-search-help", "main");
+        StyleSheet stylesheet = config.getView().styleSheetInstance();
         
         view.setParameter("sh", config.getShControl());
-        view.setStyleSheet(config.getView().getStyleSheet());
+        view.setStyleSheet(stylesheet.getElements());
         
         message.setId("get_view_data");
         message.add("view", view);
         message.add("init", true);
         view = (View)service.call(message);
-        config.getView().setStyleSheet(view.getStyleSheet());
+        config.getView().setStyleSheet(view.styleSheetInstance().getElements());
         for (Container container : view.getContainers())
             Renderer.renderContainer(tags, container, config);
         

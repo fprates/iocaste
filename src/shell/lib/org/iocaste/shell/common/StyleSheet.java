@@ -17,6 +17,10 @@ public class StyleSheet implements Serializable {
         stylesheet.put(to, clone);
     }
     
+    public final Map<String, Map<String, String>> getElements() {
+        return stylesheet;
+    }
+    
     public final void newElement(String name) {
         stylesheet.put(name, new HashMap<String, String>());
     }

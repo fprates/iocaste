@@ -37,6 +37,7 @@ import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.SearchHelp;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -1015,7 +1016,7 @@ public class PageRenderer extends AbstractRenderer {
             PageContext pagectx) throws Exception {
         TrackingData tracking;
         HtmlRenderer renderer;
-        Map<String, Map<String, String>> userstyle;
+        StyleSheet userstyle;
         String username, viewmessage;
         Const messagetype;
         AppContext appctx;
@@ -1047,10 +1048,10 @@ public class PageRenderer extends AbstractRenderer {
          * ajusta e chama o renderizador
          */
         username = pagectx.getUsername();
-        userstyle = view.getStyleSheet();
+        userstyle = view.styleSheetInstance();
         appctx = pagectx.getAppContext();
         if (userstyle != null)
-            appctx.setStyleSheet(userstyle);
+            appctx.setStyleSheet(userstyle.getElements());
         
         renderer = new HtmlRenderer();
         renderer.setMessageSource(msgsource);

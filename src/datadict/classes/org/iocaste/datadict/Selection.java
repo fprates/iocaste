@@ -1,8 +1,5 @@
 package org.iocaste.datadict;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Button;
@@ -15,6 +12,7 @@ import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.RadioGroup;
 import org.iocaste.shell.common.SHLib;
+import org.iocaste.shell.common.StyleSheet;
 
 public class Selection {
     
@@ -96,10 +94,10 @@ public class Selection {
      * @param context
      */
     public static final void main(Context context) {
-        Map<String, String> css;
         RadioGroup group;
         RadioButton tpobj;
         NodeList optlist;
+        StyleSheet stylesheet;
         Form main = new Form(context.view, "datadict.main");
         PageControl pagecontrol = new PageControl(main);
         DataForm modelform = new DataForm(main, "model");
@@ -111,9 +109,9 @@ public class Selection {
                 getModelItem("NAME"));
         modelname.setObligatory(true);
         
-        css = new HashMap<>();
-        css.put("list-style-type", "none");
-        context.view.getStyleSheet().put(".optlist", css);
+        stylesheet = context.view.styleSheetInstance();
+        stylesheet.newElement(".optlist");
+        stylesheet.put(".optlist", "list-style-type", "none");
         
         optlist = new NodeList(main, "optlist");
         optlist.setStyleClass("optlist");
