@@ -48,10 +48,8 @@ public class Services extends AbstractFunction {
     }
     
     public final String save(Message message) {
-        long packageid, sourceid;
-        int linesize;
         ExtendedObject object;
-        String sourceobj;
+        String sourceobj, packagename;
         Source source = message.get("source");
         Context context = new Context();
         
@@ -61,28 +59,38 @@ public class Services extends AbstractFunction {
         if (object == null)
             return "invalid.project";
         
-        packageid = object.getl("PROJECT_ID");
-        sourceid = object.getl("SOURCE_ID");
+        context.projectsourceid = object.getl("SOURCE_ID");
         sourceobj = object.get("SOURCE_OBJ");
 
         context.projectdefsource = (source.isDefault())? "true" : null;
         context.projectfullsourcename = source.getName();
-        context.projectsources = Common.getSources(packageid, context);
-        if (!context.projectsources.containsKey(context.projectfullsourcename)) {
+        packagename = Common.extractPackageName(context.projectfullsourcename);
+        object = Common.getPackage(packagename, context.projectname, context);
+        if (object == null)
+            return "invalid.package";
+        
+        context.projectpackageid = object.getl("PACKAGE_ID");
+        context.projectsources = Common.getSources(
+                context.projectpackageid, context);
+        if (!context.projectsources.containsKey(context.projectfullsourcename))
+        {
+            context.projectsourceid++;
             object = Common.getSourceInstance(context);
             context.editormode = Context.NEW;
             context.projectsources.put(context.projectfullsourcename, object);
-            sourceid++;
         } else {
             context.editormode = Context.EDIT;
             object = context.projectsources.get(context.projectfullsourcename);
-            sourceid = object.getl("SOURCE_ID");
+            context.projectsourceid = object.getl("SOURCE_ID");
         }
         
         Common.register(context);
-        linesize = message.geti("line_size");
         context.tetool = new TextEditorTool(context);
-        context.tetool.update(sourceobj, sourceid, source.getCode(), linesize);
+        context.tetool.update(
+                sourceobj,
+                context.projectsourceid,
+                source.getCode(),
+                source.getLineSize());
         return null;
     }
 }

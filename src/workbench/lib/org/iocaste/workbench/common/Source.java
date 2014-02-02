@@ -8,12 +8,22 @@ public class Source implements Serializable {
     private String project;
     private String code;
     private boolean defsource;
+    private int linesize;
 
     /**
-     * @return o code
+     * Retorna o código-fonte
+     * @return código-fonte
      */
     public final String getCode() {
         return code;
+    }
+    
+    /**
+     * Retorna o comprimento de linha do código-fonte
+     * @return comprimento
+     */
+    public final int getLineSize() {
+        return linesize;
     }
     
     /**
@@ -24,31 +34,39 @@ public class Source implements Serializable {
     }
     
     /**
-     * @return o project
+     * @return nome do projeto
      */
     public final String getProject() {
         return project;
     }
     
     /**
-     * @return o defsource
+     * @return true, se a classe é padrão
      */
     public final boolean isDefault() {
         return defsource;
     }
     
     /**
-     * @param code o code a ser configurado
+     * @param code código-fonte
      */
     public final void setCode(String code) {
         this.code = code;
     }
     
     /**
-     * @param defsource o defsource a ser configurado
+     * @param defsource nome da classe
      */
     public final void setDefault(boolean defsource) {
         this.defsource = defsource;
+    }
+    
+    /**
+     * 
+     * @param linesize
+     */
+    public final void setLineSize(int linesize) {
+        this.linesize = linesize;
     }
     
     /**
@@ -59,7 +77,7 @@ public class Source implements Serializable {
     }
     
     /**
-     * @param project o project a ser configurado
+     * @param project nome do projeto
      */
     public final void setProject(String project) {
         this.project = project;
