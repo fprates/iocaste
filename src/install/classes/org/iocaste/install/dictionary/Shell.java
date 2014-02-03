@@ -218,7 +218,7 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "color", "#000000");
 
         insertStyleElement(shell002, ".nlitem");
-        insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleProperty(shell003, "color", "#505050");
         insertStyleProperty(shell003, "background-color", "transparent");
 
         insertStyleElement(shell002, ".nlnode");
