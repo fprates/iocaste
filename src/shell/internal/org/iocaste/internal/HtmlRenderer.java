@@ -141,8 +141,12 @@ public class HtmlRenderer {
         Map<String, String> properties;
         XMLElement styletag = new XMLElement("style");
         
-        styletag.add("type", "text/css");
+        if (csselements == null) {
+            styletag.addInner("");
+            return styletag;
+        }
         
+        styletag.add("type", "text/css");
         if (csselements.size() == 0)
             styletag.addInner("");
         
