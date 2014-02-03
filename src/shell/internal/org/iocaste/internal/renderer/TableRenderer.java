@@ -55,7 +55,8 @@ public class TableRenderer extends Renderer {
         TableItem[] itens;
         int vlines, lastline, topline;
         TableItem item;
-        XMLElement tag, trtag, thtag, tabletag = new XMLElement("table");
+        XMLElement tag, trtag, thtag, divtag;
+        XMLElement tabletag = new XMLElement("table");
         List<InputComponent> hidden = new ArrayList<>();
         List<XMLElement> tags = new ArrayList<>();
 
@@ -144,6 +145,9 @@ public class TableRenderer extends Renderer {
             config.addToForm(ParameterRenderer.render(parameter));
         }
         
-        return tabletag;
+        divtag = new XMLElement("div");
+        divtag.add("style", "width: 100%; overflow: auto;");
+        divtag.addChild(tabletag);
+        return divtag;
     }
 }
