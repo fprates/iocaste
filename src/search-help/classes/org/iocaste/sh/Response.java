@@ -96,38 +96,46 @@ public class Response {
         String name;
         DocumentModel model;
         ExtendedObject[] result;
-        Container stdcnt;
+        Container stdcnt, datacnt;
         SearchHelp sh;
         Documents documents = new Documents(context.function);
         StyleSheet stylesheet = context.view.styleSheetInstance();
-        
+                
         stylesheet.newElement(".shcnt");
-        stylesheet.put(".shcnt", "position", "relative");
+        stylesheet.put(".shcnt", "position", "absolute");
         stylesheet.put(".shcnt", "background-color", "#f0f0f0");
-        stylesheet.put(".shcnt", "float", "left");
-        stylesheet.put(".shcnt", "overflow", "auto");
-        stylesheet.put(".shcnt", "height", "85%");
-        stylesheet.put(".shcnt", "width", "20%");
+        stylesheet.put(".shcnt", "float", "right");
+        stylesheet.put(".shcnt", "right", "0px");
+        stylesheet.put(".shcnt", "height", "95%");
+        stylesheet.put(".shcnt", "padding", "10px");
         stylesheet.put(".shcnt", "border-style", "solid");
         stylesheet.put(".shcnt", "border-color", "rgb(176, 176, 176)");
         stylesheet.put(".shcnt", "border-width", "2px"); 
+        stylesheet.put(".shcnt", "overflow", "hidden");
+        stylesheet.newElement(".shdatacnt");
+        stylesheet.put(".shdatacnt", "overflow", "auto");
+        stylesheet.put(".shdatacnt", "height", "100%");
         
         stdcnt = new StandardContainer(context.view, "shstdcnt");
         stdcnt.setStyleClass("shcnt");
+        
+        new Button(stdcnt, "cancel").addEvent("onClick","javascript:closeSh()");
 
+        datacnt = new StandardContainer(stdcnt, "shdatacnt");
+        datacnt.setStyleClass("shdatacnt");
+        
         sh = context.view.getParameter("sh");
         name = sh.getModelName();
         model = documents.getModel(name);
 //        addCriteria(sh, stdcnt, model, context);
-        new Button(stdcnt, "cancel").addEvent("onClick","javascript:closeSh()");
         
         result = Common.getResultsFrom(name, documents, context.criteria);
         if (result == null) {
-            new Text(stdcnt, "no.results.found");
+            new Text(datacnt, "no.results.found");
             context.view.setTitle(sh.getText());
             return;
         }
         
-        addItems(sh, stdcnt, name, model, result);
+        addItems(sh, datacnt, name, model, result);
     }
 }
