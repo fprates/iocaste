@@ -11,6 +11,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.packagetool.common.GlobalConfigData;
+import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.AbstractFunction;
@@ -27,6 +28,7 @@ public class Services extends AbstractFunction {
         export("assign_task_group", "assignTaskGroup");
         export("install", "install");
         export("is_installed", "isInstalled");
+        export("data_from_file", "getDataFromFile");
         export("uninstall", "uninstall");
     }
     
@@ -44,6 +46,12 @@ public class Services extends AbstractFunction {
         state.documents = new Documents(this);
         group = TaskSelector.getGroup(groupname, state);
         TaskSelector.assignGroup(group, username, state);
+    }
+    
+    public final InstallData getDataFromFile(Message message) throws Exception {
+        String file = message.getString("file");
+        
+        return InstallDataBuild.execute(file, this);
     }
     
     private final ExtendedObject getPackageHeader(State state) {

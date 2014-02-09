@@ -36,6 +36,14 @@ public class PackageTool extends AbstractServiceInterface {
         call(message);
     }
     
+    public final InstallData dataFromFile(String file) {
+        Message message = new Message();
+        
+        message.setId("data_from_file");
+        message.add("file", file);
+        return call(message);
+    }
+    
     /**
      * 
      * @return
