@@ -1,6 +1,7 @@
 package org.iocaste.packagetool;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -10,15 +11,15 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
 
 public class InstallModels {
-    public static final void init(DocumentModel[] models, State state)
-            throws Exception {
+    public static final void init(Map<String, DocumentModel> models,
+            State state) throws Exception {
         String name, modelname;
         Set<DocumentModelItem> itens;
         int i;
         List<Object[]> values;
         ExtendedObject header;
         
-        for (DocumentModel model : models) {
+        for (DocumentModel model : models.values()) {
             modelname = model.getName();
             if (state.documents.getModel(modelname) != null) {
                 if (state.documents.updateModel(model) == 0)

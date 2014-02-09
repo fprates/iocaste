@@ -96,7 +96,7 @@ public class Services extends AbstractFunction {
         Map<UserProfile, Set<User>> profiles;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
-        DocumentModel[] models;
+        Map<String, DocumentModel> models;
         ComplexModel[] cmodels;
         SearchHelpData[] shdata;
         Authorization[] authorizations;
@@ -144,7 +144,7 @@ public class Services extends AbstractFunction {
              * prepara dados para ajuda de pesquisa.
              */
             models = state.data.getModels();
-            if (models.length > 0) {
+            if (models.size() > 0) {
                 InstallModels.init(models, state);
                 state.documents.commit();
             }

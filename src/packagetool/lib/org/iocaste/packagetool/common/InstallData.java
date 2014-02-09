@@ -258,8 +258,8 @@ public class InstallData implements Serializable {
      * 
      * @return
      */
-    public final DocumentModel[] getModels() {
-        return models.values().toArray(new DocumentModel[0]);
+    public final Map<String, DocumentModel> getModels() {
+        return models;
     }
     
     /**

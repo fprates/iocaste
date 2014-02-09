@@ -82,7 +82,7 @@ public class Response {
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         Map<String, String> links = context.data.getLinks();
-        DocumentModel[] models = context.data.getModels();
+        Map<String, DocumentModel> models = context.data.getModels();
         Authorization[] authorizations = context.data.getAuthorizations();
         String[] numbers = context.data.getNumberFactories();
         String[] dependencies = context.data.getDependencies();
@@ -102,9 +102,9 @@ public class Response {
                         append(links.get(key)).toString());
         }
             
-        if (models.length > 0) {
+        if (models.size() > 0) {
             context.view.print("\n- Modelos");
-            for (DocumentModel model : models)
+            for (DocumentModel model : models.values())
                 context.view.print(model.getName());
         }
         
