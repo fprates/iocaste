@@ -18,6 +18,8 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
+import org.iocaste.protocol.utils.ConversionResult;
+import org.iocaste.protocol.utils.ConversionRules;
 
 public class Services extends AbstractFunction {
     private static final int USERNAME_MAX_LEN = 12;
@@ -39,6 +41,7 @@ public class Services extends AbstractFunction {
         export("call_procedure", "callProcedure");
         export("checked_select", "checkedSelect");
         export("commit", "commit");
+        export("conversion", "conversion");
         export("create_user", "createUser");
         export("disconnect", "disconnect");
         export("drop_user", "dropUser");
@@ -142,6 +145,14 @@ public class Services extends AbstractFunction {
         db.commit(connection);
         connection.close();
         context.setConnection(null);
+    }
+    
+    public final ConversionResult conversion(Message message)
+            throws Exception {
+        String xml = message.getString("xml");
+        ConversionRules data = message.get("data");
+        
+        return Convesion.execute(xml, data);
     }
     
     /**

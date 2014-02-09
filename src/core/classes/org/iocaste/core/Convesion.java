@@ -1,4 +1,4 @@
-package org.iocaste.external;
+package org.iocaste.core;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -9,8 +9,8 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.iocaste.external.service.ConversionResult;
-import org.iocaste.external.service.ConversionRules;
+import org.iocaste.protocol.utils.ConversionResult;
+import org.iocaste.protocol.utils.ConversionRules;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

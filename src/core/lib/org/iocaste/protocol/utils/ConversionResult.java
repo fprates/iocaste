@@ -1,4 +1,4 @@
-package org.iocaste.external.service;
+package org.iocaste.protocol.utils;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
