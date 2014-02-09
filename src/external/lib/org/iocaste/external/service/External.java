@@ -45,6 +45,14 @@ public class External extends AbstractServiceInterface {
         return call(message); 
     }
     
+    public final Map<String, Object> conversion(String xml) {
+        Message message = new Message();
+        
+        message.setId("conversion");
+        message.add("xml", xml);
+        return call(message);
+    }
+    
     public final WebService getWSData(URL wsdl, String wsurl) {
         WebService ws;
         Map<String, Map<String, ExtendedObject[]>> wsdata;

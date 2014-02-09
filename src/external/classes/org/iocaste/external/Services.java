@@ -11,6 +11,7 @@ public class Services extends AbstractFunction {
 
     public Services() {
         export("call_service", "callService");
+        export("conversion", "conversion");
         export("get_ws_data", "getWSData");
     }
     
@@ -23,6 +24,13 @@ public class Services extends AbstractFunction {
         calldata.wsdl = message.get("wsdl");
         
         return WSClient.call(calldata);
+    }
+    
+    public final Map<String, Object> conversion(Message message)
+            throws Exception {
+        String xml = message.getString("xml");
+        
+        return Convesion.execute(xml);
     }
     
     public final Map<String, Map<String, ExtendedObject[]>> getWSData(

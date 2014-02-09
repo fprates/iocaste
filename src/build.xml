@@ -70,7 +70,7 @@
         <ant antfile="${basedir}/src/tasksel/build.xml"/>
 
         <!-- external -->
-        <!-- <ant antfile="${basedir}/src/external/build.xml"/> -->
+        <ant antfile="${basedir}/src/external/build.xml"/>
           
         <!-- transport -->
         <ant antfile="${basedir}/src/transport/build.xml"/>
@@ -124,7 +124,7 @@
     		<fileset dir="${builddir}/texteditor/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/workbench/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/svg/lib" excludes="*.jar"/>
-    	<!--    <fileset dir="${builddir}/external/lib" excludes="*.jar"/> -->
+    	    <fileset dir="${builddir}/external/lib" excludes="*.jar"/>
     	<!--    <fileset dir="${builddir}/report/lib" excludes="*.jar"/> -->
     	</copy>
     	
