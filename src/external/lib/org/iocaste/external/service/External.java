@@ -46,10 +46,16 @@ public class External extends AbstractServiceInterface {
     }
     
     public final Map<String, Object> conversion(String xml) {
+        return conversion(xml, null);
+    }
+    
+    public final Map<String, Object> conversion(
+            String xml, ConversionData data) {
         Message message = new Message();
         
         message.setId("conversion");
         message.add("xml", xml);
+        message.add("data", data);
         return call(message);
     }
     

@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.external.service.ConversionData;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 
@@ -29,8 +30,9 @@ public class Services extends AbstractFunction {
     public final Map<String, Object> conversion(Message message)
             throws Exception {
         String xml = message.getString("xml");
+        ConversionData data = message.get("data");
         
-        return Convesion.execute(xml);
+        return Convesion.execute(xml, data);
     }
     
     public final Map<String, Map<String, ExtendedObject[]>> getWSData(
