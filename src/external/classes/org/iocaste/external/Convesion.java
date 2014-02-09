@@ -3,47 +3,80 @@ package org.iocaste.external;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.iocaste.external.service.ConversionData;
+import org.iocaste.external.service.ConversionResult;
+import org.iocaste.external.service.ConversionRules;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class Convesion {
 
-    public static final Map<String, Object> execute(String xml,
-            ConversionData data) throws Exception {
+    public static final ConversionResult execute(String xml,
+            ConversionRules data) throws Exception {
         InputStream is = new ByteArrayInputStream(xml.getBytes());
-        Map<String, Object> map = new LinkedHashMap<>();
+        ConversionResult map = new ConversionResult();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(is);
-//        NodeList nodes = document.getDocumentElement().getChildNodes();
+        
         document.normalize();
         extract(map, null, document, data);
         
         return map;
     }
     
-    private static final void extract(Map<String, Object> map, String parent,
-            Node node, ConversionData data) {
+    private static final void extract(ConversionResult map, String parent,
+            Node node, ConversionRules rules) {
         short type;
         NodeList children;
         Node child;
         String name, itemname, childname;
         Map<String, String> items;
-        Map<String, Object> itemmap;
-        List<Map<String, Object>> itemslist;
+        ConversionResult itemmap;
+        List<ConversionResult> itemslist;
+        Object value;
+        Class<?> class_;
         
         type = node.getNodeType();
         if (type == Node.TEXT_NODE) {
-            map.put(parent, node.getNodeValue());
+            value = node.getNodeValue();
+            if (rules != null) {
+                class_ = rules.getClass(parent);
+                if (class_ !=  null)
+                    switch (class_.getName()) {
+                    case "boolean":
+                        value = Boolean.parseBoolean((String)value);
+                        break;
+                    case "byte":
+                        value = Byte.parseByte((String)value);
+                        break;
+                    case "double":
+                        value = Double.parseDouble((String)value);
+                        break;
+                    case "float":
+                        value = Float.parseFloat((String)value);
+                        break;
+                    case "int":
+                        value = Integer.parseInt((String)value);
+                        break;
+                    case "long":
+                        value = Long.parseLong((String)value);
+                        break;
+                    case "short":
+                        value = Short.parseShort((String)value);
+                        break;
+                    default:
+                        value = node.getNodeValue();
+                    }
+            }
+                
+            map.set(parent, value);
             return;
         }
         
@@ -58,11 +91,11 @@ public class Convesion {
         itemname = null;
         items = null;
         itemslist = null;
-        if ((data != null) && (name != null)) {
-            items = data.getItems();
+        if ((rules != null) && (name != null)) {
+            items = rules.getItems();
             if (items.containsKey(name)) {
                 itemslist = new ArrayList<>();
-                map.put(name, itemslist);
+                map.set(name, itemslist);
                 itemname = items.get(name);
             }
         }
@@ -75,11 +108,11 @@ public class Convesion {
                 if (!childname.equals(itemname))
                     continue;
                 
-                itemmap = new LinkedHashMap<>();
-                extract(itemmap, name, child, data);
+                itemmap = new ConversionResult();
+                extract(itemmap, name, child, rules);
                 itemslist.add(itemmap);
             } else {
-                extract(map, name, child, data);
+                extract(map, name, child, rules);
             }
         }
         

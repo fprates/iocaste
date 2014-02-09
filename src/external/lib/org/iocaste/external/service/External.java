@@ -45,12 +45,11 @@ public class External extends AbstractServiceInterface {
         return call(message); 
     }
     
-    public final Map<String, Object> conversion(String xml) {
+    public final ConversionResult conversion(String xml) {
         return conversion(xml, null);
     }
     
-    public final Map<String, Object> conversion(
-            String xml, ConversionData data) {
+    public final ConversionResult conversion(String xml, ConversionRules data) {
         Message message = new Message();
         
         message.setId("conversion");
