@@ -80,7 +80,7 @@ public class Package {
             if (sb.length() > 0)
                 sb.append('\n');
             
-            sb.append("--").append(object_.getst("SOURCE_NAME"));
+            sb.append("---").append(object_.getst("SOURCE_NAME"));
         }
         
         return sb.toString();

@@ -79,13 +79,11 @@ public class Project {
         tokens[0] = "package";
         tokens[1] = "list";
         tokens[3] = "--project=".concat(project);
-        sb = new StringBuilder();
+        sb = new StringBuilder("-");
+        sb.append(project).append('\n');
         for (ExtendedObject object :  objects) {
-            if (sb.length() > 0)
-                sb.append('\n');
-            
             tokens[2] = object.getst("PACKAGE_NAME");
-            sb.append("-".concat(tokens[2])).append('\n');
+            sb.append("--".concat(tokens[2])).append('\n');
             sb.append(Package.execute(tokens, context));
         }
         
