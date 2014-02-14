@@ -11,12 +11,20 @@ public class Project {
     
     public static final String execute(String[] tokens, Context context)
             throws Exception {
-        context.projectdir = Common.composeFileName(
-                context.repository, tokens[2]);
+        if (tokens.length > 2)
+            context.projectdir = Common.composeFileName(
+                    context.repository, tokens[2]);
         
         switch (tokens[1]) {
         case "list":
-            return list(tokens[2], context);
+            switch (tokens.length) {
+            case 2:
+                return list(context);
+            case 3:
+                return list(tokens[2], context);
+            default:
+                return "parameter.not.specified";
+            }
         case "create":
             return Common.createProject(tokens[2], context);
         case "remove":
@@ -26,6 +34,27 @@ public class Project {
         default:
             return "invalid.project.operation";
         }
+    }
+    
+    private static final String list(Context context) {
+        Query query;
+        ExtendedObject[] objects;
+        Documents documents;
+        StringBuilder sb;
+        
+        documents = new Documents(context.function);
+        query = new Query();
+        query.setModel("WB_PACKAGE");
+        objects = documents.select(query);
+        if (objects == null)
+            return "project.has.no.packages";
+
+        sb = new StringBuilder();
+        for (ExtendedObject project : objects)
+            sb.append(list(project.getst("PROJECT_NAME"), context)).
+               append('\n');
+        
+        return sb.toString();
     }
     
     private static final String list(String project, Context context) {
