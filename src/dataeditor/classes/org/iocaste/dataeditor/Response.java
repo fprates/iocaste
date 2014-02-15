@@ -83,7 +83,7 @@ public class Response {
      * @param view
      * @param context
      */
-    public static final void itens(Context context) {
+    public static final void output(Context context) {
         TableToolData ttdata;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);

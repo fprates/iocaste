@@ -36,7 +36,7 @@ public class Main extends AbstractPage {
         }
         
         context.mode = Context.DISPLAY;
-        context.view.redirect("itens");
+        context.view.redirect("output");
     }
     
     public final void form() {
@@ -71,12 +71,38 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
-    public final void itens() {
-        Response.itens(context);
+    public final void main() {
+        String message, model;
+        String action = context.view.getParameter("action");
+        if (action == null) {
+            Response.main(context);
+            return;
+        }
+        
+        model = context.view.getParameter("model");
+        message = Request.load(model, context);
+        if (message != null) {
+            Response.main(context);
+            return;
+        }
+        
+        switch (action) {
+        case "edit":
+            context.mode = Context.UPDATE;
+            Response.output(context);
+            break;
+        case "display":
+            context.mode = Context.DISPLAY;
+            Response.output(context);
+            break;
+        default:
+            Response.main(context);
+            break;
+        }
     }
     
-    public final void main() {
-        Response.main(context);
+    public final void output() {
+        Response.output(context);
     }
 
     public final void removeitens() {
@@ -101,6 +127,6 @@ public class Main extends AbstractPage {
         }
         
         context.mode = Context.UPDATE;
-        context.view.redirect("itens");
+        context.view.redirect("output");
     }
 }
