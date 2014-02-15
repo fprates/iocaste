@@ -305,8 +305,15 @@ public class Model {
         dataelement = item.getDataElement();
         tname = Documents.getComposedName(item);
         reference = item.getReference();
-        itemref = (reference == null)?
-                null : Documents.getComposedName(reference);
+        if (reference != null) {
+            itemref = Documents.getComposedName(reference);
+            if (model.getName().equals(reference.getDocumentModel().getName()))
+                throw new IocasteException(
+                        new StringBuilder("Self model reference for ").
+                            append(tname).toString());
+        } else {
+            itemref = null;
+        }
         
         if (iocaste.update(QUERIES[INS_ITEM], tname,
                 model.getName(),
