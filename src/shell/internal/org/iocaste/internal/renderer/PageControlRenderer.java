@@ -2,7 +2,6 @@ package org.iocaste.internal.renderer;
 
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
-import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.PageControl;
@@ -32,30 +31,6 @@ public class PageControlRenderer extends Renderer {
     
     /**
      * 
-     * @param text
-     */
-    private static final void setMessage(Text message, Const msgtype,
-            String text) {
-        message.setVisible(text != null);
-        message.setText(text);
-        
-        switch (msgtype) {
-        case ERROR:
-            message.setStyleClass("error_message");
-            break;
-        case WARNING:
-            message.setStyleClass("warning_message");
-            break;
-        case STATUS:
-            message.setStyleClass("status_message");
-            break;
-        default:
-            break;
-        }
-    }
-    
-    /**
-     * 
      * @param pagecontrol
      * @param config
      * @return
@@ -66,10 +41,9 @@ public class PageControlRenderer extends Renderer {
         String[] actions, components;
         StandardContainer linkarea, statusarea, componentarea;
         XMLElement pctag;
-        Const msgtype;
         Text text;
         View view = config.getView();
-        String message, submit, title = view.getTitle();
+        String submit, title = view.getTitle();
         
         pagecontrol.clear();
         
@@ -96,14 +70,6 @@ public class PageControlRenderer extends Renderer {
         text.setText(new StringBuilder(config.getUsername()).append("@").
                 append(config.getDBName()).append(":").
                 append(config.getLogId()).toString());
-        
-        message = config.getMessage();
-        if (message != null) {
-            text = new Text(pagecontrol, "navbar.message");
-            msgtype = config.getMessageType();
-            setMessage(text, (msgtype == null)? Const.STATUS : msgtype,
-                    message);
-        }
 
         components = pagecontrol.getComponents();
         if (components.length > 0) {
