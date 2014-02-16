@@ -98,6 +98,7 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "color", "#000000");
         insertStyleProperty(shell003, "padding", "3px");
         insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "text-align", "center");
         
         insertStyleElement(shell002, ".form");
         insertStyleProperty(shell003, "padding", "0px");
@@ -208,6 +209,11 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "padding", "3px");
         
+        insertStyleElement(shell002, ".message_box");
+        insertStyleProperty(shell003, "position", "absolute");
+        insertStyleProperty(shell003, "bottom", "0px");
+        insertStyleProperty(shell003, "width", "100%");
+        
         insertStyleElement(shell002, ".navbar_components");
         insertStyleProperty(shell003, "background-color", "#f0f0f0");
         insertStyleProperty(shell003, "margin-top", "5px");
@@ -262,6 +268,7 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "color", "#000000");
         insertStyleProperty(shell003, "padding", "3px");
         insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "text-align", "center");
 
         insertStyleElement(shell002, ".table_area");
         insertStyleProperty(shell003, "background-color", "#f0f0f0");
@@ -444,6 +451,7 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "color", "#000000");
         insertStyleProperty(shell003, "padding", "3px");
         insertStyleProperty(shell003, "margin", "0px");
+        insertStyleProperty(shell003, "text-align", "center");
 
         docs001 = getTable("DOCS001");
         docs002 = getTable("DOCS002");

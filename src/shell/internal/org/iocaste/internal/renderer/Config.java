@@ -7,13 +7,12 @@ import java.util.Set;
 
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
 
 public class Config {
-    private String currentaction, currentform, pagetrack, message;
+    private String currentaction, currentform, pagetrack;
     private String dbname, username;
     private int logid;
     private List<MessageSource> msgsources;
@@ -21,15 +20,14 @@ public class Config {
     private List<String> onload; 
     private List<XMLElement> toform;
     private View view;
-    private Const msgtype;
     private ControlComponent shcontrol;
     private TrackingData tracking;
     
     public Config() {
-        actions = new HashSet<String>();
-        onload = new ArrayList<String>();
-        toform = new ArrayList<XMLElement>();
-        msgsources = new ArrayList<MessageSource>();
+        actions = new HashSet<>();
+        onload = new ArrayList<>();
+        toform = new ArrayList<>();
+        msgsources = new ArrayList<>();
     }
     
     /**
@@ -118,24 +116,8 @@ public class Config {
      * 
      * @return
      */
-    public final String getMessage() {
-        return message;
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final MessageSource[] getMessageSources() {
         return msgsources.toArray(new MessageSource[0]);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final Const getMessageType() {
-        return msgtype;
     }
     
     /**
@@ -239,16 +221,6 @@ public class Config {
      */
     public final void setDBName(String dbname) {
         this.dbname = dbname;
-    }
-    
-    /**
-     * 
-     * @param msgtype
-     * @param message
-     */
-    public final void setMessage(Const msgtype, String message) {
-        this.msgtype = msgtype;
-        this.message = message;
     }
     
     /**

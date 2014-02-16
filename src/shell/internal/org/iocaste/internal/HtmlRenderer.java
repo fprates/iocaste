@@ -181,7 +181,6 @@ public class HtmlRenderer {
         config = new Config();
         config.setView(view);
         config.setUsername(username, tracking.logid);
-        config.setMessage(msgtype, msgtext);
         config.addMessageSource(view.getMessages());
         config.addMessageSource(msgsource);
         config.setPageTrack(composePageTrack(view, tracking));
@@ -195,6 +194,7 @@ public class HtmlRenderer {
             Renderer.renderContainer(bodycontent, container, config);
         
         bodytag.addChildren(bodycontent);
+        bodytag.addChild(MessageRenderer.render(msgtype, msgtext, config));
         tags.add(renderHeader(view, config));
         tags.add(bodytag);
         msgtext = null;
