@@ -382,7 +382,7 @@ public class Shell extends Module {
         insertStyleProperty(shell003, "text-align", "left");
         insertStyleProperty(shell003, "background-color", "transparent");
         insertStyleProperty(shell003, "vertical-align", "middle");
-        insertStyleProperty(shell003, "color", "#ffffff");
+        insertStyleProperty(shell003, "color", "#505050");
         insertStyleProperty(shell003, "margin", "0px");
         insertStyleProperty(shell003, "padding", "3px");
         insertStyleProperty(shell003, "display", "inline");
