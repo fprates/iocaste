@@ -17,10 +17,16 @@ public class Install {
         Map<String, String> messages;
         InstallData data = new InstallData();
         
-        authorization = new Authorization("USEREDITOR.EXECUTE");        
+        authorization = new Authorization("USEREDITOR.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", "iocaste-usereditor");
+        data.add(authorization);
+        
+        authorization = new Authorization("USEREDITOR.CALL");
+        authorization.setObject("LINK");
+        authorization.setAction("CALL");
+        authorization.add("LINK", "SU01");
         data.add(authorization);
         
         messages = new HashMap<>();
