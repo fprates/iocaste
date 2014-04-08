@@ -13,6 +13,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.Function;
+import org.iocaste.protocol.user.Authorization;
 
 public class Install {
     
@@ -24,6 +25,7 @@ public class Install {
     public static final InstallData init(Function function) {
         TaskGroup taskgroup;
         Map<String, String> messages;
+        Authorization authorization;
         InstallData data = new InstallData();
         Models models = new Models();
 
@@ -51,6 +53,12 @@ public class Install {
         taskgroup = new TaskGroup("ADMIN");
         taskgroup.add("PACKAGE");
         data.add(taskgroup);
+        
+        authorization = new Authorization("PACKAGE.CALL");
+        authorization.setAction("CALL");
+        authorization.setObject("LINK");
+        authorization.add("LINK", "PACKAGE");
+        data.add(authorization);
         
         return data;
     }
