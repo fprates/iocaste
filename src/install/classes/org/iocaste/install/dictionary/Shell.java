@@ -94,6 +94,7 @@ public class Shell extends Module {
         insertStyleElement(shell002, ".error_message");
         insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-weight", "bold");
         insertStyleProperty(shell003, "background-color", "#ff0000");
         insertStyleProperty(shell003, "color", "#000000");
         insertStyleProperty(shell003, "padding", "3px");
@@ -264,6 +265,7 @@ public class Shell extends Module {
         insertStyleElement(shell002, ".status_message");
         insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-weight", "bold");
         insertStyleProperty(shell003, "background-color", "#00ff00");
         insertStyleProperty(shell003, "color", "#000000");
         insertStyleProperty(shell003, "padding", "3px");
@@ -447,6 +449,7 @@ public class Shell extends Module {
         insertStyleElement(shell002, ".warning_message");
         insertStyleProperty(shell003, "font-size", "12pt");
         insertStyleProperty(shell003, "font-family", "sans-serif");
+        insertStyleProperty(shell003, "font-weight", "bold");
         insertStyleProperty(shell003, "background-color", "#ffff00");
         insertStyleProperty(shell003, "color", "#000000");
         insertStyleProperty(shell003, "padding", "3px");
