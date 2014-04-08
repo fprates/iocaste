@@ -46,8 +46,8 @@ public class Common {
      * @param parsed
      */
     public static final void run(View view, String[] parsed) {
-        String page = "main", app = null;
         String[] values;
+        String page = "main", app = null;
         
         for (int i = 0; i < parsed.length; i++) {
             switch (i) {

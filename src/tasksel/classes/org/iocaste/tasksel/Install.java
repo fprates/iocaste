@@ -17,11 +17,12 @@ public class Install {
         Map<String, String> messages;
         InstallData data = new InstallData();
         
-        messages = new HashMap<String, String>();
-        messages.put("task-selector", "Seletor de tarefas");
-        messages.put("run", "Executar");
+        messages = new HashMap<>();
         messages.put("command", "Comando");
         messages.put("command.not.found", "Comando não encontrado.");
+        messages.put("not.authorized", "Sem autorização para executar.");
+        messages.put("run", "Executar");
+        messages.put("task-selector", "Seletor de tarefas");
         
         data.setMessages("pt_BR", messages);
         
