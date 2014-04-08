@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 
 public class UserContext {
@@ -17,11 +18,20 @@ public class UserContext {
     private int terminal;
     private Date conndate;
     private String currentapp;
+    private Authorization[] authorizations;
     
     public UserContext(Locale locale) {
-        objects = new HashMap<String, Object>();
+        objects = new HashMap<>();
         this.locale = locale;
         conndate = Calendar.getInstance().getTime();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Authorization[] getAuthorizations() {
+        return authorizations;
     }
     
     /**
@@ -79,6 +89,14 @@ public class UserContext {
      */
     public final User getUser() {
         return user;
+    }
+    
+    /**
+     * 
+     * @param authorizations
+     */
+    public final void setAuthorizations(Authorization[] authorizations) {
+        this.authorizations = authorizations;
     }
     
     /**

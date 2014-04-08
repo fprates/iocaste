@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -26,6 +28,7 @@ public class Services extends AbstractFunction {
     private static final String IOCASTE_DIR = ".iocaste";
     private static final String CONFIG_FILE = "core.properties";
     private Map<String, UserContext> sessions;
+    private Map<String, List<String>> usersessions;
     private DBServices db;
     private String host;
     private Properties properties;
@@ -36,6 +39,7 @@ public class Services extends AbstractFunction {
     
     public Services() {
         sessions = new HashMap<>();
+        usersessions = new HashMap<>();
         db = new DBServices();
 
         export("call_procedure", "callProcedure");
@@ -177,13 +181,18 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final void disconnect(Message message) throws Exception {
+        UserContext context;
         String sessionid = message.getSessionid();
 
         if (sessionid == null)
             throw new IocasteException("Null session not allowed.");
         
-        if (sessions.containsKey(sessionid))
-            sessions.remove(sessionid);
+        if (!sessions.containsKey(sessionid))
+            return;
+        
+        context = sessions.get(sessionid);
+        usersessions.remove(context.getUser().getUsername());
+        sessions.remove(sessionid);
     }
     
     /**
@@ -390,7 +399,8 @@ public class Services extends AbstractFunction {
      * @param message
      */
     public final void invalidateAuthCache(Message message) {
-        AuthServices.invalidateCache();
+        for (String sessionid : sessions.keySet())
+            sessions.get(sessionid).setAuthorizations(null);
     }
     
     /**
@@ -417,12 +427,14 @@ public class Services extends AbstractFunction {
             return false;
         
         objauthorization = message.get("authorization");
-        connection = db.instance();
-        usrauthorizations = AuthServices.getAuthorization(connection, db,
-                user.getUsername(), objauthorization.getObject(),
-                objauthorization.getAction());
-        
-        connection.close();
+        usrauthorizations = context.getAuthorizations();
+        if (usrauthorizations == null) {
+            connection = db.instance();
+            usrauthorizations = AuthServices.getAuthorizations(
+                    connection, db, user.getUsername());
+            connection.close();
+            context.setAuthorizations(usrauthorizations);
+        }
         
         if (usrauthorizations == null)
             return false;
@@ -500,6 +512,7 @@ public class Services extends AbstractFunction {
         Connection connection;
         Locale locale;
         int terminal;
+        List<String> sessionslist;
         User user = null;
         String[] composed, locale_ = message.getString("locale").split("_");
         String username = message.getString("user");
@@ -537,6 +550,14 @@ public class Services extends AbstractFunction {
         context = new UserContext(locale);
         context.setUser(user);
         sessions.put(sessionid, context);
+        if (usersessions.containsKey(username)) {
+            sessionslist = usersessions.get(username);
+        } else {
+            sessionslist = new ArrayList<>();
+            usersessions.put(username, sessionslist);
+        }
+        
+        sessionslist.add(sessionid);
         composed = sessionid.split(":");
         sessionid = composed[0];
         terminal = Integer.parseInt(composed[1]);
@@ -658,7 +679,8 @@ public class Services extends AbstractFunction {
     private final void updateUser(User user, String sessionid)
             throws Exception {
         UserServices.update(user, getDBConnection(sessionid), db);
-        AuthServices.invalidateCache(user.getUsername());
+        for (String sid : usersessions.get(user.getUsername()))
+            sessions.get(sid).setAuthorizations(null);
     }
     
     /**
