@@ -11,9 +11,9 @@ public class Install {
 
     public static final InstallData init() {
         TaskGroup taskgroup;
+        Authorization authorization;
         InstallData data = new InstallData();
-        Authorization authorization = new Authorization("INFOSIS.EXECUTE");
-        Map<String, String> messages = new HashMap<String, String>();
+        Map<String, String> messages = new HashMap<>();
 
         messages.put("begin", "Iniciado em");
         messages.put("db_product_version", "Versão do banco de dados");
@@ -31,12 +31,19 @@ public class Install {
         messages.put("usrsrfrsh", "Atualizar");
         messages.put("value", "Valor");
         data.setMessages("pt_BR", messages);
-        
+
+        authorization = new Authorization("INFOSIS.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", "iocaste-infosis");
         data.add(authorization);
 
+        authorization = new Authorization("INFOSIS.CALL");
+        authorization.setObject("LINK");
+        authorization.setAction("CALL");
+        authorization.add("LINK", "INFOSIS");
+        data.add(authorization);
+        
         data.link("INFOSIS", "iocaste-infosis");
         taskgroup = new TaskGroup("ADMIN");
         taskgroup.add("INFOSIS");
