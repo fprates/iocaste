@@ -21,6 +21,12 @@ public class Install {
         authorization.add("APPNAME", "iocaste-gconfigview");
         data.add(authorization);
         
+        authorization = new Authorization("GCONFIGVIEW.CALL");
+        authorization.setObject("LINK");
+        authorization.setAction("CALL");
+        authorization.add("LINK", "GCONFIGVIEW");
+        data.add(authorization);
+        
         messages = new HashMap<>();
         messages.put("config.display", "Exibir configurações");
         messages.put("config.edit","Editar configurações");
