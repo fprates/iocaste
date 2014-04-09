@@ -27,7 +27,7 @@ public class Install {
         data.add(authorization);
         profile.add(authorization);
         
-        authorization = new Authorization("SE11.CALL");
+        authorization = new Authorization("DDICT.CALL");
         authorization.setObject("LINK");
         authorization.setAction("CALL");
         authorization.add("LINK", "SE11");
