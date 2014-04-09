@@ -16,16 +16,24 @@ public class Install {
         Map<String, String> messages;
         Authorization authorization;
         InstallData data = new InstallData();
+
+        
+        profile = new UserProfile("DEVELOP");
+        data.add(profile);
         
         authorization = new Authorization("DATAEDITOR.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", "iocaste-dataeditor");
         data.add(authorization);
-        
-        profile = new UserProfile("DEVELOP");
         profile.add(authorization);
-        data.add(profile);
+        
+        authorization = new Authorization("DATAEDITOR.CALL");
+        authorization.setObject("LINK");
+        authorization.setAction("CALL");
+        authorization.add("LINK", "SM30");
+        data.add(authorization);
+        profile.add(authorization);
         
         messages = new HashMap<>();
         messages.put("acceptitens", "Aceitar");
