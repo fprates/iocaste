@@ -16,16 +16,23 @@ public class Install {
         Map<String, String> messages;
         Authorization authorization;
         InstallData data = new InstallData();
+
+        profile = new UserProfile("DEVELOP");
+        data.add(profile);
         
         authorization = new Authorization("DDICT.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", "iocaste-datadict");
         data.add(authorization);
-        
-        profile = new UserProfile("DEVELOP");
         profile.add(authorization);
-        data.add(profile);
+        
+        authorization = new Authorization("SE11.CALL");
+        authorization.setObject("LINK");
+        authorization.setAction("CALL");
+        authorization.add("LINK", "SE11");
+        data.add(authorization);
+        profile.add(authorization);
         
         data.link("SE11", "iocaste-datadict");
         taskgroup = new TaskGroup("DEVELOP");
