@@ -80,6 +80,7 @@ public class Main extends AbstractRenderer {
             message.add(name, config.values.get(name));
         
         installapp.setServletContext(getServletContext());
+        installapp.setServerName(getServerName());
         
         return (View)installapp.run(message);
     }

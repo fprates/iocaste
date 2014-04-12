@@ -1,5 +1,6 @@
 package org.iocaste.install;
 
+import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.View;
 
 public class DBConfig {
@@ -12,8 +13,14 @@ public class DBConfig {
      * @param view
      * @throws Exception
      */
-    public static final void action(View view) throws Exception {
-        DBConfigRequest.action(view);
+    public static final void action(View view, Function function)
+            throws Exception {
+        Config config = DBConfigRequest.action(view);
+        
+        if (config.option == CHANGE_BASE)
+            return;
+        
+        Packages.install(function);
     }
     
     /**

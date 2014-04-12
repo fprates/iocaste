@@ -38,7 +38,7 @@ public class Install extends AbstractFunction {
                 Welcome.action(view);
                 break;
             case DBCONFIG:
-                DBConfig.action(view);
+                DBConfig.action(view, this);
                 break;
             default:
                 break;

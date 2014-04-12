@@ -25,6 +25,16 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     
     /**
      * 
+     * @param app
+     * @return
+     */
+    protected final String composeUrl(String app) {
+        return new StringBuffer(getServerName()).append("/").
+                append(app).append("/view.html").toString();
+    }
+    
+    /**
+     * 
      * @param resp
      * @param view
      */

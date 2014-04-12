@@ -48,7 +48,7 @@ public class DBConfigRequest {
         "create database "
     };
     
-    public static final void action(View view) throws Exception {
+    public static final Config action(View view) throws Exception {
         Statement ps;
         Connection connection;
         String[] init = null;
@@ -134,6 +134,7 @@ public class DBConfigRequest {
         }
         
         view.redirect("FINISH");
+        return config;
     }
     
     private static final void createTables(Statement ps, Config config)

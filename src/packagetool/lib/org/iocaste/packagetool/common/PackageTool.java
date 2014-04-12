@@ -10,7 +10,7 @@ import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 
 public class PackageTool extends AbstractServiceInterface {
-    private static final String NAME = "/iocaste-packagetool/services.html";
+    public static final String NAME = "/iocaste-packagetool/services.html";
     private Function function;
     
     /**

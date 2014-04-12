@@ -122,16 +122,6 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
-     * @param app
-     * @return
-     */
-    private final String composeUrl(String app) {
-        return new StringBuffer(getServerName()).append("/").
-                append(app).append("/view.html").toString();
-    }
-    
-    /**
-     * 
      * @param expagectx
      * @param exception
      * @return

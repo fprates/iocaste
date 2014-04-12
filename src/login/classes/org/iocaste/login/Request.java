@@ -1,7 +1,6 @@
 package org.iocaste.login;
 
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -9,12 +8,6 @@ import org.iocaste.shell.common.InputComponent;
 
 public class Request {
     private static final boolean INITIALIZE = true;
-    private static final String[] PACKAGES = new String[] {
-        "iocaste-packagetool",
-        "iocaste-tasksel",
-        "iocaste-setup",
-        "iocaste-search-help"
-        };
     
     public static final void changesecret(Context context) {
         DataForm form = context.view.getElement("chgscrt");
@@ -42,7 +35,6 @@ public class Request {
     public static final void connect(Context context) {
         String username, secret, locale;
         InputComponent input;
-        PackageTool pkgtool = new PackageTool(context.function);
         DataForm form = context.view.getElement("login");
         Iocaste iocaste = new Iocaste(context.function);
         ExtendedObject login = form.getObject();
@@ -52,12 +44,6 @@ public class Request {
         secret = login.get("SECRET");
         locale = login.get("LOCALE");
         if (iocaste.login(username, secret, locale)) {
-            pkgtool = new PackageTool(context.function);
-            
-            for (String pkgname : PACKAGES)
-                if (!pkgtool.isInstalled(pkgname))
-                    pkgtool.install(pkgname);
-            
             context.view.export("username", username);
             if (iocaste.isInitialSecret())
                 context.view.redirect("changesecretform");
