@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.packagetool.common.SearchHelpData;
+import org.iocaste.protocol.user.Authorization;
 
 public class Units {
 
@@ -14,6 +15,7 @@ public class Units {
         DocumentModelItem item;
         DataElement element;
         SearchHelpData shd;
+        Authorization authorization;
         
         /*
          * Unidades de medida
@@ -99,5 +101,15 @@ public class Units {
         shd.add("TEXT");
         shd.setExport("UNIT_ID");
         context.data.add(shd);
+
+        context.data.link("UNITS-CONFIG", "iocaste-dataeditor "
+                + "model=MEASURE_UNITS action=edit");
+        context.group.add("UNITS-CONFIG");
+        
+        authorization = new Authorization("UNITSCFG.CALL");
+        authorization.setAction("CALL");
+        authorization.setObject("LINK");
+        authorization.add("LINK", "UNITS-CONFIG");
+        context.data.add(authorization);
     }
 }

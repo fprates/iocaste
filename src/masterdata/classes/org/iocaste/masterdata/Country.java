@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.packagetool.common.SearchHelpData;
+import org.iocaste.protocol.user.Authorization;
 
 public class Country {
     public static final void init(InstallContext context) {
@@ -13,6 +14,7 @@ public class Country {
         DocumentModelItem item;
         SearchHelpData shd;
         DataElement element;
+        Authorization authorization;
         
         /*
          * Países
@@ -53,6 +55,16 @@ public class Country {
         shd.add("NAME");
         shd.setExport("COUNTRY_ID");
         context.data.add(shd);
+
+        context.data.link("COUNTRY-CONFIG", "iocaste-dataeditor "
+                + "model=COUNTRIES action=edit");
+        context.group.add("COUNTRY-CONFIG");
+        
+        authorization = new Authorization("COUNTRYCFG.CALL");
+        authorization.setAction("CALL");
+        authorization.setObject("LINK");
+        authorization.add("LINK", "COUNTRY-CONFIG");
+        context.data.add(authorization);
     }
 
 }

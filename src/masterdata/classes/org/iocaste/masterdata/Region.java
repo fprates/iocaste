@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.packagetool.common.SearchHelpData;
+import org.iocaste.protocol.user.Authorization;
 
 public class Region {
     public static final void init(InstallContext context) {
@@ -13,6 +14,7 @@ public class Region {
         DocumentModelItem item;
         DataElement element;
         SearchHelpData shd;
+        Authorization authorization;
         
         /*
          * Regiões
@@ -88,6 +90,18 @@ public class Region {
         context.data.addValues(model, "BRSE", "BR", "SE", "Sergipe");
         context.data.addValues(model, "BRSP", "BR", "SP", "São Paulo");
         context.data.addValues(model, "BRTO", "BR", "TO", "Tocantins");
+
+        context.data.link("REGION-CONFIG", "iocaste-dataeditor "
+                + "model=REGION action=edit");
+        context.group.add("REGION-CONFIG");
+        
+        authorization = new Authorization("REGIONCFG.CALL");
+        authorization.setAction("CALL");
+        authorization.setObject("LINK");
+        authorization.add("LINK", "REGION-CONFIG");
+        context.data.add(authorization);
+        
+        context.profile.add(authorization);
     }
 
 }

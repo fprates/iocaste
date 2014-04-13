@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.packagetool.common.SearchHelpData;
+import org.iocaste.protocol.user.Authorization;
 
 public class Currency {
     public static final void init(InstallContext context) {
@@ -13,6 +14,7 @@ public class Currency {
         DocumentModelItem item;
         SearchHelpData shd;
         DataElement element;
+        Authorization authorization;
         
         /*
          * Moedas
@@ -51,6 +53,16 @@ public class Currency {
         shd.add("TEXT");
         shd.setExport("CURRENCY_ID");
         context.data.add(shd);
+
+        context.data.link("CURRENCY-CONFIG", "iocaste-dataeditor "
+                + "model=CURRENCY action=edit");
+        context.group.add("CURRENCY-CONFIG");
+        
+        authorization = new Authorization("CURRENCYCFG.CALL");
+        authorization.setAction("CALL");
+        authorization.setObject("LINK");
+        authorization.add("LINK", "CURRENCY-CONFIG");
+        context.data.add(authorization);
     }
 
 }

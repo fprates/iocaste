@@ -1,5 +1,8 @@
 package org.iocaste.masterdata;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
@@ -14,6 +17,13 @@ public class Main extends AbstractPage {
     
     public InstallData install(Message message) {
         InstallContext icontext = new InstallContext();
+        Map<String, String> messages = new HashMap<>();
+        
+        messages.put("COUNTRY-CONFIG", "Países");
+        messages.put("CURRENCY-CONFIG", "Moedas");
+        messages.put("REGION-CONFIG", "Regiões/Estados");
+        messages.put("UNITS-CONFIG", "Unidades de medida");
+        icontext.data.setMessages("pt_BR", messages);
         
         Currency.init(icontext);
         Country.init(icontext);
