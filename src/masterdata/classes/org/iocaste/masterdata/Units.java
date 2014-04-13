@@ -93,7 +93,7 @@ public class Units {
         context.data.addValues(model, "TO", "Tonelada");
         context.data.addValues(model, "UN", "Unidade");
 
-        shd = new SearchHelpData("SH_UM");
+        shd = new SearchHelpData("SH_MUNIT");
         shd.setModel("MEASURE_UNITS");
         shd.add("UNIT_ID");
         shd.add("TEXT");
