@@ -108,6 +108,9 @@
     	<!-- workbench -->
         <ant antfile="${basedir}/src/workbench/build.xml"/>
         
+        <!-- masterdata -->
+        <ant antfile="${basedir}/src/masterdata/build.xml"/>
+        
         <!-- examples -->
         <!-- <ant antfile="${basedir}/src/examples/build.xml"/> -->
         

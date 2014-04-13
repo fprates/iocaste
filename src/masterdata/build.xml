@@ -1,0 +1,82 @@
+<project name="masterdata" default="compile">
+    <property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
+    <property name="warfilename" value="${basedir}/iocaste-${ant.project.name}.war"/>
+    
+    <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
+    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"/>
+	
+    <target name="compile">
+        <mkdir dir="${builddir}/${ant.project.name}/web"/>
+        <mkdir dir="${builddir}/${ant.project.name}/lib"/>
+        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
+    	
+        <!-- dependências -->
+        <path id="dependencies">
+            <fileset dir="${builddir}/core/lib"/>
+            <fileset dir="${builddir}/shell/lib"/>
+        	<fileset dir="${builddir}/documents/lib"/>
+            <fileset dir="${builddir}/search-help/lib"/>
+            <fileset dir="${builddir}/packagetool/lib"/>
+        	<fileset dir="${builddir}/globalconfig/lib"/>
+            <fileset dir="${builddir}/${ant.project.name}/lib"/>
+            <fileset dir="${basedir}/lib"/>
+            <fileset dir="${basedir}/ext"/>
+        </path>
+        
+         <copy todir="${builddir}/${ant.project.name}/web">
+           <fileset dir="${basedir}/src/${ant.project.name}/web/">
+               <include name="web.xml"/>
+               <include name="META-INF"/>
+           </fileset>
+        </copy>
+
+        <!-- substituições -->
+        <!-- <replace file="${builddir}/${ant.project.name}/web/web.xml"
+            token="@server.class@" value="${server.class}"/> -->
+        
+        <!-- compilação lib -->
+        <!--<javac srcdir="${basedir}/src/${ant.project.name}/lib" 
+            destdir="${builddir}/${ant.project.name}/lib"
+        	debug="${debug.status}">
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <jar basedir="${builddir}/${ant.project.name}/lib"
+            destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/> -->
+    	
+        <!-- compilação classes -->
+        <javac srcdir="${basedir}/src/${ant.project.name}/classes"
+            destdir="${builddir}/${ant.project.name}/classes"
+        	debug="${debug.status}">
+        	
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <copy todir="${builddir}/${ant.project.name}/classes">
+            <fileset dir="${basedir}/src/${ant.project.name}/classes"
+            	excludes="**/*.java"/>
+        </copy>
+    	
+        <!-- pacote .war -->
+        <war destfile="${warfilename}"
+            webxml="${builddir}/${ant.project.name}/web/web.xml">
+            <webinf dir="${basedir}/src/${ant.project.name}/web/">
+                <exclude name="web.xml"/>
+                <include name="**/*"/>
+            </webinf>
+            <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
+            <lib dir="${builddir}/core/lib" includes="*.jar"/>
+            <lib dir="${builddir}/shell/lib" includes="*.jar"/>
+        	<lib dir="${builddir}/documents/lib" includes="*.jar"/>
+            <lib dir="${builddir}/search-help/lib" includes="*.jar"/>
+            <lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
+        	<lib dir="${builddir}/globalconfig/lib" includes="*.jar"/>
+        	<lib dir="${builddir}/texteditor/lib" includes="*.jar"/>
+            <classes dir="${builddir}/${ant.project.name}/classes"/>
+        </war>
+    	
+    	<ant antfile="${basedir}/src/deploy.xml">
+    		<property name="app.name" value="${ant.project.name}"/>
+        </ant>
+    </target>
+</project>
