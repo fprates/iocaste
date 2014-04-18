@@ -26,7 +26,9 @@ import java.util.List;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.Function;
 
 /**
  * Implementação de formulário de dados.
@@ -144,6 +146,11 @@ public class DataForm extends AbstractContainer {
     	return object;
     }
     
+    public final void importModel(String modelname, Function function) {
+        DocumentModel model = new Documents(function).getModel(modelname);
+        importModel(model);
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.AbstractContainer#importModel(
@@ -218,5 +225,13 @@ public class DataForm extends AbstractContainer {
             
             item.set(object.get(name));
         }
+    }
+    
+    public final void show(String... fields) {
+        for (Element element : getElements())
+            element.setVisible(false);
+        
+        for (String field : fields)
+            get(field).setVisible(true);
     }
 }
