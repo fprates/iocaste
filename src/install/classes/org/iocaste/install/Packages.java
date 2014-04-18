@@ -21,9 +21,9 @@ public class Packages {
         
         pkgtool = new PackageTool(function);
         for (String pkgname : PACKAGES)
-            if (!pkgtool.isInstalled(pkgname))
-                pkgtool.install(pkgname);
+            pkgtool.install(pkgname);
 
+        iocaste.commit();
         iocaste.disconnect();
     }
 }
