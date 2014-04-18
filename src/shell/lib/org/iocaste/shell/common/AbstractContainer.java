@@ -169,4 +169,15 @@ public abstract class AbstractContainer
         
         elements.remove(element.getName());
     }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.AbstractElement#setEnabled(boolean)
+     */
+    @Override
+    public final void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        for (Element element : elements.values())
+            element.setEnabled(enabled);
+    }
 }
