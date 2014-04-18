@@ -265,6 +265,21 @@ public class TableTool {
         return table.getItems();
     }
     
+    public final ExtendedObject[] getObjects() {
+        ExtendedObject[] objects;
+        Table table = getTable();
+        TableItem[] items = table.getItems();
+        
+        if (items.length == 0)
+            return null;
+        
+        objects = new ExtendedObject[items.length];
+        for (int i = 0; i < items.length; i++)
+            objects[i] = items[i].getObject();
+        
+        return objects;
+    }
+    
     private final Table getTable() {        
         return data.context.view.getElement(data.name);
     }
