@@ -399,10 +399,7 @@ public class TableTool {
             break;
         }
         
-        for (TableItem item : table.getItems())
-            for (Element element : item.getElements())
-                element.setEnabled(mode != DISPLAY);
-        
+        table.setEnabled(mode != DISPLAY);
         for (String column : columns.keySet())
             columns.get(column).disabled = (mode == DISPLAY);
     }
