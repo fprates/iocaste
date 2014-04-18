@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
@@ -266,6 +267,13 @@ public class TableTool {
     
     private final Table getTable() {        
         return data.context.view.getElement(data.name);
+    }
+    
+    public final void model(String modelname) {
+        DocumentModel model = new Documents(data.context.function).
+                getModel(modelname);
+        
+        model(model);
     }
     
     public final void model(DocumentModel model) {
