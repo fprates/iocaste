@@ -157,6 +157,11 @@ public class TableItem implements Serializable {
         return visible;
     }
     
+    public final void setEnabled(boolean enabled) {
+        for (Element element : elements.values())
+            element.setEnabled(enabled);
+    }
+    
     /**
      * Define localização para linha.
      * @param locale localização.

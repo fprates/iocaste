@@ -175,7 +175,7 @@ public abstract class AbstractContainer
      * @see org.iocaste.shell.common.AbstractElement#setEnabled(boolean)
      */
     @Override
-    public final void setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         for (Element element : elements.values())
             element.setEnabled(enabled);

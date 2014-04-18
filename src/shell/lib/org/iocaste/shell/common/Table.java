@@ -43,7 +43,7 @@ public class Table extends AbstractContainer {
     public static final byte REMOVE = 1;
     private boolean header, mark;
     private Map<String, TableColumn> columns;
-    private List<TableItem> itens;
+    private List<TableItem> items;
     private byte seltype;
     private RadioGroup group;
     private Container linecontrol;
@@ -78,7 +78,7 @@ public class Table extends AbstractContainer {
      * @param item linha
      */
     public final void add(TableItem item) {
-        itens.add(item);
+        items.add(item);
         item.setLocale(getLocale());
     }
     
@@ -88,7 +88,7 @@ public class Table extends AbstractContainer {
      * @param pos
      */
     public final void add(TableItem item, int pos) {
-        itens.add(pos, item);
+        items.add(pos, item);
         item.setLocale(getLocale());
     }
     
@@ -109,7 +109,7 @@ public class Table extends AbstractContainer {
      * @return linha
      */
     public final TableItem get(int index) {
-        return itens.get(index);
+        return items.get(index);
     }
     
     /**
@@ -152,7 +152,7 @@ public class Table extends AbstractContainer {
         SearchHelp sh;
         List<Element> elements = new ArrayList<>();
         
-        for (TableItem item : itens)
+        for (TableItem item : items)
             for (Element element : item.getElements()) {
                 elements.add(element);
                 
@@ -183,7 +183,7 @@ public class Table extends AbstractContainer {
      * @return linhas.
      */
     public final TableItem[] getItems() {
-        return itens.toArray(new TableItem[0]);
+        return items.toArray(new TableItem[0]);
     }
     
     /**
@@ -208,7 +208,7 @@ public class Table extends AbstractContainer {
      * @return linha
      */
     public final TableItem getTableItem(int index) {
-        return itens.get(index);
+        return items.get(index);
     }
     
     /**
@@ -284,7 +284,7 @@ public class Table extends AbstractContainer {
         
         header = true;
         mark = false;
-        itens = new ArrayList<>();
+        items = new ArrayList<>();
         columns = new LinkedHashMap<>();
         seltype = MULTIPLE;
         group = new RadioGroup(getName().concat(".mark"));
@@ -312,7 +312,7 @@ public class Table extends AbstractContainer {
      * @return quantidade de linhas.
      */
     public final int length() {
-        return itens.size();
+        return items.size();
     }
     
     /**
@@ -320,7 +320,7 @@ public class Table extends AbstractContainer {
      * @param item linha
      */
     public final void remove(TableItem item) {
-        itens.remove(item);
+        items.remove(item);
     }
     
     /**
@@ -330,6 +330,13 @@ public class Table extends AbstractContainer {
      */
     public final void setAction(byte action, String method) {
         actions[action] = method;
+    }
+    
+    @Override
+    public final void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        for (TableItem item : items)
+            item.setEnabled(enabled);
     }
     
     /**
