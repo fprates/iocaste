@@ -57,6 +57,10 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
         return items;
     }
     
+    public final String getModelItemName(String name) {
+        return reverseitems.get(name);
+    }
+    
     public final String getName() {
         return name;
     }

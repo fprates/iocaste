@@ -25,14 +25,14 @@ public class ComplexDocument implements Serializable {
      * @param object
      */
     public final void add(ExtendedObject object) {
-        String model;
+        String alias;
         Set<ExtendedObject> objects;
         
         if (object == null)
             return;
         
-        model = object.getModel().getName();
-        objects = items.get(model);
+        alias = cmodel.getModelItemName(object.getModel().getName());
+        objects = items.get(alias);
         if (objects == null)
             throw new RuntimeException("Invalid object model.");
         
