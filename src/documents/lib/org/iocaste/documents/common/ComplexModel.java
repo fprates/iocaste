@@ -1,24 +1,21 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 
 public class ComplexModel implements Serializable, Comparable<ComplexModel> {
     private static final long serialVersionUID = -2741081537248227705L;
     private String name;
-    private DocumentModel modellink, header;
-    private Set<DocumentModel> itens;
-    private int id;
+    private DocumentModel header;
+    private Map<String, DocumentModel> items;
+    private Map<String, String> reverseitems;
     
     public ComplexModel() {
-        itens = new TreeSet<DocumentModel>();
-    }
-    
-    public final void add(DocumentModel item) {
-        itens.add(item);
+        items = new HashMap<>();
+        reverseitems = new HashMap<>();
     }
 
     /*
@@ -55,36 +52,21 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
         return header;
     }
     
-    public final int getId() {
-        return id;
-    }
-    
-    public final DocumentModel[] getItens() {
-        return itens.toArray(new DocumentModel[0]);
-    }
-    
-    public final DocumentModel getCDModelLink() {
-        return modellink;
+    public final Map<String, DocumentModel> getItems() {
+        return items;
     }
     
     public final String getName() {
         return name;
     }
     
-    public final boolean isItemInstanceof(DocumentModel model) {
-        return itens.contains(model);
-    }
-    
-    public final void setCDModelLink(DocumentModel modellink) {
-        this.modellink = modellink;
+    public final void put(String name, DocumentModel item) {
+        items.put(name, item);
+        reverseitems.put(item.getName(), name);
     }
     
     public final void setHeader(DocumentModel header) {
         this.header = header;
-    }
-    
-    public final void setId(int id) {
-        this.id = id;
     }
     
     public final void setName(String name) {

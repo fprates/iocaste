@@ -1,18 +1,13 @@
 package org.iocaste.documents;
 
+import java.util.Map;
+
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
-import org.iocaste.protocol.IocasteException;
 
-public class CModel {    
-    private static final byte ITEM_SAVE = 0;
-    private static final String[] ERRORS = {
-        "error on complex model item saving"
-    };
+public class CModel {
     
     /**
      * 
@@ -21,57 +16,28 @@ public class CModel {
      * @return
      * @throws Exception
      */
-    public static final int create(ComplexModel model, Cache cache)
+    public static final int create(ComplexModel cmodel, Cache cache)
             throws Exception {
-        DocumentModel cmlink;
-        DocumentModelItem reference, cmlinkitem;
-        long cmodelid;
-        DocumentModel hmodel = Model.get("COMPLEX_MODEL", cache);
-        DocumentModel imodel = Model.get("COMPLEX_MODEL_ITEM", cache);
-        ExtendedObject object = new ExtendedObject(hmodel);
-        String cminame, name = model.getName();
+        ExtendedObject object;
+        Map<String, DocumentModel> items;
+        DocumentModel model = Model.get("COMPLEX_MODEL", cache);
+        String cmodelname = cmodel.getName();
         
-        object.set("NAME", name);
-        cmodelid = NumberRange.getCurrent("CMODEL_ID", cache.function);
-        object.set("ID", cmodelid);
-        hmodel = model.getHeader();
-        object.set("MODEL", hmodel.getName());
-        cminame = new StringBuilder("CMI_").append(name).toString();
-        object.set("CD_LINK", cminame);
+        object = new ExtendedObject(model);
+        object.set("NAME", cmodelname);
+        object.set("MODEL", cmodel.getHeader().getName());
         Save.init(object, cache.function);
         
-        cmodelid *= 1000;
-        for (DocumentModel modelitem : model.getItens()) {
-            object = new ExtendedObject(imodel);
-            object.set("ID", cmodelid++);
-            object.set("COMPLEX_MODEL", name);
-            object.set("MODEL", modelitem.getName());
-            if (Save.init(object, cache.function) == 0)
-                throw new IocasteException(ERRORS[ITEM_SAVE]);
+        model = Model.get("COMPLEX_MODEL_ITEM", cache);
+        items = cmodel.getItems();
+        for (String name : items.keySet()) {
+            object = new ExtendedObject(model);
+            object.set("NAME", name);
+            object.set("CMODEL", cmodelname);
+            object.set("MODEL", items.get(name).getName());
+            Save.init(object, cache.function);
         }
         
-        cmlink = new DocumentModel(cminame);
-        cmlink.setTableName("CMI_"+hmodel.getTableName());
-        
-        reference = Model.get("COMPLEX_DOCUMENT", cache).getModelItem("ID");
-        cmlinkitem = new DocumentModelItem("ID");
-        cmlinkitem.setTableFieldName("IDENT");
-        cmlinkitem.setDataElement(reference.getDataElement());
-        cmlinkitem.setReference(reference);
-        cmlink.add(cmlinkitem);
-        cmlink.add(new DocumentModelKey(cmlinkitem));
-        
-        for (DocumentModelKey key : hmodel.getKeys()) {
-            name = key.getModelItemName();
-            reference = hmodel.getModelItem(name);
-            cmlinkitem = new DocumentModelItem("Z"+name);
-            cmlinkitem.setTableFieldName("Z"+reference.getTableFieldName());
-            cmlinkitem.setDataElement(reference.getDataElement());
-            cmlinkitem.setReference(reference);
-            cmlink.add(cmlinkitem);
-        }
-        
-        Model.create(cmlink, cache);
         return 1;
     }
     
@@ -84,42 +50,29 @@ public class CModel {
      */
     public static final ComplexModel get(String name, Cache cache)
             throws Exception {
-        Query query;
+        ExtendedObject object;
+        ExtendedObject[] objects;
         ComplexModel cmodel;
-        DocumentModel model;
-        ExtendedObject omodel;
-        String modelname;
-        ExtendedObject[] itens;
+        Query query;
         
-        if (cache.cmodels.containsKey(name))
-            return cache.cmodels.get(name);
-        
-        model = Model.get("COMPLEX_MODEL", cache);
-        omodel = Select.get(model, name, cache.function);
-        if (omodel == null)
+        object = Select.get(
+                Model.get("COMPLEX_MODEL", cache), name, cache.function);
+        if (object == null)
             return null;
         
-        modelname = omodel.get("MODEL");
         cmodel = new ComplexModel();
+        cmodel.setHeader(Model.get(object.getst("MODEL"), cache));
         cmodel.setName(name);
-        cmodel.setHeader(Model.get(modelname, cache));
-        cmodel.setId(omodel.geti("ID"));
-        model = Model.get((String)omodel.get("CD_LINK"), cache);
-        cmodel.setCDModelLink(model);
-        cache.cmodels.put(name, cmodel);
         
         query = new Query();
         query.setModel("COMPLEX_MODEL_ITEM");
-        query.andEqual("COMPLEX_MODEL", name);
-        itens = Select.init(query, cache);
-        if (itens == null)
-            return cmodel;
+        query.andEqual("CMODEL", name);
+        objects = Select.init(query, cache);
         
-        for (ExtendedObject item : itens) {
-            modelname = item.get("MODEL");
-            model = Model.get(modelname, cache);
-            cmodel.add(model);
-        }
+        for (ExtendedObject item : objects)
+            cmodel.put(
+                    item.getst("NAME"),
+                    Model.get(item.getst("MODEL"), cache));
         
         return cmodel;
     }

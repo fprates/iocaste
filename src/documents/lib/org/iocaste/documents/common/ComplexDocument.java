@@ -1,24 +1,23 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class ComplexDocument implements Serializable {
     private static final long serialVersionUID = -6366080783932302245L;
     private ComplexModel cmodel;
     private ExtendedObject header;
-    private Map<String, ComplexDocumentItem> itens;
-    private long id, last;
+    private Map<String, Set<ExtendedObject>> items;
     
     public ComplexDocument(ComplexModel cmodel) {
         this.cmodel = cmodel;
         header = new ExtendedObject(cmodel.getHeader());
-        itens = new HashMap<String, ComplexDocumentItem>();
-        for (DocumentModel model : cmodel.getItens())
-            itens.put(model.getName(), new ComplexDocumentItem(model));
+        items = new HashMap<>();
+        for (String name: cmodel.getItems().keySet())
+            items.put(name, new TreeSet<ExtendedObject>());
     }
     
     /**
@@ -26,34 +25,18 @@ public class ComplexDocument implements Serializable {
      * @param object
      */
     public final void add(ExtendedObject object) {
-        Object value;
-        ComplexDocumentItem item;
-        long index;
-        DocumentModel model = object.getModel();
+        String model = object.getModel().getName();
+        Set<ExtendedObject> objects = items.get(model);
         
-        if (!cmodel.isItemInstanceof(model))
-            new RuntimeException("object model item is not allowed for " +
-            		cmodel.getName());
+        if (objects == null)
+            throw new RuntimeException("Invalid object model.");
         
-        for (DocumentModelItem modelitem : model.getItens()) {
-            if (!model.isKey(modelitem))
-                continue;
-            
-            value = object.get(modelitem);
-            index = (value == null)? 0 : (Long)value;
-            if (index > 0) {
-                if (index > last)
-                    last = index;
-                continue;
-            }
-            
-            last++;
-            object.set(modelitem, last);
-            break;
-        }
-        
-        item = itens.get(model.getName());
-        item.add(object);
+        objects.add(object);
+    }
+    
+    public final void add(ExtendedObject[] objects) {
+        for (ExtendedObject object : objects)
+            add(object);
     }
     
     /**
@@ -66,36 +49,11 @@ public class ComplexDocument implements Serializable {
     
     /**
      * 
-     * @return
-     */
-    public final long getId() {
-        return id;
-    }
-    
-    /**
-     * 
      * @param name
      * @return
      */
-    public final DocumentModel getItemModel(String name) {
-        return itens.get(name).getModel();
-    }
-    
-    /**
-     * 
-     * @param name
-     * @return
-     */
-    public final ExtendedObject[] getItens(String name) {
-        return itens.get(name).getItens();
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final String[] getItensModels() {
-        return itens.keySet().toArray(new String[0]);
+    public final ExtendedObject[] getItems(String name) {
+        return items.get(name).toArray(new ExtendedObject[0]);
     }
     
     /**
@@ -106,9 +64,12 @@ public class ComplexDocument implements Serializable {
         return cmodel;
     }
     
+    /**
+     * 
+     */
     public final void remove() {
-        for (String name : itens.keySet())
-            itens.get(name).remove();
+        for (Set<ExtendedObject> objects : items.values())
+            objects.clear();
     }
     
     /**
@@ -117,40 +78,5 @@ public class ComplexDocument implements Serializable {
      */
     public final void setHeader(ExtendedObject header) {
         this.header = header;
-    }
-    
-    /**
-     * 
-     * @param id
-     */
-    public final void setId(long id) {
-        this.id = id;
-    }
-}
-
-class ComplexDocumentItem implements Serializable {
-    private static final long serialVersionUID = 1849261963330378344L;
-    private DocumentModel model;
-    private List<ExtendedObject> itens;
-    
-    public ComplexDocumentItem(DocumentModel model) {
-        this.model = model;
-        itens = new ArrayList<ExtendedObject>();
-    }
-    
-    public final void add(ExtendedObject object) {
-        itens.add(object);
-    }
-    
-    public final ExtendedObject[] getItens() {
-        return itens.toArray(new ExtendedObject[0]);
-    }
-    
-    public final DocumentModel getModel() {
-        return model;
-    }
-    
-    public final void remove() {
-        itens.clear();
     }
 }

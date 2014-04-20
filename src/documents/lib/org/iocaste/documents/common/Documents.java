@@ -117,7 +117,7 @@ public class Documents extends AbstractServiceInterface {
      * @param id
      * @return
      */
-    public final ComplexDocument getComplexDocument(String name, long id) {
+    public final ComplexDocument getComplexDocument(String name, Object id) {
         Message message = new Message();
         
         message.setId("get_complex_document");
@@ -400,19 +400,6 @@ public class Documents extends AbstractServiceInterface {
         
         message.setId("update_m");
         message.add("queries", queries);
-        return call(message);
-    }
-    
-    /**
-     * 
-     * @param document
-     * @return
-     */
-    public final int update(ComplexDocument document) {
-        Message message = new Message();
-        
-        message.setId("update_complex_document");
-        message.add("document", document);
         return call(message);
     }
     

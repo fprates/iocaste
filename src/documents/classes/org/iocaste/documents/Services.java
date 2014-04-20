@@ -28,7 +28,8 @@ public class Services extends AbstractFunction {
         export("create_model", "createModel");
         export("create_number_factory", "createNumberFactory");
         export("delete", "delete");
-        export("get_complex_document", "getCDocument");
+        export("delete_complex_document", "deleteComplexDocument");
+        export("get_complex_document", "getComplexDocument");
         export("get_complex_model", "getCModel");
         export("get_data_element", "getDataElement");
         export("get_next_number", "getNextNumber");
@@ -47,7 +48,6 @@ public class Services extends AbstractFunction {
         export("unlock", "unlock");
         export("update", "update");
         export("update_m", "updateMultiple");
-        export("update_complex_document", "updateCDocument");
         export("update_model", "updateModel");
         export("validate_model", "validateModel");
     }
@@ -101,15 +101,13 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
-     * @return
      * @throws Exception
      */
-    public final ComplexDocument getCDocument(Message message)
-            throws Exception {
-        String cdname = message.getString("name");
-        long id = message.getl("id");
+    public final void deleteComplexDocument(Message message) throws Exception {
+        String cmodelname = message.get("cmodel_name");
+        Object id = message.get("id");
         
-        return CDocument.get(cdname, id, cache);
+        CDocument.delete(cmodelname, id, cache);
     }
     
     /**
@@ -122,6 +120,20 @@ public class Services extends AbstractFunction {
         String name = message.getString("name");
         
         return CModel.get(name, cache);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final ComplexDocument getComplexDocument(Message message)
+            throws Exception {
+        String cdname = message.getString("name");
+        Object id = message.get("id");
+        
+        return CDocument.get(cdname, id, cache);
     }
     
     /**
@@ -319,9 +331,9 @@ public class Services extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final long saveCDocument(Message message) throws Exception {
+    public final void saveCDocument(Message message) throws Exception {
         ComplexDocument document = message.get("document");
-        return CDocument.save(document, cache);
+        CDocument.save(document, cache);
     }
     
     /**
@@ -375,18 +387,6 @@ public class Services extends AbstractFunction {
         Query query = message.get("query");
         
         return Update.init(query, cache);
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
-     * @throws Exception
-     */
-    public final int updateCDocument(Message message) throws Exception {
-        ComplexDocument document = message.get("document");
-        
-        return CDocument.update(document, cache);
     }
     
     /**
