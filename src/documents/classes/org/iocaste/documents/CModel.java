@@ -60,9 +60,8 @@ public class CModel {
         if (object == null)
             return null;
         
-        cmodel = new ComplexModel();
+        cmodel = new ComplexModel(name);
         cmodel.setHeader(Model.get(object.getst("MODEL"), cache));
-        cmodel.setName(name);
         
         query = new Query();
         query.setModel("COMPLEX_MODEL_ITEM");

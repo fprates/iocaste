@@ -13,9 +13,10 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
     private Map<String, DocumentModel> items;
     private Map<String, String> reverseitems;
     
-    public ComplexModel() {
+    public ComplexModel(String name) {
         items = new HashMap<>();
         reverseitems = new HashMap<>();
+        this.name = name;
     }
 
     /*
@@ -67,9 +68,5 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
     
     public final void setHeader(DocumentModel header) {
         this.header = header;
-    }
-    
-    public final void setName(String name) {
-        this.name = name;
     }
 }
