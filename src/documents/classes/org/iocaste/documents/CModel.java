@@ -32,6 +32,9 @@ public class CModel {
         items = cmodel.getItems();
         for (String name : items.keySet()) {
             object = new ExtendedObject(model);
+            object.set("IDENT", new StringBuilder(cmodelname).
+                    append("_").
+                    append(name).toString());
             object.set("NAME", name);
             object.set("CMODEL", cmodelname);
             object.set("MODEL", items.get(name).getName());

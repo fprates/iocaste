@@ -16,7 +16,6 @@ public class Install {
         
         config.function = function;
         CModel.install(data, config);
-        CDocument.install(data, config);
         GlobalConfig.install(data);
         Shell.install(data);
         TextEditor.install(data);

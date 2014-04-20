@@ -25,61 +25,26 @@ public class CModel {
          */
         model = data.getModel("COMPLEX_MODEL", "CPLXMODEL", null);
         
-        // identificador
-        element = new DataElement("COMPLEX_MODEL.NAME");
+        // nome
+        element = new DataElement("CMODEL_NAME");
         element.setType(DataType.CHAR);
         element.setUpcase(true);
         element.setLength(24);
-        
         config.cmodelname = new DocumentModelItem("NAME");
-        config.cmodelname.setTableFieldName("IDENT");
+        config.cmodelname.setTableFieldName("CMNAM");
         config.cmodelname.setDataElement(element);
         model.add(config.cmodelname);
         model.add(new DocumentModelKey(config.cmodelname));
-
-        // índice
-        element = new DataElement("COMPLEX_MODEL.ID");
-        element.setType(DataType.NUMC);
-        element.setLength(3);
-        
-        item = new DocumentModelItem("ID");
-        item.setTableFieldName("MDLID");
-        item.setDataElement(element);
-        model.add(item);
         
         // modelo
         modelname = new Documents(config.function).getModel("MODEL").
                 getModelItem("NAME");
         element = modelname.getDataElement();
-        
         item = new DocumentModelItem("MODEL");
         item.setTableFieldName("MODEL");
         item.setDataElement(element);
         item.setReference(modelname);
         model.add(item);
-        
-        // último documento para este modelo
-        element = new DataElement("COMPLEX_DOCUMENT.ID");
-        element.setType(DataType.NUMC);
-        element.setLength(11);
-        
-        config.cdocumentid = new DocumentModelItem("CURRENT");
-        config.cdocumentid.setTableFieldName("DOCID");
-        config.cdocumentid.setDataElement(element);
-        model.add(config.cdocumentid);
-        
-        // link documento-document complexo
-        element = new DataElement("COMPLEX_MODEL.CD_LINK");
-        element.setType(DataType.CHAR);
-        element.setLength(24);
-        element.setUpcase(true);
-        
-        item = new DocumentModelItem("CD_LINK");
-        item.setTableFieldName("CDLNK");
-        item.setDataElement(element);
-        model.add(item);
-        
-        data.addNumberFactory("CMODEL_ID");
         
         /*
          * Item de modelo de documento complexo
@@ -87,31 +52,37 @@ public class CModel {
         model = data.getModel("COMPLEX_MODEL_ITEM", "CPLXMITEM", null);
         
         // identificador
-        element = new DataElement("COMPLEX_MODEL_ITEM.ID");
-        element.setLength(6);
-        element.setType(DataType.NUMC);
+        element = new DataElement("CMODEL_ITEM_IDENT");
+        element.setLength(49);
+        element.setType(DataType.CHAR);
+        element.setUpcase(false);
+        item = new DocumentModelItem("IDENT");
+        item.setTableFieldName("CMIID");
+        item.setDataElement(element);
+        model.add(new DocumentModelKey(item));
+        model.add(item);
         
-        item = new DocumentModelItem("ID");
-        item.setTableFieldName("IDENT");
+        // nome
+        element = new DataElement("CMODEL_ITEM_NAME");
+        element.setLength(24);
+        element.setType(DataType.CHAR);
+        element.setUpcase(false);
+        item = new DocumentModelItem("NAME");
+        item.setTableFieldName("CMINM");
         item.setDataElement(element);
         model.add(item);
-        model.add(new DocumentModelKey(item));
         
         // modelo referência
-        element = config.cmodelname.getDataElement();
-        
-        item = new DocumentModelItem("COMPLEX_MODEL");
+        item = new DocumentModelItem("CMODEL");
         item.setTableFieldName("MDLNM");
-        item.setDataElement(element);
+        item.setDataElement(config.cmodelname.getDataElement());
         item.setReference(config.cmodelname);
         model.add(item);
         
         // modelo
-        element = modelname.getDataElement();
-        
         item = new DocumentModelItem("MODEL");
         item.setTableFieldName("MODEL");
-        item.setDataElement(element);
+        item.setDataElement(modelname.getDataElement());
         item.setReference(modelname);
         model.add(item);
     }
