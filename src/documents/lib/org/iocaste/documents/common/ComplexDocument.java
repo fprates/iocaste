@@ -25,9 +25,14 @@ public class ComplexDocument implements Serializable {
      * @param object
      */
     public final void add(ExtendedObject object) {
-        String model = object.getModel().getName();
-        Set<ExtendedObject> objects = items.get(model);
+        String model;
+        Set<ExtendedObject> objects;
         
+        if (object == null)
+            return;
+        
+        model = object.getModel().getName();
+        objects = items.get(model);
         if (objects == null)
             throw new RuntimeException("Invalid object model.");
         
@@ -35,6 +40,9 @@ public class ComplexDocument implements Serializable {
     }
     
     public final void add(ExtendedObject[] objects) {
+        if (objects == null)
+            return;
+        
         for (ExtendedObject object : objects)
             add(object);
     }
