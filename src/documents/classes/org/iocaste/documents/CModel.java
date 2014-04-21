@@ -94,7 +94,7 @@ public class CModel {
         
         query = new Query("delete");
         query.setModel("COMPLEX_MODEL_ITEM");
-        query.andEqual("COMPLEX_MODEL", name);
+        query.andEqual("CMODEL", name);
         Update.init(query, cache);
         
         query = new Query("delete");
