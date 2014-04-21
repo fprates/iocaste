@@ -113,6 +113,20 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
+     * @param cmodelname
+     * @param key
+     */
+    public final void deleteComplexDocument(String cmodelname, Object key) {
+        Message message = new Message();
+        
+        message.setId("delete_complex_document");
+        message.add("cmodel_name", cmodelname);
+        message.add("id", key);
+        call(message);
+    }
+    
+    /**
+     * 
      * @param name
      * @param id
      * @return
