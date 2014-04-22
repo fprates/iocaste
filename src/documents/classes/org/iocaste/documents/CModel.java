@@ -70,6 +70,8 @@ public class CModel {
         query.setModel("COMPLEX_MODEL_ITEM");
         query.andEqual("CMODEL", name);
         objects = Select.init(query, cache);
+        if (objects == null)
+            return cmodel;
         
         for (ExtendedObject item : objects)
             cmodel.put(
