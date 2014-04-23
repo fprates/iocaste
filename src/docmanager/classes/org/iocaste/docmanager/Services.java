@@ -1,0 +1,102 @@
+package org.iocaste.docmanager;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.iocaste.docmanager.common.AbstractManager;
+import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.AbstractFunction;
+import org.iocaste.protocol.Message;
+
+public class Services extends AbstractFunction {
+    
+    public Services() {
+        export("exists", "exists");
+        export("get", "get");
+        export("save", "save");
+    }
+    
+    public final boolean exists(Message message) {
+        String code = message.get("code");
+        String cmodelname = message.get("cmodel_name");
+        Documents documents = new Documents(this);
+        ComplexModel cmodel = documents.getComplexModel(cmodelname);
+        String headmodelname = cmodel.getHeader().getName();
+        ExtendedObject header = documents.getObject(headmodelname, code);
+        
+        return (header != null);
+    }
+    
+    public final ComplexDocument get(Message message) {
+        String cmodelname = message.get("cmodel_name");
+        String code = message.get("code");
+        return new Documents(this).getComplexDocument(cmodelname, code);
+    }
+    
+    public final void save(Message message) {
+        Map<String, String> keys, references;
+        Map<String, DocumentModel> models;
+        DocumentModel model;
+        DocumentModelItem headerkey;
+        String itemkey, id, modelname, reference, itemid;
+        int i;
+        String cmodelname = message.get("cmodel_name");
+        ExtendedObject head = message.get("head");
+        Collection<ExtendedObject[]> groups = message.get("groups");
+        Documents documents = new Documents(this);
+        ComplexModel cmodel = documents.getComplexModel(cmodelname);
+        ComplexDocument document = new ComplexDocument(cmodel);
+        
+        /*
+         * localizamos o código do documento
+         */
+        id = null;
+        headerkey = null;
+        model = cmodel.getHeader();
+        headerkey = AbstractManager.getKey(model);
+        if (headerkey == null)
+            throw new RuntimeException("Header key undefined.");
+
+        id = head.getst(headerkey.getName());
+        
+        /*
+         * localizamos chaves e referências para preencher
+         * os índices do objetos do documento.
+         */
+        keys = new HashMap<>();
+        references = new HashMap<>();
+        models = cmodel.getItems();
+        for (String name : models.keySet()) {
+            model = models.get(name);
+            modelname = model.getName();
+            keys.put(modelname, AbstractManager.getKey(model).getName());
+            references.put(modelname, AbstractManager.
+                    getReference(model, headerkey).getName());
+        }
+        
+        document.setHeader(head);
+        for (ExtendedObject[] group : groups) {
+            i = 0;
+            if (group == null)
+                continue;
+            for (ExtendedObject item : group) {
+                itemid = id.concat(String.format("%02d", i++));
+                modelname = item.getModel().getName();
+                itemkey = keys.get(modelname);
+                item.set(itemkey, itemid);
+                reference = references.get(modelname);
+                item.set(reference, id);
+            }
+            document.add(group);
+        }
+
+        documents.deleteComplexDocument(cmodelname, id);
+        documents.save(document);
+    }
+}
