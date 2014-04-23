@@ -189,27 +189,8 @@ public class TableTool {
          * componentes de entrada estiverem definidos.
          * por isso não podemos tratar no loop anterior.
          */
-        for (TableColumn tcolumn : tcolumns) {
-            if (tcolumn.isMark())
-                continue;
-            
-            name = tcolumn.getName();
-            element = item.get(name);
-            if (!element.isDataStorable())
-                continue;
-            
-            column = columns.get(name);
-            if (column.validator == null)
-                continue;
-            
-            input = (InputComponent)element; 
-            input.setValidator(column.validator.validator);
-            if (column.validator.inputs == null)
-                continue;
-            
-            for (String vinputname : column.validator.inputs)
-                input.addValidatorInput((InputComponent)item.get(vinputname));
-        }
+        for (TableColumn tcolumn : tcolumns)
+            setColumnValidator(tcolumn, item);
         
         if (object == null)
             return;
@@ -360,6 +341,33 @@ public class TableTool {
             }
     }
     
+    private final void setColumnValidator(TableColumn tcolumn, TableItem item) {
+        InputComponent input;
+        Column column;
+        Element element;
+        String name;
+        
+        if (tcolumn.isMark())
+            return;
+        
+        name = tcolumn.getName();
+        element = item.get(name);
+        if (!element.isDataStorable())
+            return;
+        
+        column = columns.get(name);
+        if (column.validator == null)
+            return;
+        
+        input = (InputComponent)element; 
+        input.setValidator(column.validator.validator);
+        if (column.validator.inputs == null)
+            return;
+        
+        for (String vinputname : column.validator.inputs)
+            input.addValidatorInput((InputComponent)item.get(vinputname));
+    }
+    
     public final void setColumnValues(String name, Map<String, Object> values)
     {
         columns.get(name).values = values;
@@ -415,11 +423,16 @@ public class TableTool {
     
     public final void setValidator(String field,
             Class<? extends Validator> validator, String... inputs) {
+        Column column;
         ValidatorData vdata = new ValidatorData();
+        Table table = getTable();
         
         vdata.validator = validator;
         vdata.inputs = inputs;
-        columns.get(field).validator = vdata;
+        column = columns.get(field);
+        column.validator = vdata;
+        for (TableItem item : table.getItems())
+            setColumnValidator(column.tcolumn, item);
     }
     
     public final void setVisibility(boolean visible, String... columns) {
