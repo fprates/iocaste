@@ -9,7 +9,7 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
 
 public class DocumentManager extends AbstractServiceInterface {
-    public static final String SERVICE = "/iocaste-docmanager/service.html";
+    public static final String SERVICE = "/iocaste-docmanager/services.html";
     
     public DocumentManager(Function function) {
         initService(function, SERVICE);
@@ -37,6 +37,7 @@ public class DocumentManager extends AbstractServiceInterface {
             Collection<ExtendedObject[]> groups) {
         Message message = new Message();
         
+        message.setId("save");
         message.add("cmodel_name", cmodelname);
         message.add("head", head);
         message.add("groups", groups);
