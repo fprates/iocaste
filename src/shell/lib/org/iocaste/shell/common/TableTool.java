@@ -105,7 +105,7 @@ public class TableTool {
                 additem(table, null, -1);
         } else {
             for (int i = 0; i < items.length; i++) {
-                if (vlines == i)
+                if ((vlines == i) && (vlines > 0))
                     break;
                 
                 additem(table, items[i], -1);
