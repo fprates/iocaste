@@ -13,6 +13,32 @@ import org.iocaste.protocol.IocasteException;
 
 public class CDocument {
     
+    public static final void delete(String name, Object id, Cache cache)
+            throws Exception {
+        DocumentModelItem headerkey, reference;
+        DocumentModel model, header;
+        Query query;
+        Map<String, DocumentModel> models;
+        ComplexModel cmodel = CModel.get(name, cache);
+        
+        header = cmodel.getHeader();
+        headerkey = getModelKey(header);
+        models = cmodel.getItems();
+        for (String item : models.keySet()) {
+            model = models.get(item);
+            query = new Query("delete");
+            query.setModel(model.getName());
+            reference = getReferenceItem(model, headerkey);
+            query.andEqual(reference.getName(), id);
+            Update.init(query, cache);
+        }
+        
+        query = new Query("delete");
+        query.setModel(header.getName());
+        query.andEqual(headerkey.getName(), id);
+        Update.init(query, cache);
+    }
+    
     /**
      * 
      * @param cdname
@@ -102,31 +128,5 @@ public class CDocument {
             for (ExtendedObject item : objects)
                 Save.init(item, cache.function);
         }
-    }
-    
-    public static final void delete(String name, Object id, Cache cache)
-            throws Exception {
-        DocumentModelItem headerkey, reference;
-        DocumentModel model, header;
-        Query query;
-        Map<String, DocumentModel> models;
-        ComplexModel cmodel = CModel.get(name, cache);
-        
-        header = cmodel.getHeader();
-        headerkey = getModelKey(header);
-        models = cmodel.getItems();
-        for (String item : models.keySet()) {
-            model = models.get(item);
-            query = new Query("delete");
-            query.setModel(model.getName());
-            reference = getReferenceItem(model, headerkey);
-            query.andEqual(reference.getName(), id);
-            Update.init(query, cache);
-        }
-        
-        query = new Query("delete");
-        query.setModel(header.getName());
-        query.andEqual(headerkey.getName(), id);
-        Update.init(query, cache);
     }
 }
