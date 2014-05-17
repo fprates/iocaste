@@ -15,7 +15,6 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
-import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
@@ -106,7 +105,6 @@ public class Response {
         ExpandBar group;
         Link link;
         Set<TaskEntry> entries;
-        Parameter groupcommand;
         String taskname, text;
         StyleSheet stylesheet;
         Form container = new Form(context.view, "main");
@@ -159,12 +157,11 @@ public class Response {
             
             entries = lists.get(groupname);
             for (TaskEntry entry : entries) {
-                groupcommand = new Parameter(container, "groupcommand");
                 taskname = entry.getName();
                 text = entry.getText();
                 link = new Link(table, taskname, "grouprun");
                 link.setText((text == null)? taskname : text);
-                link.add(groupcommand, taskname);
+                link.add("groupcommand", taskname);
                 new TableItem(table).add(link);
             }
         }

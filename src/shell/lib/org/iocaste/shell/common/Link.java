@@ -17,6 +17,7 @@ public class Link extends AbstractControlComponent {
     private boolean absolute;
     private Map<Parameter, Object> values;
     private String image;
+    private Container container;
     
     public Link(Container container, String name, String action) {
         super(container, Const.LINK, name);
@@ -24,16 +25,27 @@ public class Link extends AbstractControlComponent {
         setAction(action);
         setStyleClass("link");
         absolute = false;
-        values = new HashMap<Parameter, Object>();
+        this.container = container;
+        values = new HashMap<>();
     }
 
     /**
      * Adiciona parâmetro ao link.
-     * @param parameter nome do parâmetros
+     * @param parameter nome do parâmetro
      * @param value valor
      */
+    @Deprecated
     public final void add(Parameter parameter, Object value) {
         values.put(parameter, value);
+    }
+
+    /**
+     * Adiciona parâmetro ao link.
+     * @param name nome do parâmetro
+     * @param value valor
+     */
+    public final void add(String name, Object value) {
+        values.put(new Parameter(container, name), value);
     }
     
     /**
