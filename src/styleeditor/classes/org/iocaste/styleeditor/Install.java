@@ -22,16 +22,22 @@ public class Install {
         messages.put("update", "Editar");
         data.setMessages("pt_BR", messages);
         
+        data.link("STYLE", "iocaste-styleeditor");
+        taskgroup = new TaskGroup("DEVELOP");
+        taskgroup.add("STYLE");
+        data.add(taskgroup);
+        
         authorization = new Authorization("STYLEEDITOR.EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", "iocaste-styleeditor");
         data.add(authorization);
         
-        data.link("STYLE", "iocaste-styleeditor");
-        taskgroup = new TaskGroup("DEVELOP");
-        taskgroup.add("STYLE");
-        data.add(taskgroup);
+        authorization = new Authorization("STYLE.CALL");
+        authorization.setObject("LINK");
+        authorization.setAction("CALL");
+        authorization.add("LINK", "STYLE");
+        data.add(authorization);
         
         return data;
     }
