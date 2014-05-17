@@ -32,9 +32,7 @@ public class Shell extends AbstractServiceInterface {
      * @return
      */
     public final String addTicket(AccessTicket ticket) {
-        Message message = new Message();
-        
-        message.setId("add_ticket");
+        Message message = new Message("add_ticket");
         message.add("ticket", ticket);
         return call(message);
     }
@@ -182,15 +180,22 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final String[] getPagesPositions() {
+        Message message = new Message("get_pages_positions");
+        return call(message);
+    }
+    
+    /**
      * Retorna visão especificada.
      * @param view visão atual
      * @param pagename nome da visão
      * @return visão especificada.
      */
     public final View getView(View view, String pagename) {
-        Message message = new Message();
-        
-        message.setId("get_view");
+        Message message = new Message("get_view");
         message.add("app_name", view.getAppName());
         message.add("page_name", pagename);
         return call(message);
@@ -202,9 +207,7 @@ public class Shell extends AbstractServiceInterface {
      * @return
      */
     public final String[] home(View view) {
-        Message message = new Message();
-        
-        message.setId("home");
+        Message message = new Message("home");
         return call(message);
     }
     
@@ -217,6 +220,11 @@ public class Shell extends AbstractServiceInterface {
         return (value == null || value.trim().length() == 0)? true : false;
     }
     
+    /**
+     * 
+     * @param input
+     * @return
+     */
     public static final boolean isInitial(InputComponent input) {
         DataElement element;
         Object value = input.get();
@@ -248,9 +256,7 @@ public class Shell extends AbstractServiceInterface {
      * @return dados da página anterior
      */
     public final String[] popPage(View view) {
-        Message message = new Message();
-        
-        message.setId("pop_page");
+        Message message = new Message("pop_page");
         return call(message);
     }
     
@@ -259,9 +265,7 @@ public class Shell extends AbstractServiceInterface {
      * @param view visão.
      */
     public final void pushPage(View view) {
-        Message message = new Message();
-        
-        message.setId("push_page");
+        Message message = new Message("push_page");
         message.add("app_name", view.getAppName());
         message.add("page_name", view.getPageName());
         call(message);
@@ -272,10 +276,18 @@ public class Shell extends AbstractServiceInterface {
      * @param ticket código do ticket de acesso.
      */
     public final void removeTicket(String ticket) {
-        Message message = new Message();
-        
-        message.setId("remove_ticket");
+        Message message = new Message("remove_ticket");
         message.add("ticket", ticket);
+        call(message);
+    }
+    
+    /**
+     * 
+     * @param position
+     */
+    public final void setPagesPosition(String position) {
+        Message message = new Message("set_pages_position");        
+        message.add("position", position);
         call(message);
     }
     
@@ -336,9 +348,7 @@ public class Shell extends AbstractServiceInterface {
      * @param view visão.
      */
     public final void updateView(View view) {
-        Message message = new Message();
-        
-        message.setId("update_view");
+        Message message = new Message("update_view");
         message.add("view", view);
         call(message);
     }

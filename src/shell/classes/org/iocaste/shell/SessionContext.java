@@ -9,8 +9,8 @@ public class SessionContext {
     private Stack<String[]> pagestack;
 
     public SessionContext() {
-        apps = new HashMap<String, AppContext>();
-        pagestack = new Stack<String[]>();
+        apps = new HashMap<>();
+        pagestack = new Stack<>();
     }
     
     /**
@@ -29,6 +29,14 @@ public class SessionContext {
      */
     public final AppContext getAppContext(String name) {
         return apps.get(name);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String[][] getPagesNames() {
+        return pagestack.toArray(new String[0][0]);
     }
     
     /**
@@ -72,5 +80,18 @@ public class SessionContext {
      */
     public final void put(String name, AppContext appctx) {
         apps.put(name, appctx);
+    }
+    
+    /**
+     * 
+     * @param app
+     * @param page
+     */
+    public final void setPagesPosition(String app, String page) {
+        String[] entry;
+        
+        do {
+            entry = pagestack.pop();
+        } while (!entry[0].equals(app) || !entry[1].equals(page));
     }
 }

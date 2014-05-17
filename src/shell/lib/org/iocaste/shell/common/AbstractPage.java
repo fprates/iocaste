@@ -38,6 +38,18 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
+     * Retorna à página especificada
+     * @param position página
+     */
+    public final void backTo(String position) {
+        String[] entry = position.split("\\.");
+        
+        new Shell(this).setPagesPosition(position);
+        context.view.redirect(entry[0], entry[1]);
+        context.view.dontPushPage();
+    }
+    
+    /**
      * Chamado quando tem validação ajustada via setValidator().
      * @param message
      * @return

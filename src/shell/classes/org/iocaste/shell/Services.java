@@ -9,11 +9,13 @@ public class Services extends AbstractFunction {
 
     public Services() {
         export("add_ticket", "addTicket");
+        export("get_pages_positions", "getPagesPositions");
         export("get_view", "getView");
         export("home", "home");
         export("pop_page", "popPage");
         export("push_page", "pushPage");
         export("remove_ticket", "removeTicket");
+        export("set_pages_position", "setPagesPosition");
         export("update_view", "updateView");
     }
     
@@ -41,6 +43,16 @@ public class Services extends AbstractFunction {
         String pagename = message.getString("page_name");
         
         return PageRenderer.getView(sessionid, appname, pagename);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final String[] getPagesPositions(Message message) {
+        String sessionid = message.getSessionid();
+        return PageRenderer.getPagesPositions(sessionid);
     }
     
     /**
@@ -85,6 +97,17 @@ public class Services extends AbstractFunction {
         String ticket = message.getString("ticket");
         
         PageRenderer.removeTicket(ticket, this);
+    }
+    
+    /**
+     * 
+     * @param message
+     */
+    public final void setPagesPosition(Message message) {
+        String sessionid = message.getSessionid();
+        String position = message.getString("position");
+        
+        PageRenderer.setPagesPosition(sessionid, position);
     }
     
     /**

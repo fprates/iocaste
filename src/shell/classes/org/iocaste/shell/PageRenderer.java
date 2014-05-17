@@ -91,8 +91,7 @@ public class PageRenderer extends AbstractRenderer {
         if (status.error > 0 || status.event)
             return;
         
-        message = new Message();
-        message.setId("exec_action");
+        message = new Message("exec_action");
         message.add("view", config.view);
         message.setSessionid(config.sessionid);
         
@@ -201,8 +200,7 @@ public class PageRenderer extends AbstractRenderer {
         view = new View(appname, pagename);
         view.setStyleSheet(appctx.getStyleSheet());
         
-        message = new Message();
-        message.setId("get_view_data");
+        message = new Message("get_view_data");
         message.add("view", view);
         message.add("init", pagectx.isInitializableView());
         message.setSessionid(complexid);
@@ -292,6 +290,14 @@ public class PageRenderer extends AbstractRenderer {
         return pagectx;
     }
     
+    /**
+     * 
+     * @param req
+     * @param sessionid
+     * @param logid
+     * @param function
+     * @return
+     */
     private final PageContext createTicketContext(HttpServletRequest req,
             String sessionid, int logid, Function function) {
         PageContext pagectx;
@@ -364,9 +370,7 @@ public class PageRenderer extends AbstractRenderer {
     private final void execute(String appname, String complexid) {
         String url;
         Service service;
-        Message message = new Message();
-        
-        message.setId("set_current_app");
+        Message message = new Message("set_current_app");
         message.add("current_app", appname);
         message.setSessionid(complexid);
         
@@ -586,6 +590,27 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
+     * @param sessionid
+     * @return
+     */
+    public static final String[] getPagesPositions(String sessionid) {
+        String[][] rawpages;
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        
+        rawpages = apps.get(complexid[0]).get(logid).getPagesNames();
+        logid = rawpages.length / 2;
+        complexid = new String[logid];
+        for (int i = 0; i < logid; i++)
+            complexid[i] = new StringBuilder(rawpages[logid - i][0]).
+                    append(".").
+                    append(rawpages[logid - i][1]).toString();
+        
+        return complexid;
+    }
+    
+    /**
+     * 
      * @param complexid
      * @return
      */
@@ -595,8 +620,7 @@ public class PageRenderer extends AbstractRenderer {
         Service service;
         String complexid = getComplexId(ctxdata.sessionid, ctxdata.logid);
         
-        message = new Message();
-        message.setId("get_username");
+        message = new Message("get_username");
         message.setSessionid(complexid);
         
         url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
@@ -661,8 +685,7 @@ public class PageRenderer extends AbstractRenderer {
         Service service;
         String complexid = getComplexId(ctxdata.sessionid, ctxdata.logid);
         
-        message = new Message();
-        message.setId("is_connected");
+        message = new Message("is_connected");
         message.setSessionid(complexid);
         
         url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
@@ -688,8 +711,7 @@ public class PageRenderer extends AbstractRenderer {
         authorization.setAction("EXECUTE");
         authorization.add("APPNAME", appname);
         
-        message = new Message();
-        message.setId("is_authorized");
+        message = new Message("is_authorized");
         message.add("authorization", authorization);
         message.setSessionid(complexid);
         
@@ -991,9 +1013,31 @@ public class PageRenderer extends AbstractRenderer {
                     (MultipartElement)inputdata.element);
     }
     
+    /**
+     * 
+     * @param ticketcode
+     * @param function
+     */
     public static final void removeTicket(String ticketcode, Function function)
     {
         tickets.remove(ticketcode, function);
+    }
+    
+    /**
+     * 
+     * @param sessionid
+     * @param position
+     */
+    public static final void setPagesPosition(
+            String sessionid, String position) {
+        SessionContext context;
+        String[] composition;
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        
+        context = apps.get(complexid[0]).get(logid);
+        composition = position.split("\\.");
+        context.setPagesPosition(composition[0], composition[1]);
     }
     
     /**
