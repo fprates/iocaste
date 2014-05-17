@@ -11,6 +11,12 @@ public class Message implements Serializable {
     private String sessionid;
     private Exception ex;
     
+    public Message(String id) {
+        values = new HashMap<>();
+        this.id = id;
+    }
+    
+    @Deprecated
     public Message() {
         values = new HashMap<>();
     }
@@ -195,6 +201,7 @@ public class Message implements Serializable {
      * 
      * @param id
      */
+    @Deprecated
     public final void setId(String id) {
         this.id = id;
     }
