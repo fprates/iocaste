@@ -25,8 +25,8 @@ public class Link extends AbstractControlComponent {
         setAction(action);
         setStyleClass("link");
         absolute = false;
-        this.container = container;
         values = new HashMap<>();
+        this.container = container;
     }
 
     /**
@@ -45,6 +45,16 @@ public class Link extends AbstractControlComponent {
      * @param value valor
      */
     public final void add(String name, Object value) {
+        values.put(new Parameter(container, name), value);
+    }
+    
+    /**
+     * Adiciona parâmetro ao link em um container especificado
+     * @param container container
+     * @param name nome do parâmetro
+     * @param value valor
+     */
+    public final void add(Container container, String name, Object value) {
         values.put(new Parameter(container, name), value);
     }
     

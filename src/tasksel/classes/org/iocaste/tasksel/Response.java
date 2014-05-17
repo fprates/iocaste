@@ -161,7 +161,7 @@ public class Response {
                 text = entry.getText();
                 link = new Link(table, taskname, "grouprun");
                 link.setText((text == null)? taskname : text);
-                link.add("groupcommand", taskname);
+                link.add(container, "groupcommand", taskname);
                 new TableItem(table).add(link);
             }
         }
