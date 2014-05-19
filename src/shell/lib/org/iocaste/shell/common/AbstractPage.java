@@ -30,10 +30,8 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view visão atual
      */
     public void back() {
-        String[] entry;
-        
-        entry = new Shell(this).popPage(context.view);
-        context.view.redirect(entry[0], entry[1]);
+        PageStackItem entry = new Shell(this).popPage(context.view);
+        context.view.redirect(entry.getApp(), entry.getPage());
         context.view.dontPushPage();
     }
     
@@ -157,8 +155,8 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view visão atual
      */
     public void home() {
-        String[] entry = new Shell(this).home(context.view);
-        context.view.redirect(entry[0], entry[1]);
+        PageStackItem entry = new Shell(this).home(context.view);
+        context.view.redirect(entry.getApp(), entry.getPage());
         context.view.dontPushPage();
     }
     

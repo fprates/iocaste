@@ -183,9 +183,8 @@ public class Shell extends AbstractServiceInterface {
      * 
      * @return
      */
-    public final String[] getPagesPositions() {
-        Message message = new Message("get_pages_positions");
-        return call(message);
+    public final PageStackItem[] getPagesPositions() {
+        return call(new Message("get_pages_positions"));
     }
     
     /**
@@ -206,9 +205,8 @@ public class Shell extends AbstractServiceInterface {
      * @param view
      * @return
      */
-    public final String[] home(View view) {
-        Message message = new Message("home");
-        return call(message);
+    public final PageStackItem home(View view) {
+        return call(new Message("home"));
     }
     
     /**
@@ -255,9 +253,8 @@ public class Shell extends AbstractServiceInterface {
      * @param view visão atual
      * @return dados da página anterior
      */
-    public final String[] popPage(View view) {
-        Message message = new Message("pop_page");
-        return call(message);
+    public final PageStackItem popPage(View view) {
+        return call(new Message("pop_page"));
     }
     
     /**

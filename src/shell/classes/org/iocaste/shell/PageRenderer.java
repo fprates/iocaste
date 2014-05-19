@@ -34,6 +34,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipartElement;
+import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.SearchHelp;
@@ -487,6 +488,7 @@ public class PageRenderer extends AbstractRenderer {
     @SuppressWarnings("unchecked")
     private final PageContext getPageContext(HttpServletRequest req)
             throws Exception {
+        PageStackItem pagestackitem;
         ContextData contextdata;
         String[] pageparse;
         ServletFileUpload fileupload;
@@ -555,10 +557,10 @@ public class PageRenderer extends AbstractRenderer {
          */
         pagectx.setFiles(files);
         if (sequence != pagectx.getSequence()) {
-            pageparse = home(getComplexId(contextdata.sessionid, logid));
-            if (pageparse != null) {
-                contextdata.appname = pageparse[0];
-                contextdata.pagename = pageparse[1];
+            pagestackitem = home(getComplexId(contextdata.sessionid, logid));
+            if (pagestackitem != null) {
+                contextdata.appname = pagestackitem.getApp();
+                contextdata.pagename = pagestackitem.getPage();
                 pagectx = getPageContext(contextdata);
                 pagectx.setViewData(null);
             }
@@ -593,20 +595,11 @@ public class PageRenderer extends AbstractRenderer {
      * @param sessionid
      * @return
      */
-    public static final String[] getPagesPositions(String sessionid) {
-        String[][] rawpages;
+    public static final PageStackItem[] getPagesPositions(String sessionid) {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
         
-        rawpages = apps.get(complexid[0]).get(logid).getPagesNames();
-        logid = rawpages.length / 2;
-        complexid = new String[logid];
-        for (int i = 0; i < logid; i++)
-            complexid[i] = new StringBuilder(rawpages[logid - i][0]).
-                    append(".").
-                    append(rawpages[logid - i][1]).toString();
-        
-        return complexid;
+        return apps.get(complexid[0]).get(logid).getPagesNames();
     }
     
     /**
@@ -667,7 +660,7 @@ public class PageRenderer extends AbstractRenderer {
      * @param getSessionId()
      * @return
      */
-    public static final String[] home(String sessionid) {
+    public static final PageStackItem home(String sessionid) {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
         
@@ -727,7 +720,7 @@ public class PageRenderer extends AbstractRenderer {
      * @param logid
      * @return
      */
-    public static final String[] popPage(String sessionid) {
+    public static final PageStackItem popPage(String sessionid) {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
         

@@ -4,6 +4,7 @@ import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
 
@@ -21,10 +22,9 @@ public class Main extends AbstractPage {
      */
     @Override
     public void back() {
-        String[] entry;
-        entry = new Shell(this).popPage(context.view);
+        PageStackItem entry = new Shell(this).popPage(context.view);
         
-        context.view.redirect(entry[0], entry[1]);
+        context.view.redirect(entry.getApp(), entry.getPage());
         context.view.dontPushPage();
         context.view.setReloadableView(false);
     }

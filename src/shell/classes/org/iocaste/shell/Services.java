@@ -3,6 +3,7 @@ package org.iocaste.shell;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AccessTicket;
+import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.View;
 
 public class Services extends AbstractFunction {
@@ -50,7 +51,7 @@ public class Services extends AbstractFunction {
      * @param message
      * @return
      */
-    public final String[] getPagesPositions(Message message) {
+    public final PageStackItem[] getPagesPositions(Message message) {
         String sessionid = message.getSessionid();
         return PageRenderer.getPagesPositions(sessionid);
     }
@@ -60,7 +61,7 @@ public class Services extends AbstractFunction {
      * @param message
      * @return
      */
-    public final String[] home(Message message) {
+    public final PageStackItem home(Message message) {
         String sessionid = message.getSessionid();
         
         return PageRenderer.home(sessionid);
@@ -71,7 +72,7 @@ public class Services extends AbstractFunction {
      * @param message
      * @return
      */
-    public final String[] popPage(Message message) {
+    public final PageStackItem popPage(Message message) {
         String sessionid = message.getSessionid();
         
         return PageRenderer.popPage(sessionid);
