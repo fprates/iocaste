@@ -129,6 +129,7 @@ public abstract class AbstractPage extends AbstractFunction {
             context = init(view);
             context.view = view;
             context.function = this;
+            customactions.clear();
         }
         
         method = getClass().getMethod(view.getPageName());
