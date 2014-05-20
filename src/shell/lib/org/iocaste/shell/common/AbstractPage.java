@@ -1,7 +1,9 @@
 package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
@@ -18,11 +20,13 @@ import org.iocaste.protocol.Message;
  */
 public abstract class AbstractPage extends AbstractFunction {
     private PageContext context;
+    private Map<String, ViewCustomAction> customactions;
     
     public AbstractPage() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
         export("custom_validation", "customValidation");
+        customactions = new HashMap<>();
     }
     
     /**
@@ -66,6 +70,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @throws Exception
      */
     public final View execAction(Message message) throws Exception {
+        ViewCustomAction customaction;
         Method method;
         View view = message.get("view");
         String action, controlname = message.getString("action");
@@ -81,8 +86,13 @@ public abstract class AbstractPage extends AbstractFunction {
         validate();
         action = (control == null)? controlname : control.getAction();
         if (!action.equals("validate")) {
-            method = getClass().getMethod(action);
-            method.invoke(this);
+            customaction = customactions.get(action);
+            if (customaction != null) {
+                customaction.execute(context);
+            } else {
+                method = getClass().getMethod(action);
+                method.invoke(this);
+            }
         }
         
         return view;
@@ -185,6 +195,20 @@ public abstract class AbstractPage extends AbstractFunction {
         container = (Container)element;
         for (Element element_ : container.getElements())
             setLocaleForElement(element_, locale);
+    }
+    
+    /**
+     * 
+     * @param action
+     * @param custom
+     */
+    public final void register(String action, ViewCustomAction custom) {
+        if (customactions.containsKey(action))
+            throw new RuntimeException(new StringBuilder("custom action '").
+                    append(action).
+                    append("' has already registered.").toString());
+        
+        customactions.put(action, custom);
     }
     
     protected void validate() { }
