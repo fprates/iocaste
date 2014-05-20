@@ -15,6 +15,7 @@ public class UserServices {
     private static final byte USER = 4;
     private static final byte DEL_USER = 5;
     private static final byte DEL_USER_AUTH = 6;
+    private static final byte USERDATA = 7;
     private static final String[] QUERIES = {
         "insert into USERS001(uname, secrt, fname, sname, init, usrid) " +
                 "values(?, ?, ?, ?, ?, ?)",
@@ -24,7 +25,8 @@ public class UserServices {
                 "where UNAME = ?",
         "select * from USERS001 where UNAME = ?",
         "delete from USERS001 where UNAME = ?",
-        "delete from USERS002 where UNAME = ?"
+        "delete from USERS002 where UNAME = ?",
+        "select UNAME, SECRT, FNAME, SNAME, INIT from USERS001 where UNAME = ?"
     };
     
     @SuppressWarnings("unchecked")
@@ -92,6 +94,32 @@ public class UserServices {
         info.put("connection.time", usrctx.getConnTime());
         
         return info;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static final User getUserData(DBServices db, String username)
+            throws Exception {
+        User user;
+        Connection connection;
+        Object[] lines;
+        Map<String, Object> columns;
+        
+        connection = db.instance();
+        lines = db.select(
+                connection, QUERIES[USERDATA], 1, username.toUpperCase());
+        connection.close();
+        if (lines == null)
+            return null;
+        
+        columns = (Map<String, Object>)lines[0];
+        user = new User();
+        user.setUsername((String)columns.get("UNAME"));
+        user.setFirstname((String)columns.get("FNAME"));
+        user.setSurname((String)columns.get("SNAME"));
+        user.setSecret((String)columns.get("SECRT"));
+        user.setInitialSecret((boolean)columns.get("INIT"));
+        
+        return user;
     }
     
     /**

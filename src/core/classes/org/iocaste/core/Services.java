@@ -32,10 +32,6 @@ public class Services extends AbstractFunction {
     private DBServices db;
     private String host;
     private Properties properties;
-    private static final byte USER = 0;
-    private static final String[] QUERIES = {
-        "select UNAME, SECRT, FNAME, SNAME, INIT from USERS001 where UNAME = ?"
-    };
     
     public Services() {
         sessions = new HashMap<>();
@@ -57,6 +53,7 @@ public class Services extends AbstractFunction {
         export("get_sessions", "getSessions");
         export("get_system_info", "getSystemInfo");
         export("get_system_parameter", "getSystemParameter");
+        export("get_user_data", "getUserData");
         export("get_username", "getUsername");
         export("invalidate_auth_cache", "invalidateAuthCache");
         export("is_authorized", "isAuthorized");
@@ -355,17 +352,10 @@ public class Services extends AbstractFunction {
         return sessions.get(sessionid).getUser().getUsername();
     }
     
-    /**
-     * 
-     * @param columns
-     * @return
-     */
-    private final User getUserFromColumns(Map<String, Object> columns) {
-        User user = new User();
-        user.setUsername((String)columns.get("UNAME"));
-        user.setFirstname((String)columns.get("FNAME"));
-        user.setSurname((String)columns.get("SNAME"));
-        
+    public final User getUserData(Message message) throws Exception {
+        String username = message.getString("username");
+        User user = UserServices.getUserData(db, username);
+        user.setSecret(null);
         return user;
     }
     
@@ -504,16 +494,12 @@ public class Services extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
     public final boolean login(Message message) throws Exception {
         UserContext context;
-        Object[] lines;
-        Map<String, Object> columns;
-        Connection connection;
         Locale locale;
         int terminal;
         List<String> sessionslist;
-        User user = null;
+        User user;
         String[] composed, locale_ = message.getString("locale").split("_");
         String username = message.getString("user");
         String secret = message.getString("secret");
@@ -525,22 +511,9 @@ public class Services extends AbstractFunction {
         if (username.length() > USERNAME_MAX_LEN)
             return false;
 
-        connection = db.instance();
-        lines = db.select(
-                connection, QUERIES[USER], 1, username.toUpperCase());
-        connection.close();
-        if (lines == null)
-            return false;
-        
-        columns = (Map<String, Object>)lines[0];
-        user = getUserFromColumns(columns);
-        user.setSecret((String)columns.get("SECRT"));
+        user = UserServices.getUserData(db, username);
         if (!user.getSecret().equals(secret))
             return false;
-        
-        user.setInitialSecret((boolean)columns.get("INIT"));
-        user.setFirstname((String)columns.get("FNAME"));
-        user.setSurname((String)columns.get("SNAME"));
         
         if (locale_.length == 1)
             locale = new Locale(locale_[0]);

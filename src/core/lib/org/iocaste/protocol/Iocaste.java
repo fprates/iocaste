@@ -23,9 +23,7 @@ public final class Iocaste extends AbstractServiceInterface {
      */
     public final Object callProcedure(String sql, Map<String, Object> in,
             Map<String, Integer> out) {
-        Message message = new Message();
-        
-        message.setId("call_procedure");
+        Message message = new Message("call_procedure");
         message.add("sql", sql);
         message.add("in", in);
         message.add("out", out);
@@ -36,10 +34,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * Aplica commit work à uma transação de banco de dados.
      */
     public final void commit() {
-        Message message = new Message();
-        
-        message.setId("commit");
-        call(message);
+        call(new Message("commit"));
     }
     
     /**
@@ -47,9 +42,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @param userdata nome do usuário
      */
     public final void create(User user) {
-        Message message = new Message();
-        
-        message.setId("create_user");
+        Message message = new Message("create_user");
         message.add("userdata", user);
         call(message);
     }
@@ -58,10 +51,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * Desconecta usuário atual da sessão.
      */
     public final void disconnect() {
-        Message message = new Message();
-        
-        message.setId("disconnect");
-        call(message);
+        call(new Message("disconnect"));
     }
     
     /**
@@ -69,9 +59,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @param username
      */
     public final void dropUser(String username) {
-        Message message = new Message();
-        
-        message.setId("drop_user");
+        Message message = new Message("drop_user");
         message.add("username", username);
         call(message);
     }
@@ -82,9 +70,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return contexto
      */
     public final Object getContext(String name) {
-        Message message = new Message();
-        
-        message.setId("get_context");
+        Message message = new Message("get_context");
         message.add("context_id", name);
         return call(message);
     }
@@ -94,10 +80,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      */
     public final String getCurrentApp() {
-        Message message = new Message();
-        
-        message.setId("get_current_app");
-        return call(message);
+        return call(new Message("get_current_app"));
     }
     
     /**
@@ -105,10 +88,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      */
     public final String getHost() {
-        Message message = new Message();
-        
-        message.setId("get_host");
-        return call(message);
+        return call(new Message("get_host"));
     }
     
     /**
@@ -116,10 +96,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      */
     public final Locale getLocale() {
-        Message message = new Message();
-        
-        message.setId("get_locale");
-        return call(message);
+        return call(new Message("get_locale"));
     }
     
     /**
@@ -128,9 +105,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      */
     public final Map<String, Object> getSessionInfo(String sessionid) {
-        Message message = new Message();
-        
-        message.setId("get_session_info");
+        Message message = new Message("get_session_info");
         message.add("sessionid", sessionid);
         return call(message);
     }
@@ -140,10 +115,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      */
     public final String[] getSessions() {
-        Message message = new Message();
-        
-        message.setId("get_sessions");
-        return call(message);
+        return call(new Message("get_sessions"));
     }
     
     /**
@@ -151,10 +123,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      */
     public final Properties getSystemInfo() {
-        Message message = new Message();
-        
-        message.setId("get_system_info");
-        return call(message);
+        return call(new Message("get_system_info"));
     }
     
     /**
@@ -163,10 +132,19 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      */
     public final String getSystemParameter(String name) {
-        Message message = new Message();
-        
-        message.setId("get_system_parameter");
+        Message message = new Message("get_system_parameter");
         message.add("parameter", name);
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final User getUserData(String name) {
+        Message message = new Message("get_user_data");
+        message.add("username", name);
         return call(message);
     }
     
@@ -175,20 +153,14 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      */
     public final String getUsername() {
-        Message message = new Message();
-        
-        message.setId("get_username");
-        return call(message);
+        return call(new Message("get_username"));
     }
     
     /**
      * 
      */
     public final void invalidateAuthCache() {
-        Message message = new Message();
-        
-        message.setId("invalidate_auth_cache");
-        call(message);
+        call(new Message("invalidate_auth_cache"));
     }
     
     /**
@@ -197,9 +169,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      */
     public final boolean isAuthorized(Authorization authorization) {
-        Message message = new Message();
-        
-        message.setId("is_authorized");
+        Message message = new Message("is_authorized");
         message.add("authorization", authorization);
         return call(message);
     }
@@ -209,17 +179,15 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return true, se usuário está conectado.
      */
     public final boolean isConnected() {
-        Message message = new Message();
-        
-        message.setId("is_connected");
-        return call(message);
+        return call(new Message("is_connected"));
     }
     
+    /**
+     * 
+     * @return
+     */
     public final boolean isInitialSecret() {
-        Message message = new Message();
-        
-        message.setId("is_initial_secret");
-        return call(message);
+        return call(new Message("is_initial_secret"));
     }
     
     /**
@@ -230,9 +198,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return true, se a conexão foi bem sucedida
      */
     public final boolean login(String user, String secret, String locale) {
-        Message message = new Message();
-        
-        message.setId("login");
+        Message message = new Message("login");
         message.add("user", user);
         message.add("secret", secret);
         message.add("locale", locale);
@@ -243,10 +209,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * 
      */
     public final void rollback() {
-        Message message = new Message();
-        
-        message.setId("rollback");
-        call(message);
+        call(new Message("rollback"));
     }
     
     /**
@@ -267,9 +230,7 @@ public final class Iocaste extends AbstractServiceInterface {
      */
     public final Object[] selectUpTo(String query, int rows, Object... criteria) 
     {
-        Message message = new Message();
-        
-        message.setId("select");
+        Message message = new Message("select");
         message.add("query", query);
         message.add("criteria", criteria);
         message.add("rows", rows);
@@ -282,9 +243,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @param object objeto a ser armazenado
      */
     public final void setContext(String name, Object object) {
-        Message message = new Message();
-        
-        message.setId("set_context");
+        Message message = new Message("set_context");
         message.add("context_id", name);
         message.add("object", object);
         call(message);
@@ -295,9 +254,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @param secret
      */
     public final void setUserPassword(String secret) {
-        Message message = new Message();
-        
-        message.setId("set_user_password");
+        Message message = new Message("set_user_password");
         message.add("secret", secret);
         call(message);
     }
@@ -307,9 +264,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @param user
      */
     public final void update(User user) {
-        Message message = new Message();
-        
-        message.setId("update_user");
+        Message message = new Message("update_user");
         message.add("user", user);
         call(message);
     }
@@ -320,9 +275,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * @return
      */
     public final int update(String query, Object... criteria) {
-    	Message message = new Message();
-    	
-    	message.setId("update");
+    	Message message = new Message("update");
     	message.add("query", query);
     	message.add("criteria", criteria);
     	return call(message);
