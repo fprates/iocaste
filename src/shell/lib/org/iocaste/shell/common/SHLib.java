@@ -24,9 +24,7 @@ public class SHLib extends AbstractServiceInterface {
      * @param item item de modelo
      */
     public final void assign(DocumentModelItem item) {
-        Message message = new Message();
-        
-        message.setId("assign");
+        Message message = new Message("assign");
         message.add("model_item", item);
         call(message);
     }
@@ -37,9 +35,7 @@ public class SHLib extends AbstractServiceInterface {
      * @return dados da ajuda de pesquisa
      */
     public final ExtendedObject[] get(String name) {
-        Message message = new Message();
-        
-        message.setId("get");
+        Message message = new Message("get");
         message.add("name", name);
         return call(message);
     }
@@ -50,9 +46,7 @@ public class SHLib extends AbstractServiceInterface {
      * @return 1, se removido com sucesso.
      */
     public final int remove(String name) {
-        Message message = new Message();
-        
-        message.setId("remove");
+        Message message = new Message("remove");
         message.add("shname", name);
         return call(message);
     }
@@ -63,9 +57,7 @@ public class SHLib extends AbstractServiceInterface {
      * @param itens itens da ajuda
      */
     public final void save(ExtendedObject header, ExtendedObject...itens) {
-        Message message = new Message();
-        
-        message.setId("save");
+        Message message = new Message("save");
         message.add("header", header);
         message.add("itens", itens);
         call(message);
@@ -77,9 +69,7 @@ public class SHLib extends AbstractServiceInterface {
      * @return 1, se removido com sucesso
      */
     public final int unassign(String shname) {
-        Message message = new Message();
-        
-        message.setId("unassign");
+        Message message = new Message("unassign");
         message.add("name", shname);
         return call(message);
     }
@@ -90,9 +80,7 @@ public class SHLib extends AbstractServiceInterface {
      * @param itens itens
      */
     public final void update(ExtendedObject header, ExtendedObject... itens) {
-        Message message = new Message();
-        
-        message.setId("update");
+        Message message = new Message("update");
         message.add("header", header);
         message.add("itens", itens);
         call(message);

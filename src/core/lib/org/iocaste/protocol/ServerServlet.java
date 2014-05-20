@@ -78,7 +78,7 @@ public abstract class ServerServlet extends HttpServlet {
             configureStreams(service, context);
             message = service.getMessage();
         } catch (Exception e) {
-            message = new Message();
+            message = new Message(null);
             service.messageException(message, e);
             req.getSession().invalidate();
             return;
@@ -192,11 +192,9 @@ public abstract class ServerServlet extends HttpServlet {
             return;
         
         sessionid = message.getSessionid();
-        test = new Message();
+        test = new Message("is_connected");
         url = new StringBuffer(getServerName(sessionid))
             .append(Iocaste.SERVERNAME).toString();
-        
-        test.setId("is_connected");
         test.add("sessionid", sessionid);
         test.setSessionid(sessionid);
         
