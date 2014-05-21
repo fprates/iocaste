@@ -100,14 +100,13 @@ public class FormRenderer extends Renderer {
         List<XMLElement> tags = new ArrayList<>();
         TrackingData tracking = config.getTracking();
         Service service = new Service(tracking.sessionid, tracking.contexturl);
-        Message message = new Message();
+        Message message = new Message("get_view_data");
         View view = new View("iocaste-search-help", "main");
         StyleSheet stylesheet = config.getView().styleSheetInstance();
         
         view.setParameter("sh", config.getShControl());
         view.setStyleSheet(stylesheet.getElements());
         
-        message.setId("get_view_data");
         message.add("view", view);
         message.add("init", true);
         view = (View)service.call(message);

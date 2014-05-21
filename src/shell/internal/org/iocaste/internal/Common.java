@@ -7,9 +7,7 @@ import org.iocaste.protocol.Service;
 public class Common {
     public static final void commit(String servername, String sessionid) {
         Service service;
-        Message message = new Message();
-        
-        message.setId("commit");
+        Message message = new Message("commit");
         message.setSessionid(sessionid);
         service = new Service(sessionid, new StringBuilder(servername).
                 append(Iocaste.SERVERNAME).toString());
@@ -18,9 +16,7 @@ public class Common {
     
     public static final void rollback(String servername, String sessionid) {
         Service service;
-        Message message = new Message();
-        
-        message.setId("rollback");
+        Message message = new Message("rollback");
         message.setSessionid(sessionid);
         service = new Service(sessionid, new StringBuilder(servername).
                 append(Iocaste.SERVERNAME).toString());

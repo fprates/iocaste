@@ -53,9 +53,7 @@ public class Controller {
         String url = new StringBuilder("/").append(cconfig.view.getAppName()).
                 append("/view.html").toString();
         GenericService service = new GenericService(cconfig.function, url);
-        Message message = new Message();
-        
-        message.setId("custom_validation");
+        Message message = new Message("custom_validation");
         message.add("config", validatorcfg);
         
         try {
