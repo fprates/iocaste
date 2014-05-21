@@ -125,11 +125,11 @@ public abstract class AbstractPage extends AbstractFunction {
             context.view = view;
         
         view.setLocale(locale);
+        customactions.clear();
         if (initializable) {
             context = init(view);
             context.view = view;
             context.function = this;
-            customactions.clear();
         }
         
         method = getClass().getMethod(view.getPageName());
