@@ -13,6 +13,8 @@ public interface Manager {
     public abstract boolean exists(String code);
     public abstract ComplexDocument get(String code);
     public abstract String getMessage(int messageid);
+    public abstract ComplexDocument instance();
     public abstract void save(ExtendedObject head,
             Collection<ExtendedObject[]> items);
+    public abstract void save(ComplexDocument document);
 }
