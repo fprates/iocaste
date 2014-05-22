@@ -21,6 +21,8 @@
 
 package org.iocaste.documents.common;
 
+import java.math.BigDecimal;
+
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
@@ -193,6 +195,56 @@ public class Documents extends AbstractServiceInterface {
         message.add("modelname", modelname);
         message.add("key", key);
         return call(message);
+    }
+    
+    /**
+     * 
+     * @param object
+     * @param name
+     * @return
+     */
+    public static final boolean isInitial(ExtendedObject object, String name) {
+        Object value = object.get(name);
+        DataElement element = object.getModel().getModelItem(name).
+                getDataElement();
+        return isInitial(element, value);
+    }
+    
+    /**
+     * 
+     * @param value
+     * @return
+     */
+    public static final boolean isInitial(String value) {
+        if (value == null)
+            return true;
+        else
+            return (value.toString().trim().length() == 0)? true : false;
+    }
+    
+    /**
+     * 
+     * @param element
+     * @param value
+     * @return
+     */
+    public static final boolean isInitial(DataElement element, Object value) {
+        if (element == null)
+            return isInitial((String)value);
+        
+        switch (element.getType()) {
+        case DataType.BOOLEAN:
+            return (boolean)value;
+            
+        case DataType.NUMC:
+            return (((BigDecimal)value).longValue() == 0l);
+            
+        case DataType.DEC:
+            return (((Number)value).doubleValue() == 0);
+
+        default:
+            return isInitial((String)value);
+        }
     }
     
     /**

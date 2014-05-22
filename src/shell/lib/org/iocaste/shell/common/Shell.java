@@ -1,6 +1,5 @@
 package org.iocaste.shell.common;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -9,6 +8,7 @@ import java.util.Map;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
@@ -215,7 +215,7 @@ public class Shell extends AbstractServiceInterface {
      * @return true, se string for inicial.
      */
     public static final boolean isInitial(String value) {
-        return (value == null || value.trim().length() == 0)? true : false;
+        return Documents.isInitial(value);
     }
     
     /**
@@ -230,22 +230,7 @@ public class Shell extends AbstractServiceInterface {
             return true;
         
         element = getDataElement(input);
-        if (element == null)
-            return Shell.isInitial((String)value);
-        
-        switch (element.getType()) {
-        case DataType.BOOLEAN:
-            return (boolean)value;
-            
-        case DataType.NUMC:
-            return (((BigDecimal)value).longValue() == 0l);
-            
-        case DataType.DEC:
-            return (((Number)value).doubleValue() == 0);
-
-        default:
-            return Shell.isInitial(value.toString());
-        }
+        return Documents.isInitial(element, value);
     }
     
     /**
