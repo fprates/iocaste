@@ -94,8 +94,13 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
         return itens.containsKey(item.getName());
     }
     
+    /**
+     * 
+     * @param name
+     * @return
+     */
     public final boolean contains(String name) {
-        return itens.containsValue(name);
+        return itens.containsKey(name);
     }
     
     /*

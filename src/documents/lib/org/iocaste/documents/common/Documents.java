@@ -243,6 +243,25 @@ public class Documents extends AbstractServiceInterface {
     
     /**
      * 
+     * @param to
+     * @param from
+     */
+    public static final void move(ExtendedObject to, ExtendedObject from) {
+        String name;
+        DocumentModel modelfrom = from.getModel();
+        DocumentModel modelto = to.getModel();
+        
+        for (DocumentModelItem item : modelfrom.getItens()) {
+            name = item.getName();
+            if (!modelto.contains(name))
+                continue;
+            
+            to.set(name, from.get(item));
+        }
+    }
+    
+    /**
+     * 
      * @param name
      * @return
      */
