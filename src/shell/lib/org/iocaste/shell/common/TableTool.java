@@ -38,22 +38,22 @@ public class TableTool {
         Table table;
         
         this.data = data;
-        this.container = new StandardContainer(data.container,
-                data.name.concat("cnt"));
+        container = new StandardContainer(
+                data.container, data.name.concat("cnt"));
         controls = new HashMap<>();
-        controls.put(ADD, new Control(this.container, "add", data.name));
-        controls.put(REMOVE, new Control(this.container, "remove", data.name));
-        controls.put(ACCEPT, new Control(this.container, "accept", data.name));
+        controls.put(ADD,
+                new Control(container, data, "add", new AddAction(this)));
+        controls.put(REMOVE,
+                new Control(container, data, "remove", new RemoveAction(this)));
+        controls.put(ACCEPT,
+                new Control(container, data, "accept", new AcceptAction(this)));
         
-        table = new Table(this.container, data.name);
+        table = new Table(container, data.name);
         table.setMark(true);
         table.setVisibleLines(15);
         columns = new HashMap<>();
         increment = 1;
         last = 0;
-        
-        for (String name : controls.keySet())
-            controls.get(name).setContext(data.context);
     }
     
     public final void accept() {
@@ -463,19 +463,20 @@ public class TableTool {
 
 class Control {
     private String buttonname;
-    private PageContext context;
+    private TableToolData data;
     
-    public Control(Container container, String name, String tname) {
-        buttonname = name.concat(tname);
+    public Control(Container container,
+            TableToolData data, String name, ViewCustomAction action) {
+        AbstractPage page = (AbstractPage)data.context.function;
+        
+        buttonname = name.concat(data.name);
         new Button(container, buttonname);
-    }
-    
-    public final void setContext(PageContext context) {
-        this.context = context;
+        this.data = data;
+        page.register(buttonname, action);
     }
     
     public final void setVisible(boolean visible) {
-        context.view.getElement(buttonname).setVisible(visible);
+        data.context.view.getElement(buttonname).setVisible(visible);
     }
 }
 
@@ -491,4 +492,61 @@ class Column {
     public Map<String, Object> values;
     public TableColumn tcolumn;
     public String action;
+}
+
+class AcceptAction implements ViewCustomAction {
+    private static final long serialVersionUID = 7584322263265534994L;
+    private TableTool ttool;
+    
+    public AcceptAction(TableTool ttool) {
+        this.ttool = ttool;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.ViewCustomAction#execute(
+     *    org.iocaste.shell.common.PageContext)
+     */
+    @Override
+    public void execute(PageContext context) {
+        ttool.accept();
+    }
+}
+
+class AddAction implements ViewCustomAction {
+    private static final long serialVersionUID = 3846006833910298497L;
+    private TableTool ttool;
+    
+    public AddAction(TableTool ttool) {
+        this.ttool = ttool;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.ViewCustomAction#execute(
+     *    org.iocaste.shell.common.PageContext)
+     */
+    @Override
+    public void execute(PageContext context) {
+        ttool.add();
+    }
+}
+
+class RemoveAction implements ViewCustomAction {
+    private static final long serialVersionUID = -7357493784912853491L;
+    private TableTool ttool;
+    
+    public RemoveAction(TableTool ttool) {
+        this.ttool = ttool;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.ViewCustomAction#execute(
+     *    org.iocaste.shell.common.PageContext)
+     */
+    @Override
+    public void execute(PageContext context) {
+        ttool.remove();
+    }
 }
