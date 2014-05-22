@@ -16,18 +16,14 @@ public class DocumentManager extends AbstractServiceInterface {
     }
 
     public final boolean exists(String cmodelname, String code) {
-        Message message = new Message();
-        
-        message.setId("exists");
+        Message message = new Message("exists");
         message.add("cmodel_name", cmodelname);
         message.add("code", code);
         return call(message);
     }
     
     public final ComplexDocument get(String cmodelname, String code) {
-        Message message = new Message();
-        
-        message.setId("get");
+        Message message = new Message("get");
         message.add("cmodel_name", cmodelname);
         message.add("code", code);
         return call(message);
@@ -35,9 +31,7 @@ public class DocumentManager extends AbstractServiceInterface {
     
     public final void save(String cmodelname, ExtendedObject head,
             Collection<ExtendedObject[]> groups) {
-        Message message = new Message();
-        
-        message.setId("save");
+        Message message = new Message("save");
         message.add("cmodel_name", cmodelname);
         message.add("head", head);
         message.add("groups", groups);

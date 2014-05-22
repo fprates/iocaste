@@ -60,9 +60,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, se o modelo foi registrado com sucesso.
      */
     public final int create(ComplexModel cmodel) {
-        Message message = new Message();
-        
-        message.setId("create_complex_model");
+        Message message = new Message("create_complex_model");
         message.add("cmodel", cmodel);
         return call(message);
     }
@@ -76,9 +74,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, se modelo foi registrado com sucesso.
      */
     public final int createModel(DocumentModel model) {
-        Message message = new Message();
-        
-        message.setId("create_model");
+        Message message = new Message("create_model");
         message.add("model", model);
         return call(message);
     }
@@ -88,9 +84,7 @@ public class Documents extends AbstractServiceInterface {
      * @param name nome do objeto.
      */
     public final void createNumberFactory(String name) {
-        Message message = new Message();
-        
-        message.setId("create_number_factory");
+        Message message = new Message("create_number_factory");
         message.add("name", name);
         call(message);
     }
@@ -104,9 +98,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, para remoção bem sucedida.
      */
     public final int delete(ExtendedObject object) {
-        Message message = new Message();
-        
-        message.setId("delete");
+        Message message = new Message("delete");
         message.add("object", object);
         return call(message);
     }
@@ -117,9 +109,7 @@ public class Documents extends AbstractServiceInterface {
      * @param key
      */
     public final void deleteComplexDocument(String cmodelname, Object key) {
-        Message message = new Message();
-        
-        message.setId("delete_complex_document");
+        Message message = new Message("delete_complex_document");
         message.add("cmodel_name", cmodelname);
         message.add("id", key);
         call(message);
@@ -132,9 +122,7 @@ public class Documents extends AbstractServiceInterface {
      * @return
      */
     public final ComplexDocument getComplexDocument(String name, Object id) {
-        Message message = new Message();
-        
-        message.setId("get_complex_document");
+        Message message = new Message("get_complex_document");
         message.add("name", name);
         message.add("id", id);
         return call(message);
@@ -146,9 +134,7 @@ public class Documents extends AbstractServiceInterface {
      * @return
      */
     public final ComplexModel getComplexModel(String name) {
-        Message message = new Message();
-        
-        message.setId("get_complex_model");
+        Message message = new Message("get_complex_model");
         message.add("name", name);
         return call(message);
     }
@@ -169,9 +155,7 @@ public class Documents extends AbstractServiceInterface {
      * @return elemento de dados, null se não encontrado
      */
     public final DataElement getDataElement(String name) {
-        Message message = new Message();
-        
-        message.setId("get_data_element");
+        Message message = new Message("get_data_element");
         message.add("name", name);
         return call(message);
     }
@@ -182,9 +166,7 @@ public class Documents extends AbstractServiceInterface {
      * @return modelo de documento
      */
     public final DocumentModel getModel(String name) {
-        Message message = new Message();
-        
-        message.setId("get_document_model");
+        Message message = new Message("get_document_model");
         message.add("name", name);
         return call(message);
     }
@@ -195,9 +177,7 @@ public class Documents extends AbstractServiceInterface {
      * @return número
      */
     public final long getNextNumber(String range) {
-        Message message = new Message();
-        
-        message.setId("get_next_number");
+        Message message = new Message("get_next_number");
         message.add("range", range);
         return call(message);
     }
@@ -209,9 +189,7 @@ public class Documents extends AbstractServiceInterface {
      * @return objeto encontrado ou null, se não encontrado.
      */
     public final ExtendedObject getObject(String modelname, Object key) {
-        Message message = new Message();
-        
-        message.setId("get_object");
+        Message message = new Message("get_object");
         message.add("modelname", modelname);
         message.add("key", key);
         return call(message);
@@ -228,9 +206,7 @@ public class Documents extends AbstractServiceInterface {
      * @return true, se entrada está bloqueada
      */
     public final boolean isLocked(String model, String key) {
-        Message message = new Message();
-        
-        message.setId("is_locked");
+        Message message = new Message("is_locked");
         message.add("model", model);
         message.add("key", key);
         return call(message);
@@ -248,9 +224,7 @@ public class Documents extends AbstractServiceInterface {
      * @return
      */
     public final int lock(String model, String key) {
-        Message message = new Message();
-        
-        message.setId("lock");
+        Message message = new Message("lock");
         message.add("model", model);
         message.add("key", key);
         return call(message);
@@ -262,9 +236,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, se a entrada foi atualizada com sucesso.
      */
     public final int modify(ExtendedObject object) {
-        Message message = new Message();
-        
-        message.setId("modify");
+        Message message = new Message("modify");
         message.add("object", object);
         return call(message);
     }
@@ -275,9 +247,7 @@ public class Documents extends AbstractServiceInterface {
      * @return
      */
     public final int removeComplexModel(String name) {
-        Message message = new Message();
-        
-        message.setId("remove_complex_model");
+        Message message = new Message("remove_complex_model");
         message.add("name", name);
         return call(message);
     }
@@ -288,9 +258,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, se o modelo foi removido com sucesso.
      */
     public final int removeModel(String name) {
-        Message message = new Message();
-        
-        message.setId("remove_model");
+        Message message = new Message("remove_model");
         message.add("model_name", name);
         return call(message);
     }
@@ -301,9 +269,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, se o objeto foi removido com sucesso.
      */
     public final int removeNumberFactory(String name) {
-        Message message = new Message();
-        
-        message.setId("remove_number_factory");
+        Message message = new Message("remove_number_factory");
         message.add("name", name);
         return call(message);
     }
@@ -315,9 +281,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, se o modelo foi renomeado com sucesso.
      */
     public final int renameModel(String oldname, String newname) {
-        Message message = new Message();
-        
-        message.setId("rename_model");
+        Message message = new Message("rename_model");
         message.add("oldname", oldname);
         message.add("newname", newname);
         return call(message);
@@ -337,9 +301,7 @@ public class Documents extends AbstractServiceInterface {
      * 0, se erro na criação do documento;
      */
     public final void save(ComplexDocument document) {
-        Message message = new Message();
-        
-        message.setId("save_complex_document");
+        Message message = new Message("save_complex_document");
         message.add("document", document);
         call(message);
     }
@@ -350,9 +312,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, se o objeto foi inserido com sucesso.
      */
     public final int save(ExtendedObject object) {
-        Message message = new Message();
-        
-        message.setId("save");
+        Message message = new Message("save");
         message.add("object", object);
         return call(message);
     }
@@ -364,9 +324,7 @@ public class Documents extends AbstractServiceInterface {
      * @return entradas encontradas.
      */
     public final ExtendedObject[] select(Query query) {
-        Message message = new Message();
-        
-        message.setId("select");
+        Message message = new Message("select");
         message.add("query", query);
         return call(message);
     }
@@ -381,9 +339,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, se foi desbloqueado com sucesso.
      */
     public final int unlock(String model, String key) {
-        Message message = new Message();
-        
-        message.setId("unlock");
+        Message message = new Message("unlock");
         message.add("model", model);
         message.add("key", key);
         return call(message);
@@ -396,9 +352,7 @@ public class Documents extends AbstractServiceInterface {
      * @return quantidade de registros atualizados com sucesso.
      */
     public final int update(Query query) {
-        Message message = new Message();
-        
-        message.setId("update");
+        Message message = new Message("update");
         message.add("query", query);
         return call(message);
     }
@@ -410,9 +364,7 @@ public class Documents extends AbstractServiceInterface {
      * @return quantidade de registros atualizados com sucesso.
      */
     public final int update(Query[] queries) {
-        Message message = new Message();
-        
-        message.setId("update_m");
+        Message message = new Message("update_m");
         message.add("queries", queries);
         return call(message);
     }
@@ -423,9 +375,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, se o modelo foi atualizado.
      */
     public final int updateModel(DocumentModel model) {
-        Message message = new Message();
-        
-        message.setId("update_model");
+        Message message = new Message("update_model");
         message.add("model", model);
         return call(message);
     }
@@ -436,9 +386,7 @@ public class Documents extends AbstractServiceInterface {
      * @return
      */
     public final int validate(DocumentModel model) {
-        Message message = new Message();
-        
-        message.setId("validate_model");
+        Message message = new Message("validate_model");
         message.add("model", model);
         return call(message);
     }
