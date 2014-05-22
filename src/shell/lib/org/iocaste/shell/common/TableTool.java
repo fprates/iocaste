@@ -246,6 +246,14 @@ public class TableTool {
         return table.getItems();
     }
     
+    /**
+     * 
+     * @return
+     */
+    public final DocumentModel getModel() {
+        return getTable().getModel();
+    }
+    
     public final ExtendedObject[] getObjects() {
         ExtendedObject[] objects;
         Table table = getTable();
