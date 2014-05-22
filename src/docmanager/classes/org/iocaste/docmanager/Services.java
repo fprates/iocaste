@@ -7,6 +7,7 @@ import java.util.Map;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
@@ -44,8 +45,10 @@ public class Services extends AbstractFunction {
         Map<String, DocumentModel> models;
         DocumentModel model;
         DocumentModelItem headerkey;
-        String itemkey, id, modelname, reference, itemid;
-        int i;
+        String itemkey, modelname, reference, charitemid, charid;
+        long numid, numitemid;
+        int i, keytype;
+        Object id;
         String cmodelname = message.get("cmodel_name");
         ExtendedObject head = message.get("head");
         Collection<ExtendedObject[]> groups = message.get("groups");
@@ -56,14 +59,23 @@ public class Services extends AbstractFunction {
         /*
          * localizamos o código do documento
          */
-        id = null;
         headerkey = null;
         model = cmodel.getHeader();
         headerkey = AbstractManager.getKey(model);
         if (headerkey == null)
             throw new RuntimeException("Header key undefined.");
 
-        id = head.getst(headerkey.getName());
+        id = charid = null;
+        numid = 0;
+        keytype = headerkey.getDataElement().getType();
+        switch (keytype) {
+        case DataType.CHAR:
+            charid = head.getst(headerkey.getName());
+            break;
+        default:
+            numid = head.getl(headerkey.getName());
+            break;
+        }
         
         /*
          * localizamos chaves e referências para preencher
@@ -86,11 +98,23 @@ public class Services extends AbstractFunction {
             if (group == null)
                 continue;
             for (ExtendedObject item : group) {
-                itemid = id.concat(String.format("%02d", i++));
                 modelname = item.getModel().getName();
                 itemkey = keys.get(modelname);
-                item.set(itemkey, itemid);
                 reference = references.get(modelname);
+                switch (keytype) {
+                case DataType.CHAR:
+                    charitemid = charid.concat(String.format("%02d", i));
+                    item.set(itemkey, charitemid);
+                    id = charid;
+                    break;
+                default:
+                    numitemid = (numid * 100) + i;
+                    item.set(itemkey, numitemid);
+                    id = numid;
+                    break;
+                }
+                
+                i++;
                 item.set(reference, id);
             }
             document.add(group);
