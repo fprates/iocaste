@@ -101,6 +101,9 @@ public class TableTool {
         int total = table.length();
         
         if (items == null) {
+            if (vlines == 0)
+                vlines = 15;
+            
             for (int i = 0; i < vlines; i++)
                 additem(table, null, -1);
         } else {
