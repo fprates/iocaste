@@ -1,6 +1,8 @@
 package org.iocaste.dataeditor;
 
+import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.TableItem;
@@ -41,14 +43,26 @@ public class Request {
      * @param context
      */
     public static final void save(Context context) {
+        boolean skip;
+        ExtendedObject object;
         Documents documents = new Documents(context.function);
         
         for (TableItem item : context.deleted)
             documents.delete(item.getObject());
         
         context.deleted.clear();
-        for (TableItem item : context.tablehelper.getItems())
-            documents.modify(item.getObject());
+        for (TableItem item : context.tablehelper.getItems()) {
+            object = item.getObject();
+            skip = false;
+            for (DocumentModelKey key : object.getModel().getKeys())
+                if (Documents.isInitial(object, key.getModelItemName())) {
+                    skip = true;
+                    break;
+                }
+            
+            if (!skip)
+                documents.modify(object);
+        }
         
         context.view.message(Const.STATUS, "entries.saved");
     }

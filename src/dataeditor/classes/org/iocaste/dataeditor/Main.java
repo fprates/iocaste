@@ -7,7 +7,6 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.PageContext;
-import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
@@ -15,14 +14,6 @@ public class Main extends AbstractPage {
     
     public Main() {
         export("install", "install");
-    }
-    
-    public final void acceptitens() {
-        context.tablehelper.accept();
-    }
-    
-    public final void additens() {
-        context.tablehelper.add();
     }
     
     public final void display() {
@@ -103,13 +94,6 @@ public class Main extends AbstractPage {
     
     public final void output() {
         Response.output(context);
-    }
-
-    public final void removeitens() {
-        for (TableItem item : context.tablehelper.getItems())
-            if (item.isSelected())
-                context.deleted.add(item);
-        context.tablehelper.remove();
     }
     
     public final void save() {
