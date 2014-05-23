@@ -219,7 +219,7 @@ public class Documents extends AbstractServiceInterface {
         if (value == null)
             return true;
         else
-            return (value.toString().trim().length() == 0)? true : false;
+            return (value.trim().length() == 0)? true : false;
     }
     
     /**
@@ -243,7 +243,7 @@ public class Documents extends AbstractServiceInterface {
             return (((Number)value).doubleValue() == 0);
 
         default:
-            return isInitial((String)value);
+            return (value == null)? true : isInitial(value.toString());
         }
     }
     
