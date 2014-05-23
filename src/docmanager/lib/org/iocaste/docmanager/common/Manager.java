@@ -11,7 +11,7 @@ public interface Manager {
     public static final int SAVED = 2;
     
     public abstract boolean exists(String code);
-    public abstract ComplexDocument get(String code);
+    public abstract ComplexDocument get(Object code);
     public abstract String getMessage(int messageid);
     public abstract ComplexDocument instance();
     public abstract void save(ExtendedObject head,

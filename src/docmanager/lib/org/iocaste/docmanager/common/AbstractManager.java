@@ -41,7 +41,7 @@ public abstract class AbstractManager implements Manager {
      * @see com.b2b.Manager#get(java.lang.String)
      */
     @Override
-    public final ComplexDocument get(String code) {
+    public final ComplexDocument get(Object code) {
         return docmanager.get(cmodel.getName(), code);
     }
 
@@ -103,8 +103,7 @@ public abstract class AbstractManager implements Manager {
      * @see com.b2b.Manager#save(org.iocaste.documents.common.ComplexDocument)
      */
     @Override
-    public final void save(
-            ExtendedObject head, Collection<ExtendedObject[]> groups) {
+    public void save(ExtendedObject head, Collection<ExtendedObject[]> groups) {
         docmanager.save(cmodel.getName(), head, groups);
     }
     
@@ -114,7 +113,7 @@ public abstract class AbstractManager implements Manager {
      *    org.iocaste.documents.common.ComplexDocument)
      */
     @Override
-    public final void save(ComplexDocument document) {
+    public void save(ComplexDocument document) {
         Collection<ExtendedObject[]> groups = new ArrayList<>();
         
         for (String name : cmodel.getItems().keySet())
