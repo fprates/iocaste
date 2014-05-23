@@ -512,7 +512,7 @@ public class Services extends AbstractFunction {
             return false;
 
         user = UserServices.getUserData(db, username);
-        if (!user.getSecret().equals(secret))
+        if ((user == null) || (!user.getSecret().equals(secret)))
             return false;
         
         if (locale_.length == 1)
