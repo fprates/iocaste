@@ -1,10 +1,10 @@
 package org.iocaste.shell.common;
 
+import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.ServerServlet;
 
-public class IocasteServlet extends ServerServlet {
+public class IocasteServlet extends AbstractIocasteServlet {
     private static final long serialVersionUID = 5705731493914203569L;
     
     /*

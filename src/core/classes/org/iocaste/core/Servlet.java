@@ -4,11 +4,11 @@ package org.iocaste.core;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.ServerServlet;
 
-public class Servlet extends ServerServlet {
+public class Servlet extends AbstractIocasteServlet {
     private static final long serialVersionUID = -8569034003940826582L;
     private Services services;
     

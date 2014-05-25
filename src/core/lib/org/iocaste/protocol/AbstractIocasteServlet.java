@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public abstract class ServerServlet extends HttpServlet {
+public abstract class AbstractIocasteServlet extends HttpServlet {
     private static final long serialVersionUID = 7408336035974886402L;
     private Map<String, Function> functions;
     private Map<String, Map<String, Function>> sfunctions;
@@ -17,7 +17,7 @@ public abstract class ServerServlet extends HttpServlet {
     private Map<String, HttpServletRequest> requests;
     private boolean singleton;
     
-    public ServerServlet() {
+    public AbstractIocasteServlet() {
         functions = new HashMap<>();
         sfunctions = new HashMap<>();
         authorized = new HashMap<>();
@@ -118,6 +118,7 @@ public abstract class ServerServlet extends HttpServlet {
     
     /**
      * 
+     * @param req
      * @return
      */
     public final String getServerName(HttpServletRequest req) {
@@ -126,6 +127,11 @@ public abstract class ServerServlet extends HttpServlet {
                 .append(req.getServerPort()).toString();
     }
     
+    /**
+     * 
+     * @param sessionid
+     * @return
+     */
     protected final String getServerName(String sessionid) {
         HttpServletRequest req = requests.get(sessionid);
         
@@ -134,6 +140,7 @@ public abstract class ServerServlet extends HttpServlet {
     
     /**
      * 
+     * @param req
      * @return
      */
     private final String getUrl(HttpServletRequest req) {

@@ -1,9 +1,9 @@
 package org.iocaste.globalconfig;
 
+import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.ServerServlet;
 
-public class Servlet extends ServerServlet {
+public class Servlet extends AbstractIocasteServlet {
     private static final long serialVersionUID = -9220253306194832587L;
 
     /*

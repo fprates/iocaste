@@ -1,9 +1,9 @@
 package org.iocaste.docmanager;
 
+import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.ServerServlet;
 
-public class Servlet extends ServerServlet {
+public class Servlet extends AbstractIocasteServlet {
     private static final long serialVersionUID = -2369348285176090474L;
     
     /*
