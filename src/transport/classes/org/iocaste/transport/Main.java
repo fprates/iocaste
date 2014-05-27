@@ -23,7 +23,7 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Frame;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
@@ -279,7 +279,7 @@ public class Main extends AbstractPage {
     }
     
     @Override
-    public final PageContext init(View view) {
+    public final AbstractContext init(View view) {
         context = new Context();
         
         return context;
@@ -422,7 +422,7 @@ public class Main extends AbstractPage {
     }
 }
 
-class Context extends PageContext {
+class Context extends AbstractContext {
     public String instructionname;
     public List<String> instructions;
     

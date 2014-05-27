@@ -3,7 +3,7 @@ package org.iocaste.workbench;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.View;
 import org.iocaste.workbench.install.Install;
 import org.iocaste.workbench.shell.WorkbenchShell;
@@ -26,7 +26,7 @@ public class Main extends AbstractPage {
     }
     
     @Override
-    protected PageContext init(View view) throws Exception {
+    protected AbstractContext init(View view) throws Exception {
         context = new Context();
         
         context.repository = Common.composeFileName(

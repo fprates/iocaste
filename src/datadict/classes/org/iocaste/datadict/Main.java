@@ -5,7 +5,7 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.HtmlTag;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
@@ -78,7 +78,7 @@ public class Main extends AbstractPage {
     }
     
     @Override
-    public final PageContext init(View view) {
+    public final AbstractContext init(View view) {
         context = new Context();
         
         return context;

@@ -4,7 +4,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
@@ -49,7 +49,7 @@ public class Main extends AbstractPage {
     }
     
     @Override
-    public final PageContext init(View view) {
+    public final AbstractContext init(View view) {
         Documents documents = new Documents(this);
         
         context = new Context();

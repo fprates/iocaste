@@ -4,7 +4,7 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 
 public class Request {
     
@@ -12,7 +12,7 @@ public class Request {
      * 
      * @param context
      */
-    public static final void grouprun(PageContext context) {
+    public static final void grouprun(AbstractContext context) {
         Iocaste iocaste;
         Authorization authorization;
         String command = ((InputComponent)context.view.

@@ -3,11 +3,11 @@ package org.iocaste.examples;
 import org.iocaste.report.common.Report;
 import org.iocaste.report.common.ReportParameters;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 
 public class Request {
     
-    public static final void pinggo(PageContext context) {
+    public static final void pinggo(AbstractContext context) {
         Examples examples = new Examples(context.function);
         
         for(int i = 0; i < 10000; i++)
@@ -16,7 +16,7 @@ public class Request {
         context.view.message(Const.STATUS, "successfully.pinged");
     }
 
-    public static final byte[] report(PageContext context) {
+    public static final byte[] report(AbstractContext context) {
         Report report = new Report(context.function);
         ReportParameters parameters = new ReportParameters();
         

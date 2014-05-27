@@ -7,7 +7,7 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.View;
 
@@ -37,7 +37,7 @@ public class Main extends AbstractPage {
         return sb.toString();
     }
     
-    public final PageContext init(View view) {
+    public final AbstractContext init(View view) {
         context = new Context();
         context.messages = new HashMap<>();
         context.messages.put("unknown", "desconhecido");

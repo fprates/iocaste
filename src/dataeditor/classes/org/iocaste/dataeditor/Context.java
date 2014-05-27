@@ -6,11 +6,11 @@ import java.util.List;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TableTool;
 
-public class Context extends PageContext {
+public class Context extends AbstractContext {
     public static final byte DISPLAY = 0;
     public static final byte UPDATE = 1;
     public ExtendedObject[] itens;

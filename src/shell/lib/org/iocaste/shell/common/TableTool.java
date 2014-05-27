@@ -511,7 +511,7 @@ class AcceptAction implements ViewCustomAction {
      *    org.iocaste.shell.common.PageContext)
      */
     @Override
-    public void execute(PageContext context) {
+    public void execute(AbstractContext context) {
         ttool.accept();
     }
 }
@@ -530,7 +530,7 @@ class AddAction implements ViewCustomAction {
      *    org.iocaste.shell.common.PageContext)
      */
     @Override
-    public void execute(PageContext context) {
+    public void execute(AbstractContext context) {
         ttool.add();
     }
 }
@@ -549,7 +549,7 @@ class RemoveAction implements ViewCustomAction {
      *    org.iocaste.shell.common.PageContext)
      */
     @Override
-    public void execute(PageContext context) {
+    public void execute(AbstractContext context) {
         ttool.remove();
     }
 }

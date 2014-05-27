@@ -3,7 +3,7 @@ package org.iocaste.tasksel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.View;
 
 public class Common {
@@ -15,7 +15,7 @@ public class Common {
      * @return
      */
     public static final String[] parseCommand(String command,
-            PageContext context) {
+            AbstractContext context) {
         String[] parsed;
         ExtendedObject task;
         

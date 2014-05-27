@@ -19,7 +19,7 @@ import org.iocaste.protocol.Message;
  *
  */
 public abstract class AbstractPage extends AbstractFunction {
-    private PageContext context;
+    private AbstractContext context;
     private Map<String, ViewCustomAction> customactions;
     
     public AbstractPage() {
@@ -176,7 +176,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view
      * @throws Exception
      */
-    protected abstract PageContext init(View view) throws Exception;
+    protected abstract AbstractContext init(View view) throws Exception;
     
     /**
      * Atualiza uma visão, não necessariamente a visão atual.

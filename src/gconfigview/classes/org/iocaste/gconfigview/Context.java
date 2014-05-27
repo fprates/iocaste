@@ -1,9 +1,9 @@
 package org.iocaste.gconfigview;
 
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 
-public class Context extends PageContext {
+public class Context extends AbstractContext {
     public static final byte DISPLAY = 0;
     public static final byte EDIT = 1;
     public static final byte SELECT = 2;

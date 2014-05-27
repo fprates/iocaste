@@ -3,8 +3,8 @@ package org.iocaste.sh;
 import java.util.Map;
 
 import org.iocaste.documents.common.ValueRange;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 
-public class Context extends PageContext {
+public class Context extends AbstractContext {
     public Map<String, ValueRange> criteria;
 }

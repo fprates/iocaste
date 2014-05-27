@@ -9,14 +9,14 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.TextArea;
 
 public class TextEditorTool extends AbstractServiceInterface {
-    private PageContext context;
+    private AbstractContext context;
     public TextEditorTool tetool;
     
-    public TextEditorTool(PageContext context) {
+    public TextEditorTool(AbstractContext context) {
         initService(context.function, InstallData.TXTEDITOR_SERVERNAME);
         this.context = context;
     }

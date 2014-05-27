@@ -3,7 +3,7 @@ package org.iocaste.packagetool;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractPage {
@@ -22,7 +22,7 @@ public class Main extends AbstractPage {
     }
 
     @Override
-    protected final PageContext init(View view) {
+    protected final AbstractContext init(View view) {
         context = new Context();
         context.function = this;
         Response.init(context);

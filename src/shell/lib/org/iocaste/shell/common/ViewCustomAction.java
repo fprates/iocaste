@@ -4,5 +4,5 @@ import java.io.Serializable;
 
 public interface ViewCustomAction extends Serializable {
 
-    public abstract void execute(PageContext context);
+    public abstract void execute(AbstractContext context);
 }

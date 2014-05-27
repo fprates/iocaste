@@ -8,7 +8,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
@@ -151,7 +151,7 @@ public class Main extends AbstractPage {
     }
 
     @Override
-    protected PageContext init(View view) throws Exception {
+    protected AbstractContext init(View view) throws Exception {
         // TODO Stub de método gerado automaticamente
         return null;
     }

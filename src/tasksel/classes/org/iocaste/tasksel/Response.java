@@ -13,7 +13,7 @@ import org.iocaste.shell.common.ExpandBar;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.StyleSheet;
@@ -29,7 +29,7 @@ public class Response {
      * @return
      */
     private static final Map<String, Set<TaskEntry>> getLists(
-            PageContext context) {
+            AbstractContext context) {
         Query query;
         Set<TaskEntry> entries;
         TaskEntry entry;
@@ -80,7 +80,7 @@ public class Response {
         return lists;
     }
     
-    public static final void grouprun(PageContext context) {
+    public static final void grouprun(AbstractContext context) {
         InputComponent input = context.view.getElement("groupcommand");
         String command = input.get();
         String[] parsed = Common.parseCommand(command, context);
@@ -88,7 +88,7 @@ public class Response {
         Common.run(context.view, parsed);
     }
 
-    public static final Map<String, Set<TaskEntry>> init(PageContext context) {
+    public static final Map<String, Set<TaskEntry>> init(AbstractContext context) {
         return getLists(context);
     }
     
@@ -98,7 +98,7 @@ public class Response {
      * @param context
      */
     public static final void main(Map<String, Set<TaskEntry>> lists,
-            PageContext context) {
+            AbstractContext context) {
         short i;
         StandardContainer groups;
         Table table;

@@ -3,11 +3,11 @@ package org.iocaste.workbench;
 import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.PageContext;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.texteditor.common.TextEditor;
 import org.iocaste.texteditor.common.TextEditorTool;
 
-public class Context extends PageContext {
+public class Context extends AbstractContext {
     public static final byte NEW = 0;
     public static final byte EDIT = 1;
     public byte editormode;
