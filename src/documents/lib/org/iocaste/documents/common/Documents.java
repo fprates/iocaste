@@ -198,10 +198,10 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param object
-     * @param name
-     * @return
+     * Verifica se um campo do objeto extendido é inicial.
+     * @param object Objeto extendido
+     * @param name Nome do campo
+     * @return true, se o valor do campo do objeto é inicial.
      */
     public static final boolean isInitial(ExtendedObject object, String name) {
         Object value = object.get(name);
@@ -211,9 +211,9 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param value
-     * @return
+     * Verifica que a valor String é inicial
+     * @param value String
+     * @return true, se a String é nula ou tiver comprimento 0.
      */
     public static final boolean isInitial(String value) {
         if (value == null)
@@ -223,10 +223,10 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param element
-     * @param value
-     * @return
+     * Verifica se um valor do tipo do elemento de dados é inicial.
+     * @param element Elemento de dados
+     * @param value Valor
+     * @return true, se o valor é considerado inicial.
      */
     public static final boolean isInitial(DataElement element, Object value) {
         if (element == null)
@@ -237,7 +237,10 @@ public class Documents extends AbstractServiceInterface {
             return (boolean)value;
             
         case DataType.NUMC:
-            return (((BigDecimal)value).longValue() == 0l);
+            if (value instanceof BigDecimal)
+                return (((BigDecimal)value).longValue() == 0l);
+            else
+                return (((Number)value).longValue() == 0l);
             
         case DataType.DEC:
             return (((Number)value).doubleValue() == 0);
@@ -245,6 +248,20 @@ public class Documents extends AbstractServiceInterface {
         default:
             return (value == null)? true : isInitial(value.toString());
         }
+    }
+    
+    /**
+     * Verifica se objeto extendido é inicial
+     * @param object objeto extendido
+     * @return true, se todos os campos do objeto forem iniciais.
+     */
+    public static final boolean isInitial(ExtendedObject object) {
+        DocumentModel model = object.getModel();
+        for (DocumentModelItem item : model.getItens())
+            if (!isInitial(item.getDataElement(), object.get(item)))
+                return false;
+        
+        return true;
     }
     
     /**
