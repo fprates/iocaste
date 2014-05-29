@@ -31,16 +31,6 @@ public class Link extends AbstractControlComponent {
 
     /**
      * Adiciona parâmetro ao link.
-     * @param parameter nome do parâmetro
-     * @param value valor
-     */
-    @Deprecated
-    public final void add(Parameter parameter, Object value) {
-        values.put(parameter, value);
-    }
-
-    /**
-     * Adiciona parâmetro ao link.
      * @param name nome do parâmetro
      * @param value valor
      */

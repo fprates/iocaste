@@ -9,7 +9,6 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.PageControl;
-import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -45,7 +44,6 @@ public class Response {
         String action;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
-        Parameter parameter = new Parameter(container, "package");
         Table table = new Table(container, "packages");
         
         pagecontrol.add("home");
@@ -63,7 +61,7 @@ public class Response {
             
             link = new Link(table, name, action);
             link.setText(action);
-            link.add(parameter, name);
+            link.add("package", name);
             item.add(link);
         }
 

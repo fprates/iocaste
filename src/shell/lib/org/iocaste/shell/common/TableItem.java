@@ -209,7 +209,7 @@ public class TableItem implements Serializable {
                         column.setParameter(parameter);
                     }
                     
-                    link.add(parameter, value);
+                    link.add(parameter.getName(), value);
                 }
                 continue;
             }
