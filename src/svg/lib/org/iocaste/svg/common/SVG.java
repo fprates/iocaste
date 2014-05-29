@@ -16,9 +16,7 @@ public class SVG extends AbstractServiceInterface {
     }
     
     public final String compile(SVGData svgdata) {
-        Message message = new Message();
-        
-        message.setId("compile");
+        Message message = new Message("compile");
         message.add("data", svgdata);
         return call(message);
     }

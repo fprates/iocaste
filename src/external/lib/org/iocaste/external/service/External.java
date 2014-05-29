@@ -34,9 +34,7 @@ public class External extends AbstractServiceInterface {
      */
     public final ExtendedObject call(WebService ws, String function,
             Map<String, Object> parameters) {
-        Message message = new Message();
-        
-        message.setId("call_service");
+        Message message = new Message("call_service");
         message.add("function", function);
         message.add("parameters", parameters);
         message.add("wsdl", ws.getData());
@@ -48,9 +46,7 @@ public class External extends AbstractServiceInterface {
     public final WebService getWSData(URL wsdl, String wsurl) {
         WebService ws;
         Map<String, Map<String, ExtendedObject[]>> wsdata;
-        Message message = new Message();
-        
-        message.setId("get_ws_data");
+        Message message = new Message("get_ws_data");
         message.add("wsdl", wsdl);
         message.add("url", wsurl);
         

@@ -26,9 +26,7 @@ public class Authority extends AbstractServiceInterface {
      */
     public final void addAuthorization(String profile,
             Authorization authorization) {
-        Message message = new Message();
-        
-        message.setId("add_authorization");
+        Message message = new Message("add_authorization");
         message.add("profile", profile);
         message.add("authorization", authorization);
         call(message);
@@ -40,9 +38,7 @@ public class Authority extends AbstractServiceInterface {
      * @param profile
      */
     public final void assign(String username, String profile) {
-        Message message = new Message();
-        
-        message.setId("assign_profile");
+        Message message = new Message("assign_profile");
         message.add("username", username);
         message.add("profile", profile);
         call(message);
@@ -56,9 +52,7 @@ public class Authority extends AbstractServiceInterface {
      */
     public final void assign(String username, String profile,
             Authorization authorization) {
-        Message message = new Message();
-        
-        message.setId("assign_authorization");
+        Message message = new Message("assign_authorization");
         message.add("username", username);
         message.add("profile", profile);
         message.add("authorization", authorization);
@@ -71,9 +65,7 @@ public class Authority extends AbstractServiceInterface {
      * @return
      */
     public final Authorization get(String name) {
-        Message message = new Message();
-        
-        message.setId("get");
+        Message message = new Message("get");
         message.add("name", name);
         return call(message);
     }
@@ -84,9 +76,7 @@ public class Authority extends AbstractServiceInterface {
      * @return
      */
     public final UserProfile getProfile(String name) {
-        Message message = new Message();
-        
-        message.setId("get_profile");
+        Message message = new Message("get_profile");
         message.add("name", name);
         return call(message);
     }
@@ -97,9 +87,7 @@ public class Authority extends AbstractServiceInterface {
      * @return
      */
     public final Set<String> getUserProfiles(String username) {
-        Message message = new Message();
-        
-        message.setId("get_user_profiles");
+        Message message = new Message("get_user_profiles");
         message.add("username", username);
         return call(message);
     }
@@ -110,9 +98,7 @@ public class Authority extends AbstractServiceInterface {
      * @return
      */
     public final int remove(String name) {
-        Message message = new Message();
-        
-        message.setId("remove");
+        Message message = new Message("remove");
         message.add("name", name);
         return call(message);
     }
@@ -123,9 +109,7 @@ public class Authority extends AbstractServiceInterface {
      * @return 1, se removido com sucesso.
      */
     public final int removeProfile(String name) {
-        Message message = new Message();
-        
-        message.setId("remove_profile");
+        Message message = new Message("remove_profile");
         message.add("name", name);
         return call(message);
     }
@@ -135,9 +119,7 @@ public class Authority extends AbstractServiceInterface {
      * @param authorization
      */
     public final void save(Authorization authorization) {
-        Message message = new Message();
-        
-        message.setId("save");
+        Message message = new Message("save");
         message.add("authorization", authorization);
         call(message);
     }
@@ -147,9 +129,7 @@ public class Authority extends AbstractServiceInterface {
      * @param profile
      */
     public final void save(UserProfile profile) {
-        Message message = new Message();
-        
-        message.setId("save_profile");
+        Message message = new Message("save_profile");
         message.add("profile", profile);
         call(message);
     }

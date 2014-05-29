@@ -15,11 +15,6 @@ public class Message implements Serializable {
         values = new HashMap<>();
         this.id = id;
     }
-    
-    @Deprecated
-    public Message() {
-        values = new HashMap<>();
-    }
 
     /**
      * 
@@ -195,15 +190,6 @@ public class Message implements Serializable {
      */
     public final void setException(Exception ex) {
         this.ex = ex;
-    }
-    
-    /**
-     * 
-     * @param id
-     */
-    @Deprecated
-    public final void setId(String id) {
-        this.id = id;
     }
     
     /**

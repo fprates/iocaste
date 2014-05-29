@@ -17,9 +17,7 @@ public class Report extends AbstractServiceInterface {
      * @return
      */
     public final byte[] getContent(ReportParameters parameters) {
-        Message message = new Message();
-        
-        message.setId("get_content");
+        Message message = new Message("get_content");
         message.add("parameters", parameters);
         return call(message);
     }

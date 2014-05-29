@@ -72,7 +72,6 @@ public class Service {
         ObjectOutputStream oos = new ObjectOutputStream(os);
         
         message.clear();
-        message.setId(null);
         message.add("return", object);
         message.setException(ex);
         

@@ -28,18 +28,14 @@ public class PackageTool extends AbstractServiceInterface {
      * @param username
      */
     public final void assignTaskGroup(String group, String username) {
-        Message message = new Message();
-        
-        message.setId("assign_task_group");
+        Message message = new Message("assign_task_group");
         message.add("group", group);
         message.add("username", username);
         call(message);
     }
     
     public final InstallData dataFromFile(String file) {
-        Message message = new Message();
-        
-        message.setId("data_from_file");
+        Message message = new Message("data_from_file");
         message.add("file", file);
         return call(message);
     }
@@ -73,9 +69,7 @@ public class PackageTool extends AbstractServiceInterface {
                 append(name).
                 append("/view.html").toString();
         GenericService service = new GenericService(function, viewname);
-        Message message = new Message();
-        
-        message.setId("install");
+        Message message = new Message("install");
         message.add("name", name);
         
         return service.invoke(message);
@@ -97,9 +91,7 @@ public class PackageTool extends AbstractServiceInterface {
     }
     
     public final int install(InstallData data, String appname) {
-        Message message = new Message();
-        
-        message.setId("install");
+        Message message = new Message("install");
         message.add("data", data);
         message.add("name", appname);
         return call(message);
@@ -121,9 +113,7 @@ public class PackageTool extends AbstractServiceInterface {
      * @return
      */
     public final boolean isInstalled(String name) {
-        Message message = new Message();
-        
-        message.setId("is_installed");
+        Message message = new Message("is_installed");
         message.add("package", name);
         return call(message);
     }
@@ -133,9 +123,7 @@ public class PackageTool extends AbstractServiceInterface {
      * @param name
      */
     public final void uninstall(String name) {
-        Message message = new Message();
-        
-        message.setId("uninstall");
+        Message message = new Message("uninstall");
         message.add("package", name);
         call(message);
     }

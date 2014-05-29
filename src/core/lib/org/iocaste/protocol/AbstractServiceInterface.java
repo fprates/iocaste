@@ -35,9 +35,7 @@ public abstract class AbstractServiceInterface {
      */
     public final Object callAuthorized(String function,
             Map<String, Object> params) {
-        Message message = new Message();
-        
-        message.setId(function);
+        Message message = new Message(function);
         for (String key : params.keySet())
             message.add(key, params.get(key));
         

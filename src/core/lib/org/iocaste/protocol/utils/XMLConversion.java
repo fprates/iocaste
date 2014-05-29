@@ -16,9 +16,7 @@ public class XMLConversion extends AbstractServiceInterface{
     }
     
     public final ConversionResult conversion(String xml, ConversionRules data) {
-        Message message = new Message();
-        
-        message.setId("conversion");
+        Message message = new Message("conversion");
         message.add("xml", xml);
         message.add("data", data);
         return call(message);

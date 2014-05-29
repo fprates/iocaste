@@ -27,9 +27,7 @@ public class TextEditorTool extends AbstractServiceInterface {
     }
     
     public final Map<Long, String> get(String textnm, long page) {
-        Message message = new Message();
-        
-        message.setId("load");
+        Message message = new Message("load");
         message.add("textname", textnm);
         message.add("pagenr", page);
         return call(message);
@@ -80,9 +78,7 @@ public class TextEditorTool extends AbstractServiceInterface {
     }
     
     public final void update(TextEditor editor, String textnm) {
-        Message message = new Message();
-        
-        message.setId("update");
+        Message message = new Message("update");
         message.add("textname", textnm);
         message.add("editor", editor);
         call(message);
@@ -90,9 +86,7 @@ public class TextEditorTool extends AbstractServiceInterface {
     
     public final void update(String textobj, long page, String text,
             int linesize) {
-        Message message = new Message();
-        
-        message.setId("update_text");
+        Message message = new Message("update_text");
         message.add("textobj", textobj);
         message.add("page", page);
         message.add("text", text);

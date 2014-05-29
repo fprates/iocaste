@@ -12,9 +12,7 @@ public class InstallTexts {
     public static final void init(Set<String> texts, State state) {
         GenericService service = new GenericService(state.function,
                 InstallData.TXTEDITOR_SERVERNAME);
-        Message message = new Message();
-        
-        message.setId("register");
+        Message message = new Message("register");
         for (String name : texts) {
             message.add("name", name);
             service.invoke(message);
@@ -26,9 +24,7 @@ public class InstallTexts {
     public static final void uninstall(String name, Function function) {
         GenericService service = new GenericService(function,
                 InstallData.TXTEDITOR_SERVERNAME);
-        Message message = new Message();
-        
-        message.setId("unregister");
+        Message message = new Message("unregister");
         message.add("name", name);
         service.invoke(message);
     }

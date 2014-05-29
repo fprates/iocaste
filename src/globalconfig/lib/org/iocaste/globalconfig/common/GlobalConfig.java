@@ -37,9 +37,7 @@ public class GlobalConfig extends AbstractServiceInterface {
      */
     public final void define(String appname, String name, Class<?> type,
             Object value) {
-        Message message = new Message();
-        
-        message.setId("define");
+        Message message = new Message("define");
         message.add("appname", appname);
         message.add("name", name);
         message.add("type", type);
@@ -52,9 +50,7 @@ public class GlobalConfig extends AbstractServiceInterface {
      * @return
      */
     public final <T> T get(String name) {
-        Message message = new Message();
-        
-        message.setId("get");
+        Message message = new Message("get");
         message.add("name", name);
         return call(message);
     }
@@ -90,9 +86,7 @@ public class GlobalConfig extends AbstractServiceInterface {
      * @param name
      */
     public final void remove(String name) {
-        Message message = new Message();
-        
-        message.setId("remove");
+        Message message = new Message("remove");
         message.add("name", name);
         call(message);
     }
@@ -103,9 +97,7 @@ public class GlobalConfig extends AbstractServiceInterface {
      * @param value
      */
     public final void set(String name, Object value) {
-        Message message = new Message();
-        
-        message.setId("set");
+        Message message = new Message("set");
         message.add("name", name);
         message.add("value", value);
         call(message);

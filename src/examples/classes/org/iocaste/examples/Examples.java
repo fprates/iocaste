@@ -12,9 +12,6 @@ public class Examples extends AbstractServiceInterface {
     }
     
     public final int ping() {
-        Message message = new Message();
-        
-        message.setId("ping");
-        return call(message);
+        return call(new Message("ping"));
     }
 }

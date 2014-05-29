@@ -71,8 +71,7 @@ public class Main extends AbstractRenderer {
         if (status.error > 0)
             return config.view;
         
-        message = new Message();
-        message.setId("exec_action");
+        message = new Message("exec_action");
         message.add("view", config.view);
         message.setSessionid(config.sessionid);
         
@@ -568,7 +567,7 @@ public class Main extends AbstractRenderer {
         AppContext appctx;
         View viewdata;
         Map<String, Object> parameters;
-        Message message = new Message();
+        Message message = new Message("get_view_data");
 
         appctx = pagectx.getAppContext();
         viewdata = pagectx.getViewData();
@@ -584,7 +583,6 @@ public class Main extends AbstractRenderer {
                 (viewdata == null || pagectx.isReloadableView())) {
             logid = pagectx.getLogid();
             
-            message.setId("get_view_data");
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
             message.add("parameters", pagectx.getParameters());
