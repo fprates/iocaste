@@ -129,6 +129,7 @@ public abstract class AbstractPage extends AbstractFunction {
         
         view.setLocale(locale);
         customactions.clear();
+        customviews.clear();
         if (initializable) {
             context = init(view);
             context.view = view;
