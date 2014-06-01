@@ -61,7 +61,7 @@ public class Response {
             
             link = new Link(table, name, action);
             link.setText(action);
-            link.add("package", name);
+            link.add(container, "package", name);
             item.add(link);
         }
 
