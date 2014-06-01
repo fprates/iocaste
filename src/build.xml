@@ -34,6 +34,9 @@
     	<!-- document-manager -->
     	<ant antfile="${basedir}/src/docmanager/build.xml"/>
     	
+    	<!-- appbuilder -->
+    	<ant antfile="${basedir}/src/appbuilder/build.xml"/>
+    	
         <!-- report -->
         <!-- <ant antfile ="${basedir}/src/report/build.xml"/> -->
     </target>
@@ -132,6 +135,7 @@
     		<fileset dir="${builddir}/svg/lib" excludes="*.jar"/>
     	    <fileset dir="${builddir}/external/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/docmanager/lib/" excludes="*.jar"/>
+    		<fileset dir="${builddir}/appbuilder/lib/" excludes="*.jar"/>
     	<!--    <fileset dir="${builddir}/report/lib" excludes="*.jar"/> -->
     	</copy>
     	

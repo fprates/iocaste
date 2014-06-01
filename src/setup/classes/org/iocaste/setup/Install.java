@@ -19,7 +19,6 @@ public class Install {
         GlobalConfig.install(data);
         Shell.install(data);
         TextEditor.install(data);
-        ApplicationBuilder.install(data);
         
         return data;
     }

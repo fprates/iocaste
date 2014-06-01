@@ -1,4 +1,4 @@
-package org.iocaste.packagetool.common;
+package org.iocaste.appbuilder.common;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,12 +16,11 @@ public class ViewSpecItem implements Serializable {
         TEXT_EDITOR
     };
     
-    private String parent, name, view;
+    private String parent, name;
     private int type;
     private List<ViewSpecItem> items;
     
-    public ViewSpecItem(String view, String parent, TYPES type, String name) {
-        this.view = view;
+    public ViewSpecItem(String parent, TYPES type, String name) {
         this.parent = parent;
         this.type = type.ordinal();
         this.name = name;
@@ -46,9 +45,5 @@ public class ViewSpecItem implements Serializable {
     
     public final int getType() {
         return type;
-    }
-    
-    public final String getView() {
-        return view;
     }
 }
