@@ -21,12 +21,14 @@ import org.iocaste.protocol.Message;
 public abstract class AbstractPage extends AbstractFunction {
     private AbstractContext context;
     private Map<String, ViewCustomAction> customactions;
+    private Map<String, CustomView> customviews;
     
     public AbstractPage() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
         export("custom_validation", "customValidation");
         customactions = new HashMap<>();
+        customviews = new HashMap<>();
     }
     
     /**
@@ -116,6 +118,7 @@ public abstract class AbstractPage extends AbstractFunction {
     public final View getViewData(Message message) throws Exception {
         MessageSource messages;
         Method method;
+        CustomView customview;
         View view = message.get("view");
         boolean initializable = message.getbool("init");
         Iocaste iocaste = new Iocaste(this);
@@ -132,8 +135,14 @@ public abstract class AbstractPage extends AbstractFunction {
             context.function = this;
         }
         
-        method = getClass().getMethod(view.getPageName());
-        method.invoke(this);
+        customview = customviews.get(view.getPageName());
+        if (customview != null) {
+            customview.execute(context);
+        } else {
+            method = getClass().getMethod(view.getPageName());
+            method.invoke(this);
+        }
+        
         if (view.getMessages() == null) {
             /*
              * há alguma chance que getViewData() tenha sido chamada
@@ -210,6 +219,20 @@ public abstract class AbstractPage extends AbstractFunction {
                     append("' has already registered.").toString());
         
         customactions.put(action, custom);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @param custom
+     */
+    public final void register(String view, CustomView custom) {
+        if (customviews.containsKey(view))
+            throw new RuntimeException(new StringBuilder("custom view '").
+                    append(view).
+                    append("' has already registered.").toString());
+        
+        customviews.put(view, custom);
     }
     
     protected void validate() { }
