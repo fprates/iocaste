@@ -140,7 +140,14 @@ public class Uninstall {
             return;
         }
         
-        if (modeltype.equals("DATA_ELEMENT"))
+        if (modeltype.equals("DATA_ELEMENT")) {
             documents.delete(object);
+            return;
+        }
+        
+        if (modeltype.equals("APP_BUILDER_VIEWS")) {
+            InstallViewSpecs.delete(name, documents);
+            documents.delete(object);
+        }
     }
 }

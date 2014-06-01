@@ -36,6 +36,7 @@ public class InstallData implements Serializable {
     private Map<UserProfile, Set<User>> uprofiles;
     private Set<GlobalConfigData> globalcfg;
     private Set<String> texts;
+    private List<ViewSpec> specs;
     
     public InstallData() {
         models = new LinkedHashMap<>();
@@ -52,6 +53,7 @@ public class InstallData implements Serializable {
         uprofiles = new HashMap<>();
         globalcfg = new HashSet<>();
         texts = new HashSet<>();
+        specs = new ArrayList<>();
     }
     
     /**
@@ -130,6 +132,14 @@ public class InstallData implements Serializable {
      */
     public final void add(TaskGroup taskgroup) {
         tasksgroups.put(taskgroup, new TreeSet<User>());
+    }
+    
+    /**
+     * 
+     * @param viewspec
+     */
+    public final void add(ViewSpec viewspec) {
+        specs.add(viewspec);
     }
     
     /**
@@ -317,6 +327,14 @@ public class InstallData implements Serializable {
      */
     public final List<Object[]> getValues(DocumentModel model) {
         return values.get(model);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final List<ViewSpec> getViewSpecs() {
+        return specs;
     }
     
     /**

@@ -1,6 +1,7 @@
 package org.iocaste.packagetool;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.packagetool.common.TaskGroup;
+import org.iocaste.packagetool.common.ViewSpec;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
@@ -105,6 +107,7 @@ public class Services extends AbstractFunction {
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
         Map<String, DocumentModel> models;
+        List<ViewSpec> viewspecs;
         ComplexModel[] cmodels;
         SearchHelpData[] shdata;
         Authorization[] authorizations;
@@ -231,6 +234,13 @@ public class Services extends AbstractFunction {
             texts = state.data.getTexts();
             if (texts.size() > 0)
                 InstallTexts.init(texts, state);
+            
+            /*
+             * registra especificações de visões
+             */
+            viewspecs = state.data.getViewSpecs();
+            if (viewspecs.size() > 0)
+                InstallViewSpecs.init(viewspecs, state);
             
             /*
              * grava itens instalados
