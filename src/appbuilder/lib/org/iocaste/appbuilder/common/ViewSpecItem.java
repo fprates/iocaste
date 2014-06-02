@@ -13,7 +13,8 @@ public class ViewSpecItem implements Serializable {
         TABBED_PANE,
         TABBED_PANE_ITEM,
         STANDARD_CONTAINER,
-        TEXT_EDITOR
+        TEXT_EDITOR,
+        TABLE_TOOL
     };
     
     private String parent, name;

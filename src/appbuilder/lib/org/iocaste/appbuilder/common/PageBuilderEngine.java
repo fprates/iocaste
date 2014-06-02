@@ -12,6 +12,8 @@ import org.iocaste.shell.common.NavControl;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
+import org.iocaste.shell.common.TableTool;
+import org.iocaste.shell.common.TableToolData;
 import org.iocaste.texteditor.common.TextEditorTool;
 
 public class PageBuilderEngine {
@@ -27,9 +29,11 @@ public class PageBuilderEngine {
             viewspec = viewspecs.get(name);
             viewconfig = context.getViewConfig(name);
             
+            context.addViewComponents(name);
             customview = new BuilderCustomView();
             customview.setViewSpec(viewspec);
             customview.setViewConfig(viewconfig);
+            customview.setName(name);
             ((AbstractPage)context.function).register(name, customview);
         }
     }
@@ -37,8 +41,11 @@ public class PageBuilderEngine {
 
 class BuilderCustomView extends AbstractCustomView {
     private NavControl navcontrol;
+    private String name;
     
     private void buildItem(PageBuilderContext context, ViewSpecItem item) {
+        TableToolData ttdata;
+        ViewComponents viewcomponents;
         Container container = context.view.getElement(item.getParent());
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
         
@@ -57,6 +64,15 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case TABBED_PANE_ITEM:
             new TabbedPaneItem((TabbedPane)container, item.getName());
+            break;
+        case TABLE_TOOL:
+            ttdata = new TableToolData();
+            ttdata.container = container;
+            ttdata.context = context;
+            ttdata.name = item.getName();
+            
+            viewcomponents = context.getViewComponents(name);
+            viewcomponents.tabletools.put(ttdata.name, new TableTool(ttdata));
             break;
         case TEXT_EDITOR:
             
@@ -82,5 +98,9 @@ class BuilderCustomView extends AbstractCustomView {
         
         viewconfig.setNavControl(navcontrol);
         viewconfig.run((PageBuilderContext)context);
+    }
+    
+    public final void setName(String name) {
+        this.name = name;
     }
 }

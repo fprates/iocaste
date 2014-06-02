@@ -9,10 +9,29 @@ import org.iocaste.shell.common.AbstractContext;
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewSpec> viewspecs;
     private Map<String, ViewConfig> viewconfigs;
+    private Map<String, ViewComponents> viewcomponents;
     
     public PageBuilderContext() {
         viewspecs = new HashMap<>();
         viewconfigs = new HashMap<>();
+        viewcomponents = new HashMap<>();
+    }
+    
+    /**
+     * 
+     * @param name
+     */
+    public final void addViewComponents(String name) {
+        viewcomponents.put(name, new ViewComponents());
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final ViewComponents getViewComponents(String name) {
+        return viewcomponents.get(name);
     }
     
     /**

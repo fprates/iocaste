@@ -49,6 +49,10 @@ public abstract class ViewSpec implements Serializable {
         put(parent, ViewSpecItem.TYPES.TABBED_PANE_ITEM, name);
     }
     
+    protected final void tableTool(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.TABLE_TOOL, name);
+    }
+    
     protected final void standardContainer(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.STANDARD_CONTAINER, name);
     }
