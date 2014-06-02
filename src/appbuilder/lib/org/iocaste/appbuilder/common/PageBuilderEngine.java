@@ -24,16 +24,19 @@ public class PageBuilderEngine {
         Map<String, ViewSpec> viewspecs;
         ViewSpec viewspec;
         ViewConfig viewconfig;
+        ViewInput viewinput;
 
         viewspecs = context.getViewSpecs();
         for (String name : viewspecs.keySet()) {
             viewspec = viewspecs.get(name);
             viewconfig = context.getViewConfig(name);
+            viewinput = context.getViewInput(name);
             
             context.addViewComponents(name);
             customview = new BuilderCustomView();
             customview.setViewSpec(viewspec);
             customview.setViewConfig(viewconfig);
+            customview.setViewInput(viewinput);
             customview.setName(name);
             ((AbstractPage)context.function).register(name, customview);
         }
@@ -96,13 +99,17 @@ class BuilderCustomView extends AbstractCustomView {
     public void execute(AbstractContext context) {
         ViewSpec viewspec = getViewSpec();
         ViewConfig viewconfig = getViewConfig();
+        ViewInput viewinput = getViewInput();
+        PageBuilderContext _context = (PageBuilderContext)context;
         
         viewspec.execute();
         for (ViewSpecItem item : viewspec.getItems())
             buildItem((PageBuilderContext)context, item);
         
         viewconfig.setNavControl(navcontrol);
-        viewconfig.run((PageBuilderContext)context);
+        viewconfig.run(_context);
+        
+        viewinput.run(_context);
     }
     
     public final void setName(String name) {
