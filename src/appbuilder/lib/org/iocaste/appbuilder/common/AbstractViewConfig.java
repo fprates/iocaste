@@ -4,6 +4,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.NavControl;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
+import org.iocaste.shell.common.TableTool;
 
 public abstract class AbstractViewConfig implements ViewConfig {
     private PageBuilderContext context;
@@ -40,6 +41,18 @@ public abstract class AbstractViewConfig implements ViewConfig {
      */
     protected final TabbedPaneItem getTabbedItem(String tab, String name) {
         return ((TabbedPane)getElement(tab)).get(name);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    protected final TableTool getTableTool(String name) {
+        ViewComponents viewcomponents = context.
+                getViewComponents(context.view.getPageName());
+        
+        return viewcomponents.tabletools.get(name);
     }
     
     /*
