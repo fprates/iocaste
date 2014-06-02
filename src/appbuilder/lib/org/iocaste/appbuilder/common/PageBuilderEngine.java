@@ -36,6 +36,7 @@ public class PageBuilderEngine {
 }
 
 class BuilderCustomView extends AbstractCustomView {
+    private NavControl navcontrol;
     
     private void buildItem(PageBuilderContext context, ViewSpecItem item) {
         Container container = context.view.getElement(item.getParent());
@@ -46,7 +47,7 @@ class BuilderCustomView extends AbstractCustomView {
             new Form(context.view, item.getName());
             break;
         case PAGE_CONTROL:
-            new NavControl((Form)container, context);
+            navcontrol = new NavControl((Form)container, context);
             break;
         case STANDARD_CONTAINER:
             new StandardContainer(container, item.getName());
@@ -73,9 +74,13 @@ class BuilderCustomView extends AbstractCustomView {
     @Override
     public void execute(AbstractContext context) {
         ViewSpec viewspec = getViewSpec();
+        ViewConfig viewconfig = getViewConfig();
         
         viewspec.execute();
         for (ViewSpecItem item : viewspec.getItems())
             buildItem((PageBuilderContext)context, item);
+        
+        viewconfig.setNavControl(navcontrol);
+        viewconfig.run((PageBuilderContext)context);
     }
 }
