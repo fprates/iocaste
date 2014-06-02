@@ -7,34 +7,40 @@ import org.iocaste.documents.common.DocumentModelItem;
 public abstract class AbstractInstallObject {
     private StandardInstallContext context;
     
-    protected final void elementchar(String name, int length, boolean upcase) {
+    protected final DataElement elementchar(
+            String name, int length, boolean upcase) {
         DataElement element = new DataElement(name);
         element.setType(DataType.CHAR);
         element.setLength(length);
         element.setUpcase(upcase);
         context.put(name, element);
+        return element;
     }
     
-    protected final void elementdate(String name) {
+    protected final DataElement elementdate(String name) {
         DataElement element = new DataElement(name);
         element.setType(DataType.DATE);
         context.put(name, element);
+        return element;
     }
     
-    protected final void elementdec(String name, int length, int decimals) {
+    protected final DataElement elementdec(
+            String name, int length, int decimals) {
         DataElement element = new DataElement(name);
         element.setType(DataType.DEC);
         element.setLength(length);
         element.setDecimals(decimals);
         context.put(name, element);
+        return element;
     }
     
-    protected final void elementnumc(String name, int length) {
+    protected final DataElement elementnumc(String name, int length) {
         DataElement element = new DataElement(name);
         
         element.setType(DataType.NUMC);
         element.setLength(length);
         context.put(name, element);
+        return element;
     }
     
     protected abstract void execute(StandardInstallContext context);
