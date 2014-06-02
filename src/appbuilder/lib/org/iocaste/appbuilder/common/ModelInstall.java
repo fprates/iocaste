@@ -16,6 +16,14 @@ public class ModelInstall {
         model = data.getModel(name, table, null);
     }
     
+    public final DocumentModelItem item(String name, DataElement element) {
+        return item(name, null, element);
+    }
+    
+    public final DocumentModelItem item(String name, DocumentModelItem item) {
+        return item(name, null, item.getDataElement());
+    }
+    
     public final DocumentModelItem item(String name, String element) {
         return item(name, null, element);
     }
@@ -40,6 +48,11 @@ public class ModelInstall {
         DocumentModelItem item = item(key, field, element);
         model.add(new DocumentModelKey(item));
         return item;
+    }
+    
+    public final DocumentModelItem reference(
+            String name, DocumentModelItem reference) {
+        return reference(name, null, reference.getDataElement(), reference);
     }
     
     public final DocumentModelItem reference(

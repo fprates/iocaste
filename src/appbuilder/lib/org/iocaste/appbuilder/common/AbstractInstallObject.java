@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.DocumentModelItem;
 
 public abstract class AbstractInstallObject {
     private StandardInstallContext context;
@@ -38,6 +39,10 @@ public abstract class AbstractInstallObject {
     
     protected abstract void execute(StandardInstallContext context);
     
+    protected final DocumentModelItem getItem(String name) {
+        return context.getItem(name);
+    }
+    
     protected final ModelInstall modelInstance(String name) {
         return modelInstance(name, null);
     }
@@ -52,5 +57,9 @@ public abstract class AbstractInstallObject {
     public final void run(StandardInstallContext context) {
         this.context = context;
         execute(context);
+    }
+    
+    public final void setItem(String name, DocumentModelItem item) {
+        context.setItem(name, item);
     }
 }

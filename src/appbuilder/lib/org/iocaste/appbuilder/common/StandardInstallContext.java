@@ -5,9 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.packagetool.common.InstallData;
 
 public class StandardInstallContext {
+    private Map<String, DocumentModelItem> items;
     private Map<String, DataElement> elements;
     private Map<String, AbstractInstallObject> objects;
     private InstallData data;
@@ -16,6 +18,7 @@ public class StandardInstallContext {
         objects = new LinkedHashMap<>();
         elements = new HashMap<>();
         data = new InstallData();
+        items = new HashMap<>();
     }
     
     public final Map<String, DataElement> getElements() {
@@ -24,6 +27,10 @@ public class StandardInstallContext {
     
     public final InstallData getInstallData() {
         return data;
+    }
+    
+    public final DocumentModelItem getItem(String name) {
+        return items.get(name);
     }
     
     public final Map<String, AbstractInstallObject> getObjects() {
@@ -36,5 +43,9 @@ public class StandardInstallContext {
     
     public final void put(String name, DataElement element) {
         elements.put(name, element);
+    }
+    
+    public final void setItem(String name, DocumentModelItem item) {
+        items.put(name, item);
     }
 }
