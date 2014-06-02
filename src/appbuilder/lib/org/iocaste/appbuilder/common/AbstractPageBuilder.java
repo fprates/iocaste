@@ -40,7 +40,6 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     }
     
     public final InstallData install(Message message) {
-        AbstractInstallObject object;
         Map<String, AbstractInstallObject> objects;
         InstallData data;
         String pkgname = message.getString("name");
@@ -55,11 +54,8 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         objects = installcontext.getObjects();
         objects.put("default", defaultinstall);
         data = installcontext.getInstallData();
-        for (String name : objects.keySet()) {
-            object = objects.get(name);
-            object.setInstallData(data);
-            object.execute();
-        }
+        for (String name : objects.keySet())
+            objects.get(name).run(installcontext);
         
         return data;
     }

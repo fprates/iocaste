@@ -1,17 +1,25 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.packagetool.common.InstallData;
 
 public class StandardInstallContext {
+    private Map<String, DataElement> elements;
     private Map<String, AbstractInstallObject> objects;
     private InstallData data;
     
     public StandardInstallContext() {
         objects = new LinkedHashMap<>();
+        elements = new HashMap<>();
         data = new InstallData();
+    }
+    
+    public final Map<String, DataElement> getElements() {
+        return elements;
     }
     
     public final InstallData getInstallData() {
@@ -24,5 +32,9 @@ public class StandardInstallContext {
     
     public final void put(String name, AbstractInstallObject object) {
         objects.put(name, object);
+    }
+    
+    public final void put(String name, DataElement element) {
+        elements.put(name, element);
     }
 }

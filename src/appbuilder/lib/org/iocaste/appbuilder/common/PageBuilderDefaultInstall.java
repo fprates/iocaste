@@ -18,12 +18,12 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     }
     
     @Override
-    public void execute() {
+    public void execute(StandardInstallContext context) {
         TaskGroup taskgroup;
         UserProfile profile;
         String programupcase;
         Authorization authorization;
-        InstallData data = getInstallData();
+        InstallData data = context.getInstallData();
 
         profile = new UserProfile(profilename);
         data.add(profile);
