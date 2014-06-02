@@ -1,13 +1,20 @@
 package org.iocaste.appbuilder.common;
 
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.TableTool;
 
 public abstract class ViewInput {
     private PageBuilderContext context;
     
     protected final void addTableItems(String table) {
-        context.getViewComponents(context.view.getPageName()).tabletools.get(
-                table).additems();
+        TableTool tabletool = context.getViewComponents(
+                context.view.getPageName()).tabletools.get(table);
+        
+        if (tabletool == null)
+            throw new RuntimeException(table.
+                    concat(" is an invalid tabletool."));
+        
+        tabletool.additems();
     }
     
     protected abstract void execute(PageBuilderContext context);
