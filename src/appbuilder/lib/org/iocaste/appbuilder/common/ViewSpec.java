@@ -18,6 +18,10 @@ public abstract class ViewSpec implements Serializable {
     
     public abstract void execute();
     
+    protected final void dataForm(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.DATA_FORM, name);
+    }
+    
     protected final void form(String name) {
         ViewSpecItem item = new ViewSpecItem(
                 "view", ViewSpecItem.TYPES.FORM, name);

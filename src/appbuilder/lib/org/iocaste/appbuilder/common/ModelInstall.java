@@ -44,6 +44,13 @@ public class ModelInstall {
     }
     
     public final DocumentModelItem key(
+            String key, String field, DataElement element) {
+        DocumentModelItem item = item(key, field, element);
+        model.add(new DocumentModelKey(item));
+        return item;
+    }
+    
+    public final DocumentModelItem key(
             String key, String field, String element) {
         DocumentModelItem item = item(key, field, element);
         model.add(new DocumentModelKey(item));

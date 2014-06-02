@@ -7,6 +7,7 @@ import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.NavControl;
 import org.iocaste.shell.common.StandardContainer;
@@ -48,31 +49,35 @@ class BuilderCustomView extends AbstractCustomView {
         ViewComponents viewcomponents;
         Container container = context.view.getElement(item.getParent());
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
+        String name = item.getName();
         
         switch (types[item.getType()]) {
         case FORM:
-            new Form(context.view, item.getName());
+            new Form(context.view, name);
             break;
         case PAGE_CONTROL:
             navcontrol = new NavControl((Form)container, context);
             break;
         case STANDARD_CONTAINER:
-            new StandardContainer(container, item.getName());
+            new StandardContainer(container, name);
             break;
         case TABBED_PANE:
-            new TabbedPane(container, item.getName());
+            new TabbedPane(container, name);
             break;
         case TABBED_PANE_ITEM:
-            new TabbedPaneItem((TabbedPane)container, item.getName());
+            new TabbedPaneItem((TabbedPane)container, name);
             break;
         case TABLE_TOOL:
             ttdata = new TableToolData();
             ttdata.container = container;
             ttdata.context = context;
-            ttdata.name = item.getName();
+            ttdata.name = name;
             
-            viewcomponents = context.getViewComponents(name);
+            viewcomponents = context.getViewComponents(this.name);
             viewcomponents.tabletools.put(ttdata.name, new TableTool(ttdata));
+            break;
+        case DATA_FORM:
+            new DataForm(container, name);
             break;
         case TEXT_EDITOR:
             
