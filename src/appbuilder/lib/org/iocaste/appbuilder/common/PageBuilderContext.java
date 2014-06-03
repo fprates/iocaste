@@ -2,29 +2,46 @@ package org.iocaste.appbuilder.common;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.shell.common.AbstractContext;
 
 public class PageBuilderContext extends AbstractContext {
-    private Map<String, AbstractViewSpec> viewspecs;
-    private Map<String, ViewConfig> viewconfigs;
-    private Map<String, AbstractViewInput> viewinputs;
-    private Map<String, ViewComponents> viewcomponents;
+    private Map<String, ViewContext> viewcontext;
     
     public PageBuilderContext() {
-        viewspecs = new HashMap<>();
-        viewconfigs = new HashMap<>();
-        viewinputs = new HashMap<>();
-        viewcomponents = new HashMap<>();
+        viewcontext = new HashMap<>();
     }
     
     /**
      * 
-     * @param name
+     * @param view
+     * @return
      */
-    public final void addViewComponents(String name) {
-        viewcomponents.put(name, new ViewComponents());
+    public final Set<String> getActions(String view) {
+        
+        return viewcontext.get(view).actionhandlers.keySet();
+    }
+    
+    /**
+     * 
+     * @param view
+     * @param action
+     * @return
+     */
+    public final AbstractActionHandler getActionHandler(String view, String action) {
+        return viewcontext.get(view).actionhandlers.get(action);
+    }
+    
+    private final ViewContext getContext(String view) {
+        ViewContext context = viewcontext.get(view);
+        if (context == null) {
+            context = new ViewContext();
+            viewcontext.put(view, context);
+        }
+        
+        return context;
     }
     
     /**
@@ -33,7 +50,7 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final ViewComponents getViewComponents(String name) {
-        return viewcomponents.get(name);
+        return viewcontext.get(name).viewcomponents;
     }
     
     /**
@@ -42,7 +59,7 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final ViewConfig getViewConfig(String name) {
-        return viewconfigs.get(name);
+        return viewcontext.get(name).viewconfig;
     }
     
     /**
@@ -51,15 +68,34 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final AbstractViewInput getViewInput(String name) {
-        return viewinputs.get(name);
+        return viewcontext.get(name).viewinput;
     }
     
     /**
      * 
      * @return
      */
-    public final Map<String, AbstractViewSpec> getViewSpecs() {
-        return viewspecs;
+    public final Set<String> getViews() {
+        return viewcontext.keySet();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final AbstractViewSpec getViewSpec(String name) {
+        return viewcontext.get(name).viewspec;
+    }
+    
+    /**
+     * 
+     * @param view
+     * @param action
+     * @param handler
+     */
+    public final void setActionHandler(
+            String view, String action, AbstractActionHandler handler) {
+        getContext(view).actionhandlers.put(action, handler);
     }
     
     /**
@@ -68,11 +104,16 @@ public class PageBuilderContext extends AbstractContext {
      * @param config
      */
     public final void setViewConfig(String name, ViewConfig config) {
-        viewconfigs.put(name, config);
+        getContext(name).viewconfig = config;
     }
     
+    /**
+     * 
+     * @param name
+     * @param input
+     */
     public final void setViewInput(String name, AbstractViewInput input) {
-        viewinputs.put(name, input);
+        getContext(name).viewinput = input;
     }
     
     /**
@@ -81,6 +122,19 @@ public class PageBuilderContext extends AbstractContext {
      * @param viewspec
      */
     public final void setViewSpec(String name, AbstractViewSpec viewspec) {
-        viewspecs.put(name, viewspec);
+        getContext(name).viewspec = viewspec;
+    }
+}
+
+class ViewContext {
+    public AbstractViewSpec viewspec;
+    public ViewConfig viewconfig;
+    public AbstractViewInput viewinput;
+    public ViewComponents viewcomponents;
+    public Map<String, AbstractActionHandler> actionhandlers;
+    
+    public ViewContext() {
+        viewcomponents = new ViewComponents();
+        actionhandlers = new HashMap<>();
     }
 }

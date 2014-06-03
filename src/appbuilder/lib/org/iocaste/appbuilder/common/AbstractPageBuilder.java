@@ -42,28 +42,31 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     @Override
     public AbstractContext init(View view) {
         BuilderCustomView customview;
-        Map<String, AbstractViewSpec> viewspecs;
         AbstractViewSpec viewspec;
         ViewConfig viewconfig;
         AbstractViewInput viewinput;
+        AbstractActionHandler handler;
         
         context = config();
         context.view = view;
         context.function = this;
 
-        viewspecs = context.getViewSpecs();
-        for (String name : viewspecs.keySet()) {
-            viewspec = viewspecs.get(name);
+        for (String name : context.getViews()) {
+            viewspec = context.getViewSpec(name);
             viewconfig = context.getViewConfig(name);
             viewinput = context.getViewInput(name);
             
-            context.addViewComponents(name);
             customview = new BuilderCustomView();
             customview.setViewSpec(viewspec);
             customview.setViewConfig(viewconfig);
             customview.setViewInput(viewinput);
             customview.setName(name);
-            ((AbstractPage)context.function).register(name, customview);
+            
+            register(name, customview);
+            for (String action : context.getActions(name)) {
+                handler = context.getActionHandler(name, action);
+                register(action, handler);
+            }
         }
         
         return context;
@@ -163,10 +166,13 @@ class BuilderCustomView extends AbstractCustomView {
         for (ViewSpecItem item : viewspec.getItems())
             buildItem((PageBuilderContext)context, item);
         
-        viewconfig.setNavControl(navcontrol);
-        viewconfig.run(_context);
+        if (viewconfig != null) {
+            viewconfig.setNavControl(navcontrol);
+            viewconfig.run(_context);
+        }
         
-        viewinput.run(_context);
+        if (viewinput != null)
+            viewinput.run(_context);
     }
     
     public final void setName(String name) {
