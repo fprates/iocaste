@@ -7,6 +7,10 @@ import org.iocaste.documents.common.DocumentModelItem;
 public abstract class AbstractInstallObject {
     private StandardInstallContext context;
     
+    protected final ComplexModelInstall cmodelInstance(String name) {
+        return new ComplexModelInstall(name, context);
+    }
+    
     protected final DataElement elementchar(
             String name, int length, boolean upcase) {
         DataElement element = new DataElement(name);
@@ -57,6 +61,7 @@ public abstract class AbstractInstallObject {
         ModelInstall model = new ModelInstall(
                 context.getInstallData(), name, table);
         model.setElements(context.getElements());
+        
         return model;
     }
     
@@ -65,7 +70,13 @@ public abstract class AbstractInstallObject {
         execute(context);
     }
     
-    public final void setItem(String name, DocumentModelItem item) {
+    public final DocumentModelItem tag(String name, DocumentModelItem item) {
         context.setItem(name, item);
+        return item;
+    }
+    
+    public final ModelInstall tag(String tag, ModelInstall model) {
+        context.setModel(tag, model);
+        return model;
     }
 }

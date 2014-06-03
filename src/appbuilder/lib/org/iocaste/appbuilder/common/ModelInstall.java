@@ -16,6 +16,15 @@ public class ModelInstall {
         model = data.getModel(name, table, null);
     }
     
+    public final DocumentModel getModel() {
+        return model;
+    }
+    
+    public final DocumentModelItem item(
+            String name, String field, DocumentModelItem item) {
+        return item(name, field, item.getDataElement());
+    }
+    
     public final DocumentModelItem item(String name, DataElement element) {
         return item(name, null, element);
     }
