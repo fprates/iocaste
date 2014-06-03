@@ -48,6 +48,24 @@ public class Documents extends AbstractServiceInterface {
         initService(function, SERVERNAME);
     }
     
+    public static final void clear(ExtendedObject object, String item) {
+        DocumentModel model = object.getModel();
+        
+        switch (model.getModelItem(item).getDataElement().getType()) {
+        case DataType.BOOLEAN:
+            object.set(item, false);
+            break;
+        case DataType.CHAR:
+        case DataType.DATE:
+        case DataType.TIME:
+            object.set(item, null);
+            break;
+        default:
+            object.set(item, 0);
+            break;
+        }
+    }
+    
     /**
      * Efetua commit.
      */
