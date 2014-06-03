@@ -32,10 +32,10 @@ public class ComplexDocument implements Serializable {
             return;
         
         alias = cmodel.getModelItemName(object.getModel().getName());
-        objects = items.get(alias);
-        if (objects == null)
+        if (alias == null)
             throw new RuntimeException("Invalid object model.");
         
+        objects = items.get(alias);
         objects.add(object);
     }
     
