@@ -15,7 +15,13 @@ public abstract class AbstractActionHandler implements ViewCustomAction {
     
     @Override
     public final void execute(AbstractContext context) {
+        String view = context.view.getPageName();
+        String action = context.view.getActionControl();
+        
         this.context = (PageBuilderContext)context;
+        if (!this.context.hasActionHandler(view, action))
+            return;
+        
         execute(this.context);
     }
 

@@ -30,7 +30,8 @@ public class PageBuilderContext extends AbstractContext {
      * @param action
      * @return
      */
-    public final AbstractActionHandler getActionHandler(String view, String action) {
+    public final AbstractActionHandler getActionHandler(
+            String view, String action) {
         return viewcontext.get(view).actionhandlers.get(action);
     }
     
@@ -81,10 +82,21 @@ public class PageBuilderContext extends AbstractContext {
     
     /**
      * 
+     * @param name
      * @return
      */
     public final AbstractViewSpec getViewSpec(String name) {
         return viewcontext.get(name).viewspec;
+    }
+    
+    /**
+     * 
+     * @param view
+     * @param action
+     * @return
+     */
+    public final boolean hasActionHandler(String view, String action) {
+        return viewcontext.get(view).actionhandlers.containsKey(action);
     }
     
     /**
