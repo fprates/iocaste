@@ -128,9 +128,9 @@ public abstract class AbstractPage extends AbstractFunction {
             context.view = view;
         
         view.setLocale(locale);
-        customactions.clear();
-        customviews.clear();
         if (initializable) {
+            customactions.clear();
+            customviews.clear();
             context = init(view);
             context.view = view;
             context.function = this;
@@ -214,11 +214,6 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param custom
      */
     public final void register(String action, ViewCustomAction custom) {
-        if (customactions.containsKey(action))
-            throw new RuntimeException(new StringBuilder("custom action '").
-                    append(action).
-                    append("' has already registered.").toString());
-        
         customactions.put(action, custom);
     }
     
@@ -228,11 +223,6 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param custom
      */
     public final void register(String view, CustomView custom) {
-        if (customviews.containsKey(view))
-            throw new RuntimeException(new StringBuilder("custom view '").
-                    append(view).
-                    append("' has already registered.").toString());
-        
         customviews.put(view, custom);
     }
     
