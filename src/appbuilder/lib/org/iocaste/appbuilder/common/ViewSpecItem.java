@@ -1,12 +1,10 @@
 package org.iocaste.appbuilder.common;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewSpecItem implements Serializable {
-    private static final long serialVersionUID = -1030482879559951235L;
-
+public class ViewSpecItem {
+    
     public enum TYPES {
         FORM,
         PAGE_CONTROL,

@@ -1,17 +1,15 @@
 package org.iocaste.appbuilder.common;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ViewSpec implements Serializable {
-    private static final long serialVersionUID = -7172737582110561651L;
+public abstract class AbstractViewSpec {
     private Map<String, ViewSpecItem> items;
     private List<ViewSpecItem> sequence;
     
-    public ViewSpec() {
+    public AbstractViewSpec() {
         items = new HashMap<>();
         sequence = new ArrayList<>();
     }

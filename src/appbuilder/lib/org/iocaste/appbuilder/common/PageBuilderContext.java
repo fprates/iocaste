@@ -3,13 +3,13 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.ViewSpec;
+import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.shell.common.AbstractContext;
 
 public class PageBuilderContext extends AbstractContext {
-    private Map<String, ViewSpec> viewspecs;
+    private Map<String, AbstractViewSpec> viewspecs;
     private Map<String, ViewConfig> viewconfigs;
-    private Map<String, ViewInput> viewinputs;
+    private Map<String, AbstractViewInput> viewinputs;
     private Map<String, ViewComponents> viewcomponents;
     
     public PageBuilderContext() {
@@ -50,7 +50,7 @@ public class PageBuilderContext extends AbstractContext {
      * @param name
      * @return
      */
-    public final ViewInput getViewInput(String name) {
+    public final AbstractViewInput getViewInput(String name) {
         return viewinputs.get(name);
     }
     
@@ -58,7 +58,7 @@ public class PageBuilderContext extends AbstractContext {
      * 
      * @return
      */
-    public final Map<String, ViewSpec> getViewSpecs() {
+    public final Map<String, AbstractViewSpec> getViewSpecs() {
         return viewspecs;
     }
     
@@ -71,7 +71,7 @@ public class PageBuilderContext extends AbstractContext {
         viewconfigs.put(name, config);
     }
     
-    public final void setViewInput(String name, ViewInput input) {
+    public final void setViewInput(String name, AbstractViewInput input) {
         viewinputs.put(name, input);
     }
     
@@ -80,7 +80,7 @@ public class PageBuilderContext extends AbstractContext {
      * @param name
      * @param viewspec
      */
-    public final void setViewSpec(String name, ViewSpec viewspec) {
+    public final void setViewSpec(String name, AbstractViewSpec viewspec) {
         viewspecs.put(name, viewspec);
     }
 }

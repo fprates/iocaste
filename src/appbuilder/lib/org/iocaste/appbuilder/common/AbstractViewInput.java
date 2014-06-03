@@ -3,7 +3,7 @@ package org.iocaste.appbuilder.common;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.TableTool;
 
-public abstract class ViewInput {
+public abstract class AbstractViewInput {
     private PageBuilderContext context;
     
     protected final void addTableItems(String table) {

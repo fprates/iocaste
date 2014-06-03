@@ -1,22 +1,22 @@
 package org.iocaste.appbuilder.common;
 
-import org.iocaste.appbuilder.common.ViewSpec;
+import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.shell.common.CustomView;
 
 public abstract class AbstractCustomView implements CustomView {
-    private ViewSpec viewspec;
+    private AbstractViewSpec viewspec;
     private ViewConfig viewconfig;
-    private ViewInput viewinput;
+    private AbstractViewInput viewinput;
     
     protected final ViewConfig getViewConfig() {
         return viewconfig;
     }
     
-    protected final ViewInput getViewInput() {
+    protected final AbstractViewInput getViewInput() {
         return viewinput;
     }
     
-    protected final ViewSpec getViewSpec() {
+    protected final AbstractViewSpec getViewSpec() {
         return viewspec;
     }
 
@@ -24,11 +24,11 @@ public abstract class AbstractCustomView implements CustomView {
         this.viewconfig = viewconfig;
     }
     
-    public final void setViewInput(ViewInput viewinput) {
+    public final void setViewInput(AbstractViewInput viewinput) {
         this.viewinput = viewinput;
     }
     
-    public final void setViewSpec(ViewSpec viewspec) {
+    public final void setViewSpec(AbstractViewSpec viewspec) {
         this.viewspec = viewspec;
     }
 
