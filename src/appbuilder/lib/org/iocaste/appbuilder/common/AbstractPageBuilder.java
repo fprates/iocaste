@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
@@ -16,6 +17,7 @@ import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.TableTool;
 import org.iocaste.shell.common.TableToolData;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.ViewCustomAction;
 
 public abstract class AbstractPageBuilder extends AbstractPage {
     private PageBuilderContext context;
@@ -46,11 +48,13 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         ViewConfig viewconfig;
         AbstractViewInput viewinput;
         AbstractActionHandler handler;
+        BuilderCustomAction customaction;
         
         context = config();
         context.view = view;
         context.function = this;
 
+        customaction = new BuilderCustomAction();
         for (String name : context.getViews()) {
             viewspec = context.getViewSpec(name);
             viewconfig = context.getViewConfig(name);
@@ -65,7 +69,8 @@ public abstract class AbstractPageBuilder extends AbstractPage {
             register(name, customview);
             for (String action : context.getActions(name)) {
                 handler = context.getActionHandler(name, action);
-                register(action, handler);
+                customaction.addHandler(name, action, handler);
+                register(action, customaction);
             }
         }
         
@@ -177,5 +182,36 @@ class BuilderCustomView extends AbstractCustomView {
     
     public final void setName(String name) {
         this.name = name;
+    }
+}
+
+class BuilderCustomAction implements ViewCustomAction {
+    private static final long serialVersionUID = 2367760748660650540L;
+    private Map<String, Map<String, AbstractActionHandler>> handlers;
+    
+    public BuilderCustomAction() {
+        handlers = new HashMap<>();
+    }
+    
+    public final void addHandler(String view,
+            String action, AbstractActionHandler handler) {
+        Map<String, AbstractActionHandler> actions = handlers.get(view);
+        
+        if (actions == null) {
+            actions = new HashMap<>();
+            handlers.put(view, actions);
+        }
+        
+        actions.put(action, handler);
+    }
+
+    @Override
+    public void execute(AbstractContext context) {
+        String view = context.view.getPageName();
+        String action = context.view.getActionControl();
+        AbstractActionHandler handler = handlers.get(view).get(action);
+        
+        handler.run(context);
+        
     }
 }

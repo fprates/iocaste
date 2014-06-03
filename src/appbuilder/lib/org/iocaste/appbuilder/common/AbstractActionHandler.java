@@ -5,10 +5,8 @@ import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.ViewCustomAction;
 
-public abstract class AbstractActionHandler implements ViewCustomAction {
-    private static final long serialVersionUID = 4793050042995085189L;
+public abstract class AbstractActionHandler {
     private PageBuilderContext context;
     private Manager manager;
     
@@ -17,18 +15,6 @@ public abstract class AbstractActionHandler implements ViewCustomAction {
     }
     
     protected abstract void execute(PageBuilderContext context);
-    
-    @Override
-    public final void execute(AbstractContext context) {
-        String view = context.view.getPageName();
-        String action = context.view.getActionControl();
-        
-        this.context = (PageBuilderContext)context;
-        if (!this.context.hasActionHandler(view, action))
-            return;
-        
-        execute(this.context);
-    }
     
     protected final long getdfi(String dataform, String field) {
         DataForm form = context.view.getElement(dataform);
@@ -51,6 +37,17 @@ public abstract class AbstractActionHandler implements ViewCustomAction {
     
     protected final void managerMessage(Const status, int msgid) {
         context.view.message(status, manager.getMessage(msgid));
+    }
+    
+    public final void run(AbstractContext context) {
+        String view = context.view.getPageName();
+        String action = context.view.getActionControl();
+        
+        this.context = (PageBuilderContext)context;
+        if (!this.context.hasActionHandler(view, action))
+            return;
+        
+        execute(this.context);
     }
     
     public final void setManager(Manager manager) {
