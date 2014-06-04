@@ -6,7 +6,12 @@ import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Const;
 
 public class Validate extends AbstractActionHandler {
-    public String redirect;
+    private String redirect;
+    private ExtendedContext extcontext;
+    
+    public Validate(ExtendedContext extcontext) {
+        this.extcontext = extcontext;
+    }
     
     public final void setRedirect(String redirect) {
         this.redirect = redirect;
@@ -14,9 +19,9 @@ public class Validate extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        String id = getdfkeyst("head");
+        extcontext.id = getdfkeyst("head");
         
-        if (!keyExists(id))
+        if (!keyExists(extcontext.id))
             context.view.redirect(redirect);
         else
             managerMessage(Const.ERROR, Manager.EEXISTS);
