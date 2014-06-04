@@ -47,6 +47,15 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
             name = key.getModelItemName();
             value1 = get(name);
             value2 = object.get(name);
+            if (value1 == null && value2 == null)
+                continue;
+            
+            if (value1 == null)
+                return -1;
+            
+            if (value2 == null)
+                return 1;
+            
             diff = value1.toString().compareTo(value2.toString());
             if (diff == 0)
                 continue;
