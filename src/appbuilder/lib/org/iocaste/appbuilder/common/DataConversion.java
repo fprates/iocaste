@@ -16,6 +16,10 @@ public class DataConversion {
         to = tomodel;
     }
     
+    public DataConversion() {
+        fields = new HashMap<>();
+    }
+    
     public final void constant(String field, Object value) {
         put(field, CONSTANT, value);
     }

@@ -20,10 +20,19 @@ public class DocumentExtractor {
     private Map<String, DataConversion> items;
     private Documents documents;
     
-    public DocumentExtractor(PageBuilderContext context) {
+    public DocumentExtractor(PageBuilderContext context, Manager manager) {
         this.context = context;
+        this.manager = manager;
         items = new HashMap<>();
         documents = new Documents(context.function);
+    }
+    
+    public final void addItems(String tabletool) {
+        addItems(tabletool, null);
+    }
+    
+    public final void addItems(String tabletool, DataConversion conversion) {
+        items.put(tabletool, conversion);
     }
     
     private ExtendedObject conversion(ExtendedObject source,
@@ -87,18 +96,35 @@ public class DocumentExtractor {
         DocumentModel model;
         DataConversion conversion;
         String to;
+        ExtendedObject head;
+        ExtendedObject[] objects;
         Map<String, DocumentModel> models = new HashMap<>();
         String pagename = context.view.getPageName();
         ComplexDocument document = manager.instance();
         DataForm form = context.view.getElement(this.form);
         
-        model = documents.getModel(hconversion.getTo());
-        document.setHeader(conversion(form.getObject(), model, hconversion));
+        if (hconversion == null) {
+            head = form.getObject();
+        } else {
+            to = hconversion.getTo();
+            if (to == null)
+                model = manager.getModel().getHeader();
+            else
+                model = documents.getModel(to);
+            
+            head = conversion(form.getObject(), model, hconversion);
+        }
+        
+        document.setHeader(head);
         for (String name : items.keySet()) {
             tabletool = context.getViewComponents(pagename).
                     tabletools.get(name);
             
-            for (ExtendedObject object : tabletool.getObjects()) {
+            objects = tabletool.getObjects();
+            if (objects == null)
+                continue;
+            
+            for (ExtendedObject object : objects) {
                 conversion = items.get(name);
                 if (conversion == null) {
                     document.add(object);
@@ -127,20 +153,12 @@ public class DocumentExtractor {
         manager.save(document);
     }
     
+    public final void setHeader(String form) {
+        setHeader(form, null);
+    }
+    
     public final void setHeader(String form, DataConversion conversion) {
         this.form = form;
         hconversion = conversion;
-    }
-    
-    public final void setItems(String tabletool) {
-        setItems(tabletool, null);
-    }
-    
-    public final void setItems(String tabletool, DataConversion conversion) {
-        items.put(tabletool, conversion);
-    }
-    
-    public final void setManager(Manager manager) {
-        this.manager = manager;
     }
 }
