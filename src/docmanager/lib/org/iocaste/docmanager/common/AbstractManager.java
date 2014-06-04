@@ -70,6 +70,15 @@ public abstract class AbstractManager implements Manager {
         return (messages == null)? null : messages[messageid];
     }
     
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.docmanager.common.Manager#getModel()
+     */
+    @Override
+    public final ComplexModel getModel() {
+        return cmodel;
+    }
+    
     /**
      * 
      * @param model
