@@ -4,6 +4,7 @@ import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TableTool;
 
@@ -20,6 +21,10 @@ public abstract class AbstractViewInput {
                     concat(" is an invalid tabletool."));
         
         tabletool.additems();
+    }
+    
+    protected <T extends Element> T getElement(String name) {
+        return context.view.getElement(name);
     }
     
     private InputComponent getinput(String form, String item) {

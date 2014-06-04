@@ -10,6 +10,7 @@ import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TableTool;
 
 public class MaintainanceConfig extends AbstractViewConfig {
@@ -22,6 +23,7 @@ public class MaintainanceConfig extends AbstractViewConfig {
     
     @Override
     protected void execute(PageBuilderContext context) {
+        InputComponent input;
         Map<String, DocumentModel> models;
         TableTool tabletool;
         DocumentModelItem[] items;
@@ -36,8 +38,13 @@ public class MaintainanceConfig extends AbstractViewConfig {
         form.setEnabled(false);
         form.importModel(model);
         items = model.getItens();
-        for (DocumentModelItem item : items)
-            form.get(item.getName()).setVisible(model.isKey(item));
+        for (DocumentModelItem item : items) {
+            input = form.get(item.getName());
+            if (model.isKey(item))
+                input.setEnabled(false);
+            else
+                input.setVisible(false);
+        }
         
         form = getElement("base");
         form.importModel(model);
