@@ -29,16 +29,16 @@ public abstract class AbstractManager implements Manager {
     
     /*
      * (não-Javadoc)
-     * @see com.b2b.Manager#exists(java.lang.String)
+     * @see com.b2b.Manager#exists(java.lang.Object)
      */
     @Override
-    public final boolean exists(String code) {
+    public final boolean exists(Object code) {
         return docmanager.exists(cmodel.getName(), code);
     }
 
     /*
      * (não-Javadoc)
-     * @see com.b2b.Manager#get(java.lang.String)
+     * @see com.b2b.Manager#get(java.lang.Object)
      */
     @Override
     public final ComplexDocument get(Object code) {

@@ -11,7 +11,7 @@ public interface Manager {
     public static final int EINVALID = 1;
     public static final int SAVED = 2;
     
-    public abstract boolean exists(String code);
+    public abstract boolean exists(Object code);
     
     public abstract ComplexDocument get(Object code);
     

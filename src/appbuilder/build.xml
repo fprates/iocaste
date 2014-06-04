@@ -7,6 +7,7 @@
             <fileset dir="${builddir}/core/lib"/>
             <fileset dir="${builddir}/shell/lib"/>
         	<fileset dir="${builddir}/documents/lib"/>
+        	<fileset dir="${builddir}/docmanager/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>

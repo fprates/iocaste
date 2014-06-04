@@ -2,9 +2,11 @@ package org.iocaste.appbuilder.common;
 
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.InputComponent;
 
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
@@ -16,23 +18,35 @@ public abstract class AbstractActionHandler {
     
     protected abstract void execute(PageBuilderContext context);
     
+    private InputComponent getdf(String dataform, String field) {
+        return ((DataForm)context.view.getElement(dataform)).get(field);
+    }
+    
     protected final long getdfi(String dataform, String field) {
-        DataForm form = context.view.getElement(dataform);
-        return form.get(field).geti();
+        return getdf(dataform, field).geti();
+    }
+    
+    protected final String getdfkeyst(String dataform) {
+        for (DocumentModelKey key : manager.getModel().getHeader().getKeys())
+            return getdf(dataform, key.getModelItemName()).getst();
+        
+        return null;
     }
     
     protected final long getdfl(String dataform, String field) {
-        DataForm form = context.view.getElement(dataform);
-        return form.get(field).getl();
+        return getdf(dataform, field).getl();
     }
     
     protected final String getdfst(String dataform, String field) {
-        DataForm form = context.view.getElement(dataform);
-        return form.get(field).getst();
+        return getdf(dataform, field).getst();
     }
     
     protected final ComplexDocument getDocument(Object id) {
         return manager.get(id);
+    }
+    
+    protected final boolean keyExists(Object id) {
+        return manager.exists(id);
     }
     
     protected final void managerMessage(Const status, int msgid) {

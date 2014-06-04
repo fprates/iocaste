@@ -15,7 +15,7 @@ public class DocumentManager extends AbstractServiceInterface {
         initService(function, SERVICE);
     }
 
-    public final boolean exists(String cmodelname, String code) {
+    public final boolean exists(String cmodelname, Object code) {
         Message message = new Message("exists");
         message.add("cmodel_name", cmodelname);
         message.add("code", code);
