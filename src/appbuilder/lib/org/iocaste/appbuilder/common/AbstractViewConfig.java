@@ -1,7 +1,6 @@
 package org.iocaste.appbuilder.common;
 
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.NavControl;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.TableTool;
