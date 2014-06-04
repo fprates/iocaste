@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.docmanager.common.Manager;
+
 public abstract class AbstractViewSpec {
     private Map<String, ViewSpecItem> items;
     private List<ViewSpecItem> sequence;
+    private Manager manager;
     
     public AbstractViewSpec() {
         items = new HashMap<>();
@@ -29,6 +32,10 @@ public abstract class AbstractViewSpec {
     
     public final List<ViewSpecItem> getItems() {
         return sequence;
+    }
+    
+    protected final Manager getManager() {
+        return manager;
     }
     
     protected final void navControl(String parent) {
@@ -53,6 +60,10 @@ public abstract class AbstractViewSpec {
     
     protected final void tableTool(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TABLE_TOOL, name);
+    }
+    
+    public final void setManager(Manager manager) {
+        this.manager = manager;
     }
     
     protected final void standardContainer(String parent, String name) {

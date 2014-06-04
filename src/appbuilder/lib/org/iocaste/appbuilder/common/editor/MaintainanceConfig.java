@@ -14,12 +14,7 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TableTool;
 
 public class MaintainanceConfig extends AbstractViewConfig {
-    private Manager manager;
     private String title;
-    
-    public MaintainanceConfig(Manager manager) {
-        this.manager = manager;
-    }
     
     @Override
     protected void execute(PageBuilderContext context) {
@@ -27,6 +22,7 @@ public class MaintainanceConfig extends AbstractViewConfig {
         Map<String, DocumentModel> models;
         TableTool tabletool;
         DocumentModelItem[] items;
+        Manager manager = getManager();
         ComplexModel cmodel = manager.getModel();
         DocumentModel model = cmodel.getHeader();
         NavControl navcontrol = getNavControl();

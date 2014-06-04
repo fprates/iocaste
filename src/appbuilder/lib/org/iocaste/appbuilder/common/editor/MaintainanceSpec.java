@@ -1,19 +1,13 @@
 package org.iocaste.appbuilder.common.editor;
 
 import org.iocaste.appbuilder.common.AbstractViewSpec;
-import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexModel;
 
 public class MaintainanceSpec extends AbstractViewSpec {
-    private Manager manager;
-    
-    public MaintainanceSpec(Manager manager) {
-        this.manager = manager;
-    }
     
     @Override
     public void execute() {
-        ComplexModel model = manager.getModel();
+        ComplexModel model = getManager().getModel();
         
         form("main");
         navControl("main");

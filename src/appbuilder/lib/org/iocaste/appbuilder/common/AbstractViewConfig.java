@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common;
 
+import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
@@ -8,6 +9,7 @@ import org.iocaste.shell.common.TableTool;
 public abstract class AbstractViewConfig implements ViewConfig {
     private PageBuilderContext context;
     private NavControl navcontrol;
+    private Manager manager;
     
     /**
      * 
@@ -22,6 +24,14 @@ public abstract class AbstractViewConfig implements ViewConfig {
      */
     protected final <T extends Element> T getElement(String name) {
         return context.view.getElement(name);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    protected final Manager getManager() {
+        return manager;
     }
     
     /**
@@ -63,6 +73,16 @@ public abstract class AbstractViewConfig implements ViewConfig {
     public final void run(PageBuilderContext context) {
         this.context = context;
         execute(context);
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.appbuilder.common.ViewConfig#setManager(
+     *    org.iocaste.docmanager.common.Manager)
+     */
+    @Override
+    public final void setManager(Manager manager) {
+        this.manager = manager;
     }
     
     /*

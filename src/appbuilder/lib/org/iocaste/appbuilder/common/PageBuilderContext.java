@@ -5,13 +5,22 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractViewSpec;
+import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.AbstractContext;
 
 public class PageBuilderContext extends AbstractContext {
-    private Map<String, ViewContext> viewcontext;
+    private Map<String, ViewContext> viewcontexts;
     
     public PageBuilderContext() {
-        viewcontext = new HashMap<>();
+        viewcontexts = new HashMap<>();
+    }
+    
+    /**
+     * 
+     * @param manager
+     */
+    public final void addManager(String view, Manager manager) {
+        getContext(view).manager = manager;
     }
     
     /**
@@ -20,8 +29,7 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final Set<String> getActions(String view) {
-        
-        return viewcontext.get(view).actionhandlers.keySet();
+        return viewcontexts.get(view).actionhandlers.keySet();
     }
     
     /**
@@ -32,7 +40,7 @@ public class PageBuilderContext extends AbstractContext {
      */
     public final AbstractActionHandler getActionHandler(
             String view, String action) {
-        return viewcontext.get(view).actionhandlers.get(action);
+        return viewcontexts.get(view).actionhandlers.get(action);
     }
     
     /**
@@ -41,10 +49,10 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     private final ViewContext getContext(String view) {
-        ViewContext context = viewcontext.get(view);
+        ViewContext context = viewcontexts.get(view);
         if (context == null) {
             context = new ViewContext();
-            viewcontext.put(view, context);
+            viewcontexts.put(view, context);
         }
         
         return context;
@@ -56,7 +64,7 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final ViewComponents getViewComponents(String name) {
-        return viewcontext.get(name).viewcomponents;
+        return viewcontexts.get(name).viewcomponents;
     }
     
     /**
@@ -65,7 +73,7 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final ViewConfig getViewConfig(String name) {
-        return viewcontext.get(name).viewconfig;
+        return viewcontexts.get(name).viewconfig;
     }
     
     /**
@@ -74,7 +82,7 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final AbstractViewInput getViewInput(String name) {
-        return viewcontext.get(name).viewinput;
+        return viewcontexts.get(name).viewinput;
     }
     
     /**
@@ -82,7 +90,7 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final Set<String> getViews() {
-        return viewcontext.keySet();
+        return viewcontexts.keySet();
     }
     
     /**
@@ -91,7 +99,7 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final AbstractViewSpec getViewSpec(String name) {
-        return viewcontext.get(name).viewspec;
+        return viewcontexts.get(name).viewspec;
     }
     
     /**
@@ -101,7 +109,7 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final boolean hasActionHandler(String view, String action) {
-        return viewcontext.get(view).actionhandlers.containsKey(action);
+        return viewcontexts.get(view).actionhandlers.containsKey(action);
     }
     
     /**
@@ -112,34 +120,42 @@ public class PageBuilderContext extends AbstractContext {
      */
     public final void setActionHandler(
             String view, String action, AbstractActionHandler handler) {
-        getContext(view).actionhandlers.put(action, handler);
+        ViewContext context = getContext(view);
+        handler.setManager(context.manager);
+        context.actionhandlers.put(action, handler);
     }
     
     /**
      * 
-     * @param name
+     * @param view
      * @param config
      */
-    public final void setViewConfig(String name, ViewConfig config) {
-        getContext(name).viewconfig = config;
+    public final void setViewConfig(String view, ViewConfig config) {
+        ViewContext context = getContext(view);
+        config.setManager(context.manager);
+        context.viewconfig = config;
     }
     
     /**
      * 
-     * @param name
+     * @param view
      * @param input
      */
-    public final void setViewInput(String name, AbstractViewInput input) {
-        getContext(name).viewinput = input;
+    public final void setViewInput(String view, AbstractViewInput input) {
+        ViewContext context = getContext(view);
+        input.setManager(context.manager);
+        context.viewinput = input;
     }
     
     /**
      * 
-     * @param name
+     * @param view
      * @param viewspec
      */
-    public final void setViewSpec(String name, AbstractViewSpec viewspec) {
-        getContext(name).viewspec = viewspec;
+    public final void setViewSpec(String view, AbstractViewSpec viewspec) {
+        ViewContext context = getContext(view);
+        viewspec.setManager(context.manager);
+        context.viewspec = viewspec;
     }
 }
 
@@ -148,6 +164,7 @@ class ViewContext {
     public ViewConfig viewconfig;
     public AbstractViewInput viewinput;
     public ViewComponents viewcomponents;
+    public Manager manager;
     public Map<String, AbstractActionHandler> actionhandlers;
     
     public ViewContext() {
