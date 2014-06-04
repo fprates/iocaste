@@ -81,8 +81,4 @@ public abstract class AbstractActionHandler {
     public final void setManager(Manager manager) {
         this.manager = manager;
     }
-    
-    protected final void setParameter(String parameter, Object value) {
-        context.setParameter(parameter, value);
-    }
 }

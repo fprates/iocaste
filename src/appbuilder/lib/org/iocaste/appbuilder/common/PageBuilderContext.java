@@ -9,11 +9,9 @@ import org.iocaste.shell.common.AbstractContext;
 
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewContext> viewcontext;
-    private Map<String, Object> parameters;
     
     public PageBuilderContext() {
         viewcontext = new HashMap<>();
-        parameters = new HashMap<>();
     }
     
     /**
@@ -50,11 +48,6 @@ public class PageBuilderContext extends AbstractContext {
         }
         
         return context;
-    }
-    
-    @SuppressWarnings("unchecked")
-    public final <T> T getParameter(String name) {
-        return (T)parameters.get(name);
     }
     
     /**
@@ -120,15 +113,6 @@ public class PageBuilderContext extends AbstractContext {
     public final void setActionHandler(
             String view, String action, AbstractActionHandler handler) {
         getContext(view).actionhandlers.put(action, handler);
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param value
-     */
-    public final void setParameter(String name, Object value) {
-        parameters.put(name, value);
     }
     
     /**
