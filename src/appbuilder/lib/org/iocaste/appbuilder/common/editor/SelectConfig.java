@@ -9,6 +9,11 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
 
 public class SelectConfig extends AbstractViewConfig {
+    private String action;
+    
+    public SelectConfig(String action) {
+        this.action = action;
+    }
     
     @Override
     protected final void execute(PageBuilderContext context) {
@@ -17,7 +22,7 @@ public class SelectConfig extends AbstractViewConfig {
         DataForm head = getElement("head");
         NavControl navcontrol = getNavControl();
         
-        navcontrol.add("create");
+        navcontrol.add(action);
         head.importModel(model);
         head.setKeyRequired(true);
         for (DocumentModelItem item : model.getItens()) {

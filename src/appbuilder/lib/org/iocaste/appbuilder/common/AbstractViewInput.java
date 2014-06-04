@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -13,6 +14,10 @@ public abstract class AbstractViewInput {
     private Manager manager;
     
     protected final void addTableItems(String table) {
+        addTableItems(table, null);
+    }
+    
+    protected final void addTableItems(String table, ExtendedObject[] objects) {
         TableTool tabletool = context.getViewComponents(
                 context.view.getPageName()).tabletools.get(table);
         
@@ -20,7 +25,7 @@ public abstract class AbstractViewInput {
             throw new RuntimeException(table.
                     concat(" is an invalid tabletool."));
         
-        tabletool.additems();
+        tabletool.setObjects(objects);
     }
     
     protected <T extends Element> T getElement(String name) {
@@ -40,6 +45,10 @@ public abstract class AbstractViewInput {
     
     protected final void set(String form, String item, Object value) {
         getinput(form, item).set(value);
+    }
+    
+    protected final void setdf(String form, ExtendedObject object) {
+        ((DataForm)context.view.getElement(form)).setObject(object);
     }
     
     protected final void setdfkey(String form, Object value) {

@@ -13,8 +13,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TableTool;
 
-public class MaintainanceConfig extends AbstractViewConfig {
-    private String title;
+public class MaintenanceConfig extends AbstractViewConfig {
     
     @Override
     protected void execute(PageBuilderContext context) {
@@ -28,9 +27,7 @@ public class MaintainanceConfig extends AbstractViewConfig {
         NavControl navcontrol = getNavControl();
         DataForm form = getElement("head");
         
-        context.view.setTitle(title);
         navcontrol.add("save");
-        
         form.setEnabled(false);
         form.importModel(model);
         items = model.getItens();
@@ -55,9 +52,5 @@ public class MaintainanceConfig extends AbstractViewConfig {
             tabletool.model(model);
             getTabbedItem("tabs", name).setContainer(tabletool.getContainer());
         }
-    }
-
-    public final void setTitle(String title) {
-        this.title = title;
     }
 }

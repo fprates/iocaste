@@ -3,7 +3,7 @@ package org.iocaste.appbuilder.common.editor;
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.documents.common.ComplexModel;
 
-public class MaintainanceSpec extends AbstractViewSpec {
+public class MaintenanceSpec extends AbstractViewSpec {
     
     @Override
     public void execute() {

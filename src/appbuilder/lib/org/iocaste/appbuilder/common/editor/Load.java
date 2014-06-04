@@ -5,22 +5,25 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Const;
 
-public class Validate extends AbstractActionHandler {
+public class Load extends AbstractActionHandler {
+    private String redirect;
     private ExtendedContext extcontext;
     
-    public Validate(ExtendedContext extcontext) {
+    public Load(ExtendedContext extcontext, String redirect) {
         this.extcontext = extcontext;
+        this.redirect = redirect;
     }
     
     @Override
     protected void execute(PageBuilderContext context) {
         extcontext.id = getdfkeyst("head");
-        extcontext.document = null;
+        extcontext.document = getDocument(extcontext.id);
+        if (extcontext.document == null) {
+            managerMessage(Const.ERROR, Manager.EINVALID);
+            return;
+        }
         
-        if (!keyExists(extcontext.id))
-            context.view.redirect(extcontext.redirect);
-        else
-            managerMessage(Const.ERROR, Manager.EEXISTS);
+        context.view.redirect(redirect);
     }
 
 }

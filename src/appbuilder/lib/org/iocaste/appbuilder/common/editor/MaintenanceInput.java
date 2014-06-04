@@ -2,18 +2,20 @@ package org.iocaste.appbuilder.common.editor;
 
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 
-public class MaintainanceInput extends AbstractViewInput {
+public class MaintenanceInput extends AbstractViewInput {
     private ExtendedContext extcontext;
     
-    public MaintainanceInput(ExtendedContext extcontext) {
+    public MaintenanceInput(ExtendedContext extcontext) {
         this.extcontext = extcontext;
     }
     
     @Override
     protected void execute(PageBuilderContext context) {
+        ComplexModel cmodel;
         DataForm form = getElement("base");
         
         setdfkey("head", extcontext.id);
@@ -23,6 +25,15 @@ public class MaintainanceInput extends AbstractViewInput {
             context.view.setFocus(element);
             break;
         }
+        
+        if (extcontext.document == null)
+            return;
+        
+        setdf("base", extcontext.document.getHeader());
+        cmodel = extcontext.document.getModel();
+        for (String name : cmodel.getItems().keySet())
+            addTableItems(name.concat("_table"), extcontext.document.
+                    getItems(name));
     }
 
 }
