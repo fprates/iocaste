@@ -50,6 +50,7 @@ public class MaintenanceConfig extends AbstractViewConfig {
             model = models.get(name);
             tabletool = getTableTool(name.concat("_table"));
             tabletool.model(model);
+            tabletool.setMode(TableTool.UPDATE);
             getTabbedItem("tabs", name).setContainer(tabletool.getContainer());
         }
     }

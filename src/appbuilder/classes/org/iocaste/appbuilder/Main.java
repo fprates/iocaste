@@ -24,7 +24,7 @@ public class Main extends AbstractPageBuilder {
         AbstractViewSpec selspec, maintenancespec;
         AbstractViewInput maintenanceinput;
         AbstractActionHandler save;
-        String create, create1, edit, edit1;
+        String create, create1, edit, edit1, display, display1, entityaction;
         ExtendedContext extcontext;
         String name = context.view.getParameter("name");
         String cmodel = context.view.getParameter("cmodel");
@@ -35,10 +35,14 @@ public class Main extends AbstractPageBuilder {
         create1 = create.concat("1");
         edit = name.concat("edit");
         edit1 = edit.concat("1");
+        display = name.concat("display");
+        display1 = display.concat("1");
         context.addManager(create, manager);
         context.addManager(create1, manager);
         context.addManager(edit, manager);
         context.addManager(edit1, manager);
+        context.addManager(display, manager);
+        context.addManager(display1, manager);
         
         extcontext = new ExtendedContext();
         extcontext.redirect = create1;
@@ -49,32 +53,27 @@ public class Main extends AbstractPageBuilder {
         maintenanceinput = new MaintenanceInput(extcontext);
         save = new Save();
         
-        /*
-         * create
-         */
-        context.setViewSpec(create, selspec);
-        context.setViewConfig(create, new SelectConfig("create"));
         context.setActionHandler(create, "create", new Validate(extcontext));
-        
-        context.setViewSpec(create1, maintenancespec);
-        context.setViewConfig(create1, maintenanceconfig);
-        context.setViewInput(create1, maintenanceinput);
-        context.setActionHandler(create1, "save", save);
-        
-        /*
-         * edit
-         */
-        context.setViewSpec(edit, selspec);
-        context.setViewConfig(edit, new SelectConfig("edit"));
         context.setActionHandler(edit, "edit", new Load(extcontext, edit1));
+        context.setActionHandler(display, "display",
+                new Load(extcontext, display1));
         
-        context.setViewSpec(edit1, maintenancespec);
-        context.setViewConfig(edit1, maintenanceconfig);
-        context.setViewInput(edit1, maintenanceinput);
-        context.setActionHandler(edit1, "save", save);
+        for (String action : new String[] {"create", "edit", "display"}) {
+            entityaction = name.concat(action);
+            context.setViewSpec(entityaction, selspec);
+            context.setViewConfig(entityaction, new SelectConfig(action));
+        }
         
-//        action = new Load(manager);
-//        context.setActionHandler("partnercreate", "select", action);
+        for (String view : new String[] {create1, edit1}) {
+            context.setViewSpec(view, maintenancespec);
+            context.setViewConfig(view, maintenanceconfig);
+            context.setViewInput(view, maintenanceinput);
+            context.setActionHandler(view, "save", save);
+        }
+
+        context.setViewSpec(display1, maintenancespec);
+        context.setViewConfig(display1, new DisplayConfig());
+        context.setViewInput(display1, maintenanceinput);
     }
     
     @Override
