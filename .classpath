@@ -45,6 +45,7 @@
 	<classpathentry kind="src" path="src/docmanager/classes"/>
 	<classpathentry kind="src" path="src/docmanager/lib"/>
 	<classpathentry kind="src" path="src/appbuilder/lib"/>
+	<classpathentry kind="src" path="src/appbuilder/classes"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/home/francisco.prates/workspace/iocaste/lib-shell/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="lib-external/axiom-api-1.2.12.jar"/>

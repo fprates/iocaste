@@ -17,6 +17,14 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
         links = new HashMap<>();
     }
     
+    private final String buildapplink(
+            String entity, String action, String cmodel) {
+        return new StringBuilder("iocaste-appbuilder @").
+                append(entity).append(action).
+                append(" name=").append(entity).
+                append(" cmodel=").append(cmodel).toString();
+    }
+    
     @Override
     public void execute(StandardInstallContext context) {
         TaskGroup taskgroup;
@@ -54,6 +62,14 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     
     public final void removeLink(String link) {
         links.remove(link);
+    }
+    
+    public final void setAppBuilderLink(
+            String createlink, String displaylink, String changelink,
+            String entity, String cmodel) {
+        links.put(createlink, buildapplink(entity, "create", cmodel));
+        links.put(displaylink, buildapplink(entity, "display", cmodel));
+        links.put(changelink, buildapplink(entity, "edit", cmodel));
     }
     
     public final void setLink(String link, String command) {

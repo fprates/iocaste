@@ -1,4 +1,4 @@
-package org.iocaste.appbuilder.common.editor;
+package org.iocaste.appbuilder;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;

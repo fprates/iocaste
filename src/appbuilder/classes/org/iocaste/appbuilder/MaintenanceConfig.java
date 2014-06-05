@@ -1,4 +1,4 @@
-package org.iocaste.appbuilder.common.editor;
+package org.iocaste.appbuilder;
 
 import java.util.Map;
 

@@ -1,22 +1,35 @@
-package org.iocaste.appbuilder.common.editor;
+package org.iocaste.appbuilder;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
+import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.docmanager.common.Manager;
+import org.iocaste.protocol.Function;
 
-public class ComplexDocumentEditor {
+public class Main extends AbstractPageBuilder {
 
-    public ComplexDocumentEditor(String name, PageBuilderContext context,
-            Manager manager) {
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.appbuilder.common.AbstractPageBuilder#config(
+     *    org.iocaste.appbuilder.common.PageBuilderContext)
+     */
+    @Override
+    public final void config(PageBuilderContext context) {
+        Manager manager;
         MaintenanceConfig maintenanceconfig;
         AbstractViewSpec selspec, maintenancespec;
         AbstractViewInput maintenanceinput;
         AbstractActionHandler save;
         String create, create1, edit, edit1;
         ExtendedContext extcontext;
+        String name = context.view.getParameter("name");
+        String cmodel = context.view.getParameter("cmodel");
 
+        manager = managerInstance(cmodel);
+        
         create = name.concat("create");
         create1 = create.concat("1");
         edit = name.concat("edit");
@@ -62,4 +75,22 @@ public class ComplexDocumentEditor {
 //        action = new Load(manager);
 //        context.setActionHandler("partnercreate", "select", action);
     }
+    
+    private final Manager managerInstance(String cmodel) {
+        return new RuntimeManager(cmodel, this);
+    }
+}
+
+class RuntimeManager extends AbstractManager {
+
+    public RuntimeManager(String cmodelname, Function function) {
+        super(cmodelname, function);
+        String messages[] = new String[3];
+        
+        messages[EEXISTS] = "code.exists";
+        messages[EINVALID] = "invalid.code";
+        messages[SAVED] = "record.saved";
+        setMessages(messages);
+    }
+    
 }
