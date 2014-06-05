@@ -70,6 +70,12 @@ public abstract class AbstractInstallObject {
         execute(context);
     }
     
+    public final DocumentModelItem searchhelp(DocumentModelItem item, String sh)
+    {
+        item.setSearchHelp(sh);
+        return item;
+    }
+    
     public final DocumentModelItem tag(String name, DocumentModelItem item) {
         context.setItem(name, item);
         return item;
