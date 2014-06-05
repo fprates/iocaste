@@ -9,7 +9,8 @@ public class Packages {
             "iocaste-packagetool",
             "iocaste-tasksel",
             "iocaste-setup",
-            "iocaste-search-help"
+            "iocaste-search-help",
+            "iocaste-appbuilder"
             };
 
     public static final void install(Function function) {
