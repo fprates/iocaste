@@ -44,7 +44,7 @@ public class NavControl {
     private final void build(AbstractContext context) {
         Text text;
         Link link;
-        String name;
+        String name, title;
         Iocaste iocaste;
         PageStackItem[] positions;
         User user;
@@ -82,11 +82,14 @@ public class NavControl {
             page.register(name, new NavControlCustomAction(name));
             link = new Link(container, name, name);
             link.setStyleClass("nc_nav_link");
-            link.setText(position.getTitle());
+            title = position.getTitle();
+            if (title == null)
+                title = name;
+            link.setText(title);
             link.setCancellable(true);
             
             text = new Text(container, name.concat(".separator"));
-            text.setText(">");
+            text.setText("&gt;");
             text.setStyleClass("nc_text");
         }
 

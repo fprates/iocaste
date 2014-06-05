@@ -36,6 +36,7 @@ public class DisplayConfig extends AbstractViewConfig {
                 for (DocumentModelItem item : items)
                     form.get(item.getName()).setVisible(!model.isKey(item));
                 getTabbedItem("tabs", "basetab").setContainer(form);
+                break;
             }
         }
         
