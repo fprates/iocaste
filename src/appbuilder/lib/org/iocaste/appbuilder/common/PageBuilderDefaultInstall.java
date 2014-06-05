@@ -10,7 +10,7 @@ import org.iocaste.protocol.user.UserProfile;
 
 public class PageBuilderDefaultInstall extends AbstractInstallObject {
     private Map<String, String> links;
-    private String pkgname, profilename, taskgroupname;
+    private String pkgname, profilename, taskgroupname, programauth;
 
     public PageBuilderDefaultInstall(String pkgname) {
         this.pkgname = pkgname;
@@ -29,30 +29,33 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     public void execute(StandardInstallContext context) {
         TaskGroup taskgroup;
         UserProfile profile;
-        String programupcase;
         Authorization authorization;
         InstallData data = context.getInstallData();
 
         profile = new UserProfile(profilename);
         data.add(profile);
         
-        taskgroup = new TaskGroup(taskgroupname);
-        data.add(taskgroup);
-        
-        for (String link : links.keySet()) {
-            authorization = new Authorization(link.concat(".CALL"));
-            authorization.setAction("CALL");
-            authorization.setObject("LINK");
-            authorization.add("LINK", link);
-            data.add(authorization);
-            profile.add(authorization);
+        if (taskgroupname != null) {
+            taskgroup = new TaskGroup(taskgroupname);
+            data.add(taskgroup);
             
-            data.link(link, links.get(link));
-            taskgroup.add(link);
+            for (String link : links.keySet()) {
+                authorization = new Authorization(link.concat(".CALL"));
+                authorization.setAction("CALL");
+                authorization.setObject("LINK");
+                authorization.add("LINK", link);
+                data.add(authorization);
+                profile.add(authorization);
+                
+                data.link(link, links.get(link));
+                taskgroup.add(link);
+            }
         }
         
-        programupcase = pkgname.toUpperCase();
-        authorization = new Authorization(programupcase.concat("EXECUTE"));
+        if (programauth == null)
+            programauth = pkgname.toUpperCase().concat(".EXECUTE");
+        
+        authorization = new Authorization(programauth);
         authorization.setAction("EXECUTE");
         authorization.setObject("APPLICATION");
         authorization.add("APPNAME", pkgname);
@@ -78,6 +81,10 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     
     public final void setProfile(String profile) {
         profilename = profile;
+    }
+    
+    public final void setProgramAuthorization(String programauth) {
+        this.programauth = programauth;
     }
     
     public final void setTaskGroup(String taskgroup) {

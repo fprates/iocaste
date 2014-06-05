@@ -5,6 +5,7 @@ import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.protocol.Function;
@@ -74,6 +75,14 @@ public class Main extends AbstractPageBuilder {
         
 //        action = new Load(manager);
 //        context.setActionHandler("partnercreate", "select", action);
+    }
+    
+    @Override
+    protected final void installConfig(PageBuilderDefaultInstall defaultinstall)
+    {
+        defaultinstall.setProfile("APPBUILDER");
+        defaultinstall.setTaskGroup(null);
+        defaultinstall.setProgramAuthorization("APPBUILDER.EXECUTE");
     }
     
     private final Manager managerInstance(String cmodel) {
