@@ -11,8 +11,10 @@ import org.iocaste.packagetool.common.InstallData;
 public class ModelInstall {
     private DocumentModel model;
     private Map<String, DataElement> elements;
+    private InstallData data;
     
     public ModelInstall(InstallData data, String name, String table) {
+        this.data = data;
         model = data.getModel(name, table, null);
     }
     
@@ -98,5 +100,9 @@ public class ModelInstall {
     
     public final void setElements(Map<String, DataElement> elements) {
         this.elements = elements;
+    }
+    
+    public final void values(Object... values) {
+        data.addValues(model, values);
     }
 }
