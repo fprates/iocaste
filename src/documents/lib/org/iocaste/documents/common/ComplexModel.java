@@ -6,6 +6,25 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 
+/**
+ * <p>Specifies a contract to instantiate a ComplexDocument.</p>
+ * 
+ * <p>ComplexModel is organized in a header and one or several
+ * items groups.</p>
+ * 
+ * <p>The structure of a ComplexModel is documented below:</p>
+ * 
+ * <p>ComplexModel<br/>
+ * - header (DocumentModel)<br/>
+ * - items groups<br/>
+ * -- group 1 (DocumentModel 1)<br/>
+ * -- group 2 (DocumentModel 2)<br/>
+ * -- ...<br/>
+ * -- group n (DocumentModel n)<br/></p>
+ * 
+ * @author francisco.prates
+ *
+ */
 public class ComplexModel implements Serializable, Comparable<ComplexModel> {
     private static final long serialVersionUID = -2741081537248227705L;
     private String name;
@@ -49,28 +68,54 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
         return name.equals(cmodel.getName());
     }
     
+    /**
+     * Get the header model
+     * @return model
+     */
     public final DocumentModel getHeader() {
         return header;
     }
     
+    /**
+     * Get the models of all groups items
+     * @return models
+     */
     public final Map<String, DocumentModel> getItems() {
         return items;
     }
     
+    /**
+     * Get the model for a items group
+     * @param name items group
+     * @return model
+     */
     public final String getModelItemName(String name) {
         return reverseitems.get(name);
     }
     
+    /**
+     * Get the complex model name
+     * @return name
+     */
     public final String getName() {
         return name;
     }
     
+    /**
+     * Define a items group
+     * @param name name of the group
+     * @param item model of the group
+     */
     public final void put(String name, DocumentModel item) {
         items.put(name, item);
         reverseitems.put(item.getName(), name);
     }
     
-    public final void setHeader(DocumentModel header) {
-        this.header = header;
+    /**
+     * Set a document model for the header
+     * @param model document model
+     */
+    public final void setHeader(DocumentModel model) {
+        header = model;
     }
 }

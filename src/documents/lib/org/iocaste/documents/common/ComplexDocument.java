@@ -6,6 +6,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * <p>This class groups ExtendedObjects in one document, following the
+ * ComplexModel contract.</p>
+ * 
+ * <p>The document layout is defined by a header and one or more items.</p>
+ * <p>Only registered models in ComplexModel can be stored.</p>
+ * 
+ * @author francisco.prates
+ *
+ */
 public class ComplexDocument implements Serializable {
     private static final long serialVersionUID = -6366080783932302245L;
     private ComplexModel cmodel;
@@ -21,8 +31,8 @@ public class ComplexDocument implements Serializable {
     }
     
     /**
-     * 
-     * @param object
+     * Adds an item to the document
+     * @param object extended object
      */
     public final void add(ExtendedObject object) {
         String alias;
@@ -39,6 +49,10 @@ public class ComplexDocument implements Serializable {
         objects.add(object);
     }
     
+    /**
+     * Adds an array of items to the document
+     * @param objects array of extended objects
+     */
     public final void add(ExtendedObject[] objects) {
         if (objects == null)
             return;
@@ -48,32 +62,32 @@ public class ComplexDocument implements Serializable {
     }
     
     /**
-     * 
-     * @return
+     * Get the extended object in the document header.
+     * @return header's extended object
      */
     public final ExtendedObject getHeader() {
         return header;
     }
     
     /**
-     * 
-     * @param name
-     * @return
+     * Get group of items of a document.
+     * @param name group name
+     * @return group of items
      */
     public final ExtendedObject[] getItems(String name) {
         return items.get(name).toArray(new ExtendedObject[0]);
     }
     
     /**
-     * 
-     * @return
+     * Get the complex model of the document
+     * @return complex model
      */
     public final ComplexModel getModel() {
         return cmodel;
     }
     
     /**
-     * 
+     * Remove all items of the document
      */
     public final void remove() {
         for (Set<ExtendedObject> objects : items.values())
@@ -81,10 +95,10 @@ public class ComplexDocument implements Serializable {
     }
     
     /**
-     * 
-     * @param header
+     * Set the header's extended object
+     * @param object extended object
      */
-    public final void setHeader(ExtendedObject header) {
-        this.header = header;
+    public final void setHeader(ExtendedObject object) {
+        header = object;
     }
 }
