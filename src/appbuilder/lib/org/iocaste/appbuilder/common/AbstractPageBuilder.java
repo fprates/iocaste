@@ -29,12 +29,6 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     
     public abstract void config(PageBuilderContext context);
     
-    @SuppressWarnings("unchecked")
-    protected final <T extends AbstractInstallObject> T getDefaultInstallObject(
-            ) {
-        return (T)defaultinstall;
-    }
-    
     /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.AbstractPage#init(
@@ -88,7 +82,8 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         defaultinstall.setLink(pkgnameuc, pkgname);
         defaultinstall.setProfile(pkgnameuc);
         defaultinstall.setTaskGroup(pkgnameuc);
-        installConfig();
+        installObject("default", defaultinstall);
+        installConfig(defaultinstall);
         objects = installcontext.getObjects();
         objects.put("default", defaultinstall);
         data = installcontext.getInstallData();
@@ -98,9 +93,8 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         return data;
     }
     
-    protected void installConfig() {
-        installObject("default", defaultinstall);
-    }
+    protected abstract void installConfig(
+            PageBuilderDefaultInstall defaultinstall);
     
     protected final void installObject(
             String name, AbstractInstallObject object) {
