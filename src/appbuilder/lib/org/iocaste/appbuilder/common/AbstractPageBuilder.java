@@ -27,7 +27,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         export("install", "install");
     }
     
-    public abstract PageBuilderContext config();
+    public abstract void config(PageBuilderContext context);
     
     @SuppressWarnings("unchecked")
     protected final <T extends AbstractInstallObject> T getDefaultInstallObject(
@@ -49,9 +49,10 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         AbstractActionHandler handler;
         BuilderCustomAction customaction;
         
-        context = config();
+        context = new PageBuilderContext();
         context.view = view;
         context.function = this;
+        config(context);
 
         customaction = new BuilderCustomAction();
         for (String name : context.getViews()) {
