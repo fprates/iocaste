@@ -26,9 +26,9 @@ import java.sql.Time;
 import java.util.Date;
 
 /**
- * Implementação de elemento do dicionário de dados
+ * <p>Data element implementation.</p>
  * 
- * Este elemento detém as características de um item.
+ * <p>It stores the technical specs of a document model item.</p>
  * 
  * @author Francisco Prates
  *
@@ -45,10 +45,19 @@ public class DataElement implements Serializable {
         atype = -1;
     }
     
+    /**
+     * Get the attribute type. Attribute type is the java primitive
+     * correspondent of some Iocaste data types.
+     * @return attribute type.
+     */
     public final int getAttributeType() {
         return atype;
     }
     
+    /**
+     * Get the class representation of a data type.
+     * @return Java Class<?>
+     */
     public final Class<?> getClassType() {  
         switch (type) {
         case DataType.BOOLEAN:
@@ -80,97 +89,100 @@ public class DataElement implements Serializable {
     }
     
     /**
-     * Retorna quantidade de casas decimais.
-     * @return quantidade
+     * Get the number of decimals positions.
+     * @return decimal positions number
      */
     public final int getDecimals() {
         return decimals;
     }
     
     /**
-     * Retorna comprimento máximo do dado.
-     * @return comprimento máximo
+     * Get the data length.
+     * @return length
      */
     public final int getLength() {
         return length;
     }
     
     /**
-     * Retorna nome do elemento.
-     * @return nome
+     * Get the element name.
+     * @return name
      */
     public final String getName() {
         return name;
     }
     
     /**
-     * Retorna tipo do elemento.
-     * @return tipo
+     * Get the element type.
+     * @return type
      */
     public final int getType() {
         return type;
     }
     
     /**
-     * 
-     * @return
+     * Dummy elements are references for real data elements.
+     * It holds no technical specs. It just points to the
+     * real element.
+     * @return true, if this is a dummy element.
      */
     public final boolean isDummy() {
         return dummy;
     }
     
     /**
-     * Indica se um campo deve ter seu valor convertido
-     * para maiúscula.
-     * @return true, se valor deve ser convertido para maiúscula.
+     * @return true, if the value might be converted upcase.
      */
     public final boolean isUpcase() {
     	return upcase;
     }
     
+    /**
+     * <p>Set the attribute type.</p>
+     * <p>Attribute type is the java primitive
+     * correspondent of some Iocaste data types.</p>
+     * @param type attribute type
+     */
     public final void setAttributeType(int type) {
         atype = type;
     }
     
     /**
-     * Define quantidade de casas decimais.
-     * @param decimals quantidade
+     * Define the number of decimals positions.
+     * @param decimals decimals positions.
      */
     public final void setDecimals(int decimals) {
         this.decimals = decimals;
     }
     
     /**
-     * 
-     * @param dummy
+     * Dummy elements are references for real data elements.
+     * It holds no technical specs. It just points to the
+     * real element.
+     * @param dummy true, if this is a dummy element
      */
     public final void setDummy(boolean dummy) {
         this.dummy = dummy;
     }
     
     /**
-     * Define comprimento do elemento.
-     * @param length comprimento
+     * Set the data length.
+     * @param length length
      */
     public final void setLength(int length) {
         this.length = length;
     }
     
     /**
-     * Define tipo do elemento.
-     * @param type tipo
+     * Set the data type.
+     * @param type type
      */
     public final void setType(int type) {
         this.type = type;
     }
     
     /**
-     * Define que um campo deve ter seu valor convertido
-     * para maiúscula.
-     * 
-     * deve ser efetivo apenas para tipo caracter.
-     * 
-     * @param upcase true, para converte para maiúscula.
+     * @param upcase true, if the value might be converted upcase.
      */
     public final void setUpcase(boolean upcase) {
     	this.upcase = upcase;
