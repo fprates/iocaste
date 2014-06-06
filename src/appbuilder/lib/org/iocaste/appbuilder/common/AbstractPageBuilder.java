@@ -200,7 +200,7 @@ class BuilderCustomAction implements ViewCustomAction {
     }
 
     @Override
-    public void execute(AbstractContext context) {
+    public void execute(AbstractContext context) throws Exception {
         String view = context.view.getPageName();
         String action = context.view.getActionControl();
         AbstractActionHandler handler = handlers.get(view).get(action);

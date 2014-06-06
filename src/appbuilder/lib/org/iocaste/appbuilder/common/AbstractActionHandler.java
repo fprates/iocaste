@@ -7,6 +7,7 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.TableItem;
 
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
@@ -16,10 +17,20 @@ public abstract class AbstractActionHandler {
         return new DocumentExtractor(context, manager);
     }
     
-    protected abstract void execute(PageBuilderContext context);
+    protected final void execute(String action) throws Exception {
+        String view = context.view.getPageName();
+        context.getActionHandler(view, action).run(context);
+    }
+    
+    protected abstract void execute(PageBuilderContext context)
+            throws Exception;
     
     private InputComponent getdfinput(String dataform, String field) {
-        return ((DataForm)context.view.getElement(dataform)).get(field);
+        DataForm form = (DataForm)context.view.getElement(dataform);
+        if (form == null)
+            throw new RuntimeException(dataform.concat(
+                    " isn't a valid dataform."));
+        return form.get(field);
     }
     
     protected final long getdfi(String dataform, String field) {
@@ -29,18 +40,24 @@ public abstract class AbstractActionHandler {
     private final InputComponent getdfinputkey(String dataform) {
         for (DocumentModelKey key : manager.getModel().getHeader().getKeys())
             return getdfinput(dataform, key.getModelItemName());
-        
-        return null;
+
+        throw new RuntimeException(dataform.concat(" isn't a valid key."));
     }
     
     protected final Object getdfkey(String dataform) {
-        InputComponent input = getdfinputkey(dataform);
-        return (input == null)? null : input.get();
+        return getdfinputkey(dataform).get();
+    }
+    
+    protected final int getdfkeyi(String dataform) {
+        return getdfinputkey(dataform).geti();
+    }
+    
+    protected final long getdfkeyl(String dataform) {
+        return getdfinputkey(dataform).getl();
     }
     
     protected final String getdfkeyst(String dataform) {
-        InputComponent input = getdfinputkey(dataform);
-        return (input == null)? null : input.getst();
+        return getdfinputkey(dataform).getst();
     }
     
     protected final long getdfl(String dataform, String field) {
@@ -59,6 +76,14 @@ public abstract class AbstractActionHandler {
         return manager;
     }
     
+    protected final TableItem[] gettcitems(String tablecontrol) {
+        return getViewComponents().tabletools.get(tablecontrol).getItems();
+    }
+    
+    private final ViewComponents getViewComponents() {
+        return context.getViewComponents(context.view.getPageName());
+    }
+    
     protected final boolean keyExists(Object id) {
         return manager.exists(id);
     }
@@ -67,7 +92,7 @@ public abstract class AbstractActionHandler {
         context.view.message(status, manager.getMessage(msgid));
     }
     
-    public final void run(AbstractContext context) {
+    public final void run(AbstractContext context) throws Exception {
         String view = context.view.getPageName();
         String action = context.view.getActionControl();
         
