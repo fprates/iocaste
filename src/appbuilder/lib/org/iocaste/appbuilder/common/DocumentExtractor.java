@@ -91,7 +91,7 @@ public class DocumentExtractor {
         return hold;
     }
     
-    public final void save() {
+    public final ComplexDocument save() {
         TableTool tabletool;
         DocumentModel model;
         DataConversion conversion;
@@ -151,6 +151,8 @@ public class DocumentExtractor {
         }
         
         manager.save(document);
+        
+        return document;
     }
     
     public final void setHeader(String form) {
