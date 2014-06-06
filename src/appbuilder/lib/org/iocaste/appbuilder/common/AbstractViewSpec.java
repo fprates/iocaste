@@ -19,6 +19,14 @@ public abstract class AbstractViewSpec {
     
     public abstract void execute();
     
+    protected final void dashboard(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.DASHBOARD, name);
+    };
+    
+    protected final void dashboarditem(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.DASHBOARD_ITEM, name);
+    }
+    
     protected final void dataForm(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.DATA_FORM, name);
     }

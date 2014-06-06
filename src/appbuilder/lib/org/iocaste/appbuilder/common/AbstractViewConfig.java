@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common;
 
+import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.TabbedPane;
@@ -16,6 +17,17 @@ public abstract class AbstractViewConfig implements ViewConfig {
      * @param context
      */
     protected abstract void execute(PageBuilderContext context);
+    
+    /**
+     * 
+     * @param dashboard
+     * @param name
+     * @return
+     */
+    protected final DashboardComponent getDashboardItem(
+            String dashboard, String name) {
+        return getViewComponents().dashboards.get(dashboard).get(name);
+    }
     
     /**
      * 
@@ -58,10 +70,15 @@ public abstract class AbstractViewConfig implements ViewConfig {
      * @return
      */
     protected final TableTool getTableTool(String name) {
-        ViewComponents viewcomponents = context.
-                getViewComponents(context.view.getPageName());
-        
-        return viewcomponents.tabletools.get(name);
+        return getViewComponents().tabletools.get(name);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    private final ViewComponents getViewComponents() {
+        return context.getViewComponents(context.view.getPageName());
     }
     
     /*

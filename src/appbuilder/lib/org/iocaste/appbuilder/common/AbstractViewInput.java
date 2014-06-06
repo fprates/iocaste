@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common;
 
+import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -18,8 +19,7 @@ public abstract class AbstractViewInput {
     }
     
     protected final void addTableItems(String table, ExtendedObject[] objects) {
-        TableTool tabletool = context.getViewComponents(
-                context.view.getPageName()).tabletools.get(table);
+        TableTool tabletool = getViewComponents().tabletools.get(table);
         
         if (tabletool == null)
             throw new RuntimeException(table.
@@ -28,15 +28,28 @@ public abstract class AbstractViewInput {
         tabletool.setObjects(objects);
     }
     
+    protected abstract void execute(PageBuilderContext context);
+    
     protected <T extends Element> T getElement(String name) {
         return context.view.getElement(name);
+    }
+    
+    protected DashboardComponent getDashboardItem(String dashboard, String name)
+    {
+        return getViewComponents().dashboards.get(dashboard).get(name);
     }
     
     private InputComponent getinput(String form, String item) {
         return ((DataForm)context.view.getElement(form)).get(item);
     }
     
-    protected abstract void execute(PageBuilderContext context);
+    protected final Manager getManager() {
+        return manager;
+    }
+    
+    private final ViewComponents getViewComponents() {
+        return context.getViewComponents(context.view.getPageName());
+    }
     
     public final void run(PageBuilderContext context) {
         this.context = context;

@@ -13,7 +13,9 @@ public class ViewSpecItem {
         STANDARD_CONTAINER,
         TEXT_EDITOR,
         TABLE_TOOL,
-        DATA_FORM
+        DATA_FORM,
+        DASHBOARD,
+        DASHBOARD_ITEM
     };
     
     private String parent, name;

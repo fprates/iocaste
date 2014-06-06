@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
@@ -58,7 +59,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
             customview.setViewSpec(viewspec);
             customview.setViewConfig(viewconfig);
             customview.setViewInput(viewinput);
-            customview.setName(name);
+            customview.setView(name);
             
             register(name, customview);
             for (String action : context.getActions(name)) {
@@ -104,9 +105,10 @@ public abstract class AbstractPageBuilder extends AbstractPage {
 
 class BuilderCustomView extends AbstractCustomView {
     private NavControl navcontrol;
-    private String name;
+    private String view;
     
     private void buildItem(PageBuilderContext context, ViewSpecItem item) {
+        DashboardFactory dashboard;
         TableToolData ttdata;
         ViewComponents viewcomponents;
         Container container = context.view.getElement(item.getParent());
@@ -135,11 +137,21 @@ class BuilderCustomView extends AbstractCustomView {
             ttdata.context = context;
             ttdata.name = name;
             
-            viewcomponents = context.getViewComponents(this.name);
+            viewcomponents = context.getViewComponents(view);
             viewcomponents.tabletools.put(ttdata.name, new TableTool(ttdata));
             break;
         case DATA_FORM:
             new DataForm(container, name);
+            break;
+        case DASHBOARD:
+            dashboard = new DashboardFactory(container, context);
+            viewcomponents = context.getViewComponents(view);
+            viewcomponents.dashboards.put(name, dashboard);
+            break;
+        case DASHBOARD_ITEM:
+            viewcomponents = context.getViewComponents(view);
+            dashboard = viewcomponents.dashboards.get(item.getParent());
+            dashboard.instance(name);
             break;
         case TEXT_EDITOR:
             
@@ -174,8 +186,8 @@ class BuilderCustomView extends AbstractCustomView {
             viewinput.run(_context);
     }
     
-    public final void setName(String name) {
-        this.name = name;
+    public final void setView(String view) {
+        this.view = view;
     }
 }
 
