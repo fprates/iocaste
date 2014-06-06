@@ -58,6 +58,10 @@ public class PageBuilderContext extends AbstractContext {
         return context;
     }
     
+    public final Manager getManager(String view) {
+        return viewcontexts.get(view).manager;
+    }
+    
     /**
      * 
      * @param name
