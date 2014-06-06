@@ -19,7 +19,7 @@ public class Save extends AbstractActionHandler {
         
         conversion = new DataConversion();
         for (DocumentModelKey key : cmodel.getHeader().getKeys()) {
-            conversion.constant(key.getModelItemName(), getdfkeyst("head"));
+            conversion.constant(key.getModelItemName(), getdfkey("head"));
             break;
         }
         

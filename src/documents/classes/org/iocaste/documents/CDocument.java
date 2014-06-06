@@ -115,13 +115,15 @@ public class CDocument {
      */
     public static final void save(ComplexDocument document, Cache cache)
             throws Exception {
-        ComplexModel cmodel;
         Map<String, DocumentModel> models;
         ExtendedObject[] objects;
+        ComplexModel cmodel = document.getModel();
         ExtendedObject object = document.getHeader();
+        DocumentModel model = object.getModel(); 
+        DocumentModelItem modelkey = getModelKey(model);
         
+        delete(cmodel.getName(), object.get(modelkey), cache);
         Save.init(object, cache.function);
-        cmodel = document.getModel();
         models = cmodel.getItems();
         for (String name : models.keySet()) {
             objects = document.getItems(name);
