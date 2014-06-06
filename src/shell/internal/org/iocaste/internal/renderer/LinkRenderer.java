@@ -64,6 +64,8 @@ public class LinkRenderer extends Renderer {
             text = link.getText();
             if (text != null)
                 atag.addInner(config.getText(text, text));
+            else
+                atag.addInner("");
         }
             
         return atag;
