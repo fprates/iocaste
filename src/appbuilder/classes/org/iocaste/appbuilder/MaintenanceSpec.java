@@ -10,14 +10,14 @@ public class MaintenanceSpec extends AbstractViewSpec {
         ComplexModel model = getManager().getModel();
         
         form("main");
-        navControl("main");
-        dataForm("main", "head");
-        tabbedPane("main", "tabs");
-        tabbedPaneItem("tabs", "basetab");
-        dataForm("tabs", "base");
+        navcontrol("main");
+        dataform("main", "head");
+        tabbedpane("main", "tabs");
+        tabbedpaneitem("tabs", "basetab");
+        dataform("tabs", "base");
         for (String name : model.getItems().keySet()) {
-            tabbedPaneItem("tabs", name);
-            tableTool("tabs", name.concat("_table"));
+            tabbedpaneitem("tabs", name);
+            tabletool("tabs", name.concat("_table"));
         }
     }
 

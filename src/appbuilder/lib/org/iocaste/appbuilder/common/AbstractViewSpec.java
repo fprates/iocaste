@@ -27,7 +27,7 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.DASHBOARD_ITEM, name);
     }
     
-    protected final void dataForm(String parent, String name) {
+    protected final void dataform(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.DATA_FORM, name);
     }
     
@@ -46,7 +46,7 @@ public abstract class AbstractViewSpec {
         return manager;
     }
     
-    protected final void navControl(String parent) {
+    protected final void navcontrol(String parent) {
         put(parent, ViewSpecItem.TYPES.PAGE_CONTROL, "navcontrol");
     }
     
@@ -58,15 +58,15 @@ public abstract class AbstractViewSpec {
         items.put(name, item);
     }
     
-    protected final void tabbedPane(String parent, String name) {
+    protected final void tabbedpane(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TABBED_PANE, name);
     }
     
-    protected final void tabbedPaneItem(String parent, String name) {
+    protected final void tabbedpaneitem(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TABBED_PANE_ITEM, name);
     }
     
-    protected final void tableTool(String parent, String name) {
+    protected final void tabletool(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TABLE_TOOL, name);
     }
     
@@ -74,11 +74,11 @@ public abstract class AbstractViewSpec {
         this.manager = manager;
     }
     
-    protected final void standardContainer(String parent, String name) {
+    protected final void standardcontainer(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.STANDARD_CONTAINER, name);
     }
     
-    protected final void textEditor(String parent, String name) {
+    protected final void texteditor(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TEXT_EDITOR, name);
     }
 }

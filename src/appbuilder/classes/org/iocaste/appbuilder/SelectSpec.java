@@ -7,8 +7,8 @@ public class SelectSpec extends AbstractViewSpec {
     @Override
     public void execute() {
         form("main");
-        navControl("main");
-        dataForm("main", "head");
+        navcontrol("main");
+        dataform("main", "head");
     }
 
 }
