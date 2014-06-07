@@ -30,16 +30,20 @@ public abstract class AbstractActionHandler {
     protected abstract void execute(PageBuilderContext context)
             throws Exception;
     
+    protected <T> T getdf(String dataform, String field) {
+        return getdfinput(dataform, field).get();
+    }
+    
+    protected final long getdfi(String dataform, String field) {
+        return getdfinput(dataform, field).geti();
+    }
+    
     private InputComponent getdfinput(String dataform, String field) {
         DataForm form = (DataForm)context.view.getElement(dataform);
         if (form == null)
             throw new RuntimeException(dataform.concat(
                     " isn't a valid dataform."));
         return form.get(field);
-    }
-    
-    protected final long getdfi(String dataform, String field) {
-        return getdfinput(dataform, field).geti();
     }
     
     private final InputComponent getdfinputkey(String dataform) {
