@@ -22,8 +22,9 @@ public abstract class AbstractViewConfig implements ViewConfig {
      * 
      * @return
      */
-    protected final ExtendedContext getExtendedContext() {
-        return context.getExtendedContext(context.view.getPageName());
+    @SuppressWarnings("unchecked")
+    protected final <T extends ExtendedContext> T getExtendedContext() {
+        return (T)context.getExtendedContext(context.view.getPageName());
     }
     
     /**
