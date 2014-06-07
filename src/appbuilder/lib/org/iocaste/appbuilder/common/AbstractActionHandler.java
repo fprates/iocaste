@@ -13,7 +13,12 @@ public abstract class AbstractActionHandler {
     private PageBuilderContext context;
     private Manager manager;
     
-    protected DocumentExtractor documentExtractorInstance() {
+    protected final String dbactionget(String dashboard, String item) {
+        return getViewComponents().dashboards.get(dashboard).
+                get(item).getValue();
+    }
+    
+    protected final DocumentExtractor documentExtractorInstance() {
         return new DocumentExtractor(context, manager);
     }
     

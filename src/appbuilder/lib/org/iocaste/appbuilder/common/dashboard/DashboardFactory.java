@@ -4,13 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StyleSheet;
 
 public class DashboardFactory {
     private Container container;
-    private AbstractContext context;
+    private PageBuilderContext context;
     private Map<String, DashboardComponent> components;
     
     public DashboardFactory(Container container, PageBuilderContext context) {
