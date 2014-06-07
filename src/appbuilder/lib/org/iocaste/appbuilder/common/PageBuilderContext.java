@@ -17,6 +17,17 @@ public class PageBuilderContext extends AbstractContext {
     
     /**
      * 
+     * @param view
+     * @param extcontext
+     */
+    public final void addExtendedContext(
+            String view, ExtendedContext extcontext) {
+        getContext(view).extcontext = extcontext;
+    }
+    
+    /**
+     * 
+     * @param view
      * @param manager
      */
     public final void addManager(String view, Manager manager) {
@@ -58,6 +69,20 @@ public class PageBuilderContext extends AbstractContext {
         return context;
     }
     
+    /**
+     * 
+     * @param view
+     * @return
+     */
+    public final ExtendedContext getExtendedContext(String view) {
+        return viewcontexts.get(view).extcontext;
+    }
+    
+    /**
+     * 
+     * @param view
+     * @return
+     */
     public final Manager getManager(String view) {
         return viewcontexts.get(view).manager;
     }
@@ -170,6 +195,7 @@ class ViewContext {
     public ViewComponents viewcomponents;
     public Manager manager;
     public Map<String, AbstractActionHandler> actionhandlers;
+    public ExtendedContext extcontext;
     
     public ViewContext() {
         viewcomponents = new ViewComponents();

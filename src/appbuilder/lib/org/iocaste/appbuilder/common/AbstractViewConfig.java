@@ -20,6 +20,14 @@ public abstract class AbstractViewConfig implements ViewConfig {
     
     /**
      * 
+     * @return
+     */
+    protected final ExtendedContext getExtendedContext() {
+        return context.getExtendedContext(context.view.getPageName());
+    }
+    
+    /**
+     * 
      * @param dashboard
      * @param name
      * @return

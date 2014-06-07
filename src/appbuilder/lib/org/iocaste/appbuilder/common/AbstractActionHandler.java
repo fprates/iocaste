@@ -77,6 +77,11 @@ public abstract class AbstractActionHandler {
         return manager.get(id);
     }
     
+    @SuppressWarnings("unchecked")
+    protected final <T extends ExtendedContext> T getExtendedContext() {
+        return (T)context.getExtendedContext(context.view.getPageName());
+    }
+    
     protected final Manager getManager() {
         return manager;
     }

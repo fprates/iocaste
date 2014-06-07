@@ -39,6 +39,11 @@ public abstract class AbstractViewInput {
         return getViewComponents().dashboards.get(dashboard).get(name);
     }
     
+    @SuppressWarnings("unchecked")
+    protected final <T extends ExtendedContext> T getExtendedContext() {
+        return (T)context.getExtendedContext(context.view.getPageName());
+    }
+    
     private InputComponent getinput(String form, String item) {
         return ((DataForm)context.view.getElement(form)).get(item);
     }
