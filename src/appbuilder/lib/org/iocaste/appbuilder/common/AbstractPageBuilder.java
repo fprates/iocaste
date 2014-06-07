@@ -10,6 +10,7 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.ExpandBar;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
@@ -153,6 +154,9 @@ class BuilderCustomView extends AbstractCustomView {
             dashboard = viewcomponents.dashboards.get(item.getParent());
             dashboard.instance(name);
             break;
+        case EXPAND_BAR:
+            new ExpandBar(container, name);
+            break;
         case TEXT_EDITOR:
             
         }
@@ -173,7 +177,7 @@ class BuilderCustomView extends AbstractCustomView {
         AbstractViewInput viewinput = getViewInput();
         PageBuilderContext _context = (PageBuilderContext)context;
         
-        viewspec.execute();
+        viewspec.run(_context);
         for (ViewSpecItem item : viewspec.getItems())
             buildItem((PageBuilderContext)context, item);
         

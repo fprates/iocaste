@@ -15,7 +15,8 @@ public class ViewSpecItem {
         TABLE_TOOL,
         DATA_FORM,
         DASHBOARD,
-        DASHBOARD_ITEM
+        DASHBOARD_ITEM,
+        EXPAND_BAR
     };
     
     private String parent, name;

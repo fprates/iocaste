@@ -11,13 +11,12 @@ public abstract class AbstractViewSpec {
     private Map<String, ViewSpecItem> items;
     private List<ViewSpecItem> sequence;
     private Manager manager;
+    private PageBuilderContext context;
     
     public AbstractViewSpec() {
         items = new HashMap<>();
         sequence = new ArrayList<>();
     }
-    
-    public abstract void execute();
     
     protected final void dashboard(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.DASHBOARD, name);
@@ -31,11 +30,22 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.DATA_FORM, name);
     }
     
+    protected abstract void execute();
+    
+    protected final void expandbar(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.EXPAND_BAR, name);
+    }
+    
     protected final void form(String name) {
         ViewSpecItem item = new ViewSpecItem(
                 "view", ViewSpecItem.TYPES.FORM, name);
         items.put(name, item);
         sequence.add(item);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public final <T extends ExtendedContext> T getExtendedContext() {
+        return (T)context.getExtendedContext(context.view.getPageName());
     }
     
     public final List<ViewSpecItem> getItems() {
@@ -58,6 +68,19 @@ public abstract class AbstractViewSpec {
         items.put(name, item);
     }
     
+    public final void run(PageBuilderContext context) {
+        this.context = context;
+        execute();
+    }
+    
+    public final void setManager(Manager manager) {
+        this.manager = manager;
+    }
+    
+    protected final void standardcontainer(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.STANDARD_CONTAINER, name);
+    }
+    
     protected final void tabbedpane(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TABBED_PANE, name);
     }
@@ -68,14 +91,6 @@ public abstract class AbstractViewSpec {
     
     protected final void tabletool(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TABLE_TOOL, name);
-    }
-    
-    public final void setManager(Manager manager) {
-        this.manager = manager;
-    }
-    
-    protected final void standardcontainer(String parent, String name) {
-        put(parent, ViewSpecItem.TYPES.STANDARD_CONTAINER, name);
     }
     
     protected final void texteditor(String parent, String name) {
