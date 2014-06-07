@@ -3,11 +3,11 @@ package org.iocaste.appbuilder.common;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.TableItem;
 
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
@@ -76,8 +76,8 @@ public abstract class AbstractActionHandler {
         return manager;
     }
     
-    protected final TableItem[] gettcitems(String tablecontrol) {
-        return getViewComponents().tabletools.get(tablecontrol).getItems();
+    protected final ExtendedObject[] gettcitems(String tablecontrol) {
+        return getViewComponents().tabletools.get(tablecontrol).getObjects();
     }
     
     private final ViewComponents getViewComponents() {
