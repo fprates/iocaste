@@ -9,7 +9,7 @@ import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Text;
 
 public class DashboardComponent {
-    private String choose, actionname, stylename;
+    private String choose, name, stylename;
     private PageBuilderContext context;
     private StandardContainer component;
     private StyleSheet stylesheet;
@@ -17,11 +17,11 @@ public class DashboardComponent {
     public DashboardComponent(
             Container container, PageBuilderContext context, String name) {
         this.context = context;
+        this.name = name;
         choose = name.concat("_dbitem_choose");
         stylename = ".db_dash_".concat(name);
         component = new StandardContainer(container, name.concat("_container"));
         component.setStyleClass(stylename.substring(1));
-        actionname = name.concat("_dbitem");
 
         stylesheet = context.view.styleSheetInstance();
         stylesheet.newElement(stylename);
@@ -39,7 +39,7 @@ public class DashboardComponent {
     
     public final void add(String item) {
         String linkname = item.concat("_dbitem_link");
-        Link link = new Link(component, linkname, actionname);
+        Link link = new Link(component, linkname, name);
         link.setStyleClass("db_dash_item");
         link.setText(item);
         link.add(choose, item);
