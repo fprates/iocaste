@@ -18,13 +18,14 @@ public class Save extends AbstractActionHandler {
         ComplexModel cmodel = getManager().getModel();
         
         conversion = new DataConversion();
+        conversion.dfsource("base");
         for (DocumentModelKey key : cmodel.getHeader().getKeys()) {
             conversion.constant(key.getModelItemName(), getdfkey("head"));
             break;
         }
         
         extractor = documentExtractorInstance();
-        extractor.setHeader("base", conversion);
+        extractor.setHeader(conversion);
         for (String name : cmodel.getItems().keySet())
             extractor.addItems(name.concat("_table"));
         extractor.save();
