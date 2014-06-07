@@ -15,7 +15,6 @@ import org.iocaste.shell.common.TableTool;
 public class DocumentExtractor {
     private Manager manager;
     private PageBuilderContext context;
-    private String form;
     private DataConversion hconversion;
     private Map<String, DataConversion> items;
     private Documents documents;
@@ -95,26 +94,35 @@ public class DocumentExtractor {
         TableTool tabletool;
         DocumentModel model;
         DataConversion conversion;
-        String to;
+        String to, dfsource;
         ExtendedObject head;
         ExtendedObject[] objects;
+        DataForm form;
         Map<String, DocumentModel> models = new HashMap<>();
         String pagename = context.view.getPageName();
         ComplexDocument document = manager.instance();
-        DataForm form = context.view.getElement(this.form);
         
-        if (hconversion == null) {
+        if (hconversion == null)
+            throw new RuntimeException("no conversion rule for header.");
+        
+        dfsource = hconversion.getDFSource();
+        if (dfsource != null) {
+            form = context.view.getElement(dfsource);
             head = form.getObject();
         } else {
-            to = hconversion.getTo();
-            if (to == null)
-                model = manager.getModel().getHeader();
-            else
-                model = documents.getModel(to);
-            
-            head = conversion(form.getObject(), model, hconversion);
+            head = hconversion.getSource();
         }
         
+        if (head == null)
+            throw new RuntimeException("no header data.");
+        
+        to = hconversion.getTo();
+        if (to == null)
+            model = manager.getModel().getHeader();
+        else
+            model = documents.getModel(to);
+        
+        head = conversion(head, model, hconversion);
         document.setHeader(head);
         for (String name : items.keySet()) {
             tabletool = context.getViewComponents(pagename).
@@ -155,12 +163,7 @@ public class DocumentExtractor {
         return document;
     }
     
-    public final void setHeader(String form) {
-        setHeader(form, null);
-    }
-    
-    public final void setHeader(String form, DataConversion conversion) {
-        this.form = form;
+    public final void setHeader(DataConversion conversion) {
         hconversion = conversion;
     }
 }

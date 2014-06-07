@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.documents.common.ExtendedObject;
+
 public class DataConversion {
     public static final int NEXT_NUMBER = 0;
     public static final int CONSTANT = 1;
     public static final int IGNORE = 2;
-    private String to;
+    private String to, dataform;
     private Map<String, FieldConversion> fields;
+    private ExtendedObject source;
     
     public DataConversion(String tomodel) {
         fields = new HashMap<>();
@@ -24,8 +27,20 @@ public class DataConversion {
         put(field, CONSTANT, value);
     }
     
+    public final void dfsource(String dataform) {
+        this.dataform = dataform;
+    }
+    
+    public final String getDFSource() {
+        return dataform;
+    }
+    
     public final Set<String> getFields() {
         return fields.keySet();
+    }
+    
+    public final ExtendedObject getSource() {
+        return source;
     }
     
     public final String getTo() {
@@ -50,6 +65,10 @@ public class DataConversion {
     
     private final void put(String field, int type, Object value) {
         fields.put(field, new FieldConversion(type, value));
+    }
+    
+    public final void source(ExtendedObject object) {
+        source = object;
     }
     
     public final void to(String model) {
