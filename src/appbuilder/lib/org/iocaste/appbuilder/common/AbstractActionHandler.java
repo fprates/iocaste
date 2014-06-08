@@ -39,11 +39,18 @@ public abstract class AbstractActionHandler {
     }
     
     private InputComponent getdfinput(String dataform, String field) {
+        InputComponent input;
         DataForm form = (DataForm)context.view.getElement(dataform);
+        
         if (form == null)
             throw new RuntimeException(dataform.concat(
                     " isn't a valid dataform."));
-        return form.get(field);
+        
+        input = form.get(field);        
+        if (input == null)
+            throw new RuntimeException(field.concat(" isn't a valid field."));
+        
+        return input;
     }
     
     private final InputComponent getdfinputkey(String dataform) {
