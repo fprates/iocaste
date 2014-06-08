@@ -60,6 +60,10 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.PAGE_CONTROL, "navcontrol");
     }
     
+    protected final void nodelist(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.NODE_LIST, name);
+    }
+    
     private final void put(String parent, ViewSpecItem.TYPES type, String name)
     {
         ViewSpecItem item = new ViewSpecItem(parent, type, name);
@@ -91,6 +95,10 @@ public abstract class AbstractViewSpec {
     
     protected final void tabletool(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TABLE_TOOL, name);
+    }
+    
+    protected final void text(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.TEXT, name);
     }
     
     protected final void texteditor(String parent, String name) {

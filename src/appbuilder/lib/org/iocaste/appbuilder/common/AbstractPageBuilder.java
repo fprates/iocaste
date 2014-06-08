@@ -12,11 +12,13 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.ExpandBar;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.TableTool;
 import org.iocaste.shell.common.TableToolData;
+import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewCustomAction;
 
@@ -157,6 +159,12 @@ class BuilderCustomView extends AbstractCustomView {
         case EXPAND_BAR:
             new ExpandBar(container, name);
             break;
+        case NODE_LIST:
+            new NodeList(container, name);
+            break;
+        case TEXT:
+            new Text(container, name);
+            break;
         case TEXT_EDITOR:
             
         }
@@ -220,6 +228,9 @@ class BuilderCustomAction implements ViewCustomAction {
         String view = context.view.getPageName();
         String action = context.view.getActionControl();
         AbstractActionHandler handler = handlers.get(view).get(action);
+        
+        if (handler == null)
+            throw new RuntimeException(action.concat(" isn't a valid action."));
         
         handler.run(context);
         
