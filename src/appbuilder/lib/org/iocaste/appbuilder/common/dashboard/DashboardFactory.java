@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.StyleSheet;
 
 public class DashboardFactory {
@@ -12,11 +13,16 @@ public class DashboardFactory {
     private PageBuilderContext context;
     private Map<String, DashboardComponent> components;
     
-    public DashboardFactory(Container container, PageBuilderContext context) {
+    public DashboardFactory(
+            Container container, PageBuilderContext context, String name) {
         StyleSheet stylesheet = context.view.styleSheetInstance();
-        this.container = container;
+        this.container = new StandardContainer(container, name);
         this.context = context;
         components = new HashMap<>();
+        
+        stylesheet.newElement(".db_container");
+        stylesheet.put(".db_container", "float", "left");
+        this.container.setStyleClass("db_container");
         
         stylesheet.newElement(".db_dash_item");
         stylesheet.put(".db_dash_item", "display", "block");

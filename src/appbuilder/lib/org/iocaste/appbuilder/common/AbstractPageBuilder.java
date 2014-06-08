@@ -147,7 +147,7 @@ class BuilderCustomView extends AbstractCustomView {
             new DataForm(container, name);
             break;
         case DASHBOARD:
-            dashboard = new DashboardFactory(container, context);
+            dashboard = new DashboardFactory(container, context, name);
             viewcomponents = context.getViewComponents(view);
             viewcomponents.dashboards.put(name, dashboard);
             break;
