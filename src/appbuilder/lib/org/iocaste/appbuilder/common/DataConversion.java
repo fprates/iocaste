@@ -10,9 +10,14 @@ public class DataConversion {
     public static final int NEXT_NUMBER = 0;
     public static final int CONSTANT = 1;
     public static final int IGNORE = 2;
-    private String to, dataform;
+    public static final byte DATAFORM = 1;
+    public static final byte OBJECT = 2;
+    public static final byte OBJECTS = 3;
+    private String to;
     private Map<String, FieldConversion> fields;
-    private ExtendedObject source;
+    private Object source;
+    private byte sourcetype;
+    private DataConversionRule rule;
     
     public DataConversion(String tomodel) {
         fields = new HashMap<>();
@@ -28,18 +33,23 @@ public class DataConversion {
     }
     
     public final void dfsource(String dataform) {
-        this.dataform = dataform;
+        sourcetype = DATAFORM;
+        source = dataform;
     }
     
-    public final String getDFSource() {
-        return dataform;
+    public final byte getSourceType() {
+        return sourcetype;
     }
     
     public final Set<String> getFields() {
         return fields.keySet();
     }
     
-    public final ExtendedObject getSource() {
+    public final DataConversionRule getRule() {
+        return rule;
+    }
+    
+    public final Object getSource() {
         return source;
     }
     
@@ -67,10 +77,19 @@ public class DataConversion {
         fields.put(field, new FieldConversion(type, value));
     }
     
-    public final void source(ExtendedObject object) {
-        source = object;
+    public final void rule(DataConversionRule rule) {
+        this.rule = rule;
     }
     
+    public final void source(ExtendedObject source) {
+        sourcetype = OBJECT;
+        this.source = source;
+    }
+    
+    public final void source(ExtendedObject[] source) {
+        sourcetype = OBJECTS;
+        this.source = source;
+    }
     public final void to(String model) {
         to = model;
     }

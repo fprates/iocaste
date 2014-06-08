@@ -1,6 +1,8 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,8 +36,11 @@ public class DocumentExtractor {
         items.put(tabletool, conversion);
     }
     
-    private ExtendedObject conversion(ExtendedObject source,
-            DocumentModel resultmodel, DataConversion conversion) {
+    private static ExtendedObject conversion(
+            ExtendedObject source,
+            DocumentModel resultmodel,
+            DataConversion conversion,
+            Documents documents) {
         Map<String, Object> hold;
         ExtendedObject object;
         Set<String> fields;
@@ -70,12 +75,69 @@ public class DocumentExtractor {
         return object;
     }
     
-    private final void pop(ExtendedObject object, Map<String, Object> hold) {
+    public static final ExtendedObject[] extractItems(
+            Documents documents,
+            DataConversion conversion,
+            ComplexDocument document,
+            ExtendedObject[] objects) {
+        DataConversionRule rule;
+        List<ExtendedObject> result;
+        String to;
+        DocumentModel model;
+        Map<String, DocumentModel> models = new HashMap<>();
+        
+        result = (document == null)? new ArrayList<ExtendedObject>() : null;
+        
+        if ((objects == null) &&
+                (conversion.getSourceType() == DataConversion.OBJECTS))
+            objects = (ExtendedObject[])conversion.getSource();
+        
+        for (ExtendedObject object : objects) {
+            if (conversion == null) {
+                if (document == null)
+                    result.add(object);
+                else
+                    document.add(object);
+                continue;
+            }
+            
+            to = conversion.getTo();
+            model = models.get(to);
+            if (model == null) {
+                model = documents.getModel(to);
+                if (model == null)
+                    throw new RuntimeException(
+                            to.concat(" is an invalid model."));
+                
+                models.put(to, model);
+            }
+
+            rule = conversion.getRule();
+            if (rule != null)
+                rule.beforeConversion(object);
+            
+            object = conversion(object, model, conversion, documents);
+            if (object == null)
+                continue;
+            
+            if (rule != null)
+                rule.afterConversion(object);
+            
+            if (document == null)
+                result.add(object);
+            else
+                document.add(object);
+        }
+        
+        return (document == null)? result.toArray(new ExtendedObject[0]) : null;
+    }
+    
+    private static final void pop(ExtendedObject object, Map<String, Object> hold) {
         for (String field : hold.keySet())
             object.set(field, hold.get(field));
     }
     
-    private final Map<String, Object> push(
+    private static final Map<String, Object> push(
             ExtendedObject object, DataConversion conversion) {
         Map<String, Object> hold = new HashMap<>();
         
@@ -91,26 +153,37 @@ public class DocumentExtractor {
     }
     
     public final ComplexDocument save() {
+        DataConversion conversion;
         TableTool tabletool;
         DocumentModel model;
-        DataConversion conversion;
         String to, dfsource;
         ExtendedObject head;
         ExtendedObject[] objects;
         DataForm form;
-        Map<String, DocumentModel> models = new HashMap<>();
-        String pagename = context.view.getPageName();
-        ComplexDocument document = manager.instance();
+        String pagename;
+        ComplexDocument document;
         
         if (hconversion == null)
             throw new RuntimeException("no conversion rule for header.");
+
+        head = null;
+        pagename = context.view.getPageName();
+        document = manager.instance();
         
-        dfsource = hconversion.getDFSource();
-        if (dfsource != null) {
+        switch (hconversion.getSourceType()) {
+        case DataConversion.DATAFORM:
+            dfsource = (String)hconversion.getSource();
+            if (dfsource == null)
+                break;
+            
             form = context.view.getElement(dfsource);
             head = form.getObject();
-        } else {
-            head = hconversion.getSource();
+            break;
+        case DataConversion.OBJECT:
+            head = (ExtendedObject)hconversion.getSource();
+            break;
+        default:
+            throw new RuntimeException("invalid conversion for header");
         }
         
         if (head == null)
@@ -122,7 +195,7 @@ public class DocumentExtractor {
         else
             model = documents.getModel(to);
         
-        head = conversion(head, model, hconversion);
+        head = conversion(head, model, hconversion, documents);
         document.setHeader(head);
         for (String name : items.keySet()) {
             tabletool = context.getViewComponents(pagename).
@@ -131,31 +204,9 @@ public class DocumentExtractor {
             objects = tabletool.getObjects();
             if (objects == null)
                 continue;
-            
-            for (ExtendedObject object : objects) {
-                conversion = items.get(name);
-                if (conversion == null) {
-                    document.add(object);
-                    continue;
-                }
-                
-                to = conversion.getTo();
-                model = models.get(to);
-                if (model == null) {
-                    model = documents.getModel(to);
-                    if (model == null)
-                        throw new RuntimeException(
-                                to.concat(" is an invalid model."));
-                    
-                    models.put(to, model);
-                }
-                
-                object = conversion(object, model, conversion);
-                if (object == null)
-                    continue;
-                
-                document.add(object);
-            }
+
+            conversion = items.get(name);
+            extractItems(documents, conversion, document, objects);
         }
         
         manager.save(document);

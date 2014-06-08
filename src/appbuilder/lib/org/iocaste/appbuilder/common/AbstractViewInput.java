@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
@@ -13,9 +14,19 @@ import org.iocaste.shell.common.TableTool;
 public abstract class AbstractViewInput {
     private PageBuilderContext context;
     private Manager manager;
+
+    private final void addtableitems(String table, ExtendedObject[] objects) {
+        TableTool tabletool = getViewComponents().tabletools.get(table);
+        
+        if (tabletool == null)
+            throw new RuntimeException(table.
+                    concat(" is an invalid tabletool."));
+        
+        tabletool.setObjects(objects);
+    }
     
     protected final void addTableItems(String table) {
-        addTableItems(table, null);
+        addtableitems(table, null);
     }
     
     protected final void addTableItems(String table, ExtendedObject[] objects) {
@@ -26,6 +37,15 @@ public abstract class AbstractViewInput {
                     concat(" is an invalid tabletool."));
         
         tabletool.setObjects(objects);
+    }
+    
+    protected final void addTableItems(String table, DataConversion conversion)
+    {
+        Documents documents = new Documents(context.function);
+        ExtendedObject[] objects = DocumentExtractor.extractItems(
+                documents, conversion, null, null);
+        
+        addtableitems(table, objects);
     }
     
     protected abstract void execute(PageBuilderContext context);
