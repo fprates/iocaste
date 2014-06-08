@@ -18,6 +18,7 @@
             <fileset dir="${builddir}/search-help/lib"/>
             <fileset dir="${builddir}/packagetool/lib"/>
         	<fileset dir="${builddir}/globalconfig/lib"/>
+        	<fileset dir="${builddir}/appbuilder/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
@@ -72,6 +73,7 @@
             <lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
         	<lib dir="${builddir}/globalconfig/lib" includes="*.jar"/>
         	<lib dir="${builddir}/texteditor/lib" includes="*.jar"/>
+        	<lib dir="${builddir}/appbuilder/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
     	

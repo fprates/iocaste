@@ -1,54 +1,38 @@
 package org.iocaste.workbench;
 
-import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.View;
-import org.iocaste.workbench.install.Install;
-import org.iocaste.workbench.shell.WorkbenchShell;
-import org.iocaste.workbench.shell.source.Editor;
+import org.iocaste.appbuilder.common.AbstractPageBuilder;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 
-/**
- * 
- * @author francisco.prates
- *
- */
-public class Main extends AbstractPage {
-    private Context context;
-
-    public Main() {
-        export("install", "install");
-    }
-    
-    public final InstallData install(Message message) {
-        return Install.execute();
-    }
+public class Main extends AbstractPageBuilder {
+    private static final String MAIN = "main";
+    public static final String PRJC = "project_create";
     
     @Override
-    protected AbstractContext init(View view) throws Exception {
-        context = new Context();
+    public void config(PageBuilderContext context) {
+        Context extcontext = new Context();
         
-        context.repository = Common.composeFileName(
-                System.getProperty("user.dir"),
-                ".iocaste", "workbench");
-                
-        return context;
+        context.addExtendedContext(MAIN, extcontext);
+        context.setViewSpec(MAIN, new MainSpec());
+        context.setViewConfig(MAIN, new MainConfig());
+        context.setActionHandler(MAIN, "create", new ProjectCreate());
+        
+        context.addExtendedContext(PRJC, extcontext);
+        context.setViewSpec(PRJC, new ProjectSpec());
+        context.setViewConfig(PRJC, new ProjectConfig());
+        context.setViewInput(PRJC, new ProjectInput());
+        context.setActionHandler(PRJC, "create", new ObjectProjectCreate());
     }
-    
-    public final void main() {
-        WorkbenchShell.output(context);
+
+    @Override
+    protected void installConfig(PageBuilderDefaultInstall defaultinstall) {
+        defaultinstall.removeLink("IOCASTE-WORKBENCH");
+        defaultinstall.setLink("WORKBENCH", "iocaste-workbench");
+        defaultinstall.setProfile("WORKBENCH");
+        defaultinstall.setProgramAuthorization("WORKBENCH.EXECUTE");
+        defaultinstall.setTaskGroup("DEVELOP");
+        
+        installObject("models", new ModelsInstall());
     }
-    
-    public final void run() throws Exception {
-        WorkbenchShell.run(context);
-    }
-    
-    public final void save() {
-        Editor.save(context);
-    }
-    
-    public final void source() {
-        Editor.output(context);
-    }
+
 }
