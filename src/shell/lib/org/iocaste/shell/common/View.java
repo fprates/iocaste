@@ -66,7 +66,6 @@ public class View implements Serializable {
         
         this.appname = appname;
         this.pagename = pagename;
-        reloadable = true;
         
         clearRedirect();
     }
@@ -137,7 +136,7 @@ public class View implements Serializable {
         rpage = null;
         messagetext = null;
         messagetype = null;
-        reloadable = true;
+        reloadable = false;
         pagecall = false;
         dontpushpage = false;
     }
