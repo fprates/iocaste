@@ -93,9 +93,8 @@ public abstract class AbstractActionHandler {
         return (T)context.getExtendedContext(context.view.getPageName());
     }
 
-    @SuppressWarnings("unchecked")
-    protected final <T extends InputComponent> T getinputst(String name) {
-        return (T)context.view.getElement(name);
+    protected final String getinputst(String name) {
+        return ((InputComponent)context.view.getElement(name)).getst();
     }
     
     protected final Manager getManager() {
