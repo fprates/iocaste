@@ -18,7 +18,8 @@ public class ViewSpecItem {
         DASHBOARD_ITEM,
         EXPAND_BAR,
         NODE_LIST,
-        TEXT
+        TEXT,
+        LINK
     };
     
     private String parent, name;

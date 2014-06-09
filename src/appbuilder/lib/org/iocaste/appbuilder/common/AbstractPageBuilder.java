@@ -12,6 +12,7 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.ExpandBar;
 import org.iocaste.shell.common.Form;
+import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
@@ -164,6 +165,9 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case TEXT:
             new Text(container, name);
+            break;
+        case LINK:
+            new Link(container, name, name);
             break;
         case TEXT_EDITOR:
             
