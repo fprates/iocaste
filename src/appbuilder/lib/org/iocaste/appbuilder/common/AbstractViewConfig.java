@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
+import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.TabbedPane;
@@ -35,7 +36,19 @@ public abstract class AbstractViewConfig implements ViewConfig {
      */
     protected final DashboardComponent getDashboardItem(
             String dashboard, String name) {
-        return getViewComponents().dashboards.get(dashboard).get(name);
+        DashboardComponent component;
+        DashboardFactory factory = getViewComponents().dashboards.
+                get(dashboard);
+        
+        if (factory == null)
+            throw new RuntimeException(
+                    dashboard.concat(" is an invalid dashboard factory."));
+        
+        component = factory.get(name);
+        if (component == null)
+            throw new RuntimeException(
+                    name.concat(" is an invalid dashboard component."));
+        return component;
     }
     
     /**
