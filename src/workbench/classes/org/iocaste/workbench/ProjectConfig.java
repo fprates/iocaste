@@ -1,6 +1,7 @@
 package org.iocaste.workbench;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
+import org.iocaste.appbuilder.common.NavControl;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.shell.common.Container;
@@ -10,12 +11,16 @@ public class ProjectConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
+        NavControl navcontrol;
         Context extcontext;
         Container view;
         DashboardComponent dashitem;
         StyleSheet stylesheet;
 
         extcontext = getExtendedContext();
+        
+        navcontrol = getNavControl();
+        navcontrol.add("save");
         
         dashitem = getDashboardItem("project", "create");
         dashitem.setColor("#50ff50");

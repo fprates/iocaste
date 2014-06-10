@@ -5,17 +5,23 @@ import org.iocaste.appbuilder.common.ViewSpecItem;
 
 public class ProjectSpec extends AbstractViewSpec {
 
-    private final void additem(
+    private final ProjectTreeItem additem(
             ProjectView project, String container, ViewSpecItem item) {
+        ProjectTreeItem treeitem;
         String name = item.getName();
         
-        project.treeitems.put(name, treeitem(container, name));
+        treeitem = treeitem(container, name, item.getType());
+        project.treeitems.put(name, treeitem);
+        
         for (ViewSpecItem child : item.getItems())
-            additem(project, name, child);
+            treeitem.items.add(additem(project, name, child));
+        
+        return treeitem;
     }
     
     @Override
     protected void execute() {
+        ProjectTreeItem treeitem;
         ProjectView project;
         Context extcontext = getExtendedContext();
         
@@ -29,13 +35,17 @@ public class ProjectSpec extends AbstractViewSpec {
         standardcontainer("main", "viewtree");
         for (String view : extcontext.views.keySet()) {
             project = extcontext.views.get(view);
-            project.treeitems.put(view, treeitem("viewtree", view));
+            treeitem = treeitem("viewtree", view,
+                    ViewSpecItem.TYPES.VIEW.ordinal());
+            
+            project.treeitems.put(view, treeitem);
             for (ViewSpecItem item : project.getItems())
-                additem(project, view, item);
+                treeitem.items.add(additem(project, view, item));
         }
     }
     
-    private final ProjectTreeItem treeitem(String container, String name) {
+    private final ProjectTreeItem treeitem(
+            String container, String name, int type) {
         String containeritem;
         ProjectTreeItem treeitem;
         
@@ -43,14 +53,15 @@ public class ProjectSpec extends AbstractViewSpec {
         nodelist(container, name);
         containeritem = name.concat("_viewtreeitem");
         standardcontainer(name, containeritem);
+        
+        treeitem.name = name;
         treeitem.text = name.concat("_text");
-        text(containeritem, treeitem.text);
-        
         treeitem.link = name.concat("_link");
-        link(containeritem, treeitem.link);
-        
         treeitem.container = container;
+        treeitem.type = type;
         
+        text(containeritem, treeitem.text);
+        link(containeritem, treeitem.link);
         return treeitem;
     }
 
