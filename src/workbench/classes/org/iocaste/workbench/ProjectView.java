@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 
 public class ProjectView extends AbstractViewSpec {
+    public int count;
     public Map<String, ProjectTreeItem> treeitems;
     
     public ProjectView() {
@@ -18,7 +19,7 @@ public class ProjectView extends AbstractViewSpec {
             form(name);
             break;
         case "navcontrol":
-            navcontrol(container);
+            navcontrol(container, name);
             break;
         case "dataform":
             dataform(container, name);
