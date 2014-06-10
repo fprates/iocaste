@@ -37,8 +37,8 @@ public class ProjectConfig extends AbstractViewConfig {
         view.setStyleClass("wb_view");
         view.setVisible(extcontext.viewtree);
         
-        stylesheet.clone(".wb_text", ".text");
-        stylesheet.put(".wb_text", "float", "left");
+        stylesheet.newElement(".wb_text");
+        stylesheet.put(".wb_text", "display", "inline");
         
         for (ProjectView project : extcontext.views.values())
             for (ProjectTreeItem item : project.treeitems.values())
