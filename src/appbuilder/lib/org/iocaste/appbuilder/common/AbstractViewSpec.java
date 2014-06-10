@@ -64,6 +64,10 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.PAGE_CONTROL, "navcontrol");
     }
     
+    protected final void navcontrol(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.PAGE_CONTROL, name);
+    }
+    
     protected final void nodelist(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.NODE_LIST, name);
     }
