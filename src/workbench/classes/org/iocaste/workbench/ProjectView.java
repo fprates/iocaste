@@ -13,7 +13,7 @@ public class ProjectView extends AbstractViewSpec {
         treeitems = new HashMap<>();
     }
     
-    public final void add(String type, String container, String name) {        
+    public final void add(String type, String container, String name) {
         switch (type) {
         case "form":
             form(name);

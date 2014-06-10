@@ -12,12 +12,12 @@ public class Context implements ExtendedContext {
 //    public static final byte NEW = 0;
 //    public static final byte EDIT = 1;
 //    public byte editormode;
-//    public String repository;
+    public String repository;
 //    public TextEditorTool tetool;
 //    public TextEditor editor;
 //    
 //    public String projectname;
-//    public String projectdir;
+    public String projectdir;
 //    public String projectsourceobj;
 //    public String projectfullsourcename;
 //    public String projectsourcename;

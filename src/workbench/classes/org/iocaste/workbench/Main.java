@@ -12,6 +12,9 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) {
         Context extcontext = new Context();
         
+        extcontext.repository =
+                "/home/francisco.prates/iocaste/iocaste-workbench";
+        
         context.addExtendedContext(MAIN, extcontext);
         context.setViewSpec(MAIN, new MainSpec());
         context.setViewConfig(MAIN, new MainConfig());

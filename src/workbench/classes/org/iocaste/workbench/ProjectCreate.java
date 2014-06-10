@@ -1,5 +1,7 @@
 package org.iocaste.workbench;
 
+import java.io.File;
+
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 
@@ -10,6 +12,10 @@ public class ProjectCreate extends AbstractActionHandler {
         Context extcontext = getExtendedContext();
         
         extcontext.project = getdfst("head", "PROJECT_ID");
+        extcontext.projectdir = new StringBuilder(extcontext.repository).
+                append(File.separator).
+                append(extcontext.project).toString();
+        
         context.view.redirect(Main.PRJC);
     }
 
