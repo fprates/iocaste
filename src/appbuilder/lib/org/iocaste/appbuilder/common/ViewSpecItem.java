@@ -6,6 +6,7 @@ import java.util.List;
 public class ViewSpecItem {
     
     public enum TYPES {
+        VIEW,
         FORM,
         PAGE_CONTROL,
         TABBED_PANE,
