@@ -78,6 +78,8 @@ public abstract class AbstractViewSpec {
     
     public final void run(PageBuilderContext context) {
         this.context = context;
+        sequence.clear();
+        items.clear();
         execute();
     }
     
