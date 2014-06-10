@@ -26,8 +26,8 @@ public class Context implements ExtendedContext {
 //    public long projectsourceid;
 //    public long projectlastsrcid;
 //    public Map<String, ExtendedObject> projectsources;
-    public String project;
-    public boolean viewtree;
+    public String project, view, container, name;
+    public boolean viewtree, viewoptions;
     public Map<String, ProjectView> views;
     
     public Context() {

@@ -22,20 +22,27 @@ public class ProjectConfig extends AbstractViewConfig {
         dashitem.addText("create");
         dashitem.add("view");
         
-        dashitem = getDashboardItem("project", "viewoptions");
+        dashitem = getDashboardItem("project", "components");
         dashitem.setColor("#ff5050");
         dashitem.addText("viewcomponents");
         dashitem.add("form");
         dashitem.add("navcontrol");
         dashitem.add("dataform");
+        dashitem.setVisible(extcontext.viewoptions);
         
-        view = getElement("view");
+        view = getElement("viewtree");
         stylesheet = context.view.styleSheetInstance();
         stylesheet.newElement(".wb_view");
         stylesheet.put(".wb_view", "float", "left");
         view.setStyleClass("wb_view");
-        
         view.setVisible(extcontext.viewtree);
+        
+        stylesheet.clone(".wb_text", ".text");
+        stylesheet.put(".wb_text", "float", "left");
+        
+        for (ProjectView project : extcontext.views.values())
+            for (ProjectTreeItem item : project.treeitems.values())
+                getElement(item.text).setStyleClass("wb_text");
     }
 
 }
