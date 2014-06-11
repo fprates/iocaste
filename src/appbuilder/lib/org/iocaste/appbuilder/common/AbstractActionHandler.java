@@ -1,5 +1,8 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -10,6 +13,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.TableItem;
 
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
@@ -107,11 +111,7 @@ public abstract class AbstractActionHandler {
         return manager;
     }
     
-    protected final ExtendedObject[] gettcitems(String tablecontrol) {
-        return getViewComponents().tabletools.get(tablecontrol).getObjects();
-    }
-    
-    private final ViewComponents getViewComponents() {
+    protected final ViewComponents getViewComponents() {
         return context.getViewComponents(context.view.getPageName());
     }
     
@@ -169,7 +169,7 @@ public abstract class AbstractActionHandler {
             store(view, name, dataform.getObject());
             return;
         case TABLE_TOOL:
-            store(view, name, gettcitems(name));
+            store(view, name, tableitemsget(name));
             return;
         default:
             element = context.view.getElement(name);
@@ -194,6 +194,22 @@ public abstract class AbstractActionHandler {
             storeitem(view, child);
     }
     
+    protected final ExtendedObject[] tableitemsget(String tabletool) {
+        return getViewComponents().tabletools.get(tabletool).getObjects();
+    }
+    
+    protected final ExtendedObject[] tableselectedget(String tabletool) {
+        List<ExtendedObject> selected = new ArrayList<>();
+        TableItem[] items = getViewComponents().tabletools.get(tabletool).
+                getItems();
+        
+        for (TableItem item : items)
+            if (item.isSelected())
+                selected.add(item.getObject());
+        
+        return (selected.size() == 0)?
+                null : selected.toArray(new ExtendedObject[0]);
+    }
     protected final void updateView() {
         AbstractViewSpec spec;
         String view = context.view.getPageName();
