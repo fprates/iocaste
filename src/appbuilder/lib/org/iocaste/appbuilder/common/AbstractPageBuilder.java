@@ -14,6 +14,7 @@ import org.iocaste.shell.common.ExpandBar;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
+import org.iocaste.shell.common.ReportTool;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
@@ -168,6 +169,11 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case LINK:
             new Link(container, name, name);
+            break;
+        case REPORT_TOOL:
+            viewcomponents = context.getViewComponents(view);
+            viewcomponents.reporttools.put(
+                    name, new ReportTool(container, name));
             break;
         case TEXT_EDITOR:
         default:

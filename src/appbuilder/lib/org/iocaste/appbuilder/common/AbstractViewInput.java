@@ -85,6 +85,10 @@ public abstract class AbstractViewInput {
         return context.getViewComponents(context.view.getPageName());
     }
     
+    protected final void reportset(String report, ExtendedObject[] items) {
+        getViewComponents().reporttools.get(report).setItens(items);
+    }
+    
     public final void run(PageBuilderContext context) {
         AbstractViewSpec spec;
         ViewSpecItem.TYPES[] types;

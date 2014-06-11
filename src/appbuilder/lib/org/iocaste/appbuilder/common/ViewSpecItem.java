@@ -20,7 +20,8 @@ public class ViewSpecItem {
         EXPAND_BAR,
         NODE_LIST,
         TEXT,
-        LINK
+        LINK,
+        REPORT_TOOL
     };
     
     private String parent, name;

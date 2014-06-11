@@ -76,12 +76,20 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.NODE_LIST, name);
     }
     
+    protected final void print(String line) {
+        context.view.print(line);
+    }
+    
     private final void put(String parent, ViewSpecItem.TYPES type, String name)
     {
         ViewSpecItem item = new ViewSpecItem(parent, type, name);
         
         items.get(parent).add(item);
         items.put(name, item);
+    }
+    
+    protected final void reporttool(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.REPORT_TOOL, name);
     }
     
     public final void run(PageBuilderContext context) {
