@@ -5,6 +5,7 @@ import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
@@ -13,6 +14,10 @@ import org.iocaste.shell.common.InputComponent;
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
     private Manager manager;
+    
+    protected final void back() {
+        ((AbstractPage)context.function).back();
+    }
     
     protected final String dbactionget(String dashboard, String item) {
         return getViewComponents().dashboards.get(dashboard).
@@ -116,6 +121,18 @@ public abstract class AbstractActionHandler {
     
     protected final void managerMessage(Const status, int msgid) {
         context.view.message(status, manager.getMessage(msgid));
+    }
+    
+    protected final void message(Const type, String text) {
+        context.view.message(type, text);
+    }
+    
+    protected final void redirect(String page) {
+        context.view.redirect(page);
+    }
+    
+    protected final void redirect(String app, String page) {
+        context.view.redirect(app, page);
     }
     
     public final void run(AbstractContext context) throws Exception {
