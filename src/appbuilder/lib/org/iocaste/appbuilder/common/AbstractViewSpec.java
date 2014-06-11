@@ -43,6 +43,10 @@ public abstract class AbstractViewSpec {
         sequence.add(item);
     }
     
+    public final ViewSpecItem get(String name) {
+        return items.get(name);
+    }
+    
     @SuppressWarnings("unchecked")
     public final <T extends ExtendedContext> T getExtendedContext() {
         return (T)context.getExtendedContext(context.view.getPageName());

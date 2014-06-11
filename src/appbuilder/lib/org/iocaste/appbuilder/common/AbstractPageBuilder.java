@@ -170,7 +170,8 @@ class BuilderCustomView extends AbstractCustomView {
             new Link(container, name, name);
             break;
         case TEXT_EDITOR:
-            
+        default:
+            break;
         }
         
         for (ViewSpecItem child : item.getItems())

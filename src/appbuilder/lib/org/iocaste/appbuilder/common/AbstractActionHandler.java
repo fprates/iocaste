@@ -7,6 +7,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 
 public abstract class AbstractActionHandler {
@@ -130,5 +131,62 @@ public abstract class AbstractActionHandler {
     
     public final void setManager(Manager manager) {
         this.manager = manager;
+    }
+    
+    private final void store(String view, String name, Object value)
+    {
+        context.getViewInput(view).store(name, value);
+    }
+    
+    private final void storeitem(String view, ViewSpecItem item) {
+        String name;
+        DataForm dataform;
+        Element element;
+        InputComponent input;
+        
+        name = item.getName();
+        
+        switch (ViewSpecItem.TYPES.values()[item.getType()]) {
+        case DATA_FORM:
+            dataform = context.view.getElement(name);
+            store(view, name, dataform.getObject());
+            return;
+        case TABLE_TOOL:
+            store(view, name, gettcitems(name));
+            return;
+        default:
+            element = context.view.getElement(name);
+            /*
+             * algum assistente não suportado, como TableTool, Dashboard, etc.
+             */
+            if (element == null)
+                return;
+            
+            if (element.isDataStorable()) {
+                input = (InputComponent)element;
+                store(view, name, input.get());
+                return;
+            }
+            
+            if (!element.isContainable())
+                return;
+            break;
+        }
+        
+        for (ViewSpecItem child : item.getItems())
+            storeitem(view, child);
+    }
+    
+    protected final void updateView() {
+        AbstractViewSpec spec;
+        String view = context.view.getPageName();
+        
+        spec = context.getViewSpec(view);
+        context.getViewInput(view).setUpdated(true);
+        
+        for (ViewSpecItem item : spec.getItems())
+            storeitem(view, item);
+        
+        context.view.setReloadableView(true);
     }
 }
