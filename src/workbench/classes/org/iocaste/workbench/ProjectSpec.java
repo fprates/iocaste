@@ -22,28 +22,28 @@ public class ProjectSpec extends AbstractViewSpec {
     @Override
     protected void execute() {
         ProjectTreeItem treeitem;
-        ProjectView project;
+        ProjectView projectview;
         Context extcontext = getExtendedContext();
         
         form("main");
         navcontrol("main");
-        
         dataform("main", "head");
         
         dashboard("main", "project");
         dashboarditem("project", "attributes");
         dashboarditem("project", "create");
+        dashboarditem("project", "views");
         dashboarditem("project", "components");
         
         standardcontainer("main", "viewtree");
-        for (String view : extcontext.views.keySet()) {
-            project = extcontext.views.get(view);
-            treeitem = treeitem("viewtree", view,
+        
+        if (extcontext.view != null) {
+            projectview = extcontext.views.get(extcontext.view);
+            treeitem = treeitem("viewtree", extcontext.view,
                     ViewSpecItem.TYPES.VIEW.ordinal());
-            
-            project.treeitems.put(view, treeitem);
-            for (ViewSpecItem item : project.getItems())
-                treeitem.items.add(additem(project, view, item));
+            projectview.treeitems.put(extcontext.view, treeitem);
+            for (ViewSpecItem item : projectview.getItems())
+                treeitem.items.add(additem(projectview, extcontext.view, item));
         }
         
         standardcontainer("main", "linkscnt");

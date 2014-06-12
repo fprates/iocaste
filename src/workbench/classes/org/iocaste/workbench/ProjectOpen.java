@@ -25,14 +25,11 @@ public class ProjectOpen extends AbstractActionHandler {
         Context extcontext = getExtendedContext();
         
         extcontext.project = getdfst("head", "PROJECT_ID");
-        extcontext.projectdir = new StringBuilder(extcontext.repository).
-                append(File.separator).
-                append(extcontext.project).toString();
+        extcontext.projectdir = Common.composeFileName(
+                extcontext.repository, extcontext.project);
         
-        contextfile = new StringBuilder(extcontext.projectdir).
-                append(File.separator).append("bin").
-                append(File.separator).append("META-INF").
-                append(File.separator).append("context.txt").toString();
+        contextfile = Common.composeFileName(
+                extcontext.projectdir, "bin", "META-INF", "context.txt");
         
         file = new File(contextfile);
         if (!file.exists()) {

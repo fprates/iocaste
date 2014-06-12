@@ -8,12 +8,15 @@ import org.iocaste.appbuilder.common.AbstractViewSpec;
 public class ProjectView extends AbstractViewSpec {
     public int count;
     public Map<String, ProjectTreeItem> treeitems;
+    public String name;
     
-    public ProjectView() {
+    public ProjectView(String name) {
         treeitems = new HashMap<>();
+        this.name = name;
     }
     
     public final void add(String type, String container, String name) {
+        count++;
         switch (type) {
         case "form":
             form(name);

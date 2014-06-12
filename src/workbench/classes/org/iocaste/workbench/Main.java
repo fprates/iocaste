@@ -12,8 +12,8 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) {
         Context extcontext = new Context();
         
-        extcontext.repository =
-                "/home/francisco.prates/iocaste/iocaste-workbench";
+        extcontext.repository = Common.composeFileName(
+                System.getProperty("user.dir"), "iocaste","iocaste-workbench");
         
         context.setUpdateViews(true);
         context.addExtendedContext(MAIN, extcontext);
@@ -31,6 +31,7 @@ public class Main extends AbstractPageBuilder {
         context.setActionHandler(PRJC, "components", new ComponentChoose());
         context.setActionHandler(PRJC, "save", new ProjectSave());
         context.setActionHandler(PRJC, "attributes", new AttributesSet());
+        context.setActionHandler(PRJC, "views", new ProjectViewDisplay());
     }
 
     @Override

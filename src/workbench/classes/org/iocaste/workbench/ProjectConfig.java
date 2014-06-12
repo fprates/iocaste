@@ -13,6 +13,7 @@ public class ProjectConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
+        ProjectView projectview;
         Container container;
         NavControl navcontrol;
         Context extcontext;
@@ -40,6 +41,11 @@ public class ProjectConfig extends AbstractViewConfig {
         dashitem.addText("create");
         dashitem.add("view");
         
+        dashitem = getDashboardItem("project", "views");
+        dashitem.setColor("#a0a0ff");
+        dashitem.addText("views");
+        dashitem.setVisible(extcontext.views.size() > 0);
+        
         dashitem = getDashboardItem("project", "components");
         dashitem.setColor("#ff5050");
         dashitem.addText("viewcomponents");
@@ -58,9 +64,11 @@ public class ProjectConfig extends AbstractViewConfig {
         stylesheet.newElement(".wb_text");
         stylesheet.put(".wb_text", "display", "inline");
         
-        for (ProjectView project : extcontext.views.values())
-            for (ProjectTreeItem item : project.treeitems.values())
+        if (extcontext.view != null) {
+            projectview = extcontext.views.get(extcontext.view);
+            for (ProjectTreeItem item : projectview.treeitems.values())
                 getElement(item.text).setStyleClass("wb_text");
+        }
         
         container = getElement("linkscnt");
         container.setVisible(extcontext.links);
