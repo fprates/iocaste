@@ -3,7 +3,6 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -57,16 +56,16 @@ public abstract class AbstractViewInput {
         addtableitems(table, objects);
     }
     
+    protected void dbitemadd(String dashboard, String name, String value) {
+        getViewComponents().dashboards.get(dashboard).get(name).add(value);
+    }
+    
     protected abstract void execute(PageBuilderContext context);
     
     protected <T extends Element> T getElement(String name) {
         return context.view.getElement(name);
     }
     
-    protected DashboardComponent getDashboardItem(String dashboard, String name)
-    {
-        return getViewComponents().dashboards.get(dashboard).get(name);
-    }
     
     @SuppressWarnings("unchecked")
     protected final <T extends ExtendedContext> T getExtendedContext() {
