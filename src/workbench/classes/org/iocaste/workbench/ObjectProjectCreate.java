@@ -18,8 +18,9 @@ public class ObjectProjectCreate extends AbstractActionHandler {
                     "view".concat(Integer.toString(l)), new ProjectView());
             break;
         }
+        
+        extcontext.hideAll();
         extcontext.viewtree = true;
-        context.view.setReloadableView(true);
+        updateView();
     }
-
 }

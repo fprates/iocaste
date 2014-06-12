@@ -9,13 +9,12 @@ public class ModelsInstall extends AbstractInstallObject {
 
     @Override
     protected void execute(StandardInstallContext context) {
-        ModelInstall project;
+        ModelInstall model;
         DataElement projectid;
         
-        projectid = elementchar("WB_PROJECT_ID", 12, true);
-        
-        project = modelInstance("WB_PROJECT");
-        project.item("PROJECT_ID", projectid);
+        projectid = elementchar("WB_PROJECT_ID", 12, false);
+        model = modelInstance("WB_PROJECT");
+        model.item("PROJECT_ID", projectid);
     }
 
 }

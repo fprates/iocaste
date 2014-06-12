@@ -28,6 +28,7 @@ public class Main extends AbstractPageBuilder {
         context.setActionHandler(PRJC, "add", new ComponentViewAdd());
         context.setActionHandler(PRJC, "components", new ComponentChoose());
         context.setActionHandler(PRJC, "save", new ProjectSave());
+        context.setActionHandler(PRJC, "attributes", new AttributesSet());
     }
 
     @Override

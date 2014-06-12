@@ -19,10 +19,16 @@ import javax.tools.ToolProvider;
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.AbstractPage;
 
 public class ProjectSave extends AbstractActionHandler {
+    private static final String AUTOMATED_ENTRY =
+            "org.iocaste.workbench.common.engine.ApplicationEngine";
+    private static final int LINK= 200;
     
     private void add(StringBuilder content, StringBuilder level, int type,
             String... args) {
@@ -79,8 +85,9 @@ public class ProjectSave extends AbstractActionHandler {
         }
     }
     
-    private final void buildViewSpec(Context extcontext, CompileData data) {
-        StringBuilder content, projectlevel, viewlevel;
+    private final void buildAppSpec(Context extcontext, CompileData data) {
+        ExtendedObject[] links;
+        StringBuilder content, projectlevel, viewlevel, level;
         ProjectView project;
         
         content = new StringBuilder();
@@ -95,6 +102,16 @@ public class ProjectSave extends AbstractActionHandler {
                 additem(content, viewlevel, item);
         }
         
+        projectlevel = viewlevel = null;
+        links = tableitemsget("links");
+        if (links != null) {
+            for (ExtendedObject link : links) {
+                if (Documents.isInitial(link))
+                    continue;
+                level = marklevel(null, link.getst("NAME"));
+                add(content, level, LINK, link.getst("COMMAND"));
+            }
+        }
         data.views = content.toString();
     }
     
@@ -115,9 +132,36 @@ public class ProjectSave extends AbstractActionHandler {
 //        if (message != null)
 //            return message;
 //        
-//        copyLibraries(data);
+        copyLibraries(extcontext, data);
         createWebXML(extcontext, data);
         return null;
+    }
+    
+    private final void copyFile(File to, File from) throws Exception {
+        FileInputStream is = new FileInputStream(from);
+        FileChannel fcfrom = is.getChannel();
+        FileOutputStream os = new FileOutputStream(to);
+        FileChannel fcto = os.getChannel();
+        
+        to.createNewFile();
+        fcto.transferFrom(fcfrom, 0, fcfrom.size());
+        fcfrom.close();
+        fcto.close();
+        os.close();
+        is.close();
+    }
+    
+    private final void copyLibraries(Context extcontext, CompileData data)
+            throws Exception {
+        String libfrom = Common.composeFileName(
+                data.workbenchpath, "WEB-INF", "lib");
+        String libto = Common.composeFileName(
+                extcontext.projectdir, "bin", "WEB-INF", "lib");
+      
+        new File(libto).mkdir();
+        for (File file : new File(libfrom).listFiles())
+            copyFile(new File(Common.composeFileName(
+                    libto, file.getName())), file);
     }
     
     private final void createProjectFiles(Context extcontext, CompileData data)
@@ -182,11 +226,11 @@ public class ProjectSave extends AbstractActionHandler {
         File file;
         OutputStream os;
         
-        new File(extcontext.projectdir).mkdir();
         path = Common.composeFileName(extcontext.projectdir, "bin", "META-INF");
+        if (!new File(path).mkdirs())
+            throw new IocasteException("directory creation error.");
+        path = Common.composeFileName(path, "context.txt");
         
-        new File(path).mkdirs();
-        path = Common.composeFileName(path, "views.txt");
         file = new File(path);
         file.createNewFile();
         os = new FileOutputStream(file, false);
@@ -296,7 +340,10 @@ public class ProjectSave extends AbstractActionHandler {
         Context extcontext = getExtendedContext();
         CompileData compiledata = new CompileData();
         
-        buildViewSpec(extcontext, compiledata);
+        compiledata.workbenchpath = ((AbstractPage)context.function).
+                getRealPath();
+        compiledata.entryclass = AUTOMATED_ENTRY;
+        buildAppSpec(extcontext, compiledata);
         createProjectFiles(extcontext, compiledata);
         compileProject(extcontext, compiledata);
         deployApplication(extcontext, compiledata);

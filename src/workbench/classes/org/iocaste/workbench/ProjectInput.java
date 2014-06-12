@@ -14,6 +14,8 @@ public class ProjectInput extends AbstractViewInput {
         ProjectView project;
         Context extcontext = getExtendedContext();
         
+        set("head", "PROJECT_ID", extcontext.project);
+        
         for (String view : extcontext.views.keySet()) {
             project = extcontext.views.get(view);
             for (String name : project.treeitems.keySet()) {

@@ -12,18 +12,18 @@ import org.iocaste.texteditor.common.TextEditorTool;
 
 public class Common {
 
-//    public static final String composeFileName(String... names) {
-//        StringBuilder sb = new StringBuilder();
-//        
-//        for (String name : names) {
-//            if (sb.length() > 0)
-//                sb.append(File.separator);
-//        
-//            sb.append(name);
-//        }
-//        
-//        return sb.toString();
-//    }
+    public static final String composeFileName(String... names) {
+        StringBuilder sb = new StringBuilder();
+        
+        for (String name : names) {
+            if (sb.length() > 0)
+                sb.append(File.separator);
+        
+            sb.append(name);
+        }
+        
+        return sb.toString();
+    }
 //    
 //    public static final String createProject(String project, Context context) {
 //        DocumentModel model;

@@ -28,7 +28,10 @@ public class ProjectSpec extends AbstractViewSpec {
         form("main");
         navcontrol("main");
         
+        dataform("main", "head");
+        
         dashboard("main", "project");
+        dashboarditem("project", "attributes");
         dashboarditem("project", "create");
         dashboarditem("project", "components");
         
@@ -42,6 +45,9 @@ public class ProjectSpec extends AbstractViewSpec {
             for (ViewSpecItem item : project.getItems())
                 treeitem.items.add(additem(project, view, item));
         }
+        
+        standardcontainer("main", "linkscnt");
+        tabletool("linkscnt", "links");
     }
     
     private final ProjectTreeItem treeitem(
