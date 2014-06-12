@@ -33,7 +33,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         export("install", "install");
     }
     
-    public abstract void config(PageBuilderContext context);
+    public abstract void config(PageBuilderContext context) throws Exception;
     
     /*
      * (não-Javadoc)
@@ -41,7 +41,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
      *    org.iocaste.shell.common.View)
      */
     @Override
-    public AbstractContext init(View view) {
+    public AbstractContext init(View view) throws Exception {
         BuilderCustomView customview;
         AbstractViewSpec viewspec;
         ViewConfig viewconfig;
@@ -77,7 +77,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         return context;
     }
     
-    public final InstallData install(Message message) {
+    public final InstallData install(Message message) throws Exception {
         Map<String, AbstractInstallObject> objects;
         InstallData data;
         String pkgname = message.getString("name");
@@ -100,7 +100,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     }
     
     protected abstract void installConfig(
-            PageBuilderDefaultInstall defaultinstall);
+            PageBuilderDefaultInstall defaultinstall) throws Exception;
     
     protected final void installObject(
             String name, AbstractInstallObject object) {
