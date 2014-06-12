@@ -32,7 +32,7 @@ public class MaintenanceInput extends AbstractViewInput {
         setdf("base", extcontext.document.getHeader());
         cmodel = extcontext.document.getModel();
         for (String name : cmodel.getItems().keySet())
-            addTableItems(name.concat("_table"), extcontext.document.
+            tableitemsadd(name.concat("_table"), extcontext.document.
                     getItems(name));
     }
 

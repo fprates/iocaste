@@ -33,29 +33,6 @@ public abstract class AbstractViewInput {
         tabletool.setObjects(objects);
     }
     
-    protected final void addTableItems(String table) {
-        addtableitems(table, null);
-    }
-    
-    protected final void addTableItems(String table, ExtendedObject[] objects) {
-        TableTool tabletool = getViewComponents().tabletools.get(table);
-        
-        if (tabletool == null)
-            throw new RuntimeException(table.
-                    concat(" is an invalid tabletool."));
-        
-        tabletool.setObjects(objects);
-    }
-    
-    protected final void addTableItems(String table, DataConversion conversion)
-    {
-        Documents documents = new Documents(context.function);
-        ExtendedObject[] objects = DocumentExtractor.extractItems(
-                documents, conversion, null, null);
-        
-        addtableitems(table, objects);
-    }
-    
     protected void dbitemadd(String dashboard, String name, String value) {
         getViewComponents().dashboards.get(dashboard).get(name).add(value);
     }
@@ -150,5 +127,28 @@ public abstract class AbstractViewInput {
     
     public final void store(String name, Object value) {
         storage.put(name, value);
+    }
+    
+    protected final void tableitemsadd(String table) {
+        addtableitems(table, null);
+    }
+    
+    protected final void tableitemsadd(String table, ExtendedObject[] objects) {
+        TableTool tabletool = getViewComponents().tabletools.get(table);
+        
+        if (tabletool == null)
+            throw new RuntimeException(table.
+                    concat(" is an invalid tabletool."));
+        
+        tabletool.setObjects(objects);
+    }
+    
+    protected final void tableitemsadd(String table, DataConversion conversion)
+    {
+        Documents documents = new Documents(context.function);
+        ExtendedObject[] objects = DocumentExtractor.extractItems(
+                documents, conversion, null, null);
+        
+        addtableitems(table, objects);
     }
 }
