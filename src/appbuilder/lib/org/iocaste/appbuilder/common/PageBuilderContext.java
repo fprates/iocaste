@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +11,7 @@ import org.iocaste.shell.common.AbstractContext;
 
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewContext> viewcontexts;
+    private boolean updateview;
     
     public PageBuilderContext() {
         viewcontexts = new HashMap<>();
@@ -151,6 +153,7 @@ public class PageBuilderContext extends AbstractContext {
             String view, String action, AbstractActionHandler handler) {
         ViewContext context = getContext(view);
         handler.setManager(context.manager);
+        handler.setUpdateView(updateview);
         context.actionhandlers.put(action, handler);
     }
     
@@ -185,6 +188,21 @@ public class PageBuilderContext extends AbstractContext {
         ViewContext context = getContext(view);
         viewspec.setManager(context.manager);
         context.viewspec = viewspec;
+    }
+    
+    /**
+     * 
+     * @param updateview
+     */
+    public final void setUpdateViews(boolean updateview) {
+        Collection<AbstractActionHandler> handlers;
+        
+        this.updateview = updateview;
+        for (ViewContext context : viewcontexts.values()) {
+            handlers = context.actionhandlers.values();
+            for (AbstractActionHandler handler : handlers)
+                handler.setUpdateView(updateview);
+        }
     }
 }
 

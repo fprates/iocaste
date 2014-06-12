@@ -18,6 +18,7 @@ import org.iocaste.shell.common.TableItem;
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
     private Manager manager;
+    private boolean updateview;
     
     protected final void back() {
         ((AbstractPage)context.function).back();
@@ -35,6 +36,8 @@ public abstract class AbstractActionHandler {
     protected final void execute(String action) throws Exception {
         String view = context.view.getPageName();
         context.getActionHandler(view, action).run(context);
+        if (updateview)
+            updateView();
     }
     
     protected abstract void execute(PageBuilderContext context)
@@ -150,6 +153,10 @@ public abstract class AbstractActionHandler {
         this.manager = manager;
     }
     
+    public final void setUpdateView(boolean updateview) {
+        this.updateview = updateview;
+    }
+    
     private final void store(String view, String name, Object value)
     {
         context.getViewInput(view).store(name, value);
@@ -210,7 +217,8 @@ public abstract class AbstractActionHandler {
         return (selected.size() == 0)?
                 null : selected.toArray(new ExtendedObject[0]);
     }
-    protected final void updateView() {
+    
+    private final void updateView() {
         AbstractViewSpec spec;
         String view = context.view.getPageName();
         
