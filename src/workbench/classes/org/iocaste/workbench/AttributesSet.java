@@ -11,7 +11,6 @@ public class AttributesSet extends AbstractActionHandler {
         
         extcontext.hideAll();
         extcontext.links = true;
-        updateView();
     }
 
 }

@@ -5,23 +5,34 @@ import java.util.List;
 
 public class ViewSpecItem {
     
-    public enum TYPES {
-        VIEW,
-        FORM,
-        PAGE_CONTROL,
-        TABBED_PANE,
-        TABBED_PANE_ITEM,
-        STANDARD_CONTAINER,
-        TEXT_EDITOR,
-        TABLE_TOOL,
-        DATA_FORM,
-        DASHBOARD,
-        DASHBOARD_ITEM,
-        EXPAND_BAR,
-        NODE_LIST,
-        TEXT,
-        LINK,
-        REPORT_TOOL
+    public enum TYPES {        
+        VIEW("view"),
+        FORM("form"),
+        PAGE_CONTROL("navcontrol"),
+        TABBED_PANE("tabbedpane"),
+        TABBED_PANE_ITEM("tabbedpaneitem"),
+        STANDARD_CONTAINER("standardcontainer"),
+        TEXT_EDITOR("texteditor"),
+        TABLE_TOOL("tabletool"),
+        DATA_FORM("dataform"),
+        DASHBOARD("dashboard"),
+        DASHBOARD_ITEM("dashboarditem"),
+        EXPAND_BAR("expandbar"),
+        NODE_LIST("nodelist"),
+        TEXT("text"),
+        LINK("link"),
+        REPORT_TOOL("reporttool");
+
+        private String name;
+        
+        TYPES(String name) {
+            this.name = name;
+        }
+        
+        @Override
+        public String toString() {
+            return name;
+        }
     };
     
     private String parent, name;

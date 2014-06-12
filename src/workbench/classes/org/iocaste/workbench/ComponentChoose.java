@@ -17,6 +17,5 @@ public class ComponentChoose extends AbstractActionHandler {
                 append(project.count).toString();
         project.add(type, extcontext.name, name);
         extcontext.viewoptions = false;
-        updateView();
     }
 }

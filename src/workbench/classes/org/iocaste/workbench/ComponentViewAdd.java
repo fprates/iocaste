@@ -13,7 +13,6 @@ public class ComponentViewAdd extends AbstractActionHandler {
         extcontext.view = getinputst("viewname");
         extcontext.container = getinputst("container");
         extcontext.viewoptions = true;
-        updateView();
     }
 
 }

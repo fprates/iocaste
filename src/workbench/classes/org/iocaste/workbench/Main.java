@@ -15,10 +15,12 @@ public class Main extends AbstractPageBuilder {
         extcontext.repository =
                 "/home/francisco.prates/iocaste/iocaste-workbench";
         
+        context.setUpdateViews(true);
         context.addExtendedContext(MAIN, extcontext);
         context.setViewSpec(MAIN, new MainSpec());
         context.setViewConfig(MAIN, new MainConfig());
         context.setActionHandler(MAIN, "create", new ProjectCreate());
+        context.setActionHandler(MAIN, "open", new ProjectOpen());
         
         context.addExtendedContext(PRJC, extcontext);
         context.setViewSpec(PRJC, new ProjectSpec());

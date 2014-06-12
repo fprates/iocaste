@@ -7,20 +7,24 @@ public class ObjectProjectCreate extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        int l;
         Context extcontext = getExtendedContext();
         String item = dbactionget("project", "create");
         
         switch(item) {
         case "view":
-            l = extcontext.views.size();
-            extcontext.views.put(
-                    "view".concat(Integer.toString(l)), new ProjectView());
+            now(extcontext);
             break;
         }
         
         extcontext.hideAll();
         extcontext.viewtree = true;
-        updateView();
+    }
+    
+    public static final ProjectView now(Context extcontext) {
+        int l = extcontext.views.size();
+        ProjectView view = new ProjectView();
+        
+        extcontext.views.put("view".concat(Integer.toString(l)), view);
+        return view;
     }
 }

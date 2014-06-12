@@ -16,6 +16,7 @@ public class MainConfig extends AbstractViewConfig {
         
         control = getNavControl();
         control.add("create");
+        control.add("open");
         
         head = getElement("head");
         head.importModel("WB_PROJECT", context.function);
