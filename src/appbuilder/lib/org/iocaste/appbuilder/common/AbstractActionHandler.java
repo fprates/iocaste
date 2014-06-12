@@ -36,8 +36,6 @@ public abstract class AbstractActionHandler {
     protected final void execute(String action) throws Exception {
         String view = context.view.getPageName();
         context.getActionHandler(view, action).run(context);
-        if (updateview)
-            updateView();
     }
     
     protected abstract void execute(PageBuilderContext context)
@@ -147,6 +145,8 @@ public abstract class AbstractActionHandler {
             return;
         
         execute(this.context);
+        if (updateview)
+            updateView();
     }
     
     public final void setManager(Manager manager) {
@@ -219,12 +219,16 @@ public abstract class AbstractActionHandler {
     }
     
     private final void updateView() {
+        AbstractViewInput input;
         AbstractViewSpec spec;
         String view = context.view.getPageName();
         
         spec = context.getViewSpec(view);
-        context.getViewInput(view).setUpdated(true);
+        input = context.getViewInput(view);
+        if (input == null)
+            return;
         
+        input.setUpdated(true);
         for (ViewSpecItem item : spec.getItems())
             storeitem(view, item);
         
