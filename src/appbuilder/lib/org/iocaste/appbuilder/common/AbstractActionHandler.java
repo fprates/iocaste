@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -25,8 +26,14 @@ public abstract class AbstractActionHandler {
     }
     
     protected final String dbactionget(String dashboard, String item) {
-        return getViewComponents().dashboards.get(dashboard).
-                get(item).getValue();
+        DashboardFactory factory = getViewComponents().dashboards.
+                get(dashboard);
+        
+        if (factory == null)
+            throw new RuntimeException(dashboard.concat(
+                    " is an invalid dashboard factory."));
+        
+        return factory.get(item).getValue();
     }
     
     protected final DocumentExtractor documentExtractorInstance() {
