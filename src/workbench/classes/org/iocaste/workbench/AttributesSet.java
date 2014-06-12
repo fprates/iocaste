@@ -10,7 +10,7 @@ public class AttributesSet extends AbstractActionHandler {
         Context extcontext = getExtendedContext();
         
         extcontext.hideAll();
-        extcontext.links = true;
+        extcontext.linksgrid = true;
     }
 
 }

@@ -18,7 +18,12 @@ public class ProjectInput extends AbstractViewInput {
 
         for (String view : extcontext.views.keySet())
             dbitemadd("project", "views", view);
-                
+        
+        if (extcontext.links != null) {
+            tableitemsadd("links", extcontext.links);
+            extcontext.links = null;
+        }
+        
         if (extcontext.view != null) {
             projectview = extcontext.views.get(extcontext.view);
             for (String name : projectview.treeitems.keySet()) {

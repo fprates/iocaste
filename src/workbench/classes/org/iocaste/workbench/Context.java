@@ -27,14 +27,15 @@ public class Context implements ExtendedContext {
 //    public long projectlastsrcid;
 //    public Map<String, ExtendedObject> projectsources;
     public String project, view, container, name;
-    public boolean viewtree, viewoptions, links;
+    public boolean viewtree, viewoptions, linksgrid;
     public Map<String, ProjectView> views;
+    public ExtendedObject[] links;
     
     public Context() {
         views = new LinkedHashMap<>();
     }
     
     public final void hideAll() {
-        viewtree = viewoptions = links = false;
+        viewtree = viewoptions = linksgrid = false;
     }
 }

@@ -16,6 +16,8 @@ public class ProjectCreate extends AbstractActionHandler {
                 append(File.separator).
                 append(extcontext.project).toString();
         
+        extcontext.view = null;
+        extcontext.links = null;
         extcontext.views.clear();
         redirect(Main.PRJC);
     }

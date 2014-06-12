@@ -71,7 +71,7 @@ public class ProjectConfig extends AbstractViewConfig {
         }
         
         container = getElement("linkscnt");
-        container.setVisible(extcontext.links);
+        container.setVisible(extcontext.linksgrid);
         tabletool = getTableTool("links");
         tabletool.model("TASKS");
         tabletool.setMode(TableTool.UPDATE);
