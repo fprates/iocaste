@@ -10,8 +10,6 @@ import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.protocol.Function;
-import org.iocaste.workbench.common.engine.ApplicationEngine;
-import org.iocaste.workbench.common.engine.AutomatedViewSpec;
 
 public class Main extends AbstractPageBuilder {
 
@@ -27,7 +25,7 @@ public class Main extends AbstractPageBuilder {
         if (module == null)
             loadManagedModule(context);
         else
-            loadRemoteModule(context);
+            loadRemoteModule(context, module);
     }
     
     @Override
@@ -98,13 +96,14 @@ public class Main extends AbstractPageBuilder {
         context.setViewInput(display1, maintenanceinput);
     }
     
-    private void loadRemoteModule(PageBuilderContext context) throws Exception {
+    private void loadRemoteModule(PageBuilderContext context, String module)
+            throws Exception {
         String view;
         AutomatedViewSpec spec;
         int index;
         ViewSpecItem.TYPES[] types;
         String[] args;
-        byte[] buffer = ApplicationEngine.getApplicationContext(this);
+        byte[] buffer = getApplicationContext(module);
         String[] lines = new String(buffer).split("\n");
 
         types = ViewSpecItem.TYPES.values();
@@ -112,11 +111,8 @@ public class Main extends AbstractPageBuilder {
         for (String line : lines) {
             args = line.split(":");
             index = Integer.parseInt(args[1]);
-            if (index == -1)
+            if ((index == -1) || (index >= 200))
                 continue;
-
-            if (index >= 200)
-                return;
             
             switch (types[index]) {
             case VIEW:
