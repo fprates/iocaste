@@ -24,11 +24,33 @@ public class DashboardFactory {
         stylesheet.put(".db_container", "float", "left");
         this.container.setStyleClass("db_container");
         
-        stylesheet.newElement(".db_dash_item");
-        stylesheet.put(".db_dash_item", "display", "block");
-        stylesheet.put(".db_dash_item", "text-decoration", "none");
-        stylesheet.put(".db_dash_item", "padding", "3px");
-        stylesheet.put(".db_dash_item", "font-size", "12pt");
+        stylesheet.newElement(".db_dash_item:link");
+        stylesheet.put(".db_dash_item:link", "display", "block");
+        stylesheet.put(".db_dash_item:link", "text-decoration", "none");
+        stylesheet.put(".db_dash_item:link", "padding", "3px");
+        stylesheet.put(".db_dash_item:link", "font-size", "12pt");
+        stylesheet.put(".db_dash_item:link", "color", "#0000ff");
+        
+        stylesheet.newElement(".db_dash_item:active");
+        stylesheet.put(".db_dash_item:active", "display", "block");
+        stylesheet.put(".db_dash_item:active", "text-decoration", "none");
+        stylesheet.put(".db_dash_item:active", "padding", "3px");
+        stylesheet.put(".db_dash_item:active", "font-size", "12pt");
+        stylesheet.put(".db_dash_item:active", "color", "#0000ff");
+        
+        stylesheet.newElement(".db_dash_item:hover");
+        stylesheet.put(".db_dash_item:hover", "display", "block");
+        stylesheet.put(".db_dash_item:hover", "text-decoration", "none");
+        stylesheet.put(".db_dash_item:hover", "padding", "3px");
+        stylesheet.put(".db_dash_item:hover", "font-size", "12pt");
+        stylesheet.put(".db_dash_item:hover", "color", "#ffffff");
+        
+        stylesheet.newElement(".db_dash_item:visited");
+        stylesheet.put(".db_dash_item:visited", "display", "block");
+        stylesheet.put(".db_dash_item:visited", "text-decoration", "none");
+        stylesheet.put(".db_dash_item:visited", "padding", "3px");
+        stylesheet.put(".db_dash_item:visited", "font-size", "12pt");
+        stylesheet.put(".db_dash_item:visited", "color", "#0000ff");
     }
     
     public final DashboardComponent get(String name) {
