@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -33,8 +34,16 @@ public abstract class AbstractViewInput {
         tabletool.setObjects(objects);
     }
     
+    private DashboardComponent dbget(String dashboard, String name) {
+        return getViewComponents().dashboards.get(dashboard).get(name);
+    }
+    
     protected void dbitemadd(String dashboard, String name, String value) {
-        getViewComponents().dashboards.get(dashboard).get(name).add(value);
+        dbget(dashboard, name).add(value);
+    }
+    
+    protected void dbtextadd(String dashboard, String name, String value) {
+        dbget(dashboard, name).addText(value);
     }
     
     protected abstract void execute(PageBuilderContext context);
