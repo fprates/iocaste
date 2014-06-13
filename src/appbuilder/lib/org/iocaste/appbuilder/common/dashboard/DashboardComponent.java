@@ -13,6 +13,7 @@ public class DashboardComponent {
     private PageBuilderContext context;
     private StandardContainer component;
     private StyleSheet stylesheet;
+    private boolean hide;
     
     public DashboardComponent(
             Container container, PageBuilderContext context, String name) {
@@ -29,15 +30,22 @@ public class DashboardComponent {
         stylesheet.put(stylename, "width", "150px");
         stylesheet.put(stylename, "padding", "20px");
         stylesheet.put(stylename, "margin", "2px");
+        component.setVisible(false);
     }
     
     public final void addText(String name) {
+        if (!hide)
+            component.setVisible(true);
+        
         String textname = name.concat(".item");
         Text text = new Text(component, textname);
         text.setText(name);
     }
     
     public final void add(String item) {
+        if (!hide)
+            component.setVisible(true);
+        
         String linkname = item.concat("_dbitem_link");
         Link link = new Link(component, linkname, name);
         link.setStyleClass("db_dash_item");
@@ -49,11 +57,18 @@ public class DashboardComponent {
         return ((InputComponent)context.view.getElement(choose)).getst();
     }
     
+    public final void hide() {
+        hide = true;
+        component.setVisible(false);
+    }
+    
     public final void setColor(String color) {
         stylesheet.put(stylename, "background-color", color);
     }
     
-    public final void setVisible(boolean visible) {
-        component.setVisible(visible);
+    public final void show() {
+        hide = false;
+        if (component.getElements().length > 0)
+            component.setVisible(true);
     }
 }

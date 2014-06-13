@@ -22,7 +22,6 @@ public class DashboardFactory {
         
         stylesheet.newElement(".db_container");
         stylesheet.put(".db_container", "float", "left");
-        stylesheet.put(".db_container", "width", "200px");
         this.container.setStyleClass("db_container");
         
         stylesheet.newElement(".db_dash_item:link");
