@@ -63,10 +63,6 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
         profile.add(authorization);
     }
     
-    public final void removeLink(String link) {
-        links.remove(link);
-    }
-    
     public final void setAppBuilderLink(
             String createlink, String displaylink, String changelink,
             String entity, String cmodel) {

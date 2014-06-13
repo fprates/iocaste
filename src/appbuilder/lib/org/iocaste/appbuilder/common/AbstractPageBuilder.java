@@ -99,13 +99,9 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         Map<String, AbstractInstallObject> objects;
         InstallData data;
         String pkgname = message.getString("name");
-        String pkgnameuc = pkgname.toUpperCase();
         
         installcontext = new StandardInstallContext();
         defaultinstall = new PageBuilderDefaultInstall(pkgname);
-        defaultinstall.setLink(pkgnameuc, pkgname);
-        defaultinstall.setProfile(pkgnameuc);
-        defaultinstall.setTaskGroup(pkgnameuc);
         installObject("default", defaultinstall);
         installConfig(defaultinstall);
         objects = installcontext.getObjects();
