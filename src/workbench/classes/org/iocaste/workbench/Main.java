@@ -36,7 +36,6 @@ public class Main extends AbstractPageBuilder {
 
     @Override
     protected void installConfig(PageBuilderDefaultInstall defaultinstall) {
-        defaultinstall.removeLink("IOCASTE-WORKBENCH");
         defaultinstall.setLink("WORKBENCH", "iocaste-workbench");
         defaultinstall.setProfile("WORKBENCH");
         defaultinstall.setProgramAuthorization("WORKBENCH.EXECUTE");

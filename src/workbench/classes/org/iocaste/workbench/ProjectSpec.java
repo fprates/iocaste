@@ -50,22 +50,25 @@ public class ProjectSpec extends AbstractViewSpec {
         tabletool("linkscnt", "links");
     }
     
-    private final ProjectTreeItem treeitem(
-            String container, String name, int type) {
-        String containeritem;
-        ProjectTreeItem treeitem;
-        
-        treeitem = new ProjectTreeItem();
-        nodelist(container, name);
-        containeritem = name.concat("_viewtreeitem");
-        standardcontainer(name, containeritem);
-        
+    public static final ProjectTreeItem registerTreeItem(
+            String container, int type, String name) {
+        ProjectTreeItem treeitem = new ProjectTreeItem();
         treeitem.name = name;
         treeitem.text = name.concat("_text");
         treeitem.link = name.concat("_link");
         treeitem.container = container;
         treeitem.type = type;
+        return treeitem;
+    }
+    
+    private final ProjectTreeItem treeitem(
+            String container, String name, int type) {
+        String containeritem;
+        ProjectTreeItem treeitem = registerTreeItem(container, type, name);
         
+        nodelist(container, name);
+        containeritem = name.concat("_viewtreeitem");
+        standardcontainer(name, containeritem);
         text(containeritem, treeitem.text);
         link(containeritem, treeitem.link);
         return treeitem;
