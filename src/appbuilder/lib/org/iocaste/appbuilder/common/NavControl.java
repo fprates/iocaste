@@ -18,6 +18,7 @@ public class NavControl {
     private AbstractContext context;
     private Container container;
     private StandardContainer buttonbar;
+    private Text title;
     
     public NavControl(Form container, AbstractContext context) {
         this.context = context;
@@ -44,7 +45,7 @@ public class NavControl {
     private final void build(AbstractContext context) {
         Text text;
         Link link;
-        String name, title;
+        String name, titletext;
         Iocaste iocaste;
         PageStackItem[] positions;
         User user;
@@ -80,12 +81,11 @@ public class NavControl {
              * a posição no próprio handler.
              */
             page.register(name, new NavControlCustomAction(name));
+            titletext = position.getTitle();
+            
             link = new Link(container, name, name);
             link.setStyleClass("nc_nav_link");
-            title = position.getTitle();
-            if (title == null)
-                title = name;
-            link.setText(title);
+            link.setText((titletext == null)? name : titletext);
             link.setCancellable(true);
             
             text = new Text(container, name.concat(".separator"));
@@ -98,9 +98,9 @@ public class NavControl {
         if (name == null)
             name = iocaste.getCurrentApp();
         
-        text = new Text(container, "this");
-        text.setStyleClass("nc_text");
-        text.setText(name);
+        title = new Text(container, "this");
+        title.setStyleClass("nc_text");
+        title.setText(name);
         
         user = iocaste.getUserData(iocaste.getUsername());
         text = new Text(container, "username");
@@ -150,6 +150,11 @@ public class NavControl {
         stylesheet.put(to, "text-decoration", "none");
         stylesheet.put(to, "padding", "3px");
         stylesheet.put(to, "vertical-align", "middle");
+    }
+    
+    public final void setTitle(String title) {
+        this.title.setText(title);
+        context.view.setTitle(title);
     }
 
 }
