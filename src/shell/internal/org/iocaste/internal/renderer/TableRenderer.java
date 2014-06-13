@@ -146,7 +146,7 @@ public class TableRenderer extends Renderer {
         }
         
         divtag = new XMLElement("div");
-        divtag.add("style", "width: 100%; overflow: auto;");
+        divtag.add("style", table.getBorderStyle());
         divtag.addChild(tabletag);
         return divtag;
     }

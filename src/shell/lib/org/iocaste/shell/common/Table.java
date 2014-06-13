@@ -48,7 +48,7 @@ public class Table extends AbstractContainer {
     private RadioGroup group;
     private Container linecontrol;
     private String[] actions;
-    private String text;
+    private String text, borderstyle;
     private int topline, vlines;
     private Container container;
     
@@ -119,6 +119,14 @@ public class Table extends AbstractContainer {
      */
     public final String getAction(byte action) {
         return actions[action];
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getBorderStyle() {
+        return borderstyle;
     }
     
     /**
@@ -283,14 +291,12 @@ public class Table extends AbstractContainer {
         TableColumn column;
         
         header = true;
-        mark = false;
         items = new ArrayList<>();
         columns = new LinkedHashMap<>();
         seltype = MULTIPLE;
         group = new RadioGroup(getName().concat(".mark"));
         actions = new String[2];
-        topline = 0;
-        vlines = 0;
+        borderstyle = "width: 100%; overflow: auto;";
         
         setStyleClass("table_area");
         column = new TableColumn(this, "");
@@ -330,6 +336,14 @@ public class Table extends AbstractContainer {
      */
     public final void setAction(byte action, String method) {
         actions[action] = method;
+    }
+    
+    /**
+     * 
+     * @param borderstyle
+     */
+    public final void setBorderStyle(String borderstyle) {
+        this.borderstyle = borderstyle;
     }
     
     @Override

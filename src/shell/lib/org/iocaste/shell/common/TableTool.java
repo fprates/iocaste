@@ -280,6 +280,9 @@ public class TableTool {
         DocumentModel model = new Documents(data.context.function).
                 getModel(modelname);
         
+        if (model == null)
+            throw new RuntimeException(modelname.
+                    concat(" is an invalid model."));
         model(model);
     }
     
@@ -306,6 +309,10 @@ public class TableTool {
         for (TableItem item : table.getItems())
             if (item.isSelected())
                 table.remove(item);
+    }
+    
+    public final void setBorderStyle(String borderstyle) {
+        getTable().setBorderStyle(borderstyle);
     }
     
     public final void setColumnSize(String column, int size) {
@@ -447,14 +454,20 @@ public class TableTool {
     }
     
     public final void setVisibility(boolean visible, String... columns) {
+        TableColumn tcolumn;
         Table table = getTable();
         
         for (TableColumn column : table.getColumns())
             if (!column.isMark())
                 column.setVisible(!visible);
         
-        for (String column : columns)
-            table.getColumn(column).setVisible(visible);
+        for (String column : columns) {
+            tcolumn = table.getColumn(column);
+            if (tcolumn == null)
+                throw new RuntimeException(
+                        column.concat(" is an invalid column."));
+            tcolumn.setVisible(visible);
+        }
     }
     
     public final void setVisibleLines(int lines) {
