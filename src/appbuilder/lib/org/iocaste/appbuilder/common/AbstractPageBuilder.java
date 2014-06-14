@@ -14,6 +14,7 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.ExpandBar;
+import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
@@ -196,6 +197,9 @@ class BuilderCustomView extends AbstractCustomView {
             editor = new TextEditorTool(context).instance(container, name);
             viewcomponents = context.getViewComponents(view);
             viewcomponents.editors.put(name, editor);
+            break;
+        case FILE_UPLOAD:
+            new FileEntry(container, name);
             break;
         default:
             break;

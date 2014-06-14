@@ -36,6 +36,10 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.EXPAND_BAR, name);
     }
     
+    protected final void fileupload(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.FILE_UPLOAD, name);
+    }
+    
     protected final void form(String name) {
         ViewSpecItem item = new ViewSpecItem(
                 "view", ViewSpecItem.TYPES.FORM, name);

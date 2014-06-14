@@ -21,7 +21,8 @@ public class ViewSpecItem {
         NODE_LIST("nodelist"),
         TEXT("text"),
         LINK("link"),
-        REPORT_TOOL("reporttool");
+        REPORT_TOOL("reporttool"),
+        FILE_UPLOAD("fileupload");
 
         private String name;
         
