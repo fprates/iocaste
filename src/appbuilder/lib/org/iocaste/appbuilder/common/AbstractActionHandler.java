@@ -8,6 +8,8 @@ import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.GenericService;
+import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
@@ -15,6 +17,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.View;
 
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
@@ -223,6 +226,23 @@ public abstract class AbstractActionHandler {
         
         return (selected.size() == 0)?
                 null : selected.toArray(new ExtendedObject[0]);
+    }
+    
+    protected final void taskredirect(String task) {
+        View view;
+        GenericService service = new GenericService(
+                context.function, "/iocaste-tasksel/view.html");
+        Message message = new Message("task_redirect");
+        
+        message.add("task", task);
+        view = service.invoke(message);
+        if (view == null)
+            throw new RuntimeException(task.concat(" is an invalid task."));
+        
+        for (String name : view.getExportable())
+            context.view.setParameter(name, view.getParameter(name));
+        context.view.redirect(view.getRedirectedApp(),
+                view.getRedirectedPage(), View.INITIALIZE);
     }
     
     private final void updateView() {

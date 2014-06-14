@@ -14,6 +14,7 @@ public class Main extends AbstractPage {
     
     public Main() {
         export("install", "install");
+        export("task_redirect", "redirect");
     }
     
     /**
@@ -57,6 +58,12 @@ public class Main extends AbstractPage {
     public final void main() {
         Map<String, Set<TaskEntry>> lists = Response.init(context);
         Response.main(lists, context);
+    }
+    
+    public final View redirect(Message message) {
+        String task = message.getString("task");
+        View view = new View(null, null);
+        return (Request.call(view, this, task) == 1)? null : view;
     }
 }
 

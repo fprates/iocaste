@@ -11,7 +11,6 @@ import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.ExpandBar;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.PageControl;
@@ -78,14 +77,6 @@ public class Response {
         }
         
         return lists;
-    }
-    
-    public static final void grouprun(AbstractContext context) {
-        InputComponent input = context.view.getElement("groupcommand");
-        String command = input.get();
-        String[] parsed = Common.parseCommand(command, context);
-        
-        Common.run(context.view, parsed);
     }
 
     public static final Map<String, Set<TaskEntry>> init(AbstractContext context) {
