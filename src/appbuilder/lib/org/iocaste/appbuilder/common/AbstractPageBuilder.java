@@ -26,6 +26,8 @@ import org.iocaste.shell.common.TableToolData;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewCustomAction;
+import org.iocaste.texteditor.common.TextEditor;
+import org.iocaste.texteditor.common.TextEditorTool;
 
 public abstract class AbstractPageBuilder extends AbstractPage {
     private PageBuilderContext context;
@@ -123,6 +125,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
 }
 
 class BuilderCustomView extends AbstractCustomView {
+    private TextEditor editor;
     private NavControl navcontrol;
     private String view;
     
@@ -190,6 +193,10 @@ class BuilderCustomView extends AbstractCustomView {
                     name, new ReportTool(container, name));
             break;
         case TEXT_EDITOR:
+            editor = new TextEditorTool(context).instance(container, name);
+            viewcomponents = context.getViewComponents(view);
+            viewcomponents.editors.put(name, editor);
+            break;
         default:
             break;
         }

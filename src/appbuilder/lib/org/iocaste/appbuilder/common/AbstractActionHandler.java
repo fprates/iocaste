@@ -18,6 +18,8 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
+import org.iocaste.texteditor.common.TextEditor;
+import org.iocaste.texteditor.common.TextEditorTool;
 
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
@@ -243,6 +245,14 @@ public abstract class AbstractActionHandler {
             context.view.setParameter(name, view.getParameter(name));
         context.view.redirect(view.getRedirectedApp(),
                 view.getRedirectedPage(), View.INITIALIZE);
+    }
+    
+    protected final void texteditorsave(String name, String id) {
+        TextEditorTool editortool = new TextEditorTool(context);
+        TextEditor editor = getViewComponents().editors.get(name);
+        
+        editortool.commit(editor, id);
+        editortool.update(editor, "B2B_OBSERV");
     }
     
     private final void updateView() {
