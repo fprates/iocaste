@@ -33,10 +33,10 @@ public class Main extends AbstractPageBuilder {
     @Override
     protected void installConfig(PageBuilderDefaultInstall defaultinstall)
             throws Exception {
-        defaultinstall.setTaskGroup("ADMIN");
         defaultinstall.setProfile("ADMIN");
         defaultinstall.setProgramAuthorization("INFOSYS.EXECUTE");
         defaultinstall.setLink("SYSINFO", "iocaste-infosis");
+        defaultinstall.addToTaskGroup("ADMIN", "SYSINFO");
         
         installObject("models", new ModelsInstall());
         installObject("messages", new MessagesInstall());

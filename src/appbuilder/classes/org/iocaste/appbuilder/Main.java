@@ -32,7 +32,6 @@ public class Main extends AbstractPageBuilder {
     protected final void installConfig(PageBuilderDefaultInstall defaultinstall)
     {
         defaultinstall.setProfile("APPBUILDER");
-        defaultinstall.setTaskGroup(null);
         defaultinstall.setProgramAuthorization("APPBUILDER.EXECUTE");
     }
     

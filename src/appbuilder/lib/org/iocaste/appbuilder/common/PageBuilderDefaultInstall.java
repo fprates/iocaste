@@ -10,11 +10,20 @@ import org.iocaste.protocol.user.UserProfile;
 
 public class PageBuilderDefaultInstall extends AbstractInstallObject {
     private Map<String, String> links;
-    private String pkgname, profilename, taskgroupname, programauth;
-
+    private String pkgname, profilename, programauth;
+    private Map<String, TaskGroup> tasksgroups;
+    
     public PageBuilderDefaultInstall(String pkgname) {
         this.pkgname = pkgname;
         links = new HashMap<>();
+        tasksgroups = new HashMap<>();
+    }
+    
+    public final void addToTaskGroup(String name, String... links) {
+        TaskGroup taskgroup = new TaskGroup(name);
+        for (String link : links)
+            taskgroup.add(link);
+        tasksgroups.put(name, taskgroup);
     }
     
     private final String buildapplink(
@@ -27,7 +36,6 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     
     @Override
     public void execute(StandardInstallContext context) {
-        TaskGroup taskgroup;
         UserProfile profile;
         Authorization authorization;
         InstallData data = context.getInstallData();
@@ -35,21 +43,17 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
         profile = new UserProfile(profilename);
         data.add(profile);
         
-        if (taskgroupname != null) {
-            taskgroup = new TaskGroup(taskgroupname);
+        for (TaskGroup taskgroup : tasksgroups.values())
             data.add(taskgroup);
-            
-            for (String link : links.keySet()) {
-                authorization = new Authorization(link.concat(".CALL"));
-                authorization.setAction("CALL");
-                authorization.setObject("LINK");
-                authorization.add("LINK", link);
-                data.add(authorization);
-                profile.add(authorization);
-                
-                data.link(link, links.get(link));
-                taskgroup.add(link);
-            }
+        
+        for (String link : links.keySet()) {
+            authorization = new Authorization(link.concat(".CALL"));
+            authorization.setAction("CALL");
+            authorization.setObject("LINK");
+            authorization.add("LINK", link);
+            data.add(authorization);
+            profile.add(authorization);
+            data.link(link, links.get(link));
         }
         
         if (programauth == null)
@@ -81,9 +85,5 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     
     public final void setProgramAuthorization(String programauth) {
         this.programauth = programauth;
-    }
-    
-    public final void setTaskGroup(String taskgroup) {
-        taskgroupname = taskgroup;
     }
 }
