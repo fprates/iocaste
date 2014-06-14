@@ -9,7 +9,7 @@ import org.iocaste.shell.common.TextArea;
 public class TextEditor implements Serializable {
     private static final long serialVersionUID = 8099830107603124518L;
     private String name;
-    private Map<Long, String> pages;
+    private Map<String, String> pages;
     private TextArea element;
     
     public TextEditor(String name) {
@@ -17,8 +17,8 @@ public class TextEditor implements Serializable {
         pages = new LinkedHashMap<>();
     }
     
-    public final void commit(long page, String text) {
-        pages.put(page, text);
+    public final void commit(String id, String text) {
+        pages.put(id, text);
     }
     
     public final TextArea getElement() {
@@ -37,12 +37,12 @@ public class TextEditor implements Serializable {
         return name;
     }
     
-    public final Long[] getPages() {
-        return pages.keySet().toArray(new Long[0]);
+    public final String[] getPages() {
+        return pages.keySet().toArray(new String[0]);
     }
     
-    public final String getString(long page) {
-        return pages.get(page);
+    public final String getString(String id) {
+        return pages.get(id);
     }
     
     public final void setElement(TextArea element) {

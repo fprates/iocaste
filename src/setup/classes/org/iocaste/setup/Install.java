@@ -18,7 +18,6 @@ public class Install {
         CModel.install(data, config);
         GlobalConfig.install(data);
         Shell.install(data);
-        TextEditor.install(data);
         
         return data;
     }

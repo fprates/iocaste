@@ -1,5 +1,6 @@
 package org.iocaste.texteditor.common;
 
+import java.io.File;
 import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
@@ -21,15 +22,28 @@ public class TextEditorTool extends AbstractServiceInterface {
         this.context = context;
     }
     
-    public final void commit(TextEditor editor, long page) {
+    public final void commit(TextEditor editor, String id) {
         TextArea textarea = context.view.getElement(editor.getName());
-        editor.commit(page, textarea.getst());
+        editor.commit(id, textarea.getst());
+    }
+
+    public static final String composeFileName(String... names) {
+        StringBuilder sb = new StringBuilder();
+        
+        for (String name : names) {
+            if (sb.length() > 0)
+                sb.append(File.separator);
+        
+            sb.append(name);
+        }
+        
+        return sb.toString();
     }
     
-    public final Map<Long, String> get(String textnm, long page) {
+    public final Map<String, String> get(String textnm, String id) {
         Message message = new Message("load");
         message.add("textname", textnm);
-        message.add("pagenr", page);
+        message.add("id", id);
         return call(message);
     }
     
@@ -40,21 +54,21 @@ public class TextEditorTool extends AbstractServiceInterface {
         return editor;
     }
     
-    public final void load(TextEditor editor, String textnm, long page) {
+    public final void load(TextEditor editor, String textnm, String id) {
         InputComponent input;
-        Map<Long, String> pages = get(textnm, page);
+        Map<String, String> pages = get(textnm, id);
         
         if (pages == null)
             return;
         
-        for (long pagenr : pages.keySet())
-            editor.commit(pagenr, pages.get(pagenr));
+        for (String key : pages.keySet())
+            editor.commit(key, pages.get(key));
         
-        if (page == 0)
+        if (id == null)
             return;
         
         input = context.view.getElement(editor.getName());
-        input.set(pages.get(page));
+        input.set(pages.get(id));
     }
     
     public final void register(String name) {
@@ -67,10 +81,24 @@ public class TextEditorTool extends AbstractServiceInterface {
         new PackageTool(context.function).install(data, app);
     }
     
-    public final void set(TextEditor editor, int page, String text) {
+    public static final void removeCompleteDir(String dir) {
+        File origin = new File(dir);
+        File[] files = origin.listFiles();
+        
+        if (files != null)
+            for (File file : files) {
+                if (file.isDirectory())
+                    removeCompleteDir(file.getAbsolutePath());
+                file.delete();
+            }
+        
+        origin.delete();
+    }
+    
+    public final void set(TextEditor editor, String id, String text) {
         TextArea textarea = context.view.getElement(editor.getName());
         textarea.set(text);
-        editor.commit(page, text);
+        editor.commit(id, text);
     }
     
     public final void setEnabled(TextEditor editor, boolean enabled) {
@@ -84,13 +112,11 @@ public class TextEditorTool extends AbstractServiceInterface {
         call(message);
     }
     
-    public final void update(String textobj, long page, String text,
-            int linesize) {
+    public final void update(String textobj, String page, String text) {
         Message message = new Message("update_text");
         message.add("textobj", textobj);
-        message.add("page", page);
+        message.add("id", page);
         message.add("text", text);
-        message.add("line_size", linesize);
         call(message);
     }
 }
