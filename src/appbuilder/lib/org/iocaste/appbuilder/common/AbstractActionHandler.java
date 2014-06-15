@@ -169,6 +169,7 @@ public abstract class AbstractActionHandler {
     }
     
     public final void run(AbstractContext context) throws Exception {
+        AbstractViewInput input;
         String view = context.view.getPageName();
         String action = context.view.getActionControl();
         
@@ -177,8 +178,13 @@ public abstract class AbstractActionHandler {
             return;
         
         execute(this.context);
-        if (updateview)
+        if (updateview) {
             updateView();
+        } else {
+            input = this.context.getViewInput(view);
+            if (input != null)
+                input.run(this.context);
+        }
     }
     
     public final void setManager(Manager manager) {
