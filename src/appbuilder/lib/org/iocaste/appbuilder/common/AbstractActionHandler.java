@@ -15,6 +15,7 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
@@ -52,6 +53,25 @@ public abstract class AbstractActionHandler {
     
     protected abstract void execute(PageBuilderContext context)
             throws Exception;
+    
+    protected final byte[] filecontentget(String fileentry) {
+        return fileentryget(fileentry).getContent();
+    }
+    
+    private final FileEntry fileentryget(String fileentry) {
+        FileEntry fentry = context.view.getElement(fileentry);
+        if (fentry != null)
+            return fentry;
+        throw new RuntimeException(fileentry.concat(" is an invalid element."));
+    }
+    
+    protected final int fileerrorget(String fileentry) {
+        return fileentryget(fileentry).getError();
+    }
+    
+    protected final String filenameget(String fileentry) {
+        return fileentryget(fileentry).get();
+    }
     
     protected <T> T getdf(String dataform, String field) {
         return getdfinput(dataform, field).get();
