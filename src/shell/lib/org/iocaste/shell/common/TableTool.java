@@ -475,6 +475,10 @@ public class TableTool {
         
         table.setVisibleLines(lines);
     }
+    
+    public final int size() {
+        return getTable().length();
+    }
 }
 
 class Control {

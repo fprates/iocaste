@@ -33,6 +33,9 @@ public abstract class AbstractViewInput {
             throw new RuntimeException(table.
                     concat(" is an invalid tabletool."));
         
+        if (tabletool.size() > 0 && (objects == null || objects.length == 0))
+            return;
+        
         tabletool.setObjects(objects);
     }
     
@@ -145,13 +148,7 @@ public abstract class AbstractViewInput {
     }
     
     protected final void tableitemsadd(String table, ExtendedObject[] objects) {
-        TableTool tabletool = getViewComponents().tabletools.get(table);
-        
-        if (tabletool == null)
-            throw new RuntimeException(table.
-                    concat(" is an invalid tabletool."));
-        
-        tabletool.setObjects(objects);
+        addtableitems(table, objects);
     }
     
     protected final void tableitemsadd(String table, DataConversion conversion)
