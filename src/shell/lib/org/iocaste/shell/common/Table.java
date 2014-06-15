@@ -103,6 +103,15 @@ public class Table extends AbstractContainer {
         columns.put(column.getName(), column);
     }
     
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.AbstractContainer#clear()
+     */
+    @Override
+    public void clear() {
+        items.clear();
+    }
+    
     /**
      * Obtem linha da tabela através de índice.
      * @param index índice

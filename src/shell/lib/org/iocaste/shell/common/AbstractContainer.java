@@ -73,7 +73,7 @@ public abstract class AbstractContainer
      * @see org.iocaste.shell.common.Container#clear()
      */
     @Override
-    public final void clear() {
+    public void clear() {
         if (elements.size() > 0)
             elements.clear();
     }

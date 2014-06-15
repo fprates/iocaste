@@ -160,6 +160,17 @@ public abstract class AbstractViewInput {
         addtableitems(table, objects);
     }
     
+    protected final void tableitemsset(String table, ExtendedObject[] objects) {
+        TableTool tabletool = getViewComponents().tabletools.get(table);
+        
+        if (tabletool == null)
+            throw new RuntimeException(table.
+                    concat(" is an invalid tabletool."));
+        
+        tabletool.clear();
+        tabletool.setObjects(objects);
+    }
+    
     protected final void texteditorload(
             String texteditor, String namespace, String id) {
         TextEditor editor = getViewComponents().editors.get(texteditor);

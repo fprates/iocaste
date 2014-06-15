@@ -206,6 +206,11 @@ public class TableTool {
         item.setObject(object);
     }
     
+    public final void clear() {
+        getTable().clear();
+        last = 0;
+    }
+    
     public final void controls(byte state, String... controls) {
         Control control;
         Table table = getTable();
@@ -233,20 +238,20 @@ public class TableTool {
         }
     }
     
-    public final void clear() {
-        Table table = getTable();
-        
-        table.clear();
-    }
-    
+    /**
+     * 
+     * @return
+     */
     public final Container getContainer() {
         return container;
     }
     
+    /**
+     * 
+     * @return
+     */
     public final TableItem[] getItems() {
-        Table table = getTable();
-        
-        return table.getItems();
+        return getTable().getItems();
     }
     
     /**
@@ -257,6 +262,10 @@ public class TableTool {
         return getTable().getModel();
     }
     
+    /**
+     * 
+     * @return
+     */
     public final ExtendedObject[] getObjects() {
         ExtendedObject[] objects;
         Table table = getTable();
@@ -272,10 +281,18 @@ public class TableTool {
         return objects;
     }
     
+    /**
+     * 
+     * @return
+     */
     private final Table getTable() {        
         return data.context.view.getElement(data.name);
     }
     
+    /**
+     * 
+     * @param modelname
+     */
     public final void model(String modelname) {
         DocumentModel model = new Documents(data.context.function).
                 getModel(modelname);
@@ -286,6 +303,10 @@ public class TableTool {
         model(model);
     }
     
+    /**
+     * 
+     * @param model
+     */
     public final void model(DocumentModel model) {
         Column column;
         Table table = getTable();
@@ -303,6 +324,9 @@ public class TableTool {
         }
     }
     
+    /**
+     * 
+     */
     public final void remove() {
         Table table = getTable();
         
@@ -311,18 +335,38 @@ public class TableTool {
                 table.remove(item);
     }
     
+    /**
+     * 
+     * @param borderstyle
+     */
     public final void setBorderStyle(String borderstyle) {
         getTable().setBorderStyle(borderstyle);
     }
     
+    /**
+     * 
+     * @param column
+     * @param size
+     */
     public final void setColumnSize(String column, int size) {
         columns.get(column).tcolumn.setLength(size);
     }
     
+    /**
+     * 
+     * @param name
+     * @param type
+     */
     public final void setColumnType(String name, Const type) {
         setColumnType(name, type, null);
     }
     
+    /**
+     * 
+     * @param name
+     * @param type
+     * @param action
+     */
     public final void setColumnType(String name, Const type, String action) {
         Column column = columns.get(name);
         
@@ -330,6 +374,11 @@ public class TableTool {
         column.action = action;
     }
     
+    /**
+     * 
+     * @param status
+     * @param tcolumns
+     */
     public final void setColumnStatus(byte status, String... tcolumns) {
         String name;
         Column column;
@@ -359,6 +408,11 @@ public class TableTool {
             }
     }
     
+    /**
+     * 
+     * @param tcolumn
+     * @param item
+     */
     private final void setColumnValidator(TableColumn tcolumn, TableItem item) {
         InputComponent input;
         Column column;
@@ -386,24 +440,45 @@ public class TableTool {
             input.addValidatorInput((InputComponent)item.get(vinputname));
     }
     
+    /**
+     * 
+     * @param name
+     * @param values
+     */
     public final void setColumnValues(String name, Map<String, Object> values)
     {
         columns.get(name).values = values;
     }
     
+    /**
+     * 
+     * @param name
+     */
     public final void setItemColumn(String name) {
         itemcolumn = name;
     }
     
+    /**
+     * 
+     * @param increment
+     */
     public final void setItemIncrement(int increment) {
         this.increment = increment;
     }
     
+    /**
+     * 
+     * @param mark
+     */
     public final void setMark(boolean mark) {
         Table table = getTable();
         table.setMark(mark);
     }
     
+    /**
+     * 
+     * @param mode
+     */
     public final void setMode(byte mode) {
         Table table = getTable();
         
@@ -430,6 +505,10 @@ public class TableTool {
             columns.get(column).disabled = (mode == DISPLAY);
     }
     
+    /**
+     * 
+     * @param objects
+     */
     public final void setObjects(ExtendedObject[] objects) {
         Table table = getTable();
         
@@ -439,6 +518,12 @@ public class TableTool {
             additems(table, objects);
     }
     
+    /**
+     * 
+     * @param field
+     * @param validator
+     * @param inputs
+     */
     public final void setValidator(String field,
             Class<? extends Validator> validator, String... inputs) {
         Column column;
@@ -453,6 +538,11 @@ public class TableTool {
             setColumnValidator(column.tcolumn, item);
     }
     
+    /**
+     * 
+     * @param visible
+     * @param columns
+     */
     public final void setVisibility(boolean visible, String... columns) {
         TableColumn tcolumn;
         Table table = getTable();
@@ -470,12 +560,20 @@ public class TableTool {
         }
     }
     
+    /**
+     * 
+     * @param lines
+     */
     public final void setVisibleLines(int lines) {
         Table table = getTable();
         
         table.setVisibleLines(lines);
     }
     
+    /**
+     * 
+     * @return
+     */
     public final int size() {
         return getTable().length();
     }
