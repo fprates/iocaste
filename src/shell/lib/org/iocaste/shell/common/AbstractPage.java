@@ -85,16 +85,13 @@ public abstract class AbstractPage extends AbstractFunction {
         
         action = (control == null)? controlname : control.getName();
         view.setActionControl(action);
-        validate();
         action = (control == null)? controlname : control.getAction();
-        if (!action.equals("validate")) {
-            customaction = customactions.get(action);
-            if (customaction != null) {
-                customaction.execute(context);
-            } else {
-                method = getClass().getMethod(action);
-                method.invoke(this);
-            }
+        customaction = customactions.get(action);
+        if (customaction != null) {
+            customaction.execute(context);
+        } else {
+            method = getClass().getMethod(action);
+            method.invoke(this);
         }
         
         return view;
@@ -225,8 +222,6 @@ public abstract class AbstractPage extends AbstractFunction {
     public final void register(String view, CustomView custom) {
         customviews.put(view, custom);
     }
-    
-    protected void validate() { }
     
     /**
      * 
