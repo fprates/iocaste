@@ -4,6 +4,7 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
@@ -121,21 +122,30 @@ public class NavControl {
         
         cloneLink(stylesheet, ".nc_nav_action:hover", ".link:hover");
         stylesheet.put(".nc_nav_action:hover", "color", "#ffffff");
-        stylesheet.put(".nc_nav_action:hover", "font-size", "#10pt");
+        stylesheet.put(".nc_nav_action:hover", "font-size", "10pt");
         cloneLink(stylesheet, ".nc_nav_action:link", ".link:link");
         stylesheet.put(".nc_nav_action:link", "color", "#ffffff");
-        stylesheet.put(".nc_nav_action:link", "font-size", "#10pt");
+        stylesheet.put(".nc_nav_action:link", "font-size", "10pt");
         cloneLink(stylesheet, ".nc_nav_action:active", ".link:active");
         stylesheet.put(".nc_nav_action:active", "color", "#ffffff");
-        stylesheet.put(".nc_nav_action:active", "font-size", "#10pt");
+        stylesheet.put(".nc_nav_action:active", "font-size", "10pt");
         cloneLink(stylesheet, ".nc_nav_action:visited", ".link:visited");
         stylesheet.put(".nc_nav_action:visited", "color", "#ffffff");
-        stylesheet.put(".nc_nav_action:visited", "font-size", "#10pt");
+        stylesheet.put(".nc_nav_action:visited", "font-size", "10pt");
         
         stylesheet.newElement(".nc_nav_separator");
         stylesheet.put(".nc_nav_separator", "color", "#ffffff");
         stylesheet.put(".nc_nav_separator", "font-size", "10pt");
         stylesheet.put(".nc_nav_separator", "display", "inline");
+        
+        stylesheet.newElement(".nc_nav_submit");
+        stylesheet.put(".nc_nav_submit", "color", "#ffffff");
+        stylesheet.put(".nc_nav_submit", "font-size", "10pt");
+        stylesheet.put(".nc_nav_submit", "border-style", "none");
+        stylesheet.put(".nc_nav_submit", "background-color", "#aaaaaa");
+        stylesheet.put(".nc_nav_submit", "padding", "0px");
+        stylesheet.put(".nc_nav_submit", "font-family", "sans-serif");
+        stylesheet.put(".nc_nav_submit", "vertical-align", "middle");
         
         buttonbar = new StandardContainer(container, "navbar.container");
         buttonbar.setStyleClass("nc_nav_buttonbar");
@@ -155,6 +165,23 @@ public class NavControl {
     public final void setTitle(String title) {
         this.title.setText(title);
         context.view.setTitle(title);
+    }
+    
+    public final void submit(String action) {
+        Text text;
+        Button button;
+        
+        if (buttonbar == null) {
+            buttonbar = buildButtonBar();
+        } else {
+            text = new Text(buttonbar, action.concat("_separator"));
+            text.setText("|");
+            text.setStyleClass("nc_nav_separator");
+        }
+        
+        button = new Button(buttonbar, action);
+        button.setSubmit(true);
+        button.setStyleClass("nc_nav_submit");
     }
 
 }
