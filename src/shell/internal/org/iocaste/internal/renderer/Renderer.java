@@ -9,6 +9,7 @@ import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Canvas;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.CustomComponent;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.ExpandBar;
@@ -91,6 +92,12 @@ public class Renderer {
             tags.add(StandardContainerRenderer.render(
                     (StandardContainer)container, config));
             break;
+            
+        case CUSTOM_COMPONENT:
+            tags.add(CustomComponentRenderer.render(
+                    (CustomComponent)container, config));
+            break;
+            
         default:
             break;
         }
@@ -103,7 +110,7 @@ public class Renderer {
      * @param element
      * @param config
      */
-    protected static final void renderElement(List<XMLElement> tags,
+    public static final void renderElement(List<XMLElement> tags,
             Element element, Config config) {
         if (!element.isVisible())
             return;

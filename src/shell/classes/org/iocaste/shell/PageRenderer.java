@@ -1091,6 +1091,7 @@ public class PageRenderer extends AbstractRenderer {
         
         renderer.setDBName(dbname);
         renderer.setShControl(pagectx.getShControl());
+        renderer.setFunction(this);
         tracking = new TrackingData();
         tracking.logid = pagectx.getLogid();
         tracking.sequence = pagectx.getSequence();

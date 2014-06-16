@@ -2,6 +2,7 @@ package org.iocaste.shell.common;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.utils.XMLElement;
 
 /**
  * Serviços do shell.
@@ -261,6 +263,17 @@ public class Shell extends AbstractServiceInterface {
         Message message = new Message("remove_ticket");
         message.add("ticket", ticket);
         call(message);
+    }
+    
+    /**
+     * 
+     * @param element
+     * @return
+     */
+    public final List<XMLElement> render(Element element) {
+        Message message = new Message("render");
+        message.add("element", element);
+        return call(message);
     }
     
     /**

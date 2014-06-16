@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.iocaste.internal.renderer.Config;
 import org.iocaste.internal.renderer.Renderer;
+import org.iocaste.protocol.Function;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -29,6 +30,7 @@ public class HtmlRenderer {
     private Set<String> actions;
     private MessageSource msgsource;
     private ControlComponent shcontrol;
+    private Function function;
     
     public HtmlRenderer() {
         String line;
@@ -179,6 +181,7 @@ public class HtmlRenderer {
         XMLElement bodytag = new XMLElement("body");
         
         config = new Config();
+        config.function = function;
         config.setView(view);
         config.setUsername(username, tracking.logid);
         config.addMessageSource(view.getMessages());
@@ -213,6 +216,14 @@ public class HtmlRenderer {
      */
     public final void setDBName(String dbname) {
         this.dbname = dbname;
+    }
+    
+    /**
+     * 
+     * @param function
+     */
+    public final void setFunction(Function function) {
+        this.function = function;
     }
     
     /**

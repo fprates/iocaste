@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.iocaste.internal.TrackingData;
+import org.iocaste.protocol.Function;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
 
 public class Config {
+    public Function function;
     private String currentaction, currentform, pagetrack;
     private String dbname, username;
     private int logid;
