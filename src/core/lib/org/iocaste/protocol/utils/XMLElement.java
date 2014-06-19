@@ -1,12 +1,14 @@
 package org.iocaste.protocol.utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class XMLElement {
+public class XMLElement implements Serializable {
+    private static final long serialVersionUID = 3065700337817067863L;
     private String name;
     private Map<String, String> attributes;
     private List<XMLElement> elements;
