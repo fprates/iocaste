@@ -1,7 +1,9 @@
 package org.iocaste.appbuilder;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
@@ -153,14 +155,35 @@ public class ComponentRender extends AbstractFunction {
         String buttonname, componentname;
         Container container;
         ExtendedObject[] objects;
+        Map<String, Button> controls;
         CustomComponent component = message.get("element");
         
         componentname = component.getName();
         container = new StandardContainer(
                 component.getContainer(), componentname.concat("cnt"));
-        for (String name : new String[] {"add", "remove", "accept"}) {
+        
+        controls = new HashMap<>();
+        for (String name : new String[] {
+                TableTool.ADD,
+                TableTool.REMOVE,
+                TableTool.ACCEPT}) {
             buttonname = name.concat(componentname);
-            new Button(container, buttonname);
+            controls.put(name, new Button(container, buttonname));
+        }
+
+        switch (component.getb("mode")) {
+        case TableTool.CONTINUOUS_UPDATE:
+        case TableTool.UPDATE:
+            controls.get(TableTool.ACCEPT).setVisible(false);
+            controls.get(TableTool.ADD).setVisible(true);
+            controls.get(TableTool.REMOVE).setVisible(true);
+            break;
+            
+        case TableTool.DISPLAY:
+            controls.get(TableTool.ACCEPT).setVisible(false);
+            controls.get(TableTool.ADD).setVisible(false);
+            controls.get(TableTool.REMOVE).setVisible(false);
+            break;
         }
         
         model = new Documents(this).getModel(component.getst("model"));
@@ -168,6 +191,8 @@ public class ComponentRender extends AbstractFunction {
         table.setMark(component.getbl("mark"));
         table.setVisibleLines(component.geti("visible_lines"));
         table.importModel(model);
+        table.setBorderStyle(component.getst("borderstyle"));
+        table.setEnabled(component.getbl("enabled"));
         
         step = component.geti("step");
         itemcolumn = component.getst("itemcolumn");

@@ -35,6 +35,7 @@ public class TableTool {
         custom.set("visible_lines", 15);
         custom.set("step", 1);
         custom.set("columns", columns);
+        custom.set("enabled", true);
     }
     
     public final Container getContainer() {
@@ -93,6 +94,10 @@ public class TableTool {
             custom.set("mark", false);
             break;
         }
+        
+        custom.set("enabled", mode != DISPLAY);
+        for (Map<String, Object> column : columns.values())
+            column.put("disabled", mode == DISPLAY);
     }
     
     public final void setObjects(ExtendedObject[] objects) {
