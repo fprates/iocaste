@@ -93,11 +93,6 @@ public class Renderer {
                     (StandardContainer)container, config));
             break;
             
-        case CUSTOM_COMPONENT:
-            tags.add(CustomComponentRenderer.render(
-                    (CustomComponent)container, config));
-            break;
-            
         default:
             break;
         }
@@ -126,6 +121,11 @@ public class Renderer {
             
         case CHECKBOX:
             tags.add(CheckBoxRenderer.render((CheckBox)element));
+            break;
+            
+        case CUSTOM_COMPONENT:
+            tags.add(CustomComponentRenderer.render(
+                    (CustomComponent)element, config));
             break;
             
         case FILE_ENTRY:
