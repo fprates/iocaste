@@ -7,6 +7,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.NavControl;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexModel;
@@ -14,7 +15,6 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.TableTool;
 
 public class MaintenanceConfig extends AbstractViewConfig {
     

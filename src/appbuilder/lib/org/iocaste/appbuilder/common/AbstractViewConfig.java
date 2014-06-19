@@ -2,11 +2,11 @@ package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
-import org.iocaste.shell.common.TableTool;
 
 public abstract class AbstractViewConfig implements ViewConfig {
     private PageBuilderContext context;

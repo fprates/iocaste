@@ -4,11 +4,11 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.TableTool;
 
 public class DisplayConfig extends AbstractViewConfig {
 

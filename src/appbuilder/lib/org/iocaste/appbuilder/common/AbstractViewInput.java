@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -12,7 +13,6 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.TableTool;
 import org.iocaste.texteditor.common.TextEditor;
 import org.iocaste.texteditor.common.TextEditorTool;
 
@@ -158,17 +158,6 @@ public abstract class AbstractViewInput {
                 documents, conversion, null, null);
         
         addtableitems(table, objects);
-    }
-    
-    protected final void tableitemsset(String table, ExtendedObject[] objects) {
-        TableTool tabletool = getViewComponents().tabletools.get(table);
-        
-        if (tabletool == null)
-            throw new RuntimeException(table.
-                    concat(" is an invalid tabletool."));
-        
-        tabletool.clear();
-        tabletool.setObjects(objects);
     }
     
     protected final void texteditorload(

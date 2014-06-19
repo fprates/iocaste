@@ -1,17 +1,15 @@
 package org.iocaste.appbuilder;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Const;
@@ -124,7 +122,7 @@ public class ComponentRender extends AbstractFunction {
         item.setObject(object);
     }
     
-    private final void additems(Table table, Collection<ExtendedObject> items) {
+    private final void additems(Table table, ExtendedObject[] items) {
         int i = 0;
         int vlines = table.getVisibleLines();
         int total = table.length();
@@ -149,13 +147,12 @@ public class ComponentRender extends AbstractFunction {
         table.setTopLine(total);
     }
     
-    @SuppressWarnings("unchecked")
     public final XMLElement render(Message message) {
         DocumentModel model;
         Table table;
         String buttonname, componentname;
         Container container;
-        Collection<ExtendedObject> objects;
+        ExtendedObject[] objects;
         CustomComponent component = message.get("element");
         
         componentname = component.getName();
@@ -166,15 +163,16 @@ public class ComponentRender extends AbstractFunction {
             new Button(container, buttonname);
         }
         
-        model = (DocumentModel)component.get("model");
+        model = new Documents(this).getModel(component.getst("model"));
         table = new Table(container, componentname);
         table.setMark(component.getbl("mark"));
         table.setVisibleLines(component.geti("visible_lines"));
         table.importModel(model);
         
-        step = component.geti("step"); 
+        step = component.geti("step");
         itemcolumn = component.getst("itemcolumn");
-        objects = (List<ExtendedObject>)component.get("objects");
+        columns = component.get("columns");
+        objects = component.get("objects");
         additems(table, objects);
         
         return new Shell(this).render(container).get(0);

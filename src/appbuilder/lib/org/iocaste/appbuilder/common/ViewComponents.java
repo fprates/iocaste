@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.shell.common.ReportTool;
-import org.iocaste.shell.common.TableTool;
 import org.iocaste.texteditor.common.TextEditor;
 
 public class ViewComponents {

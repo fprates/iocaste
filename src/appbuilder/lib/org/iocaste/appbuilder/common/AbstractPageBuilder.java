@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
@@ -22,8 +24,6 @@ import org.iocaste.shell.common.ReportTool;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
-import org.iocaste.shell.common.TableTool;
-import org.iocaste.shell.common.TableToolData;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewCustomAction;
