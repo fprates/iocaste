@@ -9,7 +9,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.CustomComponent;
+import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.TableItem;
 
 public class TableTool {
@@ -21,7 +21,7 @@ public class TableTool {
     public static final byte DISPLAY = 2;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
-    private CustomComponent custom;
+    private CustomContainer custom;
     private Map<String, Map<String, Object>> columns;
     private TableToolData data;
     
@@ -29,7 +29,7 @@ public class TableTool {
         columns = new HashMap<>();
         this.data = data;
         
-        custom = new CustomComponent(data.container, data.name);
+        custom = new CustomContainer(data.container, data.name);
         custom.setRenderURL("/iocaste-appbuilder/services.html");
         custom.set("mark", false);
         custom.set("visible_lines", 15);
@@ -39,7 +39,7 @@ public class TableTool {
     }
     
     public final Container getContainer() {
-        return custom.getContainer();
+        return custom;
     }
     
     public final TableItem[] getItems() {
@@ -63,6 +63,7 @@ public class TableTool {
             column = new HashMap<>();
             column.put("type", Const.TEXT_FIELD);
             column.put("disabled", false);
+            column.put("visible", true);
             columns.put(item.getName(), column);
         }
     }

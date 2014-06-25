@@ -11,12 +11,11 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.CustomComponent;
+import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
@@ -149,18 +148,18 @@ public class ComponentRender extends AbstractFunction {
         table.setTopLine(total);
     }
     
-    public final XMLElement render(Message message) {
+    public final CustomContainer render(Message message) {
         DocumentModel model;
         Table table;
         String buttonname, componentname;
         Container container;
         ExtendedObject[] objects;
         Map<String, Button> controls;
-        CustomComponent component = message.get("element");
+        CustomContainer component = message.get("element");
         
         componentname = component.getName();
         container = new StandardContainer(
-                component.getContainer(), componentname.concat("cnt"));
+                component, componentname.concat("cnt"));
         
         controls = new HashMap<>();
         for (String name : new String[] {
@@ -197,10 +196,16 @@ public class ComponentRender extends AbstractFunction {
         step = component.geti("step");
         itemcolumn = component.getst("itemcolumn");
         columns = component.get("columns");
+        for (TableColumn column : table.getColumns())
+            if (!column.isMark())
+                column.setVisible((boolean)
+                        columns.get(column.getName()).get("visible"));
+        
         objects = component.get("objects");
         additems(table, objects);
         
-        return new Shell(this).render(container).get(0);
+        component.setOutput(new Shell(this).render(container));
+        return component;
     }
     
 //    /**
