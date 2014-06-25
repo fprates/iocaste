@@ -128,6 +128,12 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract boolean isEnabled();
     
     /**
+     * Retorn true se elemento é renderizado remotamente.
+     * @return true, se renderizado remotamente
+     */
+    public abstract boolean isRemote();
+    
+    /**
      * Retorna true se elemento é visível.
      * @return true, se visível.
      */

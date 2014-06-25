@@ -1,15 +1,19 @@
 package org.iocaste.shell.common;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class CustomComponent extends AbstractComponent {
+import org.iocaste.protocol.utils.XMLElement;
+
+public class CustomContainer extends AbstractContainer {
     private static final long serialVersionUID = 7689711993523839095L;
     private String renderurl;
     private Map<String, Object> properties;
+    private List<XMLElement> output;
     
-    public CustomComponent(Container container, String name) {
-        super(container, Const.CUSTOM_COMPONENT, name);
+    public CustomContainer(Container container, String name) {
+        super(container, Const.CUSTOM_CONTAINER, name);
         properties = new HashMap<>();
     }
 
@@ -34,22 +38,25 @@ public class CustomComponent extends AbstractComponent {
         return renderurl;
     }
     
+    public final List<XMLElement> getOutput() {
+        return output;
+    }
+    
     public final String getst(String key) {
         return get(key);
     }
+
+    @Override
+    public final boolean isRemote() {
+        return true;
+    }
     
-    @Override
-    public boolean isControlComponent() {
-        return false;
-    }
-
-    @Override
-    public boolean isDataStorable() {
-        return false;
-    }
-
     public final void set(String key, Object value) {
         properties.put(key, value);
+    }
+    
+    public final void setOutput(List<XMLElement> output) {
+        this.output = output;
     }
     
     public final void setRenderURL(String url) {

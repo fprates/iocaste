@@ -12,12 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.internal.AbstractRenderer;
 import org.iocaste.internal.Common;
 import org.iocaste.internal.Controller;
 import org.iocaste.internal.HtmlRenderer;
+import org.iocaste.internal.Input;
 import org.iocaste.internal.InputStatus;
 import org.iocaste.internal.ControllerData;
 import org.iocaste.internal.TrackingData;
@@ -30,18 +29,10 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.PageStackItem;
-import org.iocaste.shell.common.RangeInputComponent;
-import org.iocaste.shell.common.SHLib;
-import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.StyleSheet;
-import org.iocaste.shell.common.Table;
-import org.iocaste.shell.common.TableColumn;
-import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.View;
 
@@ -175,7 +166,7 @@ public class PageRenderer extends AbstractRenderer {
             throws Exception {
         String complexid, appname, pagename;
         int logid;
-        InputData inputdata;
+        Input input;
         Message message;
         Map<String, Object> iparams, parameters;
         String[] initparams;
@@ -223,19 +214,19 @@ public class PageRenderer extends AbstractRenderer {
             service = new Service(complexid, composeUrl(appname));
             view = (View)service.call(message);
             
-            inputdata = new InputData();
-            inputdata.view = view;
-            inputdata.view.clearMultipartElements();
-            inputdata.container = null;
-            inputdata.function = this;
+            input = new Input();
+            input.view = view;
+            input.view.clearMultipartElements();
+            input.container = null;
+            input.function = this;
             
             /*
              * deixa registerInputs() antes do commit(),
              * para que a conexão seja encerrada.
              */
             for (Container container : view.getContainers()) {
-                inputdata.element = container;
-                registerInputs(inputdata);
+                input.element = container;
+                input.register();
             }
             
             Common.commit(getServerName(), complexid);
@@ -379,104 +370,6 @@ public class PageRenderer extends AbstractRenderer {
                 toString();
         service = new Service(complexid, url);
         service.call(message);
-    }
-    
-    /**
-     * 
-     * @param input
-     * @param inputdata
-     */
-    private static final void generateSearchHelp(InputComponent input,
-            InputData inputdata) {
-        SearchHelp sh;
-        SHLib shlib = new SHLib(inputdata.function);
-        String shname = input.getModelItem().getSearchHelp();
-        ExtendedObject[] shdata = shlib.get(shname);
-        
-        if (shdata == null || shdata.length == 0)
-            return;
-        
-        sh = new SearchHelp(inputdata.container, input.getName()+".sh");
-        sh.setHtmlName(input.getHtmlName()+".sh");
-        sh.setModelName((String)shdata[0].get("MODEL"));
-        sh.setExport((String)shdata[0].get("EXPORT"));
-        
-        for (int i = 1; i < shdata.length; i++) {
-            shname = shdata[i].get("ITEM");
-            sh.addModelItemName(shname);
-        }
-        
-        input.setSearchHelp(sh);
-    }
-    
-    /**
-     * 
-     * @param container
-     * @return
-     */
-    private static final Element[] getMultiLineElements(Container container) {
-        byte selectiontype;
-        Element element;
-        SearchHelp sh;
-        Table table;
-        TableColumn[] columns;
-        List<Element> elements = new ArrayList<>();
-        String name, linename, htmlname, markname = null;
-        int i = 0;
-        
-        if (container.getType() != Const.TABLE)
-            new RuntimeException("Multi-line container not supported.");
-        
-        table = (Table)container;
-        name = table.getName();
-        selectiontype = table.getSelectionType();
-        
-        if (selectiontype == Table.SINGLE)
-            markname = new StringBuilder(name).append(".mark").toString();
-        
-        columns = table.getColumns();
-        elements = new ArrayList<Element>();
-        
-        for (TableItem item : table.getItems()) {
-            linename = new StringBuilder(name).append(".").append(i++).
-                    append(".").toString();
-            
-            for (TableColumn column: columns) {
-                element = (column.isMark())?
-                        item.get("mark") : item.get(column.getName());
-                
-                if (element == null)
-                    continue;
-                
-                if (column.isMark() && markname != null)
-                    htmlname = markname;
-                else
-                    htmlname = new StringBuilder(linename).
-                            append(element.getName()).toString();
-                
-                element.setHtmlName(htmlname);
-                elements.add(element);
-                
-                /*
-                 * ajusta nome de ajuda de pesquisa, se houver
-                 */
-                if (!element.isDataStorable())
-                    continue;
-                
-                sh = ((InputComponent)element).getSearchHelp();
-                
-                if (sh == null)
-                    continue;
-                
-                htmlname = new StringBuilder(linename).
-                        append(sh.getName()).toString();
-                
-                sh.setHtmlName(htmlname);
-                elements.add(sh);
-            }
-        }
-        
-        return elements.toArray(new Element[0]);
     }
     
     /**
@@ -740,7 +633,7 @@ public class PageRenderer extends AbstractRenderer {
         long sequence;
         ControllerData config;
         ContextData contextdata;
-        InputData inputdata;
+        Input input;
         ControlComponent action;
         Enumeration<?> parameternames;
         PageContext pagectx_;
@@ -799,14 +692,14 @@ public class PageRenderer extends AbstractRenderer {
             pushPage(config.sessionid, view.getAppName(), view.getPageName());
         
         view.clearInputs();
-        inputdata = new InputData();
-        inputdata.view = view;
-        inputdata.view.clearMultipartElements();
-        inputdata.container = null;
-        inputdata.function = this;
+        input = new Input();
+        input.view = view;
+        input.view.clearMultipartElements();
+        input.container = null;
+        input.function = this;
         for (Container container : view.getContainers()) {
-            inputdata.element = container;
-            registerInputs(inputdata);
+            input.element = container;
+            input.register();
         }
         
         updateView(config.sessionid, view, this);
@@ -951,63 +844,6 @@ public class PageRenderer extends AbstractRenderer {
     
     /**
      * 
-     * @param inputdata
-     */
-    private static final void registerInputs(InputData inputdata) {
-        RangeInputComponent rinput;
-        Element[] elements;
-        InputData inputdata_;
-        Container container;
-        InputComponent input;
-        DocumentModelItem modelitem;
-        
-        if (inputdata.element == null)
-            return;
-        
-        inputdata.element.setView(inputdata.view);
-        
-        if (inputdata.element.isContainable()) {
-            container = (Container)inputdata.element;
-            
-            inputdata_ = new InputData();
-            inputdata_.container = container;
-            inputdata_.view = inputdata.view;
-            inputdata_.function = inputdata.function;
-            
-            elements = (container.isMultiLine())?
-                    getMultiLineElements(container) : container.getElements();
-                    
-            for (Element element : elements) {
-                inputdata_.element = element;
-                registerInputs(inputdata_);
-            }
-            
-            return;
-        }
-        
-        if (inputdata.element.isDataStorable()) {
-            input = (InputComponent)inputdata.element;
-            inputdata.view.addInput(input.getHtmlName());
-            
-            modelitem = input.getModelItem();
-            if (input.getSearchHelp() == null && modelitem != null &&
-                    modelitem.getSearchHelp() != null)
-                generateSearchHelp(input, inputdata);
-            
-            if (input.isValueRangeComponent()) {
-                rinput = (RangeInputComponent)input;
-                inputdata.view.addInput(rinput.getHighHtmlName());
-                inputdata.view.addInput(rinput.getLowHtmlName());
-            }
-        }
-        
-        if (inputdata.element.hasMultipartSupport())
-            inputdata.view.addMultipartElement(
-                    (MultipartElement)inputdata.element);
-    }
-    
-    /**
-     * 
      * @param ticketcode
      * @param function
      */
@@ -1114,27 +950,20 @@ public class PageRenderer extends AbstractRenderer {
         int logid = Integer.parseInt(complexid[1]);
         AppContext appcontext = apps.get(complexid[0]).get(logid).
                 getAppContext(view.getAppName());
-        InputData inputdata = new InputData();
+        Input input = new Input();
         
-        inputdata.view = view;
-        inputdata.view.clearMultipartElements();
-        inputdata.container = null;
-        inputdata.function = function;
+        input.view = view;
+        input.view.clearMultipartElements();
+        input.container = null;
+        input.function = function;
         
         for (Container container : view.getContainers()) {
-            inputdata.element = container;
-            registerInputs(inputdata);
+            input.element = container;
+            input.register();
         }
         
         appcontext.getPageContext(view.getPageName()).setViewData(view);
     }
-}
-
-class InputData {
-    public View view;
-    public Element element;
-    public Container container;
-    public Function function;
 }
 
 class ContextData {

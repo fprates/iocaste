@@ -9,7 +9,7 @@ import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Canvas;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.CustomComponent;
+import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.ExpandBar;
@@ -55,6 +55,10 @@ public class Renderer {
         XMLElement xmltag;
         
         switch (container.getType()) {
+        case CUSTOM_CONTAINER:
+            tags.addAll(CustomContainerRenderer.render(
+                    (CustomContainer)container, config));
+            break;
         case FORM:
             config.setCurrentForm(container.getHtmlName());
             xmltag = FormRenderer.render((Form)container, config);
@@ -121,11 +125,6 @@ public class Renderer {
             
         case CHECKBOX:
             tags.add(CheckBoxRenderer.render((CheckBox)element));
-            break;
-            
-        case CUSTOM_COMPONENT:
-            tags.add(CustomComponentRenderer.render(
-                    (CustomComponent)element, config));
             break;
             
         case FILE_ENTRY:

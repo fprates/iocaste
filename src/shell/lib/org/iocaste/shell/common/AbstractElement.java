@@ -216,6 +216,15 @@ public abstract class AbstractElement implements Element {
     }
     
     /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.Element#isRemote()
+     */
+    @Override
+    public boolean isRemote() {
+        return false;
+    }
+    
+    /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#isVisible()
      */
