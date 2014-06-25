@@ -3,6 +3,7 @@ package org.iocaste.workbench;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.texteditor.common.TextEditorTool;
 
 public class Main extends AbstractPageBuilder {
     private static final String MAIN = "main";
@@ -12,7 +13,7 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) {
         Context extcontext = new Context();
         
-        extcontext.repository = Common.composeFileName(
+        extcontext.repository = TextEditorTool.composeFileName(
                 System.getProperty("user.dir"), "iocaste","iocaste-workbench");
         
         context.setUpdateViews(true);
@@ -21,6 +22,7 @@ public class Main extends AbstractPageBuilder {
         context.setViewConfig(MAIN, new MainConfig());
         context.setActionHandler(MAIN, "create", new ProjectCreate());
         context.setActionHandler(MAIN, "open", new ProjectOpen());
+        
         
         context.addExtendedContext(PRJC, extcontext);
         context.setViewSpec(PRJC, new ProjectSpec());
@@ -32,6 +34,10 @@ public class Main extends AbstractPageBuilder {
         context.setActionHandler(PRJC, "save", new ProjectSave());
         context.setActionHandler(PRJC, "attributes", new AttributesSet());
         context.setActionHandler(PRJC, "views", new ProjectViewDisplay());
+        context.setActionHandler(
+                PRJC, "create_element", new SwitchPanel("element"));
+        context.setActionHandler(
+                PRJC, "cancel_element", new SwitchPanel("model"));
     }
 
     @Override
@@ -39,7 +45,7 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.setLink("WORKBENCH", "iocaste-workbench");
         defaultinstall.setProfile("WORKBENCH");
         defaultinstall.setProgramAuthorization("WORKBENCH.EXECUTE");
-        defaultinstall.setTaskGroup("DEVELOP");
+        defaultinstall.addToTaskGroup("DEVELOP", "WORKBENCH");
         
         installObject("models", new ModelsInstall());
     }

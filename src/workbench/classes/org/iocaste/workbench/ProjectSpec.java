@@ -28,15 +28,15 @@ public class ProjectSpec extends AbstractViewSpec {
         form("main");
         navcontrol("main");
         dataform("main", "head");
-        
-        dashboard("main", "project");
+
+        standardcontainer("main", "globalview");
+        dashboard("globalview", "project");
         dashboarditem("project", "attributes");
         dashboarditem("project", "create");
         dashboarditem("project", "views");
         dashboarditem("project", "components");
         
-        standardcontainer("main", "viewtree");
-        
+        standardcontainer("globalview", "viewtree");
         if (extcontext.view != null) {
             projectview = extcontext.views.get(extcontext.view);
             treeitem = treeitem("viewtree", extcontext.view,
@@ -46,8 +46,15 @@ public class ProjectSpec extends AbstractViewSpec {
                 treeitem.items.add(additem(projectview, extcontext.view, item));
         }
         
-        standardcontainer("main", "linkscnt");
+        standardcontainer("globalview", "linkscnt");
         tabletool("linkscnt", "links");
+        
+        standardcontainer("globalview", "modelscnt");
+        dataform("modelscnt", "modelhead");
+        tabletool("modelscnt", "modelitems");
+        
+        standardcontainer("globalview", "elementcnt");
+        dataform("elementcnt", "dataelement");
     }
     
     public static final ProjectTreeItem registerTreeItem(

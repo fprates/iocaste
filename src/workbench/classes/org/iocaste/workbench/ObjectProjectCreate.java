@@ -10,16 +10,18 @@ public class ObjectProjectCreate extends AbstractActionHandler {
         ProjectView projectview;
         Context extcontext = getExtendedContext();
         String item = dbactionget("project", "create");
-        
+
+        extcontext.hideAll();
         switch(item) {
         case "view":
             projectview = now(extcontext);
             extcontext.view = projectview.name;
+            extcontext.viewtree = true;
+            break;
+        case "model":
+            extcontext.modelview = true;
             break;
         }
-        
-        extcontext.hideAll();
-        extcontext.viewtree = true;
     }
     
     public static final ProjectView now(Context extcontext) {

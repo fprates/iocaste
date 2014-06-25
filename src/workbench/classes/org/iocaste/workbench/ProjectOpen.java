@@ -15,6 +15,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
+import org.iocaste.texteditor.common.TextEditorTool;
 
 public class ProjectOpen extends AbstractActionHandler {
 
@@ -38,10 +39,10 @@ public class ProjectOpen extends AbstractActionHandler {
         
         extcontext.views.clear();
         extcontext.project = getdfst("head", "PROJECT_ID");
-        extcontext.projectdir = Common.composeFileName(
+        extcontext.projectdir = TextEditorTool.composeFileName(
                 extcontext.repository, extcontext.project);
         
-        contextfile = Common.composeFileName(
+        contextfile = TextEditorTool.composeFileName(
                 extcontext.projectdir, "bin", "META-INF", "context.txt");
         
         file = new File(contextfile);

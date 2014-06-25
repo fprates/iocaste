@@ -27,7 +27,7 @@ public class Context implements ExtendedContext {
 //    public long projectlastsrcid;
 //    public Map<String, ExtendedObject> projectsources;
     public String project, view, container, name;
-    public boolean viewtree, viewoptions, linksgrid;
+    public boolean viewtree, viewoptions, linksgrid, modelview, elementview;
     public Map<String, ProjectView> views;
     public ExtendedObject[] links;
     
@@ -36,6 +36,6 @@ public class Context implements ExtendedContext {
     }
     
     public final void hideAll() {
-        viewtree = viewoptions = linksgrid = false;
+        viewtree = viewoptions = linksgrid = modelview = elementview = false;
     }
 }

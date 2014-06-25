@@ -24,6 +24,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.texteditor.common.TextEditorTool;
 
 public class ProjectSave extends AbstractActionHandler {
     private static final String AUTOMATED_ENTRY =
@@ -153,14 +154,14 @@ public class ProjectSave extends AbstractActionHandler {
     
     private final void copyLibraries(Context extcontext, CompileData data)
             throws Exception {
-        String libfrom = Common.composeFileName(
+        String libfrom = TextEditorTool.composeFileName(
                 data.workbenchpath, "WEB-INF", "lib");
-        String libto = Common.composeFileName(
+        String libto = TextEditorTool.composeFileName(
                 extcontext.projectdir, "bin", "WEB-INF", "lib");
       
         new File(libto).mkdir();
         for (File file : new File(libfrom).listFiles())
-            copyFile(new File(Common.composeFileName(
+            copyFile(new File(TextEditorTool.composeFileName(
                     libto, file.getName())), file);
     }
     
@@ -179,10 +180,10 @@ public class ProjectSave extends AbstractActionHandler {
         if (!file.exists())
             file.mkdir();
         
-        removeCompleteDir(extcontext.projectdir);
+        TextEditorTool.removeCompleteDir(extcontext.projectdir);
         createViewsSpecFile(extcontext, data);
         
-        bindir = Common.composeFileName(extcontext.projectdir,
+        bindir = TextEditorTool.composeFileName(extcontext.projectdir,
                 "bin", "WEB-INF", "classes");
         new File(bindir).mkdirs();
         
@@ -226,10 +227,11 @@ public class ProjectSave extends AbstractActionHandler {
         File file;
         OutputStream os;
         
-        path = Common.composeFileName(extcontext.projectdir, "bin", "META-INF");
+        path = TextEditorTool.composeFileName(
+                extcontext.projectdir, "bin", "META-INF");
         if (!new File(path).mkdirs())
             throw new IocasteException("directory creation error.");
-        path = Common.composeFileName(path, "context.txt");
+        path = TextEditorTool.composeFileName(path, "context.txt");
         
         file = new File(path);
         file.createNewFile();
@@ -274,7 +276,7 @@ public class ProjectSave extends AbstractActionHandler {
         
         xml = new StringBuilder(xml).append(System.lineSeparator()).
                 append(webapp.toString()).toString();
-        file = new File(Common.composeFileName(
+        file = new File(TextEditorTool.composeFileName(
                 extcontext.projectdir, "bin", "WEB-INF", "web.xml"));
         os = new FileOutputStream(file);
         
@@ -322,13 +324,14 @@ public class ProjectSave extends AbstractActionHandler {
     private final void deployApplication(Context extcontext, CompileData data)
             throws Exception {
         String jarname = extcontext.project;
-        String dest = Common.composeFileName(
+        String dest = TextEditorTool.composeFileName(
                 System.getProperty("catalina.home"),
                 "webapps",
                 jarname.concat(".war"));
         OutputStream os = new FileOutputStream(dest);
         JarOutputStream jar = new JarOutputStream(os);
-        String bindir = Common.composeFileName(extcontext.projectdir, "bin");
+        String bindir = TextEditorTool.composeFileName(
+                extcontext.projectdir, "bin");
         
         addJarItems(jar, bindir, bindir);
         jar.close();
@@ -357,21 +360,6 @@ public class ProjectSave extends AbstractActionHandler {
         
         return result.append(name);
     }
-    
-    private final void removeCompleteDir(String dir) {
-        File origin = new File(dir);
-        File[] files = origin.listFiles();
-        
-        if (files != null)
-            for (File file : files) {
-                if (file.isDirectory())
-                    removeCompleteDir(file.getAbsolutePath());
-                file.delete();
-            }
-        
-        origin.delete();
-    }
-
 }
 
 class CompileData {

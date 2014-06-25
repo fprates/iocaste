@@ -4,10 +4,10 @@ import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.NavControl;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.StyleSheet;
-import org.iocaste.shell.common.TableTool;
 
 public class ProjectConfig extends AbstractViewConfig {
 
@@ -19,17 +19,18 @@ public class ProjectConfig extends AbstractViewConfig {
         Context extcontext;
         DashboardComponent dashitem;
         StyleSheet stylesheet;
-        DataForm head;
+        DataForm dataform;
         TableTool tabletool;
 
         extcontext = getExtendedContext();
+        stylesheet = context.view.styleSheetInstance();
         
         navcontrol = getNavControl();
         navcontrol.add("save");
         
-        head = getElement("head");
-        head.importModel("WB_PROJECT", context.function);
-        head.get("PROJECT_ID").setEnabled(false);
+        dataform = getElement("head");
+        dataform.importModel("WB_PROJECT", context.function);
+        dataform.get("PROJECT_ID").setEnabled(false);
         
         dashitem = getDashboardItem("project", "attributes");
         dashitem.setColor("#a0a0a0");
@@ -40,11 +41,15 @@ public class ProjectConfig extends AbstractViewConfig {
         dashitem.setColor("#50ff50");
         dashitem.addText("create");
         dashitem.add("view");
+        dashitem.add("model");
         
         dashitem = getDashboardItem("project", "views");
         dashitem.setColor("#a0a0ff");
         dashitem.addText("views");
-        dashitem.setVisible(extcontext.views.size() > 0);
+        if (extcontext.views.size() > 0)
+            dashitem.show();
+        else
+            dashitem.hide();
         
         dashitem = getDashboardItem("project", "components");
         dashitem.setColor("#ff5050");
@@ -52,18 +57,18 @@ public class ProjectConfig extends AbstractViewConfig {
         dashitem.add("form");
         dashitem.add("navcontrol");
         dashitem.add("dataform");
-        dashitem.setVisible(extcontext.viewoptions);
+        if (extcontext.viewoptions)
+            dashitem.show();
+        else
+            dashitem.hide();
         
-        container = getElement("viewtree");
-        stylesheet = context.view.styleSheetInstance();
         stylesheet.newElement(".wb_view");
         stylesheet.put(".wb_view", "float", "left");
+        container = getElement("viewtree");
         container.setStyleClass("wb_view");
         container.setVisible(extcontext.viewtree);
-        
         stylesheet.newElement(".wb_text");
         stylesheet.put(".wb_text", "display", "inline");
-        
         if (extcontext.view != null) {
             projectview = extcontext.views.get(extcontext.view);
             for (ProjectTreeItem item : projectview.treeitems.values())
@@ -72,9 +77,39 @@ public class ProjectConfig extends AbstractViewConfig {
         
         container = getElement("linkscnt");
         container.setVisible(extcontext.linksgrid);
+        container.setStyleClass("wb_view");
         tabletool = getTableTool("links");
         tabletool.model("TASKS");
         tabletool.setMode(TableTool.UPDATE);
+        tabletool.setBorderStyle("overflow: auto;");
+        
+        container = getElement("modelscnt");
+        container.setVisible(extcontext.modelview);
+        dataform = getElement("modelhead");
+        dataform.importModel("MODEL", context.function);
+        container.setStyleClass("wb_view");
+        dataform.show("NAME", "TABLE");
+        tabletool = getTableTool("modelitems");
+        tabletool.model("MODELITEM");
+        tabletool.setMode(TableTool.UPDATE);
+        tabletool.setVisibility(
+                false, "NAME", "MODEL", "INDEX", "ATTRIB", "ITEM_REF");
+        tabletool.setBorderStyle("overflow: auto; display: inline");
+        if (extcontext.modelview){
+            navcontrol.add("accept_model");
+            navcontrol.add("create_element");
+        }
+        
+        if (extcontext.elementview) {
+            navcontrol.add("cancel_element");
+            navcontrol.add("accept_element");
+        }
+        
+        container = getElement("elementcnt");
+        container.setVisible(extcontext.elementview);
+        container.setStyleClass("wb_view");
+        dataform = getElement("dataelement");
+        dataform.importModel("DATAELEMENT", context.function);
     }
 
 }
