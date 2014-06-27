@@ -1,5 +1,6 @@
 package org.iocaste.internal.renderer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.internal.Input;
@@ -13,6 +14,7 @@ public class CustomContainerRenderer extends Renderer {
     
     public static List<XMLElement> render(
             CustomContainer container, Config config) {
+        List<XMLElement> xmlcontent;
         Input input;
         CustomContainer returned;
         GenericService service = new GenericService(
@@ -32,7 +34,10 @@ public class CustomContainerRenderer extends Renderer {
             input.element = element;
             input.register();
         }
-        
-        return returned.getOutput();
+
+        xmlcontent = new ArrayList<>();
+        for (Element element : container.getElements())
+            renderElement(xmlcontent, element, config);
+        return xmlcontent;
     }
 }

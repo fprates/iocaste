@@ -203,8 +203,6 @@ public class ComponentRender extends AbstractFunction {
         
         objects = component.get("objects");
         additems(table, objects);
-        
-        component.setOutput(new Shell(this).render(container));
         return component;
     }
     
