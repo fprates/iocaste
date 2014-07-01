@@ -20,7 +20,6 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
-import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
@@ -35,6 +34,7 @@ public class ComponentRender extends AbstractFunction {
     
     public ComponentRender() {
         export("render", "render");
+        export("validate", "validate");
     }
     
     @SuppressWarnings("unchecked")
@@ -155,7 +155,7 @@ public class ComponentRender extends AbstractFunction {
         Container container;
         ExtendedObject[] objects;
         Map<String, Button> controls;
-        CustomContainer component = message.get("element");
+        CustomContainer component = message.get("container");
         
         componentname = component.getName();
         container = new StandardContainer(
@@ -186,7 +186,7 @@ public class ComponentRender extends AbstractFunction {
         }
         
         model = new Documents(this).getModel(component.getst("model"));
-        table = new Table(container, componentname);
+        table = new Table(container, componentname.concat("_table"));
         table.setMark(component.getbl("mark"));
         table.setVisibleLines(component.geti("visible_lines"));
         table.importModel(model);
@@ -237,4 +237,24 @@ public class ComponentRender extends AbstractFunction {
 //        for (String vinputname : column.validator.inputs)
 //            input.addValidatorInput((InputComponent)item.get(vinputname));
 //    }
+    public Map<String, Object> validate(Message message) {
+        Map<String, Object> properties;
+        TableItem[] items;
+        ExtendedObject[] objects;
+        CustomContainer container = message.get("container");
+        Table table = container.getView().getElement(container.getName().
+                concat("_table"));
+
+        items = table.getItems();
+        if (items.length == 0)
+            return null;
+        
+        objects = new ExtendedObject[items.length];
+        for (int i = 0; i < items.length; i++)
+            objects[i] = items[i].getObject();
+
+        properties = container.properties();
+        properties.put("objects", objects);
+        return properties;
+    }
 }
