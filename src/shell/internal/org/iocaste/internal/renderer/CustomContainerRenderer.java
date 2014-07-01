@@ -21,7 +21,7 @@ public class CustomContainerRenderer extends Renderer {
                 config.function, container.getRenderURL());
         Message message = new Message("render");
 
-        message.add("element", container);
+        message.add("container", container);
         returned = service.invoke(message);
 
         container.clear();
@@ -35,6 +35,7 @@ public class CustomContainerRenderer extends Renderer {
             input.register();
         }
 
+        config.customs.add(container);
         xmlcontent = new ArrayList<>();
         for (Element element : container.getElements())
             renderElement(xmlcontent, element, config);

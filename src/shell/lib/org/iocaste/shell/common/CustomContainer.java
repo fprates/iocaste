@@ -43,6 +43,10 @@ public class CustomContainer extends AbstractContainer {
         return true;
     }
     
+    public final Map<String, Object> properties() {
+        return properties;
+    }
+    
     public final void set(String key, Object value) {
         properties.put(key, value);
     }

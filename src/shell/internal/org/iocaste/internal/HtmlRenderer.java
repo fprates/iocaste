@@ -16,6 +16,7 @@ import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
@@ -28,6 +29,7 @@ public class HtmlRenderer {
     private Const msgtype;
     private List<String> script;
     private Set<String> actions;
+    private List<CustomContainer> customs;
     private MessageSource msgsource;
     private ControlComponent shcontrol;
     private Function function;
@@ -68,6 +70,14 @@ public class HtmlRenderer {
      */
     public final Set<String> getActions() {
         return actions;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final List<CustomContainer> getCustoms() {
+        return customs;
     }
     
     /**
@@ -206,6 +216,7 @@ public class HtmlRenderer {
         
         html.add(htmltag.toString());
         actions = config.getActions();
+        customs = config.customs;
         
         return html.toArray(new String[0]);
     }

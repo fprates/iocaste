@@ -23,6 +23,7 @@ import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
@@ -450,6 +451,12 @@ public class Controller {
             status.error = EVALIDATION;
             break;
         }
+        
+        if (status.error != 0)
+            return;
+        
+        for (CustomContainer custom : config.customs)
+            validateCustomContainer(custom, config);
     }
     
     /**
@@ -644,6 +651,22 @@ public class Controller {
         }
         
         return status;
+    }
+    
+    private static void validateCustomContainer(
+            CustomContainer container, ControllerData config) {
+        Map<String, ?> values;
+        GenericService service = new GenericService(
+                config.function, container.getRenderURL());
+        Message message = new Message("validate");
+        
+        message.add("container", container);
+        values = service.invoke(message);
+        if (values == null)
+            return;
+        
+        for (String key : values.keySet())
+            container.set(key, values.get(key));
     }
 }
 
