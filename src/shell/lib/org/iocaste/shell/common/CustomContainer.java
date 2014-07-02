@@ -7,12 +7,19 @@ public class CustomContainer extends AbstractContainer {
     private static final long serialVersionUID = 7689711993523839095L;
     private String renderurl;
     private Map<String, Object> properties;
+    private boolean initialized;
     
     public CustomContainer(Container container, String name) {
         super(container, Const.CUSTOM_CONTAINER, name);
         properties = new HashMap<>();
     }
 
+    @Override
+    public void add(Element element) {
+        super.add(element);
+        initialized = true;
+    }
+    
     @SuppressWarnings("unchecked")
     public final <T> T get(String key) {
         return (T)properties.get(key);
@@ -38,6 +45,10 @@ public class CustomContainer extends AbstractContainer {
         return get(key);
     }
 
+    public final boolean isInitialized() {
+        return initialized;
+    }
+    
     @Override
     public final boolean isRemote() {
         return true;
