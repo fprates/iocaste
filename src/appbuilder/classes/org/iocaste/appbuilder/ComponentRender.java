@@ -148,20 +148,19 @@ public class ComponentRender extends AbstractFunction {
         table.setTopLine(total);
     }
     
-    public final CustomContainer render(Message message) {
-        DocumentModel model;
-        Table table;
-        String buttonname, componentname;
-        Container container;
-        ExtendedObject[] objects;
+    private final void initialize(CustomContainer component) {
         Map<String, Button> controls;
-        CustomContainer component = message.get("container");
-        
-        componentname = component.getName();
-        container = new StandardContainer(
+        String buttonname;
+        Table table;
+        DocumentModel model;
+        ExtendedObject[] objects;
+        String componentname = component.getName();
+        Container container = new StandardContainer(
                 component, componentname.concat("cnt"));
         
         controls = new HashMap<>();
+        component.set("controls", controls);
+        
         for (String name : new String[] {
                 TableTool.ADD,
                 TableTool.REMOVE,
@@ -203,6 +202,67 @@ public class ComponentRender extends AbstractFunction {
         
         objects = component.get("objects");
         additems(table, objects);
+    }
+    
+    private final void performTableAction(CustomContainer container,
+            String action) {
+        int i;
+        byte mode;
+        Map<String, Button> controls = container.get("controls");
+        Table table = (Table)container.getView().getElement(
+                container.getName().concat("_table"));
+        
+        switch (action) {
+        case TableTool.ACCEPT:
+            controls.get(TableTool.ACCEPT).setVisible(false);
+            controls.get(TableTool.ADD).setVisible(true);
+            controls.get(TableTool.REMOVE).setVisible(true);
+            table.setTopLine(0);
+            break;
+        case TableTool.ADD:
+            mode = container.getb("mode");
+            i = 0;
+            switch (mode) {
+            case TableTool.CONTINUOUS_UPDATE:
+                for (TableItem item_ : table.getItems()) {
+                    if (!item_.isSelected()) {
+                        i++;
+                        continue;
+                    }
+                    break;
+                }
+                
+                additem(table, null, i);
+                break;
+            default:
+                controls.get(TableTool.ACCEPT).setVisible(true);
+                controls.get(TableTool.ADD).setVisible(false);
+                controls.get(TableTool.REMOVE).setVisible(false);
+                additems(table, null);
+                break;
+            }
+            break;
+        case TableTool.REMOVE:
+            for (TableItem item : table.getItems())
+                if (item.isSelected())
+                    table.remove(item);
+            break;
+        }
+        
+        container.set("action", null);
+    }
+    
+    public final CustomContainer render(Message message) {
+        String action;
+        CustomContainer component = message.get("container");
+        
+        if (!component.isInitialized())
+            initialize(component);
+        
+        action = component.getst("action");
+        if (action != null)
+            performTableAction(component, action);
+        
         return component;
     }
     

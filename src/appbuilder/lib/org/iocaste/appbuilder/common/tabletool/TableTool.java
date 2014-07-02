@@ -7,10 +7,13 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.ViewCustomAction;
 
 public class TableTool {
     public static final String ADD = "add";
@@ -21,11 +24,11 @@ public class TableTool {
     public static final byte DISPLAY = 2;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
-    private CustomContainer custom;
     private Map<String, Map<String, Object>> columns;
     private TableToolData data;
     
     public TableTool(TableToolData data) {
+        CustomContainer custom;
         columns = new HashMap<>();
         this.data = data;
         
@@ -36,18 +39,35 @@ public class TableTool {
         custom.set("step", 1);
         custom.set("columns", columns);
         custom.set("enabled", true);
+        custom.set("action", null);
+        
+        new Action(this, data, ACCEPT);
+        new Action(this, data, ADD);
+        new Action(this, data, REMOVE);
+    }
+    
+    public final void accept() {
+        getCustom().set("action", ACCEPT);
+    }
+    
+    public final void add() {
+        getCustom().set("action", ADD);
     }
     
     public final Container getContainer() {
-        return custom;
+        return getCustom();
+    }
+    
+    private final CustomContainer getCustom() {
+        return data.context.view.getElement(data.name);
     }
     
     public final TableItem[] getItems() {
-        return custom.get("items");
+        return getCustom().get("items");
     }
     
     public final ExtendedObject[] getObjects() {
-        return custom.get("objects");
+        return getCustom().get("objects");
     }
     
     public final void model(String model) {
@@ -57,7 +77,7 @@ public class TableTool {
     public final void model(DocumentModel model) {
         Map<String, Object> column;
         
-        custom.set("model", model.getName());
+        getCustom().set("model", model.getName());
         columns.clear();
         for (DocumentModelItem item : model.getItens()) {
             column = new HashMap<>();
@@ -68,23 +88,29 @@ public class TableTool {
         }
     }
     
+    public final void remove() {
+        getCustom().set("action", REMOVE);
+    }
+    
     public final void setBorderStyle(String borderstyle) {
-        custom.set("borderstyle", borderstyle);
+        getCustom().set("borderstyle", borderstyle);
     }
     
     public final void setItemColumn(String itemcolumn) {
-        custom.set("itemcolumn", itemcolumn);
+        getCustom().set("itemcolumn", itemcolumn);
     }
     
     public final void setItemIncrement(String step) {
-        custom.set("step", step);
+        getCustom().set("step", step);
     }
     
     public final void setMark(boolean mark) {
-        custom.set("mark", mark);
+        getCustom().set("mark", mark);
     }
     
     public final void setMode(byte mode) {
+        CustomContainer custom = getCustom();
+        
         custom.set("mode", mode);
         switch (mode) {
         case CONTINUOUS_UPDATE:
@@ -102,7 +128,7 @@ public class TableTool {
     }
     
     public final void setObjects(ExtendedObject[] objects) {
-        custom.set("objects", objects);
+        getCustom().set("objects", objects);
     }
     
     public final void setVisibility(boolean visible, String... columns) {
@@ -121,7 +147,37 @@ public class TableTool {
     }
     
     public final int size() {
-        ExtendedObject[] objects = custom.get("objects");
+        ExtendedObject[] objects = getCustom().get("objects");
         return (objects == null)? 0 : objects.length;
     }
+}
+
+class Action implements ViewCustomAction {
+    private static final long serialVersionUID = 7220679345842901434L;
+    private String action;
+    private TableTool tabletool;
+    
+    public Action(TableTool tabletool, TableToolData data, String action) {
+        ((AbstractPage)data.context.function).register(
+                action.concat(data.name), this);
+        
+        this.tabletool = tabletool;
+        this.action = action;
+    }
+    
+    @Override
+    public void execute(AbstractContext context) throws Exception {
+        switch (action) {
+        case TableTool.ACCEPT:
+            tabletool.accept();
+            break;
+        case TableTool.ADD:
+            tabletool.add();
+            break;
+        case TableTool.REMOVE:
+            tabletool.remove();
+            break;
+        }
+    }
+    
 }
