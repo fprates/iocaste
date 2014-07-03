@@ -24,12 +24,12 @@ public class TableTool {
     public static final byte DISPLAY = 2;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
-    private Map<String, Map<String, Object>> columns;
     private TableToolData data;
     
     public TableTool(TableToolData data) {
         CustomContainer custom;
-        columns = new HashMap<>();
+        Map<String, Map<String, Object>> columns = new HashMap<>();
+        
         this.data = data;
         
         custom = new CustomContainer(data.container, data.name);
@@ -40,6 +40,8 @@ public class TableTool {
         custom.set("columns", columns);
         custom.set("enabled", true);
         custom.set("action", null);
+        custom.set("controls_state", ENABLED);
+        custom.set("controls", null);
         
         new Action(this, data, ACCEPT);
         new Action(this, data, ADD);
@@ -52,6 +54,12 @@ public class TableTool {
     
     public final void add() {
         getCustom().set("action", ADD);
+    }
+    
+    public final void controls(byte status, String... controls) {
+        CustomContainer custom = getCustom();
+        custom.set("controls_state", status);
+        custom.set("controls", controls);
     }
     
     public final Container getContainer() {
@@ -76,6 +84,8 @@ public class TableTool {
     
     public final void model(DocumentModel model) {
         Map<String, Object> column;
+        CustomContainer custom = getCustom();
+        Map<String, Map<String, Object>> columns = custom.get("columns");
         
         getCustom().set("model", model.getName());
         columns.clear();
@@ -96,6 +106,32 @@ public class TableTool {
         getCustom().set("borderstyle", borderstyle);
     }
     
+    public final void setColumnStatus(byte status, String... tcolumns) {
+        Map<String, Object> column;
+        Map<String, Map<String, Object>> columns = getCustom().get("columns");
+        
+        if (tcolumns == null || tcolumns.length == 0) {
+            for (String cname :  columns.keySet())
+                columns.get(cname).put("disabled", status == DISABLED);
+        } else {
+            for (String cname : tcolumns) {
+                column = columns.get(cname);
+                if (column == null)
+                    throw new RuntimeException(cname.concat(
+                            " is an invalid column."));
+                
+                column.put("disabled", status == DISABLED);
+            }
+        }
+    }
+    
+    public final void setColumnType(String name, Const type, String action) {
+        Map<String, Map<String, Object>> columns = getCustom().get("columns");
+        Map<String, Object> column = columns.get(name);
+        column.put("type", type);
+        column.put("action", action);
+    }
+    
     public final void setItemColumn(String itemcolumn) {
         getCustom().set("itemcolumn", itemcolumn);
     }
@@ -110,6 +146,7 @@ public class TableTool {
     
     public final void setMode(byte mode) {
         CustomContainer custom = getCustom();
+        Map<String, Map<String, Object>> columns = custom.get("columns");
         
         custom.set("mode", mode);
         switch (mode) {
@@ -131,19 +168,24 @@ public class TableTool {
         getCustom().set("objects", objects);
     }
     
-    public final void setVisibility(boolean visible, String... columns) {
+    public final void setVisibility(boolean visible, String... tcolumns) {
         Map<String, Object> properties;
+        Map<String, Map<String, Object>> columns = getCustom().get("columns");
         
-        for (Map<String, Object> column : this.columns.values())
+        for (Map<String, Object> column : columns.values())
             column.put("visible", !visible);
         
-        for (String column : columns) {
-            properties = this.columns.get(column);
+        for (String column : tcolumns) {
+            properties = columns.get(column);
             if (properties == null)
                 throw new RuntimeException(
                         column.concat(" is an invalid column."));
             properties.put("visible", visible);
         }
+    }
+    
+    public final void setVisibleLines(int lines) {
+        getCustom().set("visible_lines", lines);
     }
     
     public final int size() {

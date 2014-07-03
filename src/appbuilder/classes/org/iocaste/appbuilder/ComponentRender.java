@@ -159,7 +159,7 @@ public class ComponentRender extends AbstractFunction {
                 component, componentname.concat("cnt"));
         
         controls = new HashMap<>();
-        component.set("controls", controls);
+        component.set("buttons", controls);
         
         for (String name : new String[] {
                 TableTool.ADD,
@@ -208,7 +208,7 @@ public class ComponentRender extends AbstractFunction {
             String action) {
         int i;
         byte mode;
-        Map<String, Button> controls = container.get("controls");
+        Map<String, Button> controls = container.get("buttons");
         Table table = (Table)container.getView().getElement(
                 container.getName().concat("_table"));
         
@@ -259,11 +259,45 @@ public class ComponentRender extends AbstractFunction {
         if (!component.isInitialized())
             initialize(component);
         
+        setControlsState(component);
         action = component.getst("action");
         if (action != null)
             performTableAction(component, action);
         
+        
         return component;
+    }
+    
+    private final void setControlsState(CustomContainer container) {
+        Element button;
+        byte state = container.getb("controls_state");
+        String[] controls = container.get("controls");
+        Map<String, Button> buttons = container.get("buttons");
+        Table table = container.getView().getElement(
+                container.getName().concat("_table"));
+        
+        switch (state) {
+        case TableTool.ENABLED:
+        case TableTool.DISABLED:
+            if ((controls == null) || (controls.length == 0)) {
+                for (String name : buttons.keySet())
+                    buttons.get(name).setVisible(state == TableTool.ENABLED);
+                
+                table.setMark(state == TableTool.ENABLED);
+                break;
+            }
+            
+            for (String name : controls) {
+                button = buttons.get(name);
+                if (button == null)
+                    throw new RuntimeException(name.
+                            concat(" is an invalid control."));
+                
+                button.setVisible(state == TableTool.ENABLED);
+            }
+            
+            break;
+        }
     }
     
 //    /**
