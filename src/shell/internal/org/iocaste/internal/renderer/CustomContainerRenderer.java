@@ -23,7 +23,9 @@ public class CustomContainerRenderer extends Renderer {
 
         message.add("container", container);
         returned = service.invoke(message);
-
+        for (String name : returned.properties().keySet())
+            container.set(name, returned.get(name));
+        
         container.clear();
         input = new Input();
         input.container = container;
