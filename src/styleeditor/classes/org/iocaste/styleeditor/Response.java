@@ -1,5 +1,7 @@
 package org.iocaste.styleeditor;
 
+import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
@@ -10,8 +12,6 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.SearchHelp;
-import org.iocaste.shell.common.TableTool;
-import org.iocaste.shell.common.TableToolData;
 
 public class Response {
 

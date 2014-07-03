@@ -1,5 +1,7 @@
 package org.iocaste.usereditor;
 
+import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
@@ -11,8 +13,6 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
-import org.iocaste.shell.common.TableTool;
-import org.iocaste.shell.common.TableToolData;
 
 public class Response {
 

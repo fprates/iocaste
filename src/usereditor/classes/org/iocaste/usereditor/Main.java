@@ -14,22 +14,6 @@ public class Main extends AbstractPage {
         export("install", "install");
     }
     
-    public final void acceptprofiles() {
-        context.profileshelper.accept();
-    }
-    
-    public final void accepttasks() {
-        context.taskshelper.accept();
-    }
-    
-    public final void addprofiles() {
-        context.profileshelper.add();
-    }
-    
-    public final void addtasks() {
-        context.taskshelper.add();
-    }
-    
     public final void create() {
         context.mode = Context.CREATE;
         Request.create(context);
@@ -70,14 +54,6 @@ public class Main extends AbstractPage {
     
     public final void main() {
         Response.selector(context);
-    }
-    
-    public final void removeprofiles() {
-        context.profileshelper.remove();
-    }
-    
-    public final void removetasks() {
-        context.taskshelper.remove();
     }
     
     public final void save() {

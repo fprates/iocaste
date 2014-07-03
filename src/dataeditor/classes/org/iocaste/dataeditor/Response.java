@@ -1,5 +1,7 @@
 package org.iocaste.dataeditor;
 
+import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -14,8 +16,6 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.TableItem;
-import org.iocaste.shell.common.TableTool;
-import org.iocaste.shell.common.TableToolData;
 
 public class Response {
     
