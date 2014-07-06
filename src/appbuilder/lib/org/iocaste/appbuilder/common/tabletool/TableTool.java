@@ -61,6 +61,10 @@ public class TableTool {
         custom.set("controls", controls);
     }
     
+    public final Map<String, Map<String, Object>> getColumns() {
+        return getCustom().get("columns");
+    }
+    
     public final Container getContainer() {
         return getCustom();
     }
@@ -83,8 +87,7 @@ public class TableTool {
     
     public final void model(DocumentModel model) {
         Map<String, Object> column;
-        CustomContainer custom = getCustom();
-        Map<String, Map<String, Object>> columns = custom.get("columns");
+        Map<String, Map<String, Object>> columns = getColumns();
         
         getCustom().set("model", model.getName());
         columns.clear();
@@ -105,8 +108,12 @@ public class TableTool {
         getCustom().set("borderstyle", borderstyle);
     }
     
+    public final void setColumnSize(String name, int size) {
+        getColumns().get(name).put("size", size);
+    }
+    
     public final void setColumnStatus(byte status, String... tcolumns) {
-        Map<String, Map<String, Object>> columns = getCustom().get("columns");
+        Map<String, Map<String, Object>> columns = getColumns();
         
         if (tcolumns == null || tcolumns.length == 0) {
             for (String cname :  columns.keySet())
@@ -122,15 +129,13 @@ public class TableTool {
     }
     
     public final void setColumnType(String name, Const type, String action) {
-        Map<String, Map<String, Object>> columns = getCustom().get("columns");
-        Map<String, Object> column = columns.get(name);
+        Map<String, Object> column = getColumns().get(name);
         column.put("type", type);
         column.put("action", action);
     }
     
     public final void setEnabledColumn(String name, boolean enabled) {
-        Map<String, Map<String, Object>> columns = getCustom().get("columns");
-        columns.get(name).put("disabled", enabled);
+        getColumns().get(name).put("disabled", enabled);
     }
     
     public final void setItemColumn(String itemcolumn) {

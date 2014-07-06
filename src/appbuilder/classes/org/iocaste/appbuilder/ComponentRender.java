@@ -59,6 +59,9 @@ public class ComponentRender extends AbstractFunction {
             name = tcolumn.getName();
             column = columns.get(name);
             delement = tcolumn.getModelItem().getDataElement();
+            if (column.containsKey("size"))
+                tcolumn.setLength((int)column.get("size"));
+            
             switch (delement.getType()) {
             case DataType.BOOLEAN:
                 element = new CheckBox(table, name);
