@@ -121,7 +121,7 @@ public class TableTool {
                 setEnabledColumn(cname, status == DISABLED);
         } else {
             for (String cname : tcolumns) {
-                if (columns.containsKey(cname))
+                if (!columns.containsKey(cname))
                     throw new RuntimeException(cname.concat(
                             " is an invalid column."));
                 setEnabledColumn(cname, status == DISABLED);
