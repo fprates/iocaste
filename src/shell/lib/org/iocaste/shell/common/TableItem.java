@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 
@@ -111,21 +112,25 @@ public class TableItem implements Serializable {
         Element element;
         InputComponent input;
         DocumentModelItem modelitem;
-        ExtendedObject object = new ExtendedObject(table.getModel());
+        DocumentModel model = table.getModel();
+        ExtendedObject object = new ExtendedObject(model);
         
         for (String name : elements.keySet()) {
             element = elements.get(name);
             
-            if (!element.isDataStorable())
+            if (element.isDataStorable()) {
+                input = (InputComponent)element;
+                modelitem = input.getModelItem();
+                
+                if (modelitem == null)
+                    continue;
+                
+                object.set(modelitem, input.get());
                 continue;
+            }
             
-            input = (InputComponent)element;
-            modelitem = input.getModelItem();
-            
-            if (modelitem == null)
-                continue;
-            
-            object.set(modelitem, input.get());
+            if ((element.getType() == Const.LINK) && (model.contains(name)))
+                object.set(name, ((Link)element).getText());
         }
         
         return object;
