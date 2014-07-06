@@ -1,6 +1,8 @@
 package org.iocaste.appbuilder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.tabletool.TableTool;
@@ -148,18 +150,39 @@ public class ComponentRender extends AbstractFunction {
         table.setTopLine(total);
     }
     
-    private final void initialize(CustomContainer component) {
+    private final ExtendedObject[] getObjects(CustomContainer container) {
+        TableItem[] items;
+        ExtendedObject[] objects;
+        Table table = getTable(container);
+        int length = table.length();
+        
+        if (length == 0)
+            return null;
+        
+        items = table.getItems();
+        objects = new ExtendedObject[length];
+        for (int i = 0; i < items.length; i++)
+            objects[i] = items[i].getObject();
+        return objects;
+    }
+    
+    private final Table getTable(CustomContainer container) {
+        return container.getView().getElement(container.getName().
+                concat("_table"));
+    }
+    
+    private final void initialize(CustomContainer custom) {
         Map<String, Button> controls;
         String buttonname;
         Table table;
         DocumentModel model;
         ExtendedObject[] objects;
-        String componentname = component.getName();
+        String componentname = custom.getName();
         Container container = new StandardContainer(
-                component, componentname.concat("cnt"));
+                custom, componentname.concat("cnt"));
         
         controls = new HashMap<>();
-        component.set("buttons", controls);
+        custom.set("buttons", controls);
         
         for (String name : new String[] {
                 TableTool.ADD,
@@ -169,7 +192,7 @@ public class ComponentRender extends AbstractFunction {
             controls.put(name, new Button(container, buttonname));
         }
 
-        switch (component.getb("mode")) {
+        switch (custom.getb("mode")) {
         case TableTool.CONTINUOUS_UPDATE:
         case TableTool.UPDATE:
             controls.get(TableTool.ACCEPT).setVisible(false);
@@ -184,23 +207,23 @@ public class ComponentRender extends AbstractFunction {
             break;
         }
         
-        model = new Documents(this).getModel(component.getst("model"));
+        model = new Documents(this).getModel(custom.getst("model"));
         table = new Table(container, componentname.concat("_table"));
-        table.setMark(component.getbl("mark"));
-        table.setVisibleLines(component.geti("visible_lines"));
+        table.setMark(custom.getbl("mark"));
+        table.setVisibleLines(custom.geti("visible_lines"));
         table.importModel(model);
-        table.setBorderStyle(component.getst("borderstyle"));
-        table.setEnabled(component.getbl("enabled"));
+        table.setBorderStyle(custom.getst("borderstyle"));
+        table.setEnabled(custom.getbl("enabled"));
         
-        step = component.geti("step");
-        itemcolumn = component.getst("itemcolumn");
-        columns = component.get("columns");
+        step = custom.geti("step");
+        itemcolumn = custom.getst("itemcolumn");
+        columns = custom.get("columns");
         for (TableColumn column : table.getColumns())
             if (!column.isMark())
                 column.setVisible((boolean)
                         columns.get(column.getName()).get("visible"));
         
-        objects = component.get("objects");
+        objects = custom.get("objects");
         additems(table, objects);
     }
     
@@ -209,8 +232,7 @@ public class ComponentRender extends AbstractFunction {
         int i;
         byte mode;
         Map<String, Button> controls = container.get("buttons");
-        Table table = (Table)container.getView().getElement(
-                container.getName().concat("_table"));
+        Table table = getTable(container);
         
         switch (action) {
         case TableTool.ACCEPT:
@@ -253,6 +275,7 @@ public class ComponentRender extends AbstractFunction {
     }
     
     public final CustomContainer render(Message message) {
+        ExtendedObject[] objects;
         String action;
         CustomContainer component = message.get("container");
         
@@ -261,9 +284,12 @@ public class ComponentRender extends AbstractFunction {
         
         setControlsState(component);
         action = component.getst("action");
-        if (action != null)
+        if (action != null) {
             performTableAction(component, action);
-        
+            objects = getObjects(component);
+            component.set("objects", objects);
+            component.set("selected", null);
+        }
         
         return component;
     }
@@ -332,6 +358,7 @@ public class ComponentRender extends AbstractFunction {
 //            input.addValidatorInput((InputComponent)item.get(vinputname));
 //    }
     public Map<String, Object> validate(Message message) {
+        List<ExtendedObject> selected;
         Map<String, Object> properties;
         TableItem[] items;
         ExtendedObject[] objects;
@@ -339,16 +366,24 @@ public class ComponentRender extends AbstractFunction {
         Table table = container.getView().getElement(container.getName().
                 concat("_table"));
 
-        items = table.getItems();
-        if (items.length == 0)
-            return null;
-        
-        objects = new ExtendedObject[items.length];
-        for (int i = 0; i < items.length; i++)
-            objects[i] = items[i].getObject();
-
         properties = container.properties();
+        if (table.length() == 0) {
+            properties.put("objects", null);
+            properties.put("selected", null);
+            return null;
+        }
+
+        objects = getObjects(container);
+        items = table.getItems();
         properties.put("objects", objects);
+        selected = new ArrayList<>();
+        for (TableItem item : items)
+            if (item.isSelected())
+                selected.add(item.getObject());
+
+        properties.put("selected", (selected.size() == 0)?
+                null : selected.toArray(new ExtendedObject[0]));
+        
         return properties;
     }
 }

@@ -12,7 +12,6 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.CustomContainer;
-import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public class TableTool {
@@ -70,12 +69,12 @@ public class TableTool {
         return data.context.view.getElement(data.name);
     }
     
-    public final TableItem[] getItems() {
-        return getCustom().get("items");
-    }
-    
     public final ExtendedObject[] getObjects() {
         return getCustom().get("objects");
+    }
+    
+    public final ExtendedObject[] getSelected() {
+        return getCustom().get("selected");
     }
     
     public final void model(String model) {
@@ -107,20 +106,17 @@ public class TableTool {
     }
     
     public final void setColumnStatus(byte status, String... tcolumns) {
-        Map<String, Object> column;
         Map<String, Map<String, Object>> columns = getCustom().get("columns");
         
         if (tcolumns == null || tcolumns.length == 0) {
             for (String cname :  columns.keySet())
-                columns.get(cname).put("disabled", status == DISABLED);
+                setEnabledColumn(cname, status == DISABLED);
         } else {
             for (String cname : tcolumns) {
-                column = columns.get(cname);
-                if (column == null)
+                if (columns.containsKey(cname))
                     throw new RuntimeException(cname.concat(
                             " is an invalid column."));
-                
-                column.put("disabled", status == DISABLED);
+                setEnabledColumn(cname, status == DISABLED);
             }
         }
     }
@@ -130,6 +126,11 @@ public class TableTool {
         Map<String, Object> column = columns.get(name);
         column.put("type", type);
         column.put("action", action);
+    }
+    
+    public final void setEnabledColumn(String name, boolean enabled) {
+        Map<String, Map<String, Object>> columns = getCustom().get("columns");
+        columns.get(name).put("disabled", enabled);
     }
     
     public final void setItemColumn(String itemcolumn) {

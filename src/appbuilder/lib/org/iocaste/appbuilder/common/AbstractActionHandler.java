@@ -1,8 +1,5 @@
 package org.iocaste.appbuilder.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
@@ -17,7 +14,6 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 import org.iocaste.texteditor.common.TextEditor;
 import org.iocaste.texteditor.common.TextEditorTool;
@@ -238,16 +234,7 @@ public abstract class AbstractActionHandler {
     }
     
     protected final ExtendedObject[] tableselectedget(String tabletool) {
-        List<ExtendedObject> selected = new ArrayList<>();
-        TableItem[] items = getViewComponents().tabletools.get(tabletool).
-                getItems();
-        
-        for (TableItem item : items)
-            if (item.isSelected())
-                selected.add(item.getObject());
-        
-        return (selected.size() == 0)?
-                null : selected.toArray(new ExtendedObject[0]);
+        return getViewComponents().tabletools.get(tabletool).getSelected();
     }
     
     protected final void taskredirect(String task) {
