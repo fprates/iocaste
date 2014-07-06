@@ -12,6 +12,7 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.CustomContainer;
+import org.iocaste.shell.common.Validator;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public class TableTool {
@@ -172,6 +173,14 @@ public class TableTool {
     
     public final void setObjects(ExtendedObject[] objects) {
         getCustom().set("objects", objects);
+    }
+    
+    public final void setValidator(String field,
+            Class<? extends Validator> validator, String... inputs) {
+        Map<String, Object> vdata = new HashMap<>();
+        vdata.put("validator", validator);
+        vdata.put("inputs", inputs);
+        getColumns().get(field).put("validator", vdata);
     }
     
     public final void setVisibility(boolean visible, String... tcolumns) {

@@ -28,6 +28,7 @@ import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
+import org.iocaste.shell.common.Validator;
 
 public class ComponentRender extends AbstractFunction {
     private int step;
@@ -108,14 +109,6 @@ public class ComponentRender extends AbstractFunction {
             element.setEnabled(!((boolean)column.get("disabled")));
             item.add(element);
         }
-        
-        /*
-         * só podemos tratar os validadores quando todos os
-         * componentes de entrada estiverem definidos.
-         * por isso não podemos tratar no loop anterior.
-         */
-//        for (TableColumn tcolumn : tcolumns)
-//            setColumnValidator(tcolumn, item);
         
         if (object == null)
             return;
@@ -230,6 +223,21 @@ public class ComponentRender extends AbstractFunction {
         additems(table, objects);
     }
     
+    private final void installValidators(CustomContainer container) {
+        Table table = getTable(container);
+        Map<String, Object> properties;
+        
+        for (TableItem item : table.getItems())
+            for (TableColumn column : table.getColumns()) {
+                if (column.isMark())
+                    continue;
+                properties = columns.get(column.getName());
+                if (properties == null)
+                    continue;
+                setColumnValidator(properties, column, item);
+            }
+    }
+    
     private final void performTableAction(CustomContainer container,
             String action) {
         int i;
@@ -294,7 +302,41 @@ public class ComponentRender extends AbstractFunction {
             component.set("selected", null);
         }
         
+        installValidators(component);
+        
         return component;
+    }
+    
+    @SuppressWarnings("unchecked")
+    private final void setColumnValidator(Map<String, Object> properties,
+            TableColumn tcolumn, TableItem item) {
+        String[] inputs;
+        Map<String, Object> validator;
+        InputComponent input;
+        Element element;
+        String name;
+        
+        if (tcolumn.isMark())
+            return;
+        
+        name = tcolumn.getName();
+        element = item.get(name);
+        if (!element.isDataStorable())
+            return;
+        
+        validator = columns.get("validator");
+        if (validator == null)
+            return;
+        
+        input = (InputComponent)element; 
+        input.setValidator((Class<? extends Validator>)validator.
+                get("validator"));
+        if (validator.get("inputs") == null)
+            return;
+        
+        inputs = (String[])validator.get("inputs");
+        for (String vinputname : inputs)
+            input.addValidatorInput((InputComponent)item.get(vinputname));
     }
     
     private final void setControlsState(CustomContainer container) {
