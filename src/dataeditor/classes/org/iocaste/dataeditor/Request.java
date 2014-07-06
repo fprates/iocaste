@@ -44,15 +44,13 @@ public class Request {
      */
     public static final void save(Context context) {
         boolean skip;
-        ExtendedObject object;
         Documents documents = new Documents(context.function);
         
         for (TableItem item : context.deleted)
             documents.delete(item.getObject());
         
         context.deleted.clear();
-        for (TableItem item : context.tablehelper.getItems()) {
-            object = item.getObject();
+        for (ExtendedObject object : context.tablehelper.getObjects()) {
             skip = false;
             for (DocumentModelKey key : object.getModel().getKeys())
                 if (Documents.isInitial(object, key.getModelItemName())) {

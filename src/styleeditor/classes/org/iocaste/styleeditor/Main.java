@@ -28,9 +28,7 @@ public class Main extends AbstractPage {
     
     @Override
     public final AbstractContext init(View view) {
-        context = new Context();
-        
-        return context;
+        return context = new Context();
     }
     
     public final InstallData install(Message message) {

@@ -6,8 +6,6 @@ import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.TableItem;
 
 public class Request {
     
@@ -24,21 +22,18 @@ public class Request {
     }
     
     public static final void element(Context context) {
-        String element;
         Query query;
         InputComponent input = context.view.getElement("NAME");
         Documents documents = new Documents(context.function);
         
         context.element = input.get();
-        for (TableItem item : context.items.getItems()) {
-            element = ((Link)item.get("NAME")).getText();
-            if (!element.equals(context.element))
+        for (ExtendedObject object : context.items.getObjects()) {
+            if (!object.getst("NAME").equals(context.element))
                 continue;
 
-            input = item.get("INDEX");
             query = new Query();
             query.setModel("STYLE_ELEMENT_DETAIL");
-            query.andEqual("ELEMENT", input.get());
+            query.andEqual("ELEMENT", object.get("INDEX"));
             context.eproperties = documents.select(query);
             break;
         }

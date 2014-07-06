@@ -15,7 +15,6 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Shell;
-import org.iocaste.shell.common.TableItem;
 
 public class Response {
     
@@ -104,16 +103,15 @@ public class Response {
         switch (context.mode) {
         case Context.DISPLAY:
             context.tablehelper.setMode(TableTool.DISPLAY);
-            for (TableItem item : context.tablehelper.getItems())
-                for (DocumentModelItem mitem : context.model.getItens())
-                    item.get(mitem.getName()).setEnabled(false);
+            for (DocumentModelItem mitem : context.model.getItens())
+                context.tablehelper.setEnabledColumn(mitem.getName(), false);
             break;
         case Context.UPDATE:
             pagecontrol.add("save", PageControl.REQUEST);
             context.tablehelper.setMode(TableTool.UPDATE);
-            for (TableItem item : context.tablehelper.getItems())
-                for (DocumentModelKey key : context.model.getKeys())
-                    item.get(key.getModelItemName()).setEnabled(false);
+            for (DocumentModelKey key : context.model.getKeys())
+                context.tablehelper.setEnabledColumn(
+                        key.getModelItemName(), false);
             break;
         }
     }
