@@ -24,6 +24,7 @@ public class Input {
     public Element element;
     public Container container;
     public Function function;
+    public boolean enablecustom;
 
     public final void register() {
         InputData data = new InputData();
@@ -32,6 +33,7 @@ public class Input {
         data.element = element;
         data.function = function;
         data.view = view;
+        data.enablecustom = enablecustom;
         
         register(data);
     }
@@ -150,7 +152,6 @@ public class Input {
             return;
         
         inputdata.element.setView(inputdata.view);
-        
         if (inputdata.element.isContainable()) {
             container = (Container)inputdata.element;
             
@@ -158,7 +159,11 @@ public class Input {
             inputdata_.container = container;
             inputdata_.view = inputdata.view;
             inputdata_.function = inputdata.function;
-            
+            inputdata_.enablecustom = inputdata.enablecustom;
+            inputdata_.inputdisabled = inputdata.inputdisabled;
+            if (!inputdata_.enablecustom && container.isRemote())
+                inputdata_.inputdisabled = true;
+                
             elements = (container.isMultiLine())?
                     getMultiLineElements(container) : container.getElements();
                     
@@ -172,7 +177,8 @@ public class Input {
         
         if (inputdata.element.isDataStorable()) {
             input = (InputComponent)inputdata.element;
-            inputdata.view.addInput(input.getHtmlName());
+            if (!inputdata.inputdisabled)
+                inputdata.view.addInput(input.getHtmlName());
             
             modelitem = input.getModelItem();
             if (input.getSearchHelp() == null && modelitem != null &&
@@ -198,4 +204,5 @@ class InputData {
     public Element element;
     public Container container;
     public Function function;
+    public boolean enablecustom, inputdisabled;
 }
