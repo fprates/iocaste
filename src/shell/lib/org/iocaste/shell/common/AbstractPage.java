@@ -22,6 +22,7 @@ public abstract class AbstractPage extends AbstractFunction {
     private AbstractContext context;
     private Map<String, ViewCustomAction> customactions;
     private Map<String, CustomView> customviews;
+    private Map<String, Validator> validators;
     
     public AbstractPage() {
         export("get_view_data", "getViewData");
@@ -29,6 +30,7 @@ public abstract class AbstractPage extends AbstractFunction {
         export("custom_validation", "customValidation");
         customactions = new HashMap<>();
         customviews = new HashMap<>();
+        validators = new HashMap<>();
     }
     
     /**
@@ -58,11 +60,19 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param message
      * @return
      */
-    public final ValidatorConfig customValidation(Message message)
+    public final Map<String, Object> customValidation(Message message)
             throws Exception {
-        ValidatorConfig config = message.get("config");
+        Map<String, Object> response;
+        String name = message.get("name");
+        Validator validator = validators.get(name);
         
-        return validate(config);
+        validator.setFunction(this);
+        validator.validate();
+        
+        response = new HashMap<>();
+        response.put("message", validator.getMessage());
+        response.put("inputs", validator.getInputs());
+        return response;
     }
     
     /**
@@ -225,35 +235,10 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
-     * @param config
-     * @return
-     * @throws Exception
+     * @param field
+     * @param validator
      */
-    private final ValidatorConfig validate(ValidatorConfig config)
-            throws Exception {
-        Validator validator = (Validator)Class.forName(config.getClassName()).
-                newInstance();
-        
-        validator.setFunction(this);
-        config.setMessage(null);
-        validator.validate(config);
-        
-        return config;
-        
-    }
-    
-    /**
-     * 
-     * @param input
-     * @return
-     */
-    public final ValidatorConfig validate(InputComponent input) {
-        ValidatorConfig config = input.getValidatorConfig();
-        
-        try {
-            return validate(config);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public final void register(String field, Validator validator) {
+        validators.put(field, validator);
     }
 }

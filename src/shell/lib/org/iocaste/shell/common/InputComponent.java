@@ -14,13 +14,6 @@ import org.iocaste.documents.common.DocumentModelItem;
 public interface InputComponent extends Component {
     
     /**
-     * Adiciona campos de entrada para serem utilizados pela
-     * rotina de validação customizada.
-     * @param input
-     */
-    public abstract void addValidatorInput(InputComponent input);
-    
-    /**
      * Retorna conteúdo do componente.
      * @return conteúdo
      */
@@ -89,10 +82,10 @@ public interface InputComponent extends Component {
     public abstract InputComponent[] getStackComponents();
     
     /**
-     * Retorna configuração do validador.
-     * @return configuração
+     * 
+     * @return
      */
-    public abstract ValidatorConfig getValidatorConfig();
+    public abstract String getValidator();
     
     /**
      * 
@@ -209,10 +202,16 @@ public interface InputComponent extends Component {
     public abstract void setSelected(boolean selected);
     
     /**
-     * Define um validador customizado para a entrada.
-     * @param validator rotina de validação.
+     * 
+     * @param string
      */
-    public abstract void setValidator(Class<? extends Validator> validator);
+    public abstract void setValidator(String string);
+    
+    /**
+     * 
+     * @param validator
+     */
+    public abstract void setValidator(Validator validator);
     
     /**
      * 

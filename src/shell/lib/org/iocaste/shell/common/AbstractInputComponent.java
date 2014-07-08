@@ -24,7 +24,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private Const type;
     private DataElement dataelement;
     private SearchHelp search;
-    private ValidatorConfig validatorcfg;
+    private String validator;
     
     public AbstractInputComponent(Container container, Const type,
             Const type_, String name) {
@@ -32,19 +32,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
         
         this.type = type_;
         obligatory = false;
-        validatorcfg = new ValidatorConfig();
-        validatorcfg.add(this);
         setEventHandler(new OnFocus(this));
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.InputComponent#
-     *     addValidatorInput(org.iocaste.shell.common.InputComponent)
-     */
-    @Override
-    public final void addValidatorInput(InputComponent input) {
-        validatorcfg.add(input);
     }
     
     /*
@@ -164,12 +152,12 @@ public abstract class AbstractInputComponent extends AbstractComponent
     }
     
     /*
-     * (non-Javadoc)
+     * (não-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#getValidator()
      */
     @Override
-    public final ValidatorConfig getValidatorConfig() {
-        return validatorcfg;
+    public final String getValidator() {
+        return validator;
     }
     
     /*
@@ -369,13 +357,23 @@ public abstract class AbstractInputComponent extends AbstractComponent
     };
     
     /*
-     * (non-Javadoc)
+     * (não-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#setValidator(
-     *     java.lang.Class)
+     *    java.lang.String)
      */
     @Override
-    public final void setValidator(Class<? extends Validator> validator) {
-        validatorcfg.setValidator(validator);
+    public final void setValidator(String validator) {
+        this.validator = validator;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setValidator(
+     *    java.lang.String)
+     */
+    @Override
+    public final void setValidator(Validator validator) {
+        this.validator = validator.getName();
     }
     
     /*

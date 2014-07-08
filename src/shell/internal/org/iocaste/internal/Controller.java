@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -29,7 +30,6 @@ import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.Shell;
-import org.iocaste.shell.common.ValidatorConfig;
 
 public class Controller {
     private static final int EINITIAL = 1;
@@ -47,24 +47,27 @@ public class Controller {
      * @return
      * @throws Exception
      */
-    private static final ValidatorConfig callCustomValidation(
-            ControllerData cconfig, ValidatorConfig validatorcfg)
-                    throws Exception {
-        ValidatorConfig vconfig;
-        String url = new StringBuilder("/").append(cconfig.view.getAppName()).
+    private static final Map<String, Object> callCustomValidation(
+            ControllerData cconfig, InputComponent input) throws Exception {
+        Map<String, Object> response;
+        String url;
+        GenericService service;
+        Message message;
+        
+        url = new StringBuilder("/").append(cconfig.view.getAppName()).
                 append("/view.html").toString();
-        GenericService service = new GenericService(cconfig.function, url);
-        Message message = new Message("custom_validation");
-        message.add("config", validatorcfg);
+        service = new GenericService(cconfig.function, url);
+        message = new Message("custom_validation");
+        message.add("name", input.getValidator());
         
         try {
-            vconfig = service.invoke(message);
-            if (vconfig.getMessage() == null)
+            response = service.invoke(message);
+            if (response.get("message") == null)
                 Common.commit(cconfig.servername, cconfig.sessionid);
             else
                 Common.rollback(cconfig.servername, cconfig.sessionid);
             
-            return vconfig;
+            return response;
         } catch (Exception e) {
             Common.rollback(cconfig.servername, cconfig.sessionid);
             throw e;
@@ -313,6 +316,33 @@ public class Controller {
         }
     }
     
+    @SuppressWarnings("unchecked")
+    private static final void processCustomValidation(ControllerData config,
+            List<InputComponent> validations, InputStatus status)
+                    throws Exception {
+        Map<String, Object> response;
+        Collection<InputComponent> inputs;
+        
+        for (InputComponent input_ : validations) {
+            response = callCustomValidation(config, input_);
+            
+            status.message = (String)response.get("message");
+            if (status.message == null) {
+                inputs = (Collection<InputComponent>)response.get("inputs");
+                for (InputComponent input : inputs) {
+                    status.input = config.view.getElement(input.getHtmlName());
+                    status.input.set(input.get());
+                    status.input.setText(input.getText());
+                }
+                
+                continue;
+            }
+            
+            status.error = EVALIDATION;
+            break;
+        }
+    }
+    
     /**
      * 
      * @param config
@@ -322,12 +352,11 @@ public class Controller {
     private static final void processInputs(ControllerData config,
             InputStatus status) throws Exception {
         RangeInputComponent rinput;
-        ValidatorConfig validatorcfg;
         Element element;
         String value;
         DataElement dataelement;
         InputComponent input;
-        List<InputComponent> validations = new ArrayList<InputComponent>();
+        List<InputComponent> validations = new ArrayList<>();
         RangeInputStatus ri = new RangeInputStatus();
         
         /*
@@ -422,35 +451,15 @@ public class Controller {
                 continue;
             }
             
-            validatorcfg = input.getValidatorConfig();
-            if (validatorcfg != null &&
-                    !Shell.isInitial(validatorcfg.getClassName()))
+            if (input.getValidator() != null)
                 validations.add(input);
         }
         
         if (status.error != 0)
             return;
         
-        for (InputComponent input_ : validations) {
-            validatorcfg = input_.getValidatorConfig();
-            validatorcfg = callCustomValidation(config, validatorcfg);
-            
-            status.message = validatorcfg.getMessage();
-            if (status.message == null) {
-                for (String inputname : validatorcfg.getInputNames()) {
-                    input = validatorcfg.getInput(inputname);
-                    input_ = config.view.getElement(input.getHtmlName());
-                    input_.set(input.get());
-                    input_.setText(input.getText());
-                }
-                
-                continue;
-            }
-            
-            status.input = input_;
-            status.error = EVALIDATION;
-            break;
-        }
+        if (validations.size() > 0)
+            processCustomValidation(config, validations, status);
         
         if (status.error != 0)
             return;
