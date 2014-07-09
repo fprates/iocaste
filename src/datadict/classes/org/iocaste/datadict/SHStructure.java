@@ -16,7 +16,7 @@ import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextField;
-import org.iocaste.shell.common.ValidatorConfig;
+import org.iocaste.shell.common.Validator;
 
 public class SHStructure {
     private final static String[] TITLE = {
@@ -27,6 +27,7 @@ public class SHStructure {
     
     private static void insertItem(Context context, Table itens,
             ExtendedObject object) {
+        Validator validator;
         TextField tfield;
         String name;
         TableItem item = new TableItem(itens);
@@ -34,6 +35,7 @@ public class SHStructure {
         InputComponent modelinput = ((DataForm)context.view.
                 getElement("header")).get("MODEL");
         
+        validator = new SHItemValidator(context);
         for (DocumentModelItem modelitem : model.getItens()) {
             name = modelitem.getName();
             
@@ -56,8 +58,9 @@ public class SHStructure {
             }
             
             if (name.equals("ITEM")) {
-                tfield.setValidator(SHItemValidator.class);
-                tfield.addValidatorInput(modelinput);
+                validator.add(modelinput);
+                tfield.setValidator(validator);
+                
                 context.view.setFocus(tfield);
                 modelitem.getDataElement().setLength(24);
             }
@@ -68,10 +71,10 @@ public class SHStructure {
     }
 
     public static final void main(Context context) {
+        Validator validator;
         DataItem ditem;
         String name;
         ExtendedObject[] oitens;
-        ValidatorConfig validatorcfg;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         Documents documents = new Documents(context.function);
@@ -87,8 +90,7 @@ public class SHStructure {
             header.setObject((ExtendedObject)context.view.
                     getParameter("header"));
         
-        validatorcfg = new ValidatorConfig();
-        validatorcfg.setValidator(SHExportValidator.class);
+        validator = new SHExportValidator(context);
         
         for (Element element : header.getElements()) {
             if (element.getType() != Const.DATA_ITEM)
@@ -105,16 +107,16 @@ public class SHStructure {
             }
             
             if (name.equals("MODEL")) {
-                validatorcfg.add(ditem);
+                validator.add(ditem);
                 context.view.setFocus(ditem);
             }
             
             if (name.equals("EXPORT")) {
-                validatorcfg.add(ditem);
+                validator.add(ditem);
                 
                 ditem.getModelItem().getDataElement().setLength(24);
                 ditem.getModelItem().setReference(null);
-                ditem.setValidator(SHItemValidator.class);
+                ditem.setValidator(validator);
             }
             
             ditem.setObligatory(context.mode != Common.SHOW);
