@@ -175,12 +175,10 @@ public class TableTool {
         getCustom().set("objects", objects);
     }
     
-    public final void setValidator(String field,
-            Class<? extends Validator> validator, String... inputs) {
-        Map<String, Object> vdata = new HashMap<>();
-        vdata.put("validator", validator);
-        vdata.put("inputs", inputs);
-        getColumns().get(field).put("validator", vdata);
+    public final void setValidator(String field, Validator validator) {
+        String name = validator.getName();
+        getColumns().get(field).put("validator", name);
+        ((AbstractPage)data.context.function).register(name, validator);
     }
     
     public final void setVisibility(boolean visible, String... tcolumns) {

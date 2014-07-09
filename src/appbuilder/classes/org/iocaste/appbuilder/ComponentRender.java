@@ -28,7 +28,6 @@ import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
-import org.iocaste.shell.common.Validator;
 
 public class ComponentRender extends AbstractFunction {
     private int step;
@@ -307,12 +306,8 @@ public class ComponentRender extends AbstractFunction {
         return component;
     }
     
-    @SuppressWarnings("unchecked")
     private final void setColumnValidator(Map<String, Object> properties,
             TableColumn tcolumn, TableItem item) {
-        String[] inputs;
-        Map<String, Object> validator;
-        InputComponent input;
         Element element;
         String name;
         
@@ -324,19 +319,11 @@ public class ComponentRender extends AbstractFunction {
         if (!element.isDataStorable())
             return;
         
-        validator = columns.get("validator");
-        if (validator == null)
+        name = (String)properties.get("validator");
+        if (name == null)
             return;
         
-        input = (InputComponent)element; 
-        input.setValidator((Class<? extends Validator>)validator.
-                get("validator"));
-        if (validator.get("inputs") == null)
-            return;
-        
-        inputs = (String[])validator.get("inputs");
-        for (String vinputname : inputs)
-            input.addValidatorInput((InputComponent)item.get(vinputname));
+        ((InputComponent)element).setValidator(name);
     }
     
     private final void setControlsState(CustomContainer container) {
@@ -371,37 +358,6 @@ public class ComponentRender extends AbstractFunction {
         }
     }
     
-//    /**
-//     * 
-//     * @param tcolumn
-//     * @param item
-//     */
-//    private final void setColumnValidator(TableColumn tcolumn, TableItem item) {
-//        InputComponent input;
-//        Map<String, Object> column;
-//        Element element;
-//        String name;
-//        
-//        if (tcolumn.isMark())
-//            return;
-//        
-//        name = tcolumn.getName();
-//        element = item.get(name);
-//        if (!element.isDataStorable())
-//            return;
-//        
-//        column = columns.get(name);
-//        if (column.get("validator") == null)
-//            return;
-//        
-//        input = (InputComponent)element; 
-//        input.setValidator(column.validator.validator);
-//        if (column.validator.inputs == null)
-//            return;
-//        
-//        for (String vinputname : column.validator.inputs)
-//            input.addValidatorInput((InputComponent)item.get(vinputname));
-//    }
     public Map<String, Object> validate(Message message) {
         List<ExtendedObject> selected;
         Map<String, Object> properties;
