@@ -12,7 +12,6 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.CustomContainer;
-import org.iocaste.shell.common.Validator;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public class TableTool {
@@ -175,10 +174,8 @@ public class TableTool {
         getCustom().set("objects", objects);
     }
     
-    public final void setValidator(String field, Validator validator) {
-        String name = validator.getName();
-        getColumns().get(field).put("validator", name);
-        ((AbstractPage)data.context.function).register(name, validator);
+    public final void setValidator(String field, String validator) {
+        getColumns().get(field).put("validator", validator);
     }
     
     public final void setVisibility(boolean visible, String... tcolumns) {

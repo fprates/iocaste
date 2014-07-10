@@ -138,6 +138,7 @@ public abstract class AbstractPage extends AbstractFunction {
         if (initializable) {
             customactions.clear();
             customviews.clear();
+            validators.clear();
             context = init(view);
             context.view = view;
             context.function = this;
