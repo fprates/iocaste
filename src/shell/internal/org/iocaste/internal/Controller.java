@@ -22,6 +22,7 @@ import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.CustomContainer;
@@ -47,21 +48,23 @@ public class Controller {
      * @return
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     private static final Map<String, Object> callCustomValidation(
             ControllerData cconfig, InputComponent input) throws Exception {
         Map<String, Object> response;
         String url;
-        GenericService service;
+        Service service;
         Message message;
         
-        url = new StringBuilder("/").append(cconfig.view.getAppName()).
-                append("/view.html").toString();
-        service = new GenericService(cconfig.function, url);
+        url = new StringBuilder(cconfig.servername).append("/").
+                append(cconfig.view.getAppName()).append("/view.html").
+                toString();
+        service = new Service(cconfig.sessionid, url);
         message = new Message("custom_validation");
         message.add("name", input.getValidator());
         
         try {
-            response = service.invoke(message);
+            response = (Map<String, Object>)service.call(message);
             if (response.get("message") == null)
                 Common.commit(cconfig.servername, cconfig.sessionid);
             else
