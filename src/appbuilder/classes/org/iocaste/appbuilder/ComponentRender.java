@@ -30,7 +30,7 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
 
 public class ComponentRender extends AbstractFunction {
-    private int step;
+    private int step, last;
     private Map<String, Map<String, Object>> columns;
     private String itemcolumn;
     
@@ -41,7 +41,6 @@ public class ComponentRender extends AbstractFunction {
     
     @SuppressWarnings("unchecked")
     private void additem(Table table, ExtendedObject object, int pos) {
-        int last;
         Map<String, Object> column;
         Element element;
         DataElement delement;
@@ -51,7 +50,6 @@ public class ComponentRender extends AbstractFunction {
         TableItem item = new TableItem(table, pos);
         TableColumn[] tcolumns = table.getColumns();
         
-        last = 0;
         for (TableColumn tcolumn : tcolumns) {
             if (tcolumn.isMark())
                 continue;
@@ -287,23 +285,24 @@ public class ComponentRender extends AbstractFunction {
     public final CustomContainer render(Message message) {
         ExtendedObject[] objects;
         String action;
-        CustomContainer component = message.get("container");
+        CustomContainer custom = message.get("container");
+
+        last = custom.geti("last");
+        if (!custom.isInitialized())
+            initialize(custom);
         
-        if (!component.isInitialized())
-            initialize(component);
-        
-        setControlsState(component);
-        action = component.getst("action");
+        setControlsState(custom);
+        action = custom.getst("action");
         if (action != null) {
-            performTableAction(component, action);
-            objects = getObjects(component);
-            component.set("objects", objects);
-            component.set("selected", null);
+            performTableAction(custom, action);
+            objects = getObjects(custom);
+            custom.set("objects", objects);
+            custom.set("selected", null);
         }
         
-        installValidators(component);
+        installValidators(custom);
         
-        return component;
+        return custom;
     }
     
     private final void setColumnValidator(Map<String, Object> properties,

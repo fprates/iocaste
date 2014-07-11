@@ -36,6 +36,7 @@ public class TableTool {
         custom.set("mark", false);
         custom.set("visible_lines", 15);
         custom.set("step", 1);
+        custom.set("last", 0);
         custom.set("columns", columns);
         custom.set("enabled", true);
         custom.set("action", null);
