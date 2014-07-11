@@ -62,6 +62,10 @@ public class CustomContainer extends AbstractContainer {
         properties.put(key, value);
     }
     
+    public final void set(Map<String, Object> properties) {
+        this.properties = properties;
+    }
+    
     public final void setRenderURL(String url) {
         renderurl = url;
     }

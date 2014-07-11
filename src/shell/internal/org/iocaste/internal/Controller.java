@@ -23,6 +23,7 @@ import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.Element;
@@ -50,7 +51,7 @@ public class Controller {
      */
     @SuppressWarnings("unchecked")
     private static final Map<String, Object> callCustomValidation(
-            ControllerData cconfig, InputComponent input) throws Exception {
+            ControllerData cconfig, List<InputComponent> inputs) throws Exception {
         Map<String, Object> response;
         String url;
         Service service;
@@ -61,18 +62,15 @@ public class Controller {
                 toString();
         service = new Service(cconfig.sessionid, url);
         message = new Message("custom_validation");
-        message.add("name", input.getValidator());
+        message.add("inputs", inputs);
         message.add("view", cconfig.view);
-        message.add("input", input);
         
         try {
             response = (Map<String, Object>)service.call(message);
-            if (response.get("message") == null) {
-                cconfig.view = (View)response.get("view");
+            if (response.get("message") == null)
                 Common.commit(cconfig.servername, cconfig.sessionid);
-            } else {
+            else
                 Common.rollback(cconfig.servername, cconfig.sessionid);
-            }
             return response;
         } catch (Exception e) {
             Common.rollback(cconfig.servername, cconfig.sessionid);
@@ -325,20 +323,27 @@ public class Controller {
     private static final void processCustomValidation(ControllerData config,
             List<InputComponent> validations, InputStatus status)
                     throws Exception {
+        View view;
+        InputComponent inputto, inputfrom;
         Map<String, Object> response;
-        
-        for (InputComponent input_ : validations) {
-            response = callCustomValidation(config, input_);
-            
-            status.message = (String)response.get("message");
-            if (status.message == null) {
-                config.view = (View)response.get("view");
-                continue;
-            }
-            
+
+        response = callCustomValidation(config, validations);
+        status.message = (String)response.get("message");
+        if (status.message != null) {
             status.error = EVALIDATION;
-            break;
+            status.input = (InputComponent)response.get("input_error");
+            return;
         }
+        
+        view = (View)response.get("view");
+        for (String name : config.view.getInputs()) {
+            inputto = config.view.getElement(name);
+            inputfrom = view.getElement(name);
+            inputto.set(inputfrom.get());
+        }
+        
+        for (Container container : config.customs)
+            updateCustomContainer(container, view);
     }
     
     /**
@@ -594,6 +599,14 @@ public class Controller {
             input.set(value);
             break;
         }
+    }
+    
+    private static final void updateCustomContainer(
+            Container container, View view) {
+        CustomContainer customto = (CustomContainer)container;
+        CustomContainer customfrom = view.getElement(customto.getName());
+        
+        customto.set(customfrom.properties());
     }
     
     /**

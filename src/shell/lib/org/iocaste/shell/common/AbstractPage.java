@@ -2,6 +2,7 @@ package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -64,22 +65,33 @@ public abstract class AbstractPage extends AbstractFunction {
     public final Map<String, Object> customValidation(Message message)
             throws Exception {
         Map<String, Object> response;
-        String name = message.get("name");
-        InputComponent input = message.get("input");
-        Validator validator = validators.get(name);
-        
-        if (validator == null)
-            throw new IocasteException(name.
-                    concat(" is an invalid validator."));
+        String name, error;
+        List<InputComponent> inputs = message.get("inputs");
+        Validator validator = null;
         
         context.view = message.get("view");
         context.function = this;
-        validator.setInput(input);
-        validator.setContext(context);
-        validator.validate();
-        
         response = new HashMap<>();
-        response.put("message", validator.getMessage());
+        error = null;
+        for (InputComponent input : inputs) {
+            name = input.getValidator();
+            validator = validators.get(name);
+            
+            if (validator == null)
+                throw new IocasteException(name.
+                        concat(" is an invalid validator."));
+            
+            validator.setInput(input);
+            validator.setContext(context);
+            validator.validate();
+            
+            error = validator.getMessage();
+            if (error == null)
+                continue;
+            response.put("input_error", input);
+        }
+        
+        response.put("message", error);
         response.put("view", context.view);
         return response;
     }
