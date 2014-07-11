@@ -4,6 +4,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -32,7 +33,9 @@ public class SHStructure {
         TableItem item = new TableItem(itens);
         DocumentModel model = itens.getModel();
         
-        validator = new SHItemValidator(context);
+        validator = new SHItemValidator();
+        ((AbstractPage)context.function).register(
+                validator.getName(), validator);
         for (DocumentModelItem modelitem : model.getItens()) {
             name = modelitem.getName();
             
@@ -85,8 +88,9 @@ public class SHStructure {
             header.setObject((ExtendedObject)context.view.
                     getParameter("header"));
         
-        validator = new SHExportValidator(context);
-        
+        validator = new SHExportValidator();
+        ((AbstractPage)context.function).register(
+                validator.getName(), validator);
         for (Element element : header.getElements()) {
             if (element.getType() != Const.DATA_ITEM)
                 continue;

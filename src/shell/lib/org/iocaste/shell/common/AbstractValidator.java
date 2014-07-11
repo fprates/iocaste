@@ -19,8 +19,7 @@ public abstract class AbstractValidator implements Validator {
     private InputComponent input;
     private AbstractContext context;
     
-    public AbstractValidator(AbstractContext context, String name) {
-        ((AbstractPage)context.function).register(name, this);
+    public AbstractValidator(String name) {
         this.name = name;
     }
     
