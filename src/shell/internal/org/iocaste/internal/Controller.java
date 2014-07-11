@@ -461,8 +461,9 @@ public class Controller {
         if (status.error != 0)
             return;
         
-        for (CustomContainer custom : config.customs)
-            validateCustomContainer(custom, config);
+        if (config.customs != null)
+            for (CustomContainer custom : config.customs)
+                validateCustomContainer(custom, config);
         
         if (validations.size() > 0)
             processCustomValidation(config, validations, status);
