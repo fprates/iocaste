@@ -10,7 +10,6 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.SHLib;
 import org.iocaste.shell.common.Table;
@@ -32,8 +31,6 @@ public class SHStructure {
         String name;
         TableItem item = new TableItem(itens);
         DocumentModel model = itens.getModel();
-        InputComponent modelinput = ((DataForm)context.view.
-                getElement("header")).get("MODEL");
         
         validator = new SHItemValidator(context);
         for (DocumentModelItem modelitem : model.getItens()) {
@@ -53,12 +50,10 @@ public class SHStructure {
                 
             default:
                 tfield.setEnabled(true);
-                
                 break;
             }
             
             if (name.equals("ITEM")) {
-                validator.add(modelinput);
                 tfield.setValidator(validator);
                 
                 context.view.setFocus(tfield);
@@ -106,14 +101,10 @@ public class SHStructure {
                 continue;
             }
             
-            if (name.equals("MODEL")) {
-                validator.add(ditem);
+            if (name.equals("MODEL"))
                 context.view.setFocus(ditem);
-            }
             
             if (name.equals("EXPORT")) {
-                validator.add(ditem);
-                
                 ditem.getModelItem().getDataElement().setLength(24);
                 ditem.getModelItem().setReference(null);
                 ditem.setValidator(validator);
