@@ -15,13 +15,13 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) {
         Context extcontext = new Context();
 
-        context.addExtendedContext(MAIN, extcontext);
+        context.setExtendedContext(MAIN, extcontext);
         context.setViewSpec(MAIN, new MainSpec());
         context.setViewConfig(MAIN, new MainConfig());
         context.setActionHandler(MAIN, "items", new OptionChoosen());
         
         for (String page : new String[] {JVPR, SINF, ULST}) {
-            context.addExtendedContext(page, extcontext);
+            context.setExtendedContext(page, extcontext);
             context.setViewSpec(page, new PropertiesSpec());
             context.setViewConfig(page, new PropertiesConfig(page));
             context.setViewInput(page, new PropertiesInput());
