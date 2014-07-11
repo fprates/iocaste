@@ -33,7 +33,7 @@ public class Services extends AbstractFunction {
     
     private final String getPath(String... args) {
         String path = TextEditorTool.composeFileName(
-                System.getProperty("user.dir"), "iocaste", "texteditor");
+                System.getProperty("user.home"), "iocaste", "texteditor");
         
         for (String arg : args)
             if (arg != null)
@@ -92,10 +92,14 @@ public class Services extends AbstractFunction {
     
     private final void update(String textname, String id, String text)
             throws Exception {
+        OutputStream os;
         String path = getPath(textname, id);
         File file = new File(path);
-        OutputStream os = new FileOutputStream(file);
         
+        if (!file.exists())
+            file.createNewFile();
+        
+        os = new FileOutputStream(file);
         os.write(text.getBytes());
         os.close();
     }
