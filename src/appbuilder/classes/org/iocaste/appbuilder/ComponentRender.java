@@ -118,6 +118,11 @@ public class ComponentRender extends AbstractFunction {
         item.setObject(object);
     }
     
+    /**
+     * 
+     * @param table
+     * @param items
+     */
     private final void additems(Table table, ExtendedObject[] items) {
         int i = 0;
         int vlines = table.getVisibleLines();
@@ -143,6 +148,11 @@ public class ComponentRender extends AbstractFunction {
         table.setTopLine(total);
     }
     
+    /**
+     * 
+     * @param container
+     * @return
+     */
     private final ExtendedObject[] getObjects(CustomContainer container) {
         TableItem[] items;
         ExtendedObject[] objects;
@@ -159,11 +169,20 @@ public class ComponentRender extends AbstractFunction {
         return objects;
     }
     
+    /**
+     * 
+     * @param container
+     * @return
+     */
     private final Table getTable(CustomContainer container) {
         return container.getView().getElement(container.getName().
                 concat("_table"));
     }
     
+    /**
+     * 
+     * @param custom
+     */
     private final void initialize(CustomContainer custom) {
         Map<String, Button> controls;
         String buttonname;
@@ -208,9 +227,6 @@ public class ComponentRender extends AbstractFunction {
         table.setBorderStyle(custom.getst("borderstyle"));
         table.setEnabled(custom.getbl("enabled"));
         
-        step = custom.geti("step");
-        itemcolumn = custom.getst("itemcolumn");
-        columns = custom.get("columns");
         for (TableColumn column : table.getColumns())
             if (!column.isMark())
                 column.setVisible((boolean)
@@ -220,6 +236,10 @@ public class ComponentRender extends AbstractFunction {
         additems(table, objects);
     }
     
+    /**
+     * 
+     * @param container
+     */
     private final void installValidators(CustomContainer container) {
         Table table = getTable(container);
         Map<String, Object> properties;
@@ -235,6 +255,11 @@ public class ComponentRender extends AbstractFunction {
             }
     }
     
+    /**
+     * 
+     * @param container
+     * @param action
+     */
     private final void performTableAction(CustomContainer container,
             String action) {
         int i;
@@ -282,14 +307,25 @@ public class ComponentRender extends AbstractFunction {
         container.set("action", null);
     }
     
+    /**
+     * 
+     * @param message
+     * @return
+     */
     public final CustomContainer render(Message message) {
         ExtendedObject[] objects;
         String action;
         CustomContainer custom = message.get("container");
 
+        step = custom.geti("step");
+        itemcolumn = custom.getst("itemcolumn");
+        columns = custom.get("columns");
         last = custom.geti("last");
+        
         if (!custom.isInitialized())
             initialize(custom);
+        else
+            updateItems(custom);
         
         setControlsState(custom);
         action = custom.getst("action");
@@ -305,6 +341,12 @@ public class ComponentRender extends AbstractFunction {
         return custom;
     }
     
+    /**
+     * 
+     * @param properties
+     * @param tcolumn
+     * @param item
+     */
     private final void setColumnValidator(Map<String, Object> properties,
             TableColumn tcolumn, TableItem item) {
         Element element;
@@ -325,6 +367,10 @@ public class ComponentRender extends AbstractFunction {
         ((InputComponent)element).setValidator(name);
     }
     
+    /**
+     * 
+     * @param container
+     */
     private final void setControlsState(CustomContainer container) {
         Element button;
         byte state = container.getb("controls_state");
@@ -357,6 +403,23 @@ public class ComponentRender extends AbstractFunction {
         }
     }
     
+    /**
+     * 
+     * @param custom
+     */
+    private void updateItems(CustomContainer custom) {
+        Table table = getTable(custom);
+        ExtendedObject[] objects = custom.get("objects");
+        
+        table.clear();
+        additems(table, objects);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
     public Map<String, Object> validate(Message message) {
         List<ExtendedObject> selected;
         Map<String, Object> properties;
