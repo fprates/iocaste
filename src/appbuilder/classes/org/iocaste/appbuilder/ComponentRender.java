@@ -213,6 +213,7 @@ public class ComponentRender extends AbstractFunction {
             break;
             
         case TableTool.DISPLAY:
+        case TableTool.DONT_APPEND:
             controls.get(TableTool.ACCEPT).setVisible(false);
             controls.get(TableTool.ADD).setVisible(false);
             controls.get(TableTool.REMOVE).setVisible(false);
@@ -327,7 +328,6 @@ public class ComponentRender extends AbstractFunction {
         else
             updateItems(custom);
         
-        setControlsState(custom);
         action = custom.getst("action");
         if (action != null) {
             performTableAction(custom, action);
@@ -365,42 +365,6 @@ public class ComponentRender extends AbstractFunction {
             return;
         
         ((InputComponent)element).setValidator(name);
-    }
-    
-    /**
-     * 
-     * @param container
-     */
-    private final void setControlsState(CustomContainer container) {
-        Element button;
-        byte state = container.getb("controls_state");
-        String[] controls = container.get("controls");
-        Map<String, Button> buttons = container.get("buttons");
-        Table table = container.getView().getElement(
-                container.getName().concat("_table"));
-        
-        switch (state) {
-        case TableTool.ENABLED:
-        case TableTool.DISABLED:
-            if ((controls == null) || (controls.length == 0)) {
-                for (String name : buttons.keySet())
-                    buttons.get(name).setVisible(state == TableTool.ENABLED);
-                
-                table.setMark(state == TableTool.ENABLED);
-                break;
-            }
-            
-            for (String name : controls) {
-                button = buttons.get(name);
-                if (button == null)
-                    throw new RuntimeException(name.
-                            concat(" is an invalid control."));
-                
-                button.setVisible(state == TableTool.ENABLED);
-            }
-            
-            break;
-        }
     }
     
     /**

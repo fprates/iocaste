@@ -36,8 +36,7 @@ public class Response {
             context.properties.setVisibility(false, "INDEX", "ELEMENT");
             break;
         case Context.UPDATE:
-            context.properties.setMode(TableTool.UPDATE);
-            context.properties.controls(TableTool.DISABLED);
+            context.properties.setMode(TableTool.DONT_APPEND);
             context.properties.setVisibility(false, "INDEX", "ELEMENT");
             context.properties.setColumnStatus(TableTool.DISABLED, "PROPERTY");
             break;
@@ -97,8 +96,7 @@ public class Response {
         context.items.setVisibility(false, "INDEX", "STYLE");
         context.items.setColumnType("NAME", Const.LINK, "element");
         context.items.setVisibleLines(0);
-        context.items.setMode(TableTool.UPDATE);
-        context.items.controls(TableTool.DISABLED);
+        context.items.setMode(TableTool.DONT_APPEND);
         
         switch (context.mode) {
         case Context.CREATE:

@@ -21,6 +21,7 @@ public class TableTool {
     public static final byte CONTINUOUS_UPDATE = 0;
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
+    public static final byte DONT_APPEND = 3;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
     private TableToolData data;
@@ -54,12 +55,6 @@ public class TableTool {
     
     public final void add() {
         getCustom().set("action", ADD);
-    }
-    
-    public final void controls(byte status, String... controls) {
-        CustomContainer custom = getCustom();
-        custom.set("controls_state", status);
-        custom.set("controls", controls);
     }
     
     public final Map<String, Map<String, Object>> getColumns() {
@@ -161,6 +156,7 @@ public class TableTool {
         case UPDATE:
             custom.set("mark", true);
             break;
+        case DONT_APPEND:
         case DISPLAY:
             custom.set("mark", false);
             break;
