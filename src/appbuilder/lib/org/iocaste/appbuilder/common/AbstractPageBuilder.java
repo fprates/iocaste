@@ -96,7 +96,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
             }
             
             for (Validator validator : context.getValidators(name))
-                register(validator.getName(), validator);
+                register(validator);
         }
         
         return context;

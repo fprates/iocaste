@@ -257,10 +257,9 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
-     * @param field
      * @param validator
      */
-    public final void register(String field, Validator validator) {
-        validators.put(field, validator);
+    public final void register(Validator validator) {
+        validators.put(validator.getName(), validator);
     }
 }
