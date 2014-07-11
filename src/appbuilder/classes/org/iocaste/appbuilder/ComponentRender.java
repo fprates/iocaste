@@ -337,6 +337,7 @@ public class ComponentRender extends AbstractFunction {
         }
         
         installValidators(custom);
+        custom.set("last", last);
         
         return custom;
     }
@@ -372,11 +373,12 @@ public class ComponentRender extends AbstractFunction {
      * @param custom
      */
     private void updateItems(CustomContainer custom) {
+        int i = 0;
         Table table = getTable(custom);
         ExtendedObject[] objects = custom.get("objects");
         
-        table.clear();
-        additems(table, objects);
+        for (TableItem item : table.getItems())
+            item.setObject(objects[i++]);
     }
     
     /**
