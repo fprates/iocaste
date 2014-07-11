@@ -1,10 +1,6 @@
 package org.iocaste.shell.common;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.iocaste.protocol.Function;
+import org.iocaste.documents.common.ExtendedObject;
 
 /**
  * Implementação abstrata de validador de campos.
@@ -19,32 +15,21 @@ import org.iocaste.protocol.Function;
  */
 public abstract class AbstractValidator implements Validator {
     private static final long serialVersionUID = 1174080367157084461L;
-    private Map<String, InputComponent> inputs;
-    private Function function;
     private String message, name;
+    private InputComponent input;
+    private AbstractContext context;
     
     public AbstractValidator(AbstractContext context, String name) {
-        ((AbstractPage)context.function).register("shitem", this);
+        ((AbstractPage)context.function).register(name, this);
         this.name = name;
-        inputs = new HashMap<>();
-    }
-    
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.Validator#add(
-     *     org.iocaste.shell.common.InputComponent)
-     */
-    @Override
-    public final void add(InputComponent input) {
-        inputs.put(input.getName(), input);
     }
     
     /**
-     * Disponibiliza function para a validação.
-     * @return Function
+     * 
+     * @return
      */
-    protected final Function getFunction() {
-        return function;
+    protected final AbstractContext getContext() {
+        return context;
     }
     
     /**
@@ -52,17 +37,16 @@ public abstract class AbstractValidator implements Validator {
      * @param name
      * @return
      */
-    public final InputComponent getInput(String name) {
-        return inputs.get(name);
+    protected final <T extends Element> T getElement(String name) {
+        return context.view.getElement(name);
     }
     
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.Validator#getInputs()
+    /**
+     * 
+     * @return
      */
-    @Override
-    public final Collection<InputComponent> getInputs() {
-        return inputs.values();
+    protected final InputComponent getInput() {
+        return input;
     }
     
     /*
@@ -72,6 +56,25 @@ public abstract class AbstractValidator implements Validator {
     @Override
     public final String getMessage() {
         return message;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.Validator#getName()
+     */
+    @Override
+    public final String getName() {
+        return name;
+    }
+    
+    protected ExtendedObject getObject(
+            ExtendedObject[] objects, String name, Object value)
+    {        
+        for (ExtendedObject object : objects)
+            if (!object.get(name).equals(value))
+                return object;
+        
+        return null;
     }
     
     /**
@@ -84,21 +87,32 @@ public abstract class AbstractValidator implements Validator {
     
     /*
      * (não-Javadoc)
-     * @see org.iocaste.shell.common.Validator#getName()
+     * @see org.iocaste.shell.common.Validator#setContext(
+     *    org.iocaste.shell.common.AbstractContext)
      */
     @Override
-    public final String getName() {
-        return name;
+    public final void setContext(AbstractContext context) {
+        this.context = context;
     }
     
     /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Validator#setFunction(
-     *     org.iocaste.protocol.Function)
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.Validator#setInput(
+     *    org.iocaste.shell.common.InputComponent)
      */
     @Override
-    public final void setFunction(Function function) {
-        this.function = function;
+    public final void setInput(InputComponent input) {
+        this.input = input;
+    }
+    
+    /**
+     * 
+     * @param item
+     * @param name
+     * @param value
+     */
+    public final void setInput(TableItem item, String name, Object value) {
+        ((InputComponent)item.get(name)).set(value);
     }
     
     /*

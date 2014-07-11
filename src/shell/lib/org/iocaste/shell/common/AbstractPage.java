@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 /**
@@ -64,14 +65,22 @@ public abstract class AbstractPage extends AbstractFunction {
             throws Exception {
         Map<String, Object> response;
         String name = message.get("name");
+        InputComponent input = message.get("input");
         Validator validator = validators.get(name);
         
-        validator.setFunction(this);
+        if (validator == null)
+            throw new IocasteException(name.
+                    concat(" is an invalid validator."));
+        
+        context.view = message.get("view");
+        context.function = this;
+        validator.setInput(input);
+        validator.setContext(context);
         validator.validate();
         
         response = new HashMap<>();
         response.put("message", validator.getMessage());
-        response.put("inputs", validator.getInputs());
+        response.put("view", context.view);
         return response;
     }
     
