@@ -134,6 +134,11 @@ class BuilderCustomView extends AbstractCustomView {
     private TextEditor editor;
     private NavControl navcontrol;
     private String view;
+    private boolean rebuildview;
+    
+    public BuilderCustomView() {
+        rebuildview = true;
+    }
     
     private void buildItem(PageBuilderContext context, ViewSpecItem item) {
         DashboardFactory dashboard;
@@ -229,13 +234,17 @@ class BuilderCustomView extends AbstractCustomView {
         AbstractViewInput viewinput = getViewInput();
         PageBuilderContext _context = (PageBuilderContext)context;
         
-        viewspec.run(_context);
-        for (ViewSpecItem item : viewspec.getItems())
-            buildItem((PageBuilderContext)context, item);
-        
-        if (viewconfig != null) {
-            viewconfig.setNavControl(navcontrol);
-            viewconfig.run(_context);
+        if (rebuildview) {
+            viewspec.run(_context);
+            for (ViewSpecItem item : viewspec.getItems())
+                buildItem((PageBuilderContext)context, item);
+            
+            if (viewconfig != null) {
+                viewconfig.setNavControl(navcontrol);
+                viewconfig.run(_context);
+            }
+            
+            rebuildview = _context.isViewUpdatable();
         }
         
         if (viewinput != null)

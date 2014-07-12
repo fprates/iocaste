@@ -11,7 +11,7 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.Element;
+//import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.View;
@@ -21,7 +21,6 @@ import org.iocaste.texteditor.common.TextEditorTool;
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
     private Manager manager;
-    private boolean updateview;
     
     protected final void back() {
         ((AbstractPage)context.function).back();
@@ -173,60 +172,12 @@ public abstract class AbstractActionHandler {
             return;
         
         execute(this.context);
-        if (updateview)
-            updateView();
+        context.view.setReloadableView(true);
+        context.view.setKeepView(!this.context.isViewUpdatable());
     }
     
     public final void setManager(Manager manager) {
         this.manager = manager;
-    }
-    
-    public final void setUpdateView(boolean updateview) {
-        this.updateview = updateview;
-    }
-    
-    private final void store(String view, String name, Object value)
-    {
-        context.getViewInput(view).store(name, value);
-    }
-    
-    private final void storeitem(String view, ViewSpecItem item) {
-        String name;
-        DataForm dataform;
-        Element element;
-        InputComponent input;
-        
-        name = item.getName();
-        
-        switch (ViewSpecItem.TYPES.values()[item.getType()]) {
-        case DATA_FORM:
-            dataform = context.view.getElement(name);
-            store(view, name, dataform.getObject());
-            return;
-        case TABLE_TOOL:
-            store(view, name, tableitemsget(name));
-            return;
-        default:
-            element = context.view.getElement(name);
-            /*
-             * algum assistente não suportado, como TableTool, Dashboard, etc.
-             */
-            if (element == null)
-                return;
-            
-            if (element.isDataStorable()) {
-                input = (InputComponent)element;
-                store(view, name, input.get());
-                return;
-            }
-            
-            if (!element.isContainable())
-                return;
-            break;
-        }
-        
-        for (ViewSpecItem child : item.getItems())
-            storeitem(view, child);
     }
     
     protected final ExtendedObject[] tableitemsget(String tabletool) {
@@ -250,6 +201,7 @@ public abstract class AbstractActionHandler {
         
         for (String name : view.getExportable())
             context.view.setParameter(name, view.getParameter(name));
+        
         context.view.redirect(view.getRedirectedApp(),
                 view.getRedirectedPage(), View.INITIALIZE);
     }
@@ -260,22 +212,5 @@ public abstract class AbstractActionHandler {
         
         editortool.commit(editor, id);
         editortool.update(editor, "B2B_OBSERV");
-    }
-    
-    private final void updateView() {
-        AbstractViewInput input;
-        AbstractViewSpec spec;
-        String view = context.view.getPageName();
-        
-        spec = context.getViewSpec(view);
-        input = context.getViewInput(view);
-        if (input == null)
-            return;
-        
-        input.setUpdated(true);
-        for (ViewSpecItem item : spec.getItems())
-            storeitem(view, item);
-        
-        context.view.setReloadableView(true);
     }
 }
