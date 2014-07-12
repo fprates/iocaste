@@ -373,12 +373,19 @@ public class ComponentRender extends AbstractFunction {
      * @param custom
      */
     private void updateItems(CustomContainer custom) {
-        int i = 0;
+        int i;
         Table table = getTable(custom);
         ExtendedObject[] objects = custom.get("objects");
         
-        for (TableItem item : table.getItems())
-            item.setObject(objects[i++]);
+        if (objects.length == table.length()) {
+            i = 0;
+            for (TableItem item : table.getItems())
+                item.setObject(objects[i++]);
+        } else {
+            table.clear();
+            additems(table, objects);
+        }
+            
     }
     
     /**
