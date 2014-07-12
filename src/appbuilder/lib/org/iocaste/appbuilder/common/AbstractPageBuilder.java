@@ -13,6 +13,7 @@ import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.ExpandBar;
@@ -204,6 +205,9 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case FILE_UPLOAD:
             new FileEntry(container, name);
+            break;
+        case BUTTON:
+            new Button(container, name);
             break;
         default:
             break;

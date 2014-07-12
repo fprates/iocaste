@@ -22,7 +22,8 @@ public class ViewSpecItem {
         TEXT("text"),
         LINK("link"),
         REPORT_TOOL("reporttool"),
-        FILE_UPLOAD("fileupload");
+        FILE_UPLOAD("fileupload"),
+        BUTTON("button");
 
         private String name;
         

@@ -18,6 +18,10 @@ public abstract class AbstractViewSpec {
         sequence = new ArrayList<>();
     }
     
+    protected final void button(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.BUTTON, name);
+    }
+    
     protected final void dashboard(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.DASHBOARD, name);
     };
