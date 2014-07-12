@@ -13,7 +13,6 @@ import org.iocaste.shell.common.Validator;
 
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewContext> viewcontexts;
-    private boolean updateview;
     
     public PageBuilderContext() {
         viewcontexts = new HashMap<>();
@@ -157,8 +156,8 @@ public class PageBuilderContext extends AbstractContext {
      * 
      * @return
      */
-    public final boolean isViewUpdatable() {
-        return updateview;
+    public final boolean isViewUpdatable(String view) {
+        return getContext(view).updateview;
     }
     
     /**
@@ -219,10 +218,11 @@ public class PageBuilderContext extends AbstractContext {
     
     /**
      * 
+     * @param view
      * @param updateview
      */
-    public final void setUpdateViews(boolean updateview) {
-        this.updateview = updateview;
+    public final void setUpdateViews(String view, boolean updateview) {
+        getContext(view).updateview = updateview;
     }
 }
 
@@ -235,6 +235,7 @@ class ViewContext {
     public Map<String, AbstractActionHandler> actionhandlers;
     public ExtendedContext extcontext;
     public List<Validator> validators;
+    public boolean updateview;
     
     public ViewContext() {
         viewcomponents = new ViewComponents();

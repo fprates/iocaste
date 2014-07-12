@@ -173,7 +173,7 @@ public abstract class AbstractActionHandler {
         
         execute(this.context);
         context.view.setReloadableView(true);
-        context.view.setKeepView(!this.context.isViewUpdatable());
+        context.view.setKeepView(!this.context.isViewUpdatable(view));
     }
     
     public final void setManager(Manager manager) {
