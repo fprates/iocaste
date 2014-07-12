@@ -189,7 +189,10 @@ public class PageRenderer extends AbstractRenderer {
             appctx.setStyleSheet(style);
         }
         
-        view = new View(appname, pagename);
+        view = pagectx.getViewData(); 
+        if (!pagectx.keepView() || view == null)
+            view = new View(appname, pagename);
+        
         view.setStyleSheet(appctx.getStyleSheet());
         
         message = new Message("get_view_data");
@@ -753,6 +756,7 @@ public class PageRenderer extends AbstractRenderer {
         
         pagectx_.setInitialize(view.isInitializable());
         pagectx_.setSequence(sequence);
+        pagectx_.setKeepView(view.keepView());
         pagectx_.setReloadableView(view.isReloadableView());
         pagectx_.setInitParameters(view.getInitParameters());
         pagectx_.clearParameters();

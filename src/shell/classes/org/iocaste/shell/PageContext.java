@@ -15,7 +15,7 @@ public class PageContext {
     private View view;
     private AppContext appctx;
     private String name, username, contexturl;
-    private boolean reloadable, initialize;
+    private boolean reloadable, initialize, keepview;
     private Map<String, Object> parameters;
     private List<FileItem> files;
     private List<CustomContainer> customs;
@@ -182,6 +182,14 @@ public class PageContext {
     
     /**
      * 
+     * @return
+     */
+    public final boolean keepView() {
+        return keepview;
+    }
+    
+    /**
+     * 
      * @param actions
      */
     public final void setActions(Set<String> actions) {
@@ -242,6 +250,14 @@ public class PageContext {
      */
     public final void setInitParameters(String[] initparams) {
         this.initparams = initparams;
+    }
+    
+    /**
+     * 
+     * @param keepview
+     */
+    public final void setKeepView(boolean keepview) {
+        this.keepview = keepview;
     }
     
     /**
