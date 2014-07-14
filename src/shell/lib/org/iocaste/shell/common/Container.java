@@ -21,6 +21,8 @@
 
 package org.iocaste.shell.common;
 
+import java.util.Set;
+
 import org.iocaste.documents.common.DocumentModel;
 
 /**
@@ -50,13 +52,13 @@ public interface Container extends Element {
      * @param name nome html.
      * @return
      */
-    public abstract Element getElement(String name);
+    public abstract <T extends Element> T getElement(String name);
 
     /**
      * Retorna todos os elementos do container.
      * @return
      */
-    public abstract Element[] getElements();
+    public abstract Set<Element> getElements();
     
     /**
      * Retorna array com elementos.
@@ -87,4 +89,5 @@ public interface Container extends Element {
      * @param element elemento
      */
     public abstract void remove(Element element);
+    
 }

@@ -23,8 +23,10 @@ package org.iocaste.shell.common;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -164,10 +166,10 @@ public class Table extends AbstractContainer {
      * @see org.iocaste.shell.common.AbstractContainer#getElements()
      */
     @Override
-    public final Element[] getElements() {
+    public final Set<Element> getElements() {
         InputComponent input;
         SearchHelp sh;
-        List<Element> elements = new ArrayList<>();
+        Set<Element> elements = new LinkedHashSet<>();
         
         for (TableItem item : items)
             for (Element element : item.getElements()) {
@@ -184,7 +186,7 @@ public class Table extends AbstractContainer {
                 elements.add(sh);
             }
         
-        return elements.toArray(new Element[0]);
+        return elements;
     }
     
     /**

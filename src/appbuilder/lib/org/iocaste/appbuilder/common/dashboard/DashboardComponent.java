@@ -68,7 +68,7 @@ public class DashboardComponent {
     
     public final void show() {
         hide = false;
-        if (component.getElements().length > 0)
+        if (component.getElements().size() > 0)
             component.setVisible(true);
     }
 }
