@@ -102,7 +102,7 @@ public class DataForm extends AbstractContainer {
      * @return item do formulário
      */
     public final DataItem get(String name) {
-        return (DataItem)getElement(name);
+        return getElement(name);
     }
     
     /**
