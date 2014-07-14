@@ -13,8 +13,17 @@ public class Button extends AbstractControlComponent {
     private static final long serialVersionUID = 2295137293981769652L;
     private boolean submit;
     
+    public Button(View view, String name) {
+        super(view, Const.BUTTON, name);
+        init();
+    }
+    
     public Button(Container container, String name) {
         super(container, Const.BUTTON, name);
+        init();
+    }
+    
+    private final void init() {
         submit = false;
         setStyleClass("button");
     }

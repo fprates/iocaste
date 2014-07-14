@@ -111,7 +111,7 @@ public class TextFieldRenderer extends Renderer {
      */
     private static final XMLElement renderSearchHelp(SearchHelp sh,
             Config config) {
-        Button button = new Button(null, sh.getHtmlName());
+        Button button = new Button(config.getView(), sh.getHtmlName());
         
         button.setStyleClass("sh_button");
         button.setText("?");
