@@ -9,12 +9,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.internal.AbstractRenderer;
 import org.iocaste.internal.Controller;
 import org.iocaste.internal.ControllerData;
 import org.iocaste.internal.HtmlRenderer;
+import org.iocaste.internal.Input;
 import org.iocaste.internal.InputStatus;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
@@ -22,17 +21,8 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
-import org.iocaste.shell.common.MultipartElement;
-import org.iocaste.shell.common.SHLib;
-import org.iocaste.shell.common.SearchHelp;
-import org.iocaste.shell.common.Table;
-import org.iocaste.shell.common.TableColumn;
-import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.View;
 
 public class Main extends AbstractRenderer {
@@ -169,105 +159,6 @@ public class Main extends AbstractRenderer {
         
         startRender(sessionid, resp, pagectx);
     }
-
-    /**
-     * 
-     * @param input
-     * @param inputdata
-     * @throws Exception
-     */
-    private static final void generateSearchHelp(InputComponent input,
-            InputData inputdata) throws Exception {
-        SearchHelp sh;
-        SHLib shlib = new SHLib(inputdata.function);
-        String shname = input.getModelItem().getSearchHelp();
-        ExtendedObject[] shdata = shlib.get(shname);
-        
-        if (shdata == null || shdata.length == 0)
-            return;
-        
-        sh = new SearchHelp(inputdata.container, input.getName()+".sh");
-        sh.setHtmlName(input.getHtmlName()+".sh");
-        sh.setModelName((String)shdata[0].get("MODEL"));
-        sh.setExport((String)shdata[0].get("EXPORT"));
-        
-        for (int i = 1; i < shdata.length; i++) {
-            shname = shdata[i].get("ITEM");
-            sh.addModelItemName(shname);
-        }
-        
-        input.setSearchHelp(sh);
-    }
-    
-    /**
-     * 
-     * @param container
-     * @return
-     */
-    private static final Element[] getMultiLineElements(Container container) {
-        byte selectiontype;
-        Element element;
-        SearchHelp sh;
-        Table table;
-        TableColumn[] columns;
-        List<Element> elements = new ArrayList<Element>();
-        String name, linename, htmlname, markname = null;
-        int i = 0;
-        
-        if (container.getType() != Const.TABLE)
-            new RuntimeException("Multi-line container not supported.");
-        
-        table = (Table)container;
-        name = table.getName();
-        selectiontype = table.getSelectionType();
-        
-        if (selectiontype == Table.SINGLE)
-            markname = new StringBuilder(name).append(".mark").toString();
-        
-        columns = table.getColumns();
-        elements = new ArrayList<Element>();
-        
-        for (TableItem item : table.getItems()) {
-            linename = new StringBuilder(name).append(".").append(i++).
-                    append(".").toString();
-            
-            for (TableColumn column: columns) {
-                element = (column.isMark())?
-                        item.get("mark") : item.get(column.getName());
-                
-                if (element == null)
-                    continue;
-                
-                if (column.isMark() && markname != null)
-                    htmlname = markname;
-                else
-                    htmlname = new StringBuilder(linename).
-                            append(element.getName()).toString();
-                
-                element.setHtmlName(htmlname);
-                elements.add(element);
-                
-                /*
-                 * ajusta nome de ajuda de pesquisa, se houver
-                 */
-                if (!element.isDataStorable())
-                    continue;
-                
-                sh = ((InputComponent)element).getSearchHelp();
-                
-                if (sh == null)
-                    continue;
-                
-                htmlname = new StringBuilder(linename).
-                        append(sh.getName()).toString();
-                
-                sh.setHtmlName(htmlname);
-                elements.add(sh);
-            }
-        }
-        
-        return elements.toArray(new Element[0]);
-    }
     
     /**
      * 
@@ -398,7 +289,7 @@ public class Main extends AbstractRenderer {
             HttpServletRequest req, PageContext pagectx) throws Exception {
         ControllerData config;
         ContextData contextdata;
-        InputData inputdata;
+        Input inputdata;
         ControlComponent action;
         Enumeration<?> parameternames;
         PageContext pagectx_;
@@ -443,15 +334,11 @@ public class Main extends AbstractRenderer {
         
         view.clearInputs();
         
-        inputdata = new InputData();
+        inputdata = new Input();
         inputdata.view = view;
         inputdata.container = null;
         inputdata.function = this;
-        
-        for (Container container : view.getContainers()) {
-            inputdata.element = container;
-            registerInputs(inputdata);
-        }
+        inputdata.register();
         
         updateView(config.sessionid, view, this);
         appname = view.getRedirectedApp();
@@ -498,59 +385,6 @@ public class Main extends AbstractRenderer {
     
     /**
      * 
-     * @param inputdata
-     * @throws Exception
-     */
-    private static final void registerInputs(InputData inputdata)
-            throws Exception {
-        Element[] elements;
-        InputData inputdata_;
-        Container container;
-        InputComponent input;
-        DocumentModelItem modelitem;
-        
-        if (inputdata.element == null)
-            return;
-        
-        inputdata.element.setView(inputdata.view);
-        
-        if (inputdata.element.isContainable()) {
-            container = (Container)inputdata.element;
-            
-            inputdata_ = new InputData();
-            inputdata_.container = container;
-            inputdata_.view = inputdata.view;
-            inputdata_.function = inputdata.function;
-            
-            elements = (container.isMultiLine())?
-                    getMultiLineElements(container) : container.getElements();
-                    
-            for (Element element : elements) {
-                inputdata_.element = element;
-                registerInputs(inputdata_);
-            }
-            
-            return;
-        }
-        
-        if (inputdata.element.isDataStorable()) {
-            inputdata.view.addInput(inputdata.element.getHtmlName());
-            
-            input = (InputComponent)inputdata.element;            
-            modelitem = input.getModelItem();
-            
-            if (input.getSearchHelp() == null && modelitem != null &&
-                    modelitem.getSearchHelp() != null)
-                generateSearchHelp(input, inputdata);
-        }
-        
-        if (inputdata.element.hasMultipartSupport())
-            inputdata.view.addMultipartElement(
-                    (MultipartElement)inputdata.element);
-    }
-    
-    /**
-     * 
      * @param resp
      * @param pagectx
      * @throws Exception
@@ -563,7 +397,7 @@ public class Main extends AbstractRenderer {
         String username, viewmessage;
         Const messagetype;
         int logid;
-        InputData inputdata;
+        Input inputdata;
         AppContext appctx;
         View viewdata;
         Map<String, Object> parameters;
@@ -590,15 +424,11 @@ public class Main extends AbstractRenderer {
             
             viewdata = (View)installapp.run(message);
             
-            inputdata = new InputData();
+            inputdata = new Input();
             inputdata.view = viewdata;
             inputdata.container = null;
             inputdata.function = this;
-            
-            for (Container container : viewdata.getContainers()) {
-                inputdata.element = container;
-                registerInputs(inputdata);
-            }
+            inputdata.register();
             
             pagectx.setViewData(viewdata);
         } else {
@@ -642,26 +472,15 @@ public class Main extends AbstractRenderer {
         int logid = Integer.parseInt(complexid[1]);
         AppContext appcontext = apps.get(complexid[0]).get(logid).
                 getAppContext(view.getAppName());
-        InputData inputdata = new InputData();
+        Input inputdata = new Input();
         
         inputdata.view = view;
         inputdata.container = null;
         inputdata.function = function;
-        
-        for (Container container : view.getContainers()) {
-            inputdata.element = container;
-            registerInputs(inputdata);
-        }
+        inputdata.register();
         
         appcontext.getPageContext(view.getPageName()).setViewData(view);
     }
-}
-
-class InputData {
-    public View view;
-    public Element element;
-    public Container container;
-    public Function function;
 }
 
 class ContextData {
