@@ -2,6 +2,7 @@ package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.protocol.utils.XMLElement;
@@ -177,10 +178,11 @@ public class Renderer {
     /**
      * 
      * @param elements
+     * @param config
      * @return
      */
-    protected static final List<XMLElement> renderElements(Element[] elements,
-            Config config) {
+    protected static final List<XMLElement> renderElements(
+            Set<Element> elements, Config config) {
         List<XMLElement> tags = new ArrayList<>();
         
         for (Element element : elements) 

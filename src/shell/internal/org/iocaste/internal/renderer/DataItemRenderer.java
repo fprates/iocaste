@@ -1,31 +1,29 @@
 package org.iocaste.internal.renderer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
-import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.View;
 
 public class DataItemRenderer {
 
     public static final void render(DataItem dataitem, XMLElement itemtag,
             Config config) {
+        Const componenttype;
+        View view;
         Text colname;
-        List<XMLElement> coltags;
         DocumentModelItem modelitem;
-        InputComponent input;
         DocumentModel model = null;
         DataForm form = (DataForm)dataitem.getContainer();
         XMLElement coltag;
         String inputname = dataitem.getName();
         
-        colname = new Text(null, "");
+        view = config.getView();
+        colname = new Text(view, "");
         colname.setStyleClass("item_form_name");
         colname.setText(inputname);
         
@@ -45,15 +43,26 @@ public class DataItemRenderer {
         
         coltag = new XMLElement("td");
         coltag.add("class", dataitem.getStyleClass());
-
-        input = Shell.copyInputItem(null, dataitem, inputname, dataitem.
-                getValues());
-        input.setText(dataitem.getText());
+        componenttype = dataitem.getComponentType();
+        switch (componenttype) {
+        case CHECKBOX:
+            coltag.addChild(CheckBoxRenderer.render(dataitem));
+            break;
+        case LIST_BOX:
+            coltag.addChild(ListBoxRenderer.render(dataitem));
+            break;
+        case RANGE_FIELD:
+            coltag.addChild(RangeFieldRenderer.render(dataitem, config));
+            break;
+        case TEXT_FIELD:
+            coltag.addChildren(TextFieldRenderer.render(dataitem, config));
+            break;
+        default:
+            throw new RuntimeException(new StringBuilder("Component type ").
+                                append(componenttype).append(" not supported.").
+                                toString());
+        }
         
-        coltags = new ArrayList<XMLElement>();
-        Renderer.renderElement(coltags, input, config);
-        
-        coltag.addChildren(coltags);
         itemtag.addChild(coltag);
     }
 }

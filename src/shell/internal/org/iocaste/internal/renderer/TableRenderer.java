@@ -133,7 +133,7 @@ public class TableRenderer extends Renderer {
          */
         locale = table.getLocale();
         for (InputComponent input : hidden) {
-            parameter = new Parameter(null, input.getHtmlName());
+            parameter = new Parameter(config.getView(), input.getHtmlName());
             parameter.setModelItem(input.getModelItem());
             parameter.setLocale(locale);
             

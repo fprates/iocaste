@@ -1,46 +1,57 @@
 package org.iocaste.internal.renderer;
 
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.DataItem;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.Shell;
 
 public class ListBoxRenderer extends Renderer {
+
+    public static final XMLElement render(DataItem dataitem) {
+        return _render(dataitem, dataitem.getValues());
+    }
+
+    public static final XMLElement render(ListBox list) {
+        return _render(list, list.properties());
+    }
     
     /**
      * 
      * @param list
      * @return
      */
-    public static final XMLElement render(ListBox list) {
-        String[] entriesnames;
+    private static final XMLElement _render(InputComponent input,
+            Map<String, Object> values) {
         XMLElement optiontag = null, selecttag= new XMLElement("select");
-        String value, name = list.getHtmlName();
+        String value, name = input.getHtmlName();
         
         selecttag.add("name", name);
         selecttag.add("id", name);
 
-        if (!list.isEnabled()) {
-            selecttag.add("class", new StringBuilder(list.getStyleClass()).
+        if (!input.isEnabled()) {
+            selecttag.add("class", new StringBuilder(input.getStyleClass()).
                     append("_disabled").toString());
             selecttag.add("disabled", "disabled");
         } else {
-            selecttag.add("class", list.getStyleClass());
+            selecttag.add("class", input.getStyleClass());
         }
         
-        addEvents(selecttag, list);
+        addEvents(selecttag, input);
         
-        entriesnames = list.getEntriesNames();
-        if (entriesnames.length == 0)
+        if (values.size() == 0)
             selecttag.addInner("");
         else
-            for (String option : entriesnames) {
+            for (String option : values.keySet()) {
                 optiontag = new XMLElement("option");
-                value = Shell.toString(list.get(option),
-                        Shell.getDataElement(list), list.getLocale(), false);
+                value = Shell.toString(values.get(option),
+                        Shell.getDataElement(input), input.getLocale(), false);
                 
                 optiontag.add("value", value);
                 
-                if (value.equals(toString(list)))
+                if (value.equals(toString(input)))
                     optiontag.add("selected", "selected");
                 
                 optiontag.addInner(option);

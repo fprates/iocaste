@@ -7,12 +7,25 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.DataItem;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
 
 public class TextFieldRenderer extends Renderer {
+
+
+    public static final List<XMLElement> render(DataItem dataitem,
+            Config config) {
+        return _render(dataitem, config);
+    }
+    
+    public static final List<XMLElement> render(TextField textfield,
+            Config config) {
+        return _render(textfield, config);
+    }
     
     /**
      * 
@@ -20,37 +33,37 @@ public class TextFieldRenderer extends Renderer {
      * @param config
      * @return
      */
-    public static final List<XMLElement> render(TextField textfield,
+    private static final List<XMLElement> _render(InputComponent input,
             Config config) {
         StringBuilder sb;
         String tftext;
         Text text;
         SearchHelp search;
-        DataElement dataelement = Shell.getDataElement(textfield);
-        int length = (dataelement == null)? textfield.getLength() :
+        DataElement dataelement = Shell.getDataElement(input);
+        int length = (dataelement == null)? input.getLength() :
             dataelement.getLength();
-        String name = textfield.getHtmlName(), value = toString(textfield);
+        String name = input.getHtmlName(), value = toString(input);
         XMLElement spantag, inputtag = new XMLElement("input");
         List<XMLElement> tags = new ArrayList<XMLElement>();
         
         if (value == null)
             value = "";
         
-        if (!textfield.isSecret())
+        if (!input.isSecret())
             inputtag.add("type", "text");
         else
             inputtag.add("type", "password");
         
         inputtag.add("name", name);
         inputtag.add("id", name);
-        inputtag.add("size", Integer.toString(textfield.getVisibleLength()));
+        inputtag.add("size", Integer.toString(input.getVisibleLength()));
         inputtag.add("maxlength", Integer.toString(length));
         inputtag.add("value", value);
         inputtag.add("onfocus", new StringBuilder("send('").append(name).
                 append("', '&event=onfocus', null)").toString());
         
-        sb = new StringBuilder(textfield.getStyleClass());
-        if (!textfield.isEnabled()) {
+        sb = new StringBuilder(input.getStyleClass());
+        if (!input.isEnabled()) {
             sb.append("_disabled");
             inputtag.add("readonly", "readonly");
         }
@@ -65,13 +78,13 @@ public class TextFieldRenderer extends Renderer {
         
         inputtag.add("class", sb.toString());
         
-        addEvents(inputtag, textfield);
+        addEvents(inputtag, input);
         tags.add(inputtag);
-        search = textfield.getSearchHelp();
+        search = input.getSearchHelp();
         if (search != null)
             tags.add(renderSearchHelp(search, config));
         
-        if (textfield.isObligatory()) {
+        if (input.isObligatory()) {
             spantag = new XMLElement("input");
             spantag.add("type", "button");
             spantag.add("class", "sh_button");
@@ -80,9 +93,9 @@ public class TextFieldRenderer extends Renderer {
             tags.add(spantag);
         }
         
-        tftext = textfield.getText();
+        tftext = input.getText();
         if (tftext != null) {
-            text = new Text(null, "");
+            text = new Text(config.getView(), "");
             text.setStyleClass("tftext");
             text.setText(tftext);
             tags.add(TextRenderer.render(text, config));

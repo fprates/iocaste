@@ -1,7 +1,7 @@
 package org.iocaste.internal;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
@@ -71,13 +71,13 @@ public class Input {
      * @param container
      * @return
      */
-    private final Element[] getMultiLineElements(Container container) {
+    private final Set<Element> getMultiLineElements(Container container) {
         byte selectiontype;
         Element element;
         SearchHelp sh;
         Table table;
         TableColumn[] columns;
-        List<Element> elements = new ArrayList<>();
+        Set<Element> elements;
         String name, linename, htmlname, markname = null;
         int i = 0;
         
@@ -92,7 +92,7 @@ public class Input {
             markname = new StringBuilder(name).append(".mark").toString();
         
         columns = table.getColumns();
-        elements = new ArrayList<Element>();
+        elements = new LinkedHashSet<>();
         
         for (TableItem item : table.getItems()) {
             linename = new StringBuilder(name).append(".").append(i++).
@@ -133,7 +133,7 @@ public class Input {
             }
         }
         
-        return elements.toArray(new Element[0]);
+        return elements;
     }
     
     /**
@@ -142,7 +142,7 @@ public class Input {
      */
     private final void register(InputData inputdata) {
         RangeInputComponent rinput;
-        Element[] elements;
+        Set<Element> elements;
         InputData inputdata_;
         Container container;
         InputComponent input;

@@ -3,13 +3,18 @@ package org.iocaste.shell.common;
 public class RangeField extends AbstractInputComponent
         implements RangeInputComponent {
     private static final long serialVersionUID = -4051730629554327493L;
+    public static final String HIGH = ".high";
+    public static final String LOW = ".low";
     private String highname, lowname;
     
     public RangeField(Container container, String name) {
         super(container, Const.RANGE_FIELD, null, name);
-        
-        setLength(20);
-        setStyleClass("text_field");
+        init();
+    }
+    
+    public RangeField(View view, String name) {
+        super(view, Const.RANGE_FIELD, null, name);
+        init();
     }
     
     /*
@@ -28,6 +33,11 @@ public class RangeField extends AbstractInputComponent
     @Override
     public final String getLowHtmlName() {
         return lowname;
+    }
+    
+    private final void init() {
+        setLength(20);
+        setStyleClass("text_field");
     }
     
     /*
@@ -49,7 +59,7 @@ public class RangeField extends AbstractInputComponent
     public final void setHtmlName(String name) {
         super.setHtmlName(name);
         
-        highname = name.concat(".high");
-        lowname = name.concat(".low");
+        highname = name.concat(HIGH);
+        lowname = name.concat(LOW);
     }
 }

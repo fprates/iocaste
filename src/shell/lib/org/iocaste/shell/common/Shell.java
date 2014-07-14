@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
@@ -37,86 +36,6 @@ public class Shell extends AbstractServiceInterface {
         Message message = new Message("add_ticket");
         message.add("ticket", ticket);
         return call(message);
-    }
-    
-    /**
-     * Copia componentes de entrada.
-     * 
-     * @param container conteiner
-     * @param inputitem componente original
-     * @param name nome do componente destino
-     * @param values valores (para listbox)
-     * @return componente de destino
-     */
-    public static final InputComponent copyInputItem(Container container,
-            InputComponent inputitem, String name, Map<String, Object> values) {
-        RangeField rfield;
-        TextField tfield;
-        CheckBox cbox;
-        ListBox lbox;
-        Const componenttype;
-        
-        componenttype = inputitem.getComponentType();
-        switch (componenttype) {
-        case CHECKBOX:
-            cbox = new CheckBox(container, name);
-            cbox.set(inputitem.get());
-            cbox.setModelItem(inputitem.getModelItem());
-            cbox.setEnabled(inputitem.isEnabled());
-            cbox.setDataElement(inputitem.getDataElement());
-            cbox.setLocale(inputitem.getLocale());
-            cbox.setHtmlName(inputitem.getHtmlName());
-            
-            return cbox;
-            
-        case LIST_BOX:
-            lbox = new ListBox(container, name);
-            lbox.set(inputitem.get());
-            lbox.setModelItem(inputitem.getModelItem());
-            lbox.setEnabled(inputitem.isEnabled());
-            lbox.setDataElement(inputitem.getDataElement());
-            lbox.setLocale(inputitem.getLocale());
-            lbox.setHtmlName(inputitem.getHtmlName());
-            
-            for (String key : values.keySet())
-                lbox.add(key, values.get(key));
-            
-            return lbox;
-            
-        case RANGE_FIELD:
-            rfield = new RangeField(container, name);
-            rfield.setObligatory(inputitem.isObligatory());
-            rfield.setLength(inputitem.getLength());
-            rfield.set(inputitem.get());
-            rfield.setModelItem(inputitem.getModelItem());
-            rfield.setEnabled(inputitem.isEnabled());
-            rfield.setDataElement(inputitem.getDataElement());
-            rfield.setSearchHelp(inputitem.getSearchHelp());
-            rfield.setLocale(inputitem.getLocale());
-            rfield.setHtmlName(inputitem.getHtmlName());
-            
-            return rfield;
-            
-        case TEXT_FIELD:
-            tfield = new TextField(container, name);
-            tfield.setObligatory(inputitem.isObligatory());
-            tfield.setSecret(inputitem.isSecret());
-            tfield.setLength(inputitem.getLength());
-            tfield.setVisibleLength(inputitem.getVisibleLength());
-            tfield.set(inputitem.get());
-            tfield.setModelItem(inputitem.getModelItem());
-            tfield.setEnabled(inputitem.isEnabled());
-            tfield.setDataElement(inputitem.getDataElement());
-            tfield.setSearchHelp(inputitem.getSearchHelp());
-            tfield.setLocale(inputitem.getLocale());
-            tfield.setHtmlName(inputitem.getHtmlName());
-            
-            return tfield;
-            
-        default:
-            throw new RuntimeException(new StringBuilder("Component type ").
-                    append(componenttype).append(" not supported.").toString());
-        }
     }
     
     /**

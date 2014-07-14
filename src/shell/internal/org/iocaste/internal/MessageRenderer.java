@@ -17,7 +17,7 @@ public class MessageRenderer {
         if (message == null)
             return xmlmsg;
         
-        text = new Text(null, "navbar.message");
+        text = new Text(config.getView(), "navbar.message");
         setMessage(text, (type == null)? Const.STATUS : type, message);
         xmlmsg.addChild(TextRenderer.render(text, config));
         return xmlmsg;
