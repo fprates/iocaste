@@ -22,14 +22,15 @@ public class TableItem implements Serializable {
     private Table table;
     private Locale locale;
     private boolean visible;
+    private int index;
     
     public TableItem(Table table) {
         this(table, -1);
     }
     
     public TableItem(Table table, int pos) {
+        InputComponent input;
         String markname;
-        RadioButton mark;
         
         if (pos < 0)
             table.add(this);
@@ -40,35 +41,47 @@ public class TableItem implements Serializable {
         columns = table.getColumns();
         elements = new LinkedHashMap<>();
         visible = true;
+        index = table.length() - 1;
         
+        markname = new StringBuilder(table.getName()).append(".").
+                append(index).append(".mark").toString();
         switch (table.getSelectionType()) {
         case Table.SINGLE:
-            markname = new StringBuilder(table.getName()).append(".").
-                    append(table.length() - 1).append(".mark").toString();
-            mark = new RadioButton(table, markname, table.getGroup());
-            
-            elements.put("mark", mark);
+            input = new RadioButton(table.getView(), markname, table.getGroup());
             break;
             
         case Table.MULTIPLE:
-            elements.put("mark", new CheckBox(table, "mark"));
+            input = new CheckBox(table.getView(), markname);
             break;
+        default:
+            input = null;
         }
+        
+        if (input == null)
+            return;
+
+        elements.put("mark", input);
     }
+    
     /**
      * Adiciona elemento para linha.
      * @param element elemento
      */
     public final void add(Element element) {
+        String htmlname;
         DocumentModelItem modelitem;
         InputComponent input;
         int i = elements.size();
         
         if (i == table.width())
-            throw new RuntimeException("Item overflow for table.");
-        
-        elements.put(columns[i].getName(), element);
+            throw new RuntimeException("item overflow for table.");
+
+        htmlname = new StringBuilder(table.getName()).
+                append(index).append(element.getName()).toString();
+        element.setView(table.getView());
+        element.setHtmlName(htmlname);
         element.setLocale(locale);
+        elements.put(columns[i].getName(), element);
         
         modelitem = columns[i].getModelItem();
         if (element.isDataStorable() && modelitem != null) {

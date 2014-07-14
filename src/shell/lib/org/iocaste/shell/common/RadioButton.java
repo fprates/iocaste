@@ -11,14 +11,14 @@ public class RadioButton extends AbstractInputComponent {
     private RadioGroup group;
     private int index;
     
+    public RadioButton(View view, String name, RadioGroup group) {
+        super(view, Const.RADIO_BUTTON, null, name);
+        init(group);
+    }
+    
     public RadioButton(Container container, String name, RadioGroup group) {
         super(container, Const.RADIO_BUTTON, null, name);
-        
-        this.group = group;
-        index = group.add(this);
-        
-        setHtmlName(group.getName());
-        setSelected(false);
+        init(group);
     }
     
     /**
@@ -56,6 +56,14 @@ public class RadioButton extends AbstractInputComponent {
      */
     public final int index() {
         return index;
+    }
+    
+    private final void init(RadioGroup group) {
+        this.group = group;
+        index = group.add(this);
+        
+        setHtmlName(group.getName());
+        setSelected(false);
     }
     
     /*
