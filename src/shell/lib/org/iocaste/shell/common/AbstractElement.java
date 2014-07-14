@@ -267,7 +267,9 @@ public abstract class AbstractElement implements Element {
      */
     @Override
     public void setHtmlName(String htmlname) {
+        view.remove(this);
         this.htmlname = htmlname;
+        view.index(this);
     }
     
     /*

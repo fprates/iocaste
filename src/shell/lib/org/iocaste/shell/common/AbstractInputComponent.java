@@ -25,14 +25,17 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private DataElement dataelement;
     private SearchHelp search;
     private String validator;
+
+    public AbstractInputComponent(View view, Const type, Const type_,
+            String name) {
+        super(view, type, name);
+        init(type_);
+    }
     
     public AbstractInputComponent(Container container, Const type,
             Const type_, String name) {
         super(container, type, name);
-        
-        this.type = type_;
-        obligatory = false;
-        setEventHandler(new OnFocus(this));
+        init(type_);
     }
     
     /*
@@ -167,6 +170,16 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final int getVisibleLength() {
         return vlength;
+    }
+    
+    /**
+     * 
+     * @param type
+     */
+    private final void init(Const type) {
+        this.type = type;
+        obligatory = false;
+        setEventHandler(new OnFocus(this));
     }
     
     /*

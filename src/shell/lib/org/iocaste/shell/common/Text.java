@@ -12,11 +12,14 @@ public class Text extends AbstractComponent {
     private static final long serialVersionUID = -6584462992412783994L;
     private String tag;
     
+    public Text(View view, String name) {
+        super(view, Const.TEXT, name);
+        init();
+    }
+    
     public Text(Container container, String name) {
         super(container, Const.TEXT, name);
-        
-        setStyleClass("text");
-        tag = "p";
+        init();
     }
     
     /**
@@ -25,6 +28,14 @@ public class Text extends AbstractComponent {
      */
     public final String getTag() {
         return tag;
+    }
+    
+    /**
+     * 
+     */
+    private final void init() {
+        setStyleClass("text");
+        tag = "p";
     }
     
     /*

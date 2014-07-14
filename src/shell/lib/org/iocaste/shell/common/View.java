@@ -51,6 +51,7 @@ public class View implements Serializable {
     private Map<String, Object> parameters;
     private Map<String, String> headervalues;
     private Map<String, Map<String, String>> sheet;
+    private Map<String, Element> elements;
     private boolean reloadable, dontpushpage, pagecall, initialize, keepview;
     private Const messagetype;
     private Locale locale;
@@ -63,6 +64,7 @@ public class View implements Serializable {
         containers = new ArrayList<>();
         mpelements = new ArrayList<>();
         initparams = new HashSet<>();
+        elements = new HashMap<>();
         
         this.appname = appname;
         this.pagename = pagename;
@@ -75,7 +77,9 @@ public class View implements Serializable {
      * @param container container
      */
     public final void add(Container container) {
+        container.setView(this);
         containers.add(container);
+        elements.put(container.getHtmlName(), container);
     }
     
     /**
@@ -182,48 +186,6 @@ public class View implements Serializable {
         parameters.put(name, value);
     }
     
-    /**
-     * Retorna elemento de um container por nome.
-     * @param container container
-     * @param name nome do elemento
-     * @return Elemento
-     */
-    private final Element findElement(Container container, String name) {
-        RangeInputComponent rinput;
-        Element element_;
-        String name_ = container.getHtmlName();
-        
-        if (name_.equals(name))
-            return container;
-        
-        for (Element element : container.getElements()) {
-            name_= element.getHtmlName();
-            
-            if (name_.equals(name))
-                return element;
-            
-            if (element.isContainable()) {
-                element_ = findElement((Container)element, name);
-                if (element_ == null)
-                    continue;
-                
-                return element_;
-            }
-            
-            if (element.isDataStorable()) {
-                if (!((InputComponent)element).isValueRangeComponent())
-                    continue;
-                
-                rinput = (RangeInputComponent)element;
-                if (rinput.getHighHtmlName().equals(name) ||
-                        rinput.getLowHtmlName().equals(name))
-                    return element;
-            }
-        }
-        
-        return null;
-    }
-    
     public final String getActionControl() {
         return actioncontrol;
     }
@@ -267,15 +229,7 @@ public class View implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public final <T extends Element> T getElement(String name) {
-        Element element = null;
-        
-        for (Container container : containers) {
-            element = findElement(container, name);
-            if (element != null)
-                break;
-        }
-        
-        return (T)element;
+        return (T)elements.get(name);
     }
     
     /**
@@ -429,6 +383,21 @@ public class View implements Serializable {
     public final boolean hasPageCall() {
         return pagecall;
     }
+
+    
+    /**
+     * 
+     * @param element
+     */
+    public final void index(Element element) {
+        View view = element.getView();
+        
+        if ((view != this) && (view != null))
+            throw new RuntimeException(
+                    element.getHtmlName().concat(" view mismatch."));
+        elements.put(element.getHtmlName(), element);
+        element.setView(this);
+    }
     
     /**
      * Indica se executou o procedimento de inicialização da visão.
@@ -506,6 +475,18 @@ public class View implements Serializable {
             pagecall = true;
     }
     
+    /**
+     * 
+     * @param element
+     */
+    public final void remove(Element element) {
+        elements.remove(element.getHtmlName());
+    }
+    
+    /**
+     * 
+     * @param actioncontrol
+     */
     public final void setActionControl(String actioncontrol) {
         this.actioncontrol = actioncontrol;
     }

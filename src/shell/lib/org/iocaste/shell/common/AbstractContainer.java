@@ -22,7 +22,9 @@
 package org.iocaste.shell.common;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
 
@@ -38,13 +40,13 @@ import org.iocaste.documents.common.DocumentModel;
 public abstract class AbstractContainer
     extends AbstractElement implements Container {
     private static final long serialVersionUID = 8676224931708725226L;
-    private Map<String, Element> elements;
+    private Map<String, String> elements;
     private DocumentModel model;
 
     public AbstractContainer(View view, Const type, String name) {
         super(type, name);
 
-        elements = new LinkedHashMap<String, Element>();
+        elements = new LinkedHashMap<>();
         view.add(this);
         setLocale(view.getLocale());
     }
@@ -52,7 +54,7 @@ public abstract class AbstractContainer
     public AbstractContainer(Container container, Const type, String name) {
         super(type, name);
         
-        elements = new LinkedHashMap<String, Element>();
+        elements = new LinkedHashMap<>();
         container.add(this);
         setLocale(container.getLocale());
     }
@@ -65,7 +67,8 @@ public abstract class AbstractContainer
     @Override
     public void add(Element element) {
         element.setLocale(getLocale());
-        elements.put(element.getName(), element);
+        elements.put(element.getName(), element.getHtmlName());
+        getView().index(element);
     }
     
     /*
@@ -74,24 +77,40 @@ public abstract class AbstractContainer
      */
     @Override
     public void clear() {
-        if (elements.size() > 0)
-            elements.clear();
+        View view;
+        
+        if (elements.size() == 0)
+            return;
+
+        view = getView();
+        for (String name : elements.values())
+            view.remove(view.getElement(name));
+        elements.clear();
     }
     
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Container#getElement(java.lang.String)
      */
-    public final Element getElement(String name) {
-        return elements.get(name);
+    @Override
+    @SuppressWarnings("unchecked")
+    public final <T extends Element> T getElement(String name) {
+        return (T)getView().getElement(elements.get(name));
     }
     
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Container#getElements()
      */
-    public Element[] getElements() {
-        return elements.values().toArray(new Element[0]);
+    @Override
+    public Set<Element> getElements() {
+        Set<Element> children = new LinkedHashSet<>();
+        View view = getView();
+        
+        for (String name : elements.values())
+            children.add(view.getElement(name));
+        
+        return children;
     }
     
     /*
@@ -176,8 +195,10 @@ public abstract class AbstractContainer
      */
     @Override
     public void setEnabled(boolean enabled) {
+        View view = getView();
+        
         super.setEnabled(enabled);
-        for (Element element : elements.values())
-            element.setEnabled(enabled);
+        for (String name : elements.values())
+            view.getElement(name).setEnabled(enabled);
     }
 }

@@ -13,11 +13,14 @@ public class ListBox extends AbstractInputComponent {
     private static final long serialVersionUID = -8869412092037011348L;
     private Map<String, Object> values;
     
+    public ListBox(View view, String name) {
+        super(view, Const.LIST_BOX, Const.LIST_BOX, name);
+        init();
+    }
+    
     public ListBox(Container container, String name) {
         super(container, Const.LIST_BOX, Const.LIST_BOX, name);
-        
-        values = new LinkedHashMap<String, Object>();
-        setStyleClass("list_box");
+        init();
     }
     
     /**
@@ -51,5 +54,18 @@ public class ListBox extends AbstractInputComponent {
      */
     public String[] getEntriesNames() {
         return values.keySet().toArray(new String[0]);
+    }
+    
+    private final void init() {
+        values = new LinkedHashMap<>();
+        setStyleClass("list_box");
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Map<String, Object> properties() {
+        return values;
     }
 }

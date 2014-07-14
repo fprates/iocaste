@@ -11,8 +11,17 @@ package org.iocaste.shell.common;
 public class TextField extends AbstractInputComponent {
     private static final long serialVersionUID = 4027561075976606307L;
     
+    public TextField(View view, String name) {
+        super(view, Const.TEXT_FIELD, null, name);
+        init();
+    }
+    
     public TextField(Container container, String name) {
         super(container, Const.TEXT_FIELD, null, name);
+        init();
+    }
+    
+    private final void init() {
         setLength(20);
         setVisibleLength(20);
         setStyleClass("text_field");

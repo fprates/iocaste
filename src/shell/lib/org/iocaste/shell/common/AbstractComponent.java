@@ -37,14 +37,22 @@ public abstract class AbstractComponent extends AbstractElement
     private String text;
     private boolean translate;
     
+    public AbstractComponent(View view, Const type, String name) {
+        super(type, name);
+        
+        view.index(this);
+        this.translate = true;
+    }
+    
     public AbstractComponent(Container container, Const type, String name) {
         super(type, name);
         
         this.container = container;
         this.translate = true;
-        
-        if (container != null)
-            container.add(this);
+        if (container == null)
+            throw new RuntimeException(
+                    name.concat(" had an undefined container."));
+        container.add(this);
     }
     
     /*
@@ -74,20 +82,34 @@ public abstract class AbstractComponent extends AbstractElement
     }
     
     /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Component#setText(java.lang.String)
-     */
-    public final void setText(String text) {
-        this.text = text;
-    }
-    
-    /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.Component#isTranslatable()
      */
     @Override
     public final boolean isTranslatable() {
         return translate;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.AbstractElement#setHtmlName(
+     *    java.lang.String)
+     */
+    @Override
+    public void setHtmlName(String htmlname) {
+        super.setHtmlName(htmlname);
+        if (container == null)
+            getView().index(this);
+        else
+            container.add(this);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Component#setText(java.lang.String)
+     */
+    public final void setText(String text) {
+        this.text = text;
     }
     
     /*
