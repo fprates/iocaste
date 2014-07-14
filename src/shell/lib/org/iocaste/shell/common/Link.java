@@ -19,14 +19,15 @@ public class Link extends AbstractControlComponent {
     private String image;
     private Container container;
     
+    public Link(View view, String name, String action) {
+        super(view, Const.LINK, name);
+        init(name, action);
+    }
+    
     public Link(Container container, String name, String action) {
         super(container, Const.LINK, name);
-        setText(name);
-        setAction(action);
-        setStyleClass("link");
-        absolute = false;
-        values = new HashMap<>();
         this.container = container;
+        init(name, action);
     }
 
     /**
@@ -62,6 +63,14 @@ public class Link extends AbstractControlComponent {
      */
     public final Map<Parameter, Object> getParametersMap() {
         return values;
+    }
+    
+    private final void init(String name, String action) {
+        setText(name);
+        setAction(action);
+        setStyleClass("link");
+        absolute = false;
+        values = new HashMap<>();
     }
     
     /**

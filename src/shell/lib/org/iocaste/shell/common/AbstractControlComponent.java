@@ -36,13 +36,15 @@ public abstract class AbstractControlComponent extends AbstractComponent
     private boolean cancellable, stacking;
     private String action;
     
+    public AbstractControlComponent(View view, Const type, String name) {
+        super(view, type, name);
+        init(name);
+    }
+    
     public AbstractControlComponent(
             Container container, Const type, String name) {
         super(container, type, name);
-        cancellable = false;
-        stacking = false;
-        
-        setAction(name);
+        init(name);
     }
     
     /*
@@ -61,6 +63,16 @@ public abstract class AbstractControlComponent extends AbstractComponent
     @Override
     public final String getAction() {
         return action;
+    }
+    
+    /**
+     * 
+     * @param name
+     */
+    private final void init(String name) {
+        cancellable = false;
+        stacking = false;
+        setAction(name);
     }
     
     /*
