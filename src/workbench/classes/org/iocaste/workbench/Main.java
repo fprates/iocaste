@@ -16,13 +16,11 @@ public class Main extends AbstractPageBuilder {
         extcontext.repository = TextEditorTool.composeFileName(
                 System.getProperty("user.dir"), "iocaste","iocaste-workbench");
         
-        context.setUpdateViews(true);
         context.setExtendedContext(MAIN, extcontext);
         context.setViewSpec(MAIN, new MainSpec());
         context.setViewConfig(MAIN, new MainConfig());
         context.setActionHandler(MAIN, "create", new ProjectCreate());
         context.setActionHandler(MAIN, "open", new ProjectOpen());
-        
         
         context.setExtendedContext(PRJC, extcontext);
         context.setViewSpec(PRJC, new ProjectSpec());
@@ -38,6 +36,7 @@ public class Main extends AbstractPageBuilder {
                 PRJC, "create_element", new SwitchPanel("element"));
         context.setActionHandler(
                 PRJC, "cancel_element", new SwitchPanel("model"));
+        context.setUpdateViews(PRJC, true);
     }
 
     @Override
