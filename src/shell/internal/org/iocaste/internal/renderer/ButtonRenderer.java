@@ -2,19 +2,32 @@ package org.iocaste.internal.renderer;
 
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.Component;
+import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.SearchHelp;
 
 public class ButtonRenderer extends Renderer {
+    
+    public static final XMLElement render(SearchHelp sh, Config config) {
+        return _render(sh, config);
+    }
+    
+    public static final XMLElement render(Button button, Config config) {
+        return _render(button, config);
+    }
     
     /**
      * 
      * @param button
      * @return
      */
-    public static final XMLElement render(Button button, Config config) {
+    private static final XMLElement _render(Component component, Config config)
+    {
+        Button button;
         StringBuilder onclick;
-        String text_ = button.getText();
-        String name = button.getName();
-        String htmlname = button.getHtmlName();
+        String text_ = component.getText();
+        String name = component.getName();
+        String htmlname = component.getHtmlName();
         XMLElement buttontag= new XMLElement("input");
         
         if (text_ == null)
@@ -25,16 +38,20 @@ public class ButtonRenderer extends Renderer {
                 append("', '").append(config.getCurrentAction()).
                 append("', '").append(htmlname).append("');");
         
-        buttontag.add("type", (!button.isSubmit())? "button" : "submit");
+        if (component.getType() == Const.BUTTON) {
+            button = (Button)component;
+            buttontag.add("type", (!button.isSubmit())? "button" : "submit");
+        }
+        
         buttontag.add("name", htmlname);
         buttontag.add("id", htmlname);
-        buttontag.add("class", button.getStyleClass());
+        buttontag.add("class", component.getStyleClass());
         buttontag.add("value", config.getText(text_, name));
         buttontag.add("onClick", onclick.toString());
-        if (!button.isEnabled())
+        if (!component.isEnabled())
             buttontag.add("disabled", "disabled");
         
-        addEvents(buttontag, button);
+        addEvents(buttontag, component);
         
         return buttontag;
     }

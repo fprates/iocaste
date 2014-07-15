@@ -21,6 +21,8 @@ public class SearchHelp extends AbstractControlComponent {
         
         itemnames = new LinkedHashSet<String>();
         setAllowStacking(true);
+        setStyleClass("sh_button");
+        setText("?");
     }
 
     /**

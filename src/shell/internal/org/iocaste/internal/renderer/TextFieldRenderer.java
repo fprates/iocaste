@@ -6,7 +6,6 @@ import java.util.List;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.SearchHelp;
@@ -44,16 +43,12 @@ public class TextFieldRenderer extends Renderer {
             dataelement.getLength();
         String name = input.getHtmlName(), value = toString(input);
         XMLElement spantag, inputtag = new XMLElement("input");
-        List<XMLElement> tags = new ArrayList<XMLElement>();
+        List<XMLElement> tags = new ArrayList<>();
         
         if (value == null)
             value = "";
         
-        if (!input.isSecret())
-            inputtag.add("type", "text");
-        else
-            inputtag.add("type", "password");
-        
+        inputtag.add("type", (!input.isSecret())? "text" : "password");
         inputtag.add("name", name);
         inputtag.add("id", name);
         inputtag.add("size", Integer.toString(input.getVisibleLength()));
@@ -82,7 +77,7 @@ public class TextFieldRenderer extends Renderer {
         tags.add(inputtag);
         search = input.getSearchHelp();
         if (search != null)
-            tags.add(renderSearchHelp(search, config));
+            tags.add(ButtonRenderer.render(search, config));
         
         if (input.isObligatory()) {
             spantag = new XMLElement("input");
@@ -102,20 +97,5 @@ public class TextFieldRenderer extends Renderer {
         }
         
         return tags;
-    }
-    
-    /**
-     * 
-     * @param sh
-     * @return
-     */
-    private static final XMLElement renderSearchHelp(SearchHelp sh,
-            Config config) {
-        Button button = new Button(config.getView(), sh.getHtmlName());
-        
-        button.setStyleClass("sh_button");
-        button.setText("?");
-        
-        return ButtonRenderer.render(button, config);
     }
 }
