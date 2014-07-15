@@ -57,12 +57,11 @@ public class Response {
         for (String name : context.pkgsdata.keySet()) {
             action = context.pkgsdata.get(name);
             item = new TableItem(table);
-            item.add(new Text(table, name));
+            new Text(item, name.concat("_tx")).setText(name);
             
-            link = new Link(table, name, action);
+            link = new Link(item, name, action);
             link.setText(action);
             link.add(container, "package", name);
-            item.add(link);
         }
 
         if (table.length() > 0)

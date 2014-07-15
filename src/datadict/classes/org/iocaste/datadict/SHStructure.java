@@ -38,8 +38,7 @@ public class SHStructure {
         for (DocumentModelItem modelitem : model.getItens()) {
             name = modelitem.getName();
             
-            tfield = new TextField(itens, name);
-            item.add(tfield);
+            tfield = new TextField(item, name);
             tfield.getModelItem().setReference(null);
             
             switch (context.mode) {

@@ -62,15 +62,15 @@ public class ComponentRender extends AbstractFunction {
             
             switch (delement.getType()) {
             case DataType.BOOLEAN:
-                element = new CheckBox(table, name);
+                element = new CheckBox(item, name);
                 break;
             default:
                 switch ((Const)column.get("type")) {
                 case TEXT:
-                    element = new Text(table, name);
+                    element = new Text(item, name);
                     break;
                 case LIST_BOX:
-                    input = new ListBox(table, name);
+                    input = new ListBox(item, name);
                     element = input;
                     values = (Map<String, String>)column.get("values");
                     if (values == null)
@@ -80,11 +80,11 @@ public class ComponentRender extends AbstractFunction {
                         ((ListBox)input).add(vname, values.get(vname));
                     break;
                 case TEXT_FIELD:
-                    element = new TextField(table, name);
+                    element = new TextField(item, name);
                     break;
                 case LINK:
                     element = new Link(
-                            table, name, (String)column.get("action"));
+                            item, name, (String)column.get("action"));
                     break;
                 default:
                     throw new RuntimeException("component type not supported"
@@ -104,7 +104,6 @@ public class ComponentRender extends AbstractFunction {
             }
             
             element.setEnabled(!((boolean)column.get("disabled")));
-            item.add(element);
         }
         
         if (object == null)

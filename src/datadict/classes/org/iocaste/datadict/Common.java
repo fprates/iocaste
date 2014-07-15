@@ -326,15 +326,13 @@ public class Common {
      */
     private static final Element newField(FieldHelper helper) {
         InputComponent input;
-        Table table = helper.item.getTable();
-        Element element = Shell.factory(table, helper.type, helper.name);
+        Element element = Shell.factory(helper.item, helper.type, helper.name);
         
         element.setEnabled(helper.mode != Common.SHOW);
         input = (InputComponent)element;
         input.set(helper.value);
         input.setDataElement(helper.reference);
         input.setObligatory(helper.obligatory);
-        helper.item.add(element);
         
         return element;
     }

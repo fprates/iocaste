@@ -30,9 +30,8 @@ public class Main extends AbstractPage {
     public final void add(View view) {
         Table attributes = view.getElement("attribs");
         TableItem item = new TableItem(attributes);
-        
-        item.add(new TextField(attributes, "aname"));
-        item.add(new TextField(attributes, "avalue"));
+        new TextField(item, "aname");
+        new TextField(item, "avalue");
     }
     
     /**

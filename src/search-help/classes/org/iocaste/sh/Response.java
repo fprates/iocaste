@@ -73,14 +73,12 @@ public class Response {
                             append(value).
                             append("')").
                             toString();
-                    link = new Link(table, "choose", action);
-                    tableitem.add(link);
+                    link = new Link(tableitem, "choose", action);
                     link.setText(value.toString());
                     link.setAbsolute(true);
                 } else {
                     column.setRenderTextOnly(true);
-                    text = new Text(table, name);
-                    tableitem.add(text);
+                    text = new Text(tableitem, name);
                     text.setText((value == null)? "" : value.toString());
                 }
                 

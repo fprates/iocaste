@@ -46,17 +46,15 @@ public class ReportTool {
                 element = column.getModelItem().getDataElement();
                 switch (element.getType()) {
                 case DataType.BOOLEAN:
-                    input = new CheckBox(table, name);
+                    input = new CheckBox(item, name);
                     input.set(value);
                     input.setEnabled(false);
-                    item.add(input);
                     break;
                 default:
                     stext = Shell.toString(value, element, locale, false);
-                    component = new Text(table, name);
+                    component = new Text(item, name);
                     component.setText(stext);
                     component.setTranslatable(translate);
-                    item.add(component);
                     break;
                 }
             }

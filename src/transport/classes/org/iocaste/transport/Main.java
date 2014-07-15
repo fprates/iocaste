@@ -291,8 +291,7 @@ public class Main extends AbstractPage {
      */
     private final void insertItem(Table table) {
         Documents documents = new Documents(this);
-        TableItem item = new TableItem(table);
-        TextField tfield = new TextField(table, "name");
+        TextField tfield = new TextField(new TableItem(table), "name");
         SearchHelp sh = new SearchHelp(table, "shname");
         
         sh.setModelName("MODEL");
@@ -301,7 +300,6 @@ public class Main extends AbstractPage {
         
         tfield.setDataElement(documents.getDataElement("MODEL.NAME"));
         tfield.setSearchHelp(sh);
-        item.add(tfield);
     }
     
     /**
@@ -326,7 +324,7 @@ public class Main extends AbstractPage {
         table.setMark(true);
         
         for (String file : files)
-            new TableItem(table).add(new Text(table, file));
+            new Text(new TableItem(table), file);
         
         new Button(container, "importitens");
         context.view.setTitle("importable-build-instructions");
@@ -361,12 +359,9 @@ public class Main extends AbstractPage {
         
         new TableColumn(importtable, "a");
         
-        importtbitem = new TableItem(importtable);
-        importtbitem.add(new FileEntry(importtable, "buildfile"));
-        importtbitem = new TableItem(importtable);
-        importtbitem.add(new Button(importtable, "upload"));
-        importtbitem = new TableItem(importtable);
-        importtbitem.add(new Link(importtable, "frompool", "pool"));
+        new FileEntry(new TableItem(importtable), "buildfile");
+        new Button(new TableItem(importtable), "upload");
+        new Link(new TableItem(importtable), "frompool", "pool");
         
         context.view.setTitle("transport-utility");
     }

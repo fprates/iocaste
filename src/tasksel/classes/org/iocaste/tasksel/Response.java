@@ -150,10 +150,9 @@ public class Response {
             for (TaskEntry entry : entries) {
                 taskname = entry.getName();
                 text = entry.getText();
-                link = new Link(table, taskname, "grouprun");
+                link = new Link(new TableItem(table), taskname, "grouprun");
                 link.setText((text == null)? taskname : text);
                 link.add(container, "groupcommand", taskname);
-                new TableItem(table).add(link);
             }
         }
     }
