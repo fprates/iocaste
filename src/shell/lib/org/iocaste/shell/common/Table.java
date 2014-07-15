@@ -81,6 +81,7 @@ public class Table extends AbstractContainer {
      */
     public final void add(TableItem item) {
         items.add(item);
+        item.setView(getView());
         item.setLocale(getLocale());
     }
     
@@ -91,6 +92,7 @@ public class Table extends AbstractContainer {
      */
     public final void add(TableItem item, int pos) {
         items.add(pos, item);
+        item.setView(getView());
         item.setLocale(getLocale());
     }
     

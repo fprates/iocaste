@@ -34,8 +34,6 @@ public class CustomContainerRenderer extends Renderer {
         input.enablecustom = true;
         
         for (Element element : returned.getView().getElements().values()) {
-            if (input.view.getElement(element.getName()) != null)
-                continue;
             element.setView(input.view);
             input.view.index(element);
         }

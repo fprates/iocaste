@@ -22,7 +22,6 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
-import org.iocaste.shell.common.AbstractComponent;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
@@ -324,7 +323,6 @@ public class Controller {
     private static final void processCustomValidation(ControllerData config,
             List<InputComponent> validations, InputStatus status)
                     throws Exception {
-        Object value;
         Element element;
         View view;
         Map<String, Object> response;
@@ -340,14 +338,8 @@ public class Controller {
         view = (View)response.get("view");
         for (String name : config.view.getInputs()) {
             element = config.view.getElement(name);
-            if (element.isDataStorable()) {
-                value = ((InputComponent)element).get();
-                ((InputComponent)element).set(value);
-            } else {
-                value = ((AbstractComponent)element).getText();
-                ((AbstractComponent)element).setText(
-                        (value == null)? null : value.toString());
-            }
+            element.setView(config.view);
+            config.view.index(element);
         }
         
         for (Container container : config.customs)

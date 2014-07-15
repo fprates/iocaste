@@ -90,4 +90,10 @@ public interface Container extends Element {
      */
     public abstract void remove(Element element);
     
+    /**
+     * 
+     * @return
+     */
+    public abstract int size();
+    
 }

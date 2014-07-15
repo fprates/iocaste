@@ -201,4 +201,13 @@ public abstract class AbstractContainer
         for (String name : elements.values())
             view.getElement(name).setEnabled(enabled);
     }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.Container#size()
+     */
+    @Override
+    public final int size() {
+        return elements.size();
+    }
 }

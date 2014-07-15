@@ -1,8 +1,6 @@
 package org.iocaste.shell.common;
 
-import java.io.Serializable;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
@@ -15,52 +13,41 @@ import org.iocaste.documents.common.ExtendedObject;
  * @author Francisco Prates
  *
  */
-public class TableItem implements Serializable {
+public class TableItem extends AbstractContainer {
     private static final long serialVersionUID = -1076760582954115701L;
-    private Map<String, Element> elements;
     private TableColumn[] columns;
-    private Table table;
-    private Locale locale;
-    private boolean visible;
     private int index;
+    private String tablename;
+    private boolean recursive;
+    private Map<String, String> elements;
     
     public TableItem(Table table) {
         this(table, -1);
     }
     
     public TableItem(Table table, int pos) {
-        InputComponent input;
-        String markname;
+        super(table, Const.TABLE_ITEM, new StringBuilder(table.getHtmlName()).
+                append(".").append(table.length()).toString());
         
         if (pos < 0)
             table.add(this);
         else
             table.add(this, pos);
         
-        this.table = table;
-        columns = table.getColumns();
         elements = new LinkedHashMap<>();
-        visible = true;
+        tablename = table.getHtmlName();
+        columns = table.getColumns();
         index = table.length() - 1;
         
-        markname = new StringBuilder(table.getName()).append(".").
-                append(index).append(".mark").toString();
         switch (table.getSelectionType()) {
         case Table.SINGLE:
-            input = new RadioButton(table.getView(), markname, table.getGroup());
+            new RadioButton(this, "mark", table.getGroup());
             break;
             
         case Table.MULTIPLE:
-            input = new CheckBox(table.getView(), markname);
+            new CheckBox(this, "mark");
             break;
-        default:
-            input = null;
         }
-        
-        if (input == null)
-            return;
-
-        elements.put("mark", input);
     }
     
     /**
@@ -71,17 +58,23 @@ public class TableItem implements Serializable {
         String htmlname;
         DocumentModelItem modelitem;
         InputComponent input;
-        int i = elements.size();
+        Table table;
+        int i;
         
+        if (recursive) {
+            recursive = false;
+            return;
+        }
+        recursive = true;
+        table = getTable();
+        i = size();
         if (i == table.width())
             throw new RuntimeException("item overflow for table.");
 
-        htmlname = new StringBuilder(table.getName()).
-                append(index).append(element.getName()).toString();
-        element.setView(table.getView());
+        htmlname = new StringBuilder(tablename).append(".").
+                append(index).append(".").append(element.getName()).toString();
+        element.setView(getView());
         element.setHtmlName(htmlname);
-        element.setLocale(locale);
-        elements.put(columns[i].getName(), element);
         
         modelitem = columns[i].getModelItem();
         if (element.isDataStorable() && modelitem != null) {
@@ -89,6 +82,9 @@ public class TableItem implements Serializable {
             input.setModelItem(modelitem);
             input.setVisibleLength(columns[i].getLength());
         }
+
+        elements.put(columns[i].getName(), htmlname);
+        super.add(element);
     }
     
     /**
@@ -96,25 +92,8 @@ public class TableItem implements Serializable {
      * @param name nome do elemento
      * @return elemento
      */
-    @SuppressWarnings("unchecked")
     public final <T extends Element> T get(String name) {
-        return (T)elements.get(name);
-    }
-    
-    /**
-     * Retorna elementos da linha.
-     * @return elementos
-     */
-    public final Element[] getElements() {
-        return elements.values().toArray(new Element[0]);
-    }
-    
-    /**
-     * Retorna localização da linha.
-     * @return localização.
-     */
-    public final Locale getLocale() {
-        return locale;
+        return getView().getElement(elements.get(name));
     }
     
     /**
@@ -125,11 +104,12 @@ public class TableItem implements Serializable {
         Element element;
         InputComponent input;
         DocumentModelItem modelitem;
-        DocumentModel model = table.getModel();
+        View view = getView();
+        DocumentModel model = getTable().getModel();
         ExtendedObject object = new ExtendedObject(model);
         
         for (String name : elements.keySet()) {
-            element = elements.get(name);
+            element = view.getElement(elements.get(name));
             
             if (element.isDataStorable()) {
                 input = (InputComponent)element;
@@ -154,7 +134,7 @@ public class TableItem implements Serializable {
      * @return tabela
      */
     public final Table getTable() {
-        return table;
+        return getView().getElement(tablename);
     }
     
     /**
@@ -162,30 +142,8 @@ public class TableItem implements Serializable {
      * @return true, se foi selecionada.
      */
     public final boolean isSelected() {
-        InputComponent input = (InputComponent)elements.get("mark");
-        
+        InputComponent input = getView().getElement(elements.get("mark"));        
         return input.isSelected();
-    }
-    
-    /**
-     * Indica se a linha é visível.
-     * @return true, se a linha é visível.
-     */
-    public final boolean isVisible() {
-        return visible;
-    }
-    
-    public final void setEnabled(boolean enabled) {
-        for (Element element : elements.values())
-            element.setEnabled(enabled);
-    }
-    
-    /**
-     * Define localização para linha.
-     * @param locale localização.
-     */
-    public final void setLocale(Locale locale) {
-        this.locale = locale;
     }
     
     /**
@@ -196,6 +154,7 @@ public class TableItem implements Serializable {
      * @param object objeto extendido.
      */
     public final void setObject(ExtendedObject object) {
+        View view;
         Parameter parameter;
         Link link;
         Element element;
@@ -204,13 +163,15 @@ public class TableItem implements Serializable {
         DocumentModelItem modelitem;
         Component component;
         String name;
+        Container container = getTable().getContainer();
         
+        view = getView();
         for (TableColumn column : columns) {
             if (column.isMark())
                 continue;
             
             name = column.getName();
-            element = elements.get(name);
+            element = view.getElement(elements.get(name));
             if (element == null)
                 throw new RuntimeException("no component defined for " +
                 		"this table item");
@@ -219,16 +180,17 @@ public class TableItem implements Serializable {
                 component = (Component)element;
                 value = object.get(column.getModelItem());
                 component.setText((value == null)? "" : value.toString());
-                if (element.getType() == Const.LINK) {
-                    link = (Link)element;
-                    parameter = column.getParameter();
-                    if (parameter == null) {
-                        parameter = new Parameter(table.getContainer(), name);
-                        column.setParameter(parameter);
-                    }
-                    
-                    link.add(parameter.getName(), value);
+                if (element.getType() != Const.LINK)
+                    continue;
+                
+                link = (Link)element;
+                parameter = column.getParameter();
+                if (parameter == null) {
+                    parameter = new Parameter(container, name);
+                    column.setParameter(parameter);
                 }
+                
+                link.add(parameter.getName(), value);
                 continue;
             }
             
@@ -250,19 +212,11 @@ public class TableItem implements Serializable {
      * @param selected true, para selecionar linha.
      */
     public final void setSelected(boolean selected) {
-        CheckBox mark = (CheckBox)elements.get("mark");
-        
+        CheckBox mark = getView().getElement(elements.get("mark"));
         mark.setSelected(selected);
     }
     
-    /**
-     * Define se linha é visível.
-     * @param visible true, para linha visível.
-     */
-    public final void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-    
+    @Override
     public final String toString() {
         StringBuilder sb = new StringBuilder();
         

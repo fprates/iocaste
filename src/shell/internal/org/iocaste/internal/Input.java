@@ -72,13 +72,12 @@ public class Input {
      * @return
      */
     private final Set<Element> getMultiLineElements(Container container) {
-        byte selectiontype;
         Element element;
         SearchHelp sh;
         Table table;
         TableColumn[] columns;
         Set<Element> elements;
-        String name, linename, htmlname, markname = null;
+        String name, linename, htmlname;
         int i = 0;
         
         if (container.getType() != Const.TABLE)
@@ -86,11 +85,6 @@ public class Input {
         
         table = (Table)container;
         name = table.getName();
-        selectiontype = table.getSelectionType();
-        
-        if (selectiontype == Table.SINGLE)
-            markname = new StringBuilder(name).append(".mark").toString();
-        
         columns = table.getColumns();
         elements = new LinkedHashSet<>();
         
@@ -105,13 +99,6 @@ public class Input {
                 if (element == null)
                     continue;
                 
-                if (column.isMark() && markname != null)
-                    htmlname = markname;
-                else
-                    htmlname = new StringBuilder(linename).
-                            append(element.getName()).toString();
-                
-                element.setHtmlName(htmlname);
                 elements.add(element);
                 
                 /*

@@ -60,8 +60,7 @@ public abstract class AbstractElement implements Element {
         style = "";
         enabled = true;
         visible = true;
-        
-        events = new HashMap<String, String>();
+        events = new HashMap<>();
     }
     
     /*
@@ -300,8 +299,12 @@ public abstract class AbstractElement implements Element {
         this.visible = visible;
     }
     
+    /*
+     * (não-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
-    public final String toString() {
+    public String toString() {
         return name;
     }
 }
