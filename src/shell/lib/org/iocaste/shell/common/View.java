@@ -233,6 +233,14 @@ public class View implements Serializable {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final Map<String, Element> getElements() {
+        return elements;
+    }
+    
+    /**
      * Retorna parâmetros exportáveis.
      * @return nomes de parâmetros
      */

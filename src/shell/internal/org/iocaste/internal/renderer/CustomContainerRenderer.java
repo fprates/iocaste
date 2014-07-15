@@ -33,7 +33,15 @@ public class CustomContainerRenderer extends Renderer {
         input.view = config.getView();
         input.enablecustom = true;
         
+        for (Element element : returned.getView().getElements().values()) {
+            if (input.view.getElement(element.getName()) != null)
+                continue;
+            element.setView(input.view);
+            input.view.index(element);
+        }
+        
         for (Element element : returned.getElements()) {
+            element.setView(input.view);
             container.add(element);
             input.element = element;
             input.register();
