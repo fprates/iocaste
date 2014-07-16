@@ -45,10 +45,12 @@ public class TableItem extends AbstractContainer {
         }
     }
     
-    /**
-     * Adiciona elemento para linha.
-     * @param element elemento
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.AbstractContainer#add(
+     *    org.iocaste.shell.common.Element)
      */
+    @Override
     public final void add(Element element) {
         String htmlname;
         DocumentModelItem modelitem;
@@ -213,6 +215,10 @@ public class TableItem extends AbstractContainer {
         mark.setSelected(selected);
     }
     
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.AbstractElement#toString()
+     */
     @Override
     public final String toString() {
         StringBuilder sb = new StringBuilder();

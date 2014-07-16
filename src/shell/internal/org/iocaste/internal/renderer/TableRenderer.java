@@ -120,7 +120,7 @@ public class TableRenderer extends Renderer {
                 if (i++ < topline)
                     continue;
                 
-                if (i == lastline)
+                if ((i - 1) == lastline)
                     break;
                 
                 tags.clear();

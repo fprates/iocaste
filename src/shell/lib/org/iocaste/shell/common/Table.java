@@ -48,7 +48,6 @@ public class Table extends AbstractContainer {
     private String[] actions;
     private String text, borderstyle;
     private int topline, vlines;
-    private Container container;
     
     public Table(View view, String name) {
         super(view, Const.TABLE, name);
@@ -58,8 +57,6 @@ public class Table extends AbstractContainer {
     
     public Table(Container container, String name) {
         super(container, Const.TABLE, name);
-        
-        this.container = container;
         init();
     }
     
@@ -69,14 +66,9 @@ public class Table extends AbstractContainer {
      *     org.iocaste.shell.common.Element)
      */
     @Override
-    public final void add(Element element) { };
-    
-    /**
-     * Adiciona linha na tabela.
-     * @param item linha
-     */
-    public final void add(TableItem item) {
-        super.add(item);
+    public final void add(Element element) {
+        if (element.getType() == Const.TABLE_ITEM)
+            super.add(element);
     }
     
     /**
@@ -124,10 +116,6 @@ public class Table extends AbstractContainer {
         return columns.values().toArray(new TableColumn[0]);
     }
     
-    public final Container getContainer() {
-        return container;
-    }
-    
     /**
      * Retorna grupo de seleção, para seleção simples.
      * @return grupo de seleção.
@@ -136,6 +124,10 @@ public class Table extends AbstractContainer {
         return group;
     }
     
+    /**
+     * 
+     * @return
+     */
     public Set<TableItem> getItems() {
         return getElements();
     }
