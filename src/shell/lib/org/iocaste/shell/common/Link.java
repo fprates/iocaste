@@ -17,7 +17,6 @@ public class Link extends AbstractControlComponent {
     private boolean absolute;
     private Map<Parameter, Object> values;
     private String image;
-    private Container container;
     
     public Link(View view, String name, String action) {
         super(view, Const.LINK, name);
@@ -26,7 +25,6 @@ public class Link extends AbstractControlComponent {
     
     public Link(Container container, String name, String action) {
         super(container, Const.LINK, name);
-        this.container = container;
         init(name, action);
     }
 
@@ -36,7 +34,7 @@ public class Link extends AbstractControlComponent {
      * @param value valor
      */
     public final void add(String name, Object value) {
-        values.put(new Parameter(container, name), value);
+        values.put(new Parameter(getView(), name), value);
     }
     
     /**

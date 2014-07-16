@@ -163,7 +163,6 @@ public class TableItem extends AbstractContainer {
         DocumentModelItem modelitem;
         Component component;
         String name;
-        Container container = getTable().getContainer();
         
         view = getView();
         for (TableColumn column : columns) {
@@ -186,7 +185,7 @@ public class TableItem extends AbstractContainer {
                 link = (Link)element;
                 parameter = column.getParameter();
                 if (parameter == null) {
-                    parameter = new Parameter(container, name);
+                    parameter = new Parameter(view, name);
                     column.setParameter(parameter);
                 }
                 
