@@ -103,14 +103,15 @@ public abstract class AbstractContainer
      * @see org.iocaste.shell.common.Container#getElements()
      */
     @Override
-    public Set<Element> getElements() {
+    @SuppressWarnings("unchecked")
+    public <T extends Element> Set<T> getElements() {
         Set<Element> children = new LinkedHashSet<>();
         View view = getView();
         
         for (String name : elements.values())
             children.add(view.getElement(name));
         
-        return children;
+        return (Set<T>)children;
     }
     
     /*

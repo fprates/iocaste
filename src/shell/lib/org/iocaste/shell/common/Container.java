@@ -58,7 +58,7 @@ public interface Container extends Element {
      * Retorna todos os elementos do container.
      * @return
      */
-    public abstract Set<Element> getElements();
+    public abstract <T extends Element> Set<T> getElements();
     
     /**
      * Retorna array com elementos.

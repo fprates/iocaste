@@ -3,6 +3,7 @@ package org.iocaste.internal.renderer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Container;
@@ -52,9 +53,8 @@ public class TableRenderer extends Renderer {
         Locale locale;
         String title, name;
         Parameter parameter;
-        TableItem[] itens;
-        int vlines, lastline, topline;
-        TableItem item;
+        Set<TableItem> items;
+        int vlines, lastline, topline, size, i;
         XMLElement tag, trtag, thtag, divtag;
         XMLElement tabletag = new XMLElement("table");
         List<InputComponent> hidden = new ArrayList<>();
@@ -103,27 +103,32 @@ public class TableRenderer extends Renderer {
             tabletag.addChild(tag);
         }
         
-        itens = table.getItems();
-        if (itens.length > 0) {
+        items = table.getItems();
+        size = items.size();
+        if (items.size() > 0) {
             tag = new XMLElement("tbody");
             vlines = table.getVisibleLines();
             topline = table.getTopLine();
             
             if (vlines == 0)
-                lastline = topline + itens.length;
+                lastline = topline + size;
             else
                 lastline = topline + vlines;
             
-            for (int i = topline; i < lastline; i++) {
-                if (i >= itens.length)
+            i = 0;
+            for (TableItem item : items) {
+                if (i++ < topline)
                     continue;
                 
-                item = itens[i];
+                if (i == lastline)
+                    break;
+                
                 tags.clear();
                 tags.add(TableItemRenderer.render(table, item, config));
                 hidden.addAll(TableItemRenderer.getHidden());
                 tag.addChildren(tags);
             }
+            
             tabletag.addChild(tag);
         }
         

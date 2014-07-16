@@ -27,17 +27,12 @@ public class TableItem extends AbstractContainer {
     
     public TableItem(Table table, int pos) {
         super(table, Const.TABLE_ITEM, new StringBuilder(table.getHtmlName()).
-                append(".").append(table.length()).toString());
-        
-        if (pos < 0)
-            table.add(this);
-        else
-            table.add(this, pos);
+                append(".").append((pos == -1)? table.size() : pos).toString());
         
         elements = new LinkedHashMap<>();
         tablename = table.getHtmlName();
         columns = table.getColumns();
-        index = table.length() - 1;
+        index = table.size() - 1;
         
         switch (table.getSelectionType()) {
         case Table.SINGLE:
@@ -83,7 +78,10 @@ public class TableItem extends AbstractContainer {
             input.setVisibleLength(columns[i].getLength());
         }
 
-        elements.put(columns[i].getName(), htmlname);
+        if (columns[i].isMark())
+            elements.put("mark", htmlname);
+        else
+            elements.put(columns[i].getName(), htmlname);
         super.add(element);
     }
     

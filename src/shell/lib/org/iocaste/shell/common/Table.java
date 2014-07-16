@@ -21,10 +21,7 @@
 
 package org.iocaste.shell.common;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,7 +42,6 @@ public class Table extends AbstractContainer {
     public static final byte REMOVE = 1;
     private boolean header, mark;
     private Map<String, TableColumn> columns;
-    private List<TableItem> items;
     private byte seltype;
     private RadioGroup group;
     private Container linecontrol;
@@ -80,20 +76,7 @@ public class Table extends AbstractContainer {
      * @param item linha
      */
     public final void add(TableItem item) {
-        items.add(item);
-        item.setView(getView());
-        item.setLocale(getLocale());
-    }
-    
-    /**
-     * 
-     * @param item
-     * @param pos
-     */
-    public final void add(TableItem item, int pos) {
-        items.add(pos, item);
-        item.setView(getView());
-        item.setLocale(getLocale());
+        super.add(item);
     }
     
     /**
@@ -105,24 +88,6 @@ public class Table extends AbstractContainer {
             throw new RuntimeException("Table column has already exists.");
         
         columns.put(column.getName(), column);
-    }
-    
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.AbstractContainer#clear()
-     */
-    @Override
-    public void clear() {
-        items.clear();
-    }
-    
-    /**
-     * Obtem linha da tabela através de índice.
-     * @param index índice
-     * @return linha
-     */
-    public final TableItem get(int index) {
-        return items.get(index);
     }
     
     /**
@@ -163,34 +128,6 @@ public class Table extends AbstractContainer {
         return container;
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractContainer#getElements()
-     */
-    @Override
-    public final Set<Element> getElements() {
-        InputComponent input;
-        SearchHelp sh;
-        Set<Element> elements = new LinkedHashSet<>();
-        
-        for (TableItem item : items)
-            for (Element element : item.getElements()) {
-                elements.add(element);
-                
-                if (!element.isDataStorable())
-                    continue;
-                
-                input = (InputComponent)element;
-                sh = input.getSearchHelp();
-                if (sh == null)
-                    continue;
-                
-                elements.add(sh);
-            }
-        
-        return elements;
-    }
-    
     /**
      * Retorna grupo de seleção, para seleção simples.
      * @return grupo de seleção.
@@ -199,12 +136,8 @@ public class Table extends AbstractContainer {
         return group;
     }
     
-    /**
-     * Retorna linhas da tabela.
-     * @return linhas.
-     */
-    public final TableItem[] getItems() {
-        return items.toArray(new TableItem[0]);
+    public Set<TableItem> getItems() {
+        return getElements();
     }
     
     /**
@@ -221,15 +154,6 @@ public class Table extends AbstractContainer {
      */
     public final byte getSelectionType() {
         return seltype;
-    }
-    
-    /**
-     * Retorna item especificado.
-     * @param index índice
-     * @return linha
-     */
-    public final TableItem getTableItem(int index) {
-        return items.get(index);
     }
     
     /**
@@ -304,7 +228,6 @@ public class Table extends AbstractContainer {
         TableColumn column;
         
         header = true;
-        items = new ArrayList<>();
         columns = new LinkedHashMap<>();
         seltype = MULTIPLE;
         group = new RadioGroup(getName().concat(".mark"));
@@ -327,22 +250,6 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * Retorna quantidade de linha da tabela.
-     * @return quantidade de linhas.
-     */
-    public final int length() {
-        return items.size();
-    }
-    
-    /**
-     * Remove linha da tabela.
-     * @param item linha
-     */
-    public final void remove(TableItem item) {
-        items.remove(item);
-    }
-    
-    /**
      * - not ready, do not use - 
      * @param action
      * @param method
@@ -357,13 +264,6 @@ public class Table extends AbstractContainer {
      */
     public final void setBorderStyle(String borderstyle) {
         this.borderstyle = borderstyle;
-    }
-    
-    @Override
-    public final void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        for (TableItem item : items)
-            item.setEnabled(enabled);
     }
     
     /**
