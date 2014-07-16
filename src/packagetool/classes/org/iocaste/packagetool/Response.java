@@ -64,7 +64,7 @@ public class Response {
             link.add(container, "package", name);
         }
 
-        if (table.length() > 0)
+        if (table.size() > 0)
             pagecontrol.add("info", PageControl.REQUEST);
         
         context.view.setTitle("package-manager");

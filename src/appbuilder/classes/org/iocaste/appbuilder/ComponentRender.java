@@ -125,7 +125,7 @@ public class ComponentRender extends AbstractFunction {
     private final void additems(Table table, ExtendedObject[] items) {
         int i = 0;
         int vlines = table.getVisibleLines();
-        int total = table.length();
+        int total = table.size();
         
         if (items == null) {
             if (vlines == 0)
@@ -153,18 +153,19 @@ public class ComponentRender extends AbstractFunction {
      * @return
      */
     private final ExtendedObject[] getObjects(CustomContainer container) {
-        TableItem[] items;
+        int i;
         ExtendedObject[] objects;
         Table table = getTable(container);
-        int length = table.length();
+        int length = table.size();
         
         if (length == 0)
             return null;
-        
-        items = table.getItems();
+
+        i = 0;
         objects = new ExtendedObject[length];
-        for (int i = 0; i < items.length; i++)
-            objects[i] = items[i].getObject();
+        for (TableItem item : table.getItems())
+            objects[i++] = item.getObject();
+        
         return objects;
     }
     
@@ -376,7 +377,7 @@ public class ComponentRender extends AbstractFunction {
         Table table = getTable(custom);
         ExtendedObject[] objects = custom.get("objects");
         
-        if (objects.length == table.length()) {
+        if (objects.length == table.size()) {
             i = 0;
             for (TableItem item : table.getItems())
                 item.setObject(objects[i++]);
@@ -395,24 +396,22 @@ public class ComponentRender extends AbstractFunction {
     public Map<String, Object> validate(Message message) {
         List<ExtendedObject> selected;
         Map<String, Object> properties;
-        TableItem[] items;
         ExtendedObject[] objects;
         CustomContainer container = message.get("container");
         Table table = container.getView().getElement(container.getName().
                 concat("_table"));
 
         properties = container.properties();
-        if (table.length() == 0) {
+        if (table.size() == 0) {
             properties.put("objects", null);
             properties.put("selected", null);
             return null;
         }
 
         objects = getObjects(container);
-        items = table.getItems();
         properties.put("objects", objects);
         selected = new ArrayList<>();
-        for (TableItem item : items)
+        for (TableItem item : table.getItems())
             if (item.isSelected())
                 selected.add(item.getObject());
 

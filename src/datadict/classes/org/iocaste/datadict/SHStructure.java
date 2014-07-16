@@ -166,7 +166,7 @@ public class SHStructure {
         DataForm header = context.view.getElement("header");
         ExtendedObject object = header.getObject();
         Table itens = context.view.getElement("itens");
-        oitens = new ExtendedObject[itens.length()];
+        oitens = new ExtendedObject[itens.size()];
         
         for (TableItem item : itens.getItems())
             oitens[i++] = item.getObject();

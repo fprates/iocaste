@@ -141,7 +141,7 @@ public class Request {
         }
         
         itens = context.view.getElement("tasks");
-        if (itens.length() > 0) {
+        if (itens.size() > 0) {
             pkgtool = new PackageTool(context.function);
             for (TableItem item : itens.getItems()) {
                 name = ((InputComponent)item.get("GROUP")).get();

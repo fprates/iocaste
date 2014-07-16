@@ -382,39 +382,39 @@ public class Main extends AbstractPage {
         context.view.redirect("list");
     }
     
-    public void upload() throws Exception {
-        FileEntry fileentry = null;
-        String filename = null;
-        Table table = context.view.getElement("importtable");
-        
-        fileentry = (FileEntry)table.get(0).get("a");
-        filename = fileentry.get();
-        
-        switch (fileentry.getError()) {
-        case FileEntry.FILE_NOT_FOUND:
-            context.view.message(Const.ERROR, "file.not.found");
-            return;
-        case FileEntry.EMPTY_FILE_NAME:
-            context.view.message(Const.ERROR, "filename.is.obligatory");
-            return;
-        }
-        
-        switch (build(filename, this)) {
-        case FILE_IS_EMPTY:
-            context.view.message(Const.ERROR, "file.is.empty");
-            return;
-            
-        case INVALID_FILE:
-            context.view.message(Const.ERROR, "invalid.file");
-            return;
-            
-        case INVALID_HEADER:
-            context.view.message(Const.ERROR, "invalid.header");
-            return;
-        }
-        
-        context.view.message(Const.STATUS, "model.imported.successfully");
-    }
+//    public void upload() throws Exception {
+//        FileEntry fileentry = null;
+//        String filename = null;
+//        Table table = context.view.getElement("importtable");
+//        
+//        fileentry = (FileEntry)table.get(0).get("a");
+//        filename = fileentry.get();
+//        
+//        switch (fileentry.getError()) {
+//        case FileEntry.FILE_NOT_FOUND:
+//            context.view.message(Const.ERROR, "file.not.found");
+//            return;
+//        case FileEntry.EMPTY_FILE_NAME:
+//            context.view.message(Const.ERROR, "filename.is.obligatory");
+//            return;
+//        }
+//        
+//        switch (build(filename, this)) {
+//        case FILE_IS_EMPTY:
+//            context.view.message(Const.ERROR, "file.is.empty");
+//            return;
+//            
+//        case INVALID_FILE:
+//            context.view.message(Const.ERROR, "invalid.file");
+//            return;
+//            
+//        case INVALID_HEADER:
+//            context.view.message(Const.ERROR, "invalid.header");
+//            return;
+//        }
+//        
+//        context.view.message(Const.STATUS, "model.imported.successfully");
+//    }
 }
 
 class Context extends AbstractContext {
