@@ -17,34 +17,38 @@ public class CustomContainerRenderer extends Renderer {
         List<XMLElement> xmlcontent;
         Input input;
         CustomContainer returned;
-        GenericService service = new GenericService(
-                config.function, container.getRenderURL());
-        Message message = new Message("render");
-
-        message.add("container", container);
-        returned = service.invoke(message);
-        for (String name : returned.properties().keySet())
-            container.set(name, returned.get(name));
+        GenericService service;
         
-        container.clear();
-        input = new Input();
-        input.container = container;
-        input.function = config.function;
-        input.view = config.getView();
-        input.enablecustom = true;
-        
-        for (Element element : returned.getView().getElements().values()) {
-            element.setView(input.view);
-            input.view.index(element);
+        if (container.isDamaged()) {
+            service = new GenericService(
+                    config.function, container.getRenderURL());
+            Message message = new Message("render");
+    
+            message.add("container", container);
+            returned = service.invoke(message);
+            for (String name : returned.properties().keySet())
+                container.set(name, returned.get(name));
+            
+            container.clear();
+            input = new Input();
+            input.container = container;
+            input.function = config.function;
+            input.view = config.getView();
+            input.enablecustom = true;
+            
+            for (Element element : returned.getView().getElements().values()) {
+                element.setView(input.view);
+                input.view.index(element);
+            }
+            
+            for (Element element : returned.getElements()) {
+                element.setView(input.view);
+                container.add(element);
+                input.element = element;
+                input.register();
+            }
         }
         
-        for (Element element : returned.getElements()) {
-            element.setView(input.view);
-            container.add(element);
-            input.element = element;
-            input.register();
-        }
-
         config.customs.add(container);
         xmlcontent = new ArrayList<>();
         for (Element element : container.getElements())
