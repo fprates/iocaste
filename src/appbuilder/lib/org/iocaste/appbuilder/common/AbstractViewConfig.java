@@ -83,7 +83,7 @@ public abstract class AbstractViewConfig implements ViewConfig {
      * @return
      */
     protected final TabbedPaneItem getTabbedItem(String tab, String name) {
-        return ((TabbedPane)getElement(tab)).get(name);
+        return ((TabbedPane)getElement(tab)).getElement(name);
     }
     
     /**

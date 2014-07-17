@@ -51,7 +51,7 @@ public class MaintenanceConfig extends AbstractViewConfig {
         form.importModel(model);
         for (DocumentModelItem item : items)
             form.get(item.getName()).setVisible(!model.isKey(item));
-        getTabbedItem("tabs", "basetab").setContainer(form);
+        getTabbedItem("tabs", "basetab").set(form);
         
         models = cmodel.getItems();
         names = new ArrayList<>();
@@ -65,7 +65,7 @@ public class MaintenanceConfig extends AbstractViewConfig {
             names.add(AbstractManager.getKey(model).getName());
             tabletool.setVisibility(false, names.toArray(new String[0]));
             
-            getTabbedItem("tabs", name).setContainer(tabletool.getContainer());
+            getTabbedItem("tabs", name).set(tabletool.getContainer());
         }
     }
 }

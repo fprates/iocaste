@@ -45,7 +45,7 @@ public class Response {
         username.setEnabled(false);
         
         tabitem = new TabbedPaneItem(tabs, "idtab");
-        tabitem.setContainer(form);
+        tabitem.set(form);
         
         /*
          * tarefas
@@ -60,7 +60,7 @@ public class Response {
         context.taskshelper.setObjects(context.userdata.tasks);
         
         tabitem = new TabbedPaneItem(tabs, "taskstab");
-        tabitem.setContainer(context.taskshelper.getContainer());
+        tabitem.set(context.taskshelper.getContainer());
         
         /*
          * perfis
@@ -75,7 +75,7 @@ public class Response {
         context.profileshelper.setObjects(context.userdata.profiles);
         
         tabitem = new TabbedPaneItem(tabs, "profiletab");
-        tabitem.setContainer(context.profileshelper.getContainer());
+        tabitem.set(context.profileshelper.getContainer());
         
         switch (context.mode) {
         case Context.CREATE:
