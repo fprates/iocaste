@@ -23,4 +23,10 @@ public interface EventHandler extends Serializable {
      * @param error
      */
     public abstract void setInputError(byte error);
+    
+    /**
+     * 
+     * @param view
+     */
+    public abstract void setView(View view);
 }

@@ -58,10 +58,10 @@ public class TabbedPane extends AbstractContainer {
 
 class OnClickHandler extends AbstractEventHandler {
     private static final long serialVersionUID = -4167470559514121355L;
-    private TabbedPane pane;
+    private String pane;
     
     public OnClickHandler(TabbedPane pane) {
-        this.pane = pane;
+        this.pane = pane.toString();
     }
     
     private final InputComponent getFirstInput(Container container) {
@@ -91,19 +91,25 @@ class OnClickHandler extends AbstractEventHandler {
      */
     @Override
     public final void onEvent(byte event, String args) {
+        Button button;
+        TabbedPane pane;
         View view;
         TabbedPaneItem paneitem;
         Element focus;
         Container container;
+        String name;
         
         if (getInputError() != 0)
             return;
 
-        view = pane.getView();
+        view = getView();
         view.setReloadableView(false);
         
-        paneitem = pane.getElement(args);
-        container = paneitem.getContainer();
+        pane = view.getElement(this.pane);
+        button = view.getElement(args);
+        name = button.getText();
+        paneitem = pane.getElement(name);
+        container = paneitem.get();
         if (container != null) {
             focus = paneitem.getFocus();
             if (focus == null) {
@@ -114,6 +120,6 @@ class OnClickHandler extends AbstractEventHandler {
             view.setFocus(focus);
         }
         
-        pane.setCurrent(args);
+        pane.setCurrent(name);
     }
 }

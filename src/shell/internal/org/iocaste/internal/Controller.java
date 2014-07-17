@@ -488,12 +488,14 @@ public class Controller {
                 processInputs(config, status);
             
             if (status.event) {
+                evhandler.setView(config.view);
                 evhandler.setInputError(status.error);
                 evhandler.onEvent(EventHandler.ON_CLICK,
                         status.control.getAction());
             }
         } else {
             if (status.event)
+                evhandler.setView(config.view);
                 evhandler.onEvent(EventHandler.ON_CLICK, null);
         }
     }
