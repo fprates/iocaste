@@ -18,12 +18,12 @@ public class TextFieldRenderer extends Renderer {
 
     public static final List<XMLElement> render(DataItem dataitem,
             Config config) {
-        return _render(dataitem, config);
+        return _render(dataitem, TextField.STYLE, config);
     }
     
     public static final List<XMLElement> render(TextField textfield,
             Config config) {
-        return _render(textfield, config);
+        return _render(textfield, textfield.getStyleClass(),config);
     }
     
     /**
@@ -33,7 +33,7 @@ public class TextFieldRenderer extends Renderer {
      * @return
      */
     private static final List<XMLElement> _render(InputComponent input,
-            Config config) {
+            String style, Config config) {
         StringBuilder sb;
         String tftext;
         Text text;
@@ -57,7 +57,7 @@ public class TextFieldRenderer extends Renderer {
         inputtag.add("onfocus", new StringBuilder("send('").append(name).
                 append("', '&event=onfocus', null)").toString());
         
-        sb = new StringBuilder(input.getStyleClass());
+        sb = new StringBuilder(style);
         if (!input.isEnabled()) {
             sb.append("_disabled");
             inputtag.add("readonly", "readonly");
