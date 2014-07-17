@@ -27,7 +27,7 @@ public class TabbedPane extends AbstractContainer {
      */
     @Override
     public final void add(Element element) {
-        if (current == null)
+        if ((current == null) && (element.getType() == Const.TABBED_PANE_ITEM))
             current = element.getHtmlName();
         super.add(element);
     }
