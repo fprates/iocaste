@@ -132,7 +132,7 @@ public class Request {
         }
         
         authority = new Authority(context.function);
-        itens = context.view.getElement("profiles");
+        itens = context.view.getElement("profiles_table");
         for (TableItem item : itens.getItems()) {
             name = ((InputComponent)item.get("PROFILE")).get();
             if (name == null)
@@ -140,7 +140,7 @@ public class Request {
             authority.assign(username, name);
         }
         
-        itens = context.view.getElement("tasks");
+        itens = context.view.getElement("tasks_table");
         if (itens.size() > 0) {
             pkgtool = new PackageTool(context.function);
             for (TableItem item : itens.getItems()) {
