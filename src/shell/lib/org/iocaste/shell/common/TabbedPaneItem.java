@@ -1,32 +1,27 @@
 package org.iocaste.shell.common;
 
-import java.io.Serializable;
-
 /**
  * Aba do painel de abas.
  * 
  * @author francisco.prates
  *
  */
-public class TabbedPaneItem implements Serializable {
+public class TabbedPaneItem extends AbstractComponent {
     private static final long serialVersionUID = 6583630385235074815L;
-    private Container container;
-    private String name;
-    private Element focus;
+    private String container, focus;
     
     public TabbedPaneItem(TabbedPane pane, String name) {
-        this.name = name;
-        
-        pane.add(this);
+        super(pane, Const.TABBED_PANE_ITEM, name);
+        setHtmlName(new StringBuilder(pane.getName()).
+                append(".").append(name).toString());
     }
     
     /**
      * Retorna o conteiner associado.
      * @return conteiner.
      */
-    @SuppressWarnings("unchecked")
-    public final <T extends Container> T getContainer() {
-        return (T)container;
+    public final <T extends Container> T get() {
+        return getView().getElement(container);
     }
     
     /**
@@ -34,23 +29,33 @@ public class TabbedPaneItem implements Serializable {
      * @return
      */
     public final Element getFocus() {
-        return focus;
+        return getView().getElement(focus);
     }
-    
-    /**
-     * Retorna nome da aba.
-     * @return nome da aba.
+
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.Element#isControlComponent()
      */
-    public final String getName() {
-        return name;
+    @Override
+    public boolean isControlComponent() {
+        return false;
+    }
+
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.Element#isDataStorable()
+     */
+    @Override
+    public boolean isDataStorable() {
+        return false;
     }
     
     /**
      * Associa um conteiner à aba.
      * @param container conteiner.
      */
-    public final void setContainer(Container container) {
-        this.container = container;
+    public final void set(Container container) {
+        this.container = container.getHtmlName();
     }
     
     /**
@@ -58,6 +63,6 @@ public class TabbedPaneItem implements Serializable {
      * @param focus
      */
     public final void setFocus(Element focus) {
-        this.focus = focus;
+        this.focus = focus.getHtmlName();
     }
 }

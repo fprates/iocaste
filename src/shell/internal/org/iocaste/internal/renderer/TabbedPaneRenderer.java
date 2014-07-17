@@ -2,10 +2,13 @@ package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
@@ -23,13 +26,19 @@ public class TabbedPaneRenderer extends Renderer {
         StandardContainer container;
         Button button;
         StringBuilder sb;
-        String classname;
+        String classname, name;
+        TabbedPaneItem item;
         XMLElement tabitem, tabbedtag = new XMLElement("div");
-        String[] names = tabbedpane.getItensNames();
+        Set<Element> elements;
         
         tabbedtag.add("id", tabbedpane.getName());
         
-        for (String name : names) {
+        elements = tabbedpane.getElements();
+        for (Element element : elements) {
+            if (element.getType() != Const.TABBED_PANE_ITEM)
+                continue;
+            
+            name = element.getName();
             sb = new StringBuilder("setElementDisplay('").append(name);
             
             if (tabbedpane.getCurrent().equals(name)) {
@@ -41,20 +50,25 @@ public class TabbedPaneRenderer extends Renderer {
             }
             config.addOnload(sb.toString());
             
-            button = new Button(tabbedpane, name);
+            button = new Button(config.getView(), name.concat("_bt"));
+            button.setText(name);
             button.setStyleClass(classname);
             button.setEventHandler(tabbedpane.getEventHandler());
             tabbedtag.addChild(ButtonRenderer.render(button, config));
         }
-        
-        for (String name : names) {
-            container = new StandardContainer(tabbedpane,
+
+        for (Element element : elements) {
+            if (element.getType() != Const.TABBED_PANE_ITEM)
+                continue;
+            
+            name = element.getName();
+            container = new StandardContainer(config.getView(),
                     new StringBuilder(name).append(".tabitem").toString());
             container.setStyleClass("tp_item");
             
+            item = (TabbedPaneItem)element;
             tabitem = StandardContainerRenderer.render(container, config);
-            tabitem.addChildren(renderTabbedPaneItem(tabbedpane.get(name),
-                    config));
+            tabitem.addChildren(renderTabbedPaneItem(item, config));
             
             tabbedtag.addChild(tabitem);
         }
@@ -70,8 +84,8 @@ public class TabbedPaneRenderer extends Renderer {
      */
     private static final List<XMLElement> renderTabbedPaneItem(
             TabbedPaneItem tabbedpaneitem, Config config) {
-        List<XMLElement> elements = new ArrayList<XMLElement>();
-        Container container = tabbedpaneitem.getContainer();
+        List<XMLElement> elements = new ArrayList<>();
+        Container container = tabbedpaneitem.get();
         
         if (container != null)
             renderContainer(elements, container, config);
