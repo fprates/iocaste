@@ -33,6 +33,7 @@ public class ComponentRender extends AbstractFunction {
     private int step, last;
     private Map<String, Map<String, Object>> columns;
     private String itemcolumn;
+    private Table table;
     
     public ComponentRender() {
         export("render", "render");
@@ -40,7 +41,7 @@ public class ComponentRender extends AbstractFunction {
     }
     
     @SuppressWarnings("unchecked")
-    private void additem(Table table, ExtendedObject object, int pos) {
+    private void additem(ExtendedObject object, int pos) {
         Map<String, Object> column;
         Element element;
         DataElement delement;
@@ -132,7 +133,7 @@ public class ComponentRender extends AbstractFunction {
                 vlines = 15;
             
             for (int k = 0; k < vlines; k++)
-                additem(table, null, -1);
+                additem(null, -1);
         } else {
             i = -1;
             for (ExtendedObject item : items) {
@@ -140,7 +141,7 @@ public class ComponentRender extends AbstractFunction {
                 if ((vlines == i) && (vlines > 0))
                     break;
                 
-                additem(table, item, -1);
+                additem(item, -1);
             }
         }
         
@@ -155,7 +156,6 @@ public class ComponentRender extends AbstractFunction {
     private final ExtendedObject[] getObjects(CustomContainer container) {
         int i;
         ExtendedObject[] objects;
-        Table table = getTable(container);
         int length = table.size();
         
         if (length == 0)
@@ -171,22 +171,11 @@ public class ComponentRender extends AbstractFunction {
     
     /**
      * 
-     * @param container
-     * @return
-     */
-    private final Table getTable(CustomContainer container) {
-        return container.getView().getElement(container.getName().
-                concat("_table"));
-    }
-    
-    /**
-     * 
      * @param custom
      */
     private final void initialize(CustomContainer custom) {
         Map<String, Button> controls;
         String buttonname;
-        Table table;
         DocumentModel model;
         ExtendedObject[] objects;
         String componentname = custom.getName();
@@ -242,7 +231,6 @@ public class ComponentRender extends AbstractFunction {
      * @param container
      */
     private final void installValidators(CustomContainer container) {
-        Table table = getTable(container);
         Map<String, Object> properties;
         
         for (TableItem item : table.getItems())
@@ -266,7 +254,6 @@ public class ComponentRender extends AbstractFunction {
         int i;
         byte mode;
         Map<String, Button> controls = container.get("buttons");
-        Table table = getTable(container);
         
         switch (action) {
         case TableTool.ACCEPT:
@@ -288,7 +275,7 @@ public class ComponentRender extends AbstractFunction {
                     break;
                 }
                 
-                additem(table, null, i);
+                additem(null, i);
                 break;
             default:
                 controls.get(TableTool.ACCEPT).setVisible(true);
@@ -374,9 +361,9 @@ public class ComponentRender extends AbstractFunction {
      */
     private void updateItems(CustomContainer custom) {
         int i;
-        Table table = getTable(custom);
         ExtendedObject[] objects = custom.get("objects");
         
+        table = custom.getView().getElement(custom.getName().concat("_table"));
         if (objects.length == table.size()) {
             i = 0;
             for (TableItem item : table.getItems())
@@ -385,7 +372,6 @@ public class ComponentRender extends AbstractFunction {
             table.clear();
             additems(table, objects);
         }
-            
     }
     
     /**
@@ -398,7 +384,8 @@ public class ComponentRender extends AbstractFunction {
         Map<String, Object> properties;
         ExtendedObject[] objects;
         CustomContainer container = message.get("container");
-        Table table = container.getView().getElement(container.getName().
+        
+        table = container.getView().getElement(container.getName().
                 concat("_table"));
 
         properties = container.properties();
