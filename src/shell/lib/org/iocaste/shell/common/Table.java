@@ -51,7 +51,6 @@ public class Table extends AbstractContainer {
     
     public Table(View view, String name) {
         super(view, Const.TABLE, name);
-        
         init();
     }
     
@@ -222,7 +221,7 @@ public class Table extends AbstractContainer {
         header = true;
         columns = new LinkedHashMap<>();
         seltype = MULTIPLE;
-        group = new RadioGroup(getName().concat(".mark"));
+        group = new RadioGroup(getView(), getName().concat(".mark"));
         actions = new String[2];
         borderstyle = "width: 100%; overflow: auto;";
         

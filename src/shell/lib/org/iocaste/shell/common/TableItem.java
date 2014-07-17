@@ -36,7 +36,7 @@ public class TableItem extends AbstractContainer {
         
         switch (table.getSelectionType()) {
         case Table.SINGLE:
-            new RadioButton(this, "mark", table.getGroup());
+            table.getGroup().button(this, "mark");
             break;
             
         case Table.MULTIPLE:

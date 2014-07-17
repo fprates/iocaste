@@ -7,11 +7,9 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Parameter;
-import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.RadioGroup;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.View;
 
 public class DBConfigResponse {
     private static final String[] LINES = {
@@ -19,12 +17,11 @@ public class DBConfigResponse {
         "Todos os dados anteriores serão destruídos."
     };
     
-    public static final void render(View view) {
+    public static final void render(Context context) {
         Container dbtypecnt;
         DataItem item;
         DataForm dbinfo;
-        Form container = new Form(view, "main");
-        RadioGroup rbgroup = new RadioGroup("dbtype");
+        Form container = new Form(context.view, "main");
         
         for (int i = 0; i < LINES.length; i++)
             new Text(container, Integer.toString(i)).setText(LINES[i]);
@@ -33,7 +30,7 @@ public class DBConfigResponse {
         item = new DataItem(dbinfo, Const.TEXT_FIELD, "host");
         item.setLength(100);
         item.setObligatory(true);
-        view.setFocus(item);
+        context.view.setFocus(item);
         
         new DataItem(dbinfo, Const.TEXT_FIELD, "username").setObligatory(true);
         new DataItem(dbinfo, Const.TEXT_FIELD, "secret").setSecret(true);
@@ -45,13 +42,14 @@ public class DBConfigResponse {
         item.add("newbase", DBConfig.NEW_BASE);
         
         dbtypecnt = new StandardContainer(container, "dbtypecnt");
+        context.group = new RadioGroup(context.view, "dbtype");
         for (String dbname : DBNames.names.keySet())
-            new RadioButton(dbtypecnt, dbname, rbgroup).setText(dbname);
+            context.group.button(dbtypecnt, dbname).setText(dbname);
         
         new Button(container, "continue");
         new Parameter(container, "nextstage").set("DBCREATE");
         
-        view.setTitle("db-config");
+        context.view.setTitle("db-config");
     }
 }
     

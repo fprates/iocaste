@@ -1,8 +1,5 @@
 package org.iocaste.install;
 
-import org.iocaste.protocol.Function;
-import org.iocaste.shell.common.View;
-
 public class DBConfig {
     public static final byte KEEP_BASE = 0;
     public static final byte CHANGE_BASE = 1;
@@ -13,21 +10,21 @@ public class DBConfig {
      * @param view
      * @throws Exception
      */
-    public static final void action(View view, Function function)
+    public static final void action(Context context)
             throws Exception {
-        Config config = DBConfigRequest.action(view);
+        Config config = DBConfigRequest.action(context);
         
         if (config.option == CHANGE_BASE)
             return;
         
-        Packages.install(function);
+        Packages.install(context.function);
     }
     
     /**
      * 
      * @param view
      */
-    public static final void render(View view) {
-        DBConfigResponse.render(view);
+    public static final void render(Context context) {
+        DBConfigResponse.render(context);
     }
 }

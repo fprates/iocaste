@@ -13,7 +13,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.ListBox;
-import org.iocaste.shell.common.RadioButton;
+import org.iocaste.shell.common.RadioGroup;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
@@ -96,11 +96,8 @@ public class Common {
      * @return
      */
     public static final int getTpObjectValue(View view) {
-        RadioButton tpobj = view.getElement("tpobject");
-        
-        tpobj = tpobj.getSelectedComponent();
-        
-        return tpobj.index();
+        RadioGroup group = view.getElement("tpobject");
+        return group.getSelected().index();
     }
     
     /**

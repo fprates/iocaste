@@ -10,9 +10,12 @@ import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.View;
 
 public class Install extends AbstractFunction {
+    private Context context;
+    
     public Install() {        
         export("exec_action", "execAction");
         export("get_view_data", "getViewData");
+        context = new Context();
     }
     
     /**
@@ -33,12 +36,15 @@ public class Install extends AbstractFunction {
             view.export("sh", control);
             view.redirect("iocaste-search-help", "main");
         } else {
+            context.view = view;
+            context.function = this;
+            
             switch (Stages.valueOf(view.getPageName())) {
             case WELCOME:
                 Welcome.action(view);
                 break;
             case DBCONFIG:
-                DBConfig.action(view, this);
+                DBConfig.action(context);
                 break;
             default:
                 break;
@@ -71,12 +77,15 @@ public class Install extends AbstractFunction {
         for (String name : parameters.keySet())
             view.export(name, parameters.get(name));
         
+        context.view = view;
+        context.function = this;
+        
         switch (Stages.valueOf(page)) {
         case WELCOME:
             Welcome.render(view);
             break;
         case DBCONFIG:
-            DBConfig.render(view);
+            DBConfig.render(context);
             break;
         case FINISH:
             Finish.render(view);

@@ -22,8 +22,6 @@ import org.iocaste.install.dictionary.SH;
 import org.iocaste.install.dictionary.Shell;
 import org.iocaste.install.dictionary.Table;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.RadioButton;
-import org.iocaste.shell.common.View;
 
 public class DBConfigRequest {
     private static final String CONFIG_FILE = "core.properties";
@@ -48,13 +46,12 @@ public class DBConfigRequest {
         "create database "
     };
     
-    public static final Config action(View view) throws Exception {
+    public static final Config action(Context context) throws Exception {
         Statement ps;
         Connection connection;
         String[] init = null;
-        DataForm dbinfo = view.getElement("dbinfo");
+        DataForm dbinfo = context.view.getElement("dbinfo");
         Config config = new Config();
-        RadioButton rb = view.getElement("dbtype");
         
         config.option = Byte.parseByte((String)dbinfo.get("options").get());
         config.host = dbinfo.get("host").get();
@@ -62,15 +59,8 @@ public class DBConfigRequest {
         config.secret = dbinfo.get("secret").get();
         config.dbname = dbinfo.get("dbname").get();
         
-        for (RadioButton dbtype : rb.getGroup().getComponents()) {
-            if (!dbtype.isSelected())
-                continue;
-            
-            config.dbtype = dbtype.getName();
-            init = getDBInitializator(config);
-            
-            break;
-        }
+        config.dbtype = context.group.getSelected().getName();
+        init = getDBInitializator(config);
         
         switch (config.option) {
         case DBConfig.KEEP_BASE:
@@ -133,7 +123,7 @@ public class DBConfigRequest {
             break;
         }
         
-        view.redirect("FINISH");
+        context.view.redirect("FINISH");
         return config;
     }
     

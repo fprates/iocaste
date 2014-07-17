@@ -115,12 +115,12 @@ public class Selection {
         
         optlist = new NodeList(main, "optlist");
         optlist.setStyleClass("optlist");
-        group = new RadioGroup("tpobject");
-        tpobj = new RadioButton(optlist, "tpobjtable", group);
+        group = new RadioGroup(context.view, "tpobject");
+        tpobj = group.button(optlist, "tpobjtable");
         tpobj.setText("table");
         tpobj.setSelected(true);
         
-        tpobj = new RadioButton(optlist, "tpobjsh", group);
+        tpobj = group.button(optlist, "tpobjsh");
         tpobj.setText("search.help");
         
         new Button(main, "create");
