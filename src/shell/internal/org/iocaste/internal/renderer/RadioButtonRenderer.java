@@ -17,13 +17,13 @@ public class RadioButtonRenderer extends Renderer {
             Config config) {
         XMLElement rbtag, rbtexttag;
         String text;
-        List<XMLElement> elements = new ArrayList<XMLElement>();
+        List<XMLElement> elements = new ArrayList<>();
         
         text = radiobutton.getHtmlName();
         rbtag = new XMLElement("input");
         rbtag.add("type", "radio");
-        rbtag.add("name", text);
-        rbtag.add("value", radiobutton.getName());
+        rbtag.add("name", radiobutton.getGroup().getName());
+        rbtag.add("value", radiobutton.getHtmlName());
         rbtag.add("id", text);
         
         if (radiobutton.isSelected())

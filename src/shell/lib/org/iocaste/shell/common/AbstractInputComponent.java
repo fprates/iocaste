@@ -1,6 +1,7 @@
 package org.iocaste.shell.common;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -150,7 +151,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
      * @see org.iocaste.shell.common.InputComponent#getStackComponents()
      */
     @Override
-    public InputComponent[] getStackComponents() {
+    public Set<InputComponent> getStackComponents() {
         return null;
     }
     
@@ -269,7 +270,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
      * @see org.iocaste.shell.common.InputComponent#set(java.lang.Object)
      */
     @Override
-    public final void set(Object value) {
+    public void set(Object value) {
         this.value = value;
     }
     

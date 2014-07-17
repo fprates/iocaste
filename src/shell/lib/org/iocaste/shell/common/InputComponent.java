@@ -1,5 +1,7 @@
 package org.iocaste.shell.common;
 
+import java.util.Set;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 
@@ -73,13 +75,17 @@ public interface InputComponent extends Component {
      */
     public abstract SearchHelp getSearchHelp();
     
+    /**
+     * 
+     * @return
+     */
     public abstract String getst();
     
     /**
      * 
      * @return
      */
-    public abstract InputComponent[] getStackComponents();
+    public abstract Set<InputComponent> getStackComponents();
     
     /**
      * 

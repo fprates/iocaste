@@ -1,8 +1,8 @@
 package org.iocaste.shell.common;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Implementação de grupo para radio button.
@@ -12,43 +12,59 @@ import java.util.List;
  * @author francisco.prates
  *
  */
-public class RadioGroup implements Serializable {
+public class RadioGroup extends AbstractInputComponent {
     private static final long serialVersionUID = -1996756052092584844L;
-    private String name;
-    private List<RadioButton> group;
+    private Set<String> items;
     
-    public RadioGroup(String name) {
-        this.name = name;
-        group = new ArrayList<RadioButton>();
+    public RadioGroup(View view, String name) {
+        super(view, Const.RADIO_GROUP, null, name);
+        items = new LinkedHashSet<>();
     }
     
-    /**
-     * Adiciona radio button.
-     * @param rb
-     * @return
-     */
-    public final int add(RadioButton rb) {
-        int index = group.size();
+    public final RadioButton button(Container container, String name) {
+        items.add(name);
+        return new RadioButton(this, container, name, items.size());
+    }
+    
+    public final Set<InputComponent> getComponents() {
+        View view = getView();
+        Set<InputComponent> components = new HashSet<>();
         
-        group.add(rb);
+        for (String name : items)
+            components.add((InputComponent)view.getElement(name));
         
-        return index;
+        return components;
     }
     
-    /**
-     * Retorna radio buttons associados.
-     * @return array de radio buttons.
-     */
-    public final RadioButton[] getComponents() {
-        return group.toArray(new RadioButton[0]);
+    public final RadioButton getSelected() {
+        RadioButton rb;
+        View view = getView();
+        
+        for (String name : items) {
+            rb = view.getElement(name);
+            if (rb.isSelected())
+                return rb;
+        }
+        
+        return null;
     }
     
-    /**
-     * Retorna nome do grupo.
-     * @return nome.
-     */
-    public final String getName() {
-        return name;
+    public final void rename(String to, String from) {
+        if (!items.contains(from))
+            return;
+        items.remove(from);
+        items.add(to);
     }
-
+    
+    @Override
+    public void set(Object value) {
+        InputComponent input;
+        String iname = (String)value;
+        View view = getView();
+        
+        for (String name : items) {
+            input = view.getElement(name);
+            input.setSelected(name.equals(iname));
+        }
+    }
 }

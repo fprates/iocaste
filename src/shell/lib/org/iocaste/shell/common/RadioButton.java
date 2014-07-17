@@ -1,5 +1,7 @@
 package org.iocaste.shell.common;
 
+import java.util.Set;
+
 /**
  * Implementação de componente radio button.
  * 
@@ -8,37 +10,25 @@ package org.iocaste.shell.common;
  */
 public class RadioButton extends AbstractInputComponent {
     private static final long serialVersionUID = 4032308949086603543L;
-    private RadioGroup group;
     private int index;
+    private RadioGroup group;
     
-    public RadioButton(View view, String name, RadioGroup group) {
-        super(view, Const.RADIO_BUTTON, null, name);
-        init(group);
-    }
-    
-    public RadioButton(Container container, String name, RadioGroup group) {
+    public RadioButton(RadioGroup group, Container container, String name,
+            int index) {
         super(container, Const.RADIO_BUTTON, null, name);
-        init(group);
+        this.index = index;
+        this.group = group;
+        
+        group.rename(getHtmlName(), name);
+        setSelected(false);
     }
     
     /**
-     * Retorna grupo de botões.
-     * @return grupo de botões.
+     * 
+     * @return
      */
     public final RadioGroup getGroup() {
         return group;
-    }
-    
-    /**
-     * Indica que componente do grupo foi selecionado.
-     * @return botão selecionado.
-     */
-    public final RadioButton getSelectedComponent() {
-        for (RadioButton rb : group.getComponents())
-            if (rb.isSelected())
-                return rb;
-        
-        return null;
     }
     
     /*
@@ -46,7 +36,7 @@ public class RadioButton extends AbstractInputComponent {
      * @see org.iocaste.shell.common.AbstractInputComponent#getStackComponents()
      */
     @Override
-    public final InputComponent[] getStackComponents() {
+    public final Set<InputComponent> getStackComponents() {
         return group.getComponents();
     }
     
@@ -56,14 +46,6 @@ public class RadioButton extends AbstractInputComponent {
      */
     public final int index() {
         return index;
-    }
-    
-    private final void init(RadioGroup group) {
-        this.group = group;
-        index = group.add(this);
-        
-        setHtmlName(group.getName());
-        setSelected(false);
     }
     
     /*
@@ -91,5 +73,17 @@ public class RadioButton extends AbstractInputComponent {
     @Override
     public final boolean isStackable() {
         return true;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.AbstractInputComponent#setHtmlName(
+     *    java.lang.String)
+     */
+    @Override
+    public final void setHtmlName(String htmlname) {
+        if (group != null)
+            group.rename(htmlname, getHtmlName());
+        super.setHtmlName(htmlname);
     }
 }

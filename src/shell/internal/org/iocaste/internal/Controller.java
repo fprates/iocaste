@@ -414,10 +414,6 @@ public class Controller {
                 ri.value = value;
                 
                 break;
-            case 2:
-                for (InputComponent input_ : input.getStackComponents())
-                    input_.setSelected(value.equals(input_.getName()));
-                break;
             }
             
             if (!input.isBooleanComponent() &&
