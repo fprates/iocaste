@@ -18,7 +18,12 @@ public class RadioGroup extends AbstractInputComponent {
     
     public RadioGroup(View view, String name) {
         super(view, Const.RADIO_GROUP, null, name);
-        items = new LinkedHashSet<>();
+        init();
+    }
+    
+    public RadioGroup(Container container, String name) {
+        super(container, Const.RADIO_GROUP, null, name);
+        init();
     }
     
     public final RadioButton button(Container container, String name) {
@@ -47,6 +52,10 @@ public class RadioGroup extends AbstractInputComponent {
         }
         
         return null;
+    }
+    
+    private final void init() {
+        items = new LinkedHashSet<>();
     }
     
     public final void rename(String to, String from) {
