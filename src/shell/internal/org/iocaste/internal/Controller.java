@@ -23,7 +23,6 @@ import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.Element;
@@ -31,7 +30,6 @@ import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.Shell;
-import org.iocaste.shell.common.View;
 
 public class Controller {
     private static final int EINITIAL = 1;
@@ -324,7 +322,6 @@ public class Controller {
             List<InputComponent> validations, InputStatus status)
                     throws Exception {
         Element element;
-        View view;
         Map<String, Object> response;
 
         response = callCustomValidation(config, validations);
@@ -335,15 +332,11 @@ public class Controller {
             return;
         }
         
-        view = (View)response.get("view");
         for (String name : config.view.getInputs()) {
             element = config.view.getElement(name);
             element.setView(config.view);
             config.view.index(element);
         }
-        
-        for (Container container : config.customs)
-            updateCustomContainer(container, view);
     }
     
     /**
@@ -458,7 +451,7 @@ public class Controller {
             return;
         
         if (config.customs != null)
-            for (CustomContainer custom : config.customs)
+            for (String custom : config.customs)
                 validateCustomContainer(custom, config);
         
         if (validations.size() > 0)
@@ -600,14 +593,6 @@ public class Controller {
         }
     }
     
-    private static final void updateCustomContainer(
-            Container container, View view) {
-        CustomContainer customto = (CustomContainer)container;
-        CustomContainer customfrom = view.getElement(customto.getName());
-        
-        customto.set(customfrom.properties());
-    }
-    
     /**
      * 
      * @param config
@@ -670,8 +655,9 @@ public class Controller {
     }
     
     private static void validateCustomContainer(
-            CustomContainer container, ControllerData config) {
-        Map<String, ?> values;
+            String name, ControllerData config) {
+        Map<String, Object> values;
+        CustomContainer container = config.view.getElement(name);
         GenericService service = new GenericService(
                 config.function, container.getRenderURL());
         Message message = new Message("validate");
@@ -681,8 +667,7 @@ public class Controller {
         if (values == null)
             return;
         
-        for (String key : values.keySet())
-            container.set(key, values.get(key));
+        container.set(values);
     }
 }
 

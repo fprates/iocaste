@@ -16,7 +16,6 @@ import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
@@ -28,8 +27,7 @@ public class HtmlRenderer {
     private String username, msgtext, dbname;
     private Const msgtype;
     private List<String> script;
-    private Set<String> actions;
-    private List<CustomContainer> customs;
+    private Set<String> actions, customs;
     private MessageSource msgsource;
     private ControlComponent shcontrol;
     private Function function;
@@ -76,7 +74,7 @@ public class HtmlRenderer {
      * 
      * @return
      */
-    public final List<CustomContainer> getCustoms() {
+    public final Set<String> getCustoms() {
         return customs;
     }
     

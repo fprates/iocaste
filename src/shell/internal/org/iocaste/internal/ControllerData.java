@@ -1,11 +1,10 @@
 package org.iocaste.internal;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.View;
 
 public class ControllerData {
@@ -16,5 +15,5 @@ public class ControllerData {
     public int logid;
     public boolean event;
     public ControlComponent shcontrol;
-    public List<CustomContainer> customs;
+    public Set<String> customs;
 }

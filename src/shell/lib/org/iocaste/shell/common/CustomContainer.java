@@ -1,24 +1,42 @@
 package org.iocaste.shell.common;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class CustomContainer extends AbstractContainer {
     private static final long serialVersionUID = 7689711993523839095L;
     private String renderurl;
     private Map<String, Object> properties;
     private boolean initialized;
-    private int damage;
+    private long damage;
+    private Set<String> nodamage;
     
     public CustomContainer(Container container, String name) {
         super(container, Const.CUSTOM_CONTAINER, name);
         properties = new HashMap<>();
+        nodamage = new HashSet<>();
     }
 
     @Override
     public void add(Element element) {
         super.add(element);
         initialized = true;
+    }
+    
+    private long calculateDamage() {
+        Object value;
+        long damage = 0;
+        
+        for (String key : properties.keySet()) {
+            value = properties.get(key);
+            if (nodamage.contains(key) || value == null)
+                continue;
+            damage += (key.hashCode() + value.hashCode());
+        }
+        
+        return damage;
     }
     
     @SuppressWarnings("unchecked")
@@ -47,18 +65,18 @@ public class CustomContainer extends AbstractContainer {
     }
 
     /**
-     * Verifica e ajusta dano nas propriedades do conteiner.
-     * Este método não deve ser chamado por aplicações do usuário,
-     * sob risco de não atualizar o conteúdo atual.
+     * Verifica dano nas propriedades do conteiner.
      * 
      * @return true, se conteiner foi atualizado
      */
     public final boolean isDamaged() {
-        int damage = properties.toString().hashCode();
-        if (this.damage == damage)
-            return false;
-        this.damage = damage;
-        return true;
+        long damage;
+        
+        if (!initialized)
+            return true;
+        
+        damage = calculateDamage();
+        return (this.damage != damage);
     }
     
     public final boolean isInitialized() {
@@ -74,8 +92,21 @@ public class CustomContainer extends AbstractContainer {
         return true;
     }
     
+    public final void noDamageFor(String property) {
+        nodamage.add(property);
+    }
+    
     public final Map<String, Object> properties() {
         return properties;
+    }
+
+    /**
+     * Ajusta dano nas propriedades do conteiner.
+     * Este método não deve ser chamado por aplicações do usuário,
+     * sob risco de não atualizar o conteúdo atual.
+     */
+    public final void restore() {
+        damage = calculateDamage();
     }
     
     public final void set(String key, Object value) {

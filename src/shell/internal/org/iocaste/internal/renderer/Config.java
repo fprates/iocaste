@@ -9,13 +9,12 @@ import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
 
 public class Config {
     public Function function;
-    public List<CustomContainer> customs;
+    public Set<String> customs;
     private String currentaction, currentform, pagetrack;
     private String dbname, username;
     private int logid;
@@ -32,7 +31,7 @@ public class Config {
         onload = new ArrayList<>();
         toform = new ArrayList<>();
         msgsources = new ArrayList<>();
-        customs = new ArrayList<>();
+        customs = new HashSet<>();
     }
     
     /**

@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.apache.commons.fileupload.FileItem;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.View;
 
 public class PageContext {
@@ -18,8 +17,7 @@ public class PageContext {
     private boolean reloadable, initialize, keepview;
     private Map<String, Object> parameters;
     private List<FileItem> files;
-    private List<CustomContainer> customs;
-    private Set<String> actions;
+    private Set<String> customs, actions;
     private int logid;
     private byte error;
     private long sequence;
@@ -71,7 +69,7 @@ public class PageContext {
      * 
      * @return
      */
-    public final List<CustomContainer> getCustoms() {
+    public final Set<String> getCustoms() {
         return customs;
     }
     
@@ -216,7 +214,7 @@ public class PageContext {
      * 
      * @param customs
      */
-    public final void setCustoms(List<CustomContainer> customs) {
+    public final void setCustoms(Set<String> customs) {
         this.customs = customs;
     }
     
