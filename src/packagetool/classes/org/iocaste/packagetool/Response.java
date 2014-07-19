@@ -61,7 +61,7 @@ public class Response {
             
             link = new Link(item, name, action);
             link.setText(action);
-            link.add(container, "package", name);
+            link.add("package", name);
         }
 
         if (table.size() > 0)
