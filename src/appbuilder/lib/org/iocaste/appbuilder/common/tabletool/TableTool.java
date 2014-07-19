@@ -43,6 +43,11 @@ public class TableTool {
         custom.set("action", null);
         custom.set("controls_state", ENABLED);
         custom.set("controls", null);
+        custom.set("objects", null);
+        custom.set("selected", null);
+        
+        custom.noDamageFor("objects");
+        custom.noDamageFor("selected");
         
         new Action(this, data, ACCEPT);
         new Action(this, data, ADD);
