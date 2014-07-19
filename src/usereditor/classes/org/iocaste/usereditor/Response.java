@@ -35,7 +35,7 @@ public class Response {
         /*
          * identificação
          */
-        form.importModel(context.usermodel);
+        form.importModel("LOGIN", context.function);
         form.get("ID").setVisible(false);
         secret = form.get("INIT");
         secret.setComponentType(Const.CHECKBOX);
@@ -55,9 +55,10 @@ public class Response {
         ttdata.name = "tasks";
         ttdata.context = context;
         context.taskshelper = new TableTool(ttdata);
-        context.taskshelper.model(context.tasksmodel);
+        context.taskshelper.model("USER_TASKS_GROUPS");
         context.taskshelper.setVisibility(true, "GROUP");
         context.taskshelper.setObjects(context.userdata.tasks);
+        context.taskshelper.setSearchHelp("GROUP", "SH_TASKS_GROUPS");
         
         tabitem = new TabbedPaneItem(tabs, "taskstab");
         tabitem.set(context.taskshelper.getContainer());
@@ -70,9 +71,10 @@ public class Response {
         ttdata.name = "profiles";
         ttdata.context = context;
         context.profileshelper = new TableTool(ttdata);
-        context.profileshelper.model(context.profilesmodel);
+        context.profileshelper.model("USER_AUTHORITY");
         context.profileshelper.setVisibility(true, "PROFILE");
         context.profileshelper.setObjects(context.userdata.profiles);
+        context.profileshelper.setSearchHelp("PROFILE", "SH_USER_PROFILE");
         
         tabitem = new TabbedPaneItem(tabs, "profiletab");
         tabitem.set(context.profileshelper.getContainer());

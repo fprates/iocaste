@@ -1,7 +1,6 @@
 package org.iocaste.usereditor;
 
 import org.iocaste.appbuilder.common.tabletool.TableTool;
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.shell.common.AbstractContext;
 
 public class Context extends AbstractContext {
@@ -17,5 +16,4 @@ public class Context extends AbstractContext {
     public byte mode;
     public UserData userdata;
     public TableTool taskshelper, profileshelper;
-    public DocumentModel usermodel, tasksmodel, profilesmodel;
 }

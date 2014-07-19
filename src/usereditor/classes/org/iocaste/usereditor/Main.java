@@ -1,6 +1,5 @@
 package org.iocaste.usereditor;
 
-import org.iocaste.documents.common.Documents;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
@@ -34,17 +33,7 @@ public class Main extends AbstractPage {
     
     @Override
     public final AbstractContext init(View view) {
-        Documents documents = new Documents(this);
-        
         context = new Context();
-        context.tasksmodel = documents.getModel("USER_TASKS_GROUPS");
-        context.tasksmodel.getModelItem("GROUP").
-                setSearchHelp("SH_TASKS_GROUPS");
-        context.profilesmodel = documents.getModel("USER_AUTHORITY");
-        context.profilesmodel.getModelItem("PROFILE").
-                setSearchHelp("SH_USER_PROFILE");
-        context.usermodel = documents.getModel("LOGIN");
-        
         return context;
     }
     
