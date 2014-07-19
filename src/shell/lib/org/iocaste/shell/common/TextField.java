@@ -23,8 +23,10 @@ public class TextField extends AbstractInputComponent {
     }
     
     private final void init() {
-        setLength(20);
-        setVisibleLength(20);
+        if (getLength() == 0) {
+            setLength(20);
+            setVisibleLength(20);
+        }
         setStyleClass(STYLE);
     }
 }
