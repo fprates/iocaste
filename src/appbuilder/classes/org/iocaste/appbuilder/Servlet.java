@@ -7,7 +7,7 @@ public class Servlet extends AbstractIocasteServlet {
 
     @Override
     protected void config() {
-        register(new ComponentRender());
+        register(new TableToolRenderer());
     }
 
 }

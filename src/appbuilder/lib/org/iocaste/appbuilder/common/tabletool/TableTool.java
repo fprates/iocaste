@@ -97,6 +97,8 @@ public class TableTool {
             column.put("type", Const.TEXT_FIELD);
             column.put("disabled", false);
             column.put("visible", true);
+            column.put("sh", null);
+            column.put("validator", null);
             columns.put(item.getName(), column);
         }
     }
@@ -176,8 +178,12 @@ public class TableTool {
         getCustom().set("objects", objects);
     }
     
-    public final void setValidator(String field, String validator) {
-        getColumns().get(field).put("validator", validator);
+    public final void setSearchHelp(String column, String sh) {
+        getColumns().get(column).put("sh", sh);
+    }
+    
+    public final void setValidator(String column, String validator) {
+        getColumns().get(column).put("validator", validator);
     }
     
     public final void setVisibility(boolean visible, String... tcolumns) {

@@ -29,13 +29,13 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
 
-public class ComponentRender extends AbstractFunction {
+public class TableToolRenderer extends AbstractFunction {
     private int step, last;
     private Map<String, Map<String, Object>> columns;
     private String itemcolumn;
     private Table table;
     
-    public ComponentRender() {
+    public TableToolRenderer() {
         export("render", "render");
         export("validate", "validate");
     }
@@ -175,7 +175,8 @@ public class ComponentRender extends AbstractFunction {
      */
     private final void initialize(CustomContainer custom) {
         Map<String, Button> controls;
-        String buttonname;
+        Map<String, Object> columnp;
+        String _name;
         DocumentModel model;
         ExtendedObject[] objects;
         String componentname = custom.getName();
@@ -189,8 +190,8 @@ public class ComponentRender extends AbstractFunction {
                 TableTool.ADD,
                 TableTool.REMOVE,
                 TableTool.ACCEPT}) {
-            buttonname = name.concat(componentname);
-            controls.put(name, new Button(container, buttonname));
+            _name = name.concat(componentname);
+            controls.put(name, new Button(container, _name));
         }
 
         switch (custom.getb("mode")) {
@@ -217,10 +218,14 @@ public class ComponentRender extends AbstractFunction {
         table.setBorderStyle(custom.getst("borderstyle"));
         table.setEnabled(custom.getbl("enabled"));
         
-        for (TableColumn column : table.getColumns())
-            if (!column.isMark())
-                column.setVisible((boolean)
-                        columns.get(column.getName()).get("visible"));
+        for (TableColumn column : table.getColumns()) {
+            if (column.isMark())
+                continue;
+            _name = column.getName();
+            columnp = columns.get(_name);
+            column.setVisible((boolean)columnp.get("visible"));
+            model.getModelItem(_name).setSearchHelp((String)columnp.get("sh"));
+        }
         
         objects = custom.get("objects");
         additems(table, objects);
