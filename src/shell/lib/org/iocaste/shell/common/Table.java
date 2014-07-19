@@ -68,6 +68,8 @@ public class Table extends AbstractContainer {
     public final void add(Element element) {
         if (element.getType() == Const.TABLE_ITEM)
             super.add(element);
+        else
+            element.setView(getView());
     }
     
     /**
@@ -221,7 +223,7 @@ public class Table extends AbstractContainer {
         header = true;
         columns = new LinkedHashMap<>();
         seltype = MULTIPLE;
-        group = new RadioGroup(getView(), getName().concat(".mark"));
+        group = new RadioGroup(this, getName().concat(".mark"));
         actions = new String[2];
         borderstyle = "width: 100%; overflow: auto;";
         
