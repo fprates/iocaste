@@ -176,7 +176,7 @@ public class TableToolRenderer extends AbstractFunction {
     private final void initialize(CustomContainer custom) {
         Map<String, Button> controls;
         Map<String, Object> columnp;
-        String _name;
+        String _name, sh;
         DocumentModel model;
         ExtendedObject[] objects;
         String componentname = custom.getName();
@@ -224,7 +224,9 @@ public class TableToolRenderer extends AbstractFunction {
             _name = column.getName();
             columnp = columns.get(_name);
             column.setVisible((boolean)columnp.get("visible"));
-            model.getModelItem(_name).setSearchHelp((String)columnp.get("sh"));
+            sh = (String)columnp.get("sh");
+            if (sh != null)
+                model.getModelItem(_name).setSearchHelp(sh);
         }
         
         objects = custom.get("objects");
