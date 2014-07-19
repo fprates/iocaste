@@ -15,7 +15,7 @@ import java.util.Map;
 public class Link extends AbstractControlComponent {
     private static final long serialVersionUID = 667738108271176995L;
     private boolean absolute;
-    private Map<Parameter, Object> values;
+    private Map<String, Object> values;
     private String image;
     
     public Link(View view, String name, String action) {
@@ -34,17 +34,7 @@ public class Link extends AbstractControlComponent {
      * @param value valor
      */
     public final void add(String name, Object value) {
-        values.put(new Parameter(getView(), name), value);
-    }
-    
-    /**
-     * Adiciona parâmetro ao link em um container especificado
-     * @param container container
-     * @param name nome do parâmetro
-     * @param value valor
-     */
-    public final void add(Container container, String name, Object value) {
-        values.put(new Parameter(container, name), value);
+        values.put(name, value);
     }
     
     /**
@@ -59,7 +49,7 @@ public class Link extends AbstractControlComponent {
      * Retorna parâmetros do link.
      * @return parâmetros.
      */
-    public final Map<Parameter, Object> getParametersMap() {
+    public final Map<String, Object> getParametersMap() {
         return values;
     }
     
@@ -96,21 +86,5 @@ public class Link extends AbstractControlComponent {
      */
     public final void setImage(String image) {
         this.image = image;
-    }
-    
-    /**
-     * Ajusta valor dos parâmetros.
-     * @param name nome do parâmetro
-     * @param value valor
-     */
-    public final void setValue(String name, Object value) {
-        for (Parameter parameter : values.keySet()) {
-            if (!parameter.getName().equals(name))
-                continue;
-            
-            values.remove(parameter);
-            values.put(parameter, value);
-            break;
-        }
     }
 }

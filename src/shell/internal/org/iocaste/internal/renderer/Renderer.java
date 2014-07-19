@@ -137,7 +137,7 @@ public class Renderer {
             break;
             
         case LINK:
-            tags.add(LinkRenderer.render((Link)element, config));
+            tags.addAll(LinkRenderer.render((Link)element, config));
             break;
             
         case LIST_BOX:

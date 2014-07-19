@@ -1,5 +1,7 @@
 package org.iocaste.internal.renderer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.protocol.utils.XMLElement;
@@ -13,23 +15,27 @@ public class LinkRenderer extends Renderer {
      * @param link
      * @return
      */
-    public static final XMLElement render(Link link, Config config) {
+    public static final List<XMLElement> render(Link link, Config config) {
         XMLElement atag, imgtag;
         String text, href, image;
         StringBuilder onclick;
-        Map<Parameter, Object> parameters;
+        Map<String, Object> parameters;
+        Parameter parameter;
+        List<XMLElement> tags = new ArrayList<>();
         
         if (!link.isEnabled()) {
             atag = new XMLElement("span");
             atag.addInner(link.getText());
             atag.add("class", link.getStyleClass());
             
-            return atag;
+            tags.add(atag);
+            return tags;
         }
         
         atag = new XMLElement("a");
         atag.add("class", link.getStyleClass());
-        
+
+        tags.add(atag);
         if (link.isAbsolute())
             href = link.getAction();
         else
@@ -42,10 +48,14 @@ public class LinkRenderer extends Renderer {
         parameters = link.getParametersMap();
         if (parameters.size() > 0) {
             onclick = new StringBuilder();
-            for (Parameter parameter : parameters.keySet())
-                onclick.append("setValue('").append(parameter.getHtmlName()).
-                        append("', '").append(parameters.get(parameter)).
+            for (String name : parameters.keySet()) {
+                onclick.append("setValue('").append(name).
+                        append("', '").append(parameters.get(name)).
                         append("');");
+                
+                parameter = new Parameter(config.getView(), name);
+                tags.add(ParameterRenderer.render(parameter));
+            }
             
             atag.add("onClick", onclick.toString());
         }
@@ -67,8 +77,8 @@ public class LinkRenderer extends Renderer {
             else
                 atag.addInner("");
         }
-            
-        return atag;
+        
+        return tags;
     }
 
 }
