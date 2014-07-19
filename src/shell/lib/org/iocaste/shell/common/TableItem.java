@@ -56,7 +56,7 @@ public class TableItem extends AbstractContainer {
         DocumentModelItem modelitem;
         InputComponent input;
         Table table;
-        int i, length;
+        int i;
         
         if (recursive) {
             recursive = false;
@@ -77,9 +77,7 @@ public class TableItem extends AbstractContainer {
         if (element.isDataStorable() && modelitem != null) {
             input = (InputComponent)element;
             input.setModelItem(modelitem);
-            length = columns[i].getLength();
-            input.setLength(length);
-            input.setVisibleLength(length);
+            input.setVisibleLength(columns[i].getLength());
         }
 
         if (columns[i].isMark())

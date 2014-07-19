@@ -23,7 +23,7 @@ public class TextField extends AbstractInputComponent {
     }
     
     private final void init() {
-        if (getLength() == 0) {
+        if (getLength() == 0 && getModelItem() == null) {
             setLength(20);
             setVisibleLength(20);
         }
