@@ -63,6 +63,6 @@ public class TabbedPaneItem extends AbstractComponent {
      * @param focus
      */
     public final void setFocus(Element focus) {
-        this.focus = focus.getHtmlName();
+        this.focus = (focus == null)? null : focus.getHtmlName();
     }
 }
