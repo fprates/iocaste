@@ -788,7 +788,8 @@ public class PageRenderer extends AbstractRenderer {
      */
     private final Map<String, String[]> processMultipartContent(
             HttpServletRequest req, PageContext pagectx) throws Exception {
-        String filename, fieldname;
+        String[] values;
+        String filename, fieldname, value;
         MultipartElement[] elements;
         FileItem fileitem;
         Map<String, String[]> parameters;
@@ -804,8 +805,10 @@ public class PageRenderer extends AbstractRenderer {
                 if (pagectx.isAction(fieldname))
                     fieldname = "action";
                 
-                parameters.put(fieldname,
-                		new String[] {fileitem.getString("UTF-8")});
+                value = fileitem.getString("UTF-8");
+                values = parameters.get(fieldname);
+                if ((values == null) || (values != null && value.length() > 0))
+                    parameters.put(fieldname, new String[] {value});
                 
                 continue;
             }
