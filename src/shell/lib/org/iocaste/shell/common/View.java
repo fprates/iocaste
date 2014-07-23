@@ -455,7 +455,11 @@ public class View implements Serializable {
      * @param page página.
      */
     public final void redirect(String page) {
-        redirect(null, page);
+        redirect(null, page, false);
+    }
+    
+    public final void redirect(String page, boolean initialize) {
+        redirect(null, page, initialize);
     }
     
     /**
