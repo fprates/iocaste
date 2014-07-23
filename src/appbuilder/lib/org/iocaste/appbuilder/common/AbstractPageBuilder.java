@@ -229,7 +229,7 @@ class BuilderCustomView extends AbstractCustomView {
         AbstractViewInput viewinput = getViewInput();
         PageBuilderContext _context = (PageBuilderContext)context;
         
-        if (!context.view.keepView()) {
+        if (!context.view.keepView() || !viewspec.isInitialized()) {
             viewspec.run(_context);
             for (ViewSpecItem item : viewspec.getItems())
                 buildItem((PageBuilderContext)context, item);
@@ -238,6 +238,8 @@ class BuilderCustomView extends AbstractCustomView {
                 viewconfig.setNavControl(navcontrol);
                 viewconfig.run(_context);
             }
+            
+            viewspec.setInitialized(true);
         }
         
         if (viewinput != null)

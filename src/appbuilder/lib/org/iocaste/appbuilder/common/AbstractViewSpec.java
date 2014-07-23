@@ -12,6 +12,7 @@ public abstract class AbstractViewSpec {
     private List<ViewSpecItem> sequence;
     private Manager manager;
     private PageBuilderContext context;
+    private boolean initialized;
     
     public AbstractViewSpec() {
         items = new HashMap<>();
@@ -68,6 +69,10 @@ public abstract class AbstractViewSpec {
         return manager;
     }
     
+    public final boolean isInitialized() {
+        return initialized;
+    }
+    
     protected final void link(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.LINK, name);
     }
@@ -105,6 +110,10 @@ public abstract class AbstractViewSpec {
         sequence.clear();
         items.clear();
         execute();
+    }
+    
+    public final void setInitialized(boolean initialized) {
+        this.initialized = initialized;
     }
     
     public final void setManager(Manager manager) {
