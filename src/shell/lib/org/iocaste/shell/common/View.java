@@ -541,6 +541,14 @@ public class View implements Serializable {
     
     /**
      * 
+     * @param initialize
+     */
+    public final void setInitialize(boolean initialize) {
+        this.initialize = initialize;
+    }
+    
+    /**
+     * 
      * @param keepview
      */
     public final void setKeepView(boolean keepview) {
