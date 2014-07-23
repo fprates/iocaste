@@ -171,6 +171,7 @@ public abstract class AbstractActionHandler {
         if (!this.context.hasActionHandler(view, action))
             return;
         
+        context.view.setInitialize(false);
         execute(this.context);
         context.view.setReloadableView(true);
         context.view.setKeepView(!this.context.isViewUpdatable(view));
