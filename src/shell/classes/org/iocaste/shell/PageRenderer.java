@@ -636,7 +636,6 @@ public class PageRenderer extends AbstractRenderer {
         long sequence;
         ControllerData config;
         ContextData contextdata;
-        Input input;
         ControlComponent action;
         Enumeration<?> parameternames;
         PageContext pagectx_;
@@ -696,16 +695,6 @@ public class PageRenderer extends AbstractRenderer {
             pushPage(config.sessionid, view.getAppName(), view.getPageName());
         
         view.clearInputs();
-        input = new Input();
-        input.view = view;
-        input.view.clearMultipartElements();
-        input.container = null;
-        input.function = this;
-        for (Container container : view.getContainers()) {
-            input.element = container;
-            input.register();
-        }
-        
         updateView(config.sessionid, view, this);
         
         /*
