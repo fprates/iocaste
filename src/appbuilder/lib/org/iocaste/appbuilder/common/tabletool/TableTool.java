@@ -12,6 +12,8 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.CustomContainer;
+import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public class TableTool {
@@ -45,6 +47,7 @@ public class TableTool {
         custom.set("controls", null);
         custom.set("objects", null);
         custom.set("selected", null);
+        custom.set("content_hash", null);
         
         custom.noDamageFor("objects");
         custom.noDamageFor("selected");
@@ -209,6 +212,28 @@ public class TableTool {
     public final int size() {
         ExtendedObject[] objects = getCustom().get("objects");
         return (objects == null)? 0 : objects.length;
+    }
+    
+    public final void updateContent() {
+        int i;
+        long hash;
+        Table table;
+        ExtendedObject[] objects;
+        CustomContainer custom = getCustom();
+        
+        if (!custom.isInitialized())
+            return;
+
+        hash = i = 0;
+        table = data.context.view.getElement(data.name.concat("_table"));
+        objects = new ExtendedObject[table.size()];
+        for (TableItem item : table.getItems()) {
+            objects[i] = item.getObject();
+            hash += objects[i++].toString().hashCode();
+        }
+        
+        custom.set("objects", objects);
+        custom.set("content_hash", hash);
     }
 }
 

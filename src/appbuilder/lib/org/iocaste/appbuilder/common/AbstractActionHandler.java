@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -21,14 +22,14 @@ import org.iocaste.texteditor.common.TextEditorTool;
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
     private Manager manager;
+    private ViewComponents components;
     
     protected final void back() {
         ((AbstractPage)context.function).back();
     }
     
     protected final String dbactionget(String dashboard, String item) {
-        DashboardFactory factory = getViewComponents().dashboards.
-                get(dashboard);
+        DashboardFactory factory = components.dashboards.get(dashboard);
         
         if (factory == null)
             throw new RuntimeException(dashboard.concat(
@@ -139,10 +140,6 @@ public abstract class AbstractActionHandler {
         return manager;
     }
     
-    protected final ViewComponents getViewComponents() {
-        return context.getViewComponents(context.view.getPageName());
-    }
-    
     protected final boolean keyExists(Object id) {
         return manager.exists(id);
     }
@@ -171,6 +168,10 @@ public abstract class AbstractActionHandler {
         if (!this.context.hasActionHandler(view, action))
             return;
         
+        this.components = this.context.getViewComponents(view);
+        for (TableTool tabletool : this.components.tabletools.values())
+            tabletool.updateContent();
+        
         context.view.setInitialize(false);
         execute(this.context);
         context.view.setReloadableView(true);
@@ -182,11 +183,11 @@ public abstract class AbstractActionHandler {
     }
     
     protected final ExtendedObject[] tableitemsget(String tabletool) {
-        return getViewComponents().tabletools.get(tabletool).getObjects();
+        return components.tabletools.get(tabletool).getObjects();
     }
     
     protected final ExtendedObject[] tableselectedget(String tabletool) {
-        return getViewComponents().tabletools.get(tabletool).getSelected();
+        return components.tabletools.get(tabletool).getSelected();
     }
     
     protected final void taskredirect(String task) {
@@ -209,7 +210,7 @@ public abstract class AbstractActionHandler {
     
     protected final void texteditorsave(String name, String id) {
         TextEditorTool editortool = new TextEditorTool(context);
-        TextEditor editor = getViewComponents().editors.get(name);
+        TextEditor editor = components.editors.get(name);
         
         editortool.commit(editor, id);
         editortool.update(editor, "B2B_OBSERV");
