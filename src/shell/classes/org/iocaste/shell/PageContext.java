@@ -17,7 +17,7 @@ public class PageContext {
     private boolean reloadable, initialize, keepview;
     private Map<String, Object> parameters;
     private List<FileItem> files;
-    private Set<String> customs, actions;
+    private Set<String> actions;
     private int logid;
     private byte error;
     private long sequence;
@@ -63,14 +63,6 @@ public class PageContext {
      */
     public final String getContextUrl() {
         return contexturl;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final Set<String> getCustoms() {
-        return customs;
     }
     
     /**
@@ -208,14 +200,6 @@ public class PageContext {
      */
     public final void setContextUrl(String contexturl) {
         this.contexturl = contexturl;
-    }
-    
-    /**
-     * 
-     * @param customs
-     */
-    public final void setCustoms(Set<String> customs) {
-        this.customs = customs;
     }
     
     /**

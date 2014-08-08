@@ -14,7 +14,6 @@ import org.iocaste.shell.common.View;
 
 public class Config {
     public Function function;
-    public Set<String> customs;
     private String currentaction, currentform, pagetrack;
     private String dbname, username;
     private int logid;
@@ -31,7 +30,6 @@ public class Config {
         onload = new ArrayList<>();
         toform = new ArrayList<>();
         msgsources = new ArrayList<>();
-        customs = new HashSet<>();
     }
     
     /**

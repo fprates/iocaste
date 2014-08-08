@@ -1,7 +1,6 @@
 package org.iocaste.internal;
 
 import java.util.Map;
-import java.util.Set;
 
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.ControlComponent;
@@ -15,5 +14,4 @@ public class ControllerData {
     public int logid;
     public boolean event;
     public ControlComponent shcontrol;
-    public Set<String> customs;
 }

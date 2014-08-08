@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
-import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
@@ -42,7 +41,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     }
     
     public abstract void config(PageBuilderContext context) throws Exception;
-
+    
     protected byte[] getApplicationContext(String installctx) throws Exception {
         byte[] buffer;
         int size;
@@ -162,11 +161,10 @@ class BuilderCustomView extends AbstractCustomView {
         case TABLE_TOOL:
             ttdata = new TableToolData();
             ttdata.container = container;
-            ttdata.context = context;
             ttdata.name = name;
-            
+             
             viewcomponents = context.getViewComponents(view);
-            viewcomponents.tabletools.put(ttdata.name, new TableTool(ttdata));
+            viewcomponents.add(ttdata);
             break;
         case DATA_FORM:
             new DataForm(container, name);
@@ -229,19 +227,19 @@ class BuilderCustomView extends AbstractCustomView {
         AbstractViewInput viewinput = getViewInput();
         PageBuilderContext _context = (PageBuilderContext)context;
         
-        if (!context.view.keepView() || !viewspec.isInitialized()) {
-            viewspec.run(_context);
-            for (ViewSpecItem item : viewspec.getItems())
-                buildItem((PageBuilderContext)context, item);
-            
-            if (viewconfig != null) {
-                viewconfig.setNavControl(navcontrol);
-                viewconfig.run(_context);
-            }
-            
-            viewspec.setInitialized(true);
+        if (context.view.keepView() && viewspec.isInitialized())
+            return;
+        
+        viewspec.run(_context);
+        for (ViewSpecItem item : viewspec.getItems())
+            buildItem((PageBuilderContext)context, item);
+        
+        if (viewconfig != null) {
+            viewconfig.setNavControl(navcontrol);
+            viewconfig.run(_context);
         }
         
+        viewspec.setInitialized(true);
         if (viewinput != null)
             viewinput.run(_context);
     }

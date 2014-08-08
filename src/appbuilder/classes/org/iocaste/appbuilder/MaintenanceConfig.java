@@ -1,13 +1,12 @@
 package org.iocaste.appbuilder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.NavControl;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexModel;
@@ -21,10 +20,9 @@ public class MaintenanceConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         DocumentModelItem hkey;
-        List<String> names;
         InputComponent input;
         Map<String, DocumentModel> models;
-        TableTool tabletool;
+        TableToolData tabletool;
         DocumentModelItem[] items;
         Manager manager = getManager();
         ComplexModel cmodel = manager.getModel();
@@ -51,21 +49,19 @@ public class MaintenanceConfig extends AbstractViewConfig {
         form.importModel(model);
         for (DocumentModelItem item : items)
             form.get(item.getName()).setVisible(!model.isKey(item));
-        getTabbedItem("tabs", "basetab").set(form);
+        getTabbedItem("tabs", "basetab").set(form.getHtmlName());
         
         models = cmodel.getItems();
-        names = new ArrayList<>();
         for (String name : models.keySet()) {
             model = models.get(name);
             tabletool = getTableTool(name.concat("_table"));
-            tabletool.model(model);
-            tabletool.setMode(TableTool.UPDATE);
-            names.clear();
-            names.add(AbstractManager.getReference(model, hkey).getName());
-            names.add(AbstractManager.getKey(model).getName());
-            tabletool.setVisibility(false, names.toArray(new String[0]));
-            
-            getTabbedItem("tabs", name).set(tabletool.getContainer());
+            tabletool.model = model.getName();
+            tabletool.mode = TableTool.UPDATE;
+            tabletool.hide = new String[] {
+                    AbstractManager.getReference(model, hkey).getName(),
+                    AbstractManager.getKey(model).getName()
+            };
+            getTabbedItem("tabs", name).set(tabletool.name);
         }
     }
 }

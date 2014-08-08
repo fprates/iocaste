@@ -27,7 +27,8 @@ public abstract class AbstractViewInput {
     }
     
     private final void addtableitems(String table, ExtendedObject[] objects) {
-        TableTool tabletool = getViewComponents().tabletools.get(table);
+        TableTool tabletool = getViewComponents().tabletools.
+                get(table).component;
         
         if (tabletool == null)
             throw new RuntimeException(table.
@@ -101,8 +102,8 @@ public abstract class AbstractViewInput {
                 dataform.setObject((ExtendedObject)storage.get(name));
                 break;
             case TABLE_TOOL:
-                components.tabletools.get(name).setObjects(
-                        (ExtendedObject[])storage.get(name));
+                components.tabletools.get(name).data.objects =
+                        (ExtendedObject[])storage.get(name);
                 break;
             default:
                 input = getElement(name);

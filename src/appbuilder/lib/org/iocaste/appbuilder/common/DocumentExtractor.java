@@ -199,7 +199,7 @@ public class DocumentExtractor {
         document.setHeader(head);
         for (String name : items.keySet()) {
             tabletool = context.getViewComponents(pagename).
-                    tabletools.get(name);
+                    tabletools.get(name).component;
             
             objects = tabletool.getObjects();
             if (objects == null)

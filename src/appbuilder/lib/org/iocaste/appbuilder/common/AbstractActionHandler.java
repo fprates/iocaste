@@ -1,7 +1,8 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.List;
+
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
-import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -168,10 +169,7 @@ public abstract class AbstractActionHandler {
         if (!this.context.hasActionHandler(view, action))
             return;
         
-        this.components = this.context.getViewComponents(view);
-        for (TableTool tabletool : this.components.tabletools.values())
-            tabletool.updateContent();
-        
+        components = this.context.getViewComponents(view);
         context.view.setInitialize(false);
         execute(this.context);
         context.view.setReloadableView(true);
@@ -183,11 +181,11 @@ public abstract class AbstractActionHandler {
     }
     
     protected final ExtendedObject[] tableitemsget(String tabletool) {
-        return components.tabletools.get(tabletool).getObjects();
+        return components.tabletools.get(tabletool).component.getObjects();
     }
     
-    protected final ExtendedObject[] tableselectedget(String tabletool) {
-        return components.tabletools.get(tabletool).getSelected();
+    protected final List<ExtendedObject> tableselectedget(String tabletool) {
+        return components.tabletools.get(tabletool).component.getSelected();
     }
     
     protected final void taskredirect(String task) {

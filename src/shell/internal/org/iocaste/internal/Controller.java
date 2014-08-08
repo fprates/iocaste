@@ -19,17 +19,16 @@ import org.iocaste.documents.common.RangeOption;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.protocol.Function;
-import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.CustomContainer;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.View;
 
 public class Controller {
     private static final int EINITIAL = 1;
@@ -321,6 +320,7 @@ public class Controller {
     private static final void processCustomValidation(ControllerData config,
             List<InputComponent> validations, InputStatus status)
                     throws Exception {
+        View view;
         Element element;
         Map<String, Object> response;
 
@@ -332,8 +332,9 @@ public class Controller {
             return;
         }
         
+        view = (View)response.get("view");
         for (String name : config.view.getInputs()) {
-            element = config.view.getElement(name);
+            element = view.getElement(name);
             element.setView(config.view);
             config.view.index(element);
         }
@@ -449,10 +450,6 @@ public class Controller {
         
         if (status.error != 0)
             return;
-        
-        if (config.customs != null)
-            for (String custom : config.customs)
-                validateCustomContainer(custom, config);
         
         if (validations.size() > 0)
             processCustomValidation(config, validations, status);
@@ -652,22 +649,6 @@ public class Controller {
         }
         
         return status;
-    }
-    
-    private static void validateCustomContainer(
-            String name, ControllerData config) {
-        Map<String, Object> values;
-        CustomContainer container = config.view.getElement(name);
-        GenericService service = new GenericService(
-                config.function, container.getRenderURL());
-        Message message = new Message("validate");
-        
-        message.add("container", container);
-        values = service.invoke(message);
-        if (values == null)
-            return;
-        
-        container.set(values);
     }
 }
 

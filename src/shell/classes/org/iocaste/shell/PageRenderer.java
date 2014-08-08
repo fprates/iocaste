@@ -682,7 +682,6 @@ public class PageRenderer extends AbstractRenderer {
         config.logid = getLogid(pagetrack);
         config.sessionid = getComplexId(sessionid, config.logid);
         config.servername = getServerName();
-        config.customs = pagectx.getCustoms();
         callController(config);
         
         /*
@@ -929,7 +928,6 @@ public class PageRenderer extends AbstractRenderer {
         render(renderer, resp, view, tracking);
         
         pagectx.setActions(renderer.getActions());
-        pagectx.setCustoms(renderer.getCustoms());
     }
     
     /**

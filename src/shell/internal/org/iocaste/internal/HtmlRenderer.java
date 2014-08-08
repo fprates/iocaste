@@ -27,7 +27,7 @@ public class HtmlRenderer {
     private String username, msgtext, dbname;
     private Const msgtype;
     private List<String> script;
-    private Set<String> actions, customs;
+    private Set<String> actions;
     private MessageSource msgsource;
     private ControlComponent shcontrol;
     private Function function;
@@ -68,14 +68,6 @@ public class HtmlRenderer {
      */
     public final Set<String> getActions() {
         return actions;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final Set<String> getCustoms() {
-        return customs;
     }
     
     /**
@@ -214,7 +206,6 @@ public class HtmlRenderer {
         
         html.add(htmltag.toString());
         actions = config.getActions();
-        customs = config.customs;
         
         return html.toArray(new String[0]);
     }

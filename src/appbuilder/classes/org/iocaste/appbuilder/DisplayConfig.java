@@ -5,6 +5,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -14,7 +15,7 @@ public class DisplayConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        TableTool tabletool;
+        TableToolData tabletool;
         Map<String, DocumentModel> models;
         DocumentModelItem[] items;
         DataForm form;
@@ -35,7 +36,7 @@ public class DisplayConfig extends AbstractViewConfig {
             case "base":
                 for (DocumentModelItem item : items)
                     form.get(item.getName()).setVisible(!model.isKey(item));
-                getTabbedItem("tabs", "basetab").set(form);
+                getTabbedItem("tabs", "basetab").set(form.getHtmlName());
                 break;
             }
         }
@@ -44,10 +45,9 @@ public class DisplayConfig extends AbstractViewConfig {
         for (String name : models.keySet()) {
             model = models.get(name);
             tabletool = getTableTool(name.concat("_table"));
-            tabletool.model(model);
-            tabletool.setMode(TableTool.DISPLAY);
-            getTabbedItem("tabs", name).set(tabletool.getContainer());
-            
+            tabletool.model = model.getName();
+            tabletool.mode = TableTool.DISPLAY;
+            getTabbedItem("tabs", name).set(tabletool.name);
         }
     }
 }

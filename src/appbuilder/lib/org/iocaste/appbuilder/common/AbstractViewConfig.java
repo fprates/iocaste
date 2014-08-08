@@ -2,7 +2,7 @@ package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
-import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.TabbedPane;
@@ -91,8 +91,8 @@ public abstract class AbstractViewConfig implements ViewConfig {
      * @param name
      * @return
      */
-    protected final TableTool getTableTool(String name) {
-        return getViewComponents().tabletools.get(name);
+    protected final TableToolData getTableTool(String name) {
+        return getViewComponents().tabletools.get(name).data;
     }
     
     /**

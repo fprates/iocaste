@@ -1,19 +1,21 @@
 package org.iocaste.appbuilder.common.tabletool;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.GenericService;
+import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.CustomContainer;
+import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
+import org.iocaste.shell.common.Validator;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public class TableTool {
@@ -23,228 +25,326 @@ public class TableTool {
     public static final byte CONTINUOUS_UPDATE = 0;
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
-    public static final byte DONT_APPEND = 3;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
+    private static final String URL = "/iocaste-appbuilder/services.html";
+    private AbstractContext context;
+    private GenericService service;
+    private String accept, add, remove;
     private TableToolData data;
     
-    public TableTool(TableToolData data) {
-        CustomContainer custom;
-        Map<String, Map<String, Object>> columns = new HashMap<>();
+    public TableTool(AbstractContext context, TableToolData data) {
+        Map<String, Object> result;
+        Container container, returned;
+        Message message;
         
-        this.data = data;
+        message = new Message("render");
+        message.add("data", data);
+        message.add("view", context.view);
         
-        custom = new CustomContainer(data.container, data.name);
-        custom.setRenderURL("/iocaste-appbuilder/services.html");
-        custom.set("mark", false);
-        custom.set("visible_lines", 15);
-        custom.set("step", 1);
-        custom.set("last", 0);
-        custom.set("columns", columns);
-        custom.set("enabled", true);
-        custom.set("action", null);
-        custom.set("controls_state", ENABLED);
-        custom.set("controls", null);
-        custom.set("objects", null);
-        custom.set("selected", null);
-        custom.set("content_hash", null);
+        service = new GenericService(context.function, URL);
+        result = service.invoke(message);
+        this.context = context;
         
-        custom.noDamageFor("objects");
-        custom.noDamageFor("selected");
+        accept = new Action(this, data, ACCEPT).getName();
+        add = new Action(this, data, ADD).getName();
+        remove = new Action(this, data, REMOVE).getName();
+
+        container = new StandardContainer(data.container, data.name);
+        returned = (Container)result.get("container");
+        this.data = (TableToolData)result.get("data");
         
-        new Action(this, data, ACCEPT);
-        new Action(this, data, ADD);
-        new Action(this, data, REMOVE);
+        for (Element element : returned.getElements()) {
+            transfer(container, element);
+            element.setView(context.view);
+            container.add(element);
+        }
     }
     
     public final void accept() {
-        getCustom().set("action", ACCEPT);
+        Table table = getTable();
+        
+        context.view.getElement(accept).setVisible(false);
+        context.view.getElement(add).setVisible(true);
+        context.view.getElement(remove).setVisible(true);
+        table.setTopLine(0);
     }
     
     public final void add() {
-        getCustom().set("action", ADD);
-    }
-    
-    public final Map<String, Map<String, Object>> getColumns() {
-        return getCustom().get("columns");
-    }
-    
-    public final Container getContainer() {
-        return getCustom();
-    }
-    
-    private final CustomContainer getCustom() {
-        return data.context.view.getElement(data.name);
-    }
-    
-    public final ExtendedObject[] getObjects() {
-        return getCustom().get("objects");
-    }
-    
-    public final ExtendedObject[] getSelected() {
-        return getCustom().get("selected");
-    }
-    
-    public final void model(String model) {
-        model(new Documents(data.context.function).getModel(model));
-    }
-    
-    public final void model(DocumentModel model) {
-        Map<String, Object> column;
-        Map<String, Map<String, Object>> columns = getColumns();
+        int i = 0;
+        Table table = getTable();
         
-        getCustom().set("model", model.getName());
-        columns.clear();
-        for (DocumentModelItem item : model.getItens()) {
-            column = new HashMap<>();
-            column.put("type", Const.TEXT_FIELD);
-            column.put("disabled", false);
-            column.put("visible", true);
-            column.put("sh", null);
-            column.put("validator", null);
-            columns.put(item.getName(), column);
-        }
-    }
-    
-    public final void remove() {
-        getCustom().set("action", REMOVE);
-    }
-    
-    public final void setBorderStyle(String borderstyle) {
-        getCustom().set("borderstyle", borderstyle);
-    }
-    
-    public final void setColumnSize(String name, int size) {
-        getColumns().get(name).put("size", size);
-    }
-    
-    public final void setColumnStatus(byte status, String... tcolumns) {
-        Map<String, Map<String, Object>> columns = getColumns();
-        
-        if (tcolumns == null || tcolumns.length == 0) {
-            for (String cname :  columns.keySet())
-                setEnabledColumn(cname, status == DISABLED);
-        } else {
-            for (String cname : tcolumns) {
-                if (!columns.containsKey(cname))
-                    throw new RuntimeException(cname.concat(
-                            " is an invalid column."));
-                setEnabledColumn(cname, status == DISABLED);
-            }
-        }
-    }
-    
-    public final void setColumnType(String name, Const type, String action) {
-        Map<String, Object> column = getColumns().get(name);
-        column.put("type", type);
-        column.put("action", action);
-    }
-    
-    public final void setEnabledColumn(String name, boolean enabled) {
-        getColumns().get(name).put("disabled", enabled);
-    }
-    
-    public final void setItemColumn(String itemcolumn) {
-        getCustom().set("itemcolumn", itemcolumn);
-    }
-    
-    public final void setItemIncrement(String step) {
-        getCustom().set("step", step);
-    }
-    
-    public final void setMark(boolean mark) {
-        getCustom().set("mark", mark);
-    }
-    
-    public final void setMode(byte mode) {
-        CustomContainer custom = getCustom();
-        Map<String, Map<String, Object>> columns = custom.get("columns");
-        
-        custom.set("mode", mode);
-        switch (mode) {
+        switch (data.mode) {
         case CONTINUOUS_UPDATE:
-        case UPDATE:
-            custom.set("mark", true);
+            for (TableItem item_ : table.getItems()) {
+                if (!item_.isSelected()) {
+                    i++;
+                    continue;
+                }
+                break;
+            }
+            
+            additem(table, null, i);
             break;
-        case DONT_APPEND:
-        case DISPLAY:
-            custom.set("mark", false);
+        default:
+            context.view.getElement(accept).setVisible(true);
+            context.view.getElement(add).setVisible(false);
+            context.view.getElement(remove).setVisible(false);
+            additems(null);
             break;
-        }
-        
-        custom.set("enabled", mode != DISPLAY);
-        for (Map<String, Object> column : columns.values())
-            column.put("disabled", mode == DISPLAY);
-    }
-    
-    public final void setObjects(ExtendedObject[] objects) {
-        getCustom().set("objects", objects);
-    }
-    
-    public final void setSearchHelp(String column, String sh) {
-        getColumns().get(column).put("sh", sh);
-    }
-    
-    public final void setValidator(String column, String validator) {
-        getColumns().get(column).put("validator", validator);
-    }
-    
-    public final void setVisibility(boolean visible, String... tcolumns) {
-        Map<String, Object> properties;
-        Map<String, Map<String, Object>> columns = getCustom().get("columns");
-        
-        for (Map<String, Object> column : columns.values())
-            column.put("visible", !visible);
-        
-        for (String column : tcolumns) {
-            properties = columns.get(column);
-            if (properties == null)
-                throw new RuntimeException(
-                        column.concat(" is an invalid column."));
-            properties.put("visible", visible);
         }
     }
     
-    public final void setVisibleLines(int lines) {
-        getCustom().set("visible_lines", lines);
+    private final void additem(Table table, ExtendedObject object, int index) {
+        
     }
     
-    public final int size() {
-        ExtendedObject[] objects = getCustom().get("objects");
-        return (objects == null)? 0 : objects.length;
+    public final void additems() {
+        additems(null);
     }
     
-    public final void updateContent() {
+    private final void additems(ExtendedObject[] objects) {
+        Message message = new Message("items_add");
+        Table returned, table = getTable();
+        
+        data.objects = objects;
+        message.add("table", table);
+        message.add("data", data);
+        returned = service.invoke(message);
+        update(table, returned);
+    }
+    
+    public final void clear() {
+        getTable().clear();
+        data.last = 0;
+    }
+    
+    public final void controls(byte state, String... controls) {
+//        Control control;
+//        Table table = getTable();
+//        
+//        switch (state) {
+//        case ENABLED:
+//        case DISABLED:
+//            if ((controls == null) || (controls.length == 0)) {
+//                for (String name : this.controls.keySet())
+//                    this.controls.get(name).setVisible(state == ENABLED);
+//                
+//                table.setMark(state == ENABLED);
+//                break;
+//            }
+//            
+//            for (String name : controls) {
+//                control = this.controls.get(name);
+//                if (control == null)
+//                    throw new RuntimeException(name.
+//                            concat(" is an invalid control."));
+//                
+//                control.setVisible(state == ENABLED);
+//            }
+//            break;
+//        }
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Container getContainer() {
+        return context.view.getElement(data.name);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final AbstractContext getContext() {
+        return context;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Set<TableItem> getItems() {
+        return getTable().getItems();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final DocumentModel getModel() {
+        return getTable().getModel();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final ExtendedObject[] getObjects() {
         int i;
-        long hash;
-        Table table;
         ExtendedObject[] objects;
-        CustomContainer custom = getCustom();
+        Table table = getTable();
+        Set<TableItem> items = table.getItems();
+        int size = items.size();
         
-        if (!custom.isInitialized())
+        if (size == 0)
+            return null;
+        
+        objects = new ExtendedObject[size];
+        i = 0;
+        for (TableItem item : items)
+            objects[i++] = item.getObject();
+        
+        return objects;
+    }
+    
+    public final List<ExtendedObject> getSelected() {
+        return null;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    private final Table getTable() {        
+        return context.view.getElement(data.name.concat("_table"));
+    }
+    
+    /**
+     * 
+     */
+    public final void remove() {
+        Table table = getTable();
+        
+        for (TableItem item : table.getItems())
+            if (item.isSelected())
+                table.remove(item);
+    }
+    
+    /**
+     * 
+     * @param status
+     * @param tcolumns
+     */
+    public final void setColumnStatus(byte status, String... tcolumns) {
+//        String name;
+//        Column column;
+//        Table table = getTable();
+//        
+//        if (tcolumns == null || tcolumns.length == 0) {
+//            for (String cname :  columns.keySet())
+//                columns.get(cname).disabled = (status == DISABLED);
+//        } else {
+//            for (String cname : tcolumns) {
+//                column = columns.get(cname);
+//                if (column == null)
+//                    throw new RuntimeException(cname.concat(
+//                            " is an invalid column."));
+//                
+//                column.disabled = (status == DISABLED);
+//            }
+//        }
+//        
+//        for (TableItem item : table.getItems())
+//            for (TableColumn tcolumn : table.getColumns()) {
+//                if (tcolumn.isMark())
+//                    continue;
+//                
+//                name = tcolumn.getName();
+//                item.get(name).setEnabled(!columns.get(name).disabled);
+//            }
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param values
+     */
+    public final void setColumnValues(String name, Map<String, Object> values)
+    {
+//        columns.get(name).values = values;
+    }
+    
+    /**
+     * 
+     * @param objects
+     */
+    public final void setObjects(ExtendedObject[] objects) {
+//        Table table = getTable();
+//        
+//        if (objects == null || objects.length == 0)
+//            additems(table, null);
+//        else
+//            additems(table, objects);
+    }
+    
+    /**
+     * 
+     * @param field
+     * @param validator
+     * @param inputs
+     */
+    public final void setValidator(String field,
+            Class<? extends Validator> validator, String... inputs) {
+//        Column column;
+//        ValidatorData vdata = new ValidatorData();
+//        Table table = getTable();
+//        
+//        vdata.validator = validator;
+//        vdata.inputs = inputs;
+//        column = columns.get(field);
+//        column.validator = vdata;
+//        for (TableItem item : table.getItems())
+//            setColumnValidator(column.tcolumn, item);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final int size() {
+        return getTable().size();
+    }
+    
+    private void transfer(Container to, Element from) {
+        Container fromc;
+        
+        if (!from.isContainable()) {
+            from.setView(context.view);
+            to.setView(context.view);
+            context.view.index(from);
             return;
-
-        hash = i = 0;
-        table = data.context.view.getElement(data.name.concat("_table"));
-        objects = new ExtendedObject[table.size()];
-        for (TableItem item : table.getItems()) {
-            objects[i] = item.getObject();
-            hash += objects[i++].toString().hashCode();
         }
         
-        custom.set("objects", objects);
-        custom.set("content_hash", hash);
+        fromc = (Container)from;
+        for (Element child : fromc.getElements())
+            transfer(fromc, child);
+        fromc.setView(context.view);
+        context.view.index(from);
     }
+    
+    private void update(Table dest, Table source) {
+        dest.clear();
+        for (Element element : source.getElements())
+            transfer(dest, element);
+    }
+}
+
+class ValidatorData {
+    public Class<? extends Validator> validator;
+    public String[] inputs;
 }
 
 class Action implements ViewCustomAction {
     private static final long serialVersionUID = 7220679345842901434L;
-    private String action;
+    private String action, name;
     private TableTool tabletool;
     
     public Action(TableTool tabletool, TableToolData data, String action) {
-        ((AbstractPage)data.context.function).register(
-                action.concat(data.name), this);
+        name = action.concat(data.name);
+        ((AbstractPage)tabletool.getContext().function).register(name, this);
         
         this.tabletool = tabletool;
         this.action = action;
@@ -263,6 +363,10 @@ class Action implements ViewCustomAction {
             tabletool.remove();
             break;
         }
+    }
+    
+    public String getName() {
+        return name;
     }
     
 }
