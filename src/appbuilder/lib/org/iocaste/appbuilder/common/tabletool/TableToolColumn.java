@@ -18,5 +18,6 @@ public class TableToolColumn implements Serializable {
     public TableToolColumn(TableToolData data, String name) {
         this.name = name;
         data.columns.put(name, this);
+        type = Const.TEXT_FIELD;
     }
 }

@@ -160,6 +160,7 @@ public class TableToolRenderer extends AbstractFunction {
      * @param modelname
      */
     private final void model(String modelname) {
+        String name;
         TableToolColumn column;
         DocumentModel model = new Documents(this).getModel(modelname);
         
@@ -168,13 +169,16 @@ public class TableToolRenderer extends AbstractFunction {
                     concat(" is an invalid model."));
 
         table.importModel(model);
-        data.columns.clear();
         for (TableColumn tcolumn : table.getColumns()) {
             if (tcolumn.isMark())
                 continue;
             
-            column = new TableToolColumn(data, tcolumn.getName());
-            column.type = Const.TEXT_FIELD;
+            name = tcolumn.getName();
+            column = data.columns.get(name);
+            if (column == null) {
+                column = new TableToolColumn(data, name);
+                column.type = Const.TEXT_FIELD;
+            }
             column.tcolumn = tcolumn;
         }
     }
@@ -264,12 +268,11 @@ public class TableToolRenderer extends AbstractFunction {
             view.getElement(add).setVisible(false);
             view.getElement(remove).setVisible(false);
             table.setMark(false);
+            table.setEnabled(false);
+            for (String column : data.columns.keySet())
+                data.columns.get(column).disabled = true;
             break;
         }
-        
-        table.setEnabled(mode != TableTool.DISPLAY);
-        for (String column : data.columns.keySet())
-            data.columns.get(column).disabled = (mode == TableTool.DISPLAY);
     }
     
     /**

@@ -1,11 +1,14 @@
 package org.iocaste.dataeditor;
 
 import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -35,7 +38,8 @@ public class Response {
         new Button(container, "insertnext");
         
         form = new DataForm(container, "model.form");
-        form.importModel(context.model);
+        form.importModel(new Documents(context.function).
+                getModel(context.model));
         form.setKeyRequired(true);
         
         for (Element element : form.getElements()) {
@@ -83,37 +87,40 @@ public class Response {
      * @param context
      */
     public static final void output(Context context) {
+        DocumentModel model;
         TableToolData ttdata;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
+        Documents documents = new Documents(context.function);
         
         pagecontrol.add("home");
         pagecontrol.add("back");
 
         ttdata = new TableToolData();
-        ttdata.context = context;
         ttdata.container = container;
         ttdata.name = "itens";
-        context.tablehelper = new TableTool(ttdata);
-        context.tablehelper.model(context.model);
-        context.tablehelper.setVisibleLines(0);
-        context.tablehelper.setObjects(context.itens);
-        context.view.setTitle(context.model.getName());
-        
+        ttdata.model = context.model;
+        ttdata.objects = context.itens;
+        ttdata.vlines = 0;
+        context.view.setTitle(context.model);
+
+        model = documents.getModel(context.model);
         switch (context.mode) {
         case Context.DISPLAY:
-            context.tablehelper.setMode(TableTool.DISPLAY);
-            for (DocumentModelItem mitem : context.model.getItens())
-                context.tablehelper.setEnabledColumn(mitem.getName(), false);
+            ttdata.mode = TableTool.DISPLAY;
+            for (DocumentModelItem mitem : model.getItens())
+                new TableToolColumn(ttdata, mitem.getName()).disabled = true;
             break;
         case Context.UPDATE:
             pagecontrol.add("save", PageControl.REQUEST);
-            context.tablehelper.setMode(TableTool.UPDATE);
-            for (DocumentModelKey key : context.model.getKeys())
-                context.tablehelper.setEnabledColumn(
-                        key.getModelItemName(), false);
+            ttdata.mode = TableTool.UPDATE;
+            for (DocumentModelKey key : model.getKeys())
+                new TableToolColumn(
+                        ttdata, key.getModelItemName()).disabled = true;
             break;
         }
+        
+        context.tablehelper = new TableTool(context, ttdata);
     }
 
 }

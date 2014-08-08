@@ -1,5 +1,6 @@
 package org.iocaste.dataeditor;
 
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -15,18 +16,20 @@ public class Request {
      * @param vdata
      */
     public static final void insert(View view) {
+        view.setReloadableView(true);
         view.redirect("form");
     }
     
     public static final String load(String modelname, Context context) {
         Query query;
         Documents documents = new Documents(context.function);
+        DocumentModel model = documents.getModel(modelname);
         
-        context.model = documents.getModel(modelname);
+        context.model = modelname;
         if (context.model == null)
             return "invalid.model";
         
-        if (context.model.getTableName() == null)
+        if (model.getTableName() == null)
             return "is.reference.model";
         
         context.viewtype = Const.SINGLE;

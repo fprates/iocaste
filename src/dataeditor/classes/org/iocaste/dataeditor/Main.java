@@ -27,6 +27,7 @@ public class Main extends AbstractPage {
         }
         
         context.mode = Context.DISPLAY;
+        context.view.setReloadableView(true);
         context.view.redirect("output");
     }
     
@@ -111,6 +112,7 @@ public class Main extends AbstractPage {
         }
         
         context.mode = Context.UPDATE;
+        context.view.setReloadableView(true);
         context.view.redirect("output");
     }
 }

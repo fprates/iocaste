@@ -14,7 +14,8 @@ public class Context extends AbstractContext {
     public static final byte DISPLAY = 0;
     public static final byte UPDATE = 1;
     public ExtendedObject[] itens;
-    public DocumentModel model, modelmodel;
+    public DocumentModel modelmodel;
+    public String model;
     public Const viewtype;
     public byte mode;
     public TableTool tablehelper;
