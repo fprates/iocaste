@@ -5,6 +5,7 @@ import org.iocaste.appbuilder.common.NavControl;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.StyleSheet;
@@ -20,7 +21,7 @@ public class ProjectConfig extends AbstractViewConfig {
         DashboardComponent dashitem;
         StyleSheet stylesheet;
         DataForm dataform;
-        TableTool tabletool;
+        TableToolData tabletool;
 
         extcontext = getExtendedContext();
         stylesheet = context.view.styleSheetInstance();
@@ -79,9 +80,9 @@ public class ProjectConfig extends AbstractViewConfig {
         container.setVisible(extcontext.linksgrid);
         container.setStyleClass("wb_view");
         tabletool = getTableTool("links");
-        tabletool.model("TASKS");
-        tabletool.setMode(TableTool.UPDATE);
-        tabletool.setBorderStyle("overflow: auto;");
+        tabletool.model = "TASKS";
+        tabletool.mode = TableTool.UPDATE;
+        tabletool.borderstyle = "overflow: auto;";
         
         container = getElement("modelscnt");
         container.setVisible(extcontext.modelview);
@@ -90,11 +91,12 @@ public class ProjectConfig extends AbstractViewConfig {
         container.setStyleClass("wb_view");
         dataform.show("NAME", "TABLE");
         tabletool = getTableTool("modelitems");
-        tabletool.model("MODELITEM");
-        tabletool.setMode(TableTool.UPDATE);
-        tabletool.setVisibility(
-                false, "NAME", "MODEL", "INDEX", "ATTRIB", "ITEM_REF");
-        tabletool.setBorderStyle("overflow: auto; display: inline");
+        tabletool.model = "MODELITEM";
+        tabletool.mode = TableTool.UPDATE;
+        tabletool.hide = new String[] {
+                "NAME", "MODEL", "INDEX", "ATTRIB", "ITEM_REF"
+        };
+        tabletool.borderstyle = "overflow: auto; display: inline";
         if (extcontext.modelview){
             navcontrol.add("accept_model");
             navcontrol.add("create_element");

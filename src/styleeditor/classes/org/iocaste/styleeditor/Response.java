@@ -1,6 +1,7 @@
 package org.iocaste.styleeditor;
 
 import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.Button;
@@ -18,29 +19,28 @@ public class Response {
     public static final void detail(Context context) {
         TableToolData ttdata;
         Form container = new Form(context.view, "main");
-        Documents documents = new Documents(context.function);
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("back");
         ttdata = new TableToolData();
-        ttdata.context = context;
         ttdata.container = container;
         ttdata.name = "details";
-        context.properties = new TableTool(ttdata);
-        context.properties.model(documents.getModel("STYLE_ELEMENT_DETAIL"));
-        context.properties.setObjects(context.eproperties);
-        context.properties.setVisibleLines(0);
+        ttdata.model = "STYLE_ELEMENT_DETAIL";
+        ttdata.objects = context.eproperties;
+        ttdata.vlines = 0;
         switch (context.mode) {
         case Context.SHOW:
-            context.properties.setMode(TableTool.DISPLAY);
-            context.properties.setVisibility(false, "INDEX", "ELEMENT");
+            ttdata.mode = TableTool.DISPLAY;
+            ttdata.hide= new String[] {"INDEX", "ELEMENT"};
             break;
         case Context.UPDATE:
-            context.properties.setMode(TableTool.DONT_APPEND);
-            context.properties.setVisibility(false, "INDEX", "ELEMENT");
-            context.properties.setColumnStatus(TableTool.DISABLED, "PROPERTY");
+            ttdata.mode = TableTool.UPDATE;
+            ttdata.hide = new String[] {"INDEX", "ELEMENT"};
+            new TableToolColumn(ttdata, "PROPERTY").disabled = true;
             break;
         }
+        
+        context.properties = new TableTool(context, ttdata);
         context.view.setTitle(context.element);
     }
     
@@ -73,6 +73,7 @@ public class Response {
     
     public static final void style(Context context) {
         TableToolData ttdata;
+        TableToolColumn column;
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         DataForm header = new DataForm(container, "header");
@@ -88,25 +89,25 @@ public class Response {
         }
 
         ttdata = new TableToolData();
-        ttdata.context = context;
         ttdata.container = container;
         ttdata.name = "elements";
-        context.items = new TableTool(ttdata);
-        context.items.model(documents.getModel("STYLE_ELEMENT"));
-        context.items.setVisibility(false, "INDEX", "STYLE");
-        context.items.setColumnType("NAME", Const.LINK, "element");
-        context.items.setVisibleLines(0);
-        context.items.setMode(TableTool.DONT_APPEND);
+        ttdata.model = "STYLE_ELEMENT";
+        ttdata.hide = new String[] {"INDEX", "STYLE"};
+        ttdata.vlines = 0;
+        ttdata.mode = TableTool.UPDATE;
+        column = new TableToolColumn(ttdata, "NAME");
+        column.type = Const.LINK;
+        column.name = "element";
         
         switch (context.mode) {
         case Context.CREATE:
-            pagecontrol.add("save", PageControl.REQUEST);
-            break;
         case Context.UPDATE:
             pagecontrol.add("save", PageControl.REQUEST);
         default:
-            context.items.setObjects(context.elements);
+            ttdata.objects = context.elements;
             break;
         }
+        
+        context.items = new TableTool(context, ttdata);
     }
 }
