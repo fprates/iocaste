@@ -31,6 +31,7 @@ public class Request {
         
         context.userdata = new UserData();
         context.userdata.username = username;
+        context.view.setReloadableView(true);
         context.view.redirect("form");
     }
     
@@ -80,6 +81,7 @@ public class Request {
         query.setModel("USER_TASKS_GROUPS");
         query.andEqual("USERNAME", username);
         userdata.tasks = documents.select(query);
+        context.view.setReloadableView(true);
         context.view.redirect("form");
         
         return userdata;

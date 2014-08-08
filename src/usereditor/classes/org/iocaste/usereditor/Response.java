@@ -1,6 +1,7 @@
 package org.iocaste.usereditor;
 
 import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.Button;
@@ -44,8 +45,26 @@ public class Response {
         username = form.get("USERNAME");
         username.setEnabled(false);
         
+        switch (context.mode) {
+        case Context.CREATE:
+            username.set(context.userdata.username);
+            pagecontrol.add("save", PageControl.REQUEST);
+            break;
+            
+        case Context.DISPLAY:
+            form.setObject(context.userdata.identity);
+            for (Element element : form.getElements())
+                element.setEnabled(false);
+            break;
+            
+        case Context.UPDATE:
+            form.setObject(context.userdata.identity);
+            pagecontrol.add("save", PageControl.REQUEST);
+            break;
+        }
+        
         tabitem = new TabbedPaneItem(tabs, "idtab");
-        tabitem.set(form);
+        tabitem.set(form.getHtmlName());
         
         /*
          * tarefas
@@ -53,15 +72,28 @@ public class Response {
         ttdata = new TableToolData();
         ttdata.container = tabs;
         ttdata.name = "tasks";
-        ttdata.context = context;
-        context.taskshelper = new TableTool(ttdata);
-        context.taskshelper.model("USER_TASKS_GROUPS");
-        context.taskshelper.setVisibility(true, "GROUP");
-        context.taskshelper.setObjects(context.userdata.tasks);
-        context.taskshelper.setSearchHelp("GROUP", "SH_TASKS_GROUPS");
+        ttdata.model = "USER_TASKS_GROUPS";
+        ttdata.show = new String[] {"GROUP"};
+        ttdata.objects = context.userdata.tasks;
+        new TableToolColumn(ttdata, "GROUP").sh = "SH_TASKS_GROUPS";
         
+        switch (context.mode) {
+        case Context.CREATE:
+            ttdata.mode = TableTool.UPDATE;
+            break;
+            
+        case Context.DISPLAY:
+            ttdata.mode = TableTool.DISPLAY;
+            break;
+            
+        case Context.UPDATE:
+            ttdata.mode = TableTool.UPDATE;
+            break;
+        }
+        
+        context.taskshelper = new TableTool(context, ttdata);
         tabitem = new TabbedPaneItem(tabs, "taskstab");
-        tabitem.set(context.taskshelper.getContainer());
+        tabitem.set(ttdata.name);
         
         /*
          * perfis
@@ -69,40 +101,29 @@ public class Response {
         ttdata = new TableToolData();
         ttdata.container = tabs;
         ttdata.name = "profiles";
-        ttdata.context = context;
-        context.profileshelper = new TableTool(ttdata);
-        context.profileshelper.model("USER_AUTHORITY");
-        context.profileshelper.setVisibility(true, "PROFILE");
-        context.profileshelper.setObjects(context.userdata.profiles);
-        context.profileshelper.setSearchHelp("PROFILE", "SH_USER_PROFILE");
-        
-        tabitem = new TabbedPaneItem(tabs, "profiletab");
-        tabitem.set(context.profileshelper.getContainer());
+        ttdata.model = "USER_AUTHORITY";
+        ttdata.show = new String[] {"PROFILE"};
+        ttdata.objects = context.userdata.profiles;
+        new TableToolColumn(ttdata, "PROFILE").sh = "SH_USER_PROFILE";
         
         switch (context.mode) {
         case Context.CREATE:
-            username.set(context.userdata.username);
-            pagecontrol.add("save", PageControl.REQUEST);
-            context.taskshelper.setMode(TableTool.UPDATE);
-            context.profileshelper.setMode(TableTool.UPDATE);
+            ttdata.mode = TableTool.UPDATE;
             break;
             
         case Context.DISPLAY:
-            form.setObject(context.userdata.identity);
-            for (Element element : form.getElements())
-                element.setEnabled(false);
-            context.taskshelper.setMode(TableTool.DISPLAY);
-            context.profileshelper.setMode(TableTool.DISPLAY);
+            ttdata.mode = TableTool.DISPLAY;
             break;
             
         case Context.UPDATE:
-            form.setObject(context.userdata.identity);
-            pagecontrol.add("save", PageControl.REQUEST);
-            context.taskshelper.setMode(TableTool.UPDATE);
-            context.profileshelper.setMode(TableTool.UPDATE);
+            ttdata.mode = TableTool.UPDATE;
             break;
         }
-        
+
+        context.profileshelper = new TableTool(context, ttdata);
+        tabitem = new TabbedPaneItem(tabs, "profiletab");
+        tabitem.set(ttdata.name);
+
         context.view.setFocus(secret);
         context.view.setTitle(Context.TITLE[context.mode]);
     }
