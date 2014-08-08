@@ -15,5 +15,4 @@ public class Context extends AbstractContext {
     public ItemDetail detail;
     public List<String> code;
     public String oldname;
-    public Context context;
 }

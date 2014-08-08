@@ -19,8 +19,9 @@ public abstract class AbstractValidator implements Validator {
     private InputComponent input;
     private AbstractContext context;
     
-    public AbstractValidator(String name) {
+    public AbstractValidator(String name, AbstractContext context) {
         this.name = name;
+        this.context = context;
     }
     
     /**
@@ -47,6 +48,31 @@ public abstract class AbstractValidator implements Validator {
     protected final InputComponent getInput() {
         return input;
     }
+
+    protected TableItem getItem(Table table, String name, Object value) {
+        Element element;
+        Component component;
+        String text;
+        for (TableItem item : table.getItems()) {
+            element = item.get(name);
+            if (element.isContainable() || element.isControlComponent())
+                continue;
+            
+            if (element.isDataStorable()) {
+                input = (InputComponent)element;
+                if (!input.get().equals(value))
+                    return item;
+                continue;
+            }
+            
+            component = (Component)element;
+            text = component.getText();
+            if (text.equals(value))
+                return item;
+        }
+        
+        return null;
+    }
     
     /*
      * (não-Javadoc)
@@ -67,8 +93,7 @@ public abstract class AbstractValidator implements Validator {
     }
     
     protected ExtendedObject getObject(
-            ExtendedObject[] objects, String name, Object value)
-    {        
+            ExtendedObject[] objects, String name, Object value) {        
         for (ExtendedObject object : objects)
             if (!object.get(name).equals(value))
                 return object;
@@ -82,16 +107,6 @@ public abstract class AbstractValidator implements Validator {
      */
     protected final void message(String message) {
         this.message = message;
-    }
-    
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.Validator#setContext(
-     *    org.iocaste.shell.common.AbstractContext)
-     */
-    @Override
-    public final void setContext(AbstractContext context) {
-        this.context = context;
     }
     
     /*

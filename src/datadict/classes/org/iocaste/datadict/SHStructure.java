@@ -33,7 +33,7 @@ public class SHStructure {
         TableItem item = new TableItem(itens);
         DocumentModel model = itens.getModel();
         
-        validator = new SHItemValidator();
+        validator = new SHItemValidator(context);
         ((AbstractPage)context.function).register(validator);
         for (DocumentModelItem modelitem : model.getItens()) {
             name = modelitem.getName();
@@ -86,7 +86,7 @@ public class SHStructure {
             header.setObject((ExtendedObject)context.view.
                     getParameter("header"));
         
-        validator = new SHExportValidator();
+        validator = new SHExportValidator(context);
         ((AbstractPage)context.function).register(validator);
         for (Element element : header.getElements()) {
             if (element.getType() != Const.DATA_ITEM)

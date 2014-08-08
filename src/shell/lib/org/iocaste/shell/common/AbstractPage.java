@@ -62,7 +62,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param message
      * @return
      */
-    public final Map<String, Object> customValidation(Message message)
+    public Map<String, Object> customValidation(Message message)
             throws Exception {
         Map<String, Object> response;
         String name, error;
@@ -82,7 +82,6 @@ public abstract class AbstractPage extends AbstractFunction {
                         concat(" is an invalid validator."));
             
             validator.setInput(input);
-            validator.setContext(context);
             validator.validate();
             
             error = validator.getMessage();
