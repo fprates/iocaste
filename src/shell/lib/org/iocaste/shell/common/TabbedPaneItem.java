@@ -54,8 +54,8 @@ public class TabbedPaneItem extends AbstractComponent {
      * Associa um conteiner à aba.
      * @param container conteiner.
      */
-    public final void set(Container container) {
-        this.container = container.getHtmlName();
+    public final void set(String container) {
+        this.container = container;
     }
     
     /**
