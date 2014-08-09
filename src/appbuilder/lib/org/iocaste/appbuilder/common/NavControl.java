@@ -16,12 +16,12 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public class NavControl {
-    private AbstractContext context;
+    private PageBuilderContext context;
     private Container container;
     private StandardContainer buttonbar;
     private Text title;
     
-    public NavControl(Form container, AbstractContext context) {
+    public NavControl(Form container, PageBuilderContext context) {
         this.context = context;
         this.container = new StandardContainer(container, "navcontrol_cntnr");
         build(context);
@@ -201,8 +201,11 @@ class NavControlCustomAction implements ViewCustomAction {
      */
     @Override
     public void execute(AbstractContext context) {
-        AbstractPage page = (AbstractPage)context.function;
+        PageBuilderContext _context = (PageBuilderContext)context;
+        AbstractPage page = (AbstractPage)_context.function;
         page.backTo(position);
+        _context.view.setReloadableView(true);
+        _context.view.setKeepView(!_context.isViewUpdatable(position));
     }
     
 }
