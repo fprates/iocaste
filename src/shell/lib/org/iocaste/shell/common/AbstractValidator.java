@@ -28,8 +28,9 @@ public abstract class AbstractValidator implements Validator {
      * 
      * @return
      */
-    protected final AbstractContext getContext() {
-        return context;
+    @SuppressWarnings("unchecked")
+    protected final <T extends AbstractContext> T getContext() {
+        return (T)context;
     }
     
     /**

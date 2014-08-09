@@ -29,6 +29,10 @@ public class ViewComponents {
         entry.data = data;
         tabletools.put(data.name, entry);
     }
+    
+    public final TableToolData getTableToolData(String name) {
+        return tabletools.get(name).data;
+    }
 }
 
 class TableToolEntry {

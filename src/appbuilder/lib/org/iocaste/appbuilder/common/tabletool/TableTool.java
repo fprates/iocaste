@@ -16,6 +16,7 @@ import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Validator;
+import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public class TableTool {
@@ -94,12 +95,8 @@ public class TableTool {
         data.last = 0;
     }
     
-    /**
-     * 
-     * @return
-     */
-    public final Container getContainer() {
-        return context.view.getElement(data.name);
+    public static final Table get(View view, TableToolData data) {
+        return view.getElement(data.name.concat("_table"));
     }
     
     /**
