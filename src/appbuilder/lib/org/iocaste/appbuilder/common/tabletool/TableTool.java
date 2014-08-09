@@ -119,33 +119,6 @@ public class TableTool {
         data.last = 0;
     }
     
-    public final void controls(byte state, String... controls) {
-//        Control control;
-//        Table table = getTable();
-//        
-//        switch (state) {
-//        case ENABLED:
-//        case DISABLED:
-//            if ((controls == null) || (controls.length == 0)) {
-//                for (String name : this.controls.keySet())
-//                    this.controls.get(name).setVisible(state == ENABLED);
-//                
-//                table.setMark(state == ENABLED);
-//                break;
-//            }
-//            
-//            for (String name : controls) {
-//                control = this.controls.get(name);
-//                if (control == null)
-//                    throw new RuntimeException(name.
-//                            concat(" is an invalid control."));
-//                
-//                control.setVisible(state == ENABLED);
-//            }
-//            break;
-//        }
-    }
-    
     /**
      * 
      * @return
@@ -225,79 +198,13 @@ public class TableTool {
     
     /**
      * 
-     * @param status
-     * @param tcolumns
-     */
-    public final void setColumnStatus(byte status, String... tcolumns) {
-//        String name;
-//        Column column;
-//        Table table = getTable();
-//        
-//        if (tcolumns == null || tcolumns.length == 0) {
-//            for (String cname :  columns.keySet())
-//                columns.get(cname).disabled = (status == DISABLED);
-//        } else {
-//            for (String cname : tcolumns) {
-//                column = columns.get(cname);
-//                if (column == null)
-//                    throw new RuntimeException(cname.concat(
-//                            " is an invalid column."));
-//                
-//                column.disabled = (status == DISABLED);
-//            }
-//        }
-//        
-//        for (TableItem item : table.getItems())
-//            for (TableColumn tcolumn : table.getColumns()) {
-//                if (tcolumn.isMark())
-//                    continue;
-//                
-//                name = tcolumn.getName();
-//                item.get(name).setEnabled(!columns.get(name).disabled);
-//            }
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param values
-     */
-    public final void setColumnValues(String name, Map<String, Object> values)
-    {
-//        columns.get(name).values = values;
-    }
-    
-    /**
-     * 
      * @param objects
      */
     public final void setObjects(ExtendedObject[] objects) {
-//        Table table = getTable();
-//        
-//        if (objects == null || objects.length == 0)
-//            additems(table, null);
-//        else
-//            additems(table, objects);
-    }
-    
-    /**
-     * 
-     * @param field
-     * @param validator
-     * @param inputs
-     */
-    public final void setValidator(String field,
-            Class<? extends Validator> validator, String... inputs) {
-//        Column column;
-//        ValidatorData vdata = new ValidatorData();
-//        Table table = getTable();
-//        
-//        vdata.validator = validator;
-//        vdata.inputs = inputs;
-//        column = columns.get(field);
-//        column.validator = vdata;
-//        for (TableItem item : table.getItems())
-//            setColumnValidator(column.tcolumn, item);
+        if (objects == null || objects.length == 0)
+            additems(null);
+        else
+            additems(objects);
     }
     
     /**

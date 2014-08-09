@@ -9,6 +9,7 @@ import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
@@ -160,6 +161,7 @@ public class TableToolRenderer extends AbstractFunction {
      * @param modelname
      */
     private final void model(String modelname) {
+        DocumentModelItem modelitem;
         String name;
         TableToolColumn column;
         DocumentModel model = new Documents(this).getModel(modelname);
@@ -180,6 +182,9 @@ public class TableToolRenderer extends AbstractFunction {
                 column.type = Const.TEXT_FIELD;
             }
             column.tcolumn = tcolumn;
+            modelitem = tcolumn.getModelItem();
+            if (modelitem.getSearchHelp() == null)
+                modelitem.setSearchHelp(column.sh);
         }
     }
     
