@@ -37,15 +37,15 @@ public class TableToolRenderer extends AbstractFunction {
     private View view;
     
     public TableToolRenderer() {
-        export("items_add", "additems");
         export("render", "render");
+        export("objects_set", "setObjects");
     }
     
     public final void additem(ExtendedObject object) {
-        additem(table, object, -1);
+        additem(object, -1);
     }
     
-    private void additem(Table table, ExtendedObject object, int pos) {
+    private void additem(ExtendedObject object, int pos) {
         TableToolColumn column;
         Element element;
         DataElement delement;
@@ -125,16 +125,7 @@ public class TableToolRenderer extends AbstractFunction {
         item.setObject(object);
     }
     
-    public final Table additems(Message message) {
-        Table table = message.get("table");
-        
-        data = message.get("data");
-        
-        additems(table, data.objects);
-        return table;
-    }
-    
-    private final void additems(Table table, ExtendedObject[] items) {
+    private final void additems(ExtendedObject[] items) {
         int vlines = table.getVisibleLines();
         int total = table.size();
         
@@ -143,13 +134,13 @@ public class TableToolRenderer extends AbstractFunction {
                 vlines = 15;
             
             for (int i = 0; i < vlines; i++)
-                additem(table, null, -1);
+                additem(null, -1);
         } else {
             for (int i = 0; i < items.length; i++) {
                 if ((vlines == i) && (vlines > 0))
                     break;
                 
-                additem(table, items[i], -1);
+                additem(items[i], -1);
             }
         }
         
@@ -275,15 +266,31 @@ public class TableToolRenderer extends AbstractFunction {
         }
     }
     
+    public final Map<String, Object> setObjects(Message message) {
+        Map<String, Object> result;
+        
+        table = message.get("table");
+        table.clear();
+        data = message.get("data");
+        data.last = 0;
+        
+        setObjects(data.objects);
+        
+        result = new HashMap<>();
+        result.put("table", table);
+        result.put("data", data);
+        return result;
+    }
+    
     /**
      * 
      * @param objects
      */
     private final void setObjects(ExtendedObject[] objects) {
         if (objects == null || objects.length == 0)
-            additems(table, null);
+            additems(null);
         else
-            additems(table, objects);
+            additems(objects);
     }
     
     /**

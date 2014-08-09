@@ -104,14 +104,18 @@ public class TableTool {
     }
     
     private final void additems(ExtendedObject[] objects) {
-        Message message = new Message("items_add");
-        Table returned, table = getTable();
+        Map<String, Object> returned;
+        Message message = new Message("objects_set");
+        Table from, to = getTable();
         
         data.objects = objects;
-        message.add("table", table);
+        message.add("table", to);
         message.add("data", data);
         returned = service.invoke(message);
-        update(table, returned);
+        
+        from = (Table)returned.get("table");
+        data = (TableToolData)returned.get("data");
+        update(to, from);
     }
     
     public final void clear() {
@@ -234,8 +238,11 @@ public class TableTool {
     
     private void update(Table dest, Table source) {
         dest.clear();
-        for (Element element : source.getElements())
+        for (Element element : source.getElements()) {
             transfer(dest, element);
+            element.setView(context.view);
+            dest.add(element);
+        }
     }
 }
 
