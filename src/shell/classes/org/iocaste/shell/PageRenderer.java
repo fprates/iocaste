@@ -179,6 +179,7 @@ public class PageRenderer extends AbstractRenderer {
         pagename = pagectx.getName();
         logid = pagectx.getLogid();
         complexid = getComplexId(sessionid, logid);
+        pagectx.getEarlyValues().clear();
         
         if (appname == null || pagename == null)
             throw new IocasteException("page not especified.");

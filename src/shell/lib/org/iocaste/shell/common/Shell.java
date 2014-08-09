@@ -40,6 +40,13 @@ public class Shell extends AbstractServiceInterface {
     
     public static final boolean areEquals(InputComponent input, Object value) {
         DataElement de = getDataElement(input);
+        Object ivalue = input.get();
+        
+        if (ivalue == null && value == null)
+            return true;
+        
+        if (ivalue == null)
+            return false;
         
         switch(de.getType()) {
         case DataType.BYTE:
@@ -50,7 +57,7 @@ public class Shell extends AbstractServiceInterface {
             return (new Long(input.getl()).equals(value));
         }
         
-        return input.get().equals(value);
+        return ivalue.equals(value);
     }
     
     /**
