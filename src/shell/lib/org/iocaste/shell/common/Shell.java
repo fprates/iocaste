@@ -38,6 +38,21 @@ public class Shell extends AbstractServiceInterface {
         return call(message);
     }
     
+    public static final boolean areEquals(InputComponent input, Object value) {
+        DataElement de = getDataElement(input);
+        
+        switch(de.getType()) {
+        case DataType.BYTE:
+        case DataType.INT:
+        case DataType.LONG:
+        case DataType.SHORT:
+        case DataType.NUMC:
+            return (new Long(input.getl()).equals(value));
+        }
+        
+        return input.get().equals(value);
+    }
+    
     /**
      * Gera um componente especificado.
      * 

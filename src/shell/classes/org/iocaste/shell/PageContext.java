@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.commons.fileupload.FileItem;
 import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.View;
 
 public class PageContext {
@@ -16,6 +17,7 @@ public class PageContext {
     private String name, username, contexturl;
     private boolean reloadable, initialize, keepview;
     private Map<String, Object> parameters;
+    private Map<String, InputComponent> earlyvalues;
     private List<FileItem> files;
     private Set<String> actions;
     private int logid;
@@ -24,7 +26,8 @@ public class PageContext {
     private ControlComponent shcontrol;
     
     public PageContext(String name) {
-        parameters =  new HashMap<>();
+        parameters = new HashMap<>();
+        earlyvalues = new HashMap<>();
         reloadable = true;
         actions = null;
         logid = 0;
@@ -95,6 +98,14 @@ public class PageContext {
      */
     public final boolean isInitializableView() {
         return initialize;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final Map<String, InputComponent> getEarlyValues() {
+        return earlyvalues;
     }
     
     /**
@@ -200,6 +211,14 @@ public class PageContext {
      */
     public final void setContextUrl(String contexturl) {
         this.contexturl = contexturl;
+    }
+    
+    /**
+     * 
+     * @param earlyvalues
+     */
+    public final void setEarlyValues(Map<String, InputComponent> earlyvalues) {
+        this.earlyvalues = earlyvalues;
     }
     
     /**

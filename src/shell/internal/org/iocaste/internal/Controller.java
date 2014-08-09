@@ -188,6 +188,27 @@ public class Controller {
         }
     }
     
+    private static final boolean hasInputsUpdated(
+            ControllerData config, List<InputComponent> validations) {
+        InputComponent input2;
+        Object v1, v2;
+        
+        for (InputComponent input1 : validations) {
+            v1 = input1.get();
+            input2 = config.earlyvalues.get(input1.getHtmlName());
+            if (input2 == null)
+                return true;
+            
+            v2 = input2.get();
+            if ((v1 == null) && (v2 == null))
+                continue;
+            
+            if ((v1 == null) || (!v1.equals(v2)))
+                return true;
+        }
+        return false;
+    }
+    
     /**
      * 
      * @param input
@@ -321,9 +342,12 @@ public class Controller {
             List<InputComponent> validations, InputStatus status)
                     throws Exception {
         View view;
-        Element element;
+        InputComponent input;
         Map<String, Object> response;
 
+        if (!hasInputsUpdated(config, validations))
+            return;
+        
         response = callCustomValidation(config, validations);
         status.message = (String)response.get("message");
         if (status.message != null) {
@@ -334,9 +358,10 @@ public class Controller {
         
         view = (View)response.get("view");
         for (String name : config.view.getInputs()) {
-            element = view.getElement(name);
-            element.setView(config.view);
-            config.view.index(element);
+            input = view.getElement(name);
+            input.setView(config.view);
+            config.view.index(input);
+            config.earlyvalues.put(name, input);
         }
     }
     

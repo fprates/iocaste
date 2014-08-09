@@ -54,6 +54,8 @@ public abstract class AbstractValidator implements Validator {
         Element element;
         Component component;
         String text;
+        InputComponent input;
+        
         for (TableItem item : table.getItems()) {
             element = item.get(name);
             if (element.isContainable() || element.isControlComponent())
@@ -61,7 +63,7 @@ public abstract class AbstractValidator implements Validator {
             
             if (element.isDataStorable()) {
                 input = (InputComponent)element;
-                if (!input.get().equals(value))
+                if (Shell.areEquals(input, value))
                     return item;
                 continue;
             }

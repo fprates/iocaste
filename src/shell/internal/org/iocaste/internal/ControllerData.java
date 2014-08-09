@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.View;
 
 public class ControllerData {
@@ -14,4 +15,5 @@ public class ControllerData {
     public int logid;
     public boolean event;
     public ControlComponent shcontrol;
+    public Map<String, InputComponent> earlyvalues;
 }

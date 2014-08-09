@@ -682,7 +682,9 @@ public class PageRenderer extends AbstractRenderer {
         config.logid = getLogid(pagetrack);
         config.sessionid = getComplexId(sessionid, config.logid);
         config.servername = getServerName();
+        config.earlyvalues = pagectx.getEarlyValues();
         callController(config);
+        pagectx.setEarlyValues(config.earlyvalues);
         
         /*
          * processa atualização na visão após chamada do controlador

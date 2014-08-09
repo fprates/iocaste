@@ -88,6 +88,7 @@ public abstract class AbstractPage extends AbstractFunction {
             if (error == null)
                 continue;
             response.put("input_error", input);
+            break;
         }
         
         response.put("message", error);
