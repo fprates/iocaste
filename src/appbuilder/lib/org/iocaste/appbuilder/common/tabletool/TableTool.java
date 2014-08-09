@@ -71,32 +71,13 @@ public class TableTool {
     }
     
     public final void add() {
-        int i = 0;
-        Table table = getTable();
-        
-        switch (data.mode) {
-        case CONTINUOUS_UPDATE:
-            for (TableItem item_ : table.getItems()) {
-                if (!item_.isSelected()) {
-                    i++;
-                    continue;
-                }
-                break;
-            }
-            
-            additem(table, null, i);
-            break;
-        default:
+        if (data.mode != TableTool.CONTINUOUS_UPDATE) {
             context.view.getElement(accept).setVisible(true);
             context.view.getElement(add).setVisible(false);
             context.view.getElement(remove).setVisible(false);
-            additems(null);
-            break;
         }
-    }
-    
-    private final void additem(Table table, ExtendedObject object, int index) {
         
+        remote("add_action");
     }
     
     public final void additems() {
@@ -104,18 +85,8 @@ public class TableTool {
     }
     
     private final void additems(ExtendedObject[] objects) {
-        Map<String, Object> returned;
-        Message message = new Message("objects_set");
-        Table from, to = getTable();
-        
         data.objects = objects;
-        message.add("table", to);
-        message.add("data", data);
-        returned = service.invoke(message);
-        
-        from = (Table)returned.get("table");
-        data = (TableToolData)returned.get("data");
-        update(to, from);
+        remote("item_add");
     }
     
     public final void clear() {
@@ -189,6 +160,20 @@ public class TableTool {
         return context.view.getElement(data.name.concat("_table"));
     }
     
+    private final void remote(String function) {
+        Map<String, Object> returned;
+        Message message = new Message(function);
+        Table table = getTable();
+        
+        message.add("table", table);
+        message.add("data", data);
+        returned = service.invoke(message);
+        
+        table = (Table)returned.get("table");
+        data = (TableToolData)returned.get("data");
+        update(table);
+    }
+    
     /**
      * 
      */
@@ -204,11 +189,13 @@ public class TableTool {
      * 
      * @param objects
      */
-    public final void setObjects(ExtendedObject[] objects) {
+    public final void setObjects(ExtendedObject[] objects) {        
         if (objects == null || objects.length == 0)
-            additems(null);
+            data.objects = null;
         else
-            additems(objects);
+            data.objects = objects;
+        
+        remote("objects_set");
     }
     
     /**
@@ -236,13 +223,17 @@ public class TableTool {
         context.view.index(from);
     }
     
-    private void update(Table dest, Table source) {
-        dest.clear();
-        for (Element element : source.getElements()) {
-            transfer(dest, element);
-            element.setView(context.view);
-            dest.add(element);
+    private void update(Element element) {
+        Container container;
+        
+        if (element.isContainable()) {
+            container = (Container)element;
+            for (Element child : container.getElements())
+                update(child);
         }
+        
+        element.setView(context.view);
+        context.view.index(element);
     }
 }
 

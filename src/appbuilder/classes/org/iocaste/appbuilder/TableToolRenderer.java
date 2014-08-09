@@ -37,12 +37,40 @@ public class TableToolRenderer extends AbstractFunction {
     private View view;
     
     public TableToolRenderer() {
-        export("render", "render");
+        export("add_action", "addaction");
+        export("items_add", "addItems");
         export("objects_set", "setObjects");
+        export("render", "render");
     }
     
-    public final void additem(ExtendedObject object) {
-        additem(object, -1);
+    public final Map<String, Object> addaction(Message message) {
+        Map<String, Object> result;
+        int i = 0;
+        
+        table = message.get("table");
+        data = message.get("data");
+        
+        switch (data.mode) {
+        case TableTool.CONTINUOUS_UPDATE:
+            for (TableItem item_ : table.getItems()) {
+                if (!item_.isSelected()) {
+                    i++;
+                    continue;
+                }
+                break;
+            }
+            
+            additem(null, i);
+            break;
+        default:
+            additems(null);
+            break;
+        }
+        
+        result = new HashMap<>();
+        result.put("table", table);
+        result.put("data", data);
+        return result;
     }
     
     private void additem(ExtendedObject object, int pos) {
@@ -145,6 +173,19 @@ public class TableToolRenderer extends AbstractFunction {
         }
         
         table.setTopLine(total);
+    }
+    
+    public final Map<String, Object> addItems(Message message) {
+        Map<String, Object> result;
+        
+        table = message.get("table");
+        data = message.get("data");
+        additems(data.objects);
+        
+        result = new HashMap<>();
+        result.put("table", table);
+        result.put("data", data);
+        return result;
     }
     
     /**
