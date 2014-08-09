@@ -1,10 +1,8 @@
 package org.iocaste.appbuilder.common;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -19,25 +17,16 @@ import org.iocaste.texteditor.common.TextEditorTool;
 public abstract class AbstractViewInput {
     private PageBuilderContext context;
     private Manager manager;
-    private boolean updated;
-    private Map<String, Object> storage;
-    
-    public AbstractViewInput() {
-        storage = new HashMap<>();
-    }
     
     private final void addtableitems(String table, ExtendedObject[] objects) {
-        TableTool tabletool = getViewComponents().tabletools.
-                get(table).component;
+        TableToolData tabletool = getViewComponents().tabletools.
+                get(table).data;
         
         if (tabletool == null)
             throw new RuntimeException(table.
                     concat(" is an invalid tabletool."));
         
-        if (tabletool.size() > 0 && (objects == null || objects.length == 0))
-            return;
-        
-        tabletool.setObjects(objects);
+        tabletool.objects = objects;
     }
     
     private DashboardComponent dbget(String dashboard, String name) {
@@ -81,38 +70,10 @@ public abstract class AbstractViewInput {
     }
     
     public final void run(PageBuilderContext context) {
-        AbstractViewSpec spec;
-        ViewSpecItem.TYPES[] types;
-        DataForm dataform;
-        ViewComponents components;
-        InputComponent input;
-        
         this.context = context;
         execute(context);
-        if (!updated)
-            return;
-
-        types = ViewSpecItem.TYPES.values();
-        spec = context.getViewSpec(context.view.getPageName());
-        components = getViewComponents();
-        for (String name : storage.keySet()) {
-            switch (types[spec.get(name).getType()]) {
-            case DATA_FORM:
-                dataform = getElement(name);
-                dataform.setObject((ExtendedObject)storage.get(name));
-                break;
-            case TABLE_TOOL:
-                components.tabletools.get(name).data.objects =
-                        (ExtendedObject[])storage.get(name);
-                break;
-            default:
-                input = getElement(name);
-                input.set(storage.get(name));
-                break;
-            }
-        }
-        storage.clear();
-        updated = false;
+        for (TableToolEntry entry : getViewComponents().tabletools.values())
+            entry.component = new TableTool(context, entry.data);
     }
     
     protected final void set(String form, String item, Object value) {
@@ -134,14 +95,6 @@ public abstract class AbstractViewInput {
     
     public final void setManager(Manager manager) {
         this.manager = manager;
-    }
-    
-    public final void setUpdated(boolean updated) {
-        this.updated = updated;
-    }
-    
-    public final void store(String name, Object value) {
-        storage.put(name, value);
     }
     
     protected final void tableitemsadd(String table) {
