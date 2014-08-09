@@ -16,7 +16,6 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
-import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -209,14 +208,15 @@ public class TableToolRenderer extends AbstractFunction {
             
             name = tcolumn.getName();
             column = data.columns.get(name);
-            if (column == null) {
+            if (column == null)
                 column = new TableToolColumn(data, name);
-                column.type = Const.TEXT_FIELD;
-            }
+            
             column.tcolumn = tcolumn;
             modelitem = tcolumn.getModelItem();
             if (modelitem.getSearchHelp() == null)
                 modelitem.setSearchHelp(column.sh);
+            if (column.size > 0)
+                column.tcolumn.setLength(column.size);
         }
     }
     
