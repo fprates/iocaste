@@ -10,12 +10,11 @@ import org.iocaste.shell.common.Container;
 public class TableToolData implements Serializable {
     private static final long serialVersionUID = -5741139329515555543L;
     public Container container;
-    public String name, borderstyle, itemcolumn;
+    public String name, borderstyle, itemcolumn, model;
     public boolean mark, enabled;
     public int vlines, step, last, increment;
     public byte mode;
     public ExtendedObject[] objects;
-    public String model;
     public String[] hide, show;
     public Map<String, TableToolColumn> columns;
     

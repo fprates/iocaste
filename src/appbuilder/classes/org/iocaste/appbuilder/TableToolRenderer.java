@@ -228,30 +228,25 @@ public class TableToolRenderer extends AbstractFunction {
      * @param item
      */
     private final void setColumnValidator(TableColumn tcolumn, TableItem item) {
-//        InputComponent input;
-//        Column column;
-//        Element element;
-//        String name;
-//        
-//        if (tcolumn.isMark())
-//            return;
-//        
-//        name = tcolumn.getName();
-//        element = item.get(name);
-//        if (!element.isDataStorable())
-//            return;
-//        
-//        column = columns.get(name);
-//        if (column.validator == null)http://arstechnica.com/
-//            return;
-//        
-//        input = (InputComponent)element; 
-//        input.setValidator(column.validatorhttp://arstechnica.com/.validator);
-//        if (column.validator.inputs == null)
-//            return;
-//        
-//        for (String vinputname : column.validator.inputs)
-//            input.addValidatorInput((InputComponent)item.get(vinputname));
+        InputComponent input;
+        TableToolColumn column;
+        Element element;
+        String name;
+        
+        if (tcolumn.isMark())
+            return;
+        
+        name = tcolumn.getName();
+        element = item.get(name);
+        if (!element.isDataStorable())
+            return;
+        
+        column = data.columns.get(name);
+        if (column.validator == null)
+            return;
+        
+        input = (InputComponent)element;
+        input.setValidator(column.validator);
     }
     
     /**
