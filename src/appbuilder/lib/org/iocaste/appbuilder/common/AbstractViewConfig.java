@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Element;
@@ -112,6 +113,8 @@ public abstract class AbstractViewConfig implements ViewConfig {
     public final void run(PageBuilderContext context) {
         this.context = context;
         execute(context);
+        for (TableToolEntry entry : getViewComponents().tabletools.values())
+            entry.component = new TableTool(context, entry.data);
     }
     
     /*
