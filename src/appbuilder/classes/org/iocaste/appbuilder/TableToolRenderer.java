@@ -243,11 +243,6 @@ public class TableToolRenderer extends AbstractFunction {
         model(data.model);
         setMode(data.mode);
         setObjects(data.objects);
-        if (data.hide != null)
-            setVisibility(false, data.hide);
-        if (data.show != null)
-            setVisibility(true, data.show);
-        
         result = new HashMap<>();
         result.put("container", container);
         result.put("data", data);
@@ -303,8 +298,20 @@ public class TableToolRenderer extends AbstractFunction {
             table.setEnabled(false);
             for (String column : data.columns.keySet())
                 data.columns.get(column).disabled = true;
+            if (data.enableonly != null)
+                for (String name : data.enableonly)
+                    if (!data.columns.containsKey(name))
+                        throw new RuntimeException(
+                                name.concat(" isn't a valid column."));
+                    else
+                        data.columns.get(name).disabled = false;
             break;
         }
+        
+        if (data.hide != null)
+            setVisibility(false, data.hide);
+        if (data.show != null)
+            setVisibility(true, data.show);
     }
     
     public final Map<String, Object> setObjects(Message message) {

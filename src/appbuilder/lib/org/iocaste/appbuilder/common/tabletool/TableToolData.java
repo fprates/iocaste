@@ -15,7 +15,7 @@ public class TableToolData implements Serializable {
     public int vlines, step, last, increment;
     public byte mode;
     public ExtendedObject[] objects;
-    public String[] hide, show;
+    public String[] hide, show, enableonly;
     public Map<String, TableToolColumn> columns;
     
     public TableToolData() {
