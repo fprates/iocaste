@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common.tabletool;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -146,7 +147,15 @@ public class TableTool {
     }
     
     public final List<ExtendedObject> getSelected() {
-        return null;
+        List<ExtendedObject> objects;
+        Table table = getTable();
+        
+        objects = new ArrayList<>();
+        for (TableItem item : table.getItems())
+            if (item.isSelected())
+                objects.add(item.getObject());
+        
+        return (objects.size() == 0)? null : objects;
     }
     
     /**
