@@ -79,15 +79,13 @@ public class Response {
         
         switch (context.mode) {
         case Context.CREATE:
+        case Context.UPDATE:
+            ttdata.mark = true;
             ttdata.mode = TableTool.UPDATE;
             break;
             
         case Context.DISPLAY:
             ttdata.mode = TableTool.DISPLAY;
-            break;
-            
-        case Context.UPDATE:
-            ttdata.mode = TableTool.UPDATE;
             break;
         }
         
@@ -108,15 +106,13 @@ public class Response {
         
         switch (context.mode) {
         case Context.CREATE:
+        case Context.UPDATE:
+            ttdata.mark = true;
             ttdata.mode = TableTool.UPDATE;
             break;
             
         case Context.DISPLAY:
             ttdata.mode = TableTool.DISPLAY;
-            break;
-            
-        case Context.UPDATE:
-            ttdata.mode = TableTool.UPDATE;
             break;
         }
 
