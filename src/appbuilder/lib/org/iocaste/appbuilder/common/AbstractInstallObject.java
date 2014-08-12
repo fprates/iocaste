@@ -53,6 +53,10 @@ public abstract class AbstractInstallObject {
         return context.getItem(name);
     }
     
+    protected final void insert(ModelInstall model, Object... values) {
+        context.getInstallData().addValues(model.getModel(), values);
+    }
+    
     protected final ModelInstall modelInstance(String name) {
         return modelInstance(name, null);
     }
