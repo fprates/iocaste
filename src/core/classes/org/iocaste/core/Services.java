@@ -652,7 +652,12 @@ public class Services extends AbstractFunction {
     private final void updateUser(User user, String sessionid)
             throws Exception {
         UserServices.update(user, getDBConnection(sessionid), db);
-        for (String sid : usersessions.get(user.getUsername()))
+        List<String> sids = usersessions.get(user.getUsername());
+        
+        if (sids== null)
+            return;
+        
+        for (String sid : sids)
             sessions.get(sid).setAuthorizations(null);
     }
     
