@@ -113,6 +113,7 @@ public class Response {
             break;
         case Context.UPDATE:
             pagecontrol.add("save", PageControl.REQUEST);
+            ttdata.mark = true;
             ttdata.mode = TableTool.UPDATE;
             for (DocumentModelKey key : model.getKeys())
                 new TableToolColumn(
