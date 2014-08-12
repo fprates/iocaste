@@ -287,27 +287,28 @@ public class TableToolRenderer extends AbstractFunction {
             view.getElement(accept).setVisible(false);
             view.getElement(add).setVisible(true);
             view.getElement(remove).setVisible(true);
-            table.setMark(true);
             break;
             
         case TableTool.DISPLAY:
             view.getElement(accept).setVisible(false);
             view.getElement(add).setVisible(false);
             view.getElement(remove).setVisible(false);
-            table.setMark(false);
             table.setEnabled(false);
             for (String column : data.columns.keySet())
                 data.columns.get(column).disabled = true;
-            if (data.enableonly != null)
-                for (String name : data.enableonly)
-                    if (!data.columns.containsKey(name))
-                        throw new RuntimeException(
-                                name.concat(" isn't a valid column."));
-                    else
-                        data.columns.get(name).disabled = false;
+            if (data.enableonly == null)
+                break;
+            
+            for (String name : data.enableonly)
+                if (!data.columns.containsKey(name))
+                    throw new RuntimeException(
+                            name.concat(" isn't a valid column."));
+                else
+                    data.columns.get(name).disabled = false;
             break;
         }
-        
+
+        table.setMark(data.mark);
         if (data.hide != null)
             setVisibility(false, data.hide);
         if (data.show != null)
