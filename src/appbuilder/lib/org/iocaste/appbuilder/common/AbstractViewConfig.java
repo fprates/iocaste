@@ -15,6 +15,16 @@ public abstract class AbstractViewConfig implements ViewConfig {
     
     /**
      * 
+     * @param viewconfig
+     */
+    protected final void autoconfig(ViewConfig viewconfig) {
+        viewconfig.setNavControl(navcontrol);
+        viewconfig.setManager(manager);
+        viewconfig.run(context);
+    }
+    
+    /**
+     * 
      * @param context
      */
     protected abstract void execute(PageBuilderContext context);
