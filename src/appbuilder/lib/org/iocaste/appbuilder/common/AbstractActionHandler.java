@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.docmanager.common.Manager;
@@ -13,7 +14,6 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
-//import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.View;
@@ -22,6 +22,7 @@ import org.iocaste.texteditor.common.TextEditorTool;
 
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
+    private Map<String, Manager> managers;
     private Manager manager;
     private ViewComponents components;
     
@@ -176,8 +177,8 @@ public abstract class AbstractActionHandler {
         context.view.setKeepView(!this.context.isViewUpdatable(view));
     }
     
-    public final void setManager(Manager manager) {
-        this.manager = manager;
+    public final void setManagers(Map<String, Manager> managers) {
+        this.managers = managers;
     }
     
     protected final ExtendedObject[] tableitemsget(String tabletool) {
@@ -212,5 +213,9 @@ public abstract class AbstractActionHandler {
         
         editortool.commit(editor, id);
         editortool.update(editor, "B2B_OBSERV");
+    }
+    
+    protected final void useManager(String name) {
+        manager = managers.get(name);
     }
 }

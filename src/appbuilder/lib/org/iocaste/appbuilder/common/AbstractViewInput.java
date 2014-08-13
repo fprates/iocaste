@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -16,6 +18,7 @@ import org.iocaste.texteditor.common.TextEditorTool;
 
 public abstract class AbstractViewInput {
     private PageBuilderContext context;
+    private Map<String, Manager> managers;
     private Manager manager;
     
     private final void addtableitems(String table, ExtendedObject[] objects) {
@@ -93,8 +96,8 @@ public abstract class AbstractViewInput {
         }
     }
     
-    public final void setManager(Manager manager) {
-        this.manager = manager;
+    public final void setManagers(Map<String, Manager> managers) {
+        this.managers= managers;
     }
     
     protected final void tableitemsadd(String table) {
@@ -119,5 +122,9 @@ public abstract class AbstractViewInput {
         TextEditor editor = getViewComponents().editors.get(texteditor);
         
         new TextEditorTool(context).load(editor, namespace, id);
+    }
+    
+    protected final void useManager(String name) {
+        manager = managers.get(name);
     }
 }

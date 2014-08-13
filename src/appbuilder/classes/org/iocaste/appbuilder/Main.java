@@ -56,12 +56,12 @@ public class Main extends AbstractPageBuilder {
         edit1 = edit.concat("1");
         display = name.concat("display");
         display1 = display.concat("1");
-        context.addManager(create, manager);
-        context.addManager(create1, manager);
-        context.addManager(edit, manager);
-        context.addManager(edit1, manager);
-        context.addManager(display, manager);
-        context.addManager(display1, manager);
+        context.addManager(create, cmodel, manager);
+        context.addManager(create1, cmodel, manager);
+        context.addManager(edit, cmodel, manager);
+        context.addManager(edit1, cmodel, manager);
+        context.addManager(display, cmodel, manager);
+        context.addManager(display1, cmodel, manager);
         
         extcontext = new ExtendedContext();
         extcontext.redirect = create1;

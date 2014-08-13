@@ -10,6 +10,7 @@ import org.iocaste.docmanager.common.Manager;
 public abstract class AbstractViewSpec {
     private Map<String, ViewSpecItem> items;
     private List<ViewSpecItem> sequence;
+    private Map<String, Manager> managers;
     private Manager manager;
     private PageBuilderContext context;
     private boolean initialized;
@@ -116,8 +117,8 @@ public abstract class AbstractViewSpec {
         this.initialized = initialized;
     }
     
-    public final void setManager(Manager manager) {
-        this.manager = manager;
+    public final void setManagers(Map<String, Manager> managers) {
+        this.managers = managers;
     }
     
     protected final void standardcontainer(String parent, String name) {
@@ -142,5 +143,9 @@ public abstract class AbstractViewSpec {
     
     protected final void texteditor(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TEXT_EDITOR, name);
+    }
+    
+    protected final void useManager(String name) {
+        manager = managers.get(name);
     }
 }

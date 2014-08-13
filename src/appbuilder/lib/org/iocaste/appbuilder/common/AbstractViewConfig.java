@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -11,6 +13,7 @@ import org.iocaste.shell.common.TabbedPaneItem;
 public abstract class AbstractViewConfig implements ViewConfig {
     private PageBuilderContext context;
     private NavControl navcontrol;
+    private Map<String, Manager> managers;
     private Manager manager;
     
     /**
@@ -19,7 +22,7 @@ public abstract class AbstractViewConfig implements ViewConfig {
      */
     protected final void autoconfig(ViewConfig viewconfig) {
         viewconfig.setNavControl(navcontrol);
-        viewconfig.setManager(manager);
+        viewconfig.setManagers(managers);
         viewconfig.run(context);
     }
     
@@ -130,8 +133,8 @@ public abstract class AbstractViewConfig implements ViewConfig {
      *    org.iocaste.docmanager.common.Manager)
      */
     @Override
-    public final void setManager(Manager manager) {
-        this.manager = manager;
+    public final void setManagers(Map<String, Manager> managers) {
+        this.managers = managers;
     }
     
     /*
@@ -142,6 +145,10 @@ public abstract class AbstractViewConfig implements ViewConfig {
     @Override
     public final void setNavControl(NavControl navcontrol) {
         this.navcontrol = navcontrol;
+    }
+    
+    protected final void useManager(String name) {
+        manager = managers.get(name);
     }
 
 }

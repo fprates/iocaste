@@ -132,7 +132,8 @@ public class DocumentExtractor {
         return (document == null)? result.toArray(new ExtendedObject[0]) : null;
     }
     
-    private static final void pop(ExtendedObject object, Map<String, Object> hold) {
+    private static final void pop(
+            ExtendedObject object, Map<String, Object> hold) {
         for (String field : hold.keySet())
             object.set(field, hold.get(field));
     }
