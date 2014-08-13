@@ -7,7 +7,9 @@ import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
@@ -175,6 +177,10 @@ public abstract class AbstractActionHandler {
         execute(this.context);
         context.view.setReloadableView(true);
         context.view.setKeepView(!this.context.isViewUpdatable(view));
+    }
+    
+    protected final ExtendedObject[] select(Query query) {
+        return new Documents(context.function).select(query);
     }
     
     public final void setManagers(Map<String, Manager> managers) {
