@@ -16,6 +16,11 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
 
 public class MaintenanceConfig extends AbstractViewConfig {
+    private String cmodel;
+    
+    public MaintenanceConfig(String cmodel) {
+        this.cmodel = cmodel;
+    }
     
     @Override
     protected void execute(PageBuilderContext context) {
@@ -24,7 +29,7 @@ public class MaintenanceConfig extends AbstractViewConfig {
         Map<String, DocumentModel> models;
         TableToolData tabletool;
         DocumentModelItem[] items;
-        Manager manager = getManager();
+        Manager manager = getManager(this.cmodel);
         ComplexModel cmodel = manager.getModel();
         DocumentModel model = cmodel.getHeader();
         NavControl navcontrol = getNavControl();

@@ -12,14 +12,19 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.DataForm;
 
 public class DisplayConfig extends AbstractViewConfig {
-
+    private String cmodel;
+    
+    public DisplayConfig(String cmodel) {
+        this.cmodel = cmodel;
+    }
+    
     @Override
     protected void execute(PageBuilderContext context) {
         TableToolData tabletool;
         Map<String, DocumentModel> models;
         DocumentModelItem[] items;
         DataForm form;
-        ComplexModel cmodel = getManager().getModel();
+        ComplexModel cmodel = getManager(this.cmodel).getModel();
         DocumentModel model = cmodel.getHeader();
 
         items = model.getItens();

@@ -56,31 +56,29 @@ public class Main extends AbstractPageBuilder {
         edit1 = edit.concat("1");
         display = name.concat("display");
         display1 = display.concat("1");
-        context.addManager(create, cmodel, manager);
-        context.addManager(create1, cmodel, manager);
-        context.addManager(edit, cmodel, manager);
-        context.addManager(edit1, cmodel, manager);
-        context.addManager(display, cmodel, manager);
-        context.addManager(display1, cmodel, manager);
+        context.addManager(cmodel, manager);
         
         extcontext = new ExtendedContext();
         extcontext.redirect = create1;
         
         selspec = new SelectSpec();
-        maintenancespec = new MaintenanceSpec();
-        maintenanceconfig = new MaintenanceConfig();
+        maintenancespec = new MaintenanceSpec(cmodel);
+        maintenanceconfig = new MaintenanceConfig(cmodel);
         maintenanceinput = new MaintenanceInput(extcontext);
-        save = new Save();
+        save = new Save(cmodel);
         
-        context.setActionHandler(create, "create", new Validate(extcontext));
-        context.setActionHandler(edit, "edit", new Load(extcontext, edit1));
+        context.setActionHandler(create, "create",
+                new Validate(extcontext, cmodel));
+        context.setActionHandler(edit, "edit",
+                new Load(extcontext, edit1, cmodel));
         context.setActionHandler(display, "display",
-                new Load(extcontext, display1));
+                new Load(extcontext, display1, cmodel));
         
         for (String action : new String[] {"create", "edit", "display"}) {
             entityaction = name.concat(action);
             context.setViewSpec(entityaction, selspec);
-            context.setViewConfig(entityaction, new SelectConfig(action));
+            context.setViewConfig(
+                    entityaction, new SelectConfig(action, cmodel));
         }
         
         for (String view : new String[] {create1, edit1}) {
@@ -91,7 +89,7 @@ public class Main extends AbstractPageBuilder {
         }
 
         context.setViewSpec(display1, maintenancespec);
-        context.setViewConfig(display1, new DisplayConfig());
+        context.setViewConfig(display1, new DisplayConfig(cmodel));
         context.setViewInput(display1, maintenanceinput);
     }
     

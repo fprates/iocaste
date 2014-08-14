@@ -13,13 +13,15 @@ import org.iocaste.shell.common.Validator;
 
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewContext> viewcontexts;
+    private Map<String, Manager> managers;
     
     public PageBuilderContext() {
         viewcontexts = new HashMap<>();
+        managers = new HashMap<>();
     }
     
-    public final void addManager(String view, String name, Manager manager) {
-        getContext(view).managers.put(name, manager);
+    public final void addManager(String name, Manager manager) {
+        managers.put(name, manager);
     }
     
     /**
@@ -81,8 +83,8 @@ public class PageBuilderContext extends AbstractContext {
      * @param view
      * @return
      */
-    public final Manager getManager(String view, String name) {
-        return viewcontexts.get(view).managers.get(name);
+    public final Manager getManager(String name) {
+        return managers.get(name);
     }
     
     /**
@@ -164,7 +166,6 @@ public class PageBuilderContext extends AbstractContext {
     public final void setActionHandler(
             String view, String action, AbstractActionHandler handler) {
         ViewContext context = getContext(view);
-        handler.setManagers(context.managers);
         context.actionhandlers.put(action, handler);
     }
     
@@ -185,7 +186,6 @@ public class PageBuilderContext extends AbstractContext {
      */
     public final void setViewConfig(String view, ViewConfig config) {
         ViewContext context = getContext(view);
-        config.setManagers(context.managers);
         context.viewconfig = config;
     }
     
@@ -196,7 +196,6 @@ public class PageBuilderContext extends AbstractContext {
      */
     public final void setViewInput(String view, AbstractViewInput input) {
         ViewContext context = getContext(view);
-        input.setManagers(context.managers);
         context.viewinput = input;
     }
     
@@ -207,7 +206,6 @@ public class PageBuilderContext extends AbstractContext {
      */
     public final void setViewSpec(String view, AbstractViewSpec viewspec) {
         ViewContext context = getContext(view);
-        viewspec.setManagers(context.managers);
         context.viewspec = viewspec;
     }
     
@@ -226,7 +224,6 @@ class ViewContext {
     public ViewConfig viewconfig;
     public AbstractViewInput viewinput;
     public ViewComponents viewcomponents;
-    public Map<String, Manager> managers;
     public Map<String, AbstractActionHandler> actionhandlers;
     public ExtendedContext extcontext;
     public List<Validator> validators;
@@ -236,6 +233,5 @@ class ViewContext {
         viewcomponents = new ViewComponents();
         actionhandlers = new HashMap<>();
         validators = new ArrayList<>();
-        managers = new HashMap<>();
     }
 }

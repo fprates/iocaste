@@ -7,9 +7,11 @@ import org.iocaste.shell.common.Const;
 
 public class Validate extends AbstractActionHandler {
     private ExtendedContext extcontext;
+    private String cmodel;
     
-    public Validate(ExtendedContext extcontext) {
+    public Validate(ExtendedContext extcontext, String cmodel) {
         this.extcontext = extcontext;
+        this.cmodel = cmodel;
     }
     
     @Override
@@ -17,10 +19,10 @@ public class Validate extends AbstractActionHandler {
         extcontext.id = getdfkeyst("head");
         extcontext.document = null;
         
-        if (!keyExists(extcontext.id))
-            context.view.redirect(extcontext.redirect);
+        if (!keyExists(cmodel, extcontext.id))
+            redirect(extcontext.redirect);
         else
-            managerMessage(Const.ERROR, Manager.EEXISTS);
+            managerMessage(cmodel, Const.ERROR, Manager.EEXISTS);
     }
 
 }

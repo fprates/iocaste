@@ -15,17 +15,17 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.DataForm;
 
 public class DocumentExtractor {
-    private Manager manager;
     private PageBuilderContext context;
     private DataConversion hconversion;
     private Map<String, DataConversion> items;
     private Documents documents;
+    private Manager manager;
     
-    public DocumentExtractor(PageBuilderContext context, Manager manager) {
+    public DocumentExtractor(PageBuilderContext context, String manager) {
         this.context = context;
-        this.manager = manager;
         items = new HashMap<>();
         documents = new Documents(context.function);
+        this.manager = context.getManager(manager);
     }
     
     public final void addItems(String tabletool) {

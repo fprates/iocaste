@@ -10,13 +10,19 @@ import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.shell.common.Const;
 
 public class Save extends AbstractActionHandler {
-
+    private String cmodel;
+    
+    public Save(String cmodel) {
+        this.cmodel = cmodel;
+    }
+    
     @Override
     protected void execute(PageBuilderContext context) {
         DocumentExtractor extractor;
         DataConversion conversion;
-        ComplexModel cmodel = getManager().getModel();
+        ComplexModel cmodel;
         
+        cmodel = getManager(this.cmodel).getModel();
         conversion = new DataConversion();
         conversion.dfsource("base");
         for (DocumentModelKey key : cmodel.getHeader().getKeys()) {
@@ -24,13 +30,13 @@ public class Save extends AbstractActionHandler {
             break;
         }
         
-        extractor = documentExtractorInstance();
+        extractor = documentExtractorInstance(this.cmodel);
         extractor.setHeader(conversion);
         for (String name : cmodel.getItems().keySet())
             extractor.addItems(name.concat("_table"));
         extractor.save();
         
-        managerMessage(Const.STATUS, Manager.SAVED);
+        managerMessage(this.cmodel, Const.STATUS, Manager.SAVED);
 
     }
 

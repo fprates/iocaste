@@ -1,7 +1,6 @@
 package org.iocaste.appbuilder.common;
 
 import java.util.List;
-import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.docmanager.common.Manager;
@@ -24,8 +23,6 @@ import org.iocaste.texteditor.common.TextEditorTool;
 
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
-    private Map<String, Manager> managers;
-    private Manager manager;
     private ViewComponents components;
     
     protected final void back() {
@@ -42,7 +39,8 @@ public abstract class AbstractActionHandler {
         return factory.get(item).getValue();
     }
     
-    protected final DocumentExtractor documentExtractorInstance() {
+    protected final DocumentExtractor documentExtractorInstance(String manager)
+    {
         return new DocumentExtractor(context, manager);
     }
     
@@ -97,7 +95,8 @@ public abstract class AbstractActionHandler {
     }
     
     private final InputComponent getdfinputkey(String dataform) {
-        for (DocumentModelKey key : manager.getModel().getHeader().getKeys())
+        DataForm df = context.view.getElement(dataform);
+        for (DocumentModelKey key : df.getModel().getKeys())
             return getdfinput(dataform, key.getModelItemName());
 
         throw new RuntimeException(dataform.concat(" isn't a valid key."));
@@ -127,8 +126,8 @@ public abstract class AbstractActionHandler {
         return getdfinput(dataform, field).getst();
     }
     
-    protected final ComplexDocument getDocument(Object id) {
-        return manager.get(id);
+    protected final ComplexDocument getDocument(String manager, Object id) {
+        return context.getManager(manager).get(id);
     }
     
     @SuppressWarnings("unchecked")
@@ -140,16 +139,17 @@ public abstract class AbstractActionHandler {
         return ((InputComponent)context.view.getElement(name)).getst();
     }
     
-    protected final Manager getManager() {
-        return manager;
+    protected final Manager getManager(String name) {
+        return context.getManager(name);
     }
     
-    protected final boolean keyExists(Object id) {
-        return manager.exists(id);
+    protected final boolean keyExists(String manager, Object id) {
+        return context.getManager(manager).exists(id);
     }
     
-    protected final void managerMessage(Const status, int msgid) {
-        context.view.message(status, manager.getMessage(msgid));
+    protected final void managerMessage(String manager, Const status, int msgid) {
+        context.view.message(
+                status, context.getManager(manager).getMessage(msgid));
     }
     
     protected final void message(Const type, String text) {
@@ -181,10 +181,6 @@ public abstract class AbstractActionHandler {
     
     protected final ExtendedObject[] select(Query query) {
         return new Documents(context.function).select(query);
-    }
-    
-    public final void setManagers(Map<String, Manager> managers) {
-        this.managers = managers;
     }
     
     protected final ExtendedObject[] tableitemsget(String tabletool) {
@@ -219,9 +215,5 @@ public abstract class AbstractActionHandler {
         
         editortool.commit(editor, id);
         editortool.update(editor, "B2B_OBSERV");
-    }
-    
-    protected final void useManager(String name) {
-        manager = managers.get(name);
     }
 }

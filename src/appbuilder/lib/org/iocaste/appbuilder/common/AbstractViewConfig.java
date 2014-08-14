@@ -1,7 +1,5 @@
 package org.iocaste.appbuilder.common;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -13,8 +11,6 @@ import org.iocaste.shell.common.TabbedPaneItem;
 public abstract class AbstractViewConfig implements ViewConfig {
     private PageBuilderContext context;
     private NavControl navcontrol;
-    private Map<String, Manager> managers;
-    private Manager manager;
     
     /**
      * 
@@ -22,7 +18,6 @@ public abstract class AbstractViewConfig implements ViewConfig {
      */
     protected final void autoconfig(ViewConfig viewconfig) {
         viewconfig.setNavControl(navcontrol);
-        viewconfig.setManagers(managers);
         viewconfig.run(context);
     }
     
@@ -75,10 +70,11 @@ public abstract class AbstractViewConfig implements ViewConfig {
     
     /**
      * 
+     * @param name
      * @return
      */
-    protected final Manager getManager() {
-        return manager;
+    protected final Manager getManager(String name) {
+        return context.getManager(name);
     }
     
     /**
@@ -129,16 +125,6 @@ public abstract class AbstractViewConfig implements ViewConfig {
     
     /*
      * (não-Javadoc)
-     * @see org.iocaste.appbuilder.common.ViewConfig#setManager(
-     *    org.iocaste.docmanager.common.Manager)
-     */
-    @Override
-    public final void setManagers(Map<String, Manager> managers) {
-        this.managers = managers;
-    }
-    
-    /*
-     * (não-Javadoc)
      * @see org.iocaste.appbuilder.common.ViewConfig#setNavControl(
      *    org.iocaste.shell.common.NavControl)
      */
@@ -146,9 +132,4 @@ public abstract class AbstractViewConfig implements ViewConfig {
     public final void setNavControl(NavControl navcontrol) {
         this.navcontrol = navcontrol;
     }
-    
-    protected final void useManager(String name) {
-        manager = managers.get(name);
-    }
-
 }

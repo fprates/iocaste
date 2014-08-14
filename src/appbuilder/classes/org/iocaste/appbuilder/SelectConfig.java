@@ -9,16 +9,17 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
 
 public class SelectConfig extends AbstractViewConfig {
-    private String action;
+    private String action, cmodel;
     
-    public SelectConfig(String action) {
+    public SelectConfig(String action, String cmodel) {
         this.action = action;
+        this.cmodel = cmodel;
     }
     
     @Override
     protected final void execute(PageBuilderContext context) {
         InputComponent input;
-        DocumentModel model = getManager().getModel().getHeader();
+        DocumentModel model = getManager(cmodel).getModel().getHeader();
         DataForm head = getElement("head");
         NavControl navcontrol = getNavControl();
         
