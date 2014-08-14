@@ -13,6 +13,7 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
@@ -61,6 +62,8 @@ public class TableTool {
             element.setView(context.view);
             container.add(element);
         }
+        
+        installValidators();
     }
     
     public final void accept() {
@@ -180,6 +183,23 @@ public class TableTool {
         update(table);
     }
     
+    private final void installValidators() {
+        InputComponent input;
+        TableToolColumn column;
+        Table table = getTable();
+        
+        for (String name : data.columns.keySet()) {
+            column = data.columns.get(name);
+            if (column.validator == null)
+                continue;
+            
+            for (TableItem item : table.getItems()) {
+                input = item.get(name);
+                context.function.validate(input, column.validator); 
+            }
+        }
+    }
+    
     /**
      * 
      */
@@ -202,6 +222,7 @@ public class TableTool {
             data.objects = objects;
         
         remote("objects_set");
+        installValidators();
     }
     
     /**

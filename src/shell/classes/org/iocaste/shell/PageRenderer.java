@@ -179,7 +179,6 @@ public class PageRenderer extends AbstractRenderer {
         pagename = pagectx.getName();
         logid = pagectx.getLogid();
         complexid = getComplexId(sessionid, logid);
-        pagectx.getEarlyValues().clear();
         
         if (appname == null || pagename == null)
             throw new IocasteException("page not especified.");
@@ -683,9 +682,7 @@ public class PageRenderer extends AbstractRenderer {
         config.logid = getLogid(pagetrack);
         config.sessionid = getComplexId(sessionid, config.logid);
         config.servername = getServerName();
-        config.earlyvalues = pagectx.getEarlyValues();
         callController(config);
-        pagectx.setEarlyValues(config.earlyvalues);
         
         /*
          * processa atualização na visão após chamada do controlador

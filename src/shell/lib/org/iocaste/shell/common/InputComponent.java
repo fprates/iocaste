@@ -91,12 +91,6 @@ public interface InputComponent extends Component {
      * 
      * @return
      */
-    public abstract String getValidator();
-    
-    /**
-     * 
-     * @return
-     */
     public abstract int getVisibleLength();
     
     /**
@@ -206,18 +200,6 @@ public interface InputComponent extends Component {
      * @param selected true, para valor verdadeiro
      */
     public abstract void setSelected(boolean selected);
-    
-    /**
-     * 
-     * @param string
-     */
-    public abstract void setValidator(String string);
-    
-    /**
-     * 
-     * @param validator
-     */
-    public abstract void setValidator(Validator validator);
     
     /**
      * 

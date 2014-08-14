@@ -133,14 +133,6 @@ public class TableToolRenderer extends AbstractFunction {
                 element.setEnabled(false);
         }
         
-        /*
-         * só podemos tratar os validadores quando todos os
-         * componentes de entrada estiverem definidos.
-         * por isso não podemos tratar no loop anterior.
-         */
-        for (TableColumn tcolumn : tcolumns)
-            setColumnValidator(tcolumn, item);
-        
         if (object == null)
             return;
         
@@ -247,33 +239,6 @@ public class TableToolRenderer extends AbstractFunction {
         result.put("container", container);
         result.put("data", data);
         return result;
-    }
-    
-    /**
-     * 
-     * @param tcolumn
-     * @param item
-     */
-    private final void setColumnValidator(TableColumn tcolumn, TableItem item) {
-        InputComponent input;
-        TableToolColumn column;
-        Element element;
-        String name;
-        
-        if (tcolumn.isMark())
-            return;
-        
-        name = tcolumn.getName();
-        element = item.get(name);
-        if (!element.isDataStorable())
-            return;
-        
-        column = data.columns.get(name);
-        if (column.validator == null)
-            return;
-        
-        input = (InputComponent)element;
-        input.setValidator(column.validator);
     }
     
     /**

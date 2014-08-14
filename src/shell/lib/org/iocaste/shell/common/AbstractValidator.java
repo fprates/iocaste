@@ -15,14 +15,9 @@ import org.iocaste.documents.common.ExtendedObject;
  */
 public abstract class AbstractValidator implements Validator {
     private static final long serialVersionUID = 1174080367157084461L;
-    private String message, name;
+    private String message;
     private InputComponent input;
     private AbstractContext context;
-    
-    public AbstractValidator(String name, AbstractContext context) {
-        this.name = name;
-        this.context = context;
-    }
     
     /**
      * 
@@ -86,15 +81,6 @@ public abstract class AbstractValidator implements Validator {
         return message;
     }
     
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.Validator#getName()
-     */
-    @Override
-    public final String getName() {
-        return name;
-    }
-    
     protected ExtendedObject getObject(
             ExtendedObject[] objects, String name, Object value) {        
         for (ExtendedObject object : objects)
@@ -110,6 +96,16 @@ public abstract class AbstractValidator implements Validator {
      */
     protected final void message(String message) {
         this.message = message;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.Validator#setContext(
+     *    org.iocaste.shell.common.AbstractContext)
+     */
+    @Override
+    public final void setContext(AbstractContext context) {
+        this.context = context;
     }
     
     /*

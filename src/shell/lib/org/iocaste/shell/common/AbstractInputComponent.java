@@ -25,7 +25,6 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private Const type;
     private DataElement dataelement;
     private SearchHelp search;
-    private String validator;
 
     public AbstractInputComponent(View view, Const type, Const type_,
             String name) {
@@ -153,15 +152,6 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public Set<InputComponent> getStackComponents() {
         return null;
-    }
-    
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.InputComponent#getValidator()
-     */
-    @Override
-    public final String getValidator() {
-        return validator;
     }
     
     /*
@@ -369,26 +359,6 @@ public abstract class AbstractInputComponent extends AbstractComponent
     public final void setSelected(boolean selected) {
         set(selected);
     };
-    
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.InputComponent#setValidator(
-     *    java.lang.String)
-     */
-    @Override
-    public final void setValidator(String validator) {
-        this.validator = validator;
-    }
-    
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.InputComponent#setValidator(
-     *    java.lang.String)
-     */
-    @Override
-    public final void setValidator(Validator validator) {
-        this.validator = validator.getName();
-    }
     
     /*
      * (non-Javadoc)

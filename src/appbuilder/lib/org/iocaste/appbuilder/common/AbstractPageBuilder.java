@@ -25,7 +25,6 @@ import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.Validator;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewCustomAction;
 import org.iocaste.texteditor.common.TextEditor;
@@ -94,9 +93,6 @@ public abstract class AbstractPageBuilder extends AbstractPage {
                 customaction.addHandler(name, action, handler);
                 register(action, customaction);
             }
-            
-            for (Validator validator : context.getValidators(name))
-                register(validator);
         }
         
         return context;

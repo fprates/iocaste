@@ -4,9 +4,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -19,8 +17,6 @@ import org.iocaste.documents.common.RangeOption;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.protocol.Function;
-import org.iocaste.protocol.Message;
-import org.iocaste.protocol.Service;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
@@ -28,7 +24,6 @@ import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.Shell;
-import org.iocaste.shell.common.View;
 
 public class Controller {
     private static final int EINITIAL = 1;
@@ -38,42 +33,6 @@ public class Controller {
     private static final int EVALIDATION = 5;
     private static final int LOW_RANGE = 3;
     private static final int HIGH_RANGE = 4;
-    
-    /**
-     * 
-     * @param config
-     * @param validatorcfg
-     * @return
-     * @throws Exception
-     */
-    @SuppressWarnings("unchecked")
-    private static final Map<String, Object> callCustomValidation(
-            ControllerData cconfig, List<InputComponent> inputs) throws Exception {
-        Map<String, Object> response;
-        String url;
-        Service service;
-        Message message;
-        
-        url = new StringBuilder(cconfig.servername).append("/").
-                append(cconfig.view.getAppName()).append("/view.html").
-                toString();
-        service = new Service(cconfig.sessionid, url);
-        message = new Message("custom_validation");
-        message.add("inputs", inputs);
-        message.add("view", cconfig.view);
-        
-        try {
-            response = (Map<String, Object>)service.call(message);
-            if (response.get("message") == null)
-                Common.commit(cconfig.servername, cconfig.sessionid);
-            else
-                Common.rollback(cconfig.servername, cconfig.sessionid);
-            return response;
-        } catch (Exception e) {
-            Common.rollback(cconfig.servername, cconfig.sessionid);
-            throw e;
-        }
-    }
     
     /**
      * 
@@ -186,27 +145,6 @@ public class Controller {
         default:
             return input.get();
         }
-    }
-    
-    private static final boolean hasInputsUpdated(
-            ControllerData config, List<InputComponent> validations) {
-        InputComponent input2;
-        Object v1, v2;
-        
-        for (InputComponent input1 : validations) {
-            v1 = input1.get();
-            input2 = config.earlyvalues.get(input1.getHtmlName());
-            if (input2 == null)
-                return true;
-            
-            v2 = input2.get();
-            if ((v1 == null) && (v2 == null))
-                continue;
-            
-            if ((v1 == null) || (!v1.equals(v2)))
-                return true;
-        }
-        return false;
     }
     
     /**
@@ -338,33 +276,6 @@ public class Controller {
         }
     }
     
-    private static final void processCustomValidation(ControllerData config,
-            List<InputComponent> validations, InputStatus status)
-                    throws Exception {
-        View view;
-        InputComponent input;
-        Map<String, Object> response;
-
-        if (!hasInputsUpdated(config, validations))
-            return;
-        
-        response = callCustomValidation(config, validations);
-        status.message = (String)response.get("message");
-        if (status.message != null) {
-            status.error = EVALIDATION;
-            status.input = (InputComponent)response.get("input_error");
-            return;
-        }
-        
-        view = (View)response.get("view");
-        for (String name : config.view.getInputs()) {
-            input = view.getElement(name);
-            input.setView(config.view);
-            config.view.index(input);
-            config.earlyvalues.put(name, input);
-        }
-    }
-    
     /**
      * 
      * @param config
@@ -378,7 +289,6 @@ public class Controller {
         String value;
         DataElement dataelement;
         InputComponent input;
-        List<InputComponent> validations = new ArrayList<>();
         RangeInputStatus ri = new RangeInputStatus();
         
         /*
@@ -468,16 +378,7 @@ public class Controller {
                 status.error = EINVALID_REFERENCE;
                 continue;
             }
-            
-            if (input.getValidator() != null)
-                validations.add(input);
         }
-        
-        if (status.error != 0)
-            return;
-        
-        if (validations.size() > 0)
-            processCustomValidation(config, validations, status);
     }
     
     /**

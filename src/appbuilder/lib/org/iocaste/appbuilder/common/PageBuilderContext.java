@@ -1,15 +1,12 @@
 package org.iocaste.appbuilder.common;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.Validator;
 
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewContext> viewcontexts;
@@ -22,16 +19,6 @@ public class PageBuilderContext extends AbstractContext {
     
     public final void addManager(String name, Manager manager) {
         managers.put(name, manager);
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param validator
-     */
-    public final void addValidator(String view, Validator validator) {
-        ViewContext context = getContext(view);
-        context.validators.add(validator);
     }
     
     /**
@@ -85,14 +72,6 @@ public class PageBuilderContext extends AbstractContext {
      */
     public final Manager getManager(String name) {
         return managers.get(name);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final List<Validator> getValidators(String view) {
-        return viewcontexts.get(view).validators;
     }
     
     /**
@@ -226,12 +205,10 @@ class ViewContext {
     public ViewComponents viewcomponents;
     public Map<String, AbstractActionHandler> actionhandlers;
     public ExtendedContext extcontext;
-    public List<Validator> validators;
     public boolean updateview;
     
     public ViewContext() {
         viewcomponents = new ViewComponents();
         actionhandlers = new HashMap<>();
-        validators = new ArrayList<>();
     }
 }

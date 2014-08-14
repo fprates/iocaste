@@ -1,6 +1,7 @@
 package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -8,7 +9,6 @@ import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
-import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 /**
@@ -25,14 +25,15 @@ public abstract class AbstractPage extends AbstractFunction {
     private Map<String, ViewCustomAction> customactions;
     private Map<String, CustomView> customviews;
     private Map<String, Validator> validators;
+    private Map<String, List<String>> validables;
     
     public AbstractPage() {
         export("get_view_data", "getViewData");
         export("exec_action", "execAction");
-        export("custom_validation", "customValidation");
         customactions = new HashMap<>();
         customviews = new HashMap<>();
         validators = new HashMap<>();
+        validables = new HashMap<>();
     }
     
     /**
@@ -58,60 +59,43 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
-     * Chamado quando tem validação ajustada via setValidator().
-     * @param message
-     * @return
-     */
-    public Map<String, Object> customValidation(Message message)
-            throws Exception {
-        Map<String, Object> response;
-        String name, error;
-        List<InputComponent> inputs = message.get("inputs");
-        Validator validator = null;
-        
-        context.view = message.get("view");
-        context.function = this;
-        response = new HashMap<>();
-        error = null;
-        for (InputComponent input : inputs) {
-            name = input.getValidator();
-            validator = validators.get(name);
-            
-            if (validator == null)
-                throw new IocasteException(name.
-                        concat(" is an invalid validator."));
-            
-            validator.setInput(input);
-            validator.validate();
-            
-            error = validator.getMessage();
-            if (error == null)
-                continue;
-            response.put("input_error", input);
-            break;
-        }
-        
-        response.put("message", error);
-        response.put("view", context.view);
-        return response;
-    }
-    
-    /**
      * Executa métodos associados à action.
      * @param message
      * @return
      * @throws Exception
      */
     public final View execAction(Message message) throws Exception {
+        Validator validator;
+        InputComponent input;
+        List<String> handlers;
         ViewCustomAction customaction;
         Method method;
+        String action, error;
+        String controlname = message.getString("action");
         View view = message.get("view");
-        String action, controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
         
         if (context != null) {
             context.view = view;
             context.function = this;
+        }
+        
+        for (String name : validables.keySet()) {
+            input = (InputComponent)view.getElement(name);
+            if (input == null)
+                continue;
+            
+            handlers = validables.get(name);
+            for (String validatorname : handlers) {
+                validator = validators.get(validatorname);
+                validator.setContext(context);
+                validator.setInput(input);
+                validator.validate();
+                error = validator.getMessage();
+                if (error == null)
+                    continue;
+                return view;
+            }
         }
         
         action = (control == null)? controlname : control.getName();
@@ -239,15 +223,6 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
-     * @param action
-     * @param custom
-     */
-    public final void register(String action, ViewCustomAction custom) {
-        customactions.put(action, custom);
-    }
-    
-    /**
-     * 
      * @param view
      * @param custom
      */
@@ -257,9 +232,44 @@ public abstract class AbstractPage extends AbstractFunction {
     
     /**
      * 
+     * @param name
      * @param validator
      */
-    public final void register(Validator validator) {
-        validators.put(validator.getName(), validator);
+    public final void register(String name, Validator validator) {
+        validators.put(name, validator);
+    }
+    
+    /**
+     * 
+     * @param action
+     * @param custom
+     */
+    public final void register(String action, ViewCustomAction custom) {
+        customactions.put(action, custom);
+    }
+    
+    /**
+     * 
+     * @param input
+     * @param validator
+     */
+    public final void validate(InputComponent input, String validator) {
+        validate(input.getHtmlName(), validator);
+    }
+    
+    /**
+     * 
+     * @param input
+     * @param validator
+     */
+    public final void validate(String input, String validator) {
+        List<String> validators = validables.get(input);
+        
+        if (validators == null) {
+            validators = new ArrayList<>();
+            validables.put(input, validators);
+        }
+        
+        validators.add(validator);       
     }
 }
