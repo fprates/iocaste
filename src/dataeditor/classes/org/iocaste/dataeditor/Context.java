@@ -1,14 +1,13 @@
 package org.iocaste.dataeditor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.TableItem;
 
 public class Context extends AbstractContext {
     public static final byte DISPLAY = 0;
@@ -19,9 +18,9 @@ public class Context extends AbstractContext {
     public Const viewtype;
     public byte mode;
     public TableTool tablehelper;
-    public List<TableItem> deleted;
+    public Set<ExtendedObject> deleted;
     
     public Context() {
-        deleted = new ArrayList<>();
+        deleted = new HashSet<>();
     }
 }
