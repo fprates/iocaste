@@ -60,6 +60,7 @@ function setElementDisplay(id, state) {
 
 function setFieldSh(name, value) {
 	setValue(name, value);
+	document.getElementById(name).focus();
 	closeSh();
 }
 
