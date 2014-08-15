@@ -59,9 +59,12 @@ function setElementDisplay(id, state) {
 }
 
 function setFieldSh(name, value) {
-	setValue(name, value);
-	document.getElementById(name).focus();
-	closeSh();
+    var input = document.getElementById(name);
+    if (!input.readOnly)
+        setValue(name, value);
+    
+    input.focus();
+    closeSh();
 }
 
 function setValue(name, value) {
