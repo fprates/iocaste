@@ -96,9 +96,7 @@ public class Response {
         pagecontrol.add("home");
         pagecontrol.add("back");
 
-        ttdata = new TableToolData();
-        ttdata.container = container;
-        ttdata.name = "itens";
+        ttdata = new TableToolData(container, "itens");
         ttdata.model = context.model;
         ttdata.objects = context.itens;
         ttdata.vlines = 0;

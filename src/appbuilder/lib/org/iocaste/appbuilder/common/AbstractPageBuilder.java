@@ -155,10 +155,7 @@ class BuilderCustomView extends AbstractCustomView {
             new TabbedPaneItem((TabbedPane)container, name);
             break;
         case TABLE_TOOL:
-            ttdata = new TableToolData();
-            ttdata.container = container;
-            ttdata.name = name;
-             
+            ttdata = new TableToolData(container, name);
             viewcomponents = context.getViewComponents(view);
             viewcomponents.add(ttdata);
             break;

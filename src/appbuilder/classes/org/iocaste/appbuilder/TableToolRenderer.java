@@ -21,7 +21,6 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
-import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -218,7 +217,7 @@ public class TableToolRenderer extends AbstractFunction {
         
         data = message.get("data");  
         view = message.get("view");
-        container = new StandardContainer(data.container, data.name);
+        container = data.getContainer();
         
         accept = TableTool.ACCEPT.concat(data.name);
         new Button(container, accept);

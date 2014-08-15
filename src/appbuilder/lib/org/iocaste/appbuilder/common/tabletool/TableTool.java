@@ -14,7 +14,6 @@ import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Validator;
@@ -53,10 +52,10 @@ public class TableTool {
         add = new Action(this, data, ADD).getName();
         remove = new Action(this, data, REMOVE).getName();
 
-        container = new StandardContainer(data.container, data.name);
         returned = (Container)result.get("container");
         this.data = (TableToolData)result.get("data");
         
+        container = data.getContainer();
         for (Element element : returned.getElements()) {
             transfer(container, element);
             element.setView(context.view);

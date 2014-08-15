@@ -22,9 +22,7 @@ public class Response {
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("back");
-        ttdata = new TableToolData();
-        ttdata.container = container;
-        ttdata.name = "details";
+        ttdata = new TableToolData(container, "details");
         ttdata.model = "STYLE_ELEMENT_DETAIL";
         ttdata.objects = context.eproperties;
         ttdata.vlines = 0;
@@ -88,9 +86,7 @@ public class Response {
             ((InputComponent)element).setEnabled(false);
         }
 
-        ttdata = new TableToolData();
-        ttdata.container = container;
-        ttdata.name = "elements";
+        ttdata = new TableToolData(container, "elements");
         ttdata.model = "STYLE_ELEMENT";
         ttdata.hide = new String[] {"INDEX", "STYLE"};
         ttdata.vlines = 0;

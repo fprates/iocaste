@@ -69,9 +69,7 @@ public class Response {
         /*
          * tarefas
          */
-        ttdata = new TableToolData();
-        ttdata.container = tabs;
-        ttdata.name = "tasks";
+        ttdata = new TableToolData(tabs, "tasks");
         ttdata.model = "USER_TASKS_GROUPS";
         ttdata.show = new String[] {"GROUP"};
         ttdata.objects = context.userdata.tasks;
@@ -96,9 +94,7 @@ public class Response {
         /*
          * perfis
          */
-        ttdata = new TableToolData();
-        ttdata.container = tabs;
-        ttdata.name = "profiles";
+        ttdata = new TableToolData(tabs, "profiles");
         ttdata.model = "USER_AUTHORITY";
         ttdata.show = new String[] {"PROFILE"};
         ttdata.objects = context.userdata.profiles;
