@@ -18,6 +18,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.TextArea;
 import org.iocaste.shell.common.View;
 import org.iocaste.texteditor.common.TextEditor;
 import org.iocaste.texteditor.common.TextEditorTool;
@@ -222,6 +223,11 @@ public abstract class AbstractActionHandler {
         
         editortool.commit(editor, id);
         editortool.update(editor, "B2B_OBSERV");
+    }
+    
+    protected final String textget(String name) {
+        TextArea text = context.view.getElement(name);
+        return text.getst();
     }
     
     protected final Map<String, String> textget(String name, String id) {
