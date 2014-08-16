@@ -48,6 +48,10 @@ public class StandardInstallContext {
     }
     
     public final void put(String name, DataElement element) {
+        if (elements.containsKey(name))
+            throw new RuntimeException(new StringBuilder("dataelement ").
+                    append(name).
+                    append(" has already defined.").toString());
         elements.put(name, element);
     }
     
