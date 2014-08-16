@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.docmanager.common.Manager;
@@ -215,5 +216,9 @@ public abstract class AbstractActionHandler {
         
         editortool.commit(editor, id);
         editortool.update(editor, "B2B_OBSERV");
+    }
+    
+    protected final Map<String, String> textget(String name, String id) {
+        return new TextEditorTool(context).get(name, id);
     }
 }

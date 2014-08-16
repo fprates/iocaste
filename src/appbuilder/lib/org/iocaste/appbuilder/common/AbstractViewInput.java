@@ -12,7 +12,6 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.texteditor.common.TextEditor;
-import org.iocaste.texteditor.common.TextEditorTool;
 
 public abstract class AbstractViewInput {
     private PageBuilderContext context;
@@ -110,10 +109,8 @@ public abstract class AbstractViewInput {
         addtableitems(table, objects);
     }
     
-    protected final void texteditorload(
-            String texteditor, String namespace, String id) {
+    protected final void texteditorset(String texteditor, String text) {
         TextEditor editor = getViewComponents().editors.get(texteditor);
-        
-        new TextEditorTool(context).load(editor, namespace, id);
+        editor.getElement().set(text);
     }
 }
