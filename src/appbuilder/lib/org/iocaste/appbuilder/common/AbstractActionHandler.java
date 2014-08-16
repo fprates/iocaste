@@ -25,6 +25,7 @@ import org.iocaste.texteditor.common.TextEditorTool;
 public abstract class AbstractActionHandler {
     private PageBuilderContext context;
     private ViewComponents components;
+    private Documents documents;
     
     protected final void back() {
         ((AbstractPage)context.function).back();
@@ -144,6 +145,10 @@ public abstract class AbstractActionHandler {
         return context.getManager(name);
     }
     
+    protected final ExtendedObject instance(String model) {
+        return new ExtendedObject(documents.getModel(model));
+    }
+    
     protected final boolean keyExists(String manager, Object id) {
         return context.getManager(manager).exists(id);
     }
@@ -174,6 +179,7 @@ public abstract class AbstractActionHandler {
             return;
         
         components = this.context.getViewComponents(view);
+        documents = new Documents(context.function);
         context.view.setInitialize(false);
         execute(this.context);
         context.view.setReloadableView(true);
@@ -181,7 +187,7 @@ public abstract class AbstractActionHandler {
     }
     
     protected final ExtendedObject[] select(Query query) {
-        return new Documents(context.function).select(query);
+        return documents.select(query);
     }
     
     protected final ExtendedObject[] tableitemsget(String tabletool) {
