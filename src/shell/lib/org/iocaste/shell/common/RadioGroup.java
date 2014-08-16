@@ -28,7 +28,7 @@ public class RadioGroup extends AbstractInputComponent {
     
     public final RadioButton button(Container container, String name) {
         items.add(name);
-        return new RadioButton(this, container, name, items.size());
+        return new RadioButton(this, container, name, items.size() - 1);
     }
     
     public final Set<InputComponent> getComponents() {

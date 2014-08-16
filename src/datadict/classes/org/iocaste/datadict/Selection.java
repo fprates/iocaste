@@ -145,6 +145,7 @@ public class Selection {
         
         context.modelname = name;
         context.model = documents.getModel(name);
+        context.view.setReloadableView(true);
         context.view.redirect("tbstructure");
     }
     
@@ -163,7 +164,7 @@ public class Selection {
         System.arraycopy(shdata, 1, context.shitens, 0, context.shitens.length);
         context.header = shdata[0];
         context.shname = name;
-        
+        context.view.setReloadableView(true);
         context.view.redirect("shstructure");
     }
 }
