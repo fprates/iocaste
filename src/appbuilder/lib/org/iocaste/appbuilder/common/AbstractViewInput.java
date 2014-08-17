@@ -1,7 +1,6 @@
 package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
-import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
@@ -70,8 +69,6 @@ public abstract class AbstractViewInput {
     public final void run(PageBuilderContext context) {
         this.context = context;
         execute(context);
-        for (TableToolEntry entry : getViewComponents().tabletools.values())
-            entry.component = new TableTool(context, entry.data);
     }
     
     protected final void set(String form, String item, Object value) {

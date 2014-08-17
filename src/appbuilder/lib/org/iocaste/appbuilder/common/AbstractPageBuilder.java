@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
@@ -264,19 +265,38 @@ class BuilderCustomView extends AbstractCustomView {
             }
             
             viewspec.setInitialized(true);
-            if (viewinput != null)
+            if (viewinput != null) {
                 viewinput.run(_context);
+                generateTables(_context);
+            }
             return;
         }
         
         if (_context.isInputUpdatable() && viewinput != null) {
             _context.setInputUpdate(false);
             viewinput.run(_context);
+            updateTables(_context);
         }
+    }
+    
+    private final void generateTables(PageBuilderContext context) {
+        ViewComponents components = context.
+                getViewComponents(context.view.getPageName());
+        
+        for (TableToolEntry entry : components.tabletools.values())
+            entry.component = new TableTool(context, entry.data);
     }
     
     public final void setView(String view) {
         this.view = view;
+    }
+    
+    private final void updateTables(PageBuilderContext context) {
+        ViewComponents components = context.
+                getViewComponents(context.view.getPageName());
+        
+        for (TableToolEntry entry : components.tabletools.values())
+            entry.component.setObjects(entry.data.objects);
     }
 }
 
