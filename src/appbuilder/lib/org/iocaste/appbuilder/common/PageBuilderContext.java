@@ -63,8 +63,9 @@ public class PageBuilderContext extends AbstractContext {
      * @param view
      * @return
      */
-    public final ExtendedContext getExtendedContext(String view) {
-        return viewcontexts.get(view).extcontext;
+    @SuppressWarnings("unchecked")
+    public final <T extends ExtendedContext> T getExtendedContext(String view) {
+        return (T)viewcontexts.get(view).extcontext;
     }
     
     /**
