@@ -255,6 +255,7 @@ class BuilderCustomView extends AbstractCustomView {
         }
         
         if (!context.view.keepView() || !viewspec.isInitialized()) {
+            _context.setInputUpdate(false);
             viewspec.run(_context);
             for (ViewSpecItem item : viewspec.getItems())
                 buildItem((PageBuilderContext)context, item);
