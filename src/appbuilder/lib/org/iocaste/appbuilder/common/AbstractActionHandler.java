@@ -176,6 +176,8 @@ public abstract class AbstractActionHandler {
     }
     
     public final void run(AbstractContext context) throws Exception {
+        String appname, rappname, pagename, rpagename;
+        AbstractViewSpec viewspec;
         String view = context.view.getPageName();
         String action = context.view.getActionControl();
         
@@ -188,7 +190,17 @@ public abstract class AbstractActionHandler {
         context.view.setInitialize(false);
         execute(this.context);
         context.view.setReloadableView(true);
-        context.view.setKeepView(!this.context.isViewUpdatable(view));
+        appname = this.context.view.getAppName();
+        rappname = this.context.view.getRedirectedApp();
+        pagename = this.context.view.getPageName();
+        rpagename = this.context.view.getRedirectedPage();
+        viewspec = this.context.getViewSpec(rpagename);
+        
+        if (appname.equals(rappname) && !pagename.equals(rpagename) &&
+                !viewspec.isInitialized())
+            context.view.setKeepView(false);
+        else
+            context.view.setKeepView(!this.context.isViewUpdatable(view));
     }
     
     protected final ExtendedObject[] select(Query query) {
