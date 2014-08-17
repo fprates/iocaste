@@ -192,15 +192,26 @@ public abstract class AbstractActionHandler {
         context.view.setReloadableView(true);
         appname = this.context.view.getAppName();
         rappname = this.context.view.getRedirectedApp();
+        if (rappname != null && !appname.equals(rappname))
+            rappname = null;
+        
         pagename = this.context.view.getPageName();
         rpagename = this.context.view.getRedirectedPage();
-        viewspec = this.context.getViewSpec(rpagename);
+        if ((rpagename != null) && (rpagename.equals(pagename)))
+            rpagename = null;
         
-        if (appname.equals(rappname) && !pagename.equals(rpagename) &&
-                !viewspec.isInitialized())
-            context.view.setKeepView(false);
+        if (rpagename != null)
+            viewspec = this.context.getViewSpec(rpagename);
         else
+            viewspec = null;
+        
+        if ((rappname == null) && (rpagename != null)) {
+            context.view.setKeepView(false);
+            if ((viewspec != null) && viewspec.isInitialized())
+                inputrefresh();
+        } else {
             context.view.setKeepView(!this.context.isViewUpdatable(view));
+        }
     }
     
     protected final ExtendedObject[] select(Query query) {
