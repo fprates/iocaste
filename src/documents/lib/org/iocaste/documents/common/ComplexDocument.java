@@ -62,11 +62,31 @@ public class ComplexDocument implements Serializable {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final byte getbKey() {
+        for (DocumentModelKey key : cmodel.getHeader().getKeys())
+            return header.getb(key.getModelItemName());
+        return 0;
+    }
+    
+    /**
      * Get the extended object in the document header.
      * @return header's extended object
      */
     public final ExtendedObject getHeader() {
         return header;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final int getiKey() {
+        for (DocumentModelKey key : cmodel.getHeader().getKeys())
+            return header.geti(key.getModelItemName());
+        return 0;
     }
     
     /**
@@ -76,6 +96,27 @@ public class ComplexDocument implements Serializable {
      */
     public final ExtendedObject[] getItems(String name) {
         return items.get(name).toArray(new ExtendedObject[0]);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public final <T> T getKey() {
+        for (DocumentModelKey key : cmodel.getHeader().getKeys())
+            return (T)header.get(key.getModelItemName());
+        return null;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final long getlKey() {
+        for (DocumentModelKey key : cmodel.getHeader().getKeys())
+            return header.getl(key.getModelItemName());
+        return 0;
     }
     
     /**
