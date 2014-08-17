@@ -146,6 +146,10 @@ public abstract class AbstractActionHandler {
         return context.getManager(name);
     }
     
+    protected final void inputrefresh() {
+        context.setInputUpdate(true);
+    }
+    
     protected final ExtendedObject instance(String model) {
         return new ExtendedObject(documents.getModel(model));
     }

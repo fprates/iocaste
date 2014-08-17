@@ -208,33 +208,60 @@ class BuilderCustomView extends AbstractCustomView {
             buildItem(context, child);
     }
     
+    private final void download(PageBuilderContext context) throws Exception {
+        File file = new File(context.downloaddata.fullname);
+        FileInputStream fis = new FileInputStream(file);
+        byte[] content = new byte[fis.available()];
+        
+        fis.read(content);
+        fis.close();
+        
+        context.view.setContentType("application/octet-stream");
+        context.view.setHeader("Content-Disposition",
+                new StringBuilder("attachment; filename=\"").
+                append(context.downloaddata.filename).
+                append("\"").toString());
+        context.view.setContent(content);
+    }
+    
     /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.CustomView#execute(
      *    org.iocaste.shell.common.AbstractContext)
      */
     @Override
-    public void execute(AbstractContext context) {
+    public void execute(AbstractContext context) throws Exception {
         AbstractViewSpec viewspec = getViewSpec();
         ViewConfig viewconfig = getViewConfig();
         AbstractViewInput viewinput = getViewInput();
         PageBuilderContext _context = (PageBuilderContext)context;
         
-        if (context.view.keepView() && viewspec.isInitialized())
+        if (_context.downloaddata != null) {
+            download(_context);
+            _context.downloaddata = null;
             return;
-        
-        viewspec.run(_context);
-        for (ViewSpecItem item : viewspec.getItems())
-            buildItem((PageBuilderContext)context, item);
-        
-        if (viewconfig != null) {
-            viewconfig.setNavControl(navcontrol);
-            viewconfig.run(_context);
         }
         
-        viewspec.setInitialized(true);
-        if (viewinput != null)
+        if (!context.view.keepView() || !viewspec.isInitialized()) {
+            viewspec.run(_context);
+            for (ViewSpecItem item : viewspec.getItems())
+                buildItem((PageBuilderContext)context, item);
+            
+            if (viewconfig != null) {
+                viewconfig.setNavControl(navcontrol);
+                viewconfig.run(_context);
+            }
+            
+            viewspec.setInitialized(true);
+            if (viewinput != null)
+                viewinput.run(_context);
+            return;
+        }
+        
+        if (_context.isInputUpdatable() && viewinput != null) {
+            _context.setInputUpdate(false);
             viewinput.run(_context);
+        }
     }
     
     public final void setView(String view) {

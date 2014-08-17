@@ -95,6 +95,14 @@ public class ComplexDocument implements Serializable {
     }
     
     /**
+     * Remove specified items group
+     * @param name items group name
+     */
+    public final void remove(String name) {
+        items.get(name).clear();
+    }
+    
+    /**
      * Set the header's extended object
      * @param object extended object
      */

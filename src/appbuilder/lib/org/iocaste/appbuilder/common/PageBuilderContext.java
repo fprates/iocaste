@@ -11,6 +11,8 @@ import org.iocaste.shell.common.AbstractContext;
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewContext> viewcontexts;
     private Map<String, Manager> managers;
+    private boolean inputupdate;
+    public DownloadData downloaddata;
     
     public PageBuilderContext() {
         viewcontexts = new HashMap<>();
@@ -132,6 +134,14 @@ public class PageBuilderContext extends AbstractContext {
      * 
      * @return
      */
+    public final boolean isInputUpdatable() {
+        return inputupdate;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final boolean isViewUpdatable(String view) {
         return getContext(view).updateview;
     }
@@ -156,6 +166,14 @@ public class PageBuilderContext extends AbstractContext {
     public final void setExtendedContext(
             String view, ExtendedContext extcontext) {
         getContext(view).extcontext = extcontext;
+    }
+    
+    /**
+     * 
+     * @param inputupdate
+     */
+    public final void setInputUpdate(boolean inputupdate) {
+        this.inputupdate = inputupdate;
     }
     
     /**
