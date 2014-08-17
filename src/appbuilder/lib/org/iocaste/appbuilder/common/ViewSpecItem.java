@@ -23,7 +23,9 @@ public class ViewSpecItem {
         LINK("link"),
         REPORT_TOOL("reporttool"),
         FILE_UPLOAD("fileupload"),
-        BUTTON("button");
+        BUTTON("button"),
+        RADIO_BUTTON("radiobutton"),
+        RADIO_GROUP("radiogroup");
 
         private String name;
         

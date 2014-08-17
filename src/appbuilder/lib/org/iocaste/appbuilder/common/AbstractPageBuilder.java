@@ -20,6 +20,7 @@ import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
+import org.iocaste.shell.common.RadioGroup;
 import org.iocaste.shell.common.ReportTool;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
@@ -131,6 +132,8 @@ class BuilderCustomView extends AbstractCustomView {
     private String view;
     
     private void buildItem(PageBuilderContext context, ViewSpecItem item) {
+        RadioGroup group;
+        String[] names;
         DashboardFactory dashboard;
         TableToolData ttdata;
         ViewComponents viewcomponents;
@@ -199,6 +202,14 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case BUTTON:
             new Button(container, name);
+            break;
+        case RADIO_GROUP:
+            new RadioGroup(container, name);
+            break;
+        case RADIO_BUTTON:
+            names = name.split("\\.", 2);
+            group = context.view.getElement(names[0]);
+            group.button(container, names[1]);
             break;
         default:
             break;

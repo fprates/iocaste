@@ -104,6 +104,16 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.REPORT_TOOL, name);
     }
     
+    protected final void radiobutton(String parent, String group, String name)
+    {
+        put(parent, ViewSpecItem.TYPES.RADIO_BUTTON,
+                new StringBuilder(group).append(".").append(name).toString());
+    }
+    
+    protected final void radiogroup(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.RADIO_GROUP, name);
+    }
+    
     public final void run(PageBuilderContext context) {
         this.context = context;
         sequence.clear();
