@@ -118,7 +118,8 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final AbstractViewSpec getViewSpec(String name) {
-        return viewcontexts.get(name).viewspec;
+        ViewContext context = viewcontexts.get(name);
+        return (context == null)? null : context.viewspec;
     }
     
     /**
