@@ -12,5 +12,10 @@ public class PropertiesInput extends AbstractViewInput {
         reportset("properties", extcontext.report.
                 toArray(new ExtendedObject[0]));
     }
+    
+    @Override
+    protected void init(PageBuilderContext context) {
+        execute(context);
+    }
 
 }

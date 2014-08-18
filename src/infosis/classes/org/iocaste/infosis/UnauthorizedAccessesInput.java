@@ -10,5 +10,10 @@ public class UnauthorizedAccessesInput extends AbstractViewInput {
         // TODO Stub de método gerado automaticamente
 
     }
+    
+    @Override
+    protected void init(PageBuilderContext context) {
+        
+    }
 
 }

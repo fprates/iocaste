@@ -39,5 +39,9 @@ public class ProjectInput extends AbstractViewInput {
             }
         }
     }
+    @Override
+    protected void init(PageBuilderContext context) {
+        execute(context);
+    }
 
 }

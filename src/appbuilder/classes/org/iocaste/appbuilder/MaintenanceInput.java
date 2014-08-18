@@ -35,5 +35,10 @@ public class MaintenanceInput extends AbstractViewInput {
             tableitemsadd(name.concat("_table"), extcontext.document.
                     getItems(name));
     }
+    
+    @Override
+    protected void init(PageBuilderContext context) {
+        execute(context);
+    }
 
 }

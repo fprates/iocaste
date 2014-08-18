@@ -44,7 +44,6 @@ public abstract class AbstractViewInput {
         return context.view.getElement(name);
     }
     
-    
     @SuppressWarnings("unchecked")
     protected final <T extends ExtendedContext> T getExtendedContext() {
         return (T)context.getExtendedContext(context.view.getPageName());
@@ -62,13 +61,18 @@ public abstract class AbstractViewInput {
         return context.getViewComponents(context.view.getPageName());
     }
     
+    protected abstract void init(PageBuilderContext context);
+    
     protected final void reportset(String report, ExtendedObject[] items) {
         getViewComponents().reporttools.get(report).setItens(items);
     }
     
-    public final void run(PageBuilderContext context) {
+    public final void run(PageBuilderContext context, boolean init) {
         this.context = context;
-        execute(context);
+        if (init)
+            init(context);
+        else
+            execute(context);
     }
     
     protected final void set(String form, String item, Object value) {

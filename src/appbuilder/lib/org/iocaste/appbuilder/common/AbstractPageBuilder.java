@@ -267,7 +267,7 @@ class BuilderCustomView extends AbstractCustomView {
             
             viewspec.setInitialized(true);
             if (viewinput != null) {
-                viewinput.run(_context);
+                viewinput.run(_context, true);
                 generateTables(_context);
             }
             return;
@@ -275,7 +275,7 @@ class BuilderCustomView extends AbstractCustomView {
         
         if (_context.isInputUpdatable() && viewinput != null) {
             _context.setInputUpdate(false);
-            viewinput.run(_context);
+            viewinput.run(_context, false);
             updateTables(_context);
         }
     }
@@ -322,7 +322,7 @@ class BuilderCustomAction implements ViewCustomAction {
     }
 
     @Override
-    public void execute(AbstractContext context) throws Exception {
+    public final void execute(AbstractContext context) throws Exception {
         String view = context.view.getPageName();
         String action = context.view.getActionControl();
         AbstractActionHandler handler = handlers.get(view).get(action);
@@ -330,7 +330,15 @@ class BuilderCustomAction implements ViewCustomAction {
         if (handler == null)
             throw new RuntimeException(action.concat(" isn't a valid action."));
         
+        loadTableObjects((PageBuilderContext)context);
         handler.run(context);
+    }
+    
+    private final void loadTableObjects(PageBuilderContext context) {
+        ViewComponents components = context.
+                getViewComponents(context.view.getPageName());
         
+        for (TableToolEntry entry : components.tabletools.values())
+            entry.data.objects = entry.component.getObjects();
     }
 }
