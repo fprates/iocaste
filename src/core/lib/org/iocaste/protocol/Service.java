@@ -1,5 +1,7 @@
 package org.iocaste.protocol;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -49,11 +51,13 @@ public class Service {
             urlcon.setDoInput(true);
             urlcon.setDoOutput(true);
             
-            oos = new ObjectOutputStream(urlcon.getOutputStream());
+            oos = new ObjectOutputStream(
+                    new BufferedOutputStream(urlcon.getOutputStream()));
             oos.writeObject(message);
             oos.flush();
             
-            ois = new ObjectInputStream(urlcon.getInputStream());
+            ois = new ObjectInputStream(
+                    new BufferedInputStream(urlcon.getInputStream()));
             response = (Message)ois.readObject();
             ois.close();
             oos.close();
