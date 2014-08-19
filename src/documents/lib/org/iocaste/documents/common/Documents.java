@@ -22,6 +22,7 @@
 package org.iocaste.documents.common;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
@@ -274,9 +275,16 @@ public class Documents extends AbstractServiceInterface {
      * @return true, se todos os campos do objeto forem iniciais.
      */
     public static final boolean isInitial(ExtendedObject object) {
+        return isInitialIgnoring(object, null);
+    }
+    
+    public static final boolean isInitialIgnoring(
+            ExtendedObject object, Set<String> ignore) {
         DocumentModel model = object.getModel();
+        
         for (DocumentModelItem item : model.getItens())
-            if (!isInitial(item.getDataElement(), object.get(item)))
+            if (!isInitial(item.getDataElement(), object.get(item)) &&
+                    !ignore.contains(item.getName()))
                 return false;
         
         return true;
