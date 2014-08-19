@@ -29,10 +29,6 @@ import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.View;
 
 public class TableToolRenderer extends AbstractFunction {
-    private TableToolData data;
-    private Table table;
-    private String accept, add, remove;
-    private View view;
     
     public TableToolRenderer() {
         export("add_action", "addaction");
@@ -44,13 +40,14 @@ public class TableToolRenderer extends AbstractFunction {
     public final Map<String, Object> addaction(Message message) {
         Map<String, Object> result;
         int i = 0;
+        Context context = new Context();
         
-        table = message.get("table");
-        data = message.get("data");
+        context.table = message.get("table");
+        context.data = message.get("data");
         
-        switch (data.mode) {
+        switch (context.data.mode) {
         case TableTool.CONTINUOUS_UPDATE:
-            for (TableItem item_ : table.getItems()) {
+            for (TableItem item_ : context.table.getItems()) {
                 if (!item_.isSelected()) {
                     i++;
                     continue;
@@ -58,34 +55,34 @@ public class TableToolRenderer extends AbstractFunction {
                 break;
             }
             
-            additem(null, i);
+            additem(context, null, i);
             break;
         default:
-            additems(null);
+            additems(context, null);
             break;
         }
         
         result = new HashMap<>();
-        result.put("table", table);
-        result.put("data", data);
+        result.put("table", context.table);
+        result.put("data", context.data);
         return result;
     }
     
-    private void additem(ExtendedObject object, int pos) {
+    private void additem(Context context, ExtendedObject object, int pos) {
         TableToolColumn column;
         Element element;
         DataElement delement;
         InputComponent input;
         String name;
-        TableItem item = new TableItem(table, pos);
-        TableColumn[] tcolumns = table.getColumns();
+        TableItem item = new TableItem(context.table, pos);
+        TableColumn[] tcolumns = context.table.getColumns();
         
         for (TableColumn tcolumn : tcolumns) {
             if (tcolumn.isMark())
                 continue;
 
             name = tcolumn.getName();
-            column = data.columns.get(name);
+            column = context.data.columns.get(name);
             delement = tcolumn.getModelItem().getDataElement();
             switch (delement.getType()) {
             case DataType.BOOLEAN:
@@ -117,14 +114,14 @@ public class TableToolRenderer extends AbstractFunction {
                 }
             }
             
-            if (object == null && data.itemcolumn != null && name.
-                    equals(data.itemcolumn)) {
-                data.last += data.increment;
+            if (object == null && context.data.itemcolumn != null && name.
+                    equals(context.data.itemcolumn)) {
+                context.data.last += context.data.increment;
                 if (element.isDataStorable()) {
                     input = (InputComponent)element;
-                    input.set(data.last);
+                    input.set(context.data.last);
                 } else {
-                    ((Text)element).setText(Long.toString(data.last));
+                    ((Text)element).setText(Long.toString(context.data.last));
                 }
             }
             
@@ -135,46 +132,47 @@ public class TableToolRenderer extends AbstractFunction {
         if (object == null)
             return;
         
-        if (data.itemcolumn != null) {
-            data.last += data.increment; 
-            object.set(data.itemcolumn, data.last);
+        if (context.data.itemcolumn != null) {
+            context.data.last += context.data.increment; 
+            object.set(context.data.itemcolumn, context.data.last);
         }
         
         item.setObject(object);
     }
     
-    private final void additems(ExtendedObject[] items) {
-        int vlines = table.getVisibleLines();
-        int total = table.size();
+    private final void additems(Context context, ExtendedObject[] items) {
+        int vlines = context.table.getVisibleLines();
+        int total = context.table.size();
         
         if (items == null) {
             if (vlines == 0)
                 vlines = 15;
             
             for (int i = 0; i < vlines; i++)
-                additem(null, -1);
+                additem(context, null, -1);
         } else {
             for (int i = 0; i < items.length; i++) {
                 if ((vlines == i) && (vlines > 0))
                     break;
                 
-                additem(items[i], -1);
+                additem(context, items[i], -1);
             }
         }
         
-        table.setTopLine(total);
+        context.table.setTopLine(total);
     }
     
     public final Map<String, Object> addItems(Message message) {
         Map<String, Object> result;
+        Context context = new Context();
         
-        table = message.get("table");
-        data = message.get("data");
-        additems(data.objects);
+        context.table = message.get("table");
+        context.data = message.get("data");
+        additems(context, context.data.objects);
         
         result = new HashMap<>();
-        result.put("table", table);
-        result.put("data", data);
+        result.put("table", context.table);
+        result.put("data", context.data);
         return result;
     }
     
@@ -182,25 +180,25 @@ public class TableToolRenderer extends AbstractFunction {
      * 
      * @param modelname
      */
-    private final void model(String modelname) {
+    private final void model(Context context) {
         DocumentModelItem modelitem;
         String name;
         TableToolColumn column;
-        DocumentModel model = new Documents(this).getModel(modelname);
+        DocumentModel model = new Documents(this).getModel(context.data.model);
         
         if (model == null)
-            throw new RuntimeException(modelname.
+            throw new RuntimeException(context.data.model.
                     concat(" is an invalid model."));
 
-        table.importModel(model);
-        for (TableColumn tcolumn : table.getColumns()) {
+        context.table.importModel(model);
+        for (TableColumn tcolumn : context.table.getColumns()) {
             if (tcolumn.isMark())
                 continue;
             
             name = tcolumn.getName();
-            column = data.columns.get(name);
+            column = context.data.columns.get(name);
             if (column == null)
-                column = new TableToolColumn(data, name);
+                column = new TableToolColumn(context.data, name);
             
             column.tcolumn = tcolumn;
             modelitem = tcolumn.getModelItem();
@@ -214,29 +212,31 @@ public class TableToolRenderer extends AbstractFunction {
     public final Map<String, Object> render(Message message) {
         Map<String, Object> result;
         Container container;
+        Context context = new Context();
         
-        data = message.get("data");  
-        view = message.get("view");
-        container = data.getContainer();
+        context.data = message.get("data");  
+        context.view = message.get("view");
+        container = context.data.getContainer();
         
-        accept = TableTool.ACCEPT.concat(data.name);
-        new Button(container, accept);
-        add = TableTool.ADD.concat(data.name);
-        new Button(container, add);
-        remove = TableTool.REMOVE.concat(data.name);
-        new Button(container, remove);
+        context.accept = new Button(
+                container, TableTool.ACCEPT.concat(context.data.name));
+        context.add = new Button(
+                container, TableTool.ADD.concat(context.data.name));
+        context.remove = new Button(container,
+                TableTool.REMOVE.concat(context.data.name));
         
-        table = new Table(container, data.name.concat("_table"));
-        table.setMark(true);
-        table.setVisibleLines(15);
-        data.last = 0;
+        context.table = new Table(
+                container, context.data.name.concat("_table"));
+        context.table.setMark(true);
+        context.table.setVisibleLines(15);
+        context.data.last = 0;
         
-        model(data.model);
-        setMode(data.mode);
-        setObjects(data.objects);
+        model(context);
+        setMode(context);
+        setObjects(context);
         result = new HashMap<>();
         result.put("container", container);
-        result.put("data", data);
+        result.put("data", context.data);
         return result;
     }
     
@@ -244,54 +244,55 @@ public class TableToolRenderer extends AbstractFunction {
      * 
      * @param mode
      */
-    private final void setMode(byte mode) {
-        switch (mode) {
+    private final void setMode(Context context) {
+        switch (context.data.mode) {
         case TableTool.CONTINUOUS_UPDATE:
         case TableTool.UPDATE:
-            view.getElement(accept).setVisible(false);
-            view.getElement(add).setVisible(true);
-            view.getElement(remove).setVisible(true);
+            context.accept.setVisible(false);
+            context.add.setVisible(true);
+            context.remove.setVisible(true);
             break;
             
         case TableTool.DISPLAY:
-            view.getElement(accept).setVisible(false);
-            view.getElement(add).setVisible(false);
-            view.getElement(remove).setVisible(false);
-            table.setEnabled(false);
-            for (String column : data.columns.keySet())
-                data.columns.get(column).disabled = true;
-            if (data.enableonly == null)
+            context.accept.setVisible(false);
+            context.add.setVisible(false);
+            context.remove.setVisible(false);
+            context.table.setEnabled(false);
+            for (String column : context.data.columns.keySet())
+                context.data.columns.get(column).disabled = true;
+            if (context.data.enableonly == null)
                 break;
             
-            for (String name : data.enableonly)
-                if (!data.columns.containsKey(name))
+            for (String name : context.data.enableonly)
+                if (!context.data.columns.containsKey(name))
                     throw new RuntimeException(
                             name.concat(" isn't a valid column."));
                 else
-                    data.columns.get(name).disabled = false;
+                    context.data.columns.get(name).disabled = false;
             break;
         }
 
-        table.setMark(data.mark);
-        if (data.hide != null)
-            setVisibility(false, data.hide);
-        if (data.show != null)
-            setVisibility(true, data.show);
+        context.table.setMark(context.data.mark);
+        if (context.data.hide != null)
+            setVisibility(context, false, context.data.hide);
+        if (context.data.show != null)
+            setVisibility(context, true, context.data.show);
     }
     
     public final Map<String, Object> setObjects(Message message) {
         Map<String, Object> result;
+        Context context = new Context();
         
-        table = message.get("table");
-        table.clear();
-        data = message.get("data");
-        data.last = 0;
+        context.table = message.get("table");
+        context.table.clear();
+        context.data = message.get("data");
+        context.data.last = 0;
         
-        setObjects(data.objects);
+        setObjects(context);
         
         result = new HashMap<>();
-        result.put("table", table);
-        result.put("data", data);
+        result.put("table", context.table);
+        result.put("data", context.data);
         return result;
     }
     
@@ -299,31 +300,40 @@ public class TableToolRenderer extends AbstractFunction {
      * 
      * @param objects
      */
-    private final void setObjects(ExtendedObject[] objects) {
-        if (objects == null || objects.length == 0)
-            additems(null);
+    private final void setObjects(Context context) {
+        if (context.data.objects == null || context.data.objects.length == 0)
+            additems(context, null);
         else
-            additems(objects);
+            additems(context, context.data.objects);
     }
     
     /**
      * 
+     * @param context
      * @param visible
      * @param columns
      */
-    private final void setVisibility(boolean visible, String... columns) {
+    private final void setVisibility(
+            Context context, boolean visible, String... columns) {
         TableColumn tcolumn;
         
-        for (TableColumn column : table.getColumns())
+        for (TableColumn column : context.table.getColumns())
             if (!column.isMark())
                 column.setVisible(!visible);
         
         for (String column : columns) {
-            tcolumn = table.getColumn(column);
+            tcolumn = context.table.getColumn(column);
             if (tcolumn == null)
                 throw new RuntimeException(
                         column.concat(" is an invalid column."));
             tcolumn.setVisible(visible);
         }
     }
+}
+
+class Context {
+    public TableToolData data;
+    public Table table;
+    public Button accept, add, remove;
+    public View view;
 }
