@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class DocumentExtractor {
             Documents documents) {
         Map<String, Object> hold;
         ExtendedObject object;
-        Set<String> fields;
+        Set<String> fields, ignore;
         Object value;
         
         if (conversion == null)
@@ -51,7 +52,12 @@ public class DocumentExtractor {
         
         fields = conversion.getFields();
         hold = push(source, conversion);
-        if (Documents.isInitial(source)) {
+        ignore = new HashSet<>();
+        for (String field : fields)
+            if (conversion.getType(field) == DataConversion.IGNORE)
+                ignore.add(field);
+        
+        if (Documents.isInitialIgnoring(source, ignore)) {
             pop(source, hold);
             return null;
         }
