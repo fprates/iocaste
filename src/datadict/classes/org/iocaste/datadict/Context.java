@@ -10,8 +10,8 @@ public class Context implements ExtendedContext {
     public byte mode;
     public String modelname, shname;
     public DocumentModel model;
-    public ExtendedObject header;
-    public ExtendedObject[] shitens;
+    public ExtendedObject head;
+    public ExtendedObject[] items, shitems;
     public ItemDetail detail;
     public List<String> code;
     public String oldname;
