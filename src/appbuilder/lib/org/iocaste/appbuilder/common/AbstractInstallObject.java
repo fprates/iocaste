@@ -3,12 +3,21 @@ package org.iocaste.appbuilder.common;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DummyElement;
+import org.iocaste.documents.common.DummyModelItem;
 
 public abstract class AbstractInstallObject {
     private StandardInstallContext context;
     
     protected final ComplexModelInstall cmodelInstance(String name) {
         return new ComplexModelInstall(name, context);
+    }
+    
+    protected final DataElement elementbool(String name) {
+        DataElement element = new DataElement(name);
+        element.setType(DataType.BOOLEAN);
+        context.put(name, element);
+        return element;
     }
     
     protected final DataElement elementchar(
@@ -67,6 +76,14 @@ public abstract class AbstractInstallObject {
         model.setElements(context.getElements());
         
         return model;
+    }
+    
+    protected final DummyElement reference(String dataelement) {
+        return new DummyElement(dataelement);
+    }
+    
+    protected final DummyModelItem reference(String model, String name) {
+        return new DummyModelItem(model, name);
     }
     
     public final void run(StandardInstallContext context) {
