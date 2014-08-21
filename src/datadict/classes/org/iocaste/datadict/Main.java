@@ -10,7 +10,6 @@ public class Main extends AbstractPageBuilder {
     
     @Override
     public void config(PageBuilderContext context) throws Exception {
-        
         context.setViewSpec(MAIN, new SelectSpec());
         context.setViewConfig(MAIN, new SelectConfig());
 //        context.setActionHandler(MAIN, "create", new CreateObject());
@@ -30,6 +29,8 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.addToTaskGroup("DEVELOP", "SE11");
         defaultinstall.setProfile("DEVELOP");
         defaultinstall.setProgramAuthorization("DDICT.EXECUTE");
+        
+        installObject("models", new ModelsInstall());
     }
     
 }
