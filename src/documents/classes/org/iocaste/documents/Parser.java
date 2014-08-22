@@ -139,7 +139,9 @@ public class Parser {
         }
     }
     
-    private static final String orderby(String[] fields, DocumentModel model) {
+    private static final String orderby(String[] fields, DocumentModel model)
+            throws Exception {
+        DocumentModelItem item;
         boolean started = false;
         StringBuilder sb = new StringBuilder(" order by ");
         
@@ -149,7 +151,12 @@ public class Parser {
             else
                 sb.append(", ");
             
-            sb.append(model.getModelItem(field).getTableFieldName());
+            item = model.getModelItem(field);
+            if (item == null)
+                throw new IocasteException(
+                        field.concat(" is an invalid field to order by."));
+            
+            sb.append(item.getTableFieldName());
         }
         
         
