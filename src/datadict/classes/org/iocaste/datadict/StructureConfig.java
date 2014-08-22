@@ -20,9 +20,8 @@ public class StructureConfig extends AbstractViewConfig {
         dataform.setEnabled(false);
         
         tabletool = getTableTool("items");
-        tabletool.model = "MODELITEM";
+        tabletool.model = "DD_MODEL_ITEM";
         tabletool.mode = TableTool.DISPLAY;
-        tabletool.hide = new String[] {"MODEL", "INDEX"};
         
         column = new TableToolColumn(tabletool, "NAME");
         column.size = 24;

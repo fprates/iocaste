@@ -26,7 +26,7 @@ public class SelectConfig extends AbstractViewConfig {
         navcontrol.add("rename");
         
         dataform = getElement("model");
-        dataform.importModel("DD_MODEL_ITEM", context.function);
+        dataform.importModel("MODEL", context.function);
         for (Element element : dataform.getElements())
             if (element.getName().equals("NAME")) {
                 element.setVisible(true);
