@@ -17,6 +17,7 @@ public class Query implements Serializable {
     private int maxresults;
     private boolean skiperror, descending;
     private Map<String, Object> values;
+    private ExtendedObject[] entries;
     
     public Query() {
         init();
@@ -41,6 +42,10 @@ public class Query implements Serializable {
         add(field, WhereClause.EQ, value, "and");
     }
 
+    public final void andEqualEntries(String field, String entriesfield) {
+        add(field, WhereClause.EQ_ENTRY, entriesfield, "and");
+    }
+    
     public final void andGE(String field, Object value) {
         add(field, WhereClause.GE, value, "and");
     }
@@ -84,8 +89,16 @@ public class Query implements Serializable {
         enclose(false);
     }
     
+    public final void forEntries(ExtendedObject[] entries) {
+        this.entries = entries;
+    }
+    
     public final String[] getColumns() {
         return columns;
+    }
+    
+    public final ExtendedObject[] getEntries() {
+        return entries;
     }
     
     public final List<JoinClause> getJoinClauses(String name) {
