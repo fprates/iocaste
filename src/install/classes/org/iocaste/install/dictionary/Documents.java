@@ -98,7 +98,7 @@ public class Documents extends Module {
         insertModelItem(docs002, docs006, "MODELITEM.MODEL", "MODELITEM",
                 "DOCID", "MODEL.NAME", "documentModel", "MODEL.NAME");
         insertModelItem(docs002, "MODELITEM.INDEX", "MODELITEM", "NRITM",
-                "MODELITEM.INDEX", "nritm");
+                "MODELITEM.INDEX", "index");
         insertModelItem(docs002, "MODELITEM.FIELDNAME", "MODELITEM",
                 "FNAME", "MODELITEM.FIELDNAME", "tableFieldName");
         insertModelItem(docs002, "MODELITEM.ELEMENT", "MODELITEM",
@@ -106,7 +106,7 @@ public class Documents extends Module {
         insertModelItem(docs002, "MODELITEM.ATTRIB", "MODELITEM",
                 "ATTRB", "MODELITEM.ATTRIB", "attributeName");
         insertModelItem(docs002, "MODELITEM.ITEM_REF", "MODELITEM",
-                "ITREF", "MODELITEM.NAME", "itemReference");
+                "ITREF", "MODELITEM.NAME", "reference");
 
         insertModel(docs001, docs005, "MODEL_KEYS", "DOCS004", null);
         insertModelKey(docs002, docs004, "MODEL_KEYS.NAME", "MODEL_KEYS",
