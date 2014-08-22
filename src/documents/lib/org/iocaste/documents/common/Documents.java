@@ -22,6 +22,7 @@
 package org.iocaste.documents.common;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.iocaste.protocol.AbstractServiceInterface;
@@ -349,6 +350,30 @@ public class Documents extends AbstractServiceInterface {
         for (DocumentModelItem item : modelfrom.getItens()) {
             name = item.getName();
             if (!modelto.contains(name))
+                continue;
+            
+            to.set(name, from.get(item));
+        }
+    }
+    
+    /**
+     * 
+     * @param to
+     * @param from
+     */
+    public static final void moveOnly(
+            ExtendedObject to, ExtendedObject from, String... fields) {
+        String name;
+        DocumentModel modelfrom = from.getModel();
+        DocumentModel modelto = to.getModel();
+        Set<String> fieldset = new HashSet<>();
+        
+        for (String field : fields)
+            fieldset.add(field);
+        
+        for (DocumentModelItem item : modelfrom.getItens()) {
+            name = item.getName();
+            if (!modelto.contains(name) || !fieldset.contains(name))
                 continue;
             
             to.set(name, from.get(item));
