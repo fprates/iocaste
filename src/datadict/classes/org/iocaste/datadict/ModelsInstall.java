@@ -10,8 +10,9 @@ public class ModelsInstall extends AbstractInstallObject {
     @Override
     protected void execute(StandardInstallContext context) {
         ModelInstall model;
-        DataElement key;
+        DataElement key, type;
         
+        type = elementchar("DD_ELEMENT_TYPE", 4, true);
         key = elementbool("DD_KEY");
         
         model = modelInstance("DD_MODEL_ITEM");
@@ -19,7 +20,7 @@ public class ModelsInstall extends AbstractInstallObject {
         model.item("FIELDNAME", reference("MODELITEM.FIELDNAME"));
         model.item("KEY", key);
         model.item("ELEMENT", reference("DATAELEMENT.NAME"));
-        model.item("TYPE", reference("DATAELEMENT.TYPE"));
+        model.item("TYPE", type);
         model.item("LENGTH", reference("DATAELEMENT.LENGTH"));
         model.item("DECIMALS", reference("DATAELEMENT.DECIMALS"));
     }
