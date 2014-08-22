@@ -29,7 +29,7 @@ public class Parser {
         StringBuilder entryclause;
 
         if (entries == null || entries.length == 0)
-            return;
+            throw new IocasteException("no entries for selection.");
         
         sb.append(" (");
         entryclause = null;
@@ -42,7 +42,7 @@ public class Parser {
             name = (String)value;
             if (!entry.getModel().contains((String)value))
                 throw new IocasteException(name.concat(" is an invalid "
-                        + " item for query entries"));
+                        + "item for query entries"));
             addClause(
                     entryclause, values, operator, condition, entry.get(name));
         }
