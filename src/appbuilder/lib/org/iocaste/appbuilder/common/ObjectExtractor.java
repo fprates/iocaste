@@ -35,10 +35,24 @@ public class ObjectExtractor {
         }
         
         rule = conversion.getRule();
-        rule.beforeConversion(object);
+        if (rule != null)
+            rule.beforeConversion(object);
         for (ExtendedObject source : sources)
             Documents.move(object, source);
-        rule.afterConversion(object);
+        for (String field : conversion.getFields()) {
+            switch (conversion.getType(field)) {
+            case DataConversion.CONSTANT:
+                object.set(field, conversion.getValue(field));
+                break;
+            case DataConversion.NEXT_NUMBER:
+                object.set(field, documents.
+                        getNextNumber((String)conversion.getValue(field)));
+                break;
+            }
+        }
+        
+        if (rule != null)
+            rule.afterConversion(object);
         
         return object;
     }
