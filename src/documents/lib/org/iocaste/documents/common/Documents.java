@@ -23,6 +23,7 @@ package org.iocaste.documents.common;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.protocol.AbstractServiceInterface;
@@ -464,6 +465,17 @@ public class Documents extends AbstractServiceInterface {
      */
     public final ExtendedObject[] select(Query query) {
         Message message = new Message("select");
+        message.add("query", query);
+        return call(message);
+    }
+    
+    /**
+     * 
+     * @param query
+     * @return
+     */
+    public final Map<Object, ExtendedObject> selectToMap(Query query) {
+        Message message = new Message("select_to_map");
         message.add("query", query);
         return call(message);
     }

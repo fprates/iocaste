@@ -1,6 +1,7 @@
 package org.iocaste.documents;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -111,21 +112,8 @@ public class Select {
         Object[] lines;
         Map<String, Object> line;
         ExtendedObject[] objects;
-        List<Object> values;
-        String statement;
         
-        if (query.getStatement() != null)
-            throw new Exception("statement for select must be null.");
-
-        values = new ArrayList<>();
-        statement = Parser.parseQuery(query, cache, values);
-        if (values.size() == 0)
-            lines = new Iocaste(cache.function).
-                selectUpTo(statement, query.getMaxResults());
-        else
-            lines = new Iocaste(cache.function).
-                selectUpTo(statement, query.getMaxResults(), values.toArray());
-        
+        lines = select(query, cache);
         if (lines == null)
             return null;
         
@@ -137,5 +125,54 @@ public class Select {
         
         return objects;
         
+    }
+
+    @SuppressWarnings("unchecked")
+    public static final Map<Object, ExtendedObject> toMap(
+            Query query, Cache cache) throws Exception {
+        Object[] lines;
+        Map<String, Object> line;
+        ExtendedObject object;
+        Map<Object, ExtendedObject> objects;
+        DocumentModel model;
+        String key;
+
+        lines = select(query, cache);
+        if (lines == null)
+            return null;
+
+        key = null;
+        model = Model.get(query.getModel(), cache);
+        for (DocumentModelKey item : model.getKeys()) {
+            key = item.getModelItemName();
+            break;
+        }
+        
+        objects = new LinkedHashMap<>();
+        for (int i = 0; i < lines.length; i++) {
+            line = (Map<String, Object>)lines[i];
+            object = getExtendedObject2From(query, line, cache);
+            objects.put(object.get(key), object);
+        }
+        
+        return objects;
+    }
+    
+    private static final Object[] select(Query query, Cache cache)
+            throws Exception {
+        List<Object> values;
+        String statement;
+        
+        if (query.getStatement() != null)
+            throw new Exception("statement for select must be null.");
+
+        values = new ArrayList<>();
+        statement = Parser.parseQuery(query, cache, values);
+        if (values.size() == 0)
+            return new Iocaste(cache.function).
+                selectUpTo(statement, query.getMaxResults());
+        
+        return new Iocaste(cache.function).
+            selectUpTo(statement, query.getMaxResults(), values.toArray());
     }
 }

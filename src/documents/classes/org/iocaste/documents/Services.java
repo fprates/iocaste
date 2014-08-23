@@ -45,6 +45,7 @@ public class Services extends AbstractFunction {
         export("save", "save");
         export("save_complex_document", "saveCDocument");
         export("select", "select");
+        export("select_to_map", "selectToMap");
         export("unlock", "unlock");
         export("update", "update");
         export("update_m", "updateMultiple");
@@ -343,8 +344,19 @@ public class Services extends AbstractFunction {
      */
     public final ExtendedObject[] select(Message message) throws Exception {
         Query query = message.get("query");
-        
         return Select.init(query, cache);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     * @throws Exception
+     */
+    public final Map<Object, ExtendedObject> selectToMap(Message message)
+            throws Exception {
+        Query query = message.get("query");
+        return Select.toMap(query, cache);
     }
     
     /**
