@@ -2,6 +2,7 @@ package org.iocaste.docmanager.common;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
@@ -10,6 +11,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Function;
 
 public abstract class AbstractManager implements Manager {
@@ -44,7 +46,7 @@ public abstract class AbstractManager implements Manager {
     public final ComplexDocument get(Object code) {
         return docmanager.get(cmodel.getName(), code);
     }
-
+    
     /**
      * 
      * @param model
@@ -96,6 +98,38 @@ public abstract class AbstractManager implements Manager {
             return item;
         }
         return null;
+    }
+
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.docmanager.common.Manager#getRelated(
+     *    org.iocaste.documents.common.ComplexDocument, java.lang.String,
+     *    java.lang.String)
+     */
+    @Override
+    public final Map<Object, ExtendedObject> getRelated(
+            ComplexDocument document, String name, String field) {
+        DocumentModelItem item;
+        Query query;
+        ExtendedObject[] objects;
+        DocumentModelItem reference;
+        DocumentModel model;
+        
+        model = cmodel.getItems().get(name);
+        item = model.getModelItem(field);
+        reference = item.getReference();
+        if (reference == null)
+            return null;
+        
+        objects = document.getItems(name);
+        if (objects == null || objects.length == 0)
+            return null;
+        
+        query = new Query();
+        query.setModel(reference.getDocumentModel().getName());
+        query.forEntries(objects);
+        query.andEqualEntries(reference.getName(), field);
+        return documents.selectToMap(query);
     }
     
     /*
