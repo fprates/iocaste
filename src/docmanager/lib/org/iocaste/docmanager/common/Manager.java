@@ -1,6 +1,7 @@
 package org.iocaste.docmanager.common;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
@@ -18,6 +19,9 @@ public interface Manager {
     public abstract String getMessage(int messageid);
     
     public abstract ComplexModel getModel();
+
+    public abstract Map<Object, ExtendedObject> getRelated(
+            ComplexDocument document, String name, String field);
     
     public abstract ComplexDocument instance();
     
