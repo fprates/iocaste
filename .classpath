@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="src/workbench/lib"/>
 	<classpathentry kind="src" path="src/svg/lib"/>
 	<classpathentry kind="src" path="src/svg/classes"/>
-	<classpathentry kind="src" path="src/examples/classes"/>
 	<classpathentry kind="src" path="src/workbench/classes"/>
 	<classpathentry kind="src" path="src/gconfigview/classes"/>
 	<classpathentry kind="src" path="src/globalconfig/classes"/>
@@ -18,7 +17,6 @@
 	<classpathentry kind="src" path="src/styleeditor/classes"/>
 	<classpathentry kind="src" path="src/packagetool/classes"/>
 	<classpathentry kind="src" path="src/datadict/classes"/>
-	<classpathentry kind="src" path="src/transport/classes"/>
 	<classpathentry kind="src" path="src/help/classes"/>
 	<classpathentry kind="src" path="src/documents/lib"/>
 	<classpathentry excluding="hibernate.cfg.xml" kind="src" path="src/shell/classes"/>
@@ -29,8 +27,6 @@
 	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/login/classes"/>
 	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/tasksel/classes"/>
 	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/documents/classes"/>
-	<classpathentry kind="src" path="src/external/classes"/>
-	<classpathentry kind="src" path="src/external/lib"/>
 	<classpathentry kind="src" path="src/search-help/classes"/>
 	<classpathentry kind="src" path="src/dataview/classes"/>
 	<classpathentry kind="src" path="src/packagetool/lib"/>
@@ -50,8 +46,6 @@
 	<classpathentry kind="src" path="src/kernel/lib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/home/francisco.prates/workspace/iocaste/lib-shell/commons-fileupload-1.2.2.jar"/>
-	<classpathentry kind="lib" path="lib-external/axiom-api-1.2.12.jar"/>
-	<classpathentry kind="lib" path="lib-external/axis2-kernel-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
 	<classpathentry kind="lib" path="lib-report/jasperreports-4.6.0.jar"/>
 	<classpathentry kind="lib" path="lib-report/iText-2.1.7.jar"/>

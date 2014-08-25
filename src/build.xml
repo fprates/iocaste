@@ -75,12 +75,6 @@
         <!-- tasksel -->
         <ant antfile="${basedir}/src/tasksel/build.xml"/>
 
-        <!-- external -->
-        <ant antfile="${basedir}/src/external/build.xml"/>
-          
-        <!-- transport -->
-        <ant antfile="${basedir}/src/transport/build.xml"/>
-
         <!-- datadict -->
         <ant antfile="${basedir}/src/datadict/build.xml"/>
             
@@ -117,9 +111,6 @@
         <!-- masterdata -->
         <ant antfile="${basedir}/src/masterdata/build.xml"/>
         
-        <!-- examples -->
-        <!-- <ant antfile="${basedir}/src/examples/build.xml"/> -->
-        
         <!-- template -->
         <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
     	
@@ -133,7 +124,6 @@
     		<fileset dir="${builddir}/texteditor/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/workbench/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/svg/lib" excludes="*.jar"/>
-    	    <fileset dir="${builddir}/external/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/docmanager/lib/" excludes="*.jar"/>
     		<fileset dir="${builddir}/appbuilder/lib/" excludes="*.jar"/>
     	<!--    <fileset dir="${builddir}/report/lib" excludes="*.jar"/> -->
