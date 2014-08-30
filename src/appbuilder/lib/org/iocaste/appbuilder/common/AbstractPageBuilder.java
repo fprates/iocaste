@@ -134,7 +134,8 @@ class BuilderCustomView extends AbstractCustomView {
     private NavControl navcontrol;
     private String view;
     
-    private void buildItem(PageBuilderContext context, ViewSpecItem item) {
+    private void buildItem(PageBuilderContext context, ViewContext viewctx,
+            ViewSpecItem item) {
         RadioGroup group;
         String[] names;
         DashboardFactory dashboard;
@@ -143,7 +144,6 @@ class BuilderCustomView extends AbstractCustomView {
         Container container = context.view.getElement(item.getParent());
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
         String name = item.getName();
-        ViewContext viewctx = context.getView(view);
         
         switch (types[item.getType()]) {
         case FORM:
@@ -163,7 +163,6 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case TABLE_TOOL:
             ttdata = new TableToolData(container, name);
-            viewctx =context.getView(view);
             viewcomponents = viewctx.getComponents();
             viewcomponents.add(ttdata);
             break;
@@ -172,11 +171,11 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case DASHBOARD:
             dashboard = new DashboardFactory(container, context, name);
-            viewcomponents = context.getView(view).getComponents();
+            viewcomponents = viewctx.getComponents();
             viewcomponents.dashboards.put(name, dashboard);
             break;
         case DASHBOARD_ITEM:
-            viewcomponents = context.getView(view).getComponents();
+            viewcomponents = viewctx.getComponents();
             dashboard = viewcomponents.dashboards.get(item.getParent());
             dashboard.instance(name);
             break;
@@ -193,13 +192,13 @@ class BuilderCustomView extends AbstractCustomView {
             new Link(container, name, name);
             break;
         case REPORT_TOOL:
-            viewcomponents = context.getView(view).getComponents();
+            viewcomponents = viewctx.getComponents();
             viewcomponents.reporttools.put(
                     name, new ReportTool(container, name));
             break;
         case TEXT_EDITOR:
             editor = new TextEditorTool(context).instance(container, name);
-            viewcomponents = context.getView(view).getComponents();
+            viewcomponents = viewctx.getComponents();
             viewcomponents.editors.put(name, editor);
             break;
         case FILE_UPLOAD:
@@ -221,7 +220,7 @@ class BuilderCustomView extends AbstractCustomView {
         }
         
         for (ViewSpecItem child : item.getItems())
-            buildItem(context, child);
+            buildItem(context, viewctx, child);
     }
     
     private final void download(PageBuilderContext context) throws Exception {
@@ -247,6 +246,7 @@ class BuilderCustomView extends AbstractCustomView {
      */
     @Override
     public void execute(AbstractContext context) throws Exception {
+        ViewContext viewctx;
         AbstractViewSpec viewspec = getViewSpec();
         ViewConfig viewconfig = getViewConfig();
         AbstractViewInput viewinput = getViewInput();
@@ -261,8 +261,9 @@ class BuilderCustomView extends AbstractCustomView {
         if (!viewspec.isInitialized()) {
             _context.setInputUpdate(false);
             viewspec.run(_context);
+            viewctx = _context.getView(view);
             for (ViewSpecItem item : viewspec.getItems())
-                buildItem((PageBuilderContext)context, item);
+                buildItem(_context, viewctx, item);
             
             if (viewconfig != null) {
                 viewconfig.setNavControl(navcontrol);
