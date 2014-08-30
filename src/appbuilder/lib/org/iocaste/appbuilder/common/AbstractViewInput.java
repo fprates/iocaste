@@ -46,7 +46,8 @@ public abstract class AbstractViewInput {
     
     @SuppressWarnings("unchecked")
     protected final <T extends ExtendedContext> T getExtendedContext() {
-        return (T)context.getExtendedContext(context.view.getPageName());
+        return (T)context.getView(context.view.getPageName()).
+                getExtendedContext();
     }
     
     private InputComponent getinput(String form, String item) {
@@ -58,7 +59,7 @@ public abstract class AbstractViewInput {
     }
     
     private final ViewComponents getViewComponents() {
-        return context.getViewComponents(context.view.getPageName());
+        return context.getView(context.view.getPageName()).getComponents();
     }
     
     protected abstract void init(PageBuilderContext context);

@@ -58,7 +58,7 @@ public class ShowObject extends AbstractActionHandler {
         }
          
         extcontext.items = objects.toArray(new ExtendedObject[0]);
-        context.setExtendedContext(Main.STRUCTURE, extcontext);
+        context.getView(Main.STRUCTURE).set(extcontext);
         redirect(Main.STRUCTURE);
     }
 }

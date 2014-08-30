@@ -205,7 +205,7 @@ public class DocumentExtractor {
         head = conversion(head, model, hconversion, documents);
         document.setHeader(head);
         for (String name : items.keySet()) {
-            tabletool = context.getViewComponents(pagename).
+            tabletool = context.getView(pagename).getComponents().
                     tabletools.get(name).component;
             
             objects = tabletool.getObjects();

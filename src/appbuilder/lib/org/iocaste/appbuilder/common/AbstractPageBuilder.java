@@ -65,6 +65,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
      */
     @Override
     public AbstractContext init(View view) throws Exception {
+        ViewContext viewctx;
         BuilderCustomView customview;
         AbstractViewSpec viewspec;
         ViewConfig viewconfig;
@@ -79,9 +80,10 @@ public abstract class AbstractPageBuilder extends AbstractPage {
 
         customaction = new BuilderCustomAction();
         for (String name : context.getViews()) {
-            viewspec = context.getViewSpec(name);
-            viewconfig = context.getViewConfig(name);
-            viewinput = context.getViewInput(name);
+            viewctx = context.getView(name);
+            viewspec = viewctx.getSpec();
+            viewconfig = viewctx.getConfig();
+            viewinput = viewctx.getInput();
             
             customview = new BuilderCustomView();
             customview.setViewSpec(viewspec);
@@ -90,8 +92,8 @@ public abstract class AbstractPageBuilder extends AbstractPage {
             customview.setView(name);
             
             register(name, customview);
-            for (String action : context.getActions(name)) {
-                handler = context.getActionHandler(name, action);
+            for (String action : viewctx.getActions()) {
+                handler = viewctx.getActionHandler(action);
                 customaction.addHandler(name, action, handler);
                 register(action, customaction);
             }
@@ -141,6 +143,7 @@ class BuilderCustomView extends AbstractCustomView {
         Container container = context.view.getElement(item.getParent());
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
         String name = item.getName();
+        ViewContext viewctx = context.getView(view);
         
         switch (types[item.getType()]) {
         case FORM:
@@ -160,7 +163,8 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case TABLE_TOOL:
             ttdata = new TableToolData(container, name);
-            viewcomponents = context.getViewComponents(view);
+            viewctx =context.getView(view);
+            viewcomponents = viewctx.getComponents();
             viewcomponents.add(ttdata);
             break;
         case DATA_FORM:
@@ -168,11 +172,11 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case DASHBOARD:
             dashboard = new DashboardFactory(container, context, name);
-            viewcomponents = context.getViewComponents(view);
+            viewcomponents = context.getView(view).getComponents();
             viewcomponents.dashboards.put(name, dashboard);
             break;
         case DASHBOARD_ITEM:
-            viewcomponents = context.getViewComponents(view);
+            viewcomponents = context.getView(view).getComponents();
             dashboard = viewcomponents.dashboards.get(item.getParent());
             dashboard.instance(name);
             break;
@@ -189,13 +193,13 @@ class BuilderCustomView extends AbstractCustomView {
             new Link(container, name, name);
             break;
         case REPORT_TOOL:
-            viewcomponents = context.getViewComponents(view);
+            viewcomponents = context.getView(view).getComponents();
             viewcomponents.reporttools.put(
                     name, new ReportTool(container, name));
             break;
         case TEXT_EDITOR:
             editor = new TextEditorTool(context).instance(container, name);
-            viewcomponents = context.getViewComponents(view);
+            viewcomponents = context.getView(view).getComponents();
             viewcomponents.editors.put(name, editor);
             break;
         case FILE_UPLOAD:
@@ -282,7 +286,7 @@ class BuilderCustomView extends AbstractCustomView {
     
     private final void generateTables(PageBuilderContext context) {
         ViewComponents components = context.
-                getViewComponents(context.view.getPageName());
+                getView(context.view.getPageName()).getComponents();
         
         for (TableToolEntry entry : components.tabletools.values())
             entry.component = new TableTool(context, entry.data);
@@ -294,7 +298,7 @@ class BuilderCustomView extends AbstractCustomView {
     
     private final void updateTables(PageBuilderContext context) {
         ViewComponents components = context.
-                getViewComponents(context.view.getPageName());
+                getView(context.view.getPageName()).getComponents();
         
         for (TableToolEntry entry : components.tabletools.values())
             entry.component.setObjects(entry.data.objects);
@@ -336,7 +340,7 @@ class BuilderCustomAction implements ViewCustomAction {
     
     private final void loadTableObjects(PageBuilderContext context) {
         ViewComponents components = context.
-                getViewComponents(context.view.getPageName());
+                getView(context.view.getPageName()).getComponents();
         
         for (TableToolEntry entry : components.tabletools.values())
             entry.data.objects = entry.component.getObjects();

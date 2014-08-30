@@ -3,6 +3,7 @@ package org.iocaste.datadict;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.ViewContext;
 
 public class Main extends AbstractPageBuilder {
     public static final String MAIN = "main";
@@ -10,17 +11,21 @@ public class Main extends AbstractPageBuilder {
     
     @Override
     public void config(PageBuilderContext context) throws Exception {
-        context.setView(MAIN, new SelectSpec(), new SelectConfig());
+        ViewContext view;
+        
+        view = context.instance(MAIN);
+        view.set(new SelectSpec());
+        view.set(new SelectConfig());
 //        context.setActionHandler(MAIN, "create", new CreateObject());
-        context.setActionHandler(MAIN, "show", new ShowObject());
+        view.put("show", new ShowObject());
 //        context.setActionHandler(MAIN, "update", new UpdateObject());
 //        context.setActionHandler(MAIN, "delete", new DeleteObject());
 //        context.setActionHandler(MAIN, "rename", new RenameObject());
         
-        context.setView(STRUCTURE,
-                new StructureSpec(),
-                new StructureConfig(),
-                new StructureInput());
+        view = context.instance(STRUCTURE);
+        view.set(new StructureSpec());
+        view.set(new StructureConfig());
+        view.set(new StructureInput());
     }
 
     @Override

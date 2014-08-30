@@ -3,6 +3,7 @@ package org.iocaste.infosis;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.ViewContext;
 
 public class Main extends AbstractPageBuilder {
     private static final String MAIN = "main";
@@ -13,21 +14,25 @@ public class Main extends AbstractPageBuilder {
 
     @Override
     public void config(PageBuilderContext context) {
+        ViewContext view;
         Context extcontext = new Context();
 
-        context.setExtendedContext(MAIN, extcontext);
-        context.setView(MAIN, new MainSpec(), new MainConfig());
-        context.setActionHandler(MAIN, "items", new OptionChoosen());
+        view = context.instance(MAIN);
+        view.set(extcontext);
+        view.set(new MainSpec());
+        view.set(new MainConfig());
+        view.put("items", new OptionChoosen());
         
         for (String page : new String[] {JVPR, SINF, ULST}) {
-            context.setExtendedContext(page, extcontext);
-            context.setView(page,
-                    new PropertiesSpec(),
-                    new PropertiesConfig(page),
-                    new PropertiesInput());
+            view = context.instance(page);
+            view.set(extcontext);
+            view.set(new PropertiesSpec());
+            view.set(new PropertiesConfig(page));
+            view.set(new PropertiesInput());
         }
         
-        context.setView(UACC, new UnauthorizedAccessesSpec());
+        view = context.instance(UACC);
+        view.set(new UnauthorizedAccessesSpec());
     }
 
     @Override

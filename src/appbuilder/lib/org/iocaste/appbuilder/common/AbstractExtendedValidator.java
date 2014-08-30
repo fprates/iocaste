@@ -48,8 +48,8 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
     protected final Table getTable(String name) {
         TableToolData data;
         PageBuilderContext context = getContext();
-        ViewComponents components = context.getViewComponents(
-                context.view.getPageName());
+        ViewComponents components = context.
+                getView(context.view.getPageName()).getComponents();
         
         data = components.getTableToolData(name);
         return TableTool.get(context.view, data);

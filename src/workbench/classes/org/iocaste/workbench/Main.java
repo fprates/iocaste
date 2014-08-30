@@ -3,6 +3,7 @@ package org.iocaste.workbench;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.texteditor.common.TextEditorTool;
 
 public class Main extends AbstractPageBuilder {
@@ -11,30 +12,34 @@ public class Main extends AbstractPageBuilder {
     
     @Override
     public void config(PageBuilderContext context) {
+        ViewContext view;
         Context extcontext = new Context();
         
         extcontext.repository = TextEditorTool.composeFileName(
                 System.getProperty("user.dir"), "iocaste","iocaste-workbench");
         
-        context.setExtendedContext(MAIN, extcontext);
-        context.setView(MAIN, new MainSpec(), new MainConfig());
-        context.setActionHandler(MAIN, "create", new ProjectCreate());
-        context.setActionHandler(MAIN, "open", new ProjectOpen());
+        view = context.instance(MAIN);
+        view.set(extcontext);
+        view.set(new MainSpec());
+        view.set(new MainConfig());
+        view.put("create", new ProjectCreate());
+        view.put("open", new ProjectOpen());
         
-        context.setExtendedContext(PRJC, extcontext);
-        context.setView(PRJC,
-                new ProjectSpec(), new ProjectConfig(), new ProjectInput());
-        context.setActionHandler(PRJC, "create", new ObjectProjectCreate());
-        context.setActionHandler(PRJC, "add", new ComponentViewAdd());
-        context.setActionHandler(PRJC, "components", new ComponentChoose());
-        context.setActionHandler(PRJC, "save", new ProjectSave());
-        context.setActionHandler(PRJC, "attributes", new AttributesSet());
-        context.setActionHandler(PRJC, "views", new ProjectViewDisplay());
-        context.setActionHandler(
-                PRJC, "create_element", new SwitchPanel("element"));
-        context.setActionHandler(
-                PRJC, "cancel_element", new SwitchPanel("model"));
-        context.setUpdateViews(PRJC, true);
+        
+        view = context.instance(PRJC);
+        view.set(extcontext);
+        view.set(new ProjectSpec());
+        view.set(new ProjectConfig());
+        view.set(new ProjectInput());
+        view.put("create", new ObjectProjectCreate());
+        view.put("add", new ComponentViewAdd());
+        view.put("components", new ComponentChoose());
+        view.put("save", new ProjectSave());
+        view.put("attributes", new AttributesSet());
+        view.put("views", new ProjectViewDisplay());
+        view.put("create_element", new SwitchPanel("element"));
+        view.put("cancel_element", new SwitchPanel("model"));
+        view.setUpdate(true);
     }
 
     @Override

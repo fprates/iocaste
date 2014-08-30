@@ -48,7 +48,7 @@ public abstract class AbstractActionHandler {
     
     protected final void execute(String action) throws Exception {
         String view = context.view.getPageName();
-        context.getActionHandler(view, action).run(context);
+        context.getView(view).getActionHandler(action).run(context);
     }
     
     protected abstract void execute(PageBuilderContext context)
@@ -134,7 +134,8 @@ public abstract class AbstractActionHandler {
     
     @SuppressWarnings("unchecked")
     protected final <T extends ExtendedContext> T getExtendedContext() {
-        return (T)context.getExtendedContext(context.view.getPageName());
+        String page = context.view.getPageName();
+        return (T)context.getView(page).getExtendedContext();
     }
 
     protected final String getinputst(String name) {
@@ -146,8 +147,9 @@ public abstract class AbstractActionHandler {
     }
     
     protected final void init(String view, ExtendedContext extcontext) {
-        context.setExtendedContext(view, extcontext);
-        context.getViewSpec(view).setInitialized(false);
+        ViewContext viewctx = context.getView(view);
+        viewctx.set(extcontext);
+        viewctx.getSpec().setInitialized(false);
     }
     
     protected final void inputrefresh() {
@@ -182,14 +184,16 @@ public abstract class AbstractActionHandler {
     public final void run(AbstractContext context) throws Exception {
         String appname, rappname, pagename, rpagename;
         AbstractViewSpec viewspec;
+        ViewContext viewctx, rviewctx;
         String view = context.view.getPageName();
         String action = context.view.getActionControl();
         
         this.context = (PageBuilderContext)context;
-        if (!this.context.hasActionHandler(view, action))
+        viewctx = this.context.getView(view);
+        if (viewctx.getActionHandler(action) == null)
             return;
         
-        components = this.context.getViewComponents(view);
+        components = viewctx.getComponents();
         documents = new Documents(context.function);
         context.view.setInitialize(false);
         execute(this.context);
@@ -204,16 +208,18 @@ public abstract class AbstractActionHandler {
         if ((rpagename != null) && (rpagename.equals(pagename)))
             rpagename = null;
         
-        if (rpagename != null)
-            viewspec = this.context.getViewSpec(rpagename);
-        else
+        if (rpagename != null) {
+            rviewctx = this.context.getView(rpagename);
+            viewspec = (rviewctx == null)? null : rviewctx.getSpec();
+        } else {
             viewspec = null;
+        }
         
         if ((rappname == null) && (rpagename != null)) {
             if ((viewspec != null) && viewspec.isInitialized())
                 inputrefresh();
         } else {
-            if (!this.context.isViewUpdatable(view))
+            if (!viewctx.isUpdatable())
                 context.function.keepView();
         }
     }

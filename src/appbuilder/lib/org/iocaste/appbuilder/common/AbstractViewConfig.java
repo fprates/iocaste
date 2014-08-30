@@ -33,7 +33,8 @@ public abstract class AbstractViewConfig implements ViewConfig {
      */
     @SuppressWarnings("unchecked")
     protected final <T extends ExtendedContext> T getExtendedContext() {
-        return (T)context.getExtendedContext(context.view.getPageName());
+        return (T)context.getView(context.view.getPageName()).
+                getExtendedContext();
     }
     
     /**
@@ -109,7 +110,7 @@ public abstract class AbstractViewConfig implements ViewConfig {
      * @return
      */
     private final ViewComponents getViewComponents() {
-        return context.getViewComponents(context.view.getPageName());
+        return context.getView(context.view.getPageName()).getComponents();
     }
     
     /*

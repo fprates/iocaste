@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.docmanager.common.Manager;
@@ -40,6 +41,7 @@ public class Main extends AbstractPageBuilder {
     }
     
     private void loadManagedModule(PageBuilderContext context) {
+        ViewContext viewctx;
         MaintenanceConfig maintenanceconfig;
         AbstractViewSpec selspec, maintenancespec;
         AbstractViewInput maintenanceinput;
@@ -67,27 +69,36 @@ public class Main extends AbstractPageBuilder {
         maintenanceinput = new MaintenanceInput(extcontext);
         save = new Save(cmodel);
         
-        context.setActionHandler(create, "create",
-                new Validate(extcontext, cmodel));
-        context.setActionHandler(edit, "edit",
-                new Load(extcontext, edit1, cmodel));
-        context.setActionHandler(display, "display",
-                new Load(extcontext, display1, cmodel));
-        
         for (String action : new String[] {"create", "edit", "display"}) {
             entityaction = name.concat(action);
-            context.setView(
-                    entityaction, selspec, new SelectConfig(action, cmodel));
+            viewctx = context.instance(entityaction);
+            viewctx.set(selspec);
+            viewctx.set(new SelectConfig(action, cmodel));
+            switch (action) {
+            case "create":
+                viewctx.put("create", new Validate(extcontext, cmodel));
+                break;
+            case "edit":
+                viewctx.put("edit", new Load(extcontext, edit1, cmodel));
+                break;
+            case "display":
+                viewctx.put("display", new Load(extcontext, display1, cmodel));
+                break;
+            }
         }
         
         for (String view : new String[] {create1, edit1}) {
-            context.setView(view,
-                    maintenancespec, maintenanceconfig, maintenanceinput);
-            context.setActionHandler(view, "save", save);
+            viewctx = context.instance(view);
+            viewctx.set(maintenancespec);
+            viewctx.set(maintenanceconfig);
+            viewctx.set(maintenanceinput);
+            viewctx.put("save", save);
         }
 
-        context.setView(display1,
-                maintenancespec, new DisplayConfig(cmodel), maintenanceinput);
+        viewctx = context.instance(display1);
+        viewctx.set(maintenancespec);
+        viewctx.set(new DisplayConfig(cmodel));
+        viewctx.set(maintenanceinput);
     }
     
     private void loadRemoteModule(PageBuilderContext context, String module)
@@ -113,7 +124,7 @@ public class Main extends AbstractPageBuilder {
                 args = args[0].split("\\.");
                 view = args[args.length - 1];
                 spec = new AutomatedViewSpec();
-                context.setView(view, spec);
+                context.instance(view).set(spec);
                 break;
             default:
                 spec.add(args);

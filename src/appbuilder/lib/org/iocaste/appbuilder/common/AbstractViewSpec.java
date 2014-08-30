@@ -57,7 +57,8 @@ public abstract class AbstractViewSpec {
     
     @SuppressWarnings("unchecked")
     public final <T extends ExtendedContext> T getExtendedContext() {
-        return (T)context.getExtendedContext(context.view.getPageName());
+        return (T)context.getView(context.view.getPageName()).
+                getExtendedContext();
     }
     
     public final List<ViewSpecItem> getItems() {
