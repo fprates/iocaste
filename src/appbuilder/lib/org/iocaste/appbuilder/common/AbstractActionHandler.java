@@ -13,7 +13,6 @@ import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.FileEntry;
@@ -29,7 +28,7 @@ public abstract class AbstractActionHandler {
     private Documents documents;
     
     protected final void back() {
-        ((AbstractPage)context.function).back();
+        context.function.back();
     }
     
     protected final String dbactionget(String dashboard, String item) {
@@ -144,6 +143,11 @@ public abstract class AbstractActionHandler {
     
     protected final Manager getManager(String name) {
         return context.getManager(name);
+    }
+    
+    protected final void init(String view, ExtendedContext extcontext) {
+        context.setExtendedContext(view, extcontext);
+        context.getViewSpec(view).setInitialized(false);
     }
     
     protected final void inputrefresh() {
