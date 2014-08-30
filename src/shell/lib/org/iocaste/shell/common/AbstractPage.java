@@ -26,6 +26,7 @@ public abstract class AbstractPage extends AbstractFunction {
     private Map<String, CustomView> customviews;
     private Map<String, Validator> validators;
     private Map<String, List<String>> validables;
+    private ViewState state;
     
     public AbstractPage() {
         export("get_view_data", "getViewData");
@@ -34,6 +35,7 @@ public abstract class AbstractPage extends AbstractFunction {
         customviews = new HashMap<>();
         validators = new HashMap<>();
         validables = new HashMap<>();
+        state = new ViewState();
     }
     
     /**
@@ -64,7 +66,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final View execAction(Message message) throws Exception {
+    public final ViewState execAction(Message message) throws Exception {
         Validator validator;
         InputComponent input;
         List<String> handlers;
@@ -80,6 +82,7 @@ public abstract class AbstractPage extends AbstractFunction {
             context.function = this;
         }
         
+        state.view = view;
         for (String name : validables.keySet()) {
             input = (InputComponent)view.getElement(name);
             if (input == null)
@@ -94,7 +97,7 @@ public abstract class AbstractPage extends AbstractFunction {
                 error = validator.getMessage();
                 if (error == null)
                     continue;
-                return view;
+                return state;
             }
         }
         
@@ -109,7 +112,7 @@ public abstract class AbstractPage extends AbstractFunction {
             method.invoke(this);
         }
         
-        return view;
+        return state;
     }
     
     /**
@@ -136,6 +139,7 @@ public abstract class AbstractPage extends AbstractFunction {
         Iocaste iocaste = new Iocaste(this);
         Locale locale = iocaste.getLocale();
 
+        state.keepview = false;
         if (context != null)
             context.view = view;
         
@@ -202,23 +206,10 @@ public abstract class AbstractPage extends AbstractFunction {
     protected abstract AbstractContext init(View view) throws Exception;
     
     /**
-     * Atualiza uma visão, não necessariamente a visão atual.
-     * @param view visão a ser atualizada.
+     * 
      */
-    protected final void updateView(View view) {
-        new Shell(this).updateView(view);
-    }
-    
-    private void setLocaleForElement(Element element, Locale locale) {
-        Container container;
-        
-        element.setLocale(locale);
-        if (!element.isContainable())
-            return;
-        
-        container = (Container)element;
-        for (Element element_ : container.getElements())
-            setLocaleForElement(element_, locale);
+    public final void keepView() {
+        state.keepview = true;
     }
     
     /**
@@ -246,6 +237,26 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public final void register(String action, ViewCustomAction custom) {
         customactions.put(action, custom);
+    }
+    
+    private void setLocaleForElement(Element element, Locale locale) {
+        Container container;
+        
+        element.setLocale(locale);
+        if (!element.isContainable())
+            return;
+        
+        container = (Container)element;
+        for (Element element_ : container.getElements())
+            setLocaleForElement(element_, locale);
+    }
+    
+    /**
+     * Atualiza uma visão, não necessariamente a visão atual.
+     * @param view visão a ser atualizada.
+     */
+    protected final void updateView(View view) {
+        new Shell(this).updateView(view);
     }
     
     /**

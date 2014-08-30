@@ -35,6 +35,7 @@ import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.ViewState;
 
 public class PageRenderer extends AbstractRenderer {
     private static final long serialVersionUID = -8143025594178489781L;
@@ -98,7 +99,8 @@ public class PageRenderer extends AbstractRenderer {
             try {
                 service = new Service(config.sessionid,
                         composeUrl(config.contextname));
-                config.view = (View)service.call(message);
+                config.state = (ViewState)service.call(message);
+                config.view = config.state.view;
                 
                 if (config.view.getMessageType() == Const.ERROR)
                     Common.rollback(getServerName(), config.sessionid);
@@ -740,7 +742,7 @@ public class PageRenderer extends AbstractRenderer {
         
         pagectx_.setInitialize(view.isInitializable());
         pagectx_.setSequence(sequence);
-        pagectx_.setKeepView(view.keepView());
+        pagectx_.setKeepView(config.state.keepview);
         pagectx_.setReloadableView(view.isReloadableView());
         pagectx_.setInitParameters(view.getInitParameters());
         pagectx_.clearParameters();

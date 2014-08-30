@@ -52,7 +52,7 @@ public class View implements Serializable {
     private Map<String, String> headervalues;
     private Map<String, Map<String, String>> sheet;
     private Map<String, Element> elements;
-    private boolean reloadable, dontpushpage, pagecall, initialize, keepview;
+    private boolean reloadable, dontpushpage, pagecall, initialize;
     private Const messagetype;
     private Locale locale;
     
@@ -424,14 +424,6 @@ public class View implements Serializable {
     }
     
     /**
-     * 
-     * @return
-     */
-    public final boolean keepView() {
-        return keepview;
-    }
-    
-    /**
      * Ajusta tipo e texto da mensagem.
      * @param messagetype tipo
      * @param messagetext texto
@@ -545,14 +537,6 @@ public class View implements Serializable {
      */
     public final void setInitialize(boolean initialize) {
         this.initialize = initialize;
-    }
-    
-    /**
-     * 
-     * @param keepview
-     */
-    public final void setKeepView(boolean keepview) {
-        this.keepview = keepview;
     }
     
     /**
