@@ -83,6 +83,8 @@ public abstract class AbstractPage extends AbstractFunction {
         }
         
         state.view = view;
+        action = (control == null)? controlname : control.getName();
+        view.setActionControl(action);
         for (String name : validables.keySet()) {
             input = (InputComponent)view.getElement(name);
             if (input == null)
@@ -97,12 +99,12 @@ public abstract class AbstractPage extends AbstractFunction {
                 error = validator.getMessage();
                 if (error == null)
                     continue;
+                context.view.setFocus(input);
+                context.view.message(Const.ERROR, error);
                 return state;
             }
         }
         
-        action = (control == null)? controlname : control.getName();
-        view.setActionControl(action);
         action = (control == null)? controlname : control.getAction();
         customaction = customactions.get(action);
         if (customaction != null) {
