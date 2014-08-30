@@ -742,7 +742,10 @@ public class PageRenderer extends AbstractRenderer {
         
         pagectx_.setInitialize(view.isInitializable());
         pagectx_.setSequence(sequence);
-        pagectx_.setKeepView(config.state.keepview);
+        if (config.state != null)
+            pagectx_.setKeepView(config.state.keepview);
+        else
+            pagectx_.setKeepView(true);
         pagectx_.setReloadableView(view.isReloadableView());
         pagectx_.setInitParameters(view.getInitParameters());
         pagectx_.clearParameters();
