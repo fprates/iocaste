@@ -181,31 +181,36 @@ public class PageBuilderContext extends AbstractContext {
     /**
      * 
      * @param view
+     * @param spec
+     */
+    public final void setView(String view, AbstractViewSpec spec) {
+        setView(view, spec, null, null);
+    }
+    
+    /**
+     * 
+     * @param view
+     * @param spec
      * @param config
      */
-    public final void setViewConfig(String view, ViewConfig config) {
-        ViewContext context = getContext(view);
-        context.viewconfig = config;
+    public final void setView(String view,
+            AbstractViewSpec spec, ViewConfig config) {
+        setView(view, spec, config, null);
     }
     
     /**
      * 
      * @param view
+     * @param spec
+     * @param config
      * @param input
      */
-    public final void setViewInput(String view, AbstractViewInput input) {
+    public final void setView(String view,
+            AbstractViewSpec spec, ViewConfig config, AbstractViewInput input) {
         ViewContext context = getContext(view);
+        context.viewspec = spec;
+        context.viewconfig = config;
         context.viewinput = input;
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param viewspec
-     */
-    public final void setViewSpec(String view, AbstractViewSpec viewspec) {
-        ViewContext context = getContext(view);
-        context.viewspec = viewspec;
     }
     
     /**

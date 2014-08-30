@@ -10,17 +10,17 @@ public class Main extends AbstractPageBuilder {
     
     @Override
     public void config(PageBuilderContext context) throws Exception {
-        context.setViewSpec(MAIN, new SelectSpec());
-        context.setViewConfig(MAIN, new SelectConfig());
+        context.setView(MAIN, new SelectSpec(), new SelectConfig());
 //        context.setActionHandler(MAIN, "create", new CreateObject());
         context.setActionHandler(MAIN, "show", new ShowObject());
 //        context.setActionHandler(MAIN, "update", new UpdateObject());
 //        context.setActionHandler(MAIN, "delete", new DeleteObject());
 //        context.setActionHandler(MAIN, "rename", new RenameObject());
         
-        context.setViewSpec(STRUCTURE, new StructureSpec());
-        context.setViewConfig(STRUCTURE, new StructureConfig());
-        context.setViewInput(STRUCTURE, new StructureInput());
+        context.setView(STRUCTURE,
+                new StructureSpec(),
+                new StructureConfig(),
+                new StructureInput());
     }
 
     @Override

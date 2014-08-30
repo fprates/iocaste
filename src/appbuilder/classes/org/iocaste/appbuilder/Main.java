@@ -76,21 +76,18 @@ public class Main extends AbstractPageBuilder {
         
         for (String action : new String[] {"create", "edit", "display"}) {
             entityaction = name.concat(action);
-            context.setViewSpec(entityaction, selspec);
-            context.setViewConfig(
-                    entityaction, new SelectConfig(action, cmodel));
+            context.setView(
+                    entityaction, selspec, new SelectConfig(action, cmodel));
         }
         
         for (String view : new String[] {create1, edit1}) {
-            context.setViewSpec(view, maintenancespec);
-            context.setViewConfig(view, maintenanceconfig);
-            context.setViewInput(view, maintenanceinput);
+            context.setView(view,
+                    maintenancespec, maintenanceconfig, maintenanceinput);
             context.setActionHandler(view, "save", save);
         }
 
-        context.setViewSpec(display1, maintenancespec);
-        context.setViewConfig(display1, new DisplayConfig(cmodel));
-        context.setViewInput(display1, maintenanceinput);
+        context.setView(display1,
+                maintenancespec, new DisplayConfig(cmodel), maintenanceinput);
     }
     
     private void loadRemoteModule(PageBuilderContext context, String module)
@@ -116,7 +113,7 @@ public class Main extends AbstractPageBuilder {
                 args = args[0].split("\\.");
                 view = args[args.length - 1];
                 spec = new AutomatedViewSpec();
-                context.setViewSpec(view, spec);
+                context.setView(view, spec);
                 break;
             default:
                 spec.add(args);

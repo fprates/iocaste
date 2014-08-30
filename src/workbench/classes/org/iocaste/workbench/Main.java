@@ -17,15 +17,13 @@ public class Main extends AbstractPageBuilder {
                 System.getProperty("user.dir"), "iocaste","iocaste-workbench");
         
         context.setExtendedContext(MAIN, extcontext);
-        context.setViewSpec(MAIN, new MainSpec());
-        context.setViewConfig(MAIN, new MainConfig());
+        context.setView(MAIN, new MainSpec(), new MainConfig());
         context.setActionHandler(MAIN, "create", new ProjectCreate());
         context.setActionHandler(MAIN, "open", new ProjectOpen());
         
         context.setExtendedContext(PRJC, extcontext);
-        context.setViewSpec(PRJC, new ProjectSpec());
-        context.setViewConfig(PRJC, new ProjectConfig());
-        context.setViewInput(PRJC, new ProjectInput());
+        context.setView(PRJC,
+                new ProjectSpec(), new ProjectConfig(), new ProjectInput());
         context.setActionHandler(PRJC, "create", new ObjectProjectCreate());
         context.setActionHandler(PRJC, "add", new ComponentViewAdd());
         context.setActionHandler(PRJC, "components", new ComponentChoose());

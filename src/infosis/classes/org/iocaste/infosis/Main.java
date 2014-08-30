@@ -16,18 +16,18 @@ public class Main extends AbstractPageBuilder {
         Context extcontext = new Context();
 
         context.setExtendedContext(MAIN, extcontext);
-        context.setViewSpec(MAIN, new MainSpec());
-        context.setViewConfig(MAIN, new MainConfig());
+        context.setView(MAIN, new MainSpec(), new MainConfig());
         context.setActionHandler(MAIN, "items", new OptionChoosen());
         
         for (String page : new String[] {JVPR, SINF, ULST}) {
             context.setExtendedContext(page, extcontext);
-            context.setViewSpec(page, new PropertiesSpec());
-            context.setViewConfig(page, new PropertiesConfig(page));
-            context.setViewInput(page, new PropertiesInput());
+            context.setView(page,
+                    new PropertiesSpec(),
+                    new PropertiesConfig(page),
+                    new PropertiesInput());
         }
         
-        context.setViewSpec(UACC, new UnauthorizedAccessesSpec());
+        context.setView(UACC, new UnauthorizedAccessesSpec());
     }
 
     @Override
