@@ -205,7 +205,8 @@ class NavControlCustomAction implements ViewCustomAction {
         AbstractPage page = (AbstractPage)_context.function;
         page.backTo(position);
         _context.view.setReloadableView(true);
-        _context.view.setKeepView(!_context.isViewUpdatable(position));
+        _context.view.setInitialize(false);
+        context.function.keepView();
     }
     
 }

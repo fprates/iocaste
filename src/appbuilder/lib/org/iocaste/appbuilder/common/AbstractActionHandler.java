@@ -206,11 +206,11 @@ public abstract class AbstractActionHandler {
             viewspec = null;
         
         if ((rappname == null) && (rpagename != null)) {
-            context.view.setKeepView(false);
             if ((viewspec != null) && viewspec.isInitialized())
                 inputrefresh();
         } else {
-            context.view.setKeepView(!this.context.isViewUpdatable(view));
+            if (!this.context.isViewUpdatable(view))
+                context.function.keepView();
         }
     }
     
