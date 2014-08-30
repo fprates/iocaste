@@ -93,6 +93,7 @@ public abstract class AbstractPage extends AbstractFunction {
             handlers = validables.get(name);
             for (String validatorname : handlers) {
                 validator = validators.get(validatorname);
+                validator.clear();
                 validator.setContext(context);
                 validator.setInput(input);
                 validator.validate();

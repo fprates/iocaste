@@ -19,6 +19,11 @@ public abstract class AbstractValidator implements Validator {
     private InputComponent input;
     private AbstractContext context;
     
+    @Override
+    public final void clear() {
+        message = null;
+    }
+    
     /**
      * 
      * @return

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public interface Validator extends Serializable {
     
+    public abstract void clear();
+    
     public abstract String getMessage();
     
     public abstract void setContext(AbstractContext context);
