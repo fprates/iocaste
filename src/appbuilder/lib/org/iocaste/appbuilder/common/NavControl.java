@@ -201,12 +201,13 @@ class NavControlCustomAction implements ViewCustomAction {
      */
     @Override
     public void execute(AbstractContext context) {
+        ViewContext viewctx;
         PageBuilderContext _context = (PageBuilderContext)context;
         AbstractPage page = (AbstractPage)_context.function;
+        
         page.backTo(position);
-        _context.view.setReloadableView(true);
-        _context.view.setInitialize(false);
-        context.function.keepView();
+        viewctx = _context.getView(_context.view.getPageName());
+        AbstractActionHandler.redirectContext(_context, viewctx);
     }
     
 }

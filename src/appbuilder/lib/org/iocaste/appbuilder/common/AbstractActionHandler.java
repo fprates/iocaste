@@ -181,10 +181,41 @@ public abstract class AbstractActionHandler {
         context.view.redirect(app, page);
     }
     
-    public final void run(AbstractContext context) throws Exception {
+    public static final void redirectContext(
+            PageBuilderContext context, ViewContext viewctx) {
         String appname, rappname, pagename, rpagename;
         AbstractViewSpec viewspec;
-        ViewContext viewctx, rviewctx;
+        ViewContext rviewctx;
+        
+        context.view.setReloadableView(true);
+        appname = context.view.getAppName();
+        rappname = context.view.getRedirectedApp();
+        if (rappname != null && !appname.equals(rappname))
+            rappname = null;
+        
+        pagename = context.view.getPageName();
+        rpagename = context.view.getRedirectedPage();
+        if ((rpagename != null) && (rpagename.equals(pagename)))
+            rpagename = null;
+        
+        if (rpagename != null) {
+            rviewctx = context.getView(rpagename);
+            viewspec = (rviewctx == null)? null : rviewctx.getSpec();
+        } else {
+            viewspec = null;
+        }
+        
+        if ((rappname == null) && (rpagename != null)) {
+            if ((viewspec != null) && viewspec.isInitialized())
+                context.setInputUpdate(true);
+        } else {
+            if (!viewctx.isUpdatable())
+                context.function.keepView();
+        }
+    }
+    
+    public final void run(AbstractContext context) throws Exception {
+        ViewContext viewctx;
         String view = context.view.getPageName();
         String action = context.view.getActionControl();
         
@@ -197,31 +228,7 @@ public abstract class AbstractActionHandler {
         documents = new Documents(context.function);
         context.view.setInitialize(false);
         execute(this.context);
-        context.view.setReloadableView(true);
-        appname = this.context.view.getAppName();
-        rappname = this.context.view.getRedirectedApp();
-        if (rappname != null && !appname.equals(rappname))
-            rappname = null;
-        
-        pagename = this.context.view.getPageName();
-        rpagename = this.context.view.getRedirectedPage();
-        if ((rpagename != null) && (rpagename.equals(pagename)))
-            rpagename = null;
-        
-        if (rpagename != null) {
-            rviewctx = this.context.getView(rpagename);
-            viewspec = (rviewctx == null)? null : rviewctx.getSpec();
-        } else {
-            viewspec = null;
-        }
-        
-        if ((rappname == null) && (rpagename != null)) {
-            if ((viewspec != null) && viewspec.isInitialized())
-                inputrefresh();
-        } else {
-            if (!viewctx.isUpdatable())
-                context.function.keepView();
-        }
+        redirectContext(this.context, viewctx);
     }
     
     protected final ExtendedObject[] select(Query query) {
