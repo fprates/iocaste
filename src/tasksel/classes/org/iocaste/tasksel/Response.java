@@ -27,7 +27,7 @@ public class Response {
      * @param context
      * @return
      */
-    private static final Map<String, Set<TaskEntry>> getLists(
+    public static final Map<String, Set<TaskEntry>> getLists(
             AbstractContext context) {
         Query query;
         Set<TaskEntry> entries;
@@ -77,10 +77,6 @@ public class Response {
         }
         
         return lists;
-    }
-
-    public static final Map<String, Set<TaskEntry>> init(AbstractContext context) {
-        return getLists(context);
     }
     
     /**
