@@ -6,6 +6,7 @@ import java.util.Set;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
@@ -19,13 +20,18 @@ public class Main extends AbstractPageBuilder {
     }
 
     public void config(PageBuilderContext context) {
+        ViewContext viewctx;
         Context extcontext = new Context();
         
         extcontext.groups = Response.getLists(context);
-        context.setExtendedContext(MAIN, extcontext);
-        context.setUpdateViews(MAIN, true);
-        context.setViewSpec(MAIN, new TasksSpec());
-        context.setViewConfig(MAIN, new TasksConfig());
+        viewctx = context.instance(MAIN);
+        viewctx.set(extcontext);
+        viewctx.set(new TasksSpec());
+        viewctx.set(new TasksConfig());
+        viewctx.set(new TasksInput());
+        for (String name : extcontext.groups.keySet())
+            viewctx.put(name, new Call(name));
+        viewctx.setUpdate(true);
     }
     
 //    /**
