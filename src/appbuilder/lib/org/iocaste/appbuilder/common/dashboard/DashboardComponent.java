@@ -43,14 +43,21 @@ public class DashboardComponent {
     }
     
     public final void add(String item) {
+        add(item, item);
+    }
+    
+    public final void add(String item, Object value) {
         if (!hide)
             component.setVisible(true);
+        
+        if (item == null)
+            throw new RuntimeException("dashboard item undefined.");
         
         String linkname = item.concat("_dbitem_link");
         Link link = new Link(component, linkname, name);
         link.setStyleClass("db_dash_item");
         link.setText(item);
-        link.add(choose, item);
+        link.add(choose, value);
     }
     
     public final String getValue() {
