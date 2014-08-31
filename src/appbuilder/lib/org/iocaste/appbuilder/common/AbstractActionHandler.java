@@ -23,6 +23,7 @@ import org.iocaste.texteditor.common.TextEditor;
 import org.iocaste.texteditor.common.TextEditorTool;
 
 public abstract class AbstractActionHandler {
+    public static final boolean REDIRECT = true;
     private PageBuilderContext context;
     private ViewComponents components;
     private Documents documents;
@@ -48,7 +49,7 @@ public abstract class AbstractActionHandler {
     
     protected final void execute(String action) throws Exception {
         String view = context.view.getPageName();
-        context.getView(view).getActionHandler(action).run(context);
+        context.getView(view).getActionHandler(action).run(context, !REDIRECT);
     }
     
     protected abstract void execute(PageBuilderContext context)
@@ -202,6 +203,7 @@ public abstract class AbstractActionHandler {
             rviewctx = context.getView(rpagename);
             viewspec = (rviewctx == null)? null : rviewctx.getSpec();
         } else {
+            rviewctx = null;
             viewspec = null;
         }
         
@@ -209,12 +211,22 @@ public abstract class AbstractActionHandler {
             if ((viewspec != null) && viewspec.isInitialized())
                 context.setInputUpdate(true);
         } else {
-            if (!viewctx.isUpdatable())
+            if (rviewctx == null)
+                return;
+            
+            if ((viewspec != null) && rviewctx.isUpdatable())
+                viewspec.setInitialized(false);
+            else
                 context.function.keepView();
         }
     }
     
     public final void run(AbstractContext context) throws Exception {
+        run(context, REDIRECT);
+    }
+    
+    public final void run(AbstractContext context, boolean redirectflag)
+            throws Exception {
         ViewContext viewctx;
         String view = context.view.getPageName();
         String action = context.view.getActionControl();
@@ -228,7 +240,8 @@ public abstract class AbstractActionHandler {
         documents = new Documents(context.function);
         context.view.setInitialize(false);
         execute(this.context);
-        redirectContext(this.context, viewctx);
+        if (redirectflag)
+            redirectContext(this.context, viewctx);
     }
     
     protected final ExtendedObject[] select(Query query) {
