@@ -446,10 +446,12 @@ public class View implements Serializable {
      * Não inicializa a visão.
      * @param page página.
      */
+    @Deprecated
     public final void redirect(String page) {
         redirect(null, page, false);
     }
-    
+
+    @Deprecated
     public final void redirect(String page, boolean initialize) {
         redirect(null, page, initialize);
     }
@@ -460,6 +462,7 @@ public class View implements Serializable {
      * @param app aplicação
      * @param page página
      */
+    @Deprecated
     public final void redirect(String app, String page) {
         redirect(app, page, false);
     }
@@ -470,6 +473,7 @@ public class View implements Serializable {
      * @param page página
      * @param initialize true, para inicializar a visão.
      */
+    @Deprecated
     public final void redirect(String app, String page, boolean initialize) {
         rapp = app;
         rpage = page;

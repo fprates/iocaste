@@ -72,7 +72,7 @@ public class Main extends AbstractPageBuilder {
     public final View redirect(Message message) {
         String task = message.getString("task");
         View view = new View(null, null);
-        return (Request.call(view, this, task) == 1)? null : view;
+        return (Request.call(this, view, task) == 1)? null : view;
     }
 
     @Override

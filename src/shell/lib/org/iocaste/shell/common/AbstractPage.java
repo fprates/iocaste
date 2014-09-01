@@ -60,6 +60,11 @@ public abstract class AbstractPage extends AbstractFunction {
         context.view.dontPushPage();
     }
     
+    public final void exec(String app, String page) {
+        context.view.setReloadableView(true);
+        context.view.redirect(app, page, View.INITIALIZE);
+    }
+    
     /**
      * Executa métodos associados à action.
      * @param message

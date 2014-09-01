@@ -3,6 +3,7 @@ package org.iocaste.tasksel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
+import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.View;
 
@@ -46,7 +47,8 @@ public class Common {
      * @param view
      * @param parsed
      */
-    public static final void run(View view, String[] parsed) {
+    public static final void run(
+            AbstractPage function, View view, String[] parsed) {
         String[] values;
         String page = "main", app = null;
         
@@ -74,8 +76,7 @@ public class Common {
         if (app == null)
             return;
         
-        view.setReloadableView(true);
-        view.redirect(app, page, View.INITIALIZE);
+        function.exec(app, page);
     }
 
 }

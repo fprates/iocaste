@@ -1,8 +1,8 @@
 package org.iocaste.tasksel;
 
-import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.Authorization;
+import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.AbstractContext;
@@ -10,7 +10,7 @@ import org.iocaste.shell.common.View;
 
 public class Request {
     
-    public static int call(View view, Function function, String command) {
+    public static int call(AbstractPage page, View view, String command) {
         Iocaste iocaste;
         Authorization authorization;
         String[] parsed;
@@ -19,13 +19,13 @@ public class Request {
         authorization.setObject("LINK");
         authorization.setAction("CALL");
         authorization.add("LINK", command);
-        iocaste = new Iocaste(function);
+        iocaste = new Iocaste(page);
         if (!iocaste.isAuthorized(authorization))
             return 1;
         
-        parsed = Common.parseCommand(command, function, view);
+        parsed = Common.parseCommand(command, page, view);
         parsed = parsed[0].split("\\s");
-        Common.run(view, parsed);
+        Common.run(page, view, parsed);
         return 0;
     }
     /**
@@ -36,7 +36,7 @@ public class Request {
         String command = ((InputComponent)context.view.
                 getElement("groupcommand")).get();
 
-        if (call(context.view, context.function, command) == 0)
+        if (call(context.function, context.view, command) == 0)
             return;
         
         context.view.message(Const.ERROR, "not.authorized");
