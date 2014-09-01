@@ -220,6 +220,10 @@ public abstract class AbstractPage extends AbstractFunction {
         state.keepview = true;
     }
     
+    public final void redirect(String page) {
+        context.view.redirect(page);
+    }
+    
     /**
      * 
      * @param view

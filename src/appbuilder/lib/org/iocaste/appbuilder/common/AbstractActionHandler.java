@@ -175,11 +175,11 @@ public abstract class AbstractActionHandler {
     }
     
     protected final void redirect(String page) {
-        context.view.redirect(page);
+        context.function.redirect(page);
     }
     
     protected final void redirect(String app, String page) {
-        context.view.redirect(app, page);
+        context.function.exec(app, page);
     }
     
     public static final void redirectContext(
@@ -192,7 +192,7 @@ public abstract class AbstractActionHandler {
         appname = context.view.getAppName();
         rappname = context.view.getRedirectedApp();
         if (rappname != null && !appname.equals(rappname))
-            rappname = null;
+            return;
         
         pagename = context.view.getPageName();
         rpagename = context.view.getRedirectedPage();
@@ -270,8 +270,8 @@ public abstract class AbstractActionHandler {
         for (String name : view.getExportable())
             context.view.setParameter(name, view.getParameter(name));
         
-        context.view.redirect(view.getRedirectedApp(),
-                view.getRedirectedPage(), View.INITIALIZE);
+        context.function.exec(view.getRedirectedApp(),
+                view.getRedirectedPage());
     }
     
     protected final void texteditorsave(String name, String id) {

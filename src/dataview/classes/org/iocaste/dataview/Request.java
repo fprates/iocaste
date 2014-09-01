@@ -33,6 +33,6 @@ public class Request {
         
         context.items = Request.load(context.model.getName(), documents);
         context.view.setReloadableView(true);
-        context.view.redirect("list");
+        context.function.redirect("list");
     }
 }

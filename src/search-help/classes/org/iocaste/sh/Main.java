@@ -22,10 +22,13 @@ public class Main extends AbstractPage {
      */
     @Override
     public void back() {
-        PageStackItem entry = new Shell(this).popPage(context.view);
+        String position;
+        PageStackItem entry;
         
-        context.view.redirect(entry.getApp(), entry.getPage());
-        context.view.dontPushPage();
+        entry = new Shell(this).popPage(context.view);
+        position = new StringBuilder(entry.getApp()).append(".").
+                append(entry.getPage()).toString();
+        backTo(position);
         context.view.setReloadableView(false);
     }
     

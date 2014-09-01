@@ -32,7 +32,7 @@ public class Request {
         context.userdata = new UserData();
         context.userdata.username = username;
         context.view.setReloadableView(true);
-        context.view.redirect("form");
+        context.function.redirect("form");
     }
     
     public static final void delete(Context context) {
@@ -82,7 +82,7 @@ public class Request {
         query.andEqual("USERNAME", username);
         userdata.tasks = documents.select(query);
         context.view.setReloadableView(true);
-        context.view.redirect("form");
+        context.function.redirect("form");
         
         return userdata;
     }

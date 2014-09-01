@@ -7,7 +7,6 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
 
 public class Request {
-    private static final boolean INITIALIZE = true;
     
     public static final void changesecret(Context context) {
         DataForm form = context.view.getElement("chgscrt");
@@ -21,7 +20,7 @@ public class Request {
              * não queremos que essa seja a página inicial
              */
             context.view.dontPushPage();
-            context.view.redirect("iocaste-tasksel", "main", INITIALIZE);
+            context.function.exec("iocaste-tasksel", "main");
             return;
         }
         
@@ -46,9 +45,9 @@ public class Request {
         if (iocaste.login(username, secret, locale)) {
             context.view.export("username", username);
             if (iocaste.isInitialSecret())
-                context.view.redirect("changesecretform");
+                context.function.redirect("changesecretform");
             else
-                context.view.redirect("iocaste-tasksel", "main", INITIALIZE);
+                context.function.exec("iocaste-tasksel", "main");
         } else {
             context.view.message(Const.ERROR, "invalid.login");
         }

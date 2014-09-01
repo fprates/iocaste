@@ -64,7 +64,7 @@ public class Main extends AbstractPage {
         
 //        view.export("filename", table.concat(".txt"));
 //        view.export("text", text);
-        context.view.redirect("export");
+        redirect("export");
     }
     
     public final void export(View view) {

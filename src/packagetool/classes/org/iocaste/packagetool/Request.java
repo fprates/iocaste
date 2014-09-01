@@ -17,7 +17,7 @@ public class Request {
         
         for (TableItem item : table.getItems())
             if (item.isSelected()) {
-                context.view.redirect("printinfo");
+                context.function.redirect("printinfo");
                 pkgname = ((Text)item.get("name")).getText();
                 context.data = new PackageTool(context.function).
                         getInstallData(pkgname);

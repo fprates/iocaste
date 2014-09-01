@@ -18,7 +18,7 @@ public class Request {
             return;
         }
         
-        context.view.redirect("style");
+        context.function.redirect("style");
     }
     
     public static final void element(Context context) {
@@ -38,7 +38,7 @@ public class Request {
             break;
         }
         
-        context.view.redirect("detail");
+        context.function.redirect("detail");
     }
     
     public static final ExtendedObject[] load(Context context) {
@@ -55,7 +55,7 @@ public class Request {
             return null;
         }
         
-        context.view.redirect("style");
+        context.function.redirect("style");
         query = new Query();
         query.setModel("STYLE_ELEMENT");
         query.andEqual("STYLE", style);

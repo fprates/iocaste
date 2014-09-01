@@ -31,7 +31,7 @@ public class Request {
             return;
         }
         
-        context.view.redirect("configform");
+        context.function.redirect("configform");
     }
     
     public static final void save(Context context) {
