@@ -191,8 +191,10 @@ public abstract class AbstractActionHandler {
         context.function.setReloadableView(true);
         appname = context.view.getAppName();
         rappname = context.function.getRedirectedApp();
-        if (rappname != null && !appname.equals(rappname))
+        if (rappname != null && !appname.equals(rappname)) {
+            context.function.keepView();
             return;
+        }
         
         pagename = context.view.getPageName();
         rpagename = context.function.getRedirectedPage();
