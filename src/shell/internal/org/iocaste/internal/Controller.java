@@ -399,16 +399,19 @@ public class Controller {
             if (!status.control.isCancellable())
                 processInputs(config, status);
             
-            if (status.event) {
-                evhandler.setView(config.view);
-                evhandler.setInputError(status.error);
-                evhandler.onEvent(EventHandler.ON_CLICK,
-                        status.control.getAction());
-            }
+            if (!status.event)
+                return;
+            
+            evhandler.setView(config.view);
+            evhandler.setInputError(status.error);
+            evhandler.onEvent(EventHandler.ON_CLICK,
+                    status.control.getAction());
         } else {
-            if (status.event)
-                evhandler.setView(config.view);
-                evhandler.onEvent(EventHandler.ON_CLICK, null);
+            if (!status.event)
+                return;
+            
+            evhandler.setView(config.view);
+            evhandler.onEvent(EventHandler.ON_CLICK, null);
         }
     }
     
@@ -553,7 +556,7 @@ public class Controller {
         
         if (status.input != null) {
             config.view.setFocus(status.input);
-            config.view.setReloadableView(false);
+            config.state.reloadable = false;
             
             switch (status.error) {
             case EINITIAL:

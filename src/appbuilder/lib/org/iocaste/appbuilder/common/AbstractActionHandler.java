@@ -188,7 +188,7 @@ public abstract class AbstractActionHandler {
         AbstractViewSpec viewspec;
         ViewContext rviewctx;
         
-        context.view.setReloadableView(true);
+        context.function.setReloadableView(true);
         appname = context.view.getAppName();
         rappname = context.view.getRedirectedApp();
         if (rappname != null && !appname.equals(rappname))

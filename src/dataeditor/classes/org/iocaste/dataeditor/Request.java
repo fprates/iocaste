@@ -5,20 +5,9 @@ import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
-import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.View;
 
 public class Request {
-    
-    /**
-     * 
-     * @param vdata
-     */
-    public static final void insert(AbstractPage page, View view) {
-        view.setReloadableView(true);
-        page.redirect("form");
-    }
     
     public static final String load(String modelname, Context context) {
         Query query;

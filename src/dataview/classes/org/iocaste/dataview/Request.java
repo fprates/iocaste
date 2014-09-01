@@ -32,7 +32,7 @@ public class Request {
         }
         
         context.items = Request.load(context.model.getName(), documents);
-        context.view.setReloadableView(true);
+        context.function.setReloadableView(true);
         context.function.redirect("list");
     }
 }

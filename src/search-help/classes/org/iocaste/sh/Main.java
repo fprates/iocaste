@@ -29,7 +29,7 @@ public class Main extends AbstractPage {
         position = new StringBuilder(entry.getApp()).append(".").
                 append(entry.getPage()).toString();
         backTo(position);
-        context.view.setReloadableView(false);
+        setReloadableView(false);
     }
     
     public final void choose() {

@@ -52,7 +52,7 @@ public class View implements Serializable {
     private Map<String, String> headervalues;
     private Map<String, Map<String, String>> sheet;
     private Map<String, Element> elements;
-    private boolean reloadable, dontpushpage, pagecall, initialize;
+    private boolean dontpushpage, pagecall, initialize;
     private Const messagetype;
     private Locale locale;
     
@@ -140,7 +140,6 @@ public class View implements Serializable {
         rpage = null;
         messagetext = null;
         messagetype = null;
-        reloadable = false;
         pagecall = false;
         dontpushpage = false;
     }
@@ -416,14 +415,6 @@ public class View implements Serializable {
     }
     
     /**
-     * Indica se foi solicitada recarga da visão.
-     * @return
-     */
-    public final boolean isReloadableView() {
-        return reloadable;
-    }
-    
-    /**
      * Ajusta tipo e texto da mensagem.
      * @param messagetype tipo
      * @param messagetext texto
@@ -571,14 +562,6 @@ public class View implements Serializable {
             initparams.add(name);
         
         parameters.put(name, value);
-    }
-    
-    /**
-     * Ajusta recarga da visão.
-     * @param reloadable true, para recarga da visão.
-     */
-    public final void setReloadableView(boolean reloadable) {
-        this.reloadable = reloadable;
     }
     
     /**

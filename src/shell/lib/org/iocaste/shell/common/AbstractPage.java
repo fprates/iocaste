@@ -61,7 +61,7 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     public final void exec(String app, String page) {
-        context.view.setReloadableView(true);
+        state.reloadable = true;
         context.view.redirect(app, page, View.INITIALIZE);
     }
     
@@ -148,6 +148,7 @@ public abstract class AbstractPage extends AbstractFunction {
         Locale locale = iocaste.getLocale();
 
         state.keepview = false;
+        state.reloadable = false;
         if (context != null)
             context.view = view;
         
@@ -261,6 +262,10 @@ public abstract class AbstractPage extends AbstractFunction {
         container = (Container)element;
         for (Element element_ : container.getElements())
             setLocaleForElement(element_, locale);
+    }
+    
+    public final void setReloadableView(boolean reloadable) {
+        state.reloadable = reloadable;
     }
     
     /**

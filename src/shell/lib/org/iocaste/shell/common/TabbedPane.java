@@ -103,8 +103,6 @@ class OnClickHandler extends AbstractEventHandler {
             return;
 
         view = getView();
-        view.setReloadableView(false);
-        
         pane = view.getElement(this.pane);
         button = view.getElement(args);
         name = button.getText();

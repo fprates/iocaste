@@ -27,7 +27,7 @@ public class Main extends AbstractPage {
         }
         
         context.mode = Context.DISPLAY;
-        context.view.setReloadableView(true);
+        setReloadableView(true);
         redirect("output");
     }
     
@@ -44,7 +44,8 @@ public class Main extends AbstractPage {
     }
     
     public final void insert() {
-        Request.insert(this, context.view);
+        setReloadableView(true);
+        redirect("form");
     }
     
     /**
@@ -112,7 +113,7 @@ public class Main extends AbstractPage {
         }
         
         context.mode = Context.UPDATE;
-        context.view.setReloadableView(true);
+        setReloadableView(true);
         redirect("output");
     }
 }
