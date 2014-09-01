@@ -18,7 +18,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TextArea;
-import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.ViewState;
 import org.iocaste.texteditor.common.TextEditor;
 import org.iocaste.texteditor.common.TextEditorTool;
 
@@ -256,21 +256,20 @@ public abstract class AbstractActionHandler {
     }
     
     protected final void taskredirect(String task) {
-        View view;
+        ViewState state;
         GenericService service = new GenericService(
                 context.function, "/iocaste-tasksel/view.html");
         Message message = new Message("task_redirect");
         
         message.add("task", task);
-        view = service.invoke(message);
-        if (view == null)
+        state = service.invoke(message);
+        if (state == null)
             throw new RuntimeException(task.concat(" is an invalid task."));
         
-        for (String name : view.getExportable())
-            context.view.setParameter(name, view.getParameter(name));
+        for (String name : state.view.getExportable())
+            context.view.setParameter(name, state.view.getParameter(name));
         
-        context.function.exec(context.function.getRedirectedApp(),
-                context.function.getRedirectedPage());
+        context.function.exec(state.rapp, state.rpage);
     }
     
     protected final void texteditorsave(String name, String id) {

@@ -12,6 +12,7 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.ViewState;
 
 public class Main extends AbstractPageBuilder {
     public static final String MAIN = "main";
@@ -69,10 +70,18 @@ public class Main extends AbstractPageBuilder {
 //    }
 //    
     
-    public final View redirect(Message message) {
+    public final ViewState redirect(Message message) {
+        ViewState state;
         String task = message.getString("task");
-        View view = new View(null, null);
-        return (Request.call(this, view, task) == 1)? null : view;
+        
+        state = new ViewState();
+        state.view = new View(null, null);
+        if (Request.call(this, state.view, task) == 1)
+            return null;
+        
+        state.rapp = getRedirectedApp();
+        state.rpage = getRedirectedPage();
+        return state;
     }
 
     @Override
