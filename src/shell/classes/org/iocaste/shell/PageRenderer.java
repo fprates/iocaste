@@ -85,13 +85,13 @@ public class PageRenderer extends AbstractRenderer {
             return;
         
         message = new Message("exec_action");
-        message.add("view", config.view);
+        message.add("view", config.state.view);
         message.setSessionid(config.sessionid);
         
         for (String name : config.values.keySet())
             message.add(name, config.values.get(name));
 
-        control = config.view.getElement(message.getString("action"));
+        control = config.state.view.getElement(message.getString("action"));
         if (control != null && control.getType() == Const.SEARCH_HELP) {
             config.shcontrol = control;
             config.contexturl = composeUrl("iocaste-search-help");
@@ -100,9 +100,8 @@ public class PageRenderer extends AbstractRenderer {
                 service = new Service(config.sessionid,
                         composeUrl(config.contextname));
                 config.state = (ViewState)service.call(message);
-                config.view = config.state.view;
                 
-                if (config.view.getMessageType() == Const.ERROR)
+                if (config.state.view.getMessageType() == Const.ERROR)
                     Common.rollback(getServerName(), config.sessionid);
                 else
                     Common.commit(getServerName(), config.sessionid);
@@ -642,7 +641,7 @@ public class PageRenderer extends AbstractRenderer {
         Enumeration<?> parameternames;
         PageContext pagectx_;
         Map<String, String[]> parameters;
-        View view, pagectxview;
+        View pagectxview;
         String appname, pagename, key, pagetrack = null, actionname = null;
         
         /*
@@ -677,7 +676,7 @@ public class PageRenderer extends AbstractRenderer {
         }
         
         config = new ControllerData();
-        config.view = pagectx.getViewData();
+        config.state.view = pagectx.getViewData();
         config.values = parameters;
         config.function = this;
         config.contextname = pagectx.getAppContext().getName();
@@ -689,24 +688,24 @@ public class PageRenderer extends AbstractRenderer {
         /*
          * processa atualização na visão após chamada do controlador
          */
-        view = config.view;
-        action = view.getElement(actionname);
-        if (view.hasPageCall() && (action == null ||
+        action = config.state.view.getElement(actionname);
+        if (config.state.pagecall && (action == null ||
                 !action.isCancellable() || action.allowStacking()))
-            pushPage(config.sessionid, view.getAppName(), view.getPageName());
+            pushPage(config.sessionid, config.state.view.getAppName(),
+                    config.state.view.getPageName());
         
-        view.clearInputs();
-        updateView(config.sessionid, view, this);
+        config.state.view.clearInputs();
+        updateView(config.sessionid, config.state.view, this);
         
         /*
          * prepara retorno para resposta, seja na visão atual ou se for
          * redirecionado
          */
-        appname = view.getRedirectedApp();
+        appname = config.state.rapp;
         if (appname == null)
             appname = pagectx.getAppContext().getName();
         
-        pagename = view.getRedirectedPage();
+        pagename = config.state.rpage;
         if (pagename == null)
             pagename = pagectx.getName();
         
@@ -714,7 +713,7 @@ public class PageRenderer extends AbstractRenderer {
          * testa autorização para execução e sequencia de telas
          */
         if (!isExecuteAuthorized(appname, config.sessionid) &&
-                view.getRedirectedApp() != null) {
+                config.state.rapp != null) {
             pagectx.setError(AUTHORIZATION_ERROR);
             pagectx.getViewData().message(Const.ERROR, "user.not.authorized");
             
@@ -740,7 +739,7 @@ public class PageRenderer extends AbstractRenderer {
         if (!config.event)
             sequence++;
         
-        pagectx_.setInitialize(view.isInitializable());
+        pagectx_.setInitialize(config.state.initialize);
         pagectx_.setSequence(sequence);
         if (config.state != null) {
             pagectx_.setKeepView(config.state.keepview);
@@ -750,17 +749,17 @@ public class PageRenderer extends AbstractRenderer {
             pagectx_.setReloadableView(false);
         }
         
-        pagectx_.setInitParameters(view.getInitParameters());
+        pagectx_.setInitParameters(config.state.view.getInitParameters());
         pagectx_.clearParameters();
         pagectxview = pagectx_.getViewData();
         
         if (pagectxview != null)
-            pagectxview.message(view.getMessageType(),
-                view.getTranslatedMessage());
+            pagectxview.message(config.state.view.getMessageType(),
+                    config.state.view.getTranslatedMessage());
         
-        for (String name : view.getExportable())
-            pagectx_.addParameter(name, view.getParameter(name));
-        view.clearInitExports();
+        for (String name : config.state.view.getExportable())
+            pagectx_.addParameter(name, config.state.view.getParameter(name));
+        config.state.view.clearInitExports();
         
         if (isConnected(contextdata)) {
             execute(appname, config.sessionid);

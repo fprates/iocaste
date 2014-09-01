@@ -190,12 +190,12 @@ public abstract class AbstractActionHandler {
         
         context.function.setReloadableView(true);
         appname = context.view.getAppName();
-        rappname = context.view.getRedirectedApp();
+        rappname = context.function.getRedirectedApp();
         if (rappname != null && !appname.equals(rappname))
             return;
         
         pagename = context.view.getPageName();
-        rpagename = context.view.getRedirectedPage();
+        rpagename = context.function.getRedirectedPage();
         if ((rpagename != null) && (rpagename.equals(pagename)))
             rpagename = null;
         
@@ -238,7 +238,6 @@ public abstract class AbstractActionHandler {
         
         components = viewctx.getComponents();
         documents = new Documents(context.function);
-        context.view.setInitialize(false);
         execute(this.context);
         if (redirectflag)
             redirectContext(this.context, viewctx);
@@ -270,8 +269,8 @@ public abstract class AbstractActionHandler {
         for (String name : view.getExportable())
             context.view.setParameter(name, view.getParameter(name));
         
-        context.function.exec(view.getRedirectedApp(),
-                view.getRedirectedPage());
+        context.function.exec(context.function.getRedirectedApp(),
+                context.function.getRedirectedPage());
     }
     
     protected final void texteditorsave(String name, String id) {

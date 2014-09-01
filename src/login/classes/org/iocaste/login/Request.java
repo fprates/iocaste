@@ -19,7 +19,7 @@ public class Request {
             /*
              * não queremos que essa seja a página inicial
              */
-            context.view.dontPushPage();
+            context.function.dontPushPage();
             context.function.exec("iocaste-tasksel", "main");
             return;
         }

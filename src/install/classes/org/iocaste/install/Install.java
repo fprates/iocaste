@@ -8,6 +8,7 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.ViewState;
 
 public class Install extends AbstractFunction {
     private Context context;
@@ -24,7 +25,7 @@ public class Install extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final View execAction(Message message) throws Exception {
+    public final ViewState execAction(Message message) throws Exception {
         View view = message.get("view");
         String controlname = message.getString("action");
         ControlComponent control = view.getElement(controlname);
@@ -34,14 +35,15 @@ public class Install extends AbstractFunction {
          */
         if (control != null && control.getType() == Const.SEARCH_HELP) {
             view.export("sh", control);
-            view.redirect("iocaste-search-help", "main");
+            context.state.rapp = "iocaste-search-help";
+            context.state.rpage = "main";
         } else {
             context.view = view;
             context.function = this;
             
             switch (Stages.valueOf(view.getPageName())) {
             case WELCOME:
-                Welcome.action(view);
+                Welcome.action(view, context.state);
                 break;
             case DBCONFIG:
                 DBConfig.action(context);
@@ -51,7 +53,8 @@ public class Install extends AbstractFunction {
             }
         }
         
-        return view;
+        context.state.view = view;
+        return context.state;
     }
     
     /**

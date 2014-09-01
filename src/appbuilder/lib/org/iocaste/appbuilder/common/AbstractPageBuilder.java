@@ -270,7 +270,7 @@ class BuilderCustomView extends AbstractCustomView {
                 viewconfig.run(_context);
             }
             
-            viewspec.setInitialized(true);
+            viewspec.setInitialized(!viewctx.isUpdatable());
             if (viewinput != null) {
                 viewinput.run(_context, true);
                 generateTables(_context);

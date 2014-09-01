@@ -5,6 +5,7 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.ViewState;
 
 public class Welcome {
     private static final String[] LINES = {
@@ -15,8 +16,9 @@ public class Welcome {
             "Para continuar, clique no botão \"Continuar\""
     };
 
-    public static final void action(View view) {
-        view.redirect("DBCONFIG");
+    public static final void action(View view, ViewState state) {
+        state.rapp = null;
+        state.rpage = "DBCONFIG";
     }
     
     public static final void render(View view) {

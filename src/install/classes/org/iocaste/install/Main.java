@@ -24,6 +24,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.ViewState;
 
 public class Main extends AbstractRenderer {
     private static final long serialVersionUID = -8143025594178489781L;
@@ -50,7 +51,7 @@ public class Main extends AbstractRenderer {
      * @return
      * @throws Exception
      */
-    private final View callController(ControllerData config) throws Exception {
+    private final void callController(ControllerData config) throws Exception {
         InputStatus status;
         Message message;
         
@@ -59,10 +60,10 @@ public class Main extends AbstractRenderer {
             throw new IocasteException(status.fatal);
         
         if (status.error > 0)
-            return config.view;
+            return;
         
         message = new Message("exec_action");
-        message.add("view", config.view);
+        message.add("view", config.state.view);
         message.setSessionid(config.sessionid);
         
         for (String name : config.values.keySet())
@@ -71,7 +72,7 @@ public class Main extends AbstractRenderer {
         installapp.setServletContext(getServletContext());
         installapp.setServerName(getServerName());
         
-        return (View)installapp.run(message);
+        config.state = (ViewState)installapp.run(message);
     }
     
     /**
@@ -294,7 +295,6 @@ public class Main extends AbstractRenderer {
         Enumeration<?> parameternames;
         PageContext pagectx_;
         Map<String, String[]> parameters;
-        View view;
         String appname, pagename, key, pagetrack = null, actionname = null;
         String sessionid = req.getSession().getId();
         
@@ -320,32 +320,34 @@ public class Main extends AbstractRenderer {
         }
         
         config = new ControllerData();
-        config.view = pagectx.getViewData();
+        config.state.view = pagectx.getViewData();
         config.values = parameters;
         config.contextname = pagectx.getAppContext().getName();
         config.logid = getLogid(pagetrack);
         config.sessionid = getComplexId(sessionid, config.logid);
-        view = callController(config);
+        config.state = new ViewState();
+        callController(config);
         
-        action = view.getElement(actionname);
-        if (view.hasPageCall() && (action == null ||
+        action = config.state.view.getElement(actionname);
+        if (config.state.pagecall && (action == null ||
                 !action.isCancellable() || action.allowStacking()))
-            pushPage(config.sessionid, view.getAppName(), view.getPageName());
+            pushPage(config.sessionid, config.state.view.getAppName(),
+                    config.state.view.getPageName());
         
-        view.clearInputs();
+        config.state.view.clearInputs();
         
         inputdata = new Input();
-        inputdata.view = view;
+        inputdata.view = config.state.view;
         inputdata.container = null;
         inputdata.function = this;
         inputdata.register();
         
-        updateView(config.sessionid, view, this);
-        appname = view.getRedirectedApp();
+        updateView(config.sessionid, config.state.view, this);
+        appname = config.state.rapp;
         if (appname == null)
             appname = pagectx.getAppContext().getName();
         
-        pagename = view.getRedirectedPage();
+        pagename = config.state.rpage;
         if (pagename == null)
             pagename = pagectx.getName();
         
@@ -362,8 +364,8 @@ public class Main extends AbstractRenderer {
             pagectx_ = createPageContext(contextdata);
         
         pagectx_.clearParameters();
-        for (String name : view.getExportable())
-            pagectx_.addParameter(name, view.getParameter(name));
+        for (String name : config.state.view.getExportable())
+            pagectx_.addParameter(name, config.state.view.getParameter(name));
         
         return pagectx_;
     }

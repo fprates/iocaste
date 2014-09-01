@@ -296,13 +296,13 @@ public class Controller {
          * valor quando marcados. Processa o estado falso deles antes
          * do processamento principal.
          */
-        for (String name : config.view.getInputs()) {
+        for (String name : config.state.view.getInputs()) {
             value = getString(config.values, name);
             
             if (value != null)
                 continue;
             
-            element = config.view.getElement(name);
+            element = config.state.view.getElement(name);
             if (!element.isDataStorable())
                 continue;
             
@@ -314,7 +314,7 @@ public class Controller {
         }
         
         for (String name : config.values.keySet()) {
-            element = config.view.getElement(name);
+            element = config.state.view.getElement(name);
             
             if (element == null || !element.isDataStorable())
                 continue;
@@ -402,16 +402,18 @@ public class Controller {
             if (!status.event)
                 return;
             
-            evhandler.setView(config.view);
+            evhandler.setView(config.state.view);
             evhandler.setInputError(status.error);
             evhandler.onEvent(EventHandler.ON_CLICK,
                     status.control.getAction());
+            config.state.reloadable = false;
         } else {
             if (!status.event)
                 return;
             
-            evhandler.setView(config.view);
+            evhandler.setView(config.state.view);
             evhandler.onEvent(EventHandler.ON_CLICK, null);
+            config.state.reloadable = false;
         }
     }
     
@@ -537,42 +539,42 @@ public class Controller {
             return status;
         }
         
-        if (config.view == null) {
+        if (config.state.view == null) {
             status.fatal = "null view on action processing.";
             return status;
         }
         
-        config.view.clearRedirect();
+        config.state.view.clearRedirect();
         if (controlname.equals("")) {
             status.error = WINVALID_ACTION;
             return status;
         }
         
-        element = config.view.getElement(controlname);
+        element = config.state.view.getElement(controlname);
         if (element != null)
             processInputsStage(element, config, status);
         else
             processInputs(config, status);
         
         if (status.input != null) {
-            config.view.setFocus(status.input);
+            config.state.view.setFocus(status.input);
             config.state.reloadable = false;
             
             switch (status.error) {
             case EINITIAL:
-                config.view.message(Const.ERROR, "field.is.obligatory");
+                config.state.view.message(Const.ERROR, "field.is.obligatory");
                 break;
                 
             case EMISMATCH:
-                config.view.message(Const.ERROR, "field.type.mismatch");
+                config.state.view.message(Const.ERROR, "field.type.mismatch");
                 break;
                 
             case EINVALID_REFERENCE:
-                config.view.message(Const.ERROR, "invalid.value");
+                config.state.view.message(Const.ERROR, "invalid.value");
                 break;
                 
             case EVALIDATION:
-                config.view.message(Const.ERROR, status.message);
+                config.state.view.message(Const.ERROR, status.message);
                 break;
             }
         }

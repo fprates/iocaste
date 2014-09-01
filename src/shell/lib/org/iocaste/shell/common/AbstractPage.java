@@ -44,8 +44,8 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public void back() {
         PageStackItem entry = new Shell(this).popPage(context.view);
-        context.view.redirect(entry.getApp(), entry.getPage());
-        context.view.dontPushPage();
+        redirect(entry.getApp(), entry.getPage(), false);
+        dontPushPage();
     }
     
     /**
@@ -56,13 +56,21 @@ public abstract class AbstractPage extends AbstractFunction {
         String[] entry = position.split("\\.");
         
         new Shell(this).setPagesPosition(position);
-        context.view.redirect(entry[0], entry[1]);
-        context.view.dontPushPage();
+        redirect(entry[0], entry[1], false);
+        dontPushPage();
+    }
+    
+    /**
+     * Não salva página na pilha de chamada.
+     */
+    public final void dontPushPage() {
+        state.dontpushpage = true;
+        state.pagecall = false;
     }
     
     public final void exec(String app, String page) {
         state.reloadable = true;
-        context.view.redirect(app, page, View.INITIALIZE);
+        redirect(app, page, View.INITIALIZE);
     }
     
     /**
@@ -123,6 +131,14 @@ public abstract class AbstractPage extends AbstractFunction {
         return state;
     }
     
+    public final String getRedirectedApp() {
+        return state.rapp;
+    }
+    
+    public final String getRedirectedPage() {
+        return state.rpage;
+    }
+    
     /**
      * Retorna visão especificada.
      * @param name identificador da visão
@@ -149,6 +165,10 @@ public abstract class AbstractPage extends AbstractFunction {
 
         state.keepview = false;
         state.reloadable = false;
+        state.rapp = null;
+        state.rpage = null;
+        state.pagecall = false;
+        state.dontpushpage = false;
         if (context != null)
             context.view = view;
         
@@ -203,8 +223,8 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public void home() {
         PageStackItem entry = new Shell(this).home(context.view);
-        context.view.redirect(entry.getApp(), entry.getPage());
-        context.view.dontPushPage();
+        redirect(entry.getApp(), entry.getPage(), false);
+        dontPushPage();
     }
     
     /**
@@ -222,7 +242,22 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     public final void redirect(String page) {
-        context.view.redirect(page);
+        redirect(null, page, false);
+    }
+    
+    /**
+     * Redireciona aplicação e visão.
+     * @param app aplicação
+     * @param page página
+     * @param initialize true, para inicializar a visão.
+     */
+    private final void redirect(String app, String page, boolean initialize) {
+        state.rapp = app;
+        state.rpage = page;
+        state.initialize = initialize;
+        
+        if (!state.dontpushpage)
+            state.pagecall = true;
     }
     
     /**

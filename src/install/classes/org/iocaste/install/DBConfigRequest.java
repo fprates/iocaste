@@ -123,7 +123,8 @@ public class DBConfigRequest {
             break;
         }
         
-        context.view.redirect("FINISH");
+        context.state.rapp = null;
+        context.state.rpage = "FINISH";
         return config;
     }
     

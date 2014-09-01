@@ -42,7 +42,7 @@ public class View implements Serializable {
     private byte[] content;
     private Element elementfocus;
     private String title, appname, pagename, actioncontrol;
-    private String contenttype, rapp, rpage, messagetext;
+    private String contenttype, messagetext;
     private MessageSource messages;
     private Set<String> initparams;
     private List<String> inputs, lines;
@@ -52,7 +52,6 @@ public class View implements Serializable {
     private Map<String, String> headervalues;
     private Map<String, Map<String, String>> sheet;
     private Map<String, Element> elements;
-    private boolean dontpushpage, pagecall, initialize;
     private Const messagetype;
     private Locale locale;
     
@@ -136,20 +135,8 @@ public class View implements Serializable {
      * Limpa dados de redirecionamento de visão.
      */
     public final void clearRedirect() {
-        rapp = null;
-        rpage = null;
         messagetext = null;
         messagetype = null;
-        pagecall = false;
-        dontpushpage = false;
-    }
-    
-    /**
-     * Não salva página na pilha de chamada.
-     */
-    public final void dontPushPage() {
-        dontpushpage = true;
-        pagecall = false;
     }
     
     /*
@@ -346,22 +333,6 @@ public class View implements Serializable {
     }
     
     /**
-     * Retorna aplicação redirecionada.
-     * @return aplicação.
-     */
-    public final String getRedirectedApp() {
-        return rapp;
-    }
-    
-    /**
-     * Retorna página redirecionada.
-     * @return página
-     */
-    public final String getRedirectedPage() {
-        return rpage;
-    }
-    
-    /**
      * Retorna título da página.
      * @return título
      */
@@ -384,15 +355,6 @@ public class View implements Serializable {
     }
     
     /**
-     * Indica se deve ser feito redirecionamento de página.
-     * @return true, se for redirecionar.
-     */
-    public final boolean hasPageCall() {
-        return pagecall;
-    }
-
-    
-    /**
      * 
      * @param element
      */
@@ -404,14 +366,6 @@ public class View implements Serializable {
                     element.getHtmlName().concat(" view mismatch."));
         elements.put(element.getHtmlName(), element);
         element.setView(this);
-    }
-    
-    /**
-     * Indica se executou o procedimento de inicialização da visão.
-     * @return true, se visão foi inicializada.
-     */
-    public final boolean isInitializable() {
-        return initialize;
     }
     
     /**
@@ -430,48 +384,6 @@ public class View implements Serializable {
      */
     public final void print(String line) {
         lines.add(line);
-    }
-    
-    /**
-     * Redireciona visão.
-     * Não inicializa a visão.
-     * @param page página.
-     */
-    @Deprecated
-    public final void redirect(String page) {
-        redirect(null, page, false);
-    }
-
-    @Deprecated
-    public final void redirect(String page, boolean initialize) {
-        redirect(null, page, initialize);
-    }
-    
-    /**
-     * Redireciona aplicação e visão.
-     * Não inicializa a visão.
-     * @param app aplicação
-     * @param page página
-     */
-    @Deprecated
-    public final void redirect(String app, String page) {
-        redirect(app, page, false);
-    }
-    
-    /**
-     * Redireciona aplicação e visão.
-     * @param app aplicação
-     * @param page página
-     * @param initialize true, para inicializar a visão.
-     */
-    @Deprecated
-    public final void redirect(String app, String page, boolean initialize) {
-        rapp = app;
-        rpage = page;
-        this.initialize = initialize;
-        
-        if (!dontpushpage)
-            pagecall = true;
     }
     
     /**
@@ -524,14 +436,6 @@ public class View implements Serializable {
             headervalues.remove(key);
         
         headervalues.put(key, value);
-    }
-    
-    /**
-     * 
-     * @param initialize
-     */
-    public final void setInitialize(boolean initialize) {
-        this.initialize = initialize;
     }
     
     /**
