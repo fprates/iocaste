@@ -60,7 +60,7 @@ public class RangeFieldRenderer extends Renderer {
             else
                 tfield.set((value == null)? null : value.getHigh());
             
-            rfieldtag.addChildren(TextFieldRenderer.render(tfield, config));
+            rfieldtag.addChild(TextFieldRenderer.render(tfield, config));
         }
         
         return rfieldtag;

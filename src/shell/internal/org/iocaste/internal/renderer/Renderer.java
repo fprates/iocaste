@@ -161,7 +161,7 @@ public class Renderer {
             break;
             
         case TEXT_FIELD:
-            tags.addAll(TextFieldRenderer.render((TextField)element, config));
+            tags.add(TextFieldRenderer.render((TextField)element, config));
             break;
             
         default:

@@ -55,7 +55,7 @@ public class DataItemRenderer {
             coltag.addChild(RangeFieldRenderer.render(dataitem, config));
             break;
         case TEXT_FIELD:
-            coltag.addChildren(TextFieldRenderer.render(dataitem, config));
+            coltag.addChild(TextFieldRenderer.render(dataitem, config));
             break;
         default:
             throw new RuntimeException(new StringBuilder("Component type ").

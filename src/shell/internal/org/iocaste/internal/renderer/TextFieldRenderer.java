@@ -1,8 +1,5 @@
 package org.iocaste.internal.renderer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.utils.XMLElement;
@@ -16,12 +13,12 @@ import org.iocaste.shell.common.TextField;
 public class TextFieldRenderer extends Renderer {
 
 
-    public static final List<XMLElement> render(DataItem dataitem,
+    public static final XMLElement render(DataItem dataitem,
             Config config) {
         return _render(dataitem, TextField.STYLE, config);
     }
     
-    public static final List<XMLElement> render(TextField textfield,
+    public static final XMLElement render(TextField textfield,
             Config config) {
         return _render(textfield, textfield.getStyleClass(),config);
     }
@@ -32,18 +29,18 @@ public class TextFieldRenderer extends Renderer {
      * @param config
      * @return
      */
-    private static final List<XMLElement> _render(InputComponent input,
+    private static final XMLElement _render(InputComponent input,
             String style, Config config) {
         StringBuilder sb;
         String tftext;
         Text text;
         SearchHelp search;
+        XMLElement tagt, tagl, tagc;
         DataElement dataelement = Shell.getDataElement(input);
         int length = (dataelement == null)? input.getLength() :
             dataelement.getLength();
         String name = input.getHtmlName(), value = toString(input);
         XMLElement spantag, inputtag = new XMLElement("input");
-        List<XMLElement> tags = new ArrayList<>();
         
         if (value == null)
             value = "";
@@ -72,12 +69,18 @@ public class TextFieldRenderer extends Renderer {
             }
         
         inputtag.add("class", sb.toString());
-        
         addEvents(inputtag, input);
-        tags.add(inputtag);
+        tagc = new XMLElement("td");
+        tagc.addChild(inputtag);
+        tagl = new XMLElement("tr");
+        tagl.addChild(tagc);
+        
         search = input.getSearchHelp();
-        if (search != null)
-            tags.add(ButtonRenderer.render(search, config));
+        if (search != null) {
+            tagc = new XMLElement("td");
+            tagc.addChild(ButtonRenderer.render(search, config));
+            tagl.addChild(tagc);
+        }
         
         if (input.isObligatory()) {
             spantag = new XMLElement("input");
@@ -85,7 +88,9 @@ public class TextFieldRenderer extends Renderer {
             spantag.add("class", "sh_button");
             spantag.add("value", "!");
             spantag.add("disabled", "disabled");
-            tags.add(spantag);
+            tagc = new XMLElement("td");
+            tagc.addChild(spantag);
+            tagl.addChild(tagc);
         }
         
         tftext = input.getText();
@@ -93,9 +98,13 @@ public class TextFieldRenderer extends Renderer {
             text = new Text(config.getView(), "");
             text.setStyleClass("tftext");
             text.setText(tftext);
-            tags.add(TextRenderer.render(text, config));
+            tagc = new XMLElement("td");
+            tagc.addChild(TextRenderer.render(text, config));
+            tagl.addChild(tagc);
         }
         
-        return tags;
+        tagt = new XMLElement("table");
+        tagt.addChild(tagl);
+        return tagt;
     }
 }
