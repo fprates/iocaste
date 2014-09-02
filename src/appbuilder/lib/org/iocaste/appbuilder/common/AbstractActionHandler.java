@@ -213,8 +213,10 @@ public abstract class AbstractActionHandler {
             if ((viewspec != null) && viewspec.isInitialized())
                 context.setInputUpdate(true);
         } else {
-            if (rviewctx == null)
+            if (rviewctx == null) {
+                context.function.keepView();
                 return;
+            }
             
             if ((viewspec != null) && rviewctx.isUpdatable())
                 viewspec.setInitialized(false);
