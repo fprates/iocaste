@@ -27,14 +27,8 @@ public abstract class AbstractViewConfig implements ViewConfig {
      */
     protected abstract void execute(PageBuilderContext context);
     
-    /**
-     * 
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    protected final <T extends ExtendedContext> T getExtendedContext() {
-        return (T)context.getView(context.view.getPageName()).
-                getExtendedContext();
+    protected final DashboardFactory getDashboard(String name) {
+        return getViewComponents().dashboards.get(name);
     }
     
     /**
@@ -67,6 +61,16 @@ public abstract class AbstractViewConfig implements ViewConfig {
      */
     protected final <T extends Element> T getElement(String name) {
         return context.view.getElement(name);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    protected final <T extends ExtendedContext> T getExtendedContext() {
+        return (T)context.getView(context.view.getPageName()).
+                getExtendedContext();
     }
     
     /**

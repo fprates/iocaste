@@ -16,6 +16,7 @@ public class ViewSpecItem {
         TABLE_TOOL("tabletool"),
         DATA_FORM("dataform"),
         DASHBOARD("dashboard"),
+        DASHBOARD_GROUP("dashboardgroup"),
         DASHBOARD_ITEM("dashboarditem"),
         EXPAND_BAR("expandbar"),
         NODE_LIST("nodelist"),

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -173,6 +174,11 @@ class BuilderCustomView extends AbstractCustomView {
             dashboard = new DashboardFactory(container, context, name);
             viewcomponents = viewctx.getComponents();
             viewcomponents.dashboards.put(name, dashboard);
+            break;
+        case DASHBOARD_GROUP:
+            viewcomponents = viewctx.getComponents();
+            dashboard = viewcomponents.dashboards.get(item.getParent());
+            dashboard.instance(name, DashboardComponent.GROUP);
             break;
         case DASHBOARD_ITEM:
             viewcomponents = viewctx.getComponents();

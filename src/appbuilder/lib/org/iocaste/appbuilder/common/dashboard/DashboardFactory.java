@@ -12,17 +12,23 @@ public class DashboardFactory {
     private Container container;
     private PageBuilderContext context;
     private Map<String, DashboardComponent> components;
+    private StyleSheet stylesheet;
+    private String stylename;
     
     public DashboardFactory(
             Container container, PageBuilderContext context, String name) {
-        StyleSheet stylesheet = context.view.styleSheetInstance();
         this.container = new StandardContainer(container, name);
         this.context = context;
         components = new HashMap<>();
+
+        stylename = name.concat("_db_container");
+        this.container.setStyleClass(stylename);
         
-        stylesheet.newElement(".db_container");
-        stylesheet.put(".db_container", "float", "left");
-        this.container.setStyleClass("db_container");
+        stylename = String.format(".%s", stylename);
+        stylesheet = context.view.styleSheetInstance();
+        stylesheet.newElement(stylename);
+        stylesheet.put(stylename, "float", "left");
+        stylesheet.put(stylename, "background-color", "#ffffff");
         
         stylesheet.newElement(".db_dash_item:link");
         stylesheet.put(".db_dash_item:link", "display", "block");
@@ -58,10 +64,38 @@ public class DashboardFactory {
     }
     
     public final DashboardComponent instance(String name) {
-        DashboardComponent component = new DashboardComponent(
-                container, context, name);
+        return instance(name, false);
+    }
+    
+    public final DashboardComponent instance(String name, boolean group) {
+        DashboardComponent component;
         
+        component = new DashboardComponent(container, context, name, group);
         components.put(name, component);
         return component;
+    }
+    
+    public final void setArea(int width, int height, String unit) {
+        String swidth = String.format("%d%s", width, unit);
+        String sheight = String.format("%d%s", height, unit);
+        
+        stylesheet.put(stylename, "height", sheight);
+        stylesheet.put(stylename, "width", swidth);
+    }
+    
+    public final void setColor(String color) {
+        stylesheet.put(stylename, "background-color", color);
+        for (DashboardComponent component : components.values())
+            component.setBorderColor(color);
+    }
+    
+    public final void setGrid(int columns, int lines) {
+        for (DashboardComponent component : components.values())
+            component.setArea(100/columns, 100/lines, "%");
+    }
+    
+    public final void setPadding(int padding, String unit) {
+        for (DashboardComponent component : components.values())
+            component.setPadding(padding);
     }
 }
