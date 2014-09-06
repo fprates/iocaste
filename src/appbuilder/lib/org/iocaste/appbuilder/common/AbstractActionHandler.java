@@ -35,6 +35,10 @@ public abstract class AbstractActionHandler {
     protected final String dbactionget(String dashboard, String item) {
         DashboardFactory factory = components.dashboards.get(dashboard);
         
+        if (factory != null)
+            return factory.get(item).getValue();
+        
+        factory = components.dashboardgroups.get(dashboard).getFactory();
         if (factory == null)
             throw new RuntimeException(dashboard.concat(
                     " is an invalid dashboard factory."));
