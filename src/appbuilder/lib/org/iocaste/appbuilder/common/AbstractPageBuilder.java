@@ -140,11 +140,14 @@ class BuilderCustomView extends AbstractCustomView {
         RadioGroup group;
         String[] names;
         DashboardFactory dashboard;
+        DashboardComponent dashboardgroup;
         TableToolData ttdata;
         ViewComponents viewcomponents;
-        Container container = context.view.getElement(item.getParent());
+        String parent = item.getParent();
+        Container container = context.view.getElement(parent);
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
         String name = item.getName();
+        
         
         switch (types[item.getType()]) {
         case FORM:
@@ -177,13 +180,20 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case DASHBOARD_GROUP:
             viewcomponents = viewctx.getComponents();
-            dashboard = viewcomponents.dashboards.get(item.getParent());
-            dashboard.instance(name, DashboardComponent.GROUP);
+            dashboard = viewcomponents.dashboards.get(parent);
+            dashboardgroup = dashboard.instance(name, DashboardComponent.GROUP);
+            viewcomponents.dashboardgroups.put(name, dashboardgroup);
             break;
         case DASHBOARD_ITEM:
             viewcomponents = viewctx.getComponents();
-            dashboard = viewcomponents.dashboards.get(item.getParent());
-            dashboard.instance(name);
+            
+            dashboard = viewcomponents.dashboards.get(parent);
+            if (dashboard == null) {
+                dashboardgroup = viewcomponents.dashboardgroups.get(parent);
+                dashboardgroup.instance(name, DashboardComponent.GROUP);
+            } else {
+                dashboard.instance(name);
+            }
             break;
         case EXPAND_BAR:
             new ExpandBar(container, name);

@@ -1,7 +1,9 @@
 package org.iocaste.appbuilder.common.dashboard;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Container;
@@ -12,6 +14,7 @@ public class DashboardFactory {
     private Container container;
     private PageBuilderContext context;
     private Map<String, DashboardComponent> components;
+    private Set<String> here;
     private StyleSheet stylesheet;
     private String stylename;
     
@@ -20,6 +23,7 @@ public class DashboardFactory {
         this.container = new StandardContainer(container, name);
         this.context = context;
         components = new HashMap<>();
+        here = new HashSet<>();
 
         stylename = name.concat("_db_container");
         this.container.setStyleClass(stylename);
@@ -68,14 +72,24 @@ public class DashboardFactory {
     }
     
     public final DashboardComponent instance(String name, boolean group) {
-        DashboardComponent component;
-        
-        component = new DashboardComponent(container, context, name, group);
+        here.add(name);
+        return instance(name, container, group);
+    }
+    
+    public final DashboardComponent instance(String name, Container container,
+            boolean group) {
+        DashboardComponent component = new DashboardComponent(
+                this, container, context, name, group);
         components.put(name, component);
         return component;
     }
     
     public final void setArea(int width, int height, String unit) {
+        setArea(stylename, stylesheet, width, height, unit);
+    }
+    
+    public final void setArea(String stylename, StyleSheet stylesheet,
+            int width, int height, String unit) {
         String swidth = String.format("%d%s", width, unit);
         String sheight = String.format("%d%s", height, unit);
         
@@ -85,17 +99,17 @@ public class DashboardFactory {
     
     public final void setColor(String color) {
         stylesheet.put(stylename, "background-color", color);
-        for (DashboardComponent component : components.values())
-            component.setBorderColor(color);
+        for (String name : here)
+            components.get(name).setBorderColor(color);
     }
     
     public final void setGrid(int columns, int lines) {
-        for (DashboardComponent component : components.values())
-            component.setArea(100/columns, 100/lines, "%");
+        for (String name : here)
+            components.get(name).setArea(100/columns, 100/lines, "%");
     }
     
     public final void setPadding(int padding, String unit) {
-        for (DashboardComponent component : components.values())
-            component.setPadding(padding);
+        for (String name : here)
+            components.get(name).setPadding(padding);
     }
 }

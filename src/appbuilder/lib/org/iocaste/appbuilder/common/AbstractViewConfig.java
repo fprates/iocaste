@@ -40,14 +40,19 @@ public abstract class AbstractViewConfig implements ViewConfig {
     protected final DashboardComponent getDashboardItem(
             String dashboard, String name) {
         DashboardComponent component;
-        DashboardFactory factory = getViewComponents().dashboards.
-                get(dashboard);
+        ViewComponents components = getViewComponents();
+        DashboardFactory factory = components.dashboards.get(dashboard);
         
-        if (factory == null)
-            throw new RuntimeException(
-                    dashboard.concat(" is an invalid dashboard factory."));
+        if (factory == null) {
+            component = components.dashboardgroups.get(dashboard);
+            if (component == null)
+                throw new RuntimeException(
+                        dashboard.concat(" is an invalid dashboard factory."));
+            component = component.getFactory().get(name);
+        } else {
+            component = factory.get(name);
+        }
         
-        component = factory.get(name);
         if (component == null)
             throw new RuntimeException(
                     name.concat(" is an invalid dashboard component."));

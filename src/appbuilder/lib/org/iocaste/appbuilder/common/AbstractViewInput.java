@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
+import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
@@ -27,7 +28,14 @@ public abstract class AbstractViewInput {
     }
     
     private DashboardComponent dbget(String dashboard, String name) {
-        return getViewComponents().dashboards.get(dashboard).get(name);
+        ViewComponents components = getViewComponents();
+        DashboardFactory factory = components.dashboards.get(dashboard);
+        
+        if (factory != null)
+            return factory.get(name);
+        
+        factory = components.dashboardgroups.get(dashboard).getFactory();
+        return factory.get(name);
     }
     
     protected void dbitemadd(String dashboard, String name, String value) {

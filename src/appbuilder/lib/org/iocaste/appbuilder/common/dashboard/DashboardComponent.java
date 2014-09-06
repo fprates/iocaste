@@ -1,5 +1,8 @@
 package org.iocaste.appbuilder.common.dashboard;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
@@ -12,28 +15,34 @@ public class DashboardComponent {
     public static final boolean GROUP = true;
     private String choose, name, stylename, unit, backcolor, bordercolor;
     private PageBuilderContext context;
-    private StandardContainer component;
+    private StandardContainer container;
     private StyleSheet stylesheet;
+    private DashboardFactory factory;
     private boolean hide, group;
     private int width, height, padding;
+    private Set<String> components;
     
-    public DashboardComponent(Container container, PageBuilderContext context,
-            String name) {
-        this(container, context, name, false);
+    public DashboardComponent(DashboardFactory factory, Container container,
+            PageBuilderContext context, String name) {
+        this(factory, container, context, name, false);
     }
     
-    public DashboardComponent(Container container, PageBuilderContext context,
-            String name, boolean group) {
+    public DashboardComponent(DashboardFactory factory, Container container,
+            PageBuilderContext context, String name, boolean group) {
         this.context = context;
         this.name = name;
         this.group = group;
+        this.factory = factory;
+
+        components = new HashSet<>();
         bordercolor = "black";
         backcolor = "white";
-        
         choose = name.concat("_dbitem_choose");
         stylename = ".db_dash_".concat(name);
-        component = new StandardContainer(container, name.concat("_container"));
-        component.setStyleClass(stylename.substring(1));
+        this.container = new StandardContainer(container,
+                name.concat("_container"));
+        this.container.setStyleClass(stylename.substring(1));
+        this.container.setVisible(false);
 
         stylesheet = context.view.styleSheetInstance();
         stylesheet.newElement(stylename);
@@ -53,16 +62,6 @@ public class DashboardComponent {
             stylesheet.put(stylename, "margin", "2px");
             stylesheet.put(stylename, "padding", "20px");
         }
-        component.setVisible(false);
-    }
-    
-    public final void addText(String name) {
-        if (!hide)
-            component.setVisible(true);
-        
-        String textname = name.concat(".item");
-        Text text = new Text(component, textname);
-        text.setText(name);
     }
     
     public final void add(String item) {
@@ -70,31 +69,47 @@ public class DashboardComponent {
     }
     
     public final void add(String item, Object value) {
+        String linkname;
+        Link link;
+        
         if (!hide)
-            component.setVisible(true);
+            container.setVisible(true);
         
         if (item == null)
             throw new RuntimeException("dashboard item undefined.");
         
-        String linkname = item.concat("_dbitem_link");
-        Link link = new Link(component, linkname, name);
+        linkname = item.concat("_dbitem_link");
+        link = new Link(container, linkname, name);
         link.setStyleClass("db_dash_item");
         link.setText(item);
         link.add(choose, value);
     }
     
+    public final void addText(String name) {
+        String textname;
+        Text text;
+        
+        if (!hide)
+            container.setVisible(true);
+        
+        textname = name.concat(".item");
+        text = new Text(container, textname);
+        text.setText(name);
+    }
+    
     private final void commit() {
-        String swidth = String.format("%d%s", width - (padding * 2), unit);
-        String sheight = String.format("%d%s", height - (padding * 2), unit);
-
+        factory.setArea(stylename, stylesheet,
+                width - (padding * 2), height - (padding * 2), unit);
         stylesheet.put(stylename, "border-color", bordercolor);
         stylesheet.put(stylename, "background-color", backcolor);
-        stylesheet.put(stylename, "height", sheight);
-        stylesheet.put(stylename, "width", swidth);
         stylesheet.put(stylename, "padding-top",
                 String.format("%d%s", padding, unit));
         stylesheet.put(stylename, "padding-left",
                 String.format("%d%s", padding, unit));
+    }
+    
+    public final DashboardFactory getFactory() {
+        return factory;
     }
     
     public final String getValue() {
@@ -103,13 +118,35 @@ public class DashboardComponent {
     
     public final void hide() {
         hide = true;
-        component.setVisible(false);
+        container.setVisible(false);
+    }
+    
+    public final void instance(String name, boolean group) {
+        factory.instance(name, container, group);
+        components.add(name);
+        if (!hide)
+            container.setVisible(true);
+    }
+    
+    public final void isometricGrid() {
+        DashboardComponent component;
+        double size;
+        int qt;
+        
+        size = Math.sqrt(components.size());
+        qt = ((size%2) > 0)? ((int)size) + 1 : (int)size;
+        setArea(100, 100, "%");
+        for (String name : components) {
+            component = factory.get(name);
+            component.setArea(100/qt, 100/qt, "%");
+        }
     }
     
     public final void setArea(int width, int height, String unit) {
         this.width = width;
         this.height = height;
         this.unit = unit;
+        commit();
     }
     
     public final void setBorderColor(String color) {
@@ -119,6 +156,8 @@ public class DashboardComponent {
     
     public final void setColor(String color) {
         backcolor = color;
+        for (String name : components)
+            factory.get(name).setBorderColor(color);
         commit();
     }
     
@@ -129,7 +168,7 @@ public class DashboardComponent {
     
     public final void show() {
         hide = false;
-        if (component.getElements().size() > 0)
-            component.setVisible(true);
+        if (container.getElements().size() > 0)
+            container.setVisible(true);
     }
 }
