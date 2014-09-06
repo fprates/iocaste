@@ -129,17 +129,7 @@ public class DashboardComponent {
     }
     
     public final void isometricGrid() {
-        DashboardComponent component;
-        double size;
-        int qt;
-        
-        size = Math.sqrt(components.size());
-        qt = ((size%2) > 0)? ((int)size) + 1 : (int)size;
-        setArea(100, 100, "%");
-        for (String name : components) {
-            component = factory.get(name);
-            component.setArea(100/qt, 100/qt, "%");
-        }
+        factory.isometricGrid(components);
     }
     
     public final void setArea(int width, int height, String unit) {

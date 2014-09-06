@@ -84,6 +84,20 @@ public class DashboardFactory {
         return component;
     }
     
+    public final void isometricGrid() {
+        isometricGrid(here);
+    }
+    
+    public final void isometricGrid(Set<String> items) {
+        double size;
+        int qt;
+        
+        size = Math.sqrt(items.size());
+        qt = ((size%2) > 0)? ((int)size) + 1 : (int)size;
+        for (String name : items)
+            components.get(name).setArea(100/qt, 100/qt, "%");
+    }
+    
     public final void setArea(int width, int height, String unit) {
         setArea(stylename, stylesheet, width, height, unit);
     }
