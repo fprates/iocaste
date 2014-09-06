@@ -135,14 +135,13 @@ class BuilderCustomView extends AbstractCustomView {
     private NavControl navcontrol;
     private String view;
     
-    private void buildItem(PageBuilderContext context, ViewContext viewctx,
-            ViewSpecItem item) {
+    private void buildItem(PageBuilderContext context,
+            ViewComponents components, ViewSpecItem item) {
         RadioGroup group;
         String[] names;
         DashboardFactory dashboard;
         DashboardComponent dashboardgroup;
         TableToolData ttdata;
-        ViewComponents viewcomponents;
         String parent = item.getParent();
         Container container = context.view.getElement(parent);
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
@@ -167,29 +166,24 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case TABLE_TOOL:
             ttdata = new TableToolData(container, name);
-            viewcomponents = viewctx.getComponents();
-            viewcomponents.add(ttdata);
+            components.add(ttdata);
             break;
         case DATA_FORM:
             new DataForm(container, name);
             break;
         case DASHBOARD:
             dashboard = new DashboardFactory(container, context, name);
-            viewcomponents = viewctx.getComponents();
-            viewcomponents.dashboards.put(name, dashboard);
+            components.dashboards.put(name, dashboard);
             break;
         case DASHBOARD_GROUP:
-            viewcomponents = viewctx.getComponents();
-            dashboard = viewcomponents.dashboards.get(parent);
+            dashboard = components.dashboards.get(parent);
             dashboardgroup = dashboard.instance(name, DashboardComponent.GROUP);
-            viewcomponents.dashboardgroups.put(name, dashboardgroup);
+            components.dashboardgroups.put(name, dashboardgroup);
             break;
         case DASHBOARD_ITEM:
-            viewcomponents = viewctx.getComponents();
-            
-            dashboard = viewcomponents.dashboards.get(parent);
+            dashboard = components.dashboards.get(parent);
             if (dashboard == null) {
-                dashboardgroup = viewcomponents.dashboardgroups.get(parent);
+                dashboardgroup = components.dashboardgroups.get(parent);
                 dashboardgroup.instance(name, DashboardComponent.GROUP);
             } else {
                 dashboard.instance(name);
@@ -208,14 +202,11 @@ class BuilderCustomView extends AbstractCustomView {
             new Link(container, name, name);
             break;
         case REPORT_TOOL:
-            viewcomponents = viewctx.getComponents();
-            viewcomponents.reporttools.put(
-                    name, new ReportTool(container, name));
+            components.reporttools.put(name, new ReportTool(container, name));
             break;
         case TEXT_EDITOR:
             editor = new TextEditorTool(context).instance(container, name);
-            viewcomponents = viewctx.getComponents();
-            viewcomponents.editors.put(name, editor);
+            components.editors.put(name, editor);
             break;
         case FILE_UPLOAD:
             new FileEntry(container, name);
@@ -236,7 +227,7 @@ class BuilderCustomView extends AbstractCustomView {
         }
         
         for (ViewSpecItem child : item.getItems())
-            buildItem(context, viewctx, child);
+            buildItem(context, components, child);
     }
     
     private final void download(PageBuilderContext context) throws Exception {
@@ -276,10 +267,11 @@ class BuilderCustomView extends AbstractCustomView {
         
         if (!viewspec.isInitialized()) {
             _context.setInputUpdate(false);
+            _context.view.clear();
             viewspec.run(_context);
             viewctx = _context.getView(view);
             for (ViewSpecItem item : viewspec.getItems())
-                buildItem(_context, viewctx, item);
+                buildItem(_context, viewctx.getComponents(), item);
             
             if (viewconfig != null) {
                 viewconfig.setNavControl(navcontrol);

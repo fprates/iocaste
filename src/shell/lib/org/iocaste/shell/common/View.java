@@ -97,11 +97,16 @@ public class View implements Serializable {
         mpelements.add(element);
     }
     
-    /**
-     * Limpa componentes de entrada.
-     */
-    public final void clearInputs() {
+    public final void clear() {
+        containers.clear();
+        elements.clear();
         inputs.clear();
+        parameters.clear();
+        initparams.clear();
+        mpelements.clear();
+        lines.clear();
+        messagetext = null;
+        messagetype = null;
     }
     
     /**
@@ -118,6 +123,13 @@ public class View implements Serializable {
         for (String name : initparams)
             parameters.remove(name);
         initparams.clear();
+    }
+    
+    /**
+     * Limpa componentes de entrada.
+     */
+    public final void clearInputs() {
+        inputs.clear();
     }
     
     public final void clearMultipartElements() {
