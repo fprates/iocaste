@@ -56,7 +56,8 @@ public abstract class AbstractInstallObject {
         return element;
     }
     
-    protected abstract void execute(StandardInstallContext context);
+    protected abstract void execute(StandardInstallContext context)
+            throws Exception ;
     
     protected final DocumentModelItem getItem(String name) {
         return context.getItem(name);
@@ -86,7 +87,7 @@ public abstract class AbstractInstallObject {
         return new DummyModelItem(model, name);
     }
     
-    public final void run(StandardInstallContext context) {
+    public final void run(StandardInstallContext context) throws Exception {
         this.context = context;
         execute(context);
     }

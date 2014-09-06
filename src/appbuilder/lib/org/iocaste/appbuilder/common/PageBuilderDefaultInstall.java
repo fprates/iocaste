@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.TaskGroup;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.UserProfile;
 
@@ -35,11 +36,14 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     }
     
     @Override
-    public void execute(StandardInstallContext context) {
+    public void execute(StandardInstallContext context) throws Exception {
         UserProfile profile;
         Authorization authorization;
         InstallData data = context.getInstallData();
 
+        if (profilename == null)
+            throw new IocasteException("profile name undefined.");
+        
         profile = new UserProfile(profilename);
         data.add(profile);
         
