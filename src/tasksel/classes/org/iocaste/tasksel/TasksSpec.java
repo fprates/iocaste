@@ -12,7 +12,7 @@ public class TasksSpec extends AbstractViewSpec {
         navcontrol("main");
         dashboard("main", "groups");
         for (String name : extcontext.groups.keySet())
-            dashboarditem("groups", name);
+            dashboardgroup("groups", name);
     }
 
 }

@@ -1,16 +1,10 @@
 package org.iocaste.tasksel;
 
-import java.util.Map;
-import java.util.Set;
-
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewContext;
-import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewState;
 
@@ -34,41 +28,6 @@ public class Main extends AbstractPageBuilder {
             viewctx.put(name, new Call(name));
         viewctx.setUpdate(true);
     }
-    
-//    /**
-//     * 
-//     * @param view
-//     */
-//    public final void grouprun() {
-//        Request.grouprun(context);
-//    }
-//    
-//    /*
-//     * (non-Javadoc)
-//     * @see org.iocaste.shell.common.AbstractPage#help(
-//     *     org.iocaste.shell.common.ViewData)
-//     */
-//    @Override
-//    public final void help() {
-//        context.view.setParameter("topic", "tasksel-index");
-//        context.view.redirect("iocaste-help", "view", true);
-//    }
-//    
-//    @Override
-//    public final AbstractContext init(View view) {
-//        context = new Context(); 
-//        return context;
-//    }
-//    
-//    /**
-//     * 
-//     * @param message
-//     * @return
-//     */
-//    public final InstallData install(Message message) {
-//        return Install.init(this);
-//    }
-//    
     
     public final ViewState redirect(Message message) {
         ViewState state;
