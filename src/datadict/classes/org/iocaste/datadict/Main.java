@@ -16,11 +16,7 @@ public class Main extends AbstractPageBuilder {
         view = context.instance(MAIN);
         view.set(new SelectSpec());
         view.set(new SelectConfig());
-//        context.setActionHandler(MAIN, "create", new CreateObject());
         view.put("show", new ShowObject());
-//        context.setActionHandler(MAIN, "update", new UpdateObject());
-//        context.setActionHandler(MAIN, "delete", new DeleteObject());
-//        context.setActionHandler(MAIN, "rename", new RenameObject());
         
         view = context.instance(STRUCTURE);
         view.set(new StructureSpec());
