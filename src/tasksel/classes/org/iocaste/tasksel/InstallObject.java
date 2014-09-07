@@ -3,17 +3,14 @@ package org.iocaste.tasksel;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.AbstractInstallObject;
+import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.protocol.Function;
 
-public class Install {
-    
-    /**
-     * 
-     * @param function
-     * @return
-     */
-    public static final InstallData init(Function function) {
+public class InstallObject extends AbstractInstallObject {
+
+    @Override
+    protected void execute(StandardInstallContext context) throws Exception {
         Map<String, String> messages;
         InstallData data = new InstallData();
         
@@ -25,8 +22,6 @@ public class Install {
         messages.put("task-selector", "Seletor de tarefas");
         
         data.setMessages("pt_BR", messages);
-        
-        return data;
     }
 }
 

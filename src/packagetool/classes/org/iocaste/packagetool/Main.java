@@ -13,6 +13,12 @@ public class Main extends AbstractPage {
         export("install", "install");
     }
     
+    @Override
+    public void home() {
+        super.home();
+        setReloadableView(true);
+    }
+    
     /**
      * 
      * @param view

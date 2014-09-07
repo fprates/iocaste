@@ -39,12 +39,12 @@ public class InstallTasksGroups {
         tasks = state.documents.select(query);
         for (TaskGroup taskgroup : tasksgroups.keySet()) {
             groupname = taskgroup.getName();
-            group = TaskSelector.getGroup(groupname, state);
+            group = Selector.getGroup(groupname, state);
             if (group == null) {
-                group = TaskSelector.createGroup(groupname, state);
-                TaskSelector.assignGroup(group, "ADMIN", state);
+                group = Selector.createGroup(groupname, state);
+                Selector.assignGroup(group, "ADMIN", state);
                 for (User user : tasksgroups.get(taskgroup))
-                    TaskSelector.assignGroup(group, user.getUsername(), state);
+                    Selector.assignGroup(group, user.getUsername(), state);
                 Registry.add(groupname, "TSKGROUP", state);
             }
 
@@ -56,9 +56,9 @@ public class InstallTasksGroups {
                             new StringBuilder("invalid task \"").
                             append(taskname).append("\".").toString());
                 
-                task = TaskSelector.addEntry(taskname, group, state);
+                task = Selector.addEntry(taskname, group, state);
                 if (state.messages.size() > 0)
-                    TaskSelector.addEntryMessage(task, group, state);
+                    Selector.addEntryMessage(task, group, state);
                 
                 Registry.add(taskname, "TSKITEM", state);
             }

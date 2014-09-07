@@ -44,8 +44,8 @@ public class Services extends AbstractFunction {
         State state = new State();
         
         state.documents = new Documents(this);
-        group = TaskSelector.getGroup(groupname, state);
-        TaskSelector.assignGroup(group, username, state);
+        group = Selector.getGroup(groupname, state);
+        Selector.assignGroup(group, username, state);
     }
     
     public final InstallData getDataFromFile(Message message) throws Exception {

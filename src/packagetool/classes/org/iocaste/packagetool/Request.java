@@ -8,6 +8,7 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
+import org.iocaste.tasksel.common.TaskSelector;
 
 public class Request {
     
@@ -31,7 +32,7 @@ public class Request {
         
         pkgtool.install(pkgname);
         updatePackageAction(context.view, pkgname, "packageuninstall");
-        
+        new TaskSelector(context.function).refresh();
         context.view.message(Const.STATUS, "package.installed");
     }
     
@@ -42,7 +43,7 @@ public class Request {
         
         pkgtool.uninstall(pkgname);
         updatePackageAction(context.view, pkgname, "packageinstall");
-        
+        new TaskSelector(context.function).refresh();
         context.view.message(Const.STATUS, "package.uninstalled");
     }
     

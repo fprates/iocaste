@@ -10,15 +10,20 @@ import org.iocaste.shell.common.ViewState;
 
 public class Main extends AbstractPageBuilder {
     public static final String MAIN = "main";
+    private Context extcontext;
+    
     public Main() {
         export("task_redirect", "redirect");
+        export("refresh", "refresh");
     }
 
     public void config(PageBuilderContext context) {
         ViewContext viewctx;
-        Context extcontext = new Context();
         
+        extcontext = new Context();
+        extcontext.context = context;
         extcontext.groups = Response.getLists(context);
+        
         viewctx = context.instance(MAIN);
         viewctx.set(extcontext);
         viewctx.set(new TasksSpec());
@@ -43,10 +48,16 @@ public class Main extends AbstractPageBuilder {
         return state;
     }
 
+    public final void refresh(Message message) {
+        extcontext.groups = Response.getLists(extcontext.context);
+        extcontext.context.getView(MAIN).getSpec().setInitialized(false);
+        setReloadableView(true);
+    }
+    
     @Override
     protected void installConfig(PageBuilderDefaultInstall defaultinstall)
             throws Exception {
-        // TODO Stub de método gerado automaticamente
-        
+        defaultinstall.setProfile("BASE");
+        installObject("main", new InstallObject());
     }
 }

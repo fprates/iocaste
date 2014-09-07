@@ -10,8 +10,6 @@ import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
-import org.iocaste.protocol.GenericService;
-import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -19,6 +17,7 @@ import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TextArea;
 import org.iocaste.shell.common.ViewState;
+import org.iocaste.tasksel.common.TaskSelector;
 import org.iocaste.texteditor.common.TextEditor;
 import org.iocaste.texteditor.common.TextEditorTool;
 
@@ -265,12 +264,8 @@ public abstract class AbstractActionHandler {
     
     protected final void taskredirect(String task) {
         ViewState state;
-        GenericService service = new GenericService(
-                context.function, "/iocaste-tasksel/view.html");
-        Message message = new Message("task_redirect");
         
-        message.add("task", task);
-        state = service.invoke(message);
+        state = new TaskSelector(context.function).call(task);
         if (state == null)
             throw new RuntimeException(task.concat(" is an invalid task."));
         

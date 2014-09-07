@@ -111,13 +111,13 @@ public class Uninstall {
         }
         
         if (modeltype.equals("TSKGROUP")) {
-            TaskSelector.removeGroup(name, documents);
+            Selector.removeGroup(name, documents);
             documents.delete(object);
             return;
         }
         
         if (modeltype.equals("TSKITEM")) {
-            TaskSelector.removeTask(name, documents);
+            Selector.removeTask(name, documents);
             documents.delete(object);
             return;
         }

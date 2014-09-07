@@ -9,7 +9,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
 
-public class TaskSelector {
+public class Selector {
     
     /**
      * 
