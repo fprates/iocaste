@@ -3,25 +3,22 @@ package org.iocaste.kernel;
 import java.sql.Connection;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.iocaste.kernel.common.user.Authorization;
 import org.iocaste.kernel.common.user.User;
 
 public class UserContext {
-    private Map<String, Object> objects;
     private User user;
     private Connection connection;
     private Locale locale;
     private int terminal;
     private Date conndate;
     private String currentapp;
-    private Authorization[] authorizations;
+    private List<Authorization> authorizations;
     
     public UserContext(Locale locale) {
-        objects = new HashMap<>();
         this.locale = locale;
         conndate = Calendar.getInstance().getTime();
     }
@@ -30,7 +27,7 @@ public class UserContext {
      * 
      * @return
      */
-    public final Authorization[] getAuthorizations() {
+    public final List<Authorization> getAuthorizations() {
         return authorizations;
     }
     
@@ -68,15 +65,6 @@ public class UserContext {
     
     /**
      * 
-     * @param name
-     * @return
-     */
-    public final Object getObject(String name) {
-        return objects.get(name);
-    }
-    
-    /**
-     * 
      * @return
      */
     public final int getTerminal() {
@@ -95,7 +83,7 @@ public class UserContext {
      * 
      * @param authorizations
      */
-    public final void setAuthorizations(Authorization[] authorizations) {
+    public final void setAuthorizations(List<Authorization> authorizations) {
         this.authorizations = authorizations;
     }
     
@@ -113,18 +101,6 @@ public class UserContext {
      */
     public final void setCurrentApp(String currentapp) {
         this.currentapp = currentapp;
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param object
-     */
-    public final void setObject(String name, Object object) {
-        if (objects.containsKey(name))
-            objects.remove(name);
-        
-        objects.put(name, object);
     }
     
     /**

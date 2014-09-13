@@ -15,14 +15,14 @@ import org.iocaste.kernel.common.Service;
 public abstract class AbstractFunction implements Function {
     private ServletContext context;
     private Map<String, String> exports;
-    private Map<String, FunctionComponent> components;
+    private Map<String, Handler> handlers;
     private String servername;
     private String sessionid;
     private boolean authorized;
     
     public AbstractFunction() {
         exports = new HashMap<>();
-        components = new HashMap<>();
+        handlers = new HashMap<>();
         exports.put("call_authorized", "callAuthorized");
         authorized = false;
     }
@@ -34,6 +34,26 @@ public abstract class AbstractFunction implements Function {
      */
     protected final void export(String name, String method) {
         exports.put(name, method);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param handler
+     */
+    protected final void export(String name, Handler handler) {
+        handler.setFunction(this);
+        handlers.put(name, handler);
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.kernel.common.Function#get(java.lang.String)
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public final <T extends Handler> T get(String handler) {
+        return (T)handlers.get(handler);
     }
     
     /*
@@ -93,7 +113,7 @@ public abstract class AbstractFunction implements Function {
      */
     @Override
     public final Object run(Message message) throws Exception {
-        FunctionComponent component;
+        Handler component;
         Method method;
         String id = message.getId();
         String methodname = exports.get(id);
@@ -104,7 +124,7 @@ public abstract class AbstractFunction implements Function {
 
         setSessionid(message.getSessionid());
         
-        component = components.get(methodname);
+        component = handlers.get(methodname);
         if (component != null) {
             return component.run(message);
         } else {

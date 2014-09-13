@@ -4,14 +4,20 @@ package org.iocaste.kernel;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.kernel.authorization.Auth;
 import org.iocaste.kernel.common.AbstractIocasteServlet;
 import org.iocaste.kernel.common.IocasteException;
 import org.iocaste.kernel.common.Message;
+import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.database.Database;
+import org.iocaste.kernel.session.IsConnected;
+import org.iocaste.kernel.session.Session;
+import org.iocaste.kernel.users.Users;
 
 public class Servlet extends AbstractIocasteServlet {
     private static final long serialVersionUID = -8569034003940826582L;
-    private Services services;
+    private Session session;
+    private Config config;
     
     /*
      * (non-Javadoc)
@@ -20,30 +26,50 @@ public class Servlet extends AbstractIocasteServlet {
     @Override
     public void config() {
         Map<String, Object[]> parameters;
+        Database database;
+        Users users;
+        Auth auth;
+
+        database = new Database();
+        users = new Users();
+        auth = new Auth();
+        session = new Session();
+        config = new Config();
         
-        services = new Services();
-        register(new Database());
-//        register(new Login());
-//        register(new Users());
-//        register(new Authorization());
+        session.database = database;
+        users.database = database;
+        config.database = database;
+        
+        users.session = session;
+        database.session = session;
+        auth.session = session;
+        
+        session.users = users;
+        
+        register(database);
+        register(users);
+        register(session);
+        register(auth);
+        register(config);
+        register(new Services());
 //        register(new Documents());
         
         
         authorize("is_connected", null);
         authorize("login", null);
         
-        parameters = new HashMap<String, Object[]>();
+        parameters = new HashMap<>();
         parameters.put("from",
                 new String[] {"SHELL001", "SHELL002", "SHELL003", "SHELL004"});
-        authorize("checked_select", parameters);
         
+        authorize("checked_select", parameters);
         authorize("get_host", null);
         authorize("get_locale", null);
         authorize("commit", null);
         authorize("rollback", null);
         authorize("is_authorized", null);
         
-        parameters = new HashMap<String, Object[]>();
+        parameters = new HashMap<>();
         parameters.put("parameter", new String[] {"dbname"});
         authorize("get_system_parameter", parameters);
     }
@@ -53,18 +79,21 @@ public class Servlet extends AbstractIocasteServlet {
      * @see org.iocaste.protocol.ServerServlet#preRun(
      *     org.iocaste.protocol.Message)
      */
+    @Override
     protected final void preRun(Message message) throws Exception {
-        if (!services.isInitialized()) {
-            services.setServletContext(getServletContext());
-            services.init();
+        IsConnected isconnected;
+        
+        if (!config.isInitialized()) {
+            session.setServletContext(getServletContext());
+            config.init();
         }
         
-        services.setHost(getServerName(message.getSessionid()));
-        
+        config.setHost(getServerName(message.getSessionid()));
         if (isAuthorized(message))
             return;
         
-        if (!services.isConnected(message))
+        isconnected = session.get("is_connected");
+        if (!(boolean)isconnected.run(message))
             throw new IocasteException(new StringBuilder(message.getId()).
                     append("() denied: invalid session.").toString());
     }
