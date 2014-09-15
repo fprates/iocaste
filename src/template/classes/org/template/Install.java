@@ -3,38 +3,20 @@ package org.template;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.packagetool.common.TaskGroup;
-import org.iocaste.protocol.user.Authorization;
+import org.iocaste.appbuilder.common.AbstractInstallObject;
+import org.iocaste.appbuilder.common.StandardInstallContext;
 
-public class Install {
+public class Install extends AbstractInstallObject {
 
-    public static final InstallData init() {
-        TaskGroup taskgroup;
+    @Override
+    protected void execute(StandardInstallContext context) throws Exception {
         Map<String, String> messages;
-        Authorization authorization;
-        InstallData data = new InstallData();
         
         // mensagens
-        messages = new HashMap<String, String>();
+        messages = new HashMap<>();
         messages.put("TESTE", "Aplicação template");
         messages.put("iocaste-template", "Módulo template");
         messages.put("server.test", "Clique no botão para testar o servidor.");
-        data.setMessages("pt_BR", messages);
-        
-        // autorização de execução
-        authorization = new Authorization("TESTE.EXECUTE");
-        authorization.setObject("APPLICATION");
-        authorization.setAction("EXECUTE");
-        authorization.add("APPNAME", "iocaste-template");
-        data.add(authorization);
-        
-        // link
-        data.link("TESTE", "iocaste-template");
-        taskgroup = new TaskGroup("TESTE");
-        taskgroup.add("TESTE");
-        data.add(taskgroup);
-        
-        return data;
+        context.getInstallData().setMessages("pt_BR", messages);
     }
 }

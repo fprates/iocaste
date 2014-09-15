@@ -115,7 +115,7 @@
         <ant antfile="${basedir}/src/masterdata/build.xml"/>
         
         <!-- template -->
-        <!-- <ant antfile="${basedir}/src/template/build.xml"/> -->
+        <ant antfile="${basedir}/src/template/build.xml"/>
     	
     	<copy todir="${basedir}/ext/common">
     		<fileset dir="${builddir}/core/lib" excludes="*.jar"/>

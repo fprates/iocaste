@@ -11,7 +11,7 @@ import org.iocaste.protocol.Message;
  *
  */
 public class Template extends AbstractServiceInterface {
-    private static final String SERVERNAME = "/iocate-template/services.html";
+    private static final String SERVERNAME = "/iocaste-template/services.html";
     public Template(Function function) {
         initService(function, SERVERNAME);
     }
@@ -22,10 +22,7 @@ public class Template extends AbstractServiceInterface {
      * @throws Exception
      */
     public final String getMessage() {
-        Message message = new Message();
-        
-        message.setId("get_message");
-        
+        Message message = new Message("get_message");
         return call(message);
     }
 }

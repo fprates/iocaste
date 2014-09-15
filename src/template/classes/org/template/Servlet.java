@@ -1,9 +1,8 @@
 package org.template;
 
-import org.iocaste.protocol.Message;
-import org.iocaste.protocol.ServerServlet;
+import org.iocaste.protocol.AbstractIocasteServlet;
 
-public class Servlet extends ServerServlet {
+public class Servlet extends AbstractIocasteServlet {
     private static final long serialVersionUID = -4447612067637162915L;
 
     /*
@@ -15,17 +14,5 @@ public class Servlet extends ServerServlet {
     @Override
     public void config() {
         register(new Services());
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.protocol.ServerServlet#preRun(
-     *     org.iocaste.protocol.Message)
-     * 
-     * rotinas customizadas de pré-processamento
-     */
-    @Override
-    public void preRun(Message message) throws Exception {
-        super.preRun(message);
     }
 }
