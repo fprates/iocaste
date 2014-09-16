@@ -6,6 +6,7 @@ import java.util.Map;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.protocol.AbstractServiceInterface;
+import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Container;
@@ -16,6 +17,10 @@ import org.iocaste.shell.common.TextArea;
 public class TextEditorTool extends AbstractServiceInterface {
     private AbstractContext context;
     public TextEditorTool tetool;
+    
+    public TextEditorTool(Function function) {
+        initService(function, InstallData.TXTEDITOR_SERVERNAME);
+    }
     
     public TextEditorTool(AbstractContext context) {
         initService(context.function, InstallData.TXTEDITOR_SERVERNAME);
