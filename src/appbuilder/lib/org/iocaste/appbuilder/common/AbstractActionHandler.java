@@ -275,12 +275,12 @@ public abstract class AbstractActionHandler {
         context.function.exec(state.rapp, state.rpage);
     }
     
-    protected final void texteditorsave(String name, String id) {
+    protected final void texteditorsave(String name, String id, String page) {
         TextEditorTool editortool = new TextEditorTool(context);
         TextEditor editor = components.editors.get(name);
         
-        editortool.commit(editor, id);
-        editortool.update(editor, "B2B_OBSERV");
+        editortool.commit(editor, page);
+        editortool.update(editor, id);
     }
     
     protected final String textget(String name) {
