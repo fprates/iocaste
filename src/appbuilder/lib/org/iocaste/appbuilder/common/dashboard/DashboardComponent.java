@@ -57,6 +57,7 @@ public class DashboardComponent {
             stylesheet.put(stylename, "padding-left", "1%");
             stylesheet.put(stylename, "padding-bottom", "0%");
             stylesheet.put(stylename, "padding-right", "0%");
+            stylesheet.put(stylename, "overflow", "auto");
         } else {
             stylesheet.put(stylename, "width", "150px");
             stylesheet.put(stylename, "margin", "2px");
