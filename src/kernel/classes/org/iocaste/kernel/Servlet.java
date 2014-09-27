@@ -36,14 +36,9 @@ public class Servlet extends AbstractIocasteServlet {
         session = new Session();
         config = new Config();
         
-        session.database = database;
-        users.database = database;
-        config.database = database;
-        
-        users.session = session;
-        database.session = session;
-        auth.session = session;
-        
+        session.database = users.database = config.database = database; 
+        auth.database = database;
+        users.session = database.session = auth.session = session;
         session.users = users;
         
         register(database);
