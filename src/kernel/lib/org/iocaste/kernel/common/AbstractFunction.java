@@ -45,6 +45,7 @@ public abstract class AbstractFunction implements Function {
     protected final void export(String name, Handler handler) {
         handler.setFunction(this);
         handlers.put(name, handler);
+        exports.put(name, name);
     }
     
     /*
