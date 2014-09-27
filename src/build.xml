@@ -40,6 +40,9 @@
     	<!-- appbuilder -->
     	<ant antfile="${basedir}/src/appbuilder/build.xml"/>
     	
+    	<!-- log -->
+    	<ant antfile="${basedir}/src/log/build.xml"/>
+    	
         <!-- report -->
         <!-- <ant antfile ="${basedir}/src/report/build.xml"/> -->
     </target>
@@ -114,6 +117,9 @@
         <!-- masterdata -->
         <ant antfile="${basedir}/src/masterdata/build.xml"/>
         
+    	<!-- external -->
+    	<ant antfile="${basedir}/src/external/build.xml"/>
+    	
         <!-- template -->
         <ant antfile="${basedir}/src/template/build.xml"/>
     	
@@ -130,6 +136,7 @@
     		<fileset dir="${builddir}/docmanager/lib/" excludes="*.jar"/>
     		<fileset dir="${builddir}/appbuilder/lib/" excludes="*.jar"/>
     		<fileset dir="${builddir}/tasksel/lib/" excludes="*.jar"/>
+    		<fileset dir="${builddir}/log/lib/" excludes="*.jar"/>
     	<!--    <fileset dir="${builddir}/report/lib" excludes="*.jar"/> -->
     	</copy>
     	
