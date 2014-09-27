@@ -320,12 +320,12 @@ public class Main extends AbstractRenderer {
         }
         
         config = new ControllerData();
-        config.state.view = pagectx.getViewData();
         config.values = parameters;
         config.contextname = pagectx.getAppContext().getName();
         config.logid = getLogid(pagetrack);
         config.sessionid = getComplexId(sessionid, config.logid);
         config.state = new ViewState();
+        config.state.view = pagectx.getViewData();
         callController(config);
         
         action = config.state.view.getElement(actionname);
