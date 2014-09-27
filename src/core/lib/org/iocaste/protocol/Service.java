@@ -21,6 +21,14 @@ public class Service {
         this.sessionid = sessionid;
     }
     
+    public final InputStream getInpustStream() {
+        return is;
+    }
+    
+    public final OutputStream getOutputStream() {
+        return os;
+    }
+    
     public final void setInputStream(InputStream is) {
         this.is = is;
     }
@@ -31,7 +39,8 @@ public class Service {
     
     public final Message getMessage() throws IOException,
             ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(is);
+        BufferedInputStream bis = new BufferedInputStream(is);
+        ObjectInputStream ois = new ObjectInputStream(bis);
         Message message = (Message)ois.readObject();
         
         return message;
