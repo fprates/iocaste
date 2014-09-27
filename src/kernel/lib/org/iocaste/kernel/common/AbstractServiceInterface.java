@@ -2,10 +2,6 @@ package org.iocaste.kernel.common;
 
 import java.util.Map;
 
-import org.iocaste.protocol.Function;
-import org.iocaste.protocol.Message;
-import org.iocaste.protocol.Service;
-
 public abstract class AbstractServiceInterface {
     private Service service;
 

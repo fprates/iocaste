@@ -6,7 +6,10 @@
         <!-- bibliotecas base do sistema -->
     	<!-- core -->
         <ant antfile="${basedir}/src/core/build.xml"/>
-        
+    	
+    	<!-- kernel -->
+        <ant antfile="${basedir}/src/kernel/build.xml"/>
+    	
         <!-- documents -->
         <ant antfile="${basedir}/src/documents/build.xml"/>
         

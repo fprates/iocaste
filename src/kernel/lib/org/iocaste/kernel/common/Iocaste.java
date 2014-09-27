@@ -6,12 +6,9 @@ import java.util.Properties;
 
 import org.iocaste.kernel.common.user.Authorization;
 import org.iocaste.kernel.common.user.User;
-import org.iocaste.protocol.AbstractServiceInterface;
-import org.iocaste.protocol.Function;
-import org.iocaste.protocol.Message;
 
 public final class Iocaste extends AbstractServiceInterface {
-    public static final String SERVERNAME = "/iocaste-core/service.html";
+    public static final String SERVERNAME = "/iocaste-kernel/service.html";
     
     public Iocaste(Function function) {
         initService(function, SERVERNAME);
