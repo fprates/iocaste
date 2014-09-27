@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.util.List;
 
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
-import org.iocaste.kernel.common.user.User;
 import org.iocaste.kernel.database.Update;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.user.User;
 
 public class UpdateUser extends AbstractHandler {
     private static final byte UPD_USER = 0;

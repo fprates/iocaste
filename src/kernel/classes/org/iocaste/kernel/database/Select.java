@@ -7,7 +7,7 @@ import java.sql.SQLDataException;
 import java.sql.SQLException;
 
 import org.hsqldb.HsqlException;
-import org.iocaste.kernel.common.Message;
+import org.iocaste.protocol.Message;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;

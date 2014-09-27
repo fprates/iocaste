@@ -21,6 +21,7 @@ import org.iocaste.internal.InputStatus;
 import org.iocaste.internal.ControllerData;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
@@ -374,6 +375,11 @@ public class PageRenderer extends AbstractRenderer {
                 toString();
         service = new Service(complexid, url);
         service.call(message);
+    }
+
+    @Override
+    public final <T extends Handler> T get(String handler) {
+        return null;
     }
     
     /**

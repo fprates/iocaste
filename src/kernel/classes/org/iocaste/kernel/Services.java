@@ -1,9 +1,9 @@
 package org.iocaste.kernel;
 
 import org.iocaste.kernel.common.AbstractFunction;
-import org.iocaste.kernel.common.Message;
-import org.iocaste.kernel.common.utils.ConversionResult;
-import org.iocaste.kernel.common.utils.ConversionRules;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.utils.ConversionResult;
+import org.iocaste.protocol.utils.ConversionRules;
 
 public class Services extends AbstractFunction {
     

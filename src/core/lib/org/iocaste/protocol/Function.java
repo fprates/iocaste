@@ -5,6 +5,8 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 
 public interface Function {
+    public abstract <T extends Handler> T get(String handler);
+    
     public abstract Set<String> getMethods();
 
     public abstract boolean isAuthorizedCall();

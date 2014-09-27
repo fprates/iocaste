@@ -3,8 +3,8 @@ package org.iocaste.kernel.users;
 import java.sql.Connection;
 
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
 import org.iocaste.kernel.database.Update;
+import org.iocaste.protocol.Message;
 
 public class DropUser extends AbstractHandler {
     private static final byte DEL_USER = 0;

@@ -2,7 +2,7 @@ package org.iocaste.kernel.session;
 
 import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
+import org.iocaste.protocol.Message;
 
 public class GetLocale extends AbstractHandler {
 

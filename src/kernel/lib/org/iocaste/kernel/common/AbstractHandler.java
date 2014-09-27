@@ -1,5 +1,9 @@
 package org.iocaste.kernel.common;
 
+import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Handler;
+import org.iocaste.protocol.Message;
+
 public abstract class AbstractHandler implements Handler {
     private Function function;
     

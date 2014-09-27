@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
-import org.iocaste.kernel.common.user.User;
 import org.iocaste.kernel.database.Select;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.user.User;
 
 public class GetUserData extends AbstractHandler {
     private static final String QUERY =

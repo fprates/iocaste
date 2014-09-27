@@ -8,9 +8,10 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
-import org.iocaste.kernel.common.Function;
-import org.iocaste.kernel.common.Message;
-import org.iocaste.kernel.common.Service;
+import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Handler;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.Service;
 
 public abstract class AbstractFunction implements Function {
     private ServletContext context;

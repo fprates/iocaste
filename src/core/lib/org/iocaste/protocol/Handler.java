@@ -1,4 +1,7 @@
-package org.iocaste.kernel.common;
+package org.iocaste.protocol;
+
+import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Message;
 
 public interface Handler {
 

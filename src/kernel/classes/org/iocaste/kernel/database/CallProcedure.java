@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import org.hsqldb.HsqlException;
-import org.iocaste.kernel.common.Message;
+import org.iocaste.protocol.Message;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;

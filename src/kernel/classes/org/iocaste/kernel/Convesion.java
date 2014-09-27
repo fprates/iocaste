@@ -9,8 +9,8 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.iocaste.kernel.common.utils.ConversionResult;
-import org.iocaste.kernel.common.utils.ConversionRules;
+import org.iocaste.protocol.utils.ConversionResult;
+import org.iocaste.protocol.utils.ConversionRules;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

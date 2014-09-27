@@ -17,6 +17,7 @@ import org.iocaste.internal.Input;
 import org.iocaste.internal.InputStatus;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
+import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
@@ -159,6 +160,11 @@ public class Main extends AbstractRenderer {
         }
         
         startRender(sessionid, resp, pagectx);
+    }
+
+    @Override
+    public final <T extends Handler> T get(String handler) {
+        return null;
     }
     
     /**

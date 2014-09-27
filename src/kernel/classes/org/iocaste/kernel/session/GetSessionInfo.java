@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
 import org.iocaste.kernel.database.Select;
 import org.iocaste.kernel.users.Users;
+import org.iocaste.protocol.Message;
 
 public class GetSessionInfo extends AbstractHandler {
     private static final String QUERY =

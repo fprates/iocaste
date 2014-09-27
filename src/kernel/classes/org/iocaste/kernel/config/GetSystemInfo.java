@@ -5,7 +5,7 @@ import java.sql.DatabaseMetaData;
 import java.util.Properties;
 
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
+import org.iocaste.protocol.Message;
 
 public class GetSystemInfo extends AbstractHandler {
 

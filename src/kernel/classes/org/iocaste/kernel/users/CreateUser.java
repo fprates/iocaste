@@ -5,11 +5,11 @@ import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.IocasteException;
-import org.iocaste.kernel.common.Message;
-import org.iocaste.kernel.common.user.User;
 import org.iocaste.kernel.database.Select;
 import org.iocaste.kernel.database.Update;
+import org.iocaste.protocol.IocasteException;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.user.User;
 
 public class CreateUser extends AbstractHandler {
     private static final byte INS_USER = 0;

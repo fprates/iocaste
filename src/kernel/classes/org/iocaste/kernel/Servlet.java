@@ -1,18 +1,18 @@
 package org.iocaste.kernel;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.kernel.authorization.Auth;
 import org.iocaste.kernel.common.AbstractIocasteServlet;
-import org.iocaste.kernel.common.IocasteException;
-import org.iocaste.kernel.common.Message;
 import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.database.Database;
+import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.session.IsConnected;
 import org.iocaste.kernel.session.Session;
 import org.iocaste.kernel.users.Users;
+import org.iocaste.protocol.IocasteException;
+import org.iocaste.protocol.Message;
 
 public class Servlet extends AbstractIocasteServlet {
     private static final long serialVersionUID = -8569034003940826582L;
@@ -52,7 +52,7 @@ public class Servlet extends AbstractIocasteServlet {
         register(auth);
         register(config);
         register(new Services());
-//        register(new Documents());
+        register(new Documents());
         
         
         authorize("is_connected", null);

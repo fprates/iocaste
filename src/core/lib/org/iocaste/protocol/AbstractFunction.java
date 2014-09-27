@@ -16,7 +16,7 @@ public abstract class AbstractFunction implements Function {
     private boolean authorized;
     
     public AbstractFunction() {
-        exports = new HashMap<String, String>();
+        exports = new HashMap<>();
         exports.put("call_authorized", "callAuthorized");
         authorized = false;
     }
@@ -28,6 +28,11 @@ public abstract class AbstractFunction implements Function {
      */
     protected final void export(String name, String method) {
         exports.put(name, method);
+    }
+
+    @Override
+    public <T extends Handler> T get(String handler) {
+        return null;
     }
     
     /*

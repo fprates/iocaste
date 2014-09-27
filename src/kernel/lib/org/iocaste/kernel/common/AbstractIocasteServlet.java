@@ -9,6 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.iocaste.protocol.Function;
+import org.iocaste.protocol.IocasteException;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.Service;
+
 public abstract class AbstractIocasteServlet extends HttpServlet {
     private static final long serialVersionUID = 7408336035974886402L;
     private Map<String, Function> functions;

@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.iocaste.kernel.common.user.Authorization;
-import org.iocaste.kernel.common.user.User;
+import org.iocaste.protocol.user.Authorization;
+import org.iocaste.protocol.user.User;
 
 public class UserContext {
     private User user;

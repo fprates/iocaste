@@ -12,7 +12,7 @@
     	
         <!-- dependências -->
         <path id="dependencies">
-            <fileset dir="${builddir}/kernel/lib"/>
+            <fileset dir="${builddir}/core/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
@@ -54,9 +54,9 @@
         <!-- pacote .war -->
         <war destfile="${warfilename}"
         	webxml="${builddir}/${ant.project.name}/web/web.xml">
+            <lib dir="${builddir}/core/lib" includes="*.jar"/>
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
             <lib dir="${basedir}/lib" includes="*.jar"/>
-            <lib dir="${builddir}/kernel/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
     	

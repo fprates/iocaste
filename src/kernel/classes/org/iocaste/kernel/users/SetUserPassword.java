@@ -1,9 +1,9 @@
 package org.iocaste.kernel.users;
 
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
-import org.iocaste.kernel.common.user.User;
 import org.iocaste.kernel.session.Session;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.user.User;
 
 public class SetUserPassword extends AbstractHandler {
     public Session session;

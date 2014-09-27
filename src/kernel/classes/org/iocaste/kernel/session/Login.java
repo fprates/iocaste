@@ -6,9 +6,9 @@ import java.util.Locale;
 
 import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
-import org.iocaste.kernel.common.user.User;
 import org.iocaste.kernel.users.GetUserData;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.user.User;
 
 public class Login extends AbstractHandler {
     private static final int USERNAME_MAX_LEN = 12;

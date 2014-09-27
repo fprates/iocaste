@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.IocasteException;
-import org.iocaste.kernel.common.Message;
+import org.iocaste.protocol.IocasteException;
+import org.iocaste.protocol.Message;
 
 public class CheckedSelect extends AbstractHandler {
 

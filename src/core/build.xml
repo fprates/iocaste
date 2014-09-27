@@ -56,7 +56,6 @@
         	webxml="${builddir}/${ant.project.name}/web/web.xml">
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
             <lib dir="${basedir}/lib" includes="*.jar"/>
-            <lib dir="${builddir}/core/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
     	

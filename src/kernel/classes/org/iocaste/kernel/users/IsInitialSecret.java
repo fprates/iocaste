@@ -2,7 +2,7 @@ package org.iocaste.kernel.users;
 
 import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
+import org.iocaste.protocol.Message;
 
 public class IsInitialSecret extends AbstractHandler {
 

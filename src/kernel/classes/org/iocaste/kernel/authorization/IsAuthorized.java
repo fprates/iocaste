@@ -7,10 +7,10 @@ import java.util.Map;
 
 import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
-import org.iocaste.kernel.common.user.Authorization;
-import org.iocaste.kernel.common.user.User;
 import org.iocaste.kernel.database.Select;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.user.Authorization;
+import org.iocaste.protocol.user.User;
 
 public class IsAuthorized extends AbstractHandler {
     private static final byte USER_AUTHORITY = 0;

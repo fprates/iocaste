@@ -8,9 +8,9 @@ import java.util.Properties;
 
 import org.iocaste.kernel.common.AbstractFunction;
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.IocasteException;
-import org.iocaste.kernel.common.Message;
 import org.iocaste.kernel.database.Database;
+import org.iocaste.protocol.IocasteException;
+import org.iocaste.protocol.Message;
 
 public class Config extends AbstractFunction {
     private static final String IOCASTE_DIR = ".iocaste";

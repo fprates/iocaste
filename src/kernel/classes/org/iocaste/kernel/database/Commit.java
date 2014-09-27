@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.common.Message;
+import org.iocaste.protocol.Message;
 
 public class Commit extends AbstractHandler {
     
