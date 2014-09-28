@@ -26,18 +26,16 @@ public class Servlet extends AbstractIocasteServlet {
     @Override
     public void config() {
         Map<String, Object[]> parameters;
-        Database database;
-        Users users;
-        Auth auth;
+        Database database = new Database();
+        Users users = new Users();
+        Auth auth = new Auth();
+        Documents documents = new Documents();
 
-        database = new Database();
-        users = new Users();
-        auth = new Auth();
         session = new Session();
         config = new Config();
         
         session.database = users.database = config.database = database; 
-        auth.database = database;
+        auth.database = documents.database = database;
         users.session = database.session = auth.session = session;
         session.users = users;
         
@@ -47,7 +45,7 @@ public class Servlet extends AbstractIocasteServlet {
         register(auth);
         register(config);
         register(new Services());
-        register(new Documents());
+        register(documents);
         
         
         authorize("is_connected", null);

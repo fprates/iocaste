@@ -16,7 +16,7 @@ import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class Database extends AbstractFunction {
-    public Map<String, Connection> connections;
+    private Map<String, Connection> connections;
     public Config config;
     public Session session;
     

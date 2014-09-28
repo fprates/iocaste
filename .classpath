@@ -21,7 +21,6 @@
 	<classpathentry kind="src" path="src/documents/lib"/>
 	<classpathentry excluding="hibernate.cfg.xml" kind="src" path="src/shell/classes"/>
 	<classpathentry kind="src" path="src/shell/lib"/>
-	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/core/classes"/>
 	<classpathentry kind="src" path="src/core/lib"/>
 	<classpathentry kind="src" path="src/infosis/classes"/>
 	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/login/classes"/>
