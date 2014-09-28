@@ -3,12 +3,13 @@ package org.iocaste.protocol;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 
 public final class Iocaste extends AbstractServiceInterface {
-    public static final String SERVERNAME = "/iocaste-core/service.html";
+    public static final String SERVERNAME = "/iocaste-kernel/service.html";
     
     public Iocaste(Function function) {
         initService(function, SERVERNAME);
@@ -114,7 +115,7 @@ public final class Iocaste extends AbstractServiceInterface {
      * Retorna sessões ativas
      * @return
      */
-    public final String[] getSessions() {
+    public final Set<String> getSessions() {
         return call(new Message("get_sessions"));
     }
     

@@ -78,18 +78,11 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
         context = new Context();
         context.req = req;
         context.resp = resp;
-        
+        message = null;
+
         try {
             configureStreams(service, context);
-            message = service.getMessage();
-        } catch (Exception e) {
-            message = new Message(null);
-            service.messageException(message, e);
-            req.getSession().invalidate();
-            return;
-        }
-        
-        try {
+            message = getMessage(sessionid, service, req.getParameterMap());
             complexid = message.getSessionid();
             requests.put(complexid, req);
             preRun(message);
@@ -115,10 +108,18 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
             
             service.messageReturn(message, function.run(message));
         } catch (Exception e) {
+            if (message == null)
+                message = new Message(null);
+            
             service.messageException(message, e);
         } finally {
             req.getSession().invalidate();
         }
+    }
+    
+    protected Message getMessage(String sessionid, Service service,
+            Map<String, String[]> parameters) throws Exception {
+        return service.getMessage();
     }
     
     /**

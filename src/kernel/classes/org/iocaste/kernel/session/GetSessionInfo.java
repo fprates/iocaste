@@ -7,7 +7,6 @@ import java.util.Map;
 import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.common.AbstractHandler;
 import org.iocaste.kernel.database.Select;
-import org.iocaste.kernel.users.Users;
 import org.iocaste.protocol.Message;
 
 public class GetSessionInfo extends AbstractHandler {
@@ -17,13 +16,12 @@ public class GetSessionInfo extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        Users users = getFunction();
         String sessionid = message.getString("sessionid");
-        Connection connection = users.database.
+        Session session = getFunction();
+        Connection connection = session.database.
                 getDBConnection(message.getSessionid());
         
-        return getSessionInfo(
-                users.session.sessions.get(sessionid), connection);
+        return getSessionInfo(session.sessions.get(sessionid), connection);
     }
     
     /**
@@ -35,7 +33,7 @@ public class GetSessionInfo extends AbstractHandler {
      */
     private final Map<String, Object> getSessionInfo(UserContext usrctx,
             Connection connection) throws Exception {
-        Users users;
+        Session session;
         Map<String, Object> info;
         Object[] objects;
         String username;
@@ -44,9 +42,9 @@ public class GetSessionInfo extends AbstractHandler {
         if (usrctx == null)
             return null;
         
-        users = getFunction();
+        session = getFunction();
         username = usrctx.getUser().getUsername();
-        select = users.database.get("select");
+        select = session.database.get("select");
         objects = select.run(connection, QUERY, 1, username);
         if (objects == null)
             return null;

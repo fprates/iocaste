@@ -285,7 +285,7 @@ public class Services extends AbstractFunction {
      * @return
      * @throws Exception 
      */
-    public final String[] getSessions(Message message) throws Exception {
+    public final Set<String> getSessions(Message message) throws Exception {
         UserContext context;
         User user;
         Set<String> users;
@@ -300,7 +300,7 @@ public class Services extends AbstractFunction {
             users.add(sessionid);
         }
         
-        return users.toArray(new String[0]);
+        return users;
     }
     
     /**

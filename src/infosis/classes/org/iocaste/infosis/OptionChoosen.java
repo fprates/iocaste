@@ -2,6 +2,7 @@ package org.iocaste.infosis;
 
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -17,7 +18,7 @@ public class OptionChoosen extends AbstractActionHandler {
         ExtendedObject object;
         DocumentModel model;
         Properties properties = null;
-        String[] sessions = null;
+        Set<String> sessions = null;
         Iocaste iocaste = null;
         Map<String, Object> sessiondata;
         String choice = dbactionget("menu", "items");
