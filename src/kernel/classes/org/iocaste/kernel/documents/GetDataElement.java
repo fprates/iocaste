@@ -1,37 +1,28 @@
 package org.iocaste.kernel.documents;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.kernel.database.Select;
 import org.iocaste.protocol.Message;
 
 public class GetDataElement extends AbstractDocumentsHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String sessionid = message.getSessionid();
         String name = message.getString("name");
         
-        return run(name, sessionid);
+        setSessionid(message.getSessionid());
+        return run(name);
     }
 
     @SuppressWarnings("unchecked")
-    public DataElement run(String name, String sessionid) throws Exception {
+    public DataElement run(String name) throws Exception {
         Object[] lines;
         DataElement element;
         Map<String, Object> columns;
-        Documents documents;
-        Select select;
-        Connection connection;
         
-        documents = getFunction();
-        connection = documents.database.getDBConnection(sessionid);
-        documents = getFunction();
-        select = documents.get("select");
-        lines = select.run(connection, QUERIES[ELEMENT], 0, name);
+        lines = select(QUERIES[ELEMENT], 0, name);
         if (lines == null)
             return null;
         

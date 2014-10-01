@@ -80,16 +80,3 @@ class GetHost extends AbstractHandler {
     }
     
 }
-
-class GetSystemParameter extends AbstractHandler {
-    private Config config;
-    
-    public GetSystemParameter(Config config) {
-        this.config = config;
-    }
-    
-    public final Object run(Message message) {
-        String name = message.getString("parameter");
-        return config.properties.getProperty(name);
-    }
-}

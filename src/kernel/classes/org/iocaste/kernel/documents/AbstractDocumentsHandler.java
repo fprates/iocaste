@@ -1,6 +1,11 @@
 package org.iocaste.kernel.documents;
 
+import java.sql.Connection;
+
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.kernel.database.Select;
+import org.iocaste.kernel.database.Update;
 import org.iocaste.protocol.Message;
 
 public abstract class AbstractDocumentsHandler extends AbstractHandler {
@@ -28,7 +33,6 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
     protected static final byte UPDATE_ELEMENT = 21;
     protected static final byte UPDATE_ITEM = 22;
     protected static final byte INS_ELEMENT = 1;
-    
     protected static final String[] QUERIES = {
         "select * from DOCS001 where docid = ?",
         "select * from DOCS002 where docid = ?",
@@ -60,7 +64,41 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
                 "values(?, ?, ?, ?, ?, ?)"
     };
     
+    private Connection connection;
+    
+    /**
+     * Retorna nome composto.
+     * @param item item de modelo
+     * @return nome composto do item.
+     */
+    protected final String getComposedName(DocumentModelItem item) {
+        return new StringBuilder(item.getDocumentModel().getName()).
+                append(".").append(item.getName()).toString();
+    }
+    
     @Override
     public abstract Object run(Message message) throws Exception;
+    
+    protected Object[] select(String query, int rows, Object... criteria)
+            throws Exception {
+        Documents documents = getFunction();
+        Select select = documents.database.get("select");
+        
+        return select.run(connection, query, rows, criteria);
+    }
+    
+    protected final void setSessionid(String sessionid) throws Exception {
+        Documents documents = getFunction();
+        
+        connection = documents.database.getDBConnection(sessionid);
+    }
+    
+    protected final int update(String query, Object... criteria)
+            throws Exception {
+        Documents documents = getFunction();
+        Update update = documents.database.get("update");
+        
+        return update.run(connection, query, criteria);
+    }
 
 }

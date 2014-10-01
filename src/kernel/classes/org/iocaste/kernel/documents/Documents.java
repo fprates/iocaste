@@ -15,7 +15,8 @@ public class Documents extends AbstractFunction {
     public Documents() {
         cache = new Cache(this);
         export("create_complex_model", new CreateCModel());
-//        export("create_model", new CreateModel());
+        export("create_data_element", new CreateDataElement());
+        export("create_model", new CreateModel());
 //        export("create_number_factory", new CreateNumberFactory());
 //        export("delete", new Delete());
 //        export("delete_complex_document", new DeleteComplexDocument());
@@ -61,8 +62,7 @@ public class Documents extends AbstractFunction {
      * @param model
      * @param queries
      */
-    public static final void parseQueries(DocumentModel model,
-            Map<String, Map<String, String>> queries) {
+    public final void parseQueries(DocumentModel model) {
         String fieldname;
         boolean iskey, setok = false;
         int k = 0;
@@ -118,9 +118,9 @@ public class Documents extends AbstractFunction {
         queries_.put("delete", delete.toString());
         
         fieldname = model.getName();
-        if (queries.containsKey(fieldname))
-            queries.remove(fieldname);
+        if (cache.queries.containsKey(fieldname))
+            cache.queries.remove(fieldname);
         
-        queries.put(fieldname, queries_);
+        cache.queries.put(fieldname, queries_);
     }
 }
