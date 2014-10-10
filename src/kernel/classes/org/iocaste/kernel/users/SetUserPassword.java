@@ -1,12 +1,10 @@
 package org.iocaste.kernel.users;
 
 import org.iocaste.kernel.common.AbstractHandler;
-import org.iocaste.kernel.session.Session;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 
 public class SetUserPassword extends AbstractHandler {
-    public Session session;
 
     @Override
     public Object run(Message message) throws Exception {
@@ -14,8 +12,9 @@ public class SetUserPassword extends AbstractHandler {
         User user;
         String sessionid = message.getSessionid();
         String secret = message.getString("secret");
+        Users users = getFunction();
         
-        user = session.sessions.get(sessionid).getUser();
+        user = users.session.sessions.get(sessionid).getUser();
         user.setSecret(secret);
         user.setInitialSecret(false);
         
