@@ -22,6 +22,7 @@ public class Main extends AbstractPageBuilder {
         view.set(new StructureSpec());
         view.set(new StructureConfig());
         view.set(new StructureInput());
+        view.setUpdate(true);
     }
 
     @Override
