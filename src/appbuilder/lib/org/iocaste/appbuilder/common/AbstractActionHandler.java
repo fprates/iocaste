@@ -177,6 +177,15 @@ public abstract class AbstractActionHandler {
         context.view.message(type, text);
     }
     
+    protected final ExtendedObject readobjects(ExtendedObject[] objects,
+            String op1, Object op2) {
+        for (ExtendedObject object : objects)
+            if (object.get(op1).equals(op2))
+                return object;
+        
+        return null;
+    }
+    
     protected final void redirect(String page) {
         context.function.redirect(page);
     }
