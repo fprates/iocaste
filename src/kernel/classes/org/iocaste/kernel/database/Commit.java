@@ -3,7 +3,6 @@ package org.iocaste.kernel.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.common.AbstractHandler;
 import org.iocaste.protocol.Message;
 
@@ -11,21 +10,9 @@ public class Commit extends AbstractHandler {
     
     @Override
     public Object run(Message message) throws Exception {
-        Connection connection;
         String sessionid = message.getSessionid();
-        Database database = getFunction();
-        UserContext context = database.session.sessions.get(sessionid);
         
-        if (context == null)
-            return null;
-        
-        connection = context.getConnection();
-        if (connection == null)
-            return null;
-        
-        run(connection);
-        connection.close();
-        context.setConnection(null);
+        run(sessionid);
         return null;
     }
     
@@ -34,8 +21,16 @@ public class Commit extends AbstractHandler {
      * @param connection
      * @throws SQLException 
      */
-    public final void run(Connection connection) throws SQLException {
+    public final void run(String sessionid) throws Exception {
+        Database database = getFunction();
+        Connection connection = database.getDBConnection(sessionid);
+        
+        if (connection == null)
+            return;
+        
         connection.commit();
+        connection.close();
+        database.removeDBConnection(sessionid);
     }
 
 }

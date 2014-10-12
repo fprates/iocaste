@@ -1,6 +1,5 @@
 package org.iocaste.kernel;
 
-import java.sql.Connection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +10,6 @@ import org.iocaste.protocol.user.User;
 
 public class UserContext {
     private User user;
-    private Connection connection;
     private Locale locale;
     private int terminal;
     private Date conndate;
@@ -51,14 +49,6 @@ public class UserContext {
      * 
      * @return
      */
-    public final Connection getConnection() {
-        return connection;
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final Locale getLocale() {
         return locale;
     }
@@ -85,14 +75,6 @@ public class UserContext {
      */
     public final void setAuthorizations(List<Authorization> authorizations) {
         this.authorizations = authorizations;
-    }
-    
-    /**
-     * 
-     * @param connection
-     */
-    public final void setConnection(Connection connection) {
-        this.connection = connection;
     }
     
     /**

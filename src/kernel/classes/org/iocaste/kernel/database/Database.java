@@ -93,6 +93,10 @@ public class Database extends AbstractFunction {
             throw new SQLException(e.getMessage());
         }
     }
+    
+    public final void removeDBConnection(String sessionid) {
+        connections.remove(sessionid);
+    }
 }
 
 class Config {
