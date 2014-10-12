@@ -271,6 +271,10 @@ public abstract class AbstractActionHandler {
         return documents.select(query);
     }
     
+    protected final ExtendedObject select(String model, Object key) {
+        return documents.getObject(model, key);
+    }
+    
     protected final ExtendedObject[] tableitemsget(String tabletool) {
         return components.tabletools.get(tabletool).component.getObjects();
     }
