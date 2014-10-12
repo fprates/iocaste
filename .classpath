@@ -51,11 +51,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/home/francisco.prates/workspace/iocaste/lib-shell/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
-	<classpathentry kind="lib" path="lib-report/jasperreports-4.6.0.jar"/>
-	<classpathentry kind="lib" path="lib-report/iText-2.1.7.jar"/>
 	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.17.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-jdbc-9.2.1002.jar"/>
-	<classpathentry kind="lib" path="/home/francisco.prates/Downloads/apache-tomcat/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="ext/servlet-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
