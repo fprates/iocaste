@@ -205,14 +205,24 @@ public class DocumentExtractor {
         head = conversion(head, model, hconversion, documents);
         document.setHeader(head);
         for (String name : items.keySet()) {
-            tabletool = context.getView(pagename).getComponents().
-                    tabletools.get(name).component;
+            objects = null;
+            conversion = items.get(name);
+            if (conversion != null)
+                switch (conversion.getSourceType()) {
+                case DataConversion.OBJECTS:
+                    objects = (ExtendedObject[])conversion.getSource();
+                    break;
+                }
             
-            objects = tabletool.getObjects();
+            if (objects == null) {
+                tabletool = context.getView(pagename).getComponents().
+                        tabletools.get(name).component;
+                objects = tabletool.getObjects();
+            }
+            
             if (objects == null)
                 continue;
 
-            conversion = items.get(name);
             extractItems(documents, conversion, document, objects);
         }
         
