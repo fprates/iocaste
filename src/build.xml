@@ -7,6 +7,9 @@
     	<!-- core -->
         <ant antfile="${basedir}/src/core/build.xml"/>
     	
+    	<!-- documents-common -->
+    	<ant antfile="${basedir}/src/documents/build-lib.xml"/>
+    	
     	<!-- kernel -->
         <ant antfile="${basedir}/src/kernel/build.xml"/>
     	
