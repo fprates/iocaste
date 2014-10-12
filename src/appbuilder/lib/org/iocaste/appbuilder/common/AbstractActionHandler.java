@@ -136,6 +136,10 @@ public abstract class AbstractActionHandler {
         return context.getManager(manager).get(id);
     }
     
+    protected Const getErrorType() {
+        return context.view.getMessageType();
+    }
+    
     @SuppressWarnings("unchecked")
     protected final <T extends ExtendedContext> T getExtendedContext() {
         String page = context.view.getPageName();
