@@ -136,7 +136,7 @@ public class Services extends AbstractFunction {
         if (shdata != null)
             throw new IocasteException(new StringBuilder(
                     "Search help has pendence on  ").
-                    append(shdata[0].get("MODEL_ITEM")).toString());
+                    append(shdata[0].getst("MODEL_ITEM")).toString());
         
         shdata = load(shname);
         for (int i = 1; i < shdata.length; i++)
@@ -185,7 +185,7 @@ public class Services extends AbstractFunction {
             
             if (documents.save(item) == 0) {
                 exmessage = new StringBuilder("Error saving line of sh ").
-                        append(item.get("NAME")).toString();
+                        append(item.getst("NAME")).toString();
                 
                 throw new IocasteException(exmessage);
             }
