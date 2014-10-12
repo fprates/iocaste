@@ -263,6 +263,10 @@ public abstract class AbstractActionHandler {
             redirectContext(this.context, viewctx);
     }
     
+    protected final void save(ExtendedObject object) {
+        documents.save(object);
+    }
+    
     protected final ExtendedObject[] select(Query query) {
         return documents.select(query);
     }
