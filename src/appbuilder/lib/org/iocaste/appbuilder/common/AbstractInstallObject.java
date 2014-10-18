@@ -5,6 +5,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DummyElement;
 import org.iocaste.documents.common.DummyModelItem;
+import org.iocaste.packagetool.common.SearchHelpData;
 
 public abstract class AbstractInstallObject {
     private StandardInstallContext context;
@@ -96,6 +97,15 @@ public abstract class AbstractInstallObject {
     {
         item.setSearchHelp(sh);
         return item;
+    }
+    
+    protected final SearchHelpData searchHelpInstance(String name, String model)
+    {
+        SearchHelpData shd = new SearchHelpData(name);
+        
+        shd.setModel(model);
+        context.getInstallData().add(shd);
+        return shd;
     }
     
     public final DocumentModelItem tag(String name, DocumentModelItem item) {
