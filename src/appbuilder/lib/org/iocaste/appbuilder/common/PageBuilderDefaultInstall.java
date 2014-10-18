@@ -1,6 +1,8 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.packagetool.common.InstallData;
@@ -13,11 +15,13 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     private Map<String, String> links;
     private String pkgname, profilename, programauth;
     private Map<String, TaskGroup> tasksgroups;
+    private List<AppBuilderLink> applinks;
     
     public PageBuilderDefaultInstall(String pkgname) {
         this.pkgname = pkgname;
         links = new HashMap<>();
         tasksgroups = new HashMap<>();
+        applinks = new ArrayList<>();
     }
     
     public final void addToTaskGroup(String name, String... links) {
@@ -41,6 +45,12 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
                 append(" cmodel=").append(cmodel).toString();
     }
     
+    public AppBuilderLink builderLinkInstance() {
+        AppBuilderLink link = new AppBuilderLink();
+        applinks.add(link);
+        return link;
+    }
+    
     @Override
     public void execute(StandardInstallContext context) throws Exception {
         UserProfile profile;
@@ -55,6 +65,22 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
         
         for (TaskGroup taskgroup : tasksgroups.values())
             data.add(taskgroup);
+        
+        for (AppBuilderLink applink : applinks) {
+            links.put(applink.create,
+                    buildapplink(applink.entity, "create", applink.cmodel));
+            links.put(applink.display,
+                    buildapplink(applink.entity, "display", applink.cmodel));
+            links.put(applink.change,
+                    buildapplink(applink.entity, "edit", applink.cmodel));
+            
+            if (applink.taskgroup == null)
+                continue;
+            
+            addToTaskGroup(applink.taskgroup, applink.create);
+            addToTaskGroup(applink.taskgroup, applink.display);
+            addToTaskGroup(applink.taskgroup, applink.change);
+        }
         
         for (String link : links.keySet()) {
             authorization = new Authorization(link.concat(".CALL"));
@@ -75,14 +101,6 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
         authorization.add("APPNAME", pkgname);
         data.add(authorization);
         profile.add(authorization);
-    }
-    
-    public final void setAppBuilderLink(
-            String createlink, String displaylink, String changelink,
-            String entity, String cmodel) {
-        links.put(createlink, buildapplink(entity, "create", cmodel));
-        links.put(displaylink, buildapplink(entity, "display", cmodel));
-        links.put(changelink, buildapplink(entity, "edit", cmodel));
     }
     
     public final void setLink(String link, String command) {
