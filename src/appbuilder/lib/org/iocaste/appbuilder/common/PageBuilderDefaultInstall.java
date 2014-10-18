@@ -21,10 +21,16 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     }
     
     public final void addToTaskGroup(String name, String... links) {
-        TaskGroup taskgroup = new TaskGroup(name);
+        TaskGroup taskgroup;
+        
+        taskgroup = tasksgroups.get(name);
+        if (taskgroup == null) {
+            taskgroup = new TaskGroup(name);
+            tasksgroups.put(name, taskgroup);
+        }
+        
         for (String link : links)
             taskgroup.add(link);
-        tasksgroups.put(name, taskgroup);
     }
     
     private final String buildapplink(
