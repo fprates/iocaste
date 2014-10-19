@@ -17,7 +17,7 @@ public class Documents extends AbstractFunction {
         export("create_complex_model", new CreateCModel());
         protect("create_data_element", new CreateDataElement());
         export("create_model", new CreateModel());
-//        export("create_number_factory", new CreateNumberFactory());
+        export("create_number_factory", new CreateNumberFactory());
 //        export("delete", new Delete());
 //        export("delete_complex_document", new DeleteComplexDocument());
 //        export("get_complex_document", new GetComplexDocument());
