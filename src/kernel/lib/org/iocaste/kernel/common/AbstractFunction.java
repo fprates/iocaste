@@ -43,8 +43,7 @@ public abstract class AbstractFunction implements Function {
      * @param handler
      */
     protected final void export(String name, Handler handler) {
-        handler.setFunction(this);
-        handlers.put(name, handler);
+        protect(name, handler);
         exports.put(name, name);
     }
     
@@ -107,6 +106,16 @@ public abstract class AbstractFunction implements Function {
     @Override
     public final boolean isAuthorizedCall() {
         return authorized;
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param handler
+     */
+    protected final void protect(String name, Handler handler) {
+        handler.setFunction(this);
+        handlers.put(name, handler);
     }
     
     /*

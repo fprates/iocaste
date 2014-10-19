@@ -15,7 +15,7 @@ public class Documents extends AbstractFunction {
     public Documents() {
         cache = new Cache(this);
         export("create_complex_model", new CreateCModel());
-        export("create_data_element", new CreateDataElement());
+        protect("create_data_element", new CreateDataElement());
         export("create_model", new CreateModel());
 //        export("create_number_factory", new CreateNumberFactory());
 //        export("delete", new Delete());
