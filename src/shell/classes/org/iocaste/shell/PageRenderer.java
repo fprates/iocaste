@@ -44,7 +44,7 @@ public class PageRenderer extends AbstractRenderer {
     private static final String EXCEPTION_HANDLER = "iocaste-exhandler";
     private static final byte AUTHORIZATION_ERROR = 1;
     private static Map<String, List<SessionContext>> apps;
-    private String sessionconnector, dbname;
+    private String dbname;
     private Map<String, Map<String, String>> style;
     private MessageSource msgsource;
     private static TicketControl tickets;
@@ -56,7 +56,6 @@ public class PageRenderer extends AbstractRenderer {
     
     public PageRenderer() {
         style = null;
-        sessionconnector = "iocaste-login";
         msgsource = Messages.getMessages();
     }
     
@@ -145,11 +144,13 @@ public class PageRenderer extends AbstractRenderer {
      * @param logid
      * @return
      */
-    private final PageContext createLoginContext(String sessionid, int logid) {
+    private final PageContext createLoginContext(HttpServletRequest req,
+            String sessionid, int logid) {
         ContextData contextdata = new ContextData();
+        String login = req.getParameter("login-manager");
         
+        contextdata.appname = (login == null)? "iocaste-login" : login;
         contextdata.sessionid = sessionid;
-        contextdata.appname = sessionconnector;
         contextdata.pagename = "authentic";
         contextdata.logid = logid;
         contextdata.initialize = true;
@@ -343,7 +344,7 @@ public class PageRenderer extends AbstractRenderer {
             if (pagectx == null) {
                 tickets.load(this);
                 if (!hasTicket(req))
-                    pagectx = createLoginContext(sessionid, logid);
+                    pagectx = createLoginContext(req, sessionid, logid);
                 else
                     pagectx = createTicketContext(req, sessionid, logid, this);
             }
