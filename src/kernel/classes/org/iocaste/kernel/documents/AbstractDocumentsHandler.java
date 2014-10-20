@@ -32,7 +32,9 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
     protected static final byte INS_MODEL_REF = 20;
     protected static final byte UPDATE_ELEMENT = 21;
     protected static final byte UPDATE_ITEM = 22;
-    protected static final byte INS_ELEMENT = 1;
+    protected static final byte INS_ELEMENT = 23;
+    protected static final byte RANGE = 24;
+    protected static final byte UPDATE_RANGE = 25;
     protected static final String[] QUERIES = {
         "select * from DOCS001 where docid = ?",
         "select * from DOCS002 where docid = ?",
@@ -61,7 +63,9 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         "update DOCS002 set docid = ?, nritm = ?, fname = ?, ename = ?, " +
                 "attrb = ?, itref = ? where iname = ?",
         "insert into DOCS003(ename, decim, lngth, etype, upcas, atype) " +
-                "values(?, ?, ?, ?, ?, ?)"
+                "values(?, ?, ?, ?, ?, ?)",
+        "select CRRNT from RANGE001 where ident = ?",
+        "update RANGE001 set crrnt = ? where ident = ?"
     };
     
     private Connection connection;
