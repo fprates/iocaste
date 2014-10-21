@@ -1,5 +1,7 @@
 package org.iocaste.kernel.documents;
 
+import java.sql.Connection;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
@@ -14,8 +16,11 @@ public class CreateNumberFactory extends AbstractDocumentsHandler {
         SaveDocument save;
         String name = message.getString("name");
         Documents documents = getFunction();
-        GetDocumentModel modelget = documents.get("get_document_model"); 
-        DocumentModel model = modelget.run(documents, "NUMBER_RANGE");
+        GetDocumentModel modelget = documents.get("get_document_model");
+        String sessionid = message.getSessionid();
+        Connection connection = documents.database.getDBConnection(sessionid);
+        DocumentModel model = modelget.run(
+                connection, documents, "NUMBER_RANGE");
         DataElement element = model.getModelItem("IDENT").getDataElement();
         int l = element.getLength();
         

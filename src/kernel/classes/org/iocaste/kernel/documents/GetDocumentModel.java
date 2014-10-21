@@ -1,6 +1,7 @@
 package org.iocaste.kernel.documents;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
@@ -15,14 +16,14 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
     public Object run(Message message) throws Exception {
         String modelname = message.getString("name");
         Documents documents = getFunction();
-
-        setSessionid(message.getSessionid());
-        return run(documents, modelname);
+        String sessionid = message.getSessionid();
+        Connection connection = documents.database.getDBConnection(sessionid);
+        return run(connection, documents, modelname);
     }
     
     @SuppressWarnings("unchecked")
-    public DocumentModel run(Documents documents, String modelname)
-            throws Exception {
+    public DocumentModel run(Connection connection, Documents documents,
+            String modelname) throws Exception {
         int i;
         Object[] lines, shlines;
         String itemref, name;
@@ -38,7 +39,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         if (documents.cache.models.containsKey(modelname))
             return documents.cache.models.get(modelname);
         
-        lines = select(QUERIES[DOCUMENT], 1, modelname);
+        lines = select(connection, QUERIES[DOCUMENT], 1, modelname);
         if (lines == null)
             return null;
         
@@ -48,7 +49,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         document.setClassName((String)columns.get("CLASS"));
         
         getde = documents.get("get_data_element");
-        lines = select(QUERIES[DOC_ITEM], 0, modelname);
+        lines = select(connection, QUERIES[DOC_ITEM], 0, modelname);
         for (Object object : lines) {
             columns = (Map<String, Object>)object;
             name = (String)columns.get("INAME");
@@ -58,17 +59,18 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
             item.setDocumentModel(document);
             item.setAttributeName((String)columns.get("ATTRB"));
             item.setTableFieldName((String)columns.get("FNAME"));
-            item.setDataElement(getde.run((String)columns.get("ENAME")));
+            item.setDataElement(
+                    getde.run(connection, (String)columns.get("ENAME")));
             item.setIndex(((BigDecimal)columns.get("NRITM")).intValue());
             
             itemref = (String)columns.get("ITREF");
             if (itemref != null) {
                 composed = itemref.split("\\.");
-                item.setReference(run(documents, composed[0]).
+                item.setReference(run(connection, documents, composed[0]).
                         getModelItem(composed[1]));
             }
             
-            shlines = select(QUERIES[SH_REFERENCE], 0, name);
+            shlines = select(connection, QUERIES[SH_REFERENCE], 0, name);
             if (shlines != null) {
                 columns = (Map<String, Object>)shlines[0];
                 item.setSearchHelp((String)columns.get("SHCAB"));
@@ -79,7 +81,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
             item.setIndex(i);
         }
         
-        lines = select(QUERIES[TABLE_INDEX], 0, modelname);
+        lines = select(connection, QUERIES[TABLE_INDEX], 0, modelname);
         if (lines != null)
             for (Object object : lines) {
                 columns = (Map<String, Object>)object;

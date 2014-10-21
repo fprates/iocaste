@@ -68,8 +68,6 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         "update RANGE001 set crrnt = ? where ident = ?"
     };
     
-    private Connection connection;
-    
     /**
      * Retorna nome composto.
      * @param item item de modelo
@@ -83,25 +81,17 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
     @Override
     public abstract Object run(Message message) throws Exception;
     
-    protected Object[] select(String query, int rows, Object... criteria)
-            throws Exception {
+    protected Object[] select(Connection connection, String query, int rows,
+            Object... criteria) throws Exception {
         Documents documents = getFunction();
         Select select = documents.database.get("select");
-        
         return select.run(connection, query, rows, criteria);
     }
     
-    protected final void setSessionid(String sessionid) throws Exception {
-        Documents documents = getFunction();
-        
-        connection = documents.database.getDBConnection(sessionid);
-    }
-    
-    protected final int update(String query, Object... criteria)
-            throws Exception {
+    protected final int update(Connection connection, String query,
+            Object... criteria) throws Exception {
         Documents documents = getFunction();
         Update update = documents.database.get("update");
-        
         return update.run(connection, query, criteria);
     }
 

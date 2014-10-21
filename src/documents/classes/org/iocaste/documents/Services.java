@@ -42,9 +42,9 @@ public class Services extends AbstractFunction {
         export("remove_model", "removeModel");
         export("remove_number_factory", "removeNumberFactory");
         export("rename_model", "renameModel");
-        export("save", "save");
+        export("save_document", "save");
         export("save_complex_document", "saveCDocument");
-        export("select", "select");
+        export("select_document", "select");
         export("select_to_map", "selectToMap");
         export("unlock", "unlock");
         export("update", "update");

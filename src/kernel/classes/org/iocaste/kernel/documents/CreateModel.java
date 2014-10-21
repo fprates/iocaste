@@ -1,5 +1,7 @@
 package org.iocaste.kernel.documents;
 
+import java.sql.Connection;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
@@ -16,13 +18,14 @@ public class CreateModel extends AbstractDocumentsHandler {
         Documents documents;
         String name;
         DocumentModel model;
+        Connection connection;
         
         model = message.get("model");
-        setSessionid(message.getSessionid());
         documents = getFunction();
-        registerModel(documents, model);
+        connection = documents.database.getDBConnection(message.getSessionid());
+        registerModel(connection, documents, model);
         if (model.getTableName() != null)
-            createTable(documents, model);
+            createTable(connection, documents, model);
         
         name = model.getName();
         model.setQueries(documents.cache.queries.get(name));
@@ -38,8 +41,8 @@ public class CreateModel extends AbstractDocumentsHandler {
      * @return
      * @throws Exception
      */
-    private final int createTable(Documents documents, DocumentModel model)
-            throws Exception {
+    private final int createTable(Connection connection, Documents documents,
+            DocumentModel model) throws Exception {
         GetDataElement getde;
         DocumentModel refmodel;
         DataElement dataelement;
@@ -52,7 +55,6 @@ public class CreateModel extends AbstractDocumentsHandler {
         DocumentModelItem[] itens = model.getItens();
         String refstmt;
 
-        documents = getFunction();
         getsp = documents.get("get_system_parameter");
         getmodel = documents.get("get_document_model");
         dbtype = getsp.run("dbtype");
@@ -70,7 +72,7 @@ public class CreateModel extends AbstractDocumentsHandler {
             sb.append(tname);
             dataelement = item.getDataElement();
             if (dataelement.isDummy()) {
-                dataelement = getde.run(dataelement.getName());
+                dataelement = getde.run(connection, dataelement.getName());
                 item.setDataElement(dataelement);
             }
 
@@ -88,7 +90,7 @@ public class CreateModel extends AbstractDocumentsHandler {
             if (reference != null) {
                 if (reference.isDummy()) {
                     refname = reference.getDocumentModel().getName();
-                    refmodel = getmodel.run(documents, refname);
+                    refmodel = getmodel.run(connection, documents, refname);
                     refname = getComposedName(reference);
                     reference = refmodel.getModelItem(reference.getName());
                     if (reference == null)
@@ -110,10 +112,11 @@ public class CreateModel extends AbstractDocumentsHandler {
             sb.append(sbk).append(")");
 
         query = sb.append(")").toString();
-        return update(query);
+        return update(connection, query);
     }
     
-    private final int insertModelItem(DocumentModelItem item) throws Exception {
+    private final int insertModelItem(Connection connection,
+            DocumentModelItem item) throws Exception {
         DocumentModelItem reference;
         DataElement dataelement;
         String itemref, tname, shname;
@@ -132,7 +135,7 @@ public class CreateModel extends AbstractDocumentsHandler {
             itemref = null;
         }
         
-        if (update(QUERIES[INS_ITEM], tname,
+        if (update(connection, QUERIES[INS_ITEM], tname,
                 model.getName(),
                 item.getIndex(),
                 item.getTableFieldName(),
@@ -142,17 +145,17 @@ public class CreateModel extends AbstractDocumentsHandler {
             return 0;
         
         if (itemref != null)
-            if (update(QUERIES[INS_FOREIGN], tname, itemref) == 0)
+            if (update(connection, QUERIES[INS_FOREIGN], tname, itemref) == 0)
                 return 0;
         
         shname = item.getSearchHelp();
         if (shname == null)
             return 1;
 
-        if (select(QUERIES[SH_HEADER], 0, shname) == null)
+        if (select(connection, QUERIES[SH_HEADER], 0, shname) == null)
             return 1;
 
-        return update(QUERIES[INS_SH_REF], tname, shname);
+        return update(connection, QUERIES[INS_SH_REF], tname, shname);
     }
     
     private final String getReferenceStatement(String dbtype) {
@@ -171,8 +174,8 @@ public class CreateModel extends AbstractDocumentsHandler {
      * @return
      * @throws Exception
      */
-    private final int registerDataElements(Documents documents,
-            DocumentModel model) throws Exception {
+    private final int registerDataElements(Connection connection,
+            Documents documents, DocumentModel model) throws Exception {
         CreateDataElement createde;
         String name;
         DataElement element;
@@ -207,21 +210,21 @@ public class CreateModel extends AbstractDocumentsHandler {
             }
             
             name = element.getName();
-            if (select(QUERIES[ELEMENT], 1, name) != null)
+            if (select(connection, QUERIES[ELEMENT], 1, name) != null)
                 continue;
             
             if (element.isDummy())
                 throw new IocasteException(new StringBuilder(name).
                         append(": is an invalid data element.").toString());
             
-            createde.run(element);
+            createde.run(connection, element);
         }
         
         return 1;
     }
     
-    private final int registerDocumentHeader(Documents documents,
-            DocumentModel model) throws Exception {
+    private final int registerDocumentHeader(Connection connection,
+            Documents documents, DocumentModel model) throws Exception {
         GetDocumentModel getmodel;
         int l;
         String name = model.getName();
@@ -229,7 +232,8 @@ public class CreateModel extends AbstractDocumentsHandler {
         
         getmodel = documents.get("get_document_model");
         if (documents.cache.mmodel == null)
-            documents.cache.mmodel = getmodel.run(documents, "MODEL");
+            documents.cache.mmodel = getmodel.run(
+                    connection, documents, "MODEL");
         
         if (documents.cache.mmodel != null) {
             l = documents.getModelItemLen("NAME");
@@ -245,33 +249,33 @@ public class CreateModel extends AbstractDocumentsHandler {
             }
         }
         
-        if (update(QUERIES[INS_HEADER],
+        if (update(connection, QUERIES[INS_HEADER],
                 name, tablename, model.getClassName()) == 0)
             throw new IocasteException("document header insert error");
 
-        if ((tablename != null) && (
-                update(QUERIES[INS_MODEL_REF], tablename, name) == 0))
+        if ((tablename != null) && (update(
+                connection, QUERIES[INS_MODEL_REF], tablename, name) == 0))
                 throw new IocasteException(
                         "header's model reference insert error");
         
         return 1;
     }
     
-    private final int registerDocumentItems(Documents documents,
-            DocumentModel model) throws Exception {
+    private final int registerDocumentItems(Connection connection,
+            Documents documents, DocumentModel model) throws Exception {
         GetDataElement getde;
         DataElement dataelement;
         DocumentModelItem[] itens = model.getItens();
         
         getde = documents.get("get_data_element");
         for (DocumentModelItem item : itens) {
-            insertModelItem(item);
+            insertModelItem(connection, item);
             
             dataelement = item.getDataElement();
             if (!dataelement.isDummy())
                 continue;
             
-            dataelement = getde.run(dataelement.getName());
+            dataelement = getde.run(connection, dataelement.getName());
             item.setDataElement(dataelement);
         }
         
@@ -285,14 +289,14 @@ public class CreateModel extends AbstractDocumentsHandler {
      * @return
      * @throws Exception
      */
-    private int registerDocumentKeys(DocumentModel model)
+    private int registerDocumentKeys(Connection connection, DocumentModel model)
             throws Exception {
         String modelname, name;
         
         modelname = model.getName();
         for (DocumentModelKey key : model.getKeys()) {
             name = getComposedName(model.getModelItem(key.getModelItemName()));
-            if (update(QUERIES[INS_KEY], name, modelname) == 0)
+            if (update(connection, QUERIES[INS_KEY], name, modelname) == 0)
                 throw new IocasteException("error on key insert.");
         }
         
@@ -305,12 +309,12 @@ public class CreateModel extends AbstractDocumentsHandler {
      * @param cache
      * @throws Exception
      */
-    private final void registerModel(Documents documents, DocumentModel model)
-            throws Exception {
-        registerDataElements(documents, model);
-        registerDocumentHeader(documents, model);
-        registerDocumentItems(documents, model);
-        registerDocumentKeys(model);
+    private final void registerModel(Connection connection, Documents documents,
+            DocumentModel model) throws Exception {
+        registerDataElements(connection, documents, model);
+        registerDocumentHeader(connection, documents, model);
+        registerDocumentItems(connection, documents, model);
+        registerDocumentKeys(connection, model);
         documents.parseQueries(model);
         
     }

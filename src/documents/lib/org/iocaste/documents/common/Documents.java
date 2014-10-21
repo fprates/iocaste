@@ -452,7 +452,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, se o objeto foi inserido com sucesso.
      */
     public final int save(ExtendedObject object) {
-        Message message = new Message("save");
+        Message message = new Message("save_document");
         message.add("object", object);
         return call(message);
     }
@@ -464,7 +464,7 @@ public class Documents extends AbstractServiceInterface {
      * @return entradas encontradas.
      */
     public final ExtendedObject[] select(Query query) {
-        Message message = new Message("select");
+        Message message = new Message("select_document");
         message.add("query", query);
         return call(message);
     }

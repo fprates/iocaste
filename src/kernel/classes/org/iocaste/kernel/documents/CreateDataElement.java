@@ -1,5 +1,7 @@
 package org.iocaste.kernel.documents;
 
+import java.sql.Connection;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.IocasteException;
@@ -10,12 +12,13 @@ public class CreateDataElement extends AbstractDocumentsHandler {
     @Override
     public Object run(Message message) throws Exception {
         DataElement element = message.get("element");
-        
-        setSessionid(message.getSessionid());
-        return run(element);
+        Documents documents = getFunction();
+        String sessionid = message.getSessionid();
+        Connection connection = documents.database.getDBConnection(sessionid);
+        return run(connection, element);
     }
     
-    public int run(DataElement element) throws Exception
+    public int run(Connection connection, DataElement element) throws Exception
     {
         String name = element.getName();
         int length = element.getLength();
@@ -39,7 +42,7 @@ public class CreateDataElement extends AbstractDocumentsHandler {
             break;
         }
 
-        return update(QUERIES[INS_ELEMENT], name,
+        return update(connection, QUERIES[INS_ELEMENT], name,
                 element.getDecimals(), length, type, element.isUpcase(),
                 element.getAttributeType());
     }

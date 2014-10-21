@@ -1,6 +1,7 @@
 package org.iocaste.kernel.documents;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
@@ -11,18 +12,21 @@ public class GetDataElement extends AbstractDocumentsHandler {
     @Override
     public Object run(Message message) throws Exception {
         String name = message.getString("name");
+        Documents documents = getFunction();
+        String sessionid = message.getSessionid(); 
+        Connection connection = documents.database.getDBConnection(sessionid);
         
-        setSessionid(message.getSessionid());
-        return run(name);
+        return run(connection, name);
     }
 
     @SuppressWarnings("unchecked")
-    public DataElement run(String name) throws Exception {
+    public DataElement run(Connection connection, String name) throws Exception
+    {
         Object[] lines;
         DataElement element;
         Map<String, Object> columns;
         
-        lines = select(QUERIES[ELEMENT], 0, name);
+        lines = select(connection, QUERIES[ELEMENT], 0, name);
         if (lines == null)
             return null;
         

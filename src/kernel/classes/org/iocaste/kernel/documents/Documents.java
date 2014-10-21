@@ -35,7 +35,7 @@ public class Documents extends AbstractFunction {
 //        export("rename_model", new RenameModel());
         export("save_document", new SaveDocument());
 //        export("save_complex_document", new SaveCDocument());
-//        export("select", new Select());
+        export("select_document", new SelectDocument());
 //        export("select_to_map", new SelectToMap());
 //        export("unlock", new Unlock());
 //        export("update", new Update());
