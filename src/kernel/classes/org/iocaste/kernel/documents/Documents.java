@@ -24,7 +24,7 @@ public class Documents extends AbstractFunction {
 //        export("get_complex_model", new GetCModel());
         export("get_data_element", new GetDataElement());
         export("get_next_number", new GetNextNumber());
-//        export("get_object", new GetObject());
+        export("get_object", new GetObject());
         export("get_document_model", new GetDocumentModel());
 //        export("is_locked", new IsLocked());
 //        export("lock", new Lock());

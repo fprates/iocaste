@@ -59,7 +59,7 @@ public class SelectDocument extends AbstractDocumentsHandler {
      * @param line
      * @return
      */
-    private final ExtendedObject getExtendedObjectFrom(
+    public static final ExtendedObject getExtendedObjectFrom(
             DocumentModel model, Map<String, Object> line) {
         Object value;
         ExtendedObject object = new ExtendedObject(model);
