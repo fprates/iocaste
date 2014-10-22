@@ -503,7 +503,7 @@ public class Documents extends AbstractServiceInterface {
      * @return quantidade de registros atualizados com sucesso.
      */
     public final int update(Query query) {
-        Message message = new Message("update");
+        Message message = new Message("update_document");
         message.add("query", query);
         return call(message);
     }

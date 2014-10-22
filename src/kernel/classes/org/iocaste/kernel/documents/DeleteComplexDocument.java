@@ -10,9 +10,19 @@ import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Message;
 
 public class DeleteComplexDocument extends AbstractDocumentsHandler {
-
     @Override
     public Object run(Message message) throws Exception {
+        String name = message.get("cmodel_name");
+        Object id = message.get("id");
+        String sessionid = message.getSessionid();
+        Documents documents = getFunction();
+        Connection connection = documents.database.getDBConnection(sessionid);
+        
+        return run(connection, documents, name, id);
+    }
+
+    public Object run(Connection connection, Documents documents, String name,
+            Object id) throws Exception {
         GetComplexModel getcmodel;
         UpdateDocument update;
         DocumentModelItem headerkey, reference;
@@ -20,11 +30,6 @@ public class DeleteComplexDocument extends AbstractDocumentsHandler {
         Query query;
         Map<String, DocumentModel> models;
         ComplexModel cmodel;
-        String name = message.get("cmodel_name");
-        Object id = message.get("id");
-        String sessionid = message.getSessionid();
-        Documents documents = getFunction();
-        Connection connection = documents.database.getDBConnection(sessionid);
         
         getcmodel = documents.get("get_complex_model");
         cmodel = getcmodel.run(connection, documents, name);
@@ -46,5 +51,4 @@ public class DeleteComplexDocument extends AbstractDocumentsHandler {
         query.andEqual(headerkey.getName(), id);
         return update.run(connection, documents, query);
     }
-
 }

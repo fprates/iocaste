@@ -34,7 +34,7 @@ public class Documents extends AbstractFunction {
 //        export("remove_number_factory", new RemoveNumberFactory());
 //        export("rename_model", new RenameModel());
         export("save_document", new SaveDocument());
-//        export("save_complex_document", new SaveCDocument());
+        export("save_complex_document", new SaveComplexDocument());
         export("select_document", new SelectDocument());
 //        export("select_to_map", new SelectToMap());
 //        export("unlock", new Unlock());

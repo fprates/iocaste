@@ -34,8 +34,7 @@ public class CreateNumberFactory extends AbstractDocumentsHandler {
         range.set("CURRENT", 0);
         
         save = documents.get("save_document");
-        save.run(range, message.getSessionid());
-        return null;
+        return save.run(connection, range);
     }
 
 }

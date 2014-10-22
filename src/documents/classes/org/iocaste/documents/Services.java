@@ -47,7 +47,7 @@ public class Services extends AbstractFunction {
         export("select_document", "select");
         export("select_to_map", "selectToMap");
         export("unlock", "unlock");
-        export("update", "update");
+        export("update_document", "update");
         export("update_m", "updateMultiple");
         export("update_model", "updateModel");
         export("validate_model", "validateModel");
