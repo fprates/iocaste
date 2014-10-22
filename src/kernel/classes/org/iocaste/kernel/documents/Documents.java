@@ -28,7 +28,7 @@ public class Documents extends AbstractFunction {
         export("get_document_model", new GetDocumentModel());
 //        export("is_locked", new IsLocked());
 //        export("lock", new Lock());
-//        export("modify", new Modify());
+        export("modify", new ModifyDocument());
 //        export("remove_complex_model", new RemoveCModel());
 //        export("remove_model", new RemoveModel());
 //        export("remove_number_factory", new RemoveNumberFactory());
