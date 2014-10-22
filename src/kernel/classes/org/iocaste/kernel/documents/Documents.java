@@ -36,12 +36,11 @@ public class Documents extends AbstractFunction {
         export("save_document", new SaveDocument());
         export("save_complex_document", new SaveComplexDocument());
         export("select_document", new SelectDocument());
-//        export("select_to_map", new SelectToMap());
+        export("select_to_map", new SelectToMap());
 //        export("unlock", new Unlock());
         export("update_document", new UpdateDocument());
 //        export("update_m", new UpdateMultiple());
 //        export("update_model", new UpdateModel());
-//        export("validate_model", new ValidateModel());
     }
     
     public final int getModelItemLen(String name) {

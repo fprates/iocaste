@@ -7,6 +7,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.kernel.common.AbstractHandler;
 import org.iocaste.kernel.database.Select;
 import org.iocaste.kernel.database.Update;
@@ -99,6 +100,46 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         }
         
         return object;
+    }
+    
+    /**
+     * 
+     * @param queryinfo
+     * @param line
+     * @return
+     */
+    protected final ExtendedObject getExtendedObject2From(Connection connection,
+            Query query, Map<String, Object> line) throws Exception {
+        GetDocumentModel getmodel;
+        DocumentModel model;
+        DocumentModelItem item, itemref;
+        String[] composed;
+        int i;
+        Documents documents;
+        
+        documents = getFunction();
+        getmodel = documents.get("get_document_model");
+        if (query.getJoins().size() == 0) {
+            model = getmodel.run(connection, documents, query.getModel());
+            return getExtendedObjectFrom(model, line);
+        }
+
+        model = new DocumentModel(null);
+        i = 0;
+        for (String column : query.getColumns()) {
+            composed = column.split("\\.");
+            item = new DocumentModelItem(composed[1]);
+            itemref = ((DocumentModel)getmodel.run(
+                    connection, documents, composed[0])).
+                    getModelItem(composed[1]);
+            item.setTableFieldName(itemref.getTableFieldName());
+            item.setIndex(i++);
+            item.setDataElement(itemref.getDataElement());
+            item.setDocumentModel(model);
+            model.add(item);
+        }
+        
+        return getExtendedObjectFrom(model, line);
     }
     
     protected final DocumentModelItem getModelKey(DocumentModel model) {
