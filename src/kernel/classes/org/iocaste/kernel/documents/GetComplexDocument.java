@@ -7,34 +7,12 @@ import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class GetComplexDocument extends AbstractDocumentsHandler {
-    
-    private final DocumentModelItem getModelKey(DocumentModel model) {
-        for (DocumentModelKey key : model.getKeys())
-            return model.getModelItem(key.getModelItemName());
-        return null;
-    }
-    
-    private final DocumentModelItem getReferenceItem(
-            DocumentModel model, DocumentModelItem key) {
-        DocumentModelItem reference;
-        
-        for (DocumentModelItem item : model.getItens()) {
-            reference = item.getReference();
-            if ((reference == null) || (!reference.equals(key)))
-                continue;
-            
-            return item;
-        }
-        
-        return null;
-    }
 
     @Override
     public Object run(Message message) throws Exception {

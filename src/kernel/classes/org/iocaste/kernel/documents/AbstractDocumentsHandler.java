@@ -1,8 +1,12 @@
 package org.iocaste.kernel.documents;
 
 import java.sql.Connection;
+import java.util.Map;
 
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.kernel.common.AbstractHandler;
 import org.iocaste.kernel.database.Select;
 import org.iocaste.kernel.database.Update;
@@ -76,6 +80,46 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
     protected final String getComposedName(DocumentModelItem item) {
         return new StringBuilder(item.getDocumentModel().getName()).
                 append(".").append(item.getName()).toString();
+    }
+    
+    /**
+     * 
+     * @param model
+     * @param line
+     * @return
+     */
+    protected final ExtendedObject getExtendedObjectFrom(
+            DocumentModel model, Map<String, Object> line) {
+        Object value;
+        ExtendedObject object = new ExtendedObject(model);
+        
+        for (DocumentModelItem modelitem : model.getItens()) {
+            value = line.get(modelitem.getTableFieldName());
+            object.set(modelitem, value);
+        }
+        
+        return object;
+    }
+    
+    protected final DocumentModelItem getModelKey(DocumentModel model) {
+        for (DocumentModelKey key : model.getKeys())
+            return model.getModelItem(key.getModelItemName());
+        return null;
+    }
+    
+    protected final DocumentModelItem getReferenceItem(
+            DocumentModel model, DocumentModelItem key) {
+        DocumentModelItem reference;
+        
+        for (DocumentModelItem item : model.getItens()) {
+            reference = item.getReference();
+            if ((reference == null) || (!reference.equals(key)))
+                continue;
+            
+            return item;
+        }
+        
+        return null;
     }
     
     @Override

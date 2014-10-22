@@ -52,25 +52,6 @@ public class SelectDocument extends AbstractDocumentsHandler {
         
         return getExtendedObjectFrom(model, line);
     }
-    
-    /**
-     * 
-     * @param model
-     * @param line
-     * @return
-     */
-    public static final ExtendedObject getExtendedObjectFrom(
-            DocumentModel model, Map<String, Object> line) {
-        Object value;
-        ExtendedObject object = new ExtendedObject(model);
-        
-        for (DocumentModelItem modelitem : model.getItens()) {
-            value = line.get(modelitem.getTableFieldName());
-            object.set(modelitem, value);
-        }
-        
-        return object;
-    }
 
     @Override
     public Object run(Message message) throws Exception {

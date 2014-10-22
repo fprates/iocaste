@@ -19,7 +19,7 @@ public class Documents extends AbstractFunction {
         export("create_model", new CreateModel());
         export("create_number_factory", new CreateNumberFactory());
 //        export("delete", new Delete());
-//        export("delete_complex_document", new DeleteComplexDocument());
+        export("delete_complex_document", new DeleteComplexDocument());
         export("get_complex_document", new GetComplexDocument());
         export("get_complex_model", new GetComplexModel());
         export("get_data_element", new GetDataElement());
@@ -38,7 +38,7 @@ public class Documents extends AbstractFunction {
         export("select_document", new SelectDocument());
 //        export("select_to_map", new SelectToMap());
 //        export("unlock", new Unlock());
-//        export("update", new Update());
+        export("update_document", new UpdateDocument());
 //        export("update_m", new UpdateMultiple());
 //        export("update_model", new UpdateModel());
 //        export("validate_model", new ValidateModel());

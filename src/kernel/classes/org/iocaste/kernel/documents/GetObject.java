@@ -4,24 +4,10 @@ import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Message;
 
 public class GetObject extends AbstractDocumentsHandler {
-    
-    /**
-     * 
-     * @param model
-     * @return
-     */
-    private final DocumentModelItem getModelKey(DocumentModel model) {
-        for (DocumentModelKey key : model.getKeys())
-            return model.getModelItem(key.getModelItemName());
-        
-        return null;
-    }
     
     @Override
     public Object run(Message message) throws Exception {
@@ -45,7 +31,7 @@ public class GetObject extends AbstractDocumentsHandler {
                 append(" = ?").toString();
         Object[] objects = select(connection, query, 1, key);
         
-        return (objects == null)? null : SelectDocument.getExtendedObjectFrom(
+        return (objects == null)? null : getExtendedObjectFrom(
                 model, (Map<String, Object>)objects[0]);
     }
 
