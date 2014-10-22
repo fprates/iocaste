@@ -72,16 +72,22 @@ public class SelectDocument extends AbstractDocumentsHandler {
         return object;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Object run(Message message) throws Exception {
+        Query query = message.get("query");
+        String sessionid = message.getSessionid();
+        Documents documents = getFunction();
+        Connection connection = documents.database.getDBConnection(sessionid);
+        
+        return run(connection, query);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ExtendedObject[] run(Connection connection, Query query)
+            throws Exception {
         Object[] lines;
         Map<String, Object> line;
         ExtendedObject[] objects;
-        Query query = message.get("query");
-        Documents documents = getFunction();
-        String sessionid = message.getSessionid();
-        Connection connection = documents.database.getDBConnection(sessionid);
         
         lines = select(connection, query);
         if (lines == null)

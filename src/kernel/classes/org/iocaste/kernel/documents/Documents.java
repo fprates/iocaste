@@ -20,8 +20,8 @@ public class Documents extends AbstractFunction {
         export("create_number_factory", new CreateNumberFactory());
 //        export("delete", new Delete());
 //        export("delete_complex_document", new DeleteComplexDocument());
-//        export("get_complex_document", new GetComplexDocument());
-//        export("get_complex_model", new GetCModel());
+        export("get_complex_document", new GetComplexDocument());
+        export("get_complex_model", new GetComplexModel());
         export("get_data_element", new GetDataElement());
         export("get_next_number", new GetNextNumber());
         export("get_object", new GetObject());
