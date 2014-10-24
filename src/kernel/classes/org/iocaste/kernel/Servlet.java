@@ -32,7 +32,7 @@ public class Servlet extends AbstractIocasteServlet {
         Documents documents = new Documents();
 
         session = new Session();
-        config = new Config();
+        documents.config = config = new Config();
         
         session.database = users.database = config.database = database; 
         auth.database = documents.database = database;

@@ -59,7 +59,7 @@ public class CreateModel extends AbstractDocumentsHandler {
         getmodel = documents.get("get_document_model");
         dbtype = getsp.run("dbtype");
         size = itens.length - 1;
-        refstmt = getReferenceStatement(dbtype);
+        refstmt = getReferenceStatement(documents);
         sb = new StringBuilder("create table ").append(
                 model.getTableName()).append("(");
         
@@ -76,7 +76,7 @@ public class CreateModel extends AbstractDocumentsHandler {
                 item.setDataElement(dataelement);
             }
 
-            setDBFieldsString(sb, dataelement, dbtype);
+            setTableFieldsString(sb, dataelement, dbtype);
             if (model.isKey(item)) {
                 if (sbk == null)
                     sbk = new StringBuilder(", primary key(");
@@ -113,59 +113,6 @@ public class CreateModel extends AbstractDocumentsHandler {
 
         query = sb.append(")").toString();
         return update(connection, query);
-    }
-    
-    private final int insertModelItem(Connection connection,
-            DocumentModelItem item) throws Exception {
-        DocumentModelItem reference;
-        DataElement dataelement;
-        String itemref, tname, shname;
-        DocumentModel model = item.getDocumentModel();
-        
-        dataelement = item.getDataElement();
-        tname = getComposedName(item);
-        reference = item.getReference();
-        if (reference != null) {
-            itemref = getComposedName(reference);
-            if (model.getName().equals(reference.getDocumentModel().getName()))
-                throw new IocasteException(
-                        new StringBuilder("Self model reference for ").
-                            append(tname).toString());
-        } else {
-            itemref = null;
-        }
-        
-        if (update(connection, QUERIES[INS_ITEM], tname,
-                model.getName(),
-                item.getIndex(),
-                item.getTableFieldName(),
-                dataelement.getName(),
-                item.getAttributeName(),
-                itemref) == 0)
-            return 0;
-        
-        if (itemref != null)
-            if (update(connection, QUERIES[INS_FOREIGN], tname, itemref) == 0)
-                return 0;
-        
-        shname = item.getSearchHelp();
-        if (shname == null)
-            return 1;
-
-        if (select(connection, QUERIES[SH_HEADER], 0, shname) == null)
-            return 1;
-
-        return update(connection, QUERIES[INS_SH_REF], tname, shname);
-    }
-    
-    private final String getReferenceStatement(String dbtype) {
-        switch (dbtype) {
-        case "mysql":
-        case "postgres":
-            return " references ";
-        default:
-            return " foreign key references ";
-        }
     }
     
     /**
@@ -317,62 +264,5 @@ public class CreateModel extends AbstractDocumentsHandler {
         registerDocumentKeys(connection, model);
         documents.parseQueries(model);
         
-    }
-    
-    /**
-     * 
-     * @param sb
-     * @param ddelement
-     */
-    private void setDBFieldsString(StringBuilder sb,
-            DataElement ddelement, String dbtype) throws Exception {
-        int length = ddelement.getLength();
-        
-        switch (ddelement.getType()) {
-        case DataType.CHAR:
-            if (length == 0)
-                throw new IocasteException(new StringBuilder("Invalid "
-                        + "length for data element ").
-                        append(ddelement.getName()).toString());
-            
-            sb.append(" varchar(");
-            sb.append(length);
-            sb.append(")");
-            break;
-        case DataType.NUMC:
-            if (length == 0)
-                throw new IocasteException(new StringBuilder("Invalid "
-                        + "length for data element ").
-                        append(ddelement.getName()).toString());
-            
-            sb.append(" numeric(");
-            sb.append(length);
-            sb.append(")");
-            break;
-        case DataType.DEC:
-            if (length == 0)
-                throw new IocasteException(new StringBuilder("Invalid "
-                        + "length for data element ").
-                        append(ddelement.getName()).toString());
-            
-            sb.append(" decimal(");
-            sb.append(length);
-            sb.append(",");
-            sb.append(ddelement.getDecimals());
-            sb.append(")");
-            break;
-        case DataType.DATE:
-            sb.append(" date");
-            break;
-        case DataType.TIME:
-            sb.append(" time");
-            break;
-        case DataType.BOOLEAN:
-            if (dbtype.equals("postgres"))
-                sb.append(" boolean");
-            else
-                sb.append(" bit");
-            break;
-        }
     }
 }

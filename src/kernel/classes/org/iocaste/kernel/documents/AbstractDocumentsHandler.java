@@ -3,14 +3,18 @@ package org.iocaste.kernel.documents;
 import java.sql.Connection;
 import java.util.Map;
 
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.kernel.config.GetSystemParameter;
 import org.iocaste.kernel.database.Select;
 import org.iocaste.kernel.database.Update;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public abstract class AbstractDocumentsHandler extends AbstractHandler {
@@ -72,6 +76,26 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         "select CRRNT from RANGE001 where ident = ?",
         "update RANGE001 set crrnt = ? where ident = ?"
     };
+    
+    protected final int addTableColumn(Connection connection, String refstmt,
+            DocumentModelItem item, String dbtype) throws Exception {
+        DocumentModelItem reference;
+        String modelname = item.getDocumentModel().getTableName();
+        StringBuilder sb = new StringBuilder("alter table ").append(modelname);
+        DataElement ddelement = item.getDataElement();
+        
+        sb.append(" add column ").append(item.getTableFieldName());
+        setTableFieldsString(sb, ddelement, dbtype);
+        
+        reference = item.getReference();
+        if (reference != null)
+            sb.append(refstmt).
+                    append(reference.getDocumentModel().getTableName()).
+                    append("(").
+                    append(reference.getTableFieldName()).append(")");
+        
+        return update(connection, sb.toString());
+    }
     
     /**
      * Retorna nome composto.
@@ -148,6 +172,13 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         return null;
     }
     
+    protected final String getSystemParameter(Documents documents, String name)
+    {
+        GetSystemParameter getparameter;
+        getparameter = documents.config.get("get_system_parameter");
+        return getparameter.run(name);
+    }
+    
     protected final DocumentModelItem getReferenceItem(
             DocumentModel model, DocumentModelItem key) {
         DocumentModelItem reference;
@@ -163,6 +194,58 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         return null;
     }
     
+    protected final String getReferenceStatement(Documents documents)
+            throws Exception {
+        String dbtype = getSystemParameter(documents, "dbtype");
+        if (dbtype.equals("mysql") || dbtype.equals("postgres"))
+            return " references ";
+        else
+            return " foreign key references ";
+    }
+    
+    protected final int insertModelItem(Connection connection,
+            DocumentModelItem item) throws Exception {
+        DocumentModelItem reference;
+        DataElement dataelement;
+        String itemref, tname, shname;
+        DocumentModel model = item.getDocumentModel();
+        
+        dataelement = item.getDataElement();
+        tname = getComposedName(item);
+        reference = item.getReference();
+        if (reference != null) {
+            itemref = getComposedName(reference);
+            if (model.getName().equals(reference.getDocumentModel().getName()))
+                throw new IocasteException(
+                        new StringBuilder("Self model reference for ").
+                            append(tname).toString());
+        } else {
+            itemref = null;
+        }
+        
+        if (update(connection, QUERIES[INS_ITEM], tname,
+                model.getName(),
+                item.getIndex(),
+                item.getTableFieldName(),
+                dataelement.getName(),
+                item.getAttributeName(),
+                itemref) == 0)
+            return 0;
+        
+        if (itemref != null)
+            if (update(connection, QUERIES[INS_FOREIGN], tname, itemref) == 0)
+                return 0;
+        
+        shname = item.getSearchHelp();
+        if (shname == null)
+            return 1;
+
+        if (select(connection, QUERIES[SH_HEADER], 0, shname) == null)
+            return 1;
+
+        return update(connection, QUERIES[INS_SH_REF], tname, shname);
+    }
+    
     @Override
     public abstract Object run(Message message) throws Exception;
     
@@ -171,6 +254,63 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         Documents documents = getFunction();
         Select select = documents.database.get("select");
         return select.run(connection, query, rows, criteria);
+    }
+    
+    /**
+     * 
+     * @param sb
+     * @param ddelement
+     */
+    protected void setTableFieldsString(StringBuilder sb,
+            DataElement ddelement, String dbtype) throws Exception {
+        int length = ddelement.getLength();
+        
+        switch (ddelement.getType()) {
+        case DataType.CHAR:
+            if (length == 0)
+                throw new IocasteException(new StringBuilder("Invalid "
+                        + "length for data element ").
+                        append(ddelement.getName()).toString());
+            
+            sb.append(" varchar(");
+            sb.append(length);
+            sb.append(")");
+            break;
+        case DataType.NUMC:
+            if (length == 0)
+                throw new IocasteException(new StringBuilder("Invalid "
+                        + "length for data element ").
+                        append(ddelement.getName()).toString());
+            
+            sb.append(" numeric(");
+            sb.append(length);
+            sb.append(")");
+            break;
+        case DataType.DEC:
+            if (length == 0)
+                throw new IocasteException(new StringBuilder("Invalid "
+                        + "length for data element ").
+                        append(ddelement.getName()).toString());
+            
+            sb.append(" decimal(");
+            sb.append(length);
+            sb.append(",");
+            sb.append(ddelement.getDecimals());
+            sb.append(")");
+            break;
+        case DataType.DATE:
+            sb.append(" date");
+            break;
+        case DataType.TIME:
+            sb.append(" time");
+            break;
+        case DataType.BOOLEAN:
+            if (dbtype.equals("postgres"))
+                sb.append(" boolean");
+            else
+                sb.append(" bit");
+            break;
+        }
     }
     
     protected final int update(Connection connection, String query,

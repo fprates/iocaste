@@ -6,11 +6,13 @@ import java.util.Map;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.kernel.common.AbstractFunction;
+import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.database.Database;
 
 public class Documents extends AbstractFunction {
     public Cache cache;
     public Database database;
+    public Config config;
     
     public Documents() {
         cache = new Cache(this);
@@ -26,6 +28,7 @@ public class Documents extends AbstractFunction {
         export("get_next_number", new GetNextNumber());
         export("get_object", new GetObject());
         export("get_document_model", new GetDocumentModel());
+        protect("insert_data_element", new InsertDataElement());
 //        export("is_locked", new IsLocked());
 //        export("lock", new Lock());
         export("modify", new ModifyDocument());
@@ -39,7 +42,7 @@ public class Documents extends AbstractFunction {
 //        export("unlock", new Unlock());
         export("update_document", new UpdateDocument());
 //        export("update_m", new UpdateMultiple());
-//        export("update_model", new UpdateModel());
+        export("update_model", new UpdateModel());
     }
     
     public final int getModelItemLen(String name) {
