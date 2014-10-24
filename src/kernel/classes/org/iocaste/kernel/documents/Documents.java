@@ -31,7 +31,7 @@ public class Documents extends AbstractFunction {
         export("modify", new ModifyDocument());
         export("remove_complex_model", new RemoveComplexModel());
         export("remove_model", new RemoveModel());
-//        export("remove_number_factory", new RemoveNumberFactory());
+        export("remove_number_factory", new RemoveNumberFactory());
         export("save_document", new SaveDocument());
         export("save_complex_document", new SaveComplexDocument());
         export("select_document", new SelectDocument());
