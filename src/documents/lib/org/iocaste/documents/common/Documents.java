@@ -121,7 +121,7 @@ public class Documents extends AbstractServiceInterface {
      * @return 1, para remoção bem sucedida.
      */
     public final int delete(ExtendedObject object) {
-        Message message = new Message("delete");
+        Message message = new Message("delete_document");
         message.add("object", object);
         return call(message);
     }

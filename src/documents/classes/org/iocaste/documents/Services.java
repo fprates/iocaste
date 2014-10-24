@@ -27,7 +27,7 @@ public class Services extends AbstractFunction {
         export("create_complex_model", "createCModel");
         export("create_model", "createModel");
         export("create_number_factory", "createNumberFactory");
-        export("delete", "delete");
+        export("delete_document", "delete");
         export("delete_complex_document", "deleteComplexDocument");
         export("get_complex_document", "getComplexDocument");
         export("get_complex_model", "getCModel");
