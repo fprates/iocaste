@@ -42,7 +42,7 @@ import org.iocaste.protocol.Message;
  */
 public class Documents extends AbstractServiceInterface {
     private static final String SERVERNAME =
-            "/iocaste-documents/services.html";
+            "/iocaste-kernel/service.html";
     public static final int TABLE_ALREADY_ASSIGNED = 1;
     private Function function;
     

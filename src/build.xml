@@ -8,13 +8,10 @@
         <ant antfile="${basedir}/src/core/build.xml"/>
     	
     	<!-- documents-common -->
-    	<ant antfile="${basedir}/src/documents/build-lib.xml"/>
+    	<ant antfile="${basedir}/src/documents/build.xml"/>
     	
     	<!-- kernel -->
         <ant antfile="${basedir}/src/kernel/build.xml"/>
-    	
-        <!-- documents -->
-        <ant antfile="${basedir}/src/documents/build.xml"/>
         
         <!-- shell -->
         <ant antfile="${basedir}/src/shell/build.xml"/>

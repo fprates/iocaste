@@ -25,7 +25,6 @@
 	<classpathentry kind="src" path="src/infosis/classes"/>
 	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/login/classes"/>
 	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/tasksel/classes"/>
-	<classpathentry excluding="META-INF/|hibernate.cfg.xml" kind="src" path="src/documents/classes"/>
 	<classpathentry kind="src" path="src/search-help/classes"/>
 	<classpathentry kind="src" path="src/dataview/classes"/>
 	<classpathentry kind="src" path="src/packagetool/lib"/>
