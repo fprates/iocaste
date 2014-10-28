@@ -2,6 +2,7 @@ package org.iocaste.kernel.documents;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -13,9 +14,12 @@ public class Documents extends AbstractFunction {
     public Cache cache;
     public Database database;
     public Config config;
+    public Map<String, Set<LockEntry>> lockcache;
     
     public Documents() {
         cache = new Cache(this);
+        lockcache = new HashMap<>();
+        
         export("create_complex_model", new CreateCModel());
         protect("create_data_element", new CreateDataElement());
         export("create_model", new CreateModel());
@@ -29,8 +33,8 @@ public class Documents extends AbstractFunction {
         export("get_object", new GetObject());
         export("get_document_model", new GetDocumentModel());
         protect("insert_data_element", new InsertDataElement());
-//        export("is_locked", new IsLocked());
-//        export("lock", new Lock());
+        export("is_locked", new IsLocked());
+        export("lock", new Lock());
         export("modify", new ModifyDocument());
         export("remove_complex_model", new RemoveComplexModel());
         export("remove_model", new RemoveModel());
@@ -39,7 +43,7 @@ public class Documents extends AbstractFunction {
         export("save_complex_document", new SaveComplexDocument());
         export("select_document", new SelectDocument());
         export("select_to_map", new SelectToMap());
-//        export("unlock", new Unlock());
+        export("unlock", new Unlock());
         export("update_document", new UpdateDocument());
         export("update_m", new UpdateMultiple());
         export("update_model", new UpdateModel());
