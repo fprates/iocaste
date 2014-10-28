@@ -41,7 +41,7 @@ public class Documents extends AbstractFunction {
         export("select_to_map", new SelectToMap());
 //        export("unlock", new Unlock());
         export("update_document", new UpdateDocument());
-//        export("update_m", new UpdateMultiple());
+        export("update_m", new UpdateMultiple());
         export("update_model", new UpdateModel());
     }
     
