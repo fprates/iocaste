@@ -7,7 +7,6 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
-import org.iocaste.kernel.config.GetSystemParameter;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
@@ -48,20 +47,18 @@ public class CreateModel extends AbstractDocumentsHandler {
         DataElement dataelement;
         DocumentModelItem reference;
         String tname, query, refname, dbtype;
-        GetSystemParameter getsp;
         GetDocumentModel getmodel;
         int size;
         StringBuilder sb, sbk = null;
         DocumentModelItem[] itens = model.getItens();
         String refstmt;
 
-        getsp = documents.get("get_system_parameter");
         getmodel = documents.get("get_document_model");
-        dbtype = getsp.run("dbtype");
+        dbtype = getSystemParameter(documents, "dbtype");
         size = itens.length - 1;
         refstmt = getReferenceStatement(documents);
-        sb = new StringBuilder("create table ").append(
-                model.getTableName()).append("(");
+        sb = new StringBuilder("create table ").append(model.getTableName()).
+                append("(");
         
         getde = documents.get("get_data_element");
         for (DocumentModelItem item : itens) {
