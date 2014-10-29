@@ -33,6 +33,7 @@ public class TableToolRenderer extends AbstractFunction {
     public TableToolRenderer() {
         export("add_action", "addaction");
         export("items_add", "addItems");
+        export("multiple_objects_set", "setMultipleObjects");
         export("objects_set", "setObjects");
         export("render", "render");
     }
@@ -279,13 +280,33 @@ public class TableToolRenderer extends AbstractFunction {
             setVisibility(context, true, context.data.show);
     }
     
-    public final Map<String, Object> setObjects(Message message) {
+    public final Map<String, Map<String, Object>> setMultipleObjects(
+            Message message) {
+        Table table;
+        TableToolData data;
+        Map<String, Object> tabledata;
+        Map<String, Map<String, Object>> results;
+        Map<String, Map<String, Object>> tables = message.get("tables");
+        
+        results = new HashMap<>();
+        for (String name : tables.keySet()) {
+            tabledata = tables.get(name);
+            table = (Table)tabledata.get("table");
+            data = (TableToolData)tabledata.get("data");
+            results.put(name, setObject(table, data));
+        }
+        
+        return results;
+    }
+    
+    private final Map<String, Object> setObject(Table table, TableToolData data)
+    {
         Map<String, Object> result;
         Context context = new Context();
         
-        context.table = message.get("table");
+        context.table = table;
         context.table.clear();
-        context.data = message.get("data");
+        context.data = data;
         context.data.last = 0;
         
         setObjects(context);
@@ -294,6 +315,13 @@ public class TableToolRenderer extends AbstractFunction {
         result.put("table", context.table);
         result.put("data", context.data);
         return result;
+    }
+    
+    public final Map<String, Object> setObjects(Message message) {
+        Table table = message.get("table");
+        TableToolData data = message.get("data");
+        
+        return setObject(table, data);
     }
     
     /**

@@ -33,6 +33,14 @@ public class PageBuilderContext extends AbstractContext {
     
     /**
      * 
+     * @return
+     */
+    public final ViewContext getView() {
+        return viewcontexts.get(view.getPageName());
+    }
+    
+    /**
+     * 
      * @param name
      * @return
      */

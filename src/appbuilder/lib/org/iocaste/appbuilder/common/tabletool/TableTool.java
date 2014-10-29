@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.GenericService;
@@ -29,40 +31,21 @@ public class TableTool {
     public static final byte DISPLAY = 2;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
-    private static final String URL = "/iocaste-appbuilder/services.html";
+    public static final String URL = "/iocaste-appbuilder/services.html";
     private AbstractContext context;
     private GenericService service;
-    private String accept, add, remove;
+    private String accept, add, remove, name;
     private TableToolData data;
     
+    public TableTool(PageBuilderContext context, String name) {
+        ViewContext viewcontext = context.getView();
+        
+        this.name = name;
+        init(context, viewcontext.getComponents().getTableToolData(name));
+    }
+    
     public TableTool(AbstractContext context, TableToolData data) {
-        Map<String, Object> result;
-        Container container, returned;
-        Message message;
-        
-        message = new Message("render");
-        message.add("data", data);
-        message.add("view", context.view);
-        
-        service = new GenericService(context.function, URL);
-        result = service.invoke(message);
-        this.context = context;
-        
-        accept = new Action(this, data, ACCEPT).getName();
-        add = new Action(this, data, ADD).getName();
-        remove = new Action(this, data, REMOVE).getName();
-
-        returned = (Container)result.get("container");
-        this.data = (TableToolData)result.get("data");
-        
-        container = data.getContainer();
-        for (Element element : returned.getElements()) {
-            transfer(container, element);
-            element.setView(context.view);
-            container.add(element);
-        }
-        
-        installValidators();
+        init(context, data);
     }
     
     public final void accept() {
@@ -75,7 +58,7 @@ public class TableTool {
     }
     
     public final void add() {
-        if (data.mode != TableTool.CONTINUOUS_UPDATE) {
+        if (getTableData().mode != TableTool.CONTINUOUS_UPDATE) {
             context.view.getElement(accept).setVisible(true);
             context.view.getElement(add).setVisible(false);
             context.view.getElement(remove).setVisible(false);
@@ -89,13 +72,13 @@ public class TableTool {
     }
     
     private final void additems(ExtendedObject[] objects) {
-        data.objects = objects;
+        getTableData().objects = objects;
         remote("item_add");
     }
     
     public final void clear() {
         getTable().clear();
-        data.last = 0;
+        getTableData().last = 0;
     }
     
     public static final Table get(View view, TableToolData data) {
@@ -165,26 +148,58 @@ public class TableTool {
      * @return
      */
     private final Table getTable() {        
-        return context.view.getElement(data.name.concat("_table"));
+        return context.view.getElement(getTableData().name.concat("_table"));
     }
     
-    private final void remote(String function) {
-        Map<String, Object> returned;
-        Message message = new Message(function);
-        Table table = getTable();
+    private final TableToolData getTableData() {
+        ViewContext viewcontext; 
         
-        message.add("table", table);
+        if (name == null)
+            return data;
+        
+        viewcontext = ((PageBuilderContext)context).getView();
+        return viewcontext.getComponents().getTableToolData(name);
+    }
+    
+    /**
+     * 
+     * @param context
+     * @param data
+     */
+    private final void init(AbstractContext context, TableToolData data) {
+        Map<String, Object> result;
+        Container container, returned;
+        Message message;
+        
+        message = new Message("render");
         message.add("data", data);
-        returned = service.invoke(message);
+        message.add("view", context.view);
         
-        table = (Table)returned.get("table");
-        data = (TableToolData)returned.get("data");
-        update(table);
+        service = new GenericService(context.function, URL);
+        result = service.invoke(message);
+        this.context = context;
+        
+        accept = new Action(this, data, ACCEPT).getName();
+        add = new Action(this, data, ADD).getName();
+        remove = new Action(this, data, REMOVE).getName();
+
+        returned = (Container)result.get("container");
+        setTableData((TableToolData)result.get("data"));
+        
+        container = data.getContainer();
+        for (Element element : returned.getElements()) {
+            transfer(container, element);
+            element.setView(context.view);
+            container.add(element);
+        }
+        
+        installValidators();
     }
     
     private final void installValidators() {
         InputComponent input;
         TableToolColumn column;
+        TableToolData data = getTableData();
         Table table = getTable();
         
         for (String name : data.columns.keySet()) {
@@ -197,6 +212,20 @@ public class TableTool {
                 context.function.validate(input, column.validator); 
             }
         }
+    }
+    
+    private final void remote(String function) {
+        Map<String, Object> returned;
+        Message message = new Message(function);
+        Table table = getTable();
+        
+        message.add("table", table);
+        message.add("data", getTableData());
+        returned = service.invoke(message);
+        
+        table = (Table)returned.get("table");
+        setTableData((TableToolData)returned.get("data"));
+        update(table);
     }
     
     /**
@@ -216,12 +245,20 @@ public class TableTool {
      */
     public final void setObjects(ExtendedObject[] objects) {        
         if (objects == null || objects.length == 0)
-            data.objects = null;
+            getTableData().objects = null;
         else
-            data.objects = objects;
+            getTableData().objects = objects;
         
         remote("objects_set");
         installValidators();
+    }
+    
+    public final void setTableData(TableToolData data) {
+        PageBuilderContext context = (PageBuilderContext)this.context;
+        if (name == null)
+            this.data = data;
+        else
+            context.getView().getComponents().set(data);
     }
     
     /**

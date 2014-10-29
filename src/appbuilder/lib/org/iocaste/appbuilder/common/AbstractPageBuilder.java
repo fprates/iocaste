@@ -11,6 +11,7 @@ import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
@@ -298,7 +299,7 @@ class BuilderCustomView extends AbstractCustomView {
                 getView(context.view.getPageName()).getComponents();
         
         for (TableToolEntry entry : components.tabletools.values())
-            entry.component = new TableTool(context, entry.data);
+            entry.component = new TableTool(context, entry.data.name);
     }
     
     public final void setView(String view) {
@@ -306,11 +307,26 @@ class BuilderCustomView extends AbstractCustomView {
     }
     
     private final void updateTables(PageBuilderContext context) {
+        GenericService service;
+        Map<String, Map<String, Object>> returned, tables;
+        Message message;
         ViewComponents components = context.
                 getView(context.view.getPageName()).getComponents();
+
+        if (components.tabletools.size() == 0)
+            return;
         
-        for (TableToolEntry entry : components.tabletools.values())
-            entry.component.setObjects(entry.data.objects);
+        tables = new HashMap<>();
+        message = new Message("multiple_objects_set");
+        for (String name : components.tabletools.keySet())
+            components.tabletools.get(name).sendUpdate(context, tables);
+        
+        message.add("tables", tables);
+        service = new GenericService(context.function, TableTool.URL);
+        returned = service.invoke(message);
+        for (String name : returned.keySet())
+            components.tabletools.get(name).receiveUpdate(
+                    context, returned.get(name));
     }
 }
 
