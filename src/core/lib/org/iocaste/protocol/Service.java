@@ -80,16 +80,9 @@ public class Service {
         }
     }
     
-    private final void messageSend(
-            Message message, Object object, Exception ex) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(os);
-        
-        message.clear();
-        message.add("return", object);
-        message.setException(ex);
-        
-        oos.writeObject(message);
-        oos.flush();
+    public final void messageException(
+            Message message, Exception ex) throws IOException {
+        messageSend(message, null, ex);
     }
     
     public final void messageReturn(
@@ -97,8 +90,16 @@ public class Service {
         messageSend(message, object, null);
     }
     
-    public final void messageException(
-            Message message, Exception ex) throws IOException {
-        messageSend(message, null, ex);
+    private final void messageSend(
+            Message message, Object object, Exception ex) throws IOException {
+        BufferedOutputStream bos = new BufferedOutputStream(os);
+        ObjectOutputStream oos = new ObjectOutputStream(bos);
+        
+        message.clear();
+        message.add("return", object);
+        message.setException(ex);
+        
+        oos.writeObject(message);
+        oos.flush();
     }
 }
