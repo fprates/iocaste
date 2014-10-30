@@ -29,6 +29,7 @@ public class TableTool {
     public static final byte CONTINUOUS_UPDATE = 0;
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
+    public static final byte CONTINUOUS_DISPLAY = 3;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
     public static final String URL = "/iocaste-appbuilder/services.html";

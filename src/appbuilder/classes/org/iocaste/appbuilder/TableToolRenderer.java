@@ -228,8 +228,7 @@ public class TableToolRenderer extends AbstractFunction {
         
         context.table = new Table(
                 container, context.data.name.concat("_table"));
-        context.table.setMark(true);
-        context.table.setVisibleLines(15);
+        context.table.setVisibleLines(context.data.vlines);
         context.data.last = 0;
         
         model(context);
@@ -247,14 +246,15 @@ public class TableToolRenderer extends AbstractFunction {
      */
     private final void setMode(Context context) {
         switch (context.data.mode) {
-        case TableTool.CONTINUOUS_UPDATE:
         case TableTool.UPDATE:
+        case TableTool.CONTINUOUS_UPDATE:
             context.accept.setVisible(false);
             context.add.setVisible(true);
             context.remove.setVisible(true);
             break;
             
         case TableTool.DISPLAY:
+        case TableTool.CONTINUOUS_DISPLAY:
             context.accept.setVisible(false);
             context.add.setVisible(false);
             context.remove.setVisible(false);
@@ -329,10 +329,20 @@ public class TableToolRenderer extends AbstractFunction {
      * @param objects
      */
     private final void setObjects(Context context) {
-        if (context.data.objects == null || context.data.objects.length == 0)
-            additems(context, null);
-        else
-            additems(context, context.data.objects);
+        if (context.data.objects == null || context.data.objects.length == 0) {
+            switch(context.data.mode) {
+            case TableTool.CONTINUOUS_DISPLAY:
+            case TableTool.CONTINUOUS_UPDATE:
+                context.table.clear();
+                return;
+            case TableTool.UPDATE:
+            case TableTool.DISPLAY:
+                additems(context, null);
+                return;
+            }
+        }
+        
+        additems(context, context.data.objects);
     }
     
     /**
