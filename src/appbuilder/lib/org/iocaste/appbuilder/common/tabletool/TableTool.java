@@ -255,11 +255,14 @@ public class TableTool {
     }
     
     public final void setTableData(TableToolData data) {
-        PageBuilderContext context = (PageBuilderContext)this.context;
-        if (name == null)
+        PageBuilderContext context;
+        
+        if (name == null) {
             this.data = data;
-        else
+        } else {
+            context = (PageBuilderContext)this.context;
             context.getView().getComponents().set(data);
+        }
     }
     
     /**
