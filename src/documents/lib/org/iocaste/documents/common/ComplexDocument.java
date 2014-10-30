@@ -1,10 +1,10 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * <p>This class groups ExtendedObjects in one document, following the
@@ -20,14 +20,14 @@ public class ComplexDocument implements Serializable {
     private static final long serialVersionUID = -6366080783932302245L;
     private ComplexModel cmodel;
     private ExtendedObject header;
-    private Map<String, Set<ExtendedObject>> items;
+    private Map<String, List<ExtendedObject>> items;
     
     public ComplexDocument(ComplexModel cmodel) {
         this.cmodel = cmodel;
         header = new ExtendedObject(cmodel.getHeader());
         items = new HashMap<>();
         for (String name: cmodel.getItems().keySet())
-            items.put(name, new TreeSet<ExtendedObject>());
+            items.put(name, new ArrayList<ExtendedObject>());
     }
     
     /**
@@ -36,7 +36,7 @@ public class ComplexDocument implements Serializable {
      */
     public final void add(ExtendedObject object) {
         String alias;
-        Set<ExtendedObject> objects;
+        List<ExtendedObject> objects;
         
         if (object == null)
             return;
@@ -131,7 +131,7 @@ public class ComplexDocument implements Serializable {
      * Remove all items of the document
      */
     public final void remove() {
-        for (Set<ExtendedObject> objects : items.values())
+        for (List<ExtendedObject> objects : items.values())
             objects.clear();
     }
     
