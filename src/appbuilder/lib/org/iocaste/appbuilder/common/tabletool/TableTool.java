@@ -66,6 +66,7 @@ public class TableTool {
         }
         
         remote("add_action");
+        installValidators();
     }
     
     public final void additems() {
