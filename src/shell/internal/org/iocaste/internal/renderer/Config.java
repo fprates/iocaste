@@ -7,20 +7,20 @@ import java.util.Set;
 
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
-import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.View;
 
 public class Config {
     public Function function;
+    public Form form;
     private String currentaction, currentform, pagetrack;
     private String dbname, username;
     private int logid;
     private List<MessageSource> msgsources;
     private Set<String> actions;
-    private List<String> onload; 
-    private List<XMLElement> toform;
+    private List<String> onload;
     private View view;
     private ControlComponent shcontrol;
     private TrackingData tracking;
@@ -28,7 +28,6 @@ public class Config {
     public Config() {
         actions = new HashSet<>();
         onload = new ArrayList<>();
-        toform = new ArrayList<>();
         msgsources = new ArrayList<>();
     }
     
@@ -57,21 +56,6 @@ public class Config {
      */
     public final void addOnload(String onload) {
         this.onload.add(onload);
-    }
-    
-    /**
-     * 
-     * @param element
-     */
-    public final void addToForm(XMLElement element) {
-        toform.add(element);
-    }
-    
-    /**
-     * 
-     */
-    public final void clearToForm() {
-        toform.clear();
     }
     
     /**
@@ -167,14 +151,6 @@ public class Config {
         }
         
         return tag;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final List<XMLElement> getToForm() {
-        return toform;
     }
     
     /**

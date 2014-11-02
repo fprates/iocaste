@@ -27,6 +27,7 @@ import org.iocaste.shell.common.RangeField;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
+import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextArea;
@@ -58,8 +59,8 @@ public class Renderer {
         case FORM:
             config.setCurrentForm(container.getHtmlName());
             xmltag = FormRenderer.render((Form)container, config);
-            xmltag.addChildren(config.getToForm());
-            config.clearToForm();
+//            xmltag.addChildren(config.getToForm());
+//            config.clearToForm();
             
             tags.add(xmltag);
             break;
@@ -70,6 +71,11 @@ public class Renderer {
             
         case TABBED_PANE:
             tags.add(TabbedPaneRenderer.render((TabbedPane)container, config));
+            break;
+            
+        case TABBED_PANE_ITEM:
+            tags.add(StandardContainerRenderer.render(
+                    (TabbedPaneItem)container, config));
             break;
             
         case TABLE:

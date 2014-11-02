@@ -138,7 +138,7 @@ public class TableRenderer extends Renderer {
          */
         locale = table.getLocale();
         for (InputComponent input : hidden) {
-            parameter = new Parameter(config.getView(), input.getHtmlName());
+            parameter = new Parameter(config.form, input.getHtmlName());
             parameter.setModelItem(input.getModelItem());
             parameter.setLocale(locale);
             
@@ -147,7 +147,7 @@ public class TableRenderer extends Renderer {
             else
                 parameter.set(input.get());
             
-            config.addToForm(ParameterRenderer.render(parameter));
+//            config.addToForm(ParameterRenderer.render(parameter));
         }
         
         divtag = new XMLElement("div");

@@ -36,6 +36,7 @@ public class FormRenderer extends Renderer {
         
         config.setCurrentAction(currentaction);
         config.addAction(currentaction);
+        config.form = container;
 
         for (Element element : container.getElements()) {
             if (element.getType() != Const.PAGE_CONTROL)
