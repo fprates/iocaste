@@ -8,12 +8,11 @@ package org.iocaste.shell.common;
  */
 public class TabbedPaneItem extends AbstractContainer {
     private static final long serialVersionUID = 6583630385235074815L;
-    private String focus, name;
+    private String focus;
     
     public TabbedPaneItem(TabbedPane pane, String name) {
-        super(pane, Const.TABBED_PANE_ITEM, name.concat(".tabitem"));
+        super(pane, Const.TABBED_PANE_ITEM, name);
         setStyleClass("tp_item");
-        this.name = name;
     }
     
     /**
@@ -22,14 +21,6 @@ public class TabbedPaneItem extends AbstractContainer {
      */
     public final Element getFocus() {
         return getView().getElement(focus);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final String getPaneName() {
-        return name;
     }
     
     /**

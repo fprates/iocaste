@@ -23,7 +23,7 @@ public class TabbedPaneRenderer extends Renderer {
             Config config) {
         Button button;
         StringBuilder sb;
-        String classname, name, panename;
+        String classname, name;
         TabbedPaneItem item;
         List<XMLElement> tags;
         Set<Element> elements;
@@ -38,7 +38,6 @@ public class TabbedPaneRenderer extends Renderer {
             
             item = (TabbedPaneItem)element;
             name = item.getName();
-            panename = item.getPaneName();
             sb = new StringBuilder("setElementDisplay('").append(name);
             
             if (tabbedpane.getCurrent().equals(name)) {
@@ -51,8 +50,8 @@ public class TabbedPaneRenderer extends Renderer {
             
             config.addOnload(sb.toString());
             
-            button = new Button(config.getView(), panename.concat("_bt"));
-            button.setText(panename);
+            button = new Button(config.getView(), name.concat("_bt"));
+            button.setText(name);
             button.setStyleClass(classname);
             button.setEventHandler(tabbedpane.getEventHandler());
             tabbedtag.addChild(ButtonRenderer.render(button, config));

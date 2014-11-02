@@ -107,7 +107,7 @@ class OnClickHandler extends AbstractEventHandler {
         button = view.getElement(args);
         name = button.getText();
         
-        paneitem = pane.getElement(name.concat(".tabitem"));
+        paneitem = pane.getElement(name);
         focus = paneitem.getFocus();
         for (Element element : paneitem.getElements()) {
             if (!element.isContainable())
@@ -121,6 +121,6 @@ class OnClickHandler extends AbstractEventHandler {
             view.setFocus(focus);
             break;
         }
-        pane.setCurrent(paneitem.getName());
+        pane.setCurrent(name);
     }
 }
