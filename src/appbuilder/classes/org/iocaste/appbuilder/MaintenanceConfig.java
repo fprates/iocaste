@@ -54,7 +54,6 @@ public class MaintenanceConfig extends AbstractViewConfig {
         form.importModel(model);
         for (DocumentModelItem item : items)
             form.get(item.getName()).setVisible(!model.isKey(item));
-        getTabbedItem("tabs", "basetab").set(form.getHtmlName());
         
         models = cmodel.getItems();
         for (String name : models.keySet()) {
@@ -66,7 +65,6 @@ public class MaintenanceConfig extends AbstractViewConfig {
                     AbstractManager.getReference(model, hkey).getName(),
                     AbstractManager.getKey(model).getName()
             };
-            getTabbedItem("tabs", name).set(tabletool.name);
         }
     }
 }

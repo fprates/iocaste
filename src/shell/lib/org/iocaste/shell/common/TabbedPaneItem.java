@@ -6,22 +6,14 @@ package org.iocaste.shell.common;
  * @author francisco.prates
  *
  */
-public class TabbedPaneItem extends AbstractComponent {
+public class TabbedPaneItem extends AbstractContainer {
     private static final long serialVersionUID = 6583630385235074815L;
-    private String container, focus;
+    private String focus, name;
     
     public TabbedPaneItem(TabbedPane pane, String name) {
-        super(pane, Const.TABBED_PANE_ITEM, name);
-        setHtmlName(new StringBuilder(pane.getName()).
-                append(".").append(name).toString());
-    }
-    
-    /**
-     * Retorna o conteiner associado.
-     * @return conteiner.
-     */
-    public final <T extends Container> T get() {
-        return getView().getElement(container);
+        super(pane, Const.TABBED_PANE_ITEM, name.concat(".tabitem"));
+        setStyleClass("tp_item");
+        this.name = name;
     }
     
     /**
@@ -31,31 +23,13 @@ public class TabbedPaneItem extends AbstractComponent {
     public final Element getFocus() {
         return getView().getElement(focus);
     }
-
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.Element#isControlComponent()
-     */
-    @Override
-    public boolean isControlComponent() {
-        return false;
-    }
-
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.Element#isDataStorable()
-     */
-    @Override
-    public boolean isDataStorable() {
-        return false;
-    }
     
     /**
-     * Associa um conteiner à aba.
-     * @param container conteiner.
+     * 
+     * @return
      */
-    public final void set(String container) {
-        this.container = container;
+    public final String getPaneName() {
+        return name;
     }
     
     /**

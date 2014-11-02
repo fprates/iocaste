@@ -22,7 +22,7 @@ public class MaintenanceSpec extends AbstractViewSpec {
         dataform("tabs", "base");
         for (String name : model.getItems().keySet()) {
             tabbedpaneitem("tabs", name);
-            tabletool("tabs", name.concat("_table"));
+            tabletool(name, name.concat("_table"));
         }
     }
 

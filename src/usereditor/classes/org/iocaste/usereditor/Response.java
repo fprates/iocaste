@@ -28,7 +28,7 @@ public class Response {
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
         TabbedPane tabs = new TabbedPane(container, "tabs");
-        DataForm form = new DataForm(tabs, "identity");
+        DataForm form;
 
         pagecontrol.add("home");
         pagecontrol.add("back");
@@ -36,6 +36,8 @@ public class Response {
         /*
          * identificação
          */
+        tabitem = new TabbedPaneItem(tabs, "idtab");
+        form = new DataForm(tabitem, "identity");
         form.importModel("LOGIN", context.function);
         form.get("ID").setVisible(false);
         secret = form.get("INIT");
@@ -63,13 +65,11 @@ public class Response {
             break;
         }
         
-        tabitem = new TabbedPaneItem(tabs, "idtab");
-        tabitem.set(form.getHtmlName());
-        
         /*
          * tarefas
          */
-        ttdata = new TableToolData(tabs, "tasks");
+        tabitem = new TabbedPaneItem(tabs, "taskstab");
+        ttdata = new TableToolData(tabitem, "tasks");
         ttdata.model = "USER_TASKS_GROUPS";
         ttdata.show = new String[] {"GROUP"};
         ttdata.objects = context.userdata.tasks;
@@ -88,13 +88,12 @@ public class Response {
         }
         
         context.taskshelper = new TableTool(context, ttdata);
-        tabitem = new TabbedPaneItem(tabs, "taskstab");
-        tabitem.set(ttdata.name);
         
         /*
          * perfis
          */
-        ttdata = new TableToolData(tabs, "profiles");
+        tabitem = new TabbedPaneItem(tabs, "profiletab");
+        ttdata = new TableToolData(tabitem, "profiles");
         ttdata.model = "USER_AUTHORITY";
         ttdata.show = new String[] {"PROFILE"};
         ttdata.objects = context.userdata.profiles;
@@ -113,9 +112,6 @@ public class Response {
         }
 
         context.profileshelper = new TableTool(context, ttdata);
-        tabitem = new TabbedPaneItem(tabs, "profiletab");
-        tabitem.set(ttdata.name);
-
         context.view.setFocus(secret);
         context.view.setTitle(Context.TITLE[context.mode]);
     }

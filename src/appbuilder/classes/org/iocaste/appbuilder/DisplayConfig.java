@@ -41,7 +41,6 @@ public class DisplayConfig extends AbstractViewConfig {
             case "base":
                 for (DocumentModelItem item : items)
                     form.get(item.getName()).setVisible(!model.isKey(item));
-                getTabbedItem("tabs", "basetab").set(form.getHtmlName());
                 break;
             }
         }
@@ -52,7 +51,6 @@ public class DisplayConfig extends AbstractViewConfig {
             tabletool = getTableTool(name.concat("_table"));
             tabletool.model = model.getName();
             tabletool.mode = TableTool.DISPLAY;
-            getTabbedItem("tabs", name).set(tabletool.name);
         }
     }
 }
