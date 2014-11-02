@@ -172,7 +172,7 @@ public class HtmlRenderer {
      * @param view dados da visão
      * @return código html da visão
      */
-    public final String[] run(View view, TrackingData tracking) {
+    public final List<String> run(View view, TrackingData tracking) {
         Config config;
         List<String> html = new ArrayList<>();
         List<XMLElement> tags = new ArrayList<>();
@@ -207,7 +207,7 @@ public class HtmlRenderer {
         html.add(htmltag.toString());
         actions = config.getActions();
         
-        return html.toArray(new String[0]);
+        return html;
     }
     
     /**

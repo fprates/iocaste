@@ -1,8 +1,10 @@
 package org.iocaste.internal;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -155,9 +157,10 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
      */
     protected final void render(HtmlRenderer renderer, HttpServletResponse resp,
             View view, TrackingData tracking) throws Exception {
+        BufferedOutputStream bos;
         byte[] content;
         OutputStream os;
-        String[] text;
+        List<String> text;
         PrintWriter writer;
         
         if (view == null)
@@ -173,18 +176,19 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             resp.reset();
             configResponse(resp, view);
             os = resp.getOutputStream();
+            bos = new BufferedOutputStream(os);
             
             content = view.getContent();
             if (content != null) {
-                os.write(content);
+                bos.write(content);
                 resp.setContentLength(content.length);
             } else {
                 for (String line : view.getPrintLines())
-                    os.write(line.getBytes());
+                    bos.write(line.getBytes());
             }
             
-            os.flush();
-            os.close();
+            bos.flush();
+            bos.close();
             
             return;
         }
