@@ -891,6 +891,7 @@ public class PageRenderer extends AbstractRenderer {
         AppContext appctx;
         View view;
         Map<String, Object> parameters;
+        boolean hasrendered;
 
         /*
          * prepara a visão para renderização
@@ -939,9 +940,9 @@ public class PageRenderer extends AbstractRenderer {
         tracking.sequence = pagectx.getSequence();
         tracking.sessionid = sessionid;
         tracking.contexturl = pagectx.getContextUrl();
-        render(renderer, resp, view, tracking);
-        
-        pagectx.setActions(renderer.getActions());
+        hasrendered = render(renderer, resp, view, tracking);
+        if (hasrendered)
+            pagectx.setActions(renderer.getActions());
     }
     
     /**

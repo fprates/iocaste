@@ -155,8 +155,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
      * @param tracking
      * @throws Exception
      */
-    protected final void render(HtmlRenderer renderer, HttpServletResponse resp,
-            View view, TrackingData tracking) throws Exception {
+    protected final boolean render(HtmlRenderer renderer,
+            HttpServletResponse resp, View view, TrackingData tracking)
+                    throws Exception {
         BufferedOutputStream bos;
         byte[] content;
         OutputStream os;
@@ -189,8 +190,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             
             bos.flush();
             bos.close();
-            
-            return;
+            return false;
         }
         
         configResponse(resp, view);
@@ -202,6 +202,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         
         writer.flush();
         writer.close();
+        return true;
     }
 
     /*
