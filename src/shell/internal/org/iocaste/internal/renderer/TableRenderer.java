@@ -132,13 +132,17 @@ public class TableRenderer extends Renderer {
             tabletag.addChild(tag);
         }
         
+        divtag = new XMLElement("div");
+        divtag.add("style", table.getBorderStyle());
+        divtag.addChild(tabletag);
+        
         /*
          * componentes de entrada de colunas invisíveis são tratados
          * como parâmetros, pois precisam ter seu conteúdo armazenado.
          */
         locale = table.getLocale();
         for (InputComponent input : hidden) {
-            parameter = new Parameter(config.form, input.getHtmlName());
+            parameter = new Parameter(config.getView(), input.getHtmlName());
             parameter.setModelItem(input.getModelItem());
             parameter.setLocale(locale);
             
@@ -147,12 +151,8 @@ public class TableRenderer extends Renderer {
             else
                 parameter.set(input.get());
             
-//            config.addToForm(ParameterRenderer.render(parameter));
+            divtag.addChild(ParameterRenderer.render(parameter));
         }
-        
-        divtag = new XMLElement("div");
-        divtag.add("style", table.getBorderStyle());
-        divtag.addChild(tabletag);
         return divtag;
     }
 }
