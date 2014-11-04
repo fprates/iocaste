@@ -229,11 +229,13 @@ public class TableToolRenderer extends AbstractFunction {
         context.table = new Table(
                 container, context.data.name.concat("_table"));
         context.table.setVisibleLines(context.data.vlines);
+        context.table.setHeader(!context.data.noheader);
         context.data.last = 0;
         
         model(context);
         setMode(context);
         setObjects(context);
+        
         result = new HashMap<>();
         result.put("container", container);
         result.put("data", context.data);

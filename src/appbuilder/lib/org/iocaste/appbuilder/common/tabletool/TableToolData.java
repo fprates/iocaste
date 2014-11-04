@@ -13,7 +13,7 @@ public class TableToolData implements Serializable {
     private Container container;
     public String name;
     public String borderstyle, itemcolumn, model;
-    public boolean mark, enabled;
+    public boolean mark, enabled, noheader;
     public int vlines, step, last, increment;
     public byte mode;
     public ExtendedObject[] objects;
