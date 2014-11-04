@@ -116,6 +116,11 @@ public abstract class AbstractManager implements Manager {
         DocumentModel model;
         
         model = cmodel.getItems().get(name);
+        if (model == null)
+            throw new RuntimeException(new StringBuilder("items '").
+                    append("' undefined for cmodel ").
+                    append(cmodel.getName()).toString());
+        
         item = model.getModelItem(field);
         reference = item.getReference();
         if (reference == null)
