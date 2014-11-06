@@ -24,11 +24,9 @@ package org.iocaste.shell.common;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Implementação de camada de visão
@@ -44,10 +42,8 @@ public class View implements Serializable {
     private String title, appname, pagename, actioncontrol;
     private String contenttype, messagetext;
     private MessageSource messages;
-    private Set<String> initparams;
     private List<String> lines;
     private List<Container> containers;
-    private Map<String, Object> parameters;
     private Map<String, String> headervalues;
     private Map<String, Map<String, String>> sheet;
     private Map<String, Element> elements;
@@ -56,10 +52,8 @@ public class View implements Serializable {
     
     public View(String appname, String pagename) {
         lines = new ArrayList<>();
-        parameters = new HashMap<>();
         headervalues = new HashMap<>();
         containers = new ArrayList<>();
-        initparams = new HashSet<>();
         elements = new HashMap<>();
         
         this.appname = appname;
@@ -81,27 +75,9 @@ public class View implements Serializable {
     public final void clear() {
         containers.clear();
         elements.clear();
-        parameters.clear();
-        initparams.clear();
         lines.clear();
         messagetext = null;
         messagetype = null;
-    }
-    
-    /**
-     * Limpa parâmetros da visão.
-     */
-    public final void clearExports() {
-        parameters.clear();
-    }
-    
-    /**
-     * 
-     */
-    public final void clearInitExports() {
-        for (String name : initparams)
-            parameters.remove(name);
-        initparams.clear();
     }
     
     /**
@@ -138,18 +114,6 @@ public class View implements Serializable {
     		return false;
     	
     	return true;
-    }
-    
-    /**
-     * Exporta parâmetro para próxima visão.
-     * @param name nome
-     * @param value valor
-     */
-    public final void export(String name, Object value) {
-        if (parameters.containsKey(name))
-            parameters.remove(name);
-        
-        parameters.put(name, value);
     }
     
     public final String getActionControl() {
@@ -207,14 +171,6 @@ public class View implements Serializable {
     }
     
     /**
-     * Retorna parâmetros exportáveis.
-     * @return nomes de parâmetros
-     */
-    public final String[] getExportable() {
-        return parameters.keySet().toArray(new String[0]);
-    }
-    
-    /**
      * Ajusta elemento a receber foco.
      * @return
      */
@@ -237,14 +193,6 @@ public class View implements Serializable {
      */
     public final String getHeader(String key) {
         return headervalues.get(key);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final String[] getInitParameters() {
-        return initparams.toArray(new String[0]);
     }
     
     /**
@@ -276,16 +224,6 @@ public class View implements Serializable {
      */
     public final String getPageName() {
         return pagename;
-    }
-    
-    /**
-     * Retorna valor do parâmetro da visão.
-     * @param name nome
-     * @return value valor
-     */
-    @SuppressWarnings("unchecked")
-    public final <T> T getParameter(String name) {
-        return (T)parameters.get(name);
     }
     
     /**
@@ -416,20 +354,6 @@ public class View implements Serializable {
      */
     public final void setMessages(MessageSource messages) {
         this.messages = messages;
-    }
-
-    /**
-     * 
-     * @param name
-     * @param value
-     */
-    public final void setParameter(String name, Object value) {
-        if (initparams.contains(name))
-            parameters.remove(name);
-        else
-            initparams.add(name);
-        
-        parameters.put(name, value);
     }
     
     /**

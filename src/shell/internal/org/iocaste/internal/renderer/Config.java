@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.iocaste.internal.PageContext;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.ControlComponent;
@@ -15,6 +16,7 @@ import org.iocaste.shell.common.View;
 public class Config {
     public Function function;
     public Form form;
+    public PageContext pagectx;
     private String currentaction, currentform, pagetrack;
     private String dbname, username;
     private int logid;

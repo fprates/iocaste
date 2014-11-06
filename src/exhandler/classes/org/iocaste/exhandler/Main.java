@@ -61,8 +61,8 @@ public class Main extends AbstractPage {
     public void main() {
         Container[] containers;
         PageControl pagecontrol;
-        Exception ex = context.view.getParameter("exception");
-        View exview = context.view.getParameter("exview");
+        Exception ex = getParameter("exception");
+        View exview = getParameter("exview");
         Form form = new Form(context.view, "main");
         
         pagecontrol = new PageControl(form);
@@ -132,22 +132,10 @@ public class Main extends AbstractPage {
      * @param exview
      */
     private void printOffensiveView(View view, View exview) {
-        String[] keys;
-        
         view.print(concatenate(context.messages.get("module"), ": ",
                 checkunknown(exview.getAppName())));
         view.print(concatenate(context.messages.get("page"), ": ",
                 checkunknown(exview.getPageName())));
-        
-        keys = exview.getExportable();
-        if (keys.length > 0) {
-            view.print(context.messages.get("parameters"));
-            
-            for (String key : keys)
-                view.print(concatenate("- ", key, ": ",
-                        exview.getParameter(key)));
-        }
-        
         view.print("");
     }
     

@@ -61,6 +61,13 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
+     * 
+     */
+    public final void clearExports() {
+        state.parameters.clear();
+    }
+    
+    /**
      * Não salva página na pilha de chamada.
      */
     public final void dontPushPage() {
@@ -130,6 +137,24 @@ public abstract class AbstractPage extends AbstractFunction {
         
         return state;
     }
+
+    
+    /**
+     * Exporta parâmetro para próxima visão.
+     * @param name nome
+     * @param value valor
+     */
+    public final void export(String name, Object value) {
+        if (state.parameters.containsKey(name))
+            state.parameters.remove(name);
+        
+        state.parameters.put(name, value);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public final <T> T getParameter(String name) {
+        return (T)state.parameters.get(name);
+    }
     
     public final String getRedirectedApp() {
         return state.rapp;
@@ -163,6 +188,7 @@ public abstract class AbstractPage extends AbstractFunction {
         Iocaste iocaste = new Iocaste(this);
         Locale locale = iocaste.getLocale();
 
+        state.parameters = message.get("parameters");
         state.keepview = false;
         state.reloadable = false;
         state.rapp = null;

@@ -290,8 +290,8 @@ public abstract class AbstractActionHandler {
         if (state == null)
             throw new RuntimeException(task.concat(" is an invalid task."));
         
-        for (String name : state.view.getExportable())
-            context.view.setParameter(name, state.view.getParameter(name));
+        for (String name : state.parameters.keySet())
+            context.function.export(name, state.parameters.get(name));
         
         context.function.exec(state.rapp, state.rpage);
     }

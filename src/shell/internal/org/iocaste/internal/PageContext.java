@@ -12,12 +12,10 @@ import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.View;
 
 public class PageContext {
-    private String[] initparams;
     private View view;
     private AppContext appctx;
     private String name, username, contexturl;
     private boolean reloadable, initialize, keepview;
-    private Map<String, Object> parameters;
     private List<FileItem> files;
     private Set<String> actions;
     private int logid;
@@ -26,6 +24,8 @@ public class PageContext {
     private ControlComponent shcontrol;
     public List<String> inputs;
     public List<MultipartElement> mpelements;
+    public Map<String, Object> parameters;
+    public Set<String> initparams;
     
     public PageContext(String name) {
         parameters = new HashMap<>();
@@ -37,22 +37,6 @@ public class PageContext {
         sequence = 0;
         
         this.name = name;
-    }
-    
-    /**
-     * 
-     * @param name
-     * @param value
-     */
-    public final void addParameter(String name, Object value) {
-        parameters.put(name, value);
-    }
-    
-    /**
-     * 
-     */
-    public final void clearParameters() {
-        parameters.clear();
     }
     
     /**
@@ -107,14 +91,6 @@ public class PageContext {
      * 
      * @return
      */
-    public final String[] getInitParameters() {
-        return initparams;
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final int getLogid() {
         return logid;
     }
@@ -125,14 +101,6 @@ public class PageContext {
      */
     public final String getName() {
         return name;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final Map<String, Object> getParameters() {
-        return parameters;
     }
     
     /**
@@ -230,14 +198,6 @@ public class PageContext {
      */
     public final void setInitialize(boolean initialize) {
         this.initialize = initialize;
-    }
-    
-    /**
-     * 
-     * @param initparams
-     */
-    public final void setInitParameters(String[] initparams) {
-        this.initparams = initparams;
     }
     
     /**

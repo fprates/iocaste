@@ -13,10 +13,10 @@ import org.iocaste.shell.common.View;
 
 public class Request {
 
-    public static final View choose(View vdata) {
-        SearchHelp sh = vdata.getParameter("sh");
+    public static final View choose(Context context) {
+        SearchHelp sh = context.function.getParameter("sh");
         View view = sh.getView();
-        Parameter value = vdata.getElement("value");
+        Parameter value = context.view.getElement("value");
         InputComponent input = view.getElement(sh.getInputName());
         
         if (input.isEnabled())

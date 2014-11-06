@@ -68,8 +68,8 @@ public class Main extends AbstractPage {
     }
     
     public final void export(View view) {
-        List<String> text = view.getParameter("text");
-        String filename = view.getParameter("filename");
+        List<String> text = getParameter("text");
+        String filename = getParameter("filename");
         
         for (String line : text)
             view.print(line.concat("\n"));

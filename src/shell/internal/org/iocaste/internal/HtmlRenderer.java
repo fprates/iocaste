@@ -31,6 +31,7 @@ public class HtmlRenderer {
     private MessageSource msgsource;
     private ControlComponent shcontrol;
     private Function function;
+    private PageContext pagectx;
     
     public HtmlRenderer() {
         String line;
@@ -182,6 +183,7 @@ public class HtmlRenderer {
         
         config = new Config();
         config.function = function;
+        config.pagectx = pagectx;
         config.setView(view);
         config.setUsername(username, tracking.logid);
         config.addMessageSource(view.getMessages());
@@ -248,6 +250,14 @@ public class HtmlRenderer {
      */
     public final void setMessageType(Const msgtype) {
         this.msgtype = msgtype;
+    }
+    
+    /**
+     * 
+     * @param pagectx
+     */
+    public final void setPageContext(PageContext pagectx) {
+        this.pagectx = pagectx;
     }
     
     /**

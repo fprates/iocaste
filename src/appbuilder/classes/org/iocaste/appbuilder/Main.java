@@ -21,7 +21,7 @@ public class Main extends AbstractPageBuilder {
      */
     @Override
     public final void config(PageBuilderContext context) throws Exception {
-        String module = context.view.getParameter("module");
+        String module = getParameter("module");
         
         if (module == null)
             loadManagedModule(context);
@@ -48,8 +48,8 @@ public class Main extends AbstractPageBuilder {
         AbstractActionHandler save;
         String create, create1, edit, edit1, display, display1, entityaction;
         ExtendedContext extcontext;
-        String name = context.view.getParameter("name");
-        String cmodel = context.view.getParameter("cmodel");
+        String name = getParameter("name");
+        String cmodel = getParameter("cmodel");
         Manager manager = managerInstance(cmodel);
         
         create = name.concat("create");

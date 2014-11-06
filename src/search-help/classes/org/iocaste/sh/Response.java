@@ -122,7 +122,7 @@ public class Response {
         datacnt = new StandardContainer(stdcnt, "shdatacnt");
         datacnt.setStyleClass("shdatacnt");
         
-        sh = context.view.getParameter("sh");
+        sh = context.function.getParameter("sh");
         name = sh.getModelName();
         model = documents.getModel(name);
 //        addCriteria(sh, stdcnt, model, context);

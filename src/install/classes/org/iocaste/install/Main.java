@@ -374,10 +374,6 @@ public class Main extends AbstractRenderer {
         if (pagectx_ == null)
             pagectx_ = createPageContext(contextdata);
         
-        pagectx_.clearParameters();
-        for (String name : config.state.view.getExportable())
-            pagectx_.addParameter(name, config.state.view.getParameter(name));
-        
         return pagectx_;
     }
     
@@ -413,7 +409,6 @@ public class Main extends AbstractRenderer {
         Input inputdata;
         AppContext appctx;
         View viewdata;
-        Map<String, Object> parameters;
         Message message = new Message("get_view_data");
 
         appctx = pagectx.getAppContext();
@@ -432,7 +427,6 @@ public class Main extends AbstractRenderer {
             
             message.add("app", appctx.getName());
             message.add("page", pagectx.getName());
-            message.add("parameters", pagectx.getParameters());
             message.setSessionid(getComplexId(sessionid, logid));
             
             viewdata = (View)installapp.run(message);
@@ -444,10 +438,6 @@ public class Main extends AbstractRenderer {
             inputdata.register();
             
             pagectx.setViewData(viewdata);
-        } else {
-            parameters = pagectx.getParameters();
-            for (String key : parameters.keySet())
-                viewdata.export(key, parameters.get(key));
         }
 
         /*

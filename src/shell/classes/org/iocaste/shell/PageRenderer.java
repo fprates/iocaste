@@ -134,8 +134,8 @@ public class PageRenderer extends AbstractRenderer {
         contextdata.initialize = true;
         
         pagectx = createPageContext(contextdata);
-        pagectx.addParameter("exception", exception);
-        pagectx.addParameter("exview", expagectx.getViewData());
+        pagectx.parameters.put("exception", exception);
+        pagectx.parameters.put("exview", expagectx.getViewData());
         pagectx.setUsername(expagectx.getUsername());
         
         return pagectx;
@@ -174,8 +174,7 @@ public class PageRenderer extends AbstractRenderer {
         int logid;
         Input input;
         Message message;
-        Map<String, Object> iparams, parameters;
-        String[] initparams;
+        Map<String, Object> parameters;
         AppContext appctx;
         View view;
         Service service;
@@ -204,21 +203,17 @@ public class PageRenderer extends AbstractRenderer {
         message = new Message("get_view_data");
         message.add("view", view);
         message.add("init", pagectx.isInitializableView());
+        message.add("parameters", pagectx.parameters);
         message.setSessionid(complexid);
         
-        initparams = pagectx.getInitParameters();
-        if (initparams == null || initparams.length == 0) {
-            parameters = pagectx.getParameters();
-        } else {
+        if (pagectx.initparams != null) {
             parameters = new HashMap<>();
-            iparams = pagectx.getParameters();
-            for (String name : initparams)
-                parameters.put(name, iparams.get(name));
-            pagectx.setInitParameters(null);
+            for (String name : pagectx.initparams)
+                parameters.put(name, pagectx.parameters.get(name));
+            pagectx.initparams = null;
+            pagectx.parameters = parameters;
         }
         
-        for (String name : parameters.keySet())
-            view.export(name, parameters.get(name));
         try {
             service = new Service(complexid, composeUrl(appname));
             view = (View)service.call(message);
@@ -315,10 +310,10 @@ public class PageRenderer extends AbstractRenderer {
         contextdata.initialize = true;
         
         pagectx = createPageContext(contextdata);
-        pagectx.addParameter("username", ticket.getUsername());
-        pagectx.addParameter("secret", ticket.getSecret());
-        pagectx.addParameter("locale", ticket.getLocale());
-        pagectx.addParameter("ticket", ticketcode);
+        pagectx.parameters.put("username", ticket.getUsername());
+        pagectx.parameters.put("secret", ticket.getSecret());
+        pagectx.parameters.put("locale", ticket.getLocale());
+        pagectx.parameters.put("ticket", ticketcode);
         return pagectx;
     }
     
@@ -762,17 +757,11 @@ public class PageRenderer extends AbstractRenderer {
             pagectx_.setReloadableView(false);
         }
         
-        pagectx_.setInitParameters(config.state.view.getInitParameters());
-        pagectx_.clearParameters();
+        pagectx_.initparams = config.state.initparams;
         pagectxview = pagectx_.getViewData();
-        
         if (pagectxview != null)
             pagectxview.message(config.state.view.getMessageType(),
                     config.state.view.getTranslatedMessage());
-        
-        for (String name : config.state.view.getExportable())
-            pagectx_.addParameter(name, config.state.view.getParameter(name));
-        config.state.view.clearInitExports();
         
         if (isConnected(contextdata)) {
             execute(appname, config.sessionid);
@@ -893,7 +882,6 @@ public class PageRenderer extends AbstractRenderer {
         Const messagetype;
         AppContext appctx;
         View view;
-        Map<String, Object> parameters;
         boolean hasrendered;
 
         /*
@@ -912,11 +900,8 @@ public class PageRenderer extends AbstractRenderer {
                 (view == null || pagectx.isReloadableView())) {
             view = createView(sessionid, pagectx);
             pagectx.setViewData(view);
-        } else {
-            parameters = pagectx.getParameters();
-            for (String key : parameters.keySet())
-                view.export(key, parameters.get(key));
         }
+        
         /*
          * ajusta e chama o renderizador
          */
@@ -930,6 +915,7 @@ public class PageRenderer extends AbstractRenderer {
         renderer.setMessageSource(msgsource);
         renderer.setMessageText(viewmessage);
         renderer.setMessageType(messagetype);
+        renderer.setPageContext(pagectx);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
         
         if (dbname == null)

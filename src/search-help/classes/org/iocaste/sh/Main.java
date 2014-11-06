@@ -33,7 +33,7 @@ public class Main extends AbstractPage {
     }
     
     public final void choose() {
-        updateView(Request.choose(context.view));
+        updateView(Request.choose(context));
         back();
     }
     

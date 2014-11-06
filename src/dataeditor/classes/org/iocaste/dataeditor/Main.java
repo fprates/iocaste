@@ -66,13 +66,13 @@ public class Main extends AbstractPage {
     
     public final void main() {
         String message, model;
-        String action = context.view.getParameter("action");
+        String action = getParameter("action");
         if (action == null) {
             Response.main(context);
             return;
         }
         
-        model = context.view.getParameter("model");
+        model = getParameter("model");
         message = Request.load(model, context);
         if (message != null) {
             Response.main(context);

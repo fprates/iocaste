@@ -38,12 +38,12 @@ public class Request {
         Iocaste iocaste = new Iocaste(context.function);
         ExtendedObject login = form.getObject();
         
-        context.view.clearExports();
+        context.function.clearExports();
         username = login.get("USERNAME");
         secret = login.get("SECRET");
         locale = login.get("LOCALE");
         if (iocaste.login(username, secret, locale)) {
-            context.view.export("username", username);
+            context.function.export("username", username);
             if (iocaste.isInitialSecret())
                 context.function.redirect("changesecretform");
             else

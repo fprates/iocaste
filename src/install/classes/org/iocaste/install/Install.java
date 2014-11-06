@@ -1,7 +1,5 @@
 package org.iocaste.install;
 
-import java.util.Map;
-
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
@@ -33,11 +31,7 @@ public class Install extends AbstractFunction {
         /*
          * TODO poderia ser feito algo melhor do que este hardcode?
          */
-        if (control != null && control.getType() == Const.SEARCH_HELP) {
-            view.export("sh", control);
-            context.state.rapp = "iocaste-search-help";
-            context.state.rpage = "main";
-        } else {
+        if (control == null || control.getType() != Const.SEARCH_HELP) {
             context.view = view;
             context.function = this;
             
@@ -64,10 +58,8 @@ public class Install extends AbstractFunction {
      * @throws Exception
      */
     public final View getViewData(Message message) throws Exception {
-        View view;
         String page = message.getString("page");
         String app = message.getString("app");
-        Map<String, Object> parameters = message.get("parameters");
         
         /*
          * TODO pode ser movido para o servidor
@@ -75,26 +67,21 @@ public class Install extends AbstractFunction {
         if (app == null || page == null)
             throw new IocasteException("page not especified.");
         
-        view = new View(app, page);
-        
-        for (String name : parameters.keySet())
-            view.export(name, parameters.get(name));
-        
-        context.view = view;
+        context.view = new View(app, page);
         context.function = this;
         
         switch (Stages.valueOf(page)) {
         case WELCOME:
-            Welcome.render(view);
+            Welcome.render(context.view);
             break;
         case DBCONFIG:
             DBConfig.render(context);
             break;
         case FINISH:
-            Finish.render(view);
+            Finish.render(context.view);
             break;
         }
         
-        return view;
+        return context.view;
     }
 }

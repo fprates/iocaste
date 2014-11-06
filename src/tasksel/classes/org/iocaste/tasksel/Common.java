@@ -2,7 +2,6 @@ package org.iocaste.tasksel;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.View;
@@ -17,12 +16,12 @@ public class Common {
      * @return
      */
     public static final String[] parseCommand(
-            String command, Function function, View view) {
+            String command, AbstractPage function, View view) {
         String[] parsed;
         ExtendedObject task;
         
         parsed = command.trim().split("\\s");
-        view.clearExports();
+        function.clearExports();
 
         if (parsed[0].length() >= 19) {
             view.message(Const.ERROR, "command.not.found");
@@ -68,7 +67,7 @@ public class Common {
                 if (values.length < 2)
                     break;
                 
-                view.setParameter(values[0], values[1]);
+                function.export(values[0], values[1]);
                 break;
             }
         }

@@ -105,11 +105,12 @@ public class FormRenderer extends Renderer {
         View view = new View("iocaste-search-help", "main");
         StyleSheet stylesheet = config.getView().styleSheetInstance();
         
-        view.setParameter("sh", config.getShControl());
+        config.pagectx.parameters.put("sh", config.getShControl());
         view.setStyleSheet(stylesheet.getElements());
         
         message.add("view", view);
         message.add("init", true);
+        message.add("parameters", config.pagectx.parameters);
         view = (View)service.call(message);
         config.getView().setStyleSheet(view.styleSheetInstance().getElements());
         for (Container container : view.getContainers())
