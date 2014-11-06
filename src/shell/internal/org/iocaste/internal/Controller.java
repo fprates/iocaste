@@ -296,7 +296,7 @@ public class Controller {
          * valor quando marcados. Processa o estado falso deles antes
          * do processamento principal.
          */
-        for (String name : config.state.view.getInputs()) {
+        for (String name : config.pagectx.inputs) {
             value = getString(config.values, name);
             
             if (value != null)

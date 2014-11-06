@@ -45,7 +45,7 @@ public class View implements Serializable {
     private String contenttype, messagetext;
     private MessageSource messages;
     private Set<String> initparams;
-    private List<String> inputs, lines;
+    private List<String> lines;
     private List<MultipartElement> mpelements;
     private List<Container> containers;
     private Map<String, Object> parameters;
@@ -56,7 +56,6 @@ public class View implements Serializable {
     private Locale locale;
     
     public View(String appname, String pagename) {
-        inputs = new ArrayList<>();
         lines = new ArrayList<>();
         parameters = new HashMap<>();
         headervalues = new HashMap<>();
@@ -82,14 +81,6 @@ public class View implements Serializable {
     }
     
     /**
-     * Adiciona componente de entrada.
-     * @param name componente de entrada
-     */
-    public final void addInput(String name) {
-        inputs.add(name);
-    }
-    
-    /**
      * Adiciona elemento multipart.
      * @param elemento
      */
@@ -100,7 +91,6 @@ public class View implements Serializable {
     public final void clear() {
         containers.clear();
         elements.clear();
-        inputs.clear();
         parameters.clear();
         initparams.clear();
         mpelements.clear();
@@ -123,13 +113,6 @@ public class View implements Serializable {
         for (String name : initparams)
             parameters.remove(name);
         initparams.clear();
-    }
-    
-    /**
-     * Limpa componentes de entrada.
-     */
-    public final void clearInputs() {
-        inputs.clear();
     }
     
     public final void clearMultipartElements() {
@@ -277,14 +260,6 @@ public class View implements Serializable {
      */
     public final String[] getInitParameters() {
         return initparams.toArray(new String[0]);
-    }
-    
-    /**
-     * Retorna mapa com componentes de entrada de dados.
-     * @return mapa de componentes.
-     */
-    public final String[] getInputs() {
-        return inputs.toArray(new String[0]);
     }
     
     /**

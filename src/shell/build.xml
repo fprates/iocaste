@@ -11,11 +11,7 @@
         <mkdir dir="${builddir}/${ant.project.name}/classes"/>
         <mkdir dir="${builddir}/${ant.project.name}/internal"/>
 
-        <!-- dependências -->
-        <path id="dependencies-internal">
-            <fileset dir="${basedir}/ext"/>
-        </path>
-    	
+        <!-- dependências -->    	
         <path id="dependencies">
             <fileset dir="${builddir}/core/lib"/>
         	<fileset dir="${builddir}/documents/lib"/>
@@ -48,7 +44,7 @@
         <javac srcdir="${basedir}/src/${ant.project.name}/internal"
             destdir="${builddir}/${ant.project.name}/internal"
             debug="${debug.status}">
-            <classpath refid="dependencies-internal"/>
+            <classpath refid="dependencies"/>
         </javac>
         
         <jar basedir="${builddir}/${ant.project.name}/internal"

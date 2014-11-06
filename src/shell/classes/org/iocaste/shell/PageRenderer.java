@@ -13,12 +13,15 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iocaste.internal.AbstractRenderer;
+import org.iocaste.internal.AppContext;
 import org.iocaste.internal.Common;
 import org.iocaste.internal.Controller;
 import org.iocaste.internal.HtmlRenderer;
 import org.iocaste.internal.Input;
 import org.iocaste.internal.InputStatus;
 import org.iocaste.internal.ControllerData;
+import org.iocaste.internal.PageContext;
+import org.iocaste.internal.SessionContext;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Handler;
@@ -225,6 +228,7 @@ public class PageRenderer extends AbstractRenderer {
             input.view.clearMultipartElements();
             input.container = null;
             input.function = this;
+            input.pagectx = pagectx;
             
             /*
              * deixa registerInputs() antes do commit(),
@@ -690,6 +694,7 @@ public class PageRenderer extends AbstractRenderer {
         config.logid = getLogid(pagetrack);
         config.sessionid = getComplexId(sessionid, config.logid);
         config.servername = getServerName();
+        config.pagectx = pagectx;
         callController(config);
         
         /*
@@ -701,7 +706,7 @@ public class PageRenderer extends AbstractRenderer {
             pushPage(config.sessionid, config.state.view.getAppName(),
                     config.state.view.getPageName());
         
-        config.state.view.clearInputs();
+        config.pagectx.inputs.clear();
         updateView(config.sessionid, config.state.view, this);
         
         /*
@@ -963,6 +968,7 @@ public class PageRenderer extends AbstractRenderer {
         input.view.clearMultipartElements();
         input.container = null;
         input.function = function;
+        input.pagectx = appcontext.getPageContext(view.getPageName());
         
         for (Container container : view.getContainers()) {
             input.element = container;

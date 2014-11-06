@@ -1,4 +1,4 @@
-package org.iocaste.install;
+package org.iocaste.internal;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,26 +1,37 @@
-package org.iocaste.install;
+package org.iocaste.internal;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.fileupload.FileItem;
+import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.View;
 
 public class PageContext {
+    private String[] initparams;
     private View view;
     private AppContext appctx;
-    private String name, username;
-    private boolean reloadable;
+    private String name, username, contexturl;
+    private boolean reloadable, initialize, keepview;
     private Map<String, Object> parameters;
+    private List<FileItem> files;
     private Set<String> actions;
     private int logid;
     private byte error;
+    private long sequence;
+    private ControlComponent shcontrol;
+    public List<String> inputs;
     
     public PageContext(String name) {
-        parameters =  new HashMap<>();
-        reloadable = false;
+        parameters = new HashMap<>();
+        inputs = new ArrayList<>();
+        reloadable = true;
         actions = null;
         logid = 0;
+        sequence = 0;
         
         this.name = name;
     }
@@ -53,8 +64,48 @@ public class PageContext {
      * 
      * @return
      */
+    public final String getContextUrl() {
+        return contexturl;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final byte getError() {
         return error;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final List<FileItem> getFiles() {
+        return files;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final ControlComponent getShControl() {
+        return shcontrol;
+    }
+    
+    /**
+     * Indica se a visão foi inicializada.
+     * @return true, se a visão foi inicializada.
+     */
+    public final boolean isInitializableView() {
+        return initialize;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String[] getInitParameters() {
+        return initparams;
     }
     
     /**
@@ -79,6 +130,14 @@ public class PageContext {
      */
     public final Map<String, Object> getParameters() {
         return parameters;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final long getSequence() {
+        return sequence;
     }
     
     /**
@@ -116,6 +175,14 @@ public class PageContext {
     
     /**
      * 
+     * @return
+     */
+    public final boolean keepView() {
+        return keepview;
+    }
+    
+    /**
+     * 
      * @param actions
      */
     public final void setActions(Set<String> actions) {
@@ -132,10 +199,50 @@ public class PageContext {
     
     /**
      * 
+     * @param contexturl
+     */
+    public final void setContextUrl(String contexturl) {
+        this.contexturl = contexturl;
+    }
+    
+    /**
+     * 
      * @param error
      */
     public final void setError(byte error) {
         this.error = error;
+    }
+    
+    /**
+     * 
+     * @param files
+     */
+    public final void setFiles(List<FileItem> files) {
+        this.files = files;
+    }
+    
+    /**
+     * Define estado da inicialização da visão.
+     * @param initialized: true, para visão inicializada.
+     */
+    public final void setInitialize(boolean initialize) {
+        this.initialize = initialize;
+    }
+    
+    /**
+     * 
+     * @param initparams
+     */
+    public final void setInitParameters(String[] initparams) {
+        this.initparams = initparams;
+    }
+    
+    /**
+     * 
+     * @param keepview
+     */
+    public final void setKeepView(boolean keepview) {
+        this.keepview = keepview;
     }
     
     /**
@@ -152,6 +259,22 @@ public class PageContext {
      */
     public final void setReloadableView(boolean reloadable) {
         this.reloadable = reloadable;
+    }
+    
+    /**
+     * 
+     * @param sequence
+     */
+    public final void setSequence(long sequence) {
+        this.sequence = sequence;
+    }
+    
+    /**
+     * 
+     * @param shcontrol
+     */
+    public final void setShControl(ControlComponent shcontrol) {
+        this.shcontrol = shcontrol;
     }
     
     /**

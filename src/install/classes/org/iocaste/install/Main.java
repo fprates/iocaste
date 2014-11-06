@@ -10,11 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.iocaste.internal.AbstractRenderer;
+import org.iocaste.internal.AppContext;
 import org.iocaste.internal.Controller;
 import org.iocaste.internal.ControllerData;
 import org.iocaste.internal.HtmlRenderer;
 import org.iocaste.internal.Input;
 import org.iocaste.internal.InputStatus;
+import org.iocaste.internal.PageContext;
+import org.iocaste.internal.SessionContext;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Handler;
@@ -24,6 +27,7 @@ import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.MessageSource;
+import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewState;
 
@@ -264,7 +268,7 @@ public class Main extends AbstractRenderer {
      * @param getSessionId()
      * @return
      */
-    public static final String[] home(String sessionid) {
+    public static final PageStackItem home(String sessionid) {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
         
@@ -277,7 +281,7 @@ public class Main extends AbstractRenderer {
      * @param logid
      * @return
      */
-    public static final String[] popPage(String sessionid) {
+    public static final PageStackItem popPage(String sessionid) {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
         
@@ -332,6 +336,7 @@ public class Main extends AbstractRenderer {
         config.sessionid = getComplexId(sessionid, config.logid);
         config.state = new ViewState();
         config.state.view = pagectx.getViewData();
+        config.pagectx = pagectx;
         callController(config);
         
         action = config.state.view.getElement(actionname);
@@ -340,7 +345,7 @@ public class Main extends AbstractRenderer {
             pushPage(config.sessionid, config.state.view.getAppName(),
                     config.state.view.getPageName());
         
-        config.state.view.clearInputs();
+        config.pagectx.inputs.clear();
         
         inputdata = new Input();
         inputdata.view = config.state.view;

@@ -9,6 +9,7 @@ import org.iocaste.shell.common.ViewState;
 public class ControllerData {
     public ViewState state;
     public Map<String, ?> values;
+    public PageContext pagectx;
     public Function function;
     public String sessionid, contextname, servername, contexturl;
     public int logid;

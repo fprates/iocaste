@@ -25,6 +25,7 @@ public class Input {
     public Container container;
     public Function function;
     public boolean enablecustom;
+    public PageContext pagectx;
 
     public final void register() {
         InputData data = new InputData();
@@ -34,6 +35,7 @@ public class Input {
         data.function = function;
         data.view = view;
         data.enablecustom = enablecustom;
+        data.pagectx = pagectx;
         
         register(data);
     }
@@ -148,6 +150,8 @@ public class Input {
             inputdata_.function = inputdata.function;
             inputdata_.enablecustom = inputdata.enablecustom;
             inputdata_.inputdisabled = inputdata.inputdisabled;
+            inputdata_.pagectx = inputdata.pagectx;
+            
             if (!inputdata_.enablecustom && container.isRemote())
                 inputdata_.inputdisabled = true;
                 
@@ -165,7 +169,7 @@ public class Input {
         if (inputdata.element.isDataStorable()) {
             input = (InputComponent)inputdata.element;
             if (!inputdata.inputdisabled)
-                inputdata.view.addInput(input.getHtmlName());
+                inputdata.pagectx.inputs.add(input.getHtmlName());
             
             modelitem = input.getModelItem();
             if (input.getSearchHelp() == null && modelitem != null &&
@@ -174,8 +178,8 @@ public class Input {
             
             if (input.isValueRangeComponent()) {
                 rinput = (RangeInputComponent)input;
-                inputdata.view.addInput(rinput.getHighHtmlName());
-                inputdata.view.addInput(rinput.getLowHtmlName());
+                inputdata.pagectx.inputs.add(rinput.getHighHtmlName());
+                inputdata.pagectx.inputs.add(rinput.getLowHtmlName());
             }
         }
         
@@ -192,4 +196,5 @@ class InputData {
     public Container container;
     public Function function;
     public boolean enablecustom, inputdisabled;
+    public PageContext pagectx;
 }
