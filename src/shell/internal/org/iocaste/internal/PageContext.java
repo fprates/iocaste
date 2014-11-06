@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.fileupload.FileItem;
 import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.View;
 
 public class PageContext {
@@ -24,10 +25,12 @@ public class PageContext {
     private long sequence;
     private ControlComponent shcontrol;
     public List<String> inputs;
+    public List<MultipartElement> mpelements;
     
     public PageContext(String name) {
         parameters = new HashMap<>();
         inputs = new ArrayList<>();
+        mpelements = new ArrayList<>();
         reloadable = true;
         actions = null;
         logid = 0;

@@ -184,7 +184,7 @@ public class Input {
         }
         
         if (inputdata.element.hasMultipartSupport())
-            inputdata.view.addMultipartElement(
+            inputdata.pagectx.mpelements.add(
                     (MultipartElement)inputdata.element);
     }
     

@@ -225,10 +225,11 @@ public class PageRenderer extends AbstractRenderer {
             
             input = new Input();
             input.view = view;
-            input.view.clearMultipartElements();
             input.container = null;
             input.function = this;
             input.pagectx = pagectx;
+            input.pagectx.inputs.clear();
+            input.pagectx.mpelements.clear();
             
             /*
              * deixa registerInputs() antes do commit(),
@@ -793,13 +794,10 @@ public class PageRenderer extends AbstractRenderer {
             HttpServletRequest req, PageContext pagectx) throws Exception {
         String[] values;
         String filename, fieldname, value;
-        MultipartElement[] elements;
         FileItem fileitem;
         Map<String, String[]> parameters;
         
         parameters = new HashMap<>();
-        elements = pagectx.getViewData().getMultipartElements();
-        
         for (Object object : pagectx.getFiles()) {
         	fileitem = (FileItem)object;
             fieldname = fileitem.getFieldName();
@@ -816,7 +814,7 @@ public class PageRenderer extends AbstractRenderer {
                 continue;
             }
 
-            for (MultipartElement element : elements) {
+            for (MultipartElement element : pagectx.mpelements) {
                 if (!fieldname.equals(element.getHtmlName()))
                     continue;
                 
@@ -965,10 +963,11 @@ public class PageRenderer extends AbstractRenderer {
         Input input = new Input();
         
         input.view = view;
-        input.view.clearMultipartElements();
         input.container = null;
         input.function = function;
         input.pagectx = appcontext.getPageContext(view.getPageName());
+        input.pagectx.inputs.clear();
+        input.pagectx.mpelements.clear();
         
         for (Container container : view.getContainers()) {
             input.element = container;

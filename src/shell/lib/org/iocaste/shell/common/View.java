@@ -46,7 +46,6 @@ public class View implements Serializable {
     private MessageSource messages;
     private Set<String> initparams;
     private List<String> lines;
-    private List<MultipartElement> mpelements;
     private List<Container> containers;
     private Map<String, Object> parameters;
     private Map<String, String> headervalues;
@@ -60,7 +59,6 @@ public class View implements Serializable {
         parameters = new HashMap<>();
         headervalues = new HashMap<>();
         containers = new ArrayList<>();
-        mpelements = new ArrayList<>();
         initparams = new HashSet<>();
         elements = new HashMap<>();
         
@@ -80,20 +78,11 @@ public class View implements Serializable {
         elements.put(container.getHtmlName(), container);
     }
     
-    /**
-     * Adiciona elemento multipart.
-     * @param elemento
-     */
-    public final void addMultipartElement(MultipartElement element) {
-        mpelements.add(element);
-    }
-    
     public final void clear() {
         containers.clear();
         elements.clear();
         parameters.clear();
         initparams.clear();
-        mpelements.clear();
         lines.clear();
         messagetext = null;
         messagetype = null;
@@ -113,10 +102,6 @@ public class View implements Serializable {
         for (String name : initparams)
             parameters.remove(name);
         initparams.clear();
-    }
-    
-    public final void clearMultipartElements() {
-        mpelements.clear();
     }
     
     /**
@@ -283,14 +268,6 @@ public class View implements Serializable {
      */
     public final Const getMessageType() {
         return messagetype;
-    }
-    
-    /**
-     * Retorna elementos multipart.
-     * @return elementos
-     */
-    public final MultipartElement[] getMultipartElements() {
-        return mpelements.toArray(new MultipartElement[0]);
     }
     
     /**
