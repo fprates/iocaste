@@ -641,14 +641,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         
         pagectx_.setInitialize(config.state.initialize);
         pagectx_.setSequence(sequence);
-        if (config.state != null) {
-            pagectx_.setKeepView(config.state.keepview);
-            pagectx_.setReloadableView(config.state.reloadable);
-        } else {
-            pagectx_.setKeepView(true);
-            pagectx_.setReloadableView(false);
-        }
-        
+        pagectx_.setKeepView(config.state.keepview);
+        pagectx_.setReloadableView(config.state.reloadable);
+        pagectx_.parameters = config.state.parameters;
         pagectx_.initparams = config.state.initparams;
         pagectxview = pagectx_.getViewData();
         if (pagectxview != null)
