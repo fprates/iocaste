@@ -26,6 +26,7 @@ public class PageContext {
     public List<MultipartElement> mpelements;
     public Map<String, Object> parameters;
     public Set<String> initparams;
+    public Map<String, String> headervalues;
     
     public PageContext(String name) {
         parameters = new HashMap<>();

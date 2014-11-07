@@ -13,31 +13,25 @@ import org.iocaste.internal.AbstractRenderer;
 import org.iocaste.internal.AppContext;
 import org.iocaste.internal.Controller;
 import org.iocaste.internal.ControllerData;
-import org.iocaste.internal.HtmlRenderer;
 import org.iocaste.internal.Input;
 import org.iocaste.internal.InputStatus;
 import org.iocaste.internal.PageContext;
 import org.iocaste.internal.SessionContext;
-import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewState;
 
 public class Main extends AbstractRenderer {
     private static final long serialVersionUID = -8143025594178489781L;
-    private static final String NOT_CONNECTED = "not.connected";
     private static final String INSTALLER = "iocaste-install";
     private static Map<String, List<SessionContext>> apps;
     private Stages stage;
-    private MessageSource msgsource;
     private Function installapp;
     
     static {
@@ -122,6 +116,24 @@ public class Main extends AbstractRenderer {
         sessionctx.put(contextdata.appname, appctx);
         
         return pagectx;
+    }
+    
+    @Override
+    protected final View createView(String sessionid, PageContext pagectx)
+            throws Exception {
+        Message message;
+        int logid;
+        AppContext appctx;
+        
+        logid = pagectx.getLogid();
+        appctx = pagectx.getAppContext();
+        
+        message = new Message("get_view_data");
+        message.add("app", appctx.getName());
+        message.add("page", pagectx.getName());
+        message.setSessionid(getComplexId(sessionid, logid));
+        
+        return (View)installapp.run(message);
     }
     
     /*
@@ -390,76 +402,6 @@ public class Main extends AbstractRenderer {
         int logid = Integer.parseInt(complexid[1]);
         
         apps.get(complexid[0]).get(logid).pushPage(appname, pagename);
-    }
-    
-    /**
-     * 
-     * @param resp
-     * @param pagectx
-     * @throws Exception
-     */
-    private final void startRender(String sessionid, HttpServletResponse resp,
-            PageContext pagectx) throws Exception {
-        TrackingData tracking;
-        HtmlRenderer renderer;
-        Map<String, Map<String, String>> userstyle;
-        String username, viewmessage;
-        Const messagetype;
-        int logid;
-        Input inputdata;
-        AppContext appctx;
-        View viewdata;
-        Message message = new Message("get_view_data");
-
-        appctx = pagectx.getAppContext();
-        viewdata = pagectx.getViewData();
-        if (viewdata != null) {
-            viewmessage = viewdata.getTranslatedMessage();
-            messagetype = viewdata.getMessageType();
-        } else {
-            viewmessage = null;
-            messagetype = null;
-        }
-        
-        if (pagectx.getError() == 0 &&
-                (viewdata == null || pagectx.isReloadableView())) {
-            logid = pagectx.getLogid();
-            
-            message.add("app", appctx.getName());
-            message.add("page", pagectx.getName());
-            message.setSessionid(getComplexId(sessionid, logid));
-            
-            viewdata = (View)installapp.run(message);
-            
-            inputdata = new Input();
-            inputdata.view = viewdata;
-            inputdata.container = null;
-            inputdata.function = this;
-            inputdata.register();
-            
-            pagectx.setViewData(viewdata);
-        }
-
-        /*
-         * ajusta o renderizador
-         */
-        username = pagectx.getUsername();
-        userstyle = viewdata.styleSheetInstance().getElements();
-        if (userstyle != null)
-            appctx.setStyleSheet(userstyle);
-        
-        renderer = new HtmlRenderer();
-        renderer.setMessageSource(msgsource);
-        renderer.setMessageText(viewmessage);
-        renderer.setMessageType(messagetype);
-        renderer.setUsername((username == null)? NOT_CONNECTED : username);
-        
-        tracking = new TrackingData();
-        tracking.sessionid = sessionid;
-        tracking.logid = pagectx.getLogid();
-        render(renderer, resp, viewdata, tracking);
-        
-        pagectx.setActions(renderer.getActions());
     }
     
     /**

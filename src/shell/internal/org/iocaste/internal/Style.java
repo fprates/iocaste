@@ -1,4 +1,4 @@
-package org.iocaste.shell;
+package org.iocaste.internal;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

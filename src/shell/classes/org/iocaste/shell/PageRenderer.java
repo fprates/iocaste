@@ -16,13 +16,11 @@ import org.iocaste.internal.AbstractRenderer;
 import org.iocaste.internal.AppContext;
 import org.iocaste.internal.Common;
 import org.iocaste.internal.Controller;
-import org.iocaste.internal.HtmlRenderer;
 import org.iocaste.internal.Input;
 import org.iocaste.internal.InputStatus;
 import org.iocaste.internal.ControllerData;
 import org.iocaste.internal.PageContext;
 import org.iocaste.internal.SessionContext;
-import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Handler;
 import org.iocaste.protocol.Iocaste;
@@ -33,23 +31,17 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.PageStackItem;
-import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewState;
 
 public class PageRenderer extends AbstractRenderer {
     private static final long serialVersionUID = -8143025594178489781L;
-    private static final String NOT_CONNECTED = "not.connected";
     private static final String EXCEPTION_HANDLER = "iocaste-exhandler";
     private static final byte AUTHORIZATION_ERROR = 1;
     private static Map<String, List<SessionContext>> apps;
-    private String dbname;
-    private Map<String, Map<String, String>> style;
-    private MessageSource msgsource;
     private static TicketControl tickets;
     
     static {
@@ -159,91 +151,6 @@ public class PageRenderer extends AbstractRenderer {
         contextdata.initialize = true;
         
         return createPageContext(contextdata);
-    }
-    
-    /**
-     * 
-     * @param sessionid
-     * @param pagectx
-     * @return
-     * @throws Exception
-     */
-    private final View createView(String sessionid, PageContext pagectx)
-            throws Exception {
-        String complexid, appname, pagename;
-        int logid;
-        Input input;
-        Message message;
-        Map<String, Object> parameters;
-        AppContext appctx;
-        View view;
-        Service service;
-        
-        appctx = pagectx.getAppContext();
-        appname = appctx.getName();
-        pagename = pagectx.getName();
-        logid = pagectx.getLogid();
-        complexid = getComplexId(sessionid, logid);
-        
-        if (appname == null || pagename == null)
-            throw new IocasteException("page not especified.");
-        
-        if (appctx.getStyleSheet() == null) {
-            if (style == null)
-                style = Style.get("DEFAULT", this);
-            appctx.setStyleSheet(style);
-        }
-        
-        view = pagectx.getViewData(); 
-        if (!pagectx.keepView() || view == null)
-            view = new View(appname, pagename);
-        
-        view.setStyleSheet(appctx.getStyleSheet());
-        
-        message = new Message("get_view_data");
-        message.add("view", view);
-        message.add("init", pagectx.isInitializableView());
-        message.add("parameters", pagectx.parameters);
-        message.setSessionid(complexid);
-        
-        if (pagectx.initparams != null) {
-            parameters = new HashMap<>();
-            for (String name : pagectx.initparams)
-                parameters.put(name, pagectx.parameters.get(name));
-            pagectx.initparams = null;
-            pagectx.parameters = parameters;
-        }
-        
-        try {
-            service = new Service(complexid, composeUrl(appname));
-            view = (View)service.call(message);
-            
-            input = new Input();
-            input.view = view;
-            input.container = null;
-            input.function = this;
-            input.pagectx = pagectx;
-            input.pagectx.inputs.clear();
-            input.pagectx.mpelements.clear();
-            
-            /*
-             * deixa registerInputs() antes do commit(),
-             * para que a conexão seja encerrada.
-             */
-            for (Container container : view.getContainers()) {
-                input.element = container;
-                input.register();
-            }
-            
-            Common.commit(getServerName(), complexid);
-            new Iocaste(this).commit();
-        } catch (Exception e) {
-            Common.rollback(getServerName(), complexid);
-            new Iocaste(this).rollback();
-            throw e;
-        }
-        
-        return view;
     }
     
     /**
@@ -865,73 +772,6 @@ public class PageRenderer extends AbstractRenderer {
         context = apps.get(complexid[0]).get(logid);
         composition = position.split("\\.");
         context.setPagesPosition(composition[0], composition[1]);
-    }
-    
-    /**
-     * 
-     * @param resp
-     * @param pagectx
-     * @throws Exception
-     */
-    private final void startRender(String sessionid, HttpServletResponse resp,
-            PageContext pagectx) throws Exception {
-        TrackingData tracking;
-        HtmlRenderer renderer;
-        StyleSheet userstyle;
-        String username, viewmessage;
-        Const messagetype;
-        AppContext appctx;
-        View view;
-        boolean hasrendered;
-
-        /*
-         * prepara a visão para renderização
-         */
-        view = pagectx.getViewData();
-        if (view != null) {
-            viewmessage = view.getTranslatedMessage();
-            messagetype = view.getMessageType();
-        } else {
-            viewmessage = null;
-            messagetype = null;
-        }
-        
-        if (pagectx.getError() == 0 &&
-                (view == null || pagectx.isReloadableView())) {
-            view = createView(sessionid, pagectx);
-            pagectx.setViewData(view);
-        }
-        
-        /*
-         * ajusta e chama o renderizador
-         */
-        username = pagectx.getUsername();
-        userstyle = view.styleSheetInstance();
-        appctx = pagectx.getAppContext();
-        if (userstyle != null)
-            appctx.setStyleSheet(userstyle.getElements());
-        
-        renderer = new HtmlRenderer();
-        renderer.setMessageSource(msgsource);
-        renderer.setMessageText(viewmessage);
-        renderer.setMessageType(messagetype);
-        renderer.setPageContext(pagectx);
-        renderer.setUsername((username == null)? NOT_CONNECTED : username);
-        
-        if (dbname == null)
-            dbname = new Iocaste(this).getSystemParameter("dbname");
-        
-        renderer.setDBName(dbname);
-        renderer.setShControl(pagectx.getShControl());
-        renderer.setFunction(this);
-        tracking = new TrackingData();
-        tracking.logid = pagectx.getLogid();
-        tracking.sequence = pagectx.getSequence();
-        tracking.sessionid = sessionid;
-        tracking.contexturl = pagectx.getContextUrl();
-        hasrendered = render(renderer, resp, view, tracking);
-        if (hasrendered)
-            pagectx.setActions(renderer.getActions());
     }
     
     /**

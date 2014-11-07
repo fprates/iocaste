@@ -98,6 +98,7 @@ public class FormRenderer extends Renderer {
     }
     
     private static final List<XMLElement> renderSh(Config config) {
+        Object[] viewreturn;
         List<XMLElement> tags = new ArrayList<>();
         TrackingData tracking = config.getTracking();
         Service service = new Service(tracking.sessionid, tracking.contexturl);
@@ -111,7 +112,9 @@ public class FormRenderer extends Renderer {
         message.add("view", view);
         message.add("init", true);
         message.add("parameters", config.pagectx.parameters);
-        view = (View)service.call(message);
+        viewreturn = (Object[])service.call(message);
+        view = (View)viewreturn[0];
+        
         config.getView().setStyleSheet(view.styleSheetInstance().getElements());
         for (Container container : view.getContainers())
             Renderer.renderContainer(tags, container, config);

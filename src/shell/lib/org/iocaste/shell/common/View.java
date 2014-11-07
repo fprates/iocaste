@@ -44,7 +44,6 @@ public class View implements Serializable {
     private MessageSource messages;
     private List<String> lines;
     private List<Container> containers;
-    private Map<String, String> headervalues;
     private Map<String, Map<String, String>> sheet;
     private Map<String, Element> elements;
     private Const messagetype;
@@ -52,7 +51,6 @@ public class View implements Serializable {
     
     public View(String appname, String pagename) {
         lines = new ArrayList<>();
-        headervalues = new HashMap<>();
         containers = new ArrayList<>();
         elements = new HashMap<>();
         
@@ -176,23 +174,6 @@ public class View implements Serializable {
      */
     public final Element getFocus() {
         return elementfocus;
-    }
-    
-    /**
-     * Retorna parâmetros a serem passados para setHeader() em HttpResponse.
-     * @return nomes de parâmetros.
-     */
-    public final String[] getHeaderKeys() {
-        return headervalues.keySet().toArray(new String[0]);
-    }
-    
-    /**
-     * Retorna valor de parâmetro para header em response.
-     * @param key nome
-     * @return valor
-     */
-    public final String getHeader(String key) {
-        return headervalues.get(key);
     }
     
     /**
@@ -326,18 +307,6 @@ public class View implements Serializable {
      */
     public final void setFocus(Element elementfocus) {
         this.elementfocus = elementfocus;
-    }
-    
-    /**
-     * Define parâmetro para header http.
-     * @param key nome
-     * @param value valor
-     */
-    public final void setHeader(String key, String value) {
-        if (headervalues.containsKey(key))
-            headervalues.remove(key);
-        
-        headervalues.put(key, value);
     }
     
     /**

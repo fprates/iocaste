@@ -75,7 +75,7 @@ public class Main extends AbstractPage {
             view.print(line.concat("\n"));
         
         view.setContentType("text/plain");
-        view.setHeader("Content-Disposition",
+        setHeader("Content-Disposition",
                 new StringBuilder("attachment; filename=\"").
                         append(filename).
                         append("\"").toString());

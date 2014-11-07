@@ -145,9 +145,6 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param value valor
      */
     public final void export(String name, Object value) {
-        if (state.parameters.containsKey(name))
-            state.parameters.remove(name);
-        
         state.parameters.put(name, value);
     }
     
@@ -179,7 +176,8 @@ public abstract class AbstractPage extends AbstractFunction {
      * @return
      * @throws Exception
      */
-    public final View getViewData(Message message) throws Exception {
+    public final Object[] getViewData(Message message) throws Exception {
+        Object[] viewreturn;
         MessageSource messages;
         Method method;
         CustomView customview;
@@ -234,7 +232,10 @@ public abstract class AbstractPage extends AbstractFunction {
             view.setMessages(messages);
         }
         
-        return view;
+        viewreturn = new Object[2];
+        viewreturn[0] = view;
+        viewreturn[1] = state.headervalues;
+        return viewreturn;
     }
     
     /**
@@ -311,6 +312,15 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public final void register(String action, ViewCustomAction custom) {
         customactions.put(action, custom);
+    }
+    
+    /**
+     * Define parâmetro para header http.
+     * @param key nome
+     * @param value valor
+     */
+    public final void setHeader(String key, String value) {
+        state.headervalues.put(key, value);
     }
     
     private void setLocaleForElement(Element element, Locale locale) {

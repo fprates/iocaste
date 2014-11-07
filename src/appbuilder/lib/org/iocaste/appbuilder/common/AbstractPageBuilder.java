@@ -240,7 +240,7 @@ class BuilderCustomView extends AbstractCustomView {
         fis.close();
         
         context.view.setContentType("application/octet-stream");
-        context.view.setHeader("Content-Disposition",
+        context.function.setHeader("Content-Disposition",
                 new StringBuilder("attachment; filename=\"").
                 append(context.downloaddata.filename).
                 append("\"").toString());
