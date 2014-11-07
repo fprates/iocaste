@@ -60,6 +60,7 @@
                 <exclude name="web.xml"/>
                 <include name="**/*"/> 
             </webinf>
+            <lib dir="${basedir}/lib-shell" includes="*.jar"/>
             <lib dir="${basedir}/lib" includes="*.jar"/>
             <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
             <lib dir="${builddir}/core/lib" includes="*.jar"/>
