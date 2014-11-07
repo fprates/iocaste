@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.kernel.authorization.Auth;
-import org.iocaste.kernel.common.AbstractIocasteServlet;
 import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.database.Database;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.session.IsConnected;
 import org.iocaste.kernel.session.Session;
 import org.iocaste.kernel.users.Users;
+import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 

@@ -11,12 +11,14 @@ import javax.servlet.ServletContext;
 public abstract class AbstractFunction implements Function {
     private ServletContext context;
     private Map<String, String> exports;
+    private Map<String, Handler> handlers;
     private String servername;
     private String sessionid;
     private boolean authorized;
     
     public AbstractFunction() {
         exports = new HashMap<>();
+        handlers = new HashMap<>();
         exports.put("call_authorized", "callAuthorized");
         authorized = false;
     }
@@ -29,10 +31,25 @@ public abstract class AbstractFunction implements Function {
     protected final void export(String name, String method) {
         exports.put(name, method);
     }
-
+    
+    /**
+     * 
+     * @param name
+     * @param handler
+     */
+    protected final void export(String name, Handler handler) {
+        protect(name, handler);
+        exports.put(name, name);
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.kernel.common.Function#get(java.lang.String)
+     */
     @Override
-    public <T extends Handler> T get(String handler) {
-        return null;
+    @SuppressWarnings("unchecked")
+    public final <T extends Handler> T get(String handler) {
+        return (T)handlers.get(handler);
     }
     
     /*
@@ -86,12 +103,23 @@ public abstract class AbstractFunction implements Function {
         return authorized;
     }
     
+    /**
+     * 
+     * @param name
+     * @param handler
+     */
+    protected final void protect(String name, Handler handler) {
+        handler.setFunction(this);
+        handlers.put(name, handler);
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#run(org.iocaste.protocol.Message)
      */
     @Override
-    public final Object run(Message message) throws Exception {
+    public Object run(Message message) throws Exception {
+        Handler component;
         Method method;
         String id = message.getId();
         String methodname = exports.get(id);
@@ -102,9 +130,13 @@ public abstract class AbstractFunction implements Function {
 
         setSessionid(message.getSessionid());
         
-        method = getClass().getMethod(methodname, Message.class);
-        
-        return method.invoke(this, message);
+        component = handlers.get(methodname);
+        if (component != null) {
+            return component.run(message);
+        } else {
+            method = getClass().getMethod(methodname, Message.class);
+            return method.invoke(this, message);
+        }
     }
     
     /*

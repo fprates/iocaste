@@ -1,14 +1,11 @@
 package org.iocaste.shell.common;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 /**
@@ -29,13 +26,28 @@ public abstract class AbstractPage extends AbstractFunction {
     private ViewState state;
     
     public AbstractPage() {
-        export("get_view_data", "getViewData");
-        export("exec_action", "execAction");
+        GetViewData getviewdata;
+        ExecAction execaction;
+        
         customactions = new HashMap<>();
         customviews = new HashMap<>();
         validators = new HashMap<>();
         validables = new HashMap<>();
         state = new ViewState();
+        
+        getviewdata = new GetViewData();
+        getviewdata.customviews = customviews;
+        getviewdata.customactions = customactions;
+        getviewdata.validators = validators;
+        getviewdata.validables = validables;
+        
+        execaction = new ExecAction();
+        execaction.customactions = customactions;
+        execaction.validators = validators;
+        execaction.validables = validables;
+        
+        export("get_view_data", getviewdata);
+        export("exec_action", execaction);
     }
     
     /**
@@ -81,65 +93,6 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
-     * Executa métodos associados à action.
-     * @param message
-     * @return
-     * @throws Exception
-     */
-    public final ViewState execAction(Message message) throws Exception {
-        Validator validator;
-        InputComponent input;
-        List<String> handlers;
-        ViewCustomAction customaction;
-        Method method;
-        String action, error;
-        String controlname = message.getString("action");
-        View view = message.get("view");
-        ControlComponent control = view.getElement(controlname);
-        
-        if (context != null) {
-            context.view = view;
-            context.function = this;
-        }
-        
-        state.view = view;
-        action = (control == null)? controlname : control.getName();
-        view.setActionControl(action);
-        for (String name : validables.keySet()) {
-            input = (InputComponent)view.getElement(name);
-            if (input == null)
-                continue;
-            
-            handlers = validables.get(name);
-            for (String validatorname : handlers) {
-                validator = validators.get(validatorname);
-                validator.clear();
-                validator.setContext(context);
-                validator.setInput(input);
-                validator.validate();
-                error = validator.getMessage();
-                if (error == null)
-                    continue;
-                context.view.setFocus(input);
-                context.view.message(Const.ERROR, error);
-                return state;
-            }
-        }
-        
-        action = (control == null)? controlname : control.getAction();
-        customaction = customactions.get(action);
-        if (customaction != null) {
-            customaction.execute(context);
-        } else {
-            method = getClass().getMethod(action);
-            method.invoke(this);
-        }
-        
-        return state;
-    }
-
-    
-    /**
      * Exporta parâmetro para próxima visão.
      * @param name nome
      * @param value valor
@@ -168,74 +121,6 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     protected final View getView(String name) {
         return new Shell(this).getView(context.view, name);
-    }
-    
-    /**
-     * Gera uma visão solicitada por redirect().
-     * @param message
-     * @return
-     * @throws Exception
-     */
-    public final Object[] getViewData(Message message) throws Exception {
-        Object[] viewreturn;
-        MessageSource messages;
-        Method method;
-        CustomView customview;
-        View view = message.get("view");
-        boolean initializable = message.getbool("init");
-        Iocaste iocaste = new Iocaste(this);
-        Locale locale = iocaste.getLocale();
-
-        state.parameters = message.get("parameters");
-        state.keepview = false;
-        state.reloadable = false;
-        state.rapp = null;
-        state.rpage = null;
-        state.pagecall = false;
-        state.dontpushpage = false;
-        if (context != null)
-            context.view = view;
-        
-        view.setLocale(locale);
-        if (initializable) {
-            customactions.clear();
-            customviews.clear();
-            validators.clear();
-            context = init(view);
-            context.view = view;
-            context.function = this;
-        }
-        
-        customview = customviews.get(view.getPageName());
-        if (customview != null) {
-            customview.execute(context);
-        } else {
-            method = getClass().getMethod(view.getPageName());
-            method.invoke(this);
-        }
-        
-        if (view.getMessages() == null) {
-            /*
-             * há alguma chance que getViewData() tenha sido chamada
-             * a partir de um ticket, que nesse caso teria a localização
-             * definida (provavelmente) apenas depois da chamada da visão.
-             */
-            if (locale == null) {
-                locale = iocaste.getLocale();
-                view.setLocale(locale);
-                for (Container container : view.getContainers())
-                    setLocaleForElement(container, view.getLocale());
-            }
-            
-            messages = new MessageSource();
-            messages.loadFromApplication(view.getAppName(), locale, this);
-            view.setMessages(messages);
-        }
-        
-        viewreturn = new Object[2];
-        viewreturn[0] = view;
-        viewreturn[1] = state.headervalues;
-        return viewreturn;
     }
     
     /**
@@ -314,6 +199,27 @@ public abstract class AbstractPage extends AbstractFunction {
         customactions.put(action, custom);
     }
     
+    @Override
+    public final Object run(Message message) throws Exception {
+        GetViewData getviewdata;
+        ExecAction execaction;
+        Object object;
+        String id = message.getId();
+        
+        if (!id.equals("get_view_data"))
+            return run(message);
+        
+        getviewdata = get(id);
+        object = getviewdata.run(message);
+        if (context == null) {
+            context = getviewdata.context;
+            execaction = get("exec_action");
+            execaction.context = context;
+        }
+        
+        return object;
+    }
+    
     /**
      * Define parâmetro para header http.
      * @param key nome
@@ -321,18 +227,6 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public final void setHeader(String key, String value) {
         state.headervalues.put(key, value);
-    }
-    
-    private void setLocaleForElement(Element element, Locale locale) {
-        Container container;
-        
-        element.setLocale(locale);
-        if (!element.isContainable())
-            return;
-        
-        container = (Container)element;
-        for (Element element_ : container.getElements())
-            setLocaleForElement(element_, locale);
     }
     
     public final void setReloadableView(boolean reloadable) {

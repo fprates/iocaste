@@ -62,18 +62,19 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
     protected final void doPost(
             HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        Message message;
         Function function;
         Service service;
         Context context;
         String functionid, complexid;
         String sessionid = req.getSession().getId();
-        Message message = null;
         
         service = new Service(sessionid, getUrl(req));
         context = new Context();
         context.req = req;
         context.resp = resp;
-        
+        message = null;
+
         try {
             configureStreams(service, context);
             message = getMessage(sessionid, service, req.getParameterMap());

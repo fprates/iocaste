@@ -1,0 +1,97 @@
+package org.iocaste.shell.common;
+
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.Message;
+
+public class GetViewData extends AbstractHandler {
+    public AbstractContext context;
+    public ViewState state;
+    public Map<String, ViewCustomAction> customactions;
+    public Map<String, CustomView> customviews;
+    public Map<String, List<String>> validables;
+    public Map<String, Validator> validators;
+    
+    @Override
+    public Object run(Message message) throws Exception {
+        Object[] viewreturn;
+        MessageSource messages;
+        Method method;
+        CustomView customview;
+        View view = message.get("view");
+        boolean initializable = message.getbool("init");
+        AbstractPage page = getFunction();
+        Iocaste iocaste = new Iocaste(page);
+        Locale locale = iocaste.getLocale();
+        
+        state.parameters = message.get("parameters");
+        state.keepview = false;
+        state.reloadable = false;
+        state.rapp = null;
+        state.rpage = null;
+        state.pagecall = false;
+        state.dontpushpage = false;
+        if (context != null)
+            context.view = view;
+        
+        view.setLocale(locale);
+        if (initializable) {
+            customactions.clear();
+            customviews.clear();
+            validators.clear();
+            validables.clear();
+            context = page.init(view);
+            context.view = view;
+            context.function = page;
+        }
+        
+        customview = customviews.get(view.getPageName());
+        if (customview != null) {
+            customview.execute(context);
+        } else {
+            method = getClass().getMethod(view.getPageName());
+            method.invoke(page);
+        }
+        
+        if (view.getMessages() == null) {
+            /*
+             * há alguma chance que getViewData() tenha sido chamada
+             * a partir de um ticket, que nesse caso teria a localização
+             * definida (provavelmente) apenas depois da chamada da visão.
+             */
+            if (locale == null) {
+                locale = iocaste.getLocale();
+                view.setLocale(locale);
+                for (Container container : view.getContainers())
+                    setLocaleForElement(container, view.getLocale());
+            }
+            
+            messages = new MessageSource();
+            messages.loadFromApplication(view.getAppName(), locale, page);
+            view.setMessages(messages);
+        }
+        
+        viewreturn = new Object[2];
+        viewreturn[0] = view;
+        viewreturn[1] = state.headervalues;
+        return viewreturn;
+    }
+    
+    private void setLocaleForElement(Element element, Locale locale) {
+        Container container;
+        
+        element.setLocale(locale);
+        if (!element.isContainable())
+            return;
+        
+        container = (Container)element;
+        for (Element element_ : container.getElements())
+            setLocaleForElement(element_, locale);
+    }
+
+}

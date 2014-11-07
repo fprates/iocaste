@@ -6,9 +6,9 @@ import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.kernel.common.AbstractFunction;
 import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.database.Database;
+import org.iocaste.protocol.AbstractFunction;
 
 public class Documents extends AbstractFunction {
     public Cache cache;

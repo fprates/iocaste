@@ -1,6 +1,6 @@
 package org.iocaste.kernel;
 
-import org.iocaste.kernel.common.AbstractFunction;
+import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.utils.ConversionResult;
 import org.iocaste.protocol.utils.ConversionRules;

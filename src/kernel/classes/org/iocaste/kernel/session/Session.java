@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.kernel.UserContext;
-import org.iocaste.kernel.common.AbstractFunction;
 import org.iocaste.kernel.database.Database;
 import org.iocaste.kernel.users.Users;
+import org.iocaste.protocol.AbstractFunction;
 
 public class Session extends AbstractFunction {
     public Map<String, UserContext> sessions;

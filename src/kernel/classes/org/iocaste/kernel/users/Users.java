@@ -1,8 +1,8 @@
 package org.iocaste.kernel.users;
 
-import org.iocaste.kernel.common.AbstractFunction;
 import org.iocaste.kernel.database.Database;
 import org.iocaste.kernel.session.Session;
+import org.iocaste.protocol.AbstractFunction;
 
 public class Users extends AbstractFunction {
     public Database database;
