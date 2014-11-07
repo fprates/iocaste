@@ -50,20 +50,16 @@ class TableToolEntry {
     public TableToolData data;
     
     public final void receiveUpdate(PageBuilderContext context,
-            Map<String, Object> tables) {
-        Table table = (Table)tables.get("table");
+            TableToolData data) {
+        Table table;
         
-        data = (TableToolData)tables.get("data");
+        table = data.getContainer().getElement(data.name.concat("_table"));
         update(context, table);
     }
     
     public final void sendUpdate(PageBuilderContext context,
-            Map<String, Map<String, Object>> tables) {
-        Map<String, Object> entry = new HashMap<>();
-        
-        entry.put("table", context.view.getElement(data.name.concat("_table")));
-        entry.put("data", data);
-        tables.put(data.name, entry);
+            Map<String, TableToolData> tables) {
+        tables.put(data.name, data);
     }
     
     private void update(PageBuilderContext context, Element element) {

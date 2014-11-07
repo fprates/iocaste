@@ -217,16 +217,15 @@ public class TableTool {
     }
     
     private final void remote(String function) {
-        Map<String, Object> returned;
+        Table table;
+        TableToolData data = getTableData();
         Message message = new Message(function);
-        Table table = getTable();
         
-        message.add("table", table);
-        message.add("data", getTableData());
-        returned = service.invoke(message);
+        message.add("data", data);
+        data = service.invoke(message);
         
-        table = (Table)returned.get("table");
-        setTableData((TableToolData)returned.get("data"));
+        table = data.getContainer().getElement(data.name.concat("_table"));
+        setTableData(data);
         update(table);
     }
     

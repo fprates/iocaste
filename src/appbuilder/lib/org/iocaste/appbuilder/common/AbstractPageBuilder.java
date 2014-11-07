@@ -308,7 +308,7 @@ class BuilderCustomView extends AbstractCustomView {
     
     private final void updateTables(PageBuilderContext context) {
         GenericService service;
-        Map<String, Map<String, Object>> returned, tables;
+        Map<String, TableToolData> tables;
         Message message;
         ViewComponents components = context.
                 getView(context.view.getPageName()).getComponents();
@@ -323,10 +323,10 @@ class BuilderCustomView extends AbstractCustomView {
         
         message.add("tables", tables);
         service = new GenericService(context.function, TableTool.URL);
-        returned = service.invoke(message);
-        for (String name : returned.keySet())
+        tables = service.invoke(message);
+        for (String name : tables.keySet())
             components.tabletools.get(name).receiveUpdate(
-                    context, returned.get(name));
+                    context, tables.get(name));
     }
 }
 

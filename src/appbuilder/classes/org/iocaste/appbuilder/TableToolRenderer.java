@@ -38,13 +38,12 @@ public class TableToolRenderer extends AbstractFunction {
         export("render", "render");
     }
     
-    public final Map<String, Object> addaction(Message message) {
-        Map<String, Object> result;
+    public final TableToolData addaction(Message message) {
         int i = 0;
         Context context = new Context();
         
-        context.table = message.get("table");
         context.data = message.get("data");
+        context.table = getTable(context.data);
         
         switch (context.data.mode) {
         case TableTool.CONTINUOUS_UPDATE:
@@ -63,10 +62,7 @@ public class TableToolRenderer extends AbstractFunction {
             break;
         }
         
-        result = new HashMap<>();
-        result.put("table", context.table);
-        result.put("data", context.data);
-        return result;
+        return context.data;
     }
     
     private void additem(Context context, ExtendedObject object, int pos) {
@@ -167,14 +163,18 @@ public class TableToolRenderer extends AbstractFunction {
         Map<String, Object> result;
         Context context = new Context();
         
-        context.table = message.get("table");
         context.data = message.get("data");
+        context.table = getTable(context.data);
         additems(context, context.data.objects);
         
         result = new HashMap<>();
         result.put("table", context.table);
         result.put("data", context.data);
         return result;
+    }
+    
+    private final Table getTable(TableToolData data) {
+        return data.getContainer().getElement(data.name.concat("_table"));
     }
     
     /**
@@ -282,23 +282,19 @@ public class TableToolRenderer extends AbstractFunction {
             setVisibility(context, true, context.data.show);
     }
     
-    public final Map<String, Map<String, Object>> setMultipleObjects(
+    public final Map<String, TableToolData> setMultipleObjects(
             Message message) {
         Table table;
         TableToolData data;
-        Map<String, Object> tabledata;
-        Map<String, Map<String, Object>> results;
-        Map<String, Map<String, Object>> tables = message.get("tables");
+        Map<String, TableToolData> tables = message.get("tables");
         
-        results = new HashMap<>();
         for (String name : tables.keySet()) {
-            tabledata = tables.get(name);
-            table = (Table)tabledata.get("table");
-            data = (TableToolData)tabledata.get("data");
-            results.put(name, setObject(table, data));
+            data = tables.get(name);
+            table = getTable(data);
+            setObject(table, data);
         }
         
-        return results;
+        return tables;
     }
     
     private final Map<String, Object> setObject(Table table, TableToolData data)
