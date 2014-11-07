@@ -1,7 +1,9 @@
 package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Message;
@@ -98,6 +100,7 @@ public class FormRenderer extends Renderer {
     }
     
     private static final List<XMLElement> renderSh(Config config) {
+        Map<String, Object> parameters;
         Object[] viewreturn;
         List<XMLElement> tags = new ArrayList<>();
         TrackingData tracking = config.getTracking();
@@ -106,12 +109,13 @@ public class FormRenderer extends Renderer {
         View view = new View("iocaste-search-help", "main");
         StyleSheet stylesheet = config.getView().styleSheetInstance();
         
-        config.pagectx.parameters.put("sh", config.getShControl());
+        parameters = new HashMap<>();
+        parameters.put("sh", config.getShControl());
         view.setStyleSheet(stylesheet.getElements());
         
         message.add("view", view);
         message.add("init", true);
-        message.add("parameters", config.pagectx.parameters);
+        message.add("parameters", parameters);
         viewreturn = (Object[])service.call(message);
         view = (View)viewreturn[0];
         
