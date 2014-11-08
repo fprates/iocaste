@@ -2,6 +2,8 @@ package org.iocaste.tasksel;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.View;
@@ -76,6 +78,25 @@ public class Common {
             return;
         
         function.exec(app, page);
+    }
+    
+    public static int call(AbstractPage page, View view, String command) {
+        Iocaste iocaste;
+        Authorization authorization;
+        String[] parsed;
+        
+        authorization = new Authorization("LINK.CALL");
+        authorization.setObject("LINK");
+        authorization.setAction("CALL");
+        authorization.add("LINK", command);
+        iocaste = new Iocaste(page);
+        if (!iocaste.isAuthorized(authorization))
+            return 1;
+        
+        parsed = Common.parseCommand(command, page, view);
+        parsed = parsed[0].split("\\s");
+        Common.run(page, view, parsed);
+        return 0;
     }
 
 }
