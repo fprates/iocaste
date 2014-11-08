@@ -45,6 +45,7 @@ public class Main extends AbstractPageBuilder {
         
         state.rapp = getRedirectedApp();
         state.rpage = getRedirectedPage();
+        state.parameters = getParameters();
         return state;
     }
 

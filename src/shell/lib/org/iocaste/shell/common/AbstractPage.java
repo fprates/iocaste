@@ -108,6 +108,10 @@ public abstract class AbstractPage extends AbstractFunction {
         return (T)state.parameters.get(name);
     }
     
+    public final Map<String, Object> getParameters() {
+        return state.parameters;
+    }
+    
     public final String getRedirectedApp() {
         return state.rapp;
     }
