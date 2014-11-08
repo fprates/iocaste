@@ -3,7 +3,7 @@ package org.iocaste.kernel.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
 import com.mysql.jdbc.exceptions.MySQLNonTransientConnectionException;

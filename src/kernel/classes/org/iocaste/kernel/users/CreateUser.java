@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.Map;
 
-import org.iocaste.kernel.common.AbstractHandler;
 import org.iocaste.kernel.database.Select;
 import org.iocaste.kernel.database.Update;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;

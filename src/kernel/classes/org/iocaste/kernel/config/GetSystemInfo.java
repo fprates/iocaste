@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.Properties;
 
-import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
 public class GetSystemInfo extends AbstractHandler {

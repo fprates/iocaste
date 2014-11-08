@@ -2,8 +2,8 @@ package org.iocaste.kernel.users;
 
 import java.sql.Connection;
 
-import org.iocaste.kernel.common.AbstractHandler;
 import org.iocaste.kernel.database.Update;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
 public class DropUser extends AbstractHandler {

@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.iocaste.kernel.UserContext;
-import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 

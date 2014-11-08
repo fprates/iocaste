@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.iocaste.kernel.UserContext;
-import org.iocaste.kernel.common.AbstractHandler;
 import org.iocaste.kernel.users.GetUserData;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 

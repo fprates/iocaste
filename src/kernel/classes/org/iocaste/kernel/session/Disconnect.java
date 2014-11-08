@@ -1,7 +1,7 @@
 package org.iocaste.kernel.session;
 
 import org.iocaste.kernel.UserContext;
-import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 

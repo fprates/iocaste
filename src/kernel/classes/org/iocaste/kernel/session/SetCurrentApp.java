@@ -1,6 +1,6 @@
 package org.iocaste.kernel.session;
 
-import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
 public class SetCurrentApp extends AbstractHandler {

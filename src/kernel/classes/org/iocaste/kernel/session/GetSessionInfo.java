@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.kernel.UserContext;
-import org.iocaste.kernel.common.AbstractHandler;
 import org.iocaste.kernel.database.Select;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
 public class GetSessionInfo extends AbstractHandler {

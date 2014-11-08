@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 public class GetViewData extends AbstractHandler {
-    public AbstractContext context;
     public ViewState state;
+    public AbstractContext context;
     public Map<String, ViewCustomAction> customactions;
     public Map<String, CustomView> customviews;
     public Map<String, List<String>> validables;
@@ -54,7 +54,7 @@ public class GetViewData extends AbstractHandler {
         if (customview != null) {
             customview.execute(context);
         } else {
-            method = getClass().getMethod(view.getPageName());
+            method = page.getClass().getMethod(view.getPageName());
             method.invoke(page);
         }
         

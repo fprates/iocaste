@@ -10,10 +10,10 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
-import org.iocaste.kernel.common.AbstractHandler;
 import org.iocaste.kernel.config.GetSystemParameter;
 import org.iocaste.kernel.database.Select;
 import org.iocaste.kernel.database.Update;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 

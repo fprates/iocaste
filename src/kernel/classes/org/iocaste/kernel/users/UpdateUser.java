@@ -3,8 +3,8 @@ package org.iocaste.kernel.users;
 import java.sql.Connection;
 import java.util.List;
 
-import org.iocaste.kernel.common.AbstractHandler;
 import org.iocaste.kernel.database.Update;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 

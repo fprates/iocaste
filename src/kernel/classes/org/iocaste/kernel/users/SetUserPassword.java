@@ -1,6 +1,6 @@
 package org.iocaste.kernel.users;
 
-import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 

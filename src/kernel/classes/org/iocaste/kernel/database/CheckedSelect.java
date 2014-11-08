@@ -3,7 +3,7 @@ package org.iocaste.kernel.database;
 import java.sql.Connection;
 import java.util.Map;
 
-import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 

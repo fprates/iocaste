@@ -36,12 +36,14 @@ public abstract class AbstractPage extends AbstractFunction {
         state = new ViewState();
         
         getviewdata = new GetViewData();
+        getviewdata.state = state;
         getviewdata.customviews = customviews;
         getviewdata.customactions = customactions;
         getviewdata.validators = validators;
         getviewdata.validables = validables;
         
         execaction = new ExecAction();
+        execaction.state = state;
         execaction.customactions = customactions;
         execaction.validators = validators;
         execaction.validables = validables;
@@ -207,7 +209,7 @@ public abstract class AbstractPage extends AbstractFunction {
         String id = message.getId();
         
         if (!id.equals("get_view_data"))
-            return run(message);
+            return super.run(message);
         
         getviewdata = get(id);
         object = getviewdata.run(message);

@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import org.iocaste.kernel.common.AbstractHandler;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
 public class ExecAction extends AbstractHandler {
@@ -61,8 +61,8 @@ public class ExecAction extends AbstractHandler {
         if (customaction != null) {
             customaction.execute(context);
         } else {
-            method = getClass().getMethod(action);
-            method.invoke(this);
+            method = page.getClass().getMethod(action);
+            method.invoke(page);
         }
         
         return state;
