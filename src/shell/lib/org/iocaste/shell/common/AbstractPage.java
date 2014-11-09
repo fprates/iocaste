@@ -18,35 +18,23 @@ import org.iocaste.protocol.Message;
  *
  */
 public abstract class AbstractPage extends AbstractFunction {
-    private AbstractContext context;
-    private Map<String, ViewCustomAction> customactions;
-    private Map<String, CustomView> customviews;
-    private Map<String, Validator> validators;
-    private Map<String, List<String>> validables;
-    private ViewState state;
+    private GetViewData getviewdata;
     
     public AbstractPage() {
-        GetViewData getviewdata;
         ExecAction execaction;
         
-        customactions = new HashMap<>();
-        customviews = new HashMap<>();
-        validators = new HashMap<>();
-        validables = new HashMap<>();
-        state = new ViewState();
-        
         getviewdata = new GetViewData();
-        getviewdata.state = state;
-        getviewdata.customviews = customviews;
-        getviewdata.customactions = customactions;
-        getviewdata.validators = validators;
-        getviewdata.validables = validables;
+        getviewdata.state = new ViewState();
+        getviewdata.customviews = new HashMap<>();
+        getviewdata.customactions = new HashMap<>();
+        getviewdata.validators = new HashMap<>();
+        getviewdata.validables = new HashMap<>();
         
         execaction = new ExecAction();
-        execaction.state = state;
-        execaction.customactions = customactions;
-        execaction.validators = validators;
-        execaction.validables = validables;
+        execaction.state = getviewdata.state;
+        execaction.customactions = getviewdata.customactions;
+        execaction.validators = getviewdata.validators;
+        execaction.validables = getviewdata.validables;
         
         export("get_view_data", getviewdata);
         export("exec_action", execaction);
@@ -57,7 +45,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view visão atual
      */
     public void back() {
-        PageStackItem entry = new Shell(this).popPage(context.view);
+        PageStackItem entry = new Shell(this).popPage(getviewdata.context.view);
         redirect(entry.getApp(), entry.getPage(), false);
         dontPushPage();
     }
@@ -78,19 +66,19 @@ public abstract class AbstractPage extends AbstractFunction {
      * 
      */
     public final void clearExports() {
-        state.parameters.clear();
+        getviewdata.state.parameters.clear();
     }
     
     /**
      * Não salva página na pilha de chamada.
      */
     public final void dontPushPage() {
-        state.dontpushpage = true;
-        state.pagecall = false;
+        getviewdata.state.dontpushpage = true;
+        getviewdata.state.pagecall = false;
     }
     
     public final void exec(String app, String page) {
-        state.reloadable = true;
+        getviewdata.state.reloadable = true;
         redirect(app, page, View.INITIALIZE);
     }
     
@@ -100,24 +88,24 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param value valor
      */
     public final void export(String name, Object value) {
-        state.parameters.put(name, value);
+        getviewdata.state.parameters.put(name, value);
     }
     
     @SuppressWarnings("unchecked")
     public final <T> T getParameter(String name) {
-        return (T)state.parameters.get(name);
+        return (T)getviewdata.state.parameters.get(name);
     }
     
     public final Map<String, Object> getParameters() {
-        return state.parameters;
+        return getviewdata.state.parameters;
     }
     
     public final String getRedirectedApp() {
-        return state.rapp;
+        return getviewdata.state.rapp;
     }
     
     public final String getRedirectedPage() {
-        return state.rpage;
+        return getviewdata.state.rpage;
     }
     
     /**
@@ -126,7 +114,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @return visão
      */
     protected final View getView(String name) {
-        return new Shell(this).getView(context.view, name);
+        return new Shell(this).getView(getviewdata.context.view, name);
     }
     
     /**
@@ -140,7 +128,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view visão atual
      */
     public void home() {
-        PageStackItem entry = new Shell(this).home(context.view);
+        PageStackItem entry = new Shell(this).home(getviewdata.context.view);
         redirect(entry.getApp(), entry.getPage(), false);
         dontPushPage();
     }
@@ -156,7 +144,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * 
      */
     public final void keepView() {
-        state.keepview = true;
+        getviewdata.state.keepview = true;
     }
     
     public final void redirect(String page) {
@@ -170,12 +158,12 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param initialize true, para inicializar a visão.
      */
     private final void redirect(String app, String page, boolean initialize) {
-        state.rapp = app;
-        state.rpage = page;
-        state.initialize = initialize;
+        getviewdata.state.rapp = app;
+        getviewdata.state.rpage = page;
+        getviewdata.state.initialize = initialize;
         
-        if (!state.dontpushpage)
-            state.pagecall = true;
+        if (!getviewdata.state.dontpushpage)
+            getviewdata.state.pagecall = true;
     }
     
     /**
@@ -184,7 +172,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param custom
      */
     public final void register(String view, CustomView custom) {
-        customviews.put(view, custom);
+        getviewdata.customviews.put(view, custom);
     }
     
     /**
@@ -193,7 +181,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param validator
      */
     public final void register(String name, Validator validator) {
-        validators.put(name, validator);
+        getviewdata.validators.put(name, validator);
     }
     
     /**
@@ -202,29 +190,20 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param custom
      */
     public final void register(String action, ViewCustomAction custom) {
-        customactions.put(action, custom);
+        getviewdata.customactions.put(action, custom);
     }
     
     @Override
     public final Object run(Message message) throws Exception {
-        GetViewData getviewdata;
         ExecAction execaction;
-        Object object;
         String id = message.getId();
         
-        switch (id) {
-        case "get_view_data":
-            getviewdata = get(id);
-            object = getviewdata.run(message);
-            context = getviewdata.context;
-            return object;
-        case "exec_action":
-            execaction = get("exec_action");
-            execaction.context = context;
-            return execaction.run(message);
-        default:
+        if (!id.equals("exec_action"))
             return super.run(message);
-        }
+        
+        execaction = get(id);
+        execaction.context = getviewdata.context;
+        return execaction.run(message);
     }
     
     /**
@@ -233,11 +212,11 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param value valor
      */
     public final void setHeader(String key, String value) {
-        state.headervalues.put(key, value);
+        getviewdata.state.headervalues.put(key, value);
     }
     
     public final void setReloadableView(boolean reloadable) {
-        state.reloadable = reloadable;
+        getviewdata.state.reloadable = reloadable;
     }
     
     /**
@@ -263,11 +242,11 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param validator
      */
     public final void validate(String input, String validator) {
-        List<String> validators = validables.get(input);
+        List<String> validators = getviewdata.validables.get(input);
         
         if (validators == null) {
             validators = new ArrayList<>();
-            validables.put(input, validators);
+            getviewdata.validables.put(input, validators);
         }
         
         validators.add(validator);       
