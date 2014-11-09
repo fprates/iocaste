@@ -2,7 +2,6 @@ package org.iocaste.appbuilder.common.tabletool;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -169,24 +168,22 @@ public class TableTool {
      * @param data
      */
     private final void init(AbstractContext context, TableToolData data) {
-        Map<String, Object> result;
+        TableToolData rdata;
         Container container, returned;
         Message message;
         
         message = new Message("render");
         message.add("data", data);
-        message.add("view", context.view);
-        
         service = new GenericService(context.function, URL);
-        result = service.invoke(message);
-        this.context = context;
+        rdata = service.invoke(message);
         
+        this.context = context;
         accept = new Action(this, data, ACCEPT).getName();
         add = new Action(this, data, ADD).getName();
         remove = new Action(this, data, REMOVE).getName();
 
-        returned = (Container)result.get("container");
-        setTableData((TableToolData)result.get("data"));
+        returned = rdata.getContainer();
+        setTableData(rdata);
         
         container = data.getContainer();
         for (Element element : returned.getElements()) {
