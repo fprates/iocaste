@@ -93,12 +93,14 @@ public class Main extends AbstractPageBuilder {
             viewctx.set(maintenanceconfig);
             viewctx.set(maintenanceinput);
             viewctx.put("save", save);
+            viewctx.setUpdate(true);
         }
 
         viewctx = context.instance(display1);
         viewctx.set(maintenancespec);
         viewctx.set(new DisplayConfig(cmodel));
         viewctx.set(maintenanceinput);
+        viewctx.setUpdate(true);
     }
     
     private void loadRemoteModule(PageBuilderContext context, String module)

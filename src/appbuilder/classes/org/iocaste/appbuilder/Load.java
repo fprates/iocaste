@@ -24,7 +24,7 @@ public class Load extends AbstractActionHandler {
             return;
         }
         
-        context.function.redirect(redirect);
+        redirect(redirect);
     }
 
 }
