@@ -17,7 +17,7 @@ public class Common {
      * @param view
      * @return
      */
-    public static final String[] parseCommand(
+    private static final String[] parseCommand(
             String command, AbstractPage function, View view) {
         String[] parsed;
         ExtendedObject task;
@@ -48,7 +48,7 @@ public class Common {
      * @param view
      * @param parsed
      */
-    public static final void run(
+    private static final void run(
             AbstractPage function, View view, String[] parsed) {
         String[] values;
         String page = "main", app = null;
@@ -93,9 +93,9 @@ public class Common {
         if (!iocaste.isAuthorized(authorization))
             return 1;
         
-        parsed = Common.parseCommand(command, page, view);
+        parsed = parseCommand(command, page, view);
         parsed = parsed[0].split("\\s");
-        Common.run(page, view, parsed);
+        run(page, view, parsed);
         return 0;
     }
 

@@ -10,6 +10,7 @@ public class Call extends AbstractActionHandler {
     public Call(String dash) {
         this.dash = dash;
     }
+    
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         String task = dbactionget("groups", dash);
@@ -17,7 +18,7 @@ public class Call extends AbstractActionHandler {
         if (Common.call(context.function, context.view, task) == 0)
             return;
         
-        context.view.message(Const.ERROR, "not.authorized");
+        message(Const.ERROR, "not.authorized");
     }
 
 }
