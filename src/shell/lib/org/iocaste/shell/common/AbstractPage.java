@@ -212,18 +212,19 @@ public abstract class AbstractPage extends AbstractFunction {
         Object object;
         String id = message.getId();
         
-        if (!id.equals("get_view_data"))
-            return super.run(message);
-        
-        getviewdata = get(id);
-        object = getviewdata.run(message);
-        if (context == null) {
+        switch (id) {
+        case "get_view_data":
+            getviewdata = get(id);
+            object = getviewdata.run(message);
             context = getviewdata.context;
+            return object;
+        case "exec_action":
             execaction = get("exec_action");
             execaction.context = context;
+            return execaction.run(message);
+        default:
+            return super.run(message);
         }
-        
-        return object;
     }
     
     /**
