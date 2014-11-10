@@ -11,6 +11,7 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.ReportTool;
 import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.View;
 import org.iocaste.texteditor.common.TextEditor;
 
 public class ViewComponents {
@@ -48,18 +49,19 @@ public class ViewComponents {
 class TableToolEntry {
     public TableTool component;
     public TableToolData data;
+    public boolean update;
     
-    public final void receiveUpdate(PageBuilderContext context,
+    public final void receiveUpdate(View view, PageBuilderContext context,
             TableToolData data) {
+        Container container;
         Table table;
         
-        table = data.getContainer().getElement(data.name.concat("_table"));
+        update = false;
+        this.data.getContainer().setView(context.view);
+        container = data.getContainer();
+        container.setView(view);
+        table = container.getElement(data.name.concat("_table"));
         update(context, table);
-    }
-    
-    public final void sendUpdate(PageBuilderContext context,
-            Map<String, TableToolData> tables) {
-        tables.put(data.name, data);
     }
     
     private void update(PageBuilderContext context, Element element) {

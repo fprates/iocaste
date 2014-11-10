@@ -3,7 +3,9 @@ package org.iocaste.appbuilder.common;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
@@ -306,27 +308,35 @@ class BuilderCustomView extends AbstractCustomView {
         this.view = view;
     }
     
+    @SuppressWarnings("unchecked")
     private final void updateTables(PageBuilderContext context) {
+        Object[] objects;
         GenericService service;
-        Map<String, TableToolData> tables;
+        List<TableToolData> tables;
         Message message;
-        ViewComponents components = context.
-                getView(context.view.getPageName()).getComponents();
-
+        ViewComponents components;
+        
+        components = context.getView(context.view.getPageName()).getComponents();
         if (components.tabletools.size() == 0)
             return;
         
-        tables = new HashMap<>();
+        tables = new ArrayList<>();
         message = new Message("multiple_objects_set");
-        for (String name : components.tabletools.keySet())
-            components.tabletools.get(name).sendUpdate(context, tables);
+        for (TableToolEntry entry : components.tabletools.values()) {
+            if (!entry.update)
+                continue;
+            entry.data.getContainer().setView(null);
+            tables.add(entry.data);
+        }
         
+        message.add("view", context.view);
         message.add("tables", tables);
         service = new GenericService(context.function, TableTool.URL);
-        tables = service.invoke(message);
-        for (String name : tables.keySet())
-            components.tabletools.get(name).receiveUpdate(
-                    context, tables.get(name));
+        objects = service.invoke(message);
+        tables = (List<TableToolData>)objects[1];
+        for (TableToolData data : tables)
+            components.tabletools.get(data.name).receiveUpdate(
+                    (View)objects[0], context, data);
     }
 }
 

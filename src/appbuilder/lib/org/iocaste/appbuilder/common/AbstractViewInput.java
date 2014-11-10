@@ -15,16 +15,18 @@ import org.iocaste.texteditor.common.TextEditor;
 
 public abstract class AbstractViewInput {
     private PageBuilderContext context;
+    private boolean init;
     
     private final void addtableitems(String table, ExtendedObject[] objects) {
-        TableToolData tabletool = getViewComponents().tabletools.
-                get(table).data;
+        TableToolEntry entry = getViewComponents().tabletools.get(table);
+        TableToolData tabletool = entry.data;
         
         if (tabletool == null)
             throw new RuntimeException(table.
                     concat(" is an invalid tabletool."));
         
         tabletool.objects = objects;
+        entry.update = !init;
     }
     
     private DashboardComponent dbget(String dashboard, String name) {
@@ -78,6 +80,7 @@ public abstract class AbstractViewInput {
     
     public final void run(PageBuilderContext context, boolean init) {
         this.context = context;
+        this.init = init;
         if (init)
             init(context);
         else

@@ -124,8 +124,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
      */
     public final String getServerName(HttpServletRequest req) {
         return new StringBuffer(req.getScheme()).append("://")
-                .append(req.getServerName()).append(":")
-                .append(req.getServerPort()).toString();
+                .append("127.0.0.1:").append(req.getServerPort()).toString();
     }
     
     /**
