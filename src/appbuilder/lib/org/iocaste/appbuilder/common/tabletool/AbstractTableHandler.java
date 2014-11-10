@@ -1,4 +1,4 @@
-package org.iocaste.appbuilder;
+package org.iocaste.appbuilder.common.tabletool;
 
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
@@ -6,8 +6,7 @@ import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.protocol.AbstractHandler;
-import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -19,9 +18,10 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
 
-public abstract class AbstractTableHandler extends AbstractHandler {
+public abstract class AbstractTableHandler {
     
-    protected void additem(Context context, ExtendedObject object, int pos) {
+    protected static void additem(
+            Context context, ExtendedObject object, int pos) {
         TableToolColumn column;
         Element element;
         DataElement delement;
@@ -93,7 +93,8 @@ public abstract class AbstractTableHandler extends AbstractHandler {
         item.setObject(object);
     }
     
-    protected final void additems(Context context, ExtendedObject[] items) {
+    protected static final void additems(
+            Context context, ExtendedObject[] items) {
         int vlines = context.table.getVisibleLines();
         int total = context.table.size();
         
@@ -115,18 +116,15 @@ public abstract class AbstractTableHandler extends AbstractHandler {
         context.table.setTopLine(total);
     }
     
-    protected final Table getTable(TableToolData data) {
-        return data.getContainer().getElement(data.name.concat("_table"));
+    protected static final Table getTable(TableToolData data) {
+        return data.context.view.getElement(data.name.concat("_table"));
     }
-
-    @Override
-    public abstract Object run(Message message) throws Exception;
     
     /**
      * 
      * @param mode
      */
-    protected final void setMode(Context context) {
+    protected static final void setMode(Context context) {
         switch (context.data.mode) {
         case TableTool.UPDATE:
         case TableTool.CONTINUOUS_UPDATE:
@@ -162,21 +160,21 @@ public abstract class AbstractTableHandler extends AbstractHandler {
             setVisibility(context, true, context.data.show);
     }
     
-    protected void setObject(TableToolData data) {
-        Context context = new Context();
+    protected static void setObject(TableToolData data) {
+        Context extcontext = new Context();
         
-        context.table = getTable(data);
-        context.table.clear();
-        context.data = data;
-        context.data.last = 0;
-        setObjects(context);
+        extcontext.table = getTable(data);
+        extcontext.table.clear();
+        extcontext.data = data;
+        extcontext.data.last = 0;
+        setObjects(extcontext);
     }
     
     /**
      * 
      * @param objects
      */
-    protected final void setObjects(Context context) {
+    protected static final void setObjects(Context context) {
         if (context.data.objects == null || context.data.objects.length == 0) {
             switch(context.data.mode) {
             case TableTool.CONTINUOUS_DISPLAY:
@@ -199,7 +197,7 @@ public abstract class AbstractTableHandler extends AbstractHandler {
      * @param visible
      * @param columns
      */
-    private final void setVisibility(
+    private static final void setVisibility(
             Context context, boolean visible, String... columns) {
         TableColumn tcolumn;
         
@@ -216,4 +214,10 @@ public abstract class AbstractTableHandler extends AbstractHandler {
         }
     }
 
+}
+
+class Context {
+    public TableToolData data;
+    public Table table;
+    public Button accept, add, remove;
 }

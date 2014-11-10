@@ -1,17 +1,15 @@
-package org.iocaste.appbuilder;
+package org.iocaste.appbuilder.common.tabletool;
 
 import org.iocaste.appbuilder.common.tabletool.TableTool;
-import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.TableItem;
 
 public class AddItem extends AbstractTableHandler {
 
-    @Override
-    public Object run(Message message) throws Exception {
+    public static final void run(TableToolData data) {
         int i = 0;
         Context context = new Context();
         
-        context.data = message.get("data");
+        context.data = data;
         context.table = getTable(context.data);
         
         switch (context.data.mode) {
@@ -30,8 +28,6 @@ public class AddItem extends AbstractTableHandler {
             additems(context, null);
             break;
         }
-        
-        return context.data;
     }
 
 }

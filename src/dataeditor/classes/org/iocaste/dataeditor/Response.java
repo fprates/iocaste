@@ -96,7 +96,10 @@ public class Response {
         pagecontrol.add("home");
         pagecontrol.add("back");
 
-        ttdata = new TableToolData(container, "itens");
+        ttdata = new TableToolData();
+        ttdata.context = context;
+        ttdata.container = container.getHtmlName();
+        ttdata.name = "itens";
         ttdata.model = context.model;
         ttdata.objects = context.itens;
         ttdata.vlines = 0;
@@ -119,7 +122,7 @@ public class Response {
             break;
         }
         
-        context.tablehelper = new TableTool(context, ttdata);
+        context.tablehelper = new TableTool(ttdata);
     }
 
 }

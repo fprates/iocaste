@@ -7,16 +7,6 @@
     <display-name>Document Manager Editor</display-name>
     
     <servlet>
-        <servlet-name>iocaste_server</servlet-name>
-        <servlet-class>@server.class@</servlet-class>
-    </servlet>
-    
-    <servlet-mapping>
-        <servlet-name>iocaste_server</servlet-name>
-        <url-pattern>/services.html</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
         <servlet-name>iocaste_servlet</servlet-name>
         <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
         <init-param>

@@ -69,7 +69,10 @@ public class Response {
          * tarefas
          */
         tabitem = new TabbedPaneItem(tabs, "taskstab");
-        ttdata = new TableToolData(tabitem, "tasks");
+        ttdata = new TableToolData();
+        ttdata.context = context;
+        ttdata.container = tabitem.getHtmlName();
+        ttdata.name = "tasks";
         ttdata.model = "USER_TASKS_GROUPS";
         ttdata.show = new String[] {"GROUP"};
         ttdata.objects = context.userdata.tasks;
@@ -87,13 +90,16 @@ public class Response {
             break;
         }
         
-        context.taskshelper = new TableTool(context, ttdata);
+        context.taskshelper = new TableTool(ttdata);
         
         /*
          * perfis
          */
         tabitem = new TabbedPaneItem(tabs, "profiletab");
-        ttdata = new TableToolData(tabitem, "profiles");
+        ttdata = new TableToolData();
+        ttdata.context = context;
+        ttdata.container = tabitem.getHtmlName();
+        ttdata.name = "profiles";
         ttdata.model = "USER_AUTHORITY";
         ttdata.show = new String[] {"PROFILE"};
         ttdata.objects = context.userdata.profiles;
@@ -111,7 +117,7 @@ public class Response {
             break;
         }
 
-        context.profileshelper = new TableTool(context, ttdata);
+        context.profileshelper = new TableTool(ttdata);
         context.view.setFocus(secret);
         context.view.setTitle(Context.TITLE[context.mode]);
     }

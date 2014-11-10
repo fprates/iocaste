@@ -22,7 +22,10 @@ public class Response {
         PageControl pagecontrol = new PageControl(container);
         
         pagecontrol.add("back");
-        ttdata = new TableToolData(container, "details");
+        ttdata = new TableToolData();
+        ttdata.context = context;
+        ttdata.container = container.getHtmlName();
+        ttdata.name = "details";
         ttdata.model = "STYLE_ELEMENT_DETAIL";
         ttdata.objects = context.eproperties;
         ttdata.vlines = 0;
@@ -38,7 +41,7 @@ public class Response {
             break;
         }
         
-        context.properties = new TableTool(context, ttdata);
+        context.properties = new TableTool(ttdata);
         context.view.setTitle(context.element);
     }
     
@@ -86,7 +89,10 @@ public class Response {
             ((InputComponent)element).setEnabled(false);
         }
 
-        ttdata = new TableToolData(container, "elements");
+        ttdata = new TableToolData();
+        ttdata.context = context;
+        ttdata.container = container.getHtmlName();
+        ttdata.name = "elements";
         ttdata.model = "STYLE_ELEMENT";
         ttdata.hide = new String[] {"INDEX", "STYLE"};
         ttdata.vlines = 0;
@@ -104,6 +110,6 @@ public class Response {
             break;
         }
         
-        context.items = new TableTool(context, ttdata);
+        context.items = new TableTool(ttdata);
     }
 }

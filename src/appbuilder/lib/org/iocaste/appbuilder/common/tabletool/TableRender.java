@@ -1,26 +1,26 @@
-package org.iocaste.appbuilder;
+package org.iocaste.appbuilder.common.tabletool;
 
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.protocol.Message;
+import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 
 public class TableRender extends AbstractTableHandler {
 
-    @Override
-    public Object run(Message message) throws Exception {
-        Container container;
+    public static final void run(Function function, TableToolData data) {
+        Container container, supercontainer;
         Context context = new Context();
         
-        context.data = message.get("data");
-        container = context.data.getContainer();
-        context.view = container.getView();
+        context.data = data;
+        supercontainer = data.context.view.getElement(data.container);
+        container = new StandardContainer(supercontainer, data.name);
         
         context.accept = new Button(
                 container, TableTool.ACCEPT.concat(context.data.name));
@@ -35,22 +35,20 @@ public class TableRender extends AbstractTableHandler {
         context.table.setHeader(!context.data.noheader);
         context.data.last = 0;
         
-        model(context);
+        model(function, context);
         setMode(context);
         setObjects(context);
-        
-        return context.data;
     }
     
     /**
      * 
      * @param modelname
      */
-    private final void model(Context context) {
+    private static final void model(Function function, Context context) {
         DocumentModelItem modelitem;
         String name;
         TableToolColumn column;
-        DocumentModel model = new Documents(getFunction()).
+        DocumentModel model = new Documents(function).
                 getModel(context.data.model);
         
         if (model == null)
