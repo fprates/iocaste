@@ -4,15 +4,11 @@ import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.documents.common.ComplexModel;
 
 public class MaintenanceSpec extends AbstractViewSpec {
-    private String cmodel;
-    
-    public MaintenanceSpec(String cmodel) {
-        this.cmodel = cmodel;
-    }
     
     @Override
     public void execute() {
-        ComplexModel model = getManager(cmodel).getModel();
+        Context extcontext = getExtendedContext();
+        ComplexModel model = getManager(extcontext.cmodel).getModel();
         
         form("main");
         navcontrol("main");

@@ -6,21 +6,20 @@ import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Const;
 
 public class Load extends AbstractActionHandler {
-    private String redirect, cmodel;
-    private ExtendedContext extcontext;
+    private String redirect;
     
-    public Load(ExtendedContext extcontext, String redirect, String cmodel) {
-        this.extcontext = extcontext;
+    public Load(String redirect) {
         this.redirect = redirect;
-        this.cmodel = cmodel;
     }
     
     @Override
     protected void execute(PageBuilderContext context) {
+        Context extcontext = getExtendedContext();
+        
         extcontext.id = getdfkeyst("head");
-        extcontext.document = getDocument(cmodel, extcontext.id);
+        extcontext.document = getDocument(extcontext.cmodel, extcontext.id);
         if (extcontext.document == null) {
-            managerMessage(cmodel, Const.ERROR, Manager.EINVALID);
+            managerMessage(extcontext.cmodel, Const.ERROR, Manager.EINVALID);
             return;
         }
         

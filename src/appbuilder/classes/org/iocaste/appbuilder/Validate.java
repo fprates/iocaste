@@ -6,23 +6,18 @@ import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Const;
 
 public class Validate extends AbstractActionHandler {
-    private ExtendedContext extcontext;
-    private String cmodel;
-    
-    public Validate(ExtendedContext extcontext, String cmodel) {
-        this.extcontext = extcontext;
-        this.cmodel = cmodel;
-    }
     
     @Override
     protected void execute(PageBuilderContext context) {
+        Context extcontext = getExtendedContext();
+        
         extcontext.id = getdfkey("head");
         extcontext.document = null;
         
-        if (!keyExists(cmodel, extcontext.id))
+        if (!keyExists(extcontext.cmodel, extcontext.id))
             redirect(extcontext.redirect);
         else
-            managerMessage(cmodel, Const.ERROR, Manager.EEXISTS);
+            managerMessage(extcontext.cmodel, Const.ERROR, Manager.EEXISTS);
     }
 
 }

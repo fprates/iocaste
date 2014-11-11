@@ -6,16 +6,12 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.docmanager.common.Manager;
 
 public class MaintenanceConfig extends AbstractViewConfig {
-    private String cmodel;
-    
-    public MaintenanceConfig(String cmodel) {
-        this.cmodel = cmodel;
-    }
     
     @Override
     protected void execute(PageBuilderContext context) {
         ConfigData configdata;
-        Manager manager = getManager(cmodel);
+        Context extcontext = getExtendedContext();
+        Manager manager = getManager(extcontext.cmodel);
         NavControl navcontrol = getNavControl();
 
         configdata = new ConfigData();

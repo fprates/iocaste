@@ -47,10 +47,9 @@ public class Main extends AbstractPageBuilder {
         AbstractViewInput maintenanceinput;
         AbstractActionHandler save;
         String create, create1, edit, edit1, display, display1, entityaction;
-        ExtendedContext extcontext;
+        Context extcontext;
         String name = getParameter("name");
-        String cmodel = getParameter("cmodel");
-        Manager manager = managerInstance(cmodel);
+        Manager manager;
         
         create = name.concat("create");
         create1 = create.concat("1");
@@ -58,49 +57,62 @@ public class Main extends AbstractPageBuilder {
         edit1 = edit.concat("1");
         display = name.concat("display");
         display1 = display.concat("1");
-        context.addManager(cmodel, manager);
         
-        extcontext = new ExtendedContext();
-        extcontext.redirect = create1;
+        extcontext = new Context();
+        extcontext.number = getParameter("number");
+        extcontext.redirect = (extcontext.number == null)? create1 : edit1;
+        extcontext.cmodel = getParameter("cmodel");
+        
+        manager = managerInstance(extcontext.cmodel);
+        context.addManager(extcontext.cmodel, manager);
         
         selspec = new SelectSpec();
-        maintenancespec = new MaintenanceSpec(cmodel);
-        maintenanceconfig = new MaintenanceConfig(cmodel);
-        maintenanceinput = new MaintenanceInput(extcontext);
-        save = new Save(cmodel);
+        maintenancespec = new MaintenanceSpec();
+        maintenanceconfig = new MaintenanceConfig();
+        maintenanceinput = new MaintenanceInput();
+        save = new Save();
         
         for (String action : new String[] {"create", "edit", "display"}) {
+            if (extcontext.number != null && action.equals("create"))
+                continue;
+            
             entityaction = name.concat(action);
             viewctx = context.instance(entityaction);
             viewctx.set(selspec);
-            viewctx.set(new SelectConfig(action, cmodel));
+            viewctx.set(new SelectConfig(action, extcontext.cmodel));
+            viewctx.set(extcontext);
             switch (action) {
             case "create":
-                viewctx.put("create", new Validate(extcontext, cmodel));
+                viewctx.put("create", new Validate());
                 break;
             case "edit":
-                viewctx.put("edit", new Load(extcontext, edit1, cmodel));
+                viewctx.put("edit", new Load(edit1));
                 break;
             case "display":
-                viewctx.put("display", new Load(extcontext, display1, cmodel));
+                viewctx.put("display", new Load(display1));
                 break;
             }
         }
         
-        for (String view : new String[] {create1, edit1}) {
+        for (String view : new String[] {create, create1, edit1}) {
+            if (extcontext.number == null && view.equals(create))
+                continue;
+            
             viewctx = context.instance(view);
             viewctx.set(maintenancespec);
             viewctx.set(maintenanceconfig);
             viewctx.set(maintenanceinput);
             viewctx.put("save", save);
             viewctx.setUpdate(true);
+            viewctx.set(extcontext);
         }
 
         viewctx = context.instance(display1);
         viewctx.set(maintenancespec);
-        viewctx.set(new DisplayConfig(cmodel));
+        viewctx.set(new DisplayConfig());
         viewctx.set(maintenanceinput);
         viewctx.setUpdate(true);
+        viewctx.set(extcontext);
     }
     
     private void loadRemoteModule(PageBuilderContext context, String module)

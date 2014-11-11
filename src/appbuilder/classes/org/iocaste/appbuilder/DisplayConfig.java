@@ -5,16 +5,12 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.docmanager.common.Manager;
 
 public class DisplayConfig extends AbstractViewConfig {
-    private String cmodel;
-    
-    public DisplayConfig(String cmodel) {
-        this.cmodel = cmodel;
-    }
     
     @Override
     protected void execute(PageBuilderContext context) {
         ConfigData configdata;
-        Manager manager = getManager(cmodel);
+        Context extcontext = getExtendedContext();
+        Manager manager = getManager(extcontext.cmodel);
 
         configdata = new ConfigData();
         configdata.cmodel = manager.getModel();

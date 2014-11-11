@@ -10,34 +10,34 @@ import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.shell.common.Const;
 
 public class Save extends AbstractActionHandler {
-    private String cmodel;
-    
-    public Save(String cmodel) {
-        this.cmodel = cmodel;
-    }
     
     @Override
     protected void execute(PageBuilderContext context) {
         DocumentExtractor extractor;
         DataConversion conversion;
         ComplexModel cmodel;
+        String keyname;
+        Context extcontext = getExtendedContext();
         
-        cmodel = getManager(this.cmodel).getModel();
+        cmodel = getManager(extcontext.cmodel).getModel();
         conversion = new DataConversion();
         conversion.dfsource("base");
         for (DocumentModelKey key : cmodel.getHeader().getKeys()) {
-            conversion.constant(key.getModelItemName(), getdfkey("head"));
+            keyname = key.getModelItemName();
+            conversion.constant(keyname, getdfkey("head"));
+            if (extcontext.number != null)
+                conversion.nextnumber(keyname, extcontext.number);
             break;
         }
         
-        extractor = documentExtractorInstance(this.cmodel);
+        extractor = documentExtractorInstance(extcontext.cmodel);
         extractor.setHeader(conversion);
         extractor.ignoreInitialHead();
         for (String name : cmodel.getItems().keySet())
             extractor.addItems(name.concat("_table"));
         extractor.save();
         
-        managerMessage(this.cmodel, Const.STATUS, Manager.SAVED);
+        managerMessage(extcontext.cmodel, Const.STATUS, Manager.SAVED);
 
     }
 

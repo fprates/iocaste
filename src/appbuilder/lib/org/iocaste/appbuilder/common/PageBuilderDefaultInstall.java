@@ -37,12 +37,16 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
             taskgroup.add(link);
     }
     
-    private final String buildapplink(
-            String entity, String action, String cmodel) {
-        return new StringBuilder("iocaste-appbuilder @").
-                append(entity).append(action).
-                append(" name=").append(entity).
-                append(" cmodel=").append(cmodel).toString();
+    private final String buildapplink(AppBuilderLink applink, String action) {
+        StringBuilder sb = new StringBuilder("iocaste-appbuilder @").
+                append(applink.entity).append(action).
+                append(" name=").append(applink.entity).
+                append(" cmodel=").append(applink.cmodel);
+        
+        if (applink.number != null)
+            sb.append(" number=").append(applink.number);
+        
+        return sb.toString();
     }
     
     public AppBuilderLink builderLinkInstance() {
@@ -67,12 +71,9 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
             data.add(taskgroup);
         
         for (AppBuilderLink applink : applinks) {
-            links.put(applink.create,
-                    buildapplink(applink.entity, "create", applink.cmodel));
-            links.put(applink.display,
-                    buildapplink(applink.entity, "display", applink.cmodel));
-            links.put(applink.change,
-                    buildapplink(applink.entity, "edit", applink.cmodel));
+            links.put(applink.create, buildapplink(applink, "create"));
+            links.put(applink.display, buildapplink(applink, "display"));
+            links.put(applink.change, buildapplink(applink, "edit"));
             
             if (applink.taskgroup == null)
                 continue;

@@ -7,16 +7,12 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 
 public class MaintenanceInput extends AbstractViewInput {
-    private ExtendedContext extcontext;
-    
-    public MaintenanceInput(ExtendedContext extcontext) {
-        this.extcontext = extcontext;
-    }
     
     @Override
     protected void execute(PageBuilderContext context) {
         ComplexModel cmodel;
         DataForm form = getElement("base");
+        Context extcontext = getExtendedContext();
         
         setdfkey("head", extcontext.id);
         for (Element element : form.getElements()) {
