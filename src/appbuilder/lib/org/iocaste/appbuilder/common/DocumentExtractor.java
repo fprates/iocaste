@@ -21,6 +21,7 @@ public class DocumentExtractor {
     private Map<String, DataConversion> items;
     private Documents documents;
     private Manager manager;
+    private boolean ignoreinitialhead;
     
     public DocumentExtractor(PageBuilderContext context, String manager) {
         this.context = context;
@@ -41,7 +42,8 @@ public class DocumentExtractor {
             ExtendedObject source,
             DocumentModel resultmodel,
             DataConversion conversion,
-            Documents documents) {
+            Documents documents,
+            boolean ignoreinitial) {
         Map<String, Object> hold;
         ExtendedObject object;
         Set<String> fields, ignore;
@@ -51,18 +53,21 @@ public class DocumentExtractor {
             return source;
         
         fields = conversion.getFields();
-        hold = push(source, conversion);
-        ignore = new HashSet<>();
-        for (String field : fields)
-            if (conversion.getType(field) == DataConversion.IGNORE)
-                ignore.add(field);
-        
-        if (Documents.isInitialIgnoring(source, ignore)) {
+        if (!ignoreinitial) {
+            hold = push(source, conversion);
+            ignore = new HashSet<>();
+            for (String field : fields)
+                if (conversion.getType(field) == DataConversion.IGNORE)
+                    ignore.add(field);
+            
+            if (Documents.isInitialIgnoring(source, ignore)) {
+                pop(source, hold);
+                return null;
+            }
+            
             pop(source, hold);
-            return null;
         }
         
-        pop(source, hold);
         object = new ExtendedObject(resultmodel);
         Documents.move(object, source);
         
@@ -122,7 +127,7 @@ public class DocumentExtractor {
             if (rule != null)
                 rule.beforeConversion(object);
             
-            object = conversion(object, model, conversion, documents);
+            object = conversion(object, model, conversion, documents, false);
             if (object == null)
                 continue;
             
@@ -136,6 +141,10 @@ public class DocumentExtractor {
         }
         
         return (document == null)? result.toArray(new ExtendedObject[0]) : null;
+    }
+    
+    public final void ignoreInitialHead() {
+        ignoreinitialhead = true;
     }
     
     private static final void pop(
@@ -202,7 +211,8 @@ public class DocumentExtractor {
         else
             model = documents.getModel(to);
         
-        head = conversion(head, model, hconversion, documents);
+        head = conversion(
+                head, model, hconversion, documents, ignoreinitialhead);
         document.setHeader(head);
         for (String name : items.keySet()) {
             objects = null;

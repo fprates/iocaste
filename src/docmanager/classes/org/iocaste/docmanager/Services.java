@@ -24,7 +24,7 @@ public class Services extends AbstractFunction {
     }
     
     public final boolean exists(Message message) {
-        String code = message.get("code");
+        Object code = message.get("code");
         String cmodelname = message.get("cmodel_name");
         Documents documents = new Documents(this);
         ComplexModel cmodel = documents.getComplexModel(cmodelname);

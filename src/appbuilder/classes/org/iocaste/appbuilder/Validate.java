@@ -16,7 +16,7 @@ public class Validate extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        extcontext.id = getdfkeyst("head");
+        extcontext.id = getdfkey("head");
         extcontext.document = null;
         
         if (!keyExists(cmodel, extcontext.id))

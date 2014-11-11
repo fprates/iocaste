@@ -32,6 +32,7 @@ public class Save extends AbstractActionHandler {
         
         extractor = documentExtractorInstance(this.cmodel);
         extractor.setHeader(conversion);
+        extractor.ignoreInitialHead();
         for (String name : cmodel.getItems().keySet())
             extractor.addItems(name.concat("_table"));
         extractor.save();
