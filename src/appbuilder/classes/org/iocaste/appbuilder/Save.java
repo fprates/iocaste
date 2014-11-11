@@ -5,6 +5,7 @@ import org.iocaste.appbuilder.common.DataConversion;
 import org.iocaste.appbuilder.common.DocumentExtractor;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.docmanager.common.Manager;
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.shell.common.Const;
@@ -13,6 +14,7 @@ public class Save extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) {
+        ComplexDocument document;
         DocumentExtractor extractor;
         DataConversion conversion;
         ComplexModel cmodel;
@@ -35,7 +37,9 @@ public class Save extends AbstractActionHandler {
         extractor.ignoreInitialHead();
         for (String name : cmodel.getItems().keySet())
             extractor.addItems(name.concat("_table"));
-        extractor.save();
+        
+        document = extractor.save();
+        extcontext.id = document.getKey();
         
         managerMessage(extcontext.cmodel, Const.STATUS, Manager.SAVED);
 
