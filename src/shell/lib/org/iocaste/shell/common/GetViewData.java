@@ -76,6 +76,7 @@ public class GetViewData extends AbstractHandler {
             view.setMessages(messages);
         }
         
+        state.parameters.clear();
         viewreturn = new Object[2];
         viewreturn[0] = view;
         viewreturn[1] = state.headervalues;
