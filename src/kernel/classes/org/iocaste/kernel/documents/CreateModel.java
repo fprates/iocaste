@@ -112,6 +112,15 @@ public class CreateModel extends AbstractDocumentsHandler {
         return update(connection, query);
     }
     
+    private final DocumentModelItem getModelItem(Connection connection,
+            Documents documents, DocumentModel model, String name)
+                    throws Exception {
+        GetDocumentModel getmodel = documents.get("get_document_model");
+        
+        return getmodel.run(connection, documents, model.getName()).
+                getModelItem(name);
+    }
+    
     /**
      * 
      * @param model
@@ -123,11 +132,21 @@ public class CreateModel extends AbstractDocumentsHandler {
         CreateDataElement createde;
         String name;
         DataElement element;
+        DocumentModelItem reference;
         DocumentModelItem[] itens = model.getItens();
         
         createde = documents.get("create_data_element");
         for (DocumentModelItem item : itens) {
             element = item.getDataElement();
+            if (element == null) {
+                reference = item.getReference();
+                if (reference.isDummy())
+                    reference = getModelItem(connection, documents,
+                            reference.getDocumentModel(), reference.getName());
+                element = reference.getDataElement();
+                item.setDataElement(element);
+            }
+            
             if (element == null)
                 throw new IocasteException(new StringBuilder(item.getName()).
                         append(" has null data element.").toString());
