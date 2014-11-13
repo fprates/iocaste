@@ -181,6 +181,10 @@ public abstract class AbstractActionHandler {
         context.view.message(type, text);
     }
     
+    protected final int modify(ExtendedObject object) {
+        return documents.modify(object);
+    }
+    
     protected final ExtendedObject readobjects(ExtendedObject[] objects,
             String op1, Object op2) {
         for (ExtendedObject object : objects)
@@ -311,5 +315,9 @@ public abstract class AbstractActionHandler {
     
     protected final Map<String, String> textget(String name, String id) {
         return new TextEditorTool(context).get(name, id);
+    }
+    
+    protected final int update(Query query) {
+        return documents.update(query);
     }
 }
