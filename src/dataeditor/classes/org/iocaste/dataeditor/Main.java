@@ -99,6 +99,6 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.addToTaskGroup("DEVELOP", "SM30");
         defaultinstall.setProfile("DEVELOP");
         
-        installObject("messages", new MessagesInstall());
+        installObject("messages", new TextsInstall());
     }
 }
