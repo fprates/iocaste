@@ -5,8 +5,9 @@ import org.iocaste.appbuilder.common.DataConversion;
 import org.iocaste.appbuilder.common.DocumentExtractor;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.docmanager.common.Manager;
-import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.shell.common.Const;
 
@@ -14,7 +15,7 @@ public class Save extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        ComplexDocument document;
+        DocumentModel model;
         DocumentExtractor extractor;
         DataConversion conversion;
         ComplexModel cmodel;
@@ -35,11 +36,19 @@ public class Save extends AbstractActionHandler {
         extractor = documentExtractorInstance(extcontext.cmodel);
         extractor.setHeader(conversion);
         extractor.ignoreInitialHead();
-        for (String name : cmodel.getItems().keySet())
-            extractor.addItems(name.concat("_table"));
         
-        document = extractor.save();
-        extcontext.id = document.getKey();
+        for (String name : cmodel.getItems().keySet()) {
+            model = cmodel.getItems().get(name);
+            conversion = new DataConversion(model.getName());
+            extractor.addItems(name.concat("_table"), conversion);
+            
+            for (DocumentModelItem item : model.getItens())
+                if (model.isKey(item))
+                    conversion.ignore(item.getName());
+        }
+        
+        extcontext.document = extractor.save();
+        extcontext.id = extcontext.document.getKey();
         
         managerMessage(extcontext.cmodel, Const.STATUS, Manager.SAVED);
 
