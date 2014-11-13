@@ -1,119 +1,104 @@
 package org.iocaste.dataeditor;
 
-import org.iocaste.documents.common.Documents;
-import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.View;
+import org.iocaste.appbuilder.common.AbstractActionHandler;
+import org.iocaste.appbuilder.common.AbstractPageBuilder;
+import org.iocaste.appbuilder.common.AbstractViewInput;
+import org.iocaste.appbuilder.common.AbstractViewSpec;
+import org.iocaste.appbuilder.common.ExtendedContext;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.ViewContext;
 
-public class Main extends AbstractPage {
-    private Context context;
-    
-    public Main() {
-        export("install", "install");
+public class Main extends AbstractPageBuilder {
+
+    private final ViewContext buildDisplayView(
+            PageBuilderContext context, ExtendedContext extcontext, String name)
+    {
+        ViewContext view;
+        AbstractViewSpec outputspec;
+        AbstractViewInput itemsinput;
+
+        outputspec = new OutputSpec();
+        itemsinput = new ItemsInput();
+        
+        view = context.instance(name);
+        view.set(outputspec);
+        view.set(new DisplayConfig());
+        view.set(itemsinput);
+        view.set(extcontext);
+        view.put("save", new Save());
+        view.setUpdate(true);
+        
+        return view;
     }
     
-    public final void display() {
-        DataForm form = context.view.getElement("model");
-        String modelname = form.get("NAME").get();
-        String message = Request.load(modelname, context);
+    private final ViewContext buildEditView(
+            PageBuilderContext context, ExtendedContext extcontext, String name)
+    {
+        ViewContext view;
+        AbstractViewSpec outputspec;
+        AbstractViewInput itemsinput;
+
+        outputspec = new OutputSpec();
+        itemsinput = new ItemsInput();
         
-        if (message != null) {
-            context.view.message(Const.ERROR, message);
-            return;
-        }
+        view = context.instance(name);
+        view.set(outputspec);
+        view.set(new EditConfig());
+        view.set(itemsinput);
+        view.set(extcontext);
+        view.setUpdate(true);
         
-        context.mode = Context.DISPLAY;
-        setReloadableView(true);
-        redirect("output");
-    }
-    
-    public final void form() {
-        Response.form(context);
+        return view;
     }
     
     @Override
-    public final AbstractContext init(View view) {
-        context = new Context();
-        context.modelmodel = new Documents(this).getModel("MODEL");
+    public final void config(PageBuilderContext context) throws Exception {
+        AbstractActionHandler load;
+        ViewContext view;
+        Context extcontext = new Context();
         
-        return context;
-    }
-    
-    public final void insert() {
-        setReloadableView(true);
-        redirect("form");
-    }
-    
-    /**
-     * 
-     */
-    public final void insertcancel() {
-        back();
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
-     */
-    public final InstallData install(Message message) {
-        return Install.init();
-    }
-    
-    public final void main() {
-        String message, model;
-        String action = getParameter("action");
-        if (action == null) {
-            Response.main(context);
+        extcontext.action = getParameter("action");
+        extcontext.model = getParameter("model");
+        
+        if (extcontext.action != null) {
+            switch (extcontext.action) {
+            case "display":
+                view = buildDisplayView(context, extcontext, "main");
+                break;
+            case "edit":
+                view = buildEditView(context, extcontext, "main");
+                break;
+            default:
+                return;
+            }
+
+            context.view.setActionControl("load");
+            load = new Load(extcontext.action);
+            view.put("load", load);
+            load.run(context, false);
             return;
         }
         
-        model = getParameter("model");
-        message = Request.load(model, context);
-        if (message != null) {
-            Response.main(context);
-            return;
-        }
+        view = context.instance("main");
+        view.set(new SelectionSpec());
+        view.set(new SelectionConfig());
+        view.put("display", new Load("display"));
+        view.put("edit", new Load("edit"));
+        view.set(extcontext);
         
-        switch (action) {
-        case "edit":
-            context.mode = Context.UPDATE;
-            Response.output(context);
-            break;
-        case "display":
-            context.mode = Context.DISPLAY;
-            Response.output(context);
-            break;
-        default:
-            Response.main(context);
-            break;
-        }
+        buildEditView(context, extcontext, "edit");
+        buildDisplayView(context, extcontext, "display");
     }
-    
-    public final void output() {
-        Response.output(context);
-    }
-    
-    public final void save() {
-        Request.save(context);
-    }
-    
-    public final void update() {
-        DataForm form = context.view.getElement("model");
-        String modelname = form.get("NAME").get();
-        String message = Request.load(modelname, context);
+
+    @Override
+    protected void installConfig(PageBuilderDefaultInstall defaultinstall)
+            throws Exception {
+        defaultinstall.setLink("SM30", "iocaste-dataeditor");
+        defaultinstall.setProgramAuthorization("DATAEDITOR");
+        defaultinstall.addToTaskGroup("DEVELOP", "SM30");
+        defaultinstall.setProfile("DEVELOP");
         
-        if (message != null) {
-            context.view.message(Const.ERROR, message);
-            return;
-        }
-        
-        context.mode = Context.UPDATE;
-        setReloadableView(true);
-        redirect("output");
+        installObject("messages", new MessagesInstall());
     }
 }
