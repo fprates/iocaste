@@ -76,6 +76,11 @@ public abstract class AbstractActionHandler {
     protected final String filenameget(String fileentry) {
         return fileentryget(fileentry).get();
     }
+
+    protected ExtendedObject getdf(String name) {
+        DataForm dataform = context.view.getElement(name);
+        return dataform.getObject();
+    }
     
     protected <T> T getdf(String dataform, String field) {
         return getdfinput(dataform, field).get();
