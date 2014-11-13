@@ -62,6 +62,7 @@ public class Common {
             tabletool = components.getTableToolData(name.concat("_table"));
             tabletool.model = model.getName();
             tabletool.mode = griddata.mode;
+            tabletool.mark = griddata.mark;
             tabletool.hide = new String[] {
                 AbstractManager.getReference(model, griddata.hkey).getName(),
                 AbstractManager.getKey(model).getName()

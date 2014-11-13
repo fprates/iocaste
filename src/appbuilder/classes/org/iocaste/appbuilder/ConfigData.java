@@ -11,5 +11,6 @@ public class ConfigData {
     public DocumentModelItem hkey;
     public ComplexModel cmodel;
     public byte mode;
+    public boolean mark;
     public PageBuilderContext context;
 }

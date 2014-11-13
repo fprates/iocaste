@@ -18,6 +18,7 @@ public class MaintenanceConfig extends AbstractViewConfig {
         configdata.cmodel = manager.getModel();
         configdata.mode = ConfigData.UPDATE;
         configdata.context = context;
+        configdata.mark = true;
         
         navcontrol.add("save");
         
