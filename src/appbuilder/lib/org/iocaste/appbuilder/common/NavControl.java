@@ -139,7 +139,7 @@ public class NavControl {
         stylesheet.put(".nc_nav_separator", "display", "inline");
         
         stylesheet.newElement(".nc_nav_submit");
-        stylesheet.put(".nc_nav_submit", "color", "#aaaaaa");
+        stylesheet.put(".nc_nav_submit", "color", "#ffffff");
         stylesheet.put(".nc_nav_submit", "font-size", "10pt");
         stylesheet.put(".nc_nav_submit", "border-style", "none");
         stylesheet.put(".nc_nav_submit", "background-color", "#aaaaaa");
@@ -160,6 +160,10 @@ public class NavControl {
         stylesheet.put(to, "text-decoration", "none");
         stylesheet.put(to, "padding", "3px");
         stylesheet.put(to, "vertical-align", "middle");
+    }
+    
+    public final void setControlStyle(String control, String style) {
+        context.view.getElement(control).setStyleClass(style);
     }
     
     public final void setTitle(String title) {

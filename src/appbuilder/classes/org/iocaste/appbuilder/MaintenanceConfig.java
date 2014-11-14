@@ -21,6 +21,7 @@ public class MaintenanceConfig extends AbstractViewConfig {
         configdata.mark = true;
         
         navcontrol.add("save");
+        navcontrol.submit("validate");
         
         Common.formConfig(configdata);
         Common.gridConfig(configdata);

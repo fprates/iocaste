@@ -45,7 +45,7 @@ public class Main extends AbstractPageBuilder {
         MaintenanceConfig maintenanceconfig;
         AbstractViewSpec selspec, maintenancespec;
         AbstractViewInput maintenanceinput;
-        AbstractActionHandler save;
+        AbstractActionHandler save, inputvalidate;
         String create, create1, edit, edit1, display, display1, entityaction;
         Context extcontext;
         String name = getParameter("name");
@@ -71,6 +71,7 @@ public class Main extends AbstractPageBuilder {
         maintenanceconfig = new MaintenanceConfig();
         maintenanceinput = new MaintenanceInput();
         save = new Save();
+        inputvalidate = new InputValidate();
         
         for (String action : new String[] {"create", "edit", "display"}) {
             if (extcontext.number != null && action.equals("create"))
@@ -102,9 +103,9 @@ public class Main extends AbstractPageBuilder {
             viewctx.set(maintenancespec);
             viewctx.set(maintenanceconfig);
             viewctx.set(maintenanceinput);
-            viewctx.put("save", save);
-            viewctx.setUpdate(true);
             viewctx.set(extcontext);
+            viewctx.put("validate", inputvalidate);
+            viewctx.put("save", save);
         }
 
         viewctx = context.instance(display1);
@@ -159,5 +160,12 @@ class RuntimeManager extends AbstractManager {
         messages[SAVED] = "record.saved";
         setMessages(messages);
     }
+    
+}
+
+class InputValidate extends AbstractActionHandler {
+
+    @Override
+    protected void execute(PageBuilderContext context) throws Exception { }
     
 }
