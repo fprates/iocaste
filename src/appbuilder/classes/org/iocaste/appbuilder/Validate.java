@@ -14,10 +14,13 @@ public class Validate extends AbstractActionHandler {
         extcontext.id = getdfkey("head");
         extcontext.document = null;
         
-        if (!keyExists(extcontext.cmodel, extcontext.id))
-            redirect(extcontext.redirect);
-        else
+        if (keyExists(extcontext.cmodel, extcontext.id)) {
             managerMessage(extcontext.cmodel, Const.ERROR, Manager.EEXISTS);
+            return;
+        }
+        
+        init(extcontext.redirect, extcontext);
+        redirect(extcontext.redirect);
     }
 
 }
