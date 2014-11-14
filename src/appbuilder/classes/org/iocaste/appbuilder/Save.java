@@ -28,7 +28,7 @@ public class Save extends AbstractActionHandler {
         for (DocumentModelKey key : cmodel.getHeader().getKeys()) {
             keyname = key.getModelItemName();
             conversion.constant(keyname, getdfkey("head"));
-            if (extcontext.number != null)
+            if ((extcontext.number != null) && (extcontext.id == null))
                 conversion.nextnumber(keyname, extcontext.number);
             break;
         }
@@ -47,11 +47,13 @@ public class Save extends AbstractActionHandler {
                     conversion.ignore(item.getName());
         }
         
+        if (extcontext.id == null)
+            inputrefresh();
+        
         extcontext.document = extractor.save();
         extcontext.id = extcontext.document.getKey();
         
         managerMessage(extcontext.cmodel, Const.STATUS, Manager.SAVED);
-
     }
 
 }
