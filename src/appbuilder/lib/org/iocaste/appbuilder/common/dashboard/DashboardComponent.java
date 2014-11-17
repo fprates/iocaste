@@ -1,6 +1,6 @@
 package org.iocaste.appbuilder.common.dashboard;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -34,7 +34,7 @@ public class DashboardComponent {
         this.group = group;
         this.factory = factory;
 
-        components = new HashSet<>();
+        components = new LinkedHashSet<>();
         bordercolor = "black";
         backcolor = "white";
         choose = name.concat("_dbitem_choose");
@@ -49,6 +49,7 @@ public class DashboardComponent {
         stylesheet.put(stylename, "border-color", bordercolor);
         stylesheet.put(stylename, "background-color", backcolor);
         stylesheet.put(stylename, "border-style", "solid");
+        stylesheet.put(stylename, "border-width", "1px");
         
         if (this.group) {
             padding = 1;
@@ -113,6 +114,10 @@ public class DashboardComponent {
         return factory;
     }
     
+    public final Set<String> getComponents() {
+        return components;
+    }
+    
     public final String getValue() {
         return ((InputComponent)context.view.getElement(choose)).getst();
     }
@@ -155,6 +160,10 @@ public class DashboardComponent {
     public final void setPadding(int padding) {
         this.padding = padding;
         commit();
+    }
+    
+    public final void setStyleProperty(String name, String value) {
+        stylesheet.put(stylename, name, value);
     }
     
     public final void show() {
