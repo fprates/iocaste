@@ -2,8 +2,7 @@ package org.iocaste.install;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.FileWriter;
 import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -274,8 +273,7 @@ public class DBConfigRequest {
         new File(path).mkdir();
         file = new File(new StringBuilder(path).
                 append(File.separator).append(CONFIG_FILE).toString());
-        writer = new BufferedWriter(
-                new OutputStreamWriter(new FileOutputStream(file)));
+        writer = new BufferedWriter(new FileWriter(file));
         
         properties.put("dbdriver", config.dbdriver);
         properties.put("dbname", config.dbname);
