@@ -22,10 +22,10 @@ public class InstallModels {
         for (DocumentModel model : models.values()) {
             modelname = model.getName();
             if (state.documents.getModel(modelname) != null) {
-                if (state.documents.updateModel(model) == 0)
+                if (state.documents.updateModel(model) < 0)
                     throw new IocasteException("update model error.");
             } else {
-                if (state.documents.createModel(model) == 0)
+                if (state.documents.createModel(model) < 0)
                     throw new IocasteException("create model error.");
             }
             

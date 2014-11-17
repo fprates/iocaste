@@ -3,7 +3,6 @@ package org.iocaste.kernel.documents;
 import java.sql.Connection;
 
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -11,27 +10,6 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class CreateModel extends AbstractDocumentsHandler {
-
-    @Override
-    public Object run(Message message) throws Exception {
-        Documents documents;
-        String name;
-        DocumentModel model;
-        Connection connection;
-        
-        model = message.get("model");
-        documents = getFunction();
-        connection = documents.database.getDBConnection(message.getSessionid());
-        registerModel(connection, documents, model);
-        if (model.getTableName() != null)
-            createTable(connection, documents, model);
-        
-        name = model.getName();
-        model.setQueries(documents.cache.queries.get(name));
-        documents.cache.models.put(name, model);
-        
-        return 1;
-    }
     
     /**
      * 
@@ -42,37 +20,30 @@ public class CreateModel extends AbstractDocumentsHandler {
      */
     private final int createTable(Connection connection, Documents documents,
             DocumentModel model) throws Exception {
-        GetDataElement getde;
+        GetDocumentModel getmodel;
         DocumentModel refmodel;
         DataElement dataelement;
         DocumentModelItem reference;
-        String tname, query, refname, dbtype;
-        GetDocumentModel getmodel;
+        String tname, query, refname, dbtype, refstmt;
         int size;
         StringBuilder sb, sbk = null;
         DocumentModelItem[] itens = model.getItens();
-        String refstmt;
-
+        
         getmodel = documents.get("get_document_model");
         dbtype = getSystemParameter(documents, "dbtype");
         size = itens.length - 1;
         refstmt = getReferenceStatement(documents);
         sb = new StringBuilder("create table ").append(model.getTableName()).
                 append("(");
-        
-        getde = documents.get("get_data_element");
+
         for (DocumentModelItem item : itens) {
             tname = item.getTableFieldName();
             if (tname == null)
-                throw new IocasteException("Table field name is null.");
+                throw new IocasteException(new StringBuilder(model.getName()).
+                        append(": Table field name is null.").toString());
             
             sb.append(tname);
             dataelement = item.getDataElement();
-            if (dataelement.isDummy()) {
-                dataelement = getde.run(connection, dataelement.getName());
-                item.setDataElement(dataelement);
-            }
-
             setTableFieldsString(sb, dataelement, dbtype);
             if (model.isKey(item)) {
                 if (sbk == null)
@@ -130,58 +101,11 @@ public class CreateModel extends AbstractDocumentsHandler {
     private final int registerDataElements(Connection connection,
             Documents documents, DocumentModel model) throws Exception {
         CreateDataElement createde;
-        String name;
-        DataElement element;
-        DocumentModelItem reference;
         DocumentModelItem[] itens = model.getItens();
         
         createde = documents.get("create_data_element");
-        for (DocumentModelItem item : itens) {
-            element = item.getDataElement();
-            if (element == null) {
-                reference = item.getReference();
-                if (reference.isDummy())
-                    reference = getModelItem(connection, documents,
-                            reference.getDocumentModel(), reference.getName());
-                element = reference.getDataElement();
-                item.setDataElement(element);
-            }
-            
-            if (element == null)
-                throw new IocasteException(new StringBuilder(item.getName()).
-                        append(" has null data element.").toString());
-            
-            switch (element.getType()) {
-            case DataType.DATE:
-                element.setLength(10);
-                element.setDecimals(0);
-                element.setUpcase(false);
-                
-                break;
-            case DataType.TIME:
-                element.setLength(8);
-                element.setDecimals(0);
-                element.setUpcase(false);
-                
-                break;
-            case DataType.BOOLEAN:
-                element.setLength(1);
-                element.setDecimals(0);
-                element.setUpcase(false);
-                
-                break;
-            }
-            
-            name = element.getName();
-            if (select(connection, QUERIES[ELEMENT], 1, name) != null)
-                continue;
-            
-            if (element.isDummy())
-                throw new IocasteException(new StringBuilder(name).
-                        append(": is an invalid data element.").toString());
-            
-            createde.run(connection, element);
-        }
+        for (DocumentModelItem item : itens)
+            createde.run(connection, item.getDataElement());
         
         return 1;
     }
@@ -279,6 +203,65 @@ public class CreateModel extends AbstractDocumentsHandler {
         registerDocumentItems(connection, documents, model);
         registerDocumentKeys(connection, model);
         documents.parseQueries(model);
+    }
+
+    private void prepareElements(Connection connection, Documents documents,
+            DocumentModel model) throws Exception {
+        DocumentModelItem reference;
+        DataElement element;
+        CreateDataElement createde;
+        GetDataElement getde;
         
+        createde = documents.get("create_data_element");
+        getde = documents.get("get_data_element");
+        for (DocumentModelItem item : model.getItens()) {
+            element = item.getDataElement();
+            if (element == null) {
+                reference = item.getReference();
+                if (reference.isDummy())
+                    reference = getModelItem(connection, documents,
+                            reference.getDocumentModel(), reference.getName());
+                element = reference.getDataElement();
+                item.setDataElement(element);
+            }
+            
+            if (element == null)
+                throw new IocasteException(new StringBuilder(item.getName()).
+                        append(" has null data element.").toString());
+            
+            if (element.isDummy()) {
+                element = getde.run(connection, element.getName());
+                item.setDataElement(element);
+            } else {
+                createde.prepare(element);
+            }   
+        }
+    }
+    
+    @Override
+    public Object run(Message message) throws Exception {
+        int code;
+        Documents documents;
+        String name;
+        DocumentModel model;
+        Connection connection;
+        
+        model = message.get("model");
+        documents = getFunction();
+        connection = documents.database.getDBConnection(message.getSessionid());
+        
+        prepareElements(connection, documents, model);
+        if (model.getTableName() != null) {
+            code = createTable(connection, documents, model);
+            if (code < 0)
+                return code;
+        }
+        
+        registerModel(connection, documents, model);        
+        name = model.getName();
+        model.setQueries(documents.cache.queries.get(name));
+        documents.cache.models.put(name, model);
+        
+        return 1;
     }
 }

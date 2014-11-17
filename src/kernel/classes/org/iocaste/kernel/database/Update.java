@@ -52,7 +52,7 @@ public class Update extends AbstractHandler {
             i = e.getErrorCode();
             switch (i) {
             case 2627: // constraint error code
-                return 0;
+                return -1;
             }
             throw new SQLException(e.getMessage());
         } catch (MySQLSyntaxErrorException e) {
@@ -74,7 +74,7 @@ public class Update extends AbstractHandler {
                 }
                     
             }
-            return 0;
+            return -1;
         } finally {
             ps.close();
         }
