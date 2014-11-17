@@ -29,21 +29,25 @@ public class RemoveModel extends AbstractDocumentsHandler {
         for (DocumentModelKey key : model.getKeys()) {
             name = getComposedName(model.getModelItem(key.getModelItemName()));
             if (update(connection, QUERIES[DEL_KEY], name) == 0)
-                throw new IocasteException("error on removing model key");
+                throw new IocasteException(new StringBuilder(modelname).
+                        append(": error on removing key").toString());
         }
         
         for (DocumentModelItem item : model.getItens())
             if (removeModelItem(connection, item) == 0)
-                throw new IocasteException("error on removing model item");
+                throw new IocasteException(new StringBuilder(modelname).
+                        append(": error on removing item").toString());
         
         tablename = model.getTableName();
         if ((tablename != null) &&
                 (update(connection, QUERIES[DEL_MODEL_REF], tablename) == 0))
-            throw new IocasteException(
-                        "error on removing model/table reference");
+            throw new IocasteException(new StringBuilder(modelname).
+                        append(": error on removing model/table reference").
+                        toString());
         
         if (update(connection, QUERIES[DEL_MODEL], modelname) == 0)
-            throw new IocasteException("error on removing header model data");
+            throw new IocasteException(new StringBuilder(modelname).
+                    append(": error on removing header model data").toString());
         
         documents.cache.queries.remove(modelname);
         documents.cache.models.remove(modelname);
