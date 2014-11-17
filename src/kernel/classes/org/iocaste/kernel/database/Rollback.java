@@ -22,9 +22,6 @@ public class Rollback extends AbstractHandler {
         Connection connection;
         Database database = getFunction();
         
-        if (database.isAuthorizedCall())
-            return;
-        
         connection = database.getDBConnection(sessionid);
         if (connection == null)
             return;
