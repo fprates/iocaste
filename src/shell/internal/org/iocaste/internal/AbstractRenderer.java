@@ -222,9 +222,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     protected final void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         jsessionid = req.getSession().getId();
-        servername = new StringBuffer(req.getScheme()).append("://").
-                        append("127.0.0.1:").append(req.getServerPort()).
-                        toString();
+        servername = new StringBuffer(req.getScheme()).append("://127.0.0.1:").
+                append(req.getServerPort()).toString();
         
         try {
             entry(req, resp, NEW_SESSION);
@@ -242,9 +241,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     protected final void doPost(HttpServletRequest req,
             HttpServletResponse resp) throws ServletException, IOException {
         jsessionid = req.getSession().getId();
-        servername = new StringBuffer(req.getScheme()).append("://").
-                        append("127.0.0.1:").append(req.getServerPort()).
-                        toString();
+        servername = new StringBuffer(req.getScheme()).append("://127.0.0.1:").
+                append(req.getServerPort()).toString();
         
         try {
             entry(req, resp, KEEP_SESSION);
