@@ -41,7 +41,8 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
         StringBuilder sb = new StringBuilder("iocaste-appbuilder @").
                 append(applink.entity).append(action).
                 append(" name=").append(applink.entity).
-                append(" cmodel=").append(applink.cmodel);
+                append(" cmodel=").append(applink.cmodel).
+                append(" msgsource=").append(pkgname);
         
         if (applink.number != null)
             sb.append(" number=").append(applink.number);

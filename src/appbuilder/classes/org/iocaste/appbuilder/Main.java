@@ -34,6 +34,8 @@ public class Main extends AbstractPageBuilder {
     {
         defaultinstall.setProfile("APPBUILDER");
         defaultinstall.setProgramAuthorization("APPBUILDER.EXECUTE");
+        
+        installObject("messages", new TextsInstall());
     }
     
     private final Manager managerInstance(String cmodel) {
@@ -48,8 +50,12 @@ public class Main extends AbstractPageBuilder {
         AbstractActionHandler save, inputvalidate;
         String create, create1, edit, edit1, display, display1, entityaction;
         Context extcontext;
-        String name = getParameter("name");
         Manager manager;
+        String name = getParameter("name");
+        String msgsource = getParameter("msgsource");
+        
+        if (msgsource != null)
+            setMessageSource(msgsource);
         
         create = name.concat("create");
         create1 = create.concat("1");

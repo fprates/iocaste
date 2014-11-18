@@ -215,6 +215,10 @@ public abstract class AbstractPage extends AbstractFunction {
         getviewdata.state.headervalues.put(key, value);
     }
     
+    protected final void setMessageSource(String source) {
+        getviewdata.setMessageSource(source);
+    }
+    
     public final void setReloadableView(boolean reloadable) {
         getviewdata.state.reloadable = reloadable;
     }
