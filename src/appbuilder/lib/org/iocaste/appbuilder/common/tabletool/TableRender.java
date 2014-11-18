@@ -19,8 +19,12 @@ public class TableRender extends AbstractTableHandler {
         Context context = new Context();
         
         context.data = data;
-        supercontainer = data.context.view.getElement(data.container);
-        container = new StandardContainer(supercontainer, data.name);
+        if (data.container != null) {
+            supercontainer = data.context.view.getElement(data.container);
+            container = new StandardContainer(supercontainer, data.name);
+        } else {
+            container = data.context.view.getElement(data.name);
+        }
         
         context.accept = new Button(
                 container, TableTool.ACCEPT.concat(context.data.name));

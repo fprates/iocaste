@@ -1,21 +1,18 @@
 package org.iocaste.appbuilder.common;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.docmanager.common.Manager;
 
 public abstract class AbstractViewSpec {
     private Map<String, ViewSpecItem> items;
-    private List<ViewSpecItem> sequence;
     private PageBuilderContext context;
     private boolean initialized;
     
     public AbstractViewSpec() {
-        items = new HashMap<>();
-        sequence = new ArrayList<>();
+        items = new LinkedHashMap<>();
     }
     
     protected final void button(String parent, String name) {
@@ -52,7 +49,6 @@ public abstract class AbstractViewSpec {
         ViewSpecItem item = new ViewSpecItem(
                 "view", ViewSpecItem.TYPES.FORM, name);
         items.put(name, item);
-        sequence.add(item);
     }
     
     public final ViewSpecItem get(String name) {
@@ -65,8 +61,8 @@ public abstract class AbstractViewSpec {
                 getExtendedContext();
     }
     
-    public final List<ViewSpecItem> getItems() {
-        return sequence;
+    public final Collection<ViewSpecItem> getItems() {
+        return items.values();
     }
     
     protected final Manager getManager(String name) {
@@ -121,7 +117,6 @@ public abstract class AbstractViewSpec {
     
     public final void run(PageBuilderContext context) {
         this.context = context;
-        sequence.clear();
         items.clear();
         execute();
     }

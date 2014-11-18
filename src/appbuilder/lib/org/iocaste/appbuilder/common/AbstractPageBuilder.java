@@ -168,8 +168,8 @@ class BuilderCustomView extends AbstractCustomView {
         case TABLE_TOOL:
             ttdata = new TableToolData();
             ttdata.context = context;
-            ttdata.container = container.getHtmlName();
             ttdata.name = name;
+            new StandardContainer(container, ttdata.name);
             components.add(ttdata);
             break;
         case DATA_FORM:
