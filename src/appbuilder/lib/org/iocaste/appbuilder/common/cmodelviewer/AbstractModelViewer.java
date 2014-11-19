@@ -78,13 +78,13 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             viewctx.set(new SelectConfig(action, extcontext.cmodel));
             viewctx.set(extcontext);
             switch (action) {
-            case "create":
+            case CREATE:
                 viewctx.put(CREATE, new Validate());
                 break;
-            case "edit":
+            case EDIT:
                 viewctx.put(EDIT, new Load(edit1));
                 break;
-            case "display":
+            case DISPLAY:
                 viewctx.put(DISPLAY, new Load(display1));
                 break;
             }
@@ -107,7 +107,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         viewctx.set(maintenancespec);
         viewctx.set(new DisplayConfig());
         viewctx.set(maintenanceinput);
-        viewctx.setUpdate(true);
         viewctx.set(extcontext);
     }
     

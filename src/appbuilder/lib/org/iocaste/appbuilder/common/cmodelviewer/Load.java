@@ -23,6 +23,7 @@ public class Load extends AbstractActionHandler {
             return;
         }
         
+        init(redirect, extcontext);
         redirect(redirect);
     }
 
