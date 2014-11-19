@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.AbstractViewSpec;
+import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewContext;
@@ -16,12 +17,26 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
     public static final String DISPLAY = "display";
     public static final String EDIT = "edit";
     
+    protected final AppBuilderLink getReceivedLink() {
+        AppBuilderLink link;
+        String entity = getParameter("name");
+        
+        if (entity == null)
+            return null;
+        
+        link = new AppBuilderLink();
+        link.entity = entity;
+        link.cmodel = getParameter("cmodel");
+        link.number = getParameter("number");
+        return link;
+    }
+    
     @Override
     protected abstract void installConfig(
             PageBuilderDefaultInstall defaultinstall);
     
     protected final void loadManagedModule(PageBuilderContext context,
-            String name, String cmodel, String msgsource) {
+            AppBuilderLink link) {
         ViewContext viewctx;
         MaintenanceConfig maintenanceconfig;
         AbstractViewSpec selspec, maintenancespec;
@@ -31,20 +46,17 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         Context extcontext;
         Manager manager;
         
-        if (msgsource != null)
-            setMessageSource(msgsource);
-        
-        create = name.concat(CREATE);
+        create = link.entity.concat(CREATE);
         create1 = create.concat("1");
-        edit = name.concat(EDIT);
+        edit = link.entity.concat(EDIT);
         edit1 = edit.concat("1");
-        display = name.concat(DISPLAY);
+        display = link.entity.concat(DISPLAY);
         display1 = display.concat("1");
         
         extcontext = new Context();
-        extcontext.number = getParameter("number");
+        extcontext.number = link.number;
+        extcontext.cmodel = link.cmodel;
         extcontext.redirect = (extcontext.number == null)? create1 : edit1;
-        extcontext.cmodel = cmodel;
         
         manager = managerInstance(extcontext.cmodel);
         context.addManager(extcontext.cmodel, manager);
@@ -60,7 +72,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             if (extcontext.number != null && action.equals(CREATE))
                 continue;
             
-            entityaction = name.concat(action);
+            entityaction = link.entity.concat(action);
             viewctx = context.instance(entityaction);
             viewctx.set(selspec);
             viewctx.set(new SelectConfig(action, extcontext.cmodel));

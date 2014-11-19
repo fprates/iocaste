@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder;
 
+import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewSpecItem;
@@ -10,12 +11,14 @@ public class Main extends AbstractModelViewer {
     @Override
     public final void config(PageBuilderContext context) throws Exception {
         String module = getParameter("module");
-        String name = getParameter("name");
         String msgsource = getParameter("msgsource");
-        String cmodel = getParameter("cmodel");
+        AppBuilderLink link = getReceivedLink();
+        
+        if (msgsource != null)
+            setMessageSource(msgsource);
         
         if (module == null)
-            loadManagedModule(context, name, msgsource, cmodel);
+            loadManagedModule(context, link);
         else
             loadRemoteModule(context, module);
     }
