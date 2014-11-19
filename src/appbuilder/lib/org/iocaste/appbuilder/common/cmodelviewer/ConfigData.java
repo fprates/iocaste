@@ -1,4 +1,4 @@
-package org.iocaste.appbuilder;
+package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.tabletool.TableTool;

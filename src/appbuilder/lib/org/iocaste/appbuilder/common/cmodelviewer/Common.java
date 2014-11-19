@@ -1,4 +1,4 @@
-package org.iocaste.appbuilder;
+package org.iocaste.appbuilder.common.cmodelviewer;
 
 import java.util.Map;
 

@@ -38,7 +38,15 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     }
     
     private final String buildapplink(AppBuilderLink applink, String action) {
-        StringBuilder sb = new StringBuilder("iocaste-appbuilder @").
+        String appname;
+        
+        if (applink.appname == null)
+            appname = "iocaste-appbuilder";
+        else
+            appname = applink.appname;
+            
+        StringBuilder sb = new StringBuilder(appname).
+                append(" @").
                 append(applink.entity).append(action).
                 append(" name=").append(applink.entity).
                 append(" cmodel=").append(applink.cmodel).
