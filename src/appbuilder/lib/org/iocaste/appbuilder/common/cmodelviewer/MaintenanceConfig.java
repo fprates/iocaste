@@ -25,5 +25,8 @@ public class MaintenanceConfig extends AbstractViewConfig {
         
         Common.formConfig(configdata);
         Common.gridConfig(configdata);
+        
+        if (extcontext.link.customconfig != null)
+            autoconfig(extcontext.link.customconfig);
     }
 }

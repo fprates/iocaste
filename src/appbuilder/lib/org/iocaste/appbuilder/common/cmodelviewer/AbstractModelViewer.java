@@ -57,6 +57,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         extcontext.number = link.number;
         extcontext.cmodel = link.cmodel;
         extcontext.redirect = (extcontext.number == null)? create1 : edit1;
+        extcontext.link = link;
         
         manager = managerInstance(extcontext.cmodel);
         context.addManager(extcontext.cmodel, manager);
