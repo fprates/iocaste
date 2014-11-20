@@ -7,6 +7,7 @@ import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.docmanager.common.Manager;
@@ -38,7 +39,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
     protected final void loadManagedModule(PageBuilderContext context,
             AppBuilderLink link) {
         ViewContext viewctx;
-        MaintenanceConfig maintenanceconfig;
+        ViewConfig maintenanceconfig;
         AbstractViewSpec selspec, maintenancespec;
         AbstractViewInput maintenanceinput;
         AbstractActionHandler save, inputvalidate;
@@ -57,14 +58,17 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         extcontext.number = link.number;
         extcontext.cmodel = link.cmodel;
         extcontext.redirect = (extcontext.number == null)? create1 : edit1;
-        extcontext.link = link;
         
         manager = managerInstance(extcontext.cmodel);
         context.addManager(extcontext.cmodel, manager);
         
         selspec = new SelectSpec();
         maintenancespec = new MaintenanceSpec();
-        maintenanceconfig = new MaintenanceConfig();
+        if (link.customconfig == null)
+            maintenanceconfig = new MaintenanceConfig();
+        else
+            maintenanceconfig = link.customconfig;
+        
         maintenanceinput = new MaintenanceInput();
         save = new Save();
         inputvalidate = new InputValidate();
