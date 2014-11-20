@@ -34,6 +34,7 @@ public class ExecAction extends AbstractHandler {
         
         state.view = view;
         state.rapp = state.rpage = null;
+        state.initialize = false;
         action = (control == null)? controlname : control.getName();
         view.setActionControl(action);
         for (String name : validables.keySet()) {
