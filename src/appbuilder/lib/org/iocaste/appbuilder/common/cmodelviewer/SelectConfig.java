@@ -17,7 +17,7 @@ public class SelectConfig extends AbstractViewConfig {
     }
     
     @Override
-    protected final void execute(PageBuilderContext context) {
+    protected void execute(PageBuilderContext context) {
         InputComponent input;
         DocumentModel model = getManager(cmodel).getModel().getHeader();
         DataForm head = getElement("head");

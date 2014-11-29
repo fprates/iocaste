@@ -159,6 +159,10 @@ public abstract class AbstractActionHandler {
         return context.getManager(name);
     }
     
+    protected final long getNextNumber(String range) {
+        return documents.getNextNumber(range);
+    }
+    
     protected final void init(String view, ExtendedContext extcontext) {
         ViewContext viewctx = context.getView(view);
         viewctx.set(extcontext);
@@ -270,6 +274,10 @@ public abstract class AbstractActionHandler {
         execute(this.context);
         if (redirectflag)
             redirectContext(this.context, viewctx);
+    }
+    
+    protected final void save(String managername, ComplexDocument document) {
+        context.getManager(managername).save(document);
     }
     
     protected final void save(ExtendedObject object) {

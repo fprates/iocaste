@@ -39,84 +39,97 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
     protected final void loadManagedModule(PageBuilderContext context,
             AppBuilderLink link) {
         ViewContext viewctx;
-        ViewConfig maintenanceconfig;
         AbstractViewSpec selspec, maintenancespec;
         AbstractViewInput maintenanceinput;
         AbstractActionHandler save, inputvalidate;
-        String create, create1, edit, edit1, display, display1, entityaction;
-        Context extcontext;
+        String entityaction;
         Manager manager;
         
-        create = link.entity.concat(CREATE);
-        create1 = create.concat("1");
-        edit = link.entity.concat(EDIT);
-        edit1 = edit.concat("1");
-        display = link.entity.concat(DISPLAY);
-        display1 = display.concat("1");
+        link.createview = link.entity.concat(CREATE);
+        link.create1view = link.createview.concat("1");
+        link.editview = link.entity.concat(EDIT);
+        link.edit1view = link.editview.concat("1");
+        link.displayview = link.entity.concat(DISPLAY);
+        link.display1view = link.displayview.concat("1");
         
-        extcontext = new Context();
-        extcontext.number = link.number;
-        extcontext.cmodel = link.cmodel;
-        extcontext.redirect = (extcontext.number == null)? create1 : edit1;
+        link.extcontext.number = link.number;
+        link.extcontext.cmodel = link.cmodel;
+        link.extcontext.redirect = (link.extcontext.number == null)?
+                link.create1view : link.edit1view;
         
-        manager = managerInstance(extcontext.cmodel);
-        context.addManager(extcontext.cmodel, manager);
+        manager = managerInstance(link.extcontext.cmodel);
+        context.addManager(link.extcontext.cmodel, manager);
         
         selspec = new SelectSpec();
         maintenancespec = new MaintenanceSpec();
-        if (link.customconfig == null)
-            maintenanceconfig = new MaintenanceConfig();
-        else
-            maintenanceconfig = link.customconfig;
-        
         maintenanceinput = new MaintenanceInput();
         save = new Save();
         inputvalidate = new InputValidate();
         
         for (String action : new String[] {CREATE, EDIT, DISPLAY}) {
-            if (extcontext.number != null && action.equals(CREATE))
+            if ((link.extcontext.number != null) && action.equals(CREATE) &&
+                    (link.createselectconfig == null))
                 continue;
             
             entityaction = link.entity.concat(action);
             viewctx = context.instance(entityaction);
             viewctx.set(selspec);
-            viewctx.set(new SelectConfig(action, extcontext.cmodel));
-            viewctx.set(extcontext);
+            viewctx.set(link.extcontext);
             switch (action) {
             case CREATE:
-                viewctx.put(CREATE, new Validate());
+                setSelectConfig(link.createselectconfig, viewctx, action,
+                        link.extcontext);
+                viewctx.put(CREATE, link.validate);
+                
                 break;
             case EDIT:
-                viewctx.put(EDIT, new Load(edit1));
+                setSelectConfig(link.updateselectconfig, viewctx, action,
+                        link.extcontext);
+                
+                viewctx.put(EDIT, new Load(link.edit1view));
                 break;
             case DISPLAY:
-                viewctx.put(DISPLAY, new Load(display1));
+                setSelectConfig(link.displayselectconfig, viewctx, action,
+                        link.extcontext);
+                
+                viewctx.put(DISPLAY, new Load(link.display1view));
                 break;
             }
         }
         
-        for (String view : new String[] {create, create1, edit1}) {
-            if (extcontext.number == null && view.equals(create))
+        for (String view : new String[] {
+                link.createview, link.create1view, link.edit1view}) {
+            if (view.equals(link.createview) &&
+                    ((link.extcontext.number == null) ||
+                            (link.createselectconfig != null)))
                 continue;
             
             viewctx = context.instance(view);
             viewctx.set(maintenancespec);
-            viewctx.set(maintenanceconfig);
+            viewctx.set(link.maintenanceconfig);
             viewctx.set(maintenanceinput);
-            viewctx.set(extcontext);
+            viewctx.set(link.extcontext);
             viewctx.put("validate", inputvalidate);
             viewctx.put("save", save);
         }
 
-        viewctx = context.instance(display1);
+        viewctx = context.instance(link.display1view);
         viewctx.set(maintenancespec);
         viewctx.set(new DisplayConfig());
         viewctx.set(maintenanceinput);
-        viewctx.set(extcontext);
+        viewctx.set(link.extcontext);
     }
     
     private final Manager managerInstance(String cmodel) {
         return new RuntimeManager(cmodel, this);
+    }
+    
+    private final void setSelectConfig(ViewConfig config, ViewContext viewctx,
+            String action, Context context) {
+        if (config == null)
+            viewctx.set(new SelectConfig(action, context.cmodel));
+        else
+            viewctx.set(config);
     }
 }
 
