@@ -132,7 +132,7 @@ public class DashboardComponent {
             throw new RuntimeException("dashboard item undefined.");
         
         linkname = name.concat("_dbitem_link");
-        link = new Link(container, linkname, name);
+        link = new Link(container, linkname, this.name);
         link.setStyleClass("db_dash_item");
         link.setText(name);
         link.add(choose, value, type);
