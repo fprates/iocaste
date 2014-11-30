@@ -3,6 +3,8 @@ package org.iocaste.shell.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.documents.common.DataType;
+
 /**
  * Implementação de link html.
  * 
@@ -15,7 +17,7 @@ import java.util.Map;
 public class Link extends AbstractControlComponent {
     private static final long serialVersionUID = 667738108271176995L;
     private boolean absolute;
-    private Map<String, Object> values;
+    private Map<String, LinkEntry> values;
     private String image;
     
     public Link(View view, String name, String action) {
@@ -28,13 +30,17 @@ public class Link extends AbstractControlComponent {
         init(name, action);
     }
 
+    public final void add(String name, String value) {
+        values.put(name, new LinkEntry(value, DataType.CHAR));
+    }
+    
     /**
      * Adiciona parâmetro ao link.
      * @param name nome do parâmetro
      * @param value valor
      */
-    public final void add(String name, Object value) {
-        values.put(name, value);
+    public final void add(String name, Object value, int type) {
+        values.put(name, new LinkEntry(value, type));
     }
     
     /**
@@ -49,7 +55,7 @@ public class Link extends AbstractControlComponent {
      * Retorna parâmetros do link.
      * @return parâmetros.
      */
-    public final Map<String, Object> getParametersMap() {
+    public final Map<String, LinkEntry> getParametersMap() {
         return values;
     }
     

@@ -14,21 +14,14 @@ public class TasksConfig extends AbstractViewConfig {
         String text;
         Set<TaskEntry> entries;
         DashboardComponent dash;
-        int c, colorinc;
         Context extcontext = getExtendedContext();
         DashboardFactory groups = getDashboard("groups");
 
-        colorinc = 255 / extcontext.groups.size();
         groups.isometricGrid();
         groups.setArea(100, 100, "%");
-        groups.setColor("white");
-        groups.setPadding(1, "%");
-        c = 0;
         for (String name : extcontext.groups.keySet()) {
             entries = extcontext.groups.get(name);
             dash = getDashboardItem("groups", name);
-            dash.setColor(String.format("rgb(%d, %d, %d)", 255, c, c));
-            c += colorinc;
             dash.addText(name);
             for (TaskEntry entry : entries) {
                 text = entry.getText();

@@ -67,17 +67,17 @@ public class DashboardFactory {
         return components.get(name);
     }
     
-    public final DashboardComponent instance(String name) {
-        return instance(name, false);
+    public final Set<String> getItems() {
+        return components.keySet();
     }
     
-    public final DashboardComponent instance(String name, boolean group) {
+    public final DashboardComponent instance(String name) {
         here.add(name);
-        return instance(name, container, group);
+        return instance(name, container, null);
     }
     
     public final DashboardComponent instance(String name, Container container,
-            boolean group) {
+            String group) {
         DashboardComponent component = new DashboardComponent(
                 this, container, context, name, group);
         components.put(name, component);
@@ -111,19 +111,8 @@ public class DashboardFactory {
         stylesheet.put(stylename, "width", swidth);
     }
     
-    public final void setColor(String color) {
-        stylesheet.put(stylename, "background-color", color);
-        for (String name : here)
-            components.get(name).setBorderColor(color);
-    }
-    
     public final void setGrid(int columns, int lines) {
         for (String name : here)
             components.get(name).setArea(100/columns, 100/lines, "%");
-    }
-    
-    public final void setPadding(int padding, String unit) {
-        for (String name : here)
-            components.get(name).setPadding(padding);
     }
 }

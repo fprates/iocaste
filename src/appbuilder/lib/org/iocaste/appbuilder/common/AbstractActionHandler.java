@@ -31,18 +31,24 @@ public abstract class AbstractActionHandler {
         context.function.back();
     }
     
-    protected final String dbactionget(String dashboard, String item) {
-        DashboardFactory factory = components.dashboards.get(dashboard);
+    @SuppressWarnings("unchecked")
+    protected final <T> T dbactionget(String dashboard) {
+        Object value;
+        DashboardFactory factory = getDashboardFactory(dashboard);
         
-        if (factory != null)
-            return factory.get(item).getValue();
+        for (String name : factory.getItems()) {
+            value = factory.get(name).get();
+            if (value != null)
+                return (T)value;
+        }
         
-        factory = components.dashboardgroups.get(dashboard).getFactory();
-        if (factory == null)
-            throw new RuntimeException(dashboard.concat(
-                    " is an invalid dashboard factory."));
+        return null;
+    }
+    
+    protected final <T> T dbactionget(String dashboard, String item) {
+        DashboardFactory factory = getDashboardFactory(dashboard);
         
-        return factory.get(item).getValue();
+        return factory.get(item).get();
     }
     
     protected final DocumentExtractor documentExtractorInstance(String manager)
@@ -77,6 +83,20 @@ public abstract class AbstractActionHandler {
         return fileentryget(fileentry).get();
     }
 
+    private DashboardFactory getDashboardFactory(String dashboard) {
+        DashboardFactory factory = components.dashboards.get(dashboard);
+        
+        if (factory != null)
+            return factory;
+        
+        factory = components.dashboardgroups.get(dashboard).getFactory();
+        if (factory == null)
+            throw new RuntimeException(dashboard.concat(
+                    " is an invalid dashboard factory."));
+        
+        return factory;
+    }
+    
     protected ExtendedObject getdf(String name) {
         DataForm dataform = context.view.getElement(name);
         return dataform.getObject();

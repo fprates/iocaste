@@ -16,7 +16,6 @@ public class MainConfig extends AbstractViewConfig {
         navcontrol.setTitle("SYSINFO");
         
         dashitem = getDashboardItem("menu", "items");
-        dashitem.setColor("#ffa0a0");
         dashitem.add("java-properties");
         dashitem.add("system-info");
         dashitem.add("users-list");

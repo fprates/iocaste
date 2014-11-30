@@ -174,10 +174,11 @@ public class TableItem extends AbstractContainer {
             if (element == null)
                 throw new RuntimeException("no component defined for " +
                 		"this table item");
-            
+
+            modelitem = column.getModelItem();
             if (!element.isDataStorable()) {
                 component = (Component)element;
-                value = object.get(column.getModelItem());
+                value = object.get(modelitem);
                 component.setText((value == null)? "" : value.toString());
                 if (element.getType() != Const.LINK)
                     continue;
@@ -189,12 +190,12 @@ public class TableItem extends AbstractContainer {
                     column.setParameter(parameter);
                 }
                 
-                link.add(parameter.getName(), value);
+                link.add(parameter.getName(), value,
+                        modelitem.getDataElement().getType());
                 continue;
             }
             
             input = (InputComponent)element;
-            modelitem = column.getModelItem();
             if (input.getModelItem() == null)
                 input.setModelItem(modelitem);
             

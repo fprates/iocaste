@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.LinkEntry;
 import org.iocaste.shell.common.Parameter;
 
 public class LinkRenderer extends Renderer {
@@ -16,10 +19,12 @@ public class LinkRenderer extends Renderer {
      * @return
      */
     public static final List<XMLElement> render(Link link, Config config) {
+        DataElement element;
+        LinkEntry entry;
         XMLElement atag, imgtag;
         String text, href, image;
         StringBuilder onclick;
-        Map<String, Object> parameters;
+        Map<String, LinkEntry> parameters;
         Parameter parameter;
         List<XMLElement> tags = new ArrayList<>();
         
@@ -49,11 +54,31 @@ public class LinkRenderer extends Renderer {
         if (parameters.size() > 0) {
             onclick = new StringBuilder();
             for (String name : parameters.keySet()) {
+                entry = parameters.get(name);
                 onclick.append("setValue('").append(name).
-                        append("', '").append(parameters.get(name)).
+                        append("', '").append(entry.value).
                         append("');");
                 
                 parameter = new Parameter(config.getView(), name);
+                element = null;
+                switch (entry.type) {
+                case DataType.CHAR:
+                    element = new DataElement(name);
+                    element.setType(entry.type);
+                    element.setUpcase(DataType.KEEPCASE);
+                    element.setLength(entry.value.toString().length());
+                    break;
+                case DataType.INT:
+                case DataType.BYTE:
+                case DataType.LONG:
+                case DataType.SHORT:
+                    element = new DataElement(name);
+                    element.setType(entry.type);
+                    element.setLength(entry.value.toString().length());
+                    break;
+                }
+                
+                parameter.setDataElement(element);
                 tags.add(ParameterRenderer.render(parameter));
             }
             

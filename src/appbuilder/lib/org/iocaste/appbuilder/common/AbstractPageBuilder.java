@@ -181,14 +181,14 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case DASHBOARD_GROUP:
             dashboard = components.dashboards.get(parent);
-            dashboardgroup = dashboard.instance(name, DashboardComponent.GROUP);
+            dashboardgroup = dashboard.instance(name);
             components.dashboardgroups.put(name, dashboardgroup);
             break;
         case DASHBOARD_ITEM:
             dashboard = components.dashboards.get(parent);
             if (dashboard == null) {
                 dashboardgroup = components.dashboardgroups.get(parent);
-                dashboardgroup.instance(name, DashboardComponent.GROUP);
+                dashboardgroup.instance(name);
             } else {
                 dashboard.instance(name);
             }

@@ -34,18 +34,15 @@ public class ProjectConfig extends AbstractViewConfig {
         dataform.get("PROJECT_ID").setEnabled(false);
         
         dashitem = getDashboardItem("project", "attributes");
-        dashitem.setColor("#a0a0a0");
         dashitem.addText("attributes");
         dashitem.add("links");
         
         dashitem = getDashboardItem("project", "create");
-        dashitem.setColor("#50ff50");
         dashitem.addText("create");
         dashitem.add("view");
         dashitem.add("model");
         
         dashitem = getDashboardItem("project", "views");
-        dashitem.setColor("#a0a0ff");
         dashitem.addText("views");
         if (extcontext.views.size() > 0)
             dashitem.show();
@@ -53,7 +50,6 @@ public class ProjectConfig extends AbstractViewConfig {
             dashitem.hide();
         
         dashitem = getDashboardItem("project", "components");
-        dashitem.setColor("#ff5050");
         dashitem.addText("viewcomponents");
         dashitem.add("form");
         dashitem.add("navcontrol");
