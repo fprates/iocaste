@@ -241,8 +241,12 @@ public class Controller {
         switch (dataelement.getType()) {
         case DataType.CHAR:
             return true;
-            
+        
+        case DataType.BYTE:
+        case DataType.INT:
+        case DataType.LONG:
         case DataType.NUMC:
+        case DataType.SHORT:
             return value.matches("[0-9]+");
             
         case DataType.DEC:
