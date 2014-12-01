@@ -93,6 +93,10 @@ public class Controller {
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
+        case DataType.BYTE:
+        case DataType.INT:
+        case DataType.LONG:
+        case DataType.SHORT:
         case DataType.NUMC:
             if (Shell.isInitial(value))
                 return new BigDecimal(0);
