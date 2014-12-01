@@ -21,7 +21,7 @@ public class OptionChoosen extends AbstractActionHandler {
         Set<String> sessions = null;
         Iocaste iocaste = null;
         Map<String, Object> sessiondata;
-        String choice = dbactionget("menu", "items");
+        String choice = dbactiongetst("menu", "items");
         Context extcontext = getExtendedContext();
         
         extcontext.report.clear();

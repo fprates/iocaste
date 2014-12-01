@@ -9,7 +9,7 @@ public class ProjectViewDisplay extends AbstractActionHandler {
     protected void execute(PageBuilderContext context) throws Exception {
         Context extcontext = getExtendedContext();
         
-        extcontext.view = dbactionget("project", "views");
+        extcontext.view = dbactiongetst("project", "views");
         extcontext.hideAll();
         extcontext.viewtree = true;
     }

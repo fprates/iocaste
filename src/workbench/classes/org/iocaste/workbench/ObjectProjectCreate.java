@@ -9,7 +9,7 @@ public class ObjectProjectCreate extends AbstractActionHandler {
     protected void execute(PageBuilderContext context) throws Exception {
         ProjectView projectview;
         Context extcontext = getExtendedContext();
-        String item = dbactionget("project", "create");
+        String item = dbactiongetst("project", "create");
 
         extcontext.hideAll();
         switch(item) {

@@ -8,7 +8,7 @@ public class ComponentChoose extends AbstractActionHandler {
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         String name;
-        String type = dbactionget("project", "components");
+        String type = dbactiongetst("project", "components");
         Context extcontext = getExtendedContext();
         ProjectView project = extcontext.views.get(extcontext.view);
         

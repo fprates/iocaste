@@ -70,16 +70,28 @@ public class DashboardComponent {
         factory.setArea(stylename, stylesheet, width, height, unit);
     }
     
-    public final <T> T get() {
-        return ((InputComponent)context.view.getElement(choose)).get();
+    public final Set<String> getComponents() {
+        return components;
     }
     
     public final DashboardFactory getFactory() {
         return factory;
     }
     
-    public final Set<String> getComponents() {
-        return components;
+    private final InputComponent getInput() {
+        return context.view.getElement(choose);
+    }
+    
+    public final int geti() {
+        return getInput().geti();
+    }
+    
+    public final long getl() {
+        return getInput().getl();
+    }
+    
+    public final String getst() {
+        return getInput().getst();
     }
     
     public final String getValue() {
@@ -98,7 +110,7 @@ public class DashboardComponent {
         this.factory = factory;
 
         components = new LinkedHashSet<>();
-        choose = name.concat("_dbitem_choose");
+        choose = this.name.concat("_dbitem_choose");
         stylename = ".db_dash_".concat(name);
         this.container = new StandardContainer(container,
                 name.concat("_container"));

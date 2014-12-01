@@ -30,25 +30,17 @@ public abstract class AbstractActionHandler {
     protected final void back() {
         context.function.back();
     }
-    
-    @SuppressWarnings("unchecked")
-    protected final <T> T dbactionget(String dashboard) {
-        Object value;
-        DashboardFactory factory = getDashboardFactory(dashboard);
-        
-        for (String name : factory.getItems()) {
-            value = factory.get(name).get();
-            if (value != null)
-                return (T)value;
-        }
-        
-        return null;
+
+    protected final long dbactiongeti(String dashboard, String item) {
+        return getDashboardFactory(dashboard).get(item).geti();
     }
     
-    protected final <T> T dbactionget(String dashboard, String item) {
-        DashboardFactory factory = getDashboardFactory(dashboard);
-        
-        return factory.get(item).get();
+    protected final long dbactiongetl(String dashboard, String item) {
+        return getDashboardFactory(dashboard).get(item).getl();
+    }
+    
+    protected final String dbactiongetst(String dashboard, String item) {
+        return getDashboardFactory(dashboard).get(item).getst();
     }
     
     protected final DocumentExtractor documentExtractorInstance(String manager)

@@ -13,7 +13,7 @@ public class Call extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        String task = dbactionget("groups", dash);
+        String task = dbactiongetst("groups", dash);
 
         if (Common.call(context.function, context.view, task) == 0)
             return;
