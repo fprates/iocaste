@@ -44,6 +44,37 @@ public abstract class AbstractViewInput {
         dbget(dashboard, name).add(value);
     }
     
+    protected void dbitemadd(String dashboard, String name, byte value) {
+        dbget(dashboard, name).add(Byte.toString(value), value);
+    }
+    
+    protected void dbitemadd(String dashboard, String name, int value) {
+        dbget(dashboard, name).add(Integer.toString(value), value);
+    }
+    
+    protected void dbitemadd(String dashboard, String name, long value) {
+        dbget(dashboard, name).add(Long.toString(value), value);
+    }
+    
+    protected void dbitemadd(String dashboard, String name, short value) {
+        dbget(dashboard, name).add(Short.toString(value), value);
+    }
+    
+    protected void dbitemadd(String dashboard, String name, String key,
+            byte value) {
+        dbget(dashboard, name).add(key, value);
+    }
+    
+    protected void dbitemadd(String dashboard, String name, String key,
+            int value) {
+        dbget(dashboard, name).add(key, value);
+    }
+    
+    protected void dbitemadd(String dashboard, String name, String key,
+            long value) {
+        dbget(dashboard, name).add(key, value);
+    }
+    
     protected void dbtextadd(String dashboard, String name, String value) {
         dbget(dashboard, name).addText(value);
     }
