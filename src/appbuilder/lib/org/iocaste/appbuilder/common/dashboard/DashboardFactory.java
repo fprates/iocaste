@@ -115,4 +115,8 @@ public class DashboardFactory {
         for (String name : here)
             components.get(name).setArea(100/columns, 100/lines, "%");
     }
+    
+    public final void setStyleProperty(String name, String value) {
+        stylesheet.put(stylename, name, value);
+    }
 }
