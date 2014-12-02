@@ -14,7 +14,7 @@ import org.iocaste.shell.common.Text;
 
 public class DashboardComponent {
     public static final boolean GROUP = true;
-    private String choose, name, stylename, unit;
+    private String choose, name, stylename, innerstyle, unit;
     private PageBuilderContext context;
     private StandardContainer container, inner;
     private StyleSheet stylesheet;
@@ -124,12 +124,13 @@ public class DashboardComponent {
         this.container.setStyleClass(stylename.substring(1));
         this.container.setVisible(false);
         
-        stylesheet.newElement(".db_dash_inner");
-        stylesheet.put(".db_dash_inner", "margin", "10px");
+        innerstyle = ".db_dash_inner_".concat(name);
+        stylesheet.newElement(innerstyle);
+        stylesheet.put(innerstyle, "margin", "10px");
         
         this.inner = new StandardContainer(this.container,
                 name.concat("_inner"));
-        this.inner.setStyleClass("db_dash_inner");
+        this.inner.setStyleClass(innerstyle.substring(1));
     }
     
     public final void instance(String name) {
@@ -165,6 +166,10 @@ public class DashboardComponent {
         this.height = height;
         this.unit = unit;
         commit();
+    }
+    
+    public final void setInnerStyle(String name, String value) {
+        stylesheet.put(innerstyle, name, value);
     }
     
     public final void setStyleProperty(String name, String value) {
