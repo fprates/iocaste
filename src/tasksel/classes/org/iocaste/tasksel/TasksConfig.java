@@ -22,6 +22,8 @@ public class TasksConfig extends AbstractViewConfig {
         for (String name : extcontext.groups.keySet()) {
             entries = extcontext.groups.get(name);
             dash = getDashboardItem("groups", name);
+            dash.setStyleProperty("float", "left");
+            dash.setStyleProperty("overflow", "auto");
             dash.addText(name);
             for (TaskEntry entry : entries) {
                 text = entry.getText();

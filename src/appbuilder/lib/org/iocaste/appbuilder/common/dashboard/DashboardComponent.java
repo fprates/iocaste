@@ -16,7 +16,7 @@ public class DashboardComponent {
     public static final boolean GROUP = true;
     private String choose, name, stylename, unit;
     private PageBuilderContext context;
-    private StandardContainer container;
+    private StandardContainer container, inner;
     private StyleSheet stylesheet;
     private DashboardFactory factory;
     private boolean hide;
@@ -54,6 +54,10 @@ public class DashboardComponent {
         internalAdd(item, value, DataType.BYTE);
     }
     
+    public final void add(String item, short value) {
+        internalAdd(item, value, DataType.SHORT);
+    }
+    
     public final void addText(String name) {
         String textname;
         Text text;
@@ -62,7 +66,7 @@ public class DashboardComponent {
             container.setVisible(true);
         
         textname = name.concat(".item");
-        text = new Text(container, textname);
+        text = new Text(inner, textname);
         text.setText(name);
     }
     
@@ -94,10 +98,6 @@ public class DashboardComponent {
         return getInput().getst();
     }
     
-    public final String getValue() {
-        return ((InputComponent)context.view.getElement(choose)).getst();
-    }
-    
     public final void hide() {
         hide = true;
         container.setVisible(false);
@@ -112,22 +112,28 @@ public class DashboardComponent {
         components = new LinkedHashSet<>();
         choose = this.name.concat("_dbitem_choose");
         stylename = ".db_dash_".concat(name);
-        this.container = new StandardContainer(container,
-                name.concat("_container"));
-        this.container.setStyleClass(stylename.substring(1));
-        this.container.setVisible(false);
 
         stylesheet = context.view.styleSheetInstance();
         stylesheet.newElement(stylename);
         stylesheet.put(stylename, "border-style", "solid");
         stylesheet.put(stylename, "border-width", "1px");
-        stylesheet.put(stylename, "width", "150px");
-        stylesheet.put(stylename, "margin", "2px");
-        stylesheet.put(stylename, "padding", "20px");
+        stylesheet.put(stylename, "margin", "1px");
+        
+        this.container = new StandardContainer(
+                container, name.concat("_container"));
+        this.container.setStyleClass(stylename.substring(1));
+        this.container.setVisible(false);
+        
+        stylesheet.newElement(".db_dash_inner");
+        stylesheet.put(".db_dash_inner", "margin", "10px");
+        
+        this.inner = new StandardContainer(this.container,
+                name.concat("_inner"));
+        this.inner.setStyleClass("db_dash_inner");
     }
     
     public final void instance(String name) {
-        factory.instance(name, container, this.name);
+        factory.instance(name, inner, this.name);
         components.add(name);
         if (!hide)
             container.setVisible(true);
@@ -144,7 +150,7 @@ public class DashboardComponent {
             throw new RuntimeException("dashboard item undefined.");
         
         linkname = name.concat("_dbitem_link");
-        link = new Link(container, linkname, this.name);
+        link = new Link(inner, linkname, this.name);
         link.setStyleClass("db_dash_item");
         link.setText(name);
         link.add(choose, value, type);
