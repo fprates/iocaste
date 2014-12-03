@@ -87,7 +87,9 @@ public class Main extends AbstractPageBuilder {
         view.put("edit", new Load("edit"));
         view.set(extcontext);
         
-        buildEditView(context, extcontext, "edit");
+        view = buildEditView(context, extcontext, "edit");
+        view.put("save", new Save());
+        
         buildDisplayView(context, extcontext, "display");
     }
 

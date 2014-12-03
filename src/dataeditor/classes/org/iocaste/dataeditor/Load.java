@@ -4,7 +4,6 @@ import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
 
@@ -19,8 +18,8 @@ public class Load extends AbstractActionHandler {
     protected void execute(PageBuilderContext context) throws Exception {
         Context extcontext;
         Query query;
-        Documents documents = new Documents(context.function);
         DocumentModel model;
+        Documents documents = new Documents(context.function);
 
         extcontext = getExtendedContext();
         if (extcontext.action == null)
@@ -40,10 +39,6 @@ public class Load extends AbstractActionHandler {
         query = new Query();
         query.setModel(extcontext.model);
         extcontext.items = select(query);
-        extcontext.deleted.clear();
-        if (extcontext.items != null)
-            for (ExtendedObject object : extcontext.items)
-                extcontext.deleted.add(object);
         redirect(view);
 
     }

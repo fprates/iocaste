@@ -20,15 +20,15 @@ public class Save extends AbstractActionHandler {
         
         extcontext = getExtendedContext();
         objects = tableitemsget("items");
-        if (objects == null) {
-            query = new Query("delete");
-            query.setModel(extcontext.model);
-            update(query);
-            message(Const.STATUS, "entries.saved");
-            return;
-        }
         
-        extcontext.deleted.clear();
+        query = new Query("delete");
+        query.setModel(extcontext.model);
+        update(query);
+        message(Const.STATUS, "entries.saved");
+        
+        if (objects == null)
+            return;
+        
         for (ExtendedObject object : objects) {
             skip = false;
             for (DocumentModelKey key : object.getModel().getKeys())
@@ -38,7 +38,7 @@ public class Save extends AbstractActionHandler {
                 }
             
             if (!skip)
-                modify(object);
+                save(object);
         }
         
         message(Const.STATUS, "entries.saved");
