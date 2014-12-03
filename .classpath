@@ -7,7 +7,6 @@
 	<classpathentry kind="src" path="src/workbench/classes"/>
 	<classpathentry kind="src" path="src/gconfigview/classes"/>
 	<classpathentry kind="src" path="src/globalconfig/classes"/>
-	<classpathentry kind="src" path="src/datamigr/classes"/>
 	<classpathentry kind="src" path="src/install/classes"/>
 	<classpathentry kind="src" path="src/setup/classes"/>
 	<classpathentry kind="src" path="src/exhandler/classes"/>

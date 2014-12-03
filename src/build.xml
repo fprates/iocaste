@@ -108,9 +108,6 @@
         <!-- install -->
         <ant antfile="${basedir}/src/install/build.xml"/>
         
-        <!-- datamigr -->
-        <ant antfile="${basedir}/src/datamigr/build.xml"/>
-        
         <!-- gconfigview -->
         <ant antfile="${basedir}/src/gconfigview/build.xml"/>
         
