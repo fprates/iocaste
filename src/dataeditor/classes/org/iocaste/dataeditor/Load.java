@@ -39,6 +39,7 @@ public class Load extends AbstractActionHandler {
         query = new Query();
         query.setModel(extcontext.model);
         extcontext.items = select(query);
+        init(view, extcontext);
         redirect(view);
 
     }

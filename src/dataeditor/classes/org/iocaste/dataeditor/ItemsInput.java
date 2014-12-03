@@ -7,15 +7,14 @@ public class ItemsInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        // TODO Stub de método gerado automaticamente
-
+        Context extcontext = getExtendedContext();
+        
+        tableitemsadd("items", extcontext.items);
     }
 
     @Override
     protected void init(PageBuilderContext context) {
-        Context extcontext = getExtendedContext();
-        
-        tableitemsadd("items", extcontext.items);
+        execute(context);
     }
 
 }

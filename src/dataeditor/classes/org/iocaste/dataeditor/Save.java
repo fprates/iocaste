@@ -41,6 +41,7 @@ public class Save extends AbstractActionHandler {
                 save(object);
         }
         
+        extcontext.items = objects;
         message(Const.STATUS, "entries.saved");
 
     }

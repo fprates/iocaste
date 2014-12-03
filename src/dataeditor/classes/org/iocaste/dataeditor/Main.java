@@ -68,13 +68,14 @@ public class Main extends AbstractPageBuilder {
                 break;
             case "edit":
                 view = buildEditView(context, extcontext, "main");
+                view.put("save", new Save());
                 break;
             default:
                 return;
             }
 
             context.view.setActionControl("load");
-            load = new Load(extcontext.action);
+            load = new Load("main");
             view.put("load", load);
             load.run(context, false);
             return;
