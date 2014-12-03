@@ -50,10 +50,10 @@ public class DashboardFactory {
         
         stylesheet.newElement(".db_dash_item:hover");
         stylesheet.put(".db_dash_item:hover", "display", "block");
-        stylesheet.put(".db_dash_item:hover", "text-decoration", "none");
+        stylesheet.put(".db_dash_item:hover", "text-decoration", "underline");
         stylesheet.put(".db_dash_item:hover", "padding", "3px");
         stylesheet.put(".db_dash_item:hover", "font-size", "12pt");
-        stylesheet.put(".db_dash_item:hover", "color", "#ffffff");
+        stylesheet.put(".db_dash_item:hover", "color", "#0000ff");
         
         stylesheet.newElement(".db_dash_item:visited");
         stylesheet.put(".db_dash_item:visited", "display", "block");
