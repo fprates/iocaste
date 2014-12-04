@@ -20,6 +20,7 @@ public class State {
     public Function function;
     public Map<String, Map<String, String>> messages;
     public List<ExtendedObject> log;
+    public byte installed;
     
     public State() {
         log = new ArrayList<>();

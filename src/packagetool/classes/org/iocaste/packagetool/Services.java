@@ -157,10 +157,12 @@ public class Services extends AbstractFunction {
                 state.documents.commit();
             }
             
+            state.installed++;
             cmodels = state.data.getCModels();
             if (cmodels.length > 0)
                 InstallCModels.init(cmodels, state);
             
+            state.installed++;
             /*
              * insere usuários
              */
@@ -240,7 +242,9 @@ public class Services extends AbstractFunction {
             
             return 1;
         } catch (Exception e) {
-            state.documents.rollback();
+            if (state.installed > 1)
+                state.documents.rollback();
+            
             for (ExtendedObject object : state.log) {
                 name = object.get("MODEL");
                 if (name == null || !name.equals("MODEL"))
