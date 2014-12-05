@@ -11,6 +11,8 @@ public interface Manager {
     public static final int EEXISTS = 0;
     public static final int EINVALID = 1;
     public static final int SAVED = 2;
+
+    public abstract ComplexDocument clone(ComplexDocument document);
     
     public abstract boolean exists(Object code);
     

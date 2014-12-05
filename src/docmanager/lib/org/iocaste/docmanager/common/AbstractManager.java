@@ -29,6 +29,38 @@ public abstract class AbstractManager implements Manager {
                     cmodelname.concat(" is an invalid complex model"));
     }
     
+    @Override
+    public final ComplexDocument clone(ComplexDocument document) {
+        Map<String, DocumentModel> models;
+        ComplexDocument clone = instance();
+        DocumentModel model = cmodel.getHeader();
+        ExtendedObject object = new ExtendedObject(model);
+        
+        /*
+         * clone cmodel header object and clear its key field.
+         * it's enough to triggers most of reindexing procedures.
+         */
+        clone.setHeader(object);
+        Documents.move(object, document.getHeader());
+        for (DocumentModelKey key : model.getKeys()) {
+            Documents.clear(object, key.getModelItemName());
+            break;
+        }
+        
+        /*
+         * clone cmodel items
+         */
+        models = cmodel.getItems();
+        for (String name : models.keySet())
+            for (ExtendedObject source : document.getItems(name)) {
+                object = new ExtendedObject(models.get(name));
+                Documents.move(object, source);
+                clone.add(object);
+            }
+        
+        return clone;
+    }
+    
     /*
      * (não-Javadoc)
      * @see com.b2b.Manager#exists(java.lang.Object)
