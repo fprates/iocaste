@@ -285,8 +285,8 @@ public class Documents extends AbstractServiceInterface {
         DocumentModel model = object.getModel();
         
         for (DocumentModelItem item : model.getItens())
-            if (!isInitial(item.getDataElement(), object.get(item)) &&
-                    !ignore.contains(item.getName()))
+            if (!ignore.contains(item.getName()) &&
+                    !isInitial(item.getDataElement(), object.get(item)))
                 return false;
         
         return true;
