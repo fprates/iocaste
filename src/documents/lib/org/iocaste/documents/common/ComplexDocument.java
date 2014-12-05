@@ -144,6 +144,15 @@ public class ComplexDocument implements Serializable {
     }
     
     /**
+     * 
+     * @param field
+     * @param value
+     */
+    public final void set(String field, Object value) {
+        header.set(field, value);
+    }
+    
+    /**
      * Set the header's extended object
      * @param object extended object
      */
