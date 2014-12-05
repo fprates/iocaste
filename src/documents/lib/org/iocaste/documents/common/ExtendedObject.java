@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,6 +112,10 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
         return ((BigDecimal)value).doubleValue();
     }
 
+    public final Date getdt(String name) {
+        return (Date)get(name);
+    }
+    
     /**
      * Retorna valor do campo especificado no formato int.
      * @param name nome do campo
