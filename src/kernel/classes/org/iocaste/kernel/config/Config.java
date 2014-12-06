@@ -8,19 +8,15 @@ import java.util.Properties;
 
 import org.iocaste.kernel.database.Database;
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.IocasteException;
-import org.iocaste.protocol.Message;
 
 public class Config extends AbstractFunction {
     private static final String IOCASTE_DIR = ".iocaste";
     private static final String CONFIG_FILE = "core.properties";
     public Properties properties;
-    public String host;
     public Database database;
     
     public Config() {
-        export("get_host", new GetHost(this));
         export("get_system_info", new GetSystemInfo());
         export("get_system_parameter", new GetSystemParameter(this));
     }
@@ -57,26 +53,4 @@ public class Config extends AbstractFunction {
     public final boolean isInitialized() {
         return (properties != null);
     }
-    
-    /**
-     * 
-     * @param host
-     */
-    public final void setHost(String host) {
-        this.host = host;
-    }
-}
-
-class GetHost extends AbstractHandler {
-    private Config config;
-    
-    public GetHost(Config config) {
-        this.config = config;
-    }
-    
-    @Override
-    public Object run(Message message) throws Exception {
-        return config.host;
-    }
-    
 }

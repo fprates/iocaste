@@ -77,7 +77,6 @@ public class Servlet extends AbstractIocasteServlet {
             config.init();
         }
         
-        config.setHost(getServerName(message.getSessionid()));
         if (isAuthorized(message))
             return;
         

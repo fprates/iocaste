@@ -88,14 +88,6 @@ public final class Iocaste extends AbstractServiceInterface {
      * 
      * @return
      */
-    public final String getHost() {
-        return call(new Message("get_host"));
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final Locale getLocale() {
         return call(new Message("get_locale"));
     }
