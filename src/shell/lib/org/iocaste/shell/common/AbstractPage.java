@@ -100,12 +100,24 @@ public abstract class AbstractPage extends AbstractFunction {
         return getviewdata.state.parameters;
     }
     
+    public final int getPort() {
+        return getviewdata.state.port;
+    }
+    
+    public final String getProtocol() {
+        return getviewdata.state.protocol;
+    }
+    
     public final String getRedirectedApp() {
         return getviewdata.state.rapp;
     }
     
     public final String getRedirectedPage() {
         return getviewdata.state.rpage;
+    }
+    
+    public final String getServername() {
+        return getviewdata.state.servername;
     }
     
     /**

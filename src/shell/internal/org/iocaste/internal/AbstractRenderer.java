@@ -47,6 +47,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     protected static Map<String, List<SessionContext>> apps;
     protected Map<String, Map<String, String>> style;
     protected MessageSource msgsource;
+    protected String hostname, protocol;
+    protected int port;
 
     protected abstract void callController(ControllerData config)
             throws Exception;
@@ -167,6 +169,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         message.add("view", view);
         message.add("init", pagectx.isInitializableView());
         message.add("parameters", pagectx.parameters);
+        message.add("servername", hostname);
+        message.add("protocol", protocol);
+        message.add("port", port);
         message.setSessionid(complexid);
         
         if (pagectx.initparams != null) {
@@ -223,6 +228,12 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         jsessionid = req.getSession().getId();
         servername = new StringBuffer(req.getScheme()).append("://127.0.0.1:").
                 append(req.getServerPort()).toString();
+        
+        if (hostname == null) {
+            hostname = req.getServerName();
+            protocol = req.getScheme();
+            port = req.getServerPort();
+        }
         
         try {
             entry(req, resp, NEW_SESSION);

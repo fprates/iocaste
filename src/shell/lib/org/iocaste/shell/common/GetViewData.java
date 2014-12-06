@@ -31,6 +31,9 @@ public class GetViewData extends AbstractHandler {
         Locale locale = iocaste.getLocale();
         
         state.parameters = message.get("parameters");
+        state.protocol = message.get("protocol");
+        state.port = message.geti("port");
+        state.servername = message.get("servername");
         state.keepview = false;
         state.reloadable = false;
         state.rapp = null;
