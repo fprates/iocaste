@@ -67,9 +67,7 @@ public class PageControlRenderer extends Renderer {
         
         text = new Text(statusarea, "navbar.username");
         text.setStyleClass("status");
-        text.setText(new StringBuilder(config.getUsername()).append("@").
-                append(config.getDBName()).append(":").
-                append(config.getLogId()).toString());
+        text.setText(config.getUsername());
 
         components = pagecontrol.getComponents();
         if (components.length > 0) {

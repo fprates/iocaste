@@ -61,10 +61,6 @@ public class Servlet extends AbstractIocasteServlet {
         authorize("commit", null);
         authorize("rollback", null);
         authorize("is_authorized", null);
-        
-        parameters = new HashMap<>();
-        parameters.put("parameter", new String[] {"dbname"});
-        authorize("get_system_parameter", parameters);
     }
     
     /*

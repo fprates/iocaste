@@ -24,7 +24,7 @@ import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public class HtmlRenderer {
-    private String username, msgtext, dbname;
+    private String username, msgtext;
     private Const msgtype;
     private List<String> script;
     private Set<String> actions;
@@ -189,7 +189,6 @@ public class HtmlRenderer {
         config.addMessageSource(view.getMessages());
         config.addMessageSource(msgsource);
         config.setPageTrack(composePageTrack(view, tracking));
-        config.setDBName(dbname);
         config.setShControl(shcontrol);
         config.setTracking(tracking);
         
@@ -210,14 +209,6 @@ public class HtmlRenderer {
         actions = config.getActions();
         
         return html;
-    }
-    
-    /**
-     * 
-     * @param dbname
-     */
-    public final void setDBName(String dbname) {
-        this.dbname = dbname;
     }
     
     /**

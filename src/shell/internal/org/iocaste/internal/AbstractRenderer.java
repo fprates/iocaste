@@ -45,7 +45,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     private static final byte AUTHORIZATION_ERROR = 1;
     private String jsessionid, servername;
     protected static Map<String, List<SessionContext>> apps;
-    protected String dbname;
     protected Map<String, Map<String, String>> style;
     protected MessageSource msgsource;
 
@@ -882,11 +881,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         renderer.setMessageType(messagetype);
         renderer.setPageContext(pagectx);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
-        
-        if (dbname == null)
-            dbname = new Iocaste(this).getSystemParameter("dbname");
-        
-        renderer.setDBName(dbname);
         renderer.setShControl(pagectx.getShControl());
         renderer.setFunction(this);
         tracking = new TrackingData();
