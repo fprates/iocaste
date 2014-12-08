@@ -15,4 +15,5 @@ public class Context extends AbstractContext {
     
     public byte mode;
     public ExtendedObject[] objects;
+    public String appname;
 }

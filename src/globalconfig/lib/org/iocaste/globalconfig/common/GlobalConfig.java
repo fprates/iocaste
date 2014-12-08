@@ -1,6 +1,7 @@
 package org.iocaste.globalconfig.common;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
@@ -93,13 +94,13 @@ public class GlobalConfig extends AbstractServiceInterface {
     
     /**
      * 
-     * @param name
-     * @param value
+     * @param appname
+     * @param values
      */
-    public final void set(String name, Object value) {
+    public final void set(String appname, Map<String, Object> values) {
         Message message = new Message("set");
-        message.add("name", name);
-        message.add("value", value);
+        message.add("appname", appname);
+        message.add("values", values);
         call(message);
     }
 }
