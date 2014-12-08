@@ -229,12 +229,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         servername = new StringBuffer(req.getScheme()).append("://127.0.0.1:").
                 append(req.getServerPort()).toString();
         
-        if (hostname == null) {
-            hostname = req.getServerName();
-            protocol = req.getScheme();
-            port = req.getServerPort();
-        }
-        
         try {
             entry(req, resp, NEW_SESSION);
         } catch (Exception e) {

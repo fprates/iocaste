@@ -181,6 +181,12 @@ public class PageRenderer extends AbstractRenderer {
         req.setCharacterEncoding("UTF-8");
         sessionid = req.getSession().getId();
         
+        if (hostname == null) {
+            hostname = req.getServerName();
+            protocol = req.getScheme();
+            port = req.getServerPort();
+        }
+        
         try {
             if (apps.containsKey(sessionid)) {
                 if (keepsession)
