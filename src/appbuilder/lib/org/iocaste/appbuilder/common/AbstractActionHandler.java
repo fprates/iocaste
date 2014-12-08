@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -175,6 +176,10 @@ public abstract class AbstractActionHandler {
         return documents.getNextNumber(range);
     }
     
+    protected final ExtendedObject getObject(String model, Object key) {
+        return documents.getObject(model, key);
+    }
+    
     protected final void init(String view, ExtendedContext extcontext) {
         ViewContext viewctx = context.getView(view);
         viewctx.set(extcontext);
@@ -208,6 +213,15 @@ public abstract class AbstractActionHandler {
     
     protected final ExtendedObject readobjects(ExtendedObject[] objects,
             String op1, Object op2) {
+        for (ExtendedObject object : objects)
+            if (object.get(op1).equals(op2))
+                return object;
+        
+        return null;
+    }
+    
+    protected final ExtendedObject readobjects(
+            Collection<ExtendedObject> objects, String op1, Object op2) {
         for (ExtendedObject object : objects)
             if (object.get(op1).equals(op2))
                 return object;
