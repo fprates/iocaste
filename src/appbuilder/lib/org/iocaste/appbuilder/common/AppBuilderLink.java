@@ -9,6 +9,7 @@ public class AppBuilderLink {
     public String number, appname;
     public ViewConfig createselectconfig, displayselectconfig;
     public ViewConfig updateselectconfig, maintenanceconfig;
-    public AbstractActionHandler validate;
+    public AbstractViewInput maintenanceinput;
+    public AbstractActionHandler validate, updateload, displayload;
     public Context extcontext;
 }

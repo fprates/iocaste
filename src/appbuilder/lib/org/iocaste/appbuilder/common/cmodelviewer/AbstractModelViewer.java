@@ -2,7 +2,6 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
-import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -29,6 +28,13 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         link.entity = entity;
         link.cmodel = getParameter("cmodel");
         link.number = getParameter("number");
+        link.createview = link.entity.concat(CREATE);
+        link.create1view = link.createview.concat("1");
+        link.editview = link.entity.concat(EDIT);
+        link.edit1view = link.editview.concat("1");
+        link.displayview = link.entity.concat(DISPLAY);
+        link.display1view = link.displayview.concat("1");
+        
         return link;
     }
     
@@ -40,17 +46,9 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             AppBuilderLink link) {
         ViewContext viewctx;
         AbstractViewSpec selspec, maintenancespec;
-        AbstractViewInput maintenanceinput;
         AbstractActionHandler save, inputvalidate;
         String entityaction;
         Manager manager;
-        
-        link.createview = link.entity.concat(CREATE);
-        link.create1view = link.createview.concat("1");
-        link.editview = link.entity.concat(EDIT);
-        link.edit1view = link.editview.concat("1");
-        link.displayview = link.entity.concat(DISPLAY);
-        link.display1view = link.displayview.concat("1");
         
         link.extcontext.number = link.number;
         link.extcontext.cmodel = link.cmodel;
@@ -62,7 +60,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         
         selspec = new SelectSpec();
         maintenancespec = new MaintenanceSpec();
-        maintenanceinput = new MaintenanceInput();
         save = new Save();
         inputvalidate = new InputValidate();
         
@@ -86,13 +83,13 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
                 setSelectConfig(link.updateselectconfig, viewctx, action,
                         link.extcontext);
                 
-                viewctx.put(EDIT, new Load(link.edit1view));
+                viewctx.put(EDIT, link.updateload);
                 break;
             case DISPLAY:
                 setSelectConfig(link.displayselectconfig, viewctx, action,
                         link.extcontext);
                 
-                viewctx.put(DISPLAY, new Load(link.display1view));
+                viewctx.put(DISPLAY, link.displayload);
                 break;
             }
         }
@@ -107,7 +104,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             viewctx = context.instance(view);
             viewctx.set(maintenancespec);
             viewctx.set(link.maintenanceconfig);
-            viewctx.set(maintenanceinput);
+            viewctx.set(link.maintenanceinput);
             viewctx.set(link.extcontext);
             viewctx.put("validate", inputvalidate);
             viewctx.put("save", save);
@@ -116,7 +113,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         viewctx = context.instance(link.display1view);
         viewctx.set(maintenancespec);
         viewctx.set(new DisplayConfig());
-        viewctx.set(maintenanceinput);
+        viewctx.set(link.maintenanceinput);
         viewctx.set(link.extcontext);
     }
     

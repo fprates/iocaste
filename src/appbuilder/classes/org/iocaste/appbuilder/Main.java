@@ -6,7 +6,9 @@ import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
 import org.iocaste.appbuilder.common.cmodelviewer.Context;
+import org.iocaste.appbuilder.common.cmodelviewer.Load;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceConfig;
+import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceInput;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
 
 public class Main extends AbstractModelViewer {
@@ -20,9 +22,13 @@ public class Main extends AbstractModelViewer {
         if (msgsource != null)
             setMessageSource(msgsource);
         
+        link.maintenanceinput = new MaintenanceInput();
         link.maintenanceconfig = new MaintenanceConfig();
+        link.updateload = new Load(link.edit1view);
+        link.displayload = new Load(link.display1view);
         link.validate = new Validate();
         link.extcontext = new Context();
+        
         if (module == null)
             loadManagedModule(context, link);
         else
