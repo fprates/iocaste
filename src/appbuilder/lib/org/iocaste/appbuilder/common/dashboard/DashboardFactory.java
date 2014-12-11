@@ -1,7 +1,6 @@
 package org.iocaste.appbuilder.common.dashboard;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,7 +13,6 @@ public class DashboardFactory {
     private Container container;
     private PageBuilderContext context;
     private Map<String, DashboardComponent> components;
-    private Set<String> here;
     private StyleSheet stylesheet;
     private String stylename;
     
@@ -22,8 +20,7 @@ public class DashboardFactory {
             Container container, PageBuilderContext context, String name) {
         this.container = new StandardContainer(container, name);
         this.context = context;
-        components = new HashMap<>();
-        here = new HashSet<>();
+        components = new LinkedHashMap<>();
 
         stylename = name.concat("_db_container");
         this.container.setStyleClass(stylename);
@@ -72,7 +69,6 @@ public class DashboardFactory {
     }
     
     public final DashboardComponent instance(String name) {
-        here.add(name);
         return instance(name, container, null);
     }
     
@@ -85,17 +81,27 @@ public class DashboardFactory {
     }
     
     public final void isometricGrid() {
-        isometricGrid(here);
+        isometricGrid(components.keySet());
     }
     
-    public final void isometricGrid(Set<String> items) {
-        double size;
-        int qt;
+    public final void isometricGrid(Set<String> dashes) {
+        double width;
+        int qt, c;
+        boolean compensate;
         
-        size = Math.sqrt(items.size());
-        qt = ((size%2) > 0)? ((int)size) + 1 : (int)size;
-        for (String name : items)
-            components.get(name).setArea(100/qt, 100/qt, "%");
+        width = Math.sqrt(dashes.size());
+        compensate = ((width % 2) == 0);
+        c = qt = (int)((!compensate)? width + 1 : width);
+        width = 100 / qt;
+        
+        for (String name : dashes)
+            if (compensate && c == qt) {
+                components.get(name).setArea((int)width - 1, (int)width, "%");
+                c = 1;
+            } else {
+                components.get(name).setArea((int)width, (int)width, "%");
+                c++;
+            }
     }
     
     public final void setArea(int width, int height, String unit) {
@@ -112,7 +118,7 @@ public class DashboardFactory {
     }
     
     public final void setGrid(int columns, int lines) {
-        for (String name : here)
+        for (String name : components.keySet())
             components.get(name).setArea(100/columns, 100/lines, "%");
     }
     
