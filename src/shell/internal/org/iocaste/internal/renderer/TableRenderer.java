@@ -105,7 +105,9 @@ public class TableRenderer extends Renderer {
         
         items = table.getItems();
         size = items.size();
-        if (items.size() > 0) {
+        if (items.size() == 0) {
+            tabletag.addInner("");
+        } else {
             tag = new XMLElement("tbody");
             vlines = table.getVisibleLines();
             topline = table.getTopLine();
