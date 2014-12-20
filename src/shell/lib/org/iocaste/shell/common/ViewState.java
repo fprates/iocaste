@@ -1,6 +1,7 @@
 package org.iocaste.shell.common;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,4 +14,8 @@ public class ViewState implements Serializable {
     public Map<String, Object> parameters;
     public Set<String> initparams;
     public Map<String, String> headervalues;
+    
+    public ViewState() {
+        headervalues = new HashMap<>();
+    }
 }
