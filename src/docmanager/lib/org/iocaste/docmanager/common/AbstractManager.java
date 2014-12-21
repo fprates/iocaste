@@ -180,11 +180,13 @@ public abstract class AbstractManager implements Manager {
     
     /*
      * (não-Javadoc)
-     * @see com.b2b.Manager#save(org.iocaste.documents.common.ComplexDocument)
+     * @see org.iocaste.docmanager.common.Manager#save(
+     *    org.iocaste.documents.common.ExtendedObject, java.util.Collection)
      */
     @Override
-    public void save(ExtendedObject head, Collection<ExtendedObject[]> groups) {
-        docmanager.save(cmodel.getName(), head, groups);
+    public ComplexDocument save(
+            ExtendedObject head, Collection<ExtendedObject[]> groups) {
+        return docmanager.save(cmodel.getName(), head, groups);
     }
     
     /*
@@ -193,13 +195,13 @@ public abstract class AbstractManager implements Manager {
      *    org.iocaste.documents.common.ComplexDocument)
      */
     @Override
-    public void save(ComplexDocument document) {
+    public ComplexDocument save(ComplexDocument document) {
         Collection<ExtendedObject[]> groups = new ArrayList<>();
         
         for (String name : cmodel.getItems().keySet())
             groups.add(document.getItems(name));
         
-        save(document.getHeader(), groups);
+        return save(document.getHeader(), groups);
     }
     
     /**

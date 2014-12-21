@@ -27,8 +27,8 @@ public interface Manager {
     
     public abstract ComplexDocument instance();
     
-    public abstract void save(ExtendedObject head,
+    public abstract ComplexDocument save(ExtendedObject head,
             Collection<ExtendedObject[]> items);
     
-    public abstract void save(ComplexDocument document);
+    public abstract ComplexDocument save(ComplexDocument document);
 }

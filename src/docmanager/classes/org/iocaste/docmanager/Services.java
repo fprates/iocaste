@@ -40,7 +40,7 @@ public class Services extends AbstractFunction {
         return new Documents(this).getComplexDocument(cmodelname, code);
     }
     
-    public final void save(Message message) {
+    public final ComplexDocument save(Message message) {
         Map<String, String> keys, references;
         Map<String, DocumentModel> models;
         DocumentModel model;
@@ -122,5 +122,7 @@ public class Services extends AbstractFunction {
 
         documents.deleteComplexDocument(cmodelname, id);
         documents.save(document);
+        
+        return document;
     }
 }

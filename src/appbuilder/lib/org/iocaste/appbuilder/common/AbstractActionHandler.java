@@ -302,8 +302,9 @@ public abstract class AbstractActionHandler {
             redirectContext(this.context, viewctx);
     }
     
-    protected final void save(String managername, ComplexDocument document) {
-        context.getManager(managername).save(document);
+    protected final ComplexDocument save(
+            String managername, ComplexDocument document) {
+        return context.getManager(managername).save(document);
     }
     
     protected final void save(ExtendedObject object) {
