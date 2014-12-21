@@ -212,7 +212,8 @@ public abstract class AbstractPage extends AbstractFunction {
         
         if (!id.equals("exec_action"))
             return super.run(message);
-        
+
+        getviewdata.state.headervalues.clear();
         execaction = get(id);
         execaction.context = getviewdata.context;
         return execaction.run(message);
