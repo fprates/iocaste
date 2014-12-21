@@ -75,6 +75,11 @@ public abstract class AbstractViewInput {
         dbget(dashboard, name).add(key, value);
     }
     
+    protected void dbitemadd(String dashboard, String name, String key,
+            String value) {
+        dbget(dashboard, name).add(key, value);
+    }
+    
     protected void dbtextadd(String dashboard, String name, String value) {
         dbget(dashboard, name).addText(value);
     }
