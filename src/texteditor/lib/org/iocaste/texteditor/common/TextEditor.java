@@ -4,16 +4,21 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.TextArea;
 
 public class TextEditor implements Serializable {
     private static final long serialVersionUID = 8099830107603124518L;
     private String name;
+    private AbstractContext context;
     private Map<String, String> pages;
-    private TextArea element;
     
-    public TextEditor(String name) {
+    public TextEditor(Container container, AbstractContext context, String name)
+    {
         this.name = name;
+        this.context = context;
+        new TextArea(container, name);
         pages = new LinkedHashMap<>();
     }
     
@@ -22,15 +27,15 @@ public class TextEditor implements Serializable {
     }
     
     public final TextArea getElement() {
-        return element;
+        return context.view.getElement(name);
     }
     
     public final int getHeight() {
-        return element.getHeight();
+        return getElement().getHeight();
     }
     
     public final int getWidth() {
-        return element.getWidth();
+        return getElement().getWidth();
     }
     
     public final String getName() {
@@ -45,19 +50,17 @@ public class TextEditor implements Serializable {
         return pages.get(id);
     }
     
-    public final void setElement(TextArea element) {
-        this.element = element;
-    }
-    
     public final void setHeight(int height) {
-        element.setSize(element.getWidth(), height);
+        TextArea area= getElement();
+        area.setSize(area.getWidth(), height);
     }
     
     public final void setVisible(boolean visible) {
-        element.setVisible(visible);
+        getElement().setVisible(visible);
     }
     
     public final void setWidth(int width) {
-        element.setSize(width, element.getHeight());
+        TextArea area = getElement();
+        area.setSize(width, area.getHeight());
     }
 }

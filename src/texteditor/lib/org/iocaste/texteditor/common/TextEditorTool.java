@@ -19,7 +19,7 @@ public class TextEditorTool extends AbstractServiceInterface {
     public TextEditorTool tetool;
     
     public TextEditorTool(Function function) {
-        initService(function, InstallData.TXTEDITOR_SERVERNAME);
+        initService(context.function, InstallData.TXTEDITOR_SERVERNAME);
     }
     
     public TextEditorTool(AbstractContext context) {
@@ -53,10 +53,7 @@ public class TextEditorTool extends AbstractServiceInterface {
     }
     
     public final TextEditor instance(Container container, String name) {
-        TextEditor editor = new TextEditor(name);
-        
-        editor.setElement(new TextArea(container, name));
-        return editor;
+        return new TextEditor(container, context, name);
     }
     
     public final void load(TextEditor editor, String textnm, String id) {
