@@ -160,6 +160,6 @@ public abstract class AbstractViewInput {
     
     protected final void texteditorset(String texteditor, String text) {
         TextEditor editor = getViewComponents().editors.get(texteditor);
-        editor.getElement().set(text);
+        editor.getElement(context).set(text);
     }
 }

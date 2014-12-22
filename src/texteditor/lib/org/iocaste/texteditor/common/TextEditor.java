@@ -11,13 +11,11 @@ import org.iocaste.shell.common.TextArea;
 public class TextEditor implements Serializable {
     private static final long serialVersionUID = 8099830107603124518L;
     private String name;
-    private AbstractContext context;
     private Map<String, String> pages;
     
     public TextEditor(Container container, AbstractContext context, String name)
     {
         this.name = name;
-        this.context = context;
         new TextArea(container, name);
         pages = new LinkedHashMap<>();
     }
@@ -26,16 +24,8 @@ public class TextEditor implements Serializable {
         pages.put(id, text);
     }
     
-    public final TextArea getElement() {
+    public final TextArea getElement(AbstractContext context) {
         return context.view.getElement(name);
-    }
-    
-    public final int getHeight() {
-        return getElement().getHeight();
-    }
-    
-    public final int getWidth() {
-        return getElement().getWidth();
     }
     
     public final String getName() {
@@ -50,17 +40,13 @@ public class TextEditor implements Serializable {
         return pages.get(id);
     }
     
-    public final void setHeight(int height) {
-        TextArea area= getElement();
+    public final void setHeight(AbstractContext context, int height) {
+        TextArea area= getElement(context);
         area.setSize(area.getWidth(), height);
     }
     
-    public final void setVisible(boolean visible) {
-        getElement().setVisible(visible);
-    }
-    
-    public final void setWidth(int width) {
-        TextArea area = getElement();
+    public final void setWidth(AbstractContext context, int width) {
+        TextArea area = getElement(context);
         area.setSize(width, area.getHeight());
     }
 }
