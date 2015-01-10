@@ -181,9 +181,15 @@ public abstract class AbstractActionHandler {
     }
     
     protected final void init(String view, ExtendedContext extcontext) {
+        AbstractViewSpec spec;
+        
         ViewContext viewctx = context.getView(view);
         viewctx.set(extcontext);
-        viewctx.getSpec().setInitialized(false);
+        spec = viewctx.getSpec();
+        if (spec == null)
+            throw new RuntimeException(new StringBuilder("undefined spec for ").
+                    append(view).toString());
+        spec.setInitialized(false);
     }
     
     protected final void inputrefresh() {
