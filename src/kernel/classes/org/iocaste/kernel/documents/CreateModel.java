@@ -218,6 +218,10 @@ public class CreateModel extends AbstractDocumentsHandler {
             element = item.getDataElement();
             if (element == null) {
                 reference = item.getReference();
+                if (reference == null)
+                    throw new RuntimeException(
+                            item.getName().concat(
+                                    " has an undefined element or reference."));
                 if (reference.isDummy())
                     reference = getModelItem(connection, documents,
                             reference.getDocumentModel(), reference.getName());
