@@ -32,6 +32,8 @@ public class ModelInstall {
     }
     
     public final DocumentModelItem item(String name, DocumentModelItem item) {
+        if (item.isDummy())
+            throw new RuntimeException(name.concat(" can't use dummy item."));
         return item(name, null, item.getDataElement());
     }
     
