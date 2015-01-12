@@ -11,6 +11,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Text;
 import org.iocaste.texteditor.common.TextEditor;
 
 public abstract class AbstractViewInput {
@@ -161,5 +162,10 @@ public abstract class AbstractViewInput {
     protected final void texteditorset(String texteditor, String text) {
         TextEditor editor = getViewComponents().editors.get(texteditor);
         editor.getElement(context).set(text);
+    }
+    
+    protected final void textset(String name, String text) {
+        Text element = context.view.getElement(name);
+        element.setText(text);
     }
 }
