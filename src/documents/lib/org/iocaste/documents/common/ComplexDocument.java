@@ -16,7 +16,8 @@ import java.util.Map;
  * @author francisco.prates
  *
  */
-public class ComplexDocument implements Serializable {
+public class ComplexDocument implements Serializable,
+        Comparable<ComplexDocument> {
     private static final long serialVersionUID = -6366080783932302245L;
     private ComplexModel cmodel;
     private ExtendedObject header;
@@ -59,6 +60,15 @@ public class ComplexDocument implements Serializable {
         
         for (ExtendedObject object : objects)
             add(object);
+    }
+
+    @Override
+    public int compareTo(ComplexDocument document) {
+        String value1, value2;
+        
+        value1 = getKey().toString();
+        value2 = document.getKey().toString();
+        return (value1.compareTo(value2));
     }
     
     /**
