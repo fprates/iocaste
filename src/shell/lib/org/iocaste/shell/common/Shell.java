@@ -237,17 +237,23 @@ public class Shell extends AbstractServiceInterface {
      */
     public static final String toString(Object value, DataElement element,
             Locale locale, boolean boolconvert) {
-        DateFormat dateformat;
-        NumberFormat numberformat;
-        
         if (element == null)
             return (value == null)? "" : value.toString();
         
-        switch (element.getType()) {
+        return toString(value, element.getType(), element.getDecimals(), locale,
+                boolconvert);
+    }
+    
+    public static final String toString(Object value, int type, int dec,
+            Locale locale, boolean boolconvert) {
+        DateFormat dateformat;
+        NumberFormat numberformat;
+        
+        switch (type) {
         case DataType.DEC:
             numberformat = NumberFormat.getNumberInstance(locale);
-            numberformat.setMaximumFractionDigits(element.getDecimals());
-            numberformat.setMinimumFractionDigits(element.getDecimals());
+            numberformat.setMaximumFractionDigits(dec);
+            numberformat.setMinimumFractionDigits(dec);
             numberformat.setGroupingUsed(true);
             return numberformat.format((value == null)? 0 : value);
             
