@@ -12,6 +12,7 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.Shell;
 
 /**
  * 
@@ -146,10 +147,12 @@ public class Services extends AbstractFunction {
         object.set("GLOBAL_CONFIG", appname);
         switch (ptype) {
         case DataType.CHAR:
-            object.set("VALUE", (value == null)? null : value.toString());
+            object.set("VALUE", (Shell.isInitial((String)value))?
+                    null : value.toString());
             break;
         case DataType.NUMC:
-            object.set("VALUE", (value == null)? "0" : value.toString());
+            object.set("VALUE", (Shell.isInitial((String)value))?
+                    "0" : value.toString());
             break;
         case DataType.BOOLEAN:
             object.set("VALUE", (value == null)? "false" : value.toString());
