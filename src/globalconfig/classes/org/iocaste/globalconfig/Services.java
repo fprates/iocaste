@@ -151,8 +151,9 @@ public class Services extends AbstractFunction {
                     null : value.toString());
             break;
         case DataType.NUMC:
-            object.set("VALUE", (Shell.isInitial((String)value))?
-                    "0" : value.toString());
+            object.set("VALUE",
+                    (value == null || Shell.isInitial(value.toString()))?
+                            "0" : value.toString());
             break;
         case DataType.BOOLEAN:
             object.set("VALUE", (value == null)? "false" : value.toString());
