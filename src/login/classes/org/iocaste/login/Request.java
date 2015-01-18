@@ -24,7 +24,7 @@ public class Request {
             return;
         }
         
-        context.view.message(Const.ERROR, "password.mismatch");
+        context.function.message(Const.ERROR, "password.mismatch");
     }
     
     /**
@@ -49,7 +49,7 @@ public class Request {
             else
                 context.function.exec("iocaste-tasksel", "main");
         } else {
-            context.view.message(Const.ERROR, "invalid.login");
+            context.function.message(Const.ERROR, "invalid.login");
         }
         
         input = form.get("USERNAME");

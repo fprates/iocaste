@@ -542,7 +542,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         Enumeration<?> parameternames;
         PageContext pagectx_;
         Map<String, String[]> parameters;
-        View pagectxview;
         String appname, pagename, key, pagetrack = null, actionname = null;
         
         /*
@@ -550,6 +549,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
          */
         if (ServletFileUpload.isMultipartContent(req)) {
             parameters = processMultipartContent(req, pagectx);
+            actionname = parameters.get("action")[0];
         } else {
             parameters = new HashMap<>();
             parameternames = req.getParameterNames();
@@ -617,7 +617,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         if (!isExecuteAuthorized(appname, config.sessionid) &&
                 config.state.rapp != null) {
             pagectx.setError(AUTHORIZATION_ERROR);
-            pagectx.getViewData().message(Const.ERROR, "user.not.authorized");
+            pagectx.message(Const.ERROR, "user.not.authorized");
             
             return pagectx;
         }
@@ -647,10 +647,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         pagectx_.setReloadableView(config.state.reloadable);
         pagectx_.parameters = config.state.parameters;
         pagectx_.initparams = config.state.initparams;
-        pagectxview = pagectx_.getViewData();
-        if (pagectxview != null)
-            pagectxview.message(config.state.view.getMessageType(),
-                    config.state.view.getTranslatedMessage());
+        pagectx_.message(config.state.messagetype, config.state.messagetext);
         
         if (isConnected(contextdata)) {
             execute(appname, config.sessionid);
@@ -847,8 +844,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         TrackingData tracking;
         HtmlRenderer renderer;
         StyleSheet userstyle;
-        String username, viewmessage;
-        Const messagetype;
+        String username;
         AppContext appctx;
         View view;
         boolean hasrendered;
@@ -857,14 +853,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
          * prepara a visão para renderização
          */
         view = pagectx.getViewData();
-        if (view != null) {
-            viewmessage = view.getTranslatedMessage();
-            messagetype = view.getMessageType();
-        } else {
-            viewmessage = null;
-            messagetype = null;
-        }
-        
         if (pagectx.getError() == 0 &&
                 (view == null || pagectx.isReloadableView())) {
             view = createView(sessionid, pagectx);
@@ -882,8 +870,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         
         renderer = new HtmlRenderer();
         renderer.setMessageSource(msgsource);
-        renderer.setMessageText(viewmessage);
-        renderer.setMessageType(messagetype);
         renderer.setPageContext(pagectx);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
         renderer.setShControl(pagectx.getShControl());

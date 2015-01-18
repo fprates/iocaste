@@ -78,7 +78,7 @@ public class PageRenderer extends AbstractRenderer {
                         composeUrl(config.contextname));
                 config.state = (ViewState)service.call(message);
                 
-                if (config.state.view.getMessageType() == Const.ERROR)
+                if (config.state.messagetype == Const.ERROR)
                     Common.rollback(getServerName(), config.sessionid);
                 else
                     Common.commit(getServerName(), config.sessionid);

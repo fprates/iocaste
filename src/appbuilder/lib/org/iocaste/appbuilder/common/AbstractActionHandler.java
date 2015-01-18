@@ -155,7 +155,7 @@ public abstract class AbstractActionHandler {
     }
     
     protected Const getErrorType() {
-        return context.view.getMessageType();
+        return context.function.getMessageType();
     }
     
     @SuppressWarnings("unchecked")
@@ -205,12 +205,12 @@ public abstract class AbstractActionHandler {
     }
     
     protected final void managerMessage(String manager, Const status, int msgid) {
-        context.view.message(
+        context.function.message(
                 status, context.getManager(manager).getMessage(msgid));
     }
     
     protected final void message(Const type, String text) {
-        context.view.message(type, text);
+        context.function.message(type, text);
     }
     
     protected final int modify(ExtendedObject object) {

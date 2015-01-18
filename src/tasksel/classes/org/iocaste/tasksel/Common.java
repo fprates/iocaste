@@ -18,7 +18,7 @@ public class Common {
      * @return
      */
     private static final String[] parseCommand(
-            String command, AbstractPage function, View view) {
+            String command, AbstractPage function) {
         String[] parsed;
         ExtendedObject task;
         
@@ -26,7 +26,7 @@ public class Common {
         function.clearExports();
 
         if (parsed[0].length() >= 19) {
-            view.message(Const.ERROR, "command.not.found");
+            function.message(Const.ERROR, "command.not.found");
             return null;
         }
         
@@ -34,7 +34,7 @@ public class Common {
                 getObject("TASKS", parsed[0].toUpperCase());
         
         if (task == null) {
-            view.message(Const.ERROR, "command.not.found");
+            function.message(Const.ERROR, "command.not.found");
             return null;
         }
 
@@ -93,7 +93,7 @@ public class Common {
         if (!iocaste.isAuthorized(authorization))
             return 1;
         
-        parsed = parseCommand(command, page, view);
+        parsed = parseCommand(command, page);
         parsed = parsed[0].split("\\s");
         run(page, view, parsed);
         return 0;

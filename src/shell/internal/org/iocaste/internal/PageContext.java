@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.fileupload.FileItem;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.View;
@@ -27,6 +28,8 @@ public class PageContext {
     public Map<String, Object> parameters;
     public Set<String> initparams;
     public Map<String, String> headervalues;
+    public Const messagetype;
+    public String messagetext;
     
     public PageContext(String name) {
         parameters = new HashMap<>();
@@ -151,6 +154,11 @@ public class PageContext {
      */
     public final boolean keepView() {
         return keepview;
+    }
+    
+    public final void message(Const type, String text) {
+        messagetype = type;
+        messagetext = text;
     }
     
     /**

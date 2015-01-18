@@ -33,7 +33,7 @@ public class Request {
         pkgtool.install(pkgname);
         updatePackageAction(context.view, pkgname, "packageuninstall");
         new TaskSelector(context.function).refresh();
-        context.view.message(Const.STATUS, "package.installed");
+        context.function.message(Const.STATUS, "package.installed");
     }
     
     public static final void packageUninstall(Context context) {
@@ -44,7 +44,7 @@ public class Request {
         pkgtool.uninstall(pkgname);
         updatePackageAction(context.view, pkgname, "packageinstall");
         new TaskSelector(context.function).refresh();
-        context.view.message(Const.STATUS, "package.uninstalled");
+        context.function.message(Const.STATUS, "package.uninstalled");
     }
     
     /**

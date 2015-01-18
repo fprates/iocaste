@@ -40,13 +40,12 @@ public class View implements Serializable {
     private byte[] content;
     private Element elementfocus;
     private String title, appname, pagename, actioncontrol;
-    private String contenttype, messagetext;
+    private String contenttype;
     private MessageSource messages;
     private List<String> lines;
     private List<Container> containers;
     private Map<String, Map<String, String>> sheet;
     private Map<String, Element> elements;
-    private Const messagetype;
     private Locale locale;
     
     public View(String appname, String pagename) {
@@ -56,8 +55,6 @@ public class View implements Serializable {
         
         this.appname = appname;
         this.pagename = pagename;
-        
-        clearRedirect();
     }
     
     /**
@@ -74,8 +71,6 @@ public class View implements Serializable {
         containers.clear();
         elements.clear();
         lines.clear();
-        messagetext = null;
-        messagetype = null;
     }
     
     /**
@@ -83,14 +78,6 @@ public class View implements Serializable {
      */
     public final void clearPrintLines() {
         lines.clear();
-    }
-    
-    /**
-     * Limpa dados de redirecionamento de visão.
-     */
-    public final void clearRedirect() {
-        messagetext = null;
-        messagetype = null;
     }
     
     /*
@@ -193,13 +180,6 @@ public class View implements Serializable {
     }
     
     /**
-     * @return tipo de mensagem.
-     */
-    public final Const getMessageType() {
-        return messagetype;
-    }
-    
-    /**
      * Retorna nome da página.
      * @return nome
      */
@@ -224,20 +204,6 @@ public class View implements Serializable {
     }
     
     /**
-     * Retorna mensagem de texto.
-     * @return mensagem.
-     */
-    public final String getTranslatedMessage() {
-        if (messagetext == null)
-            return null;
-        
-        if (messages == null)
-            return messagetext;
-        else
-            return messages.get(messagetext, messagetext);
-    }
-    
-    /**
      * 
      * @param element
      */
@@ -249,16 +215,6 @@ public class View implements Serializable {
                     element.getHtmlName().concat(" view mismatch."));
         elements.put(element.getHtmlName(), element);
         element.setView(this);
-    }
-    
-    /**
-     * Ajusta tipo e texto da mensagem.
-     * @param messagetype tipo
-     * @param messagetext texto
-     */
-    public final void message(Const messagetype, String messagetext) {
-        this.messagetype = messagetype;
-        this.messagetext = messagetext;
     }
     
     /**

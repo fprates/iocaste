@@ -22,12 +22,12 @@ public class Request {
         
         context.model = documents.getModel(modelname);
         if (context.model == null) {
-            context.view.message(Const.ERROR, "invalid.model");
+            context.function.message(Const.ERROR, "invalid.model");
             return;
         }
         
         if (context.model.getTableName() == null) {
-            context.view.message(Const.ERROR, "is.reference.model");
+            context.function.message(Const.ERROR, "is.reference.model");
             return;
         }
         

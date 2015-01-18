@@ -91,6 +91,10 @@ public abstract class AbstractPage extends AbstractFunction {
         getviewdata.state.parameters.put(name, value);
     }
     
+    public final Const getMessageType() {
+        return getviewdata.state.messagetype;
+    }
+    
     @SuppressWarnings("unchecked")
     public final <T> T getParameter(String name) {
         return (T)getviewdata.state.parameters.get(name);
@@ -157,6 +161,16 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public final void keepView() {
         getviewdata.state.keepview = true;
+    }
+    
+    /**
+     * Ajusta tipo e texto da mensagem.
+     * @param messagetype tipo
+     * @param messagetext texto
+     */
+    public final void message(Const messagetype, String messagetext) {
+        getviewdata.state.messagetype = messagetype;
+        getviewdata.state.messagetext = messagetext;
     }
     
     public final void redirect(String page) {

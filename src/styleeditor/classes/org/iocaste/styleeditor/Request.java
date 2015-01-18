@@ -14,7 +14,7 @@ public class Request {
                 get("estilo").get();
         
         if (new Documents(context.function).getObject("STYLE", style) != null) {
-            context.view.message(Const.ERROR, "style.already.exists");
+            context.function.message(Const.ERROR, "style.already.exists");
             return;
         }
         
@@ -51,7 +51,7 @@ public class Request {
         
         context.header = documents.getObject("STYLE", style);
         if (context.header == null) {
-            context.view.message(Const.ERROR, "invalid.style");
+            context.function.message(Const.ERROR, "invalid.style");
             return null;
         }
         

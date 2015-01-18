@@ -25,7 +25,7 @@ public class Request {
         
         context.userdata = null;
         if (exists(username, context)) {
-            context.view.message(Const.ERROR, "user.already.exists");
+            context.function.message(Const.ERROR, "user.already.exists");
             return;
         }
         
@@ -40,12 +40,12 @@ public class Request {
         String username = form.get("USERNAME").get();
         
         if (!exists(username, context)) {
-            context.view.message(Const.ERROR, "user.not.exists");
+            context.function.message(Const.ERROR, "user.not.exists");
             return;
         }
         
         new Iocaste(context.function).dropUser(username);
-        context.view.message(Const.STATUS, "user.dropped");
+        context.function.message(Const.STATUS, "user.dropped");
     }
     
     private static final boolean exists(String username, Context context) {
@@ -68,7 +68,7 @@ public class Request {
         
         userdata.identity = documents.getObject("LOGIN", username);
         if (userdata.identity == null) {
-            context.view.message(Const.ERROR, "invalid.user");
+            context.function.message(Const.ERROR, "invalid.user");
             return null;
         }
         
@@ -152,6 +152,6 @@ public class Request {
                 pkgtool.assignTaskGroup(name, username);
             }
         }
-        context.view.message(Const.STATUS, "user.saved.successfully");
+        context.function.message(Const.STATUS, "user.saved.successfully");
     }
 }

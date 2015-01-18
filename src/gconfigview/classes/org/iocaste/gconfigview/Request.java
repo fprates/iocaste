@@ -29,7 +29,7 @@ public class Request {
         query.andEqual("GLOBAL_CONFIG_ITEM.GLOBAL_CONFIG", context.appname);
         context.objects = documents.select(query);
         if (context.objects == null) {
-            context.view.message(Const.STATUS, "no.config");
+            context.function.message(Const.STATUS, "no.config");
             return;
         }
         
@@ -52,7 +52,7 @@ public class Request {
         
         config = new GlobalConfig(context.function);
         config.set(context.appname, values);
-        context.view.message(Const.STATUS, "save.successful");
+        context.function.message(Const.STATUS, "save.successful");
     }
 
 }

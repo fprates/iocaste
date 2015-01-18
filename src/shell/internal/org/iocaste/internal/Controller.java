@@ -284,6 +284,12 @@ public class Controller {
         }
     }
     
+    private static final void message(
+            ControllerData config, Const type, String text) {
+        config.state.messagetype = type;
+        config.state.messagetext = text;
+    }
+    
     /**
      * 
      * @param config
@@ -552,7 +558,7 @@ public class Controller {
             return status;
         }
         
-        config.state.view.clearRedirect();
+        message(config, Const.NONE, null);
         if (controlname.equals("")) {
             status.error = WINVALID_ACTION;
             return status;
@@ -570,19 +576,19 @@ public class Controller {
             
             switch (status.error) {
             case EINITIAL:
-                config.state.view.message(Const.ERROR, "field.is.obligatory");
+                message(config, Const.ERROR, "field.is.obligatory");
                 break;
                 
             case EMISMATCH:
-                config.state.view.message(Const.ERROR, "field.type.mismatch");
+                message(config, Const.ERROR, "field.type.mismatch");
                 break;
                 
             case EINVALID_REFERENCE:
-                config.state.view.message(Const.ERROR, "invalid.value");
+                message(config, Const.ERROR, "invalid.value");
                 break;
                 
             case EVALIDATION:
-                config.state.view.message(Const.ERROR, status.message);
+                message(config, Const.ERROR, status.message);
                 break;
             }
         }

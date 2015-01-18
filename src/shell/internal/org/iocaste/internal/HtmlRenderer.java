@@ -13,7 +13,6 @@ import org.iocaste.internal.renderer.Config;
 import org.iocaste.internal.renderer.Renderer;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
@@ -24,8 +23,7 @@ import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public class HtmlRenderer {
-    private String username, msgtext;
-    private Const msgtype;
+    private String username;
     private List<String> script;
     private Set<String> actions;
     private MessageSource msgsource;
@@ -198,11 +196,10 @@ public class HtmlRenderer {
             Renderer.renderContainer(bodycontent, container, config);
         
         bodytag.addChildren(bodycontent);
-        bodytag.addChild(MessageRenderer.render(msgtype, msgtext, config));
+        bodytag.addChild(MessageRenderer.
+                render(pagectx.messagetype, pagectx.messagetext, config));
         tags.add(renderHeader(view, config));
         tags.add(bodytag);
-        msgtext = null;
-        msgtype = Const.NONE;
         htmltag.addChildren(tags);
         
         html.add(htmltag.toString());
@@ -225,22 +222,6 @@ public class HtmlRenderer {
      */
     public final void setMessageSource(MessageSource msgsource) {
         this.msgsource = msgsource;
-    }
-    
-    /**
-     * Ajusta texto da barra de mensagens.
-     * @param msgtext texto
-     */
-    public final void setMessageText(String msgtext) {
-        this.msgtext = msgtext;
-    }
-    
-    /**
-     * Ajusta tipo de mensagem da barra de mensagens.
-     * @param msgtype
-     */
-    public final void setMessageType(Const msgtype) {
-        this.msgtype = msgtype;
     }
     
     /**

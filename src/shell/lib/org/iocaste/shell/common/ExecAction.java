@@ -53,7 +53,7 @@ public class ExecAction extends AbstractHandler {
                 if (error == null)
                     continue;
                 context.view.setFocus(input);
-                context.view.message(Const.ERROR, error);
+                context.function.message(Const.ERROR, error);
                 return state;
             }
         }
