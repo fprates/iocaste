@@ -224,6 +224,8 @@ public abstract class AbstractPage extends AbstractFunction {
         ExecAction execaction;
         String id = message.getId();
         
+        getviewdata.state.messagetext = null;
+        getviewdata.state.messagetype = Const.NONE;
         if (!id.equals("exec_action"))
             return super.run(message);
 
