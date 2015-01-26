@@ -11,6 +11,7 @@ import org.iocaste.appbuilder.common.cmodelviewer.Load;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceConfig;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceInput;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceSpec;
+import org.iocaste.appbuilder.common.cmodelviewer.Save;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
 
 public class Main extends AbstractModelViewer {
@@ -31,6 +32,7 @@ public class Main extends AbstractModelViewer {
         link.updateload = new Load(link.edit1view);
         link.displayload = new Load(link.display1view);
         link.validate = new Validate();
+        link.save = new Save();
         link.extcontext = new Context();
         
         if (module == null)

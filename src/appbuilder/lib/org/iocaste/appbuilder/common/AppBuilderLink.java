@@ -11,6 +11,6 @@ public class AppBuilderLink {
     public ViewConfig createselectconfig, displayselectconfig;
     public ViewConfig updateselectconfig, maintenanceconfig, displayconfig;
     public AbstractViewInput maintenanceinput;
-    public AbstractActionHandler validate, updateload, displayload;
+    public AbstractActionHandler save, validate, updateload, displayload;
     public Context extcontext;
 }

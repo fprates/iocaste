@@ -46,7 +46,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             AppBuilderLink link) {
         ViewContext viewctx;
         AbstractViewSpec selspec;
-        AbstractActionHandler save, inputvalidate;
+        AbstractActionHandler inputvalidate;
         String entityaction;
         Manager manager;
         
@@ -59,7 +59,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         context.addManager(link.extcontext.cmodel, manager);
         
         selspec = new SelectSpec();
-        save = new Save();
         inputvalidate = new InputValidate();
         
         for (String action : new String[] {CREATE, EDIT, DISPLAY}) {
@@ -106,7 +105,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             viewctx.set(link.maintenanceinput);
             viewctx.set(link.extcontext);
             viewctx.put("validate", inputvalidate);
-            viewctx.put("save", save);
+            viewctx.put("save", link.save);
         }
 
         viewctx = context.instance(link.display1view);
