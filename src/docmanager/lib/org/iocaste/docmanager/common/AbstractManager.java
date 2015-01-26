@@ -140,16 +140,17 @@ public abstract class AbstractManager implements Manager {
      */
     @Override
     public final Map<Object, ExtendedObject> getRelated(
-            ComplexDocument document, String name, String field) {
+            ComplexDocument document, String itemsname, String field) {
         DocumentModelItem item;
         Query query;
         ExtendedObject[] objects;
         DocumentModelItem reference;
         DocumentModel model;
         
-        model = cmodel.getItems().get(name);
+        model = cmodel.getItems().get(itemsname);
         if (model == null)
             throw new RuntimeException(new StringBuilder("items '").
+                    append(itemsname).
                     append("' undefined for cmodel ").
                     append(cmodel.getName()).toString());
         
@@ -158,7 +159,7 @@ public abstract class AbstractManager implements Manager {
         if (reference == null)
             return null;
         
-        objects = document.getItems(name);
+        objects = document.getItems(itemsname);
         if (objects == null || objects.length == 0)
             return null;
         
