@@ -11,6 +11,7 @@ public class ViewState implements Serializable {
     public String rapp, rpage, protocol, servername, messagetext;
     public int port;
     public boolean keepview, reloadable, dontpushpage, pagecall, initialize;
+    public boolean download;
     public Map<String, Object> parameters;
     public Set<String> initparams;
     public Map<String, String> headervalues;

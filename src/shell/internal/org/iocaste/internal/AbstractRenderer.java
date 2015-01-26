@@ -638,7 +638,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             pagectx_.setSequence(sequence);
         }
         
-        if (!config.event)
+        if (!config.event && !config.state.download)
             sequence++;
         
         pagectx_.setInitialize(config.state.initialize);

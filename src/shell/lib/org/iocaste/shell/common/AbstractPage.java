@@ -77,6 +77,10 @@ public abstract class AbstractPage extends AbstractFunction {
         getviewdata.state.pagecall = false;
     }
     
+    public final void download() {
+        getviewdata.state.download = true;
+    }
+    
     public final void exec(String app, String page) {
         getviewdata.state.reloadable = true;
         redirect(app, page, View.INITIALIZE);
@@ -226,6 +230,7 @@ public abstract class AbstractPage extends AbstractFunction {
         
         getviewdata.state.messagetext = null;
         getviewdata.state.messagetype = Const.NONE;
+        getviewdata.state.download = false;
         if (!id.equals("exec_action"))
             return super.run(message);
 

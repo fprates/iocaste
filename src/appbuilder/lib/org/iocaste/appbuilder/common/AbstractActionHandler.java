@@ -306,6 +306,8 @@ public abstract class AbstractActionHandler {
         execute(this.context);
         if (redirectflag)
             redirectContext(this.context, viewctx);
+        if (this.context.downloaddata != null)
+            context.function.download();
     }
     
     protected final ComplexDocument save(
