@@ -112,7 +112,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
 
         viewctx = context.instance(link.display1view);
         viewctx.set(maintenancespec);
-        viewctx.set(new DisplayConfig());
+        viewctx.set(link.displayconfig);
         viewctx.set(link.maintenanceinput);
         viewctx.set(link.extcontext);
     }

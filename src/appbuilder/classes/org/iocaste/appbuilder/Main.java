@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
 import org.iocaste.appbuilder.common.cmodelviewer.Context;
+import org.iocaste.appbuilder.common.cmodelviewer.DisplayConfig;
 import org.iocaste.appbuilder.common.cmodelviewer.Load;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceConfig;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceInput;
@@ -22,6 +23,7 @@ public class Main extends AbstractModelViewer {
         if (msgsource != null)
             setMessageSource(msgsource);
         
+        link.displayconfig = new DisplayConfig();
         link.maintenanceinput = new MaintenanceInput();
         link.maintenanceconfig = new MaintenanceConfig();
         link.updateload = new Load(link.edit1view);

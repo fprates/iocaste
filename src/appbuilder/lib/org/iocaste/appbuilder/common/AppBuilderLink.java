@@ -8,7 +8,7 @@ public class AppBuilderLink {
     public String editview, edit1view;
     public String number, appname;
     public ViewConfig createselectconfig, displayselectconfig;
-    public ViewConfig updateselectconfig, maintenanceconfig;
+    public ViewConfig updateselectconfig, maintenanceconfig, displayconfig;
     public AbstractViewInput maintenanceinput;
     public AbstractActionHandler validate, updateload, displayload;
     public Context extcontext;
