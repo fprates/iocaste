@@ -45,7 +45,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
     protected final void loadManagedModule(PageBuilderContext context,
             AppBuilderLink link) {
         ViewContext viewctx;
-        AbstractViewSpec selspec, maintenancespec;
+        AbstractViewSpec selspec;
         AbstractActionHandler save, inputvalidate;
         String entityaction;
         Manager manager;
@@ -59,7 +59,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         context.addManager(link.extcontext.cmodel, manager);
         
         selspec = new SelectSpec();
-        maintenancespec = new MaintenanceSpec();
         save = new Save();
         inputvalidate = new InputValidate();
         
@@ -102,7 +101,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
                 continue;
             
             viewctx = context.instance(view);
-            viewctx.set(maintenancespec);
+            viewctx.set(link.maintenancespec);
             viewctx.set(link.maintenanceconfig);
             viewctx.set(link.maintenanceinput);
             viewctx.set(link.extcontext);
@@ -111,7 +110,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         }
 
         viewctx = context.instance(link.display1view);
-        viewctx.set(maintenancespec);
+        viewctx.set(link.maintenancespec);
         viewctx.set(link.displayconfig);
         viewctx.set(link.maintenanceinput);
         viewctx.set(link.extcontext);
