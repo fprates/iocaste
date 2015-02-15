@@ -66,16 +66,16 @@ public class Shell {
 
         stylesheet = new StyleSheet();
         data.setStyleSheet("DEFAULT", stylesheet);
-        stylesheet.newElement(".body");
-        stylesheet.put(".body", "font-family", "sans-serif");
-        stylesheet.put(".body", "font-size", "10pt");
-        stylesheet.put(".body", "background-color", "#f0f0f0");
-        stylesheet.put(".body", "margin", "0px");
-        stylesheet.put(".body", "position", "absolute");
-        stylesheet.put(".body", "height", "100%");
-        stylesheet.put(".body", "width", "99%");
-        stylesheet.put(".body", "top", "0px");
-        stylesheet.put(".body", "overflow", "hidden");
+        stylesheet.newElement("body");
+        stylesheet.put("body", "font-family", "sans-serif");
+        stylesheet.put("body", "font-size", "10pt");
+        stylesheet.put("body", "background-color", "#f0f0f0");
+        stylesheet.put("body", "margin", "0px");
+        stylesheet.put("body", "position", "absolute");
+        stylesheet.put("body", "height", "100%");
+        stylesheet.put("body", "width", "99%");
+        stylesheet.put("body", "top", "0px");
+        stylesheet.put("body", "overflow", "hidden");
 
         stylesheet.newElement(".button");
         stylesheet.put(".button", "font-size", "12pt");
