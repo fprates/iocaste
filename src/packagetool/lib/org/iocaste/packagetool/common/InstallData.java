@@ -16,6 +16,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
+import org.iocaste.shell.common.StyleSheet;
 
 public class InstallData implements Serializable {
     public static final String TXTEDITOR_SERVERNAME =
@@ -36,6 +37,7 @@ public class InstallData implements Serializable {
     private Map<UserProfile, Set<User>> uprofiles;
     private Set<GlobalConfigData> globalcfg;
     private Set<String> texts;
+    private Map<String, StyleSheet> stylesheets;
     
     public InstallData() {
         models = new LinkedHashMap<>();
@@ -52,6 +54,7 @@ public class InstallData implements Serializable {
         uprofiles = new HashMap<>();
         globalcfg = new HashSet<>();
         texts = new HashSet<>();
+        stylesheets = new HashMap<>();
     }
     
     /**
@@ -278,6 +281,10 @@ public class InstallData implements Serializable {
         return shds.toArray(new SearchHelpData[0]);
     }
     
+    public final Map<String, StyleSheet> getStyleSheets() {
+        return stylesheets;
+    }
+    
     /**
      * 
      * @return
@@ -344,5 +351,9 @@ public class InstallData implements Serializable {
     public final void setMessages(String language, Map<String, String> messages)
     {
         this.messages.put(language, messages);
+    }
+    
+    public final void setStyleSheet(String name, StyleSheet stylesheet) {
+        this.stylesheets.put(name, stylesheet);
     }
 }

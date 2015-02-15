@@ -21,6 +21,7 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
+import org.iocaste.shell.common.StyleSheet;
 
 public class Services extends AbstractFunction {
 
@@ -112,6 +113,7 @@ public class Services extends AbstractFunction {
         State state;
         String name, modelname;
         Set<String> texts;
+        Map<String, StyleSheet> stylesheets;
         
         state = new State();
         state.data = message.get("data");
@@ -233,6 +235,13 @@ public class Services extends AbstractFunction {
             texts = state.data.getTexts();
             if (texts.size() > 0)
                 InstallTexts.init(texts, state);
+            
+            /*
+             * registra estilos
+             */
+            stylesheets = state.data.getStyleSheets();
+            if (stylesheets.size() > 0)
+                InstallStyles.init(stylesheets, state);
             
             /*
              * grava itens instalados

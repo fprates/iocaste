@@ -140,6 +140,12 @@ public class Uninstall {
             return;
         }
         
+        if (modeltype.equals("STYLE")) {
+            InstallStyles.uninstall(name, function);
+            documents.delete(object);
+            return;
+        }
+        
         if (modeltype.equals("DATA_ELEMENT"))
             documents.delete(object);
     }

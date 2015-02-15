@@ -19,8 +19,6 @@ public abstract class Module {
     private Map<String, Profile> profiles;
     private int nritm;
     private byte dbtype;
-    private String sname;
-    private long sindx, eindx, pindx;
     
     public Module(byte dbtype) {
         tables = new LinkedHashMap<>();
@@ -29,7 +27,6 @@ public abstract class Module {
         authorizations = new HashMap<>();
         profiles = new HashMap<>();
         this.dbtype = dbtype;
-        sindx = 0;
     }
     
     protected final List<String> compile() {
@@ -171,35 +168,6 @@ public abstract class Module {
         docs004.set("iname", iname);
         docs004.set("docid", docid);
         insert(docs004);
-    }
-    
-    protected final void insertStyle(Table shell001, String name) {
-        sindx += 100000000;
-        eindx = sindx;
-        sname = name;
-        shell001.set("sname", name);
-        shell001.set("sindx", sindx);
-        insert(shell001);
-    }
-    
-    protected final void insertStyleElement(Table shell002, String name) {
-        eindx += 10000;
-        pindx = eindx;
-        shell002.set("eindx", eindx);
-        shell002.set("sname", sname);
-        shell002.set("ename", name);
-        insert(shell002);
-    }
-    
-    protected final void insertStyleProperty(
-            Table shell003, String name, String value) {
-        pindx++;
-        shell003.set("pindx", pindx);
-        shell003.set("eindx", eindx);
-        shell003.set("pname", name);
-        shell003.set("value", value);
-        insert(shell003);
-        
     }
     
     public abstract List<String> install();

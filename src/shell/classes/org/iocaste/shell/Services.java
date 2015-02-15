@@ -4,6 +4,7 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.PageStackItem;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public class Services extends AbstractFunction {
@@ -17,6 +18,8 @@ public class Services extends AbstractFunction {
         export("push_page", "pushPage");
         export("remove_ticket", "removeTicket");
         export("set_pages_position", "setPagesPosition");
+        export("style_remove", "removeStyle");
+        export("style_save", "saveStyle");
         export("update_view", "updateView");
     }
     
@@ -90,6 +93,11 @@ public class Services extends AbstractFunction {
         PageRenderer.pushPage(sessionid, appname, pagename);
     }
     
+    public final void removeStyle(Message message) {
+        String name = message.getString("name");
+        StyleServices.remove(this, name);
+    }
+    
     /**
      * 
      * @param message
@@ -98,6 +106,13 @@ public class Services extends AbstractFunction {
         String ticket = message.getString("ticket");
         
         PageRenderer.removeTicket(ticket, this);
+    }
+    
+    public final void saveStyle(Message message) {
+        String name = message.get("name");
+        StyleSheet stylesheet = message.get("style");
+        
+        StyleServices.save(this, name, stylesheet);
     }
     
     /**

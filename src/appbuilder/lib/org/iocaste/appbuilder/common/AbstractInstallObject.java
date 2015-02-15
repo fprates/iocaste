@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DummyElement;
 import org.iocaste.documents.common.DummyModelItem;
 import org.iocaste.packagetool.common.SearchHelpData;
+import org.iocaste.shell.common.StyleSheet;
 
 public abstract class AbstractInstallObject {
     private StandardInstallContext context;
@@ -120,5 +121,11 @@ public abstract class AbstractInstallObject {
     public final ModelInstall tag(String tag, ModelInstall model) {
         context.setModel(tag, model);
         return model;
+    }
+    
+    protected final StyleSheet styleInstance(String name) {
+        StyleSheet stylesheet = new StyleSheet();
+        context.getInstallData().setStyleSheet(name, stylesheet);
+        return stylesheet;
     }
 }

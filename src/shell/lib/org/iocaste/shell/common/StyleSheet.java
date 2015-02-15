@@ -12,6 +12,10 @@ public class StyleSheet implements Serializable {
         this.stylesheet = stylesheet;
     }
     
+    public StyleSheet() {
+        stylesheet = new HashMap<>();
+    }
+    
     public final void clone(String to, String from) {
         Map<String, String> clone = new HashMap<>(stylesheet.get(from));
         stylesheet.put(to, clone);

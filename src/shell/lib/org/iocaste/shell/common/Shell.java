@@ -197,6 +197,16 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
+     * 
+     * @param name
+     */
+    public final void removeStyle(String name) {
+        Message message = new Message("style_remove");
+        message.add("name", name);
+        call(message);
+    }
+    
+    /**
      * Remove ticket da lista de acessos.
      * @param ticket código do ticket de acesso.
      */
@@ -215,6 +225,13 @@ public class Shell extends AbstractServiceInterface {
         Message message = new Message("render");
         message.add("element", element);
         return call(message);
+    }
+    
+    public final void save(String name, StyleSheet stylesheet) {
+        Message message = new Message("style_save");
+        message.add("name", name);
+        message.add("style", stylesheet);
+        call(message);
     }
     
     /**
