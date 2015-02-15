@@ -36,7 +36,6 @@ public class PageRenderer extends AbstractRenderer {
     }
     
     public PageRenderer() {
-        style = null;
         msgsource = Messages.getMessages();
     }
     

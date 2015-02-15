@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AppContext {
+    public String stylename;
     private Map<String, PageContext> pages;
     private String name;
     private Map<String, Map<String, String>> sheet;

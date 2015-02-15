@@ -45,7 +45,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     private static final byte AUTHORIZATION_ERROR = 1;
     private String jsessionid, servername;
     protected static Map<String, List<SessionContext>> apps;
-    protected Map<String, Map<String, String>> style;
+    protected Map<String, Map<String, String>> defaultstyle;
     protected MessageSource msgsource;
     protected String hostname, protocol;
     protected int port;
@@ -140,6 +140,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         Input input;
         Message message;
         Map<String, Object> parameters;
+        Map<String, Map<String, String>> style;
         AppContext appctx;
         View view;
         Service service;
@@ -154,9 +155,17 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             throw new IocasteException("page not especified.");
         
         if (appctx.getStyleSheet() == null) {
-            if (style == null)
-                style = Style.get("DEFAULT", this);
+            if (appctx.stylename == null)
+                appctx.stylename = "DEFAULT";
+            
+            if (!appctx.stylename.equals("DEFAULT") || defaultstyle == null)
+                style = Style.get(appctx.stylename, this);
+            else
+                style = defaultstyle;
+            
             appctx.setStyleSheet(style);
+            if ((defaultstyle == null) && (appctx.stylename.equals("DEFAULT")))
+                defaultstyle = style;
         }
         
         view = pagectx.getViewData(); 
