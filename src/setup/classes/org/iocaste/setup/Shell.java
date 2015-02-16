@@ -17,6 +17,9 @@ public class Shell {
         DocumentModel model;
         StyleSheet stylesheet;
         
+        /*
+         * tickets
+         */
         model = data.getModel("SHELL_TICKETS", "SHELL004", null);
         
         element = new DataElement("SHELL_TICKET_ID");
@@ -64,6 +67,27 @@ public class Shell {
         item.setDataElement(element);
         model.add(item);
 
+        /*
+         * app styles
+         */
+        model = data.getModel("APP_STYLE", "SHELL005", null);
+        
+        element = new DummyElement("PACKAGE.NAME");
+        item = new DocumentModelItem("APPNAME");
+        item.setTableFieldName("APPNM");
+        item.setDataElement(element);
+        model.add(item);
+        model.add(new DocumentModelKey(item));
+        
+        element = new DummyElement("STYLE.NAME");
+        item = new DocumentModelItem("STYLE");
+        item.setTableFieldName("STYLE");
+        item.setDataElement(element);
+        model.add(item);
+        
+        /*
+         * default style
+         */
         stylesheet = new StyleSheet();
         data.setStyleSheet("DEFAULT", stylesheet);
         stylesheet.newElement("body");

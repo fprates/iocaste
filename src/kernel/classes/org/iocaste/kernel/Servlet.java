@@ -53,7 +53,8 @@ public class Servlet extends AbstractIocasteServlet {
         
         parameters = new HashMap<>();
         parameters.put("from",
-                new String[] {"SHELL001", "SHELL002", "SHELL003", "SHELL004"});
+                new String[] {"SHELL001", "SHELL002", "SHELL003", "SHELL004",
+                              "SHELL005"});
         
         authorize("checked_select", parameters);
         authorize("get_host", null);

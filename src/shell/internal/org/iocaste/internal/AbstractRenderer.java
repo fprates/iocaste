@@ -109,11 +109,13 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             }
         }
         
-        if (sessionctx.contains(contextdata.appname))
+        if (sessionctx.contains(contextdata.appname)) {
             appctx = sessionctx.getAppContext(contextdata.appname);
-        else
+        } else {
             appctx = new AppContext(contextdata.appname);
-                
+            appctx.stylename = getAppStyle(contextdata.appname, contextdata);
+        }
+        
         pagectx = new PageContext(contextdata.pagename);
         pagectx.setAppContext(appctx);
         pagectx.setLogid(contextdata.logid);
@@ -155,17 +157,15 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             throw new IocasteException("page not especified.");
         
         if (appctx.getStyleSheet() == null) {
-            if (appctx.stylename == null)
-                appctx.stylename = "DEFAULT";
+            if (defaultstyle == null)
+                defaultstyle = Style.get("DEFAULT", this);
             
-            if (!appctx.stylename.equals("DEFAULT") || defaultstyle == null)
+            if (!appctx.stylename.equals("DEFAULT"))
                 style = Style.get(appctx.stylename, this);
             else
                 style = defaultstyle;
             
             appctx.setStyleSheet(style);
-            if ((defaultstyle == null) && (appctx.stylename.equals("DEFAULT")))
-                defaultstyle = style;
         }
         
         view = pagectx.getViewData(); 
@@ -295,6 +295,30 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     @Override
     public final <T extends Handler> T get(String handler) {
         return null;
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected String getAppStyle(String appname, ContextData contextdata) {
+        CheckedSelect select;
+        Object[] results;
+        String style;
+        Map<String, Object> line;
+        
+        select = new CheckedSelect(this);
+        select.setFrom("SHELL005");
+        select.setWhere("APPNM = ?", appname);
+        results = select.execute();
+        
+        if (results == null)
+            return "DEFAULT";
+        
+        for (Object result : results) {
+            line = (Map<String, Object>)result;
+            style = (String)line.get("STYLE");
+            return style;
+        }
+        
+        return "DEFAULT";
     }
     
     /**

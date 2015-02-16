@@ -117,6 +117,11 @@ public class Main extends AbstractRenderer {
     }
     
     @Override
+    protected String getAppStyle(String appname, ContextData contextdata) {
+        return "DEFAULT";
+    }
+    
+    @Override
     protected boolean isConnected(ContextData ctxdata) {
         return false;
     }

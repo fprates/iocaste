@@ -13,7 +13,7 @@ import org.iocaste.protocol.Message;
  *
  */
 public class GlobalConfig extends AbstractServiceInterface {
-    private static final String SERVERNAME =
+    public static final String SERVERNAME =
             "/iocaste-globalconfig/services.html";
     public GlobalConfig(Function function) {
         initService(function, SERVERNAME);
