@@ -38,6 +38,7 @@ public class InstallData implements Serializable {
     private Set<GlobalConfigData> globalcfg;
     private Set<String> texts;
     private Map<String, StyleSheet> stylesheets;
+    private String defaultstyle;
     
     public InstallData() {
         models = new LinkedHashMap<>();
@@ -182,6 +183,10 @@ public class InstallData implements Serializable {
      */
     public final void assign(TaskGroup taskgroup, User user) {
         tasksgroups.get(taskgroup).add(user);
+    }
+    
+    public final String getApplicationStyle() {
+        return defaultstyle;
     }
     
     /**
@@ -333,6 +338,10 @@ public class InstallData implements Serializable {
      */
     public final void link(String link, String command) {
         links.put(link, command);
+    }
+    
+    public final void setApplicationStyle(String style) {
+        defaultstyle = style;
     }
     
     /**

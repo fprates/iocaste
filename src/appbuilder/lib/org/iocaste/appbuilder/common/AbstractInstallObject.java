@@ -5,11 +5,13 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DummyElement;
 import org.iocaste.documents.common.DummyModelItem;
+import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.shell.common.StyleSheet;
 
 public abstract class AbstractInstallObject {
     private StandardInstallContext context;
+    private InstallData data;
     
     protected final ComplexModelInstall cmodelInstance(String name) {
         return new ComplexModelInstall(name, context);
@@ -70,7 +72,7 @@ public abstract class AbstractInstallObject {
     }
     
     protected final MessagesInstall messageInstance(String language) {
-        return new MessagesInstall(context.getInstallData(), language);
+        return new MessagesInstall(data, language);
     }
     
     protected final ModelInstall modelInstance(String name) {
@@ -78,8 +80,7 @@ public abstract class AbstractInstallObject {
     }
     
     protected final ModelInstall modelInstance(String name, String table) {
-        ModelInstall model = new ModelInstall(
-                context.getInstallData(), name, table);
+        ModelInstall model = new ModelInstall(data, name, table);
         model.setElements(context.getElements());
         
         return model;
@@ -95,6 +96,7 @@ public abstract class AbstractInstallObject {
     
     public final void run(StandardInstallContext context) throws Exception {
         this.context = context;
+        data = context.getInstallData();
         execute(context);
     }
     
@@ -109,10 +111,13 @@ public abstract class AbstractInstallObject {
         SearchHelpData shd = new SearchHelpData(name);
         
         shd.setModel(model);
-        context.getInstallData().add(shd);
+        data.add(shd);
         return shd;
     }
     
+    protected final void setApplicationStyle(String name) {
+        data.setApplicationStyle(name);
+    }
     public final DocumentModelItem tag(String name, DocumentModelItem item) {
         context.setItem(name, item);
         return item;
@@ -125,7 +130,7 @@ public abstract class AbstractInstallObject {
     
     protected final StyleSheet styleInstance(String name) {
         StyleSheet stylesheet = new StyleSheet();
-        context.getInstallData().setStyleSheet(name, stylesheet);
+        data.setStyleSheet(name, stylesheet);
         return stylesheet;
     }
 }

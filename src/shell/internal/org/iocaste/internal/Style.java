@@ -31,6 +31,9 @@ public class Style {
         select.setWhere("SHELL002.sname = ?", name);
         eobjects = select.execute();
         
+        if (eobjects == null)
+            return null;
+        
         for (Object eobject : eobjects) {
             oelement = (Map<String, Object>)eobject;
             element = (String)oelement.get("ENAME");
