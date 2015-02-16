@@ -16,12 +16,14 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
     private String pkgname, profilename, programauth;
     private Map<String, TaskGroup> tasksgroups;
     private List<AppBuilderLink> applinks;
+    private List<String> dependson;
     
     public PageBuilderDefaultInstall(String pkgname) {
         this.pkgname = pkgname;
         links = new HashMap<>();
         tasksgroups = new HashMap<>();
         applinks = new ArrayList<>();
+        dependson = new ArrayList<>();
     }
     
     public final void addToTaskGroup(String name, String... links) {
@@ -64,6 +66,10 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
         return link;
     }
     
+    public final void dependsOn(String pkgname) {
+        dependson.add(pkgname);
+    }
+    
     @Override
     public void execute(StandardInstallContext context) throws Exception {
         UserProfile profile;
@@ -72,6 +78,8 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
 
         if (profilename == null)
             throw new IocasteException("profile name undefined.");
+        
+        data.setDependencies(dependson.toArray(new String[0]));
         
         profile = new UserProfile(profilename);
         data.add(profile);
