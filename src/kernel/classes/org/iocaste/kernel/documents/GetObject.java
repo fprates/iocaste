@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class GetObject extends AbstractDocumentsHandler {
@@ -22,14 +23,22 @@ public class GetObject extends AbstractDocumentsHandler {
     @SuppressWarnings("unchecked")
     public ExtendedObject run(Connection connection, Documents documents,
             String modelname, Object key) throws Exception {
+        Object[] objects;
+        String query;
         GetDocumentModel getmodel = documents.get("get_document_model");
         DocumentModel model = getmodel.run(connection, documents, modelname);
-        String query = new StringBuilder("select * from ").
+        
+        if (model == null)
+            throw new IocasteException(
+                    modelname.concat(" is an invalid model."));
+        
+        query = new StringBuilder("select * from ").
                 append(model.getTableName()).
                 append(" where ").
                 append(getModelKey(model).getTableFieldName()).
                 append(" = ?").toString();
-        Object[] objects = select(connection, query, 1, key);
+        
+        objects = select(connection, query, 1, key);
         
         return (objects == null)? null : getExtendedObjectFrom(
                 model, (Map<String, Object>)objects[0]);
