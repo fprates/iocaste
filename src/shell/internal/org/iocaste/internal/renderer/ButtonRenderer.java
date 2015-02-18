@@ -41,6 +41,8 @@ public class ButtonRenderer extends Renderer {
         if (component.getType() == Const.BUTTON) {
             button = (Button)component;
             buttontag.add("type", (!button.isSubmit())? "button" : "submit");
+        } else {
+            buttontag.add("type", "button");
         }
         
         buttontag.add("name", htmlname);
