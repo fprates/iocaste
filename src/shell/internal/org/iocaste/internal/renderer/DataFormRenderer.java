@@ -20,9 +20,13 @@ public class DataFormRenderer extends Renderer {
         DataItem dataitem;
         byte columns;
         List<XMLElement> tags = new ArrayList<XMLElement>();
-        XMLElement nulltag, itemtag, formtag = new XMLElement("table");
+        XMLElement nulltag, itemtag, divtag, formtag;
         
-        formtag.add("class", form.getStyleClass());
+        formtag = new XMLElement("table");
+
+        divtag = new XMLElement("div");
+        divtag.add("class", form.getStyleClass());
+        divtag.addChild(formtag);
         
         columns = form.getColumns();
         if (columns == 0)
@@ -55,7 +59,7 @@ public class DataFormRenderer extends Renderer {
                 formtag.addChild(itemtag);
             }
         
-        tags.add(formtag);
+        tags.add(divtag);
         
         return tags;
     }
