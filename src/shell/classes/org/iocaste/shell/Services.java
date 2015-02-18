@@ -1,5 +1,8 @@
 package org.iocaste.shell;
 
+import java.util.List;
+
+import org.iocaste.internal.SessionContext;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AccessTicket;
@@ -113,6 +116,9 @@ public class Services extends AbstractFunction {
         StyleSheet stylesheet = message.get("style");
         
         StyleServices.save(this, name, stylesheet);
+        for (List<SessionContext> sessions : PageRenderer.apps.values())
+            for (SessionContext session : sessions)
+                session.invalidateStyle(name);
     }
     
     /**

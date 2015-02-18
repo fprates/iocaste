@@ -1,7 +1,5 @@
 package org.iocaste.shell;
 
-import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -31,7 +29,6 @@ public class PageRenderer extends AbstractRenderer {
     private static TicketControl tickets;
     
     static {
-        apps = new HashMap<>();
         tickets = new TicketControl();
     }
     

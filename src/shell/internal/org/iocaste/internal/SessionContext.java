@@ -54,6 +54,11 @@ public class SessionContext {
         return home;
     }
     
+    public final void invalidateStyle(String name) {
+        for (AppContext appctx : apps.values())
+            appctx.setStyleSheet(null);
+    }
+    
     /**
      * 
      * @return

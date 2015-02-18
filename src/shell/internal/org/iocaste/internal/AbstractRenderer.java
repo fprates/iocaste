@@ -44,12 +44,16 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     private static final String STD_CONTENT = "text/html";
     private static final byte AUTHORIZATION_ERROR = 1;
     private String jsessionid, servername;
-    protected static Map<String, List<SessionContext>> apps;
+    public static Map<String, List<SessionContext>> apps;
     protected Map<String, Map<String, String>> defaultstyle;
     protected MessageSource msgsource;
     protected String hostname, protocol;
     protected int port;
 
+    static {
+        apps = new HashMap<>();
+    }
+    
     protected abstract void callController(ControllerData config)
             throws Exception;
     
