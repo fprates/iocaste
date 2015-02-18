@@ -48,6 +48,7 @@ public abstract class AbstractTableHandler {
                     break;
                 case LIST_BOX:
                     input = new ListBox(item, name);
+                    input.setDataElement(delement);
                     element = input;
                     if (column.values == null)
                         break;
@@ -56,7 +57,9 @@ public abstract class AbstractTableHandler {
                         ((ListBox)input).add(vname, column.values.get(vname));
                     break;
                 case TEXT_FIELD:
-                    element = new TextField(item, name);
+                    input = new TextField(item, name);
+                    input.setDataElement(delement);
+                    element = input;
                     break;
                 case LINK:
                     element = new Link(item, name, column.action);

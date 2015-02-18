@@ -25,6 +25,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private Const type;
     private DataElement dataelement;
     private SearchHelp search;
+    private Calendar calendar;
 
     public AbstractInputComponent(View view, Const type, Const type_,
             String name) {
@@ -46,6 +47,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final <T> T get() {
         return (T)value;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getCalendar()
+     */
+    @Override
+    public final Calendar getCalendar() {
+        return calendar;
     }
     
     /*
@@ -78,6 +88,11 @@ public abstract class AbstractInputComponent extends AbstractComponent
         return dataelement;
     }
     
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getb()
+     */
+    @Override
     public final byte getb() {
         if (!(value instanceof BigDecimal))
             return (value == null)? 0 : (byte)value;
@@ -265,6 +280,21 @@ public abstract class AbstractInputComponent extends AbstractComponent
     }
     
     /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setCalendar(
+     *    org.iocaste.shell.common.Calendar)
+     */
+    @Override
+    public final void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+        
+        if (calendar == null)
+            return;
+        
+        this.calendar.setInputName(getHtmlName());
+    }
+    
+    /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#setComponentType(
      *     org.iocaste.shell.common.Const)
@@ -297,6 +327,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
             return;
         
         search.setInputName(name);
+        calendar.setInputName(name);
     }
     
     /*

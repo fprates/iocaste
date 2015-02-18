@@ -372,8 +372,8 @@ public class Controller {
             
             convertInputValue(input, ri);
             
-            if (status.control != null &&
-                    status.control.getType() == Const.SEARCH_HELP)
+            if ((status.control != null) &&
+                    (status.control.getApplication() != null))
                 continue;
             
             if (input.isObligatory() && isInitial(input, ri) &&
@@ -603,7 +603,7 @@ class RangeInputStatus {
     private Map<String, Byte> state;
     
     public RangeInputStatus() {
-        state = new HashMap<String, Byte>();
+        state = new HashMap<>();
     }
     
     public final void addCount(String name) {

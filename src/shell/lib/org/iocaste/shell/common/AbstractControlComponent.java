@@ -34,7 +34,7 @@ public abstract class AbstractControlComponent extends AbstractComponent
         implements ControlComponent {
     private static final long serialVersionUID = -6444029817491608067L;
     private boolean cancellable, stacking;
-    private String action;
+    private String action, application;
     
     public AbstractControlComponent(View view, Const type, String name) {
         super(view, type, name);
@@ -63,6 +63,15 @@ public abstract class AbstractControlComponent extends AbstractComponent
     @Override
     public final String getAction() {
         return action;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#getApplication()
+     */
+    @Override
+    public final String getApplication() {
+        return application;
     }
     
     /**
@@ -119,6 +128,16 @@ public abstract class AbstractControlComponent extends AbstractComponent
     @Override
     public final void setAllowStacking(boolean stacking) {
         this.stacking = stacking;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#setApplication(
+     *    java.lang.String)
+     */
+    @Override
+    public final void setApplication(String application) {
+        this.application = application;
     }
     
     /*

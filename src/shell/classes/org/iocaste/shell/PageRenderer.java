@@ -48,6 +48,7 @@ public class PageRenderer extends AbstractRenderer {
         Message message;
         ControlComponent control;
         Service service;
+        String appname;
         
         status = Controller.validate(config);
         if (status.fatal != null)
@@ -65,23 +66,24 @@ public class PageRenderer extends AbstractRenderer {
             message.add(name, config.values.get(name));
 
         control = config.state.view.getElement(message.getString("action"));
-        if (control != null && control.getType() == Const.SEARCH_HELP) {
-            config.shcontrol = control;
-            config.contexturl = composeUrl("iocaste-search-help");
-        } else {
-            try {
-                service = new Service(config.sessionid,
-                        composeUrl(config.contextname));
-                config.state = (ViewState)service.call(message);
-                
-                if (config.state.messagetype == Const.ERROR)
-                    Common.rollback(getServerName(), config.sessionid);
-                else
-                    Common.commit(getServerName(), config.sessionid);
-            } catch (Exception e) {
+        if ((control != null) && (appname = control.getApplication()) != null) {
+            config.popupcontrol = control;
+            config.contexturl = composeUrl(appname);
+            return;
+        }
+        
+        try {
+            service = new Service(config.sessionid,
+                    composeUrl(config.contextname));
+            
+            config.state = (ViewState)service.call(message);
+            if (config.state.messagetype == Const.ERROR)
                 Common.rollback(getServerName(), config.sessionid);
-                throw e;
-            }
+            else
+                Common.commit(getServerName(), config.sessionid);
+        } catch (Exception e) {
+            Common.rollback(getServerName(), config.sessionid);
+            throw e;
         }
     }
     

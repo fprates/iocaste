@@ -22,7 +22,7 @@ public class PageContext {
     private int logid;
     private byte error;
     private long sequence;
-    private ControlComponent shcontrol;
+    private ControlComponent popupcontrol;
     public List<String> inputs;
     public List<MultipartElement> mpelements;
     public Map<String, Object> parameters;
@@ -79,22 +79,6 @@ public class PageContext {
      * 
      * @return
      */
-    public final ControlComponent getShControl() {
-        return shcontrol;
-    }
-    
-    /**
-     * Indica se a visão foi inicializada.
-     * @return true, se a visão foi inicializada.
-     */
-    public final boolean isInitializableView() {
-        return initialize;
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final int getLogid() {
         return logid;
     }
@@ -105,6 +89,14 @@ public class PageContext {
      */
     public final String getName() {
         return name;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final ControlComponent getPopupControl() {
+        return popupcontrol;
     }
     
     /**
@@ -138,6 +130,14 @@ public class PageContext {
      */
     public final boolean isAction(String action) {
         return (actions == null)?  false : actions.contains(action);
+    }
+    
+    /**
+     * Indica se a visão foi inicializada.
+     * @return true, se a visão foi inicializada.
+     */
+    public final boolean isInitializableView() {
+        return initialize;
     }
     
     /**
@@ -227,6 +227,14 @@ public class PageContext {
     
     /**
      * 
+     * @param popupcontrol
+     */
+    public final void setPopupControl(ControlComponent popupcontrol) {
+        this.popupcontrol = popupcontrol;
+    }
+    
+    /**
+     * 
      * @param reloadable
      */
     public final void setReloadableView(boolean reloadable) {
@@ -239,14 +247,6 @@ public class PageContext {
      */
     public final void setSequence(long sequence) {
         this.sequence = sequence;
-    }
-    
-    /**
-     * 
-     * @param shcontrol
-     */
-    public final void setShControl(ControlComponent shcontrol) {
-        this.shcontrol = shcontrol;
     }
     
     /**

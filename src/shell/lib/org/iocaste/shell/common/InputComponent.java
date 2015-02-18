@@ -22,6 +22,12 @@ public interface InputComponent extends Component {
     public abstract <T> T get();
 
     /**
+     * 
+     * @return
+     */
+    public abstract Calendar getCalendar();
+    
+    /**
      * Retorna tipo de componente.
      * @return tipo
      */
@@ -141,6 +147,11 @@ public interface InputComponent extends Component {
      */
     public abstract void set(Object value);
     
+    /**
+     * 
+     * @param calendar
+     */
+    public abstract void setCalendar(Calendar calendar);
     
     /**
      * Ajusta o tipo do componente.

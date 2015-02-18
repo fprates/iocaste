@@ -659,7 +659,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             return pagectx;
         }
         
-        pagectx.setShControl(config.shcontrol);
+        pagectx.setPopupControl(config.popupcontrol);
         pagectx.setContextUrl(config.contexturl);
         pagectx.setError((byte)0);
         sequence = pagectx.getSequence();
@@ -909,7 +909,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         renderer.setMessageSource(msgsource);
         renderer.setPageContext(pagectx);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
-        renderer.setShControl(pagectx.getShControl());
+        renderer.setPopupControl(pagectx.getPopupControl());
         renderer.setFunction(this);
         tracking = new TrackingData();
         tracking.logid = pagectx.getLogid();

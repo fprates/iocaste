@@ -14,7 +14,7 @@ public class ControllerData {
     public String sessionid, contextname, servername, contexturl;
     public int logid;
     public boolean event;
-    public ControlComponent shcontrol;
+    public ControlComponent popupcontrol;
     
     public ControllerData() {
         state = new ViewState();

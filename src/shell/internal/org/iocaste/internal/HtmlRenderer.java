@@ -27,7 +27,7 @@ public class HtmlRenderer {
     private List<String> script;
     private Set<String> actions;
     private MessageSource msgsource;
-    private ControlComponent shcontrol;
+    private ControlComponent popupcontrol;
     private Function function;
     private PageContext pagectx;
     
@@ -187,7 +187,7 @@ public class HtmlRenderer {
         config.addMessageSource(view.getMessages());
         config.addMessageSource(msgsource);
         config.setPageTrack(composePageTrack(view, tracking));
-        config.setShControl(shcontrol);
+        config.setPopupControl(popupcontrol);
         config.setTracking(tracking);
         
         html.add("<!DOCTYPE html>");
@@ -236,8 +236,8 @@ public class HtmlRenderer {
      * 
      * @param shcontrol
      */
-    public final void setShControl(ControlComponent shcontrol) {
-        this.shcontrol = shcontrol;
+    public final void setPopupControl(ControlComponent popupcontrol) {
+        this.popupcontrol = popupcontrol;
     }
     
     /**

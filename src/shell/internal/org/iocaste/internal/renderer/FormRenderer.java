@@ -11,6 +11,7 @@ import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.PageControl;
@@ -66,10 +67,11 @@ public class FormRenderer extends Renderer {
 
         content = new XMLElement("div");
         content.add("class", container.getStyleClass());
-        if (config.getShControl() != null)
-            content.addChildren(renderSh(config));
-        content.addChildren(renderElements(container.getElements(), config));
+        
+        if (config.getPopupControl() != null)
+            content.addChildren(renderPopup(config));
 
+        content.addChildren(renderElements(container.getElements(), config));
         view = config.getView();
         printlines = view.getPrintLines();
         if (printlines.length > 0) {
@@ -99,18 +101,19 @@ public class FormRenderer extends Renderer {
         return pretag;
     }
     
-    private static final List<XMLElement> renderSh(Config config) {
+    private static final List<XMLElement> renderPopup(Config config) {
         Map<String, Object> parameters;
         Object[] viewreturn;
+        ControlComponent control = config.getPopupControl();
         List<XMLElement> tags = new ArrayList<>();
         TrackingData tracking = config.getTracking();
         Service service = new Service(tracking.sessionid, tracking.contexturl);
         Message message = new Message("get_view_data");
-        View view = new View("iocaste-search-help", "main");
+        View view = new View(control.getApplication(), "main");
         StyleSheet stylesheet = config.getView().styleSheetInstance();
         
         parameters = new HashMap<>();
-        parameters.put("sh", config.getShControl());
+        parameters.put("control", control);
         view.setStyleSheet(stylesheet.getElements());
         
         message.add("view", view);

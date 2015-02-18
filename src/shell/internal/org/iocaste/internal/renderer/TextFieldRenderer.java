@@ -3,6 +3,7 @@ package org.iocaste.internal.renderer;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.InputComponent;
@@ -36,6 +37,7 @@ public class TextFieldRenderer extends Renderer {
         String tftext;
         Text text;
         SearchHelp search;
+        Calendar calendar;
         XMLElement tagt, tagl, tagc;
         DataElement dataelement = Shell.getDataElement(input);
         int length = (dataelement == null)? input.getLength() :
@@ -79,6 +81,13 @@ public class TextFieldRenderer extends Renderer {
         tagc.addChild(inputtag);
         tagl = new XMLElement("tr");
         tagl.addChild(tagc);
+        
+        calendar = input.getCalendar();
+        if (calendar != null) {
+            tagc = new XMLElement("td");
+            tagc.addChild(CalendarButtonRenderer.render(calendar, config));
+            tagl.addChild(tagc);
+        }
         
         search = input.getSearchHelp();
         if (search != null) {

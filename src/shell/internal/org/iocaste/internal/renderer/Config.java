@@ -24,7 +24,7 @@ public class Config {
     private Set<String> actions;
     private List<String> onload;
     private View view;
-    private ControlComponent shcontrol;
+    private ControlComponent popupcontrol;
     private TrackingData tracking;
     
     public Config() {
@@ -120,8 +120,8 @@ public class Config {
      * 
      * @return
      */
-    public final ControlComponent getShControl() {
-        return shcontrol;
+    public final ControlComponent getPopupControl() {
+        return popupcontrol;
     }
     
     /**
@@ -199,8 +199,8 @@ public class Config {
      * 
      * @param shcontrol
      */
-    public final void setShControl(ControlComponent shcontrol) {
-        this.shcontrol = shcontrol;
+    public final void setPopupControl(ControlComponent popupcontrol) {
+        this.popupcontrol = popupcontrol;
     }
     
     /**

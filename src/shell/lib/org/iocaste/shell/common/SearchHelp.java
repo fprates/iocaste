@@ -19,10 +19,11 @@ public class SearchHelp extends AbstractControlComponent {
     public SearchHelp(Container container, String name) {
         super(container, Const.SEARCH_HELP, name);
         
-        itemnames = new LinkedHashSet<String>();
+        itemnames = new LinkedHashSet<>();
         setAllowStacking(true);
         setStyleClass("sh_button");
         setText("?");
+        setApplication("iocaste-search-help");
     }
 
     /**

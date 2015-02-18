@@ -1,4 +1,4 @@
-package org.iocaste.sh;
+package org.iocaste.calendar;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -122,7 +122,7 @@ public class Response {
         datacnt = new StandardContainer(stdcnt, "shdatacnt");
         datacnt.setStyleClass("shdatacnt");
         
-        sh = context.function.getParameter("control");
+        sh = context.function.getParameter("sh");
         name = sh.getModelName();
         model = documents.getModel(name);
 //        addCriteria(sh, stdcnt, model, context);

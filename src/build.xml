@@ -28,6 +28,9 @@
         <!-- packagetool -->
         <ant antfile="${basedir}/src/packagetool/build.xml"/>
         
+    	<!-- calendar -->
+    	<ant antfile="${basedir}/src/calendar/build.xml"/>
+    	
         <!-- search-help -->
         <ant antfile="${basedir}/src/search-help/build.xml"/>
         

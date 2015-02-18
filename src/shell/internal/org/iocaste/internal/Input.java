@@ -3,9 +3,12 @@ package org.iocaste.internal;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
+import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
@@ -38,6 +41,20 @@ public class Input {
         data.pagectx = pagectx;
         
         register(data);
+    }
+    
+    /**
+     * 
+     * @param input
+     * @param inputdata
+     */
+    private final void generateCalendar(InputComponent input,
+            InputData inputdata) {
+        Calendar calendar;
+        
+        calendar = new Calendar(inputdata.container, input.getName()+".cal");
+        calendar.setHtmlName(input.getHtmlName()+".cal");
+        input.setCalendar(calendar);
     }
     
     /**
@@ -110,7 +127,6 @@ public class Input {
                     continue;
                 
                 sh = ((InputComponent)element).getSearchHelp();
-                
                 if (sh == null)
                     continue;
                 
@@ -130,6 +146,7 @@ public class Input {
      * @param inputdata
      */
     private final void register(InputData inputdata) {
+        DataElement dataelement;
         RangeInputComponent rinput;
         Set<Element> elements;
         InputData inputdata_;
@@ -175,6 +192,11 @@ public class Input {
             if (input.getSearchHelp() == null && modelitem != null &&
                     modelitem.getSearchHelp() != null)
                 generateSearchHelp(input, inputdata);
+            
+            dataelement = input.getDataElement();
+            if ((dataelement != null) &&
+                    (dataelement.getType() == DataType.DATE))
+                generateCalendar(input, inputdata);
             
             if (input.isValueRangeComponent()) {
                 rinput = (RangeInputComponent)input;
