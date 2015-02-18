@@ -3,6 +3,7 @@ package org.iocaste.internal.renderer;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.SearchHelp;
@@ -54,7 +55,11 @@ public class TextFieldRenderer extends Renderer {
         inputtag.add("onfocus", new StringBuilder("send('").append(name).
                 append("', '&event=onfocus', null)").toString());
         
-        sb = new StringBuilder(style);
+        if (input.getContainer().getType() == Const.TABLE_ITEM)
+            sb = new StringBuilder("table_cell_content");
+        else
+            sb = new StringBuilder(style);
+        
         if (!input.isEnabled()) {
             sb.append("_disabled");
             inputtag.add("readonly", "readonly");
@@ -78,7 +83,7 @@ public class TextFieldRenderer extends Renderer {
         search = input.getSearchHelp();
         if (search != null) {
             tagc = new XMLElement("td");
-            tagc.addChild(ButtonRenderer.render(search, config));
+            tagc.addChild(SHButtonRenderer.render(search, config));
             tagl.addChild(tagc);
         }
         

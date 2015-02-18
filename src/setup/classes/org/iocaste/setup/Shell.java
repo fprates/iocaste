@@ -343,6 +343,11 @@ public class Shell {
         stylesheet.put(".table_cell", "padding", "3px");
         stylesheet.put(".table_cell", "margin", "0px");
 
+        stylesheet.newElement(".table_cell_content");
+        stylesheet.put(".table_cell_content", "padding", "0px");
+        stylesheet.put(".table_cell_content", "margin", "0px");
+        stylesheet.put(".table_cell_content", "border-style", "none");
+        
         stylesheet.newElement(".table_header");
         stylesheet.put(".table_header", "font-size", "12pt");
         stylesheet.put(".table_header", "font-family", "sans-serif");
