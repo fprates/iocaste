@@ -11,9 +11,14 @@ public class Install {
         Map<String, String> messages;
         InstallData data = new InstallData();
         
-        messages = new HashMap<String, String>();
-        messages.put("no.results.found", "Sem resultados para esse critério.");
-        messages.put("iocaste-search-help", "Ajuda de pesquisa");
+        messages = new HashMap<>();
+        messages.put("sunday", "dom");
+        messages.put("monday", "seg");
+        messages.put("tuesday", "ter");
+        messages.put("wednesday", "qua");
+        messages.put("thursday", "qui");
+        messages.put("friday", "sex");
+        messages.put("saturday", "sáb");
         data.setMessages("pt_BR", messages);
         
         return data;

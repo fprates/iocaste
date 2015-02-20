@@ -1,5 +1,4 @@
 <project name="calendar" default="compile">
-    <property name="server.class" value="org.iocaste.calendar.Servlet"/>
     <property name="warfilename" value="${basedir}/iocaste-${ant.project.name}.war"/>
     
     <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
@@ -24,9 +23,6 @@
         <!-- substituições -->
         <copy todir="${builddir}/${ant.project.name}/web"
             file="${basedir}/src/${ant.project.name}/web/web.xml"/>
-        
-        <replace file="${builddir}/${ant.project.name}/web/web.xml"
-            token="@server.class@" value="${server.class}"/>
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/classes"

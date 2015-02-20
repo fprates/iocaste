@@ -9,6 +9,7 @@ public class Packages {
             "iocaste-packagetool",
             "iocaste-tasksel",
             "iocaste-setup",
+            "iocaste-calendar",
             "iocaste-search-help",
             "iocaste-appbuilder"
             };

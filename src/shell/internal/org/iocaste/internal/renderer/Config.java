@@ -96,8 +96,8 @@ public class Config {
      * 
      * @return
      */
-    public final MessageSource[] getMessageSources() {
-        return msgsources.toArray(new MessageSource[0]);
+    public final List<MessageSource> getMessageSources() {
+        return msgsources;
     }
     
     /**

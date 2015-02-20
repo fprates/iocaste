@@ -104,16 +104,26 @@ public class FormRenderer extends Renderer {
     private static final List<XMLElement> renderPopup(Config config) {
         Map<String, Object> parameters;
         Object[] viewreturn;
-        ControlComponent control = config.getPopupControl();
-        List<XMLElement> tags = new ArrayList<>();
-        TrackingData tracking = config.getTracking();
-        Service service = new Service(tracking.sessionid, tracking.contexturl);
-        Message message = new Message("get_view_data");
-        View view = new View(control.getApplication(), "main");
-        StyleSheet stylesheet = config.getView().styleSheetInstance();
+        ControlComponent control;
+        List<XMLElement> tags;
+        TrackingData tracking;
+        Service service;
+        Message message;
+        View view, sourceview;
+        StyleSheet stylesheet;
+        
+        control = config.getPopupControl();
+        tags = new ArrayList<>();
+        tracking = config.getTracking();
+        service = new Service(tracking.sessionid, tracking.contexturl);
+        message = new Message("get_view_data");
+        view = new View(control.getApplication(), "main");
+        sourceview = config.getView();
+        stylesheet = sourceview.styleSheetInstance();
         
         parameters = new HashMap<>();
         parameters.put("control", control);
+        parameters.put("msgsource", sourceview.getAppName());
         view.setStyleSheet(stylesheet.getElements());
         
         message.add("view", view);
@@ -122,6 +132,7 @@ public class FormRenderer extends Renderer {
         viewreturn = (Object[])service.call(message);
         view = (View)viewreturn[0];
         
+        config.getMessageSources().add(view.getMessages());
         config.getView().setStyleSheet(view.styleSheetInstance().getElements());
         for (Container container : view.getContainers())
             Renderer.renderContainer(tags, container, config);

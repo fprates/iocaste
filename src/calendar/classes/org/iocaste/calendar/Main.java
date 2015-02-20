@@ -1,12 +1,14 @@
 package org.iocaste.calendar;
 
-import org.iocaste.appbuilder.common.AbstractPageBuilder;
-import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.View;
 
-public class Main extends AbstractPageBuilder {
+public class Main extends AbstractPage {
     private Context context;
     
     public Main() {
@@ -30,21 +32,32 @@ public class Main extends AbstractPageBuilder {
         setReloadableView(false);
     }
     
-//    public final void choose() {
-//        updateView(Request.choose(context));
-//        back();
-//    }
-
-    @Override
-    public void config(PageBuilderContext context) throws Exception {
-        // TODO Stub de método gerado automaticamente
-        
+    public final void earlymonth() throws Exception {
+        Response.main(context);
     }
-
+    
     @Override
-    protected void installConfig(PageBuilderDefaultInstall defaultinstall)
-            throws Exception {
-        // TODO Stub de método gerado automaticamente
+    public final AbstractContext init(View view) {
+        context = new Context();
         
+        return context;
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final InstallData install(Message message) {
+        return Install.init();
+    }
+    
+    public final void latemonth() throws Exception {
+        Response.main(context);
+    }
+    
+    public void main() throws Exception {
+        setMessageSource("iocaste-calendar");
+        Response.main(context);
     }
 }

@@ -54,6 +54,7 @@ public class Main extends AbstractPage {
     }
     
     public void main() {
+        setMessageSource((String)context.function.getParameter("msgsource"));
         Response.main(context);
     }
     
