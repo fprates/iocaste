@@ -282,7 +282,8 @@ class BuilderCustomView extends AbstractCustomView {
                 viewconfig.setNavControl(navcontrol);
                 viewconfig.run(_context);
             }
-            
+
+            navcontrol.build(_context);
             viewspec.setInitialized(!viewctx.isUpdatable());
             if (viewinput != null) {
                 viewinput.run(_context, true);
@@ -302,7 +303,6 @@ class BuilderCustomView extends AbstractCustomView {
         ViewComponents components = context.
                 getView(context.view.getPageName()).getComponents();
         
-        navcontrol.build(context);
         for (TableToolEntry entry : components.tabletools.values())
             entry.component = new TableTool(context, entry.data.name);
     }
