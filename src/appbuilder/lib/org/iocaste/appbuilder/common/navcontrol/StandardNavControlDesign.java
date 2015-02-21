@@ -1,58 +1,45 @@
-package org.iocaste.appbuilder.common;
+package org.iocaste.appbuilder.common.navcontrol;
 
+import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
-import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.ViewCustomAction;
 
-public class NavControl {
+public class StandardNavControlDesign implements NavControlDesign {
     private PageBuilderContext context;
     private Container container;
     private StandardContainer buttonbar;
-    private Text title;
     
-    public NavControl(Form container, PageBuilderContext context) {
-        this.context = context;
-        this.container = new StandardContainer(container, "navcontrol_cntnr");
-        build(context);
-    }
-    
-    public final void add(String action) {
-        Text text;
-        Link link;
-        
-        if (buttonbar == null) {
-            buttonbar = buildButtonBar();
-        } else {
-            text = new Text(buttonbar, action.concat("_separator"));
-            text.setText("|");
-            text.setStyleClass("nc_nav_separator");
-        }
-        
-        link = new Link(buttonbar, action, action);
-        link.setStyleClass("nc_nav_action");
-    }
-    
-    private final void build(AbstractContext context) {
-        Text text;
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.appbuilder.common.navcontrol.NavControlDesign#
+     *    build(
+     *       org.iocaste.shell.common.Container,
+     *       org.iocaste.appbuilder.common.PageBuilderContext)
+     */
+    @Override
+    public final void build(Container container, PageBuilderContext context) {
+        Text text, title;
         Link link;
         String name, titletext;
         Iocaste iocaste;
         PageStackItem[] positions;
         User user;
         AbstractPage page;
-        StyleSheet stylesheet = context.view.styleSheetInstance();
-
+        StyleSheet stylesheet;
+        
+        this.container = container;
+        this.context = context;
+        
+        stylesheet = context.view.styleSheetInstance();
         stylesheet.clone(".nc_text", ".text");
         stylesheet.put(".nc_text", "display", "inline");
         
@@ -109,6 +96,36 @@ public class NavControl {
         text.setStyleClass("nc_usertext");
     }
     
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.appbuilder.common.navcontrol.NavControlDesign#
+     *    buildButton(java.lang.String)
+     */
+    @Override
+    public final void buildButton(String action) {
+        Link link;
+        
+        _buildButton(action);
+        link = new Link(buttonbar, action, action);
+        link.setStyleClass("nc_nav_action");
+    }
+    
+    private final void _buildButton(String action) {
+        Text text;
+        
+        if (buttonbar == null) {
+            buttonbar = buildButtonBar();
+        } else {
+            text = new Text(buttonbar, action.concat("_separator"));
+            text.setText("|");
+            text.setStyleClass("nc_nav_separator");
+        }
+    }
+    
+    /**
+     * 
+     * @return
+     */
     private final StandardContainer buildButtonBar() {
         StandardContainer buttonbar;
         StyleSheet stylesheet = context.view.styleSheetInstance();
@@ -153,6 +170,27 @@ public class NavControl {
         return buttonbar;
     }
     
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.appbuilder.common.navcontrol.NavControlDesign#
+     *    buildSubmit(java.lang.String)
+     */
+    @Override
+    public final void buildSubmit(String action) {
+        Button button;
+        
+        _buildButton(action);
+        button = new Button(buttonbar, action);
+        button.setSubmit(true);
+        button.setStyleClass("nc_nav_submit");
+    }
+    
+    /**
+     * 
+     * @param stylesheet
+     * @param to
+     * @param from
+     */
     private final void cloneLink(
             StyleSheet stylesheet, String to, String from) {
         stylesheet.clone(to, from);
@@ -161,57 +199,4 @@ public class NavControl {
         stylesheet.put(to, "padding", "3px");
         stylesheet.put(to, "vertical-align", "middle");
     }
-    
-    public final void setControlStyle(String control, String style) {
-        context.view.getElement(control).setStyleClass(style);
-    }
-    
-    public final void setTitle(String title) {
-        this.title.setText(title);
-        context.view.setTitle(title);
-    }
-    
-    public final void submit(String action) {
-        Text text;
-        Button button;
-        
-        if (buttonbar == null) {
-            buttonbar = buildButtonBar();
-        } else {
-            text = new Text(buttonbar, action.concat("_separator"));
-            text.setText("|");
-            text.setStyleClass("nc_nav_separator");
-        }
-        
-        button = new Button(buttonbar, action);
-        button.setSubmit(true);
-        button.setStyleClass("nc_nav_submit");
-    }
-
-}
-
-class NavControlCustomAction implements ViewCustomAction {
-    private static final long serialVersionUID = -2444551337966528191L;
-    private String position;
-    
-    public NavControlCustomAction(String position) {
-        this.position = position;
-    }
-    
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.ViewCustomAction#execute(
-     *    org.iocaste.shell.common.PageContext)
-     */
-    @Override
-    public void execute(AbstractContext context) {
-        ViewContext viewctx;
-        PageBuilderContext _context = (PageBuilderContext)context;
-        AbstractPage page = (AbstractPage)_context.function;
-        
-        page.backTo(position);
-        viewctx = _context.getView(_context.view.getPageName());
-        AbstractActionHandler.redirectContext(_context, viewctx);
-    }
-    
 }

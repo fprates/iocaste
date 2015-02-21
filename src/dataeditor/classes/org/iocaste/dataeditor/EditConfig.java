@@ -1,8 +1,8 @@
 package org.iocaste.dataeditor;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
-import org.iocaste.appbuilder.common.NavControl;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;

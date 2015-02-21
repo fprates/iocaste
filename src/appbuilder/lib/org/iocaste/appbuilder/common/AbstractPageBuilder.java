@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.appbuilder.common.tabletool.SetObjects;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -285,7 +286,7 @@ class BuilderCustomView extends AbstractCustomView {
             viewspec.setInitialized(!viewctx.isUpdatable());
             if (viewinput != null) {
                 viewinput.run(_context, true);
-                generateTables(_context);
+                generateComponents(_context);
             }
             return;
         }
@@ -297,10 +298,11 @@ class BuilderCustomView extends AbstractCustomView {
         }
     }
     
-    private final void generateTables(PageBuilderContext context) {
+    private final void generateComponents(PageBuilderContext context) {
         ViewComponents components = context.
                 getView(context.view.getPageName()).getComponents();
         
+        navcontrol.build(context);
         for (TableToolEntry entry : components.tabletools.values())
             entry.component = new TableTool(context, entry.data.name);
     }

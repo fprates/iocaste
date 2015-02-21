@@ -1,8 +1,8 @@
 package org.iocaste.datadict;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
-import org.iocaste.appbuilder.common.NavControl;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;

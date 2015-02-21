@@ -1,8 +1,8 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
-import org.iocaste.appbuilder.common.NavControl;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.docmanager.common.Manager;
 
 public class MaintenanceConfig extends AbstractViewConfig {
