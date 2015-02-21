@@ -9,8 +9,8 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.StandardContainer;
 
 public class NavControl {
-    private static final byte NORMAL = 0;
-    private static final byte SUBMIT = 1;
+    public static final byte NORMAL = 0;
+    public static final byte SUBMIT = 1;
     private PageBuilderContext context;
     private Container container;
     private NavControlDesign design;
@@ -23,7 +23,12 @@ public class NavControl {
     }
     
     public final void add(String action) {
-        buttons.put(action, new NavControlButton(NORMAL));
+        NavControlButton button;
+        
+        button = new NavControlButton();
+        button.type = NORMAL;
+        button.style = "nc_nav_action";
+        buttons.put(action, button);
     }
     
     public final void build(PageBuilderContext context) {
@@ -32,18 +37,11 @@ public class NavControl {
         
         design.build(container, context);
         for (String name : buttons.keySet())
-            switch (buttons.get(name).type) {
-            case NORMAL:
-                design.buildButton(name);
-                break;
-            case SUBMIT:
-                design.buildSubmit(name);
-                break;
-            }
+            design.buildButton(name, buttons.get(name));
     }
     
     public final void setControlStyle(String control, String style) {
-        context.view.getElement(control).setStyleClass(style);
+        buttons.get(control).style = style;
     }
     
     public final void setDesign(NavControlDesign design) {
@@ -55,15 +53,11 @@ public class NavControl {
     }
     
     public final void submit(String action) {
-        buttons.put(action, new NavControlButton(SUBMIT));
-    }
-
-}
-
-class NavControlButton {
-    public byte type;
-    
-    public NavControlButton(byte type) {
-        this.type = type;
+        NavControlButton button;
+        
+        button = new NavControlButton();
+        button.type = SUBMIT;
+        button.style = "nc_nav_submit";
+        buttons.put(action, button);
     }
 }

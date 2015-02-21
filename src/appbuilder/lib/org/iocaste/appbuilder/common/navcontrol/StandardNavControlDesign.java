@@ -102,16 +102,10 @@ public class StandardNavControlDesign implements NavControlDesign {
      *    buildButton(java.lang.String)
      */
     @Override
-    public final void buildButton(String action) {
+    public final void buildButton(String action, NavControlButton buttoncfg){
         Link link;
-        
-        _buildButton(action);
-        link = new Link(buttonbar, action, action);
-        link.setStyleClass("nc_nav_action");
-    }
-    
-    private final void _buildButton(String action) {
         Text text;
+        Button button;
         
         if (buttonbar == null) {
             buttonbar = buildButtonBar();
@@ -119,6 +113,18 @@ public class StandardNavControlDesign implements NavControlDesign {
             text = new Text(buttonbar, action.concat("_separator"));
             text.setText("|");
             text.setStyleClass("nc_nav_separator");
+        }
+        
+        switch (buttoncfg.type) {
+        case NavControl.NORMAL:
+            link = new Link(buttonbar, action, action);
+            link.setStyleClass(buttoncfg.style);
+            break;
+        case NavControl.SUBMIT:
+            button = new Button(buttonbar, action);
+            button.setSubmit(true);
+            button.setStyleClass(buttoncfg.style);
+            break;
         }
     }
     
@@ -168,21 +174,6 @@ public class StandardNavControlDesign implements NavControlDesign {
         buttonbar.setStyleClass("nc_nav_buttonbar");
         
         return buttonbar;
-    }
-    
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.appbuilder.common.navcontrol.NavControlDesign#
-     *    buildSubmit(java.lang.String)
-     */
-    @Override
-    public final void buildSubmit(String action) {
-        Button button;
-        
-        _buildButton(action);
-        button = new Button(buttonbar, action);
-        button.setSubmit(true);
-        button.setStyleClass("nc_nav_submit");
     }
     
     /**

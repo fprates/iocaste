@@ -14,11 +14,5 @@ public interface NavControlDesign {
      * 
      * @param action
      */
-    public abstract void buildButton(String action);
-    
-    /**
-     * 
-     * @param action
-     */
-    public abstract void buildSubmit(String action);
+    public abstract void buildButton(String action, NavControlButton button);
 }
