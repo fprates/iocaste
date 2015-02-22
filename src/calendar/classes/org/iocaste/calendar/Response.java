@@ -89,29 +89,25 @@ public class Response {
                     context.calendardata.sweekdays[weekday]).
                     append(day).toString();
             
-            if (context.calendardata.today == day) {
-                text = new Text(item, compname);
-                text.setText(Integer.toString(day));
-                text.setStyleClass("today");
-            } else {
-                date = format.parse(new StringBuilder().
-                        append(context.calendardata.year).
-                        append("-").
-                        append(context.calendardata.month).
-                        append("-").
-                        append(day).toString());
-                
-                value = formatdest.format(date);
-                action = new StringBuilder("javascript:setFieldCal('").
-                        append(control.getInputName()).
-                        append("','").
-                        append(value).
-                        append("')").toString();
-                
-                link = new Link(item, compname, action);
-                link.setText(Integer.toString(day));
-                link.setAbsolute(true);
-            }
+            date = format.parse(new StringBuilder().
+                    append(context.calendardata.year).
+                    append("-").
+                    append(context.calendardata.month + 1).
+                    append("-").
+                    append(day).toString());
+            
+            value = formatdest.format(date);
+            action = new StringBuilder("javascript:setFieldCal('").
+                    append(control.getInputName()).
+                    append("','").
+                    append(value).
+                    append("')").toString();
+            
+            link = new Link(item, compname, action);
+            link.setText(Integer.toString(day));
+            link.setAbsolute(true);
+            if (context.calendardata.today == day)
+                link.setStyleClass("today");
             
             if (context.calendardata.weekday ==
                     context.calendardata.weekdays.length) {
