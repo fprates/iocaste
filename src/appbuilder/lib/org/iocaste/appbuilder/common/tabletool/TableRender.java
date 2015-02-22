@@ -9,12 +9,14 @@ import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StandardContainer;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 
 public class TableRender extends AbstractTableHandler {
 
     public static final void run(Function function, TableToolData data) {
+        StyleSheet stylesheet;
         Container container, supercontainer;
         Context context = new Context();
         
@@ -26,12 +28,21 @@ public class TableRender extends AbstractTableHandler {
             container = data.context.view.getElement(data.name);
         }
         
+        stylesheet = data.context.view.styleSheetInstance();
+        stylesheet.newElement(".tt_skip");
+        stylesheet.put(".tt_skip", "border-style", "none");
+        stylesheet.put(".tt_skip", "padding", "0.2em");
+        stylesheet.put(".tt_skip", "margin", "0px");
+        
         context.accept = new Button(
                 container, TableTool.ACCEPT.concat(context.data.name));
         context.add = new Button(
                 container, TableTool.ADD.concat(context.data.name));
         context.remove = new Button(container,
                 TableTool.REMOVE.concat(context.data.name));
+        
+        new StandardContainer(container, context.data.name.concat("_skip")).
+                setStyleClass("tt_skip");
         
         context.table = new Table(
                 container, context.data.name.concat("_table"));
