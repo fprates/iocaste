@@ -1,6 +1,7 @@
 package org.iocaste.shell.common;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
@@ -98,6 +99,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
             return (value == null)? 0 : (byte)value;
         
         return ((BigDecimal)value).byteValue();
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getdt()
+     */
+    @Override
+    public final Date getdt() {
+        return (Date)value;
     }
     
     /*

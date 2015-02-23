@@ -11,7 +11,7 @@ import java.util.Set;
  * @author francisco.prates
  *
  */
-public class SearchHelp extends AbstractControlComponent {
+public class SearchHelp extends PopupControl {
     private static final long serialVersionUID = -1582634834243087782L;
     private String modelname, export, inputname;
     private Set<String> itemnames;
@@ -98,4 +98,7 @@ public class SearchHelp extends AbstractControlComponent {
     public final void setModelName(String modelname) {
         this.modelname = modelname;
     }
+
+    @Override
+    public void update(View view) { }
 }

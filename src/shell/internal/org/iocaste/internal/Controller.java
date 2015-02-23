@@ -372,8 +372,7 @@ public class Controller {
             
             convertInputValue(input, ri);
             
-            if ((status.control != null) &&
-                    (status.control.getApplication() != null))
+            if ((status.control != null) && (status.control.isPopup()))
                 continue;
             
             if (input.isObligatory() && isInitial(input, ri) &&

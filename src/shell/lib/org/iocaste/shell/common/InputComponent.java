@@ -1,5 +1,6 @@
 package org.iocaste.shell.common;
 
+import java.util.Date;
 import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
@@ -50,6 +51,12 @@ public interface InputComponent extends Component {
      * @return valor em ponto flutuante de precisão dupla.
      */
     public abstract double getd();
+    
+    /**
+     * 
+     * @return
+     */
+    public abstract Date getdt();
     
     /**
      * Retorna valor numérico do componente.

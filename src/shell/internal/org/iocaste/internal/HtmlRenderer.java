@@ -14,7 +14,6 @@ import org.iocaste.internal.renderer.Renderer;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
@@ -27,7 +26,6 @@ public class HtmlRenderer {
     private List<String> script;
     private Set<String> actions;
     private MessageSource msgsource;
-    private ControlComponent popupcontrol;
     private Function function;
     private PageContext pagectx;
     
@@ -187,7 +185,7 @@ public class HtmlRenderer {
         config.addMessageSource(view.getMessages());
         config.addMessageSource(msgsource);
         config.setPageTrack(composePageTrack(view, tracking));
-        config.setPopupControl(popupcontrol);
+        config.setPopupControl(pagectx.getPopupControl());
         config.setTracking(tracking);
         
         html.add("<!DOCTYPE html>");
@@ -230,14 +228,6 @@ public class HtmlRenderer {
      */
     public final void setPageContext(PageContext pagectx) {
         this.pagectx = pagectx;
-    }
-    
-    /**
-     * 
-     * @param shcontrol
-     */
-    public final void setPopupControl(ControlComponent popupcontrol) {
-        this.popupcontrol = popupcontrol;
     }
     
     /**

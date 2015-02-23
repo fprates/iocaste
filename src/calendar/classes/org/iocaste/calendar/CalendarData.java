@@ -9,15 +9,11 @@ public class CalendarData {
     public int lastday, weekday, today, first, month, year;
     public int[] weekdays;
     public String[] sweekdays;
-    public Date date;
     public Map<Integer, String> monthtext;
+    private Calendar calendar;
 
     public CalendarData() {
-        Calendar calendar;
-        
         calendar = Calendar.getInstance();
-        date = calendar.getTime();
-        lastday = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         weekdays = new int[] {
                 Calendar.SUNDAY,
                 Calendar.MONDAY,
@@ -37,12 +33,6 @@ public class CalendarData {
                 "friday",
                 "saturday"};
         
-        weekday = calendar.getActualMinimum(Calendar.DAY_OF_WEEK);
-        today = calendar.get(Calendar.DAY_OF_MONTH);
-        month = calendar.get(Calendar.MONTH);
-        year = calendar.get(Calendar.YEAR);
-        first = Calendar.SUNDAY;
-        
         monthtext = new HashMap<>();
         monthtext.put(Calendar.JANUARY, "Janeiro");
         monthtext.put(Calendar.FEBRUARY, "Fevereiro");
@@ -56,5 +46,28 @@ public class CalendarData {
         monthtext.put(Calendar.OCTOBER, "Outubro");
         monthtext.put(Calendar.NOVEMBER, "Novembro");
         monthtext.put(Calendar.DECEMBER, "Dezembro");
+    }
+    
+    public final Date calculate(Date date, int amount) {
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, amount);
+        return calendar.getTime();
+    }
+    
+    public final Date getTime() {
+        return calendar.getTime();
+    }
+    
+    public final void update(Date date) {
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        lastday = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        weekday = calendar.get(Calendar.DAY_OF_WEEK);
+        
+        calendar.setTime(date);
+        today = calendar.get(Calendar.DAY_OF_MONTH);
+        month = calendar.get(Calendar.MONTH);
+        year = calendar.get(Calendar.YEAR);
+        first = Calendar.SUNDAY;
     }
 }

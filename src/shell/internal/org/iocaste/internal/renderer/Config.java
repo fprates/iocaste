@@ -8,9 +8,9 @@ import java.util.Set;
 import org.iocaste.internal.PageContext;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
-import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.MessageSource;
+import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.View;
 
 public class Config {
@@ -24,7 +24,7 @@ public class Config {
     private Set<String> actions;
     private List<String> onload;
     private View view;
-    private ControlComponent popupcontrol;
+    private PopupControl popupcontrol;
     private TrackingData tracking;
     
     public Config() {
@@ -120,7 +120,7 @@ public class Config {
      * 
      * @return
      */
-    public final ControlComponent getPopupControl() {
+    public final PopupControl getPopupControl() {
         return popupcontrol;
     }
     
@@ -199,7 +199,7 @@ public class Config {
      * 
      * @param shcontrol
      */
-    public final void setPopupControl(ControlComponent popupcontrol) {
+    public final void setPopupControl(PopupControl popupcontrol) {
         this.popupcontrol = popupcontrol;
     }
     

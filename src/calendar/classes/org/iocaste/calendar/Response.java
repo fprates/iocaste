@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.iocaste.shell.common.Button;
-import org.iocaste.shell.common.Calendar;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.StandardContainer;
@@ -18,6 +18,24 @@ import org.iocaste.shell.common.Text;
 
 public class Response {
     
+    private static final void createCalendarLink(Container container,
+            Context context, String name, String text) {
+        Link link;
+        String onclick, form, action;
+        
+        form = context.function.getParameter("form");
+        action = context.function.getParameter("action");
+        onclick = new StringBuilder("javascript:formSubmit('").
+                append(form).append("', '").
+                append(action).append("', '").
+                append(name).append("');").toString();
+        
+        link = new Link(container, "link_".concat(name), onclick);
+        link.setAbsolute(true);
+        link.setText(text);
+        link.setStyleClass("month");
+    }
+    
     public static final void main(Context context) throws Exception {
         int weekday;
         Date date;
@@ -25,7 +43,6 @@ public class Response {
         String compname, action, value;
         StandardContainer container;
         Link link;
-        Calendar control;
         Text text;
         Table table;
         TableItem item;
@@ -44,34 +61,41 @@ public class Response {
         stylesheet.put(".calcnt", "border-width", "2px");
         stylesheet.put(".calcnt", "border-color", "rgb(176, 176, 176)");
         
+        stylesheet.newElement(".calkey");
+        stylesheet.put(".calkey", "padding", "0px");
+        stylesheet.put(".calkey", "margin", "0px");
+        stylesheet.put(".calkey", "text-align", "middle");
+        stylesheet.put(".calkey", "font-weight", "normal");
+        stylesheet.put(".calkey", "display", "block");
+        stylesheet.put(".calkey", "text-decoration", "none");
+        
         stylesheet.newElement(".today");
         stylesheet.put(".today", "padding", "0px");
         stylesheet.put(".today", "margin", "0px");
         stylesheet.put(".today", "text-align", "middle");
         stylesheet.put(".today", "font-weight", "bold");
+        stylesheet.put(".today", "display", "block");
+        stylesheet.put(".today", "text-decoration", "none");
         
         stylesheet.newElement(".month");
         stylesheet.put(".month", "display", "inline");
         stylesheet.put(".month", "text-decoration", "none");
         
+        context.calendardata.update(context.date);
         container = new StandardContainer(context.view, "calstdcnt");
         container.setStyleClass("calcnt");
+        
+        createCalendarLink(container, context, context.control.getEarly(), "<");
 
         locale = context.view.getLocale();
         format = new SimpleDateFormat("d MMMMM yyyy", locale);
-        value = format.format(context.calendardata.date);
-        
-        link = new Link(container, "earlymonth", "earlymonth");
-        link.setText("<");
-        link.setStyleClass("month");
+        value = format.format(context.date);
         
         text = new Text(container, "calhead");
         text.setText(value);
         text.setStyleClass("month");
-        
-        link = new Link(container, "latemonth", "latemonth");
-        link.setText(">");
-        link.setStyleClass("month");
+
+        createCalendarLink(container, context, context.control.getLate(), ">");
         
         new Parameter(container, "value");
         
@@ -80,7 +104,13 @@ public class Response {
             new TableColumn(table, name);
         
         item = new TableItem(table);
-        control = context.function.getParameter("control");
+        if (context.calendardata.weekday > 1)
+            for (int i = 0; i < (context.calendardata.weekday - 1); i++) {
+                text = new Text(item,
+                        new StringBuilder("caldummy").append(i).toString());
+                text.setText("");
+                text.setStyleClass("calkey");
+            }
         format = new SimpleDateFormat("yyyy-M-d");
         formatdest = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
         for (int day = 1; day <= context.calendardata.lastday; day++) {
@@ -98,7 +128,7 @@ public class Response {
             
             value = formatdest.format(date);
             action = new StringBuilder("javascript:setFieldCal('").
-                    append(control.getInputName()).
+                    append(context.control.getInputName()).
                     append("','").
                     append(value).
                     append("')").toString();
@@ -108,6 +138,8 @@ public class Response {
             link.setAbsolute(true);
             if (context.calendardata.today == day)
                 link.setStyleClass("today");
+            else
+                link.setStyleClass("calkey");
             
             if (context.calendardata.weekday ==
                     context.calendardata.weekdays.length) {

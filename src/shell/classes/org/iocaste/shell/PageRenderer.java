@@ -20,6 +20,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.AccessTicket;
+import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewState;
 
@@ -48,7 +49,6 @@ public class PageRenderer extends AbstractRenderer {
         Message message;
         ControlComponent control;
         Service service;
-        String appname;
         
         status = Controller.validate(config);
         if (status.fatal != null)
@@ -66,9 +66,10 @@ public class PageRenderer extends AbstractRenderer {
             message.add(name, config.values.get(name));
 
         control = config.state.view.getElement(message.getString("action"));
-        if ((control != null) && (appname = control.getApplication()) != null) {
-            config.popupcontrol = control;
-            config.contexturl = composeUrl(appname);
+        if ((control != null) && control.isPopup()) {
+            config.popupcontrol = (PopupControl)control;
+            config.contexturl = composeUrl(
+                    config.popupcontrol.getApplication());
             return;
         }
         

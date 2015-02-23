@@ -1,10 +1,14 @@
 package org.iocaste.calendar;
 
+import java.util.Date;
+
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.PageStackItem;
+import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
 
@@ -32,15 +36,9 @@ public class Main extends AbstractPage {
         setReloadableView(false);
     }
     
-    public final void earlymonth() throws Exception {
-        Response.main(context);
-    }
-    
     @Override
     public final AbstractContext init(View view) {
-        context = new Context();
-        
-        return context;
+        return context = new Context();
     }
     
     /**
@@ -52,12 +50,37 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
-    public final void latemonth() throws Exception {
-        Response.main(context);
-    }
-    
     public void main() throws Exception {
+        Calendar calendar;
+        byte mode;
+        View view;
+        
         setMessageSource("iocaste-calendar");
+        context.control = context.function.getParameter("control");
+        mode = context.control.getMode();
+        view = context.control.getView();
+        
+        switch (mode) {
+        case -1:
+        case 1:
+            context.control = view.getElement(context.control.getMaster());
+            context.date = context.calendardata.calculate(
+                    context.control.getDate(), mode);
+            break;
+        default:
+            context.date = new Date();
+            break;
+        }
+        
+        new Parameter(context.view, "p_".concat(context.control.getName())).set(
+                context.date);
+        
+        calendar = view.getElement(context.control.getEarly());
+        new Parameter(context.view, "p_".concat(calendar.getName()));
+        
+        calendar = view.getElement(context.control.getLate());
+        new Parameter(context.view, "p_".concat(calendar.getName()));
+        
         Response.main(context);
     }
 }

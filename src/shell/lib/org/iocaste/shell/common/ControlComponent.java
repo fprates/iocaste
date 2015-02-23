@@ -19,17 +19,17 @@ public interface ControlComponent extends Element {
     public abstract String getAction();
     
     /**
-     * 
-     * @return
-     */
-    public abstract String getApplication();
-    
-    /**
      * Indica se componente é cancelável.
      * Componentes canceláveis não disparam validação da tela.
      * @return true, se for cancelável.
      */
     public abstract boolean isCancellable();
+    
+    /**
+     * 
+     * @return
+     */
+    public abstract boolean isPopup();
     
     /**
      * Define uma ação, para quando ação for diferente do nome do componente.
@@ -42,12 +42,6 @@ public interface ControlComponent extends Element {
      * @param stacking
      */
     public abstract void setAllowStacking(boolean stacking);
-    
-    /**
-     * 
-     * @param application
-     */
-    public abstract void setApplication(String application);
     
     /**
      * Define se componente é cancelável.

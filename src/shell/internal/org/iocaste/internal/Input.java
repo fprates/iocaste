@@ -50,11 +50,24 @@ public class Input {
      */
     private final void generateCalendar(InputComponent input,
             InputData inputdata) {
-        Calendar calendar;
+        Calendar master, calendar;
+        String htmlname;
         
-        calendar = new Calendar(inputdata.container, input.getName()+".cal");
-        calendar.setHtmlName(input.getHtmlName()+".cal");
-        input.setCalendar(calendar);
+        htmlname = input.getHtmlName().concat(".cal");
+        master = new Calendar(inputdata.container, htmlname);
+        master.setEarly("early_".concat(htmlname));
+        master.setLate("late_".concat(htmlname));
+        input.setCalendar(master);
+        
+        calendar = new Calendar(
+                inputdata.container, master.getEarly(), Calendar.EARLY);
+        calendar.setMaster(htmlname);
+        calendar.setText("<");
+        
+        calendar = new Calendar(
+                inputdata.container, master.getLate(), Calendar.LATE);
+        calendar.setMaster(htmlname);
+        calendar.setText(">");
     }
     
     /**
@@ -194,7 +207,7 @@ public class Input {
                 generateSearchHelp(input, inputdata);
             
             dataelement = input.getDataElement();
-            if ((dataelement != null) &&
+            if ((dataelement != null) && (input.getCalendar() == null) &&
                     (dataelement.getType() == DataType.DATE))
                 generateCalendar(input, inputdata);
             

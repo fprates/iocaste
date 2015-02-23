@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.apache.commons.fileupload.FileItem;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.MultipartElement;
+import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.View;
 
 public class PageContext {
@@ -22,7 +22,7 @@ public class PageContext {
     private int logid;
     private byte error;
     private long sequence;
-    private ControlComponent popupcontrol;
+    private PopupControl popupcontrol;
     public List<String> inputs;
     public List<MultipartElement> mpelements;
     public Map<String, Object> parameters;
@@ -95,7 +95,7 @@ public class PageContext {
      * 
      * @return
      */
-    public final ControlComponent getPopupControl() {
+    public final PopupControl getPopupControl() {
         return popupcontrol;
     }
     
@@ -229,7 +229,7 @@ public class PageContext {
      * 
      * @param popupcontrol
      */
-    public final void setPopupControl(ControlComponent popupcontrol) {
+    public final void setPopupControl(PopupControl popupcontrol) {
         this.popupcontrol = popupcontrol;
     }
     

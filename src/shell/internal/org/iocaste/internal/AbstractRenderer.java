@@ -659,7 +659,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             return pagectx;
         }
         
-        pagectx.setPopupControl(config.popupcontrol);
         pagectx.setContextUrl(config.contexturl);
         pagectx.setError((byte)0);
         sequence = pagectx.getSequence();
@@ -685,6 +684,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         pagectx_.parameters = config.state.parameters;
         pagectx_.initparams = config.state.initparams;
         pagectx_.message(config.state.messagetype, config.state.messagetext);
+        pagectx_.setPopupControl(config.popupcontrol);
         
         if (isConnected(contextdata)) {
             execute(appname, config.sessionid);
@@ -909,7 +909,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         renderer.setMessageSource(msgsource);
         renderer.setPageContext(pagectx);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
-        renderer.setPopupControl(pagectx.getPopupControl());
         renderer.setFunction(this);
         tracking = new TrackingData();
         tracking.logid = pagectx.getLogid();
