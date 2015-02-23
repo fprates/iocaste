@@ -9,6 +9,7 @@ import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
@@ -19,7 +20,8 @@ import org.iocaste.shell.common.Text;
 public class Response {
     
     private static final void createCalendarLink(Container container,
-            Context context, String name, String text) {
+            Context context, String name) {
+        PopupControl control;
         Link link;
         String onclick, form, action;
         
@@ -30,9 +32,10 @@ public class Response {
                 append(action).append("', '").
                 append(name).append("');").toString();
         
+        control = context.control.getView().getElement(name);
         link = new Link(container, "link_".concat(name), onclick);
         link.setAbsolute(true);
-        link.setText(text);
+        link.setText(control.getText());
         link.setStyleClass("month");
     }
     
@@ -85,7 +88,7 @@ public class Response {
         container = new StandardContainer(context.view, "calstdcnt");
         container.setStyleClass("calcnt");
         
-        createCalendarLink(container, context, context.control.getEarly(), "<");
+        createCalendarLink(container, context, context.control.getEarly());
 
         locale = context.view.getLocale();
         format = new SimpleDateFormat("d MMMMM yyyy", locale);
@@ -95,7 +98,7 @@ public class Response {
         text.setText(value);
         text.setStyleClass("month");
 
-        createCalendarLink(container, context, context.control.getLate(), ">");
+        createCalendarLink(container, context, context.control.getLate());
         
         new Parameter(container, "value");
         

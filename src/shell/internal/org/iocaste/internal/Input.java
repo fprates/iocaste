@@ -1,6 +1,7 @@
 package org.iocaste.internal;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.DataElement;
@@ -50,24 +51,31 @@ public class Input {
      */
     private final void generateCalendar(InputComponent input,
             InputData inputdata) {
-        Calendar master, calendar;
-        String htmlname;
+        Calendar master, earlycal, latecal;
+        String htmlname, early, late;
+        Map<String, Element> elements;
         
         htmlname = input.getHtmlName().concat(".cal");
         master = new Calendar(inputdata.container, htmlname);
-        master.setEarly("early_".concat(htmlname));
-        master.setLate("late_".concat(htmlname));
+        master.setEarly(early = "early_".concat(htmlname));
+        master.setLate(late = "late_".concat(htmlname));
         input.setCalendar(master);
         
-        calendar = new Calendar(
-                inputdata.container, master.getEarly(), Calendar.EARLY);
-        calendar.setMaster(htmlname);
-        calendar.setText("<");
+        earlycal = new Calendar(inputdata.container, early, Calendar.EARLY);
+        earlycal.setMaster(htmlname);
+        earlycal.setText("<");
         
-        calendar = new Calendar(
-                inputdata.container, master.getLate(), Calendar.LATE);
-        calendar.setMaster(htmlname);
-        calendar.setText(">");
+        latecal = new Calendar(inputdata.container, late, Calendar.LATE);
+        latecal.setMaster(htmlname);
+        latecal.setText(">");
+        
+        if (!inputdata.container.isMultiLine())
+            return;
+        
+        elements = inputdata.view.getElements();
+        elements.put(htmlname, master);
+        elements.put(early, earlycal);
+        elements.put(late, latecal);
     }
     
     /**
@@ -207,6 +215,7 @@ public class Input {
                 generateSearchHelp(input, inputdata);
             
             dataelement = input.getDataElement();
+            container = input.getContainer();
             if ((dataelement != null) && (input.getCalendar() == null) &&
                     (dataelement.getType() == DataType.DATE))
                 generateCalendar(input, inputdata);
