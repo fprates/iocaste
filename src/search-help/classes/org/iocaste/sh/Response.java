@@ -76,10 +76,12 @@ public class Response {
                     link = new Link(tableitem, "choose", action);
                     link.setText(value.toString());
                     link.setAbsolute(true);
+                    link.setStyleClass("shkey");
                 } else {
                     column.setRenderTextOnly(true);
                     text = new Text(tableitem, name);
                     text.setText((value == null)? "" : value.toString());
+                    text.setStyleClass("shcol");
                 }
                 
                 if (!sh.contains(name))
@@ -98,7 +100,15 @@ public class Response {
         SearchHelp sh;
         Documents documents = new Documents(context.function);
         StyleSheet stylesheet = context.view.styleSheetInstance();
-                
+        
+        stylesheet.newElement(".shkey");
+        stylesheet.put(".shkey", "font-size", "12pt");
+        stylesheet.put(".shkey", "display", "block");
+        stylesheet.put(".shkey", "text-decoration", "none");
+        
+        stylesheet.newElement(".shcol");
+        stylesheet.put(".shcol", "font-size", "12p");
+        
         stylesheet.newElement(".shcnt");
         stylesheet.put(".shcnt", "position", "absolute");
         stylesheet.put(".shcnt", "background-color", "#f0f0f0");
@@ -110,6 +120,7 @@ public class Response {
         stylesheet.put(".shcnt", "border-color", "rgb(176, 176, 176)");
         stylesheet.put(".shcnt", "border-width", "2px"); 
         stylesheet.put(".shcnt", "overflow", "hidden");
+        
         stylesheet.newElement(".shdatacnt");
         stylesheet.put(".shdatacnt", "overflow", "auto");
         stylesheet.put(".shdatacnt", "height", "100%");
