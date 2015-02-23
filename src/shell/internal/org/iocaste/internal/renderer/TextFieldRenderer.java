@@ -1,16 +1,28 @@
 package org.iocaste.internal.renderer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.internal.TrackingData;
+import org.iocaste.protocol.Message;
+import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
+import org.iocaste.shell.common.View;
 
 public class TextFieldRenderer extends Renderer {
 
@@ -33,8 +45,9 @@ public class TextFieldRenderer extends Renderer {
      */
     private static final XMLElement _render(InputComponent input,
             String style, Config config) {
+        PopupControl popupcontrol;
         StringBuilder sb;
-        String tftext;
+        String tftext, calname;
         Text text;
         SearchHelp search;
         Calendar calendar;
@@ -81,10 +94,20 @@ public class TextFieldRenderer extends Renderer {
         tagc.addChild(inputtag);
         tagl = new XMLElement("tr");
         tagl.addChild(tagc);
-        
+
+        popupcontrol = config.getPopupControl();
         calendar = input.getCalendar();
         if (calendar != null) {
             tagc = new XMLElement("td");
+            if (popupcontrol != null) {
+                calname = popupcontrol.getName();
+                if ((calname.equals(calendar.getEarly()) ||
+                     calname.equals(calendar.getLate()) ||
+                     calname.equals(calendar.getName()))) {
+                    tagc.addChildren(renderPopup(config));
+                }
+            }
+            
             tagc.addChild(CalendarButtonRenderer.render(calendar, config));
             tagl.addChild(tagc);
         }
@@ -92,6 +115,9 @@ public class TextFieldRenderer extends Renderer {
         search = input.getSearchHelp();
         if (search != null) {
             tagc = new XMLElement("td");
+            if ((popupcontrol != null) &&
+                    (popupcontrol.getHtmlName().equals(search.getHtmlName())))
+                tagc.addChildren(renderPopup(config));
             tagc.addChild(SHButtonRenderer.render(search, config));
             tagl.addChild(tagc);
         }
@@ -120,5 +146,47 @@ public class TextFieldRenderer extends Renderer {
         tagt = new XMLElement("table");
         tagt.addChild(tagl);
         return tagt;
+    }
+    
+    private static final List<XMLElement> renderPopup(Config config) {
+        Map<String, Object> parameters;
+        Object[] viewreturn;
+        PopupControl control;
+        List<XMLElement> tags;
+        TrackingData tracking;
+        Service service;
+        Message message;
+        View view, sourceview;
+        StyleSheet stylesheet;
+        
+        control = config.getPopupControl();
+        tags = new ArrayList<>();
+        tracking = config.getTracking();
+        service = new Service(tracking.sessionid, tracking.contexturl);
+        message = new Message("get_view_data");
+        view = new View(control.getApplication(), "main");
+        sourceview = config.getView();
+        stylesheet = sourceview.styleSheetInstance();
+        
+        parameters = new HashMap<>();
+        parameters.put("control", control);
+        parameters.put("msgsource", sourceview.getAppName());
+        parameters.put("action", config.getCurrentAction());
+        parameters.put("form", config.getCurrentForm());
+        view.setStyleSheet(stylesheet.getElements());
+        
+        message.add("view", view);
+        message.add("init", true);
+        message.add("parameters", parameters);
+        viewreturn = (Object[])service.call(message);
+        view = (View)viewreturn[0];
+        
+        control.update(view);
+        config.getMessageSources().add(view.getMessages());
+        config.getView().setStyleSheet(view.styleSheetInstance().getElements());
+        for (Container container : view.getContainers())
+            Renderer.renderContainer(tags, container, config);
+        
+        return tags;
     }
 }

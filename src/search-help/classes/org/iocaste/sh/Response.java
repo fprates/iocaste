@@ -107,14 +107,12 @@ public class Response {
         stylesheet.put(".shkey", "text-decoration", "none");
         
         stylesheet.newElement(".shcol");
-        stylesheet.put(".shcol", "font-size", "12p");
+        stylesheet.put(".shcol", "font-size", "12pt");
         
         stylesheet.newElement(".shcnt");
         stylesheet.put(".shcnt", "position", "absolute");
         stylesheet.put(".shcnt", "background-color", "#f0f0f0");
-        stylesheet.put(".shcnt", "float", "right");
-        stylesheet.put(".shcnt", "right", "0px");
-        stylesheet.put(".shcnt", "height", "95%");
+        stylesheet.put(".shcnt", "float", "left");
         stylesheet.put(".shcnt", "padding", "10px");
         stylesheet.put(".shcnt", "border-style", "solid");
         stylesheet.put(".shcnt", "border-color", "rgb(176, 176, 176)");
@@ -123,7 +121,7 @@ public class Response {
         
         stylesheet.newElement(".shdatacnt");
         stylesheet.put(".shdatacnt", "overflow", "auto");
-        stylesheet.put(".shdatacnt", "height", "100%");
+        stylesheet.put(".shdatacnt", "height", "20em");
         
         stdcnt = new StandardContainer(context.view, "shstdcnt");
         stdcnt.setStyleClass("shcnt");

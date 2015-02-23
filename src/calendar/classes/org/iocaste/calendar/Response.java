@@ -56,8 +56,7 @@ public class Response {
         stylesheet.newElement(".calcnt");
         stylesheet.put(".calcnt", "position", "absolute");
         stylesheet.put(".calcnt", "padding", "10px");
-        stylesheet.put(".calcnt", "float", "right");
-        stylesheet.put(".calcnt", "right", "0px");
+        stylesheet.put(".calcnt", "float", "left");
         stylesheet.put(".calcnt", "overflow", "hidden");
         stylesheet.put(".calcnt", "background-color", "#ffffff");
         stylesheet.put(".calcnt", "border-style", "solid");

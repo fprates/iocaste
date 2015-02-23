@@ -1,22 +1,11 @@
 package org.iocaste.internal.renderer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.iocaste.internal.TrackingData;
-import org.iocaste.protocol.Message;
-import org.iocaste.protocol.Service;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
-import org.iocaste.shell.common.PopupControl;
-import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public class FormRenderer extends Renderer {
@@ -67,9 +56,6 @@ public class FormRenderer extends Renderer {
 
         content = new XMLElement("div");
         content.add("class", container.getStyleClass());
-        
-        if (config.getPopupControl() != null)
-            content.addChildren(renderPopup(config));
 
         content.addChildren(renderElements(container.getElements(), config));
         view = config.getView();
@@ -99,48 +85,6 @@ public class FormRenderer extends Renderer {
         pretag.addInner(lines);
         
         return pretag;
-    }
-    
-    private static final List<XMLElement> renderPopup(Config config) {
-        Map<String, Object> parameters;
-        Object[] viewreturn;
-        PopupControl control;
-        List<XMLElement> tags;
-        TrackingData tracking;
-        Service service;
-        Message message;
-        View view, sourceview;
-        StyleSheet stylesheet;
-        
-        control = config.getPopupControl();
-        tags = new ArrayList<>();
-        tracking = config.getTracking();
-        service = new Service(tracking.sessionid, tracking.contexturl);
-        message = new Message("get_view_data");
-        view = new View(control.getApplication(), "main");
-        sourceview = config.getView();
-        stylesheet = sourceview.styleSheetInstance();
-        
-        parameters = new HashMap<>();
-        parameters.put("control", control);
-        parameters.put("msgsource", sourceview.getAppName());
-        parameters.put("action", config.getCurrentAction());
-        parameters.put("form", config.getCurrentForm());
-        view.setStyleSheet(stylesheet.getElements());
-        
-        message.add("view", view);
-        message.add("init", true);
-        message.add("parameters", parameters);
-        viewreturn = (Object[])service.call(message);
-        view = (View)viewreturn[0];
-        
-        control.update(view);
-        config.getMessageSources().add(view.getMessages());
-        config.getView().setStyleSheet(view.styleSheetInstance().getElements());
-        for (Container container : view.getContainers())
-            Renderer.renderContainer(tags, container, config);
-        
-        return tags;
     }
 
 }
