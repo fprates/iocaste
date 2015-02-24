@@ -14,7 +14,6 @@
 	<classpathentry kind="src" path="src/report/classes"/>
 	<classpathentry kind="src" path="src/authority/classes"/>
 	<classpathentry kind="src" path="src/usereditor/classes"/>
-	<classpathentry kind="src" path="src/styleeditor/classes"/>
 	<classpathentry kind="src" path="src/packagetool/classes"/>
 	<classpathentry kind="src" path="src/datadict/classes"/>
 	<classpathentry kind="src" path="src/help/classes"/>

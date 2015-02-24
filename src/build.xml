@@ -95,9 +95,6 @@
         
         <!-- dataeditor -->
         <ant antfile="${basedir}/src/dataeditor/build.xml"/>
-    	
-    	<!-- style-editor -->
-    	<ant antfile="${basedir}/src/styleeditor/build.xml"/>
           
         <!-- usereditor -->
         <ant antfile="${basedir}/src/usereditor/build.xml"/>
