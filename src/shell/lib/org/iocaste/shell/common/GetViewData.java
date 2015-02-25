@@ -1,7 +1,6 @@
 package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -39,8 +38,10 @@ public class GetViewData extends AbstractHandler {
         state.reloadable = false;
         state.rapp = null;
         state.rpage = null;
+        state.contenttype = null;
         state.pagecall = false;
         state.dontpushpage = false;
+        state.headervalues.clear();
         if (context != null)
             context.view = view;
         
@@ -84,15 +85,10 @@ public class GetViewData extends AbstractHandler {
         }
         
         state.parameters.clear();
-        viewreturn = new Object[2];
+        viewreturn = new Object[3];
         viewreturn[0] = view;
-        if (state.headervalues.size() > 0) {
-            viewreturn[1] = new HashMap<>(state.headervalues);
-            state.headervalues.clear();
-        } else {
-            viewreturn[1] = state.headervalues;
-        }
-        
+        viewreturn[1] = state.headervalues;
+        viewreturn[2] = state.contenttype;
         return viewreturn;
     }
 

@@ -15,7 +15,7 @@ import org.iocaste.shell.common.View;
 public class PageContext {
     private View view;
     private AppContext appctx;
-    private String name, username, contexturl;
+    private String name, username, contexturl, contenttype;
     private boolean reloadable, initialize, keepview;
     private List<FileItem> files;
     private Set<String> actions;
@@ -49,6 +49,14 @@ public class PageContext {
      */
     public final AppContext getAppContext() {
         return appctx;
+    }
+    
+    /**
+     * Ajusta tipo de conteúdo.
+     * @return
+     */
+    public final String getContentType() {
+        return contenttype;
     }
     
     /**
@@ -176,6 +184,14 @@ public class PageContext {
     public final void setAppContext(AppContext appctx) {
         this.appctx = appctx;
     }
+    
+    /**
+     * Define tipo de conteúdo da página.
+     * @param contenttype tipo de conteúdo.
+     */
+    public final void setContentType(String contenttype) {
+        this.contenttype = contenttype;
+    };
     
     /**
      * 

@@ -40,7 +40,6 @@ public class View implements Serializable {
     private byte[] content;
     private Element elementfocus;
     private String title, appname, pagename, actioncontrol;
-    private String contenttype;
     private MessageSource messages;
     private List<String> lines;
     private List<Container> containers;
@@ -127,14 +126,6 @@ public class View implements Serializable {
      */
     public final byte[] getContent() {
         return content;
-    }
-    
-    /**
-     * Ajusta tipo de conteúdo.
-     * @return
-     */
-    public final String getContentType() {
-        return contenttype;
     }
     
     /**
@@ -247,14 +238,6 @@ public class View implements Serializable {
      */
     public final void setContent(byte[] content) {
         this.content = content;
-    }
-    
-    /**
-     * Define tipo de conteúdo da página.
-     * @param contenttype tipo de conteúdo.
-     */
-    public final void setContentType(String contenttype) {
-        this.contenttype = contenttype;
     }
     
     /**

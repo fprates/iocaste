@@ -74,7 +74,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
      */
     private final void configResponse(HttpServletResponse resp,
             PageContext pagectx) {
-        String contenttype = pagectx.getViewData().getContentType();
+        String contenttype = pagectx.getContentType();
         
         resp.setContentType((contenttype == null)? STD_CONTENT : contenttype);
         resp.setCharacterEncoding("UTF-8");
@@ -201,6 +201,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             
             view = (View)viewreturn[0];
             pagectx.headervalues = (Map<String, String>)viewreturn[1];
+            pagectx.setContentType((String)viewreturn[2]);
             
             input = new Input();
             input.view = view;
@@ -789,7 +790,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
          * Service.callServer()).
          */
         
-        if (view.getContentType() != null) {
+        if (pagectx.getContentType() != null) {
             resp.reset();
             configResponse(resp, pagectx);
             os = resp.getOutputStream();
@@ -803,6 +804,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
                 for (String line : view.getPrintLines())
                     bos.write(line.getBytes());
             }
+            
+            pagectx.setContentType(null);
+            pagectx.headervalues.clear();
             
             bos.flush();
             bos.close();

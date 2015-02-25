@@ -234,10 +234,13 @@ public abstract class AbstractPage extends AbstractFunction {
         if (!id.equals("exec_action"))
             return super.run(message);
 
-        getviewdata.state.headervalues.clear();
         execaction = get(id);
         execaction.context = getviewdata.context;
         return execaction.run(message);
+    }
+    
+    public final void setContentType(String contenttype) {
+        getviewdata.state.contenttype = contenttype;
     }
     
     /**
@@ -249,10 +252,18 @@ public abstract class AbstractPage extends AbstractFunction {
         getviewdata.state.headervalues.put(key, value);
     }
     
+    /**
+     * 
+     * @param source
+     */
     protected final void setMessageSource(String source) {
         getviewdata.setMessageSource(source);
     }
     
+    /**
+     * 
+     * @param reloadable
+     */
     public final void setReloadableView(boolean reloadable) {
         getviewdata.state.reloadable = reloadable;
     }

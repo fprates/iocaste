@@ -243,7 +243,7 @@ class BuilderCustomView extends AbstractCustomView {
         fis.read(content);
         fis.close();
         
-        context.view.setContentType("application/octet-stream");
+        context.function.setContentType("application/octet-stream");
         context.function.setHeader("Content-Disposition",
                 new StringBuilder("attachment; filename=\"").
                 append(context.downloaddata.filename).
@@ -283,7 +283,9 @@ class BuilderCustomView extends AbstractCustomView {
                 viewconfig.run(_context);
             }
 
-            navcontrol.build(_context);
+            if (navcontrol != null)
+                navcontrol.build(_context);
+            
             viewspec.setInitialized(!viewctx.isUpdatable());
             if (viewinput != null) {
                 viewinput.run(_context, true);
