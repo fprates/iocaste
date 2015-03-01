@@ -50,6 +50,7 @@ public class Service {
         Message response;
         ObjectOutputStream oos;
         ObjectInputStream ois;
+        Throwable cause;
         
         message.setSessionid(sessionid);
         
@@ -76,7 +77,8 @@ public class Service {
             
             return response.get("return");
         } catch (Exception e) {
-            throw new RuntimeException (e);
+            cause = e.getCause();
+            throw new RuntimeException((cause == null)? e : cause);
         }
     }
     
