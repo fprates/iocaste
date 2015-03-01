@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.Collection;
+
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -147,7 +149,13 @@ public abstract class AbstractViewInput {
     }
     
     protected final void tableitemsadd(String table, ExtendedObject[] objects) {
+        
         addtableitems(table, objects);
+    }
+    
+    protected final void tableitemsadd(
+            String table, Collection<ExtendedObject> objects) {
+        addtableitems(table, objects.toArray(new ExtendedObject[0]));
     }
     
     protected final void tableitemsadd(String table, DataConversion conversion)
