@@ -1,3 +1,13 @@
+function closeCal() {
+    var cal = document.getElementById('calstdcnt');
+    cal.style.display='none';
+}
+
+function closeSh() {
+	var sh = document.getElementById('shstdcnt');
+	sh.style.display='none';
+}
+
 function defineAction(action, actionname) {
 	setValue(action, actionname);
 }
@@ -51,6 +61,24 @@ function setClassStyle(id, classname) {
 
 function setElementDisplay(id, state) {
     document.getElementById(id).style.display = state;
+}
+
+function setFieldCal(name, value) {
+    var input = document.getElementById(name);
+    if (!input.readOnly)
+        setValue(name, value);
+    
+    input.focus();
+    closeCal();
+}
+
+function setFieldSh(name, value) {
+    var input = document.getElementById(name);
+    if (!input.readOnly)
+        setValue(name, value);
+    
+    input.focus();
+    closeSh();
 }
 
 function setValue(name, value) {
