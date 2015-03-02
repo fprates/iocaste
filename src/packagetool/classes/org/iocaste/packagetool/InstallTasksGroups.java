@@ -28,6 +28,7 @@ public class InstallTasksGroups {
      */
     public static final void init(Map<TaskGroup, Set<User>> tasksgroups,
             State state) throws Exception {
+        int entryid;
         Query query;
         String groupname;
         Set<String> itens;
@@ -42,6 +43,7 @@ public class InstallTasksGroups {
             group = Selector.getGroup(groupname, state);
             if (group == null) {
                 group = Selector.createGroup(groupname, state);
+                
                 Selector.assignGroup(group, "ADMIN", state);
                 for (User user : tasksgroups.get(taskgroup))
                     Selector.assignGroup(group, user.getUsername(), state);
@@ -49,14 +51,14 @@ public class InstallTasksGroups {
             }
 
             itens = taskgroup.getLinks();
-            
+            entryid = 0;
             for (String taskname : itens) {
                 if (!containsTask(taskname, tasks))
                     throw new IocasteException(
                             new StringBuilder("invalid task \"").
                             append(taskname).append("\".").toString());
                 
-                task = Selector.addEntry(taskname, group, state);
+                task = Selector.addEntry(taskname, groupname, entryid++, state);
                 if (state.messages.size() > 0)
                     Selector.addEntryMessage(task, group, state);
                 

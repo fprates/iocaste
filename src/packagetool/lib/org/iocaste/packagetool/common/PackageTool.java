@@ -44,19 +44,19 @@ public class PackageTool extends AbstractServiceInterface {
      * 
      * @return
      */
-    public static final String[] getAvailablePackages() {
+    public static final List<String> getAvailablePackages() {
         String home = System.getProperty("catalina.home");
         File dir = new File(new StringBuilder(home).
                 append(System.getProperty("file.separator")).
                 append("webapps").toString());
         File[] files = dir.listFiles();
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         
         for (File file : files)
             if (file.isDirectory())
                 list.add(file.getName());
         
-        return list.toArray(new String[0]);
+        return list;
     }
     
     /**
@@ -81,7 +81,7 @@ public class PackageTool extends AbstractServiceInterface {
      * @return
      */
     public static final boolean hasPackage(String name) {
-        String[] files = getAvailablePackages();
+        List<String> files = getAvailablePackages();
         
         for (String filename : files)
             if (filename.equals(name))

@@ -16,13 +16,14 @@ public class Registry {
     public static final void add(String name, String model, State state) {
         ExtendedObject pkgitem = new ExtendedObject(
                 state.documents.getModel("PACKAGE_ITEM"));
+        String code;
         
-        pkgitem.set("CODE", state.pkgid);
+        code = String.format("%s%03d", name, state.pkgitem++);
+        pkgitem.set("CODE", code);
         pkgitem.set("NAME", name);
         pkgitem.set("PACKAGE", state.pkgname);
         pkgitem.set("MODEL", model);
 
-        state.pkgid++;
         state.log.add(pkgitem);
     }
     

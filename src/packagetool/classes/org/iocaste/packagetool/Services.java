@@ -68,27 +68,10 @@ public class Services extends AbstractFunction {
     
     private final ExtendedObject getPackageHeaderInstance(State state) {
         ExtendedObject header;
-        long pkgid = state.documents.getNextNumber("PKGCODE") * 1000000;
         
         header = new ExtendedObject(state.documents.getModel("PACKAGE"));
         header.set("NAME", state.pkgname);
-        header.set("CODE", pkgid);
         return header;
-    }
-    
-    private final long getPackageLastItem(State state) {
-        ExtendedObject[] objects;
-        Query query = new Query();
-        
-        query.setModel("PACKAGE_ITEM");
-        query.setMaxResults(1);
-        query.orderBy("CODE");
-        query.descending();
-        objects = state.documents.select(query);
-        if (objects == null)
-            return state.pkgid;
-        
-        return objects[0].getl("CODE");
     }
     
     /**
@@ -140,12 +123,9 @@ public class Services extends AbstractFunction {
              */
             if (isInstalled(state.pkgname)) {
                 header = getPackageHeader(state);
-                state.pkgid = header.getl("CODE");
-                state.pkgid = getPackageLastItem(state) + 1;
             } else {
                 header = getPackageHeaderInstance(state);
                 state.documents.save(header);
-                state.pkgid = header.getl("CODE");
             }
             
             /*

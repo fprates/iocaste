@@ -25,8 +25,8 @@
     	<!-- tasksel -->
     	<ant antfile="${basedir}/src/tasksel/build-lib.xml"/>
         
-        <!-- packagetool -->
-        <ant antfile="${basedir}/src/packagetool/build.xml"/>
+        <!-- packagetool-lib -->
+        <ant antfile="${basedir}/src/packagetool/build-lib.xml"/>
         
     	<!-- calendar -->
     	<ant antfile="${basedir}/src/calendar/build.xml"/>
@@ -83,6 +83,9 @@
     	
         <!-- help -->
         <ant antfile="${basedir}/src/help/build.xml"/>
+        
+        <!-- packagetool -->
+        <ant antfile="${basedir}/src/packagetool/build.xml"/>
               
         <!-- tasksel -->
         <ant antfile="${basedir}/src/tasksel/build.xml"/>

@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.documents.common.Query;
 
 public class InstallMessages {
     
@@ -13,37 +12,23 @@ public class InstallMessages {
      * @param state
      */
     public static final void init(State state) {
-        Query query;
-        long index;
-        int langcode;
-        String locale;
+        String index;
         Map<String, String> messages;
-        ExtendedObject[] languages;
+        int i;
         DocumentModel msgmodel = state.documents.getModel("MESSAGES");
         ExtendedObject omessage = new ExtendedObject(msgmodel);
-
-        query = new Query();
-        query.setModel("LANGUAGES");
-        languages = state.documents.select(query);
+        
         for (String language : state.messages.keySet()) {
-            langcode = 0;
-            for (ExtendedObject olanguage : languages) {
-                locale = olanguage.get("LOCALE");
-                if (language.equals(locale)) {
-                    langcode = olanguage.geti("CODE");
-                    break;
-                }
-            }
-            
+            i = 0;
             messages = state.messages.get(language);
-            index = (langcode * 10000000) + (state.pkgid / 100);
             for (String msgcode : messages.keySet()) {
-                omessage.set("INDEX", index++);
+                index = String.format(
+                        "%s%05d_%s", state.pkgname, i++, language);
+                omessage.set("INDEX", index);
                 omessage.set("NAME", msgcode);
                 omessage.set("LOCALE", language);
                 omessage.set("PACKAGE", state.pkgname);
                 omessage.set("TEXT", messages.get(msgcode));
-                
                 state.documents.save(omessage);
             }
         }

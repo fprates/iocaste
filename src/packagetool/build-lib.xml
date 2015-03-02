@@ -1,0 +1,31 @@
+<project name="packagetool-lib" default="compile">
+	
+    <target name="compile">
+        <mkdir dir="${builddir}/packagetool/lib"/>
+    	
+        <!-- dependências -->
+        <path id="dependencies">
+            <fileset dir="${builddir}/core/lib"/>
+            <fileset dir="${builddir}/shell/lib"/>
+        	<fileset dir="${builddir}/documents/lib"/>
+            <fileset dir="${builddir}/authority/lib"/>
+        	<fileset dir="${builddir}/globalconfig/lib"/>
+        	<fileset dir="${builddir}/tasksel/lib"/>
+            <fileset dir="${builddir}/packagetool/lib"/>
+            <fileset dir="${basedir}/lib"/>
+            <fileset dir="${basedir}/ext"/>
+        </path>
+        
+        <!-- compilação lib -->
+        <javac srcdir="${basedir}/src/packagetool/lib" 
+            destdir="${builddir}/packagetool/lib" debug="${debug.status}">
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <jar basedir="${builddir}/packagetool/lib"
+            destfile="${builddir}/packagetool/lib/iocaste-${ant.project.name}.jar"/>
+
+        <copy todir="${basedir}/ext"
+            file="${builddir}/packagetool/lib/iocaste-${ant.project.name}.jar"/>
+    </target>
+</project>

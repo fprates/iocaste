@@ -1,6 +1,5 @@
 package org.iocaste.packagetool;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
@@ -19,23 +18,17 @@ public class Selector {
      * @return
      */
     public static final ExtendedObject addEntry(String taskname,
-            ExtendedObject group, State state) {
+            String groupname, int count, State state) {
+        String entryid;
         ExtendedObject object;
-        int entryid = group.geti("CURRENT");
-        int groupid = group.geti("ID");
         DocumentModel model = state.documents.getModel("TASK_ENTRY");
         
-        if (entryid == 0)
-            entryid = groupid * 1000;
-        
-        entryid++;
-        group.set("CURRENT", entryid);
-        state.documents.modify(group);
+        entryid = String.format("%s%03d", groupname, count);
         
         object = new ExtendedObject(model);
         object.set("ID", entryid);
         object.set("NAME", taskname);
-        object.set("GROUP", group.get("NAME"));
+        object.set("GROUP", groupname);
         state.documents.save(object);
         return object;
     }
@@ -48,26 +41,25 @@ public class Selector {
      */
     public static final void addEntryMessage(ExtendedObject task,
             ExtendedObject group, State state) {
-        String name;
+        int counter;
+        String msgid, name;
         DocumentModel model;
         ExtendedObject object;
         Map<String, String> messages;
-        int taskid = task.geti("ID");
-        int msgid = taskid * 100;
         
         model = state.documents.getModel("TASK_ENTRY_TEXT");
         name = task.get("NAME");
-        
+        counter = 0;
         for (String locale : state.messages.keySet()) {
             messages = state.messages.get(locale);
             
             if (!messages.containsKey(name))
                 continue;
             
-            msgid++;
+            msgid = String.format("%s%03d", name, counter++);
             object = new ExtendedObject(model);
             object.set("ID", msgid);
-            object.set("TASK", taskid);
+            object.set("ENTRY", name);
             object.set("LANGUAGE", locale);
             object.set("TEXT", messages.get(name));
             state.documents.save(object);
@@ -81,22 +73,19 @@ public class Selector {
      * @param state
      * @throws Exception
      */
-    public static final void assignGroup(ExtendedObject group,
-            String username, State state) throws Exception {
-        long taskid;
+    public static final void assignGroup(ExtendedObject group, String username,
+            State state) throws Exception {
         DocumentModel model;
         ExtendedObject object;
-        int userid, groupid = 0;
-        String groupname = group.get("NAME");
+        String groupid, groupname;
         
-        object = state.documents.getObject("LOGIN", username);
-        userid = object.geti("ID");
-        groupid = group.geti("ID");
-        taskid = (userid * 1000) + groupid;
+        groupname = group.get("NAME");
+        groupid = new StringBuilder(groupname).
+                append("_").append(username).toString();
         model = state.documents.getModel("USER_TASKS_GROUPS");
         
         object = new ExtendedObject(model);
-        object.set("ID", taskid);
+        object.set("ID", groupid);
         object.set("USERNAME", username);
         object.set("GROUP", groupname);
         if (state.documents.save(object) == 0)
@@ -112,12 +101,8 @@ public class Selector {
     public static final ExtendedObject createGroup(String name, State state) {
         DocumentModel model = state.documents.getModel("TASKS_GROUPS");
         ExtendedObject object = new ExtendedObject(model);
-        int id = new BigDecimal(state.documents.getNextNumber("TSKGROUP")).
-                intValue();
         
         object.set("NAME", name);
-        object.set("ID", id);
-        object.set("CURRENT", 0);
         state.documents.save(object);
         
         return object;
