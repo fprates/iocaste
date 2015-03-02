@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Objeto extendido.
@@ -192,6 +193,25 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
     
     public final String getst(String name) {
         return (String)get(name);
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash;
+        Set<DocumentModelKey> keys;
+        
+        keys = model.getKeys();
+        if (keys != null)
+            for (DocumentModelKey key : keys) {
+                hash = get(key.getModelItemName()).hashCode();
+                return hash;
+            }
+        
+        hash = 0;
+        for (Object value : values.values())
+            hash += value.hashCode();
+        
+        return hash;
     }
     
     /**
