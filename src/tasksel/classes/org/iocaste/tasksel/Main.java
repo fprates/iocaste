@@ -39,6 +39,7 @@ public class Main extends AbstractPageBuilder {
     protected void installConfig(PageBuilderDefaultInstall defaultinstall)
             throws Exception {
         defaultinstall.setProfile("BASE");
+        defaultinstall.setProgramAuthorization("TASKSEL.EXECUTE");
         installObject("main", new InstallObject());
     }
 }

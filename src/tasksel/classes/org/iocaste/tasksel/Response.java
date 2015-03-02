@@ -34,7 +34,6 @@ public class Response {
         TaskEntry entry;
         ExtendedObject[] result, mobject;
         Map<String, Set<TaskEntry>> lists;
-        int taskid;
         String groupname, language, taskname, username;
         Documents documents = new Documents(context.function);
         
@@ -61,14 +60,13 @@ public class Response {
             }
             
             taskname = object.get("NAME");
-            taskid = object.geti("ID");
             entry = new TaskEntry();
             entry.setName(taskname);
             entries.add(entry);
             
             query = new Query();
             query.setModel("TASK_ENTRY_TEXT");
-            query.andEqual("TASK", taskid);
+            query.andEqual("ENTRY", taskname);
             query.andEqual("LANGUAGE", language);
             query.setMaxResults(1);
             mobject = documents.select(query);

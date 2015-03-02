@@ -69,8 +69,6 @@ public class Core extends Module {
         
         insertExecuteAuthorization(auth001, auth002, "PACKAGE.EXECUTE",
                 "iocaste-packagetool");
-        insertExecuteAuthorization(auth001, auth002, "TASKSEL.EXECUTE",
-                "iocaste-tasksel");
         insertExecuteAuthorization(auth001, auth002, "CALENDAR.EXECUTE",
                 "iocaste-calendar");
         insertExecuteAuthorization(auth001, auth002, "SH.EXECUTE",
@@ -85,7 +83,6 @@ public class Core extends Module {
         compileAuthorizationProfile(auth003, auth004, "ALL");
 
         insertAuthorizationProfile("BASE");
-        linkAuthorizationToProfile("BASE", "TASKSEL.EXECUTE");
         linkAuthorizationToProfile("BASE", "SH.EXECUTE");
         linkAuthorizationToProfile("BASE", "HELP.EXECUTE");
         linkAuthorizationToProfile("BASE", "EXHANDLER.EXECUTE");
