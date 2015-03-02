@@ -144,7 +144,7 @@ public class Selector {
      */
     public static final void removeTask(String taskname, Documents documents) {
         Query[] queries;
-        int taskid;
+        String taskid;
         ExtendedObject[] task;
         Query query = new Query();
         
@@ -155,11 +155,11 @@ public class Selector {
         if (task == null)
             return;
         
-        taskid = task[0].geti("ID");
+        taskid = task[0].getst("ID");
         queries = new Query[2];
         queries[0] = new Query("delete");
         queries[0].setModel("TASK_ENTRY_TEXT");
-        queries[0].andEqual("TASK", taskid);
+        queries[0].andEqual("ENTRY", taskid);
         
         queries[1] = new Query("delete");
         queries[1].setModel("TASK_ENTRY");

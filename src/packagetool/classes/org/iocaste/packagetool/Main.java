@@ -26,6 +26,8 @@ public class Main extends AbstractPageBuilder {
         view.set(new MainSpec());
         view.set(new MainConfig());
         view.set(new MainInput());
+        view.put("install", new InstallPackage());
+        view.put("remove", new UninstallPackage());
     }
 
     @Override
@@ -49,7 +51,7 @@ public class Main extends AbstractPageBuilder {
         List<String> packages;
         PackageTool pkgtool;
         
-        model = new Documents(context.function).getModel("PACKAGE");
+        model = new Documents(context.function).getModel("PACKAGE_GRID");
         packages = PackageTool.getAvailablePackages();
         pkgtool = new PackageTool(context.function);
         
@@ -60,6 +62,7 @@ public class Main extends AbstractPageBuilder {
             try {
                 pkgtool.getInstallData(name);
             } catch (Exception e) {
+                object.set("EXCEPTION", e.getMessage());
                 extcontext.invalid.add(object);
                 continue;
             }

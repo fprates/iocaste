@@ -84,11 +84,11 @@
         <!-- help -->
         <ant antfile="${basedir}/src/help/build.xml"/>
         
+	    <!-- tasksel -->
+	    <ant antfile="${basedir}/src/tasksel/build.xml"/>
+        
         <!-- packagetool -->
         <ant antfile="${basedir}/src/packagetool/build.xml"/>
-              
-        <!-- tasksel -->
-        <ant antfile="${basedir}/src/tasksel/build.xml"/>
 
         <!-- datadict -->
         <ant antfile="${basedir}/src/datadict/build.xml"/>

@@ -11,9 +11,7 @@ public class MainConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         TableToolData tabletool;
-        String[] columns;
         
-        columns = new String[] {"NAME"};
         for (String name : new String[] {
                 "inpackages",
                 "unpackages",
@@ -22,12 +20,14 @@ public class MainConfig extends AbstractViewConfig {
             tabletool = getTableTool(name);
             tabletool.mode = TableTool.DISPLAY;
             tabletool.model = "PACKAGE_GRID";
-            tabletool.show = columns;
-            tabletool.mark = true;
+            new TableToolColumn(tabletool, "EXCEPTION").size = 80;
             
             switch (name) {
             case "erpackages":
-                new TableToolColumn(tabletool, "EXCEPTION").size = 80;
+                tabletool.mark = false;
+                break;
+            default:
+                tabletool.mark = true;
                 break;
             }
         }

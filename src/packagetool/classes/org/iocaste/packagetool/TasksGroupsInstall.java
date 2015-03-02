@@ -53,9 +53,8 @@ public class TasksGroupsInstall extends AbstractInstallObject {
         model.reference(
                 "LANGUAGE", "LANGU", new DummyElement("LANGUAGES.LOCALE"),
                     new DummyModelItem("LANGUAGES", "LOCALE"));
-        model.reference(
-                "TEXT", "TEXT", new DummyElement("MESSAGES.TEXT"),
-                    new DummyModelItem("MESSAGES", "TEXT"));
+        model.item(
+                "TEXT", "TEXT", new DummyElement("MESSAGES.TEXT"));
     }
 
 }
