@@ -17,7 +17,7 @@ public class PackageInstall extends AbstractInstallObject {
         exception = elementchar("PACKAGE_EXCEPTION", 255, DataType.KEEPCASE);
         
         model = modelInstance("PACKAGE_GRID");
-        model.item("NAME", new DummyElement("PACKAGE.NAME"));
+        model.key("NAME", new DummyElement("PACKAGE.NAME"));
         model.item("EXCEPTION", exception);
     }
 

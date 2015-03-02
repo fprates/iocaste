@@ -61,6 +61,10 @@ public class ModelInstall {
         return key(key, field, item.getDataElement());
     }
     
+    public final DocumentModelItem key(String key, DataElement element) {
+        return key(key, null, element);
+    }
+    
     public final DocumentModelItem key(
             String key, String field, DataElement element) {
         DocumentModelItem item = item(key, field, element);
