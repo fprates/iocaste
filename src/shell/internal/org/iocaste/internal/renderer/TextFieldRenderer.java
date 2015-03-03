@@ -97,7 +97,7 @@ public class TextFieldRenderer extends Renderer {
 
         popupcontrol = config.getPopupControl();
         calendar = input.getCalendar();
-        if (calendar != null) {
+        if ((calendar != null) && input.isEnabled()) {
             tagc = new XMLElement("td");
             if (popupcontrol != null) {
                 calname = popupcontrol.getName();
