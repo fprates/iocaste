@@ -12,11 +12,13 @@ public class MainSpec extends AbstractViewSpec {
         tabbedpane("main", "packages");
         
         tabbedpaneitem("packages", "installed");
+        button("installed", "indetail");
         button("installed", "update");
         button("installed", "remove");
         tabletool("installed", "inpackages");
         
         tabbedpaneitem("packages", "uninstalled");
+        button("uninstalled", "undetail");
         button("uninstalled", "install");
         tabletool("uninstalled", "unpackages");
         

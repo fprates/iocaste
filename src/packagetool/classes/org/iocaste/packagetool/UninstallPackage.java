@@ -18,6 +18,7 @@ public class UninstallPackage extends AbstractActionHandler {
         String pkgname;
         List<ExtendedObject> packages;
         PackageTool pkgtool;
+        Throwable cause;
         
         packages = tableselectedget("inpackages");
         if (packages == null) {
@@ -36,6 +37,8 @@ public class UninstallPackage extends AbstractActionHandler {
                 object = readobjects(extcontext.installed, "NAME", pkgname);
                 extcontext.installed.remove(object);
             } catch (Exception e) {
+                cause = e.getCause();
+                extcontext.exceptions.put(pkgname, (cause == null)? e : cause);
                 object = readobjects(extcontext.installed, "NAME", pkgname);
                 object.set("EXCEPTION", e.getMessage());
                 ex = true;

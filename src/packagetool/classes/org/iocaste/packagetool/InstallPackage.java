@@ -1,11 +1,10 @@
-package org.iocaste.packagetool.services;
+package org.iocaste.packagetool;
 
 import java.util.List;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.packagetool.Context;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.shell.common.Const;
 import org.iocaste.tasksel.common.TaskSelector;
@@ -19,6 +18,7 @@ public class InstallPackage extends AbstractActionHandler {
         String pkgname;
         List<ExtendedObject> packages;
         PackageTool pkgtool;
+        Throwable cause;
         
         packages = tableselectedget("unpackages");
         if (packages == null) {
@@ -37,6 +37,8 @@ public class InstallPackage extends AbstractActionHandler {
                 object = readobjects(extcontext.uninstalled, "NAME", pkgname);
                 extcontext.uninstalled.remove(object);
             } catch (Exception e) {
+                cause = e.getCause();
+                extcontext.exceptions.put(pkgname, (cause == null)? e : cause);
                 object = readobjects(extcontext.uninstalled, "NAME", pkgname);
                 object.set("EXCEPTION", e.getMessage());
                 ex = true;

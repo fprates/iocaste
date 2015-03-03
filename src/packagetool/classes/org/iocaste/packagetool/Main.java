@@ -10,7 +10,6 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.PackageTool;
-import org.iocaste.packagetool.services.InstallPackage;
 
 public class Main extends AbstractPageBuilder {
 
@@ -27,9 +26,16 @@ public class Main extends AbstractPageBuilder {
         view.set(new MainSpec());
         view.set(new MainConfig());
         view.set(new MainInput());
+        view.put("indetail", new DetailPackage("inpackages"));
+        view.put("undetail", new DetailPackage("unpackages"));
         view.put("install", new InstallPackage());
         view.put("remove", new UninstallPackage());
         view.put("update", new UpdatePackage());
+        
+        view = context.instance("detail");
+        view.set(extcontext);
+        view.set(new DetailSpec());
+        view.set(new DetailInput());
     }
 
     @Override
