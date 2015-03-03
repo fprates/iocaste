@@ -194,8 +194,7 @@ public class HtmlRenderer {
             Renderer.renderContainer(bodycontent, container, config);
         
         bodytag.addChildren(bodycontent);
-        bodytag.addChild(MessageRenderer.
-                render(pagectx.messagetype, pagectx.messagetext, config));
+        bodytag.addChild(MessageRenderer.render(pagectx, config));
         tags.add(renderHeader(view, config));
         tags.add(bodytag);
         htmltag.addChildren(tags);

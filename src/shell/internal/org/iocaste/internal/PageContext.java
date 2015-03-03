@@ -30,6 +30,7 @@ public class PageContext {
     public Map<String, String> headervalues;
     public Const messagetype;
     public String messagetext;
+    public Object[] messageargs;
     
     public PageContext(String name) {
         parameters = new HashMap<>();
@@ -164,9 +165,10 @@ public class PageContext {
         return keepview;
     }
     
-    public final void message(Const type, String text) {
+    public final void message(Const type, String text, Object[] args) {
         messagetype = type;
         messagetext = text;
+        messageargs = args;
     }
     
     /**

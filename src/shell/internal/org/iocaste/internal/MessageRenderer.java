@@ -8,17 +8,20 @@ import org.iocaste.shell.common.Text;
 
 public class MessageRenderer {
 
-    public static final XMLElement render(Const type, String message,
-            Config config) {
+    public static final XMLElement render(PageContext pagectx, Config config) {
         XMLElement xmlmsg = new XMLElement("div");
         Text text;
         
         xmlmsg.add("class", "message_box");
-        if (message == null)
+        if (pagectx.messagetext == null)
             return xmlmsg;
         
         text = new Text(config.getView(), "navbar.message");
-        setMessage(text, (type == null)? Const.STATUS : type, message);
+        setMessage(text, (pagectx.messagetype == null)?
+                Const.STATUS : pagectx.messagetype,
+                pagectx.messagetext,
+                pagectx.messageargs,
+                config);
         xmlmsg.addChild(TextRenderer.render(text, config));
         return xmlmsg;
     }
@@ -28,9 +31,17 @@ public class MessageRenderer {
      * @param text
      */
     private static final void setMessage(Text message, Const msgtype,
-            String text) {
+            String text, Object[] args, Config config) {
+        String formatted;
+        
         message.setVisible(text != null);
-        message.setText(text);
+        if (args == null) {
+            message.setText(text);
+        } else {
+            formatted = String.format(config.getText(text, text), args);
+            message.setText(formatted);
+            message.setTranslatable(false);
+        }
         
         switch (msgtype) {
         case ERROR:

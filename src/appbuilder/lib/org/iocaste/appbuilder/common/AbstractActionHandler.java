@@ -209,8 +209,8 @@ public abstract class AbstractActionHandler {
                 status, context.getManager(manager).getMessage(msgid));
     }
     
-    protected final void message(Const type, String text) {
-        context.function.message(type, text);
+    protected final void message(Const type, String text, Object... args) {
+        context.function.message(type, text, args);
     }
     
     protected final int modify(ExtendedObject object) {

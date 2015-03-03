@@ -655,7 +655,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         if (!isExecuteAuthorized(appname, config.sessionid) &&
                 config.state.rapp != null) {
             pagectx.setError(AUTHORIZATION_ERROR);
-            pagectx.message(Const.ERROR, "user.not.authorized");
+            pagectx.message(Const.ERROR, "user.not.authorized", null);
             
             return pagectx;
         }
@@ -684,7 +684,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         pagectx_.setReloadableView(config.state.reloadable);
         pagectx_.parameters = config.state.parameters;
         pagectx_.initparams = config.state.initparams;
-        pagectx_.message(config.state.messagetype, config.state.messagetext);
+        pagectx_.message(config.state.messagetype, config.state.messagetext,
+                config.state.messageargs);
         pagectx_.setPopupControl(config.popupcontrol);
         
         if (isConnected(contextdata)) {

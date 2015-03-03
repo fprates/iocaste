@@ -172,9 +172,11 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param messagetype tipo
      * @param messagetext texto
      */
-    public final void message(Const messagetype, String messagetext) {
+    public final void message(
+            Const messagetype, String messagetext, Object... args) {
         getviewdata.state.messagetype = messagetype;
         getviewdata.state.messagetext = messagetext;
+        getviewdata.state.messageargs = args;
     }
     
     public final void redirect(String page) {

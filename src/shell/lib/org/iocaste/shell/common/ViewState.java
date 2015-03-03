@@ -9,6 +9,7 @@ public class ViewState implements Serializable {
     private static final long serialVersionUID = 3411135941186033095L;
     public View view;
     public String rapp, rpage, protocol, servername, messagetext, contenttype;
+    public Object[] messageargs;
     public int port;
     public boolean keepview, reloadable, dontpushpage, pagecall, initialize;
     public boolean download;
