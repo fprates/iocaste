@@ -111,91 +111,41 @@ public class UpdateModel extends AbstractDocumentsHandler {
      */
     private final int updateModelItem(Connection connection,
             DocumentModelItem item, DocumentModel oldmodel) throws Exception {
-        String query, shname;
-        StringBuilder sb;
-        DataElement ddelement;
+        String shname;
         Object[] criteria;
-        DocumentModel model = item.getDocumentModel();
-        DocumentModelItem reference, olditem = oldmodel.
-                getModelItem(item.getName());
-        String tablename = model.getTableName();
-        String oldfieldname = olditem.getTableFieldName();
-        String fieldname = item.getTableFieldName();
-        Documents documents = getFunction();
-        String dbtype = getSystemParameter(documents, "dbtype");
+        UpdateData data;
         
-        update(connection, QUERIES[DEL_SH_REF], getComposedName(olditem));
+        data = new UpdateData();
+        data.model = item.getDocumentModel();
+        data.fieldname = item.getTableFieldName();
         
+        data.olditem = oldmodel.getModelItem(item.getName());
+        data.oldfieldname = data.olditem.getTableFieldName();
+        data.tablename = data.model.getTableName();
+        
+        data.item = item;
+        data.ddelement = item.getDataElement();
+        data.reference = item.getReference();
+        data.connection = connection;
+        
+        update(connection, QUERIES[DEL_SH_REF], getComposedName(data.olditem));
+
         /*
          * renomeia campo da tabela
          */
-        sb = new StringBuilder("alter table ").append(tablename);
-        switch (dbtype) {
-        case "hsqldb":
-            query = sb.append(" alter column ").toString();
-            break;
-        default:
-            query = sb.append(" modify column ").toString();
-            break;
-        }
-        
-        if (!fieldname.equals(oldfieldname)) {
-            sb = new StringBuilder(query).
-                    append(oldfieldname).
-                    append(" rename to ").
-                    append(fieldname);
-            
-            update(connection, sb.toString());
-        }
-        
-        /*
-         * atualização das característica dos itens da tabela
-         */
-        sb = new StringBuilder(query);
-        sb.append(fieldname);
-        
-        ddelement = item.getDataElement();
-        setTableFieldsString(sb, ddelement, dbtype);
-        
-        query = sb.toString();
-        update(connection, query);
-        
-        reference = item.getReference();
-        if (reference != null) {
-            if (olditem.getReference() == null) {
-                query = new StringBuilder("alter table ").
-                        append(tablename).
-                        append(" add foreign key (").
-                        append(item.getTableFieldName()).
-                        append(") references ").
-                        append(reference.getDocumentModel().getTableName()).
-                        append("(").
-                        append(reference.getTableFieldName()).
-                        append(")").toString();
-                
-                update(connection, query);
-            }
-        } else {
-            if (olditem.getReference() != null) {
-                query = new StringBuilder("alter table").
-                        append(tablename).
-                        append(" drop constraint ").
-                        append(item.getTableFieldName()).toString();
-                
-                update(connection, query);
-            }
-        }
+        if (data.tablename != null)
+            updateTable(data);
         
         /*
          * atualização do modelo
          */
         criteria = new Object[5];
         
-        criteria[0] = ddelement.getDecimals();
-        criteria[1] = ddelement.getLength();
-        criteria[2] = ddelement.getType();
-        criteria[3] = ddelement.isUpcase();
-        criteria[4] = ddelement.getName();
+        criteria[0] = data.ddelement.getDecimals();
+        criteria[1] = data.ddelement.getLength();
+        criteria[2] = data.ddelement.getType();
+        criteria[3] = data.ddelement.isUpcase();
+        criteria[4] = data.ddelement.getName();
 
         if (update(connection, QUERIES[UPDATE_ELEMENT], criteria) == 0)
             throw new IocasteException(
@@ -203,13 +153,13 @@ public class UpdateModel extends AbstractDocumentsHandler {
         
         criteria = new Object[7];
         
-        criteria[0] = model.getName();
+        criteria[0] = data.model.getName();
         criteria[1] = item.getIndex();
         criteria[2] = item.getTableFieldName();
-        criteria[3] = ddelement.getName();
+        criteria[3] = data.ddelement.getName();
         criteria[4] = item.getAttributeName();
-        criteria[5] = (reference == null)?
-                null : getComposedName(reference);
+        criteria[5] = (data.reference == null)?
+                null : getComposedName(data.reference);
         criteria[6] = getComposedName(item);
         
         if (update(connection, QUERIES[UPDATE_ITEM], criteria) == 0)
@@ -226,5 +176,79 @@ public class UpdateModel extends AbstractDocumentsHandler {
         
         return 1;
     }
+    
+    private final void updateTable(UpdateData data) throws Exception {
+        StringBuilder sb;
+        String dbtype, query;
+        Documents documents;
+        
+        documents = getFunction();
+        dbtype = getSystemParameter(documents, "dbtype");
+        
+        sb = new StringBuilder("alter table ").append(data.tablename);
+        switch (dbtype) {
+        case "hsqldb":
+            query = sb.append(" alter column ").toString();
+            break;
+        default:
+            query = sb.append(" modify column ").toString();
+            break;
+        }
+        
+        if (!data.fieldname.equals(data.oldfieldname)) {
+            sb = new StringBuilder(query).
+                    append(data.oldfieldname).
+                    append(" rename to ").
+                    append(data.fieldname);
+            
+            update(data.connection, sb.toString());
+        }
+        
+        /*
+         * atualização das característica dos itens da tabela
+         */
+        sb = new StringBuilder(query);
+        sb.append(data.fieldname);
+        
+        setTableFieldsString(sb, data.ddelement, dbtype);
+        
+        query = sb.toString();
+        update(data.connection, query);
+        
+        if (data.reference != null) {
+            if (data.olditem.getReference() != null)
+                return;
+            
+            query = new StringBuilder("alter table ").
+                    append(data.tablename).
+                    append(" add foreign key (").
+                    append(data.item.getTableFieldName()).
+                    append(") references ").
+                    append(data.reference.getDocumentModel().getTableName()).
+                    append("(").
+                    append(data.reference.getTableFieldName()).
+                    append(")").toString();
+            
+            update(data.connection, query);
+            return;
+        }
+        
+        if (data.olditem.getReference() == null)
+            return;
+        
+        query = new StringBuilder("alter table").
+                append(data.tablename).
+                append(" drop constraint ").
+                append(data.item.getTableFieldName()).toString();
+        
+        update(data.connection, query);
+    }
+}
 
+class UpdateData {
+    public DocumentModel model;
+    public String fieldname, oldfieldname, tablename;
+    public DocumentModelItem olditem, reference, item;
+    public DataElement ddelement;
+    public Connection connection;
 }
