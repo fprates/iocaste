@@ -18,51 +18,34 @@ public class Selector {
      * @param state
      * @return
      */
-    public static final ExtendedObject addEntry(String taskname,
-            String groupname, int count, State state) {
-        String entryid;
+    public static final void add(String taskname, String groupname, int count,
+            State state) {
+        int counter;
+        String msgid, entryid;
+        DocumentModel model;
         ExtendedObject object;
-        DocumentModel model = state.documents.getModel("TASK_ENTRY");
+        Map<String, String> messages;
         
+        model = state.documents.getModel("TASK_ENTRY");
         entryid = String.format("%s%03d", groupname, count);
-        
         object = new ExtendedObject(model);
         object.set("ID", entryid);
         object.set("NAME", taskname);
         object.set("GROUP", groupname);
         state.documents.save(object);
-        return object;
-    }
-    
-    /**
-     * 
-     * @param task
-     * @param group
-     * @param state
-     */
-    public static final void addEntryMessage(ExtendedObject task,
-            ExtendedObject group, State state) {
-        int counter;
-        String msgid, name;
-        DocumentModel model;
-        ExtendedObject object;
-        Map<String, String> messages;
         
         model = state.documents.getModel("TASK_ENTRY_TEXT");
-        name = task.get("NAME");
         counter = 0;
         for (String locale : state.messages.keySet()) {
             messages = state.messages.get(locale);
             
-            if (!messages.containsKey(name))
-                continue;
-            
-            msgid = String.format("%s%03d", name, counter++);
+            msgid = String.format("%s%03d", taskname, counter++);
             object = new ExtendedObject(model);
             object.set("ID", msgid);
-            object.set("ENTRY", name);
+            object.set("GROUP", groupname);
+            object.set("ENTRY", taskname);
             object.set("LANGUAGE", locale);
-            object.set("TEXT", messages.get(name));
+            object.set("TEXT", messages.get(taskname));
             state.documents.save(object);
         }
     }

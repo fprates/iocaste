@@ -15,7 +15,7 @@ public class TasksGroupsInstall extends AbstractInstallObject {
     protected void execute(StandardInstallContext context) throws Exception {
         DataElement taskgroupname, taskentryid, entrytextid;
         ModelInstall model;
-        DocumentModelItem groupname, entryid;
+        DocumentModelItem groupname;
 
         taskgroupname = elementchar(
                 "TASKS_GROUPS.NAME", 12, DataType.UPPERCASE);
@@ -28,14 +28,14 @@ public class TasksGroupsInstall extends AbstractInstallObject {
          * grupos de tarefas
          */
         model = modelInstance("TASKS_GROUPS", "TASKSGRP");
-        tag("groupid", groupname = model.key(
+        groupname = tag("groupid", model.key(
                 "NAME", "GRPID", taskgroupname));
         
         /*
          * item do grupo de tarefas
          */
         model = modelInstance("TASK_ENTRY", "TASKENTRY");
-        entryid = model.key(
+        model.key(
                 "ID", "IDENT", taskentryid);
         model.reference(
                 "GROUP", "GRPID", groupname);
@@ -49,10 +49,12 @@ public class TasksGroupsInstall extends AbstractInstallObject {
         model.key(
                 "ID", "TXTID", entrytextid);
         model.reference(
-                "ENTRY", "ENTRY", entryid);
+                "GROUP", "GRPID", groupname);
         model.reference(
                 "LANGUAGE", "LANGU", new DummyElement("LANGUAGES.LOCALE"),
                     new DummyModelItem("LANGUAGES", "LOCALE"));
+        model.item(
+                "ENTRY", "ENTRY", taskentryid);
         model.item(
                 "TEXT", "TEXT", new DummyElement("MESSAGES.TEXT"));
     }

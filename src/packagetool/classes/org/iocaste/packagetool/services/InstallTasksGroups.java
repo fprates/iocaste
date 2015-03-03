@@ -1,5 +1,6 @@
 package org.iocaste.packagetool.services;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,10 +31,12 @@ public class InstallTasksGroups {
             State state) throws Exception {
         int entryid;
         Query query;
-        String groupname;
+        String groupname, locale;
         Set<String> itens;
-        ExtendedObject task, group;
-        ExtendedObject[] tasks;
+        ExtendedObject group;
+        ExtendedObject[] tasks, entries, texts;
+        Map<String, Map<String, String>> messages;
+        Map<String, String> properties;
         
         query = new Query();
         query.setModel("TASKS");
@@ -49,8 +52,52 @@ public class InstallTasksGroups {
                     Selector.assignGroup(group, user.getUsername(), state);
                 Registry.add(groupname, "TSKGROUP", state);
             }
-
+            
             itens = taskgroup.getLinks();
+
+            /*
+             * reindexa itens do grupo
+             */
+            query = new Query();
+            query.setModel("TASK_ENTRY");
+            query.andEqual("GROUP", groupname);
+            entries = state.documents.select(query);
+            
+            if (entries != null) {
+                query = new Query();
+                query.setModel("TASK_ENTRY_TEXT");
+                query.andEqual("GROUP", groupname);
+                texts = state.documents.select(query);
+                
+                query = new Query("delete");
+                query.setModel("TASK_ENTRY_TEXT");
+                query.andEqual("GROUP", groupname);
+                state.documents.update(query);
+                
+                query = new Query("delete");
+                query.setModel("TASK_ENTRY");
+                query.andEqual("GROUP", groupname);
+                state.documents.update(query);
+
+                for (ExtendedObject entry : entries)
+                    itens.add(entry.getst("NAME"));
+
+                messages = state.data.getMessages();
+                if ((texts != null) && (messages != null))
+                    for (ExtendedObject text : texts) {
+                        locale = text.getst("LANGUAGE");
+                        properties = messages.get(locale);
+                        if (properties == null) {
+                            properties = new HashMap<>();
+                            messages.put(locale, properties);
+                        }
+                        properties.put(text.getst("ENTRY"), text.getst("TEXT"));
+                    }
+            }
+
+            /*
+             * instala entradas e textos
+             */
             entryid = 0;
             for (String taskname : itens) {
                 if (!containsTask(taskname, tasks))
@@ -58,10 +105,7 @@ public class InstallTasksGroups {
                             new StringBuilder("invalid task \"").
                             append(taskname).append("\".").toString());
                 
-                task = Selector.addEntry(taskname, groupname, entryid++, state);
-                if (state.messages.size() > 0)
-                    Selector.addEntryMessage(task, group, state);
-                
+                Selector.add(taskname, groupname, entryid++, state);
                 Registry.add(taskname, "TSKITEM", state);
             }
         }
