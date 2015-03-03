@@ -34,6 +34,11 @@ public class PackageTool extends AbstractServiceInterface {
         call(message);
     }
     
+    /**
+     * 
+     * @param file
+     * @return
+     */
     public final InstallData dataFromFile(String file) {
         Message message = new Message("data_from_file");
         message.add("file", file);
@@ -125,6 +130,17 @@ public class PackageTool extends AbstractServiceInterface {
     public final void uninstall(String name) {
         Message message = new Message("uninstall");
         message.add("package", name);
+        call(message);
+    }
+    
+    /**
+     * 
+     * @param name
+     */
+    public final void update(String name) {
+        Message message = new Message("update");
+        message.add("name", name);
+        message.add("data", getInstallData(name));
         call(message);
     }
 }

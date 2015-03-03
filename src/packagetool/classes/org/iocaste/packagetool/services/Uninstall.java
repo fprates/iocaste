@@ -1,4 +1,4 @@
-package org.iocaste.packagetool;
+package org.iocaste.packagetool.services;
 
 import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.Documents;

@@ -1,4 +1,4 @@
-package org.iocaste.packagetool;
+package org.iocaste.packagetool.services;
 
 import java.io.BufferedReader;
 import java.io.File;

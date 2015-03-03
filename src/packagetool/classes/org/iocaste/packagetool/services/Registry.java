@@ -1,8 +1,9 @@
-package org.iocaste.packagetool;
+package org.iocaste.packagetool.services;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
+import org.iocaste.packagetool.services.State;
 import org.iocaste.protocol.Function;
 
 public class Registry {

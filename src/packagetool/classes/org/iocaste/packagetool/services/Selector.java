@@ -1,4 +1,4 @@
-package org.iocaste.packagetool;
+package org.iocaste.packagetool.services;
 
 import java.util.Map;
 
@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
+import org.iocaste.packagetool.services.State;
 import org.iocaste.protocol.IocasteException;
 
 public class Selector {

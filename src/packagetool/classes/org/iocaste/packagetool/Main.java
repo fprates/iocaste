@@ -10,6 +10,7 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.PackageTool;
+import org.iocaste.packagetool.services.InstallPackage;
 
 public class Main extends AbstractPageBuilder {
 
@@ -28,6 +29,7 @@ public class Main extends AbstractPageBuilder {
         view.set(new MainInput());
         view.put("install", new InstallPackage());
         view.put("remove", new UninstallPackage());
+        view.put("update", new UpdatePackage());
     }
 
     @Override

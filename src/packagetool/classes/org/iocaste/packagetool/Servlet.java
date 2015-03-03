@@ -1,5 +1,6 @@
 package org.iocaste.packagetool;
 
+import org.iocaste.packagetool.services.Services;
 import org.iocaste.protocol.AbstractIocasteServlet;
 
 public class Servlet extends AbstractIocasteServlet {

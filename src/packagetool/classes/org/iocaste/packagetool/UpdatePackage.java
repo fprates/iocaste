@@ -9,7 +9,7 @@ import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.shell.common.Const;
 import org.iocaste.tasksel.common.TaskSelector;
 
-public class InstallPackage extends AbstractActionHandler {
+public class UpdatePackage extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
@@ -19,7 +19,7 @@ public class InstallPackage extends AbstractActionHandler {
         List<ExtendedObject> packages;
         PackageTool pkgtool;
         
-        packages = tableselectedget("unpackages");
+        packages = tableselectedget("inpackages");
         if (packages == null) {
             message(Const.STATUS, "no.packages.selected");
             return;
@@ -31,12 +31,12 @@ public class InstallPackage extends AbstractActionHandler {
         for (ExtendedObject object : packages) {
             pkgname = object.getst("NAME");
             try {
-                pkgtool.install(pkgname);
-                extcontext.installed.add(object);
-                object = readobjects(extcontext.uninstalled, "NAME", pkgname);
-                extcontext.uninstalled.remove(object);
+                pkgtool.update(pkgname);
+                extcontext.uninstalled.add(object);
+                object = readobjects(extcontext.installed, "NAME", pkgname);
+                extcontext.installed.remove(object);
             } catch (Exception e) {
-                object = readobjects(extcontext.uninstalled, "NAME", pkgname);
+                object = readobjects(extcontext.installed, "NAME", pkgname);
                 object.set("EXCEPTION", e.getMessage());
                 ex = true;
             }
@@ -46,8 +46,8 @@ public class InstallPackage extends AbstractActionHandler {
         if (ex)
             message(Const.WARNING, "some.packages.failed");
         else
-            message(Const.STATUS, "package.installed");
+            message(Const.STATUS, "package.uninstalled");
         inputrefresh();
     }
-    
+
 }

@@ -1,4 +1,4 @@
-package org.iocaste.packagetool;
+package org.iocaste.packagetool.services;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +31,7 @@ public class Services extends AbstractFunction {
         export("is_installed", "isInstalled");
         export("data_from_file", "getDataFromFile");
         export("uninstall", "uninstall");
+        export("update", new PackageUpdate());
     }
     
     /**
@@ -135,7 +136,7 @@ public class Services extends AbstractFunction {
              */
             models = state.data.getModels();
             if (models.size() > 0) {
-                InstallModels.init(models, state);
+                Models.install(models, state);
                 state.documents.commit();
             }
             
