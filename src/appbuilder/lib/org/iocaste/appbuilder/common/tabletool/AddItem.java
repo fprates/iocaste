@@ -21,7 +21,8 @@ public class AddItem extends AbstractTableHandler {
                 }
                 break;
             }
-            
+
+            context.table.setVisibleLines(context.data.vlines);
             additem(context, null, i);
             break;
         default:

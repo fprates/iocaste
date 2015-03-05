@@ -53,10 +53,15 @@ public class TableTool {
     
     public final void add() {
         TableToolData data = getTableData();
-        if (data.mode != TableTool.CONTINUOUS_UPDATE) {
+        switch (data.mode) {
+        case TableTool.CONTINUOUS_UPDATE:
+            data.vlines++;
+            break;
+        default:
             context.view.getElement(accept).setVisible(true);
             context.view.getElement(add).setVisible(false);
             context.view.getElement(remove).setVisible(false);
+            break;
         }
         
         AddItem.run(data);
