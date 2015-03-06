@@ -67,10 +67,6 @@ public abstract class AbstractInstallObject {
         return context.getItem(name);
     }
     
-    protected final void insert(ModelInstall model, Object... values) {
-        context.getInstallData().addValues(model.getModel(), values);
-    }
-    
     protected final MessagesInstall messageInstance(String language) {
         return new MessagesInstall(data, language);
     }

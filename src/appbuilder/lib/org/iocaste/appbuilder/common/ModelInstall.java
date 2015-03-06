@@ -18,6 +18,26 @@ public class ModelInstall {
         model = data.getModel(name, table, null);
     }
     
+    public final void extract(ModelInstall source) {
+        DocumentModelItem item;
+        DocumentModel sourcemodel = source.getModel();
+        String tablename = sourcemodel.getTableName();
+        
+        for (DocumentModelItem sourceitem : sourcemodel.getItens()) {
+            item = new DocumentModelItem(sourceitem.getName());
+            if (model.isKey(sourceitem))
+                model.add(new DocumentModelKey(item));
+            
+            item.setDataElement(sourceitem.getDataElement());
+            item.setSearchHelp(sourceitem.getSearchHelp());
+            item.setReference(sourceitem.getReference());
+            if (tablename == null)
+                continue;
+            
+            item.setTableFieldName(sourceitem.getTableFieldName());
+        }
+    }
+    
     public final DocumentModel getModel() {
         return model;
     }
