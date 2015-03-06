@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
@@ -14,6 +15,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.Validator;
 import org.iocaste.texteditor.common.TextEditor;
 
 public abstract class AbstractViewInput {
@@ -112,6 +114,30 @@ public abstract class AbstractViewInput {
     }
     
     protected abstract void init(PageBuilderContext context);
+
+    protected void loadInputTexts(PageBuilderContext context) {
+        List<Validator> validators;
+        AbstractExtendedValidator exvalidator;
+        Element element;
+        InputComponent input;
+        
+        for (String name : context.view.getElements().keySet()) {
+            element = context.view.getElement(name);
+            
+            if (!element.isDataStorable() || !element.isVisible())
+                continue;
+            
+            validators = context.function.getValidators(name);
+            if (validators == null)
+                continue;
+            
+            input = (InputComponent)element;
+            for (Validator validator : validators) {
+                exvalidator = (AbstractExtendedValidator)validator;
+                input.setText(exvalidator.getText(context, input.get()));
+            }
+        }
+    }
     
     protected final void reportset(String report, ExtendedObject[] items) {
         getViewComponents().reporttools.get(report).setItens(items);

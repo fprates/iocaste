@@ -128,6 +128,23 @@ public abstract class AbstractPage extends AbstractFunction {
         return getviewdata.state.servername;
     }
     
+    public final List<Validator> getValidators(String input) {
+        List<Validator> validators;
+        List<String> validables = getviewdata.validables.get(input);
+        
+        if (validables == null)
+            return null;
+
+        validators = null;
+        for (String name : validables) {
+            if (validators == null)
+                validators = new ArrayList<>();
+            validators.add(getviewdata.validators.get(name));
+        }
+        
+        return validators;
+    }
+    
     /**
      * Retorna visão especificada.
      * @param name identificador da visão

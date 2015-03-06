@@ -16,7 +16,8 @@ public class MaintenanceInput extends AbstractViewInput {
         
         setdfkey("head", extcontext.id);
         for (Element element : form.getElements()) {
-            if (!element.isVisible())
+            if (!element.isDataStorable() || !element.isVisible() ||
+                    !element.isEnabled())
                 continue;
             context.view.setFocus(element);
             break;
@@ -30,11 +31,12 @@ public class MaintenanceInput extends AbstractViewInput {
         for (String name : cmodel.getItems().keySet())
             tableitemsadd(name.concat("_table"), extcontext.document.
                     getItems(name));
+        
+        loadInputTexts(context);
     }
     
     @Override
     protected void init(PageBuilderContext context) {
         execute(context);
     }
-
 }

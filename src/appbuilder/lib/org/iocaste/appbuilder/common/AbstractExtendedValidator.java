@@ -55,6 +55,10 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
         return TableTool.get(context.view, data);
     }
     
+    public String getText(PageBuilderContext context, Object value) {
+        return null;
+    }
+    
     protected abstract void validate(PageBuilderContext context);
     
     @Override
