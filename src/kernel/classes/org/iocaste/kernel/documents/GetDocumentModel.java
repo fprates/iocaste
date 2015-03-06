@@ -50,36 +50,37 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         
         getde = documents.get("get_data_element");
         lines = select(connection, QUERIES[DOC_ITEM], 0, modelname);
-        for (Object object : lines) {
-            columns = (Map<String, Object>)object;
-            name = (String)columns.get("INAME");
-            composed = name.split("\\.");
-            
-            item = new DocumentModelItem(composed[1]);
-            item.setDocumentModel(document);
-            item.setAttributeName((String)columns.get("ATTRB"));
-            item.setTableFieldName((String)columns.get("FNAME"));
-            item.setDataElement(
-                    getde.run(connection, (String)columns.get("ENAME")));
-            item.setIndex(((BigDecimal)columns.get("NRITM")).intValue());
-            
-            itemref = (String)columns.get("ITREF");
-            if (itemref != null) {
-                composed = itemref.split("\\.");
-                item.setReference(run(connection, documents, composed[0]).
-                        getModelItem(composed[1]));
+        if (lines != null)
+            for (Object object : lines) {
+                columns = (Map<String, Object>)object;
+                name = (String)columns.get("INAME");
+                composed = name.split("\\.");
+                
+                item = new DocumentModelItem(composed[1]);
+                item.setDocumentModel(document);
+                item.setAttributeName((String)columns.get("ATTRB"));
+                item.setTableFieldName((String)columns.get("FNAME"));
+                item.setDataElement(
+                        getde.run(connection, (String)columns.get("ENAME")));
+                item.setIndex(((BigDecimal)columns.get("NRITM")).intValue());
+                
+                itemref = (String)columns.get("ITREF");
+                if (itemref != null) {
+                    composed = itemref.split("\\.");
+                    item.setReference(run(connection, documents, composed[0]).
+                            getModelItem(composed[1]));
+                }
+                
+                shlines = select(connection, QUERIES[SH_REFERENCE], 0, name);
+                if (shlines != null) {
+                    columns = (Map<String, Object>)shlines[0];
+                    item.setSearchHelp((String)columns.get("SHCAB"));
+                }
+                
+                i = item.getIndex();
+                document.add(item);
+                item.setIndex(i);
             }
-            
-            shlines = select(connection, QUERIES[SH_REFERENCE], 0, name);
-            if (shlines != null) {
-                columns = (Map<String, Object>)shlines[0];
-                item.setSearchHelp((String)columns.get("SHCAB"));
-            }
-            
-            i = item.getIndex();
-            document.add(item);
-            item.setIndex(i);
-        }
         
         lines = select(connection, QUERIES[TABLE_INDEX], 0, modelname);
         if (lines != null)
