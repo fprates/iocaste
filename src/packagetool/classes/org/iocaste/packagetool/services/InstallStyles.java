@@ -11,31 +11,34 @@ import org.iocaste.shell.common.StyleSheet;
 
 public class InstallStyles {
 
-    public static final void init(
-            Map<String, StyleSheet> stylesheets, State state) {
+    public static final void init(Map<String, StyleSheet> stylesheets,
+            State state) {
+        Shell shell = new Shell(state.function);
+        
+        for (String name : stylesheets.keySet()) {
+            shell.save(name, stylesheets.get(name));
+            Registry.add(name, "STYLE", state);
+        }
+    }
+    
+    public static final void setDefaultStyle(State state, String defaultstyle) {
         Query query;
         ExtendedObject object;
         DocumentModel model;
-        String defaultstyle = state.data.getApplicationStyle();
-        Shell shell = new Shell(state.function);
         
         query = new Query("delete");
         query.setModel("APP_STYLE");
         query.andEqual("APPNAME", state.pkgname);
         state.documents.update(query);
         
-        if (defaultstyle != null) {
-            model = state.documents.getModel("APP_STYLE");
-            object = new ExtendedObject(model);
-            object.set("APPNAME", state.pkgname);
-            object.set("STYLE", defaultstyle);
-            state.documents.save(object);
-        }
+        if (defaultstyle == null)
+            return;
         
-        for (String name : stylesheets.keySet()) {
-            shell.save(name, stylesheets.get(name));
-            Registry.add(name, "STYLE", state);
-        }
+        model = state.documents.getModel("APP_STYLE");
+        object = new ExtendedObject(model);
+        object.set("APPNAME", state.pkgname);
+        object.set("STYLE", defaultstyle);
+        state.documents.save(object);
     }
     
     public static final void uninstall(String name, Function function) {

@@ -95,7 +95,7 @@ public class Services extends AbstractFunction {
         Authorization[] authorizations;
         String[] dependencies;
         State state;
-        String name, modelname;
+        String name, modelname, defaultstyle;
         Set<String> texts;
         Map<String, StyleSheet> stylesheets;
         
@@ -220,6 +220,10 @@ public class Services extends AbstractFunction {
             /*
              * registra estilos
              */
+            defaultstyle = state.data.getApplicationStyle();
+            if (defaultstyle != null)
+                InstallStyles.setDefaultStyle(state, defaultstyle);
+            
             stylesheets = state.data.getStyleSheets();
             if (stylesheets.size() > 0)
                 InstallStyles.init(stylesheets, state);
