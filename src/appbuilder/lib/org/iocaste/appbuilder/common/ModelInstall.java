@@ -25,6 +25,7 @@ public class ModelInstall {
         
         for (DocumentModelItem sourceitem : sourcemodel.getItens()) {
             item = new DocumentModelItem(sourceitem.getName());
+            model.add(item);
             if (model.isKey(sourceitem))
                 model.add(new DocumentModelKey(item));
             
