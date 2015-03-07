@@ -628,7 +628,11 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         /*
          * processa atualização na visão após chamada do controlador
          */
-        action = config.state.view.getElement(actionname);
+        if (actionname.length() == 0)
+            action = null;
+        else
+            action = config.state.view.getElement(actionname);
+        
         if (config.state.pagecall && (action == null ||
                 !action.isCancellable() || action.allowStacking()))
             pushPage(config.sessionid, config.state.view.getAppName(),
