@@ -22,13 +22,17 @@ public class Models {
         for (DocumentModel model : models.values()) {
             modelname = model.getName();
             if (state.documents.getModel(modelname) != null) {
-                throw new IocasteException(new StringBuilder("model ").
-                        append(modelname).
-                        append(" has already exist.").
-                        toString());
+                if (state.documents.updateModel(model) < 0)
+                    throw new IocasteException(new StringBuilder("error on "
+                            + "update ").
+                            append(modelname).
+                            append(" model.").toString());
             } else {
                 if (state.documents.createModel(model) < 0)
-                    throw new IocasteException("create model error.");
+                    throw new IocasteException(new StringBuilder("error on "
+                            + "create ").
+                            append(modelname).
+                            append(" model.").toString());
             }
             
             Registry.add(modelname, "MODEL", state);
@@ -95,7 +99,7 @@ public class Models {
                 if (state.shm.containsKey(name)) {
                     itens = state.shm.get(name);
                 } else {
-                    itens = new TreeSet<DocumentModelItem>();
+                    itens = new TreeSet<>();
                     state.shm.put(name, itens);
                 }
                 itens.add(modelitem);
@@ -117,7 +121,7 @@ public class Models {
                 for (DocumentModelItem modelitem : model.getItens())
                     header.set(modelitem, line[i++]);
                 
-                state.documents.save(header);
+                state.documents.modify(header);
             }
         }
     }

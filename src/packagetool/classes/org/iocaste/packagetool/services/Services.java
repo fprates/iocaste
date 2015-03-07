@@ -1,6 +1,5 @@
 package org.iocaste.packagetool.services;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -103,7 +102,6 @@ public class Services extends AbstractFunction {
         state.data = message.get("data");
         state.pkgname = message.getString("name");
         state.documents = new Documents(this);
-        state.shm = new HashMap<>();
         state.function = this;
         
         try {

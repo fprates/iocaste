@@ -1,6 +1,7 @@
 package org.iocaste.packagetool.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,5 +25,6 @@ public class State {
     
     public State() {
         log = new ArrayList<>();
+        shm = new HashMap<>();
     }
 }
