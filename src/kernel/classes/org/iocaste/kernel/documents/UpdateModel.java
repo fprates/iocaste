@@ -10,6 +10,19 @@ import org.iocaste.protocol.Message;
 
 public class UpdateModel extends AbstractDocumentsHandler {
     
+    private final DataElement getElementByReference(GetDocumentModel getmodel,
+            Connection connection, Documents documents,
+            DocumentModelItem reference) throws Exception {
+        DocumentModel model;
+        
+        if (!reference.isDummy())
+            return reference.getDataElement();
+        
+        model = getmodel.run(connection, documents,
+                reference.getDocumentModel().getName());
+        return model.getModelItem(reference.getName()).getDataElement();
+    }
+    
     /**
      * 
      * @param iocaste
@@ -54,6 +67,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
 
     @Override
     public Object run(Message message) throws Exception {
+        DocumentModelItem reference;
         InsertDataElement insert;
         GetDocumentModel getmodel;
         DocumentModel oldmodel;
@@ -69,6 +83,13 @@ public class UpdateModel extends AbstractDocumentsHandler {
         oldmodel = getmodel.run(connection, documents, name);
         insert = documents.get("insert_data_element");
         for (DocumentModelItem item : model.getItens()) {
+            if (item.getDataElement() == null) {
+                reference = item.getReference();
+                if (reference != null)
+                    item.setDataElement(getElementByReference(
+                            getmodel, connection, documents, reference));
+            }
+            
             if (!oldmodel.contains(item)) {
                 insert.run(connection, item.getDataElement());                
                 if (insertModelItem(connection, item) == 0)
