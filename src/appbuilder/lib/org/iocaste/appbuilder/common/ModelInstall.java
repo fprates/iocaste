@@ -21,7 +21,7 @@ public class ModelInstall {
     public final void extract(ModelInstall source) {
         DocumentModelItem item;
         DocumentModel sourcemodel = source.getModel();
-        String tablename = sourcemodel.getTableName();
+        String table = model.getTableName();
         
         for (DocumentModelItem sourceitem : sourcemodel.getItens()) {
             item = new DocumentModelItem(sourceitem.getName());
@@ -32,7 +32,7 @@ public class ModelInstall {
             item.setDataElement(sourceitem.getDataElement());
             item.setSearchHelp(sourceitem.getSearchHelp());
             item.setReference(sourceitem.getReference());
-            if (tablename == null)
+            if (table == null)
                 continue;
             
             item.setTableFieldName(sourceitem.getTableFieldName());
