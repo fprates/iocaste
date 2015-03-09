@@ -1,11 +1,12 @@
 package org.iocaste.dataview;
 
+import org.iocaste.appbuilder.common.reporttool.ReportTool;
+import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageControl;
-import org.iocaste.shell.common.ReportTool;
 
 public class Response {
 
@@ -32,12 +33,20 @@ public class Response {
     public static final void list(Context context) {
         Form container = new Form(context.view, "main");
         PageControl pagecontrol = new PageControl(container);
-        ReportTool reporttool = new ReportTool(container, "items");
+        ReportToolData data;
+        
+        data = new ReportToolData();
+        data.container = container.getHtmlName();
+        data.name = "items";
+        data.context = context;
+        data.objects = context.items;
+        data.model = context.model.getName();
+        
+        new ReportTool(data);
         
         pagecontrol.add("home");
         pagecontrol.add("back");
         
-        reporttool.setItens(context.items);
         context.view.setTitle(context.model.getName());
     }
 
