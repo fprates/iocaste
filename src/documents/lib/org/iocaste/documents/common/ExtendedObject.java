@@ -86,6 +86,11 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
         return (T)values.get(item);
     }
     
+    /**
+     * 
+     * @param name
+     * @return
+     */
     public final byte getb(String name) {
         Object value = getNumericValue(name);
         
@@ -97,6 +102,15 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
         } catch (ClassCastException e) {
             return Byte.parseByte(value.toString());
         }
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public final boolean getbl(String name) {
+        return (boolean)get(name);
     }
     
     /**
@@ -113,6 +127,11 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
         return ((BigDecimal)value).doubleValue();
     }
 
+    /**
+     * 
+     * @param name
+     * @return
+     */
     public final Date getdt(String name) {
         return (Date)get(name);
     }
@@ -178,6 +197,11 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
         return (value == null)? 0 : value;
     }
     
+    /**
+     * 
+     * @param name
+     * @return
+     */
     public final short getsh(String name) {
         Object value = getNumericValue(name);
         
@@ -191,10 +215,19 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
         }
     }
     
+    /**
+     * 
+     * @param name
+     * @return
+     */
     public final String getst(String name) {
         return (String)get(name);
     }
     
+    /*
+     * (não-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         int hash;
@@ -290,6 +323,10 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
         return newInstance(true);
     }
     
+    /**
+     * 
+     * @param object
+     */
     public final void setInstance(Object object) {
         Class<?> class_;
         Method method;
