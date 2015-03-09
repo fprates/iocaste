@@ -10,6 +10,7 @@ public abstract class AbstractViewSpec {
     private Map<String, ViewSpecItem> items;
     private PageBuilderContext context;
     private boolean initialized;
+    private int skipnr;
     
     public AbstractViewSpec() {
         items = new LinkedHashMap<>();
@@ -123,6 +124,11 @@ public abstract class AbstractViewSpec {
     
     public final void setInitialized(boolean initialized) {
         this.initialized = initialized;
+    }
+    
+    public final void skip(String parent) {
+        put(parent, ViewSpecItem.TYPES.SKIP, new StringBuilder("skip").
+                append(skipnr++).toString());
     }
     
     protected final void standardcontainer(String parent, String name) {

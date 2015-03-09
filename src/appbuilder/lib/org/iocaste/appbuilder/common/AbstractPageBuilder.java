@@ -146,10 +146,11 @@ class BuilderCustomView extends AbstractCustomView {
         TableToolData ttdata;
         ReportToolData rtdata;
         String parent = item.getParent();
-        Container container = context.view.getElement(parent);
+        Container container;
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
         String name = item.getName();
-        
+
+        container = context.view.getElement(parent);
         
         switch (types[item.getType()]) {
         case FORM:
@@ -231,6 +232,9 @@ class BuilderCustomView extends AbstractCustomView {
             names = name.split("\\.", 2);
             group = context.view.getElement(names[0]);
             group.button(container, names[1]);
+            break;
+        case SKIP:
+            new StandardContainer(container, name).setStyleClass("skip");
             break;
         default:
             break;

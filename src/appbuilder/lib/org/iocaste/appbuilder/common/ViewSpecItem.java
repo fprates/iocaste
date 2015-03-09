@@ -26,7 +26,8 @@ public class ViewSpecItem {
         FILE_UPLOAD("fileupload"),
         BUTTON("button"),
         RADIO_BUTTON("radiobutton"),
-        RADIO_GROUP("radiogroup");
+        RADIO_GROUP("radiogroup"),
+        SKIP("skip");
 
         private String name;
         
