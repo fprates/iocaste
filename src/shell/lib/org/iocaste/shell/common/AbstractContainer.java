@@ -26,8 +26,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.documents.common.DocumentModel;
-
 /**
  * Implementação abstrata para containers.
  * 
@@ -41,7 +39,6 @@ public abstract class AbstractContainer
     extends AbstractElement implements Container {
     private static final long serialVersionUID = 8676224931708725226L;
     private Map<String, String> elements;
-    private DocumentModel model;
 
     public AbstractContainer(View view, Const type, String name) {
         super(type, name);
@@ -121,25 +118,6 @@ public abstract class AbstractContainer
     @Override
     public final String[] getElementsNames() {
         return elements.keySet().toArray(new String[0]);
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Container#getModel()
-     */
-    @Override
-    public final DocumentModel getModel() {
-        return model;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.Container#importModel(
-     *    org.iocaste.documents.common.DocumentModel)
-     */
-    @Override
-    public void importModel(DocumentModel model) {
-        this.model = model;
     }
     
     /*

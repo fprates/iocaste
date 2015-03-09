@@ -3,9 +3,7 @@ package org.iocaste.shell.common;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.ExtendedObject;
 
 /**
  * Item de tabela html.
@@ -97,39 +95,6 @@ public class TableItem extends AbstractContainer {
     }
     
     /**
-     * Retorna objeto extendido associado.
-     * @return object extendido.
-     */
-    public final ExtendedObject getObject() {
-        Element element;
-        InputComponent input;
-        DocumentModelItem modelitem;
-        View view = getView();
-        DocumentModel model = getTable().getModel();
-        ExtendedObject object = new ExtendedObject(model);
-        
-        for (String name : elements.keySet()) {
-            element = view.getElement(elements.get(name));
-            
-            if (element.isDataStorable()) {
-                input = (InputComponent)element;
-                modelitem = input.getModelItem();
-                
-                if (modelitem == null)
-                    continue;
-                
-                object.set(modelitem, input.get());
-                continue;
-            }
-            
-            if ((element.getType() == Const.LINK) && (model.contains(name)))
-                object.set(name, ((Link)element).getText());
-        }
-        
-        return object;
-    }
-    
-    /**
      * Retorna tabela associada.
      * @return tabela
      */
@@ -144,67 +109,6 @@ public class TableItem extends AbstractContainer {
     public final boolean isSelected() {
         InputComponent input = getView().getElement(elements.get("mark"));        
         return input.isSelected();
-    }
-    
-    /**
-     * Importa objeto extendido.
-     * 
-     * Preenche componentes de entrada com valores do objeto extendido.
-     * 
-     * @param object objeto extendido.
-     */
-    public final void setObject(ExtendedObject object) {
-        View view;
-        Parameter parameter;
-        Link link;
-        Element element;
-        Object value;
-        InputComponent input;
-        DocumentModelItem modelitem;
-        Component component;
-        String name;
-        
-        view = getView();
-        for (TableColumn column : columns) {
-            if (column.isMark())
-                continue;
-            
-            name = column.getName();
-            element = view.getElement(elements.get(name));
-            if (element == null)
-                throw new RuntimeException("no component defined for " +
-                		"this table item");
-
-            modelitem = column.getModelItem();
-            if (!element.isDataStorable()) {
-                component = (Component)element;
-                value = object.get(modelitem);
-                component.setText((value == null)? "" : value.toString());
-                if (element.getType() != Const.LINK)
-                    continue;
-                
-                link = (Link)element;
-                parameter = column.getParameter();
-                if (parameter == null) {
-                    parameter = new Parameter(view, name);
-                    column.setParameter(parameter);
-                }
-                
-                link.add(parameter.getName(), value,
-                        modelitem.getDataElement().getType());
-                continue;
-            }
-            
-            input = (InputComponent)element;
-            if (input.getModelItem() == null)
-                input.setModelItem(modelitem);
-            
-            if (modelitem == null)
-                continue;
-            
-            value = object.get(modelitem.getName());
-            input.set(value);
-        }
     }
     
     /**

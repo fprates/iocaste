@@ -20,7 +20,7 @@ import org.iocaste.shell.common.TextField;
 
 public abstract class AbstractTableHandler {
     
-    protected static void additem(
+    protected static void additem(TableTool tabletool,
             Context context, ExtendedObject object, int pos) {
         TableToolColumn column;
         Element element;
@@ -93,10 +93,10 @@ public abstract class AbstractTableHandler {
             object.set(context.data.itemcolumn, context.data.last);
         }
         
-        item.setObject(object);
+        tabletool.set(item, object);
     }
     
-    protected static final void additems(
+    protected static final void additems(TableTool tabletool,
             Context context, ExtendedObject[] items) {
         int vlines = context.table.getVisibleLines();
         int total = context.table.size();
@@ -106,13 +106,13 @@ public abstract class AbstractTableHandler {
                 vlines = 15;
             
             for (int i = 0; i < vlines; i++)
-                additem(context, null, -1);
+                additem(tabletool, context, null, -1);
         } else {
             for (int i = 0; i < items.length; i++) {
                 if ((vlines == i) && (vlines > 0))
                     break;
                 
-                additem(context, items[i], -1);
+                additem(tabletool, context, items[i], -1);
             }
         }
         
@@ -163,21 +163,22 @@ public abstract class AbstractTableHandler {
             setVisibility(context, true, context.data.show);
     }
     
-    protected static void setObject(TableToolData data) {
+    protected static void setObject(TableTool tabletool, TableToolData data) {
         Context extcontext = new Context();
         
         extcontext.table = getTable(data);
         extcontext.table.clear();
         extcontext.data = data;
         extcontext.data.last = 0;
-        setObjects(extcontext);
+        setObjects(tabletool, extcontext);
     }
     
     /**
      * 
      * @param objects
      */
-    protected static final void setObjects(Context context) {
+    protected static final void setObjects(TableTool tabletool, Context context)
+    {
         if (context.data.objects == null || context.data.objects.length == 0) {
             switch(context.data.mode) {
             case TableTool.CONTINUOUS_DISPLAY:
@@ -186,12 +187,12 @@ public abstract class AbstractTableHandler {
                 return;
             case TableTool.UPDATE:
             case TableTool.DISPLAY:
-                additems(context, null);
+                additems(tabletool, context, null);
                 return;
             }
         }
         
-        additems(context, context.data.objects);
+        additems(tabletool, context, context.data.objects);
     }
     
     /**

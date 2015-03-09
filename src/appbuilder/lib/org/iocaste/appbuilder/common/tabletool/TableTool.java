@@ -7,10 +7,16 @@ import java.util.Set;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Validator;
@@ -30,6 +36,7 @@ public class TableTool {
     private AbstractContext context;
     private String accept, add, remove, name;
     private TableToolData data;
+    private DocumentModel model;
     
     public TableTool(PageBuilderContext context, String name) {
         ViewContext viewcontext = context.getView();
@@ -42,6 +49,9 @@ public class TableTool {
         init(data.context, data);
     }
     
+    /**
+     * 
+     */
     public final void accept() {
         Table table = getTable();
         
@@ -51,6 +61,9 @@ public class TableTool {
         table.setTopLine(0);
     }
     
+    /**
+     * 
+     */
     public final void add() {
         TableToolData data = getTableData();
         switch (data.mode) {
@@ -64,29 +77,74 @@ public class TableTool {
             break;
         }
         
-        AddItem.run(data);
+        AddItem.run(this, data);
         installValidators(data);
     }
     
+    /**
+     * 
+     */
     public final void additems() {
         additems(null);
     }
     
+    /**
+     * 
+     * @param objects
+     */
     private final void additems(ExtendedObject[] objects) {
         TableToolData data = getTableData();
         
         data.objects = objects;
-        AddItems.run(data);
+        AddItems.run(this, data);
         installValidators(data);
     }
     
+    /**
+     * 
+     */
     public final void clear() {
         getTable().clear();
         getTableData().last = 0;
     }
     
+    /**
+     * 
+     * @param view
+     * @param data
+     * @return
+     */
     public static final Table get(View view, TableToolData data) {
         return view.getElement(data.name.concat("_table"));
+    }
+    
+    /**
+     * 
+     * @param item
+     * @return
+     */
+    public final ExtendedObject get(TableItem item) {
+        InputComponent input;
+        DocumentModelItem modelitem;
+        ExtendedObject object = new ExtendedObject(model);
+        
+        for (Element element : item.getElements()) {
+            if (element.isDataStorable()) {
+                input = (InputComponent)element;
+                modelitem = input.getModelItem();
+                
+                if (modelitem == null)
+                    continue;
+                
+                object.set(modelitem, input.get());
+                continue;
+            }
+            
+            if ((element.getType() == Const.LINK) && (model.contains(name)))
+                object.set(name, ((Link)element).getText());
+        }
+        
+        return object;
     }
     
     /**
@@ -109,14 +167,6 @@ public class TableTool {
      * 
      * @return
      */
-    public final DocumentModel getModel() {
-        return getTable().getModel();
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final ExtendedObject[] getObjects() {
         int i;
         ExtendedObject[] objects;
@@ -126,15 +176,19 @@ public class TableTool {
         
         if (size == 0)
             return null;
-        
+
         objects = new ExtendedObject[size];
         i = 0;
         for (TableItem item : items)
-            objects[i++] = item.getObject();
+            objects[i++] = get(item);
         
         return objects;
     }
     
+    /**
+     * 
+     * @return
+     */
     public final List<ExtendedObject> getSelected() {
         List<ExtendedObject> objects;
         Table table = getTable();
@@ -142,7 +196,7 @@ public class TableTool {
         objects = new ArrayList<>();
         for (TableItem item : table.getItems())
             if (item.isSelected())
-                objects.add(item.getObject());
+                objects.add(get(item));
         
         return (objects.size() == 0)? null : objects;
     }
@@ -155,6 +209,10 @@ public class TableTool {
         return context.view.getElement(getTableData().name.concat("_table"));
     }
     
+    /**
+     * 
+     * @return
+     */
     private final TableToolData getTableData() {
         ViewContext viewcontext; 
         
@@ -176,11 +234,16 @@ public class TableTool {
         add = new Action(this, data, ADD).getName();
         remove = new Action(this, data, REMOVE).getName();
 
-        TableRender.run(context.function, data);
         setTableData(data);
+        TableRender.run(this, context.function, data);
         installValidators(data);
+        model = new Documents(context.function).getModel(data.model);
     }
     
+    /**
+     * 
+     * @param data
+     */
     private final void installValidators(TableToolData data) {
         InputComponent input;
         TableToolColumn column;
@@ -210,6 +273,18 @@ public class TableTool {
     }
     
     /**
+     * Importa objeto extendido.
+     * 
+     * Preenche componentes de entrada com valores do objeto extendido.
+     * 
+     * @param item
+     * @param object
+     */
+    public final void set(TableItem item, ExtendedObject object) {
+        SearchHelp.setTableItem(context, getTable(), item, object);
+    }
+    
+    /**
      * 
      * @param objects
      */
@@ -217,10 +292,14 @@ public class TableTool {
         TableToolData data = getTableData();
         
         data.objects = (objects == null || objects.length == 0)? null : objects;
-        SetObjects.run(data);
+        SetObjects.run(this, data);
         installValidators(data);
     }
     
+    /**
+     * 
+     * @param data
+     */
     public final void setTableData(TableToolData data) {
         PageBuilderContext context;
         

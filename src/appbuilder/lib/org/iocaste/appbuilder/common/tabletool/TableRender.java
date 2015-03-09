@@ -15,7 +15,8 @@ import org.iocaste.shell.common.TableColumn;
 
 public class TableRender extends AbstractTableHandler {
 
-    public static final void run(Function function, TableToolData data) {
+    public static final void run(TableTool tabletool, Function function,
+            TableToolData data) {
         StyleSheet stylesheet;
         Container container, supercontainer;
         Context context = new Context();
@@ -52,7 +53,7 @@ public class TableRender extends AbstractTableHandler {
         
         model(function, context);
         setMode(context);
-        setObjects(context);
+        setObjects(tabletool, context);
     }
     
     /**
@@ -60,8 +61,8 @@ public class TableRender extends AbstractTableHandler {
      * @param modelname
      */
     private static final void model(Function function, Context context) {
-        DocumentModelItem modelitem;
-        String name;
+        DocumentModelItem[] items;
+        DocumentModelItem item;
         TableToolColumn column;
         DocumentModel model = new Documents(function).
                 getModel(context.data.model);
@@ -70,20 +71,28 @@ public class TableRender extends AbstractTableHandler {
             throw new RuntimeException(context.data.model.
                     concat(" is an invalid model."));
 
-        context.table.importModel(model);
-        for (TableColumn tcolumn : context.table.getColumns()) {
-            if (tcolumn.isMark())
-                continue;
-            
-            name = tcolumn.getName();
+        if (context.data.ordering == null) {
+            items = model.getItens();
+            context.data.ordering = new String[items.length];
+            for (int i = 0; i < context.data.ordering.length; i++)
+                context.data.ordering[i] = items[i].getName();
+        }
+                
+        for (String name : context.data.ordering) {
             column = context.data.columns.get(name);
             if (column == null)
                 column = new TableToolColumn(context.data, name);
+            item = model.getModelItem(name);
             
-            column.tcolumn = tcolumn;
-            modelitem = tcolumn.getModelItem();
-            if (modelitem.getSearchHelp() == null)
-                modelitem.setSearchHelp(column.sh);
+            column.tcolumn = new TableColumn(context.table, name);
+            column.tcolumn.setMark(false);
+            column.tcolumn.setVisible(true);
+            column.tcolumn.setModelItem(item);
+            column.tcolumn.setLength(item.getDataElement().getLength());
+            
+            if (item.getSearchHelp() == null)
+                item.setSearchHelp(column.sh);
+            
             if (column.size > 0)
                 column.tcolumn.setLength(column.size);
         }

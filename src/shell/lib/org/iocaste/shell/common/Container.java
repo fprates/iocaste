@@ -23,8 +23,6 @@ package org.iocaste.shell.common;
 
 import java.util.Set;
 
-import org.iocaste.documents.common.DocumentModel;
-
 /**
  * Interface fundamental para containeres.
  * 
@@ -65,18 +63,6 @@ public interface Container extends Element {
      * @return elementos.
      */
     public abstract String[] getElementsNames();
-
-    /**
-     * Retorna modelo de documento importado.
-     * @return modelo de documento
-     */
-    public abstract DocumentModel getModel();
-    
-    /**
-     * Importa características do modelo de documento.
-     * @param model modelo de documento
-     */
-    public abstract void importModel(DocumentModel model);
 
     /**
      * Indica se container tem múltiplas linhas;

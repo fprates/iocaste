@@ -3,6 +3,9 @@ package org.iocaste.shell.common;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.ExtendedObject;
+
 /**
  * Ajuda de pesquisa
  * 
@@ -99,6 +102,68 @@ public class SearchHelp extends PopupControl {
         this.modelname = modelname;
     }
 
+    
+    /**
+     * 
+     * @param context
+     * @param table
+     * @param item
+     * @param object
+     */
+    public static final void setTableItem(AbstractContext context, Table table,
+            TableItem item, ExtendedObject object) {
+        Parameter parameter;
+        Link link;
+        Element element;
+        Object value;
+        InputComponent input;
+        DocumentModelItem modelitem;
+        Component component;
+        String name;
+        TableColumn[] columns = table.getColumns();
+        
+        for (TableColumn column : columns) {
+            if (column.isMark())
+                continue;
+
+            name = column.getName();
+            element = item.get(name);
+            if (element == null)
+                throw new RuntimeException("no component defined for " +
+                        "this table item");
+
+            modelitem = column.getModelItem();
+            if (!element.isDataStorable()) {
+                component = (Component)element;
+                value = object.get(modelitem);
+                component.setText((value == null)? "" : value.toString());
+                if (element.getType() != Const.LINK)
+                    continue;
+                
+                link = (Link)element;
+                parameter = column.getParameter();
+                if (parameter == null) {
+                    parameter = new Parameter(context.view, name);
+                    column.setParameter(parameter);
+                }
+                
+                link.add(parameter.getName(), value,
+                        modelitem.getDataElement().getType());
+                continue;
+            }
+            
+            input = (InputComponent)element;
+            if (input.getModelItem() == null)
+                input.setModelItem(modelitem);
+            
+            if (modelitem == null)
+                continue;
+            
+            value = object.get(modelitem.getName());
+            input.set(value);
+        }
+    }
+    
     @Override
     public void update(View view) { }
 }

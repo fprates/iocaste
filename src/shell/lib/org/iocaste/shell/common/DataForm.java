@@ -42,6 +42,7 @@ public class DataForm extends AbstractContainer {
     private boolean keyrequired;
     private byte columns;
     private List<String[]> lines;
+    private DocumentModel model;
     
     /**
      * 
@@ -123,13 +124,20 @@ public class DataForm extends AbstractContainer {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final DocumentModel getModel() {
+        return model;
+    }
+    
+    /**
      * Retorna objeto extendido equivalente.
      * @return objeto extendido
      */
     public final ExtendedObject getObject() {
         String name;
     	InputComponent input;
-    	DocumentModel model = getModel();
     	ExtendedObject object = new ExtendedObject(model);
     	
         for (Element element: getElements()) {
@@ -152,12 +160,6 @@ public class DataForm extends AbstractContainer {
         importModel(model);
     }
     
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractContainer#importModel(
-     *     org.iocaste.documents.common.DocumentModel)
-     */
-    @Override
     public final void importModel(DocumentModel model) {
         DataElement dataelement;
         DataItem dataitem;
@@ -176,7 +178,7 @@ public class DataForm extends AbstractContainer {
             dataitem.setDataElement(dataelement);
         }
         
-        super.importModel(model);
+        this.model = model;
     }
 
     /**

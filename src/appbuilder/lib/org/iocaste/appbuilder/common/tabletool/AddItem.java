@@ -5,7 +5,7 @@ import org.iocaste.shell.common.TableItem;
 
 public class AddItem extends AbstractTableHandler {
 
-    public static final void run(TableToolData data) {
+    public static final void run(TableTool tabletool, TableToolData data) {
         int i = 0;
         Context context = new Context();
         
@@ -23,10 +23,10 @@ public class AddItem extends AbstractTableHandler {
             }
 
             context.table.setVisibleLines(context.data.vlines);
-            additem(context, null, i);
+            additem(tabletool, context, null, i);
             break;
         default:
-            additems(context, null);
+            additems(tabletool, context, null);
             break;
         }
     }

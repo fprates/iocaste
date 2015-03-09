@@ -42,8 +42,9 @@ public class Response {
 //        new Button(container, "search");
 //    }
     
-    private static final void addItems(SearchHelp sh, Container container,
-            String name, DocumentModel model, ExtendedObject[] items) {
+    private static final void addItems(Context context, SearchHelp sh,
+            Container container, String name, DocumentModel model,
+            ExtendedObject[] items) {
         TableColumn column;
         TableItem tableitem;
         String export, action;
@@ -51,9 +52,17 @@ public class Response {
         Text text;
         Link link;
         Parameter param;
-        Table table = new Table(container, "search.table");
-        table.importModel(model);
+        Table table;
+        
         param = new Parameter(container, "value");
+        table = new Table(container, "search.table");
+        for (DocumentModelItem item : model.getItens()) {
+            column = new TableColumn(table, item.getName());
+            column.setMark(false);
+            column.setVisible(true);
+            column.setModelItem(item);
+            column.setLength(item.getDataElement().getLength());
+        }
         
         for (ExtendedObject object : items) {
             tableitem = new TableItem(table);
@@ -88,7 +97,7 @@ public class Response {
                     column.setVisible(false);
             }
             
-            tableitem.setObject(object);
+            SearchHelp.setTableItem(context, table, tableitem, object);
         }
     }
     
@@ -143,6 +152,6 @@ public class Response {
             return;
         }
         
-        addItems(sh, datacnt, name, model, result);
+        addItems(context, sh, datacnt, name, model, result);
     }
 }

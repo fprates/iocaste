@@ -25,9 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.DocumentModelItem;
-
 /**
  * Implementação de tabela html.
  * 
@@ -187,31 +184,6 @@ public class Table extends AbstractContainer {
      */
     public final boolean hasMark() {
         return mark;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractContainer#importModel(
-     *     org.iocaste.documents.common.DocumentModel)
-     */
-    @Override
-    public final void importModel(DocumentModel model) {
-        TableColumn column;
-        String name;
-        
-        for (DocumentModelItem item : model.getItens()) {
-            name = item.getName();
-            
-            column = new TableColumn(this, name);
-            column.setMark(false);
-            column.setVisible(true);
-            column.setModelItem(item);
-            column.setLength(item.getDataElement().getLength());
-            
-            columns.put(name, column);
-        }
-        
-        super.importModel(model);
     }
     
     /**
