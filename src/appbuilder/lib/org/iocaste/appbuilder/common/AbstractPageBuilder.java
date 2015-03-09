@@ -9,6 +9,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
+import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.tabletool.SetObjects;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -25,7 +26,6 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.RadioGroup;
-import org.iocaste.shell.common.ReportTool;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
@@ -144,6 +144,7 @@ class BuilderCustomView extends AbstractCustomView {
         DashboardFactory dashboard;
         DashboardComponent dashboardgroup;
         TableToolData ttdata;
+        ReportToolData rtdata;
         String parent = item.getParent();
         Container container = context.view.getElement(parent);
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
@@ -207,7 +208,11 @@ class BuilderCustomView extends AbstractCustomView {
             new Link(container, name, name);
             break;
         case REPORT_TOOL:
-            components.reporttools.put(name, new ReportTool(container, name));
+            rtdata = new ReportToolData();
+            rtdata.context = context;
+            rtdata.name = name;
+            new StandardContainer(container, rtdata.name);
+            components.add(rtdata);
             break;
         case TEXT_EDITOR:
             editor = new TextEditorTool(context).instance(container, name);
@@ -325,7 +330,7 @@ class BuilderCustomView extends AbstractCustomView {
             if (!entry.update)
                 continue;
             
-            SetObjects.run(entry.data);
+            SetObjects.run(entry.component, entry.data);
         }
     }
 }

@@ -29,6 +29,8 @@ public class ReportTool {
         ttdata.container = data.container;
         ttdata.name = data.name;
         ttdata.objects = data.objects;
+        ttdata.model = data.model;
+        ttdata.mode = TableTool.DISPLAY;
         
         new TableTool(ttdata);
     }

@@ -140,7 +140,7 @@ public abstract class AbstractViewInput {
     }
     
     protected final void reportset(String report, ExtendedObject[] items) {
-        getViewComponents().reporttools.get(report).setItens(items);
+        getViewComponents().reporttools.get(report).data.objects = items;
     }
     
     public final void run(PageBuilderContext context, boolean init) {

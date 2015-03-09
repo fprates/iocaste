@@ -5,6 +5,6 @@ import org.iocaste.shell.common.AbstractContext;
 
 public class ReportToolData {
     public AbstractContext context;
-    public String name, container;
+    public String name, container, model;
     public ExtendedObject[] objects;
 }
