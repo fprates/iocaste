@@ -8,22 +8,24 @@ import org.iocaste.appbuilder.common.ViewContext;
 public class Main extends AbstractPageBuilder {
     public static final String MAIN = "main";
     private Context extcontext;
-    private Redirect redirect;
-    private Refresh refresh;
     
     public Main() {
+        Redirect redirect;
+        Refresh refresh;
+        
         export("task_redirect", redirect = new Redirect());
         export("refresh", refresh = new Refresh());
+        extcontext = new Context();
+        extcontext.function = this;
+        redirect.extcontext = refresh.extcontext = extcontext;
     }
 
     @Override
     public void config(PageBuilderContext context) {
         ViewContext viewctx;
         
-        extcontext = new Context();
         extcontext.context = context;
         extcontext.groups = Response.getLists(context);
-        redirect.extcontext = refresh.extcontext = extcontext;
         
         viewctx = context.instance(MAIN);
         viewctx.set(extcontext);

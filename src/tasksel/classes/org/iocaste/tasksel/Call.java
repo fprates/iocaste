@@ -15,7 +15,7 @@ public class Call extends AbstractActionHandler {
     protected void execute(PageBuilderContext context) throws Exception {
         String task = dbactiongetst("groups", dash);
 
-        if (Common.call(context.function, context.view, task) == 0)
+        if (Common.call(context.function, task) == 0)
             return;
         
         message(Const.ERROR, "not.authorized");

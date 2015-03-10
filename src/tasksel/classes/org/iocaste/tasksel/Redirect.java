@@ -13,14 +13,14 @@ public class Redirect extends AbstractHandler {
         ViewState state;
         String task = message.getString("task");
         
+        if (Common.call(extcontext.function, task) == 1)
+            return null;
+
         state = new ViewState();
         state.view = new View(null, null);
-        if (Common.call(extcontext.context.function, state.view, task) == 1)
-            return null;
-        
-        state.rapp = extcontext.context.function.getRedirectedApp();
-        state.rpage = extcontext.context.function.getRedirectedPage();
-        state.parameters = extcontext.context.function.getParameters();
+        state.rapp = extcontext.function.getRedirectedApp();
+        state.rpage = extcontext.function.getRedirectedPage();
+        state.parameters = extcontext.function.getParameters();
         return state;
     }
 

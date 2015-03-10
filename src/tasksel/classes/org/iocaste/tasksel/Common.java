@@ -6,7 +6,6 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.View;
 
 public class Common {
     
@@ -48,8 +47,7 @@ public class Common {
      * @param view
      * @param parsed
      */
-    private static final void run(
-            AbstractPage function, View view, String[] parsed) {
+    private static final void run(AbstractPage function, String[] parsed) {
         String[] values;
         String page = "main", app = null;
         
@@ -80,7 +78,7 @@ public class Common {
         function.exec(app, page);
     }
     
-    public static int call(AbstractPage page, View view, String command) {
+    public static int call(AbstractPage page, String command) {
         Iocaste iocaste;
         Authorization authorization;
         String[] parsed;
@@ -95,7 +93,7 @@ public class Common {
         
         parsed = parseCommand(command, page);
         parsed = parsed[0].split("\\s");
-        run(page, view, parsed);
+        run(page, parsed);
         return 0;
     }
 
