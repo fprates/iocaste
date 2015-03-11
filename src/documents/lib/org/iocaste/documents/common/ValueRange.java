@@ -9,7 +9,7 @@ public class ValueRange implements Serializable {
     private List<ValueRangeItem> itens;
     
     public ValueRange() {
-        itens = new ArrayList<ValueRangeItem>();
+        itens = new ArrayList<>();
     }
     
     public final void add(ValueRangeItem item) {
@@ -20,8 +20,8 @@ public class ValueRange implements Serializable {
         return itens.get(index);
     }
     
-    public final ValueRangeItem[] getItens() {
-        return itens.toArray(new ValueRangeItem[0]);
+    public final List<ValueRangeItem> getItens() {
+        return itens;
     }
     
     public final int length() {
