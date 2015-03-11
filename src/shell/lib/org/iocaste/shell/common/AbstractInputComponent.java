@@ -27,6 +27,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private DataElement dataelement;
     private SearchHelp search;
     private Calendar calendar;
+    private String master;
 
     public AbstractInputComponent(View view, Const type, Const type_,
             String name) {
@@ -141,6 +142,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final int getLength() {
         return length;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getMaster()
+     */
+    @Override
+    public final String getMaster() {
+        return master;
     }
     
     /*
@@ -347,6 +357,14 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setLength(int length) {
         this.length = length;
+    }
+    
+    /**
+     * 
+     * @param master
+     */
+    protected final void setMaster(String master) {
+        this.master = master;
     }
     
     /*

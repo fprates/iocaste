@@ -85,19 +85,28 @@ public class Input {
      */
     private final void generateSearchHelp(InputComponent input,
             InputData inputdata) {
-        SearchHelp sh;
-        SHLib shlib = new SHLib(inputdata.function);
-        String shname = input.getModelItem().getSearchHelp();
-        ExtendedObject[] shdata = shlib.get(shname);
+        SearchHelp sh, search;
+        String shname, name, htmlname;
+        ExtendedObject[] shdata;
+        
+        shname = input.getModelItem().getSearchHelp();
+        shdata = new SHLib(inputdata.function).get(shname);
         
         if (shdata == null || shdata.length == 0)
             return;
         
-        sh = new SearchHelp(inputdata.container, input.getName()+".sh");
-        sh.setHtmlName(input.getHtmlName()+".sh");
+        name = input.getName();
+        htmlname = input.getHtmlName();
+        sh = new SearchHelp(inputdata.container, name.concat(".sh"));
+        sh.setHtmlName(htmlname.concat(".sh"));
         sh.setModelName((String)shdata[0].get("MODEL"));
         sh.setExport((String)shdata[0].get("EXPORT"));
         
+        search = new SearchHelp(inputdata.container, name.concat(".search"));
+        search.setHtmlName(htmlname.concat(".search"));
+        search.setMaster(sh.getHtmlName());
+        
+        sh.setChild(search.getHtmlName());
         for (int i = 1; i < shdata.length; i++) {
             shname = shdata[i].get("ITEM");
             sh.addModelItemName(shname);

@@ -5,7 +5,11 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Button;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.DataItem;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
@@ -17,30 +21,30 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 
 public class Response {
-//    private static final void addCriteria(SearchHelp sh, Container container,
-//            DocumentModel model, Context context) {
-//        DataItem item;
-//        DataForm criteria;
-//        
-//        criteria = new DataForm(container, "criteria");        
-//        criteria.importModel(model);        
-//        for (Element element : criteria.getElements()) {
-//            if (!element.isDataStorable())
-//                continue;
-//            
-//            item = (DataItem)element;
-//            if (sh.contains(item.getName())) {
-//                item.setComponentType(Const.RANGE_FIELD);
-//                if (context.view.getFocus() == null)
-//                    context.view.setFocus(item);
-//                continue;
-//            }
-//            
-//            item.setVisible(false);
-//        }
-//        
-//        new Button(container, "search");
-//    }
+    
+    private static final void addCriteria(Context context, SearchHelp sh,
+            Container container, DocumentModel model) {
+        DataItem item;
+        DataForm criteria;
+        
+        criteria = new DataForm(container, "criteria");
+        criteria.setStyleClass("shcriteria");
+        criteria.importModel(model);
+        for (Element element : criteria.getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            
+            item = (DataItem)element;
+            if (sh.contains(item.getName())) {
+                item.setComponentType(Const.RANGE_FIELD);
+                if (context.view.getFocus() == null)
+                    context.view.setFocus(item);
+                continue;
+            }
+            
+            item.setVisible(false);
+        }
+    }
     
     private static final void addItems(Context context, SearchHelp sh,
             Container container, String name, DocumentModel model,
@@ -102,7 +106,7 @@ public class Response {
     }
     
     public static final void main(Context context) {
-        String name;
+        String name, searchjs, action, form, searchbt, master;
         DocumentModel model;
         ExtendedObject[] result;
         Container stdcnt, datacnt;
@@ -132,19 +136,43 @@ public class Response {
         stylesheet.put(".shdatacnt", "overflow", "auto");
         stylesheet.put(".shdatacnt", "height", "20em");
         
+        stylesheet.newElement(".shcriteria");
+        stylesheet.put(".shcriteria", "margin", "0px");
+        stylesheet.put(".shcriteria", "padding", "0px");
+        stylesheet.put(".shcriteria", "border-style", "none");
+        
         stdcnt = new StandardContainer(context.view, "shstdcnt");
         stdcnt.setStyleClass("shcnt");
         
         new Button(stdcnt, "cancel").addEvent("onClick","javascript:closeSh()");
+        
+        action = context.function.getParameter("action");
+        form = context.function.getParameter("form");
+        
+        searchbt = context.control.getChild();
+        if (searchbt == null)
+            searchbt = context.control.getHtmlName();
+        
+        searchjs = new StringBuilder("javascript:formSubmit('").
+                append(form).append("', '").
+                append(action).append("', '").
+                append(searchbt).append("');").toString();
+        
+        searchbt = "bt_".concat(searchbt);
+        
+        new Button(stdcnt, searchbt).addEvent("onClick", searchjs);
+        
+        sh = context.function.getParameter("control");
+        master = sh.getMaster();
+        if (master != null)
+            sh = context.control.getView().getElement(master);
+        
+        name = sh.getModelName();
+        model = documents.getModel(name);
+        addCriteria(context, sh, stdcnt, model);
 
         datacnt = new StandardContainer(stdcnt, "shdatacnt");
         datacnt.setStyleClass("shdatacnt");
-        
-        sh = context.function.getParameter("control");
-        name = sh.getModelName();
-        model = documents.getModel(name);
-//        addCriteria(sh, stdcnt, model, context);
-        
         result = Common.getResultsFrom(name, documents, context.criteria);
         if (result == null) {
             new Text(datacnt, "no.results.found");

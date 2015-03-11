@@ -35,6 +35,9 @@ public class RangeField extends AbstractInputComponent
         return lowname;
     }
     
+    /**
+     * 
+     */
     private final void init() {
         setLength(20);
         setStyleClass("text_field");

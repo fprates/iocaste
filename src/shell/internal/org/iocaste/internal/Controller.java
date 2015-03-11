@@ -298,7 +298,6 @@ public class Controller {
      */
     private static final void processInputs(ControllerData config,
             InputStatus status) throws Exception {
-        RangeInputComponent rinput;
         Element element;
         String value;
         DataElement dataelement;
@@ -347,13 +346,13 @@ public class Controller {
                 input.set(value);
                 break;
             case 1:
-                rinput = (RangeInputComponent)input;
-                if (name.equals(rinput.getLowHtmlName()))
+                ri.master = config.state.view.getElement(input.getMaster());
+                if (name.equals(ri.master.getLowHtmlName()))
                     ri.type = LOW_RANGE;
                 else
                     ri.type = HIGH_RANGE;
                 
-                ri.addCount(rinput.getHtmlName());
+                ri.addCount(ri.master.getHtmlName());
                 ri.value = value;
                 
                 break;
@@ -439,12 +438,14 @@ public class Controller {
     private static final void setRangeValue(InputComponent input, Object object,
             RangeInputStatus ri) {
         String name, value;
-        RangeInputComponent rinput;
         ValueRange range;
         ValueRangeItem rangeitem = null;
         DataElement dataelement = Shell.getDataElement(input);
 
-        name = input.getHtmlName();
+        name = input.getMaster();
+        if (name == null)
+            name = input.getHtmlName();
+        
         if (isValueInitial(object, dataelement, input.isBooleanComponent())) {
             if (ri.getCount(name) == 2)
                 ri.clearCount(name);
@@ -452,11 +453,10 @@ public class Controller {
             return;
         }
 
-        rinput = (RangeInputComponent)input;
-        range = rinput.get();
+        range = ri.master.get();
         if (range == null) {
             range = new ValueRange();
-            input.set(range);
+            ri.master.set(range);
         }
 
         if (range.length() > 0)
@@ -599,6 +599,7 @@ public class Controller {
 class RangeInputStatus {
     public byte type;
     public Object value;
+    public RangeInputComponent master;
     private Map<String, Byte> state;
     
     public RangeInputStatus() {

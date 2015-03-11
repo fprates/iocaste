@@ -1,9 +1,13 @@
 package org.iocaste.sh;
 
+import org.iocaste.documents.common.ValueRange;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.View;
@@ -32,16 +36,9 @@ public class Main extends AbstractPage {
         setReloadableView(false);
     }
     
-    public final void choose() {
-        updateView(Request.choose(context));
-        back();
-    }
-    
     @Override
     public final AbstractContext init(View view) {
-        context = new Context();
-        
-        return context;
+        return context = new Context();
     }
     
     /**
@@ -53,12 +50,28 @@ public class Main extends AbstractPage {
         return Install.init();
     }
     
+    /**
+     * 
+     */
     public void main() {
+        ValueRange range;
+        InputComponent input;
+        DataForm criteria;
+        
         setMessageSource((String)context.function.getParameter("msgsource"));
+        context.control = context.function.getParameter("control");
+        
+        if (context.control.getMaster() != null) {
+            criteria = context.control.getView().getElement("criteria");
+            for (Element element : criteria.getElements()) {
+                input = (InputComponent)element;
+                range = input.get();
+                if (range == null)
+                    continue;
+                context.criteria.put(element.getName(), range);
+            }
+        }
+        
         Response.main(context);
-    }
-    
-    public void search() {
-        Request.search(context);
     }
 }

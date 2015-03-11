@@ -27,14 +27,14 @@ import org.iocaste.shell.common.View;
 public class TextFieldRenderer extends Renderer {
 
 
-    public static final XMLElement render(DataItem dataitem,
+    public static final XMLElement render(DataItem dataitem, String tbstyle,
             Config config) {
-        return _render(dataitem, TextField.STYLE, config);
+        return _render(dataitem, TextField.STYLE, tbstyle, config);
     }
     
-    public static final XMLElement render(TextField textfield,
+    public static final XMLElement render(TextField textfield, String tbstyle,
             Config config) {
-        return _render(textfield, textfield.getStyleClass(),config);
+        return _render(textfield, textfield.getStyleClass(), tbstyle, config);
     }
     
     /**
@@ -44,10 +44,11 @@ public class TextFieldRenderer extends Renderer {
      * @return
      */
     private static final XMLElement _render(InputComponent input,
-            String style, Config config) {
+            String style, String tablestyle, Config config) {
+        Container container;
         PopupControl popupcontrol;
         StringBuilder sb;
-        String tftext, calname;
+        String tftext, calname, shname;
         Text text;
         SearchHelp search;
         Calendar calendar;
@@ -70,7 +71,8 @@ public class TextFieldRenderer extends Renderer {
         inputtag.add("onfocus", new StringBuilder("send('").append(name).
                 append("', '&event=onfocus', null)").toString());
         
-        if (input.getContainer().getType() == Const.TABLE_ITEM)
+        container = input.getContainer();
+        if ((container != null) && (container.getType() == Const.TABLE_ITEM))
             sb = new StringBuilder("table_cell_content");
         else
             sb = new StringBuilder(style);
@@ -103,9 +105,8 @@ public class TextFieldRenderer extends Renderer {
                 calname = popupcontrol.getName();
                 if ((calname.equals(calendar.getEarly()) ||
                      calname.equals(calendar.getLate()) ||
-                     calname.equals(calendar.getName()))) {
+                     calname.equals(calendar.getName())))
                     tagc.addChildren(renderPopup(config));
-                }
             }
             
             tagc.addChild(CalendarButtonRenderer.render(calendar, config));
@@ -115,9 +116,13 @@ public class TextFieldRenderer extends Renderer {
         search = input.getSearchHelp();
         if (search != null) {
             tagc = new XMLElement("td");
-            if ((popupcontrol != null) &&
-                    (popupcontrol.getHtmlName().equals(search.getHtmlName())))
-                tagc.addChildren(renderPopup(config));
+            if (popupcontrol != null) {
+                shname = popupcontrol.getHtmlName();
+                if (shname.equals(search.getHtmlName()) ||
+                    shname.equals(search.getChild()))
+                   tagc.addChildren(renderPopup(config));
+            }
+            
             tagc.addChild(SHButtonRenderer.render(search, config));
             tagl.addChild(tagc);
         }
@@ -145,6 +150,9 @@ public class TextFieldRenderer extends Renderer {
         
         tagt = new XMLElement("table");
         tagt.addChild(tagl);
+        if (tablestyle != null)
+            tagt.add("style", tablestyle);
+        
         return tagt;
     }
     
@@ -160,7 +168,6 @@ public class TextFieldRenderer extends Renderer {
         StyleSheet stylesheet;
         
         control = config.getPopupControl();
-        tags = new ArrayList<>();
         tracking = config.getTracking();
         service = new Service(tracking.sessionid, tracking.contexturl);
         message = new Message("get_view_data");
@@ -184,6 +191,8 @@ public class TextFieldRenderer extends Renderer {
         control.update(view);
         config.getMessageSources().add(view.getMessages());
         config.getView().setStyleSheet(view.styleSheetInstance().getElements());
+        
+        tags = new ArrayList<>();
         for (Container container : view.getContainers())
             Renderer.renderContainer(tags, container, config);
         

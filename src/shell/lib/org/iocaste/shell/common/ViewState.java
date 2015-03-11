@@ -20,5 +20,6 @@ public class ViewState implements Serializable {
     
     public ViewState() {
         headervalues = new HashMap<>();
+        parameters = new HashMap<>();
     }
 }

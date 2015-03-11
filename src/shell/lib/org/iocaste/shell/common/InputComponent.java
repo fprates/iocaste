@@ -77,6 +77,12 @@ public interface InputComponent extends Component {
     public abstract int getLength();
     
     /**
+     * 
+     * @return
+     */
+    public abstract String getMaster();
+    
+    /**
      * Retorna item do modelo associado.
      * @return item do modelo
      */

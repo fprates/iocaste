@@ -1,66 +1,72 @@
 package org.iocaste.internal.renderer;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.RangeField;
-import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.RangeFieldPair;
+import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.TextField;
 
 public class RangeFieldRenderer extends Renderer {
 
-    public static final XMLElement render(DataItem dataitem, Config config) {
-        return _render(dataitem, RangeField.LOW, RangeField.HIGH, config);
-    }
-    
-    public static final XMLElement render(RangeField rfield, Config config) {
-        return _render(rfield, rfield.getLowHtmlName(),
-                rfield.getHighHtmlName(), config);
-    }
-    
-    private static final XMLElement _render(InputComponent input,
-            String low, String high, Config config)
-    {
+    public static final XMLElement render(
+            RangeInputComponent rangeinput, Config config) {
+        String style, low, high;
+        DataElement dataelement;
         ValueRange range;
         ValueRangeItem value;
         TextField tfield;
-        Element[] elements = new Element[3];
-        XMLElement rfieldtag = new XMLElement("div");
+        RangeFieldPair[] elements;
+        XMLElement rfieldtag, to;
+        InputComponent input;
         
-        elements[0] = new TextField(config.getView(), "low");
-        elements[0].setHtmlName(low);
-        elements[1] = new Text(config.getView(), "to");
-        elements[2] = new TextField(config.getView(), "high");
-        elements[2].setHtmlName(high);
+        low = rangeinput.getLowHtmlName();
+        high = rangeinput.getHighHtmlName();
         
+        elements = new RangeFieldPair[3];
+        elements[0] = new RangeFieldPair(config.getView(), low);
+        elements[0].setMaster(rangeinput);
+        elements[1] = null;
+        elements[2] = new RangeFieldPair(config.getView(), high);
+        elements[2].setMaster(rangeinput);
+        
+        input = (InputComponent)rangeinput;
         range = (ValueRange)input.get();
         value = (range == null)? null : range.get(0);
+        
+        to = new XMLElement("p");
+        to.add("style", "display: inline;");
+        to.addInner("to");
+        
+        rfieldtag = new XMLElement("div");
         for (Element element : elements) {
-            if (!element.isDataStorable()) {
-                element.setStyleClass("text_h");
-                rfieldtag.addChild(TextRenderer.render((Text)element, config));
+            if (element == null) {
+                rfieldtag.addChild(to);
                 continue;
             }
             
+            dataelement = input.getDataElement();
             tfield = (TextField)element;
             tfield.setObligatory(input.isObligatory());
             tfield.setSecret(input.isSecret());
-            tfield.setLength(input.getLength());
             tfield.setModelItem(input.getModelItem());
             tfield.setEnabled(input.isEnabled());
-            tfield.setDataElement(input.getDataElement());
+            tfield.setDataElement(dataelement);
             tfield.setSearchHelp(input.getSearchHelp());
             tfield.setLocale(input.getLocale());
+            if (dataelement != null)
+                tfield.setVisibleLength(dataelement.getLength());
             
-            if (element.getName().equals("low"))
+            if (element.getName().equals(low))
                 tfield.set((value == null)? null : value.getLow());
             else
                 tfield.set((value == null)? null : value.getHigh());
             
-            rfieldtag.addChild(TextFieldRenderer.render(tfield, config));
+            style = "display: inline;";
+            rfieldtag.addChild(TextFieldRenderer.render(tfield, style, config));
         }
         
         return rfieldtag;

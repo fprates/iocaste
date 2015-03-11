@@ -1,6 +1,7 @@
 package org.iocaste.shell.common;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModelItem;
@@ -16,7 +17,7 @@ import org.iocaste.documents.common.ExtendedObject;
  */
 public class SearchHelp extends PopupControl {
     private static final long serialVersionUID = -1582634834243087782L;
-    private String modelname, export, inputname;
+    private String modelname, export, inputname, master, child;
     private Set<String> itemnames;
     
     public SearchHelp(Container container, String name) {
@@ -25,7 +26,6 @@ public class SearchHelp extends PopupControl {
         itemnames = new LinkedHashSet<>();
         setAllowStacking(true);
         setStyleClass("sh_button");
-        setText("?");
         setApplication("iocaste-search-help");
     }
 
@@ -44,6 +44,14 @@ public class SearchHelp extends PopupControl {
      */
     public final boolean contains(String name) {
         return itemnames.contains(name);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getChild() {
+        return child;
     }
     
     /**
@@ -71,11 +79,27 @@ public class SearchHelp extends PopupControl {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final String getMaster() {
+        return master;
+    }
+    
+    /**
      * Retorna modelo associado.
      * @return nome do modelo.
      */
     public final String getModelName() {
         return modelname;
+    }
+    
+    /**
+     * 
+     * @param child
+     */
+    public final void setChild(String child) {
+        this.child = child;
     }
     
     /**
@@ -92,6 +116,14 @@ public class SearchHelp extends PopupControl {
      */
     public final void setInputName(String inputname) {
         this.inputname = inputname;
+    }
+    
+    /**
+     * 
+     * @param master
+     */
+    public final void setMaster(String master) {
+        this.master = master;
     }
     
     /**
@@ -129,8 +161,8 @@ public class SearchHelp extends PopupControl {
             name = column.getName();
             element = item.get(name);
             if (element == null)
-                throw new RuntimeException("no component defined for " +
-                        "this table item");
+                throw new RuntimeException(
+                        "no component defined for this table item.");
 
             modelitem = column.getModelItem();
             if (!element.isDataStorable()) {
@@ -165,5 +197,12 @@ public class SearchHelp extends PopupControl {
     }
     
     @Override
-    public void update(View view) { }
+    public void update(View view) {
+        Map<String, Element> elements = getView().getElements();
+        DataForm criteria = view.getElement("criteria");
+        
+        elements.put("criteria", criteria);
+        for (Element element : criteria.getElements())
+            elements.put(element.getHtmlName(), element);
+    }
 }

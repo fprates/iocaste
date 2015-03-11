@@ -6,6 +6,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.documents.common.ValueRange;
+import org.iocaste.documents.common.ValueRangeItem;
 
 public class Common {
     
@@ -18,25 +19,45 @@ public class Common {
      */
     public static final ExtendedObject[] getResultsFrom(String modelname,
             Documents documents, Map<String, ValueRange> criteria) {
-        boolean started;
+        ValueRange range;
         Query query = new Query();
         
         query.setModel(modelname);
-        if (criteria == null || criteria.size() == 0) {
+        if ((criteria == null) || (criteria.size() == 0))
             return documents.select(query);
-        } else {
-            started = false;
-            for (String name : criteria.keySet()) {
-                if (started) {
-                    query.andIn(name, criteria.values().toArray());
-                    continue;
+        
+        for (String name : criteria.keySet()) {
+            range = criteria.get(name);
+            for (ValueRangeItem rangeitem : range.getItens()) {
+                switch (rangeitem.getOption()) {
+                case BT:
+                    query.andGE(name, rangeitem.getLow());
+                    query.andLE(name, rangeitem.getHigh());
+                    break;
+                case CP:
+                    break;
+                case EQ:
+                    query.andEqual(name, rangeitem.getLow());
+                    break;
+                case GE:
+                    query.andGE(name, rangeitem.getLow());
+                    break;
+                case GT:
+                    query.andGT(name, rangeitem.getLow());
+                    break;
+                case LE:
+                    query.andLE(name, rangeitem.getLow());
+                    break;
+                case LT:
+                    query.andLT(name, rangeitem.getLow());
+                    break;
+                case NE:
+                    query.andNot(name, rangeitem.getLow());
+                    break;
                 }
-                
-                started = true;
-                query.andIn(name, criteria.values().toArray());
             }
-            
-            return documents.select(query);
         }
+        
+        return documents.select(query);
     }
 }
