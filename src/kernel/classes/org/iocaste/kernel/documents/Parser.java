@@ -346,6 +346,9 @@ public class Parser {
             case WhereClause.IN:
                 addClause(sb, values, operator, " in ", value);
                 break;
+            case WhereClause.CP:
+                addClause(sb, values, operator, " like ?", value);
+                break;
             }
             operator = clause.getOperator();
         }

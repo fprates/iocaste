@@ -62,6 +62,10 @@ public class Query implements Serializable {
         add(field, WhereClause.LE, value, "and");
     }
     
+    public final void andLike(String field, Object value) {
+        add(field, WhereClause.CP, value, "and");
+    }
+    
     public final void andLT(String field, Object value) {
         add(field, WhereClause.LT, value, "and");
     }
@@ -182,6 +186,10 @@ public class Query implements Serializable {
 
     public final void orLE(String field, Object value) {
         add(field, WhereClause.LE, value, "or");
+    }
+    
+    public final void orLike(String field, Object value) {
+        add(field, WhereClause.CP, value, "or");
     }
     
     public final void orLT(String field, Object value) {

@@ -22,6 +22,7 @@ public class WhereClause implements Serializable {
     public static final byte IN_ENTRY = 15;
     public static final byte BE_ENTRY = 16;
     public static final byte EE_ENTRY = 17;
+    public static final byte CP = 18;
     private String field, operator;
     private byte condition;
     private Object value;

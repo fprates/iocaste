@@ -35,6 +35,8 @@ public class Common {
                     query.andLE(name, rangeitem.getHigh());
                     break;
                 case CP:
+                    query.andLike(name, rangeitem.getLow().toString().
+                            replaceAll("[*]", "%"));
                     break;
                 case EQ:
                     query.andEqual(name, rangeitem.getLow());
