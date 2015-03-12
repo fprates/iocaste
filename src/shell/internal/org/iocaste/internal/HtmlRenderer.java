@@ -15,9 +15,7 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.MessageSource;
-import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
@@ -87,12 +85,7 @@ public class HtmlRenderer {
                 getText(title, title));
 
         if (focus != null) {
-            if (focus.isDataStorable() &&
-                    ((InputComponent)focus).isValueRangeComponent())
-                focusname = ((RangeInputComponent)focus).getLowHtmlName();
-            else
-                focusname = focus.getHtmlName();
-            
+            focusname = focus.getHtmlName();
             config.addOnload(new StringBuffer("document.getElementById('").
                     append(focusname).append("').focus();").toString());
         }
