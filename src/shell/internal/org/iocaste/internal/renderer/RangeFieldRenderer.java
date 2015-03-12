@@ -40,7 +40,7 @@ public class RangeFieldRenderer extends Renderer {
         
         to = new XMLElement("p");
         to.add("style", "display: inline;");
-        to.addInner("to");
+        to.addInner(config.getText("to", "to"));
         
         rfieldtag = new XMLElement("div");
         for (Element element : elements) {

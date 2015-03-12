@@ -1,5 +1,7 @@
 package org.iocaste.sh;
 
+import java.util.Properties;
+
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
@@ -106,6 +108,7 @@ public class Response {
     }
     
     public static final void main(Context context) {
+        Properties messages;
         String name, searchjs, action, form, searchbt, master;
         DocumentModel model;
         ExtendedObject[] result;
@@ -181,5 +184,10 @@ public class Response {
         }
         
         addItems(context, sh, datacnt, name, model, result);
+        
+        messages = new Properties();
+        messages.put(searchbt, "Selecionar");
+        messages.put("to", "até");
+        context.source.setMessages(messages);
     }
 }

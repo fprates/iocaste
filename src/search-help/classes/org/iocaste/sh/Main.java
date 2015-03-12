@@ -59,6 +59,7 @@ public class Main extends AbstractPage {
         DataForm criteria;
         
         setMessageSource((String)context.function.getParameter("msgsource"));
+        context.view.setMessages(context.source);
         context.control = context.function.getParameter("control");
         
         if (context.control.getMaster() != null) {
