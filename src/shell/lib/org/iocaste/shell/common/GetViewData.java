@@ -64,7 +64,8 @@ public class GetViewData extends AbstractHandler {
             method.invoke(page);
         }
         
-        if (view.getMessages() == null) {
+        messages = view.getMessages();
+        if ((messages == null) || (msgsource != null)) {
             /*
              * há alguma chance que getViewData() tenha sido chamada
              * a partir de um ticket, que nesse caso teria a localização
@@ -77,7 +78,9 @@ public class GetViewData extends AbstractHandler {
                     setLocaleForElement(container, view.getLocale());
             }
             
-            messages = new MessageSource();
+            if (messages == null)
+                messages = new MessageSource();
+            
             messages.loadFromApplication(view.getAppName(), locale, page);
             if (msgsource != null)
                 messages.loadFromApplication(msgsource, locale, page);
