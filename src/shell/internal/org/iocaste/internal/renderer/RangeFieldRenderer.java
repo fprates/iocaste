@@ -22,6 +22,7 @@ public class RangeFieldRenderer extends Renderer {
         RangeFieldPair[] elements;
         XMLElement rfieldtag, to;
         InputComponent input;
+        int length;
         
         low = rangeinput.getLowHtmlName();
         high = rangeinput.getHighHtmlName();
@@ -57,8 +58,11 @@ public class RangeFieldRenderer extends Renderer {
             tfield.setDataElement(dataelement);
             tfield.setSearchHelp(input.getSearchHelp());
             tfield.setLocale(input.getLocale());
-            if (dataelement != null)
-                tfield.setVisibleLength(dataelement.getLength());
+            
+            if (dataelement != null) {
+                length = dataelement.getLength();
+                tfield.setVisibleLength((length > 20)? 20 : length);
+            }
             
             if (element.getName().equals(low))
                 tfield.set((value == null)? null : value.getLow());
