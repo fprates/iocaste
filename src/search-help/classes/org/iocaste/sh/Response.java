@@ -177,6 +177,12 @@ public class Response {
         datacnt = new StandardContainer(stdcnt, "shdatacnt");
         datacnt.setStyleClass("shdatacnt");
         result = Common.getResultsFrom(name, documents, context.criteria);
+        
+        messages = new Properties();
+        messages.put(searchbt, "Selecionar");
+        messages.put("to", "até");
+        context.source.setMessages(messages);
+        
         if (result == null) {
             new Text(datacnt, "no.results.found");
             context.view.setTitle(sh.getText());
@@ -184,10 +190,5 @@ public class Response {
         }
         
         addItems(context, sh, datacnt, name, model, result);
-        
-        messages = new Properties();
-        messages.put(searchbt, "Selecionar");
-        messages.put("to", "até");
-        context.source.setMessages(messages);
     }
 }
