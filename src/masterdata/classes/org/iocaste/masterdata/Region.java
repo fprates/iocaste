@@ -56,10 +56,9 @@ public class Region {
         
         shd = new SearchHelpData("SH_REGION");
         shd.setModel("REGION");
-        shd.add("REGION_ID");
         shd.add("CODE");
         shd.add("TEXT");
-        shd.setExport("REGION_ID");
+        shd.setExport("CODE");
         context.data.add(shd);
         
         context.data.addValues(model, "BRAC", "BR", "AC", "Acre");

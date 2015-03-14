@@ -46,8 +46,8 @@ public class Country {
         model.add(item);
         
         context.data.addValues(model, "BR", "Brasil", "BRL");
-        context.data.addValues(model, "JP", "日本", "JPY");
-        context.data.addValues(model, "US", "United States of America", "USD");
+        context.data.addValues(model, "JP", "Japão", "JPY");
+        context.data.addValues(model, "US", "Estados Unidos", "USD");
         
         shd = new SearchHelpData("SH_COUNTRY");
         shd.setModel("COUNTRIES");
