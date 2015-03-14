@@ -9,7 +9,6 @@ import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.TableItem;
 
 public abstract class AbstractExtendedValidator extends AbstractValidator {
-    private static final long serialVersionUID = 8008598121724533805L;
     
     /**
      * 

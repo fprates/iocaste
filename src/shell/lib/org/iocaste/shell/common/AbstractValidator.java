@@ -14,7 +14,6 @@ import org.iocaste.documents.common.ExtendedObject;
  *
  */
 public abstract class AbstractValidator implements Validator {
-    private static final long serialVersionUID = 1174080367157084461L;
     private String message;
     private InputComponent input;
     private AbstractContext context;

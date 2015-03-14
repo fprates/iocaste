@@ -1,8 +1,6 @@
 package org.iocaste.shell.common;
 
-import java.io.Serializable;
-
-public interface Validator extends Serializable {
+public interface Validator {
     
     public abstract void clear();
     
