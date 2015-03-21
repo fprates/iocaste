@@ -314,6 +314,9 @@ class BuilderCustomView extends AbstractCustomView {
         ViewComponents components = context.
                 getView(context.view.getPageName()).getComponents();
         
+        for (DashboardFactory factory : components.dashboards.values())
+            factory.build();
+            
         for (TableToolEntry entry : components.tabletools.values())
             entry.component = new TableTool(context, entry.data.name);
     }

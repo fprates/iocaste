@@ -1,37 +1,35 @@
 package org.iocaste.appbuilder.common.dashboard;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
-import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.StandardContainer;
-import org.iocaste.shell.common.StyleSheet;
-import org.iocaste.shell.common.Text;
 
 public class DashboardComponent {
     public static final boolean GROUP = true;
-    private String choose, name, stylename, innerstyle, unit;
-    private PageBuilderContext context;
-    private StandardContainer container, inner;
-    private StyleSheet stylesheet;
+    private String name;
     private DashboardFactory factory;
     private boolean hide;
-    private int width, height;
     private Set<String> components;
+    private List<ContentEntry> content;
+    private DashboardRenderer renderer;
     
     public DashboardComponent(DashboardFactory factory, Container container,
-            PageBuilderContext context, String name) {
-        init(factory, container, context, name, null);
+            String name) {
+        this(factory, container, name, null);
     }
-    
 
     public DashboardComponent(DashboardFactory factory, Container container,
-            PageBuilderContext context, String name, String group) {
-        init(factory, container, context, name, group);
+            String name, String group) {
+        this.name = (group == null)? name : group;
+        this.factory = factory;
+        
+        content = new ArrayList<>();
+        components = new LinkedHashSet<>();
     }
     
     public final void add(String item) {
@@ -59,19 +57,38 @@ public class DashboardComponent {
     }
     
     public final void addText(String name) {
-        String textname;
-        Text text;
+        ContentEntry entry;
         
+        entry = new ContentEntry(Const.TEXT, name);
         if (!hide)
-            container.setVisible(true);
-        
-        textname = name.concat(".item");
-        text = new Text(inner, textname);
-        text.setText(name);
+            entry.visible = true;
+        content.add(entry);
     }
     
-    private final void commit() {
-        factory.setArea(stylename, stylesheet, width, height, unit);
+    public final void build() {
+        Container container;
+
+        renderer = factory.getRenderer();
+        container = renderer.getContainer(name, DashboardRenderer.OUTER);
+        if (!hide)
+            container.setVisible(!hide);
+        else
+            if (container.getElements().size() > 0)
+                container.setVisible(true);
+        
+        for (ContentEntry entry : content) {
+            switch (entry.type) {
+            case TEXT:
+                renderer.addText(name, entry.name);
+                break;
+            case LINK:
+                renderer.add(name, entry.name, entry.value, entry.dtype);
+                break;
+            default:
+                break;
+            }
+            renderer.setVisible(name, entry.visible);
+        }
     }
     
     public final Set<String> getComponents() {
@@ -82,103 +99,59 @@ public class DashboardComponent {
         return factory;
     }
     
-    private final InputComponent getInput() {
-        return context.view.getElement(choose);
-    }
-    
     public final int geti() {
-        return getInput().geti();
+        return renderer.getInput(name).geti();
     }
     
     public final long getl() {
-        return getInput().getl();
+        return renderer.getInput(name).getl();
     }
     
     public final String getst() {
-        return getInput().getst();
+        return renderer.getInput(name).getst();
     }
     
     public final void hide() {
         hide = true;
-        container.setVisible(false);
-    }
-    
-    private final void init(DashboardFactory factory, Container container,
-                PageBuilderContext context, String name, String group) {
-        this.context = context;
-        this.name = (group == null)? name : group;
-        this.factory = factory;
-
-        components = new LinkedHashSet<>();
-        choose = this.name.concat("_dbitem_choose");
-        stylename = ".db_dash_".concat(name);
-
-        stylesheet = context.view.styleSheetInstance();
-        stylesheet.newElement(stylename);
-        stylesheet.put(stylename, "border-style", "solid");
-        stylesheet.put(stylename, "border-width", "1px");
-        stylesheet.put(stylename, "margin", "1px");
-        
-        this.container = new StandardContainer(
-                container, name.concat("_container"));
-        this.container.setStyleClass(stylename.substring(1));
-        this.container.setVisible(false);
-        
-        innerstyle = ".db_dash_inner_".concat(name);
-        stylesheet.newElement(innerstyle);
-        stylesheet.put(innerstyle, "margin", "10px");
-        
-        this.inner = new StandardContainer(this.container,
-                name.concat("_inner"));
-        this.inner.setStyleClass(innerstyle.substring(1));
     }
     
     public final void instance(String name) {
-        factory.instance(name, inner, this.name);
+        factory.instance(
+                name,
+                renderer.getContainer(this.name, DashboardRenderer.INNER),
+                this.name);
+        
         components.add(name);
-        if (!hide)
-            container.setVisible(true);
     }
     
     private final void internalAdd(String name, Object value, int type) {
-        String linkname;
-        Link link;
-        
-        if (!hide)
-            container.setVisible(true);
-        
         if (name == null)
             throw new RuntimeException("dashboard item undefined.");
         
-        linkname = name.concat("_dbitem_link");
-        link = new Link(inner, linkname, this.name);
-        link.setStyleClass("db_dash_item");
-        link.setText(name);
-        link.add(choose, value, type);
-    }
-    
-    public final void isometricGrid() {
-        factory.isometricGrid(components);
-    }
-    
-    public final void setArea(int width, int height, String unit) {
-        this.width = width;
-        this.height = height;
-        this.unit = unit;
-        commit();
-    }
-    
-    public final void setInnerStyle(String name, String value) {
-        stylesheet.put(innerstyle, name, value);
-    }
-    
-    public final void setStyleProperty(String name, String value) {
-        stylesheet.put(stylename, name, value);
+        content.add(new ContentEntry(Const.LINK, name, value, type));
     }
     
     public final void show() {
         hide = false;
-        if (container.getElements().size() > 0)
-            container.setVisible(true);
+    }
+}
+
+class ContentEntry {
+    public Const type;
+    public String name;
+    public Object value;
+    public int dtype;
+    public boolean visible;
+    
+    public ContentEntry(Const type, String name) {
+        this.type = type;
+        this.name = name;
+    }
+    
+    public ContentEntry(Const type, String name, Object value, int dtype) {
+        this.type = type;
+        this.name = name;
+        this.value = value;
+        this.dtype = dtype;
     }
 }
