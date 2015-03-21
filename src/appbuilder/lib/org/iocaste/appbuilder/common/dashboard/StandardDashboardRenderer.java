@@ -20,7 +20,7 @@ public class StandardDashboardRenderer extends AbstractDashboardRenderer {
         link = new Link(getContainer(dashname, INNER), linkname, action);
         link.setStyleClass("db_dash_item");
         link.setText(name);
-        link.add(entries.get(dashname).choose, value, type);
+        link.add(entries.get(action).choose, value, type);
     }
     
     @Override
@@ -88,14 +88,8 @@ public class StandardDashboardRenderer extends AbstractDashboardRenderer {
     @Override
     public void config(String name) {
         Entry entry;
-
-        entries.put(name, entry = new Entry());
-        entry.choose = name.concat("_dbitem_choose");
-        entry.outercnt = name.concat("_container");
-        entry.innercnt = name.concat("_inner");
-        entry.outerstyle = ".db_dash_".concat(name);
-        entry.innerstyle = ".db_dash_inner_".concat(name);
         
+        entry = entries.get(name);
         stylesheet.newElement(entry.outerstyle);
         stylesheet.put(entry.outerstyle, "display", "inline;");
         stylesheet.put(entry.outerstyle, "border-width", "1px");
