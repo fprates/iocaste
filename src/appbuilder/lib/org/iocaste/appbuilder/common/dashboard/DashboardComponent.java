@@ -18,13 +18,12 @@ public class DashboardComponent {
     private List<ContentEntry> content;
     private DashboardRenderer renderer;
     
-    public DashboardComponent(DashboardFactory factory, Container container,
-            String name) {
-        this(factory, container, name, null);
+    public DashboardComponent(DashboardFactory factory, String name) {
+        this(factory, name, null);
     }
 
-    public DashboardComponent(DashboardFactory factory, Container container,
-            String name, String group) {
+    public DashboardComponent(
+            DashboardFactory factory, String name, String group) {
         this.name = (group == null)? name : group;
         this.factory = factory;
         
@@ -116,11 +115,7 @@ public class DashboardComponent {
     }
     
     public final void instance(String name) {
-        factory.instance(
-                name,
-                renderer.getContainer(this.name, DashboardRenderer.INNER),
-                this.name);
-        
+        factory.instance(name, this.name);
         components.add(name);
     }
     

@@ -58,14 +58,13 @@ public class DashboardFactory {
     }
     
     public final DashboardComponent instance(String name) {
-        return instance(name, getFactoryContainer(), null);
+        return instance(name, null);
     }
     
-    public final DashboardComponent instance(String name, Container container,
-            String group) {
+    public final DashboardComponent instance(String name, String group) {
         DashboardComponent component;
         
-        component = new DashboardComponent(this, container, name, group);
+        component = new DashboardComponent(this, name, group);
         components.put(name, component);
         return component;
     }
