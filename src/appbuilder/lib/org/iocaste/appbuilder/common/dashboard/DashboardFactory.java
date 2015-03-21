@@ -22,8 +22,7 @@ public class DashboardFactory {
         this.name = name;
         components = new LinkedHashMap<>();
 
-        style = new StringBuilder(".").append(name).append("_db_container").
-                toString();
+        style = name.concat("_db_container");
         new StandardContainer(container, name).setStyleClass(style);
         setRenderer(new StandardDashboardRenderer());
     }
@@ -80,10 +79,15 @@ public class DashboardFactory {
     }
     
     public final void setRenderer(DashboardRenderer renderer) {
+        String style;
+        
+        style = new StringBuilder(".").append(
+                context.view.getElement(name).getStyleClass()).toString();
+        
         this.renderer = renderer;
         this.renderer.setContext(context);
         this.renderer.entryInstance(null, name);
-        this.renderer.setStyle(context.view.getElement(name).getStyleClass());
+        this.renderer.setStyle(style);
     }
     
     public final void setStyleProperty(String name, String value) {
