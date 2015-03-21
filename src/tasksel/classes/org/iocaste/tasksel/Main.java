@@ -25,7 +25,7 @@ public class Main extends AbstractPageBuilder {
         ViewContext viewctx;
         
         extcontext.context = context;
-        extcontext.groups = Response.getLists(context);
+        extcontext.groups = Refresh.getLists(context);
         
         viewctx = context.instance(MAIN);
         viewctx.set(extcontext);
