@@ -8,7 +8,7 @@ import org.iocaste.shell.common.Text;
 public class StandardDashboardRenderer extends AbstractDashboardRenderer {
 
     @Override
-    public final void add(String dashname, String name, Object value, int type)
+    public void add(String dashname, String name, Object value, int type)
     {
         String linkname;
         Link link;
