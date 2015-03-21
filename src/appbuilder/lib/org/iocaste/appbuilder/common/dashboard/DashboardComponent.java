@@ -11,20 +11,22 @@ import org.iocaste.shell.common.Container;
 
 public class DashboardComponent {
     public static final boolean GROUP = true;
-    private String name;
+    private String name, group;
     private DashboardFactory factory;
     private boolean hide;
     private Set<String> components;
     private List<ContentEntry> content;
     private DashboardRenderer renderer;
     
-    public DashboardComponent(DashboardFactory factory, String name) {
+    public DashboardComponent(
+            DashboardFactory factory, String name) {
         this(factory, name, null);
     }
 
     public DashboardComponent(
             DashboardFactory factory, String name, String group) {
-        this.name = (group == null)? name : group;
+        this.name = name;
+        this.group = group;
         this.factory = factory;
         
         content = new ArrayList<>();
@@ -96,6 +98,10 @@ public class DashboardComponent {
     
     public final DashboardFactory getFactory() {
         return factory;
+    }
+    
+    public final String getGroup() {
+        return group;
     }
     
     public final int geti() {

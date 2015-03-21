@@ -10,16 +10,20 @@ public class StandardDashboardRenderer extends AbstractDashboardRenderer {
     @Override
     public void add(String dashname, String name, Object value, int type)
     {
-        String linkname;
+        String linkname, action, group;
         Link link;
         
+        group = entries.get(dashname).group;
+        action = (group == null)? dashname : group;
         linkname = name.concat("_dbitem_link");
-        link = new Link(getContainer(dashname, INNER), linkname, dashname);
+        
+        link = new Link(getContainer(dashname, INNER), linkname, action);
         link.setStyleClass("db_dash_item");
         link.setText(name);
         link.add(entries.get(dashname).choose, value, type);
     }
     
+    @Override
     public final void addText(String dashname, String name) {
         String textname;
         Text text;

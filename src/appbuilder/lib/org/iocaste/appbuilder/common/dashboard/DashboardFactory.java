@@ -29,15 +29,25 @@ public class DashboardFactory {
     }
     
     public final void build() {
-        Container container;
+        String group;
+        DashboardComponent component;
+        Container container, factorygroup;
         
-        container = context.view.getElement(name);
         renderer.config();
+        factorygroup = context.view.getElement(name);
         for (String name : components.keySet()) {
-            renderer.entryInstance(name);
+            component = components.get(name);
+            group = component.getGroup();
+            if (group == null)
+                container = factorygroup;
+            else
+                container = renderer.getContainer(
+                        group, DashboardRenderer.INNER);
+            
+            renderer.entryInstance(group, name);
             renderer.config(name);
             renderer.build(container, name);
-            components.get(name).build();
+            component.build();
         }
     }
     
@@ -72,7 +82,7 @@ public class DashboardFactory {
     public final void setRenderer(DashboardRenderer renderer) {
         this.renderer = renderer;
         this.renderer.setContext(context);
-        this.renderer.entryInstance(name);
+        this.renderer.entryInstance(null, name);
         this.renderer.setStyle(context.view.getElement(name).getStyleClass());
     }
     

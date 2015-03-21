@@ -19,7 +19,7 @@ public interface DashboardRenderer {
     
     public abstract void config(String name);
     
-    public abstract void entryInstance(String name);
+    public abstract void entryInstance(String group, String name);
     
     public abstract Container getContainer(String name, byte type);
     

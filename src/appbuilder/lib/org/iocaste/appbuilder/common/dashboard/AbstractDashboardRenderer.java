@@ -19,7 +19,7 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
     }
     
     @Override
-    public final void entryInstance(String name) {
+    public final void entryInstance(String group, String name) {
         Entry entry;
         
         entries.put(name, entry = new Entry());
@@ -28,6 +28,7 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
         entry.innercnt = name.concat("_inner");
         entry.outerstyle = ".db_dash_".concat(name);
         entry.innerstyle = ".db_dash_inner_".concat(name);
+        entry.group = group;
     }
     
     @Override
@@ -88,6 +89,6 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
 }
 
 class Entry {
-    String outercnt, innercnt, outerstyle, innerstyle, choose;
+    String outercnt, innercnt, outerstyle, innerstyle, choose, group;
     boolean visible;
 }
