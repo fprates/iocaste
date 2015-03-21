@@ -33,7 +33,7 @@ public class TaskRenderer extends StandardDashboardRenderer {
         outer.setEdgeStyle("tasksel_edge");
         outer.setStyleClass(outerstyle);
         outer.setInternalStyle(innerstyle);
-        outer.setEnabled(true);
+        outer.setEnabled(false);
         
         new StandardContainer(outer, getContainerName(name, INNER));
     }

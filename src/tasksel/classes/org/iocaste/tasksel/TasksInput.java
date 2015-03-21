@@ -15,7 +15,6 @@ public class TasksInput extends AbstractViewInput {
         
         for (String name : extcontext.groups.keySet()) {
             entries = extcontext.groups.get(name);
-            dbtextadd("groups", name, name);
             for (TaskEntry entry : entries) {
                 text = entry.getText();
                 if (text == null)
