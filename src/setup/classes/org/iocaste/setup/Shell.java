@@ -267,7 +267,7 @@ public class Shell {
         stylesheet.put(".list_box_disabled", "padding", "3px");
         
         stylesheet.newElement(".message_box");
-        stylesheet.put(".message_box", "position", "absolute");
+        stylesheet.put(".message_box", "position", "fixed");
         stylesheet.put(".message_box", "bottom", "0px");
         stylesheet.put(".message_box", "width", "100%");
         
