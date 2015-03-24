@@ -26,18 +26,19 @@ public class Save extends AbstractActionHandler {
         TableToolData tabletool;
         Context extcontext = getExtendedContext();
         
-        cmodel = getManager(extcontext.cmodel).getModel();
+        cmodel = getManager(extcontext.link.cmodel).getModel();
         conversion = new DataConversion();
         conversion.dfsource("base");
         for (DocumentModelKey key : cmodel.getHeader().getKeys()) {
             keyname = key.getModelItemName();
             conversion.constant(keyname, getdfkey("head"));
-            if ((extcontext.number != null) && (extcontext.id == null))
-                conversion.nextnumber(keyname, extcontext.number);
+            if ((extcontext.link.number != null) && (extcontext.id == null))
+                conversion.nextnumber(keyname,
+                        extcontext.link.number, extcontext.link.numberseries);
             break;
         }
         
-        extractor = documentExtractorInstance(extcontext.cmodel);
+        extractor = documentExtractorInstance(extcontext.link.cmodel);
         extractor.setHeader(conversion);
         extractor.ignoreInitialHead();
         
@@ -64,7 +65,7 @@ public class Save extends AbstractActionHandler {
         extcontext.document = extractor.save();
         extcontext.id = extcontext.document.getKey();
         
-        managerMessage(extcontext.cmodel, Const.STATUS, Manager.SAVED);
+        managerMessage(extcontext.link.cmodel, Const.STATUS, Manager.SAVED);
     }
 
 }

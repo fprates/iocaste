@@ -8,7 +8,7 @@ public class MaintenanceSpec extends AbstractViewSpec {
     @Override
     public void execute() {
         Context extcontext = getExtendedContext();
-        ComplexModel model = getManager(extcontext.cmodel).getModel();
+        ComplexModel model = getManager(extcontext.link.cmodel).getModel();
         
         form("main");
         navcontrol("main");

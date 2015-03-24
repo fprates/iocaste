@@ -54,8 +54,11 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
                 append(" cmodel=").append(applink.cmodel).
                 append(" msgsource=").append(pkgname);
         
-        if (applink.number != null)
+        if (applink.number != null) {
             sb.append(" number=").append(applink.number);
+            if (applink.numberseries != null)
+                sb.append(" numberseries=").append(applink.numberseries);
+        }
         
         return sb.toString();
     }

@@ -17,9 +17,11 @@ public class Load extends AbstractActionHandler {
         Context extcontext = getExtendedContext();
         
         extcontext.id = getdfkey("head");
-        extcontext.document = getDocument(extcontext.cmodel, extcontext.id);
+        extcontext.document = getDocument(
+                extcontext.link.cmodel, extcontext.id);
         if (extcontext.document == null) {
-            managerMessage(extcontext.cmodel, Const.ERROR, Manager.EINVALID);
+            managerMessage(
+                    extcontext.link.cmodel, Const.ERROR, Manager.EINVALID);
             return;
         }
         

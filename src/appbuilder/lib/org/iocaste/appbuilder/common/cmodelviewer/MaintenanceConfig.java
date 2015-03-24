@@ -11,7 +11,7 @@ public class MaintenanceConfig extends AbstractViewConfig {
     protected void execute(PageBuilderContext context) {
         ConfigData configdata;
         Context extcontext = getExtendedContext();
-        Manager manager = getManager(extcontext.cmodel);
+        Manager manager = getManager(extcontext.link.cmodel);
         NavControl navcontrol = getNavControl();
 
         configdata = new ConfigData();

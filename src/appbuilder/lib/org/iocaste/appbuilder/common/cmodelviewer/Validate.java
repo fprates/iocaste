@@ -14,8 +14,9 @@ public class Validate extends AbstractActionHandler {
         extcontext.id = getdfkey("head");
         extcontext.document = null;
         
-        if (keyExists(extcontext.cmodel, extcontext.id)) {
-            managerMessage(extcontext.cmodel, Const.ERROR, Manager.EEXISTS);
+        if (keyExists(extcontext.link.cmodel, extcontext.id)) {
+            managerMessage(
+                    extcontext.link.cmodel, Const.ERROR, Manager.EEXISTS);
             return;
         }
         

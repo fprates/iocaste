@@ -47,7 +47,7 @@ public class DocumentExtractor {
         Map<String, Object> hold;
         ExtendedObject object;
         Set<String> fields, ignore;
-        Object value;
+        Object value, parameter;
         
         if (conversion == null)
             return source;
@@ -72,13 +72,15 @@ public class DocumentExtractor {
         Documents.move(object, source);
         
         for (String field : fields) {
+            parameter = conversion.getParameter(field);
             value = conversion.getValue(field);
             switch (conversion.getType(field)) {
             case DataConversion.CONSTANT:
                 object.set(field, value);
                 break;
             case DataConversion.NEXT_NUMBER:
-                object.set(field, documents.getNextNumber((String)value));
+                object.set(field, documents.
+                        getNextNumber((String)value, (String)parameter));
                 break;
             }
         }

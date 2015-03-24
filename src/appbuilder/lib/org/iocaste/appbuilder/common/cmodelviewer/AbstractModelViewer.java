@@ -16,6 +16,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
     public static final String CREATE = "create";
     public static final String DISPLAY = "display";
     public static final String EDIT = "edit";
+    private Context extcontext;
     
     protected final AppBuilderLink getReceivedLink() {
         AppBuilderLink link;
@@ -28,6 +29,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         link.entity = entity;
         link.cmodel = getParameter("cmodel");
         link.number = getParameter("number");
+        link.numberseries = getParameter("numberseries");
         link.createview = link.entity.concat(CREATE);
         link.create1view = link.createview.concat("1");
         link.editview = link.entity.concat(EDIT);
@@ -50,42 +52,44 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         String entityaction;
         Manager manager;
         
-        link.extcontext.number = link.number;
-        link.extcontext.cmodel = link.cmodel;
-        link.extcontext.redirect = (link.extcontext.number == null)?
+        if (extcontext == null)
+            extcontext = new Context();
+        
+        extcontext.link = link;
+        extcontext.redirect = (link.number == null)?
                 link.create1view : link.edit1view;
         
-        manager = managerInstance(link.extcontext.cmodel);
-        context.addManager(link.extcontext.cmodel, manager);
+        manager = managerInstance(link.cmodel);
+        context.addManager(link.cmodel, manager);
         
         selspec = new SelectSpec();
         inputvalidate = new InputValidate();
         
         for (String action : new String[] {CREATE, EDIT, DISPLAY}) {
-            if ((link.extcontext.number != null) && action.equals(CREATE) &&
+            if ((link.number != null) && action.equals(CREATE) &&
                     (link.createselectconfig == null))
                 continue;
             
             entityaction = link.entity.concat(action);
             viewctx = context.instance(entityaction);
             viewctx.set(selspec);
-            viewctx.set(link.extcontext);
+            viewctx.set(extcontext);
             switch (action) {
             case CREATE:
                 setSelectConfig(link.createselectconfig, viewctx, action,
-                        link.extcontext);
+                        extcontext, link);
                 viewctx.put(CREATE, link.validate);
                 
                 break;
             case EDIT:
                 setSelectConfig(link.updateselectconfig, viewctx, action,
-                        link.extcontext);
+                        extcontext, link);
                 
                 viewctx.put(EDIT, link.updateload);
                 break;
             case DISPLAY:
                 setSelectConfig(link.displayselectconfig, viewctx, action,
-                        link.extcontext);
+                        extcontext, link);
                 
                 viewctx.put(DISPLAY, link.displayload);
                 break;
@@ -95,7 +99,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         for (String view : new String[] {
                 link.createview, link.create1view, link.edit1view}) {
             if (view.equals(link.createview) &&
-                    ((link.extcontext.number == null) ||
+                    ((link.number == null) ||
                             (link.createselectconfig != null)))
                 continue;
             
@@ -103,7 +107,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
             viewctx.set(link.maintenancespec);
             viewctx.set(link.maintenanceconfig);
             viewctx.set(link.maintenanceinput);
-            viewctx.set(link.extcontext);
+            viewctx.set(extcontext);
             viewctx.put("validate", inputvalidate);
             viewctx.put("save", link.save);
         }
@@ -112,17 +116,25 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         viewctx.set(link.maintenancespec);
         viewctx.set(link.displayconfig);
         viewctx.set(link.maintenanceinput);
-        viewctx.set(link.extcontext);
+        viewctx.set(extcontext);
     }
     
     private final Manager managerInstance(String cmodel) {
         return new RuntimeManager(cmodel, this);
     }
     
+    /**
+     * 
+     * @param extcontext
+     */
+    protected final void setExtendedContext(Context extcontext) {
+        this.extcontext = extcontext;
+    }
+    
     private final void setSelectConfig(ViewConfig config, ViewContext viewctx,
-            String action, Context context) {
+            String action, Context context, AppBuilderLink link) {
         if (config == null)
-            viewctx.set(new SelectConfig(action, context.cmodel));
+            viewctx.set(new SelectConfig(action, link.cmodel));
         else
             viewctx.set(config);
     }

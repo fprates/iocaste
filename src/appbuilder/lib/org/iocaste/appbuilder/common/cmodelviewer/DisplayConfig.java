@@ -10,7 +10,7 @@ public class DisplayConfig extends AbstractViewConfig {
     protected void execute(PageBuilderContext context) {
         ConfigData configdata;
         Context extcontext = getExtendedContext();
-        Manager manager = getManager(extcontext.cmodel);
+        Manager manager = getManager(extcontext.link.cmodel);
 
         configdata = new ConfigData();
         configdata.cmodel = manager.getModel();

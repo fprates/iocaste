@@ -5,7 +5,6 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
-import org.iocaste.appbuilder.common.cmodelviewer.Context;
 import org.iocaste.appbuilder.common.cmodelviewer.DisplayConfig;
 import org.iocaste.appbuilder.common.cmodelviewer.Load;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceConfig;
@@ -33,7 +32,6 @@ public class Main extends AbstractModelViewer {
         link.displayload = new Load(link.display1view);
         link.validate = new Validate();
         link.save = new Save();
-        link.extcontext = new Context();
         
         if (module == null)
             loadManagedModule(context, link);

@@ -45,6 +45,10 @@ public class DataConversion {
         return fields.keySet();
     }
     
+    public final Object getParameter(String field) {
+        return fields.get(field).parameter;
+    }
+    
     public final DataConversionRule getRule() {
         return rule;
     }
@@ -69,12 +73,16 @@ public class DataConversion {
         put(field, IGNORE, null);
     }
     
-    public final void nextnumber(String field, String factory) {
-        put(field, NEXT_NUMBER, factory);
+    public final void nextnumber(String field, String factory, String series) {
+        put(field, NEXT_NUMBER, factory, series);
     }
     
     private final void put(String field, int type, Object value) {
         fields.put(field, new FieldConversion(type, value));
+    }
+    
+    private final void put(String field, int type, Object value, Object param) {
+        fields.put(field, new FieldConversion(type, value, param));
     }
     
     public final void rule(DataConversionRule rule) {
@@ -97,10 +105,16 @@ public class DataConversion {
 
 class FieldConversion {
     public int type;
-    public Object value;
+    public Object value, parameter;
     
     public FieldConversion(int type, Object value) {
         this.type = type;
         this.value = value;
+    }
+    
+    public FieldConversion(int type, Object value, Object parameter) {
+        this.type = type;
+        this.value = value;
+        this.parameter = parameter;
     }
 }
