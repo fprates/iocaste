@@ -15,11 +15,17 @@ public class Documents extends Module {
     @Override
     public final List<String> install() {
         Table range001, docs001, docs002, docs003, docs004, docs005, docs006;
+        Table range002;
         
         range001 = tableInstance("RANGE001");
         range001.key("IDENT", CHAR, 12);
         range001.add("CRRNT", NUMC, 12);
-
+        
+        range002 = tableInstance("RANGE002");
+        range002.key("SERIE", CHAR, 14);
+        range002.ref("RNGID", CHAR, 12, "RANGE001", "IDENT");
+        range002.add("CRRNT", NUMC, 12);
+        
         docs001 = tableInstance("DOCS001");
         docs001.key("DOCID", CHAR, 24);
         docs001.add("TNAME", CHAR, 12);
@@ -121,19 +127,38 @@ public class Documents extends Module {
                 "DOCID", "MODEL.NAME", "model", "MODEL.NAME");
 
         insertModel(docs001, docs005, "FOREIGN_KEY", "DOCS006", null);
-        insertModelKey(docs002, docs004, "FOREIGN_KEY.ITEM_NAME", "FOREIGN_KEY",
-                "ITREF", "MODELITEM.NAME", "itemName");
-        insertModelItem(docs002, docs006, "FOREIGN_KEY.REFERENCE",
-                "FOREIGN_KEY", "INAME", "MODELITEM.NAME", "reference",
-                "MODELITEM.NAME");
+        insertModelKey(docs002, docs004,
+                "FOREIGN_KEY.ITEM_NAME", "FOREIGN_KEY", "ITREF",
+                "MODELITEM.NAME", "itemName");
+        insertModelItem(docs002, docs006,
+                "FOREIGN_KEY.REFERENCE", "FOREIGN_KEY", "INAME",
+                "MODELITEM.NAME", "reference", "MODELITEM.NAME");
 
-        insertModel(docs001, docs005, "NUMBER_RANGE", "RANGE001", null);
+        /*
+         * range
+         */
         insertElement(docs003, "NUMBER_RANGE.IDENT", 0, 12, 0, true);
         insertElement(docs003, "NUMBER_RANGE.CURRENT", 0, 12, 3, false);
-        insertModelKey(docs002, docs004, "NUMBER_RANGE.IDENT", "NUMBER_RANGE",
-                "IDENT", "NUMBER_RANGE.IDENT", null);
-        insertModelItem(docs002, "NUMBER_RANGE.CURRENT", "NUMBER_RANGE",
-                "CRRNT", "NUMBER_RANGE.CURRENT", null);
+        insertElement(docs003, "NUMBER_SERIES.SERIE", 0, 14, 0, true);
+        
+        insertModel(docs001, docs005, "NUMBER_RANGE", "RANGE001", null);
+        insertModelKey(docs002, docs004,
+                "NUMBER_RANGE.IDENT", "NUMBER_RANGE", "IDENT",
+                "NUMBER_RANGE.IDENT", null);
+        insertModelItem(docs002,
+                "NUMBER_RANGE.CURRENT", "NUMBER_RANGE", "CRRNT",
+                "NUMBER_RANGE.CURRENT", null);
+        
+        insertModel(docs001, docs005, "NUMBER_SERIES", "RANGE002", null);
+        insertModelKey(docs002, docs004,
+                "NUMBER_SERIES.SERIE", "NUMBER_SERIES", "SERIE",
+                "NUMBER_SERIES.SERIE", null);
+        insertModelItem(docs002, docs006,
+                "NUMBER_SERIES.RANGE", "NUMBER_SERIES", "RNGID",
+                "NUMBER_RANGE.IDENT", null, "NUMBER_RANGE.IDENT");
+        insertModelItem(docs002,
+                "NUMBER_SERIES.CURRENT", "NUMBER_SERIES", "CRRNT",
+                "NUMBER_RANGE.CURRENT", null);
         
         range001.set("ident", "AUTHINDEX");
         range001.set("crrnt", 5);

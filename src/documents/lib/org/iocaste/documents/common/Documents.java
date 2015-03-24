@@ -106,9 +106,21 @@ public class Documents extends AbstractServiceInterface {
      * @param name nome do objeto.
      */
     public final void createNumberFactory(String name) {
+        createNumberFactory(name, null);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param series
+     */
+    public final void createNumberFactory(String name, Map<String, Long> series)
+    {
         Message message = new Message("create_number_factory");
         message.add("name", name);
+        message.add("series", series);
         call(message);
+        
     }
     
     /**
@@ -199,8 +211,19 @@ public class Documents extends AbstractServiceInterface {
      * @return número
      */
     public final long getNextNumber(String range) {
+        return getNextNumber(range, null);
+    }
+    
+    /**
+     * 
+     * @param range
+     * @param serie
+     * @return
+     */
+    public final long getNextNumber(String range, String serie) {
         Message message = new Message("get_next_number");
         message.add("range", range);
+        message.add("serie", serie);
         return call(message);
     }
     

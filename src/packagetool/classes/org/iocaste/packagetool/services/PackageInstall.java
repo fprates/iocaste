@@ -60,6 +60,7 @@ public class PackageInstall extends AbstractHandler {
         String name, modelname, defaultstyle;
         Set<String> texts;
         Map<String, StyleSheet> stylesheets;
+        Map<String, Map<String, Long>> numbers;
         
         state = new State();
         state.data = message.get("data");
@@ -118,8 +119,10 @@ public class PackageInstall extends AbstractHandler {
             /*
              * registra objetos de numeração
              */
-            for (String factory : state.data.getNumberFactories()) {
-                state.documents.createNumberFactory(factory);
+            numbers = state.data.getNumberFactories();
+            for (String factory : numbers.keySet()) {
+                state.documents.createNumberFactory(
+                        factory, numbers.get(factory));
                 Registry.add(factory, "NUMBER", state);
             }
             

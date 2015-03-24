@@ -21,6 +21,7 @@ public class GetNextNumber extends AbstractDocumentsHandler {
         Map<String, Object> columns;
         Documents documents;
         Connection connection;
+        String serie;
         String range = message.getString("range");
         
         if (range == null)
@@ -29,7 +30,14 @@ public class GetNextNumber extends AbstractDocumentsHandler {
         documents = getFunction();
         select = documents.database.get("select");
         connection = documents.database.getDBConnection(message.getSessionid());
-        lines = select.run(connection, QUERIES[RANGE], 1, range);
+        
+        serie = message.getString("serie");
+        if (serie == null) {
+            lines = select.run(connection, QUERIES[RANGE], 1, range);
+        } else {
+            serie = range.concat(serie);
+            lines = select.run(connection, QUERIES[RANGE_SERIE], 1, serie);
+        }
         
         if (lines == null)
             throw new IocasteException(new StringBuilder("Range \"").
@@ -38,7 +46,11 @@ public class GetNextNumber extends AbstractDocumentsHandler {
         columns = (Map<String, Object>)lines[0];
         current = ((BigDecimal)columns.get("CRRNT")).longValue() + 1;
         update = documents.database.get("update");
-        update.run(connection, QUERIES[UPDATE_RANGE], current, range);
+        
+        if (serie == null)
+            update.run(connection, QUERIES[UPDATE_RANGE], current, range);
+        else
+            update.run(connection, QUERIES[UPDATE_SERIES], current, serie);
         
         return current;
     }

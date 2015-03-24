@@ -25,7 +25,7 @@ public class InstallData implements Serializable {
     private Map<String, DocumentModel> models;
     private Map<DocumentModel, List<Object[]>> values;
     private Map<String, String> links;
-    private Set<String> numbers;
+    private Map<String, Map<String, Long>> numbers;
     private List<SearchHelpData> shds;
     private List<DataElement> elements;
     private Map<String, Map<String, String>> messages;
@@ -44,7 +44,7 @@ public class InstallData implements Serializable {
         models = new LinkedHashMap<>();
         values = new HashMap<>();
         links = new HashMap<>();
-        numbers = new HashSet<>();
+        numbers = new HashMap<>();
         shds = new ArrayList<>();
         elements = new ArrayList<>();
         messages = new HashMap<>();
@@ -141,9 +141,21 @@ public class InstallData implements Serializable {
      * @param name
      */
     public final void addNumberFactory(String name) {
-        numbers.add(name);
+        addNumberFactory(name, null);
     }
     
+    /**
+     * 
+     * @param name
+     */
+    public final void addNumberFactory(String name, Map<String, Long> series) {
+        numbers.put(name, series);
+    }
+    
+    /**
+     * 
+     * @param name
+     */
     public final void addText(String name) {
         texts.add(name);
     }
@@ -274,8 +286,8 @@ public class InstallData implements Serializable {
      * 
      * @return
      */
-    public final String[] getNumberFactories() {
-        return numbers.toArray(new String[0]);
+    public final Map<String, Map<String, Long>> getNumberFactories() {
+        return numbers;
     }
     
     /**
