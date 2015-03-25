@@ -20,7 +20,7 @@ public class RangeFieldRenderer extends Renderer {
         ValueRangeItem value;
         TextField tfield;
         RangeFieldPair[] elements;
-        XMLElement rfieldtag, to;
+        XMLElement to, tabletag, trtag, tdtag;
         InputComponent input;
         int length;
         
@@ -38,14 +38,19 @@ public class RangeFieldRenderer extends Renderer {
         range = (ValueRange)input.get();
         value = (range == null)? null : range.get(0);
         
-        to = new XMLElement("p");
-        to.add("style", "display: inline;");
-        to.addInner(config.getText("to", "to"));
+        tabletag = new XMLElement("table");
+        trtag = new XMLElement("tr");
+        tabletag.addChild(trtag);
         
-        rfieldtag = new XMLElement("div");
         for (Element element : elements) {
+            tdtag = new XMLElement("td");
+            trtag.addChild(tdtag);
+            
             if (element == null) {
-                rfieldtag.addChild(to);
+                to = new XMLElement("p");
+                to.addInner(config.getText("to", "to"));
+                to.add("class", "text");
+                tdtag.addChild(to);
                 continue;
             }
             
@@ -70,9 +75,9 @@ public class RangeFieldRenderer extends Renderer {
                 tfield.set((value == null)? null : value.getHigh());
             
             style = "display: inline;";
-            rfieldtag.addChild(TextFieldRenderer.render(tfield, style, config));
+            tdtag.addChild(TextFieldRenderer.render(tfield, style, config));
         }
         
-        return rfieldtag;
+        return tabletag;
     }
 }
