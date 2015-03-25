@@ -14,7 +14,7 @@ public class ProjectInput extends AbstractViewInput {
         ProjectView projectview;
         Context extcontext = getExtendedContext();
         
-        set("head", "PROJECT_ID", extcontext.project);
+        dfset("head", "PROJECT_ID", extcontext.project);
 
         for (String view : extcontext.views.keySet())
             dbitemadd("project", "views", view);

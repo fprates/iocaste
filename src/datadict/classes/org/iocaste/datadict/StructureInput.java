@@ -15,7 +15,7 @@ public class StructureInput extends AbstractViewInput {
     protected void init(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
         
-        setdf("head", extcontext.head);
+        dfset("head", extcontext.head);
         tableitemsadd("items", extcontext.items);
     }
 

@@ -89,6 +89,24 @@ public abstract class AbstractViewInput {
         dbget(dashboard, name).addText(value);
     }
     
+    protected final void dfset(String form, String item, Object value) {
+        getinput(form, item).set(value);
+    }
+    
+    protected final void dfset(String form, ExtendedObject object) {
+        ((DataForm)context.view.getElement(form)).setObject(object);
+    }
+    
+    protected final void dfkeyset(String form, Object value) {
+        DataForm df = context.view.getElement(form);
+        DocumentModel model = df.getModel();
+        
+        for (DocumentModelKey key : model.getKeys()) {
+            getinput(form, key.getModelItemName()).set(value);
+            break;
+        }
+    }
+    
     protected abstract void execute(PageBuilderContext context);
     
     protected <T extends Element> T getElement(String name) {
@@ -150,24 +168,6 @@ public abstract class AbstractViewInput {
             init(context);
         else
             execute(context);
-    }
-    
-    protected final void set(String form, String item, Object value) {
-        getinput(form, item).set(value);
-    }
-    
-    protected final void setdf(String form, ExtendedObject object) {
-        ((DataForm)context.view.getElement(form)).setObject(object);
-    }
-    
-    protected final void setdfkey(String form, Object value) {
-        DataForm df = context.view.getElement(form);
-        DocumentModel model = df.getModel();
-        
-        for (DocumentModelKey key : model.getKeys()) {
-            getinput(form, key.getModelItemName()).set(value);
-            break;
-        }
     }
     
     protected final void tableitemsadd(String table) {
