@@ -20,6 +20,11 @@ public class RemoveNumberFactory extends AbstractDocumentsHandler {
         connection = documents.database.getDBConnection(message.getSessionid());
         
         query = new Query("delete");
+        query.setModel("NUMBER_SERIES");
+        query.andEqual("RANGE", name);
+        update.run(connection, documents, query);
+        
+        query = new Query("delete");
         query.setModel("NUMBER_RANGE");
         query.andEqual("IDENT", name);
         return update.run(connection, documents, query);
