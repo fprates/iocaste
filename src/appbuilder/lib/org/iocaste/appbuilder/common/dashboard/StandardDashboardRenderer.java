@@ -24,7 +24,7 @@ public class StandardDashboardRenderer extends AbstractDashboardRenderer {
     }
     
     @Override
-    public final void addText(String dashname, String name) {
+    public void addText(String dashname, String name) {
         String textname;
         Text text;
         
