@@ -56,7 +56,7 @@ public class Services extends AbstractFunction {
         pages = new LinkedHashMap<>();
         if (file.isDirectory())
             for (String name : file.list()) {
-                file = new File(name);
+                file = new File(getPath(textname, id, name));
                 pages.put(name, fileread(file));
             }
         else

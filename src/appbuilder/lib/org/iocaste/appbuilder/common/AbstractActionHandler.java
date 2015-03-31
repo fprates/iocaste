@@ -348,6 +348,10 @@ public abstract class AbstractActionHandler {
         context.function.exec(state.rapp, state.rpage);
     }
     
+    protected final void textcreate(String name) {
+        new TextEditorTool(context).create(name);
+    }
+    
     protected final void texteditorsave(String name, String id, String page) {
         TextEditorTool editortool = new TextEditorTool(context);
         TextEditor editor = components.editors.get(name);

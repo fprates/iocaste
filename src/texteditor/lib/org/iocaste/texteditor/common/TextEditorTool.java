@@ -45,6 +45,12 @@ public class TextEditorTool extends AbstractServiceInterface {
         return sb.toString();
     }
     
+    public final void create(String name) {
+        Message message = new Message("register");
+        message.add("name", name);
+        call(message);
+    }
+    
     public final Map<String, String> get(String textnm, String id) {
         Message message = new Message("load");
         message.add("textname", textnm);
