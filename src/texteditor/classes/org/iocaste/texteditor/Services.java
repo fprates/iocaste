@@ -5,8 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
@@ -53,7 +53,7 @@ public class Services extends AbstractFunction {
         if (!file.exists())
             return null;
         
-        pages = new LinkedHashMap<>();
+        pages = new TreeMap<>();
         if (file.isDirectory())
             for (String name : file.list()) {
                 file = new File(getPath(textname, id, name));
