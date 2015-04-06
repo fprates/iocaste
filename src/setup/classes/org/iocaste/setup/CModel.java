@@ -18,7 +18,7 @@ public class CModel {
     public static final void install(InstallData data, Config config) {
         DocumentModel model;
         DataElement element;
-        DocumentModelItem modelname, item;
+        DocumentModelItem modelname, item, namespace;
         
         /*
          * Modelo de documento complexo
@@ -84,6 +84,59 @@ public class CModel {
         item.setTableFieldName("MODEL");
         item.setDataElement(modelname.getDataElement());
         item.setReference(modelname);
+        model.add(item);
+        
+        /*
+         * cabeçalho namespace
+         */
+        model = data.getModel("NS_HEAD", "NSHEAD", null);
+        
+        // identificador
+        element = new DataElement("NS_NAME");
+        element.setType(DataType.CHAR);
+        element.setLength(24);
+        element.setUpcase(DataType.KEEPCASE);
+        namespace = new DocumentModelItem("NAME");
+        namespace.setTableFieldName("NSKEY");
+        namespace.setDataElement(element);
+        model.add(namespace);
+        model.add(new DocumentModelKey(namespace));
+        
+        // nome do modelo complexo
+        item = new DocumentModelItem("MODEL");
+        item.setTableFieldName("MODEL");
+        item.setDataElement(modelname.getDataElement());
+        item.setReference(modelname);
+        model.add(item);
+        
+        /*
+         * modelos
+         */
+        model = data.getModel("NS_MODELS", "NSMODELS", null);
+        
+        // identificador
+        element = new DataElement("NS_ITEM");
+        element.setType(DataType.CHAR);
+        element.setLength(27);
+        element.setUpcase(DataType.KEEPCASE);
+        item = new DocumentModelItem("ITEM");
+        item.setTableFieldName("NSITM");
+        item.setDataElement(element);
+        model.add(item);
+        model.add(new DocumentModelKey(item));
+        
+        // referência
+        item = new DocumentModelItem("NAMESPACE");
+        item.setTableFieldName("NSKEY");
+        item.setDataElement(namespace.getDataElement());
+        item.setReference(namespace);
+        model.add(item);
+        
+        // complex model
+        item = new DocumentModelItem("COMPLEX_MODEL");
+        item.setTableFieldName("CMKEY");
+        item.setDataElement(config.cmodelname.getDataElement());
+        item.setReference(config.cmodelname);
         model.add(item);
     }
 }

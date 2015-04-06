@@ -23,6 +23,7 @@ public class Documents extends AbstractFunction {
         export("create_complex_model", new CreateCModel());
         protect("create_data_element", new CreateDataElement());
         export("create_model", new CreateModel());
+        export("create_namespace", new CreateNameSpace());
         export("create_number_factory", new CreateNumberFactory());
         export("delete_document", new DeleteDocument());
         export("delete_complex_document", new DeleteComplexDocument());
@@ -38,6 +39,7 @@ public class Documents extends AbstractFunction {
         export("modify", new ModifyDocument());
         export("remove_complex_model", new RemoveComplexModel());
         export("remove_model", new RemoveModel());
+        export("remove_namespace", new RemoveNameSpace());
         export("remove_number_factory", new RemoveNumberFactory());
         export("save_document", new SaveDocument());
         export("save_complex_document", new SaveComplexDocument());

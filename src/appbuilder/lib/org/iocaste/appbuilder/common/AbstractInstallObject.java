@@ -5,6 +5,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DummyElement;
 import org.iocaste.documents.common.DummyModelItem;
+import org.iocaste.documents.common.NameSpace;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.shell.common.StyleSheet;
@@ -80,6 +81,14 @@ public abstract class AbstractInstallObject {
         model.setElements(context.getElements());
         
         return model;
+    }
+    
+    protected final NameSpace namespaceInstance(String name) {
+        NameSpace ns;
+        
+        ns = new NameSpace(name);
+        data.add(ns);
+        return ns;
     }
     
     protected final DummyElement reference(String dataelement) {
