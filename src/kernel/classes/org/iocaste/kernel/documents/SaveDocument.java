@@ -69,10 +69,9 @@ public class SaveDocument extends AbstractDocumentsHandler {
         return run(connection, documents, object);
     }
     
-    public int run(
-            Connection connection, Documents documents, ExtendedObject object)
-            throws Exception {
-        GetDocumentModel getmodel;
+    public int run(Connection connection, Documents documents,
+            ExtendedObject object) throws Exception {
+        String query;
         NameSpace[] nss;
         DocumentModel model = object.getModel();
         DocumentModelItem[] itens = model.getItens();
@@ -83,13 +82,12 @@ public class SaveDocument extends AbstractDocumentsHandler {
         for (DocumentModelItem item : model.getItens())
             criteria[i++] = object.get(item);
         
-        getmodel = documents.get("get_document_model");
-        if (model.hasNamespace()) {
-            nss = getmodel.getNS(connection, model);
+        nss = documents.cache.nsmodels.get(model.getName());
+        if (nss != null)
             for (NameSpace ns : nss)
                 createNSModel(connection, documents, model, ns, object);
-        }
         
-        return update(connection, model.getQuery("insert"), criteria);
+        query = documents.getQuery(model, "insert");
+        return update(connection, query, criteria);
     }
 }

@@ -20,6 +20,7 @@ public class Documents extends AbstractFunction {
         cache = new Cache(this);
         lockcache = new HashMap<>();
         
+//        export("clear_namespace", new ClearNameSpace());
         export("create_complex_model", new CreateCModel());
         protect("create_data_element", new CreateDataElement());
         export("create_model", new CreateModel());
@@ -45,14 +46,31 @@ public class Documents extends AbstractFunction {
         export("save_complex_document", new SaveComplexDocument());
         export("select_document", new SelectDocument());
         export("select_to_map", new SelectToMap());
+//        export("set_namespace", new SetNamespace());
         export("unlock", new Unlock());
         export("update_document", new UpdateDocument());
         export("update_m", new UpdateMultiple());
         export("update_model", new UpdateModel());
     }
     
+//    public final void putNSEntry(String sessionid, String id, Object value) {
+//        Map<String, NamespaceEntry> namespace;
+//        
+//        namespace = cache.namespaces.get(sessionid);
+//        if (namespace == null) {
+//            namespace = new HashMap<>();
+//            cache.namespaces.put(sessionid, namespace);
+//        }
+//        
+//        namespace.put(id, new NamespaceEntry(id, value));
+//    }
+    
     public final int getModelItemLen(String name) {
         return cache.mmodel.getModelItem(name).getDataElement().getLength();
+    }
+    
+    public final String getQuery(DocumentModel model, String id) {
+        return cache.queries.get(model.getName()).get(id);
     }
     
     /**
@@ -67,23 +85,34 @@ public class Documents extends AbstractFunction {
     /**
      * 
      * @param model
-     * @param queries
+     * @return
      */
-    public final void parseQueries(DocumentModel model) {
-        String fieldname;
-        boolean iskey, setok = false;
-        int k = 0;
-        String tablename = model.getTableName();
-        StringBuilder update = new StringBuilder("update ").
-                append(tablename).append(" set ");
-        StringBuilder insert = new StringBuilder("insert into ").
-                append(tablename).append(" (");
-        StringBuilder delete = new StringBuilder("delete from ").
-                append(tablename);
-        StringBuilder values = new StringBuilder(") values (");
-        StringBuilder where = new StringBuilder(" where ");
-        Map<String, String> queries_ = new HashMap<String, String>();
+    public final Map<String, String> parseQueries(DocumentModel model) {
+//    public final Map<String, String> parseQueries(
+//            NamespaceEntry ns, DocumentModel model) {
+        String fieldname;//, nsvalue;
+        boolean iskey, setok;
+        int k;
+        String tablename;
+        StringBuilder update, insert, delete, values, where;
+        Map<String, String> queries;
+
+        tablename = model.getTableName();
+//        if (ns != null) {
+//            nsvalue = ns.value.toString();
+//            tablename = new StringBuilder(nsvalue).append(tablename).toString();
+//        }
         
+        update = new StringBuilder("update ").append(tablename).append(" set ");
+        insert = new StringBuilder("insert into ").
+                append(tablename).append(" (");
+        delete = new StringBuilder("delete from ").append(tablename);
+        values = new StringBuilder(") values (");
+        where = new StringBuilder(" where ");
+        queries = new HashMap<>();
+        
+        setok = false;
+        k = 0;
         for (DocumentModelItem modelitem : model.getItens()) {
             iskey = model.isKey(modelitem);
             
@@ -117,17 +146,24 @@ public class Documents extends AbstractFunction {
         insert.append(values).append(")");
         delete.append(where);
         
-        queries_.put("insert", insert.toString());
+        queries.put("insert", insert.toString());
         
         if (setok)
-            queries_.put("update", update.toString());
+            queries.put("update", update.toString());
         
-        queries_.put("delete", delete.toString());
-        
-        fieldname = model.getName();
-        if (cache.queries.containsKey(fieldname))
-            cache.queries.remove(fieldname);
-        
-        cache.queries.put(fieldname, queries_);
+        queries.put("delete", delete.toString());
+        return queries;
     }
 }
+
+//class NamespaceEntry {
+//    public String id;
+//    public Object value;
+//    public Map<String, Map<String, String>> queries;
+//    
+//    public NamespaceEntry(String id, Object value) {
+//        this.id = id;
+//        this.value = value;
+//        queries = new HashMap<>();
+//    }
+//}

@@ -24,13 +24,14 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
     }
     
     @SuppressWarnings("unchecked")
-    public DocumentModel run(Connection connection, Documents documents,
-            String modelname) throws Exception {
+    public DocumentModel run(Connection connection,
+            Documents documents, String modelname) throws Exception {
         int i;
         Object[] lines, shlines;
         String itemref, name;
         String[] composed;
         Map<String, Object> columns;
+        NameSpace[] nss;
         DocumentModelItem item;
         DocumentModel document;
         GetDataElement getde;
@@ -92,19 +93,20 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
                 document.add(new DocumentModelKey(composed[1]));
             }
         
-        if (getNS(connection, document) != null)
-            document.setNamespace(true);
+        nss = getNS(connection, document);
+        if (nss != null)
+            documents.cache.nsmodels.put(modelname, nss);
         
         if (!documents.cache.queries.containsKey(modelname))
-            documents.parseQueries(document);
+            documents.cache.queries.put(
+                    modelname, documents.parseQueries(document));
         
-        document.setQueries(documents.cache.queries.get(modelname));
         documents.cache.models.put(modelname, document);
         return document;
     }
 
     @SuppressWarnings("unchecked")
-    public NameSpace[] getNS(Connection connection, DocumentModel model)
+    private NameSpace[] getNS(Connection connection, DocumentModel model)
             throws Exception {
         Map<String, Object> values;
         int i;

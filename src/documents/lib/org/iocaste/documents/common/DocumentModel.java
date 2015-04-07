@@ -22,7 +22,6 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -45,14 +44,12 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private String classname;
     private Map<String, DocumentModelItem> itens;
     private Set<DocumentModelKey> keys;
-    private Map<String, String> queries;
     private boolean namespace;
     
     public DocumentModel(String name) {
         this.name = name;
         itens = new TreeMap<>();
         keys = new LinkedHashSet<>();
-        queries = new HashMap<>();
     }
     
     /**
@@ -173,15 +170,6 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
-     * Obtem uma query SQL a partir do cache do modelo.
-     * @param name nome
-     * @return query.
-     */
-    public final String getQuery(String name) {
-        return queries.get(name);
-    }
-    
-    /**
      * Obtem tabela do banco associada.
      * @return nome da tabela.
      */
@@ -250,17 +238,6 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      */
     public final void setNamespace(boolean namespace) {
         this.namespace = namespace;
-    }
-    
-    /**
-     * Atribui queries SQL ao modelo.
-     * 
-     * O formato da entrada no mapa é <nome da query, query>
-     * 
-     * @param queries mapa de queries.
-     */
-    public final void setQueries(Map<String, String> queries) {
-        this.queries = queries;
     }
     
     /**

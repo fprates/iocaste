@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.NameSpace;
 import org.iocaste.protocol.Function;
 
 public class Cache {
@@ -12,12 +13,16 @@ public class Cache {
     public Map<String, Map<String, String>> queries;
     public Map<String, DocumentModel> models;
     public Map<String, ComplexModel> cmodels;
+    public Map<String, NameSpace[]> nsmodels;
+//    public Map<String, Map<String, NamespaceEntry>> namespaces;
     public DocumentModel mmodel;
     
     public Cache(Function function) {
         this.function = function;
-        queries = new HashMap<String, Map<String, String>>();
-        models = new HashMap<String, DocumentModel>();
-        cmodels = new HashMap<String, ComplexModel>();
+        queries = new HashMap<>();
+        models = new HashMap<>();
+        cmodels = new HashMap<>();
+        nsmodels = new HashMap<>();
+//        namespaces = new HashMap<>();
     }
 }
