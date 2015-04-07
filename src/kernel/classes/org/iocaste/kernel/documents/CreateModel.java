@@ -6,6 +6,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.NameSpace;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
@@ -18,7 +19,7 @@ public class CreateModel extends AbstractDocumentsHandler {
      * @return
      * @throws Exception
      */
-    private final int createTable(Connection connection, Documents documents,
+    public final int createTable(Connection connection, Documents documents,
             DocumentModel model) throws Exception {
         GetDocumentModel getmodel;
         DocumentModel refmodel;
@@ -244,9 +245,7 @@ public class CreateModel extends AbstractDocumentsHandler {
     
     @Override
     public Object run(Message message) throws Exception {
-        int code;
         Documents documents;
-        String name;
         DocumentModel model;
         Connection connection;
         
@@ -254,12 +253,23 @@ public class CreateModel extends AbstractDocumentsHandler {
         documents = getFunction();
         connection = documents.database.getDBConnection(message.getSessionid());
         
+        return run(connection, documents, model, null);
+    }
+    
+    public int run(Connection connection, Documents documents,
+            DocumentModel model, NameSpace ns) throws Exception {
+        int code;
+        String name;
+        
         prepareElements(connection, documents, model);
         if (model.getTableName() != null) {
             code = createTable(connection, documents, model);
             if (code < 0)
                 return code;
         }
+        
+        if (ns != null)
+            return 1;
         
         registerModel(connection, documents, model);        
         name = model.getName();
