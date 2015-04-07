@@ -28,7 +28,7 @@ public class CreateCModel extends AbstractDocumentsHandler {
         object.set("NAME", cmodelname);
         object.set("MODEL", cmodel.getHeader().getName());
         save = documents.get("save_document");
-        save.run(connection, object);
+        save.run(connection, documents, object);
         
         model = getmodel.run(connection, documents, "COMPLEX_MODEL_ITEM");
         items = cmodel.getItems();
@@ -40,7 +40,7 @@ public class CreateCModel extends AbstractDocumentsHandler {
             object.set("NAME", name);
             object.set("CMODEL", cmodelname);
             object.set("MODEL", items.get(name).getName());
-            save.run(connection, object);
+            save.run(connection, documents, object);
         }
         
         return 1;
