@@ -26,6 +26,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
     @SuppressWarnings("unchecked")
     public DocumentModel run(Connection connection,
             Documents documents, String modelname) throws Exception {
+        DocumentModel model;
         int i;
         Object[] lines, shlines;
         String itemref, name;
@@ -39,8 +40,9 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         if (modelname == null)
             throw new IocasteException("Document model not specified.");
         
-        if (documents.cache.models.containsKey(modelname))
-            return documents.cache.models.get(modelname);
+        model = documents.cache.getModel(modelname);
+        if (model != null)
+            return model;
         
         lines = select(connection, QUERIES[DOCUMENT], 1, modelname);
         if (lines == null)
@@ -99,9 +101,9 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         
         if (!documents.cache.queries.containsKey(modelname))
             documents.cache.queries.put(
-                    modelname, documents.parseQueries(null, document));
+                    modelname, documents.parseQueries(document));
         
-        documents.cache.models.put(modelname, document);
+        documents.cache.put(modelname, document);
         return document;
     }
 

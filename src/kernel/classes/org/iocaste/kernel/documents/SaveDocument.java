@@ -28,7 +28,6 @@ public class SaveDocument extends AbstractDocumentsHandler {
             DocumentModel model, NameSpace ns, ExtendedObject object)
                     throws Exception {
         ComplexModel cmodel;
-        GetComplexModel getcmodel;
         Object value;
         CreateModel createmodel;
         DocumentModel nsmodel;
@@ -42,10 +41,9 @@ public class SaveDocument extends AbstractDocumentsHandler {
         if (value == null)
             throw new IocasteException("undefined key for NS model.");
         
-        getcmodel = documents.get("get_complex_model");
         createmodel = documents.get("create_model");
         for (String cmodelname : ns.cmodels) {
-            cmodel = getcmodel.run(connection, documents, cmodelname);
+            cmodel = documents.cache.getCModel(cmodelname);
             if (cmodel == null)
                 throw new IocasteException(
                         cmodelname.concat(" is an invalid complex model."));
