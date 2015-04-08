@@ -99,7 +99,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         
         if (!documents.cache.queries.containsKey(modelname))
             documents.cache.queries.put(
-                    modelname, documents.parseQueries(document));
+                    modelname, documents.parseQueries(null, document));
         
         documents.cache.models.put(modelname, document);
         return document;

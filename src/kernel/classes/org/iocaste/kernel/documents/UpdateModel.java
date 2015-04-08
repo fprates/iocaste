@@ -115,7 +115,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
                     throw new IocasteException("error on remove table column");
         }
         
-        documents.parseQueries(model);
+        documents.parseQueries(null, model);
         documents.cache.models.remove(name);
         documents.cache.models.put(name, model);
         

@@ -240,7 +240,7 @@ public class CreateModel extends AbstractDocumentsHandler {
         registerDocumentHeader(connection, documents, model);
         registerDocumentItems(connection, documents, model);
         registerDocumentKeys(connection, model);
-        documents.parseQueries(model);
+        documents.parseQueries(null, model);
     }
     
     @Override
@@ -269,11 +269,12 @@ public class CreateModel extends AbstractDocumentsHandler {
         }
         
         name = model.getName();
-        if (ns == null) {
-            registerModel(connection, documents, model);
-            documents.cache.models.put(name, model);
-            documents.cache.queries.put(name, documents.parseQueries(model));
-        }
+        if (ns != null)
+            return 1;
+        
+        registerModel(connection, documents, model);
+        documents.cache.models.put(name, model);
+        documents.cache.queries.put(name, documents.parseQueries(null, model));
         
         return 1;
     }

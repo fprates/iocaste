@@ -11,10 +11,10 @@ import org.iocaste.protocol.Function;
 public class Cache {
     public Function function;
     public Map<String, Map<String, String>> queries;
+    public Map<String, Map<String, Map<String, String>>> nsqueries;
     public Map<String, DocumentModel> models;
     public Map<String, ComplexModel> cmodels;
     public Map<String, NameSpace[]> nsmodels;
-//    public Map<String, Map<String, NamespaceEntry>> namespaces;
     public DocumentModel mmodel;
     
     public Cache(Function function) {
@@ -23,6 +23,6 @@ public class Cache {
         models = new HashMap<>();
         cmodels = new HashMap<>();
         nsmodels = new HashMap<>();
-//        namespaces = new HashMap<>();
+        nsqueries = new HashMap<>();
     }
 }

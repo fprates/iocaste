@@ -69,6 +69,16 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
+     * 
+     * @param name
+     */
+    public final void clearNamespace(String name) {
+        Message message = new Message("clear_namespace");
+        message.add("name", name);
+        call(message);
+    }
+    
+    /**
      * Efetua commit.
      */
     public final void commit() {
@@ -526,6 +536,17 @@ public class Documents extends AbstractServiceInterface {
         return call(message);
     }
     
+    /**
+     * 
+     * @param name
+     */
+    public final void setNamespace(String name, Object value) {
+        Message message = new Message("set_namespace");
+        message.add("name", name);
+        message.add("value", value);
+        call(message);
+        
+    }
     /**
      * Desbloqueia entrada de tabela, especificado por modelo e chave.
      * 

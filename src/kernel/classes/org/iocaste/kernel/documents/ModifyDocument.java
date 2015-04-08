@@ -14,7 +14,7 @@ public class ModifyDocument extends AbstractDocumentsHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String query;
+        String query, sessionid;
         Object value;
         int nrregs;
         Documents documents;
@@ -38,13 +38,14 @@ public class ModifyDocument extends AbstractDocumentsHandler {
         uargs.addAll(criteria);
         nrregs = 0;
         documents = getFunction();
-        query = documents.getQuery(model, "update");
+        sessionid = message.getSessionid();
+        query = documents.getQuery(sessionid, model, "update");
         if (query == null)
             return 0;
         
         connection = documents.database.getDBConnection(message.getSessionid());
         nrregs = update(connection, query, uargs.toArray());
-        query = documents.getQuery(model, "insert");
+        query = documents.getQuery(sessionid, model, "insert");
         if (nrregs == 0 && update(connection, query, iargs.toArray()) == 0)
             throw new IocasteException("Error on object insert");
         

@@ -30,7 +30,7 @@ public class CreateNameSpace extends AbstractDocumentsHandler {
         object = new ExtendedObject(model);
         object.set("NAME", nsname);
         object.set("MODEL", ns.keymodel);
-        save.run(connection, documents, object);
+        save.run(sessionid,connection, documents, object);
         
         model = getmodel.run(connection, documents, "NS_MODELS");
         i = 0;
@@ -39,7 +39,7 @@ public class CreateNameSpace extends AbstractDocumentsHandler {
             object.set("ITEM", String.format("%s%03d", nsname, i++));
             object.set("NAMESPACE", nsname);
             object.set("COMPLEX_MODEL", name);
-            save.run(connection, documents, object);
+            save.run(sessionid, connection, documents, object);
         }
         
         return null;
