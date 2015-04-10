@@ -12,7 +12,7 @@ public class DeleteDocument extends AbstractDocumentsHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String query, sessionid;
+        String query;
         Connection connection;
         Documents documents;
         DocumentModel model;
@@ -29,9 +29,8 @@ public class DeleteDocument extends AbstractDocumentsHandler {
                     key.getModelItemName()));
         
         documents = getFunction();
-        sessionid = message.getSessionid();
         connection = documents.database.getDBConnection(message.getSessionid());
-        query = documents.getQuery(sessionid, model, "delete");
+        query = documents.getQuery(model, "delete");
         return update(connection, query, criteria);
     }
 

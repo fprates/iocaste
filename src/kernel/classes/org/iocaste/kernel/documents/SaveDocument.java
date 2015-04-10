@@ -66,10 +66,10 @@ public class SaveDocument extends AbstractDocumentsHandler {
         Documents documents = getFunction();
         Connection connection = documents.database.getDBConnection(sessionid);
         
-        return run(sessionid, connection, documents, object);
+        return run(connection, documents, object);
     }
     
-    public int run(String sessionid, Connection connection, Documents documents,
+    public int run(Connection connection, Documents documents,
             ExtendedObject object) throws Exception {
         String query;
         NameSpace[] nss;
@@ -87,7 +87,7 @@ public class SaveDocument extends AbstractDocumentsHandler {
             for (NameSpace ns : nss)
                 createNSModel(connection, documents, model, ns, object);
         
-        query = documents.getQuery(sessionid, model, "insert");
+        query = documents.getQuery(model, "insert");
         return update(connection, query, criteria);
     }
 }
