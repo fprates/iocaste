@@ -46,7 +46,6 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private Map<String, DocumentModelItem> itens;
     private Set<DocumentModelKey> keys;
     private Map<String, String> queries;
-    private boolean namespace;
     
     public DocumentModel(String name) {
         this.name = name;
@@ -199,14 +198,6 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
-     * 
-     * @return
-     */
-    public final boolean hasNamespace() {
-        return namespace;
-    }
-    
-    /**
      * Indica se o item do modelo for campo chave.
      * @param item item do modelo 
      * @return true, se item é chave
@@ -242,14 +233,6 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      */
     protected void setKeys(Set<DocumentModelKey> keys) {
         this.keys = keys;
-    }
-    
-    /**
-     * 
-     * @param namespace
-     */
-    public final void setNamespace(boolean namespace) {
-        this.namespace = namespace;
     }
     
     /**

@@ -31,12 +31,12 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         delete.run(
                 connection, documents, cmodel.getName(), object.get(modelkey));
         save = documents.get("save_document");
-        save.run(connection, documents, object);
+        save.run(connection, object);
         models = cmodel.getItems();
         for (String name : models.keySet()) {
             objects = document.getItems(name);
             for (ExtendedObject item : objects)
-                save.run(connection, documents, item);
+                save.run(connection, item);
         }
         
         return null;

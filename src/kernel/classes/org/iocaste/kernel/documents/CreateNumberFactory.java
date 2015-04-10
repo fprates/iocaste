@@ -43,7 +43,7 @@ public class CreateNumberFactory extends AbstractDocumentsHandler {
         object.set("CURRENT", 0);
         
         save = documents.get("save_document");
-        save.run(connection, documents, object);
+        save.run(connection, object);
         
         series = message.get("series");
         if (series != null) {
@@ -53,7 +53,7 @@ public class CreateNumberFactory extends AbstractDocumentsHandler {
                 object.set("SERIE", name.concat(serie));
                 object.set("RANGE", name);
                 object.set("CURRENT", series.get(serie));
-                save.run(connection, documents, object);
+                save.run(connection, object);
             }
         }
         
