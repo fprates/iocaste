@@ -37,15 +37,15 @@ public class ModifyDocument extends AbstractDocumentsHandler {
         
         uargs.addAll(criteria);
         nrregs = 0;
-        documents = getFunction();
-        query = documents.getQuery(model, "update");
+        query = model.getQuery("update");
         if (query == null)
             return 0;
         
+        documents = getFunction();
         connection = documents.database.getDBConnection(message.getSessionid());
         nrregs = update(connection, query, uargs.toArray());
-        query = documents.getQuery(model, "insert");
-        if (nrregs == 0 && update(connection, query, iargs.toArray()) == 0)
+        if (nrregs == 0 && update(connection, model.getQuery("insert"),
+                iargs.toArray()) == 0)
             throw new IocasteException("Error on object insert");
         
         return 1;
