@@ -12,7 +12,7 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
     protected PageBuilderContext context;
     protected StyleSheet stylesheet;
     protected Map<String, Entry> entries;
-    protected String factorystyle;
+    protected String factorystyle, container;
     
     public AbstractDashboardRenderer() {
         entries = new HashMap<>();
@@ -34,6 +34,10 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
     @Override
     public final Container getContainer(String name, byte type) {
         return context.view.getElement(getContainerName(name, type));
+    }
+    
+    protected final String getContainerName() {
+        return container;
     }
     
     protected final String getContainerName(String name, byte type) {
@@ -61,6 +65,11 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
     }
     
     @Override
+    public final void setContainerName(String name) {
+        this.container = name;
+    }
+    
+    @Override
     public final void setContext(PageBuilderContext context) {
         this.context = context;
         stylesheet = context.view.styleSheetInstance();
@@ -68,7 +77,11 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
     
     @Override
     public final void setStyle(String name) {
+        if (factorystyle != null)
+            stylesheet.remove(factorystyle);
+        
         factorystyle = name;
+        stylesheet.newElement(factorystyle);
     }
 
     @Override

@@ -51,7 +51,6 @@ public class StandardDashboardRenderer extends AbstractDashboardRenderer {
     
     @Override
     public void config() {
-        stylesheet.newElement(factorystyle);
         stylesheet.put(factorystyle, "float", "left");
         stylesheet.put(factorystyle, "background-color", "#ffffff");
         stylesheet.put(factorystyle, "width", "100%");

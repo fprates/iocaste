@@ -35,6 +35,13 @@ public class StyleSheet implements Serializable {
         properties.put(property, value);
     }
     
+    public final void remove(String element) {
+        Map<String, String> properties = stylesheet.get(element);
+        for (String name : properties.keySet())
+            properties.remove(name);
+        stylesheet.remove(element);
+    }
+    
     public final void remove(String element, String property) {
         Map<String, String> properties = stylesheet.get(element);
         

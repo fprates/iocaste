@@ -27,6 +27,8 @@ public interface DashboardRenderer {
 
     public abstract InputComponent getInput(String name);
     
+    public abstract void setContainerName(String name);
+    
     public abstract void setContext(PageBuilderContext context);
 
     public abstract void setStyle(String name);

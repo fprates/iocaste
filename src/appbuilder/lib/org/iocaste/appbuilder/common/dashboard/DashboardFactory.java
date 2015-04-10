@@ -13,9 +13,11 @@ public class DashboardFactory {
     private PageBuilderContext context;
     private Map<String, DashboardComponent> components;
     private DashboardRenderer renderer;
+    private String container;
     
     public DashboardFactory(
-            Container container, PageBuilderContext context, String name) {
+            Container parent, PageBuilderContext context, String name) {
+        Container container;
         String style;
         
         this.context = context;
@@ -23,7 +25,10 @@ public class DashboardFactory {
         components = new LinkedHashMap<>();
 
         style = name.concat("_db_container");
-        new StandardContainer(container, name).setStyleClass(style);
+        container = new StandardContainer(parent, name);
+        container.setStyleClass(style);
+        this.container = container.getHtmlName();
+        
         setRenderer(new StandardDashboardRenderer());
     }
     
@@ -85,6 +90,7 @@ public class DashboardFactory {
                 context.view.getElement(name).getStyleClass()).toString();
         
         this.renderer = renderer;
+        this.renderer.setContainerName(container);
         this.renderer.setContext(context);
         this.renderer.entryInstance(null, name);
         this.renderer.setStyle(style);
