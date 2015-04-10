@@ -146,12 +146,6 @@ public class Uninstall {
             return;
         }
         
-        if (modeltype.equals("NS")) {
-            InstallNS.uninstall(name, documents);
-            documents.delete(object);
-            return;
-        }
-        
         if (modeltype.equals("DATA_ELEMENT"))
             documents.delete(object);
     }

@@ -1,6 +1,5 @@
 package org.iocaste.packagetool.services;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,7 +8,6 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.documents.common.NameSpace;
 import org.iocaste.documents.common.Query;
 import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.SearchHelpData;
@@ -48,12 +46,12 @@ public class PackageInstall extends AbstractHandler {
         IsInstalled isinstalled;
         ExtendedObject header;
         DocumentModel tasks;
+        Set<User> users;
+        Set<GlobalConfigData> config;
         Map<UserProfile, Set<User>> profiles;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
         Map<String, DocumentModel> models;
-        Map<String, StyleSheet> stylesheets;
-        Map<String, Map<String, Long>> numbers;
         ComplexModel[] cmodels;
         SearchHelpData[] shdata;
         Authorization[] authorizations;
@@ -61,9 +59,8 @@ public class PackageInstall extends AbstractHandler {
         State state;
         String name, modelname, defaultstyle;
         Set<String> texts;
-        Set<User> users;
-        Set<GlobalConfigData> config;
-        List<NameSpace> namespaces;
+        Map<String, StyleSheet> stylesheets;
+        Map<String, Map<String, Long>> numbers;
         
         state = new State();
         state.data = message.get("data");
@@ -112,14 +109,6 @@ public class PackageInstall extends AbstractHandler {
                 InstallCModels.init(cmodels, state);
             
             state.installed++;
-            
-            /*
-             * instala namespaces
-             */
-            namespaces = state.data.getNameSpaces();
-            if (namespaces.size() > 0)
-                InstallNS.init(namespaces, state);
-            
             /*
              * insere usuários
              */

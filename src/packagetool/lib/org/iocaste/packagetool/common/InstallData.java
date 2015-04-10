@@ -13,7 +13,6 @@ import java.util.TreeSet;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.NameSpace;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
@@ -27,19 +26,18 @@ public class InstallData implements Serializable {
     private Map<DocumentModel, List<Object[]>> values;
     private Map<String, String> links;
     private Map<String, Map<String, Long>> numbers;
-    private Map<String, StyleSheet> stylesheets;
-    private Map<TaskGroup, Set<User>> tasksgroups;
-    private Map<UserProfile, Set<User>> uprofiles;
-    private Map<String, Map<String, String>> messages;
-    private List<NameSpace> namespaces;
     private List<SearchHelpData> shds;
     private List<DataElement> elements;
+    private Map<String, Map<String, String>> messages;
     private List<Authorization> authorizations;
+    private Map<TaskGroup, Set<User>> tasksgroups;
+    private String[] dependencies;
     private Set<ComplexModel> cmodels;
     private Set<User> users;
+    private Map<UserProfile, Set<User>> uprofiles;
     private Set<GlobalConfigData> globalcfg;
     private Set<String> texts;
-    private String[] dependencies;
+    private Map<String, StyleSheet> stylesheets;
     private String defaultstyle;
     
     public InstallData() {
@@ -58,7 +56,6 @@ public class InstallData implements Serializable {
         globalcfg = new HashSet<>();
         texts = new HashSet<>();
         stylesheets = new HashMap<>();
-        namespaces = new ArrayList<>();
     }
     
     /**
@@ -137,14 +134,6 @@ public class InstallData implements Serializable {
      */
     public final void add(TaskGroup taskgroup) {
         tasksgroups.put(taskgroup, new TreeSet<User>());
-    }
-    
-    /**
-     * 
-     * @param ns
-     */
-    public final void add(NameSpace ns) {
-        namespaces.add(ns);
     }
     
     /**
@@ -291,14 +280,6 @@ public class InstallData implements Serializable {
      */
     public final Map<String, DocumentModel> getModels() {
         return models;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final List<NameSpace> getNameSpaces() {
-        return namespaces;
     }
     
     /**

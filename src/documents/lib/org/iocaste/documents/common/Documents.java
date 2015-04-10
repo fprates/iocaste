@@ -102,18 +102,6 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
-     * 
-     * @param namespace
-     */
-    public final void createNameSpace(NameSpace namespace) {
-        Message message;
-        
-        message = new Message("create_namespace");
-        message.add("namespace", namespace);
-        call(message);
-    }
-    
-    /**
      * Registra objeto de numeração.
      * @param name nome do objeto.
      */
@@ -435,18 +423,6 @@ public class Documents extends AbstractServiceInterface {
         Message message = new Message("remove_model");
         message.add("model_name", name);
         return call(message);
-    }
-    
-    /**
-     * 
-     * @param name
-     */
-    public final void removeNameSpace(String name) {
-        Message message;
-        
-        message = new Message("remove_namespace");
-        message.add("name", name);
-        call(message);
     }
     
     /**
