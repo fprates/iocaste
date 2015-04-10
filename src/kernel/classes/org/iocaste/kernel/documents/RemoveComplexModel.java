@@ -36,7 +36,7 @@ public class RemoveComplexModel extends AbstractDocumentsHandler {
         query.andEqual("NAME", name);
         error = update.run(connection, documents, query);
         if (error > 0)
-            documents.cache.removeCModel(name);
+            documents.cache.cmodels.remove(name);
         
         return error;
     }

@@ -50,7 +50,7 @@ public class RemoveModel extends AbstractDocumentsHandler {
                     append(": error on removing header model data").toString());
         
         documents.cache.queries.remove(modelname);
-        documents.cache.removeModel(modelname);
+        documents.cache.models.remove(modelname);
         
         if (tablename == null)
             return 1;

@@ -82,8 +82,9 @@ public class Documents extends AbstractFunction {
         return (value == null || value.trim().length() == 0);
     }
     
-    public final Map<String, String> parseQueries(DocumentModel model) {
-        String fieldname;
+    public final Map<String, String> parseQueries(
+            NamespaceEntry ns, DocumentModel model) {
+        String fieldname, nsvalue;
         boolean iskey, setok;
         int k;
         String tablename;
@@ -91,6 +92,11 @@ public class Documents extends AbstractFunction {
         Map<String, String> queries;
 
         tablename = model.getTableName();
+        if (ns != null) {
+            nsvalue = ns.value.toString();
+            tablename = new StringBuilder(nsvalue).append(tablename).toString();
+        }
+        
         update = new StringBuilder("update ").append(tablename).append(" set ");
         insert = new StringBuilder("insert into ").
                 append(tablename).append(" (");
@@ -141,5 +147,17 @@ public class Documents extends AbstractFunction {
         
         queries.put("delete", delete.toString());
         return queries;
+    }
+}
+
+class NamespaceEntry {
+    public String id;
+    public Object value;
+    public Map<String, Map<String, String>> queries;
+    
+    public NamespaceEntry(String id, Object value) {
+        this.id = id;
+        this.value = value;
+        queries = new HashMap<>();
     }
 }
