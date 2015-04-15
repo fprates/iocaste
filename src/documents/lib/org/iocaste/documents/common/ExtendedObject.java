@@ -25,6 +25,7 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
     private Map<DocumentModelItem, Object> values;
     private Map<String, DocumentModelItem> byname;
     private DocumentModel model;
+    private Object ns;
     
     public ExtendedObject(DocumentModel model) {
         if (model == null)
@@ -182,6 +183,14 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
     
     /**
      * 
+     * @return
+     */
+    public final Object getNS() {
+        return ns;
+    }
+    
+    /**
+     * 
      * @param name
      * @return
      */
@@ -324,6 +333,33 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
     }
     
     /**
+     * Define valor do item do objeto extendido.
+     * @param name nome do objeto
+     * @param value valor
+     */
+    public final void set(String name, Object value) {
+        set(byname.get(name), value);
+    }
+    
+    /**
+     * Define valor do item do objeto extendido.
+     * @param item item de modelo
+     * @param value valor
+     */
+    public final void set(DocumentModelItem item, Object value) {
+        if (item == null)
+            throw new RuntimeException("Invalid null model item key.");
+        
+        if (!model.contains(item))
+            return;
+        
+        if (values.containsKey(item))
+            values.remove(item);
+        
+        values.put(item, value);
+    }
+    
+    /**
      * 
      * @param object
      */
@@ -362,30 +398,11 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
     }
     
     /**
-     * Define valor do item do objeto extendido.
-     * @param name nome do objeto
-     * @param value valor
+     * 
+     * @param ns
      */
-    public final void set(String name, Object value) {
-        set(byname.get(name), value);
-    }
-    
-    /**
-     * Define valor do item do objeto extendido.
-     * @param item item de modelo
-     * @param value valor
-     */
-    public final void set(DocumentModelItem item, Object value) {
-        if (item == null)
-            throw new RuntimeException("Invalid null model item key.");
-        
-        if (!model.contains(item))
-            return;
-        
-        if (values.containsKey(item))
-            values.remove(item);
-        
-        values.put(item, value);
+    public final void setNS(Object ns) {
+        this.ns = ns;
     }
     
     /*

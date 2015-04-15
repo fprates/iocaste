@@ -21,17 +21,26 @@ public class SaveDocument extends AbstractDocumentsHandler {
     
     public int run(Connection connection, ExtendedObject object)
             throws Exception {
+        Object[] criteria;
+        DocumentModelItem ns;
         String query;
         Documents documents;
         DocumentModel model = object.getModel();
         DocumentModelItem[] itens = model.getItens();
         int i = itens.length;
-        Object[] criteria = (i > 0)? new Object[i] : null;
-        
+
+        ns = model.getNamespace();
+        if (ns != null)
+            i++;
+
+        criteria = (i > 0)? new Object[i] : null;
         i = 0;
-        for (DocumentModelItem item : model.getItens())
+        for (DocumentModelItem item : itens)
             criteria[i++] = object.get(item);
 
+        if (ns != null)
+            criteria[i] = object.getNS();
+        
         documents = getFunction();
         query = documents.cache.queries.get(model.getName()).get("insert");
         return update(connection, query, criteria);
