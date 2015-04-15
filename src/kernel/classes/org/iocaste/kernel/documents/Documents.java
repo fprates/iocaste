@@ -67,7 +67,7 @@ public class Documents extends AbstractFunction {
      * @param model
      * @param queries
      */
-    public final void parseQueries(DocumentModel model) {
+    public final Map<String, String> parseQueries(DocumentModel model) {
         String fieldname;
         boolean iskey, setok = false;
         int k = 0;
@@ -80,7 +80,7 @@ public class Documents extends AbstractFunction {
                 append(tablename);
         StringBuilder values = new StringBuilder(") values (");
         StringBuilder where = new StringBuilder(" where ");
-        Map<String, String> queries_ = new HashMap<String, String>();
+        Map<String, String> queries = new HashMap<>();
         
         for (DocumentModelItem modelitem : model.getItens()) {
             iskey = model.isKey(modelitem);
@@ -115,17 +115,12 @@ public class Documents extends AbstractFunction {
         insert.append(values).append(")");
         delete.append(where);
         
-        queries_.put("insert", insert.toString());
+        queries.put("insert", insert.toString());
         
         if (setok)
-            queries_.put("update", update.toString());
+            queries.put("update", update.toString());
         
-        queries_.put("delete", delete.toString());
-        
-        fieldname = model.getName();
-        if (cache.queries.containsKey(fieldname))
-            cache.queries.remove(fieldname);
-        
-        cache.queries.put(fieldname, queries_);
+        queries.put("delete", delete.toString());
+        return queries;
     }
 }

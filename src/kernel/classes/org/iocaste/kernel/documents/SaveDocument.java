@@ -21,6 +21,8 @@ public class SaveDocument extends AbstractDocumentsHandler {
     
     public int run(Connection connection, ExtendedObject object)
             throws Exception {
+        String query;
+        Documents documents;
         DocumentModel model = object.getModel();
         DocumentModelItem[] itens = model.getItens();
         int i = itens.length;
@@ -29,7 +31,9 @@ public class SaveDocument extends AbstractDocumentsHandler {
         i = 0;
         for (DocumentModelItem item : model.getItens())
             criteria[i++] = object.get(item);
-        
-        return update(connection, model.getQuery("insert"), criteria);
+
+        documents = getFunction();
+        query = documents.cache.queries.get(model.getName()).get("insert");
+        return update(connection, query, criteria);
     }
 }

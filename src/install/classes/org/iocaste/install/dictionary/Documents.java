@@ -30,6 +30,9 @@ public class Documents extends Module {
         docs001.key("DOCID", CHAR, 24);
         docs001.add("TNAME", CHAR, 12);
         docs001.add("CLASS", CHAR, 255);
+        docs001.add("NSCOL", CHAR, 48);
+        docs001.add("NSTYP", NUMC, 1);
+        docs001.add("NSLEN", NUMC, 4);
 
         docs003 = tableInstance("DOCS003");
         docs003.key("ENAME", CHAR, 48);
@@ -62,23 +65,39 @@ public class Documents extends Module {
 
         insertModel(docs001, docs005, "MODEL", "DOCS001",
                 "org.iocaste.documents.common.DocumentModel");
-        insertElement(docs003, "MODEL.NAME", 0, 24, 0, true);
-        insertElement(docs003, "MODEL.TABLE", 0, 12, 0, true);
-        insertElement(docs003, "MODEL.CLASS", 0, 255, 0, false);
-        insertModelKey(docs002, docs004, "MODEL.NAME", "MODEL", "DOCID",
-                "MODEL.NAME", "name");
-        insertModelItem(docs002, "MODEL.TABLE", "MODEL", "TNAME",
-                "MODEL.TABLE", "tableName");
-        insertModelItem(docs002, "MODEL.CLASS", "MODEL", "CLASS",
-                "MODEL.CLASS", "className");
-
+        insertElement(docs003,
+                "MODEL.NAME", 0, 24, 0, true);
+        insertElement(docs003,
+                "MODEL.TABLE", 0, 12, 0, true);
+        insertElement(docs003,
+                "MODEL.CLASS", 0, 255, 0, false);
+        insertElement(docs003,
+                "MODELITEM.FIELDNAME", 0, 12, 0, true);
+        insertElement(docs003,
+                "DATAELEMENT.LENGTH", 0, 4, 3, false);
+        insertElement(docs003,
+                "DATAELEMENT.TYPE", 0, 1, 3, false);
+        insertElement(docs003,
+                "DATAELEMENT.UPCASE", 0, 1, 5, false);
+        insertModelKey(docs002, docs004,
+                "MODEL.NAME", "MODEL", "DOCID", "MODEL.NAME", "name");
+        insertModelItem(docs002,
+                "MODEL.TABLE", "MODEL", "TNAME", "MODEL.TABLE", "tableName");
+        insertModelItem(docs002,
+                "MODEL.CLASS", "MODEL", "CLASS", "MODEL.CLASS", "className");
+        insertModelItem(docs002,
+                "MODEL.NAMESPACE", "MODEL", "NSCOL", "MODELITEM.FIELDNAME",
+                        null);
+        insertModelItem(docs002,
+                "MODEL.NS_TYPE", "MODEL", "NSTYP", "DATAELEMENT.TYPE", null);
+        insertModelItem(docs002,
+                "MODEL.NS_LENGTH", "MODEL", "NSLEN", "DATAELEMENT.LENGTH",
+                        null);
+        
         insertModel(docs001, docs005, "DATAELEMENT", "DOCS003",
                 "org.iocaste.documents.common.DataElement");
         insertElement(docs003, "DATAELEMENT.NAME", 0, 48, 0, true);
         insertElement(docs003, "DATAELEMENT.DECIMALS", 0, 2, 3, false);
-        insertElement(docs003, "DATAELEMENT.LENGTH", 0, 4, 3, false);
-        insertElement(docs003, "DATAELEMENT.TYPE", 0, 1, 3, false);
-        insertElement(docs003, "DATAELEMENT.UPCASE", 0, 1, 5, false);
         insertElement(docs003, "DATAELEMENT.ATTRIBTYPE", 0, 1, 3, false);
         insertModelKey(docs002, docs004, "DATAELEMENT.NAME", "DATAELEMENT",
                 "ENAME", "DATAELEMENT.NAME", "name");
@@ -97,7 +116,6 @@ public class Documents extends Module {
                 "org.iocaste.documents.common.DocumentModelItem");
         insertElement(docs003, "MODELITEM.NAME", 0, 48, 0, true);
         insertElement(docs003, "MODELITEM.INDEX", 1, 3, 3, false);
-        insertElement(docs003, "MODELITEM.FIELDNAME", 0, 12, 0, true);
         insertElement(docs003, "MODELITEM.ATTRIB", 0, 64, 0, false);
         insertModelKey(docs002, docs004, "MODELITEM.NAME", "MODELITEM",
                 "INAME", "MODELITEM.NAME", "name");

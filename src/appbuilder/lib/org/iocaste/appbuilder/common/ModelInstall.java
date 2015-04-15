@@ -100,6 +100,19 @@ public class ModelInstall {
         return item;
     }
     
+    public final void namespace(String tablecolumn, DocumentModelItem item) {
+        model.setNamespace(item);
+    }
+    
+    public final void namespace(String tablecolumn, DataElement element) {
+        DocumentModelItem item;
+        
+        item = new DocumentModelItem("namespace");
+        item.setTableFieldName(tablecolumn);
+        item.setDataElement(element);
+        model.setNamespace(item);
+    }
+    
     public final DocumentModelItem reference(
             String name, DocumentModelItem reference) {
         return reference(name, null, reference.getDataElement(), reference);

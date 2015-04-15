@@ -11,6 +11,17 @@ import org.iocaste.protocol.Message;
 
 public class CreateModel extends AbstractDocumentsHandler {
     
+    private final void addKey(StringBuilder sbk, DocumentModelItem item) {
+        String tname = item.getTableFieldName();
+        
+        if (sbk.length() == 0)
+            sbk.append(", primary key(");
+        else
+            sbk.append(", ");
+        
+        sbk.append(tname);
+    }
+    
     /**
      * 
      * @param model
@@ -23,7 +34,7 @@ public class CreateModel extends AbstractDocumentsHandler {
         GetDocumentModel getmodel;
         DocumentModel refmodel;
         DataElement dataelement;
-        DocumentModelItem reference;
+        DocumentModelItem reference, namespace;
         String tname, query, refname, dbtype, refstmt;
         int size;
         StringBuilder sb, sbk = null;
@@ -36,6 +47,15 @@ public class CreateModel extends AbstractDocumentsHandler {
         sb = new StringBuilder("create table ").append(model.getTableName()).
                 append("(");
 
+        namespace = model.getNamespace();
+        if (namespace != null) {
+            sbk = new StringBuilder();
+            addKey(sbk, namespace);
+            sb.append(namespace.getTableFieldName());
+            setTableFieldsString(sb, namespace.getDataElement(), dbtype);
+            sb.append(", ");
+        }
+        
         for (DocumentModelItem item : itens) {
             tname = item.getTableFieldName();
             if (tname == null)
@@ -47,11 +67,8 @@ public class CreateModel extends AbstractDocumentsHandler {
             setTableFieldsString(sb, dataelement, dbtype);
             if (model.isKey(item)) {
                 if (sbk == null)
-                    sbk = new StringBuilder(", primary key(");
-                else
-                    sbk.append(", ");
-                
-                sbk.append(tname);
+                    sbk = new StringBuilder();
+                addKey(sbk, item);
             }
             
             reference = item.getReference();
@@ -112,8 +129,11 @@ public class CreateModel extends AbstractDocumentsHandler {
     
     private final int registerDocumentHeader(Connection connection,
             Documents documents, DocumentModel model) throws Exception {
+        DataElement element;
+        DocumentModelItem item;
         GetDocumentModel getmodel;
-        int l;
+        int l, nstyp, nslen;
+        String ns;
         String name = model.getName();
         String tablename = model.getTableName();
         
@@ -136,8 +156,20 @@ public class CreateModel extends AbstractDocumentsHandler {
             }
         }
         
+        item = model.getNamespace();
+        if (item != null) {
+            element = item.getDataElement();
+            ns = item.getTableFieldName();
+            nstyp = element.getType();
+            nslen = element.getLength();
+        } else {
+            ns = null;
+            nstyp = 0;
+            nslen = 0;
+        }
+        
         if (update(connection, QUERIES[INS_HEADER],
-                name, tablename, model.getClassName()) == 0)
+                name, tablename, model.getClassName(), ns, nstyp, nslen) == 0)
             throw new IocasteException("document header insert error");
 
         if ((tablename != null) && (update(
@@ -202,7 +234,8 @@ public class CreateModel extends AbstractDocumentsHandler {
         registerDocumentHeader(connection, documents, model);
         registerDocumentItems(connection, documents, model);
         registerDocumentKeys(connection, model);
-        documents.parseQueries(model);
+        documents.cache.queries.put(
+                model.getName(), documents.parseQueries(model));
     }
 
     private void prepareElements(Connection connection, Documents documents,
@@ -263,7 +296,6 @@ public class CreateModel extends AbstractDocumentsHandler {
         
         registerModel(connection, documents, model);        
         name = model.getName();
-        model.setQueries(documents.cache.queries.get(name));
         documents.cache.models.put(name, model);
         
         return 1;

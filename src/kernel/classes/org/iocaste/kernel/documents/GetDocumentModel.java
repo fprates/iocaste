@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.Map;
 
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -11,33 +12,19 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class GetDocumentModel extends AbstractDocumentsHandler {
-    
-    @Override
-    public Object run(Message message) throws Exception {
-        String modelname = message.getString("name");
-        Documents documents = getFunction();
-        String sessionid = message.getSessionid();
-        Connection connection = documents.database.getDBConnection(sessionid);
-        return run(connection, documents, modelname);
-    }
-    
+
     @SuppressWarnings("unchecked")
-    public DocumentModel run(Connection connection, Documents documents,
+    public final DocumentModel build(Connection connection, Documents documents,
             String modelname) throws Exception {
+        DataElement element;
+        DocumentModel document;
         int i;
-        Object[] lines, shlines;
-        String itemref, name;
+        String itemref, name, namespace;
         String[] composed;
+        Object[] shlines, lines;
         Map<String, Object> columns;
         DocumentModelItem item;
-        DocumentModel document;
         GetDataElement getde;
-        
-        if (modelname == null)
-            throw new IocasteException("Document model not specified.");
-        
-        if (documents.cache.models.containsKey(modelname))
-            return documents.cache.models.get(modelname);
         
         lines = select(connection, QUERIES[DOCUMENT], 1, modelname);
         if (lines == null)
@@ -89,12 +76,50 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
                 composed = ((String)columns.get("INAME")).split("\\.");
                 document.add(new DocumentModelKey(composed[1]));
             }
+
+        namespace = (String)columns.get("NSCOL");
+        if (namespace != null) {
+            element = new DataElement("namespace");
+            element.setType((int)columns.get("NSTYP"));
+            element.setLength((int)columns.get("NSLEN"));
+            
+            item = new DocumentModelItem("namespace");
+            item.setTableFieldName(namespace);
+            item.setDataElement(element);
+            document.setNamespace(document.getModelItem(namespace));
+        }
         
-        if (!documents.cache.queries.containsKey(modelname))
-            documents.parseQueries(document);
+        return document;
+    }
+    @Override
+    public Object run(Message message) throws Exception {
+        String modelname = message.getString("name");
+        Documents documents = getFunction();
+        String sessionid = message.getSessionid();
+        Connection connection = documents.database.getDBConnection(sessionid);
+        return run(connection, documents, modelname);
+    }
+    
+    public DocumentModel run(Connection connection, Documents documents,
+            String modelname) throws Exception {
+        Map<String, String> queries;
+        DocumentModel document;
         
-        document.setQueries(documents.cache.queries.get(modelname));
+        if (modelname == null)
+            throw new IocasteException("Document model not specified.");
+        
+        if (documents.cache.models.containsKey(modelname))
+            return documents.cache.models.get(modelname);
+        
+        document = build(connection, documents, modelname);
+        if (document == null)
+            return null;
+        
+        queries = documents.parseQueries(document);
+        
+        documents.cache.queries.put(modelname, queries);
         documents.cache.models.put(modelname, document);
+        
         return document;
     }
 

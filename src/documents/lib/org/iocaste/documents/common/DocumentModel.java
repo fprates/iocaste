@@ -22,7 +22,6 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -40,18 +39,17 @@ import java.util.TreeMap;
  */
 public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private static final long serialVersionUID = -4964159453586462503L;
+    private DocumentModelItem namespace;
     private String name;
     private String tablename;
     private String classname;
     private Map<String, DocumentModelItem> itens;
     private Set<DocumentModelKey> keys;
-    private Map<String, String> queries;
     
     public DocumentModel(String name) {
         this.name = name;
         itens = new TreeMap<>();
         keys = new LinkedHashSet<>();
-        queries = new HashMap<>();
     }
     
     /**
@@ -164,20 +162,19 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
+     * 
+     * @return
+     */
+    public final DocumentModelItem getNamespace() {
+        return namespace;
+    }
+    
+    /**
      * Retorna nome do documento.
      * @return nome
      */
     public String getName() {
         return name;
-    }
-    
-    /**
-     * Obtem uma query SQL a partir do cache do modelo.
-     * @param name nome
-     * @return query.
-     */
-    public final String getQuery(String name) {
-        return queries.get(name);
     }
     
     /**
@@ -236,14 +233,11 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
-     * Atribui queries SQL ao modelo.
      * 
-     * O formato da entrada no mapa é <nome da query, query>
-     * 
-     * @param queries mapa de queries.
+     * @param element
      */
-    public final void setQueries(Map<String, String> queries) {
-        this.queries = queries;
+    public final void setNamespace(DocumentModelItem item) {
+        namespace = item;
     }
     
     /**
