@@ -68,6 +68,7 @@ public class Documents extends AbstractFunction {
      * @param queries
      */
     public final Map<String, String> parseQueries(DocumentModel model) {
+        DocumentModelItem ns;
         String fieldname;
         boolean iskey, setok = false;
         int k = 0;
@@ -109,6 +110,15 @@ public class Documents extends AbstractFunction {
                 update.append(fieldname).append(" = ?");
         }
 
+        ns = model.getNamespace();
+        if (ns != null) {
+            fieldname = ns.getTableFieldName();
+            insert.append(", ").append(fieldname);
+            update.append(", ").append(fieldname).append(" = ?");
+            where.append(" and ").append(fieldname).append(" = ?");
+            values.append(", ?");
+        }
+        
         if (setok)
             update.append(where);
         

@@ -35,6 +35,18 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         document.setTableName((String)columns.get("TNAME"));
         document.setClassName((String)columns.get("CLASS"));
         
+        namespace = (String)columns.get("NSCOL");
+        if (namespace != null) {
+            element = new DataElement("namespace");
+            element.setType(((BigDecimal)columns.get("NSTYP")).intValue());
+            element.setLength(((BigDecimal)columns.get("NSLEN")).intValue());
+            
+            item = new DocumentModelItem("namespace");
+            item.setTableFieldName(namespace);
+            item.setDataElement(element);
+            document.setNamespace(item);
+        }
+        
         getde = documents.get("get_data_element");
         lines = select(connection, QUERIES[DOC_ITEM], 0, modelname);
         if (lines != null)
@@ -76,18 +88,6 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
                 composed = ((String)columns.get("INAME")).split("\\.");
                 document.add(new DocumentModelKey(composed[1]));
             }
-
-        namespace = (String)columns.get("NSCOL");
-        if (namespace != null) {
-            element = new DataElement("namespace");
-            element.setType((int)columns.get("NSTYP"));
-            element.setLength((int)columns.get("NSLEN"));
-            
-            item = new DocumentModelItem("namespace");
-            item.setTableFieldName(namespace);
-            item.setDataElement(element);
-            document.setNamespace(document.getModelItem(namespace));
-        }
         
         return document;
     }
