@@ -16,7 +16,6 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.RangeOption;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
-import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
@@ -160,7 +159,10 @@ public class Controller {
      * @throws Exception
      */
     private static final boolean hasValidReference(InputComponent input,
-            RangeInputStatus ri, Function function) throws Exception {
+            RangeInputStatus ri, ControllerData config) throws Exception {
+        InputComponent nsinput;
+        Object ns;
+        String nsreference;
         Documents documents;
         ExtendedObject object;
         DocumentModelItem reference, item;
@@ -176,8 +178,17 @@ public class Controller {
         if (reference == null)
             return true;
         
-        documents = new Documents(function); 
-        object = documents.getObject(reference.getDocumentModel().getName(),
+        documents = new Documents(config.function);
+        nsreference = input.getNSReference();
+        if (nsreference != null) {
+            nsinput = config.state.view.getElement(nsreference);
+            ns = nsinput.get();
+        } else {
+            ns = null;
+        }
+        object = documents.getObject(
+                reference.getDocumentModel().getName(),
+                ns,
                 getUniversalInputValue(input, ri));
         
         return (object != null);
@@ -378,18 +389,28 @@ public class Controller {
                     input.isEnabled()) {
                 status.input = input;
                 status.error = EINITIAL;
-                continue;
             }
+        }
+        
+        if (status.error != 0)
+            return;
+        
+        for (String name : config.values.keySet()) {
+            element = config.state.view.getElement(name);
             
+            if (element == null || !element.isDataStorable())
+                continue;
+            
+            input = (InputComponent)element;
             dataelement = Shell.getDataElement(input);
-            if (value == null || dataelement == null)
+            if (input.get() == null || dataelement == null)
                 continue;
             
-            if (!hasValidReference(input, ri, config.function)) {
-                status.input = input;
-                status.error = EINVALID_REFERENCE;
+            if (hasValidReference(input, ri, config))
                 continue;
-            }
+            
+            status.input = input;
+            status.error = EINVALID_REFERENCE;
         }
     }
     
