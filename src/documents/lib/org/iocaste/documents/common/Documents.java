@@ -152,13 +152,16 @@ public class Documents extends AbstractServiceInterface {
     /**
      * 
      * @param name
+     * @param ns
      * @param id
      * @return
      */
-    public final ComplexDocument getComplexDocument(String name, Object id) {
+    public final ComplexDocument getComplexDocument(
+            String name, Object ns, Object id) {
         Message message = new Message("get_complex_document");
         message.add("name", name);
         message.add("id", id);
+        message.add("ns", ns);
         return call(message);
     }
     

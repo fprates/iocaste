@@ -37,7 +37,8 @@ public class Services extends AbstractFunction {
     public final ComplexDocument get(Message message) {
         String cmodelname = message.get("cmodel_name");
         Object code = message.get("code");
-        return new Documents(this).getComplexDocument(cmodelname, code);
+        Object ns = message.get("ns");
+        return new Documents(this).getComplexDocument(cmodelname, ns, code);
     }
     
     public final ComplexDocument save(Message message) {

@@ -76,7 +76,17 @@ public abstract class AbstractManager implements Manager {
      */
     @Override
     public final ComplexDocument get(Object code) {
-        return docmanager.get(cmodel.getName(), code);
+        return get(null, code);
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.docmanager.common.Manager#get(
+     *    java.lang.Object, java.lang.Object)
+     */
+    @Override
+    public final ComplexDocument get(Object ns, Object code) {
+        return docmanager.get(cmodel.getName(), ns, code);
     }
     
     /**

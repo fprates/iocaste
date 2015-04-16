@@ -22,10 +22,12 @@ public class DocumentManager extends AbstractServiceInterface {
         return call(message);
     }
     
-    public final ComplexDocument get(String cmodelname, Object code) {
+    public final ComplexDocument get(String cmodelname, Object ns, Object code)
+    {
         Message message = new Message("get");
         message.add("cmodel_name", cmodelname);
         message.add("code", code);
+        message.add("ns", ns);
         return call(message);
     }
     

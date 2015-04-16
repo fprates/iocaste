@@ -18,6 +18,8 @@ public interface Manager {
     
     public abstract ComplexDocument get(Object code);
     
+    public abstract ComplexDocument get(Object ns, Object code);
+    
     public abstract String getMessage(int messageid);
     
     public abstract ComplexModel getModel();

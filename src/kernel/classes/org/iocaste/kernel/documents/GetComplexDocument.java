@@ -29,6 +29,7 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
         DocumentModelItem reference, headerkey;
         String cdname = message.getString("name");
         Object id = message.get("id");
+        Object ns = message.get("ns");
         String sessionid = message.getSessionid();
         Documents documents = getFunction();
         Connection connection = documents.database.getDBConnection(sessionid);
@@ -37,7 +38,7 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
         cmodel = getcmodel.run(connection, documents, cdname);
         getobject = documents.get("get_object");
         object = getobject.run(connection, documents,
-                cmodel.getHeader().getName(), id);
+                cmodel.getHeader().getName(), ns, id);
         if (object == null)
             return null;
         
@@ -54,6 +55,7 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
             model = models.get(name);
             query = new Query();
             query.setModel(model.getName());
+            query.setNS(ns);
             reference = getReferenceItem(model, headerkey);
             query.andEqual(reference.getName(), id);
             objects = select.run(connection, query);
