@@ -27,7 +27,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private DataElement dataelement;
     private SearchHelp search;
     private Calendar calendar;
-    private String master;
+    private String master, nsreference;
 
     public AbstractInputComponent(View view, Const type, Const type_,
             String name) {
@@ -160,6 +160,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final DocumentModelItem getModelItem() {
         return modelitem;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getNSReference()
+     */
+    @Override
+    public final String getNSReference() {
+        return nsreference;
     }
     
     /*
@@ -384,6 +393,16 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setObligatory(boolean obligatory) {
         this.obligatory = obligatory;
+    }
+    
+    /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setNSReference(
+     *    java.lang.String)
+     */
+    @Override
+    public final void setNSReference(String nsreference) {
+        this.nsreference = nsreference;
     }
     
     /*

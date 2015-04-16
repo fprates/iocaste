@@ -12,6 +12,7 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
@@ -21,6 +22,7 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.View;
 
 public class Response {
     
@@ -108,12 +110,14 @@ public class Response {
     }
     
     public static final void main(Context context) {
+        View view;
         Properties messages;
-        String name, searchjs, action, form, searchbt, master;
+        String name, searchjs, action, form, searchbt, master, nsreference;
         DocumentModel model;
         ExtendedObject[] result;
         Container stdcnt, datacnt;
         SearchHelp sh;
+        Object ns;
         Documents documents = new Documents(context.function);
         StyleSheet stylesheet = context.view.styleSheetInstance();
         
@@ -167,8 +171,9 @@ public class Response {
         
         sh = context.function.getParameter("control");
         master = sh.getMaster();
+        view = context.control.getView();
         if (master != null)
-            sh = context.control.getView().getElement(master);
+            sh = view.getElement(master);
         
         name = sh.getModelName();
         model = documents.getModel(name);
@@ -176,7 +181,13 @@ public class Response {
 
         datacnt = new StandardContainer(stdcnt, "shdatacnt");
         datacnt.setStyleClass("shdatacnt");
-        result = Common.getResultsFrom(name, documents, context.criteria);
+        nsreference = sh.getNSReference();
+        if (nsreference != null)
+            ns = ((InputComponent)view.getElement(nsreference)).get();
+        else
+            ns = null;
+        
+        result = Common.getResultsFrom(model, documents, context.criteria, ns);
         
         messages = new Properties();
         messages.put(searchbt, "Selecionar");

@@ -18,6 +18,7 @@ public class Query implements Serializable {
     private boolean skiperror, descending;
     private Map<String, Object> values;
     private ExtendedObject[] entries;
+    private Object ns;
     
     public Query() {
         init();
@@ -121,6 +122,10 @@ public class Query implements Serializable {
         return model;
     }
     
+    public final Object getNS() {
+        return ns;
+    }
+    
     public final String[] getOrderBy() {
         return orderby;
     }
@@ -206,6 +211,10 @@ public class Query implements Serializable {
     
     public final void setModel(String model) {
         this.model = model;
+    }
+    
+    public final void setNS(Object ns) {
+        this.ns = ns;
     }
     
     public final void setSkipError(boolean skiperror) {

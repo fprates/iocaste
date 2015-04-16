@@ -2,6 +2,7 @@ package org.iocaste.sh;
 
 import java.util.Map;
 
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
@@ -17,12 +18,13 @@ public class Common {
      * @param criteria
      * @return
      */
-    public static final ExtendedObject[] getResultsFrom(String modelname,
-            Documents documents, Map<String, ValueRange> criteria) {
+    public static final ExtendedObject[] getResultsFrom(DocumentModel model,
+            Documents documents, Map<String, ValueRange> criteria, Object ns) {
         ValueRange range;
         Query query = new Query();
         
-        query.setModel(modelname);
+        query.setModel(model.getName());
+        query.setNS(ns);
         if ((criteria == null) || (criteria.size() == 0))
             return documents.select(query);
         

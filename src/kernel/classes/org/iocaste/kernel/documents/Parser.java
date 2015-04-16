@@ -212,9 +212,9 @@ public class Parser {
             }
         }
         
-        if (query.getWhere().size() > 0)
+        if ((query.getWhere().size() > 0) || query.getNS() != null)
             sb.append(where(connection, query, tablemodel, values, documents));
-
+            
         fields = query.getOrderBy();
         if (fields != null) {
             sb.append(orderby(fields, tablemodel));
@@ -257,6 +257,7 @@ public class Parser {
     private static final String where(Connection connection, Query query,
             DocumentModel tablemodel, List<Object> values, Documents documents)
                     throws Exception {
+        DocumentModelItem nsitem;
         Object value;
         String field;
         String[] composed;
@@ -352,7 +353,21 @@ public class Parser {
             }
             operator = clause.getOperator();
         }
-        
+
+        nsitem = tablemodel.getNamespace();
+        if (nsitem != null) {
+            if (sb == null)
+                sb = new StringBuilder(" where (");
+            else
+                sb.append(" and (");
+            
+            field = nsitem.getTableFieldName();
+            sb.append(field).append(" = ?)");
+            
+            value = query.getNS();
+            values.add(value);
+        }
+
         return (sb == null)? null : sb.toString();
     }
 }

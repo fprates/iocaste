@@ -86,7 +86,7 @@ public class Input {
     private final void generateSearchHelp(InputComponent input,
             InputData inputdata) {
         SearchHelp sh, search;
-        String shname, name, htmlname;
+        String shname, name, htmlname, nsreference;
         ExtendedObject[] shdata;
         
         shname = input.getModelItem().getSearchHelp();
@@ -97,14 +97,17 @@ public class Input {
         
         name = input.getName();
         htmlname = input.getHtmlName();
+        nsreference = input.getNSReference();
         sh = new SearchHelp(inputdata.container, name.concat(".sh"));
         sh.setHtmlName(htmlname.concat(".sh"));
         sh.setModelName((String)shdata[0].get("MODEL"));
         sh.setExport((String)shdata[0].get("EXPORT"));
+        sh.setNSReference(nsreference);
         
         search = new SearchHelp(inputdata.container, name.concat(".search"));
         search.setHtmlName(htmlname.concat(".search"));
         search.setMaster(sh.getHtmlName());
+        search.setNSReference(nsreference);
         
         sh.setChild(search.getHtmlName());
         for (int i = 1; i < shdata.length; i++) {

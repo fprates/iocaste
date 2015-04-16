@@ -11,7 +11,7 @@ public class TableToolData implements Serializable {
     private static final long serialVersionUID = -5741139329515555543L;
     public AbstractContext context;
     public String name, container;
-    public String borderstyle, itemcolumn, model;
+    public String borderstyle, itemcolumn, model, nsfield;
     public boolean mark, enabled, noheader;
     public int vlines, step, last, increment;
     public byte mode;

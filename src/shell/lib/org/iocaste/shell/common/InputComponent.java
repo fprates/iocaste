@@ -89,6 +89,12 @@ public interface InputComponent extends Component {
     public abstract DocumentModelItem getModelItem();
 
     /**
+     * 
+     * @return
+     */
+    public abstract String getNSReference();
+    
+    /**
      * Retorna ajuda de pesquisa associada.
      * @return ajuda de pesquisa
      */
@@ -200,6 +206,12 @@ public interface InputComponent extends Component {
      * @param modelitem item de modelo
      */
     public abstract void setModelItem(DocumentModelItem modelitem);
+    
+    /**
+     * 
+     * @param nsreference
+     */
+    public abstract void setNSReference(String nsreference);
     
     /**
      * Define se campo é obrigatório.

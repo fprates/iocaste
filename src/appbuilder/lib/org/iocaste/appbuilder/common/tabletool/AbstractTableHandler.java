@@ -49,6 +49,7 @@ public abstract class AbstractTableHandler {
                 case LIST_BOX:
                     input = new ListBox(item, name);
                     input.setDataElement(delement);
+                    input.setNSReference(context.data.nsfield);
                     element = input;
                     if (column.values == null)
                         break;
@@ -59,6 +60,7 @@ public abstract class AbstractTableHandler {
                 case TEXT_FIELD:
                     input = new TextField(item, name);
                     input.setDataElement(delement);
+                    input.setNSReference(context.data.nsfield);
                     element = input;
                     break;
                 case LINK:

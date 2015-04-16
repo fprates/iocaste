@@ -17,7 +17,7 @@ import org.iocaste.documents.common.ExtendedObject;
  */
 public class SearchHelp extends PopupControl {
     private static final long serialVersionUID = -1582634834243087782L;
-    private String modelname, export, inputname, master, child;
+    private String modelname, export, inputname, master, child, nsreference;
     private Set<String> itemnames;
     
     public SearchHelp(Container container, String name) {
@@ -96,6 +96,14 @@ public class SearchHelp extends PopupControl {
     
     /**
      * 
+     * @return
+     */
+    public final String getNSReference() {
+        return nsreference;
+    }
+    
+    /**
+     * 
      * @param child
      */
     public final void setChild(String child) {
@@ -134,6 +142,13 @@ public class SearchHelp extends PopupControl {
         this.modelname = modelname;
     }
 
+    /**
+     * 
+     * @param nsreference
+     */
+    public final void setNSReference(String nsreference) {
+        this.nsreference = nsreference;
+    }
     
     /**
      * 
