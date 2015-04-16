@@ -178,6 +178,7 @@ public class Parser {
      */
     public static final String parseQuery(Connection connection, Query query,
             List<Object> values, Documents documents) throws Exception {
+        boolean nsok;
         GetDocumentModel getmodel;
         String[] fields;
         String statement;
@@ -212,7 +213,8 @@ public class Parser {
             }
         }
         
-        if ((query.getWhere().size() > 0) || query.getNS() != null)
+        nsok = ((tablemodel.getNamespace() != null) && (query.getNS() != null));
+        if ((query.getWhere().size() > 0) || nsok)
             sb.append(where(connection, query, tablemodel, values, documents));
             
         fields = query.getOrderBy();
