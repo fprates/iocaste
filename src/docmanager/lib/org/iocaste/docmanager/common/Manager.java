@@ -24,6 +24,9 @@ public interface Manager {
 
     public abstract Map<Object, ExtendedObject> getRelated(
             ComplexDocument document, String name, String field);
+
+    public abstract Map<Object, ExtendedObject> getRelated(
+            ComplexDocument document, Object ns, String name, String field);
     
     public abstract ComplexDocument instance();
     

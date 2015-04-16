@@ -131,6 +131,11 @@ public abstract class AbstractManager implements Manager {
         }
         return null;
     }
+    @Override
+    public final Map<Object, ExtendedObject> getRelated(
+            ComplexDocument document, String itemsname, String field) {
+        return getRelated(document, null, itemsname, field);
+    }
 
     /*
      * (não-Javadoc)
@@ -140,7 +145,8 @@ public abstract class AbstractManager implements Manager {
      */
     @Override
     public final Map<Object, ExtendedObject> getRelated(
-            ComplexDocument document, String itemsname, String field) {
+            ComplexDocument document, Object ns, String itemsname, String field)
+    {
         DocumentModelItem item;
         Query query;
         ExtendedObject[] objects;
@@ -167,6 +173,7 @@ public abstract class AbstractManager implements Manager {
         query.setModel(reference.getDocumentModel().getName());
         query.forEntries(objects);
         query.andEqualEntries(reference.getName(), field);
+        query.setNS(ns);
         return documents.selectToMap(query);
     }
     
