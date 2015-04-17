@@ -79,6 +79,8 @@ public class FormRenderer extends Renderer {
         
         pretag.add("class", "output_list");
         for (int i = 0; i < lines.length; i++) {
+            if (lines[i] == null)
+                continue;
             lines[i] = lines[i].replaceAll("[<]", "&lt");
             lines[i] = lines[i].replaceAll("[>]", "&gt");
         }
