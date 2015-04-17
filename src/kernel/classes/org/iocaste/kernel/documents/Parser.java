@@ -367,7 +367,7 @@ public class Parser {
             sb.append(field).append(" = ?)");
             
             value = query.getNS();
-            values.add(value);
+            values.add((value == null)? "" : value);
         }
 
         return (sb == null)? null : sb.toString();

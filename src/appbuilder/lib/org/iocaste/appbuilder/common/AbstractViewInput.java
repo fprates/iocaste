@@ -188,7 +188,7 @@ public abstract class AbstractViewInput {
     {
         Documents documents = new Documents(context.function);
         ExtendedObject[] objects = DocumentExtractor.extractItems(
-                documents, conversion, null, null);
+                null, documents, conversion, null, null);
         
         addtableitems(table, objects);
     }

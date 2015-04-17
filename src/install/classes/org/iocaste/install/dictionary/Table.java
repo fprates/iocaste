@@ -30,6 +30,10 @@ public class Table {
         fields.put(name, field);
     }
     
+    public final void clear() {
+        values.clear();
+    }
+    
     public final Map<String, Object> getValues() {
         return values;
     }
@@ -69,6 +73,7 @@ public class Table {
      */
     @Override
     public String toString() {
+        StringBuilder primarykey = null;
         Field field = null;
         StringBuilder sb = new StringBuilder("create table ").
                 append(name).append(" (");
@@ -118,9 +123,17 @@ public class Table {
                 append(")");
             }
             
-            if (field.key)
-                sb.append(" primary key");
+            if (field.key) {
+                if (primarykey == null)
+                    primarykey = new StringBuilder(", primary key(");
+                else
+                    primarykey.append(", ");
+                primarykey.append(fname);
+            }
         }
+        
+        if (primarykey != null)
+            sb.append(primarykey).append(")");
         
         sb.append(")");
         return sb.toString();

@@ -22,6 +22,7 @@ public class GetNextNumber extends AbstractDocumentsHandler {
         Documents documents;
         Connection connection;
         String serie;
+        Object ns;
         String range = message.getString("range");
         
         if (range == null)
@@ -32,11 +33,14 @@ public class GetNextNumber extends AbstractDocumentsHandler {
         connection = documents.database.getDBConnection(message.getSessionid());
         
         serie = message.getString("serie");
+        ns = message.get("ns");
+        ns = (ns != null)? ns = ns.toString() : "";
+        
         if (serie == null) {
-            lines = select.run(connection, QUERIES[RANGE], 1, range);
+            lines = select.run(connection, QUERIES[RANGE], 1, range, ns);
         } else {
             serie = range.concat(serie);
-            lines = select.run(connection, QUERIES[RANGE_SERIE], 1, serie);
+            lines = select.run(connection, QUERIES[RANGE_SERIE], 1, serie, ns);
         }
         
         if (lines == null)
@@ -48,9 +52,9 @@ public class GetNextNumber extends AbstractDocumentsHandler {
         update = documents.database.get("update");
         
         if (serie == null)
-            update.run(connection, QUERIES[UPDATE_RANGE], current, range);
+            update.run(connection, QUERIES[UPDATE_RANGE], current, range, ns);
         else
-            update.run(connection, QUERIES[UPDATE_SERIES], current, serie);
+            update.run(connection, QUERIES[UPDATE_SERIES], current, serie, ns);
         
         return current;
     }

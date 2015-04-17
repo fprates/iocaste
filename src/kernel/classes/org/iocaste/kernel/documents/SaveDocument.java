@@ -38,8 +38,11 @@ public class SaveDocument extends AbstractDocumentsHandler {
         for (DocumentModelItem item : itens)
             criteria[i++] = object.get(item);
 
-        if (ns != null)
+        if (ns != null) {
             criteria[i] = object.getNS();
+            if (criteria[i] == null)
+                criteria[i] = "";
+        }
         
         documents = getFunction();
         query = documents.cache.queries.get(model.getName()).get("insert");

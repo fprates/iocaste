@@ -22,6 +22,7 @@ public class DocumentExtractor {
     private Documents documents;
     private Manager manager;
     private boolean ignoreinitialhead;
+    private Object ns;
     
     public DocumentExtractor(PageBuilderContext context, String manager) {
         this.context = context;
@@ -39,6 +40,7 @@ public class DocumentExtractor {
     }
     
     private static ExtendedObject conversion(
+            Object ns,
             ExtendedObject source,
             DocumentModel resultmodel,
             DataConversion conversion,
@@ -80,7 +82,7 @@ public class DocumentExtractor {
                 break;
             case DataConversion.NEXT_NUMBER:
                 object.set(field, documents.
-                        getNextNumber((String)value, (String)parameter));
+                        getNSNextNumber((String)value, ns, (String)parameter));
                 break;
             }
         }
@@ -89,6 +91,7 @@ public class DocumentExtractor {
     }
     
     public static final ExtendedObject[] extractItems(
+            Object ns,
             Documents documents,
             DataConversion conversion,
             ComplexDocument document,
@@ -129,7 +132,7 @@ public class DocumentExtractor {
             if (rule != null)
                 rule.beforeConversion(object);
             
-            object = conversion(object, model, conversion, documents, false);
+            object = conversion(ns, object, model, conversion, documents, false);
             if (object == null)
                 continue;
             
@@ -214,7 +217,7 @@ public class DocumentExtractor {
             model = documents.getModel(to);
         
         head = conversion(
-                head, model, hconversion, documents, ignoreinitialhead);
+                ns, head, model, hconversion, documents, ignoreinitialhead);
         document.setHeader(head);
         for (String name : items.keySet()) {
             objects = null;
@@ -235,9 +238,10 @@ public class DocumentExtractor {
             if (objects == null)
                 continue;
 
-            extractItems(documents, conversion, document, objects);
+            extractItems(ns, documents, conversion, document, objects);
         }
         
+        document.setNS(ns);
         manager.save(document);
         
         return document;
@@ -245,5 +249,9 @@ public class DocumentExtractor {
     
     public final void setHeader(DataConversion conversion) {
         hconversion = conversion;
+    }
+    
+    public final void setNS(Object ns) {
+        this.ns = ns;
     }
 }

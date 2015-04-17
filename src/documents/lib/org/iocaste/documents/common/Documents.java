@@ -102,23 +102,35 @@ public class Documents extends AbstractServiceInterface {
     }
     
     /**
-     * Registra objeto de numeração.
-     * @param name nome do objeto.
+     * 
+     * @param name
      */
     public final void createNumberFactory(String name) {
-        createNumberFactory(name, null);
+        createNumberFactory(name, null, null);
     }
     
     /**
      * 
      * @param name
+     * @param ns
+     */
+    public final void createNumberFactory(String name, Object ns) {
+        createNumberFactory(name, ns, null);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param ns
      * @param series
      */
-    public final void createNumberFactory(String name, Map<String, Long> series)
+    public final void createNumberFactory(
+            String name, Object ns, Map<String, Long> series)
     {
         Message message = new Message("create_number_factory");
         message.add("name", name);
         message.add("series", series);
+        message.add("ns", ns);
         call(message);
         
     }
@@ -214,7 +226,7 @@ public class Documents extends AbstractServiceInterface {
      * @return número
      */
     public final long getNextNumber(String range) {
-        return getNextNumber(range, null);
+        return getNSNextNumber(range, null, null);
     }
     
     /**
@@ -224,8 +236,30 @@ public class Documents extends AbstractServiceInterface {
      * @return
      */
     public final long getNextNumber(String range, String serie) {
+        return getNSNextNumber(range, null, serie);
+    }
+    
+    /**
+     * 
+     * @param range
+     * @param ns
+     * @return
+     */
+    public final long getNSNextNumber(String range, Object ns) {
+        return getNSNextNumber(range, ns, null);
+    }
+    
+    /**
+     * 
+     * @param range
+     * @param ns
+     * @param serie
+     * @return
+     */
+    public final long getNSNextNumber(String range, Object ns, String serie) {
         Message message = new Message("get_next_number");
         message.add("range", range);
+        message.add("ns", ns);
         message.add("serie", serie);
         return call(message);
     }

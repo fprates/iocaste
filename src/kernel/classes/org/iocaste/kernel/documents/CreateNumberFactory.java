@@ -13,6 +13,7 @@ public class CreateNumberFactory extends AbstractDocumentsHandler {
 
     @Override
     public Object run(Message message) throws Exception {
+        Object ns;
         ExtendedObject object;
         SaveDocument save;
         String name, sessionid;
@@ -38,9 +39,13 @@ public class CreateNumberFactory extends AbstractDocumentsHandler {
                     append(" has invalid range name length (").
                     append(l).append(" bytes max).").toString());
 
+        ns = message.get("ns");
+        ns = (ns == null)? "" : ns.toString();
+        
         object = new ExtendedObject(model);
         object.set("IDENT", name);
         object.set("CURRENT", 0);
+        object.setNS(ns);
         
         save = documents.get("save_document");
         save.run(connection, object);
@@ -53,6 +58,7 @@ public class CreateNumberFactory extends AbstractDocumentsHandler {
                 object.set("SERIE", name.concat(serie));
                 object.set("RANGE", name);
                 object.set("CURRENT", series.get(serie));
+                object.setNS(ns);
                 save.run(connection, object);
             }
         }

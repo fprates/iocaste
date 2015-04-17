@@ -76,10 +76,10 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
                 "attrb = ?, itref = ? where iname = ?",
         "insert into DOCS003(ename, decim, lngth, etype, upcas, atype) " +
                 "values(?, ?, ?, ?, ?, ?)",
-        "select CRRNT from RANGE001 where ident = ?",
-        "update RANGE001 set crrnt = ? where ident = ?",
-        "select CRRNT from RANGE002 where SERIE = ?",
-        "update RANGE002 set crrnt = ? where SERIE = ?"
+        "select CRRNT from RANGE001 where ident = ? and nmspc = ?",
+        "update RANGE001 set crrnt = ? where ident = ? and nmspc = ?",
+        "select CRRNT from RANGE002 where SERIE = ? and NMSPC = ?",
+        "update RANGE002 set crrnt = ? where SERIE = ? and NMSPC = ?"
     };
     
     protected final int addTableColumn(Connection connection, String refstmt,
