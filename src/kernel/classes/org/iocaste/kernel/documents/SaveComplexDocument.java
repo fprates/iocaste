@@ -14,6 +14,7 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
 
     @Override
     public Object run(Message message) throws Exception {
+        DeleteComplexDocumentData data;
         SaveDocument save;
         DeleteComplexDocument delete;
         Map<String, DocumentModel> models;
@@ -26,10 +27,17 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         Documents documents = getFunction();
         String sessionid = message.getSessionid();
         Connection connection = documents.database.getDBConnection(sessionid);
-        
+        Object ns = document.getNS();
+
         delete = documents.get("delete_complex_document");
-        delete.run(
-                connection, documents, cmodel.getName(), object.get(modelkey));
+        data = new DeleteComplexDocumentData();
+        data.connection = connection;
+        data.documents = documents;
+        data.cmodel = cmodel.getName();
+        data.key = object.get(modelkey);
+        data.ns = ns;
+        delete.run(data);
+        
         save = documents.get("save_document");
         save.run(connection, object);
         models = cmodel.getItems();

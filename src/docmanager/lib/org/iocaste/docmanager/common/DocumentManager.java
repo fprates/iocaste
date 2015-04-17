@@ -31,12 +31,13 @@ public class DocumentManager extends AbstractServiceInterface {
         return call(message);
     }
     
-    public final ComplexDocument save(String cmodelname, ExtendedObject head,
-            Collection<ExtendedObject[]> groups) {
+    public final ComplexDocument save(String cmodelname, Object ns,
+            ExtendedObject head, Collection<ExtendedObject[]> groups) {
         Message message = new Message("save");
         message.add("cmodel_name", cmodelname);
         message.add("head", head);
         message.add("groups", groups);
+        message.add("ns", ns);
         return call(message);
     }
 }

@@ -35,5 +35,8 @@ public interface Manager {
     public abstract ComplexDocument save(ExtendedObject head,
             Collection<ExtendedObject[]> items);
     
+    public abstract ComplexDocument save(Object ns, ExtendedObject head,
+            Collection<ExtendedObject[]> items);
+    
     public abstract ComplexDocument save(ComplexDocument document);
 }

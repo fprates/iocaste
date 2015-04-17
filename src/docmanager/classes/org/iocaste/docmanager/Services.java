@@ -53,6 +53,7 @@ public class Services extends AbstractFunction {
         String cmodelname = message.get("cmodel_name");
         ExtendedObject head = message.get("head");
         Collection<ExtendedObject[]> groups = message.get("groups");
+        Object ns = message.get("ns");
         Documents documents = new Documents(this);
         ComplexModel cmodel = documents.getComplexModel(cmodelname);
         ComplexDocument document = new ComplexDocument(cmodel);
@@ -93,7 +94,9 @@ public class Services extends AbstractFunction {
                     getReference(model, headerkey).getName());
         }
         
+        head.setNS(ns);
         document.setHeader(head);
+        document.setNS(ns);
         for (ExtendedObject[] group : groups) {
             i = 0;
             if (group == null)
@@ -116,6 +119,7 @@ public class Services extends AbstractFunction {
                 }
                 
                 i++;
+                item.setNS(ns);
                 item.set(reference, id);
             }
             document.add(group);
