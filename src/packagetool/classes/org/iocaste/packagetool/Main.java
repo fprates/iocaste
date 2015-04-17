@@ -28,6 +28,7 @@ public class Main extends AbstractPageBuilder {
         view.set(new MainInput());
         view.put("indetail", new DetailPackage("inpackages"));
         view.put("undetail", new DetailPackage("unpackages"));
+        view.put("erdetail", new DetailPackage("erpackages"));
         view.put("install", new InstallPackage());
         view.put("remove", new UninstallPackage());
         view.put("update", new UpdatePackage());
@@ -53,6 +54,14 @@ public class Main extends AbstractPageBuilder {
         installObject("messages", new TextsInstall());
     }
     
+    public static final void registerException(
+            String pkgname, Context extcontext, Exception e) {
+        Throwable cause;
+        
+        cause = e.getCause();
+        extcontext.exceptions.put(pkgname, (cause == null)? e : cause);
+    }
+    
     private void reload(PageBuilderContext context, Context extcontext) {
         ExtendedObject object;
         DocumentModel model;
@@ -70,6 +79,7 @@ public class Main extends AbstractPageBuilder {
             try {
                 pkgtool.getInstallData(name);
             } catch (Exception e) {
+                registerException(name, extcontext, e);
                 object.set("EXCEPTION", e.getMessage());
                 extcontext.invalid.add(object);
                 continue;

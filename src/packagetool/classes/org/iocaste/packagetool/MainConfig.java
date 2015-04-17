@@ -20,16 +20,9 @@ public class MainConfig extends AbstractViewConfig {
             tabletool = getTableTool(name);
             tabletool.mode = TableTool.DISPLAY;
             tabletool.model = "PACKAGE_GRID";
+            tabletool.mark = true;
+            tabletool.vlines = 0;
             new TableToolColumn(tabletool, "EXCEPTION").size = 80;
-            
-            switch (name) {
-            case "erpackages":
-                tabletool.mark = false;
-                break;
-            default:
-                tabletool.mark = true;
-                break;
-            }
         }
     }
 

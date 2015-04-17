@@ -23,6 +23,7 @@ public class MainSpec extends AbstractViewSpec {
         tabletool("uninstalled", "unpackages");
         
         tabbedpaneitem("packages", "erinstalled");
+        button("erinstalled", "erdetail");
         tabletool("erinstalled", "erpackages");
     }
 
