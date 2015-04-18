@@ -120,6 +120,7 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
      */
     protected final ExtendedObject getExtendedObjectFrom(
             DocumentModel model, Map<String, Object> line) {
+        DocumentModelItem nsitem;
         Object value;
         ExtendedObject object = new ExtendedObject(model);
         
@@ -127,6 +128,10 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
             value = line.get(modelitem.getTableFieldName());
             object.set(modelitem, value);
         }
+        
+        nsitem = model.getNamespace();
+        if (nsitem != null)
+            object.setNS(line.get(nsitem.getTableFieldName()));
         
         return object;
     }
