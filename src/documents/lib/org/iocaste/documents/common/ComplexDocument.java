@@ -177,6 +177,7 @@ public class ComplexDocument implements Serializable,
      */
     public final void setHeader(ExtendedObject object) {
         header = object;
+        ns = object.getNS();
     }
     
     /**
