@@ -32,7 +32,7 @@ public abstract class AbstractActionHandler {
         context.function.back();
     }
 
-    protected final long dbactiongeti(String dashboard, String item) {
+    protected final int dbactiongeti(String dashboard, String item) {
         return getDashboardFactory(dashboard).get(item).geti();
     }
     
