@@ -427,6 +427,7 @@ public class Documents extends AbstractServiceInterface {
             
             to.set(name, from.get(item));
         }
+        to.setNS(from.getNS());
     }
     
     /**
@@ -451,6 +452,7 @@ public class Documents extends AbstractServiceInterface {
             
             to.set(name, from.get(item));
         }
+        to.setNS(from.getNS());
     }
     
     /**
