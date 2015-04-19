@@ -213,7 +213,7 @@ public class Parser {
             }
         }
         
-        nsok = ((tablemodel.getNamespace() != null) && (query.getNS() != null));
+        nsok = (tablemodel.getNamespace() != null);
         if ((query.getWhere().size() > 0) || nsok)
             sb.append(where(connection, query, tablemodel, values, documents));
             
