@@ -18,7 +18,7 @@ public class DataFormRenderer extends Renderer {
      */
     public static final List<XMLElement> render(DataForm form, Config config) {
         DataItem dataitem;
-        byte columns;
+        int columns;
         List<XMLElement> tags = new ArrayList<XMLElement>();
         XMLElement nulltag, itemtag, divtag, formtag;
         

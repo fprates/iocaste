@@ -40,9 +40,10 @@ import org.iocaste.protocol.Function;
 public class DataForm extends AbstractContainer {
     private static final long serialVersionUID = -5059126959559630847L;
     private boolean keyrequired;
-    private byte columns;
+    private int columns;
     private List<String[]> lines;
     private DocumentModel model;
+    private String nsreference;
     
     /**
      * 
@@ -111,7 +112,7 @@ public class DataForm extends AbstractContainer {
      * Retorna quantidade de colunas.
      * @return quantidade
      */
-    public final byte getColumns() {
+    public final int getColumns() {
         return columns;
     }
     
@@ -176,6 +177,7 @@ public class DataForm extends AbstractContainer {
             dataitem.setLength(length);
             dataitem.setVisibleLength(length);
             dataitem.setDataElement(dataelement);
+            dataitem.setNSReference(nsreference);
         }
         
         this.model = model;
@@ -188,7 +190,7 @@ public class DataForm extends AbstractContainer {
         keyrequired = false;
         setStyleClass("form");
         columns = 0;
-        lines = new ArrayList<String[]>();
+        lines = new ArrayList<>();
     }
     
     /**
@@ -203,7 +205,7 @@ public class DataForm extends AbstractContainer {
      * Ajusta quantidade de colunas.
      * @param columns quantidade
      */
-    public final void setColumns(byte columns) {
+    public final void setColumns(int columns) {
         this.columns = columns;
     }
     
@@ -229,11 +231,31 @@ public class DataForm extends AbstractContainer {
             
             item = (DataItem)element;
             name = item.getName();
-            
             item.set(object.get(name));
         }
     }
     
+    /**
+     * 
+     * @param nsreference
+     */
+    public final void setNSReference(String nsreference) {
+        DataItem item;
+        
+        this.nsreference = nsreference;
+        
+        for (Element element : getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            item = (DataItem)element;
+            item.setNSReference(nsreference);
+        }
+    }
+    
+    /**
+     * 
+     * @param fields
+     */
     public final void show(String... fields) {
         for (Element element : getElements())
             element.setVisible(false);
