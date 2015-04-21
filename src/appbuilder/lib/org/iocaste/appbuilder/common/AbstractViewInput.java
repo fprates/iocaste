@@ -12,6 +12,7 @@ import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Text;
@@ -89,6 +90,22 @@ public abstract class AbstractViewInput {
         dbget(dashboard, name).addText(value);
     }
     
+    protected final void dflistset(
+            String form, String item, ExtendedObject[] objects) {
+        dflistset(form, item, objects, item);
+    }
+    
+    protected final void dflistset(
+            String form, String item, ExtendedObject[] objects, String field) {
+        Object value;
+        DataItem input = getinput(form, item);
+        
+        for (ExtendedObject object : objects) {
+            value = object.get(field);
+            input.add(value.toString(), value);
+        }
+    }
+    
     protected final void dfset(String form, String item, Object value) {
         getinput(form, item).set(value);
     }
@@ -119,8 +136,9 @@ public abstract class AbstractViewInput {
                 getExtendedContext();
     }
     
-    private InputComponent getinput(String form, String item) {
-        return ((DataForm)context.view.getElement(form)).get(item);
+    @SuppressWarnings("unchecked")
+    private <T extends InputComponent> T getinput(String form, String item) {
+        return (T)((DataForm)context.view.getElement(form)).get(item);
     }
     
     protected final Manager getManager(String name) {
