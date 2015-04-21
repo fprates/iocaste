@@ -147,6 +147,7 @@ public class TableRenderer extends Renderer {
             parameter = new Parameter(config.getView(), input.getHtmlName());
             parameter.setModelItem(input.getModelItem());
             parameter.setLocale(locale);
+            parameter.setNSReference(input.getNSReference());
             
             if (input.isBooleanComponent())
                 parameter.set((input.isSelected())? "on" : "off");
