@@ -9,6 +9,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
+import org.iocaste.appbuilder.common.reporttool.ReportTool;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.tabletool.SetObjects;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
@@ -319,6 +320,9 @@ class BuilderCustomView extends AbstractCustomView {
             
         for (TableToolEntry entry : components.tabletools.values())
             entry.component = new TableTool(context, entry.data.name);
+        
+        for (ReportToolEntry entry : components.reporttools.values())
+            entry.component = new ReportTool(entry.data);
     }
     
     public final void setView(String view) {

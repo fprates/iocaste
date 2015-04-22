@@ -179,6 +179,11 @@ public abstract class AbstractViewInput {
         getViewComponents().reporttools.get(report).data.objects = items;
     }
     
+    protected final void reportset(
+            String report, Collection<ExtendedObject> items) {
+        reportset(report, items.toArray(new ExtendedObject[0]));
+    }
+    
     public final void run(PageBuilderContext context, boolean init) {
         this.context = context;
         this.init = init;
