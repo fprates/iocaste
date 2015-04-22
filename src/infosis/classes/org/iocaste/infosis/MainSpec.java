@@ -9,7 +9,8 @@ public class MainSpec extends AbstractViewSpec {
         form("main");
         navcontrol("main");
         dashboard("main", "menu");
-        dashboarditem("menu", "items");
+        for (String name : Main.ACTIONS)
+            dashboarditem("menu", name);
     }
 
 }

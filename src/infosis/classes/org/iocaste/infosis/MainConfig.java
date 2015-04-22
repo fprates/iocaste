@@ -2,24 +2,32 @@ package org.iocaste.infosis;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
+import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.dashboard.StandardDashboardRenderer;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 
 public class MainConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        DashboardComponent dashitem;
+        DashboardFactory factory;
         NavControl navcontrol;
         
         navcontrol = getNavControl();
         navcontrol.setTitle("SYSINFO");
         
-        dashitem = getDashboardItem("menu", "items");
-        dashitem.add("java-properties");
-        dashitem.add("system-info");
-        dashitem.add("users-list");
-        dashitem.add("unauthorized-accesses");
+        factory = getDashboard("menu");
+        factory.setRenderer(new MenuRenderer());
     }
+}
 
+class MenuRenderer extends StandardDashboardRenderer {
+    
+    public final void config(String name) {
+        String outerstyle;
+        
+        super.config(name);
+        outerstyle = getStyle(name, OUTER);
+        stylesheet.put(outerstyle, "width", "100%");
+    }
 }

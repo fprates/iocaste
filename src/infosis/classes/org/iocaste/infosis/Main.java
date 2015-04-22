@@ -6,14 +6,22 @@ import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewContext;
 
 public class Main extends AbstractPageBuilder {
+    public static final String[] ACTIONS = {
+        "java-properties",
+        "system-info",
+        "users-list",
+        "unauthorized-accesses"
+    };
+    
     private static final String MAIN = "main";
-    public static final String JVPR = "java-properties";
-    public static final String SINF = "system-info";
-    public static final String ULST = "users-list";
-    public static final String UACC = "unauthorized-accesses";
+    public static final int JVPR = 0;
+    public static final int SINF = 1;
+    public static final int ULST = 2;
+//    public static final int UACC = 3;
 
     @Override
     public void config(PageBuilderContext context) {
+        int i;
         ViewContext view;
         Context extcontext = new Context();
 
@@ -21,18 +29,19 @@ public class Main extends AbstractPageBuilder {
         view.set(extcontext);
         view.set(new MainSpec());
         view.set(new MainConfig());
-        view.put("items", new OptionChoosen());
+        view.set(new MainInput());
         
-        for (String page : new String[] {JVPR, SINF, ULST}) {
-            view = context.instance(page);
-            view.set(extcontext);
-            view.set(new PropertiesSpec());
-            view.set(new PropertiesConfig(page));
-            view.set(new PropertiesInput());
-        }
+        for (i = 0; i <= ULST; i++)
+            view.put(ACTIONS[i], new OptionChoosen(i));
         
-        view = context.instance(UACC);
-        view.set(new UnauthorizedAccessesSpec());
+        view = context.instance("report");
+        view.set(extcontext);
+        view.set(new PropertiesSpec());
+        view.set(new PropertiesConfig());
+        view.set(new PropertiesInput());
+        
+//        view = context.instance(ACTIONS[UACC]);
+//        view.set(new UnauthorizedAccessesSpec());
     }
 
     @Override

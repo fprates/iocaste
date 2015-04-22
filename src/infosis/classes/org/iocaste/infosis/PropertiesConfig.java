@@ -3,19 +3,21 @@ package org.iocaste.infosis;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
+import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 
 public class PropertiesConfig extends AbstractViewConfig {
-    private String title;
-    
-    public PropertiesConfig(String title) {
-        this.title = title;
-    }
     
     @Override
     protected void execute(PageBuilderContext context) {
+        Context extcontext;
+        ReportToolData reporttool;
         NavControl navcontrol = getNavControl();
         
-        navcontrol.setTitle(title);
+        extcontext = getExtendedContext();
+        navcontrol.setTitle(extcontext.title);
+        
+        reporttool = getReportTool("properties");
+        reporttool.model = extcontext.model.getName();
     }
 
 }

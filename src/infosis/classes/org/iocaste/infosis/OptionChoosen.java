@@ -6,25 +6,28 @@ import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Iocaste;
 
 public class OptionChoosen extends AbstractActionHandler {
+    private int choice;
+    
+    public OptionChoosen(int choice) {
+        this.choice = choice;
+    }
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         ExtendedObject object;
-        DocumentModel model;
         Properties properties = null;
         Set<String> sessions = null;
         Iocaste iocaste = null;
         Map<String, Object> sessiondata;
-        String choice = dbactiongetst("menu", "items");
         Context extcontext = getExtendedContext();
         
         extcontext.report.clear();
+        extcontext.title = Main.ACTIONS[choice];
         switch (choice) {
         case Main.JVPR:
             properties = System.getProperties();
@@ -38,9 +41,10 @@ public class OptionChoosen extends AbstractActionHandler {
         }
         
         if (properties != null) {
-            model = new Documents(context.function).getModel("INFOSYS_REPORT");
+            extcontext.model = new Documents(context.function).
+                    getModel("INFOSYS_REPORT");
             for (Object key : properties.keySet()) {
-                object = new ExtendedObject(model);
+                object = new ExtendedObject(extcontext.model);
                 object.set("NAME", key);
                 object.set("VALUE", properties.get(key));
                 extcontext.report.add(object);
@@ -48,10 +52,11 @@ public class OptionChoosen extends AbstractActionHandler {
         }
         
         if (sessions != null) {
-            model = new Documents(context.function).getModel("INFOSYS_SESSION");
+            extcontext.model = new Documents(context.function).
+                    getModel("INFOSYS_SESSION");
             for (String session : sessions) {
                 sessiondata = iocaste.getSessionInfo(session);
-                object = new ExtendedObject(model);
+                object = new ExtendedObject(extcontext.model);
                 object.set("USERNAME", sessiondata.get("username"));
                 object.set("TERMINAL", sessiondata.get("terminal"));
                 object.set("STARTED", sessiondata.get("connection.time"));
@@ -59,7 +64,7 @@ public class OptionChoosen extends AbstractActionHandler {
             }
         }
         
-        redirect(choice);
+        redirect("report");
     }
 
 }

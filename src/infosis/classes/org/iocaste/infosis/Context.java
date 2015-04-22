@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.ExtendedContext;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class Context implements ExtendedContext {
+    public String title;
+    public DocumentModel model;
     public List<Map<String, Object>> users;
     public List<ExtendedObject> report;
     
