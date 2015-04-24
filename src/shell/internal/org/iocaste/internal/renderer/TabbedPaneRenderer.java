@@ -54,6 +54,7 @@ public class TabbedPaneRenderer extends Renderer {
             button.setText(name);
             button.setStyleClass(classname);
             button.setEventHandler(tabbedpane.getEventHandler());
+            button.setEnabled(element.isEnabled());
             tabbedtag.addChild(ButtonRenderer.render(button, config));
         }
 
