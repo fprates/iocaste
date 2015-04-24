@@ -2,7 +2,9 @@ package org.iocaste.dataview;
 
 import org.iocaste.appbuilder.common.reporttool.ReportTool;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
@@ -26,6 +28,7 @@ public class Response {
         input = form.get("NAME");
         input.setVisible(true);
         input.setObligatory(true);
+        
         context.view.setFocus(input);
         context.view.setTitle("dataview-selection");
     }
@@ -47,7 +50,25 @@ public class Response {
         pagecontrol.add("home");
         pagecontrol.add("back");
         
-        context.view.setTitle(context.model.getName());
+        context.view.setTitle(data.model);
     }
 
+    public static final void nsinput(Context context) {
+        InputComponent input;
+        DataForm nsform;
+        PageControl pagecontrol;
+        Form container = new Form(context.view, "main");
+        
+        pagecontrol = new PageControl(container);
+        pagecontrol.add("back");
+        pagecontrol.add("continuesel", PageControl.SUBMIT);
+        
+        nsform = new DataForm(container, "nsform");
+        
+        input = new DataItem(nsform, Const.TEXT_FIELD, "NSKEY");
+        input.setDataElement(context.nsitem.getDataElement());
+        input.setObligatory(true);
+        
+        context.view.setTitle("ns.key.input");
+    }
 }

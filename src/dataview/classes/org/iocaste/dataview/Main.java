@@ -14,6 +14,10 @@ public class Main extends AbstractPage {
         export("install", "install");
     }
     
+    public final void continuesel() {
+        Request.continuesel(context);
+    }
+    
     /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.AbstractPage#init(
@@ -42,6 +46,10 @@ public class Main extends AbstractPage {
     
     public final void main() {
         Response.main(context);
+    }
+    
+    public final void nsinput() {
+        Response.nsinput(context);
     }
     
     public final void select() {

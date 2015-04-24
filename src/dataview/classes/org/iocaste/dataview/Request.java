@@ -8,19 +8,35 @@ import org.iocaste.shell.common.DataForm;
 
 public class Request {
     
+    public static final void continuesel(Context context) {
+        DataForm form = context.view.getElement("nsform");
+        Object ns = form.get("NSKEY").get();
+        
+        context.items = Request.load(
+                context.model.getName(), context.documents, ns);
+        if (context.items == null) {
+            context.function.message(Const.ERROR, "no.results");
+            return;
+        }
+        
+        context.function.setReloadableView(true);
+        context.function.redirect("list");
+    }
+    
     private static final ExtendedObject[] load(String modelname,
-            Documents documents) {
+            Documents documents, Object ns) {
         Query query = new Query();
         query.setModel(modelname);
+        query.setNS(ns);
         return documents.select(query);
     }
     
     public static final void select(Context context) {
-        Documents documents = new Documents(context.function);
         DataForm form = context.view.getElement("model");
         String modelname = form.get("NAME").get();
-        
-        context.model = documents.getModel(modelname);
+
+        context.documents = new Documents(context.function);
+        context.model = context.documents.getModel(modelname);
         if (context.model == null) {
             context.function.message(Const.ERROR, "invalid.model");
             return;
@@ -31,7 +47,19 @@ public class Request {
             return;
         }
         
-        context.items = Request.load(context.model.getName(), documents);
+        context.nsitem = context.model.getNamespace();
+        if (context.nsitem != null) {
+            context.function.setReloadableView(true);
+            context.function.redirect("nsinput");
+            return;
+        }
+        
+        context.items = Request.load(modelname, context.documents, null);
+        if (context.items == null) {
+            context.function.message(Const.ERROR, "no.results");
+            return;
+        }
+        
         context.function.setReloadableView(true);
         context.function.redirect("list");
     }
