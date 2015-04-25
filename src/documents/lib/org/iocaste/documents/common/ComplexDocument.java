@@ -22,7 +22,6 @@ public class ComplexDocument implements Serializable,
     private ComplexModel cmodel;
     private ExtendedObject header;
     private Map<String, List<ExtendedObject>> items;
-    private Object ns;
     
     public ComplexDocument(ComplexModel cmodel) {
         this.cmodel = cmodel;
@@ -143,7 +142,7 @@ public class ComplexDocument implements Serializable,
      * @return
      */
     public final Object getNS() {
-        return ns;
+        return header.getNS();
     }
     
     /**
@@ -177,7 +176,6 @@ public class ComplexDocument implements Serializable,
      */
     public final void setHeader(ExtendedObject object) {
         header = object;
-        ns = object.getNS();
     }
     
     /**
@@ -185,6 +183,6 @@ public class ComplexDocument implements Serializable,
      * @param ns
      */
     public final void setNS(Object ns) {
-        this.ns = ns;
+        header.setNS(ns);;
     }
 }
