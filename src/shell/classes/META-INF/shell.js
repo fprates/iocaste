@@ -20,6 +20,10 @@ function formSubmit(formname, actionname, value) {
     form.submit();
 }
 
+function getClassStyle(id) {
+    return document.getElementById(id).className;
+}
+
 function revertElementDisplay(id) {
     var display = document.getElementById(id).style.display;
     
