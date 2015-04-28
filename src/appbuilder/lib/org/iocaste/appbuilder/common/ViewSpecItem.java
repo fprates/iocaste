@@ -22,6 +22,7 @@ public class ViewSpecItem {
         NODE_LIST("nodelist"),
         TEXT("text"),
         LINK("link"),
+        LISTBOX("listbox"),
         REPORT_TOOL("reporttool"),
         FILE_UPLOAD("fileupload"),
         BUTTON("button"),

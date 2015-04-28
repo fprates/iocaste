@@ -78,6 +78,10 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.LINK, name);
     }
     
+    protected final void listbox(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.LISTBOX, name);
+    }
+    
     protected final void navcontrol(String parent) {
         put(parent, ViewSpecItem.TYPES.PAGE_CONTROL, "navcontrol");
     }

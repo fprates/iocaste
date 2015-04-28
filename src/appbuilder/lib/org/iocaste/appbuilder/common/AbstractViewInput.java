@@ -15,6 +15,7 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.Validator;
 import org.iocaste.texteditor.common.TextEditor;
@@ -151,6 +152,11 @@ public abstract class AbstractViewInput {
     
     protected abstract void init(PageBuilderContext context);
 
+    protected void listadd(String name, String text, Object value) {
+        ListBox input = context.view.getElement(name);
+        input.add(text, value);
+    }
+    
     protected void loadInputTexts(PageBuilderContext context) {
         List<Validator> validators;
         AbstractExtendedValidator exvalidator;

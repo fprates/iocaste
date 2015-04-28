@@ -25,6 +25,7 @@ import org.iocaste.shell.common.ExpandBar;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.RadioGroup;
 import org.iocaste.shell.common.StandardContainer;
@@ -208,6 +209,9 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case LINK:
             new Link(container, name, name);
+            break;
+        case LISTBOX:
+            new ListBox(container, name);
             break;
         case REPORT_TOOL:
             rtdata = new ReportToolData();
