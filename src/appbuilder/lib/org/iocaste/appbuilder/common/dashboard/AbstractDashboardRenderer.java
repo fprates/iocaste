@@ -84,6 +84,17 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
         stylesheet.newElement(factorystyle);
     }
 
+    public final void setStyle(String name, byte type, String style) {
+        switch (type) {
+        case INNER:
+            entries.get(name).innerstyle = style;
+            break;
+        case OUTER:
+            entries.get(name).outerstyle = style;
+            break;
+        }
+    }
+    
     @Override
     public final void setStyleProperty(String name, String value) {
         stylesheet.put(factorystyle, name, value);
