@@ -16,7 +16,7 @@ import org.iocaste.shell.common.Text;
 public class StandardNavControlDesign implements NavControlDesign {
     private PageBuilderContext context;
     private Container container;
-    private StandardContainer buttonbar;
+    protected StandardContainer buttonbar;
     
     /*
      * (não-Javadoc)
@@ -102,7 +102,7 @@ public class StandardNavControlDesign implements NavControlDesign {
      *    buildButton(java.lang.String)
      */
     @Override
-    public final void buildButton(String action, NavControlButton buttoncfg){
+    public void buildButton(String action, NavControlButton buttoncfg) {
         Link link;
         Text text;
         Button button;
@@ -132,7 +132,7 @@ public class StandardNavControlDesign implements NavControlDesign {
      * 
      * @return
      */
-    private final StandardContainer buildButtonBar() {
+    protected final StandardContainer buildButtonBar() {
         StandardContainer buttonbar;
         StyleSheet stylesheet = context.view.styleSheetInstance();
         
