@@ -121,8 +121,14 @@ public abstract class AbstractViewSpec {
     }
     
     public final void run(PageBuilderContext context) {
+        run(null, context);
+    }
+    
+    public final void run(ViewSpecItem item, PageBuilderContext context) {
         this.context = context;
         items.clear();
+        if (item != null)
+            items.put(item.getName(), item);
         execute();
     }
     
@@ -133,6 +139,12 @@ public abstract class AbstractViewSpec {
     public final void skip(String parent) {
         put(parent, ViewSpecItem.TYPES.SKIP, new StringBuilder("skip").
                 append(skipnr++).toString());
+    }
+    
+    protected final void spec(String parent, AbstractViewSpec spec) {
+        spec.run(items.get(parent), context);
+        for (ViewSpecItem item : spec.getItems())
+            items.put(item.getName(), item);
     }
     
     protected final void standardcontainer(String parent, String name) {
