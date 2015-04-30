@@ -164,6 +164,18 @@ public abstract class AbstractActionHandler {
         return (T)context.getView(page).getExtendedContext();
     }
 
+    protected final double getinputd(String name) {
+        return ((InputComponent)context.view.getElement(name)).getd();
+    }
+
+    protected final int getinputi(String name) {
+        return ((InputComponent)context.view.getElement(name)).geti();
+    }
+
+    protected final long getinputl(String name) {
+        return ((InputComponent)context.view.getElement(name)).getl();
+    }
+    
     protected final String getinputst(String name) {
         return ((InputComponent)context.view.getElement(name)).getst();
     }
