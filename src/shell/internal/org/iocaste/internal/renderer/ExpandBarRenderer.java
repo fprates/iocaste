@@ -22,6 +22,7 @@ public class ExpandBarRenderer extends Renderer {
         
         ebarea = new XMLElement("div");
         ebarea.add("class", container.getStyleClass());
+        ebarea.add("id", container.getHtmlName().concat("_super"));
         
         edge.setText((text == null)? name : text);
         edge.setSubmit(false);
