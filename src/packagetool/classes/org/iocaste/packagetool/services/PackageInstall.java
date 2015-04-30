@@ -122,7 +122,7 @@ public class PackageInstall extends AbstractHandler {
             numbers = state.data.getNumberFactories();
             for (String factory : numbers.keySet()) {
                 state.documents.createNumberFactory(
-                        factory, numbers.get(factory));
+                        factory, null, numbers.get(factory));
                 Registry.add(factory, "NUMBER", state);
             }
             
