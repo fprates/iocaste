@@ -152,6 +152,11 @@ public abstract class AbstractViewInput {
     
     protected abstract void init(PageBuilderContext context);
 
+    protected final void inputset(String name, Object value) {
+        InputComponent input = context.view.getElement(name);
+        input.set(value);
+    }
+    
     protected void listadd(String name, String text, Object value) {
         ListBox input = context.view.getElement(name);
         input.add(text, value);
