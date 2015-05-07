@@ -1,5 +1,6 @@
 package org.iocaste.internal;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -7,6 +8,7 @@ import java.util.Set;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Calendar;
@@ -30,6 +32,8 @@ public class Input {
     public Function function;
     public boolean enablecustom;
     public PageContext pagectx;
+    private Documents documents;
+    private Map<String, DataElement> des;
 
     public final void register() {
         InputData data = new InputData();
@@ -41,6 +45,8 @@ public class Input {
         data.enablecustom = enablecustom;
         data.pagectx = pagectx;
         
+        documents = new Documents(function);
+        des = new HashMap<>();
         register(data);
     }
     
@@ -179,6 +185,7 @@ public class Input {
      * @param inputdata
      */
     private final void register(InputData inputdata) {
+        String name;
         DataElement dataelement;
         RangeInputComponent rinput;
         Set<Element> elements;
@@ -227,6 +234,16 @@ public class Input {
                 generateSearchHelp(input, inputdata);
             
             dataelement = input.getDataElement();
+            if ((dataelement != null) && dataelement.isDummy()) {
+                name = dataelement.getName();
+                dataelement = des.get(name);
+                if (dataelement == null) {
+                    dataelement = documents.getDataElement(name);
+                    des.put(name, dataelement);
+                }
+                input.setDataElement(dataelement);
+            }
+            
             container = input.getContainer();
             if ((dataelement != null) && (input.getCalendar() == null) &&
                     (dataelement.getType() == DataType.DATE))
