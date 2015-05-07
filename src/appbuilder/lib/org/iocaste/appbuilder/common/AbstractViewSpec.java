@@ -170,4 +170,8 @@ public abstract class AbstractViewSpec {
     protected final void texteditor(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TEXT_EDITOR, name);
     }
+    
+    protected final void textfield(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.TEXT_FIELD, name);
+    }
 }

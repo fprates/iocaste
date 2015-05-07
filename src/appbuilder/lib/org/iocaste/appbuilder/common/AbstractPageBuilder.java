@@ -32,6 +32,7 @@ import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.TextField;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewCustomAction;
 import org.iocaste.texteditor.common.TextEditor;
@@ -223,6 +224,9 @@ class BuilderCustomView extends AbstractCustomView {
         case TEXT_EDITOR:
             editor = new TextEditorTool(context).instance(container, name);
             components.editors.put(name, editor);
+            break;
+        case TEXT_FIELD:
+            new TextField(container, name);
             break;
         case FILE_UPLOAD:
             new FileEntry(container, name);
