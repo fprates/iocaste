@@ -52,16 +52,17 @@ public class TextFieldRenderer extends Renderer {
         Text text;
         SearchHelp search;
         Calendar calendar;
-        XMLElement tagt, tagl, tagc;
+        XMLElement tagt, tagl, tagc, spantag, inputtag;
+        boolean required;
         DataElement dataelement = Shell.getDataElement(input);
         int length = (dataelement == null)? input.getLength() :
             dataelement.getLength();
         String name = input.getHtmlName(), value = toString(input);
-        XMLElement spantag, inputtag = new XMLElement("input");
         
         if (value == null)
             value = "";
         
+        inputtag = new XMLElement("input");
         inputtag.add("type", (!input.isSecret())? "text" : "password");
         inputtag.add("name", name);
         inputtag.add("id", name);
@@ -92,13 +93,21 @@ public class TextFieldRenderer extends Renderer {
         
         inputtag.add("class", sb.toString());
         addEvents(inputtag, input);
+        
+        popupcontrol = config.getPopupControl();
+        calendar = input.getCalendar();
+        search = input.getSearchHelp();
+        required = input.isObligatory();
+        tftext = input.getText();
+        if ((search == null) && (calendar == null) && !required &&
+                (tftext == null))
+            return inputtag;
+        
         tagc = new XMLElement("td");
         tagc.addChild(inputtag);
         tagl = new XMLElement("tr");
         tagl.addChild(tagc);
 
-        popupcontrol = config.getPopupControl();
-        calendar = input.getCalendar();
         if ((calendar != null) && input.isEnabled()) {
             tagc = new XMLElement("td");
             if (popupcontrol != null) {
@@ -113,7 +122,6 @@ public class TextFieldRenderer extends Renderer {
             tagl.addChild(tagc);
         }
         
-        search = input.getSearchHelp();
         if (search != null) {
             tagc = new XMLElement("td");
             if (popupcontrol != null) {
@@ -127,7 +135,7 @@ public class TextFieldRenderer extends Renderer {
             tagl.addChild(tagc);
         }
         
-        if (input.isObligatory()) {
+        if (required) {
             spantag = new XMLElement("input");
             spantag.add("type", "button");
             spantag.add("class", "sh_button");
@@ -138,7 +146,6 @@ public class TextFieldRenderer extends Renderer {
             tagl.addChild(tagc);
         }
         
-        tftext = input.getText();
         if (tftext != null) {
             text = new Text(config.getView(), "");
             text.setStyleClass("tftext");
