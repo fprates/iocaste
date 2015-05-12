@@ -4,7 +4,6 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class Services extends AbstractFunction {
@@ -14,7 +13,7 @@ public class Services extends AbstractFunction {
         export("install", new PackageInstall());
         export("is_installed", new IsInstalled());
         export("data_from_file", "getDataFromFile");
-        export("uninstall", "uninstall");
+        export("uninstall", new Uninstall());
         export("update", new PackageUpdate());
     }
     
@@ -38,19 +37,5 @@ public class Services extends AbstractFunction {
         String file = message.getString("file");
         
         return InstallDataBuild.execute(file, this);
-    }
-    
-    /**
-     * 
-     * @param message
-     * @throws Exception
-     */
-    public final void uninstall(Message message) throws Exception {
-        String pkgname = message.getString("package");
-        
-        if (pkgname == null)
-            throw new IocasteException("package name not specified.");
-        
-        Uninstall.init(pkgname, this);
     }
 }

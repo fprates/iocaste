@@ -5,21 +5,25 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.globalconfig.common.GlobalConfig;
+import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.IocasteException;
+import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.SHLib;
 
-public class Uninstall {
+public class Uninstall extends AbstractHandler {
     private static final byte DOCS_LIB = 0;
     private static final byte SH_LIB = 1;
     private static final byte AUTH_LIB = 2;
     private static final byte CONFIG_LIB = 3;
     
-    public static final void init(String pkgname, Function function) {
+    public final void run(String pkgname) {
         Query query;
         ExtendedObject object;
         AbstractServiceInterface[] services;
+        Function function = getFunction();
         ExtendedObject[] objects = Registry.getEntries(pkgname, function);
         
         if (objects == null)
@@ -45,7 +49,6 @@ public class Uninstall {
     private static final void item(ExtendedObject object, Function function,
             AbstractServiceInterface... services) {
         Query query;
-        Query[] queries;
         Documents documents = (Documents)services[DOCS_LIB];
         SHLib shlib = (SHLib)services[SH_LIB];
         Authority authority = (Authority)services[AUTH_LIB];
@@ -54,18 +57,7 @@ public class Uninstall {
         String name = object.get("NAME");
         
         if (modeltype.equals("MESSAGE")) {
-            name = object.get("PACKAGE");
-            queries = new Query[2];
-            queries[0] = new Query("delete");
-            queries[0].setModel("MESSAGES");
-            queries[0].andEqual("PACKAGE", name);
-            
-            queries[1] = new Query("delete");
-            queries[1].setModel("PACKAGE_ITEM");
-            queries[1].andEqual("PACKAGE", name);
-            queries[1].andEqual("MODEL", "MESSAGE");
-            documents.update(queries);
-            
+            InstallMessages.uninstall(object.getst("PACKAGE"), documents);
             documents.delete(object);
             return;
         }
@@ -148,5 +140,16 @@ public class Uninstall {
         
         if (modeltype.equals("DATA_ELEMENT"))
             documents.delete(object);
+    }
+
+    @Override
+    public Object run(Message message) throws Exception {
+        String pkgname = message.getString("package");
+        
+        if (pkgname == null)
+            throw new IocasteException("package name not specified.");
+        
+        run(pkgname);
+        return null;
     }
 }

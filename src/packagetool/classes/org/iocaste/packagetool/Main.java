@@ -10,9 +10,15 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.PackageTool;
+import org.iocaste.packagetool.services.IsInstalled;
 
 public class Main extends AbstractPageBuilder {
-
+    
+    public Main() {
+        super();
+        export("is_installed", new IsInstalled());
+    }
+    
     @Override
     public void config(PageBuilderContext context) throws Exception {
         ViewContext view;
@@ -63,14 +69,16 @@ public class Main extends AbstractPageBuilder {
     }
     
     private void reload(PageBuilderContext context, Context extcontext) {
+        IsInstalled isinstalled;
         ExtendedObject object;
         DocumentModel model;
         List<String> packages;
         PackageTool pkgtool;
-        
+         
         model = new Documents(context.function).getModel("PACKAGE_GRID");
         packages = PackageTool.getAvailablePackages();
         pkgtool = new PackageTool(context.function);
+        isinstalled = get("is_installed");
         
         for (String name : packages) {
             object = new ExtendedObject(model);
@@ -85,7 +93,7 @@ public class Main extends AbstractPageBuilder {
                 continue;
             }
             
-            if (pkgtool.isInstalled(name))
+            if (isinstalled.run(name))
                 extcontext.installed.add(object);
             else
                 extcontext.uninstalled.add(object);

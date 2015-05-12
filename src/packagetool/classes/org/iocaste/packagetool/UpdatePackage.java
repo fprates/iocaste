@@ -32,9 +32,6 @@ public class UpdatePackage extends AbstractActionHandler {
             pkgname = object.getst("NAME");
             try {
                 pkgtool.update(pkgname);
-                extcontext.uninstalled.add(object);
-                object = readobjects(extcontext.installed, "NAME", pkgname);
-                extcontext.installed.remove(object);
             } catch (Exception e) {
                 object = readobjects(extcontext.installed, "NAME", pkgname);
                 object.set("EXCEPTION", e.getMessage());
@@ -46,7 +43,7 @@ public class UpdatePackage extends AbstractActionHandler {
         if (ex)
             message(Const.WARNING, "some.packages.failed");
         else
-            message(Const.STATUS, "package.uninstalled");
+            message(Const.STATUS, "package.updated");
         inputrefresh();
     }
 
