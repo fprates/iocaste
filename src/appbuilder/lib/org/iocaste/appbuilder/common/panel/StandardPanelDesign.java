@@ -10,10 +10,14 @@ import org.iocaste.shell.common.Text;
 
 public class StandardPanelDesign implements NavControlDesign {
     private boolean offline;
+    private Iocaste iocaste;
+    
+    public StandardPanelDesign() {
+        offline = true;
+    }
     
     @Override
     public void build(Container container, PageBuilderContext context) {
-        Iocaste iocaste;
         Text text;
         String style, name;
         StyleSheet stylesheet;
@@ -49,8 +53,13 @@ public class StandardPanelDesign implements NavControlDesign {
         stylesheet.put(style, "font-size", "16pt");
 
         name = context.view.getTitle();
+        if (offline) {
+            if (iocaste == null)
+                iocaste = new Iocaste(context.function);
+            offline = !iocaste.isConnected();
+        }
+        
         if (!offline && (name == null)) {
-            iocaste = new Iocaste(context.function);
             name = iocaste.getCurrentApp();
         }
         
@@ -66,9 +75,5 @@ public class StandardPanelDesign implements NavControlDesign {
     public void buildButton(String action, NavControlButton button) {
         // TODO Stub de método gerado automaticamente
         
-    }
-    
-    public final void offline() {
-        offline = true;
     }
 }
