@@ -31,6 +31,10 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
         entry.group = group;
     }
     
+    protected final String getChoice(String name) {
+        return entries.get(name).choose;
+    }
+    
     @Override
     public final Container getContainer(String name, byte type) {
         return context.view.getElement(getContainerName(name, type));
@@ -47,6 +51,10 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
         default:
             return entries.get(name).outercnt;
         }
+    }
+    
+    protected final String getGroup(String name) {
+        return entries.get(name).group;
     }
     
     @Override
