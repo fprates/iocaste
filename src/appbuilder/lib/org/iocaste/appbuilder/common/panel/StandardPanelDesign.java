@@ -9,7 +9,8 @@ import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Text;
 
 public class StandardPanelDesign implements NavControlDesign {
-
+    private boolean offline;
+    
     @Override
     public void build(Container container, PageBuilderContext context) {
         Iocaste iocaste;
@@ -41,16 +42,20 @@ public class StandardPanelDesign implements NavControlDesign {
         stylesheet.newElement(style);
         stylesheet.put(style, "color", Colors.FONT);
         stylesheet.put(style, "margin", "0px");
-        stylesheet.put(style, "padding", "0px");
+        stylesheet.put(style, "padding", "1em");
         stylesheet.put(style, "bottom", "0px");
         stylesheet.put(style, "left", "0px");
         stylesheet.put(style, "position", "absolute");
         stylesheet.put(style, "font-size", "16pt");
 
-        iocaste = new Iocaste(context.function);
         name = context.view.getTitle();
-        if (name == null)
+        if (!offline && (name == null)) {
+            iocaste = new Iocaste(context.function);
             name = iocaste.getCurrentApp();
+        }
+        
+        if (name == null)
+            return;
         
         text = new Text(container, "navcontrol_title");
         text.setStyleClass(style.substring(1));
@@ -63,4 +68,7 @@ public class StandardPanelDesign implements NavControlDesign {
         
     }
     
+    public final void offline() {
+        offline = true;
+    }
 }
