@@ -7,6 +7,8 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.PanelPageItem;
+import org.iocaste.appbuilder.common.panel.StandardDashboardConfig;
+import org.iocaste.appbuilder.common.panel.StandardDashboardSpec;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 public class Main extends AbstractPageBuilder {
@@ -51,6 +53,9 @@ class TaskPanelPage extends AbstractPanelPage {
         String text;
         Set<TaskEntry> entries;
         Context extcontext;
+        
+        set(new StandardDashboardSpec(this));
+        set(new StandardDashboardConfig(this));
         
         extcontext = getExtendedContext();
         for (String name : extcontext.groups.keySet()) {
