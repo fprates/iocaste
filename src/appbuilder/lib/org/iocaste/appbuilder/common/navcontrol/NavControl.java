@@ -40,11 +40,6 @@ public class NavControl {
             design.buildButton(name, buttons.get(name));
     }
     
-    @SuppressWarnings("unchecked")
-    public final <T extends NavControlDesign> T getDesign() {
-        return (T)design;
-    }
-    
     public final void setControlStyle(String control, String style) {
         buttons.get(control).style = style;
     }

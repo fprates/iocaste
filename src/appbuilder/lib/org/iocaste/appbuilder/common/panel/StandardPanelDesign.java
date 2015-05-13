@@ -22,7 +22,7 @@ public class StandardPanelDesign implements NavControlDesign {
         String style, name;
         StyleSheet stylesheet;
         
-        style = ".navcontrol_head";
+        style = ".std_navcontrol_head";
         stylesheet = context.view.styleSheetInstance();
         
         stylesheet.newElement(style);
@@ -42,7 +42,7 @@ public class StandardPanelDesign implements NavControlDesign {
         
         container.setStyleClass(style.substring(1));
         
-        style = ".navcontrol_title";
+        style = ".std_navcontrol_title";
         stylesheet.newElement(style);
         stylesheet.put(style, "color", Colors.FONT);
         stylesheet.put(style, "margin", "0px");

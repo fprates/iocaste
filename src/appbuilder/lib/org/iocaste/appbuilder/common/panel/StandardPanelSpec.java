@@ -23,7 +23,7 @@ public class StandardPanelSpec extends AbstractViewSpec {
         standardcontainer("main", "content");
         extspec = page.getSpec();
         if (extspec == null)
-            extspec = new StandardDashboardSpec(page);
+            return;
         
         spec("content", extspec);
         for (String ctxitem : extspec.getContextItems())

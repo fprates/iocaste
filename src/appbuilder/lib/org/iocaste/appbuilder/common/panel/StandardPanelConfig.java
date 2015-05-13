@@ -63,7 +63,7 @@ class StandardPanelConfig extends AbstractViewConfig {
         
         extconfig = page.getConfig();
         if (extconfig == null)
-            extconfig = new StandardDashboardConfig(page);
+            return;
         
         config(extconfig);
     }
