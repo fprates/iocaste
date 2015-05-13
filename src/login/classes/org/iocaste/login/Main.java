@@ -1,57 +1,49 @@
 package org.iocaste.login;
 
-import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
-import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.View;
+import org.iocaste.appbuilder.common.AbstractPageBuilder;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.StandardPanel;
 
-public class Main extends AbstractPage {
-    private Context context;
-    /**
-     * 
-     * @param view
-     */
-    public final void authentic() {
-        Response.authentic(context.view);
-    }
-    
-    public final void changesecret() {
-        Request.changesecret(context);
-    }
-    
-    public final void changesecretform() {
-        Response.changesecretform(context);
-    }
-    
-    public final void connect() {
-        Request.connect(context);
-    }
+public class Main extends AbstractPageBuilder {
     
     @Override
-    public final AbstractContext init(View view) {
-        DocumentModelItem item;
-        DataElement element;
+    public void config(PageBuilderContext context) throws Exception {
+        StandardPanel panel;
+        Context extcontext;
 
-        element = new DataElement("SECRET");
-        element.setType(DataType.CHAR);
-        element.setLength(12);
-        element.setUpcase(false);
+        extcontext = new Context();
         
-        context = new Context();
-        context.function = this;
-        context.chgscrtmodel = new DocumentModel("CHANGE_SECRET");
+        panel = new StandardPanel(context);
+        panel.instance("authentic", new MainPage(), extcontext);
+        panel.instance("changesecret", new ChangeSecretPage(), extcontext);
+    }
+
+    @Override
+    protected void installConfig(PageBuilderDefaultInstall defaultinstall)
+            throws Exception {
+        // TODO Stub de método gerado automaticamente
         
-        item = new DocumentModelItem("SECRET");
-        item.setDataElement(element);
-        context.chgscrtmodel.add(item);
-        
-        item = new DocumentModelItem("CONFIRM");
-        item.setDataElement(element);
-        context.chgscrtmodel.add(item);
-        
-        return context;
+    }
+}
+
+class MainPage extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new MainSpec());
+        set(new MainConfig());
+        put("connect", new Connect());
+    }
+}
+
+class ChangeSecretPage extends AbstractPanelPage {
+    
+    @Override
+    public void execute() {
+        set(new ChangeSecretSpec());
+        set(new ChangeSecretConfig());
+        put("changesecret", new ChangeSecret());
     }
 }
