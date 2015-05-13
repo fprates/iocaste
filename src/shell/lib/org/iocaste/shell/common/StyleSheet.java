@@ -37,8 +37,8 @@ public class StyleSheet implements Serializable {
     
     public final void remove(String element) {
         Map<String, String> properties = stylesheet.get(element);
-        for (String name : properties.keySet())
-            properties.remove(name);
+        
+        properties.clear();
         stylesheet.remove(element);
     }
     
