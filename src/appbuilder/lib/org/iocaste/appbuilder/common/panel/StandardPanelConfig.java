@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.panel;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
@@ -16,15 +18,18 @@ class StandardPanelConfig extends AbstractViewConfig {
     
     @Override
     protected void execute(PageBuilderContext context) {
+        Map<Colors, String> colors;
+        StandardPanelDesign design;
         AbstractViewConfig extconfig;
         String style;
         StyleSheet stylesheet;
         NavControl navcontrol;
         
+        colors = page.getColors();
         style = ".form_content";
         stylesheet = context.view.styleSheetInstance();
         stylesheet.put(style, "height", "100%");
-        stylesheet.put(style, "background-color", Colors.BODY_BG);
+        stylesheet.put(style, "background-color", colors.get(Colors.BODY_BG));
 
         
         style = ".std_panel_context";
@@ -36,11 +41,13 @@ class StandardPanelConfig extends AbstractViewConfig {
         stylesheet.put(style, "float", "left");
         stylesheet.put(style, "display", "inline");
         stylesheet.put(style, "position", "fixed");
-        stylesheet.put(style, "background-color", Colors.COMPONENT_BG);
+        stylesheet.put(style,
+                "background-color", colors.get(Colors.COMPONENT_BG));
         stylesheet.put(style, "font-size", "12pt");
         stylesheet.put(style, "border-bottom-style", "solid");
         stylesheet.put(style, "border-bottom-width", "2px");
-        stylesheet.put(style, "border-bottom-color", Colors.BODY_BG);
+        stylesheet.put(style,
+                "border-bottom-color", colors.get(Colors.BODY_BG));
         getElement("context").setStyleClass(style.substring(1));
         
         style = ".std_panel_content";
@@ -58,8 +65,11 @@ class StandardPanelConfig extends AbstractViewConfig {
         stylesheet.put(style, "font-size", "12pt");
         getElement("content").setStyleClass(style.substring(1));
         
+        design = new StandardPanelDesign();
+        design.setColors(colors);
+        
         navcontrol = getNavControl();
-        navcontrol.setDesign(new StandardPanelDesign());
+        navcontrol.setDesign(design);
         
         extconfig = page.getConfig();
         if (extconfig == null)

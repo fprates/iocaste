@@ -6,7 +6,7 @@ import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.StandardContainer;
 
 public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
-
+    
     @Override
     public void add(String dashname, String name, Object value, int type) {
         Container container;
@@ -85,16 +85,19 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
                 stylesheet.put(style, "display", "block");
                 stylesheet.put(style, "border-bottom-style", "solid");
                 stylesheet.put(style, "border-bottom-width", "2px");
-                stylesheet.put(style, "border-bottom-color", Colors.BODY_BG);
+                stylesheet.put(style,
+                        "border-bottom-color", colors.get(Colors.BODY_BG));
                 
                 style = style.concat("_mouseover");
                 stylesheet.clone(style, ".std_dash_context_cnt");
-                stylesheet.put(style, "background-color", Colors.FOCUS);
+                stylesheet.put(style,
+                        "background-color", colors.get(Colors.FOCUS));
                 break;
             default:
                 stylesheet.put(style, "width", "100%");
                 stylesheet.put(style, "display", "block");
-                stylesheet.put(style, "color", Colors.FONT);
+                stylesheet.put(style,
+                        "color", colors.get(Colors.FONT));
                 stylesheet.put(style, "text-decoration", "none");
                 stylesheet.put(style, "text-align", "center");
                 stylesheet.put(style, "font-size", "10pt");
@@ -116,5 +119,4 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
         style = getStyle(name, INNER);
         stylesheet.newElement(style);
     }
-    
 }

@@ -78,7 +78,8 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         stylesheet.put(factorystyle, "width", "55em");
         stylesheet.put(factorystyle, "margin", "auto");
         stylesheet.put(factorystyle, "position", "fixed");
-        stylesheet.put(factorystyle, "background-color", Colors.BODY_BG);
+        stylesheet.put(factorystyle,
+                "background-color", colors.get(Colors.BODY_BG));
         
         for (String style : new String[] {
                 ".std_dash_item:link",
@@ -88,7 +89,8 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         }) {
             stylesheet.newElement(style);
             stylesheet.put(style, "display", "block");
-            stylesheet.put(style, "color", Colors.FONT);
+            stylesheet.put(style,
+                    "color", colors.get(Colors.FONT));
             stylesheet.put(style, "text-decoration", "none");
             stylesheet.put(style, "text-align", "center");
         }
@@ -106,13 +108,16 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         stylesheet.put(style, "margin", "0.5em");
         stylesheet.put(style, "padding", "1em");
         stylesheet.put(style, "display", "inline");
-        stylesheet.put(style, "color", Colors.FOCUS);
-        stylesheet.put(style, "background-color", Colors.DASH_BG);
+        stylesheet.put(style,
+                "color", colors.get(Colors.FOCUS));
+        stylesheet.put(style,
+                "background-color", colors.get(Colors.DASH_BG));
         stylesheet.put(style, "font-size", "12pt");
         
         mouseover = style.concat("_mouseover");
         stylesheet.clone(mouseover, style);
-        stylesheet.put(mouseover, "background-color", Colors.FOCUS);
+        stylesheet.put(mouseover,
+                "background-color", colors.get(Colors.FOCUS));
         
         style = getStyle(name, INNER);
         stylesheet.newElement(style);

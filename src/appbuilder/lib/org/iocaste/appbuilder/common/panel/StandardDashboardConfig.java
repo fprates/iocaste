@@ -1,7 +1,10 @@
 package org.iocaste.appbuilder.common.panel;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 
 public class StandardDashboardConfig extends AbstractViewConfig {
     private AbstractPanelPage page;
@@ -12,11 +15,17 @@ public class StandardDashboardConfig extends AbstractViewConfig {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        getDashboard("dashitems").setRenderer(
-                new StandardPanelItemsRenderer(page));
+        DashboardFactory factory;
+        Map<Colors, String> colors;
         
-        getDashboard("dashcontext").setRenderer(
-                new StandardPanelContextRenderer());
+        colors = page.getColors();
+        factory = getDashboard("dashitems");
+        factory.setColors(colors);
+        factory.setRenderer(new StandardPanelItemsRenderer(page));
+        
+        factory = getDashboard("dashcontext");
+        factory.setColors(colors);
+        factory.setRenderer(new StandardPanelContextRenderer());
     }
 
 }

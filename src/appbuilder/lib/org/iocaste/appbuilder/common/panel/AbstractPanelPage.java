@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common.panel;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,13 +15,26 @@ public abstract class AbstractPanelPage {
     private AbstractPanelSpec spec;
     private AbstractViewConfig config;
     private AbstractViewInput input;
+    private Map<Colors, String> colors;
     public Map<String, PanelPageItem> items;
-    
     
     public AbstractPanelPage() {
         items = new LinkedHashMap<>();
+
+        colors = new HashMap<>();
+        colors.put(Colors.BODY_BG, "#202020");
+        colors.put(Colors.COMPONENT_BG, "#303030");
+        colors.put(Colors.HEAD_BG, "#303030");
+        colors.put(Colors.DASH_BG, "#5050ff");
+        colors.put(Colors.FOCUS, "#505050");
+        colors.put(Colors.FONT, "#ffffff");
     }
+    
     public abstract void execute();
+    
+    public final Map<Colors, String> getColors() {
+        return colors;
+    }
     
     public final AbstractViewConfig getConfig() {
         return config;
@@ -60,6 +74,10 @@ public abstract class AbstractPanelPage {
     
     protected final void set(AbstractPanelSpec spec) {
         this.spec = spec;
+    }
+    
+    protected final void set(Colors type, String value) {
+        colors.put(type, value);
     }
     
     public final void setViewContext(ViewContext view) {
