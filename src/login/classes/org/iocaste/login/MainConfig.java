@@ -5,10 +5,8 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.panel.StandardPanelDesign;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
@@ -32,8 +30,6 @@ public class MainConfig extends AbstractViewConfig {
         
         stylesheet = context.view.styleSheetInstance();
         stylesheet.put(".std_panel_context", "display", "none");
-        
-        getNavControl().setDesign(new CustomDesign());
         
         style = ".logincnt";
         stylesheet.newElement(style);
@@ -135,18 +131,4 @@ public class MainConfig extends AbstractViewConfig {
         messages.setMessages(extcontext.messages);
         context.view.setMessages(messages);
     }
-}
-
-class CustomDesign extends StandardPanelDesign {
-    
-    @Override
-    public void build(Container container, PageBuilderContext context) {
-        StyleSheet stylesheet;
-        
-        super.build(container, context);
-        
-        stylesheet = context.view.styleSheetInstance();
-        stylesheet.put(".std_navcontrol_head", "background-color", "#3030ff");
-    }
-    
 }
