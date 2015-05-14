@@ -23,6 +23,7 @@ public class Services extends AbstractFunction {
         export("set_pages_position", "setPagesPosition");
         export("style_remove", "removeStyle");
         export("style_save", "saveStyle");
+        export("styles_invalidate", "invalidateStyles");
         export("update_view", "updateView");
     }
     
@@ -76,6 +77,14 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
+     */
+    public final void invalidateStyles(Message message) {
+        PageRenderer.invalidateStyles();
+    }
+    
+    /**
+     * 
+     * @param message
      * @return
      */
     public final PageStackItem popPage(Message message) {
@@ -111,6 +120,10 @@ public class Services extends AbstractFunction {
         PageRenderer.removeTicket(ticket, this);
     }
     
+    /**
+     * 
+     * @param message
+     */
     public final void saveStyle(Message message) {
         String name = message.get("name");
         StyleSheet stylesheet = message.get("style");

@@ -153,6 +153,13 @@ public class Shell extends AbstractServiceInterface {
     }
     
     /**
+     * 
+     */
+    public final void invalidateStyles() {
+        call(new Message("styles_invalidate"));
+    }
+    
+    /**
      * Verifica se uma string é inicial.
      * @param value string
      * @return true, se string for inicial.

@@ -54,11 +54,24 @@ public class SessionContext {
         return home;
     }
     
+    /**
+     * 
+     * @param name
+     */
     public final void invalidateStyle(String name) {
         for (AppContext appctx : apps.values())
             appctx.setStyleSheet(null);
     }
     
+    /**
+     * 
+     */
+    public final void invalidateStyles() {
+        for (AppContext appctx : apps.values()) {
+            appctx.stylename = null;
+            appctx.invalidateStyles();
+        }
+    }
     /**
      * 
      * @return

@@ -508,6 +508,15 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         return apps.get(complexid[0]).get(logid).home();
     }
     
+    /**
+     * 
+     */
+    public static final void invalidateStyles() {
+        for (String sessionid : apps.keySet())
+            for (SessionContext sessionctx : apps.get(sessionid))
+                sessionctx.invalidateStyles();
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.protocol.Function#isAuthorizedCall()

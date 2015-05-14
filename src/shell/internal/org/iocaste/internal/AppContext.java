@@ -50,6 +50,13 @@ public class AppContext {
     
     /**
      * 
+     */
+    public final void invalidateStyles() {
+        sheet.clear();
+    }
+    
+    /**
+     * 
      * @param name
      * @param pagectx
      */

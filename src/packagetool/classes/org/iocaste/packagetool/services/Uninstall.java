@@ -14,6 +14,7 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.SHLib;
+import org.iocaste.shell.common.Shell;
 
 public class Uninstall extends AbstractHandler {
     private static final byte DOCS_LIB = 0;
@@ -44,6 +45,7 @@ public class Uninstall extends AbstractHandler {
         }
         
         new Iocaste(function).invalidateAuthCache();
+        new Shell(function).invalidateStyles();
         if (types != null)
             return;
         
