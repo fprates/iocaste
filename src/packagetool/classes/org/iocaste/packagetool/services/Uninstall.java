@@ -1,5 +1,7 @@
 package org.iocaste.packagetool.services;
 
+import java.util.Set;
+
 import org.iocaste.authority.common.Authority;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -19,7 +21,7 @@ public class Uninstall extends AbstractHandler {
     private static final byte AUTH_LIB = 2;
     private static final byte CONFIG_LIB = 3;
     
-    public final void run(String pkgname) {
+    public final void run(String pkgname, Set<String> types) {
         Query query;
         ExtendedObject object;
         AbstractServiceInterface[] services;
@@ -36,10 +38,15 @@ public class Uninstall extends AbstractHandler {
         services[CONFIG_LIB] = new GlobalConfig(function);
         for (int i = objects.length; i > 0; i--) {
             object = objects[i - 1];
+            if ((types != null) && (!types.contains(object.getst("NAME"))))
+                continue;
             item(object, function, services);
         }
-            
+        
         new Iocaste(function).invalidateAuthCache();
+        if (types != null)
+            return;
+        
         query = new Query("delete");
         query.setModel("PACKAGE");
         query.andEqual("NAME", pkgname);
@@ -56,90 +63,67 @@ public class Uninstall extends AbstractHandler {
         String modeltype = object.get("MODEL");
         String name = object.get("NAME");
         
-        if (modeltype.equals("MESSAGE")) {
+        switch (modeltype) {
+        case "MESSAGE":
             InstallMessages.uninstall(object.getst("PACKAGE"), documents);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("SH")) {
+        case "SH":
             shlib.unassign(name);
             shlib.remove(name);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("TASK")) {
+        case "TASK":
             query = new Query("delete");
             query.setModel("TASKS");
             query.andEqual("NAME", name);
             documents.update(query);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("MODEL")) {
+        case "MODEL":
             documents.removeModel(name);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("NUMBER")) {
+        case "NUMBER":
             documents.removeNumberFactory(name);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("AUTHORIZATION")) {
+        case "AUTHORIZATION":
             authority.remove(name);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("AUTH_PROFILE")) {
+        case "AUTH_PROFILE":
             authority.removeProfile(name);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("TSKGROUP")) {
+        case "TSKGROUP":
             Selector.removeGroup(name, documents);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("TSKITEM")) {
+        case "TSKITEM":
             Selector.removeTask(name, documents);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("CMODEL")) {
+        case "CMODEL":
             documents.removeComplexModel(name);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("CONFIG_ENTRY")) {
+        case "CONFIG_ENTRY":
             config.remove(name);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("PACKAGE_TEXT")) {
+        case "PACKAGE_TEXT":
             InstallTexts.uninstall(name, function);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("STYLE")) {
+        case "STYLE":
             InstallStyles.uninstall(name, function);
             documents.delete(object);
             return;
-        }
-        
-        if (modeltype.equals("DATA_ELEMENT"))
+        case "DATA_ELEMENT":
             documents.delete(object);
+            return;
+        }
     }
 
     @Override
@@ -149,7 +133,7 @@ public class Uninstall extends AbstractHandler {
         if (pkgname == null)
             throw new IocasteException("package name not specified.");
         
-        run(pkgname);
+        run(pkgname, null);
         return null;
     }
 }
