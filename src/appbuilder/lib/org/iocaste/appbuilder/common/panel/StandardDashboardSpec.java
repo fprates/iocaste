@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.panel;
 
+import org.iocaste.appbuilder.common.PageBuilderContext;
+
 public class StandardDashboardSpec extends AbstractPanelSpec {
     private AbstractPanelPage page;
     
@@ -8,7 +10,7 @@ public class StandardDashboardSpec extends AbstractPanelSpec {
     }
     
     @Override
-    protected void execute() {
+    protected void execute(PageBuilderContext context) {
         PanelPageItem item;
 
         dashboard("content", "dashitems");

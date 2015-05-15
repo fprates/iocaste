@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.shell.common.StyleSheet;
 
@@ -24,13 +25,13 @@ class StandardPanelConfig extends AbstractViewConfig {
         String style;
         StyleSheet stylesheet;
         NavControl navcontrol;
+        DashboardFactory factory;
         
         colors = page.getColors();
         style = ".form_content";
         stylesheet = context.view.styleSheetInstance();
         stylesheet.put(style, "height", "100%");
         stylesheet.put(style, "background-color", colors.get(Colors.BODY_BG));
-
         
         style = ".std_panel_context";
         stylesheet.newElement(style);
@@ -70,6 +71,10 @@ class StandardPanelConfig extends AbstractViewConfig {
         
         navcontrol = getNavControl();
         navcontrol.setDesign(design);
+        
+        factory = getDashboard("navigation");
+        factory.setColors(page.getColors());
+        factory.setRenderer(new NavigationRenderer());
         
         extconfig = page.getConfig();
         if (extconfig == null)

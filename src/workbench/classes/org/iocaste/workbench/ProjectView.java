@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewSpec;
+import org.iocaste.appbuilder.common.PageBuilderContext;
 
 public class ProjectView extends AbstractViewSpec {
     public int count;
@@ -31,7 +32,7 @@ public class ProjectView extends AbstractViewSpec {
     }
     
     @Override
-    protected void execute() {
+    protected void execute(PageBuilderContext context) {
         // TODO Stub de método gerado automaticamente
         
     }

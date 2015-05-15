@@ -1,11 +1,12 @@
 package org.iocaste.tasksel;
 
 import org.iocaste.appbuilder.common.AbstractViewSpec;
+import org.iocaste.appbuilder.common.PageBuilderContext;
 
 public class TasksSpec extends AbstractViewSpec {
 
     @Override
-    protected void execute() {
+    protected void execute(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
         
         form("main");

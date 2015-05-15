@@ -78,8 +78,6 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         stylesheet.put(factorystyle, "width", "55em");
         stylesheet.put(factorystyle, "margin", "auto");
         stylesheet.put(factorystyle, "position", "fixed");
-        stylesheet.put(factorystyle,
-                "background-color", colors.get(Colors.BODY_BG));
         
         for (String style : new String[] {
                 ".std_dash_item:link",

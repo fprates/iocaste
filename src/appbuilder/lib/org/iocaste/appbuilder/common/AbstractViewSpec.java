@@ -36,7 +36,7 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.DATA_FORM, name);
     }
     
-    protected abstract void execute();
+    protected abstract void execute(PageBuilderContext context);
     
     protected final void expandbar(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.EXPAND_BAR, name);
@@ -129,7 +129,7 @@ public abstract class AbstractViewSpec {
         items.clear();
         if (item != null)
             items.put(item.getName(), item);
-        execute();
+        execute(context);
     }
     
     public final void setInitialized(boolean initialized) {

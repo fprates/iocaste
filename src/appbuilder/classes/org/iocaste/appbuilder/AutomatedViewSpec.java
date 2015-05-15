@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.appbuilder.common.AbstractViewSpec;
+import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 
 public class AutomatedViewSpec extends AbstractViewSpec {
@@ -18,7 +19,7 @@ public class AutomatedViewSpec extends AbstractViewSpec {
     }
     
     @Override
-    protected void execute() {
+    protected void execute(PageBuilderContext context) {
         int index;
         String[] args;
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();

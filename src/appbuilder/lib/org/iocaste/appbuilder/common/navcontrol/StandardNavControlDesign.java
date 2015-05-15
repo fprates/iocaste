@@ -3,7 +3,6 @@ package org.iocaste.appbuilder.common.navcontrol;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
-import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
@@ -33,7 +32,6 @@ public class StandardNavControlDesign implements NavControlDesign {
         Iocaste iocaste;
         PageStackItem[] positions;
         User user;
-        AbstractPage page;
         StyleSheet stylesheet;
         
         this.container = container;
@@ -54,8 +52,7 @@ public class StandardNavControlDesign implements NavControlDesign {
         cloneLink(stylesheet, ".nc_nav_link:active", ".link:active");
         cloneLink(stylesheet, ".nc_nav_link:visited", ".link:visited");
 
-        page = (AbstractPage)context.function;
-        positions = new Shell(context.function).getPagesPositions();        
+        positions = new Shell(context.function).getPagesPositions();
         for (PageStackItem position : positions) {
             name = new StringBuilder(position.getApp()).
                     append(".").append(position.getPage()).toString();
@@ -68,7 +65,7 @@ public class StandardNavControlDesign implements NavControlDesign {
              * portanto não adianta adicionar parâmetro. vamos guardar
              * a posição no próprio handler.
              */
-            page.register(name, new NavControlCustomAction(name));
+            context.function.register(name, new NavControlCustomAction(name));
             titletext = position.getTitle();
             
             link = new Link(container, name, name);

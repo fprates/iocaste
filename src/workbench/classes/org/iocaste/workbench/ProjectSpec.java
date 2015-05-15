@@ -1,6 +1,7 @@
 package org.iocaste.workbench;
 
 import org.iocaste.appbuilder.common.AbstractViewSpec;
+import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 
 public class ProjectSpec extends AbstractViewSpec {
@@ -20,7 +21,7 @@ public class ProjectSpec extends AbstractViewSpec {
     }
     
     @Override
-    protected void execute() {
+    protected void execute(PageBuilderContext context) {
         ProjectTreeItem treeitem;
         ProjectView projectview;
         Context extcontext = getExtendedContext();

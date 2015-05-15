@@ -87,6 +87,7 @@ public class DashboardFactory {
     
     public final void setColors(Map<Colors, String> colors) {
         this.colors = colors;
+        renderer.setColors(colors);
     }
     
     public final void setRenderer(DashboardRenderer renderer) {
