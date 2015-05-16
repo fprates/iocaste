@@ -28,6 +28,7 @@ public abstract class AbstractPanelPage {
         colors.put(Colors.DASH_BG, "#5050ff");
         colors.put(Colors.FOCUS, "#505050");
         colors.put(Colors.FONT, "#ffffff");
+        colors.put(Colors.GROUP_BG, "#606060");
     }
     
     public abstract void execute();

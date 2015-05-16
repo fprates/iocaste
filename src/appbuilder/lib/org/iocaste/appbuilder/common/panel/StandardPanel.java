@@ -47,12 +47,11 @@ public class StandardPanel {
             item = page.items.get(key);
             for (String entrykey : item.context.entries.keySet()) {
                 entry = item.context.entries.get(entrykey);
-                switch (entry.type) {
-                case TASK:
-                    view.put(key.concat("_pagectx"),
-                            new TaskCall(item, TaskCall.CONTEXT));
-                    break;
-                }
+                if (!entry.type.equals(PanelPageEntryType.TASK))
+                    continue;
+                
+                view.put(key.concat("_pagectx"),
+                        new TaskCall(item, TaskCall.CONTEXT));
             }
         }
     }

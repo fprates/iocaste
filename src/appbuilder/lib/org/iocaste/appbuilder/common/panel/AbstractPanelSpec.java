@@ -6,17 +6,17 @@ import java.util.List;
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 
 public abstract class AbstractPanelSpec extends AbstractViewSpec {
-    private List<String> ctxitems;
+    private List<PanelPageItem> ctxitems;
     
     public AbstractPanelSpec() {
         ctxitems = new ArrayList<>();
     }
     
-    protected final void contextitem(String item) {
+    protected final void contextitem(PanelPageItem item) {
         ctxitems.add(item);
     }
     
-    public final List<String> getContextItems() {
+    public final List<PanelPageItem> getContextItems() {
         return ctxitems;
     }
 }

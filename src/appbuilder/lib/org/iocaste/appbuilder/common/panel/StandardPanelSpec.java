@@ -57,8 +57,8 @@ public class StandardPanelSpec extends AbstractViewSpec {
             return;
         
         spec("content", extspec);
-        for (String ctxitem : extspec.getContextItems())
-            dashboardgroup("dashcontext", ctxitem);
+        for (PanelPageItem ctxitem : extspec.getContextItems())
+            dashboardgroup("dashcontext", ctxitem.dashctx);
     }
     
     public final void setPositions(Map<String, PageStackItem> positions) {

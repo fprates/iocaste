@@ -19,7 +19,7 @@ public class StandardDashboardSpec extends AbstractPanelSpec {
             item.dash = name.concat("_page");
             item.dashctx = item.dash.concat("ctx");
             dashboarditem("dashitems", item.dash);
-            contextitem(item.dashctx);
+            contextitem(item);
         }
     }
 

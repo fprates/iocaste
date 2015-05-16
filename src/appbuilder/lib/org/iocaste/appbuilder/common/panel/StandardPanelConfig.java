@@ -28,10 +28,13 @@ class StandardPanelConfig extends AbstractViewConfig {
         DashboardFactory factory;
         
         colors = page.getColors();
-        style = ".form_content";
         stylesheet = context.view.styleSheetInstance();
-        stylesheet.put(style, "height", "100%");
+        
+        style = "body";
         stylesheet.put(style, "background-color", colors.get(Colors.BODY_BG));
+
+        style = ".form_content";
+        stylesheet.put(style, "height", "100%");
         
         style = ".std_panel_context";
         stylesheet.newElement(style);
@@ -45,10 +48,10 @@ class StandardPanelConfig extends AbstractViewConfig {
         stylesheet.put(style,
                 "background-color", colors.get(Colors.COMPONENT_BG));
         stylesheet.put(style, "font-size", "12pt");
-        stylesheet.put(style, "border-bottom-style", "solid");
-        stylesheet.put(style, "border-bottom-width", "2px");
+        stylesheet.put(style, "border-right-style", "solid");
+        stylesheet.put(style, "border-right-width", "2px");
         stylesheet.put(style,
-                "border-bottom-color", colors.get(Colors.BODY_BG));
+                "border-right-color", colors.get(Colors.BODY_BG));
         getElement("context").setStyleClass(style.substring(1));
         
         style = ".std_panel_content";

@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common.panel;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -19,7 +20,9 @@ public class StandardPanelInput extends AbstractViewInput {
         String title;
         PanelPageItem item;
         PageStackItem position;
-
+        PanelPageItemContextEntry ctxitem, ctxitemi;
+        Set<String> entrieskeys;
+        
         if (positions.size() > 0)
             for (String name : positions.keySet()) {
                 position = positions.get(name);
@@ -32,9 +35,32 @@ public class StandardPanelInput extends AbstractViewInput {
         for (String name : page.items.keySet()) {
             item = page.items.get(name);
             dbitemadd("dashitems", item.dash, item.name);
-            for (String text : item.context.entries.keySet())
-                dbitemadd("dashcontext", item.dashctx, text,
-                        item.context.entries.get(text).task);
+            entrieskeys = item.context.entries.keySet();
+            for (String text : entrieskeys) {
+                ctxitem = item.context.entries.get(text);
+                switch (ctxitem.type) {
+                case GROUP:
+                    dbtextadd("dashcontext", item.dashctx, ctxitem.group);
+                    for (String texti : entrieskeys) {
+                        ctxitemi = item.context.entries.get(texti);
+                        if ((ctxitemi.group == null) ||
+                                (ctxitemi.type == PanelPageEntryType.GROUP) ||
+                                !ctxitem.group.equals(ctxitemi.group))
+                            continue;
+
+                        dbitemadd("dashcontext", item.dashctx,
+                                texti, ctxitemi.task);
+                    }
+                    break;
+                default:
+                    if (ctxitem.group != null)
+                        break;
+                    
+                    dbitemadd("dashcontext", item.dashctx,
+                            text, ctxitem.task);
+                    break;
+                }
+            }
         }
     }
 

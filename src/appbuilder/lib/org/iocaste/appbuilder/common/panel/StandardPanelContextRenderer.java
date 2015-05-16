@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.dashboard.AbstractDashboardRenderer;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.StandardContainer;
+import org.iocaste.shell.common.Text;
 
 public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
     
@@ -21,7 +22,7 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
         internal.lnkstyle = "std_dash_context_lnk";
         add(internal);
     }
-
+    
     protected final void add(Internal internal) {
         Container container;
         String linkname, action, group;
@@ -55,8 +56,30 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
     
     @Override
     public void addText(String dashname, String name) {
-        // TODO Stub de método gerado automaticamente
+        Internal internal;
         
+        internal = new Internal();
+        internal.name = name;
+        internal.dashname = dashname;
+        internal.cntstyle = "std_dash_context_grp";
+        internal.lnkstyle = "std_dash_context_txt";
+        internal.suffix = "_item";
+        addText(internal);
+    }
+    
+    protected final void addText(Internal internal) {
+        Container container;
+        String name;
+        Text text;
+
+        name = internal.name.concat(internal.suffix);
+        container = new StandardContainer(
+                getContainer(internal.dashname, INNER), name.concat("cnt"));
+        container.setStyleClass(internal.cntstyle);
+        
+        text = new Text(container, name);
+        text.setStyleClass(internal.lnkstyle);
+        text.setText(internal.name);
     }
 
     @Override
@@ -108,6 +131,8 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
     }
     
     protected void config(Internal internal) {
+        String style_;
+        
         stylesheet.put(factorystyle, "float", "left");
         stylesheet.put(factorystyle, "width", "100%");
         stylesheet.put(factorystyle, "display", "inline");
@@ -139,6 +164,26 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
                 stylesheet.put(style, "font-size", "10pt");
             }
         }
+        
+        style_ = ".std_dash_context_txt";
+        stylesheet.newElement(style_);
+        stylesheet.put(style_, "color", colors.get(Colors.FONT));
+        stylesheet.put(style_, "text-align", "center");
+        stylesheet.put(style_, "font-size", "10pt");
+        stylesheet.put(style_, "font-weight", "bold");
+        stylesheet.put(style_, "margin", "0px");
+        
+        style_ = ".std_dash_context_grp";
+        stylesheet.newElement(style_);
+        stylesheet.put(style_, "padding-top", "0.5em");
+        stylesheet.put(style_, "padding-bottom", "0.5em");
+        stylesheet.put(style_, "width", "100%");
+        stylesheet.put(style_, "display", "block");
+        stylesheet.put(style_, "background-color", colors.get(Colors.GROUP_BG));
+        stylesheet.put(style_, "border-bottom-style", "solid");
+        stylesheet.put(style_, "border-bottom-width", "2px");
+        stylesheet.put(style_,
+                "border-bottom-color", colors.get(Colors.BODY_BG));
     }
 }
 

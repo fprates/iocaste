@@ -180,7 +180,6 @@ public class Shell {
         stylesheet.put(".form_content", "position", "relative");
         stylesheet.put(".form_content", "height", "85%");
         stylesheet.put(".form_content", "overflow", "auto");
-        stylesheet.put(".form_content", "background-color", "#ffffff");
         stylesheet.put(".form_content", "margin", "auto");
 
         stylesheet.newElement(".frame");

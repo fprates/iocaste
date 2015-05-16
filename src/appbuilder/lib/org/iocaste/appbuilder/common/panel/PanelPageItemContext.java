@@ -10,12 +10,26 @@ public class PanelPageItemContext {
         entries = new LinkedHashMap<>();
     }
     
-    public final void call(String text, String task) {
+    private final void call(
+            String group, String text, String task, PanelPageEntryType type) {
         PanelPageItemContextEntry entry;
         
         entry = new PanelPageItemContextEntry();
-        entry.type = PanelPageEntryType.TASK;
+        entry.group = group;
+        entry.type = type;
         entry.task = task;
         entries.put(text, entry);
+    }
+    
+    public final void call(String text, String task) {
+        call(null, text, task, PanelPageEntryType.TASK);
+    }
+    
+    public final void callgroup(String group, String text, String task) {
+        call(group, text, task, PanelPageEntryType.TASK);
+    }
+    
+    public final void group(String group, String text) {
+        call(group, text, null, PanelPageEntryType.GROUP);
     }
 }

@@ -19,6 +19,19 @@ public class NavigationRenderer extends StandardPanelContextRenderer {
     }
     
     @Override
+    public void addText(String dashname, String name) {
+        Internal internal;
+        
+        internal = new Internal();
+        internal.name = name;
+        internal.dashname = dashname;
+        internal.cntstyle = "std_dash_context_cnt";
+        internal.lnkstyle = "std_dash_context_lnk";
+        internal.suffix = "_navitem";
+        addText(internal);
+    }
+    
+    @Override
     public void config() {
         Internal internal;
         
