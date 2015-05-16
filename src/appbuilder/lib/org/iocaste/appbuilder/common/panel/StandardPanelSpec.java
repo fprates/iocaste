@@ -21,7 +21,7 @@ public class StandardPanelSpec extends AbstractViewSpec {
     @Override
     protected final void execute(PageBuilderContext context) {
         AbstractPanelSpec extspec;
-        String name;
+        String name, submit;
         PageStackItem[] positions;
         
         form("main");
@@ -31,6 +31,9 @@ public class StandardPanelSpec extends AbstractViewSpec {
         dashboard("context", "actions");
         for (String action : page.getActions())
             dashboarditem("actions", action);
+        submit = page.getSubmit();
+        if (submit != null)
+            dashboarditem("actions", submit);
         
         dashboard("context", "navigation");
         if (iocaste == null)

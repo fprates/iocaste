@@ -1,11 +1,25 @@
 package org.iocaste.appbuilder.common.panel;
 
+import org.iocaste.shell.common.Button;
+
 public class ActionRenderer extends StandardPanelContextRenderer {
     
     @Override
     public void add(String dashname, String name, Object value, int type) {
         String group;
         Internal internal;
+        Button button;
+        String style;
+        
+        if ((value != null) && value.equals("submit")) {
+            style = "std_dash_action_submit";
+            
+            button = new Button(getContainer(dashname, INNER), name);
+            button.setSubmit(true);
+            button.setStyleClass(style);
+            addEvents(button, style);
+            return;
+        }
         
         group = getGroup(dashname);
         
@@ -18,12 +32,14 @@ public class ActionRenderer extends StandardPanelContextRenderer {
         internal.cntstyle = "std_dash_action_cnt";
         internal.lnkstyle = "std_dash_action_lnk";
         internal.action = (group == null)? internal.dashname : group;
+        internal.submit = true;
         add(internal);
     }
 
     @Override
     public void config() {
         Internal internal;
+        String style;
         
         internal = new Internal();
         internal.cntstyle = ".std_dash_action_cnt";
@@ -36,6 +52,20 @@ public class ActionRenderer extends StandardPanelContextRenderer {
                 ".std_dash_action_lnk:visited"
         };
         config(internal);
+        
+        style = ".std_dash_action_submit";
+        stylesheet.clone(style, ".std_dash_action_cnt");
+        stylesheet.put(style, "color", colors.get(Colors.FONT));
+        stylesheet.put(style, "border-top-style", "none");
+        stylesheet.put(style, "border-left-style", "none");
+        stylesheet.put(style, "border-right-style", "none");
+        stylesheet.put(style, "font-family", "\"Verdana\", \"sans-serif\"");
+        stylesheet.put(style, "font-size", "10pt");
+        
+        style = style.concat("_mouseover");
+        stylesheet.clone(style, ".std_dash_action_submit");
+        stylesheet.put(style,
+                "background-color", colors.get(Colors.FOCUS));
     }
 
     @Override

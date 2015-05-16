@@ -17,7 +17,7 @@ public class StandardPanelInput extends AbstractViewInput {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        String title;
+        String title, submit;
         PanelPageItem item;
         PageStackItem position;
         PanelPageItemContextEntry ctxitem, ctxitemi;
@@ -34,6 +34,10 @@ public class StandardPanelInput extends AbstractViewInput {
         
         for (String action : page.getActions())
             dbitemadd("actions", action, action);
+        
+        submit = page.getSubmit();
+        if (submit != null)
+            dbitemadd("actions", submit, submit, "submit");
         
         for (String name : page.items.keySet()) {
             item = page.items.get(name);

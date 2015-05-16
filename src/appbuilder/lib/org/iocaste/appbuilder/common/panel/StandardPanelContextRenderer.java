@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common.panel;
 
 import org.iocaste.appbuilder.common.dashboard.AbstractDashboardRenderer;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Text;
@@ -40,23 +41,26 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
         container = new StandardContainer(
                 getContainer(internal.dashname, INNER), linkname.concat("cnt"));
         container.setStyleClass(internal.cntstyle);
-        
-        container.addEvent("onMouseOut", new StringBuilder(
-                "javascript:setClassStyle('").
-                append(container.getHtmlName()).append("', '").
-                append(internal.cntstyle).append("')").toString());
-        
-        container.addEvent("onMouseOver", new StringBuilder(
-                "javascript:setClassStyle('").
-                append(container.getHtmlName()).append("', '").
-                append(internal.cntstyle).append("_mouseover')").toString());
+        addEvents(container, internal.cntstyle);
         
         link = new Link(container, linkname, internal.action);
-        link.setStyleClass(internal.lnkstyle);
         link.setText(internal.name);
-        link.add(
-                getChoice(internal.dashname), internal.value, internal.type);
+        link.add(getChoice(internal.dashname),
+                internal.value, internal.type);
+        link.setStyleClass(internal.lnkstyle);
         link.setCancellable(internal.cancellable);
+    }
+    
+    protected final void addEvents(Element element, String style) {
+        element.addEvent("onMouseOut", new StringBuilder(
+                "javascript:setClassStyle('").
+                append(element.getHtmlName()).append("', '").
+                append(style).append("')").toString());
+        
+        element.addEvent("onMouseOver", new StringBuilder(
+                "javascript:setClassStyle('").
+                append(element.getHtmlName()).append("', '").
+                append(style).append("_mouseover')").toString());
     }
     
     @Override
@@ -198,6 +202,6 @@ class Internal {;
     public String name, dashname, suffix, cntstyle, lnkstyle, action, bgcolor;
     public Object value;
     public int type;
-    public boolean cancellable;
+    public boolean cancellable, submit;
     public String[] linksstyles;
 }
