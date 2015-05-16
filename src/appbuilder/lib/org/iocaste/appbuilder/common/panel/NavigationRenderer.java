@@ -7,11 +7,10 @@ public class NavigationRenderer extends StandardPanelContextRenderer {
         Internal internal;
         
         internal = new Internal();
-        internal.name = name;
+        internal.name = internal.action = name;
         internal.dashname = dashname;
         internal.value = value;
         internal.type = type;
-        internal.suffix = "_navitem_link";
         internal.cntstyle = "std_dash_navigation_cnt";
         internal.lnkstyle = "std_dash_navigation_lnk";
         internal.cancellable = true;

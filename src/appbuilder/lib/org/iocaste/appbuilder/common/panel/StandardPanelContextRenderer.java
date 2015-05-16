@@ -10,7 +10,10 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
     
     @Override
     public void add(String dashname, String name, Object value, int type) {
+        String group;
         Internal internal;
+        
+        group = getGroup(dashname);
         
         internal = new Internal();
         internal.name = name;
@@ -20,17 +23,19 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
         internal.suffix = "_dbitem_link";
         internal.cntstyle = "std_dash_context_cnt";
         internal.lnkstyle = "std_dash_context_lnk";
+        internal.action = (group == null)? internal.dashname : group;
         add(internal);
     }
     
     protected final void add(Internal internal) {
         Container container;
-        String linkname, action, group;
+        String linkname;
         Link link;
         
-        group = getGroup(internal.dashname);
-        action = (group == null)? internal.dashname : group;
-        linkname = internal.name.concat(internal.suffix);
+        if (internal.suffix != null)
+            linkname = internal.name.concat(internal.suffix);
+        else
+            linkname = internal.name;
         
         container = new StandardContainer(
                 getContainer(internal.dashname, INNER), linkname.concat("cnt"));
@@ -46,7 +51,7 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
                 append(container.getHtmlName()).append("', '").
                 append(internal.cntstyle).append("_mouseover')").toString());
         
-        link = new Link(container, linkname, action);
+        link = new Link(container, linkname, internal.action);
         link.setStyleClass(internal.lnkstyle);
         link.setText(internal.name);
         link.add(
@@ -188,7 +193,7 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
 }
 
 class Internal {;
-    public String name, dashname, suffix, cntstyle, lnkstyle;
+    public String name, dashname, suffix, cntstyle, lnkstyle, action;
     public Object value;
     public int type;
     public boolean cancellable;
