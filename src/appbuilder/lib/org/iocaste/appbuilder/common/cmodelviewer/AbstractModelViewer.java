@@ -2,12 +2,11 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
-import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.ViewConfig;
-import org.iocaste.appbuilder.common.ViewContext;
+import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
+import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.protocol.Function;
@@ -46,8 +45,11 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
     
     protected final void loadManagedModule(PageBuilderContext context,
             AppBuilderLink link) {
-        ViewContext viewctx;
-        AbstractViewSpec selspec;
+        EntityPage entitypage;
+        EntityCustomPage custompage;
+        EntityDisplayPage displaypage;
+        StandardPanel panel;
+        AbstractPanelSpec selspec;
         AbstractActionHandler inputvalidate;
         String entityaction;
         Manager manager;
@@ -64,6 +66,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         
         selspec = new SelectSpec();
         inputvalidate = new InputValidate();
+        panel = new StandardPanel(context);
         
         for (String action : new String[] {CREATE, EDIT, DISPLAY}) {
             if ((link.number != null) && action.equals(CREATE) &&
@@ -71,29 +74,12 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
                 continue;
             
             entityaction = link.entity.concat(action);
-            viewctx = context.instance(entityaction);
-            viewctx.set(selspec);
-            viewctx.set(extcontext);
-            switch (action) {
-            case CREATE:
-                setSelectConfig(link.createselectconfig, viewctx, action,
-                        extcontext, link);
-                viewctx.put(CREATE, link.validate);
-                
-                break;
-            case EDIT:
-                setSelectConfig(link.updateselectconfig, viewctx, action,
-                        extcontext, link);
-                
-                viewctx.put(EDIT, link.updateload);
-                break;
-            case DISPLAY:
-                setSelectConfig(link.displayselectconfig, viewctx, action,
-                        extcontext, link);
-                
-                viewctx.put(DISPLAY, link.displayload);
-                break;
-            }
+            
+            entitypage = new EntityPage();
+            entitypage.action = action;
+            entitypage.spec = selspec;
+            entitypage.link = link;
+            panel.instance(entityaction, entitypage, extcontext);
         }
         
         for (String view : new String[] {
@@ -103,20 +89,15 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
                             (link.createselectconfig != null)))
                 continue;
             
-            viewctx = context.instance(view);
-            viewctx.set(link.maintenancespec);
-            viewctx.set(link.maintenanceconfig);
-            viewctx.set(link.maintenanceinput);
-            viewctx.set(extcontext);
-            viewctx.put("validate", inputvalidate);
-            viewctx.put("save", link.save);
+            custompage = new EntityCustomPage();
+            custompage.link = link;
+            custompage.inputvalidate = inputvalidate;
+            panel.instance(view, custompage, extcontext);
         }
 
-        viewctx = context.instance(link.display1view);
-        viewctx.set(link.maintenancespec);
-        viewctx.set(link.displayconfig);
-        viewctx.set(link.maintenanceinput);
-        viewctx.set(extcontext);
+        displaypage = new EntityDisplayPage();
+        displaypage.link = link;
+        panel.instance(link.display1view, displaypage, extcontext);
     }
     
     private final Manager managerInstance(String cmodel) {
@@ -129,14 +110,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
      */
     protected final void setExtendedContext(Context extcontext) {
         this.extcontext = extcontext;
-    }
-    
-    private final void setSelectConfig(ViewConfig config, ViewContext viewctx,
-            String action, Context context, AppBuilderLink link) {
-        if (config == null)
-            viewctx.set(new SelectConfig(action, link.cmodel));
-        else
-            viewctx.set(config);
     }
 }
 

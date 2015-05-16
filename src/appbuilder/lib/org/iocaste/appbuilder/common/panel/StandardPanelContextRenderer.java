@@ -154,6 +154,8 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
                 stylesheet.put(style, "border-bottom-width", "2px");
                 stylesheet.put(style,
                         "border-bottom-color", colors.get(Colors.BODY_BG));
+                if (internal.bgcolor != null)
+                    stylesheet.put(style, "background-color", internal.bgcolor);
                 
                 style = style.concat("_mouseover");
                 stylesheet.clone(style, internal.cntstyle);
@@ -193,7 +195,7 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
 }
 
 class Internal {;
-    public String name, dashname, suffix, cntstyle, lnkstyle, action;
+    public String name, dashname, suffix, cntstyle, lnkstyle, action, bgcolor;
     public Object value;
     public int type;
     public boolean cancellable;

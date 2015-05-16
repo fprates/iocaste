@@ -28,6 +28,10 @@ public class StandardPanelSpec extends AbstractViewSpec {
         navcontrol("main");
         
         standardcontainer("main", "context");
+        dashboard("context", "actions");
+        for (String action : page.getActions())
+            dashboarditem("actions", action);
+        
         dashboard("context", "navigation");
         if (iocaste == null)
             iocaste = new Iocaste(context.function);

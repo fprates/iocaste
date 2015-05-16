@@ -1,19 +1,19 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
-import org.iocaste.appbuilder.common.AbstractViewSpec;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
 import org.iocaste.documents.common.ComplexModel;
 
-public class MaintenanceSpec extends AbstractViewSpec {
+public class MaintenanceSpec extends AbstractPanelSpec {
     
     @Override
-    public void execute() {
+    public void execute(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
         ComplexModel model = getManager(extcontext.link.cmodel).getModel();
         
-        form("main");
-        navcontrol("main");
-        dataform("main", "head");
-        tabbedpane("main", "tabs");
+        dataform("content", "head");
+        skip("content");
+        tabbedpane("content", "tabs");
         tabbedpaneitem("tabs", "basetab");
         dataform("basetab", "base");
         for (String name : model.getItems().keySet()) {

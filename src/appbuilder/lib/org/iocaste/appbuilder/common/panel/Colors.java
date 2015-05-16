@@ -7,5 +7,6 @@ public enum Colors {
     FOCUS,
     FONT,
     HEAD_BG,
-    GROUP_BG
+    GROUP_BG,
+    ACTION_BG
 }

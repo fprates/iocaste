@@ -32,6 +32,9 @@ public class StandardPanelInput extends AbstractViewInput {
                 dbitemadd("navigation", name, title, name);
             }
         
+        for (String action : page.getActions())
+            dbitemadd("actions", action, action);
+        
         for (String name : page.items.keySet()) {
             item = page.items.get(name);
             dbitemadd("dashitems", item.dash, item.name);
