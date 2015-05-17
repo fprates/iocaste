@@ -39,7 +39,7 @@ public class Uninstall extends AbstractHandler {
         services[CONFIG_LIB] = new GlobalConfig(function);
         for (int i = objects.length; i > 0; i--) {
             object = objects[i - 1];
-            if ((types != null) && (!types.contains(object.getst("NAME"))))
+            if ((types != null) && (!types.contains(object.getst("MODEL"))))
                 continue;
             item(object, function, services);
         }

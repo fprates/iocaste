@@ -67,11 +67,10 @@ public class SessionContext {
      * 
      */
     public final void invalidateStyles() {
-        for (AppContext appctx : apps.values()) {
-            appctx.stylename = null;
+        for (AppContext appctx : apps.values())
             appctx.invalidateStyles();
-        }
     }
+    
     /**
      * 
      * @return
