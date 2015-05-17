@@ -14,8 +14,9 @@ import org.iocaste.shell.common.StyleSheet;
 public 
 
 class StandardPanelConfig extends AbstractViewConfig {
+    public static final String CONTEXT_WIDTH = "15em";
+    public static final String CONTENT_TOP = "70px";
     private AbstractPanelPage page;
-    private static final String CONTEXT_WIDTH = "15em";
     
     public StandardPanelConfig(AbstractPanelPage page) {
         this.page = page;
@@ -26,7 +27,7 @@ class StandardPanelConfig extends AbstractViewConfig {
         Map<Colors, String> colors;
         StandardPanelDesign design;
         ViewConfig extconfig;
-        String style;
+        String style, bodybg;
         StyleSheet stylesheet;
         NavControl navcontrol;
         DashboardFactory factory;
@@ -34,23 +35,24 @@ class StandardPanelConfig extends AbstractViewConfig {
         colors = page.getColors();
         stylesheet = context.view.styleSheetInstance();
         
+        bodybg = colors.get(Colors.BODY_BG);
+        
         style = "body";
-        stylesheet.put(style, "background-color", colors.get(Colors.BODY_BG));
+        stylesheet.put(style, "background-color", bodybg);
+        stylesheet.put(style, "margin", "0px");
 
         style = ".form_content";
         stylesheet.put(style, "height", "100%");
-        stylesheet.put(style, "width", "80em");
+        stylesheet.put(style, "width", "100%");
         stylesheet.put(style, "overflow", "auto");
-        stylesheet.put(style, "top", "70px");
-        stylesheet.put(style, "left", CONTEXT_WIDTH);
-        stylesheet.put(style, "position", "fixed");
         stylesheet.put(style, "float", "left");
+        stylesheet.put(style, "position", "fixed");
         stylesheet.put(style, "font-size", "12pt");
         stylesheet.put(style, "font-family", "sans-serif");
         
         style = ".std_panel_context";
         stylesheet.newElement(style);
-        stylesheet.put(style, "top", "70px");
+        stylesheet.put(style, "top", CONTENT_TOP);
         stylesheet.put(style, "left", "0px");
         stylesheet.put(style, "width", CONTEXT_WIDTH);
         stylesheet.put(style, "height", "100%");
@@ -62,14 +64,12 @@ class StandardPanelConfig extends AbstractViewConfig {
         stylesheet.put(style, "font-size", "12pt");
         stylesheet.put(style, "border-right-style", "solid");
         stylesheet.put(style, "border-right-width", "2px");
-        stylesheet.put(style,
-                "border-right-color", colors.get(Colors.BODY_BG));
+        stylesheet.put(style, "border-right-color", bodybg);
         getElement("context").setStyleClass(style.substring(1));
         
         style = ".std_panel_content";
         stylesheet.newElement(style);
         stylesheet.put(style, "height", "100%");
-        stylesheet.put(style, "width", "80em");
         stylesheet.put(style, "padding", "0px");
         stylesheet.put(style, "font-size", "12pt");
         getElement("content").setStyleClass(style.substring(1));

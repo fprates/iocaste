@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.Colors;
 
 public class EntityDisplayPage extends AbstractPanelPage {
     public AppBuilderLink link;
@@ -11,6 +12,7 @@ public class EntityDisplayPage extends AbstractPanelPage {
         set(link.maintenancespec);
         set(link.displayconfig);
         set(link.maintenanceinput);
+        set(Colors.BODY_BG, "#ffffff");
     }
 
 }

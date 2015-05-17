@@ -31,13 +31,14 @@ public class MainConfig extends AbstractViewConfig {
         stylesheet = context.view.styleSheetInstance();
         stylesheet.put(".std_panel_context", "display", "none");
         
+        style = ".std_panel_content";
+        stylesheet.put(style, "margin", "auto");
+        stylesheet.remove(style, "position");
+        stylesheet.remove(style, "left");
+        
         style = ".logincnt";
         stylesheet.newElement(style);
-        stylesheet.put(style, "width", "20em");
-        stylesheet.put(style, "height", "10em");
-        stylesheet.put(style, "margin", "auto");
         stylesheet.put(style, "top", "20em");
-        stylesheet.put(style, "bottom", "20em");
         stylesheet.put(style, "position", "relative");
         
         style = ".loginform";
