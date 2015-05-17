@@ -31,6 +31,7 @@ public class StyleServices {
     
     public static final void save(
             Function function, String name, StyleSheet stylesheet) {
+        Query[] queries;
         ExtendedObject object;
         Map<String, String> properties;
         Map<String, Map<String, String>> elements;
@@ -42,6 +43,16 @@ public class StyleServices {
         object = new ExtendedObject(documents.getModel("STYLE"));
         object.set("NAME", name);
         documents.save(object);
+        
+        queries = new Query[2];
+        
+        queries[0] = new Query("delete");
+        queries[0].setModel("STYLE_ELEMENT_DETAIL");
+        queries[0].andEqual("STYLE", name);
+        queries[1] = new Query("delete");
+        queries[1].setModel("STYLE_ELEMENT");
+        queries[1].andEqual("STYLE", name);
+        documents.update(queries);
         
         elementmodel = documents.getModel("STYLE_ELEMENT");
         propertymodel = documents.getModel("STYLE_ELEMENT_DETAIL");
