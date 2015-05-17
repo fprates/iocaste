@@ -1,10 +1,13 @@
-package org.iocaste.appbuilder.common.panel;
+package org.iocaste.appbuilder.common.panel.dashboard;
 
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.Colors;
+import org.iocaste.appbuilder.common.panel.context.StandardPanelContextRenderer;
 
 public class StandardDashboardConfig extends AbstractViewConfig {
     private AbstractPanelPage page;

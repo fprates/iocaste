@@ -7,6 +7,8 @@ import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
+import org.iocaste.appbuilder.common.panel.context.PanelPageEntryType;
+import org.iocaste.appbuilder.common.panel.context.PanelPageItemContextEntry;
 import org.iocaste.shell.common.PageStackItem;
 
 public class StandardPanel {

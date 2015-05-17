@@ -1,5 +1,6 @@
-package org.iocaste.appbuilder.common.panel;
+package org.iocaste.appbuilder.common.panel.context;
 
+import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.shell.common.Button;
 
 public class ActionRenderer extends StandardPanelContextRenderer {

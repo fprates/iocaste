@@ -7,6 +7,8 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
+import org.iocaste.appbuilder.common.panel.context.ActionRenderer;
+import org.iocaste.appbuilder.common.panel.context.NavigationRenderer;
 import org.iocaste.shell.common.StyleSheet;
 
 public 
@@ -36,6 +38,8 @@ class StandardPanelConfig extends AbstractViewConfig {
 
         style = ".form_content";
         stylesheet.put(style, "height", "100%");
+        stylesheet.put(style, "width", "80em");
+        stylesheet.put(style, "margin", "auto");
         
         style = ".std_panel_context";
         stylesheet.newElement(style);
@@ -57,14 +61,8 @@ class StandardPanelConfig extends AbstractViewConfig {
         
         style = ".std_panel_content";
         stylesheet.newElement(style);
-        stylesheet.put(style, "top", "70px");
-        stylesheet.put(style, "right", "20em");
-        stylesheet.put(style, "left", "20em");
-        stylesheet.put(style, "display", "inline");
-        stylesheet.put(style, "float", "right");
         stylesheet.put(style, "height", "100%");
         stylesheet.put(style, "width", "60em");
-        stylesheet.put(style, "position", "fixed");
         stylesheet.put(style, "margin", "auto");
         stylesheet.put(style, "padding", "0px");
         stylesheet.put(style, "font-size", "12pt");

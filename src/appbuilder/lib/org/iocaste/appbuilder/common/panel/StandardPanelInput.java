@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.panel.context.PanelPageEntryType;
+import org.iocaste.appbuilder.common.panel.context.PanelPageItemContextEntry;
 import org.iocaste.shell.common.PageStackItem;
 
 public class StandardPanelInput extends AbstractViewInput {

@@ -1,4 +1,4 @@
-package org.iocaste.appbuilder.common.panel;
+package org.iocaste.appbuilder.common.panel.context;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

@@ -1,6 +1,7 @@
-package org.iocaste.appbuilder.common.panel;
+package org.iocaste.appbuilder.common.panel.context;
 
 import org.iocaste.appbuilder.common.dashboard.AbstractDashboardRenderer;
+import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Link;

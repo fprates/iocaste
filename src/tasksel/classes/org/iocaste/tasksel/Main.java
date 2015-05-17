@@ -7,9 +7,9 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.PanelPageItem;
-import org.iocaste.appbuilder.common.panel.StandardDashboardConfig;
-import org.iocaste.appbuilder.common.panel.StandardDashboardSpec;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
+import org.iocaste.appbuilder.common.panel.dashboard.StandardDashboardConfig;
+import org.iocaste.appbuilder.common.panel.dashboard.StandardDashboardSpec;
 
 public class Main extends AbstractPageBuilder {
     public static final String MAIN = "main";

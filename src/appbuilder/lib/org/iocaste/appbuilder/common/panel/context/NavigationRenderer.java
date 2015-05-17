@@ -1,4 +1,5 @@
-package org.iocaste.appbuilder.common.panel;
+package org.iocaste.appbuilder.common.panel.context;
+
 
 public class NavigationRenderer extends StandardPanelContextRenderer {
 

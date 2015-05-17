@@ -1,6 +1,9 @@
-package org.iocaste.appbuilder.common.panel;
+package org.iocaste.appbuilder.common.panel.dashboard;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
+import org.iocaste.appbuilder.common.panel.PanelPageItem;
 
 public class StandardDashboardSpec extends AbstractPanelSpec {
     private AbstractPanelPage page;
