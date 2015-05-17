@@ -27,7 +27,8 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         for (String key : page.items.keySet()) {
             item = page.items.get(key);
             sb.append("setElementDisplay('").
-                    append(item.dashctx).append("_container', '").
+                    append(item.dashctx).
+                    append("_container', '").
                     append(item.dash.equals(dashname)? "inline');" : "none');");
         }
         
@@ -47,8 +48,9 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
 
     @Override
     public void build(Container parent, String name) {
+        PanelPageItem item;
         Container container;
-        String style;
+        String style, linkname, htmlname;
         
         style = getStyle(name, OUTER).substring(1);
         
@@ -57,16 +59,31 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         container.setStyleClass(style);
         container.setVisible(false);
         
+        linkname = null;
+        for (String key : page.items.keySet()) {
+            item = page.items.get(key);
+            if (!item.dash.equals(name))
+                continue;
+            linkname = key;
+            break;
+        }
+        
+        htmlname = container.getHtmlName();
         container.addEvent("onMouseOut", new StringBuilder(
                 "javascript:setClassStyle('").
-                append(container.getHtmlName()).append("', '").
-                append(style).append("')").toString());
+                append(htmlname).append("', '").
+                append(style).append("');setClassStyle('").
+                append(linkname).
+                append("_dbitem_link', 'std_dash_item')").toString());
         
         style = style.concat("_mouseover");
         container.addEvent("onMouseOver", new StringBuilder(
                 "javascript:setClassStyle('").
-                append(container.getHtmlName()).append("', '").
-                append(style).append("')").toString());
+                append(htmlname).append("', '").
+                append(style).append("');setClassStyle('").
+                append(linkname).
+                append("_dbitem_link', 'std_dash_item_mouseover')").
+                toString());
 
         style = getStyle(name, INNER).substring(1);
         container = new StandardContainer(
@@ -76,24 +93,26 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
 
     @Override
     public void config() {
-        stylesheet.put(factorystyle, "top", "20em");
-        stylesheet.put(factorystyle, "bottom", "20em");
-        stylesheet.put(factorystyle, "width", "55em");
-        stylesheet.put(factorystyle, "margin", "auto");
-        stylesheet.put(factorystyle, "position", "fixed");
+        String style, mouseover;
         
-        for (String style : new String[] {
-                ".std_dash_item:link",
-                ".std_dash_item:active",
-                ".std_dash_item:hover",
-                ".std_dash_item:visited"
+        for (String suffix : new String[] {
+                "link",
+                "active",
+                "hover",
+                "visited"
         }) {
+            style = new StringBuilder(".std_dash_item:").
+                    append(suffix).toString();
             stylesheet.newElement(style);
             stylesheet.put(style, "display", "block");
-            stylesheet.put(style,
-                    "color", colors.get(Colors.FONT));
             stylesheet.put(style, "text-decoration", "none");
             stylesheet.put(style, "text-align", "center");
+            stylesheet.put(style, "color", colors.get(Colors.DASH_FONT));
+            
+            mouseover = new StringBuilder(".std_dash_item_mouseover:").
+                    append(suffix).toString();
+            stylesheet.clone(mouseover, style);
+            stylesheet.put(mouseover, "color", colors.get(Colors.FOCUS_FONT));
         }
     }
 
@@ -109,16 +128,15 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         stylesheet.put(style, "margin", "0.5em");
         stylesheet.put(style, "padding", "1em");
         stylesheet.put(style, "display", "inline");
-        stylesheet.put(style,
-                "color", colors.get(Colors.FOCUS));
-        stylesheet.put(style,
-                "background-color", colors.get(Colors.DASH_BG));
+        stylesheet.put(style, "border-radius", "3px");
+        stylesheet.put(style, "border-style", "solid");
+        stylesheet.put(style, "border-color", colors.get(Colors.DASH_BORDER));
+        stylesheet.put(style, "background-color", colors.get(Colors.DASH_BG));
         stylesheet.put(style, "font-size", "12pt");
         
         mouseover = style.concat("_mouseover");
         stylesheet.clone(mouseover, style);
-        stylesheet.put(mouseover,
-                "background-color", colors.get(Colors.FOCUS));
+        stylesheet.put(mouseover, "background-color", colors.get(Colors.FOCUS));
         
         style = getStyle(name, INNER);
         stylesheet.newElement(style);

@@ -15,6 +15,7 @@ public
 
 class StandardPanelConfig extends AbstractViewConfig {
     private AbstractPanelPage page;
+    private static final String CONTEXT_WIDTH = "15em";
     
     public StandardPanelConfig(AbstractPanelPage page) {
         this.page = page;
@@ -39,13 +40,19 @@ class StandardPanelConfig extends AbstractViewConfig {
         style = ".form_content";
         stylesheet.put(style, "height", "100%");
         stylesheet.put(style, "width", "80em");
-        stylesheet.put(style, "margin", "auto");
+        stylesheet.put(style, "overflow", "auto");
+        stylesheet.put(style, "top", "70px");
+        stylesheet.put(style, "left", CONTEXT_WIDTH);
+        stylesheet.put(style, "position", "fixed");
+        stylesheet.put(style, "float", "left");
+        stylesheet.put(style, "font-size", "12pt");
+        stylesheet.put(style, "font-family", "sans-serif");
         
         style = ".std_panel_context";
         stylesheet.newElement(style);
         stylesheet.put(style, "top", "70px");
         stylesheet.put(style, "left", "0px");
-        stylesheet.put(style, "width", "20em");
+        stylesheet.put(style, "width", CONTEXT_WIDTH);
         stylesheet.put(style, "height", "100%");
         stylesheet.put(style, "float", "left");
         stylesheet.put(style, "display", "inline");
@@ -62,8 +69,7 @@ class StandardPanelConfig extends AbstractViewConfig {
         style = ".std_panel_content";
         stylesheet.newElement(style);
         stylesheet.put(style, "height", "100%");
-        stylesheet.put(style, "width", "60em");
-        stylesheet.put(style, "margin", "auto");
+        stylesheet.put(style, "width", "80em");
         stylesheet.put(style, "padding", "0px");
         stylesheet.put(style, "font-size", "12pt");
         getElement("content").setStyleClass(style.substring(1));

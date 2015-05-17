@@ -29,8 +29,11 @@ public abstract class AbstractPanelPage {
         colors.put(Colors.BODY_BG, "#202020");
         colors.put(Colors.COMPONENT_BG, "#303030");
         colors.put(Colors.HEAD_BG, "#303030");
-        colors.put(Colors.DASH_BG, "#3030ff");
+        colors.put(Colors.DASH_BG, "#f0f0f0");
+        colors.put(Colors.DASH_BORDER, "#e0e0e0");
+        colors.put(Colors.DASH_FONT, "#000000");
         colors.put(Colors.FOCUS, "#505050");
+        colors.put(Colors.FOCUS_FONT, "#ffffff");
         colors.put(Colors.FONT, "#ffffff");
         colors.put(Colors.GROUP_BG, "#606060");
         colors.put(Colors.ACTION_BG, "#3030ff");

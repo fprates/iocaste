@@ -38,6 +38,7 @@ public class LinkRenderer extends Renderer {
         }
         
         atag = new XMLElement("a");
+        atag.add("id", link.getHtmlName());
         atag.add("class", link.getStyleClass());
 
         tags.add(atag);
