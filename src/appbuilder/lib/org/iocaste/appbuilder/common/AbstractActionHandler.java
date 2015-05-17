@@ -238,7 +238,7 @@ public abstract class AbstractActionHandler {
         return null;
     }
     
-    protected final ExtendedObject readobjects(
+    protected static final ExtendedObject readobjects(
             Collection<ExtendedObject> objects, String op1, Object op2) {
         for (ExtendedObject object : objects)
             if (object.get(op1).equals(op2))

@@ -33,8 +33,8 @@ public class UpdatePackage extends AbstractActionHandler {
             try {
                 pkgtool.update(pkgname);
             } catch (Exception e) {
-                object = readobjects(extcontext.installed, "NAME", pkgname);
-                object.set("EXCEPTION", e.getMessage());
+                UninstallPackage.storeException(e, pkgname, extcontext,
+                        extcontext.installed, object);
                 ex = true;
             }
         }
@@ -46,5 +46,4 @@ public class UpdatePackage extends AbstractActionHandler {
             message(Const.STATUS, "package.updated");
         inputrefresh();
     }
-
 }

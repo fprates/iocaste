@@ -36,9 +36,8 @@ public class InstallPackage extends AbstractActionHandler {
                 object = readobjects(extcontext.uninstalled, "NAME", pkgname);
                 extcontext.uninstalled.remove(object);
             } catch (Exception e) {
-                Main.registerException(pkgname, extcontext, e);
-                object = readobjects(extcontext.uninstalled, "NAME", pkgname);
-                object.set("EXCEPTION", e.getMessage());
+                UninstallPackage.storeException(e, pkgname, extcontext,
+                        extcontext.uninstalled, object);
                 ex = true;
             }
         }
