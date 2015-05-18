@@ -23,7 +23,6 @@ public class StandardPanel {
         StandardPanelSpec spec;
         StandardPanelInput input;
         PanelPageItem item;
-        PanelPageItemContextEntry entry;
         ViewContext view;
         Map<String, PageStackItem> positions;
         
@@ -47,14 +46,24 @@ public class StandardPanel {
         
         for (String key : page.items.keySet()) {
             item = page.items.get(key);
-            for (String entrykey : item.context.entries.keySet()) {
-                entry = item.context.entries.get(entrykey);
-                if (!entry.type.equals(PanelPageEntryType.TASK))
-                    continue;
-                
-                view.put(key.concat("_pagectx"),
-                        new TaskCall(item, TaskCall.CONTEXT));
-            }
+            prepareContextTasks(view, key, item);
+        }
+    }
+    
+    private final void prepareContextTasks(
+            ViewContext view, String key, PanelPageItem item) {
+        PanelPageItemContextEntry entry;
+        TaskCall taskcall;
+        String source;
+        
+        source = (item.dashboard)? "dashcontext" : "actions";
+        taskcall = new TaskCall(source, item);
+        for (String entrykey : item.context.entries.keySet()) {
+            entry = item.context.entries.get(entrykey);
+            if (!entry.type.equals(PanelPageEntryType.TASK))
+                continue;
+            item.dashctx = key.concat("_pagectx");
+            view.put(item.dashctx, taskcall);
         }
     }
 }
@@ -63,9 +72,9 @@ class TaskCall extends AbstractActionHandler {
     public static final int PANEL = 0;
     public static final int CONTEXT = 1;
     private PanelPageItem item;
-    private int source;
+    private String source;
     
-    public TaskCall(PanelPageItem item, int source) {
+    public TaskCall(String source, PanelPageItem item) {
         this.item = item;
         this.source = source;
     }
@@ -73,16 +82,8 @@ class TaskCall extends AbstractActionHandler {
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         String task;
-        
-        switch (source) {
-        case PANEL:
-            task = dbactiongetst("dashitems", item.dash);
-            break;
-        default:
-            task = dbactiongetst("dashcontext", item.dashctx);
-            break;
-        }
-        
+
+        task = dbactiongetst(source, item.dashctx);
         taskredirect(task);
     }
     

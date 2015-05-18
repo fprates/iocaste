@@ -12,7 +12,7 @@ public class EntityDisplayPage extends AbstractPanelPage {
         set(link.maintenancespec);
         set(link.displayconfig);
         set(link.maintenanceinput);
-        set(Colors.BODY_BG, "#ffffff");
+        set(Colors.CONTENT_BG, "#ffffff");
     }
 
 }

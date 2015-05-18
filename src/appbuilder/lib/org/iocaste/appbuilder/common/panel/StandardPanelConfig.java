@@ -9,6 +9,7 @@ import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.appbuilder.common.panel.context.ActionRenderer;
 import org.iocaste.appbuilder.common.panel.context.NavigationRenderer;
+import org.iocaste.appbuilder.common.panel.context.StandardPanelContextRenderer;
 import org.iocaste.shell.common.StyleSheet;
 
 public 
@@ -27,18 +28,17 @@ class StandardPanelConfig extends AbstractViewConfig {
         Map<Colors, String> colors;
         StandardPanelDesign design;
         ViewConfig extconfig;
-        String style, bodybg;
+        String style, contentbg;
         StyleSheet stylesheet;
         NavControl navcontrol;
         DashboardFactory factory;
         
         colors = page.getColors();
+        contentbg = colors.get(Colors.CONTENT_BG);
+        
         stylesheet = context.view.styleSheetInstance();
         
-        bodybg = colors.get(Colors.BODY_BG);
-        
         style = "body";
-        stylesheet.put(style, "background-color", bodybg);
         stylesheet.put(style, "margin", "0px");
 
         style = ".form_content";
@@ -49,6 +49,7 @@ class StandardPanelConfig extends AbstractViewConfig {
         stylesheet.put(style, "position", "fixed");
         stylesheet.put(style, "font-size", "12pt");
         stylesheet.put(style, "font-family", "sans-serif");
+        stylesheet.put(style, "background-color", contentbg);
         
         style = ".std_panel_context";
         stylesheet.newElement(style);
@@ -64,7 +65,7 @@ class StandardPanelConfig extends AbstractViewConfig {
         stylesheet.put(style, "font-size", "12pt");
         stylesheet.put(style, "border-right-style", "solid");
         stylesheet.put(style, "border-right-width", "2px");
-        stylesheet.put(style, "border-right-color", bodybg);
+        stylesheet.put(style, "border-right-color", contentbg);
         getElement("context").setStyleClass(style.substring(1));
         
         style = ".std_panel_content";
@@ -87,6 +88,10 @@ class StandardPanelConfig extends AbstractViewConfig {
         factory = getDashboard("actions");
         factory.setColors(colors);
         factory.setRenderer(new ActionRenderer());
+        
+        factory = getDashboard("dashcontext");
+        factory.setColors(colors);
+        factory.setRenderer(new StandardPanelContextRenderer());
         
         extconfig = page.getConfig();
         if (extconfig == null)

@@ -11,6 +11,7 @@ import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.ViewContext;
+import org.iocaste.appbuilder.common.panel.context.PanelPageItemContext;
 
 public abstract class AbstractPanelPage {
     private ViewContext view;
@@ -24,9 +25,10 @@ public abstract class AbstractPanelPage {
     
     public AbstractPanelPage() {
         items = new LinkedHashMap<>();
-
+        actions = new HashSet<>();
+        
         colors = new HashMap<>();
-        colors.put(Colors.BODY_BG, "#202020");
+        colors.put(Colors.CONTENT_BG, "#202020");
         colors.put(Colors.COMPONENT_BG, "#303030");
         colors.put(Colors.HEAD_BG, "#303030");
         colors.put(Colors.DASH_BG, "#f0f0f0");
@@ -37,13 +39,19 @@ public abstract class AbstractPanelPage {
         colors.put(Colors.FONT, "#ffffff");
         colors.put(Colors.GROUP_BG, "#606060");
         colors.put(Colors.ACTION_BG, "#3030ff");
-        
-        actions = new HashSet<>();
     }
     
-    public void action(String action, AbstractActionHandler handler) {
+    protected void action(String action, AbstractActionHandler handler) {
         actions.add(action);
         put(action, handler);
+    }
+    
+    protected PanelPageItemContext contextitem(String name) {
+        PanelPageItem item;
+        
+        item = instance(name);
+        item.dashboard = false;
+        return item.context;
     }
     
     public abstract void execute();
@@ -80,6 +88,7 @@ public abstract class AbstractPanelPage {
         PanelPageItem item = new PanelPageItem();
         
         item.name = name;
+        item.dashboard = true;
         items.put(name, item);
         return item;
     }
@@ -108,7 +117,7 @@ public abstract class AbstractPanelPage {
         this.view = view;
     }
     
-    public final void submit(String action, AbstractActionHandler handler) {
+    protected final void submit(String action, AbstractActionHandler handler) {
         submit = action;
         put(action, handler);
     }

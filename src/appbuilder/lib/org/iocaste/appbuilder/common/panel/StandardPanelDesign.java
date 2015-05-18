@@ -43,7 +43,7 @@ public class StandardPanelDesign implements NavControlDesign {
         stylesheet.put(style, "border-bottom-style", "solid");
         stylesheet.put(style, "border-bottom-width", "2px");
         stylesheet.put(
-                style, "border-bottom-color", colors.get(Colors.BODY_BG));
+                style, "border-bottom-color", colors.get(Colors.CONTENT_BG));
         
         container.setStyleClass(style.substring(1));
         

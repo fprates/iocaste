@@ -19,11 +19,12 @@ public class StandardDashboardSpec extends AbstractPanelSpec {
         dashboard("content", "dashitems");
         for (String name : page.items.keySet()) {
             item = page.items.get(name);
+            if (!item.dashboard)
+                continue;
             item.dash = name.concat("_page");
             item.dashctx = item.dash.concat("ctx");
             dashboarditem("dashitems", item.dash);
             contextitem(item);
         }
     }
-
 }

@@ -14,7 +14,7 @@ public class EntityCustomPage extends AbstractPanelPage {
         set(link.maintenancespec);
         set(link.maintenanceconfig);
         set(link.maintenanceinput);
-        set(Colors.BODY_BG, "#ffffff");
+        set(Colors.CONTENT_BG, "#ffffff");
         
         submit("validate", inputvalidate);
         action("save", link.save);

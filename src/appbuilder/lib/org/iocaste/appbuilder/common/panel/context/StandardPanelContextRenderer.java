@@ -141,12 +141,14 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
     }
     
     protected void config(Internal internal) {
-        String style_;
+        String style_, font, contentbg;
         
         stylesheet.put(factorystyle, "float", "left");
         stylesheet.put(factorystyle, "width", "100%");
         stylesheet.put(factorystyle, "display", "inline");
         
+        font = colors.get(Colors.FONT);
+        contentbg = colors.get(Colors.CONTENT_BG);
         for (String style : internal.linksstyles) {
             stylesheet.newElement(style);
             
@@ -157,8 +159,7 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
                 stylesheet.put(style, "display", "block");
                 stylesheet.put(style, "border-bottom-style", "solid");
                 stylesheet.put(style, "border-bottom-width", "2px");
-                stylesheet.put(style,
-                        "border-bottom-color", colors.get(Colors.BODY_BG));
+                stylesheet.put(style, "border-bottom-color", contentbg);
                 if (internal.bgcolor != null)
                     stylesheet.put(style, "background-color", internal.bgcolor);
                 
@@ -169,8 +170,7 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
             } else {
                 stylesheet.put(style, "width", "100%");
                 stylesheet.put(style, "display", "block");
-                stylesheet.put(style,
-                        "color", colors.get(Colors.FONT));
+                stylesheet.put(style, "color", font);
                 stylesheet.put(style, "text-decoration", "none");
                 stylesheet.put(style, "text-align", "center");
                 stylesheet.put(style, "font-size", "10pt");
@@ -179,7 +179,7 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
         
         style_ = ".std_dash_context_txt";
         stylesheet.newElement(style_);
-        stylesheet.put(style_, "color", colors.get(Colors.FONT));
+        stylesheet.put(style_, "color", font);
         stylesheet.put(style_, "text-align", "center");
         stylesheet.put(style_, "font-size", "10pt");
         stylesheet.put(style_, "font-weight", "bold");
@@ -194,8 +194,7 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
         stylesheet.put(style_, "background-color", colors.get(Colors.GROUP_BG));
         stylesheet.put(style_, "border-bottom-style", "solid");
         stylesheet.put(style_, "border-bottom-width", "2px");
-        stylesheet.put(style_,
-                "border-bottom-color", colors.get(Colors.BODY_BG));
+        stylesheet.put(style_, "border-bottom-color", contentbg);
     }
 }
 

@@ -23,6 +23,7 @@ public class StandardPanelSpec extends AbstractViewSpec {
         AbstractPanelSpec extspec;
         String name, submit;
         PageStackItem[] positions;
+        PanelPageItem item;
         
         form("main");
         navcontrol("main");
@@ -60,12 +61,18 @@ public class StandardPanelSpec extends AbstractViewSpec {
         
         standardcontainer("main", "content");
         extspec = page.getSpec();
-        if (extspec == null)
-            return;
+        if (extspec != null) {
+            spec("content", extspec);
+            for (PanelPageItem ctxitem : extspec.getContextItems())
+                dashboardgroup("dashcontext", ctxitem.dashctx);
+        }
         
-        spec("content", extspec);
-        for (PanelPageItem ctxitem : extspec.getContextItems())
-            dashboardgroup("dashcontext", ctxitem.dashctx);
+        for (String key : page.items.keySet()) {
+            item = page.items.get(key);
+            if (item.dashboard)
+                continue;
+            dashboarditem("actions", item.dashctx);
+        }
     }
     
     public final void setPositions(Map<String, PageStackItem> positions) {

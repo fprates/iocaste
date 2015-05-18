@@ -8,7 +8,6 @@ import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.appbuilder.common.panel.StandardPanelConfig;
-import org.iocaste.appbuilder.common.panel.context.StandardPanelContextRenderer;
 import org.iocaste.shell.common.StyleSheet;
 
 public class StandardDashboardConfig extends AbstractViewConfig {
@@ -40,10 +39,6 @@ public class StandardDashboardConfig extends AbstractViewConfig {
         factory = getDashboard("dashitems");
         factory.setColors(colors);
         factory.setRenderer(new StandardPanelItemsRenderer(page));
-        
-        factory = getDashboard("dashcontext");
-        factory.setColors(colors);
-        factory.setRenderer(new StandardPanelContextRenderer());
     }
 
 }

@@ -19,7 +19,7 @@ public class StandardPanelInput extends AbstractViewInput {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        String title, submit;
+        String title, submit, destination;
         PanelPageItem item;
         PageStackItem position;
         PanelPageItemContextEntry ctxitem, ctxitemi;
@@ -43,13 +43,17 @@ public class StandardPanelInput extends AbstractViewInput {
         
         for (String name : page.items.keySet()) {
             item = page.items.get(name);
-            dbitemadd("dashitems", item.dash, item.name);
+            if (item.dashboard)
+                dbitemadd("dashitems", item.dash, item.name);
+            
             entrieskeys = item.context.entries.keySet();
+            destination = (item.dashboard)? "dashcontext" : "actions";
             for (String text : entrieskeys) {
                 ctxitem = item.context.entries.get(text);
                 switch (ctxitem.type) {
                 case GROUP:
-                    dbtextadd("dashcontext", item.dashctx, ctxitem.group);
+                    dbtextadd(destination, item.dashctx, ctxitem.group);
+                    
                     for (String texti : entrieskeys) {
                         ctxitemi = item.context.entries.get(texti);
                         if ((ctxitemi.group == null) ||
@@ -57,16 +61,15 @@ public class StandardPanelInput extends AbstractViewInput {
                                 !ctxitem.group.equals(ctxitemi.group))
                             continue;
 
-                        dbitemadd("dashcontext", item.dashctx,
-                                texti, ctxitemi.task);
+                        dbitemadd(destination, item.dashctx, texti,
+                                ctxitemi.task);
                     }
                     break;
                 default:
                     if (ctxitem.group != null)
                         break;
                     
-                    dbitemadd("dashcontext", item.dashctx,
-                            text, ctxitem.task);
+                    dbitemadd(destination, item.dashctx, text, ctxitem.task);
                     break;
                 }
             }

@@ -16,7 +16,7 @@ public class EntityPage extends AbstractPanelPage {
         Context extcontext;
         
         set(spec);
-        set(Colors.BODY_BG, "#ffffff");
+        set(Colors.CONTENT_BG, "#ffffff");
         extcontext = getExtendedContext();
         
         switch (action) {
