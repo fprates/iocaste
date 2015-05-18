@@ -19,6 +19,16 @@ public class StandardPanelInput extends AbstractViewInput {
     
     @Override
     protected void execute(PageBuilderContext context) {
+        AbstractViewInput input;
+        
+        input = page.getInput();
+        if (input != null)
+            input.run(context, false);
+    }
+
+    @Override
+    protected void init(PageBuilderContext context) {
+        AbstractViewInput input;
         String title, submit, destination;
         PanelPageItem item;
         PageStackItem position;
@@ -74,11 +84,10 @@ public class StandardPanelInput extends AbstractViewInput {
                 }
             }
         }
-    }
-
-    @Override
-    protected void init(PageBuilderContext context) {
-        execute(context);
+        
+        input = page.getInput();
+        if (input != null)
+            input.run(context, true);
     }
     
     public final void setPositions(Map<String, PageStackItem> positions) {

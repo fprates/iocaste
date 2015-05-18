@@ -39,7 +39,6 @@ public class StandardPanel {
         view.set(new StandardPanelConfig(page));
         view.set(input);
         view.set(extcontext);
-        view.setUpdate(true);
         
         page.setViewContext(view);
         page.execute();

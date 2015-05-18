@@ -121,4 +121,8 @@ public abstract class AbstractPanelPage {
         submit = action;
         put(action, handler);
     }
+    
+    protected final void update() {
+        view.setUpdate(true);
+    }
 }
