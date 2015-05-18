@@ -73,14 +73,20 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
                     (link.createselectconfig == null))
                 continue;
             
-            entityaction = link.entity.concat(action);
-            
-            entitypage = new EntityPage();
+            entitypage = (link.entitypage == null)?
+                    new EntityPage() : link.entitypage;
             entitypage.action = action;
             entitypage.spec = selspec;
             entitypage.link = link;
+            
+            entityaction = link.entity.concat(action);
             panel.instance(entityaction, entitypage, extcontext);
         }
+        
+        custompage = (link.custompage == null)?
+                new EntityCustomPage() : link.custompage;
+        custompage.link = link;
+        custompage.inputvalidate = inputvalidate;
         
         for (String view : new String[] {
                 link.createview, link.create1view, link.edit1view}) {
@@ -89,13 +95,11 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
                             (link.createselectconfig != null)))
                 continue;
             
-            custompage = new EntityCustomPage();
-            custompage.link = link;
-            custompage.inputvalidate = inputvalidate;
             panel.instance(view, custompage, extcontext);
         }
 
-        displaypage = new EntityDisplayPage();
+        displaypage = (link.displaypage == null)?
+                new EntityDisplayPage() : link.displaypage;
         displaypage.link = link;
         panel.instance(link.display1view, displaypage, extcontext);
     }
