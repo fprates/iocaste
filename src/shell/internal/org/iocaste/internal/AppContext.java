@@ -52,7 +52,8 @@ public class AppContext {
      * 
      */
     public final void invalidateStyles() {
-        sheet.clear();
+        if (sheet != null)
+            sheet.clear();
     }
     
     /**
