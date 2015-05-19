@@ -20,12 +20,17 @@ public class DataItemRenderer {
         DocumentModel model = null;
         DataForm form = (DataForm)dataitem.getContainer();
         XMLElement coltag;
-        String inputname = dataitem.getName();
+        String inputname, text;
+
+        inputname = dataitem.getName();
+        text = dataitem.getText();
+        if (text == null)
+            text = inputname;
         
         view = config.getView();
         colname = new Text(view, "");
         colname.setStyleClass("item_form_name");
-        colname.setText(inputname);
+        colname.setText(text);
         
         coltag = new XMLElement("td");
         coltag.add("class", dataitem.getStyleClass());
