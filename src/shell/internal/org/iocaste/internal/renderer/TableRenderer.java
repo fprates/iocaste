@@ -51,7 +51,7 @@ public class TableRenderer extends Renderer {
      */
     public static final XMLElement render(Table table, Config config) {
         Locale locale;
-        String title, name;
+        String title, name, text;
         Parameter parameter;
         Set<TableItem> items;
         int vlines, lastline, topline, size, i;
@@ -92,9 +92,14 @@ public class TableRenderer extends Renderer {
                             table.getLineControl().getElements(), config));
                     
                 } else {
-                    name = column.getName();
-                    if (name != null)
-                        thtag.addInner(config.getText(name, name));
+                    text = column.getText();
+                    if (text == null) {
+                        name = column.getName();
+                        if (name != null)
+                            text = config.getText(name, name);
+                    }
+                    
+                    thtag.addInner(text);
                 }
                 
                 trtag.addChild(thtag);

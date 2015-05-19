@@ -14,6 +14,7 @@ import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.StandardContainer;
@@ -27,20 +28,24 @@ import org.iocaste.shell.common.View;
 public class Response {
     
     private static final void addCriteria(Context context, SearchHelp sh,
-            Container container, DocumentModel model) {
+            Container container, DocumentModel model, MessageSource source) {
+        String name;
         DataItem item;
         DataForm criteria;
         
         criteria = new DataForm(container, "criteria");
         criteria.setStyleClass("shcriteria");
         criteria.importModel(model);
+        
         for (Element element : criteria.getElements()) {
             if (!element.isDataStorable())
                 continue;
             
             item = (DataItem)element;
-            if (sh.contains(item.getName())) {
+            name = item.getName();
+            if (sh.contains(name)) {
                 item.setComponentType(Const.RANGE_FIELD);
+                item.setText(source.get(name));
                 if (context.view.getFocus() == null)
                     context.view.setFocus(item);
                 continue;
@@ -52,10 +57,10 @@ public class Response {
     
     private static final void addItems(Context context, SearchHelp sh,
             Container container, String name, DocumentModel model,
-            ExtendedObject[] items) {
+            ExtendedObject[] items, MessageSource source) {
         TableColumn column;
         TableItem tableitem;
-        String export, action;
+        String export, action, iname;
         Object value;
         Text text;
         Link link;
@@ -65,11 +70,13 @@ public class Response {
         param = new Parameter(container, "value");
         table = new Table(container, "search.table");
         for (DocumentModelItem item : model.getItens()) {
-            column = new TableColumn(table, item.getName());
+            iname = item.getName();
+            column = new TableColumn(table, iname);
             column.setMark(false);
             column.setVisible(true);
             column.setModelItem(item);
             column.setLength(item.getDataElement().getLength());
+            column.setText(source.get(iname));
         }
         
         for (ExtendedObject object : items) {
@@ -110,6 +117,7 @@ public class Response {
     }
     
     public static final void main(Context context) {
+        MessageSource source;
         View view;
         Properties messages;
         String name, searchjs, action, form, searchbt, master, nsreference;
@@ -177,7 +185,12 @@ public class Response {
         
         name = sh.getModelName();
         model = documents.getModel(name);
-        addCriteria(context, sh, stdcnt, model);
+        
+        source = new MessageSource();
+        source.loadFromApplication(
+                model.getPackage(), context.view.getLocale(), context.function);
+        
+        addCriteria(context, sh, stdcnt, model, source);
 
         datacnt = new StandardContainer(stdcnt, "shdatacnt");
         datacnt.setStyleClass("shdatacnt");
@@ -200,6 +213,6 @@ public class Response {
             return;
         }
         
-        addItems(context, sh, datacnt, name, model, result);
+        addItems(context, sh, datacnt, name, model, result, source);
     }
 }
