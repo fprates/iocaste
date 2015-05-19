@@ -20,8 +20,14 @@ public class Main extends AbstractPage {
         Map<String, String> messages = new HashMap<>();
         
         messages.put("COUNTRY-CONFIG", "Países");
+        messages.put("COUNTRY_ID", "País");
+        messages.put("CURRENCY", "Moeda");
         messages.put("CURRENCY-CONFIG", "Moedas");
+        messages.put("CURRENCY_ID", "Chave Moeda");
+        messages.put("NAME", "Nome");
         messages.put("REGION-CONFIG", "Regiões/Estados");
+        messages.put("TEXT", "Descrição");
+        messages.put("UNIT_ID", "Unidade");
         messages.put("UNITS-CONFIG", "Unidades de medida");
         icontext.data.setMessages("pt_BR", messages);
         
