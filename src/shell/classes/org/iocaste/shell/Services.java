@@ -23,7 +23,7 @@ public class Services extends AbstractFunction {
         export("set_pages_position", "setPagesPosition");
         export("style_remove", "removeStyle");
         export("style_save", "saveStyle");
-        export("styles_invalidate", "invalidateStyles");
+        export("style_invalidate", "invalidateStyle");
         export("update_view", "updateView");
     }
     
@@ -78,8 +78,8 @@ public class Services extends AbstractFunction {
      * 
      * @param message
      */
-    public final void invalidateStyles(Message message) {
-        PageRenderer.invalidateStyles();
+    public final void invalidateStyle(Message message) {
+        PageRenderer.invalidateStyle(message.getString("style"));
     }
     
     /**

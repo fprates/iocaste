@@ -511,10 +511,10 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     /**
      * 
      */
-    public static final void invalidateStyles() {
+    public static final void invalidateStyle(String name) {
         for (String sessionid : apps.keySet())
             for (SessionContext sessionctx : apps.get(sessionid))
-                sessionctx.invalidateStyles();
+                sessionctx.invalidateStyle(name);
     }
     
     /*

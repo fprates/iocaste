@@ -60,15 +60,8 @@ public class SessionContext {
      */
     public final void invalidateStyle(String name) {
         for (AppContext appctx : apps.values())
-            appctx.setStyleSheet(null);
-    }
-    
-    /**
-     * 
-     */
-    public final void invalidateStyles() {
-        for (AppContext appctx : apps.values())
-            appctx.invalidateStyles();
+            if ((appctx.stylename != null) && appctx.stylename.equals(name))
+                appctx.invalidateStyle();
     }
     
     /**

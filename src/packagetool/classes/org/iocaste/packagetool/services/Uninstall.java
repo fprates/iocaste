@@ -23,8 +23,7 @@ public class Uninstall extends AbstractHandler {
     private static final byte CONFIG_LIB = 3;
     
     public final void run(String pkgname, Set<String> types) {
-        boolean updstyle;
-        String objecttype;
+        String objecttype, style;
         Query query;
         ExtendedObject object;
         AbstractServiceInterface[] services;
@@ -34,7 +33,7 @@ public class Uninstall extends AbstractHandler {
         if (objects == null)
             return;
         
-        updstyle = false;
+        style = null;
         services = new AbstractServiceInterface[4];
         services[DOCS_LIB] = new Documents(function);
         services[AUTH_LIB] = new Authority(function);
@@ -48,7 +47,7 @@ public class Uninstall extends AbstractHandler {
             
             switch (objecttype) {
             case "STYLE":
-                updstyle = true;
+                style = object.getst("NAME");
                 break;
             }
             
@@ -57,8 +56,8 @@ public class Uninstall extends AbstractHandler {
         
         new Iocaste(function).invalidateAuthCache();
 
-        if (updstyle)
-            new Shell(function).invalidateStyles();
+        if (style != null)
+            new Shell(function).invalidateStyle(style);
         
         if (types != null)
             return;

@@ -155,8 +155,11 @@ public class Shell extends AbstractServiceInterface {
     /**
      * 
      */
-    public final void invalidateStyles() {
-        call(new Message("styles_invalidate"));
+    public final void invalidateStyle(String name) {
+        Message message = new Message("style_invalidate");
+        
+        message.add("style", name);
+        call(message);
     }
     
     /**
