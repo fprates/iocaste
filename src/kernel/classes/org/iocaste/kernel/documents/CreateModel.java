@@ -100,52 +100,6 @@ public class CreateModel extends AbstractDocumentsHandler {
         return update(connection, query);
     }
     
-    private final DocumentModelItem getModelItem(Connection connection,
-            Documents documents, DocumentModel model, String name)
-                    throws Exception {
-        GetDocumentModel getmodel = documents.get("get_document_model");
-        
-        return getmodel.run(connection, documents, model.getName()).
-                getModelItem(name);
-    }
-
-    private void prepareElements(Connection connection, Documents documents,
-            DocumentModel model) throws Exception {
-        DocumentModelItem reference;
-        DataElement element;
-        CreateDataElement createde;
-        GetDataElement getde;
-        
-        createde = documents.get("create_data_element");
-        getde = documents.get("get_data_element");
-        for (DocumentModelItem item : model.getItens()) {
-            element = item.getDataElement();
-            if (element == null) {
-                reference = item.getReference();
-                if (reference == null)
-                    throw new RuntimeException(
-                            item.getName().concat(
-                                    " has an undefined element or reference."));
-                if (reference.isDummy())
-                    reference = getModelItem(connection, documents,
-                            reference.getDocumentModel(), reference.getName());
-                element = reference.getDataElement();
-                item.setDataElement(element);
-            }
-            
-            if (element == null)
-                throw new IocasteException(new StringBuilder(item.getName()).
-                        append(" has null data element.").toString());
-            
-            if (element.isDummy()) {
-                element = getde.run(connection, element.getName());
-                item.setDataElement(element);
-            } else {
-                createde.prepare(element);
-            }   
-        }
-    }
-    
     /**
      * 
      * @param model

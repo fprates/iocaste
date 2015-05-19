@@ -62,7 +62,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
         String query = new StringBuilder("alter table ").append(tablename).
                 append(" drop column ").append(fieldname).toString();
         
-        return update(connection, query);
+        return (update(connection, query) < 0)? 0 : 1;
     }
 
     @Override
@@ -82,6 +82,9 @@ public class UpdateModel extends AbstractDocumentsHandler {
         getmodel = documents.get("get_document_model");
         oldmodel = getmodel.run(connection, documents, name);
         insert = documents.get("insert_data_element");
+
+        prepareElements(connection, documents, model);
+        
         for (DocumentModelItem item : model.getItens()) {
             if (item.getDataElement() == null) {
                 reference = item.getReference();
@@ -106,7 +109,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
         for (DocumentModelItem olditem : oldmodel.getItens()) {
             if (model.contains(olditem))
                 continue;
-            
+
             if (removeModelItem(connection, olditem) == 0)
                 throw new IocasteException("error on remove model item");
             
