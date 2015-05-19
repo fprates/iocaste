@@ -34,7 +34,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         document = new DocumentModel((String)columns.get("DOCID"));
         document.setTableName((String)columns.get("TNAME"));
         document.setClassName((String)columns.get("CLASS"));
-        
+        document.setPackage((String)columns.get("PKGNM"));
         namespace = (String)columns.get("NSCOL");
         if (namespace != null) {
             element = new DataElement("namespace");

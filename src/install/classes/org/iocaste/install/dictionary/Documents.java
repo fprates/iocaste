@@ -35,6 +35,7 @@ public class Documents extends Module {
         docs001.add("NSCOL", CHAR, 48);
         docs001.add("NSTYP", NUMC, 1);
         docs001.add("NSLEN", NUMC, 4);
+        docs001.add("PKGNM", CHAR, 60);
 
         docs003 = tableInstance("DOCS003");
         docs003.key("ENAME", CHAR, 48);
@@ -85,6 +86,8 @@ public class Documents extends Module {
                 "DATAELEMENT.TYPE", 0, 1, 3, false);
         insertElement(docs003,
                 "DATAELEMENT.UPCASE", 0, 1, 5, false);
+        insertElement(docs003,
+                "MODEL.PACKAGE", 0, 60, 0, false);
         insertModelKey(docs002, docs004,
                 "MODEL.NAME", "MODEL", "DOCID", "MODEL.NAME", "name");
         insertModelItem(docs002,
@@ -99,6 +102,8 @@ public class Documents extends Module {
         insertModelItem(docs002,
                 "MODEL.NS_LENGTH", "MODEL", "NSLEN", "DATAELEMENT.LENGTH",
                         null);
+        insertModelItem(docs002,
+                "MODEL.PACKAGE", "MODEL", "PKGNM", "MODEL.PACKAGE", null);
         
         /*
          * Data elements

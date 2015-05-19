@@ -67,8 +67,8 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         "delete from DOCS003 where ename = ?",
         "select * from DOCS003 where ename = ?",
         "insert into DOCS004(iname, docid) values (?, ?)",
-        "insert into DOCS001(docid, tname, class, nscol, nstyp, nslen) " +
-                "values(?, ?, ?, ?, ?, ?)",
+        "insert into DOCS001(docid, tname, class, nscol, nstyp, nslen, pkgnm) "+
+                "values(?, ?, ?, ?, ?, ?, ?)",
         "insert into DOCS005(tname, docid) values(? , ?)",
         "update DOCS003 set decim = ?, lngth = ?, etype = ?, upcas = ? " +
                 "where ename = ?",

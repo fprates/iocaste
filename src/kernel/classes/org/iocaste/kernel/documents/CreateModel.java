@@ -108,6 +108,43 @@ public class CreateModel extends AbstractDocumentsHandler {
         return getmodel.run(connection, documents, model.getName()).
                 getModelItem(name);
     }
+
+    private void prepareElements(Connection connection, Documents documents,
+            DocumentModel model) throws Exception {
+        DocumentModelItem reference;
+        DataElement element;
+        CreateDataElement createde;
+        GetDataElement getde;
+        
+        createde = documents.get("create_data_element");
+        getde = documents.get("get_data_element");
+        for (DocumentModelItem item : model.getItens()) {
+            element = item.getDataElement();
+            if (element == null) {
+                reference = item.getReference();
+                if (reference == null)
+                    throw new RuntimeException(
+                            item.getName().concat(
+                                    " has an undefined element or reference."));
+                if (reference.isDummy())
+                    reference = getModelItem(connection, documents,
+                            reference.getDocumentModel(), reference.getName());
+                element = reference.getDataElement();
+                item.setDataElement(element);
+            }
+            
+            if (element == null)
+                throw new IocasteException(new StringBuilder(item.getName()).
+                        append(" has null data element.").toString());
+            
+            if (element.isDummy()) {
+                element = getde.run(connection, element.getName());
+                item.setDataElement(element);
+            } else {
+                createde.prepare(element);
+            }   
+        }
+    }
     
     /**
      * 
@@ -133,7 +170,9 @@ public class CreateModel extends AbstractDocumentsHandler {
         DocumentModelItem item;
         GetDocumentModel getmodel;
         int l, nstyp, nslen;
+        Object[] fields;
         String ns;
+        String pkgnm = model.getPackage();
         String name = model.getName();
         String tablename = model.getTableName();
         
@@ -168,8 +207,17 @@ public class CreateModel extends AbstractDocumentsHandler {
             nslen = 0;
         }
         
-        if (update(connection, QUERIES[INS_HEADER],
-                name, tablename, model.getClassName(), ns, nstyp, nslen) == 0)
+        fields = new Object[] {
+                name,
+                tablename,
+                model.getClassName(),
+                ns,
+                nstyp,
+                nslen,
+                pkgnm
+        };
+        
+        if (update(connection, QUERIES[INS_HEADER], fields) == 0)
             throw new IocasteException("document header insert error");
 
         if ((tablename != null) && (update(
@@ -236,43 +284,6 @@ public class CreateModel extends AbstractDocumentsHandler {
         registerDocumentKeys(connection, model);
         documents.cache.queries.put(
                 model.getName(), documents.parseQueries(model));
-    }
-
-    private void prepareElements(Connection connection, Documents documents,
-            DocumentModel model) throws Exception {
-        DocumentModelItem reference;
-        DataElement element;
-        CreateDataElement createde;
-        GetDataElement getde;
-        
-        createde = documents.get("create_data_element");
-        getde = documents.get("get_data_element");
-        for (DocumentModelItem item : model.getItens()) {
-            element = item.getDataElement();
-            if (element == null) {
-                reference = item.getReference();
-                if (reference == null)
-                    throw new RuntimeException(
-                            item.getName().concat(
-                                    " has an undefined element or reference."));
-                if (reference.isDummy())
-                    reference = getModelItem(connection, documents,
-                            reference.getDocumentModel(), reference.getName());
-                element = reference.getDataElement();
-                item.setDataElement(element);
-            }
-            
-            if (element == null)
-                throw new IocasteException(new StringBuilder(item.getName()).
-                        append(" has null data element.").toString());
-            
-            if (element.isDummy()) {
-                element = getde.run(connection, element.getName());
-                item.setDataElement(element);
-            } else {
-                createde.prepare(element);
-            }   
-        }
     }
     
     @Override

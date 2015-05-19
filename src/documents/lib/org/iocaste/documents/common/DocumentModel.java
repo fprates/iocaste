@@ -40,9 +40,7 @@ import java.util.TreeMap;
 public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private static final long serialVersionUID = -4964159453586462503L;
     private DocumentModelItem namespace;
-    private String name;
-    private String tablename;
-    private String classname;
+    private String name, tablename, classname, pkgname;
     private Map<String, DocumentModelItem> itens;
     private Set<DocumentModelKey> keys;
     
@@ -132,7 +130,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * Retorna conjunto de itens do documento.
      * @return itens
      */
-    public DocumentModelItem[] getItens() {
+    public final DocumentModelItem[] getItens() {
         DocumentModelItem item;
         DocumentModelItem[] ordered = new DocumentModelItem[itens.size()];
         
@@ -173,15 +171,23 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * Retorna nome do documento.
      * @return nome
      */
-    public String getName() {
+    public final String getName() {
         return name;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getPackage() {
+        return pkgname;
     }
     
     /**
      * Obtem tabela do banco associada.
      * @return nome da tabela.
      */
-    public String getTableName() {
+    public final String getTableName() {
         return tablename;
     }
     
@@ -210,7 +216,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * Define classe associada.
      * @param classname nome da classe.
      */
-    public void setClassName(String classname) {
+    public final void setClassName(String classname) {
     	this.classname = classname;
     }
     
@@ -218,7 +224,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * Define itens do documento.
      * @param items itens
      */
-    protected void setItens(Set<DocumentModelItem> items) {
+    protected final void setItens(Set<DocumentModelItem> items) {
         itens.clear();
         for (DocumentModelItem item : items)
             itens.put(item.getName(), item);
@@ -228,7 +234,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      * Define chaves do documento.
      * @param keys chaves
      */
-    protected void setKeys(Set<DocumentModelKey> keys) {
+    protected final void setKeys(Set<DocumentModelKey> keys) {
         this.keys = keys;
     }
     
@@ -241,10 +247,18 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     }
     
     /**
+     * 
+     * @param pkgname
+     */
+    public final void setPackage(String pkgname) {
+        this.pkgname = pkgname;
+    }
+    
+    /**
      * Associa tabela do banco ao modelo.
      * @param tablename nome da tabela.
      */
-    public void setTableName(String tablename) {
+    public final void setTableName(String tablename) {
         this.tablename = tablename;
     }
     
