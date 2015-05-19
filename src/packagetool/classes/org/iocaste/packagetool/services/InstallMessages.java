@@ -39,17 +39,11 @@ public class InstallMessages {
     }
 
     public static final void uninstall(String name, Documents documents) {
-        Query[] queries;
+        Query query;
         
-        queries = new Query[2];
-        queries[0] = new Query("delete");
-        queries[0].setModel("MESSAGES");
-        queries[0].andEqual("PACKAGE", name);
-        
-        queries[1] = new Query("delete");
-        queries[1].setModel("PACKAGE_ITEM");
-        queries[1].andEqual("PACKAGE", name);
-        queries[1].andEqual("MODEL", "MESSAGE");
-        documents.update(queries);
+        query = new Query("delete");
+        query.setModel("MESSAGES");
+        query.andEqual("PACKAGE", name);
+        documents.update(query);
     }
 }
