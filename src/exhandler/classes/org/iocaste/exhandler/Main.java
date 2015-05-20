@@ -1,186 +1,52 @@
 package org.iocaste.exhandler;
 
-import java.util.HashMap;
+import org.iocaste.appbuilder.common.AbstractPageBuilder;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.StandardPanel;
 
-import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.PageControl;
-import org.iocaste.shell.common.View;
+public class Main extends AbstractPageBuilder {
 
-public class Main extends AbstractPage {
-    private Context context;
-    
-    /**
-     * 
-     * @param value
-     * @return
-     */
-    private final String checkunknown(String value) {
-        return (value == null)? context.messages.get("unknown") : value;
-    }
-    
-    /**
-     * 
-     * @param objects
-     * @return
-     */
-    private final String concatenate(Object... objects) {
-        StringBuilder sb = new StringBuilder();
+    @Override
+    public void config(PageBuilderContext context) throws Exception {
+        StandardPanel panel;
+        Context extcontext;
         
-        for (Object object : objects)
-            sb.append(object);
-        
-        return sb.toString();
-    }
-    
-    public final AbstractContext init(View view) {
-        context = new Context();
-        context.messages = new HashMap<>();
-        context.messages.put("unknown", "desconhecido");
-        context.messages.put("page", "Página");
-        context.messages.put("module", "Módulo");
-        context.messages.put("exception-handler", "Erro durante execução");
-        context.messages.put("view-info", "Visão afetada");
-        context.messages.put("stack-trace", "Pilha de chamadas");
-        context.messages.put("parameters", "Parâmetros");
-        context.messages.put("exception", "Exceção");
-        context.messages.put("view-elements", "Elementos da visão afetada");
-        context.messages.put("no.view.information",
+        extcontext = new Context();
+        extcontext.ex = getParameter("exception");
+        extcontext.exview = getParameter("exview");
+        extcontext.messages.put("unknown", "desconhecido");
+        extcontext.messages.put("page", "Página");
+        extcontext.messages.put("module", "Módulo");
+        extcontext.messages.put("exception-handler", "Erro durante execução");
+        extcontext.messages.put("view-info", "Visão afetada");
+        extcontext.messages.put("stack-trace", "Pilha de chamadas");
+        extcontext.messages.put("parameters", "Parâmetros");
+        extcontext.messages.put("exception", "Exceção");
+        extcontext.messages.put("view-elements", "Elementos da visão afetada");
+        extcontext.messages.put("no.view.information",
                 "Sem informações da visão\n");
         
-        return context;
+        panel = new StandardPanel(context);
+        panel.instance("main", new MainPage(), extcontext);
     }
-    /**
-     * 
-     * @param view
-     */
-    public void main() {
-        Container[] containers;
-        PageControl pagecontrol;
-        Exception ex = getParameter("exception");
-        View exview = getParameter("exview");
-        Form form = new Form(context.view, "main");
+
+    @Override
+    protected void installConfig(PageBuilderDefaultInstall defaultinstall)
+            throws Exception {
+        // TODO Auto-generated method stub
         
-        pagecontrol = new PageControl(form);
-        pagecontrol.add("home");
-        
-        /*
-         * exceção
-         */
-        context.view.print(context.messages.get("exception"));
-        printException(context.view, ex);
-        
-        /*
-         * dados do programa interrompido
-         */
-        context.view.print(context.messages.get("view-info"));
-        if (exview == null)
-            context.view.print(context.messages.get("no.view.information"));
-        else
-            printOffensiveView(context.view, exview);
-        
-        /*
-         * pilha de chamadas
-         */
-        context.view.print(context.messages.get("stack-trace"));
-        printStackTrace(context.view, ex);
-        
-        /*
-         * elementos da visão
-         */
-        context.view.print(context.messages.get("view-elements"));
-        if (exview == null) {
-            context.view.print(context.messages.get("no.view.information"));
-        } else {
-            containers = exview.getContainers();
-            if (containers.length > 0)
-                for (Container container : containers)
-                    printViewContainer(context.view, container, "-");
-        }
-        
-        context.view.setTitle(context.messages.get("exception-handler"));
+    }
+}
+
+class MainPage extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new MainSpec());
+        set(new MainConfig());
+        set(new MainInput());
     }
     
-    /**
-     * 
-     * @param view
-     * @param ex
-     */
-    private void printException(View view, Throwable ex) {
-        String message;
-        StringBuilder sb;
-        
-        while (ex.getCause() != null)
-            ex = ex.getCause();
-        
-        sb = new StringBuilder(ex.getClass().getName());
-        message = ex.getMessage();
-        if (message != null)
-            sb.append(": ").append(message);
-        
-        view.print(sb.toString());
-        view.print("");
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param exview
-     */
-    private void printOffensiveView(View view, View exview) {
-        view.print(concatenate(context.messages.get("module"), ": ",
-                checkunknown(exview.getAppName())));
-        view.print(concatenate(context.messages.get("page"), ": ",
-                checkunknown(exview.getPageName())));
-        view.print("");
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param ex
-     */
-    private void printStackTrace(View view, Throwable ex) {
-        while (ex.getCause() != null)
-            ex = ex.getCause();
-        
-        for (StackTraceElement element : ex.getStackTrace())
-            view.print(element.toString());
-        
-        view.print("");
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param container
-     * @param level
-     */
-    private void printViewContainer(View view, Container container,
-            String level) {
-        InputComponent input;
-        String level_ = level + "-";
-        
-        view.print(concatenate(level, " ", container.getName()));
-        
-        for (Element element : container.getElements()) {
-            if (element.isContainable()) {
-                printViewContainer(view, (Container)element, level_);
-                continue;
-            }
-            
-            if (element.isDataStorable()) {
-                input = (InputComponent)element;
-                view.print(concatenate(level_, " ", input.getName(), ": ",
-                        (input.isSecret())? "***" : input.get()));
-                continue;
-            }
-            
-            view.print(concatenate(level_, " ", element.getName()));
-        }
-    }
 }
