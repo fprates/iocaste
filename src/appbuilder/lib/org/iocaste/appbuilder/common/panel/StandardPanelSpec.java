@@ -58,8 +58,9 @@ public class StandardPanelSpec extends AbstractViewSpec {
         }
         
         dashboard("context", "dashcontext");
+        standardcontainer("main", "outercontent");
+        standardcontainer("outercontent", "content");
         
-        standardcontainer("main", "content");
         extspec = page.getSpec();
         if (extspec != null) {
             spec("content", extspec);

@@ -40,8 +40,9 @@ class StandardPanelConfig extends AbstractViewConfig {
         
         style = "body";
         stylesheet.put(style, "margin", "0px");
-
+        
         style = ".form_content";
+        stylesheet.newElement(style);
         stylesheet.put(style, "height", "100%");
         stylesheet.put(style, "width", "100%");
         stylesheet.put(style, "overflow", "auto");
@@ -50,6 +51,22 @@ class StandardPanelConfig extends AbstractViewConfig {
         stylesheet.put(style, "font-size", "12pt");
         stylesheet.put(style, "font-family", "sans-serif");
         stylesheet.put(style, "background-color", contentbg);
+
+        style = ".outer_content";
+        stylesheet.newElement(style);
+        stylesheet.put(style, "font-size", "12pt");
+        stylesheet.put(style, "top", "70px");
+        stylesheet.put(style, "left", "15em");
+        stylesheet.put(style, "position", "fixed");
+        stylesheet.put(style, "width", "100%");
+        stylesheet.put(style, "height", "100%");
+        stylesheet.put(style, "padding", "0px");
+        stylesheet.put(style, "margin", "0px");
+        getElement("outercontent").setStyleClass(style.substring(1));
+        
+        style = ".std_panel_content";
+        stylesheet.newElement(style);
+        getElement("content").setStyleClass(style.substring(1));
         
         style = ".std_panel_context";
         stylesheet.newElement(style);
@@ -67,13 +84,6 @@ class StandardPanelConfig extends AbstractViewConfig {
         stylesheet.put(style, "border-right-width", "2px");
         stylesheet.put(style, "border-right-color", contentbg);
         getElement("context").setStyleClass(style.substring(1));
-        
-        style = ".std_panel_content";
-        stylesheet.newElement(style);
-        stylesheet.put(style, "height", "100%");
-        stylesheet.put(style, "padding", "0px");
-        stylesheet.put(style, "font-size", "12pt");
-        getElement("content").setStyleClass(style.substring(1));
         
         design = new StandardPanelDesign();
         design.setColors(colors);

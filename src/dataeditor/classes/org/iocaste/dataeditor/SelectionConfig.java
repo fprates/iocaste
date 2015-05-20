@@ -13,8 +13,6 @@ public class SelectionConfig extends AbstractViewConfig {
         InputComponent input;
         DataForm dataform;
         
-        StyleSettings.execute(context);
-        
         getNavControl().setTitle("dataeditor-selection");
         
         dataform = getElement("model");

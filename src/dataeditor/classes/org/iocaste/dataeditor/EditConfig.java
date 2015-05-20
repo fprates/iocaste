@@ -18,14 +18,11 @@ public class EditConfig extends AbstractViewConfig {
         Context extcontext;
         Documents documents;
         
-        StyleSettings.execute(context);
-        
         extcontext = getExtendedContext();
         getNavControl().setTitle(extcontext.model);
         
         ttdata = getTableTool("items");
         ttdata.context = context;
-        ttdata.container = getElement("main").getHtmlName();
         ttdata.name = "items";
         ttdata.model = extcontext.model;
         ttdata.vlines = 0;

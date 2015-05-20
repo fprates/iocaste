@@ -29,12 +29,12 @@ public class MainConfig extends AbstractViewConfig {
         context.view.setTitle("authentic");
         
         stylesheet = context.view.styleSheetInstance();
-        stylesheet.put(".std_panel_context", "display", "none");
-        
+        stylesheet.put(".outer_content", "left", "0px");
         style = ".std_panel_content";
         stylesheet.put(style, "margin", "auto");
-        stylesheet.remove(style, "position");
-        stylesheet.remove(style, "left");
+        stylesheet.put(style, "height", "100%");
+        stylesheet.put(style, "width", "100%");
+        stylesheet.put(".std_panel_context", "display", "none");
         
         style = ".logincnt";
         stylesheet.newElement(style);
