@@ -22,6 +22,7 @@ import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.Parameter;
+import org.iocaste.shell.common.PrintArea;
 import org.iocaste.shell.common.RadioButton;
 import org.iocaste.shell.common.RangeField;
 import org.iocaste.shell.common.Shell;
@@ -147,6 +148,10 @@ public class Renderer {
             
         case PARAMETER:
             tags.add(ParameterRenderer.render((Parameter)element));
+            break;
+            
+        case PRINT_AREA:
+            tags.add(PrintAreaRenderer.render((PrintArea)element));
             break;
             
         case RADIO_BUTTON:
