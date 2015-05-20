@@ -2,7 +2,6 @@ package org.iocaste.dataeditor;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -18,12 +17,11 @@ public class EditConfig extends AbstractViewConfig {
         TableToolData ttdata;
         Context extcontext;
         Documents documents;
-        NavControl navcontrol;
+        
+        StyleSettings.execute(context);
         
         extcontext = getExtendedContext();
-        navcontrol = getNavControl();
-        navcontrol.setTitle(extcontext.model);
-        navcontrol.add("save");
+        getNavControl().setTitle(extcontext.model);
         
         ttdata = getTableTool("items");
         ttdata.context = context;
