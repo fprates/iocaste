@@ -94,8 +94,8 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.NODE_LIST, name);
     }
     
-    protected final void print(String line) {
-        context.view.print(line);
+    protected final void printarea(String parent) {
+        put(parent, ViewSpecItem.TYPES.PRINT_AREA, "printarea");
     }
     
     private final void put(String parent, ViewSpecItem.TYPES type, String name)

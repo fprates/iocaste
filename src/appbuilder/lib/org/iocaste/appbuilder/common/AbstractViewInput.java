@@ -16,6 +16,7 @@ import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.ListBox;
+import org.iocaste.shell.common.PrintArea;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.Validator;
 import org.iocaste.texteditor.common.TextEditor;
@@ -184,6 +185,16 @@ public abstract class AbstractViewInput {
                 input.setText(exvalidator.getText(context, input.get()));
             }
         }
+    }
+    
+    protected final void print(String line) {
+        PrintArea area;
+        
+        if (line == null)
+            return;
+        
+        area = context.view.getElement("printarea");
+        area.add(line);
     }
     
     protected final void reportset(String report, ExtendedObject[] items) {

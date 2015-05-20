@@ -29,7 +29,8 @@ public class ViewSpecItem {
         RADIO_BUTTON("radiobutton"),
         RADIO_GROUP("radiogroup"),
         SKIP("skip"),
-        TEXT_FIELD("textfield");
+        TEXT_FIELD("textfield"),
+        PRINT_AREA("printarea");
 
         private String name;
         

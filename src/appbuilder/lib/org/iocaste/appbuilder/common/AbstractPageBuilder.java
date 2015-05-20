@@ -27,6 +27,7 @@ import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.NodeList;
+import org.iocaste.shell.common.PrintArea;
 import org.iocaste.shell.common.RadioGroup;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.TabbedPane;
@@ -244,6 +245,9 @@ class BuilderCustomView extends AbstractCustomView {
             break;
         case SKIP:
             new StandardContainer(container, name).setStyleClass("skip");
+            break;
+        case PRINT_AREA:
+            new PrintArea(container, name);
             break;
         default:
             break;
