@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 public class Main extends AbstractPageBuilder {
@@ -47,6 +48,7 @@ class MainPage extends AbstractPanelPage {
         set(new MainSpec());
         set(new MainConfig());
         set(new MainInput());
+        set(Colors.HEAD_BG, "#ff0000");
     }
     
 }
