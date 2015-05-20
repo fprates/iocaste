@@ -8,7 +8,8 @@ public class NavigationRenderer extends StandardPanelContextRenderer {
         Internal internal;
         
         internal = new Internal();
-        internal.name = internal.action = name;
+        internal.name = internal.action = value.toString();
+        internal.text = name;
         internal.dashname = dashname;
         internal.value = value;
         internal.type = type;

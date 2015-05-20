@@ -45,9 +45,8 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
         addEvents(container, internal.cntstyle);
         
         link = new Link(container, linkname, internal.action);
-        link.setText(internal.name);
-        link.add(getChoice(internal.dashname),
-                internal.value, internal.type);
+        link.setText((internal.text == null)? internal.name : internal.text);
+        link.add(getChoice(internal.dashname), internal.value, internal.type);
         link.setStyleClass(internal.lnkstyle);
         link.setCancellable(internal.cancellable);
     }
@@ -200,6 +199,7 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
 
 class Internal {;
     public String name, dashname, suffix, cntstyle, lnkstyle, action, bgcolor;
+    public String text;
     public Object value;
     public int type;
     public boolean cancellable, submit;
