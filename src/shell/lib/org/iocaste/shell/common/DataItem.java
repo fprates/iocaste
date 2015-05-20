@@ -13,7 +13,7 @@ public class DataItem extends AbstractInputComponent
         implements RangeInputComponent {
     private static final long serialVersionUID = 3376883855229003535L;
     private Map<String, Object> values;
-    private String highname, lowname;
+    private String highname, lowname, label;
     private boolean rangecomponent;
     
     public DataItem(DataForm form, Const type, String name) {
@@ -49,16 +49,24 @@ public class DataItem extends AbstractInputComponent
      * @see org.iocaste.shell.common.RangeInputComponent#getHighHtmlName()
      */
     @Override
-    public String getHighHtmlName() {
+    public final String getHighHtmlName() {
         return highname;
     }
 
+    /**
+     * 
+     * @return
+     */
+    public final String getLabel() {
+        return label;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.RangeInputComponent#getLowHtmlName()
      */
     @Override
-    public String getLowHtmlName() {
+    public final String getLowHtmlName() {
         return lowname;
     }
     
@@ -127,5 +135,13 @@ public class DataItem extends AbstractInputComponent
         htmlname = getHtmlName();
         lowname = htmlname.concat(".low");
         highname = htmlname.concat(".high");
+    }
+    
+    /**
+     * 
+     * @param label
+     */
+    public final void setLabel(String label) {
+        this.label = label;
     }
 }

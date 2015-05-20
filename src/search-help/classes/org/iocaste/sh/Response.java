@@ -45,7 +45,7 @@ public class Response {
             name = item.getName();
             if (sh.contains(name)) {
                 item.setComponentType(Const.RANGE_FIELD);
-                item.setText(source.get(name));
+                item.setLabel(source.get(name));
                 if (context.view.getFocus() == null)
                     context.view.setFocus(item);
                 continue;
@@ -205,6 +205,7 @@ public class Response {
         messages = new Properties();
         messages.put(searchbt, "Selecionar");
         messages.put("to", "até");
+        messages.put("cancel", "Cancelar");
         context.source.setMessages(messages);
         
         if (result == null) {

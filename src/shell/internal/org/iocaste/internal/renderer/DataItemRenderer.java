@@ -23,7 +23,7 @@ public class DataItemRenderer {
         String inputname, text;
 
         inputname = dataitem.getName();
-        text = dataitem.getText();
+        text = dataitem.getLabel();
         if (text == null)
             text = inputname;
         
