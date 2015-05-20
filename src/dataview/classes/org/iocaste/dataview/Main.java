@@ -1,58 +1,68 @@
 package org.iocaste.dataview;
 
-import org.iocaste.documents.common.Documents;
-import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.View;
+import org.iocaste.appbuilder.common.AbstractPageBuilder;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.StandardPanel;
 
-public class Main extends AbstractPage {
-    private Context context;
-    
-    public Main() {
-        export("install", "install");
-    }
-    
-    public final void continuesel() {
-        Request.continuesel(context);
-    }
-    
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.AbstractPage#init(
-     *     org.iocaste.shell.common.View)
-     */
+public class Main extends AbstractPageBuilder {
+
     @Override
-    public final AbstractContext init(View view) {
-        context = new Context();
-        context.modelmodel = new Documents(this).getModel("MODEL");
+    public void config(PageBuilderContext context) throws Exception {
+        StandardPanel panel;
+        Context extcontext;
         
-        return context;
+        extcontext = new Context(context);
+        
+        panel = new StandardPanel(context);
+        panel.instance("main", new MainPage(), extcontext);
+        panel.instance("output", new OutputPage(), extcontext);
+        panel.instance("nsinput", new NSInputPage(), extcontext);
+    }
+
+    @Override
+    protected void installConfig(PageBuilderDefaultInstall defaultinstall)
+            throws Exception {
+        
+        defaultinstall.setLink("SE16", "iocaste-dataview");
+        defaultinstall.addToTaskGroup("DEVELOP", "SE16");
+        defaultinstall.setProfile("DEVELOP");
+        defaultinstall.setProgramAuthorization("DATAVIEWER");
+        
+        installObject("main", new Install());
+    }
+}
+
+class MainPage extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new MainSpec());
+        set(new MainConfig());
+        submit("select", new Select());
     }
     
-    /**
-     * 
-     * @param message
-     * @return
-     */
-    public final InstallData install(Message message) {
-        return Install.init();
+}
+
+class OutputPage extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new OutputSpec());
+        set(new OutputConfig());
+        set(new OutputInput());
     }
     
-    public final void list() {
-        Response.list(context);
+}
+
+class NSInputPage extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new NSInputSpec());
+        set(new NSInputConfig());
+        submit("continuesel", new ContinueSelect());
     }
     
-    public final void main() {
-        Response.main(context);
-    }
-    
-    public final void nsinput() {
-        Response.nsinput(context);
-    }
-    
-    public final void select() {
-        Request.select(context);
-    }
 }
