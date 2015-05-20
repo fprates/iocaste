@@ -17,6 +17,8 @@ public class EditConfig extends AbstractViewConfig {
         TableToolData ttdata;
         Context extcontext;
         Documents documents;
+
+        StyleSettings.execute(context);
         
         extcontext = getExtendedContext();
         getNavControl().setTitle(extcontext.model);
