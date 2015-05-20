@@ -5,7 +5,6 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.View;
 
 public class MainInput extends AbstractViewInput {
     
@@ -39,7 +38,7 @@ public class MainInput extends AbstractViewInput {
         
         extcontext = getExtendedContext();
         print(extcontext.messages.get("exception"));
-        printException(context.view, extcontext.ex);
+        printException(extcontext.ex);
         
         /*
          * dados do programa interrompido
@@ -82,7 +81,7 @@ public class MainInput extends AbstractViewInput {
      * @param view
      * @param ex
      */
-    private void printException(View view, Throwable ex) {
+    private void printException(Throwable ex) {
         String message;
         StringBuilder sb;
         
@@ -94,8 +93,8 @@ public class MainInput extends AbstractViewInput {
         if (message != null)
             sb.append(": ").append(message);
         
-        view.print(sb.toString());
-        view.print("");
+        print(sb.toString());
+        print("");
     }
     
     /**
