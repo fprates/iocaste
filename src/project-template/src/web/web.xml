@@ -21,7 +21,7 @@
         <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
         <init-param>
             <param-name>form</param-name>
-            <param-value>org.project.template.TemplateForm</param-value>
+            <param-value>org.quantic.template.Main</param-value>
         </init-param>
     </servlet>
     

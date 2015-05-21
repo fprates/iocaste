@@ -1,4 +1,4 @@
-package org.project.template;
+package org.quantic.template;
 
 import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Message;
