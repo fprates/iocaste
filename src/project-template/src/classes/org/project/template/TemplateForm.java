@@ -2,11 +2,11 @@ package org.project.template;
 
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.PageContext;
 import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
@@ -43,11 +43,11 @@ public class TemplateForm extends AbstractPage {
         Template template = new Template(this);
         
         // exibe mensagem de status no cabeçalho
-        context.view.message(Const.STATUS, template.getMessage());
+        context.function.message(Const.STATUS, template.getMessage());
     }
     
     @Override
-    public final PageContext init(View view) {
+    public final AbstractContext init(View view) {
         context = new Context();
         return context;
     }
@@ -80,6 +80,6 @@ public class TemplateForm extends AbstractPage {
     }
 }
 
-class Context extends PageContext {
+class Context extends AbstractContext {
     
 }

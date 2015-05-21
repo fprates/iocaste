@@ -1,7 +1,7 @@
-<project name="template" default="compile">
+<project name="@project.name@" default="compile">
     <property name="builddir" value="${basedir}/build"/>
     <property name="debug.status" value="true"/>
-    <property name="vendor" value="aegis"/>
+    <property name="vendor" value="quantic"/>
     <property name="server.class" value="org.${vendor}.${ant.project.name}.Servlet"/>
     <property name="warfilename" value="${basedir}/${ant.project.name}.war"/>
     

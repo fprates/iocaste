@@ -21,10 +21,6 @@ public class Template extends AbstractServiceInterface {
      * @return
      */
     public final String getMessage() {
-        Message message = new Message();
-        
-        message.setId("get_message");
-        
-        return call(message);
+        return call(new Message("get_message"));
     }
 }
