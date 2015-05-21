@@ -1,35 +1,18 @@
 package org.iocaste.usereditor;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.appbuilder.common.AbstractInstallObject;
+import org.iocaste.appbuilder.common.MessagesInstall;
+import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.packagetool.common.SearchHelpData;
-import org.iocaste.packagetool.common.TaskGroup;
-import org.iocaste.protocol.user.Authorization;
 
-public class Install {
+public class Install extends AbstractInstallObject {
 
-    public static final InstallData init() {
-        TaskGroup taskgroup;
+    @Override
+    protected void execute(StandardInstallContext context) throws Exception {
         SearchHelpData sh;
-        Authorization authorization;
-        Map<String, String> messages;
-        InstallData data = new InstallData();
+        MessagesInstall messages;
         
-        authorization = new Authorization("USEREDITOR.EXECUTE");
-        authorization.setObject("APPLICATION");
-        authorization.setAction("EXECUTE");
-        authorization.add("APPNAME", "iocaste-usereditor");
-        data.add(authorization);
-        
-        authorization = new Authorization("USEREDITOR.CALL");
-        authorization.setObject("LINK");
-        authorization.setAction("CALL");
-        authorization.add("LINK", "SU01");
-        data.add(authorization);
-        
-        messages = new HashMap<>();
+        messages = messageInstance("pt_BR");
         messages.put("acceptprofiles", "Aceitar");
         messages.put("accepttasks", "Aceitar");
         messages.put("addprofiles", "Adicionar");
@@ -60,31 +43,17 @@ public class Install {
         messages.put("usereditor-display", "Exibir usuário");
         messages.put("usereditor-update", "Atualizar usuário");
         messages.put("USERNAME", "Usuário");
-        data.setMessages("pt_BR", messages);
         
-        data.link("SU01", "iocaste-usereditor");
-        taskgroup = new TaskGroup("ADMIN");
-        taskgroup.add("SU01");
-        data.add(taskgroup);
-        
-        sh = new SearchHelpData("SH_USER");
-        sh.setModel("LOGIN");
+        sh = searchHelpInstance("SH_USER", "LOGIN");
         sh.setExport("USERNAME");
         sh.add("USERNAME");
-        data.add(sh);
         
-        sh = new SearchHelpData("SH_USER_PROFILE");
-        sh.setModel("USER_PROFILE");
+        sh = searchHelpInstance("SH_USER_PROFILE", "USER_PROFILE");
         sh.setExport("NAME");
         sh.add("NAME");
-        data.add(sh);
         
-        sh = new SearchHelpData("SH_TASKS_GROUPS");
-        sh.setModel("TASKS_GROUPS");
+        sh = searchHelpInstance("SH_TASKS_GROUPS", "TASKS_GROUPS");
         sh.setExport("NAME");
         sh.add("NAME");
-        data.add(sh);
-        
-        return data;
     }
 }

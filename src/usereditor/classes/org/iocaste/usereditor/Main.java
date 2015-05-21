@@ -1,56 +1,71 @@
 package org.iocaste.usereditor;
 
-import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.View;
+import org.iocaste.appbuilder.common.AbstractPageBuilder;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.StandardPanel;
 
-public class Main extends AbstractPage {
-    private Context context;
-    
-    public Main() {
-        export("install", "install");
-    }
-    
-    public final void create() {
-        context.mode = Context.CREATE;
-        Request.create(context);
-    }
-    
-    public final void delete() {
-        Request.delete(context);
-    }
-    
-    public final void display() {
-        context.mode = Context.DISPLAY;
-        context.userdata = Request.load(context);
-    }
-    
-    public final void form() {
-        Response.form(context);
-    }
-    
+public class Main extends AbstractPageBuilder {
+
     @Override
-    public final AbstractContext init(View view) {
-        context = new Context();
-        return context;
+    public void config(PageBuilderContext context) throws Exception {
+        StandardPanel panel;
+        Context extcontext;
+        
+        extcontext = new Context(context);
+        panel = new StandardPanel(context);
+        panel.instance("main", new MainPage(), extcontext);
+        panel.instance("display", new DisplayPage(), extcontext);
+        panel.instance("update", new UpdatePage(), extcontext);
+    }
+
+    @Override
+    protected void installConfig(PageBuilderDefaultInstall defaultinstall)
+            throws Exception {
+        defaultinstall.setLink("SU01", "iocaste-usereditor");
+        defaultinstall.addToTaskGroup("ADMIN", "SU01");
+        defaultinstall.setProgramAuthorization("USEREDITOR");
+        defaultinstall.setProfile("ADMIN");
+        
+        installObject("main", new Install());
+    }
+}
+
+class MainPage extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new MainSpec());
+        set(new MainConfig());
+        
+        action("display", new Dispatch("display"));
+        action("update", new Dispatch("update"));
+        action("create", new Create());
+        action("delete", new Delete());
     }
     
-    public final InstallData install(Message message) {
-        return Install.init();
+}
+
+class DisplayPage extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new DetailSpec());
+        set(new DisplayConfig());
+        set(new DetailInput());
     }
     
-    public final void main() {
-        Response.selector(context);
+}
+
+class UpdatePage extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new DetailSpec());
+        set(new UpdateConfig());
+        set(new DetailInput());
+        action("save", new Save());
     }
     
-    public final void save() {
-        Request.save(context);
-    }
-    
-    public final void update() {
-        context.mode = Context.UPDATE;
-        context.userdata = Request.load(context);
-    }
 }

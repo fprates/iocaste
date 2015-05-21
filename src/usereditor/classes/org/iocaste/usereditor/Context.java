@@ -1,19 +1,15 @@
 package org.iocaste.usereditor;
 
-import org.iocaste.appbuilder.common.tabletool.TableTool;
-import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.appbuilder.common.ExtendedContext;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.packagetool.common.PackageTool;
 
-public class Context extends AbstractContext {
-    public static final byte CREATE = 0;
-    public static final byte DISPLAY = 1;
-    public static final byte UPDATE = 2;
-    public static final String[] TITLE = {
-        "usereditor-create",
-        "usereditor-display",
-        "usereditor-update"
-    };
-    
-    public byte mode;
+public class Context implements ExtendedContext {
     public UserData userdata;
-    public TableTool taskshelper, profileshelper;
+    public PackageTool pkgtool;
+    
+    public Context(PageBuilderContext context) {
+        userdata = new UserData();
+        pkgtool = new PackageTool(context.function);
+    }
 }
