@@ -76,6 +76,7 @@ public class Refresh extends AbstractHandler {
         extcontext.groups = getLists(extcontext.context);
         extcontext.context.getView(Main.MAIN).getSpec().setInitialized(false);
         extcontext.context.function.setReloadableView(true);
+        ((TaskPanelPage)extcontext.page).refresh();
         return null;
     }
 

@@ -49,15 +49,21 @@ public class Main extends AbstractPageBuilder {
 class TaskPanelPage extends AbstractPanelPage {
     
     public final void execute() {
+        set(new StandardDashboardSpec(this));
+        set(new StandardDashboardConfig(this));
+        update();
+        refresh();
+    }
+    
+    public final void refresh() {
         PanelPageItem item;
         String text;
         Set<TaskEntry> entries;
         Context extcontext;
         
-        set(new StandardDashboardSpec(this));
-        set(new StandardDashboardConfig(this));
-        
         extcontext = getExtendedContext();
+        extcontext.page = this;
+        items.clear();
         for (String name : extcontext.groups.keySet()) {
             item = instance(name);
             entries = extcontext.groups.get(name);
