@@ -2,7 +2,6 @@ package org.iocaste.workbench.shell.source;
 
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.PageControl;
 import org.iocaste.texteditor.common.TextEditorTool;
 import org.iocaste.workbench.Common;
 import org.iocaste.workbench.Context;

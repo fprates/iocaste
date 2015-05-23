@@ -3,7 +3,6 @@ package org.iocaste.workbench.shell;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Form;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.TextArea;
 import org.iocaste.shell.common.TextField;

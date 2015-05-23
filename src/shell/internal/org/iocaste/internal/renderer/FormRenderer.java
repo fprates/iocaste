@@ -1,10 +1,7 @@
 package org.iocaste.internal.renderer;
 
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.PageControl;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.View;
 
@@ -20,7 +17,7 @@ public class FormRenderer extends Renderer {
         String[] printlines;
         Parameter parameter;
         View view;
-        XMLElement hiddentag, content, pagecontrol;
+        XMLElement hiddentag, content;
         XMLElement formtag = new XMLElement("form");
         String enctype = container.getEnctype();
         String currentaction = container.getAction();
@@ -29,15 +26,6 @@ public class FormRenderer extends Renderer {
         config.setCurrentAction(currentaction);
         config.addAction(currentaction);
         config.form = container;
-
-        for (Element element : container.getElements()) {
-            if (element.getType() != Const.PAGE_CONTROL)
-                continue;
-            pagecontrol = PageControlRenderer.
-                    render((PageControl)element, config);
-            formtag.addChild(pagecontrol);
-            break;
-        }
         
         formtag.add("method", "post");
         formtag.add("action", "index.html");
