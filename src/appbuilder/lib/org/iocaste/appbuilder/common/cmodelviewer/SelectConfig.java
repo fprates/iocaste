@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
@@ -8,7 +10,6 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.StyleSheet;
 
 public class SelectConfig extends AbstractViewConfig {
     private String action, cmodel;
@@ -20,23 +21,22 @@ public class SelectConfig extends AbstractViewConfig {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        StyleSheet stylesheet;
-        String style, bodybg;
+        Map<String, String> style;
+        String bodybg;
         InputComponent input;
         NavControl navcontrol;
         DocumentModel model = getManager(cmodel).getModel().getHeader();
         DataForm head = getElement("head");
 
-        style = ".form_content";
         bodybg = "#ffffff";
         
-        stylesheet = context.view.styleSheetInstance();
-        stylesheet.put(style, "padding", "2px");
-        stylesheet.put(style, "background-color", bodybg);
-        stylesheet.put(style, "width", "100%");
-        stylesheet.put(style, "top", StandardPanelConfig.CONTENT_TOP);
-        stylesheet.put(style, "left", StandardPanelConfig.CONTEXT_WIDTH);
-        stylesheet.put(style, "position", "fixed");
+        style = context.view.styleSheetInstance().get(".form_content");
+        style.put("padding", "2px");
+        style.put("background-color", bodybg);
+        style.put("width", "100%");
+        style.put("top", StandardPanelConfig.CONTENT_TOP);
+        style.put("left", StandardPanelConfig.CONTEXT_WIDTH);
+        style.put("position", "fixed");
         
         navcontrol = getNavControl();
         navcontrol.add(action);

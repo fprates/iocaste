@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.dashboard;
 
+import java.util.Map;
+
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.StandardContainer;
@@ -51,54 +53,58 @@ public class StandardDashboardRenderer extends AbstractDashboardRenderer {
     
     @Override
     public void config() {
-        stylesheet.put(factorystyle, "float", "left");
-        stylesheet.put(factorystyle, "background-color", "#ffffff");
-        stylesheet.put(factorystyle, "width", "100%");
+        Map<String, String> style;
         
-        stylesheet.newElement(".db_dash_item:link");
-        stylesheet.put(".db_dash_item:link", "display", "block");
-        stylesheet.put(".db_dash_item:link", "text-decoration", "none");
-        stylesheet.put(".db_dash_item:link", "padding", "3px");
-        stylesheet.put(".db_dash_item:link", "font-size", "12pt");
-        stylesheet.put(".db_dash_item:link", "color", "#0000ff");
+        style = stylesheet.get(factorystyle);
+        style.put("float", "left");
+        style.put("background-color", "#ffffff");
+        style.put("width", "100%");
         
-        stylesheet.newElement(".db_dash_item:active");
-        stylesheet.put(".db_dash_item:active", "display", "block");
-        stylesheet.put(".db_dash_item:active", "text-decoration", "none");
-        stylesheet.put(".db_dash_item:active", "padding", "3px");
-        stylesheet.put(".db_dash_item:active", "font-size", "12pt");
-        stylesheet.put(".db_dash_item:active", "color", "#0000ff");
+        style = stylesheet.newElement(".db_dash_item:link");
+        style.put("display", "block");
+        style.put("text-decoration", "none");
+        style.put("padding", "3px");
+        style.put("font-size", "12pt");
+        style.put("color", "#0000ff");
         
-        stylesheet.newElement(".db_dash_item:hover");
-        stylesheet.put(".db_dash_item:hover", "display", "block");
-        stylesheet.put(".db_dash_item:hover", "text-decoration", "underline");
-        stylesheet.put(".db_dash_item:hover", "padding", "3px");
-        stylesheet.put(".db_dash_item:hover", "font-size", "12pt");
-        stylesheet.put(".db_dash_item:hover", "color", "#0000ff");
+        style = stylesheet.newElement(".db_dash_item:active");
+        style.put("display", "block");
+        style.put("text-decoration", "none");
+        style.put("padding", "3px");
+        style.put("font-size", "12pt");
+        style.put("color", "#0000ff");
         
-        stylesheet.newElement(".db_dash_item:visited");
-        stylesheet.put(".db_dash_item:visited", "display", "block");
-        stylesheet.put(".db_dash_item:visited", "text-decoration", "none");
-        stylesheet.put(".db_dash_item:visited", "padding", "3px");
-        stylesheet.put(".db_dash_item:visited", "font-size", "12pt");
-        stylesheet.put(".db_dash_item:visited", "color", "#0000ff");
+        style = stylesheet.newElement(".db_dash_item:hover");
+        style.put("display", "block");
+        style.put("text-decoration", "underline");
+        style.put("padding", "3px");
+        style.put("font-size", "12pt");
+        style.put("color", "#0000ff");
+        
+        style = stylesheet.newElement(".db_dash_item:visited");
+        style.put("display", "block");
+        style.put("text-decoration", "none");
+        style.put("padding", "3px");
+        style.put("font-size", "12pt");
+        style.put("color", "#0000ff");
     }
     
     @Override
     public void config(String name) {
         Entry entry;
+        Map<String, String> style;
         
         entry = entries.get(name);
-        stylesheet.newElement(entry.outerstyle);
-        stylesheet.put(entry.outerstyle, "display", "inline;");
-        stylesheet.put(entry.outerstyle, "border-width", "1px");
-        stylesheet.put(entry.outerstyle, "border-style", "solid");
-        stylesheet.put(entry.outerstyle, "float", "left");
-        stylesheet.put(entry.outerstyle, "margin", "0.25em");
+        style = stylesheet.newElement(entry.outerstyle);
+        style.put("display", "inline;");
+        style.put("border-width", "1px");
+        style.put("border-style", "solid");
+        style.put("float", "left");
+        style.put("margin", "0.25em");
         
-        stylesheet.newElement(entry.innerstyle);
-        stylesheet.put(entry.innerstyle, "float", "left");
-        stylesheet.put(entry.innerstyle, "padding", "1em");
-        stylesheet.put(entry.innerstyle, "width", "100%");
+        style = stylesheet.newElement(entry.innerstyle);
+        style.put("float", "left");
+        style.put("padding", "1em");
+        style.put("width", "100%");
     }
 }

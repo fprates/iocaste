@@ -1,5 +1,7 @@
 package org.iocaste.workbench;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
@@ -22,6 +24,7 @@ public class ProjectConfig extends AbstractViewConfig {
         StyleSheet stylesheet;
         DataForm dataform;
         TableToolData tabletool;
+        Map<String, String> style;
 
         extcontext = getExtendedContext();
         stylesheet = context.view.styleSheetInstance();
@@ -59,13 +62,13 @@ public class ProjectConfig extends AbstractViewConfig {
         else
             dashitem.hide();
         
-        stylesheet.newElement(".wb_view");
-        stylesheet.put(".wb_view", "float", "left");
+        style = stylesheet.newElement(".wb_view");
+        style.put("float", "left");
         container = getElement("viewtree");
         container.setStyleClass("wb_view");
         container.setVisible(extcontext.viewtree);
-        stylesheet.newElement(".wb_text");
-        stylesheet.put(".wb_text", "display", "inline");
+        style = stylesheet.newElement(".wb_text");
+        style.put("display", "inline");
         if (extcontext.view != null) {
             projectview = extcontext.views.get(extcontext.view);
             for (ProjectTreeItem item : projectview.treeitems.values())

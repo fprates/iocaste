@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.panel.dashboard;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.dashboard.AbstractDashboardRenderer;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.Colors;
@@ -93,7 +95,8 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
 
     @Override
     public void config() {
-        String style, mouseover;
+        Map<String, String> style;
+        String name, mouseover;
         
         for (String suffix : new String[] {
                 "link",
@@ -101,47 +104,46 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
                 "hover",
                 "visited"
         }) {
-            style = new StringBuilder(".std_dash_item:").
+            name = new StringBuilder(".std_dash_item:").
                     append(suffix).toString();
-            stylesheet.newElement(style);
-            stylesheet.put(style, "display", "block");
-            stylesheet.put(style, "text-decoration", "none");
-            stylesheet.put(style, "text-align", "center");
-            stylesheet.put(style, "color", colors.get(Colors.DASH_FONT));
+            style = stylesheet.newElement(name);
+            style.put("display", "block");
+            style.put("text-decoration", "none");
+            style.put("text-align", "center");
+            style.put("color", colors.get(Colors.DASH_FONT));
             
             mouseover = new StringBuilder(".std_dash_item_mouseover:").
                     append(suffix).toString();
-            stylesheet.clone(mouseover, style);
-            stylesheet.put(mouseover, "color", colors.get(Colors.FOCUS_FONT));
+            stylesheet.clone(mouseover, name).put(
+                    "color", colors.get(Colors.FOCUS_FONT));
         }
     }
 
     @Override
     public void config(String name) {
-        String style, mouseover;
+        Map<String, String> style;
+        String mouseover;
         
-        style = getStyle(name, OUTER);
-        stylesheet.newElement(style);
-        stylesheet.put(style, "width", "15em");
-        stylesheet.put(style, "height", "3em");
-        stylesheet.put(style, "float", "left");
-        stylesheet.put(style, "margin", "0.5em");
-        stylesheet.put(style, "padding", "1em");
-        stylesheet.put(style, "display", "inline");
-        stylesheet.put(style, "border-radius", "3px");
-        stylesheet.put(style, "border-style", "solid");
-        stylesheet.put(style, "border-color", colors.get(Colors.DASH_BORDER));
-        stylesheet.put(style, "background-color", colors.get(Colors.DASH_BG));
-        stylesheet.put(style, "font-size", "12pt");
+        style = stylesheet.newElement(getStyle(name, OUTER));
+        style.put("width", "15em");
+        style.put("height", "3em");
+        style.put("float", "left");
+        style.put("margin", "0.5em");
+        style.put("padding", "1em");
+        style.put("display", "inline");
+        style.put("border-radius", "3px");
+        style.put("border-style", "solid");
+        style.put("border-color", colors.get(Colors.DASH_BORDER));
+        style.put("background-color", colors.get(Colors.DASH_BG));
+        style.put("font-size", "12pt");
         
-        mouseover = style.concat("_mouseover");
-        stylesheet.clone(mouseover, style);
-        stylesheet.put(mouseover, "background-color", colors.get(Colors.FOCUS));
+        mouseover = getStyle(name, OUTER).concat("_mouseover");
+        stylesheet.clone(mouseover, getStyle(name, OUTER)).put(
+                "background-color", colors.get(Colors.FOCUS));
         
-        style = getStyle(name, INNER);
-        stylesheet.newElement(style);
-        stylesheet.put(style, "margin", "auto");
-        stylesheet.put(style, "padding", "1em");
+        style = stylesheet.newElement(getStyle(name, INNER));
+        style.put("margin", "auto");
+        style.put("padding", "1em");
     }
     
 }

@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.panel.context;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.dashboard.AbstractDashboardRenderer;
 import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.shell.common.Container;
@@ -127,73 +129,70 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
 
     @Override
     public void config(String name) {
-        String style;
+        Map<String, String> style;
         
-        style = getStyle(name, OUTER);
-        stylesheet.newElement(style);
-        stylesheet.put(style, "float", "left");
-        stylesheet.put(style, "width", "100%");
-        stylesheet.put(style, "display", "none");
+        style = stylesheet.newElement(getStyle(name, OUTER));
+        style.put("float", "left");
+        style.put("width", "100%");
+        style.put("display", "none");
         
-        style = getStyle(name, INNER);
-        stylesheet.newElement(style);
+        stylesheet.newElement(getStyle(name, INNER));
     }
     
     protected void config(Internal internal) {
-        String style_, font, contentbg;
+        Map<String, String> style;
+        String font, contentbg;
         
-        stylesheet.put(factorystyle, "float", "left");
-        stylesheet.put(factorystyle, "width", "100%");
-        stylesheet.put(factorystyle, "display", "inline");
+        style = stylesheet.get(factorystyle);
+        style.put("float", "left");
+        style.put("width", "100%");
+        style.put("display", "inline");
         
         font = colors.get(Colors.FONT);
         contentbg = colors.get(Colors.CONTENT_BG);
-        for (String style : internal.linksstyles) {
-            stylesheet.newElement(style);
+        for (String linkstyle : internal.linksstyles) {
+            style = stylesheet.newElement(linkstyle);
             
-            if (style.equals(internal.cntstyle)) {
-                stylesheet.put(style, "padding-top", "1em");
-                stylesheet.put(style, "padding-bottom", "1em");
-                stylesheet.put(style, "width", "100%");
-                stylesheet.put(style, "display", "block");
-                stylesheet.put(style, "border-bottom-style", "solid");
-                stylesheet.put(style, "border-bottom-width", "2px");
-                stylesheet.put(style, "border-bottom-color", contentbg);
+            if (linkstyle.equals(internal.cntstyle)) {
+                style.put("padding-top", "1em");
+                style.put("padding-bottom", "1em");
+                style.put("width", "100%");
+                style.put("display", "block");
+                style.put("border-bottom-style", "solid");
+                style.put("border-bottom-width", "2px");
+                style.put("border-bottom-color", contentbg);
                 if (internal.bgcolor != null)
-                    stylesheet.put(style, "background-color", internal.bgcolor);
+                    style.put("background-color", internal.bgcolor);
                 
-                style = style.concat("_mouseover");
-                stylesheet.clone(style, internal.cntstyle);
-                stylesheet.put(style,
+                linkstyle = linkstyle.concat("_mouseover");
+                stylesheet.clone(linkstyle, internal.cntstyle).put(
                         "background-color", colors.get(Colors.FOCUS));
             } else {
-                stylesheet.put(style, "width", "100%");
-                stylesheet.put(style, "display", "block");
-                stylesheet.put(style, "color", font);
-                stylesheet.put(style, "text-decoration", "none");
-                stylesheet.put(style, "text-align", "center");
-                stylesheet.put(style, "font-size", "10pt");
+                style.put("width", "100%");
+                style.put("display", "block");
+                style.put("color", font);
+                style.put("text-decoration", "none");
+                style.put("text-align", "center");
+                style.put("font-size", "10pt");
             }
         }
         
-        style_ = ".std_dash_context_txt";
-        stylesheet.newElement(style_);
-        stylesheet.put(style_, "color", font);
-        stylesheet.put(style_, "text-align", "center");
-        stylesheet.put(style_, "font-size", "10pt");
-        stylesheet.put(style_, "font-weight", "bold");
-        stylesheet.put(style_, "margin", "0px");
+        style = stylesheet.newElement(".std_dash_context_txt");
+        style.put("color", font);
+        style.put("text-align", "center");
+        style.put("font-size", "10pt");
+        style.put("font-weight", "bold");
+        style.put("margin", "0px");
         
-        style_ = ".std_dash_context_grp";
-        stylesheet.newElement(style_);
-        stylesheet.put(style_, "padding-top", "0.5em");
-        stylesheet.put(style_, "padding-bottom", "0.5em");
-        stylesheet.put(style_, "width", "100%");
-        stylesheet.put(style_, "display", "block");
-        stylesheet.put(style_, "background-color", colors.get(Colors.GROUP_BG));
-        stylesheet.put(style_, "border-bottom-style", "solid");
-        stylesheet.put(style_, "border-bottom-width", "2px");
-        stylesheet.put(style_, "border-bottom-color", contentbg);
+        style = stylesheet.newElement(".std_dash_context_grp");
+        style.put("padding-top", "0.5em");
+        style.put("padding-bottom", "0.5em");
+        style.put("width", "100%");
+        style.put("display", "block");
+        style.put("background-color", colors.get(Colors.GROUP_BG));
+        style.put("border-bottom-style", "solid");
+        style.put("border-bottom-width", "2px");
+        style.put("border-bottom-color", contentbg);
     }
 }
 

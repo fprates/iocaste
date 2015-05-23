@@ -1,5 +1,6 @@
 package org.iocaste.sh;
 
+import java.util.Map;
 import java.util.Properties;
 
 import org.iocaste.documents.common.DocumentModel;
@@ -126,35 +127,35 @@ public class Response {
         Container stdcnt, datacnt;
         SearchHelp sh;
         Object ns;
+        Map<String, String> style;
         Documents documents = new Documents(context.function);
         StyleSheet stylesheet = context.view.styleSheetInstance();
         
-        stylesheet.newElement(".shkey");
-        stylesheet.put(".shkey", "font-size", "12pt");
-        stylesheet.put(".shkey", "display", "block");
-        stylesheet.put(".shkey", "text-decoration", "none");
+        style = stylesheet.newElement(".shkey");
+        style.put("font-size", "12pt");
+        style.put("display", "block");
+        style.put("text-decoration", "none");
         
-        stylesheet.newElement(".shcol");
-        stylesheet.put(".shcol", "font-size", "12pt");
+        stylesheet.newElement(".shcol").put("font-size", "12pt");
         
         stylesheet.newElement(".shcnt");
-        stylesheet.put(".shcnt", "position", "absolute");
-        stylesheet.put(".shcnt", "background-color", "#f0f0f0");
-        stylesheet.put(".shcnt", "float", "left");
-        stylesheet.put(".shcnt", "padding", "10px");
-        stylesheet.put(".shcnt", "border-style", "solid");
-        stylesheet.put(".shcnt", "border-color", "rgb(176, 176, 176)");
-        stylesheet.put(".shcnt", "border-width", "2px"); 
-        stylesheet.put(".shcnt", "overflow", "hidden");
+        style.put("position", "absolute");
+        style.put("background-color", "#f0f0f0");
+        style.put("float", "left");
+        style.put("padding", "10px");
+        style.put("border-style", "solid");
+        style.put("border-color", "rgb(176, 176, 176)");
+        style.put("border-width", "2px"); 
+        style.put("overflow", "hidden");
         
         stylesheet.newElement(".shdatacnt");
-        stylesheet.put(".shdatacnt", "overflow", "auto");
-        stylesheet.put(".shdatacnt", "height", "20em");
+        style.put("overflow", "auto");
+        style.put("height", "20em");
         
         stylesheet.newElement(".shcriteria");
-        stylesheet.put(".shcriteria", "margin", "0px");
-        stylesheet.put(".shcriteria", "padding", "0px");
-        stylesheet.put(".shcriteria", "border-style", "none");
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("border-style", "none");
         
         stdcnt = new StandardContainer(context.view, "shstdcnt");
         stdcnt.setStyleClass("shcnt");

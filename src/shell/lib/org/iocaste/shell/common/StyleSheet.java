@@ -16,23 +16,25 @@ public class StyleSheet implements Serializable {
         stylesheet = new HashMap<>();
     }
     
-    public final void clone(String to, String from) {
+    public final Map<String, String> clone(String to, String from) {
         Map<String, String> clone = new HashMap<>(stylesheet.get(from));
         stylesheet.put(to, clone);
+        return clone;
+    }
+    
+    public final Map<String, String> get(String name) {
+        return stylesheet.get(name);
     }
     
     public final Map<String, Map<String, String>> getElements() {
         return stylesheet;
     }
     
-    public final void newElement(String name) {
-        stylesheet.put(name, new HashMap<String, String>());
-    }
-    
-    public final void put(String element, String property, String value) {
-        Map<String, String> properties = stylesheet.get(element);
+    public final Map<String, String> newElement(String name) {
+        Map<String, String> element = new HashMap<String, String>();
         
-        properties.put(property, value);
+        stylesheet.put(name, element);
+        return element;
     }
     
     public final void remove(String element) {

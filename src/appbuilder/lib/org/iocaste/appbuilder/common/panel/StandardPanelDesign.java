@@ -22,40 +22,36 @@ public class StandardPanelDesign implements NavControlDesign {
     @Override
     public void build(Container container, PageBuilderContext context) {
         Text text;
-        String style, name;
+        Map<String, String> style;
+        String name;
         StyleSheet stylesheet;
         
-        style = ".std_navcontrol_head";
         stylesheet = context.view.styleSheetInstance();
         
-        stylesheet.newElement(style);
-        stylesheet.put(style, "height", "70px");
-        stylesheet.put(style, "width", "100%"); 
-        stylesheet.put(
-                style, "background-color", colors.get(Colors.HEAD_BG));
-        stylesheet.put(style, "margin", "0px");
-        stylesheet.put(style, "padding", "0px");
-        stylesheet.put(style, "left", "0px");
-        stylesheet.put(style, "top", "0px");
-        stylesheet.put(style, "position", "fixed");
-        stylesheet.put(style, "display", "block");
-        stylesheet.put(style, "font-name", "Verdana; sans-serif");
-        stylesheet.put(style, "border-bottom-style", "solid");
-        stylesheet.put(style, "border-bottom-width", "2px");
-        stylesheet.put(
-                style, "border-bottom-color", colors.get(Colors.CONTENT_BG));
+        style = stylesheet.newElement(".std_navcontrol_head");
+        style.put("height", "70px");
+        style.put("width", "100%"); 
+        style.put("background-color", colors.get(Colors.HEAD_BG));
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("left", "0px");
+        style.put("top", "0px");
+        style.put("position", "fixed");
+        style.put("display", "block");
+        style.put("font-name", "Verdana; sans-serif");
+        style.put("border-bottom-style", "solid");
+        style.put("border-bottom-width", "2px");
+        style.put("border-bottom-color", colors.get(Colors.CONTENT_BG));
+        container.setStyleClass("std_navcontrol_head");
         
-        container.setStyleClass(style.substring(1));
-        
-        style = ".std_navcontrol_title";
-        stylesheet.newElement(style);
-        stylesheet.put(style, "color", colors.get(Colors.FONT));
-        stylesheet.put(style, "margin", "0px");
-        stylesheet.put(style, "padding", "1em");
-        stylesheet.put(style, "bottom", "0px");
-        stylesheet.put(style, "left", "0px");
-        stylesheet.put(style, "position", "absolute");
-        stylesheet.put(style, "font-size", "16pt");
+        style = stylesheet.newElement(".std_navcontrol_title");
+        style.put("color", colors.get(Colors.FONT));
+        style.put("margin", "0px");
+        style.put("padding", "1em");
+        style.put("bottom", "0px");
+        style.put("left", "0px");
+        style.put("position", "absolute");
+        style.put("font-size", "16pt");
 
         name = context.view.getTitle();
         if (offline) {
@@ -72,7 +68,7 @@ public class StandardPanelDesign implements NavControlDesign {
             return;
         
         text = new Text(container, "navcontrol_title");
-        text.setStyleClass(style.substring(1));
+        text.setStyleClass("std_navcontrol_title");
         text.setText(name);
     }
 

@@ -112,13 +112,13 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
     
     @Override
     public final void setStyleProperty(String name, String value) {
-        stylesheet.put(factorystyle, name, value);
+        stylesheet.get(factorystyle).put(name, value);
     }
     
     @Override
     public final void setStyleProperty(String style, String name, String value)
     {
-        stylesheet.put(style, name, value);
+        stylesheet.get(style).put(name, value);
     }
     
     @Override

@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.tabletool;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.documents.common.DocumentModel;
@@ -19,6 +21,7 @@ public class TableRender extends AbstractTableHandler {
             TableToolData data) {
         StyleSheet stylesheet;
         Container container, supercontainer;
+        Map<String, String> style;
         Context context = new Context();
         
         context.data = data;
@@ -30,10 +33,10 @@ public class TableRender extends AbstractTableHandler {
         }
         
         stylesheet = data.context.view.styleSheetInstance();
-        stylesheet.newElement(".tt_skip");
-        stylesheet.put(".tt_skip", "border-style", "none");
-        stylesheet.put(".tt_skip", "padding", "0.2em");
-        stylesheet.put(".tt_skip", "margin", "0px");
+        style = stylesheet.newElement(".tt_skip");
+        style.put("border-style", "none");
+        style.put("padding", "0.2em");
+        style.put("margin", "0px");
         
         context.accept = new Button(
                 container, TableTool.ACCEPT.concat(context.data.name));

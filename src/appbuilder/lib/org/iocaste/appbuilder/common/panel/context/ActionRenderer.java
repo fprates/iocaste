@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.panel.context;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.shell.common.Button;
 
@@ -40,7 +42,7 @@ public class ActionRenderer extends StandardPanelContextRenderer {
     @Override
     public void config() {
         Internal internal;
-        String style;
+        Map<String, String> style;
         
         internal = new Internal();
         internal.cntstyle = ".std_dash_action_cnt";
@@ -54,28 +56,27 @@ public class ActionRenderer extends StandardPanelContextRenderer {
         };
         config(internal);
         
-        style = ".std_dash_action_submit";
-        stylesheet.clone(style, ".std_dash_action_cnt");
-        stylesheet.put(style, "color", colors.get(Colors.FONT));
-        stylesheet.put(style, "border-top-style", "none");
-        stylesheet.put(style, "border-left-style", "none");
-        stylesheet.put(style, "border-right-style", "none");
-        stylesheet.put(style, "font-family", "\"Verdana\", \"sans-serif\"");
-        stylesheet.put(style, "font-size", "10pt");
+        style = stylesheet.clone(
+                ".std_dash_action_submit", ".std_dash_action_cnt");
+        style.put("color", colors.get(Colors.FONT));
+        style.put("border-top-style", "none");
+        style.put("border-left-style", "none");
+        style.put("border-right-style", "none");
+        style.put("font-family", "\"Verdana\", \"sans-serif\"");
+        style.put("font-size", "10pt");
         
-        style = style.concat("_mouseover");
-        stylesheet.clone(style, ".std_dash_action_submit");
-        stylesheet.put(style,
-                "background-color", colors.get(Colors.FOCUS));
+        style = stylesheet.clone(
+                ".std_dash_action_submit_mouseover", ".std_dash_action_submit");
+        style.put("background-color", colors.get(Colors.FOCUS));
     }
 
     @Override
     public void config(String name) {
-        String style;
+        Map<String, String> style;
         
         super.config(name);
-        style = getStyle(name, OUTER);
-        stylesheet.put(style, "display", "block");
+        style = stylesheet.get(getStyle(name, OUTER));
+        style.put("display", "block");
     }
 
 }

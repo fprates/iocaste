@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
@@ -51,37 +52,38 @@ public class Response {
         TableItem item;
         StyleSheet stylesheet;
         Locale locale;
+        Map<String, String> style;
         
         stylesheet = context.view.styleSheetInstance();
-        stylesheet.newElement(".calcnt");
-        stylesheet.put(".calcnt", "position", "absolute");
-        stylesheet.put(".calcnt", "padding", "10px");
-        stylesheet.put(".calcnt", "float", "left");
-        stylesheet.put(".calcnt", "overflow", "hidden");
-        stylesheet.put(".calcnt", "background-color", "#ffffff");
-        stylesheet.put(".calcnt", "border-style", "solid");
-        stylesheet.put(".calcnt", "border-width", "2px");
-        stylesheet.put(".calcnt", "border-color", "rgb(176, 176, 176)");
+        style = stylesheet.newElement(".calcnt");
+        style.put("position", "absolute");
+        style.put("padding", "10px");
+        style.put("float", "left");
+        style.put("overflow", "hidden");
+        style.put("background-color", "#ffffff");
+        style.put("border-style", "solid");
+        style.put("border-width", "2px");
+        style.put("border-color", "rgb(176, 176, 176)");
         
-        stylesheet.newElement(".calkey");
-        stylesheet.put(".calkey", "padding", "0px");
-        stylesheet.put(".calkey", "margin", "0px");
-        stylesheet.put(".calkey", "text-align", "middle");
-        stylesheet.put(".calkey", "font-weight", "normal");
-        stylesheet.put(".calkey", "display", "block");
-        stylesheet.put(".calkey", "text-decoration", "none");
+        style = stylesheet.newElement(".calkey");
+        style.put("padding", "0px");
+        style.put("margin", "0px");
+        style.put("text-align", "middle");
+        style.put("font-weight", "normal");
+        style.put("display", "block");
+        style.put("text-decoration", "none");
         
-        stylesheet.newElement(".today");
-        stylesheet.put(".today", "padding", "0px");
-        stylesheet.put(".today", "margin", "0px");
-        stylesheet.put(".today", "text-align", "middle");
-        stylesheet.put(".today", "font-weight", "bold");
-        stylesheet.put(".today", "display", "block");
-        stylesheet.put(".today", "text-decoration", "none");
+        style = stylesheet.newElement(".today");
+        style.put("padding", "0px");
+        style.put("margin", "0px");
+        style.put("text-align", "middle");
+        style.put("font-weight", "bold");
+        style.put("display", "block");
+        style.put("text-decoration", "none");
         
-        stylesheet.newElement(".month");
-        stylesheet.put(".month", "display", "inline");
-        stylesheet.put(".month", "text-decoration", "none");
+        style = stylesheet.newElement(".month");
+        style.put("display", "inline");
+        style.put("text-decoration", "none");
         
         context.calendardata.update(context.date);
         container = new StandardContainer(context.view, "calstdcnt");

@@ -18,82 +18,74 @@ public class MainConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         MessageSource messages;
-        String style;
         Button button;
         DataItem input;
         DataForm form;
         Context extcontext;
         StyleSheet stylesheet;
         Map<String, Const> types;
+        Map<String, String> style;
         
         context.view.setTitle("authentic");
         
         stylesheet = context.view.styleSheetInstance();
-        stylesheet.put(".outer_content", "left", "0px");
-        style = ".std_panel_content";
-        stylesheet.put(style, "margin", "auto");
-        stylesheet.put(style, "height", "100%");
-        stylesheet.put(style, "width", "100%");
-        stylesheet.put(".std_panel_context", "display", "none");
+        stylesheet.get(".outer_content").put("left", "0px");
         
-        style = ".logincnt";
-        stylesheet.newElement(style);
-        stylesheet.put(style, "top", "20em");
-        stylesheet.put(style, "position", "relative");
+        style = stylesheet.get(".std_panel_content");
+        style.put("margin", "auto");
+        style.put("height", "100%");
+        style.put("width", "100%");
         
-        style = ".loginform";
-        stylesheet.newElement(style);
-        stylesheet.put(style, "border-style", "none");
-        stylesheet.put(style, "width", "16em");
-        stylesheet.put(style, "margin", "auto");
+        stylesheet.get(".std_panel_context").put("display", "none");
         
-        style = ".form_cell";
-        stylesheet.remove(style);
-        stylesheet.newElement(style);
-        stylesheet.put(style, "margin", "0px");
-        stylesheet.put(style, "padding", "0px");
+        style = stylesheet.newElement(".logincnt");
+        style.put("top", "20em");
+        style.put("position", "relative");
         
-        style = ".item_form_name";
-        stylesheet.remove(style);
-        stylesheet.newElement(style);
-        stylesheet.put(style, "margin", "0px");
-        stylesheet.put(style, "padding", "0px");
-        stylesheet.put(style, "color", "#a0a0a0");
-        stylesheet.put(style, "text-align", "right");
-        stylesheet.put(style, "text-size", "12pt");
-        stylesheet.put(style, "font-family", "\"Verdana\", \"sans-serif\"");
+        style = stylesheet.newElement(".loginform");
+        style.put("border-style", "none");
+        style.put("width", "16em");
+        style.put("margin", "auto");
+        
+        style = stylesheet.newElement(".form_cell");
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        
+        style = stylesheet.newElement(".item_form_name");
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("color", "#a0a0a0");
+        style.put("text-align", "right");
+        style.put("text-size", "12pt");
+        style.put("font-family", "\"Verdana\", \"sans-serif\"");
 
-        style = ".text_field";
-        stylesheet.remove(style);
-        stylesheet.newElement(style);
-        stylesheet.put(style, "border-style", "solid");
-        stylesheet.put(style, "border-width", "1px");
-        stylesheet.put(style, "font-size", "12pt");
-        stylesheet.put(style, "margin", "0px");
-        stylesheet.put(style, "padding", "2px");
-        stylesheet.put(style, "border-color", "#a0a0a0");
-        stylesheet.put(style, "border-radius", "2px");
-        stylesheet.put(style, "text-align", "left");
-        stylesheet.put(style, "text-size", "12pt");
-        stylesheet.put(style, "font-family", "\"Verdana\", \"sans-serif\"");
+        style = stylesheet.newElement(".text_field");
+        style.put("border-style", "solid");
+        style.put("border-width", "1px");
+        style.put("font-size", "12pt");
+        style.put("margin", "0px");
+        style.put("padding", "2px");
+        style.put("border-color", "#a0a0a0");
+        style.put("border-radius", "2px");
+        style.put("text-align", "left");
+        style.put("text-size", "12pt");
+        style.put("font-family", "\"Verdana\", \"sans-serif\"");
 
-        style = ".button";
-        stylesheet.remove(style);
-        stylesheet.newElement(style);
-        stylesheet.put(style, "width", "10em");
-        stylesheet.put(style, "margin", "auto");
-        stylesheet.put(style, "padding", "3px");
-        stylesheet.put(style, "display", "block");
-        stylesheet.put(style, "color", "#ffffff");
-        stylesheet.put(style, "background-color", "#3030ff");
-        stylesheet.put(style, "text-align", "center");
-        stylesheet.put(style, "font-weight", "normal");
-        stylesheet.put(style, "font-size", "12pt");
-        stylesheet.put(style, "font-family", "sans-serif");
-        stylesheet.put(style, "border-style", "solid");
-        stylesheet.put(style, "border-radius", "2px");
-        stylesheet.put(style, "border-width", "1px");
-        stylesheet.put(style, "border-color", "#000000");
+        style = stylesheet.newElement(".button");
+        style.put("width", "10em");
+        style.put("margin", "auto");
+        style.put("padding", "3px");
+        style.put("display", "block");
+        style.put("color", "#ffffff");
+        style.put("background-color", "#3030ff");
+        style.put("text-align", "center");
+        style.put("font-weight", "normal");
+        style.put("font-size", "12pt");
+        style.put("font-family", "sans-serif");
+        style.put("border-style", "solid");
+        style.put("border-radius", "2px");
+        style.put("border-width", "1px");
+        style.put("border-color", "#000000");
         
         getElement("logincnt").setStyleClass("logincnt");
         

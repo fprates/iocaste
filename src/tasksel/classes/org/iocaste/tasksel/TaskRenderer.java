@@ -1,5 +1,7 @@
 package org.iocaste.tasksel;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.dashboard.StandardDashboardRenderer;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ExpandBar;
@@ -9,15 +11,17 @@ public class TaskRenderer extends StandardDashboardRenderer {
 
     @Override
     public void config() {
+        Map<String, String> style;
+        
         super.config();
-        stylesheet.newElement(".tasksel_edge");
-        stylesheet.put(".tasksel_edge", "color", "#ffffff");
-        stylesheet.put(".tasksel_edge", "background-color", "#000000");
-        stylesheet.put(".tasksel_edge", "display", "block");
-        stylesheet.put(".tasksel_edge", "width", "100%");
-        stylesheet.put(".tasksel_edge", "border-width", "1px");
-        stylesheet.put(".tasksel_edge", "border-color", "#ffffff");
-        stylesheet.put(".tasksel_edge", "border-style", "solid");
+        style = stylesheet.newElement(".tasksel_edge");
+        style.put("color", "#ffffff");
+        style.put("background-color", "#000000");
+        style.put("display", "block");
+        style.put("width", "100%");
+        style.put("border-width", "1px");
+        style.put("border-color", "#ffffff");
+        style.put("border-style", "solid");
     }
     
     @Override
@@ -40,22 +44,23 @@ public class TaskRenderer extends StandardDashboardRenderer {
     
     @Override
     public void config(String name) {
+        Map<String, String> style;
         String outerstyle, innerstyle;
 
         outerstyle = getStyle(name, OUTER);
-        stylesheet.newElement(outerstyle);
-        stylesheet.put(outerstyle, "margin", "0.25em");
-        stylesheet.put(outerstyle, "display", "inline");
-        stylesheet.put(outerstyle, "width", "32%");
-        stylesheet.put(outerstyle, "border-width", "1px");
-        stylesheet.put(outerstyle, "border-style", "solid");
-        stylesheet.put(outerstyle, "float", "left");
+        style = stylesheet.newElement(outerstyle);
+        style.put("margin", "0.25em");
+        style.put("display", "inline");
+        style.put("width", "32%");
+        style.put("border-width", "1px");
+        style.put("border-style", "solid");
+        style.put("float", "left");
 
         innerstyle = getStyle(name, INNER);
-        stylesheet.newElement(innerstyle);
-        stylesheet.put(innerstyle, "padding", "1em");
-        stylesheet.put(innerstyle, "width", "100%");
-        stylesheet.put(innerstyle, "float", "left");
+        style = stylesheet.newElement(innerstyle);
+        style.put("padding", "1em");
+        style.put("width", "100%");
+        style.put("float", "left");
     }
 
 }

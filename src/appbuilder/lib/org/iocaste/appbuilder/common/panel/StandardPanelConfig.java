@@ -28,7 +28,8 @@ class StandardPanelConfig extends AbstractViewConfig {
         Map<Colors, String> colors;
         StandardPanelDesign design;
         ViewConfig extconfig;
-        String style, contentbg;
+        Map<String, String> style;
+        String contentbg;
         StyleSheet stylesheet;
         NavControl navcontrol;
         DashboardFactory factory;
@@ -37,53 +38,46 @@ class StandardPanelConfig extends AbstractViewConfig {
         contentbg = colors.get(Colors.CONTENT_BG);
         
         stylesheet = context.view.styleSheetInstance();
+        stylesheet.get("body").put("margin", "0px");
         
-        style = "body";
-        stylesheet.put(style, "margin", "0px");
-        
-        style = ".form_content";
-        stylesheet.newElement(style);
-        stylesheet.put(style, "height", "100%");
-        stylesheet.put(style, "width", "100%");
-        stylesheet.put(style, "overflow", "auto");
-        stylesheet.put(style, "float", "left");
-        stylesheet.put(style, "position", "fixed");
-        stylesheet.put(style, "font-size", "12pt");
-        stylesheet.put(style, "font-family", "sans-serif");
-        stylesheet.put(style, "background-color", contentbg);
+        style = stylesheet.newElement(".form_content");
+        style.put("height", "100%");
+        style.put("width", "100%");
+        style.put("overflow", "auto");
+        style.put("float", "left");
+        style.put("position", "fixed");
+        style.put("font-size", "12pt");
+        style.put("font-family", "sans-serif");
+        style.put("background-color", contentbg);
 
-        style = ".outer_content";
-        stylesheet.newElement(style);
-        stylesheet.put(style, "font-size", "12pt");
-        stylesheet.put(style, "top", "70px");
-        stylesheet.put(style, "left", "15em");
-        stylesheet.put(style, "position", "fixed");
-        stylesheet.put(style, "width", "100%");
-        stylesheet.put(style, "height", "100%");
-        stylesheet.put(style, "padding", "0px");
-        stylesheet.put(style, "margin", "0px");
-        getElement("outercontent").setStyleClass(style.substring(1));
+        style = stylesheet.newElement(".outer_content");
+        style.put("font-size", "12pt");
+        style.put("top", "70px");
+        style.put("left", "15em");
+        style.put("position", "fixed");
+        style.put("width", "100%");
+        style.put("height", "100%");
+        style.put("padding", "0px");
+        style.put("margin", "0px");
+        getElement("outercontent").setStyleClass("outer_content");
         
-        style = ".std_panel_content";
-        stylesheet.newElement(style);
-        getElement("content").setStyleClass(style.substring(1));
+        stylesheet.newElement(".std_panel_content");
+        getElement("content").setStyleClass("std_panel_content");
         
-        style = ".std_panel_context";
-        stylesheet.newElement(style);
-        stylesheet.put(style, "top", CONTENT_TOP);
-        stylesheet.put(style, "left", "0px");
-        stylesheet.put(style, "width", CONTEXT_WIDTH);
-        stylesheet.put(style, "height", "100%");
-        stylesheet.put(style, "float", "left");
-        stylesheet.put(style, "display", "inline");
-        stylesheet.put(style, "position", "fixed");
-        stylesheet.put(style,
-                "background-color", colors.get(Colors.COMPONENT_BG));
-        stylesheet.put(style, "font-size", "12pt");
-        stylesheet.put(style, "border-right-style", "solid");
-        stylesheet.put(style, "border-right-width", "2px");
-        stylesheet.put(style, "border-right-color", contentbg);
-        getElement("context").setStyleClass(style.substring(1));
+        style = stylesheet.newElement(".std_panel_context");
+        style.put("top", CONTENT_TOP);
+        style.put("left", "0px");
+        style.put("width", CONTEXT_WIDTH);
+        style.put("height", "100%");
+        style.put("float", "left");
+        style.put("display", "inline");
+        style.put("position", "fixed");
+        style.put("background-color", colors.get(Colors.COMPONENT_BG));
+        style.put("font-size", "12pt");
+        style.put("border-right-style", "solid");
+        style.put("border-right-width", "2px");
+        style.put("border-right-color", contentbg);
+        getElement("context").setStyleClass("std_panel_context");
         
         design = new StandardPanelDesign();
         design.setColors(colors);

@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.navcontrol;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
@@ -33,19 +35,19 @@ public class StandardNavControlDesign implements NavControlDesign {
         PageStackItem[] positions;
         User user;
         StyleSheet stylesheet;
+        Map<String, String> style;
         
         this.container = container;
         this.context = context;
         
         stylesheet = context.view.styleSheetInstance();
-        stylesheet.clone(".nc_text", ".text");
-        stylesheet.put(".nc_text", "display", "inline");
+        stylesheet.clone(".nc_text", ".text").put("display", "inline");
         
-        stylesheet.clone(".nc_usertext", ".text");
-        stylesheet.put(".nc_usertext", "display", "inline");
-        stylesheet.put(".nc_usertext", "text-align", "right");
-        stylesheet.put(".nc_usertext", "right", "0px");
-        stylesheet.put(".nc_usertext", "position", "absolute");
+        style = stylesheet.clone(".nc_usertext", ".text");
+        style.put("display", "inline");
+        style.put("text-align", "right");
+        style.put("right", "0px");
+        style.put("position", "absolute");
         
         cloneLink(stylesheet, ".nc_nav_link:hover", ".link:hover");
         cloneLink(stylesheet, ".nc_nav_link:link", ".link:link");
@@ -131,41 +133,42 @@ public class StandardNavControlDesign implements NavControlDesign {
      */
     protected final StandardContainer buildButtonBar() {
         StandardContainer buttonbar;
+        Map<String, String> style;
         StyleSheet stylesheet = context.view.styleSheetInstance();
         
-        stylesheet.newElement(".nc_nav_buttonbar");
-        stylesheet.put(".nc_nav_buttonbar", "background-color", "#aaaaaa");
-        stylesheet.put(".nc_nav_buttonbar", "width", "100%");
-        stylesheet.put(".nc_nav_buttonbar", "border-style", "none");
-        stylesheet.put(".nc_nav_buttonbar", "display", "block");
-        stylesheet.put(".nc_nav_buttonbar", "padding", "2px");
+        style = stylesheet.newElement(".nc_nav_buttonbar");
+        style.put("background-color", "#aaaaaa");
+        style.put("width", "100%");
+        style.put("border-style", "none");
+        style.put("display", "block");
+        style.put("padding", "2px");
         
         cloneLink(stylesheet, ".nc_nav_action:hover", ".link:hover");
-        stylesheet.put(".nc_nav_action:hover", "color", "#ffffff");
-        stylesheet.put(".nc_nav_action:hover", "font-size", "10pt");
+        style.put("color", "#ffffff");
+        style.put("font-size", "10pt");
         cloneLink(stylesheet, ".nc_nav_action:link", ".link:link");
-        stylesheet.put(".nc_nav_action:link", "color", "#ffffff");
-        stylesheet.put(".nc_nav_action:link", "font-size", "10pt");
+        style.put("color", "#ffffff");
+        style.put("font-size", "10pt");
         cloneLink(stylesheet, ".nc_nav_action:active", ".link:active");
-        stylesheet.put(".nc_nav_action:active", "color", "#ffffff");
-        stylesheet.put(".nc_nav_action:active", "font-size", "10pt");
+        style.put("color", "#ffffff");
+        style.put("font-size", "10pt");
         cloneLink(stylesheet, ".nc_nav_action:visited", ".link:visited");
-        stylesheet.put(".nc_nav_action:visited", "color", "#ffffff");
-        stylesheet.put(".nc_nav_action:visited", "font-size", "10pt");
+        style.put("color", "#ffffff");
+        style.put("font-size", "10pt");
         
-        stylesheet.newElement(".nc_nav_separator");
-        stylesheet.put(".nc_nav_separator", "color", "#ffffff");
-        stylesheet.put(".nc_nav_separator", "font-size", "10pt");
-        stylesheet.put(".nc_nav_separator", "display", "inline");
+        style = stylesheet.newElement(".nc_nav_separator");
+        style.put("color", "#ffffff");
+        style.put("font-size", "10pt");
+        style.put("display", "inline");
         
-        stylesheet.newElement(".nc_nav_submit");
-        stylesheet.put(".nc_nav_submit", "color", "#ffffff");
-        stylesheet.put(".nc_nav_submit", "font-size", "10pt");
-        stylesheet.put(".nc_nav_submit", "border-style", "none");
-        stylesheet.put(".nc_nav_submit", "background-color", "#aaaaaa");
-        stylesheet.put(".nc_nav_submit", "padding", "0px");
-        stylesheet.put(".nc_nav_submit", "font-family", "sans-serif");
-        stylesheet.put(".nc_nav_submit", "vertical-align", "middle");
+        style = stylesheet.newElement(".nc_nav_submit");
+        style.put("color", "#ffffff");
+        style.put("font-size", "10pt");
+        style.put("border-style", "none");
+        style.put("background-color", "#aaaaaa");
+        style.put("padding", "0px");
+        style.put("font-family", "sans-serif");
+        style.put("vertical-align", "middle");
         
         buttonbar = new StandardContainer(container, "navbar.container");
         buttonbar.setStyleClass("nc_nav_buttonbar");
@@ -181,10 +184,12 @@ public class StandardNavControlDesign implements NavControlDesign {
      */
     private final void cloneLink(
             StyleSheet stylesheet, String to, String from) {
-        stylesheet.clone(to, from);
-        stylesheet.put(to, "display", "inline");
-        stylesheet.put(to, "text-decoration", "none");
-        stylesheet.put(to, "padding", "3px");
-        stylesheet.put(to, "vertical-align", "middle");
+        Map<String, String> style;
+        
+        style = stylesheet.clone(to, from);
+        style.put("display", "inline");
+        style.put("text-decoration", "none");
+        style.put("padding", "3px");
+        style.put("vertical-align", "middle");
     }
 }

@@ -28,6 +28,6 @@ class MenuRenderer extends StandardDashboardRenderer {
         
         super.config(name);
         outerstyle = getStyle(name, OUTER);
-        stylesheet.put(outerstyle, "width", "100%");
+        stylesheet.get(outerstyle).put("width", "100%");
     }
 }
