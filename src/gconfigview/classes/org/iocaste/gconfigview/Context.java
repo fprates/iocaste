@@ -1,9 +1,12 @@
 package org.iocaste.gconfigview;
 
+import org.iocaste.appbuilder.common.ExtendedContext;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.AbstractContext;
 
-public class Context extends AbstractContext {
+public class Context implements ExtendedContext {
     public static final byte DISPLAY = 0;
     public static final byte EDIT = 1;
     public static final byte SELECT = 2;
@@ -13,7 +16,12 @@ public class Context extends AbstractContext {
         "config.select"
     };
     
-    public byte mode;
     public ExtendedObject[] objects;
     public String appname;
+    public DocumentModel globalcfgmodel;
+    
+    public Context(PageBuilderContext context) {
+        globalcfgmodel = new Documents(context.function).
+                getModel("GLOBAL_CONFIG");
+    }
 }

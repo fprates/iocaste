@@ -1,58 +1,69 @@
 package org.iocaste.gconfigview;
 
-import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.View;
+import org.iocaste.appbuilder.common.AbstractPageBuilder;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.Colors;
+import org.iocaste.appbuilder.common.panel.StandardPanel;
 
 /**
  * 
  * @author francisco.prates
  *
  */
-public class Main extends AbstractPage {
-    private Context context;
-    
-    public Main() {
-        export("install", "install");
+public class Main extends AbstractPageBuilder {
+
+    @Override
+    public void config(PageBuilderContext context) throws Exception {
+        StandardPanel panel;
+        Context extcontext;
+        
+        extcontext = new Context(context);
+        panel = new StandardPanel(context);
+        panel.instance("main", new MainPage(), extcontext);
+        panel.instance("edit", new DetailPage(Context.EDIT), extcontext);
+        panel.instance("display", new DetailPage(Context.DISPLAY), extcontext);
+    }
+
+    @Override
+    protected void installConfig(PageBuilderDefaultInstall defaultinstall)
+            throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
+}
+
+class MainPage extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new MainSpec());
+        set(new MainConfig(this));
+        set(Colors.CONTENT_BG, "#ffffff");
+        action("display", new Load("display"));
+        action("edit", new Load("edit"));
+        update();
     }
     
-    public final void configform() {
-        Response.configform(context);
-    }
+}
+
+class DetailPage extends AbstractPanelPage {
+    private byte mode;
     
-    public final void display() {
-        context.mode = Context.DISPLAY;
-        Request.load(context);
-    }
-    
-    public final void edit() {
-        context.mode = Context.EDIT;
-        Request.load(context);
+    public DetailPage(byte mode) {
+        this.mode = mode;
     }
     
     @Override
-    public final AbstractContext init(View view) {
-        context = new Context();
+    public void execute() {
+        set(new DetailSpec());
+        set(new DetailConfig(this, mode));
+        set(new DetailInput());
+        set(Colors.CONTENT_BG, "#ffffff");
         
-        return context;
+        if (mode == Context.EDIT)
+            action("save", new Save());
     }
     
-    /**
-     * 
-     * @param message
-     * @return
-     */
-    public final InstallData install(Message message) {
-        return Install.init();
-    }
-    
-    public final void main() {
-        Response.main(context);
-    }
-    
-    public final void save() {
-        Request.save(context);
-    }
 }
