@@ -30,6 +30,7 @@ public class TabbedPaneRenderer extends Renderer {
         XMLElement tabbedtag = new XMLElement("div");
         
         tabbedtag.add("id", tabbedpane.getName());
+        tabbedtag.add("class", "tp_outer");
         
         elements = tabbedpane.getElements();
         for (Element element : elements) {
