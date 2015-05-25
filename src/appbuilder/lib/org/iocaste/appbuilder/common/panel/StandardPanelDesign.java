@@ -4,12 +4,14 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.navcontrol.NavControlButton;
+import org.iocaste.appbuilder.common.navcontrol.NavControlCustomAction;
 import org.iocaste.appbuilder.common.navcontrol.NavControlDesign;
 import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Text;
@@ -29,9 +31,11 @@ public class StandardPanelDesign implements NavControlDesign {
         Link link;
         Text text;
         Map<String, String> style;
-        String name;
+        String name, address;
         StyleSheet stylesheet;
         CommonStyle profile;
+        PageStackItem position;
+        PageStackItem[] items;
         
         stylesheet = context.view.styleSheetInstance();
         profile = CommonStyle.get();
@@ -65,7 +69,8 @@ public class StandardPanelDesign implements NavControlDesign {
             return;
         
         if (!offline) {
-            if (new Shell(context.function).getPagesPositions().length > 1) {
+            items = new Shell(context.function).getPagesPositions();
+            if (items.length > 1) {
                 style = stylesheet.newElement(".std_navcontrol_back");
                 style.put("width", "128px");
                 style.put("height", "128px");
@@ -77,6 +82,12 @@ public class StandardPanelDesign implements NavControlDesign {
                 link.setImage("/iocaste-shell/images/back.svg");
                 link.setStyleClass("std_navcontrol_back");
                 link.setCancellable(true);
+                
+                position = items[items.length - 1];
+                address = new StringBuilder(position.getApp()).
+                        append(".").append(position.getPage()).toString();
+                context.function.register(
+                        "back", new NavControlCustomAction(address));
             }
             
             if ((submit != null) && (submit.equals("validate"))) {

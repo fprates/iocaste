@@ -4,8 +4,6 @@ import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
-import org.iocaste.appbuilder.common.panel.context.PanelPageEntryType;
-import org.iocaste.appbuilder.common.panel.context.PanelPageItemContextEntry;
 import org.iocaste.appbuilder.common.style.CommonStyle;
 
 public class StandardPanel {
@@ -21,7 +19,7 @@ public class StandardPanel {
             String name, AbstractPanelPage page, ExtendedContext extcontext) {
         PanelPageItem item;
         ViewContext view;
-        
+        String source;
         
         view = context.instance(name);
         view.set(new StandardPanelSpec(page));
@@ -34,24 +32,10 @@ public class StandardPanel {
         
         for (String key : page.items.keySet()) {
             item = page.items.get(key);
-            prepareContextTasks(view, key, item);
-        }
-    }
-    
-    private final void prepareContextTasks(
-            ViewContext view, String key, PanelPageItem item) {
-        PanelPageItemContextEntry entry;
-        TaskCall taskcall;
-        String source;
-        
-        source = (item.dashboard)? "dashcontext" : "actions";
-        taskcall = new TaskCall(source, item);
-        for (String entrykey : item.context.entries.keySet()) {
-            entry = item.context.entries.get(entrykey);
-            if (!entry.type.equals(PanelPageEntryType.TASK))
-                continue;
+            
+            source = (item.dashboard)? "dashcontext" : "actions";
             item.dashctx = key.concat("_pagectx");
-            view.put(item.dashctx, taskcall);
+            view.put(item.dashctx, new TaskCall(source, item.dashctx));
         }
     }
 }
@@ -59,11 +43,10 @@ public class StandardPanel {
 class TaskCall extends AbstractActionHandler {
     public static final int PANEL = 0;
     public static final int CONTEXT = 1;
-    private PanelPageItem item;
-    private String source;
+    private String source, dashctx;
     
-    public TaskCall(String source, PanelPageItem item) {
-        this.item = item;
+    public TaskCall(String source, String dashctx) {
+        this.dashctx = dashctx;
         this.source = source;
     }
     
@@ -71,7 +54,7 @@ class TaskCall extends AbstractActionHandler {
     protected void execute(PageBuilderContext context) throws Exception {
         String task;
 
-        task = dbactiongetst(source, item.dashctx);
+        task = dbactiongetst(source, dashctx);
         taskredirect(task);
     }
     
