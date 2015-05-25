@@ -24,6 +24,7 @@ public class Main extends AbstractPageBuilder {
         profile = CommonStyle.get();
         profile.head.bgcolor = "#3030ff";
         profile.content.bgcolor = "#202020";
+        profile.content.width = "100%";
     }
 
     @Override
