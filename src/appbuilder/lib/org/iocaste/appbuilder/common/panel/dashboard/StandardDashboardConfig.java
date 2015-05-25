@@ -23,7 +23,6 @@ public class StandardDashboardConfig extends AbstractViewConfig {
         
         profile = CommonStyle.get();
         style = context.view.styleSheetInstance().get(".std_panel_content");
-        style.put("margin", profile.dashboard.margin);
         style.put("background-color", profile.dashboard.bgcolor);
         
         factory = getDashboard("dashitems");

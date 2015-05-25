@@ -28,6 +28,8 @@ public class CommonStyle {
         head.font.family = content.font.family;
         
         dashboard.margin = "auto";
+        dashboard.width = "calc(100% - 220px)";
+        dashboard.height = "calc(100% - 70px)";
         dashboard.bgcolor = "#202020";
         dashboard.itembgcolor = "#f0f0f0";
         dashboard.focusbgcolor = "#505050";

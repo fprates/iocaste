@@ -98,8 +98,14 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         Map<String, String> style;
         String name, mouseover;
         CommonStyle profile;
-        
+
         profile = CommonStyle.get();
+        
+        style = stylesheet.get(factorystyle);
+        style.put("margin", profile.dashboard.margin);
+        style.put("width", profile.dashboard.width);
+        style.put("height", profile.dashboard.height);
+        
         for (String suffix : new String[] {
                 "link",
                 "active",
