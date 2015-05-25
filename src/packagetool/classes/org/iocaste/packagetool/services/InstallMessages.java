@@ -23,6 +23,7 @@ public class InstallMessages {
         for (String language : state.messages.keySet()) {
             i = 0;
             messages = state.messages.get(language);
+            
             for (String msgcode : messages.keySet()) {
                 index = String.format(
                         "%s%05d_%s", state.pkgname, i++, language);
@@ -35,7 +36,7 @@ public class InstallMessages {
             }
         }
         
-        Registry.add(null, "MESSAGE", state);
+        Registry.add(state.pkgname, "MESSAGE", state);
     }
 
     public static final void uninstall(String name, Documents documents) {

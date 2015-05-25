@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.StyleSheet;
@@ -57,6 +58,12 @@ public class PackageUpdate extends AbstractHandler {
         stylesheets = state.data.getStyleSheets();
         if (stylesheets.size() > 0)
             InstallStyles.init(stylesheets, state);
+
+        /*
+         * grava itens instalados
+         */
+        for (ExtendedObject object : state.log)
+            state.documents.save(object);
         
         return null;
     }
