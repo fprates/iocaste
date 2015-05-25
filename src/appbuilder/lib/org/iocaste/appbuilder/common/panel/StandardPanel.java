@@ -1,8 +1,5 @@
 package org.iocaste.appbuilder.common.panel;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -10,7 +7,6 @@ import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.panel.context.PanelPageEntryType;
 import org.iocaste.appbuilder.common.panel.context.PanelPageItemContextEntry;
 import org.iocaste.appbuilder.common.style.CommonStyle;
-import org.iocaste.shell.common.PageStackItem;
 
 public class StandardPanel {
     private PageBuilderContext context;
@@ -23,24 +19,14 @@ public class StandardPanel {
 
     public final void instance(
             String name, AbstractPanelPage page, ExtendedContext extcontext) {
-        StandardPanelSpec spec;
-        StandardPanelInput input;
         PanelPageItem item;
         ViewContext view;
-        Map<String, PageStackItem> positions;
         
-        positions = new LinkedHashMap<>();
-
-        spec = new StandardPanelSpec(page);
-        spec.setPositions(positions);
-        
-        input = new StandardPanelInput(page);
-        input.setPositions(positions);
         
         view = context.instance(name);
-        view.set(spec);
+        view.set(new StandardPanelSpec(page));
         view.set(new StandardPanelConfig(page));
-        view.set(input);
+        view.set(new StandardPanelInput(page));
         view.set(extcontext);
         
         page.setViewContext(view);

@@ -6,7 +6,6 @@ import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.panel.context.ActionRenderer;
-import org.iocaste.appbuilder.common.panel.context.NavigationRenderer;
 import org.iocaste.appbuilder.common.panel.context.StandardPanelContextRenderer;
 import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.shell.common.StyleSheet;
@@ -27,6 +26,7 @@ class StandardPanelConfig extends AbstractViewConfig {
         Map<String, String> style;
         StyleSheet stylesheet;
         CommonStyle profile;
+        StandardPanelDesign design;
         
         profile = CommonStyle.get();
         stylesheet = context.view.styleSheetInstance();
@@ -77,9 +77,10 @@ class StandardPanelConfig extends AbstractViewConfig {
         style.put("border-right-color", profile.content.bgcolor);
         getElement("context").setStyleClass("std_panel_context");
         
-        getNavControl().setDesign(new StandardPanelDesign());
+        design = new StandardPanelDesign();
+        design.setSubmit(page.getSubmit());
+        getNavControl().setDesign(design);
         
-        getDashboard("navigation").setRenderer(new NavigationRenderer());
         getDashboard("actions").setRenderer(new ActionRenderer());
         getDashboard("dashcontext").setRenderer(
                 new StandardPanelContextRenderer());

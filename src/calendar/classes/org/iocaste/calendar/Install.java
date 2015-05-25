@@ -19,6 +19,7 @@ public class Install {
         messages.put("thursday", "qui");
         messages.put("friday", "sex");
         messages.put("saturday", "sáb");
+        messages.put("cancel", "Cancelar");
         data.setMessages("pt_BR", messages);
         
         return data;

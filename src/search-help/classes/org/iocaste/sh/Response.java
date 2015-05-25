@@ -27,6 +27,8 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
 
 public class Response {
+    private static final String BODY = "#ffffff";
+    private static final String BORDER = "#a0a0a0";
     
     private static final void addCriteria(Context context, SearchHelp sh,
             Container container, DocumentModel model, MessageSource source) {
@@ -138,21 +140,21 @@ public class Response {
         
         stylesheet.newElement(".shcol").put("font-size", "12pt");
         
-        stylesheet.newElement(".shcnt");
+        style = stylesheet.newElement(".shcnt");
         style.put("position", "absolute");
-        style.put("background-color", "#f0f0f0");
+        style.put("background-color", BODY);
         style.put("float", "left");
         style.put("padding", "10px");
         style.put("border-style", "solid");
-        style.put("border-color", "rgb(176, 176, 176)");
+        style.put("border-color", BORDER);
         style.put("border-width", "2px"); 
         style.put("overflow", "hidden");
         
-        stylesheet.newElement(".shdatacnt");
+        style = stylesheet.newElement(".shdatacnt");
         style.put("overflow", "auto");
         style.put("height", "20em");
         
-        stylesheet.newElement(".shcriteria");
+        style = stylesheet.newElement(".shcriteria");
         style.put("margin", "0px");
         style.put("padding", "0px");
         style.put("border-style", "none");
@@ -207,6 +209,7 @@ public class Response {
         messages.put(searchbt, "Selecionar");
         messages.put("to", "até");
         messages.put("cancel", "Cancelar");
+        messages.put("no.results.found", "Nenhum resultado encontrado.");
         context.source.setMessages(messages);
         
         if (result == null) {

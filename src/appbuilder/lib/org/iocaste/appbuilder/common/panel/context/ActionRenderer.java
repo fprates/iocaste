@@ -15,8 +15,10 @@ public class ActionRenderer extends StandardPanelContextRenderer {
         String style;
         
         if ((value != null) && value.equals("submit")) {
-            style = "std_dash_action_submit";
+            if (name.equals("validate"))
+                return;
             
+            style = "std_dash_action_submit";
             button = new Button(getContainer(dashname, INNER), name);
             button.setSubmit(true);
             button.setStyleClass(style);
