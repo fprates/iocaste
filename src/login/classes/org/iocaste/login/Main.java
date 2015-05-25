@@ -4,8 +4,8 @@ import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
+import org.iocaste.appbuilder.common.style.CommonStyle;
 
 public class Main extends AbstractPageBuilder {
     
@@ -13,12 +13,17 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) throws Exception {
         StandardPanel panel;
         Context extcontext;
+        CommonStyle profile;
 
         extcontext = new Context();
         
         panel = new StandardPanel(context);
         panel.instance("authentic", new MainPage(), extcontext);
         panel.instance("changesecret", new ChangeSecretPage(), extcontext);
+        
+        profile = CommonStyle.get();
+        profile.head.bgcolor = "#3030ff";
+        profile.content.bgcolor = "#202020";
     }
 
     @Override
@@ -35,8 +40,7 @@ class MainPage extends AbstractPanelPage {
     public void execute() {
         set(new MainSpec());
         set(new MainConfig());
-
-        set(Colors.HEAD_BG, "#3030ff");
+        
         put("connect", new Connect());
     }
 }

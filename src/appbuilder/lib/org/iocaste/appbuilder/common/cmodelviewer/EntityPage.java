@@ -4,7 +4,6 @@ import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
-import org.iocaste.appbuilder.common.panel.Colors;
 
 public class EntityPage extends AbstractPanelPage {
     public String action;
@@ -16,7 +15,7 @@ public class EntityPage extends AbstractPanelPage {
         Context extcontext;
         
         set(spec);
-        set(Colors.CONTENT_BG, "#ffffff");
+        
         extcontext = getExtendedContext();
         
         switch (action) {

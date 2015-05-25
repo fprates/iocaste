@@ -5,6 +5,7 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
+import org.iocaste.appbuilder.common.style.CommonStyle;
 
 public class Main extends AbstractPageBuilder {
 
@@ -19,6 +20,8 @@ public class Main extends AbstractPageBuilder {
         panel.instance("main", new MainPage(), extcontext);
         panel.instance("output", new OutputPage(), extcontext);
         panel.instance("nsinput", new NSInputPage(), extcontext);
+        
+        CommonStyle.get().head.bgcolor = "#3030ff";
     }
 
     @Override

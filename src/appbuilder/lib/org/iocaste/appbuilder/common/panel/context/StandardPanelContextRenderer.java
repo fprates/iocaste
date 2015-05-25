@@ -3,7 +3,7 @@ package org.iocaste.appbuilder.common.panel.context;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.AbstractDashboardRenderer;
-import org.iocaste.appbuilder.common.panel.Colors;
+import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.Link;
@@ -141,15 +141,14 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
     
     protected void config(Internal internal) {
         Map<String, String> style;
-        String font, contentbg;
+        CommonStyle profile;
         
+        profile = CommonStyle.get();
         style = stylesheet.get(factorystyle);
         style.put("float", "left");
         style.put("width", "100%");
         style.put("display", "inline");
         
-        font = colors.get(Colors.FONT);
-        contentbg = colors.get(Colors.CONTENT_BG);
         for (String linkstyle : internal.linksstyles) {
             style = stylesheet.newElement(linkstyle);
             
@@ -160,27 +159,29 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
                 style.put("display", "block");
                 style.put("border-bottom-style", "solid");
                 style.put("border-bottom-width", "2px");
-                style.put("border-bottom-color", contentbg);
+                style.put("border-bottom-color", profile.context.shade);
                 if (internal.bgcolor != null)
                     style.put("background-color", internal.bgcolor);
                 
                 linkstyle = linkstyle.concat("_mouseover");
                 stylesheet.clone(linkstyle, internal.cntstyle).put(
-                        "background-color", colors.get(Colors.FOCUS));
+                        "background-color", profile.context.focusbgcolor);
             } else {
                 style.put("width", "100%");
                 style.put("display", "block");
-                style.put("color", font);
+                style.put("color", profile.context.font.color);
                 style.put("text-decoration", "none");
                 style.put("text-align", "center");
-                style.put("font-size", "10pt");
+                style.put("font-size", profile.context.font.size);
+                style.put("font-family", profile.context.font.family);
             }
         }
         
         style = stylesheet.newElement(".std_dash_context_txt");
-        style.put("color", font);
+        style.put("color", profile.context.font.color);
         style.put("text-align", "center");
-        style.put("font-size", "10pt");
+        style.put("font-size", profile.context.font.size);
+        style.put("font-family", profile.context.font.family);
         style.put("font-weight", "bold");
         style.put("margin", "0px");
         
@@ -189,10 +190,10 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
         style.put("padding-bottom", "0.5em");
         style.put("width", "100%");
         style.put("display", "block");
-        style.put("background-color", colors.get(Colors.GROUP_BG));
+        style.put("background-color", profile.context.groupbgcolor);
         style.put("border-bottom-style", "solid");
         style.put("border-bottom-width", "2px");
-        style.put("border-bottom-color", contentbg);
+        style.put("border-bottom-color", profile.context.shade);
     }
 }
 

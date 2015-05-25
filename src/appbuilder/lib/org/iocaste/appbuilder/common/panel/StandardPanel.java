@@ -9,6 +9,7 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.panel.context.PanelPageEntryType;
 import org.iocaste.appbuilder.common.panel.context.PanelPageItemContextEntry;
+import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.shell.common.PageStackItem;
 
 public class StandardPanel {
@@ -16,6 +17,8 @@ public class StandardPanel {
     
     public StandardPanel(PageBuilderContext context) {
         this.context = context;
+        CommonStyle.style = "default";
+        CommonStyle.instance("default");
     }
 
     public final void instance(

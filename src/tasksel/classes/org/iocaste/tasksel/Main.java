@@ -10,6 +10,7 @@ import org.iocaste.appbuilder.common.panel.PanelPageItem;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.appbuilder.common.panel.dashboard.StandardDashboardConfig;
 import org.iocaste.appbuilder.common.panel.dashboard.StandardDashboardSpec;
+import org.iocaste.appbuilder.common.style.CommonStyle;
 
 public class Main extends AbstractPageBuilder {
     public static final String MAIN = "main";
@@ -29,12 +30,17 @@ public class Main extends AbstractPageBuilder {
     @Override
     public void config(PageBuilderContext context) {
         StandardPanel panel;
+        CommonStyle profile;
         
         extcontext.context = context;
         extcontext.groups = Refresh.getLists(context);
         
         panel = new StandardPanel(context);
         panel.instance(MAIN, new TaskPanelPage(), extcontext);
+        
+        profile = CommonStyle.get();
+        profile.content.bgcolor = "#202020";
+        profile.head.bgcolor = "#3030ff";
     }
     
     @Override

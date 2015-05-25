@@ -4,8 +4,8 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.AbstractDashboardRenderer;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.appbuilder.common.panel.PanelPageItem;
+import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.StandardContainer;
@@ -97,7 +97,9 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
     public void config() {
         Map<String, String> style;
         String name, mouseover;
+        CommonStyle profile;
         
+        profile = CommonStyle.get();
         for (String suffix : new String[] {
                 "link",
                 "active",
@@ -110,12 +112,12 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
             style.put("display", "block");
             style.put("text-decoration", "none");
             style.put("text-align", "center");
-            style.put("color", colors.get(Colors.DASH_FONT));
+            style.put("color", profile.dashboard.font.color);
             
             mouseover = new StringBuilder(".std_dash_item_mouseover:").
                     append(suffix).toString();
             stylesheet.clone(mouseover, name).put(
-                    "color", colors.get(Colors.FOCUS_FONT));
+                    "color", profile.dashboard.font.focuscolor);
         }
     }
 
@@ -123,7 +125,9 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
     public void config(String name) {
         Map<String, String> style;
         String mouseover;
+        CommonStyle profile;
         
+        profile = CommonStyle.get();
         style = stylesheet.newElement(getStyle(name, OUTER));
         style.put("width", "15em");
         style.put("height", "3em");
@@ -131,15 +135,15 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         style.put("margin", "0.5em");
         style.put("padding", "1em");
         style.put("display", "inline");
+        style.put("background-color", profile.dashboard.itembgcolor);
         style.put("border-radius", "3px");
         style.put("border-style", "solid");
-        style.put("border-color", colors.get(Colors.DASH_BORDER));
-        style.put("background-color", colors.get(Colors.DASH_BG));
-        style.put("font-size", "12pt");
+        style.put("border-color", profile.dashboard.border.all.color);
+        style.put("font-size", profile.dashboard.font.size);
         
         mouseover = getStyle(name, OUTER).concat("_mouseover");
         stylesheet.clone(mouseover, getStyle(name, OUTER)).put(
-                "background-color", colors.get(Colors.FOCUS));
+                "background-color", profile.dashboard.focusbgcolor);
         
         style = stylesheet.newElement(getStyle(name, INNER));
         style.put("margin", "auto");

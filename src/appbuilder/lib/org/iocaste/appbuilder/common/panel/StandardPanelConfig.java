@@ -5,17 +5,15 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
-import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
-import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.appbuilder.common.panel.context.ActionRenderer;
 import org.iocaste.appbuilder.common.panel.context.NavigationRenderer;
 import org.iocaste.appbuilder.common.panel.context.StandardPanelContextRenderer;
+import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.shell.common.StyleSheet;
 
 public 
 
 class StandardPanelConfig extends AbstractViewConfig {
-    public static final String CONTEXT_WIDTH = "15em";
     public static final String CONTENT_TOP = "70px";
     private AbstractPanelPage page;
     
@@ -25,18 +23,12 @@ class StandardPanelConfig extends AbstractViewConfig {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        Map<Colors, String> colors;
-        StandardPanelDesign design;
         ViewConfig extconfig;
         Map<String, String> style;
-        String contentbg;
         StyleSheet stylesheet;
-        NavControl navcontrol;
-        DashboardFactory factory;
+        CommonStyle profile;
         
-        colors = page.getColors();
-        contentbg = colors.get(Colors.CONTENT_BG);
-        
+        profile = CommonStyle.get();
         stylesheet = context.view.styleSheetInstance();
         stylesheet.get("body").put("margin", "0px");
         
@@ -46,14 +38,12 @@ class StandardPanelConfig extends AbstractViewConfig {
         style.put("overflow", "auto");
         style.put("float", "left");
         style.put("position", "fixed");
-        style.put("font-size", "12pt");
-        style.put("font-family", "sans-serif");
-        style.put("background-color", contentbg);
+        style.put("background-color", profile.content.bgcolor);
 
         style = stylesheet.newElement(".outer_content");
         style.put("font-size", "12pt");
-        style.put("top", "70px");
-        style.put("left", "15em");
+        style.put("top", CONTENT_TOP);
+        style.put("left", profile.context.width);
         style.put("position", "fixed");
         style.put("width", "100%");
         style.put("height", "100%");
@@ -61,45 +51,43 @@ class StandardPanelConfig extends AbstractViewConfig {
         style.put("margin", "0px");
         getElement("outercontent").setStyleClass("outer_content");
         
-        stylesheet.newElement(".std_panel_content");
+        style = stylesheet.newElement(".std_panel_content");
+        style.put("margin", profile.content.margin);
+        style.put("color", profile.content.font.color);
+        style.put("height", profile.content.height);
+        style.put("width", profile.content.width);
+        style.put("position", "relative");
+        style.put("overflow", "auto");
+        style.put("font-size", profile.content.font.size);
+        style.put("font-family", profile.content.font.family);
         getElement("content").setStyleClass("std_panel_content");
         
         style = stylesheet.newElement(".std_panel_context");
         style.put("top", CONTENT_TOP);
         style.put("left", "0px");
-        style.put("width", CONTEXT_WIDTH);
-        style.put("height", "100%");
+        style.put("width", profile.context.width);
+        style.put("height", profile.context.height);
         style.put("float", "left");
         style.put("display", "inline");
         style.put("position", "fixed");
-        style.put("background-color", colors.get(Colors.COMPONENT_BG));
-        style.put("font-size", "12pt");
+        style.put("overflow", "auto");
+        style.put("background-color", profile.context.bgcolor);
         style.put("border-right-style", "solid");
         style.put("border-right-width", "2px");
-        style.put("border-right-color", contentbg);
+        style.put("border-right-color", profile.content.bgcolor);
         getElement("context").setStyleClass("std_panel_context");
         
-        design = new StandardPanelDesign();
-        design.setColors(colors);
+        getNavControl().setDesign(new StandardPanelDesign());
         
-        navcontrol = getNavControl();
-        navcontrol.setDesign(design);
-        
-        factory = getDashboard("navigation");
-        factory.setColors(colors);
-        factory.setRenderer(new NavigationRenderer());
-        
-        factory = getDashboard("actions");
-        factory.setColors(colors);
-        factory.setRenderer(new ActionRenderer());
-        
-        factory = getDashboard("dashcontext");
-        factory.setColors(colors);
-        factory.setRenderer(new StandardPanelContextRenderer());
+        getDashboard("navigation").setRenderer(new NavigationRenderer());
+        getDashboard("actions").setRenderer(new ActionRenderer());
+        getDashboard("dashcontext").setRenderer(
+                new StandardPanelContextRenderer());
         
         extconfig = page.getConfig();
         if (extconfig == null)
             return;
+        
         
         config(extconfig);
     }

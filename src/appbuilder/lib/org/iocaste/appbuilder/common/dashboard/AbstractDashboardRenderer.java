@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.StyleSheet;
@@ -14,7 +13,6 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
     protected StyleSheet stylesheet;
     protected Map<String, Entry> entries;
     protected String factorystyle, container;
-    protected Map<Colors, String> colors;
     
     public AbstractDashboardRenderer() {
         entries = new HashMap<>();
@@ -72,11 +70,6 @@ public abstract class AbstractDashboardRenderer implements DashboardRenderer {
         default:
             return entries.get(name).outerstyle;
         }
-    }
-    
-    @Override
-    public final void setColors(Map<Colors, String> colors) {
-        this.colors = colors;
     }
     
     @Override

@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
+import org.iocaste.appbuilder.common.style.CommonStyle;
 
 public class Main extends AbstractPageBuilder {
     
@@ -40,6 +41,8 @@ public class Main extends AbstractPageBuilder {
             return;
         }
 
+        CommonStyle.get().head.bgcolor = "#3030ff";
+        
         context.view.setActionControl("load");
         load.run(context, false);
     }

@@ -5,14 +5,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StandardContainer;
 
 public class DashboardFactory {
     private String name;
     private PageBuilderContext context;
-    private Map<Colors, String> colors;
     private Map<String, DashboardComponent> components;
     private DashboardRenderer renderer;
     private String container;
@@ -85,11 +83,6 @@ public class DashboardFactory {
         return component;
     }
     
-    public final void setColors(Map<Colors, String> colors) {
-        this.colors = colors;
-        renderer.setColors(colors);
-    }
-    
     public final void setRenderer(DashboardRenderer renderer) {
         String style;
         
@@ -101,7 +94,6 @@ public class DashboardFactory {
         this.renderer.setContext(context);
         this.renderer.entryInstance(null, name);
         this.renderer.setStyle(style);
-        this.renderer.setColors(colors);
     }
     
     public final void setStyleProperty(String name, String value) {

@@ -1,9 +1,6 @@
 package org.iocaste.appbuilder.common.dashboard;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.InputComponent;
 
@@ -29,8 +26,6 @@ public interface DashboardRenderer {
     public abstract String getStyle(String name, byte type);
 
     public abstract InputComponent getInput(String name);
-    
-    public abstract void setColors(Map<Colors, String> colors);
     
     public abstract void setContainerName(String name);
     

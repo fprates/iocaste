@@ -31,11 +31,6 @@ public class MainConfig extends AbstractViewConfig {
         stylesheet = context.view.styleSheetInstance();
         stylesheet.get(".outer_content").put("left", "0px");
         
-        style = stylesheet.get(".std_panel_content");
-        style.put("margin", "auto");
-        style.put("height", "100%");
-        style.put("width", "100%");
-        
         stylesheet.get(".std_panel_context").put("display", "none");
         
         style = stylesheet.newElement(".logincnt");

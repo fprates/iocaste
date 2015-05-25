@@ -2,7 +2,7 @@ package org.iocaste.appbuilder.common.panel.context;
 
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.panel.Colors;
+import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.shell.common.Button;
 
 public class ActionRenderer extends StandardPanelContextRenderer {
@@ -43,10 +43,12 @@ public class ActionRenderer extends StandardPanelContextRenderer {
     public void config() {
         Internal internal;
         Map<String, String> style;
+        CommonStyle profile;
         
+        profile = CommonStyle.get();
         internal = new Internal();
         internal.cntstyle = ".std_dash_action_cnt";
-        internal.bgcolor = colors.get(Colors.ACTION_BG);
+        internal.bgcolor = profile.context.actionbgcolor;
         internal.linksstyles = new String[] {
                 ".std_dash_action_cnt",
                 ".std_dash_action_lnk:link",
@@ -58,7 +60,7 @@ public class ActionRenderer extends StandardPanelContextRenderer {
         
         style = stylesheet.clone(
                 ".std_dash_action_submit", ".std_dash_action_cnt");
-        style.put("color", colors.get(Colors.FONT));
+        style.put("color", profile.context.font.color);
         style.put("border-top-style", "none");
         style.put("border-left-style", "none");
         style.put("border-right-style", "none");
@@ -67,7 +69,7 @@ public class ActionRenderer extends StandardPanelContextRenderer {
         
         style = stylesheet.clone(
                 ".std_dash_action_submit_mouseover", ".std_dash_action_submit");
-        style.put("background-color", colors.get(Colors.FOCUS));
+        style.put("background-color", profile.context.focusbgcolor);
     }
 
     @Override

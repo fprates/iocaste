@@ -1,11 +1,7 @@
 package org.iocaste.gconfigview;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.appbuilder.common.panel.Colors;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
@@ -19,11 +15,9 @@ import org.iocaste.shell.common.InputComponent;
 
 public class DetailConfig extends AbstractViewConfig {
     private byte mode;
-    private AbstractPanelPage page;
     
-    public DetailConfig(AbstractPanelPage page, byte mode) {
+    public DetailConfig(byte mode) {
         this.mode = mode;
-        this.page = page;
     }
     
     @Override
@@ -36,14 +30,6 @@ public class DetailConfig extends AbstractViewConfig {
         DocumentModel model;
         DocumentModelItem item;
         DataElement de;
-        Map<String, String> style;
-        Map<Colors, String> colors;
-        
-        colors = page.getColors();
-        style = context.view.styleSheetInstance().get(".std_panel_content");
-        style.put("background-color", colors.get(Colors.CONTENT_BG));
-        style.put("width", "100%");
-        style.put("height", "100%");
         
         model = new DocumentModel("PACKAGE_CONFIG");
         extcontext = getExtendedContext();
