@@ -77,17 +77,18 @@ public class StandardPanelDesign implements NavControlDesign {
                 style.put("top", "-30px");
                 style.put("left", "-30px");
                 style.put("position", "absolute");
+
+                position = items[items.length - 1];
+                address = new StringBuilder(position.getApp()).
+                        append(".").append(position.getPage()).toString();
                 
-                link = new Link(container, "back", "back");
+                link = new Link(container, address, address);
                 link.setImage("/iocaste-shell/images/back.svg");
                 link.setStyleClass("std_navcontrol_back");
                 link.setCancellable(true);
                 
-                position = items[items.length - 1];
-                address = new StringBuilder(position.getApp()).
-                        append(".").append(position.getPage()).toString();
                 context.function.register(
-                        "back", new NavControlCustomAction(address));
+                        address, new NavControlCustomAction(address));
             }
             
             if ((submit != null) && (submit.equals("validate"))) {
