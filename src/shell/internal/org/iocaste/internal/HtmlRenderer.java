@@ -80,6 +80,13 @@ public class HtmlRenderer {
         
         metatag.add("http-equiv", "Content-Type");
         metatag.add("content", "text/html; charset=utf-8");
+        headtag.addChild(metatag);
+        
+        metatag = new XMLElement("meta");
+        metatag.add("name", "viewport");
+        metatag.add("content",
+                "width=device-width, initial-scale=1.0, user-scalable=no");
+        headtag.addChild(metatag);
         
         titletag.addInner((title == null)?"Iocaste" : config.
                 getText(title, title));
@@ -90,7 +97,6 @@ public class HtmlRenderer {
                     append(focusname).append("').focus();").toString());
         }
         
-        headtag.addChild(metatag);
         headtag.addChild(titletag);
         if (script != null)
             headtag.addChild(renderJavaScript(script, config));
