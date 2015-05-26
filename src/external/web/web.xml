@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<web-app id="iocaste_tests" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app id="iocaste_external" xmlns="http://java.sun.com/xml/ns/javaee"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
    version="2.5"> 
     <description>iocaste gateway</description>
-    <display-name>Document Manager Editor</display-name>
+    <display-name>Iocaste Gateway</display-name>
     
     <servlet>
         <servlet-name>iocaste_server</servlet-name>

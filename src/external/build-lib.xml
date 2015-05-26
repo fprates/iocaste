@@ -1,9 +1,7 @@
 <project name="external" default="compile">
 	
     <target name="compile">
-        <mkdir dir="${builddir}/${ant.project.name}/web"/>
         <mkdir dir="${builddir}/${ant.project.name}/lib"/>
-        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
     	
         <!-- dependências -->
         <path id="dependencies">
@@ -24,6 +22,8 @@
         
         <jar basedir="${builddir}/${ant.project.name}/lib"
             destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
-    	
+        
+        <copy todir="${basedir}/ext"
+            file="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
     </target>
 </project>
