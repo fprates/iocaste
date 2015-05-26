@@ -87,6 +87,7 @@ public class Selector {
         ExtendedObject object = new ExtendedObject(model);
         
         object.set("NAME", name);
+        object.set("PACKAGE", state.pkgname);
         state.documents.save(object);
         
         return object;
@@ -105,19 +106,23 @@ public class Selector {
     /**
      * 
      * @param groupname
+     * @param pkgname
      * @param documents
      */
-    public static final void removeGroup(String groupname, Documents documents)
+    public static final void removeGroup(
+            String groupname, String pkgname, Documents documents)
     {
         Query[] queries = new Query[2];
         
         queries[0] = new Query("delete");
         queries[0].setModel("USER_TASKS_GROUPS");
         queries[0].andEqual("GROUP", groupname);
+        queries[0].andEqual("PACKAGE", pkgname);
         
         queries[1] = new Query("delete");
         queries[1].setModel("TASKS_GROUPS");
         queries[1].andEqual("NAME", groupname);
+        queries[1].andEqual("PACKAGE", pkgname);
         documents.update(queries);
     }
     

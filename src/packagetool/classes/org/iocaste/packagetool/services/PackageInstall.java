@@ -159,10 +159,11 @@ public class PackageInstall extends AbstractHandler {
             /*
              * registra tarefas
              */
-            tasks = state.documents.getModel("TASKS");
             links = state.data.getLinks();
-            if (links.size() > 0)
+            if (links.size() > 0) {
+                tasks = state.documents.getModel("TASKS");
                 InstallLinks.init(links, tasks, state);
+            }
             
             tasksgroups = state.data.getTasksGroups();
             if (tasksgroups.size() > 0)

@@ -30,6 +30,7 @@ public class TasksGroupsInstall extends AbstractInstallObject {
         model = modelInstance("TASKS_GROUPS", "TASKSGRP");
         groupname = tag("groupid", model.key(
                 "NAME", "GRPID", taskgroupname));
+        model.item("PACKAGE", "PKGNM", new DummyElement("PACKAGE.NAME"));
         
         /*
          * item do grupo de tarefas

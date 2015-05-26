@@ -23,6 +23,7 @@ public class UserTaskGroupsInstall extends AbstractInstallObject {
                 "USERNAME", "UNAME", new DummyElement("LOGIN.USERNAME"),
                     new DummyModelItem("LOGIN", "USERNAME"));
         model.reference("GROUP", "GRPID", getItem("groupid"));
+        model.item("PACKAGE", "PKGNM", new DummyElement("PACKAGE.NAME"));
     }
 
 }

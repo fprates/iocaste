@@ -87,9 +87,6 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
         profile = new UserProfile(profilename);
         data.add(profile);
         
-        for (TaskGroup taskgroup : tasksgroups.values())
-            data.add(taskgroup);
-        
         for (AppBuilderLink applink : applinks) {
             links.put(applink.create, buildapplink(applink, "create"));
             links.put(applink.display, buildapplink(applink, "display"));
@@ -102,6 +99,9 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
             addToTaskGroup(applink.taskgroup, applink.display);
             addToTaskGroup(applink.taskgroup, applink.change);
         }
+        
+        for (TaskGroup taskgroup : tasksgroups.values())
+            data.add(taskgroup);
         
         for (String link : links.keySet()) {
             authorization = new Authorization(link.concat(".CALL"));

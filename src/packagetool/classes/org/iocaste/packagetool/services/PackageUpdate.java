@@ -7,8 +7,13 @@ import java.util.Set;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.AbstractHandler;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.user.Authorization;
+import org.iocaste.protocol.user.User;
+import org.iocaste.protocol.user.UserProfile;
 import org.iocaste.shell.common.StyleSheet;
 
 public class PackageUpdate extends AbstractHandler {
@@ -21,6 +26,11 @@ public class PackageUpdate extends AbstractHandler {
         String defaultstyle;
         Map<String, StyleSheet> stylesheets;
         Map<String, DocumentModel> models;
+        Map<String, String> links;
+        Map<TaskGroup, Set<User>> tasksgroups;
+        Map<UserProfile, Set<User>> profiles;
+        Authorization[] authorizations;
+        DocumentModel tasks;
         State state;
         Services services;
         
@@ -42,6 +52,11 @@ public class PackageUpdate extends AbstractHandler {
         types = new HashSet<>();
         types.add("MESSAGE");
         types.add("STYLE");
+        types.add("AUTHORIZATION");
+        types.add("AUTH_PROFILE");
+        types.add("TSKGROUP");
+        types.add("TSKITEM");
+        types.add("TASK");
         
         services = getFunction();
         uninstall = services.get("uninstall");
@@ -58,7 +73,27 @@ public class PackageUpdate extends AbstractHandler {
         stylesheets = state.data.getStyleSheets();
         if (stylesheets.size() > 0)
             InstallStyles.init(stylesheets, state);
+        
+        authorizations = state.data.getAuthorizations();
+        if (authorizations.length > 0)
+            InstallAuthorizations.init(authorizations, state);
+        
+        profiles = state.data.getUserProfiles();
+        if (profiles.size() > 0)
+            InstallAuthorizations.init(profiles, state);
+        
+        new Iocaste(state.function).invalidateAuthCache();
 
+        links = state.data.getLinks();
+        if (links.size() > 0) {
+            tasks = state.documents.getModel("TASKS");
+            InstallLinks.init(links, tasks, state);
+        }
+        
+        tasksgroups = state.data.getTasksGroups();
+        if (tasksgroups.size() > 0)
+            InstallTasksGroups.init(tasksgroups, state);
+        
         /*
          * grava itens instalados
          */
