@@ -21,7 +21,9 @@ public class ChangeSecretConfig extends AbstractViewConfig {
         StyleSheet stylesheet;
         
         stylesheet = context.view.styleSheetInstance();
+        stylesheet.get(".outer_content").put("left", "0px");
         stylesheet.get(".loginform").put("width", "19em");
+        stylesheet.get(".std_panel_context").put("display", "none");
         
         getElement("chgscrtcnt").setStyleClass("logincnt");
         
