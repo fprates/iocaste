@@ -21,7 +21,8 @@ public class Servlet extends AbstractIocasteServlet {
         Message message;
         
         message = super.getMessage(sessionid, service, parameters);
-        message.setSessionid(sessionid);
+        if (message.getSessionid() == null)
+            message.setSessionid(sessionid);
         return message;
     }
 

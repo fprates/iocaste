@@ -16,7 +16,8 @@ public class ModelsInstall extends AbstractInstallObject {
         ComplexModelInstall cmodel;
         ModelInstall model;
         DocumentModelItem porttypeid;
-        DataElement portname, porttype, text;
+        DataElement portname, porttype, text, host, sapprgid;
+        DataElement sapclient, sapsystemnumber, username, secret;
         SearchHelpData shd;
         
         portname = new DataElement("XTRNL_PORT_NAME");
@@ -32,6 +33,35 @@ public class ModelsInstall extends AbstractInstallObject {
         text.setType(DataType.CHAR);
         text.setLength(45);
         text.setUpcase(false);
+        
+        host = new DataElement("XTRNL_HOST");
+        host.setType(DataType.CHAR);
+        host.setLength(128);
+        host.setUpcase(false);
+        
+        sapprgid = new DataElement("XTRNL_SAPPRGID");
+        sapprgid.setType(DataType.CHAR);
+        sapprgid.setLength(12);
+        sapprgid.setUpcase(true);
+        
+        sapclient = new DataElement("XTRNL_SAPCLIENT");
+        sapclient.setType(DataType.CHAR);
+        sapclient.setLength(3);
+        sapclient.setUpcase(true);
+        
+        sapsystemnumber = new DataElement("XTRNL_SAPSYSNR");
+        sapsystemnumber.setType(DataType.NUMC);
+        sapsystemnumber.setLength(2);
+        
+        username = new DataElement("XTRNL_USERNAME");
+        username.setType(DataType.CHAR);
+        username.setLength(64);
+        username.setUpcase(true);
+        
+        secret = new DataElement("XTRNL_SECRET");
+        secret.setType(DataType.CHAR);
+        secret.setLength(64);
+        secret.setUpcase(false);
         
         model = modelInstance("XTRNL_PORT_TYPE", "XTRNLPORTTP");
         porttypeid = searchhelp(model.key(
@@ -54,6 +84,20 @@ public class ModelsInstall extends AbstractInstallObject {
                 "PORT_TYPE", "PRTTP", porttypeid), "XTRNL_SH_PORTS_TYPES");
         model.item(
                 "TEXT", "PRTTX", text);
+        model.item(
+                "HOST", "HOST", host);
+        model.item(
+                "SAP_GWHOST", "SAPGWHOST", host);
+        model.item(
+                "SAP_PROGRAM_ID", "SAPPRGID", sapprgid);
+        model.item(
+                "SAP_CLIENT", "SAPCLIENT", sapclient);
+        model.item(
+                "USERNAME", "USRNM", username);
+        model.item(
+                "SECRET", "SECRT", secret);
+        model.item(
+                "SAP_SYSTEM_NUMBER", "SAPSYSNR", sapsystemnumber);
         
         shd = searchHelpInstance("XTRNL_SH_PORTS", "XTRNL_PORT_HEAD");
         shd.setExport("PORT_NAME");
