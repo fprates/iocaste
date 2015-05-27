@@ -177,12 +177,12 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
     }
     
     private final DocumentModelItem getModelItem(Connection connection,
-            Documents documents, DocumentModel model, String name)
-                    throws Exception {
+            Documents documents, String refname, String name) throws Exception {
+        DocumentModel model;
         GetDocumentModel getmodel = documents.get("get_document_model");
         
-        return getmodel.run(connection, documents, model.getName()).
-                getModelItem(name);
+        model = getmodel.run(connection, documents, refname);
+        return (model == null)? null : model.getModelItem(name);
     }
     
     protected final DocumentModelItem getModelKey(DocumentModel model) {
@@ -271,6 +271,7 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         DataElement element;
         CreateDataElement createde;
         GetDataElement getde;
+        String refname, modelrefname;
         
         createde = documents.get("create_data_element");
         getde = documents.get("get_data_element");
@@ -279,12 +280,25 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
             if (element == null) {
                 reference = item.getReference();
                 if (reference == null)
-                    throw new RuntimeException(
-                            item.getName().concat(
-                                    " has an undefined element or reference."));
-                if (reference.isDummy())
-                    reference = getModelItem(connection, documents,
-                            reference.getDocumentModel(), reference.getName());
+                    throw new IocasteException(
+                            new StringBuilder(item.getName()).
+                            append(" has an undefined element or reference.").
+                            toString());
+                
+                if (reference.isDummy()) {
+                    modelrefname = reference.getDocumentModel().getName();
+                    refname = reference.getName();
+                    reference = getModelItem(
+                            connection, documents, modelrefname, refname);
+                    
+                    if (reference == null)
+                        throw new IocasteException(
+                                new StringBuilder(modelrefname).
+                                append(" model used as reference for ").
+                                append(refname).
+                                append(" is undefined.").toString());
+                }
+                
                 element = reference.getDataElement();
                 item.setDataElement(element);
             }
