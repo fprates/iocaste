@@ -18,6 +18,7 @@ public class PortsInstall extends AbstractInstallObject {
         DocumentModelItem porttypeid, portnameref, functionid;
         DataElement portname, porttype, text, host, sapprgid, sapgwserv;
         DataElement sapclient, sapsystemnumber, username, secret, portfunction;
+        DataElement service, servicefunction;
         SearchHelpData shd;
         
         portname = new DataElement("XTRNL_PORT_NAME");
@@ -72,6 +73,16 @@ public class PortsInstall extends AbstractInstallObject {
         secret.setType(DataType.CHAR);
         secret.setLength(64);
         secret.setUpcase(false);
+        
+        service = new DataElement("XTRNL_SERVICE");
+        service.setType(DataType.CHAR);
+        service.setLength(64);
+        service.setUpcase(false);
+        
+        servicefunction = new DataElement("XTRNL_SERVICE_FUNCTION");
+        servicefunction.setType(DataType.CHAR);
+        servicefunction.setLength(32);
+        servicefunction.setUpcase(false);
         
         model = modelInstance("XTRNL_PORT_TYPE", "XTRNLPORTTP");
         porttypeid = searchhelp(model.key(
@@ -131,6 +142,10 @@ public class PortsInstall extends AbstractInstallObject {
                 "PORT_NAME", "CONID", portnameref);
         searchhelp(model.reference(
                 "FUNCTION", "FUNCT", functionid), "XTRNL_SH_FUNCTION");
+        model.item(
+                "SERVICE", "SRVNM", service);
+        model.item(
+                "SERVICE_FUNCTION", "SRVFN", servicefunction);
         
         cmodel = cmodelInstance("XTRNL_CONNECTION");
         cmodel.header("porthead");
