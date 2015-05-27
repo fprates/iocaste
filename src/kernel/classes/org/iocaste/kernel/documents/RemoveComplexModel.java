@@ -2,7 +2,6 @@ package org.iocaste.kernel.documents;
 
 import java.sql.Connection;
 
-import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Message;
 
@@ -11,19 +10,12 @@ public class RemoveComplexModel extends AbstractDocumentsHandler {
     @Override
     public Object run(Message message) throws Exception {
         UpdateDocument update;
-        GetComplexModel getcmodel;
-        ComplexModel cmodel;
         Query query;
         int error;
         String name = message.getString("name");
         String sessionid = message.getSessionid();
         Documents documents = getFunction();
         Connection connection = documents.database.getDBConnection(sessionid);
-        
-        getcmodel = documents.get("get_complex_model");
-        cmodel = getcmodel.run(connection, documents, name);
-        if (cmodel == null)
-            return 0;
         
         update = documents.get("update_document");
         query = new Query("delete");
