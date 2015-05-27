@@ -87,8 +87,8 @@ public class FunctionsInstall extends AbstractInstallObject {
          */
         model = tag("functionhead", modelInstance(
                 "XTRNL_FUNCTION_HEAD", "XTRNLFNCHD"));
-        modelref = tag("functionid", model.key(
-                "MODEL_ID", "MDLID", modelid));
+        modelref = searchhelp(tag("functionid", model.key(
+                "MODEL_ID", "MDLID", modelid)), "XTRNL_SH_FUNCTION");
         model.item(
                 "TEXT", "MDLTX", modeltext);
         
