@@ -4,9 +4,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
@@ -30,6 +32,8 @@ public class PackageUpdate extends AbstractHandler {
         Map<TaskGroup, Set<User>> tasksgroups;
         Map<UserProfile, Set<User>> profiles;
         Authorization[] authorizations;
+        ComplexModel[] cmodels;
+        SearchHelpData[] shdata;
         DocumentModel tasks;
         State state;
         Services services;
@@ -50,6 +54,7 @@ public class PackageUpdate extends AbstractHandler {
         }
         
         types = new HashSet<>();
+        types.add("SH");
         types.add("MESSAGE");
         types.add("STYLE");
         types.add("AUTHORIZATION");
@@ -57,10 +62,19 @@ public class PackageUpdate extends AbstractHandler {
         types.add("TSKGROUP");
         types.add("TSKITEM");
         types.add("TASK");
+        types.add("CMODEL");
         
         services = getFunction();
         uninstall = services.get("uninstall");
         uninstall.run(state.pkgname, types);
+        
+        shdata = state.data.getSHData();
+        if (shdata.length > 0)
+            InstallSH.init(shdata, state);
+        
+        cmodels = state.data.getCModels();
+        if (cmodels.length > 0)
+            InstallCModels.init(cmodels, state);
         
         state.messages = state.data.getMessages();
         if (state.messages.size() > 0)

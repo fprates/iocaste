@@ -12,6 +12,25 @@ import org.iocaste.protocol.IocasteException;
 
 public class Models {
     
+    private static final void extractsh(DocumentModel model, State state) {
+        String name;
+        Set<DocumentModelItem> itens;
+        
+        for (DocumentModelItem modelitem : model.getItens()) {
+            name = modelitem.getSearchHelp();
+            if (name == null)
+                continue;
+            
+            if (state.shm.containsKey(name)) {
+                itens = state.shm.get(name);
+            } else {
+                itens = new TreeSet<>();
+                state.shm.put(name, itens);
+            }
+            itens.add(modelitem);
+        }
+    }
+    
     public static final void installAll(Map<String, DocumentModel> models,
             State state) throws Exception {
         DocumentModel model;
@@ -28,8 +47,6 @@ public class Models {
     
     public static final void install(DocumentModel model, String modelname,
             State state) throws Exception {
-        String name;
-        Set<DocumentModelItem> itens;
         int i;
         List<Object[]> values;
         ExtendedObject header;
@@ -42,19 +59,7 @@ public class Models {
         
         Registry.add(modelname, "MODEL", state);
         
-        for (DocumentModelItem modelitem : model.getItens()) {
-            name = modelitem.getSearchHelp();
-            if (name == null)
-                continue;
-            
-            if (state.shm.containsKey(name)) {
-                itens = state.shm.get(name);
-            } else {
-                itens = new TreeSet<>();
-                state.shm.put(name, itens);
-            }
-            itens.add(modelitem);
-        }
+        extractsh(model, state);
         
         /*
          * recupera modelo para trazer as queries.
@@ -78,8 +83,6 @@ public class Models {
     
     public static final void update(DocumentModel model, String modelname,
             State state) throws Exception {
-        String name;
-        Set<DocumentModelItem> itens;
         int i;
         List<Object[]> values;
         ExtendedObject header;
@@ -87,19 +90,7 @@ public class Models {
         if (state.documents.updateModel(model) < 0)
             throw new IocasteException("update model error.");
         
-        for (DocumentModelItem modelitem : model.getItens()) {
-            name = modelitem.getSearchHelp();
-            if (name == null)
-                continue;
-            
-            if (state.shm.containsKey(name)) {
-                itens = state.shm.get(name);
-            } else {
-                itens = new TreeSet<>();
-                state.shm.put(name, itens);
-            }
-            itens.add(modelitem);
-        }
+        extractsh(model, state);
         
         /*
          * recupera modelo para trazer as queries.
