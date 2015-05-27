@@ -24,14 +24,31 @@ public class Main extends AbstractModelViewer {
         defaultinstall.setProgramAuthorization("XTRNL");
         
         link = defaultinstall.builderLinkInstance();
-        link.create = "XTRNLCR";
-        link.change = "XTRNLCH";
-        link.display = "XTRNLDS";
+        link.create = "XTRNLPORTCR";
+        link.change = "XTRNLPORTCH";
+        link.display = "XTRNLPORTDS";
         link.cmodel = "XTRNL_CONNECTION";
-        link.taskgroup = "ADMIN";
+        link.taskgroup = "EXTERNAL";
         link.entity = "externalconn";
         
-        installObject("models", new ModelsInstall());
+        link = defaultinstall.builderLinkInstance();
+        link.create = "XTRNLSTRCR";
+        link.change = "XTRNLSTRCH";
+        link.display = "XTRNLSTRDS";
+        link.cmodel = "XTRNL_STRUCTURE";
+        link.taskgroup = "EXTERNAL";
+        link.entity = "externalstruct";
+        
+        link = defaultinstall.builderLinkInstance();
+        link.create = "XTRNLFNCCR";
+        link.change = "XTRNLFNCCH";
+        link.display = "XTRNLFNCDS";
+        link.cmodel = "XTRNL_FUNCTION";
+        link.taskgroup = "EXTERNAL";
+        link.entity = "externalfunction";
+
+        installObject("functions", new FunctionsInstall());
+        installObject("models", new PortsInstall());
     }
 
 }

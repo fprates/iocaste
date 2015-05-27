@@ -9,21 +9,26 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.packagetool.common.SearchHelpData;
 
-public class ModelsInstall extends AbstractInstallObject {
+public class PortsInstall extends AbstractInstallObject {
 
     @Override
     protected void execute(StandardInstallContext context) throws Exception {
         ComplexModelInstall cmodel;
         ModelInstall model;
-        DocumentModelItem porttypeid;
-        DataElement portname, porttype, text, host, sapprgid;
-        DataElement sapclient, sapsystemnumber, username, secret;
+        DocumentModelItem porttypeid, portnameref, functionid;
+        DataElement portname, porttype, text, host, sapprgid, sapgwserv;
+        DataElement sapclient, sapsystemnumber, username, secret, portfunction;
         SearchHelpData shd;
         
         portname = new DataElement("XTRNL_PORT_NAME");
         portname.setType(DataType.CHAR);
         portname.setLength(12);
         portname.setUpcase(true);
+        
+        portfunction = new DataElement("XTRNL_PORT_FUNCT");
+        portfunction.setType(DataType.CHAR);
+        portfunction.setLength(15);
+        portfunction.setUpcase(true);
         
         porttype = new DataElement("XTRNL_PORT_TYPE");
         porttype.setType(DataType.NUMC);
@@ -38,6 +43,11 @@ public class ModelsInstall extends AbstractInstallObject {
         host.setType(DataType.CHAR);
         host.setLength(128);
         host.setUpcase(false);
+        
+        sapgwserv = new DataElement("XTRNL_SAPGWSERV");
+        sapgwserv.setType(DataType.CHAR);
+        sapgwserv.setLength(64);
+        sapgwserv.setUpcase(false);
         
         sapprgid = new DataElement("XTRNL_SAPPRGID");
         sapprgid.setType(DataType.CHAR);
@@ -76,9 +86,12 @@ public class ModelsInstall extends AbstractInstallObject {
         shd.add("PORT_TYPE");
         shd.add("TEXT");
         
-        model = tag("head", modelInstance(
+        /*
+         * cabeçalho
+         */
+        model = tag("porthead", modelInstance(
                 "XTRNL_PORT_HEAD", "XTRNLPORTHD"));
-        searchhelp(model.key(
+        portnameref = searchhelp(model.key(
                 "PORT_NAME", "CONID", portname), "XTRNL_SH_PORTS");
         searchhelp(model.reference(
                 "PORT_TYPE", "PRTTP", porttypeid), "XTRNL_SH_PORTS_TYPES");
@@ -88,6 +101,8 @@ public class ModelsInstall extends AbstractInstallObject {
                 "HOST", "HOST", host);
         model.item(
                 "SAP_GWHOST", "SAPGWHOST", host);
+        model.item(
+                "SAP_GWSERVER", "SAPGWSERV", sapgwserv);
         model.item(
                 "SAP_PROGRAM_ID", "SAPPRGID", sapprgid);
         model.item(
@@ -104,8 +119,22 @@ public class ModelsInstall extends AbstractInstallObject {
         shd.add("PORT_NAME");
         shd.add("TEXT");
         
+        /*
+         * funções
+         */
+        functionid = getItem("functionid");
+        model = tag("portfunction", modelInstance(
+                "XTRNL_PORT_FUNCTION", "XTRNLPRTFNC"));
+        model.key(
+                "PORT_FUNCTION", "PRTFN", portfunction);
+        model.reference(
+                "PORT_NAME", "CONID", portnameref);
+        searchhelp(model.reference(
+                "FUNCTION", "FUNCT", functionid), "XTRNL_SH_FUNCTION");
+        
         cmodel = cmodelInstance("XTRNL_CONNECTION");
-        cmodel.header("head");
+        cmodel.header("porthead");
+        cmodel.item("functions", "portfunction");
     }
 
 }
