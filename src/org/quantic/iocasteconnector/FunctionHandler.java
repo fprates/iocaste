@@ -86,12 +86,15 @@ public class FunctionHandler implements JCoServerFunctionHandler {
     @Override
     public void handleRequest(JCoServerContext context, JCoFunction sapfunction)
             throws AbapException, AbapClassException {
+        Map<String, Map<String, Object>> result;
+        JCoParameterList list;
         String servername, functionname, sapfunctionname, name;
         Message message;
         GenericService service;
         ComplexDocument functionmodel;
-        Map<String, Object> importing, exporting, changing, tables;
+        Map<String, Object> extracted;
         Map<String, ExtendedObject> items;
+        Map<String, JCoParameterList> lists;
         ExtendedObject[] parameters;
 
         try {
@@ -119,25 +122,43 @@ public class FunctionHandler implements JCoServerFunctionHandler {
                 log("parameter ", name, " recovered.");
                 items.put(name, object);
             }
-            
-            log("extracting importing parameters...");
-            importing = extract(items, sapfunction.getImportParameterList());
-            log("extracting exporting parameters...");
-            exporting = extract(items, sapfunction.getExportParameterList());
-            log("extracting changing parameters...");
-            changing = extract(items, sapfunction.getChangingParameterList());
-            log("extracting tables parameters...");
-            tables = extract(items, sapfunction.getTableParameterList());
-            
-            log("invoking ", functionname, "@", servername, "...");
+
+            lists = new HashMap<>();
+            lists.put("importing", sapfunction.getImportParameterList());
+            lists.put("exporting", sapfunction.getExportParameterList());
+            lists.put("changing", sapfunction.getChangingParameterList());
+            lists.put("tables", sapfunction.getTableParameterList());
+
             message = new Message(functionname);
             message.add("function", sapfunctionname);
-            message.add("importing", importing);
-            message.add("exporting", exporting);
-            message.add("changing", changing);
-            message.add("tables", tables);
+            for (String key : lists.keySet()) {
+                list = lists.get(key);
+                if (list == null)
+                    continue;
+                extracted = extract(items, list);
+                message.add(key, extracted);
+            }
+            
+            log("invoking ", functionname, "@", servername, "...");
             service = new GenericService(function, servername);
-            service.invoke(message);
+            result = service.invoke(message);
+            if (result == null) {
+                log("success.");
+                return;
+            }
+            
+            for (String keylist : new String[] {
+                    "exporting", "changing", "tables"
+            }) {
+                extracted = result.get(keylist);
+                if (extracted == null)
+                    continue;
+                
+                list = lists.get(keylist);
+                for (String key : extracted.keySet())
+                    list.setValue(key, (Object)extracted.get(key));
+            }
+            
             log("success.");
         } catch (Exception e) {
             e.printStackTrace();
