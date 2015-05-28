@@ -138,6 +138,11 @@ public class MainInput extends AbstractViewInput {
         print(concatenate(level, " ", container.getName()));
         
         for (Element element : container.getElements()) {
+            if (element == null) {
+                print("null element");
+                continue;
+            }
+            
             if (element.isContainable()) {
                 printViewContainer((Container)element, level_);
                 continue;
