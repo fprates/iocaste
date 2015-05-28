@@ -77,7 +77,6 @@ public class Uninstall extends AbstractHandler {
         GlobalConfig config = (GlobalConfig)services[CONFIG_LIB];
         String modeltype = object.get("MODEL");
         String name = object.get("NAME");
-        String pkgname = object.getst("PACKAGE");
         
         switch (modeltype) {
         case "MESSAGE":
@@ -113,7 +112,7 @@ public class Uninstall extends AbstractHandler {
             documents.delete(object);
             return;
         case "TSKGROUP":
-            Selector.removeGroup(name, pkgname, documents);
+            Selector.removeGroup(name, documents);
             documents.delete(object);
             return;
         case "TSKITEM":

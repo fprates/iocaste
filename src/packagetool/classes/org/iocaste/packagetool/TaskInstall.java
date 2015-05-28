@@ -16,9 +16,12 @@ public class TaskInstall extends AbstractInstallObject {
         taskname = elementchar("TASKS.NAME", 18, DataType.UPPERCASE);
         taskcommand = elementchar("TASKS.COMMAND", 128, DataType.KEEPCASE);
         
-        model = modelInstance("TASKS", "TASKS");
-        tag("taskname", model.key("NAME", "TSKNM", taskname));
-        model.item("COMMAND", "CMDLN", taskcommand);
+        model = modelInstance(
+                "TASKS", "TASKS");
+        tag("taskname", model.key(
+                "NAME", "TSKNM", taskname));
+        model.item(
+                "COMMAND", "CMDLN", taskcommand);
     }
 
 }
