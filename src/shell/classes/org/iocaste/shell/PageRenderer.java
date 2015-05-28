@@ -83,6 +83,10 @@ public class PageRenderer extends AbstractRenderer {
             else
                 Common.commit(getServerName(), config.sessionid);
         } catch (Exception e) {
+            if (getPagesPositions(config.sessionid).length == 1)
+                pushPage(config.sessionid, config.state.view.getAppName(),
+                        config.state.view.getPageName());
+            
             Common.rollback(getServerName(), config.sessionid);
             throw e;
         }
@@ -122,6 +126,8 @@ public class PageRenderer extends AbstractRenderer {
      */
     private final PageContext createLoginContext(HttpServletRequest req,
             String sessionid, int logid) {
+        SessionContext sessionctx;
+        PageContext pagectx;
         ContextData contextdata = new ContextData();
         String login = req.getParameter("login-manager");
         
@@ -131,7 +137,11 @@ public class PageRenderer extends AbstractRenderer {
         contextdata.logid = logid;
         contextdata.initialize = true;
         
-        return createPageContext(contextdata);
+        pagectx = createPageContext(contextdata);
+        sessionctx = apps.get(sessionid).get(logid);
+        sessionctx.loginapp = new StringBuilder(contextdata.appname).
+            append(".").append(contextdata.pagename).toString();
+        return pagectx;
     }
     
     /**
@@ -210,6 +220,18 @@ public class PageRenderer extends AbstractRenderer {
             resp.reset();
             startRender(sessionid, resp, pagectx);
         }
+    }
+    
+    /**
+     * 
+     * @param sessionid
+     * @return
+     */
+    public static final String getLoginApp(String sessionid) {
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        
+        return apps.get(complexid[0]).get(logid).loginapp;
     }
     
     /**

@@ -126,6 +126,14 @@ public class Shell extends AbstractServiceInterface {
      * 
      * @return
      */
+    public final String getLoginApp() {
+        return call(new Message("login_app_get"));
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final PageStackItem[] getPagesPositions() {
         return call(new Message("get_pages_positions"));
     }

@@ -14,6 +14,7 @@ public class Services extends AbstractFunction {
 
     public Services() {
         export("add_ticket", "addTicket");
+        export("login_app_get", "getLoginApp");
         export("get_pages_positions", "getPagesPositions");
         export("get_view", "getView");
         export("home", "home");
@@ -39,6 +40,26 @@ public class Services extends AbstractFunction {
     }
     
     /**
+     * 
+     * @param message
+     * @return
+     */
+    public final String getLoginApp(Message message) {
+        String sessionid = message.getSessionid();
+        return PageRenderer.getLoginApp(sessionid);
+    }
+    
+    /**
+     * 
+     * @param message
+     * @return
+     */
+    public final PageStackItem[] getPagesPositions(Message message) {
+        String sessionid = message.getSessionid();
+        return PageRenderer.getPagesPositions(sessionid);
+    }
+    
+    /**
      * Retorna a visão atual da sessão.
      * @param message:
      * - app_name (String): aplicação
@@ -51,16 +72,6 @@ public class Services extends AbstractFunction {
         String pagename = message.getString("page_name");
         
         return PageRenderer.getView(sessionid, appname, pagename);
-    }
-    
-    /**
-     * 
-     * @param message
-     * @return
-     */
-    public final PageStackItem[] getPagesPositions(Message message) {
-        String sessionid = message.getSessionid();
-        return PageRenderer.getPagesPositions(sessionid);
     }
     
     /**

@@ -7,6 +7,7 @@ import java.util.Stack;
 import org.iocaste.shell.common.PageStackItem;
 
 public class SessionContext {
+    public String loginapp;
     private Map<String, AppContext> apps;
     private Stack<PageStackItem> pagestack;
 
