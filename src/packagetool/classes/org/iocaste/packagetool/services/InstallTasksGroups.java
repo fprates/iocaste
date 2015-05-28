@@ -32,12 +32,12 @@ public class InstallTasksGroups {
         int entryid;
         Query query;
         String groupname, locale;
-        Set<String> itens;
+        Map<String, String> itens, properties;
         ExtendedObject group;
         ExtendedObject[] tasks, entries, texts;
         Map<String, Map<String, String>> messages;
-        Map<String, String> properties;
         
+        itens = new HashMap<>();
         query = new Query();
         query.setModel("TASKS");
         tasks = state.documents.select(query);
@@ -53,7 +53,9 @@ public class InstallTasksGroups {
                 Registry.add(groupname, "TSKGROUP", state);
             }
             
-            itens = taskgroup.getLinks();
+            itens.clear();
+            for (String link : taskgroup.getLinks())
+                itens.put(link, state.pkgname);
 
             /*
              * reindexa itens do grupo
@@ -80,7 +82,7 @@ public class InstallTasksGroups {
                 state.documents.update(query);
 
                 for (ExtendedObject entry : entries)
-                    itens.add(entry.getst("NAME"));
+                    itens.put(entry.getst("NAME"), null);
 
                 messages = state.data.getMessages();
                 if ((texts != null) && (messages != null))
@@ -99,14 +101,15 @@ public class InstallTasksGroups {
              * instala entradas e textos
              */
             entryid = 0;
-            for (String taskname : itens) {
+            for (String taskname : itens.keySet()) {
                 if (!containsTask(taskname, tasks))
                     throw new IocasteException(
                             new StringBuilder("invalid task \"").
                             append(taskname).append("\".").toString());
                 
                 Selector.add(taskname, groupname, entryid++, state);
-                Registry.add(taskname, "TSKITEM", state);
+                if (itens.get(taskname) != null)
+                    Registry.add(taskname, "TSKITEM", state);
             }
         }
     }
