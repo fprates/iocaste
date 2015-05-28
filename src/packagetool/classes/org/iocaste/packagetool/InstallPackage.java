@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.shell.common.Const;
@@ -42,11 +43,14 @@ public class InstallPackage extends AbstractActionHandler {
             }
         }
         
-        new TaskSelector(context.function).refresh();
-        if (ex)
+        if (ex) {
             message(Const.WARNING, "some.packages.failed");
-        else
+        } else {
+            new Documents(context.function).commit();
+            new TaskSelector(context.function).refresh();
             message(Const.STATUS, "package.installed");
+        }
+        
         inputrefresh();
     }
     

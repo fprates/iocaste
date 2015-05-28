@@ -43,6 +43,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     private PageBuilderContext context;
     private StandardInstallContext installcontext;
     private PageBuilderDefaultInstall defaultinstall;
+    private BuilderCustomAction customaction;
     
     public AbstractPageBuilder() {
         export("install", "install");
@@ -72,39 +73,14 @@ public abstract class AbstractPageBuilder extends AbstractPage {
      */
     @Override
     public AbstractContext init(View view) throws Exception {
-        ViewContext viewctx;
-        BuilderCustomView customview;
-        AbstractViewSpec viewspec;
-        ViewConfig viewconfig;
-        AbstractViewInput viewinput;
-        AbstractActionHandler handler;
-        BuilderCustomAction customaction;
         
         context = new PageBuilderContext();
         context.view = view;
         context.function = this;
         config(context);
-
+        
         customaction = new BuilderCustomAction();
-        for (String name : context.getViews()) {
-            viewctx = context.getView(name);
-            viewspec = viewctx.getSpec();
-            viewconfig = viewctx.getConfig();
-            viewinput = viewctx.getInput();
-            
-            customview = new BuilderCustomView();
-            customview.setViewSpec(viewspec);
-            customview.setViewConfig(viewconfig);
-            customview.setViewInput(viewinput);
-            customview.setView(name);
-            
-            register(name, customview);
-            for (String action : viewctx.getActions()) {
-                handler = viewctx.getActionHandler(action);
-                customaction.addHandler(name, action, handler);
-                register(action, customaction);
-            }
-        }
+        reassignCustomActions(context);
         
         return context;
     }
@@ -133,6 +109,36 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     protected final void installObject(
             String name, AbstractInstallObject object) {
         installcontext.put(name, object);
+    }
+    
+    protected final void reassignCustomActions(PageBuilderContext context) {
+        ViewContext viewctx;
+        BuilderCustomView customview;
+        AbstractViewSpec viewspec;
+        ViewConfig viewconfig;
+        AbstractViewInput viewinput;
+        AbstractActionHandler handler;
+        
+        for (String name : context.getViews()) {
+            viewctx = context.getView(name);
+            viewspec = viewctx.getSpec();
+            viewconfig = viewctx.getConfig();
+            viewinput = viewctx.getInput();
+            
+            customview = new BuilderCustomView();
+            customview.setViewSpec(viewspec);
+            customview.setViewConfig(viewconfig);
+            customview.setViewInput(viewinput);
+            customview.setView(name);
+            
+            register(name, customview);
+            for (String action : viewctx.getActions()) {
+                handler = viewctx.getActionHandler(action);
+                customaction.addHandler(name, action, handler);
+                register(action, customaction);
+            }
+        }
+        
     }
 }
 

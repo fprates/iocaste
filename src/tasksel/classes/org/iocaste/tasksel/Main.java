@@ -28,7 +28,7 @@ public class Main extends AbstractPageBuilder {
     }
 
     @Override
-    public void config(PageBuilderContext context) {
+    public final void config(PageBuilderContext context) {
         StandardPanel panel;
         CommonStyle profile;
         
@@ -44,11 +44,15 @@ public class Main extends AbstractPageBuilder {
     }
     
     @Override
-    protected void installConfig(PageBuilderDefaultInstall defaultinstall)
+    protected final void installConfig(PageBuilderDefaultInstall defaultinstall)
             throws Exception {
         defaultinstall.setProfile("BASE");
         defaultinstall.setProgramAuthorization("TASKSEL.EXECUTE");
         installObject("main", new InstallObject());
+    }
+    
+    public final void reassignActions() {
+        reassignCustomActions(extcontext.context);
     }
 }
 

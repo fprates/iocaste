@@ -17,9 +17,7 @@ public class StandardPanel {
 
     public final void instance(
             String name, AbstractPanelPage page, ExtendedContext extcontext) {
-        PanelPageItem item;
         ViewContext view;
-        String source;
         
         view = context.instance(name);
         view.set(new StandardPanelSpec(page));
@@ -29,6 +27,14 @@ public class StandardPanel {
         
         page.setViewContext(view);
         page.execute();
+        
+        reassignActions(view, page);
+    }
+    
+    public static final void reassignActions(
+            ViewContext view, AbstractPanelPage page) {
+        PanelPageItem item;
+        String source;
         
         for (String key : page.items.keySet()) {
             item = page.items.get(key);

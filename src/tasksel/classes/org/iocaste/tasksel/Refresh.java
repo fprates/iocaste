@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.ViewContext;
+import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
@@ -73,10 +75,19 @@ public class Refresh extends AbstractHandler {
     
     @Override
     public Object run(Message message) throws Exception {
+        ViewContext view;
+        Main function;
+        
         extcontext.groups = getLists(extcontext.context);
-        extcontext.context.getView(Main.MAIN).getSpec().setInitialized(false);
-        extcontext.context.function.setReloadableView(true);
-        ((TaskPanelPage)extcontext.page).refresh();
+        view = extcontext.context.getView(Main.MAIN);
+        view.getSpec().setInitialized(false);
+        function = (Main)extcontext.context.function;
+        function.setReloadableView(true);
+        extcontext.page.refresh();
+        
+        StandardPanel.reassignActions(view, extcontext.page);
+        function.reassignActions();
+        
         return null;
     }
 
