@@ -15,9 +15,11 @@ import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Text;
 
 public class StandardNavControlDesign implements NavControlDesign {
+    protected StandardContainer buttonbar;
     private PageBuilderContext context;
     private Container container;
-    protected StandardContainer buttonbar;
+    private Shell shell;
+    private String loginapp;
     
     /*
      * (não-Javadoc)
@@ -54,12 +56,15 @@ public class StandardNavControlDesign implements NavControlDesign {
         cloneLink(stylesheet, ".nc_nav_link:active", ".link:active");
         cloneLink(stylesheet, ".nc_nav_link:visited", ".link:visited");
 
-        positions = new Shell(context.function).getPagesPositions();
+        if (shell == null);
+            shell = new Shell(context.function);
+        positions = shell.getPagesPositions();
+        if (loginapp == null)
+            loginapp = shell.getLoginApp();
+        
         for (PageStackItem position : positions) {
-            name = new StringBuilder(position.getApp()).
-                    append(".").append(position.getPage()).toString();
-
-            if (name.equals("iocaste-login.authentic"))
+            name = getAddress(position);
+            if (name.equals(loginapp))
                 continue;
             
             /*
@@ -191,5 +196,11 @@ public class StandardNavControlDesign implements NavControlDesign {
         style.put("text-decoration", "none");
         style.put("padding", "3px");
         style.put("vertical-align", "middle");
+    }
+    
+    public static String getAddress(PageStackItem position) {
+        return new StringBuilder(position.getApp()).
+                append(".").
+                append(position.getPage()).toString();
     }
 }

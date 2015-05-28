@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.navcontrol.NavControlButton;
 import org.iocaste.appbuilder.common.navcontrol.NavControlCustomAction;
 import org.iocaste.appbuilder.common.navcontrol.NavControlDesign;
+import org.iocaste.appbuilder.common.navcontrol.StandardNavControlDesign;
 import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.Button;
@@ -19,7 +20,8 @@ import org.iocaste.shell.common.Text;
 public class StandardPanelDesign implements NavControlDesign {
     private boolean offline;
     private Iocaste iocaste;
-    private String submit;
+    private String submit, loginapp;
+    private Shell shell;
     
     public StandardPanelDesign() {
         offline = true;
@@ -32,6 +34,7 @@ public class StandardPanelDesign implements NavControlDesign {
         Text text;
         Map<String, String> style;
         String name, address;
+        boolean backrule;
         StyleSheet stylesheet;
         CommonStyle profile;
         PageStackItem position;
@@ -69,8 +72,17 @@ public class StandardPanelDesign implements NavControlDesign {
             return;
         
         if (!offline) {
-            items = new Shell(context.function).getPagesPositions();
-            if (items.length > 1) {
+            if (shell == null)
+                shell = new Shell(context.function);
+            
+            items = shell.getPagesPositions();
+            if (loginapp == null)
+                loginapp = shell.getLoginApp();
+            
+            backrule = (items.length == 1) && !StandardNavControlDesign.
+                    getAddress(items[0]).equals(loginapp);
+            backrule = backrule || (items.length > 1);
+            if (backrule) {
                 style = stylesheet.newElement(".std_navcontrol_back");
                 style.put("width", "128px");
                 style.put("height", "128px");
@@ -79,8 +91,7 @@ public class StandardPanelDesign implements NavControlDesign {
                 style.put("position", "absolute");
 
                 position = items[items.length - 1];
-                address = new StringBuilder(position.getApp()).
-                        append(".").append(position.getPage()).toString();
+                address = StandardNavControlDesign.getAddress(position);
                 
                 link = new Link(container, address, address);
                 link.setImage("/iocaste-shell/images/back.svg");
