@@ -32,6 +32,17 @@ public class Controller {
     private static final int EVALIDATION = 5;
     private static final int LOW_RANGE = 3;
     private static final int HIGH_RANGE = 4;
+    private static Map<String, String> messages;
+    
+    static {
+        messages = new HashMap<>();
+        messages.put("field.is.obligatory", "Campo é obrigatório.");
+        messages.put("field.type.mismatch",
+                "Tipo de valor incompatível com campo.");
+        messages.put("invalid.value", "Valor inválido.");
+        messages.put("not.connected", "Não conectado");
+        messages.put("user.not.authorized", "Usuário não autorizado.");
+    }
     
     /**
      * 
@@ -298,7 +309,7 @@ public class Controller {
     private static final void message(
             ControllerData config, Const type, String text) {
         config.state.messagetype = type;
-        config.state.messagetext = text;
+        config.state.messagetext = messages.get(text);
     }
     
     /**

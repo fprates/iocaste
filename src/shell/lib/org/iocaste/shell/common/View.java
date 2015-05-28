@@ -40,7 +40,6 @@ public class View implements Serializable {
     private byte[] content;
     private Element elementfocus;
     private String title, appname, pagename, actioncontrol;
-    private MessageSource messages;
     private List<String> lines;
     private List<Container> containers;
     private Map<String, Map<String, String>> sheet;
@@ -163,14 +162,6 @@ public class View implements Serializable {
     }
     
     /**
-     * Retorna fonte de mensagens.
-     * @return fonte de mensagens
-     */
-    public final MessageSource getMessages() {
-        return messages;
-    }
-    
-    /**
      * Retorna nome da página.
      * @return nome
      */
@@ -254,14 +245,6 @@ public class View implements Serializable {
      */
     public final void setLocale(Locale locale) {
         this.locale = locale;
-    }
-    
-    /**
-     * Define fonte de mensagens.
-     * @param messages fonte de mensagens
-     */
-    public final void setMessages(MessageSource messages) {
-        this.messages = messages;
     }
     
     /**

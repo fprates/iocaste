@@ -18,7 +18,7 @@ public class FrameRenderer extends Renderer {
         String styleclass = frame.getStyleClass();
 
         legendtag.add("class", styleclass);
-        legendtag.addInner(config.getText(text, text));
+        legendtag.addInner(text);
         
         frametag.add("id", frame.getName());
         frametag.add("class", styleclass);

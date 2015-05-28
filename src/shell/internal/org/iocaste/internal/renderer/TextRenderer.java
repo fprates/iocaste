@@ -12,17 +12,19 @@ public class TextRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(Text text, Config config) {
-        XMLElement ptag = new XMLElement(text.getTag());
+        String text_;
+        XMLElement ptag;
         
+        ptag = new XMLElement(text.getTag());
         ptag.add("id", text.getHtmlName());
         ptag.add("class", text.getStyleClass());
 
         addEvents(ptag, text);
-        
+        text_ = text.getText();
         if (text.isTranslatable())
-            ptag.addInner(config.getText(text.getText(), text.getName()));
+            ptag.addInner((text_ != null)? text_ : text.getName());
         else
-            ptag.addInner(text.getText());
+            ptag.addInner(text_);
         
         return ptag;
     }

@@ -446,6 +446,9 @@ public abstract class AbstractInputComponent extends AbstractComponent
     public final void setVisibleLength(int vlength) {
         this.vlength = vlength;
     }
+    
+    @Override
+    public void translate(MessageSource messages) { }
 }
 
 class OnFocus extends AbstractEventHandler {

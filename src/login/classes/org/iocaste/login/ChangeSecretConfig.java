@@ -6,7 +6,6 @@ import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.StyleSheet;
 
 public class ChangeSecretConfig extends AbstractViewConfig {
@@ -15,7 +14,6 @@ public class ChangeSecretConfig extends AbstractViewConfig {
     protected void execute(PageBuilderContext context) {
         Button button;
         Context extcontext;
-        MessageSource messages;
         DataForm form;
         InputComponent item;
         StyleSheet stylesheet;
@@ -46,11 +44,7 @@ public class ChangeSecretConfig extends AbstractViewConfig {
             }
         }
         
-        messages = new MessageSource();
-        messages.setMessages(extcontext.messages);
-        context.view.setMessages(messages);
         context.view.setTitle("password.change");
-        
         button = getElement("changesecret");
         button.setSubmit(true);
     }

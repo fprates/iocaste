@@ -180,4 +180,10 @@ public interface Element extends Comparable<Element>, Serializable {
      * @param visible true, para elemento visível.
      */
     public abstract void setVisible(boolean visible);
+    
+    /**
+     * 
+     * @param messages
+     */
+    public abstract void translate(MessageSource messages);
 }

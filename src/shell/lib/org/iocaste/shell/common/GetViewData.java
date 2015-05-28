@@ -11,6 +11,7 @@ import org.iocaste.protocol.Message;
 
 public class GetViewData extends AbstractHandler {
     private String msgsource;
+    private MessageSource messages;
     public ViewState state;
     public AbstractContext context;
     public Map<String, ViewCustomAction> customactions;
@@ -18,10 +19,34 @@ public class GetViewData extends AbstractHandler {
     public Map<String, List<String>> validables;
     public Map<String, Validator> validators;
     
+    public GetViewData() {
+        messages = new MessageSource();
+    }
+    
+    public final void addMessages(Map<Object, Object> messages) {
+        this.messages.addMessages(messages);
+    }
+    
+    private final void fillTranslations(View view) {
+        String text;
+        Map<String, Element> elements;
+        
+        elements = view.getElements();
+        for (String name : elements.keySet())
+            elements.get(name).translate(messages);
+        
+        text = view.getTitle();
+        if (text == null)
+            return;
+        text = messages.get(text);
+        if (text == null)
+            return;
+        view.setTitle(text);
+    }
+    
     @Override
     public Object run(Message message) throws Exception {
         Object[] viewreturn;
-        MessageSource messages;
         Method method;
         CustomView customview;
         View view = message.get("view");
@@ -64,8 +89,7 @@ public class GetViewData extends AbstractHandler {
             method.invoke(page);
         }
         
-        messages = view.getMessages();
-        if ((messages == null) || (msgsource != null)) {
+        if ((messages.size() == 0) || (msgsource != null)) {
             /*
              * há alguma chance que getViewData() tenha sido chamada
              * a partir de um ticket, que nesse caso teria a localização
@@ -78,14 +102,13 @@ public class GetViewData extends AbstractHandler {
                     setLocaleForElement(container, view.getLocale());
             }
             
-            if (messages == null)
-                messages = new MessageSource();
-            
             messages.loadFromApplication(view.getAppName(), locale, page);
             if (msgsource != null)
                 messages.loadFromApplication(msgsource, locale, page);
-            view.setMessages(messages);
         }
+        
+        if (messages.size() > 0)
+            fillTranslations(view);
         
         state.parameters.clear();
         viewreturn = new Object[3];

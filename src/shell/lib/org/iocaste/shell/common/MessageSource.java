@@ -2,8 +2,8 @@ package org.iocaste.shell.common;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 import org.iocaste.documents.common.Documents;
@@ -17,12 +17,19 @@ import org.iocaste.protocol.Function;
  * @author francisco.prates
  *
  */
-public class MessageSource implements Serializable {
-    private static final long serialVersionUID = 7937205136041189687L;
+public class MessageSource {
     private Properties messages;
     
     public MessageSource() {
         messages = new Properties();
+    }
+    
+    /**
+     * Define properties com mensagens.
+     * @param messages mensagens.
+     */
+    public final void addMessages(Map<Object, Object> messages) {
+        this.messages.putAll(messages);
     }
     
     /**
@@ -93,11 +100,7 @@ public class MessageSource implements Serializable {
         }
     }
     
-    /**
-     * Define properties com mensagens.
-     * @param messages mensagens.
-     */
-    public final void setMessages(Properties messages) {
-        this.messages.putAll(messages);
+    public final int size() {
+        return messages.size();
     }
 }

@@ -41,6 +41,14 @@ public abstract class AbstractPage extends AbstractFunction {
     }
     
     /**
+     * 
+     * @param messages
+     */
+    protected final void addMessages(Map<Object, Object> messages) {
+        getviewdata.addMessages(messages);
+    }
+    
+    /**
      * Retorna a página anterior.
      * @param view visão atual
      */

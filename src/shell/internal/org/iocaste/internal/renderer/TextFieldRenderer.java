@@ -196,7 +196,6 @@ public class TextFieldRenderer extends Renderer {
         view = (View)viewreturn[0];
         
         control.update(view);
-        config.getMessageSources().add(view.getMessages());
         config.getView().setStyleSheet(view.styleSheetInstance().getElements());
         
         tags = new ArrayList<>();

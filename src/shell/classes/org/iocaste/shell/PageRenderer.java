@@ -33,10 +33,6 @@ public class PageRenderer extends AbstractRenderer {
         tickets = new TicketControl();
     }
     
-    public PageRenderer() {
-        msgsource = Messages.getMessages();
-    }
-    
     public static final String addTicket(Function function, AccessTicket ticket)
     {
         return tickets.add(ticket, function);

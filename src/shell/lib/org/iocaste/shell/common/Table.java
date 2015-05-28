@@ -287,6 +287,12 @@ public class Table extends AbstractContainer {
         this.vlines = vlines;
     }
     
+    @Override
+    public final void translate(MessageSource messages) {
+        for (String name : columns.keySet())
+            columns.get(name).setText(messages.get(name));
+    }
+    
     /**
      * Retorna quantidade de colunas.
      * @return quantidade

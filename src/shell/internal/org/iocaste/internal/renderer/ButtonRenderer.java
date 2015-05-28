@@ -13,13 +13,10 @@ public class ButtonRenderer extends Renderer {
      */
     public static final XMLElement render(Button button, Config config) {
         StringBuilder onclick;
-        String text_ = button.getText();
+        String text = button.getText();
         String name = button.getName();
         String htmlname = button.getHtmlName();
         XMLElement buttontag= new XMLElement("input");
-        
-        if (text_ == null)
-            text_ = name;
         
         onclick = new StringBuilder("formSubmit('").
                 append(config.getCurrentForm()).
@@ -34,7 +31,7 @@ public class ButtonRenderer extends Renderer {
         buttontag.add("name", htmlname);
         buttontag.add("id", htmlname);
         buttontag.add("class", button.getStyleClass());
-        buttontag.add("value", config.getText(text_, name));
+        buttontag.add("value", (text == null)? name : text);
         buttontag.add("onClick", onclick.toString());
         if (!button.isEnabled())
             buttontag.add("disabled", "disabled");

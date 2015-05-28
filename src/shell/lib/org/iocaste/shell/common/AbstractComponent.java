@@ -120,4 +120,29 @@ public abstract class AbstractComponent extends AbstractElement
     public final void setTranslatable(boolean translate) {
         this.translate = translate;
     }
+    
+    @Override
+    public void translate(MessageSource messages) {
+        String message;
+        
+        if (!translate)
+            return;
+        
+        message = getTranslation(messages, getName());
+        if (message == null)
+            return;
+        
+        this.text = message;
+    }
+    
+    protected final String getTranslation(MessageSource messages, String name) {
+        String message;
+        
+        message = messages.get(getName());
+        if (message != null)
+            return message;
+        if (this.text == null)
+            return null;
+        return messages.get(text);
+    }
 }

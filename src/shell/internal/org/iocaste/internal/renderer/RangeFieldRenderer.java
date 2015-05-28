@@ -48,7 +48,7 @@ public class RangeFieldRenderer extends Renderer {
             
             if (element == null) {
                 to = new XMLElement("p");
-                to.addInner(config.getText("to", "to"));
+                to.addInner("até");
                 to.add("class", "text");
                 tdtag.addChild(to);
                 continue;

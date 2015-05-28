@@ -15,7 +15,6 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
@@ -23,7 +22,6 @@ public class HtmlRenderer {
     private String username;
     private List<String> script;
     private Set<String> actions;
-    private MessageSource msgsource;
     private Function function;
     private PageContext pagectx;
     
@@ -88,8 +86,7 @@ public class HtmlRenderer {
                 "width=device-width, initial-scale=1.0, user-scalable=no");
         headtag.addChild(metatag);
         
-        titletag.addInner((title == null)?"Iocaste" : config.
-                getText(title, title));
+        titletag.addInner((title == null)? "Iocaste" : title);
 
         if (focus != null) {
             focusname = focus.getHtmlName();
@@ -181,8 +178,6 @@ public class HtmlRenderer {
         config.pagectx = pagectx;
         config.setView(view);
         config.setUsername(username, tracking.logid);
-        config.addMessageSource(view.getMessages());
-        config.addMessageSource(msgsource);
         config.setPageTrack(composePageTrack(view, tracking));
         config.setPopupControl(pagectx.getPopupControl());
         config.setTracking(tracking);
@@ -210,14 +205,6 @@ public class HtmlRenderer {
      */
     public final void setFunction(Function function) {
         this.function = function;
-    }
-    
-    /**
-     * 
-     * @param msgsource
-     */
-    public final void setMessageSource(MessageSource msgsource) {
-        this.msgsource = msgsource;
     }
     
     /**

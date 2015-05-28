@@ -67,7 +67,7 @@ public class TableRenderer extends Renderer {
         if (title != null) {
             tag = new XMLElement("caption");
             tag.add("class", "tbcaption");
-            tag.addInner(config.getText(title, title));
+            tag.addInner(title);
             tabletag.addChild(tag);
         }
         
@@ -96,7 +96,7 @@ public class TableRenderer extends Renderer {
                     if (text == null) {
                         name = column.getName();
                         if (name != null)
-                            text = config.getText(name, name);
+                            text = name;
                     }
                     
                     thtag.addInner(text);

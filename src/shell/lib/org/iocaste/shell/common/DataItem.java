@@ -144,4 +144,14 @@ public class DataItem extends AbstractInputComponent
     public final void setLabel(String label) {
         this.label = label;
     }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.AbstractComponent#translate(
+     *    org.iocaste.shell.common.MessageSource)
+     */
+    @Override
+    public final void translate(MessageSource messages) {
+        this.label = getTranslation(messages, getName());
+    }
 }

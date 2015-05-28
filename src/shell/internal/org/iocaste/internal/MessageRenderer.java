@@ -38,7 +38,7 @@ public class MessageRenderer {
         if (args == null) {
             message.setText(text);
         } else {
-            formatted = String.format(config.getText(text, text), args);
+            formatted = String.format(text, args);
             message.setText(formatted);
             message.setTranslatable(false);
         }

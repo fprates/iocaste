@@ -30,7 +30,7 @@ public class StandardContainerRenderer extends Renderer {
         Set<Element> elements;
         XMLElement divtag = new XMLElement("div");
         
-        divtag.add("id", container.getName());
+        divtag.add("id", container.getHtmlName());
         divtag.add("class", container.getStyleClass());
         
         addEvents(divtag, container);

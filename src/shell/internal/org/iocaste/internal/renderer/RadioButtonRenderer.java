@@ -35,7 +35,7 @@ public class RadioButtonRenderer extends Renderer {
         text = radiobutton.getText();
         if (text != null) {
             rbtexttag = new XMLElement("span");
-            rbtexttag.addInner(config.getText(text, text));
+            rbtexttag.addInner(text);
             elements.add(rbtexttag);
         }
         

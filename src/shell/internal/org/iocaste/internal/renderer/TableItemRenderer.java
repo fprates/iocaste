@@ -64,7 +64,7 @@ public class TableItemRenderer extends Renderer {
                     } else {
                         component = (Component)element;
                         text = component.getText();
-                        tdtag.addInner(config.getText(text, text));
+                        tdtag.addInner(text);
                     }
                 } else {
                     renderElement(tags, element, config);

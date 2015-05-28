@@ -10,14 +10,12 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.StyleSheet;
 
 public class MainConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        MessageSource messages;
         Button button;
         DataItem input;
         DataForm form;
@@ -114,9 +112,5 @@ public class MainConfig extends AbstractViewConfig {
         
         button = getElement("connect");
         button.setSubmit(true);
-        
-        messages = new MessageSource();
-        messages.setMessages(extcontext.messages);
-        context.view.setMessages(messages);
     }
 }

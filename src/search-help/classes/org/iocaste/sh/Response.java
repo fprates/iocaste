@@ -1,7 +1,6 @@
 package org.iocaste.sh;
 
 import java.util.Map;
-import java.util.Properties;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -122,7 +121,6 @@ public class Response {
     public static final void main(Context context) {
         MessageSource source;
         View view;
-        Properties messages;
         String name, searchjs, action, form, searchbt, master, nsreference;
         DocumentModel model;
         ExtendedObject[] result;
@@ -177,8 +175,8 @@ public class Response {
                 append(searchbt).append("');").toString();
         
         searchbt = "bt_".concat(searchbt);
-        
         new Button(stdcnt, searchbt).addEvent("onClick", searchjs);
+        context.messages.put(searchbt, "Selecionar");
         
         sh = context.function.getParameter("control");
         master = sh.getMaster();
@@ -204,14 +202,6 @@ public class Response {
             ns = null;
         
         result = Common.getResultsFrom(model, documents, context.criteria, ns);
-        
-        messages = new Properties();
-        messages.put(searchbt, "Selecionar");
-        messages.put("to", "até");
-        messages.put("cancel", "Cancelar");
-        messages.put("no.results.found", "Nenhum resultado encontrado.");
-        context.source.setMessages(messages);
-        
         if (result == null) {
             new Text(datacnt, "no.results.found");
             context.view.setTitle(sh.getText());

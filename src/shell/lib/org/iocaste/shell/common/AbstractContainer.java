@@ -189,4 +189,7 @@ public abstract class AbstractContainer
     public final int size() {
         return elements.size();
     }
+    
+    @Override
+    public void translate(MessageSource messages) { }
 }

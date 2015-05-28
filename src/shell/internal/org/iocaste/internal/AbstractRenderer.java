@@ -30,7 +30,6 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
-import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.StyleSheet;
@@ -46,7 +45,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     private String jsessionid, servername;
     public static Map<String, List<SessionContext>> apps;
     protected Map<String, Map<String, String>> defaultstyle;
-    protected MessageSource msgsource;
     protected String hostname, protocol;
     protected int port;
 
@@ -924,7 +922,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             appctx.setStyleSheet(userstyle.getElements());
         
         renderer = new HtmlRenderer();
-        renderer.setMessageSource(msgsource);
         renderer.setPageContext(pagectx);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);
         renderer.setFunction(this);

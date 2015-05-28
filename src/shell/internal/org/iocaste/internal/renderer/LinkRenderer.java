@@ -95,11 +95,11 @@ public class LinkRenderer extends Renderer {
             
             text = link.getText();
             if (text != null)
-                imgtag.add("alt", config.getText(text, text));
+                imgtag.add("alt", text);
         } else {
             text = link.getText();
             if (text != null)
-                atag.addInner(config.getText(text, text));
+                atag.addInner(text);
             else
                 atag.addInner("");
         }

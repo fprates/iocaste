@@ -9,7 +9,6 @@ import org.iocaste.internal.PageContext;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.View;
 
@@ -20,7 +19,6 @@ public class Config {
     private String currentaction, currentform, pagetrack;
     private String username;
     private int logid;
-    private List<MessageSource> msgsources;
     private Set<String> actions;
     private List<String> onload;
     private View view;
@@ -30,7 +28,6 @@ public class Config {
     public Config() {
         actions = new HashSet<>();
         onload = new ArrayList<>();
-        msgsources = new ArrayList<>();
     }
     
     /**
@@ -39,17 +36,6 @@ public class Config {
      */
     public final void addAction(String action) {
         actions.add(action);
-    }
-    
-    /**
-     * 
-     * @param messages
-     */
-    public final void addMessageSource(MessageSource messages) {
-        if (messages == null)
-            return;
-        
-        msgsources.add(messages);
     }
     
     /**
@@ -96,14 +82,6 @@ public class Config {
      * 
      * @return
      */
-    public final List<MessageSource> getMessageSources() {
-        return msgsources;
-    }
-    
-    /**
-     * 
-     * @return
-     */
     public final String[] getOnload() {
         return onload.toArray(new String[0]);
     }
@@ -122,29 +100,6 @@ public class Config {
      */
     public final PopupControl getPopupControl() {
         return popupcontrol;
-    }
-    
-    /**
-     * 
-     * @param tag
-     * @param fail
-     * @return
-     */
-    public final String getText(String tag, String fail) {
-        String message;
-        
-        if (tag == null)
-            return fail;
-        
-        for (MessageSource messages : msgsources) {
-            message = messages.get(tag);
-            if (message == null)
-                continue;
-            
-            return message;
-        }
-        
-        return tag;
     }
     
     /**
