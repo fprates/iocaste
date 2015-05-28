@@ -31,8 +31,12 @@ public class Main extends AbstractPageBuilder {
     @Override
     protected void installConfig(PageBuilderDefaultInstall defaultinstall)
             throws Exception {
-        // TODO Auto-generated method stub
+        defaultinstall.setLink("GCONFIGVIEW", "iocaste-gconfigview");
+        defaultinstall.addToTaskGroup("ADMIN", "GCONFIGVIEW");
+        defaultinstall.setProfile("ADMIN");
+        defaultinstall.setProgramAuthorization("GCONFIGVIEW");
         
+        installObject("texts", new TextsInstall());
     }
 }
 
