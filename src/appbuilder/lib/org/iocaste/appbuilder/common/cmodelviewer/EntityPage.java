@@ -12,32 +12,27 @@ public class EntityPage extends AbstractPanelPage {
     
     @Override
     public void execute() {
-        Context extcontext;
-        
         set(spec);
-        
-        extcontext = getExtendedContext();
         
         switch (action) {
         case AbstractModelViewer.CREATE:
-            setSelectConfig(link.createselectconfig, action, extcontext, link);
+            setSelectConfig(link.createselectconfig, link);
             action(action, link.validate);
             break;
         case AbstractModelViewer.EDIT:
-            setSelectConfig(link.updateselectconfig, action, extcontext, link);
+            setSelectConfig(link.updateselectconfig, link);
             action(action, link.updateload);
             break;
         case AbstractModelViewer.DISPLAY:
-            setSelectConfig(link.displayselectconfig, action, extcontext, link);
+            setSelectConfig(link.displayselectconfig, link);
             action(action, link.displayload);
             break;
         }
     }
     
-    private final void setSelectConfig(ViewConfig config,
-            String action, Context context, AppBuilderLink link) {
+    private final void setSelectConfig(ViewConfig config, AppBuilderLink link) {
         if (config == null)
-            set(new SelectConfig(action, link.cmodel));
+            set(new SelectConfig(link.cmodel));
         else
             set(config);
     }

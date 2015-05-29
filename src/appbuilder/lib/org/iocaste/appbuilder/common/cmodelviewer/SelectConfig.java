@@ -2,29 +2,25 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.InputComponent;
 
 public class SelectConfig extends AbstractViewConfig {
-    private String action, cmodel;
+    private String cmodel;
     
-    public SelectConfig(String action, String cmodel) {
-        this.action = action;
+    public SelectConfig(String cmodel) {
         this.cmodel = cmodel;
     }
     
     @Override
     protected void execute(PageBuilderContext context) {
         InputComponent input;
-        NavControl navcontrol;
         DocumentModel model = getManager(cmodel).getModel().getHeader();
         DataForm head = getElement("head");
         
-        navcontrol = getNavControl();
-        navcontrol.add(action);
+        getNavControl().setTitle(context.view.getPageName());
         
         head.importModel(model);
         head.setKeyRequired(true);

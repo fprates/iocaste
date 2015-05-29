@@ -2,7 +2,6 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.docmanager.common.Manager;
 
 public class MaintenanceConfig extends AbstractViewConfig {
@@ -12,7 +11,6 @@ public class MaintenanceConfig extends AbstractViewConfig {
         ConfigData configdata;
         Context extcontext = getExtendedContext();
         Manager manager = getManager(extcontext.link.cmodel);
-        NavControl navcontrol = getNavControl();
         
         configdata = new ConfigData();
         configdata.cmodel = manager.getModel();
@@ -20,8 +18,7 @@ public class MaintenanceConfig extends AbstractViewConfig {
         configdata.context = context;
         configdata.mark = true;
         
-        navcontrol.add("save");
-        navcontrol.submit("validate");
+        getNavControl().setTitle(context.view.getPageName());
         
         Common.formConfig(configdata);
         Common.gridConfig(configdata);

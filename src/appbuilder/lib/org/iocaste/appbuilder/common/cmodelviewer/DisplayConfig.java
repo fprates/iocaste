@@ -17,6 +17,8 @@ public class DisplayConfig extends AbstractViewConfig {
         configdata.mode = ConfigData.DISPLAY;
         configdata.context = context;
         
+        getNavControl().setTitle(context.view.getPageName());
+        
         Common.formConfig(configdata);
         Common.gridConfig(configdata);
     }
