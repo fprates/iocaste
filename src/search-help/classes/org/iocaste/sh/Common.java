@@ -1,8 +1,5 @@
 package org.iocaste.sh;
 
-import java.util.Map;
-
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
@@ -18,18 +15,18 @@ public class Common {
      * @param criteria
      * @return
      */
-    public static final ExtendedObject[] getResultsFrom(DocumentModel model,
-            Documents documents, Map<String, ValueRange> criteria, Object ns) {
+    public static final ExtendedObject[] getResultsFrom(Documents documents,
+            Context context, Object ns) {
         ValueRange range;
         Query query = new Query();
         
-        query.setModel(model.getName());
+        query.setModel(context.model.getName());
         query.setNS(ns);
-        if ((criteria == null) || (criteria.size() == 0))
+        if ((context.criteria == null) || (context.criteria.size() == 0))
             return documents.select(query);
         
-        for (String name : criteria.keySet()) {
-            range = criteria.get(name);
+        for (String name : context.criteria.keySet()) {
+            range = context.criteria.get(name);
             for (ValueRangeItem rangeitem : range.getItens()) {
                 switch (rangeitem.getOption()) {
                 case BT:

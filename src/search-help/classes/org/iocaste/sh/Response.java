@@ -2,7 +2,6 @@ package org.iocaste.sh;
 
 import java.util.Map;
 
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -14,7 +13,6 @@ import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.MessageSource;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.StandardContainer;
@@ -30,14 +28,14 @@ public class Response {
     private static final String BORDER = "#a0a0a0";
     
     private static final void addCriteria(Context context, SearchHelp sh,
-            Container container, DocumentModel model, MessageSource source) {
+            Container container) {
         String name;
         DataItem item;
         DataForm criteria;
         
         criteria = new DataForm(container, "criteria");
         criteria.setStyleClass("shcriteria");
-        criteria.importModel(model);
+        criteria.importModel(context.model);
         
         for (Element element : criteria.getElements()) {
             if (!element.isDataStorable())
@@ -47,7 +45,6 @@ public class Response {
             name = item.getName();
             if (sh.contains(name)) {
                 item.setComponentType(Const.RANGE_FIELD);
-                item.setLabel(source.get(name));
                 if (context.view.getFocus() == null)
                     context.view.setFocus(item);
                 continue;
@@ -58,8 +55,7 @@ public class Response {
     }
     
     private static final void addItems(Context context, SearchHelp sh,
-            Container container, String name, DocumentModel model,
-            ExtendedObject[] items, MessageSource source) {
+            Container container, String name, ExtendedObject[] items) {
         TableColumn column;
         TableItem tableitem;
         String export, action, iname;
@@ -71,20 +67,19 @@ public class Response {
         
         param = new Parameter(container, "value");
         table = new Table(container, "search.table");
-        for (DocumentModelItem item : model.getItens()) {
+        for (DocumentModelItem item : context.model.getItens()) {
             iname = item.getName();
             column = new TableColumn(table, iname);
             column.setMark(false);
             column.setVisible(true);
             column.setModelItem(item);
             column.setLength(item.getDataElement().getLength());
-            column.setText(source.get(iname));
         }
         
         for (ExtendedObject object : items) {
             tableitem = new TableItem(table);
             
-            for (DocumentModelItem modelitem : model.getItens()) {
+            for (DocumentModelItem modelitem : context.model.getItens()) {
                 name = modelitem.getName();
                 column = table.getColumn(name);
                 value = object.get(modelitem);
@@ -119,10 +114,8 @@ public class Response {
     }
     
     public static final void main(Context context) {
-        MessageSource source;
         View view;
         String name, searchjs, action, form, searchbt, master, nsreference;
-        DocumentModel model;
         ExtendedObject[] result;
         Container stdcnt, datacnt;
         SearchHelp sh;
@@ -178,20 +171,15 @@ public class Response {
         new Button(stdcnt, searchbt).addEvent("onClick", searchjs);
         context.messages.put(searchbt, "Selecionar");
         
-        sh = context.function.getParameter("control");
+        sh = context.control;
         master = sh.getMaster();
         view = context.control.getView();
         if (master != null)
             sh = view.getElement(master);
         
         name = sh.getModelName();
-        model = documents.getModel(name);
-        
-        source = new MessageSource();
-        source.loadFromApplication(
-                model.getPackage(), context.view.getLocale(), context.function);
-        
-        addCriteria(context, sh, stdcnt, model, source);
+        context.model = documents.getModel(name);
+        addCriteria(context, sh, stdcnt);
 
         datacnt = new StandardContainer(stdcnt, "shdatacnt");
         datacnt.setStyleClass("shdatacnt");
@@ -201,13 +189,13 @@ public class Response {
         else
             ns = null;
         
-        result = Common.getResultsFrom(model, documents, context.criteria, ns);
+        result = Common.getResultsFrom(documents, context, ns);
         if (result == null) {
             new Text(datacnt, "no.results.found");
             context.view.setTitle(sh.getText());
             return;
         }
         
-        addItems(context, sh, datacnt, name, model, result, source);
+        addItems(context, sh, datacnt, name, result);
     }
 }

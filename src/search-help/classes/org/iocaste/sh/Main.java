@@ -58,9 +58,7 @@ public class Main extends AbstractPage {
         InputComponent input;
         DataForm criteria;
         
-        setMessageSource((String)context.function.getParameter("msgsource"));
         context.control = context.function.getParameter("control");
-        
         if (context.control.getMaster() != null) {
             criteria = context.control.getView().getElement("criteria");
             for (Element element : criteria.getElements()) {
@@ -73,6 +71,7 @@ public class Main extends AbstractPage {
         }
         
         Response.main(context);
+        setMessageSource(context.model.getPackage());
         addMessages(context.messages);
     }
 }

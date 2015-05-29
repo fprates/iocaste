@@ -11,7 +11,7 @@ public class Install {
         Map<String, String> messages;
         InstallData data = new InstallData();
         
-        messages = new HashMap<String, String>();
+        messages = new HashMap<>();
         messages.put("cancel", "Cancelar");
         messages.put("iocaste-search-help", "Ajuda de pesquisa");
         messages.put("no.results.found", "Sem resultados para esse critério.");
