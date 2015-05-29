@@ -7,20 +7,25 @@ import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.appbuilder.common.style.CommonStyle;
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.Documents;
 
 public class Main extends AbstractPageBuilder {
     
     @Override
     public final void config(PageBuilderContext context) throws Exception {
+        DocumentModel model;
         AbstractActionHandler load;
         StandardPanel panel;
         Context extcontext = new Context();
         
         extcontext.action = getParameter("action");
         extcontext.model = getParameter("model");
+        model = new Documents(context.function).getModel(extcontext.model);
+        if (model != null)
+            setMessageSource(model.getPackage());
         
         panel = new StandardPanel(context);
-        
         if (extcontext.action == null) {
             load = new Load("main");
             panel.instance("main", new MainPage(), extcontext);
