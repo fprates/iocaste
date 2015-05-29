@@ -3,8 +3,10 @@ package org.iocaste.kernel.documents;
 import java.sql.Connection;
 
 import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class GetComplexModel extends AbstractDocumentsHandler {
@@ -21,6 +23,8 @@ public class GetComplexModel extends AbstractDocumentsHandler {
     
     public ComplexModel run(Connection connection, Documents documents,
             String name) throws Exception {
+        String modelname;
+        DocumentModel model;
         SelectDocument select;
         GetObject getobject;
         GetDocumentModel getmodel;
@@ -47,9 +51,16 @@ public class GetComplexModel extends AbstractDocumentsHandler {
         if (objects == null)
             return cmodel;
         
-        for (ExtendedObject item : objects)
-            cmodel.put(item.getst("NAME"), getmodel.run(
-                    connection, documents, item.getst("MODEL")));
+        for (ExtendedObject item : objects) {
+            modelname = item.getst("MODEL");
+            model = getmodel.run(connection, documents, modelname);
+            if (model == null)
+                throw new IocasteException(new StringBuilder(name).
+                        append(" complex model corrupted. Item model ").
+                        append(modelname).append(" not found.").toString());
+            
+            cmodel.put(item.getst("NAME"), model);
+        }
         
         return cmodel;
     }
