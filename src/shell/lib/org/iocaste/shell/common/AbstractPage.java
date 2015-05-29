@@ -53,7 +53,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view visão atual
      */
     public void back() {
-        PageStackItem entry = new Shell(this).popPage(getviewdata.context.view);
+        PageStackItem entry = new Shell(this).popPage();
         redirect(entry.getApp(), entry.getPage(), false);
         dontPushPage();
     }

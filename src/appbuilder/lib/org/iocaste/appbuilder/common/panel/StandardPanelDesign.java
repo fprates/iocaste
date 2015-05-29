@@ -135,6 +135,7 @@ public class StandardPanelDesign implements NavControlDesign {
         text = new Text(container, "navcontrol_title");
         text.setStyleClass("std_navcontrol_title");
         text.setText(name);
+        context.view.setTitle(name);
     }
 
     @Override

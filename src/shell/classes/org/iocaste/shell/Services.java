@@ -110,10 +110,9 @@ public class Services extends AbstractFunction {
      */
     public final void pushPage(Message message) {
         String sessionid = message.getSessionid();
-        String appname = message.getString("app_name");
-        String pagename = message.getString("page_name");
+        View view = message.get("view");
         
-        PageRenderer.pushPage(sessionid, appname, pagename);
+        PageRenderer.pushPage(sessionid, view);
     }
     
     public final void removeStyle(Message message) {

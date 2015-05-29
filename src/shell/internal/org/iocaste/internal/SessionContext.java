@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.iocaste.shell.common.PageStackItem;
+import org.iocaste.shell.common.View;
 
 public class SessionContext {
     public String loginapp;
@@ -77,10 +78,11 @@ public class SessionContext {
      * 
      * @param name
      */
-    public final void pushPage(String appname, String pagename) {
+    public final void pushPage(View view) {
+        String appname = view.getAppName();
+        String pagename = view.getPageName();
+        String title = view.getTitle();
         PageStackItem entry = new PageStackItem(appname, pagename);
-        String title = apps.get(appname).getPageContext(pagename).getViewData().
-                getTitle();
         
         entry.setTitle(title);
         pagestack.push(entry);

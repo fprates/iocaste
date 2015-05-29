@@ -196,10 +196,9 @@ public class Shell extends AbstractServiceInterface {
     
     /**
      * Restaura página anterior.
-     * @param view visão atual
      * @return dados da página anterior
      */
-    public final PageStackItem popPage(View view) {
+    public final PageStackItem popPage() {
         return call(new Message("pop_page"));
     }
     
@@ -209,8 +208,7 @@ public class Shell extends AbstractServiceInterface {
      */
     public final void pushPage(View view) {
         Message message = new Message("push_page");
-        message.add("app_name", view.getAppName());
-        message.add("page_name", view.getPageName());
+        message.add("view", view);
         call(message);
     }
     

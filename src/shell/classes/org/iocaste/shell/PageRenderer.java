@@ -80,8 +80,7 @@ public class PageRenderer extends AbstractRenderer {
                 Common.commit(getServerName(), config.sessionid);
         } catch (Exception e) {
             if (getPagesPositions(config.sessionid).length == 1)
-                pushPage(config.sessionid, config.state.view.getAppName(),
-                        config.state.view.getPageName());
+                pushPage(config.sessionid, config.state.view);
             
             Common.rollback(getServerName(), config.sessionid);
             throw e;

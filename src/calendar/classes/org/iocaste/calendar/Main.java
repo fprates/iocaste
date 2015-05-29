@@ -29,7 +29,7 @@ public class Main extends AbstractPage {
         String position;
         PageStackItem entry;
         
-        entry = new Shell(this).popPage(context.view);
+        entry = new Shell(this).popPage();
         position = new StringBuilder(entry.getApp()).append(".").
                 append(entry.getPage()).toString();
         backTo(position);

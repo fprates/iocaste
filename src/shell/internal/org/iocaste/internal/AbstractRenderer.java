@@ -642,8 +642,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         
         if (config.state.pagecall && (action == null ||
                 !action.isCancellable() || action.allowStacking()))
-            pushPage(config.sessionid, config.state.view.getAppName(),
-                    config.state.view.getPageName());
+            pushPage(config.sessionid, config.state.view);
         
         config.pagectx.inputs.clear();
         updateView(config.sessionid, config.state.view, this);
@@ -768,12 +767,11 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
      * @param pagename
      * @param logid
      */
-    public static final void pushPage(String sessionid, String appname,
-            String pagename) {
+    public static final void pushPage(String sessionid, View view) {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
         
-        apps.get(complexid[0]).get(logid).pushPage(appname, pagename);
+        apps.get(complexid[0]).get(logid).pushPage(view);
     }
     
     /**
