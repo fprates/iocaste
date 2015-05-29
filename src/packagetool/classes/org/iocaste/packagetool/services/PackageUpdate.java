@@ -69,8 +69,10 @@ public class PackageUpdate extends AbstractHandler {
         uninstall.run(state.pkgname, types);
         
         shdata = state.data.getSHData();
-        if (shdata.length > 0)
+        if (shdata.length > 0) {
             InstallSH.init(shdata, state);
+            InstallSH.reassign(state);
+        }
         
         cmodels = state.data.getCModels();
         if (cmodels.length > 0)

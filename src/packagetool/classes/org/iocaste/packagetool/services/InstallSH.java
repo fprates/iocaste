@@ -1,5 +1,6 @@
 package org.iocaste.packagetool.services;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.documents.common.DocumentModel;
@@ -52,6 +53,15 @@ public class InstallSH {
 
             Registry.add(shname, "SH", state);
         }
+    }
+    
+    public static final void reassign(State state) {
+        SHLib shlib = new SHLib(state.function);
+        Map<String, DocumentModel> models = state.data.getModels();
+        
+        for (String name : models.keySet())
+            for (DocumentModelItem item : models.get(name).getItens())
+                shlib.assign(item);
     }
 
 }
