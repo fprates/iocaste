@@ -18,14 +18,19 @@ public class Main extends AbstractPage {
     public InstallData install(Message message) {
         InstallContext icontext = new InstallContext();
         Map<String, String> messages = new HashMap<>();
-        
+
+        messages.put("CODE", "Código");
+        messages.put("COUNTRIES", "Países");
         messages.put("COUNTRY-CONFIG", "Países");
         messages.put("COUNTRY_ID", "País");
         messages.put("CURRENCY", "Moeda");
         messages.put("CURRENCY-CONFIG", "Moedas");
         messages.put("CURRENCY_ID", "Chave Moeda");
+        messages.put("MEASURE_UNITS", "Unidades de medida");
         messages.put("NAME", "Nome");
+        messages.put("REGION", "Regiões/Estados");
         messages.put("REGION-CONFIG", "Regiões/Estados");
+        messages.put("REGION_ID", "Chave da região");
         messages.put("TEXT", "Descrição");
         messages.put("UNIT_ID", "Unidade");
         messages.put("UNITS-CONFIG", "Unidades de medida");
