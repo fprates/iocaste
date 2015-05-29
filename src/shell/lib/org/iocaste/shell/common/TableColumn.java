@@ -13,7 +13,7 @@ import org.iocaste.documents.common.DocumentModelItem;
  */
 public class TableColumn implements Serializable {
     private static final long serialVersionUID = -39703809895121317L;
-    private boolean visible, mark, rendertextonly;
+    private boolean visible, mark, rendertextonly, translatable;
     private String name, text;
     private DocumentModelItem modelitem;
     private DataElement de;
@@ -66,22 +66,6 @@ public class TableColumn implements Serializable {
     }
     
     /**
-     * Indica se é coluna de seleção de linha.
-     * @return true, se for coluna de seleção
-     */
-    public final boolean isMark() {
-        return mark;
-    }
-    
-    /**
-     * Retorna visibilidade da coluna.
-     * @return true, se visível.
-     */
-    public final boolean isVisible() {
-        return visible;
-    }
-    
-    /**
      * Indica se deve renderizar apenas o texto, e não o elemento inteiro.
      * @return true, se deve renderizar apenas texto.
      */
@@ -91,6 +75,30 @@ public class TableColumn implements Serializable {
     
     public final String getText() {
         return text;
+    }
+    
+    /**
+     * Indica se é coluna de seleção de linha.
+     * @return true, se for coluna de seleção
+     */
+    public final boolean isMark() {
+        return mark;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final boolean isTranslatable() {
+        return translatable;
+    }
+    
+    /**
+     * Retorna visibilidade da coluna.
+     * @return true, se visível.
+     */
+    public final boolean isVisible() {
+        return visible;
     }
     
     /**
@@ -151,6 +159,14 @@ public class TableColumn implements Serializable {
      */
     public final void setText(String text) {
         this.text = text;
+    }
+    
+    /**
+     * 
+     * @param translatable
+     */
+    public final void setTranslatable(boolean translatable) {
+        this.translatable = translatable;
     }
     
     /**

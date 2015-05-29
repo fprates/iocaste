@@ -35,20 +35,17 @@ public abstract class AbstractComponent extends AbstractElement
     private static final long serialVersionUID = -5327168368336946819L;
     private Container container;
     private String text;
-    private boolean translate;
     
     public AbstractComponent(View view, Const type, String name) {
         super(type, name);
         
         view.index(this);
-        this.translate = true;
     }
     
     public AbstractComponent(Container container, Const type, String name) {
         super(type, name);
         
         this.container = container;
-        this.translate = true;
         if (container == null)
             throw new RuntimeException(
                     name.concat(" had an undefined container."));
@@ -83,15 +80,6 @@ public abstract class AbstractComponent extends AbstractElement
     
     /*
      * (não-Javadoc)
-     * @see org.iocaste.shell.common.Component#isTranslatable()
-     */
-    @Override
-    public final boolean isTranslatable() {
-        return translate;
-    }
-    
-    /*
-     * (não-Javadoc)
      * @see org.iocaste.shell.common.AbstractElement#setHtmlName(
      *    java.lang.String)
      */
@@ -112,20 +100,11 @@ public abstract class AbstractComponent extends AbstractElement
         this.text = text;
     }
     
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.Component#setTranslatable(boolean)
-     */
-    @Override
-    public final void setTranslatable(boolean translate) {
-        this.translate = translate;
-    }
-    
     @Override
     public void translate(MessageSource messages) {
         String message;
         
-        if (!translate)
+        if (!isTranslatable())
             return;
         
         message = getTranslation(messages, getName());

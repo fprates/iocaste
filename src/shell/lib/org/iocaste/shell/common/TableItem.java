@@ -70,6 +70,7 @@ public class TableItem extends AbstractContainer {
                 append(index).append(".").append(element.getName()).toString();
         element.setView(getView());
         element.setHtmlName(htmlname);
+        element.setTranslatable(columns[i].isTranslatable());
         
         modelitem = columns[i].getModelItem();
         if (element.isDataStorable() && modelitem != null) {

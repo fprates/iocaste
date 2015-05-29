@@ -152,6 +152,7 @@ public class DataItem extends AbstractInputComponent
      */
     @Override
     public final void translate(MessageSource messages) {
-        this.label = getTranslation(messages, getName());
+        if (isTranslatable())
+            this.label = getTranslation(messages, getName());
     }
 }

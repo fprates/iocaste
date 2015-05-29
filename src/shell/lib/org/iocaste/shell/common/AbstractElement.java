@@ -39,7 +39,7 @@ public abstract class AbstractElement implements Element {
     private static final long serialVersionUID = -4565295670850530184L;
     private Const type;
     private String name, htmlname, style;
-    private boolean enabled, visible;
+    private boolean enabled, visible, translatable;
     private View view;
     private Map<String, String> events;
     private Locale locale;
@@ -58,8 +58,7 @@ public abstract class AbstractElement implements Element {
         this.name = name;
         htmlname = name;
         style = "";
-        enabled = true;
-        visible = true;
+        enabled = visible = translatable = true;
         events = new HashMap<>();
     }
     
@@ -223,6 +222,10 @@ public abstract class AbstractElement implements Element {
         return false;
     }
     
+    protected final boolean isTranslatable() {
+        return translatable;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Element#isVisible()
@@ -278,6 +281,15 @@ public abstract class AbstractElement implements Element {
     @Override
     public final void setStyleClass(String style) {
         this.style = style;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Element#setTranslatable(boolean)
+     */
+    @Override
+    public final void setTranslatable(boolean translatable) {
+        this.translatable = translatable;
     }
     
     /*

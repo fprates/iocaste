@@ -42,12 +42,6 @@ public interface Component extends Element {
     public abstract String getText();
     
     /**
-     * Verifica permissão de tradução
-     * @return true, se elemento for traduzível
-     */
-    public abstract boolean isTranslatable();
-    
-    /**
      * Ajusta texto do component
      * @param text
      */

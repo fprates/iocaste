@@ -170,6 +170,12 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract void setStyleClass(String style);
     
     /**
+     * 
+     * @param translatable
+     */
+    public abstract void setTranslatable(boolean translatable);
+    
+    /**
      * Define a visão do elemento.
      * @param view
      */
