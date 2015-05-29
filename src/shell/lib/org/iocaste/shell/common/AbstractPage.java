@@ -22,6 +22,7 @@ public abstract class AbstractPage extends AbstractFunction {
     
     public AbstractPage() {
         ExecAction execaction;
+        MessageSource messages = new MessageSource();
         
         getviewdata = new GetViewData();
         getviewdata.state = new ViewState();
@@ -29,12 +30,14 @@ public abstract class AbstractPage extends AbstractFunction {
         getviewdata.customactions = new HashMap<>();
         getviewdata.validators = new HashMap<>();
         getviewdata.validables = new HashMap<>();
+        getviewdata.setMessages(messages);
         
         execaction = new ExecAction();
         execaction.state = getviewdata.state;
         execaction.customactions = getviewdata.customactions;
         execaction.validators = getviewdata.validators;
         execaction.validables = getviewdata.validables;
+        execaction.setMessages(messages);
         
         export("get_view_data", getviewdata);
         export("exec_action", execaction);

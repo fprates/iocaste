@@ -19,10 +19,6 @@ public class GetViewData extends AbstractHandler {
     public Map<String, List<String>> validables;
     public Map<String, Validator> validators;
     
-    public GetViewData() {
-        messages = new MessageSource();
-    }
-    
     public final void addMessages(Map<Object, Object> messages) {
         this.messages.addMessages(messages);
     }
@@ -132,6 +128,10 @@ public class GetViewData extends AbstractHandler {
         container = (Container)element;
         for (Element element_ : container.getElements())
             setLocaleForElement(element_, locale);
+    }
+    
+    public final void setMessages(MessageSource messages) {
+        this.messages = messages;
     }
 
 }

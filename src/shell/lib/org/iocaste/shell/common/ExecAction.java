@@ -8,12 +8,18 @@ import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
 public class ExecAction extends AbstractHandler {
+    private MessageSource messages;
     public AbstractContext context;
     public ViewState state;
     public Map<String, ViewCustomAction> customactions;
     public Map<String, List<String>> validables;
     public Map<String, Validator> validators;
-
+    
+    private final String getMessage(String message) {
+        String text = messages.get(message);
+        return (text == null)? message : text;
+    }
+    
     @Override
     public Object run(Message message) throws Exception {
         Validator validator;
@@ -53,7 +59,7 @@ public class ExecAction extends AbstractHandler {
                 if (error == null)
                     continue;
                 context.view.setFocus(input);
-                context.function.message(Const.ERROR, error);
+                context.function.message(Const.ERROR, getMessage(error));
                 return state;
             }
         }
@@ -67,7 +73,12 @@ public class ExecAction extends AbstractHandler {
             method.invoke(page);
         }
         
+        state.messagetext = getMessage(state.messagetext);
         return state;
+    }
+    
+    public final void setMessages(MessageSource messages) {
+        this.messages = messages;
     }
 
 }
