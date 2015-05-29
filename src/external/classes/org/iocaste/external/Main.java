@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
+import org.iocaste.external.install.TextsInstall;
 
 public class Main extends AbstractModelViewer {
 
@@ -47,6 +48,7 @@ public class Main extends AbstractModelViewer {
         link.taskgroup = "EXTERNAL";
         link.entity = "externalfunction";
 
+        installObject("texts", new TextsInstall());
         installObject("functions", new FunctionsInstall());
         installObject("models", new PortsInstall());
     }
