@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.iocaste.kernel.UserContext;
 import org.iocaste.kernel.database.Select;
@@ -21,6 +22,11 @@ public class IsAuthorized extends AbstractHandler {
         "select * from AUTH004 where PRFNM = ?",
         "select * from AUTH002 where AUTNM = ?"
     };
+    private static Logger logger;
+    
+    static {
+        logger = Logger.getLogger(IsAuthorized.class.getName());
+    }
             
     /**
      * 
@@ -90,7 +96,7 @@ public class IsAuthorized extends AbstractHandler {
     public Object run(Message message) throws Exception {
         boolean fail;
         User user;
-        String objvalue, usrvalue;
+        String objvalue, usrvalue, username;
         Map<String, String> usrparameters, objparameters;
         List<Authorization> usrauthorizations;
         Connection connection;
@@ -107,10 +113,10 @@ public class IsAuthorized extends AbstractHandler {
         
         objauthorization = message.get("authorization");
         usrauthorizations = context.getAuthorizations();
+        username = user.getUsername();
         if (usrauthorizations == null) {
             connection = auth.database.instance();
-            usrauthorizations = getAuthorizations(
-                    connection, user.getUsername());
+            usrauthorizations = getAuthorizations(connection, username);
             connection.close();
             context.setAuthorizations(usrauthorizations);
         }
@@ -119,28 +125,33 @@ public class IsAuthorized extends AbstractHandler {
             return false;
         
         objparameters = objauthorization.getParameters();
-        for (Authorization usrauthorization : usrauthorizations) {
-            usrparameters = usrauthorization.getParameters();
+        for (String key : objparameters.keySet()) {
+            objvalue = objparameters.get(key);
+            if (objvalue == null || objvalue.length() == 0)
+                continue;
             
-            fail = false;
-            for (String key : objparameters.keySet()) {
-                objvalue = objparameters.get(key);
-                if (objvalue == null || objvalue.length() == 0)
-                    continue;
-                
+            fail = true;
+            for (Authorization usrauthorization : usrauthorizations) {
+                usrparameters = usrauthorization.getParameters();
                 usrvalue = usrparameters.get(key);
-                if ((usrvalue != null) && (usrvalue.equals(objvalue)))
+                if ((usrvalue == null) || !usrvalue.equals(objvalue))
                     continue;
-                
-                fail = true;
+                fail = false;
                 break;
             }
             
             if (!fail)
-                return true;
+                continue;
+            
+            logger.warning(new StringBuilder("invalid authorization '").
+                    append(objauthorization.getName()).append("@").
+                    append(key).append("=").
+                    append(objvalue).append("' for ").
+                    append(username).toString());
+            return false;
         }
         
-        return false;
+        return true;
     }
 
 }
