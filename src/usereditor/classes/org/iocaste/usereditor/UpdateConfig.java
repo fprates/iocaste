@@ -10,7 +10,11 @@ public class UpdateConfig extends DetailConfig {
     protected void config(
             DataForm identity, TableToolData tasks, TableToolData profiles) {
         tasks.mode = TableTool.UPDATE;
+        tasks.mark = true;
+        
         profiles.mode = TableTool.UPDATE;
+        profiles.mark = true;
+        
         getNavControl().setTitle("usereditor-update");
     }
 
