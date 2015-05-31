@@ -86,8 +86,10 @@ public class FunctionHandler implements JCoServerFunctionHandler {
     @Override
     public void handleRequest(JCoServerContext context, JCoFunction sapfunction)
             throws AbapException, AbapClassException {
-        Map<String, Map<String, Object>> result;
+        Map<String, Object> result;
         JCoParameterList list;
+        JCoField field;
+        Iterator<JCoField> it;
         String servername, functionname, sapfunctionname, name;
         Message message;
         GenericService service;
@@ -131,12 +133,14 @@ public class FunctionHandler implements JCoServerFunctionHandler {
 
             message = new Message(functionname);
             message.add("function", sapfunctionname);
+            message.add("parameters", result = new HashMap<>());
             for (String key : lists.keySet()) {
                 list = lists.get(key);
                 if (list == null)
                     continue;
                 extracted = extract(items, list);
-                message.add(key, extracted);
+                for (String extkey : extracted.keySet())
+                    result.put(extkey, extracted.get(extkey));
             }
             
             log("invoking ", functionname, "@", servername, "...");
@@ -150,13 +154,13 @@ public class FunctionHandler implements JCoServerFunctionHandler {
             for (String keylist : new String[] {
                     "exporting", "changing", "tables"
             }) {
-                extracted = result.get(keylist);
-                if (extracted == null)
-                    continue;
-                
                 list = lists.get(keylist);
-                for (String key : extracted.keySet())
-                    list.setValue(key, (Object)extracted.get(key));
+                it = list.iterator();
+                while (it.hasNext()) {
+                    field = it.next();
+                    name = field.getName();
+                    list.setValue(name, (Object)result.get(name));
+                }
             }
             
             log("success.");
