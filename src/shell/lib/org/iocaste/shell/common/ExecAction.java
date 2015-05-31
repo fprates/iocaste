@@ -16,7 +16,11 @@ public class ExecAction extends AbstractHandler {
     public Map<String, Validator> validators;
     
     private final String getMessage(String message) {
-        String text = messages.get(message);
+        String text;
+        
+        if (message == null)
+            return null;
+        text = messages.get(message);
         return (text == null)? message : text;
     }
     
