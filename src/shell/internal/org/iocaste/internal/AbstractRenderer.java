@@ -665,7 +665,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         if (!isExecuteAuthorized(appname, config.sessionid) &&
                 config.state.rapp != null) {
             pagectx.setError(AUTHORIZATION_ERROR);
-            pagectx.message(Const.ERROR, "user.not.authorized", null);
+            pagectx.message(Const.ERROR,
+                    Controller.messages.get("user.not.authorized"), null);
             
             return pagectx;
         }

@@ -32,7 +32,7 @@ public class Controller {
     private static final int EVALIDATION = 5;
     private static final int LOW_RANGE = 3;
     private static final int HIGH_RANGE = 4;
-    private static Map<String, String> messages;
+    public static Map<String, String> messages;
     
     static {
         messages = new HashMap<>();
