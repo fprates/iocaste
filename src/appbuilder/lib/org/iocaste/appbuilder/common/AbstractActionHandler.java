@@ -355,13 +355,19 @@ public abstract class AbstractActionHandler {
         ViewState state;
         
         state = new TaskSelector(context.function).call(task);
-        if (state == null)
+        switch (state.error) {
+        case ViewState.OK:
+            for (String name : state.parameters.keySet())
+                context.function.export(name, state.parameters.get(name));
+            
+            context.function.exec(state.rapp, state.rpage);
+            break;
+        case ViewState.NOT_AUTHORIZED:
+            message(Const.ERROR, "user.not.authorized");
+            break;
+        default:
             throw new RuntimeException(task.concat(" is an invalid task."));
-        
-        for (String name : state.parameters.keySet())
-            context.function.export(name, state.parameters.get(name));
-        
-        context.function.exec(state.rapp, state.rpage);
+        }
     }
     
     protected final void textcreate(String name) {

@@ -10,17 +10,21 @@ public class Redirect extends AbstractHandler {
     
     @Override
     public Object run(Message message) throws Exception {
-        ViewState state;
+        ViewState state = new ViewState();
         String task = message.getString("task");
-        
-        if (Common.call(extcontext.function, task) == 1)
-            return null;
 
-        state = new ViewState();
-        state.view = new View(null, null);
-        state.rapp = extcontext.function.getRedirectedApp();
-        state.rpage = extcontext.function.getRedirectedPage();
-        state.parameters = extcontext.function.getParameters();
+        switch (Common.call(extcontext.function, task)) {
+        case 0:
+            state.view = new View(null, null);
+            state.rapp = extcontext.function.getRedirectedApp();
+            state.rpage = extcontext.function.getRedirectedPage();
+            state.parameters = extcontext.function.getParameters();
+            break;
+        default:
+            state.error = 1;
+            break;
+        }
+        
         return state;
     }
 
