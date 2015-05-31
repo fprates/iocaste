@@ -20,7 +20,7 @@ import org.iocaste.shell.common.Text;
 public class StandardPanelDesign implements NavControlDesign {
     private boolean offline;
     private Iocaste iocaste;
-    private String submit, loginapp;
+    private String submit, loginapp, backaction;
     private Shell shell;
     
     public StandardPanelDesign() {
@@ -82,7 +82,7 @@ public class StandardPanelDesign implements NavControlDesign {
             backrule = (items.length == 1) && !StandardNavControlDesign.
                     getAddress(items[0]).equals(loginapp);
             backrule = backrule || (items.length > 1);
-            if (backrule) {
+            if (backrule || (backaction != null)) {
                 style = stylesheet.newElement(".std_navcontrol_back");
                 style.put("width", "128px");
                 style.put("height", "128px");
@@ -90,8 +90,12 @@ public class StandardPanelDesign implements NavControlDesign {
                 style.put("left", "-30px");
                 style.put("position", "absolute");
 
-                position = items[items.length - 1];
-                address = StandardNavControlDesign.getAddress(position);
+                if (backaction == null) {
+                    position = items[items.length - 1];
+                    address = StandardNavControlDesign.getAddress(position);
+                } else {
+                    address = backaction;
+                }
                 
                 link = new Link(container, address, address);
                 link.setImage("/iocaste-shell/images/back.svg");
@@ -140,6 +144,10 @@ public class StandardPanelDesign implements NavControlDesign {
 
     @Override
     public void buildButton(String action, NavControlButton button) { }
+    
+    public final void setBackAction(String backaction) {
+        this.backaction = backaction;
+    }
     
     public final void setSubmit(String submit) {
         this.submit = submit;
