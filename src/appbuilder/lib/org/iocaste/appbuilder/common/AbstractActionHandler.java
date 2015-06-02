@@ -189,7 +189,13 @@ public abstract class AbstractActionHandler {
     }
     
     protected final ExtendedObject getObject(String model, Object key) {
-        return documents.getObject(model, key);
+        return getObject(model, null, key);
+    }
+    
+    protected final ExtendedObject getObject(
+            String model, Object ns, Object key) {
+        return documents.getObject(model, ns, key);
+        
     }
     
     protected final void init(String view, ExtendedContext extcontext) {
