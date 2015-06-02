@@ -1,5 +1,8 @@
 package org.iocaste.appbuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
@@ -20,6 +23,12 @@ public class Main extends AbstractModelViewer {
         String module = getParameter("module");
         String msgsource = getParameter("msgsource");
         AppBuilderLink link = getReceivedLink();
+        Map<Object, Object> messages = new HashMap<>();
+        
+        messages.put("code.exists", "Entrada já existe.");
+        messages.put("invalid.code", "Código inválido.");
+        messages.put("record.saved", "Registro salvo.");
+        addMessages(messages);
         
         if (msgsource != null)
             setMessageSource(msgsource);
