@@ -1,9 +1,7 @@
 <project name="docmanager" default="compile">
     <property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
     <property name="warfilename" value="${basedir}/iocaste-${ant.project.name}.war"/>
-    
-    <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
-    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"/>
+
 	
     <target name="compile">
         <mkdir dir="${builddir}/${ant.project.name}/web"/>
@@ -69,7 +67,8 @@
         </war>
     	
     	<ant antfile="${basedir}/src/deploy.xml">
-    		<property name="app.name" value="${ant.project.name}"/>
+    		<property name="war.file" value="${warfilename}"/>
+    		<property name="war.target" value="${war.target}"/>
         </ant>
     </target>
 </project>

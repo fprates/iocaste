@@ -1,9 +1,6 @@
 <project name="masterdata" default="compile">
     <property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
     <property name="warfilename" value="${basedir}/iocaste-${ant.project.name}.war"/>
-    
-    <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
-    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"/>
 	
     <target name="compile">
         <mkdir dir="${builddir}/${ant.project.name}/web"/>
@@ -29,20 +26,6 @@
                <include name="META-INF"/>
            </fileset>
         </copy>
-
-        <!-- substituições -->
-        <!-- <replace file="${builddir}/${ant.project.name}/web/web.xml"
-            token="@server.class@" value="${server.class}"/> -->
-        
-        <!-- compilação lib -->
-        <!--<javac srcdir="${basedir}/src/${ant.project.name}/lib" 
-            destdir="${builddir}/${ant.project.name}/lib"
-        	debug="${debug.status}">
-            <classpath refid="dependencies"/>
-        </javac>
-        
-        <jar basedir="${builddir}/${ant.project.name}/lib"
-            destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/> -->
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/classes"
@@ -76,7 +59,8 @@
         </war>
     	
     	<ant antfile="${basedir}/src/deploy.xml">
-    		<property name="app.name" value="${ant.project.name}"/>
+    		<property name="war.file" value="${warfilename}"/>
+    		<property name="war.target" value="${war.target}"/>
         </ant>
     </target>
 </project>

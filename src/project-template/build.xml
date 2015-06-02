@@ -4,9 +4,6 @@
     <property name="vendor" value="quantic"/>
     <property name="server.class" value="org.${vendor}.${ant.project.name}.Servlet"/>
     <property name="warfilename" value="${basedir}/${ant.project.name}.war"/>
-    
-    <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
-    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"/>
 	
     <target name="compile">
         <mkdir dir="${builddir}/web"/>
@@ -58,19 +55,8 @@
             <lib dir="${basedir}/lib" includes="*.jar"/>
             <classes dir="${builddir}/classes"/>
         </war>
-
-        <condition property="manager_url" value="${url}/manager/text"
-        		else="${url}/manager">
-            <equals arg1="${tomcat_version}" arg2="7"/>
-        </condition>
-        
-        <undeploy url="${manager_url}" username="${username}"
-        	password="${password}" path="/${ant.project.name}"
-        	failonerror="false"/>
     	
-        <deploy url="${manager_url}" username="${username}"
-        	password="${password}" path="/${ant.project.name}"
-        	war="file:${warfilename}" failonerror="false"/>
+		<copy todir="${war.target}" file="${warfilename}"/>
 
         <delete dir="${builddir}"/>
     </target>

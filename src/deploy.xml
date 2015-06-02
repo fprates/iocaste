@@ -1,16 +1,5 @@
 <project name="deployer" default="deploy">
 	<target name="deploy" if="${auto.deploy}">
-		<condition property="manager_url" value="${url}/manager/text"
-				else="${url}/manager">
-		    <equals arg1="${tomcat_version}" arg2="7"/>
-		</condition>
-		
-		<undeploy url="${manager_url}" username="${username}"
-				password="${password}" path="/iocaste-${app.name}"
-				failonerror="false"/>
-				
-		<deploy url="${manager_url}" username="${username}"
-				password="${password}" path="/iocaste-${app.name}"
-				war="file:${warfilename}" failonerror="false"/>
+		<copy todir="${war.target}" file="${war.file}"/>
     </target>
 </project>
