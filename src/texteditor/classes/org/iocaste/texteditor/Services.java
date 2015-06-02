@@ -72,7 +72,7 @@ public class Services extends AbstractFunction {
         
         file = new File(path);
         if (file.exists())
-            return;
+            file.delete();
         file.mkdirs();
     }
     
