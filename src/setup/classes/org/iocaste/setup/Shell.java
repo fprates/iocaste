@@ -363,7 +363,10 @@ public class Shell {
         style.put("border-right-style", "none");
         style.put("border-bottom-color", "#3030ff");
         style.put("border-bottom-width", "3px");
-        style.put("padding", "0.3em");
+        style.put("padding-top", "0.3em");
+        style.put("padding-bottom", "0.3em");
+        style.put("padding-left", "1.5em");
+        style.put("padding-right", "1.5em");
         style.put("background-color", BORDER);
 
         style = stylesheet.newElement(".tp_button_unfocused");
@@ -376,7 +379,10 @@ public class Shell {
         style.put("border-top-width", "3px");
         style.put("border-left-style", "none");
         style.put("border-right-style", "none");
-        style.put("padding", "0.3em");
+        style.put("padding-top", "0.3em");
+        style.put("padding-bottom", "0.3em");
+        style.put("padding-left", "1.5em");
+        style.put("padding-right", "1.5em");
         style.put("margin", "0px");
 
         style = stylesheet.newElement(".tp_item");
