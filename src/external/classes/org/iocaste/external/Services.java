@@ -9,5 +9,6 @@ public class Services extends AbstractFunction {
         export("test", new Test());
         export("connect", new Connect());
         export("connection_data_get", new GetConnectionData());
+        export("structures_function_get", new GetFunctionStructures());
     }
 }

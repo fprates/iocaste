@@ -1,5 +1,7 @@
 package org.iocaste.external.common;
 
+import java.util.Map;
+
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
@@ -36,6 +38,15 @@ public class External extends AbstractServiceInterface {
         
         message = new Message("connection_data_get");
         message.add("name", name);
+        return call(message);
+    }
+    
+    public final Map<String, ComplexDocument> getFunctionStructures(
+            String function) {
+        Message message;
+        
+        message = new Message("structures_function_get");
+        message.add("function", function);
         return call(message);
     }
 }
