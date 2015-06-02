@@ -134,7 +134,7 @@ public class Main {
         factory = new DefaultServerHandlerFactory.FunctionHandlerFactory();
         for (ExtendedObject object : config.getItems("functions")) {
             name = object.getst("FUNCTION");
-            handler = new FunctionHandler(connector, object);
+            handler = new FunctionHandler(connector, external, object);
             factory.registerHandler(name, handler);
             System.out.println("- " + name + " registered.");
         }

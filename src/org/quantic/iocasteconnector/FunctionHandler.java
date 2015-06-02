@@ -1,13 +1,16 @@
 package org.quantic.iocasteconnector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.external.common.External;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
@@ -17,30 +20,36 @@ import com.sap.conn.jco.AbapException;
 import com.sap.conn.jco.JCoField;
 import com.sap.conn.jco.JCoFunction;
 import com.sap.conn.jco.JCoParameterList;
+import com.sap.conn.jco.JCoStructure;
+import com.sap.conn.jco.JCoTable;
 import com.sap.conn.jco.server.JCoServerContext;
 import com.sap.conn.jco.server.JCoServerFunctionHandler;
 
 public class FunctionHandler implements JCoServerFunctionHandler {
     private Function function;
     private ExtendedObject portfunction;
+    private External external;
     
-    public FunctionHandler(Function function, ExtendedObject portfunction) {
+    public FunctionHandler(Function function, External external,
+            ExtendedObject portfunction) {
         this.function = function;
         this.portfunction = portfunction;
+        this.external = external;
     }
     
-    private final Map<String, Object> extract(
-            Map<String, ExtendedObject> items, JCoParameterList list) {
+    private final Map<String, Object> extract(Map<String, ExtendedObject> items,
+            Map<String, ComplexDocument> structures, JCoParameterList list) {
         Object value;
         String name;
         ExtendedObject functionitem;
         Iterator<JCoField> it;
         JCoField field;
         Map<String, Object> result;
+        Map<String, ExtendedObject> structitems;
         
         if (list == null)
             return null;
-        
+
         result = new HashMap<>();
         it = list.iterator();
         while (it.hasNext()) {
@@ -72,6 +81,14 @@ public class FunctionHandler implements JCoServerFunctionHandler {
                 value = list.getTime(name);
                 break;
             case DataType.EXTENDED:
+                structitems = extractStructureItems(structures, name);
+                
+                extractStructure(
+                        result, structitems, name, list.getStructure(name));
+                continue;
+            case DataType.TABLE:
+                extractTable(result, structures, name, list.getTable(name));
+                continue;
             default:
                 value = null;
                 break;
@@ -81,6 +98,97 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         }
         
         return result;
+    }
+    
+    private void extractStructure(Map<String, Object> result,
+            Map<String, ExtendedObject> structitems, String structname,
+            JCoStructure sapstructure) {
+        Iterator<JCoField> it;
+        JCoField field;
+        Object value;
+        String name;
+        ExtendedObject structitem;
+        
+        it = sapstructure.iterator();
+        while (it.hasNext()) {
+            field = it.next();
+            name = field.getName();
+            
+            structitem = structitems.get(name);
+            switch (structitem.geti("TYPE")) {
+            case DataType.BOOLEAN:
+                value = (sapstructure.getChar(name) == 'X');
+                break;
+            case DataType.CHAR:
+                value = sapstructure.getString(name);
+                break;
+            case DataType.NUMC:
+            case DataType.BYTE:
+            case DataType.INT:
+            case DataType.LONG:
+            case DataType.SHORT:
+                value = sapstructure.getBigDecimal(name);
+                break;
+            case DataType.DEC:
+                value = sapstructure.getDouble(name);
+                break;
+            case DataType.DATE:
+                value = sapstructure.getDate(name);
+                break;
+            case DataType.TIME:
+                value = sapstructure.getTime(name);
+                break;
+            default:
+                value = null;
+                break;
+            }
+            
+            name = new StringBuilder(structname).
+                    append(".").append(name).toString();
+            result.put(name, value);
+        }
+    }
+    
+    private Map<String, ExtendedObject> extractStructureItems(
+            Map<String, ComplexDocument> structures, String name) {
+        ExtendedObject[] objects;
+        Map<String, ExtendedObject> structitems;
+        
+        objects = structures.get(name).getItems("items");
+        if (objects == null)
+            throw new RuntimeException("invalid function definition.");
+        
+        structitems = new HashMap<>();
+        for (ExtendedObject object : objects)
+            structitems.put("NAME", object);
+        
+        return structitems;
+    }
+    
+    private void extractTable(Map<String, Object> result,
+            Map<String, ComplexDocument> structures, String tablename,
+            JCoTable saptable) {
+        String name;
+        Iterator<JCoField> it;
+        JCoStructure structure;
+        JCoField field;
+        Map<String, ExtendedObject> structitems;
+        Map<String, Object> table;
+        List<Map<String, Object>> tables;
+        
+        tables = new ArrayList<>();
+        it = saptable.iterator();
+        while (it.hasNext()) {
+            field = it.next();
+            name = field.getName();
+            structitems = extractStructureItems(structures, name);
+            structure = field.getStructure();
+            table = new HashMap<>();
+            tables.add(table);
+            extractStructure(table, structitems, tablename, structure);
+        }
+        
+        result.put(tablename, tables);
     }
     
     @Override
@@ -96,6 +204,7 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         ComplexDocument functionmodel;
         Map<String, Object> extracted;
         Map<String, ExtendedObject> items;
+        Map<String, ComplexDocument> structures;
         Map<String, JCoParameterList> lists;
         ExtendedObject[] parameters;
 
@@ -130,7 +239,9 @@ public class FunctionHandler implements JCoServerFunctionHandler {
             lists.put("exporting", sapfunction.getExportParameterList());
             lists.put("changing", sapfunction.getChangingParameterList());
             lists.put("tables", sapfunction.getTableParameterList());
-
+            
+            structures = external.getFunctionStructures(sapfunctionname);
+            
             message = new Message(functionname);
             message.add("function", sapfunctionname);
             message.add("parameters", result = new HashMap<>());
@@ -138,7 +249,7 @@ public class FunctionHandler implements JCoServerFunctionHandler {
                 list = lists.get(key);
                 if (list == null)
                     continue;
-                extracted = extract(items, list);
+                extracted = extract(items, structures, list);
                 for (String extkey : extracted.keySet())
                     result.put(extkey, extracted.get(extkey));
             }
