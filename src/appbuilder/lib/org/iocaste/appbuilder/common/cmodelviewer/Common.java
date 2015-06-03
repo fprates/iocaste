@@ -63,6 +63,7 @@ public class Common {
             tabletool.model = model.getName();
             tabletool.mode = griddata.mode;
             tabletool.mark = griddata.mark;
+            tabletool.vlines = 0;
             tabletool.hide = new String[] {
                 AbstractManager.getReference(model, griddata.hkey).getName(),
                 AbstractManager.getKey(model).getName()
