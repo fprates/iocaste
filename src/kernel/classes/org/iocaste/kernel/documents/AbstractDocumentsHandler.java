@@ -276,6 +276,10 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         createde = documents.get("create_data_element");
         getde = documents.get("get_data_element");
         for (DocumentModelItem item : model.getItens()) {
+            if (item.isDummy())
+                throw new IocasteException(
+                        "Dummy items allowed only for references.");
+            
             element = item.getDataElement();
             if (element == null) {
                 reference = item.getReference();
