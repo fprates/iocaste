@@ -65,7 +65,8 @@ public class Save extends AbstractActionHandler {
         extcontext.document = extractor.save();
         extcontext.id = extcontext.document.getKey();
         
-        managerMessage(extcontext.link.cmodel, Const.STATUS, Manager.SAVED);
+        managerMessage(extcontext.link.cmodel, Const.STATUS, Manager.SAVED,
+                extcontext.id);
     }
 
 }

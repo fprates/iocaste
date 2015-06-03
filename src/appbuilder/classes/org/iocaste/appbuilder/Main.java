@@ -25,9 +25,9 @@ public class Main extends AbstractModelViewer {
         AppBuilderLink link = getReceivedLink();
         Map<Object, Object> messages = new HashMap<>();
         
-        messages.put("code.exists", "Entrada já existe.");
-        messages.put("invalid.code", "Código inválido.");
-        messages.put("record.saved", "Registro salvo.");
+        messages.put("code.exists", "Documento já existe.");
+        messages.put("invalid.code", "Código de documento inválido.");
+        messages.put("record.saved", "Documento %s gravado com sucesso.");
         addMessages(messages);
         
         if (msgsource != null)

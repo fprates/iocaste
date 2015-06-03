@@ -222,9 +222,10 @@ public abstract class AbstractActionHandler {
         return context.getManager(manager).exists(id);
     }
     
-    protected final void managerMessage(String manager, Const status, int msgid) {
+    protected final void managerMessage(String manager, Const status, int msgid,
+            Object... args) {
         context.function.message(
-                status, context.getManager(manager).getMessage(msgid));
+                status, context.getManager(manager).getMessage(msgid), args);
     }
     
     protected final void message(Const type, String text, Object... args) {
