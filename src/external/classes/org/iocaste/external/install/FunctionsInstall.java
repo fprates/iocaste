@@ -1,4 +1,4 @@
-package org.iocaste.external;
+package org.iocaste.external.install;
 
 import org.iocaste.appbuilder.common.AbstractInstallObject;
 import org.iocaste.appbuilder.common.ComplexModelInstall;

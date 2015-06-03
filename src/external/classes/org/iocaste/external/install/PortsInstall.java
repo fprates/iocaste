@@ -1,4 +1,4 @@
-package org.iocaste.external;
+package org.iocaste.external.install;
 
 import org.iocaste.appbuilder.common.AbstractInstallObject;
 import org.iocaste.appbuilder.common.ComplexModelInstall;
@@ -7,6 +7,7 @@ import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DummyModelItem;
 import org.iocaste.packagetool.common.SearchHelpData;
 
 public class PortsInstall extends AbstractInstallObject {
@@ -150,6 +151,15 @@ public class PortsInstall extends AbstractInstallObject {
         cmodel = cmodelInstance("XTRNL_CONNECTION");
         cmodel.header("porthead");
         cmodel.item("functions", "portfunction");
+        
+        /*
+         * object model reference
+         */
+        model = modelInstance("XTRNL_IMPORT_OBJECT");
+        searchhelp(model.reference(
+                "NAME", new DummyModelItem("MODEL", "NAME")), "SH_MODEL");
+        
+        
     }
 
 }
