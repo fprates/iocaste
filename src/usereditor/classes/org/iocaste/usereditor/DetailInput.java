@@ -10,10 +10,13 @@ public class DetailInput extends AbstractViewInput {
         Context extcontext;
         
         extcontext = getExtendedContext();
-        if (extcontext.userdata.identity != null)
+        if (extcontext.userdata.identity != null) {
             dfset("identity", extcontext.userdata.identity);
-        else
+            if (extcontext.extras != null)
+                dfset("extras", extcontext.extras);
+        } else {
             dfset("identity", "USERNAME", extcontext.userdata.username);
+        }
         
         tableitemsadd("profiles", extcontext.userdata.profiles);
         tableitemsadd("tasks", extcontext.userdata.tasks);

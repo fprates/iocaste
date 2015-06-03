@@ -48,6 +48,7 @@
             <lib dir="${builddir}/shell/lib" includes="*.jar"/>
         	<lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
         	<lib dir="${builddir}/appbuilder/lib" includes="*.jar"/>
+        	<lib dir="${builddir}/tasksel/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
     	

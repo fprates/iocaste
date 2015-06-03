@@ -18,18 +18,18 @@ public class Save extends AbstractActionHandler {
         Authority authority;
         User user;
         String name;
-        ExtendedObject identity;
+        ExtendedObject object;
 
-        identity = getdf("identity");
+        object = getdf("identity");
         extcontext = getExtendedContext();
-        extcontext.userdata.username = identity.get("USERNAME");
+        extcontext.userdata.username = object.get("USERNAME");
         
         user = new User();
         user.setUsername(extcontext.userdata.username);
-        user.setSecret(identity.getst("SECRET"));
-        user.setFirstname(identity.getst("FIRSTNAME"));
-        user.setSurname(identity.getst("SURNAME"));
-        user.setInitialSecret(identity.getbl("INIT"));
+        user.setSecret(object.getst("SECRET"));
+        user.setFirstname(object.getst("FIRSTNAME"));
+        user.setSurname(object.getst("SURNAME"));
+        user.setInitialSecret(object.getbl("INIT"));
         
         if (extcontext.userdata.identity == null) {
             new Iocaste(context.function).create(user);
@@ -44,9 +44,16 @@ public class Save extends AbstractActionHandler {
             query.setModel("USER_TASKS_GROUPS");
             query.andEqual("USERNAME", extcontext.userdata.username);
             update(query);
+            
+            query = new Query("delete");
+            query.setModel("LOGIN_EXTENSION");
+            query.andEqual("USERNAME", extcontext.userdata.username);
         }
 
-        extcontext.userdata.identity = identity;
+        extcontext.userdata.identity = object;
+        extcontext.extras = getdf("extras");
+        extcontext.extras.set("USERNAME", extcontext.userdata.username);
+        save(extcontext.extras);
         
         authority = new Authority(context.function);
         extcontext.userdata.profiles = tableitemsget("profiles");

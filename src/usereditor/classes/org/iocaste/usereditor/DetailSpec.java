@@ -12,6 +12,9 @@ public class DetailSpec extends AbstractPanelSpec {
         tabbedpaneitem("tabs", "idtab");
         dataform("idtab", "identity");
         
+        tabbedpaneitem("tabs", "extrastab");
+        dataform("extrastab", "extras");
+        
         tabbedpaneitem("tabs", "taskstab");
         tabletool("taskstab", "tasks");
         

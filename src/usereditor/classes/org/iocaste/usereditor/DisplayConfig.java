@@ -8,9 +8,12 @@ import org.iocaste.shell.common.Element;
 public class DisplayConfig extends DetailConfig {
 
     @Override
-    protected void config(
-            DataForm identity, TableToolData tasks, TableToolData profiles) {
+    protected void config(DataForm identity, DataForm extras,
+            TableToolData tasks, TableToolData profiles) {
         for (Element element : identity.getElements())
+            element.setEnabled(false);
+        
+        for (Element element : extras.getElements())
             element.setEnabled(false);
         
         tasks.mode = TableTool.DISPLAY;

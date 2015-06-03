@@ -36,6 +36,9 @@ public class Dispatch extends AbstractActionHandler {
         query.andEqual("USERNAME", extcontext.userdata.username);
         extcontext.userdata.tasks = select(query);
         
+        extcontext.extras = getObject(
+                "LOGIN_EXTENSION", extcontext.userdata.username);
+        
         init(action, getExtendedContext());
         redirect(action);
     }

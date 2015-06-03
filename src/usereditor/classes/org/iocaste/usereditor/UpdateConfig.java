@@ -7,8 +7,8 @@ import org.iocaste.shell.common.DataForm;
 public class UpdateConfig extends DetailConfig {
 
     @Override
-    protected void config(
-            DataForm identity, TableToolData tasks, TableToolData profiles) {
+    protected void config(DataForm identity, DataForm extras,
+            TableToolData tasks, TableToolData profiles) {
         tasks.mode = TableTool.UPDATE;
         tasks.mark = true;
         

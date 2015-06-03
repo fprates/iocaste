@@ -10,14 +10,14 @@ import org.iocaste.shell.common.InputComponent;
 
 public abstract class DetailConfig extends AbstractViewConfig {
     
-    protected abstract void config(
-            DataForm identity, TableToolData tasks, TableToolData profiles);
+    protected abstract void config(DataForm identity, DataForm extras,
+            TableToolData tasks, TableToolData profiles);
 
     @Override
     public final void execute(PageBuilderContext context) {
         TableToolData tasks, profiles;
         InputComponent input;
-        DataForm identity;
+        DataForm identity, extras;
         
         identity = getElement("identity");
         identity.importModel("LOGIN", context.function);
@@ -32,7 +32,11 @@ public abstract class DetailConfig extends AbstractViewConfig {
         
         input = identity.get("USERNAME");
         input.setEnabled(false);
-         
+        
+        extras = getElement("extras");
+        extras.importModel("LOGIN_EXTENSION", context.function);
+        extras.get("USERNAME").setVisible(false);
+        
         tasks = getTableTool("tasks");
         tasks.model = "USER_TASKS_GROUPS";
         tasks.show = new String[] {"GROUP"};
@@ -43,6 +47,6 @@ public abstract class DetailConfig extends AbstractViewConfig {
         profiles.show = new String[] {"PROFILE"};
         new TableToolColumn(profiles, "PROFILE").sh = "SH_USER_PROFILE";
         
-        config(identity, tasks, profiles);
+        config(identity, extras, tasks, profiles);
     }
 }

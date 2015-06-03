@@ -15,6 +15,7 @@ public class Install {
         Config config = new Config();
         
         config.function = function;
+        User.install(data);
         CModel.install(data, config);
         GlobalConfig.install(data);
         Shell.install(data);
