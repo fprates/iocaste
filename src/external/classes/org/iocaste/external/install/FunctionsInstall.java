@@ -46,6 +46,7 @@ public class FunctionsInstall extends AbstractInstallObject {
         model.values(DataType.SHORT, "Inteiro");
         model.values(DataType.TIME, "Hora");
         model.values(DataType.EXTENDED, "Objeto extendido");
+        model.values(DataType.TABLE, "Tabela");
         
         shd = searchHelpInstance("XTRNL_SH_ITEM_TYPE", "XTRNL_ITEM_TYPE");
         shd.setExport("TYPE");
@@ -102,8 +103,8 @@ public class FunctionsInstall extends AbstractInstallObject {
                 "NAME", "PARNM", parametername);
         searchhelp(model.reference(
                 "TYPE", "PARTP", typeref), "XTRNL_SH_ITEM_TYPE");
-        model.reference(
-                "STRUCTURE", "STRNM", structureref);
+        searchhelp(model.reference(
+                "STRUCTURE", "STRNM", structureref), "XTRNL_SH_STRUCT");
         
         shd = searchHelpInstance("XTRNL_SH_FUNCTION", "XTRNL_FUNCTION_HEAD");
         shd.setExport("MODEL_ID");
