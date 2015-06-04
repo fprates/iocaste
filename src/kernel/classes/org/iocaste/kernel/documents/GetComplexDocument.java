@@ -36,6 +36,10 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
         
         getcmodel = documents.get("get_complex_model");
         cmodel = getcmodel.run(connection, documents, cdname);
+        if (cmodel == null)
+            throw new IocasteException(
+                    cdname.concat(" complex model undefined."));
+        
         getobject = documents.get("get_object");
         object = getobject.run(connection, documents,
                 cmodel.getHeader().getName(), ns, id);
