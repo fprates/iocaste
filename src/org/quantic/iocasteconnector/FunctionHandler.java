@@ -20,7 +20,7 @@ import com.sap.conn.jco.AbapException;
 import com.sap.conn.jco.JCoField;
 import com.sap.conn.jco.JCoFunction;
 import com.sap.conn.jco.JCoParameterList;
-import com.sap.conn.jco.JCoStructure;
+import com.sap.conn.jco.JCoRecord;
 import com.sap.conn.jco.JCoTable;
 import com.sap.conn.jco.server.JCoServerContext;
 import com.sap.conn.jco.server.JCoServerFunctionHandler;
@@ -83,12 +83,13 @@ public class FunctionHandler implements JCoServerFunctionHandler {
             case DataType.EXTENDED:
                 structitems = extractStructureItems(structures, name);
                 
-                extractStructure(
-                        result, structitems, name, list.getStructure(name));
-                continue;
+                value = extractStructure(
+                        structitems, name, field.getStructure());
+                break;
             case DataType.TABLE:
-                extractTable(result, structures, name, list.getTable(name));
-                continue;
+                value = extractTable(
+                        structures, functionitem, field.getTable());
+                break;
             default:
                 value = null;
                 break;
@@ -100,15 +101,17 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         return result;
     }
     
-    private void extractStructure(Map<String, Object> result,
+    private Map<String, Object> extractStructure(
             Map<String, ExtendedObject> structitems, String structname,
-            JCoStructure sapstructure) {
+            JCoRecord sapstructure) {
         Iterator<JCoField> it;
         JCoField field;
         Object value;
         String name;
         ExtendedObject structitem;
+        Map<String, Object> result;
         
+        result = new HashMap<>();
         it = sapstructure.iterator();
         while (it.hasNext()) {
             field = it.next();
@@ -143,10 +146,10 @@ public class FunctionHandler implements JCoServerFunctionHandler {
                 break;
             }
             
-            name = new StringBuilder(structname).
-                    append(".").append(name).toString();
             result.put(name, value);
         }
+        
+        return result;
     }
     
     private Map<String, ExtendedObject> extractStructureItems(
@@ -160,40 +163,35 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         
         structitems = new HashMap<>();
         for (ExtendedObject object : objects)
-            structitems.put("NAME", object);
+            structitems.put(object.getst("NAME"), object);
         
         return structitems;
     }
     
-    private void extractTable(Map<String, Object> result,
-            Map<String, ComplexDocument> structures, String tablename,
-            JCoTable saptable) {
-        String name;
-        Iterator<JCoField> it;
-        JCoStructure structure;
-        JCoField field;
+    private List<Map<String, Object>> extractTable(
+            Map<String, ComplexDocument> structures,
+            ExtendedObject functionitem, JCoTable saptable) {
+        String name, structname;
         Map<String, ExtendedObject> structitems;
         Map<String, Object> table;
         List<Map<String, Object>> tables;
         
+        structname = functionitem.getst("STRUCTURE");
+        name = functionitem.getst("NAME");
+        structitems = extractStructureItems(structures, structname);
         tables = new ArrayList<>();
-        it = saptable.iterator();
-        while (it.hasNext()) {
-            field = it.next();
-            name = field.getName();
-            structitems = extractStructureItems(structures, name);
-            structure = field.getStructure();
-            table = new HashMap<>();
+        do {
+            table = extractStructure(structitems, name, saptable);
             tables.add(table);
-            extractStructure(table, structitems, tablename, structure);
-        }
+        } while (saptable.nextRow());
         
-        result.put(tablename, tables);
+        return tables;
     }
-    
+
     @Override
     public void handleRequest(JCoServerContext context, JCoFunction sapfunction)
             throws AbapException, AbapClassException {
+        boolean istable;
         Map<String, Object> result;
         JCoParameterList list;
         JCoField field;
@@ -266,11 +264,20 @@ public class FunctionHandler implements JCoServerFunctionHandler {
                     "exporting", "changing", "tables"
             }) {
                 list = lists.get(keylist);
+                if (list == null)
+                    continue;
+                
+                istable = keylist.equals("tables");
                 it = list.iterator();
                 while (it.hasNext()) {
                     field = it.next();
                     name = field.getName();
-                    list.setValue(name, (Object)result.get(name));
+                    if (!istable) {
+                        list.setValue(name, (Object)result.get(name));
+                        continue;
+                    }
+                    
+                    moveTableToSAP(field.getTable(), result.get(name));
                 }
             }
             
@@ -280,6 +287,20 @@ public class FunctionHandler implements JCoServerFunctionHandler {
             throw e;
         }
         
+    }
+
+    @SuppressWarnings("unchecked")
+    private final void moveTableToSAP(JCoTable saptable,
+            Object from) {
+        List<Map<String, Object>> lines;
+        
+        saptable.deleteAllRows();
+        lines = (List<Map<String, Object>>)from;
+        for (Map<String, Object> line : lines) {
+            saptable.appendRow();
+            for (String key : line.keySet())
+                saptable.setValue(key, line.get(key));
+        }
     }
     
     private final void log(Object... args) {
