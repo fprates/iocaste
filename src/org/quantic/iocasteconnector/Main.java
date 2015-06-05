@@ -112,8 +112,11 @@ public class Main {
         
         System.out.print("getting connection data from iocaste...");
         config = external.getConnectionData(stream.port);
-        if (config == null)
+        if (config == null) {
             System.err.println("connection data not found.");
+            return;
+        }
+        
         System.out.println("ok");
 
         text = config.getHeader().getst("TEXT");
@@ -141,7 +144,7 @@ public class Main {
         
         server.setCallHandlerFactory(factory);
 
-        System.out.println("listenning connections...");
+        System.out.println("listenning to connections...");
         server.start();
     }
 }
