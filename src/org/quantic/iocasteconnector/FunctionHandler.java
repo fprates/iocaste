@@ -37,8 +37,8 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         this.external = external;
     }
     
-    private final Map<String, Object> extract(Map<String, ExtendedObject> items,
-            Map<String, ComplexDocument> structures, JCoParameterList list) {
+    private final Map<String, Object> extract(
+            Context context, JCoParameterList list) {
         Object value;
         String name;
         ExtendedObject functionitem;
@@ -56,7 +56,7 @@ public class FunctionHandler implements JCoServerFunctionHandler {
             field = it.next();
             name = field.getName();
             
-            functionitem = items.get(name);
+            functionitem = context.items.get(name);
             switch (functionitem.geti("TYPE")) {
             case DataType.BOOLEAN:
                 value = (list.getChar(name) == 'X');
@@ -81,14 +81,14 @@ public class FunctionHandler implements JCoServerFunctionHandler {
                 value = list.getTime(name);
                 break;
             case DataType.EXTENDED:
-                structitems = extractStructureItems(structures, name);
+                structitems = extractStructureItems(context.structures, name);
                 
                 value = extractStructure(
                         structitems, name, field.getStructure());
                 break;
             case DataType.TABLE:
                 value = extractTable(
-                        structures, functionitem, field.getTable());
+                        context.structures, functionitem, field.getTable());
                 break;
             default:
                 value = null;
@@ -189,21 +189,15 @@ public class FunctionHandler implements JCoServerFunctionHandler {
     }
 
     @Override
-    public void handleRequest(JCoServerContext context, JCoFunction sapfunction)
-            throws AbapException, AbapClassException {
-        boolean istable;
-        Map<String, Object> result;
+    public void handleRequest(JCoServerContext sapcontext,
+            JCoFunction sapfunction) throws AbapException, AbapClassException {
+        Context context;
         JCoParameterList list;
-        JCoField field;
-        Iterator<JCoField> it;
         String servername, functionname, sapfunctionname, name;
         Message message;
         GenericService service;
         ComplexDocument functionmodel;
         Map<String, Object> extracted;
-        Map<String, ExtendedObject> items;
-        Map<String, ComplexDocument> structures;
-        Map<String, JCoParameterList> lists;
         ExtendedObject[] parameters;
 
         try {
@@ -212,7 +206,6 @@ public class FunctionHandler implements JCoServerFunctionHandler {
             
             servername = portfunction.getst("SERVICE");
             functionname = portfunction.getst("SERVICE_FUNCTION");
-            
             if ((servername == null) || (functionname == null)) {
                 log("server name and/or server function undefined.");
                 return;
@@ -225,61 +218,46 @@ public class FunctionHandler implements JCoServerFunctionHandler {
             if (parameters == null)
                 throw new RuntimeException("failed recovering parameters.");
 
-            items = new HashMap<>();
+            context = new Context();
             for (ExtendedObject object : parameters) {
                 name = object.getst("NAME");
                 log("parameter ", name, " recovered.");
-                items.put(name, object);
+                context.items.put(name, object);
             }
 
-            lists = new HashMap<>();
-            lists.put("importing", sapfunction.getImportParameterList());
-            lists.put("exporting", sapfunction.getExportParameterList());
-            lists.put("changing", sapfunction.getChangingParameterList());
-            lists.put("tables", sapfunction.getTableParameterList());
+            context.lists.put(
+                    "importing", sapfunction.getImportParameterList());
+            context.lists.put(
+                    "exporting", sapfunction.getExportParameterList());
+            context.lists.put(
+                    "changing", sapfunction.getChangingParameterList());
+            context.lists.put(
+                    "tables", sapfunction.getTableParameterList());
             
-            structures = external.getFunctionStructures(sapfunctionname);
+            context.structures = external.
+                    getFunctionStructures(sapfunctionname);
             
             message = new Message(functionname);
             message.add("function", sapfunctionname);
-            message.add("parameters", result = new HashMap<>());
-            for (String key : lists.keySet()) {
-                list = lists.get(key);
+            message.add("parameters", context.result);
+            for (String key : context.lists.keySet()) {
+                list = context.lists.get(key);
                 if (list == null)
                     continue;
-                extracted = extract(items, structures, list);
+                extracted = extract(context, list);
                 for (String extkey : extracted.keySet())
-                    result.put(extkey, extracted.get(extkey));
+                    context.result.put(extkey, extracted.get(extkey));
             }
             
             log("invoking ", functionname, "@", servername, "...");
             service = new GenericService(function, servername);
-            result = service.invoke(message);
-            if (result == null) {
+            context.result = service.invoke(message);
+            if (context.result == null) {
                 log("success.");
                 return;
             }
             
-            for (String keylist : new String[] {
-                    "exporting", "changing", "tables"
-            }) {
-                list = lists.get(keylist);
-                if (list == null)
-                    continue;
-                
-                istable = keylist.equals("tables");
-                it = list.iterator();
-                while (it.hasNext()) {
-                    field = it.next();
-                    name = field.getName();
-                    if (!istable) {
-                        list.setValue(name, (Object)result.get(name));
-                        continue;
-                    }
-                    
-                    moveTableToSAP(field.getTable(), result.get(name));
-                }
-            }
+            prepareToExport(context);
             
             log("success.");
         } catch (Exception e) {
@@ -290,16 +268,38 @@ public class FunctionHandler implements JCoServerFunctionHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private final void moveTableToSAP(JCoTable saptable,
+    private final void moveTableToSAP(
+            Map<String, ExtendedObject> structureitems, JCoTable saptable,
             Object from) {
         List<Map<String, Object>> lines;
+        int type;
+        Object value;
         
         saptable.deleteAllRows();
         lines = (List<Map<String, Object>>)from;
         for (Map<String, Object> line : lines) {
             saptable.appendRow();
-            for (String key : line.keySet())
-                saptable.setValue(key, line.get(key));
+            for (String key : line.keySet()) {
+                type = structureitems.get(key).geti("TYPE");
+                value = line.get(key);
+                switch (type) {
+                case DataType.DEC:
+                    value = ExtendedObject.convertd(value);
+                    break;
+                case DataType.INT:
+                    value = ExtendedObject.converti(value);
+                    break;
+                case DataType.LONG:
+                case DataType.NUMC:
+                    value = ExtendedObject.convertl(value);
+                    break;
+                case DataType.SHORT:
+                    value = ExtendedObject.convertsh(value);
+                    break;
+                }
+                
+                saptable.setValue(key, value);
+            }
         }
     }
     
@@ -316,5 +316,54 @@ public class FunctionHandler implements JCoServerFunctionHandler {
             sb.append(arg);
         
         System.out.println(sb.toString());
+    }
+    
+    private final void prepareToExport(Context context) {
+        JCoParameterList list;
+        boolean istable;
+        String name, structurename;
+        JCoField field;
+        Iterator<JCoField> it;
+        ExtendedObject functionitem;
+        Map<String, ExtendedObject> structureitems;
+        
+        for (String keylist : new String[] {
+                "exporting", "changing", "tables"
+        }) {
+            list = context.lists.get(keylist);
+            if (list == null)
+                continue;
+            
+            istable = keylist.equals("tables");
+            it = list.iterator();
+            while (it.hasNext()) {
+                field = it.next();
+                name = field.getName();
+                if (!istable) {
+                    list.setValue(name, (Object)context.result.get(name));
+                    continue;
+                }
+                
+                functionitem = context.items.get(name);
+                structurename = functionitem.get("STRUCTURE");
+                structureitems = extractStructureItems(
+                        context.structures, structurename);
+                moveTableToSAP(structureitems, field.getTable(),
+                        context.result.get(name));
+            }
+        }
+    }
+}
+
+class Context {
+    public Map<String, Object> result;
+    public Map<String, JCoParameterList> lists;
+    public Map<String, ExtendedObject> items;
+    public Map<String, ComplexDocument> structures;
+    
+    public Context() {
+        items = new HashMap<>();
+        lists = new HashMap<>();
+        result = new HashMap<>();
     }
 }
