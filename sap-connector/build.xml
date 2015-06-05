@@ -1,0 +1,39 @@
+<project name="iocaste-sap-connector" default="compile">
+    <property name="builddir" value="${basedir}/build"/>
+    <property name="debug.status" value="true"/>
+    <property name="vendor" value="quantic"/>
+    <property name="server.class" value="org.${vendor}.${ant.project.name}.Servlet"/>
+	
+    <target name="compile">
+    	
+        <!-- dependências -->
+        <path id="dependencies">
+            <fileset dir="${basedir}/lib"/>
+        </path>
+    	
+        <!-- compilação classes -->
+    	<mkdir dir="${builddir}"/>
+    	
+        <javac srcdir="${basedir}/src" destdir="${builddir}"
+        	debug="${debug.status}">
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <copy todir="${builddir}">
+            <fileset dir="${basedir}/src" excludes="**/*.java"/>
+        </copy>
+    		
+        <!-- pacote .jar -->
+		<jar basedir="${builddir}"
+			destfile="${basedir}/${ant.project.name}.jar">
+			<manifest>
+				<attribute name="Class-Path"
+					value="./lib/iocaste.jar  ./lib/sapjco3.jar"/>
+				<attribute name="Main-class"
+					value="org.quantic.iocasteconnector.Main"/>
+			</manifest>
+		</jar>
+
+        <delete dir="${builddir}"/>
+    </target>
+</project>
