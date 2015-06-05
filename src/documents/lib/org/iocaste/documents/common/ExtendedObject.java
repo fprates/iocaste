@@ -69,6 +69,87 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
     }
     
     /**
+     * 
+     * @param name
+     * @return
+     */
+    public static final byte convertb(Object value) {
+        
+        if (value instanceof BigDecimal)
+            return ((BigDecimal)value).byteValue();
+        
+        try {
+            return (byte)value;
+        } catch (ClassCastException e) {
+            return Byte.parseByte(value.toString());
+        }
+    }
+    
+    /**
+     * Retorna valor do campo especificado no formato double.
+     * @param name nome do campo
+     * @return valor do campo do tipo double
+     */
+    public static final double convertd(Object value) {
+        
+        if (!(value instanceof BigDecimal))
+            return (double)value;
+        
+        return ((BigDecimal)value).doubleValue();
+    }
+    
+    /**
+     * 
+     * @param value
+     * @return
+     */
+    public static final int converti(Object value) {
+        
+        if (value instanceof BigDecimal)
+            return ((BigDecimal)value).intValue();
+        
+        try {
+            return (int)value;
+        } catch (ClassCastException e) {
+            return Integer.parseInt(value.toString());
+        }
+    }
+
+    /**
+     * 
+     * @param value
+     * @return
+     */
+    public static final long convertl(Object value) {
+        
+        if (value instanceof BigDecimal)
+            return ((BigDecimal)value).longValue();
+        
+        try {
+            return (long)value;
+        } catch (ClassCastException e) {
+            return Long.parseLong(value.toString());
+        }
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public static final short convertsh(Object value) {
+        
+        if (value instanceof BigDecimal)
+            return ((BigDecimal)value).shortValue();
+        
+        try {
+            return (short)value;
+        } catch (ClassCastException e) {
+            return Short.parseShort(value.toString());
+        }
+    }
+    
+    /**
      * Retorna valor de um item do objeto.
      * @param name nome do item
      * @return valor
@@ -94,15 +175,7 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
      */
     public final byte getb(String name) {
         Object value = getNumericValue(name);
-        
-        if (value instanceof BigDecimal)
-            return ((BigDecimal)value).byteValue();
-        
-        try {
-            return (byte)value;
-        } catch (ClassCastException e) {
-            return Byte.parseByte(value.toString());
-        }
+        return convertb(value);
     }
     
     /**
@@ -121,11 +194,7 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
      */
     public final double getd(String name) {
         Object value = getNumericValue(name);
-        
-        if (!(value instanceof BigDecimal))
-            return (double)value;
-        
-        return ((BigDecimal)value).doubleValue();
+        return convertd(value);
     }
 
     /**
@@ -144,15 +213,7 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
      */
     public final int geti(String name) {
         Object value = getNumericValue(name);
-        
-        if (value instanceof BigDecimal)
-            return ((BigDecimal)value).intValue();
-        
-        try {
-            return (int)value;
-        } catch (ClassCastException e) {
-            return Integer.parseInt(value.toString());
-        }
+        return converti(value);
     }
 
     /**
@@ -162,15 +223,7 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
      */
     public final long getl(String name) {
         Object value = getNumericValue(name);
-        
-        if (value instanceof BigDecimal)
-            return ((BigDecimal)value).longValue();
-        
-        try {
-            return (long)value;
-        } catch (ClassCastException e) {
-            return Long.parseLong(value.toString());
-        }
+        return convertl(value);
     }
     
     /**
@@ -213,15 +266,7 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
      */
     public final short getsh(String name) {
         Object value = getNumericValue(name);
-        
-        if (value instanceof BigDecimal)
-            return ((BigDecimal)value).shortValue();
-        
-        try {
-            return (short)value;
-        } catch (ClassCastException e) {
-            return Short.parseShort(value.toString());
-        }
+        return convertsh(value);
     }
     
     /**
