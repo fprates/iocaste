@@ -46,7 +46,7 @@ public class Services extends AbstractFunction {
         Map<String, DocumentModel> models;
         DocumentModel model;
         DocumentModelItem headerkey;
-        String itemkey, modelname, reference, charitemid, charid;
+        String itemkey, modelname, reference, charitemid, charid, itemformat;
         long numid, numitemid;
         int i, keytype;
         Object id;
@@ -97,6 +97,10 @@ public class Services extends AbstractFunction {
         head.setNS(ns);
         document.setHeader(head);
         document.setNS(ns);
+        itemformat = message.getString("item_format");
+        if (itemformat == null)
+            itemformat = "%02d";
+        
         for (ExtendedObject[] group : groups) {
             i = 0;
             if (group == null)
@@ -107,7 +111,7 @@ public class Services extends AbstractFunction {
                 reference = references.get(modelname);
                 switch (keytype) {
                 case DataType.CHAR:
-                    charitemid = charid.concat(String.format("%02d", i));
+                    charitemid = charid.concat(String.format(itemformat, i));
                     item.set(itemkey, charitemid);
                     id = charid;
                     break;

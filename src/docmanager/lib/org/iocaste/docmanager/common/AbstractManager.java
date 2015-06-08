@@ -19,10 +19,12 @@ public abstract class AbstractManager implements Manager {
     private ComplexModel cmodel;
     private String[] messages;
     private Documents documents;
+    private String itemformat;
     
     public AbstractManager(String cmodelname, Function function) {
         docmanager = new DocumentManager(function);
         documents = new Documents(function);
+        itemformat = "%02d";
         cmodel = documents.getComplexModel(cmodelname);
         if (cmodel == null)
             throw new RuntimeException(
@@ -217,7 +219,7 @@ public abstract class AbstractManager implements Manager {
     @Override
     public ComplexDocument save(Object ns, ExtendedObject head,
             Collection<ExtendedObject[]> groups) {
-        return docmanager.save(cmodel.getName(), ns, head, groups);
+        return docmanager.save(cmodel.getName(), ns, head, groups, itemformat);
     }
     
     /*
@@ -233,6 +235,14 @@ public abstract class AbstractManager implements Manager {
             groups.add(document.getItems(name));
         
         return save(document.getNS(), document.getHeader(), groups);
+    }
+    
+    /**
+     * 
+     * @param itemformat
+     */
+    protected final void setItemFormat(String itemformat) {
+        this.itemformat = itemformat;
     }
     
     /**
