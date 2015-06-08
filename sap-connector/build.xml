@@ -8,19 +8,19 @@
     	
         <!-- dependências -->
         <path id="dependencies">
-            <fileset dir="${basedir}/lib"/>
+            <fileset dir="${basedir}/ext"/>
         </path>
     	
         <!-- compilação classes -->
     	<mkdir dir="${builddir}"/>
     	
-        <javac srcdir="${basedir}/src" destdir="${builddir}"
+        <javac srcdir="${basedir}/sap-connector/src" destdir="${builddir}"
         	debug="${debug.status}">
             <classpath refid="dependencies"/>
         </javac>
         
         <copy todir="${builddir}">
-            <fileset dir="${basedir}/src" excludes="**/*.java"/>
+            <fileset dir="${basedir}/sap-connector/src" excludes="**/*.java"/>
         </copy>
     		
         <!-- pacote .jar -->
@@ -28,12 +28,16 @@
 			destfile="${basedir}/${ant.project.name}.jar">
 			<manifest>
 				<attribute name="Class-Path"
-					value="./lib/iocaste.jar  ./lib/sapjco3.jar"/>
+					value="./ext/iocaste.jar ./ext/sapjco3.jar"/>
 				<attribute name="Main-class"
 					value="org.quantic.iocasteconnector.Main"/>
 			</manifest>
 		</jar>
 
         <delete dir="${builddir}"/>
+        
+        <copy todir="${basedir}">
+            <fileset dir="${basedir}/sap-connector" includes="**/*.sh"/>
+        </copy>
     </target>
 </project>
