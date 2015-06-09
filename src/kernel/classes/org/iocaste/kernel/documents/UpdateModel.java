@@ -1,6 +1,7 @@
 package org.iocaste.kernel.documents;
 
 import java.sql.Connection;
+import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
@@ -67,7 +68,8 @@ public class UpdateModel extends AbstractDocumentsHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        DocumentModelItem reference;
+        Map<String, String> queries;
+        DocumentModelItem reference, ns, oldns;
         InsertDataElement insert;
         GetDocumentModel getmodel;
         DocumentModel oldmodel;
@@ -84,6 +86,11 @@ public class UpdateModel extends AbstractDocumentsHandler {
         insert = documents.get("insert_data_element");
 
         prepareElements(connection, documents, model);
+        
+        oldns = oldmodel.getNamespace();
+        ns = model.getNamespace();
+        if ((ns != null) && (oldns == null) && (ns.getTableFieldName() != null))
+            addTableKey(connection, refstmt, ns, dbtype);
         
         for (DocumentModelItem item : model.getItens()) {
             if (item.getDataElement() == null) {
@@ -118,7 +125,8 @@ public class UpdateModel extends AbstractDocumentsHandler {
                     throw new IocasteException("error on remove table column");
         }
         
-        documents.parseQueries(model);
+        queries = documents.parseQueries(model);
+        documents.cache.queries.put(name, queries);
         documents.cache.models.remove(name);
         documents.cache.models.put(name, model);
         
