@@ -22,6 +22,7 @@ public class StructureConfig extends AbstractViewConfig {
         tabletool = getTableTool("items");
         tabletool.model = "DD_MODEL_ITEM";
         tabletool.mode = TableTool.DISPLAY;
+        tabletool.vlines = 0;
         
         column = new TableToolColumn(tabletool, "NAME");
         column.size = 24;
