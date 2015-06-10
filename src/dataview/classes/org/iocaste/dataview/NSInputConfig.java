@@ -21,6 +21,7 @@ public class NSInputConfig extends AbstractViewConfig {
         input = new DataItem(form, Const.TEXT_FIELD, "NSKEY");
         input.setDataElement(extcontext.nsitem.getDataElement());
         input.setObligatory(true);
+        context.view.setFocus(input);
         
         getNavControl().setTitle("ns.key.input");
     }
