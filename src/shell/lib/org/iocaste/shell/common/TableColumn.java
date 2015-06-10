@@ -13,7 +13,7 @@ import org.iocaste.documents.common.DocumentModelItem;
  */
 public class TableColumn implements Serializable {
     private static final long serialVersionUID = -39703809895121317L;
-    private boolean visible, mark, rendertextonly, translatable;
+    private boolean visible, mark, rendertextonly, translatable, namespace;
     private String name, text;
     private DocumentModelItem modelitem;
     private DataElement de;
@@ -89,6 +89,14 @@ public class TableColumn implements Serializable {
      * 
      * @return
      */
+    public final boolean isNamespace() {
+        return namespace;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final boolean isTranslatable() {
         return translatable;
     }
@@ -141,6 +149,18 @@ public class TableColumn implements Serializable {
         this.name = name;
     }
     
+    /**
+     * 
+     * @param namespace
+     */
+    public final void setNamespace(boolean namespace) {
+        this.namespace = namespace;
+    }
+    
+    /**
+     * 
+     * @param parameter
+     */
     public final void setParameter(Parameter parameter) {
         this.parameter = parameter;
     }

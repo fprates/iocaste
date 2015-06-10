@@ -22,21 +22,25 @@ public abstract class AbstractTableHandler {
     
     protected static void additem(TableTool tabletool,
             Context context, ExtendedObject object, int pos) {
+        Object value;
         TableToolColumn column;
         Element element;
         DataElement delement;
         InputComponent input;
-        String name;
+        String name, paramlink, nsinput;
+        Link link;
         TableItem item = new TableItem(context.table, pos);
         TableColumn[] tcolumns = context.table.getColumns();
         
+        nsinput = null;
         for (TableColumn tcolumn : tcolumns) {
             if (tcolumn.isMark())
                 continue;
-
+            
             name = tcolumn.getName();
             column = context.data.columns.get(name);
             delement = tcolumn.getModelItem().getDataElement();
+            input = null;
             switch (delement.getType()) {
             case DataType.BOOLEAN:
                 element = new CheckBox(item, name);
@@ -49,7 +53,6 @@ public abstract class AbstractTableHandler {
                 case LIST_BOX:
                     input = new ListBox(item, name);
                     input.setDataElement(delement);
-                    input.setNSReference(context.data.nsfield);
                     element = input;
                     if (column.values == null)
                         break;
@@ -60,11 +63,22 @@ public abstract class AbstractTableHandler {
                 case TEXT_FIELD:
                     input = new TextField(item, name);
                     input.setDataElement(delement);
-                    input.setNSReference(context.data.nsfield);
                     element = input;
                     break;
                 case LINK:
-                    element = new Link(item, name, column.action);
+                    link = new Link(item, name, column.action);
+                    element = link;
+                    if (object == null)
+                        break;
+
+                    value = object.get(name);
+                    if (value == null)
+                        break;
+                    
+                    paramlink = new StringBuilder(context.data.name).
+                            append(".").append(name).toString();
+                    
+                    link.add(paramlink, value.toString());
                     break;
                 default:
                     throw new RuntimeException("component type not supported"
@@ -85,6 +99,16 @@ public abstract class AbstractTableHandler {
             
             if (column.disabled)
                 element.setEnabled(false);
+
+            if (tcolumn.isNamespace())
+                nsinput = element.getHtmlName();
+            
+            if (input != null) {
+                if (nsinput != null)
+                    input.setNSReference(nsinput);
+                else
+                    input.setNSReference(context.data.nsfield);
+            }
         }
         
         if (object == null)

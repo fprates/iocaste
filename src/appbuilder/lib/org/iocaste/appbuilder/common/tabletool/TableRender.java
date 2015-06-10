@@ -16,7 +16,56 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 
 public class TableRender extends AbstractTableHandler {
+    
+    /**
+     * 
+     * @param modelname
+     */
+    private static final void model(Function function, Context context) {
+        String itemname;
+        DocumentModelItem[] items;
+        DocumentModelItem item;
+        TableToolColumn column;
+        DocumentModel model = new Documents(function).
+                getModel(context.data.model);
+        
+        if (model == null)
+            throw new RuntimeException(context.data.model.
+                    concat(" is an invalid model."));
 
+        if (context.data.ordering == null) {
+            items = model.getItens();
+            context.data.ordering = new String[items.length];
+            for (int i = 0; i < context.data.ordering.length; i++)
+                context.data.ordering[i] = items[i].getName();
+        }
+        
+        if (context.data.nsfield == null) {
+            item = model.getNamespace();
+            if (item != null) {
+                itemname = item.getName();
+                column = new TableToolColumn(context.data, itemname);
+                setTableToolColumn(context, column, itemname, item);
+                column.tcolumn.setNamespace(true);
+            }
+        }
+        
+        for (String name : context.data.ordering) {
+            column = context.data.columns.get(name);
+            if (column == null)
+                column = new TableToolColumn(context.data, name);
+            item = model.getModelItem(name);
+            
+            setTableToolColumn(context, column, name, item);
+            
+            if (item.getSearchHelp() == null)
+                item.setSearchHelp(column.sh);
+            
+            if (column.size > 0)
+                column.tcolumn.setLength(column.size);
+        }
+    }
+    
     public static final void run(TableTool tabletool, Function function,
             TableToolData data) {
         StyleSheet stylesheet;
@@ -58,47 +107,15 @@ public class TableRender extends AbstractTableHandler {
         setMode(context);
         setObjects(tabletool, context);
     }
-    
-    /**
-     * 
-     * @param modelname
-     */
-    private static final void model(Function function, Context context) {
-        DocumentModelItem[] items;
-        DocumentModelItem item;
-        TableToolColumn column;
-        DocumentModel model = new Documents(function).
-                getModel(context.data.model);
-        
-        if (model == null)
-            throw new RuntimeException(context.data.model.
-                    concat(" is an invalid model."));
 
-        if (context.data.ordering == null) {
-            items = model.getItens();
-            context.data.ordering = new String[items.length];
-            for (int i = 0; i < context.data.ordering.length; i++)
-                context.data.ordering[i] = items[i].getName();
-        }
-                
-        for (String name : context.data.ordering) {
-            column = context.data.columns.get(name);
-            if (column == null)
-                column = new TableToolColumn(context.data, name);
-            item = model.getModelItem(name);
-            
-            column.tcolumn = new TableColumn(context.table, name);
-            column.tcolumn.setMark(false);
-            column.tcolumn.setVisible(true);
-            column.tcolumn.setModelItem(item);
-            column.tcolumn.setLength(item.getDataElement().getLength());
-            
-            if (item.getSearchHelp() == null)
-                item.setSearchHelp(column.sh);
-            
-            if (column.size > 0)
-                column.tcolumn.setLength(column.size);
-        }
+    private static final void setTableToolColumn(Context context,
+            TableToolColumn column, String name, DocumentModelItem item) {
+        
+        column.tcolumn = new TableColumn(context.table, name);
+        column.tcolumn.setMark(false);
+        column.tcolumn.setVisible(true);
+        column.tcolumn.setModelItem(item);
+        column.tcolumn.setLength(item.getDataElement().getLength());
     }
 
 }

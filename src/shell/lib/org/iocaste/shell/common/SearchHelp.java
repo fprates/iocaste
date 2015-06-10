@@ -206,7 +206,11 @@ public class SearchHelp extends PopupControl {
             if (modelitem == null)
                 continue;
             
-            value = object.get(modelitem.getName());
+            if (column.isNamespace())
+                value = object.getNS();
+            else
+                value = object.get(modelitem.getName());
+            
             input.set(value);
         }
     }
