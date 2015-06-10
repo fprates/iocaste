@@ -30,7 +30,8 @@ public class ViewSpecItem {
         RADIO_GROUP("radiogroup"),
         SKIP("skip"),
         TEXT_FIELD("textfield"),
-        PRINT_AREA("printarea");
+        PRINT_AREA("printarea"),
+        PARAMETER("parameter");
 
         private String name;
         

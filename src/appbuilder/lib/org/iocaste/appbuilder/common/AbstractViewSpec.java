@@ -94,10 +94,14 @@ public abstract class AbstractViewSpec {
         put(parent, ViewSpecItem.TYPES.NODE_LIST, name);
     }
     
+    protected final void parameter(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.PARAMETER, name);
+    }
+    
     protected final void printarea(String parent) {
         put(parent, ViewSpecItem.TYPES.PRINT_AREA, "printarea");
     }
-    
+     
     private final void put(String parent, ViewSpecItem.TYPES type, String name)
     {
         ViewSpecItem item = new ViewSpecItem(parent, type, name);
