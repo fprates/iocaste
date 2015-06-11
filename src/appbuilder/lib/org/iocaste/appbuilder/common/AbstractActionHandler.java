@@ -7,6 +7,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -236,17 +237,42 @@ public abstract class AbstractActionHandler {
         return documents.modify(object);
     }
     
-    protected final ExtendedObject readobjects(ExtendedObject[] objects,
+    protected static final ExtendedObject readobject(ExtendedObject object,
             String op1, Object op2) {
-        for (ExtendedObject object : objects)
-            if (object.get(op1).equals(op2))
-                return object;
+        int type;
+        Object value1 = object.get(op1);
+        Object value2 = op2;
+        
+        type = object.getModel().getModelItem(op1).getDataElement().getType();
+        switch (type) {
+        case DataType.INT:
+            value1 = ExtendedObject.converti(value1);
+            value2 = ExtendedObject.converti(value2);
+            break;
+        case DataType.NUMC:
+        case DataType.LONG:
+            value1 = ExtendedObject.convertl(value1);
+            value2 = ExtendedObject.convertl(value2);
+            break;
+        }
+        
+        return (value1.equals(value2))? object : null;
+    }
+    
+    protected static final ExtendedObject readobjects(ExtendedObject[] objects,
+            String op1, Object op2) {
+        for (ExtendedObject object : objects) {
+            object = readobject(object, op1, op2);
+            if (object == null)
+                continue;
+            return object;
+        }
         
         return null;
     }
     
     protected static final ExtendedObject readobjects(
-            Collection<ExtendedObject> objects, String op1, Object op2) {
+            Collection<ExtendedObject> objects, String op1, String op2) {
         for (ExtendedObject object : objects)
             if (object.get(op1).equals(op2))
                 return object;
