@@ -392,11 +392,11 @@ class BuilderCustomAction implements ViewCustomAction {
     public final void execute(AbstractContext context) throws Exception {
         String view = context.view.getPageName();
         AbstractActionHandler handler = handlers.get(view).
-                get(context.actioncontrol);
+                get(context.action);
         
         if (handler == null)
             throw new RuntimeException(
-                    context.actioncontrol.concat(" isn't a valid action."));
+                    context.action.concat(" isn't a valid action."));
         
         loadTableObjects((PageBuilderContext)context);
         handler.run(context);

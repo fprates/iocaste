@@ -31,10 +31,8 @@ public class ExecAction extends AbstractHandler {
         List<String> handlers;
         ViewCustomAction customaction;
         Method method;
-        String action, error;
-        String controlname = message.getString("action");
+        String error;
         View view = message.get("view");
-        ControlComponent control = view.getElement(controlname);
         AbstractPage page = getFunction();
         
         if (context != null) {
@@ -45,8 +43,7 @@ public class ExecAction extends AbstractHandler {
         state.view = view;
         state.rapp = state.rpage = null;
         state.initialize = false;
-        context.actioncontrol =
-                (control == null)? controlname : control.getName();
+        context.action = message.getString("action");
         for (String name : validables.keySet()) {
             input = (InputComponent)view.getElement(name);
             if (input == null)
@@ -68,12 +65,11 @@ public class ExecAction extends AbstractHandler {
             }
         }
         
-        action = (control == null)? controlname : control.getAction();
-        customaction = customactions.get(action);
+        customaction = customactions.get(context.action);
         if (customaction != null) {
             customaction.execute(context);
         } else {
-            method = page.getClass().getMethod(action);
+            method = page.getClass().getMethod(context.action);
             method.invoke(page);
         }
         

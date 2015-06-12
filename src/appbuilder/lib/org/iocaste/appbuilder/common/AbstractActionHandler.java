@@ -344,7 +344,7 @@ public abstract class AbstractActionHandler {
         
         this.context = (PageBuilderContext)context;
         viewctx = this.context.getView(view);
-        if (viewctx.getActionHandler(context.actioncontrol) == null)
+        if (viewctx.getActionHandler(context.action) == null)
             return;
         
         components = viewctx.getComponents();
