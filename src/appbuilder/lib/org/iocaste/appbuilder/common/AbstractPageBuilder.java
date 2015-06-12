@@ -391,11 +391,12 @@ class BuilderCustomAction implements ViewCustomAction {
     @Override
     public final void execute(AbstractContext context) throws Exception {
         String view = context.view.getPageName();
-        String action = context.view.getActionControl();
-        AbstractActionHandler handler = handlers.get(view).get(action);
+        AbstractActionHandler handler = handlers.get(view).
+                get(context.actioncontrol);
         
         if (handler == null)
-            throw new RuntimeException(action.concat(" isn't a valid action."));
+            throw new RuntimeException(
+                    context.actioncontrol.concat(" isn't a valid action."));
         
         loadTableObjects((PageBuilderContext)context);
         handler.run(context);
@@ -406,6 +407,6 @@ class BuilderCustomAction implements ViewCustomAction {
                 getView(context.view.getPageName()).getComponents();
         
         for (TableToolEntry entry : components.tabletools.values())
-            entry.data.objects = entry.component.getObjects();
+            entry.data.set(entry.component.getObjects(entry.data));
     }
 }

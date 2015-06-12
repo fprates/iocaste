@@ -1,10 +1,12 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DataType;
@@ -339,11 +341,10 @@ public abstract class AbstractActionHandler {
             throws Exception {
         ViewContext viewctx;
         String view = context.view.getPageName();
-        String action = context.view.getActionControl();
         
         this.context = (PageBuilderContext)context;
         viewctx = this.context.getView(view);
-        if (viewctx.getActionHandler(action) == null)
+        if (viewctx.getActionHandler(context.actioncontrol) == null)
             return;
         
         components = viewctx.getComponents();
@@ -377,11 +378,35 @@ public abstract class AbstractActionHandler {
     }
     
     protected final ExtendedObject[] tableitemsget(String tabletool) {
-        return components.tabletools.get(tabletool).component.getObjects();
+        ExtendedObject[] objects;
+        int i = 0;
+        TableToolEntry entry = components.tabletools.get(tabletool);
+        List<TableToolItem> items = entry.component.getObjects(entry.data);
+        
+        if (items == null)
+            return null;
+        
+        objects = new ExtendedObject[items.size()];
+        for (TableToolItem item : items)
+            objects[i++] = item.object;
+        
+        return objects;
     }
     
     protected final List<ExtendedObject> tableselectedget(String tabletool) {
-        return components.tabletools.get(tabletool).component.getSelected();
+        List<ExtendedObject> objects;
+        TableToolEntry entry = components.tabletools.get(tabletool);
+        List<TableToolItem> items = entry.component.getObjects(entry.data);
+        
+        if (items == null)
+            return null;
+        
+        objects = new ArrayList<>();
+        for (TableToolItem item : items)
+            if (item.selected)
+                objects.add(item.object);
+        
+        return objects;
     }
     
     protected final void taskredirect(String task) {

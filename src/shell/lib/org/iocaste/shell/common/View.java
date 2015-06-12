@@ -39,7 +39,7 @@ public class View implements Serializable {
     public static final boolean INITIALIZE = true;
     private byte[] content;
     private Element elementfocus;
-    private String title, appname, pagename, actioncontrol;
+    private String title, appname, pagename;
     private List<String> lines;
     private List<Container> containers;
     private Map<String, Map<String, String>> sheet;
@@ -97,10 +97,6 @@ public class View implements Serializable {
     		return false;
     	
     	return true;
-    }
-    
-    public final String getActionControl() {
-        return actioncontrol;
     }
     
     /**
@@ -213,14 +209,6 @@ public class View implements Serializable {
      */
     public final void remove(Element element) {
         elements.remove(element.getHtmlName());
-    }
-    
-    /**
-     * 
-     * @param actioncontrol
-     */
-    public final void setActionControl(String actioncontrol) {
-        this.actioncontrol = actioncontrol;
     }
     
     /**

@@ -95,7 +95,7 @@ public class TableTool {
     private final void additems(ExtendedObject[] objects) {
         TableToolData data = getTableData();
         
-        data.objects = objects;
+        data.add(objects);
         AddItems.run(this, data);
         installValidators(data);
     }
@@ -123,12 +123,22 @@ public class TableTool {
      * @param item
      * @return
      */
-    public final ExtendedObject get(TableItem item) {
+    public final ExtendedObject get(TableToolData data, TableItem item) {
+        Element element;
         InputComponent input;
         DocumentModelItem modelitem;
+        TableToolColumn ttcolumn;
         ExtendedObject object = new ExtendedObject(model);
         
-        for (Element element : item.getElements()) {
+        for (String name : data.columns.keySet()) {
+            element = item.get(name);
+            ttcolumn = data.columns.get(name);
+            if (ttcolumn.tcolumn.isNamespace()) {
+                input = (InputComponent)element;
+                object.setNS(input.get());
+                continue;
+            }
+            
             if (element.isDataStorable()) {
                 input = (InputComponent)element;
                 modelitem = input.getModelItem();
@@ -167,9 +177,9 @@ public class TableTool {
      * 
      * @return
      */
-    public final ExtendedObject[] getObjects() {
-        int i;
-        ExtendedObject[] objects;
+    public final List<TableToolItem> getObjects(TableToolData data) {
+        TableToolItem ttitem;
+        List<TableToolItem> ttitems;
         Table table = getTable();
         Set<TableItem> items = table.getItems();
         int size = items.size();
@@ -177,28 +187,14 @@ public class TableTool {
         if (size == 0)
             return null;
 
-        objects = new ExtendedObject[size];
-        i = 0;
-        for (TableItem item : items)
-            objects[i++] = get(item);
+        ttitems = new ArrayList<>();
+        for (TableItem item : items) {
+            ttitem = new TableToolItem();
+            ttitem.object = get(data, item);
+            ttitem.selected = item.isSelected();
+        }
         
-        return objects;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final List<ExtendedObject> getSelected() {
-        List<ExtendedObject> objects;
-        Table table = getTable();
-        
-        objects = new ArrayList<>();
-        for (TableItem item : table.getItems())
-            if (item.isSelected())
-                objects.add(get(item));
-        
-        return (objects.size() == 0)? null : objects;
+        return ttitems;
     }
     
     /**
@@ -291,7 +287,7 @@ public class TableTool {
     public final void setObjects(ExtendedObject[] objects) {
         TableToolData data = getTableData();
         
-        data.objects = (objects == null || objects.length == 0)? null : objects;
+        data.set(objects);
         SetObjects.run(this, data);
         installValidators(data);
     }

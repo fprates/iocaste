@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common.tabletool;
 
+import java.util.List;
+
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -21,7 +23,7 @@ import org.iocaste.shell.common.TextField;
 public abstract class AbstractTableHandler {
     
     protected static void additem(TableTool tabletool,
-            Context context, ExtendedObject object, int pos) {
+            Context context, TableToolItem ttitem, int pos) {
         Object value;
         TableToolColumn column;
         Element element;
@@ -29,9 +31,15 @@ public abstract class AbstractTableHandler {
         InputComponent input;
         String name, paramlink, nsinput;
         Link link;
-        TableItem item = new TableItem(context.table, pos);
+        TableItem item;
+        ExtendedObject object;
         TableColumn[] tcolumns = context.table.getColumns();
         
+        item = new TableItem(context.table, pos);
+        if (ttitem != null)
+            item.setSelected(ttitem.selected);
+        
+        object = (ttitem == null)? null : ttitem.object;
         nsinput = null;
         for (TableColumn tcolumn : tcolumns) {
             if (tcolumn.isMark())
@@ -123,22 +131,25 @@ public abstract class AbstractTableHandler {
     }
     
     protected static final void additems(TableTool tabletool,
-            Context context, ExtendedObject[] items) {
+            Context context, List<TableToolItem> items) {
+        int j;
         int vlines = context.table.getVisibleLines();
         int total = context.table.size();
         
-        if (items == null) {
+        if ((items == null) || (items.size() == 0)) {
             if (vlines == 0)
                 vlines = 15;
             
             for (int i = 0; i < vlines; i++)
                 additem(tabletool, context, null, -1);
         } else {
-            for (int i = 0; i < items.length; i++) {
-                if ((vlines == i) && (vlines > 0))
+            j = -1;
+            for (TableToolItem item : items) {
+                j++;
+                if ((vlines == j) && (vlines > 0))
                     break;
                 
-                additem(tabletool, context, items[i], -1);
+                additem(tabletool, context, item, -1);
             }
         }
         
@@ -205,7 +216,9 @@ public abstract class AbstractTableHandler {
      */
     protected static final void setObjects(TableTool tabletool, Context context)
     {
-        if (context.data.objects == null || context.data.objects.length == 0) {
+        List<TableToolItem> items = context.data.getItems();
+        
+        if (items.size() == 0) {
             switch(context.data.mode) {
             case TableTool.CONTINUOUS_DISPLAY:
             case TableTool.CONTINUOUS_UPDATE:
@@ -218,7 +231,7 @@ public abstract class AbstractTableHandler {
             }
         }
         
-        additems(tabletool, context, context.data.objects);
+        additems(tabletool, context, items);
     }
     
     /**

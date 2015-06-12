@@ -6,6 +6,7 @@ import java.util.List;
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
+import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -25,15 +26,24 @@ public abstract class AbstractViewInput {
     private PageBuilderContext context;
     private boolean init;
     
-    private final void addtableitems(String table, ExtendedObject[] objects) {
-        TableToolEntry entry = getViewComponents().tabletools.get(table);
-        TableToolData tabletool = entry.data;
-        
-        if (tabletool == null)
-            throw new RuntimeException(table.
-                    concat(" is an invalid tabletool."));
-        
-        tabletool.objects = objects;
+    private final void addtablearray(
+            String table, ExtendedObject[] objects) {
+        TableToolEntry entry = getTableEntry(table);
+        entry.data.set(objects);
+        entry.update = !init;
+    }
+    
+    private final void addtablecollection(
+            String table, Collection<ExtendedObject> objects) {
+        TableToolEntry entry = getTableEntry(table);
+        entry.data.set(objects);
+        entry.update = !init;
+    }
+    
+    private final void addtableitems(
+            String table, List<TableToolItem> items) {
+        TableToolEntry entry = getTableEntry(table);
+        entry.data.set(items);
         entry.update = !init;
     }
     
@@ -147,6 +157,16 @@ public abstract class AbstractViewInput {
         return context.getManager(name);
     }
     
+    private final TableToolEntry getTableEntry(String name) {
+        TableToolEntry entry = getViewComponents().tabletools.get(name);
+        TableToolData tabletool = entry.data;
+        
+        if (tabletool != null)
+            return entry;
+        
+        throw new RuntimeException(name.concat(" is an invalid tabletool."));
+    }
+    
     private final ViewComponents getViewComponents() {
         return context.getView(context.view.getPageName()).getComponents();
     }
@@ -216,17 +236,21 @@ public abstract class AbstractViewInput {
     }
     
     protected final void tableitemsadd(String table) {
-        addtableitems(table, null);
+        addtablecollection(table, null);
     }
     
     protected final void tableitemsadd(String table, ExtendedObject[] objects) {
-        
-        addtableitems(table, objects);
+        addtablearray(table, objects);
     }
     
     protected final void tableitemsadd(
             String table, Collection<ExtendedObject> objects) {
-        addtableitems(table, objects.toArray(new ExtendedObject[0]));
+        addtablecollection(table, objects);
+    }
+    
+    protected final void tableitemsset(String table, List<TableToolItem> items)
+    {
+        addtableitems(table, items);
     }
     
     protected final void tableitemsadd(String table, DataConversion conversion)
@@ -235,7 +259,7 @@ public abstract class AbstractViewInput {
         ExtendedObject[] objects = DocumentExtractor.extractItems(
                 null, documents, conversion, null, null);
         
-        addtableitems(table, objects);
+        addtablearray(table, objects);
     }
     
     protected final void texteditorset(String texteditor, String text) {

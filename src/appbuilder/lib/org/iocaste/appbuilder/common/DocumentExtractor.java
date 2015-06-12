@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModel;
@@ -174,8 +174,10 @@ public class DocumentExtractor {
     }
     
     public final ComplexDocument save() {
+        int i;
+        List<TableToolItem> ttitems;
+        TableToolEntry entry;
         DataConversion conversion;
-        TableTool tabletool;
         DocumentModel model;
         String to, dfsource;
         ExtendedObject head;
@@ -230,13 +232,17 @@ public class DocumentExtractor {
                 }
             
             if (objects == null) {
-                tabletool = context.getView(pagename).getComponents().
-                        tabletools.get(name).component;
-                objects = tabletool.getObjects();
+                entry = context.getView(pagename).getComponents().
+                        tabletools.get(name);
+                ttitems = entry.component.getObjects(entry.data);
+                if (ttitems == null)
+                    continue;
+                
+                objects = new ExtendedObject[ttitems.size()];
+                i = 0;
+                for (TableToolItem item : ttitems)
+                    objects[i++] = item.object;
             }
-            
-            if (objects == null)
-                continue;
 
             extractItems(ns, documents, conversion, document, objects);
         }

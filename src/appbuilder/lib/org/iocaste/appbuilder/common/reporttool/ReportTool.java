@@ -16,10 +16,10 @@ public class ReportTool {
         ttdata.context = data.context;
         ttdata.container = data.container;
         ttdata.name = data.name;
-        ttdata.objects = data.objects;
         ttdata.model = data.model;
         ttdata.mode = TableTool.DISPLAY;
         ttdata.vlines = 0;
+        ttdata.set(data.objects);
         
         new TableTool(ttdata);
     }

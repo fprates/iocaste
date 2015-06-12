@@ -45,8 +45,8 @@ public class ExecAction extends AbstractHandler {
         state.view = view;
         state.rapp = state.rpage = null;
         state.initialize = false;
-        action = (control == null)? controlname : control.getName();
-        view.setActionControl(action);
+        context.actioncontrol =
+                (control == null)? controlname : control.getName();
         for (String name : validables.keySet()) {
             input = (InputComponent)view.getElement(name);
             if (input == null)
