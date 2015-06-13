@@ -234,7 +234,7 @@ public class DocumentExtractor {
             if (objects == null) {
                 entry = context.getView(pagename).getComponents().
                         tabletools.get(name);
-                ttitems = entry.component.getObjects(entry.data);
+                ttitems = entry.component.getItems(entry.data);
                 if (ttitems == null)
                     continue;
                 

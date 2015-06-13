@@ -1,7 +1,5 @@
 package org.iocaste.shell.common;
 
-import org.iocaste.documents.common.ExtendedObject;
-
 /**
  * Implementação abstrata de validador de campos.
  * 
@@ -21,6 +19,26 @@ public abstract class AbstractValidator implements Validator {
     @Override
     public final void clear() {
         message = null;
+    }
+    
+    protected final boolean isItemElementMatch(Element element, Object value) {
+        InputComponent input;
+        Component component;
+        String text;
+        
+        if (element.isContainable() || element.isControlComponent())
+            return false;
+        
+        if (element.isDataStorable()) {
+            input = (InputComponent)element;
+            if (Shell.areEquals(input, value))
+                return true;
+            return false;
+        }
+        
+        component = (Component)element;
+        text = component.getText();
+        return text.equals(value);
     }
     
     /**
@@ -51,26 +69,12 @@ public abstract class AbstractValidator implements Validator {
 
     protected TableItem getItem(Table table, String name, Object value) {
         Element element;
-        Component component;
-        String text;
-        InputComponent input;
         
         for (TableItem item : table.getItems()) {
             element = item.get(name);
-            if (element.isContainable() || element.isControlComponent())
+            if (!isItemElementMatch(element, value))
                 continue;
-            
-            if (element.isDataStorable()) {
-                input = (InputComponent)element;
-                if (Shell.areEquals(input, value))
-                    return item;
-                continue;
-            }
-            
-            component = (Component)element;
-            text = component.getText();
-            if (text.equals(value))
-                return item;
+            return item;
         }
         
         return null;
@@ -83,15 +87,6 @@ public abstract class AbstractValidator implements Validator {
     @Override
     public final String getMessage() {
         return message;
-    }
-    
-    protected ExtendedObject getObject(
-            ExtendedObject[] objects, String name, Object value) {        
-        for (ExtendedObject object : objects)
-            if (!object.get(name).equals(value))
-                return object;
-        
-        return null;
     }
     
     /**

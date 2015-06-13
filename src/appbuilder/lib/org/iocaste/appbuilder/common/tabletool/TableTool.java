@@ -177,7 +177,7 @@ public class TableTool {
      * 
      * @return
      */
-    public final List<TableToolItem> getObjects(TableToolData data) {
+    public final List<TableToolItem> getItems(TableToolData data) {
         TableToolItem ttitem;
         List<TableToolItem> ttitems;
         Table table = getTable();
@@ -192,6 +192,7 @@ public class TableTool {
             ttitem = new TableToolItem();
             ttitem.object = get(data, item);
             ttitem.selected = item.isSelected();
+            ttitem.item = item;
         }
         
         return ttitems;
