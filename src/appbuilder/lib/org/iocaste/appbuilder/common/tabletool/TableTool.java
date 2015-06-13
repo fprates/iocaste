@@ -193,6 +193,7 @@ public class TableTool {
             ttitem.object = get(data, item);
             ttitem.selected = item.isSelected();
             ttitem.item = item;
+            ttitems.add(ttitem);
         }
         
         return ttitems;
