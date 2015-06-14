@@ -10,6 +10,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
+import org.iocaste.shell.common.View;
 
 public class TabbedPaneRenderer extends Renderer {
     
@@ -21,9 +22,9 @@ public class TabbedPaneRenderer extends Renderer {
      */
     public static final XMLElement render(TabbedPane tabbedpane,
             Config config) {
+        View view;
         Button button;
-        StringBuilder sb;
-        String classname, name, text;
+        String classname, name, text, current;
         TabbedPaneItem item;
         List<XMLElement> tags;
         Set<Element> elements;
@@ -33,6 +34,8 @@ public class TabbedPaneRenderer extends Renderer {
         tabbedtag.add("class", "tp_outer");
         
         elements = tabbedpane.getElements();
+        current = tabbedpane.getCurrentPage();
+        view = config.getView();
         for (Element element : elements) {
             if (element.getType() != Const.TABBED_PANE_ITEM)
                 continue;
@@ -40,19 +43,11 @@ public class TabbedPaneRenderer extends Renderer {
             item = (TabbedPaneItem)element;
             name = item.getName();
             text = item.getText();
-            sb = new StringBuilder("setElementDisplay('").append(name);
             
-            if (tabbedpane.getCurrent().equals(name)) {
-                sb.append("', 'block');");
-                classname = "tp_button_focused";
-            } else {
-                sb.append("', 'none');");
-                classname = "tp_button_unfocused";
-            }
+            classname = current.equals(name)?
+                    "tp_button_focused" : "tp_button_unfocused";
             
-            config.addOnload(sb.toString());
-            
-            button = new Button(config.getView(), name.concat("_bt"));
+            button = new Button(view, name.concat("_bt"));
             button.setText(text);
             button.setStyleClass(classname);
             button.setEventHandler(tabbedpane.getEventHandler());
@@ -61,13 +56,8 @@ public class TabbedPaneRenderer extends Renderer {
         }
 
         tags = new ArrayList<>();
-        for (Element element : elements) {
-            if (element.getType() != Const.TABBED_PANE_ITEM)
-                continue;
-            
-            item = (TabbedPaneItem)element;
-            renderContainer(tags, item, config);
-        }
+        item = view.getElement(current);
+        renderContainer(tags, item, config);
         
         tabbedtag.addChildren(tags);
         return tabbedtag;

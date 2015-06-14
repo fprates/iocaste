@@ -128,6 +128,12 @@ public interface Element extends Comparable<Element>, Serializable {
     public abstract boolean isEnabled();
     
     /**
+     * 
+     * @return
+     */
+    public abstract boolean isMultipage();
+    
+    /**
      * Retorn true se elemento é renderizado remotamente.
      * @return true, se renderizado remotamente
      */

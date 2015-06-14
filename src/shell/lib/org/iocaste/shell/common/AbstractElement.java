@@ -214,6 +214,14 @@ public abstract class AbstractElement implements Element {
     }
     
     /*
+     * 
+     */
+    @Override
+    public boolean isMultipage() {
+        return false;
+    }
+    
+    /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.Element#isRemote()
      */

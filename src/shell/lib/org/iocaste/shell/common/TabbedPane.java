@@ -6,9 +6,8 @@ package org.iocaste.shell.common;
  * @author francisco.prates
  *
  */
-public class TabbedPane extends AbstractContainer {
+public class TabbedPane extends AbstractMultipageContainer {
     private static final long serialVersionUID = -8260508533459016709L;
-    private String current;
     
     public TabbedPane(View view, String name) {
         super(view, Const.TABBED_PANE, name);
@@ -27,17 +26,7 @@ public class TabbedPane extends AbstractContainer {
      */
     @Override
     public final void add(Element element) {
-        if ((current == null) && (element.getType() == Const.TABBED_PANE_ITEM))
-            current = element.getHtmlName();
-        super.add(element);
-    }
-    
-    /**
-     * Retorna a aba atual.
-     * @return aba.
-     */
-    public final String getCurrent() {
-        return current;
+        add(element, Const.TABBED_PANE_ITEM);
     }
 
     /**
@@ -45,14 +34,6 @@ public class TabbedPane extends AbstractContainer {
      */
     private final void init() {
         setEventHandler(new OnClickHandler(this));
-    }
-    
-    /**
-     * Define a aba atual.
-     * @param current nome da aba.
-     */
-    public final void setCurrent(String current) {
-        this.current = current;
     }
 }
 
@@ -122,6 +103,6 @@ class OnClickHandler extends AbstractEventHandler {
             view.setFocus(focus);
             break;
         }
-        pane.setCurrent(name);
+        pane.setCurrentPage(name);
     }
 }
