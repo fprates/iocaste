@@ -325,6 +325,9 @@ public class Documents extends AbstractServiceInterface {
         if (element == null)
             return isInitial((String)value);
         
+        if (value == null)
+            return true;
+        
         switch (element.getType()) {
         case DataType.BOOLEAN:
             return (boolean)value;
