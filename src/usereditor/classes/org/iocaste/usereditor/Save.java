@@ -53,7 +53,7 @@ public class Save extends AbstractActionHandler {
         extcontext.userdata.identity = object;
         extcontext.extras = getdf("extras");
         extcontext.extras.set("USERNAME", extcontext.userdata.username);
-        save(extcontext.extras);
+        modify(extcontext.extras);
         
         authority = new Authority(context.function);
         extcontext.userdata.profiles = tableitemsget("profiles");
