@@ -99,6 +99,9 @@ public class Services extends AbstractFunction {
         if (!file.exists())
             file.createNewFile();
         
+        if (text == null)
+            text = "";
+        
         os = new FileOutputStream(file);
         os.write(text.getBytes());
         os.close();
