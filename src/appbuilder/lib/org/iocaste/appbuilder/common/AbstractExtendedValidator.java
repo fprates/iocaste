@@ -1,5 +1,7 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.List;
+
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.shell.common.AbstractValidator;
 import org.iocaste.shell.common.Element;
@@ -24,8 +26,12 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
         ViewComponents components = context.
                 getView(context.view.getPageName()).getComponents();
         TableToolEntry entry = components.tabletools.get(tname);
-            
-        for (TableToolItem ttitem : entry.component.getItems(entry.data)) {
+        List<TableToolItem> ttitems = entry.component.getItems(entry.data);
+        
+        if (ttitems == null)
+            return null;
+        
+        for (TableToolItem ttitem : ttitems) {
             element = ttitem.item.getElement(name);
             if (!element.getHtmlName().equals(htmlname))
                 continue;
