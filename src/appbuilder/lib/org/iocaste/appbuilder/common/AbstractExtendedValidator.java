@@ -32,6 +32,9 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
             return null;
         
         for (TableToolItem ttitem : ttitems) {
+            if (ttitem.item == null)
+                continue;
+            
             element = ttitem.item.getElement(name);
             if (!element.getHtmlName().equals(htmlname))
                 continue;
