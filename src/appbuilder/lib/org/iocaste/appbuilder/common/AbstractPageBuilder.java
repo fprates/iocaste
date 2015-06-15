@@ -407,6 +407,6 @@ class BuilderCustomAction implements ViewCustomAction {
                 getView(context.view.getPageName()).getComponents();
         
         for (TableToolEntry entry : components.tabletools.values())
-            entry.data.set(entry.component.getItems(entry.data));
+            entry.component.refresh(entry.data);
     }
 }

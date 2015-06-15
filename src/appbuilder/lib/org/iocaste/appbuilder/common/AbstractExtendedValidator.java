@@ -26,7 +26,7 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
         ViewComponents components = context.
                 getView(context.view.getPageName()).getComponents();
         TableToolEntry entry = components.tabletools.get(tname);
-        List<TableToolItem> ttitems = entry.component.getItems(entry.data);
+        List<TableToolItem> ttitems = entry.data.getItems();
         
         if (ttitems == null)
             return null;

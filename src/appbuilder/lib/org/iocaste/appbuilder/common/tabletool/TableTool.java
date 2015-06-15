@@ -1,6 +1,5 @@
 package org.iocaste.appbuilder.common.tabletool;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -177,32 +176,6 @@ public class TableTool {
      * 
      * @return
      */
-    public final List<TableToolItem> getItems(TableToolData data) {
-        TableToolItem ttitem;
-        List<TableToolItem> ttitems;
-        Table table = getTable();
-        Set<TableItem> items = table.getItems();
-        int size = items.size();
-        
-        if (size == 0)
-            return null;
-
-        ttitems = new ArrayList<>();
-        for (TableItem item : items) {
-            ttitem = new TableToolItem();
-            ttitem.object = get(data, item);
-            ttitem.selected = item.isSelected();
-            ttitem.item = item;
-            ttitems.add(ttitem);
-        }
-        
-        return ttitems;
-    }
-    
-    /**
-     * 
-     * @return
-     */
     private final Table getTable() {        
         return context.view.getElement(getTableData().name.concat("_table"));
     }
@@ -256,6 +229,28 @@ public class TableTool {
                 input = item.get(name);
                 context.function.validate(input, column.validator); 
             }
+        }
+    }
+    
+    public final void refresh(TableToolData data) {
+        List<TableToolItem> ttitems;
+        TableToolItem ttitem;
+        Table table = getTable();
+        Set<TableItem> items = table.getItems();
+        int size = items.size();
+        
+        ttitems = data.getItems();
+        ttitems.clear();
+        
+        if (size == 0)
+            return;
+
+        for (TableItem item : items) {
+            ttitem = new TableToolItem();
+            ttitem.object = get(data, item);
+            ttitem.selected = item.isSelected();
+            ttitem.item = item;
+            ttitems.add(ttitem);
         }
     }
     

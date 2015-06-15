@@ -381,7 +381,7 @@ public abstract class AbstractActionHandler {
         ExtendedObject[] objects;
         int i = 0;
         TableToolEntry entry = components.tabletools.get(tabletool);
-        List<TableToolItem> items = entry.component.getItems(entry.data);
+        List<TableToolItem> items = entry.data.getItems();
         
         if (items == null)
             return null;
@@ -396,7 +396,7 @@ public abstract class AbstractActionHandler {
     protected final List<ExtendedObject> tableselectedget(String tabletool) {
         List<ExtendedObject> objects;
         TableToolEntry entry = components.tabletools.get(tabletool);
-        List<TableToolItem> items = entry.component.getItems(entry.data);
+        List<TableToolItem> items = entry.data.getItems();
         
         if (items == null)
             return null;
