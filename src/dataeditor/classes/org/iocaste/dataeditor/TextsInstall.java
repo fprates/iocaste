@@ -12,10 +12,13 @@ public class TextsInstall extends AbstractInstallObject {
         
         messages.put("acceptitems", "Aceitar");
         messages.put("additems", "Adicionar");
+        messages.put("continue", "Continuar");
         messages.put("dataeditor-selection", "Seleção de modelo");
         messages.put("display", "Exibir");
         messages.put("edit", "Atualizar");
         messages.put("NAME", "Modelo");
+        messages.put("ns.key.input", "Namespace");
+        messages.put("NSKEY", "Chave do namespace");
         messages.put("removeitems", "Remover");
         messages.put("save", "Salvar");
         messages.put("SM30", "Editor de entradas em modelos");

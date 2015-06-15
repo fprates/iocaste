@@ -21,11 +21,16 @@ public class Main extends AbstractPageBuilder {
         
         extcontext.action = getParameter("action");
         extcontext.model = getParameter("model");
-        model = new Documents(context.function).getModel(extcontext.model);
-        if (model != null)
-            setMessageSource(model.getPackage());
+        extcontext.documents = new Documents(context.function);
+        if (extcontext.model != null) {
+            model = new Documents(context.function).getModel(extcontext.model);
+            if (model != null)
+                setMessageSource(model.getPackage());
+        }
         
         panel = new StandardPanel(context);
+        panel.instance("nsinput", new NSPage(), extcontext);
+        
         if (extcontext.action == null) {
             load = new Load("main");
             panel.instance("main", new MainPage(), extcontext);
@@ -45,10 +50,9 @@ public class Main extends AbstractPageBuilder {
         default:
             return;
         }
-
-        CommonStyle.get().head.bgcolor = "#3030ff";
         
-        context.view.setActionControl("load");
+        CommonStyle.get().head.bgcolor = "#3030ff";
+        context.action = "load";
         load.run(context, false);
     }
 
@@ -110,6 +114,17 @@ class MainPage extends AbstractPanelPage {
         set(new SelectionConfig());
         action("display", new Load("display"));
         action("edit", new Load("edit"));
+    }
+    
+}
+
+class NSPage extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new NSInputSpec());
+        set(new NSInputConfig());
+        action("continue", new ContinueSelect());
     }
     
 }
