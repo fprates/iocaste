@@ -41,4 +41,9 @@ public class SearchHelpData implements Serializable {
     public final void setModel(String model) {
         this.model = model;
     }
+    
+    @Override
+    public String toString() {
+        return name;
+    }
 }
