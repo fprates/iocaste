@@ -71,9 +71,11 @@ public class Services extends AbstractFunction {
         String path = getPath(name);
         
         file = new File(path);
-        if (file.exists())
-            file.delete();
-        file.mkdirs();
+        if (!file.exists())
+            file.mkdirs();
+        
+        for (File arq : file.listFiles())
+            arq.delete();
     }
     
     public final void unregister(Message message) {
