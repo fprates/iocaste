@@ -448,6 +448,17 @@ public abstract class AbstractInputComponent extends AbstractComponent
     }
     
     @Override
+    public String toString() {
+        Object value = get();
+        if (value == null)
+            value = "null";
+        
+        return new StringBuilder(getHtmlName()).
+                append("=").
+                append(value.toString()).toString();
+    }
+    
+    @Override
     public void translate(MessageSource messages) { }
 }
 
