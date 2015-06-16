@@ -1,6 +1,6 @@
 package org.iocaste.appbuilder.common;
 
-import java.util.List;
+import java.util.Set;
 
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.shell.common.AbstractValidator;
@@ -8,6 +8,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.TableItem;
 
 public abstract class AbstractExtendedValidator extends AbstractValidator {
     
@@ -20,28 +21,35 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
     protected final TableToolItem getItem(String tname, InputComponent input) {
         Element element;
         Object value;
+        TableToolItem ttitem;
         String name = input.getName();
         String htmlname = input.getHtmlName();
         PageBuilderContext context = getContext();
         ViewComponents components = context.
                 getView(context.view.getPageName()).getComponents();
         TableToolEntry entry = components.tabletools.get(tname);
-        List<TableToolItem> ttitems = entry.data.getItems();
+        Set<TableItem> items = entry.component.getItems();
         
-        if (ttitems == null)
+        if (items == null)
             return null;
         
-        for (TableToolItem ttitem : ttitems) {
-            if (ttitem.item == null)
+        for (TableItem item : items) {
+            if (item == null)
                 continue;
             
-            element = ttitem.item.getElement(name);
+            element = item.getElement(name);
             if (!element.getHtmlName().equals(htmlname))
                 continue;
 
             value = input.get();
             if (!isItemElementMatch(element, value))
                 continue;
+            
+            ttitem = new TableToolItem();
+            ttitem.item = item;
+            ttitem.selected = item.isSelected();
+            ttitem.object = entry.component.get(entry.data, item);
+            
             return ttitem;
         }
         
