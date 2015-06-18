@@ -81,6 +81,8 @@ public class TableRender extends AbstractTableHandler {
             container = data.context.view.getElement(data.name);
         }
         
+        container.setStyleClass(data.style);
+        
         stylesheet = data.context.view.styleSheetInstance();
         style = stylesheet.newElement(".tt_skip");
         style.put("border-style", "none");
