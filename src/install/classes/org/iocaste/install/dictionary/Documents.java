@@ -30,7 +30,7 @@ public class Documents extends Module {
         
         docs001 = tableInstance("DOCS001");
         docs001.key("DOCID", CHAR, 24);
-        docs001.add("TNAME", CHAR, 12);
+        docs001.add("TNAME", CHAR, 24);
         docs001.add("CLASS", CHAR, 255);
         docs001.add("NSCOL", CHAR, 48);
         docs001.add("NSTYP", NUMC, 1);
@@ -49,7 +49,7 @@ public class Documents extends Module {
         docs002.key("INAME", CHAR, 48);
         docs002.ref("DOCID", CHAR, 24, "DOCS001", "DOCID");
         docs002.add("NRITM", NUMC, 3);
-        docs002.add("FNAME", CHAR, 12);
+        docs002.add("FNAME", CHAR, 24);
         docs002.ref("ENAME", CHAR, 48, "DOCS003", "ENAME");
         docs002.add("ATTRB", CHAR, 64);
         docs002.add("ITREF", CHAR, 48);
@@ -59,7 +59,7 @@ public class Documents extends Module {
         docs004.ref("DOCID", CHAR, 24, "DOCS001", "DOCID");
 
         docs005 = tableInstance("DOCS005");
-        docs005.key("TNAME", CHAR, 12);
+        docs005.key("TNAME", CHAR, 24);
         docs005.ref("DOCID", CHAR, 24, "DOCS001", "DOCID");
 
         docs006 = tableInstance("DOCS006");
@@ -75,11 +75,11 @@ public class Documents extends Module {
         insertElement(docs003,
                 "MODEL.NAME", 0, 24, 0, true);
         insertElement(docs003,
-                "MODEL.TABLE", 0, 12, 0, true);
+                "MODEL.TABLE", 0, 24, 0, true);
         insertElement(docs003,
                 "MODEL.CLASS", 0, 255, 0, false);
         insertElement(docs003,
-                "MODELITEM.FIELDNAME", 0, 12, 0, true);
+                "MODELITEM.FIELDNAME", 0, 24, 0, true);
         insertElement(docs003,
                 "DATAELEMENT.LENGTH", 0, 4, 3, false);
         insertElement(docs003,
