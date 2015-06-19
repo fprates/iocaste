@@ -146,6 +146,16 @@ public class ComplexDocument implements Serializable,
     }
     
     /**
+     * 
+     * @return
+     */
+    public final String getstKey() {
+        for (DocumentModelKey key : cmodel.getHeader().getKeys())
+            return header.getst(key.getModelItemName());
+        return null;
+    }
+    
+    /**
      * Remove all items of the document
      */
     public final void remove() {
