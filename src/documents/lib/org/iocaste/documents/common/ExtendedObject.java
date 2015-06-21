@@ -149,6 +149,26 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
         }
     }
     
+    @Override
+    public boolean equals(Object object) {
+        ExtendedObject eobject;
+        
+        if (object == null)
+            return false;
+        if (object == this)
+            return true;
+        if (!(object instanceof ExtendedObject))
+            return false;
+        eobject = (ExtendedObject)object;
+        if (!model.equals(eobject.getModel()))
+            return false;
+        for (DocumentModelKey key : model.getKeys()) {
+            if (!Documents.equals(this, eobject, key.getModelItemName()))
+                return false;
+        }
+        return true;
+    }
+    
     /**
      * Retorna valor de um item do objeto.
      * @param name nome do item

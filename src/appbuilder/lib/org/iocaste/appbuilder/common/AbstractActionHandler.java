@@ -9,7 +9,6 @@ import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
-import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -239,33 +238,10 @@ public abstract class AbstractActionHandler {
         return documents.modify(object);
     }
     
-    protected static final ExtendedObject readobject(ExtendedObject object,
-            String op1, Object op2) {
-        int type;
-        Object value1 = object.get(op1);
-        Object value2 = op2;
-        
-        type = object.getModel().getModelItem(op1).getDataElement().getType();
-        switch (type) {
-        case DataType.INT:
-            value1 = ExtendedObject.converti(value1);
-            value2 = ExtendedObject.converti(value2);
-            break;
-        case DataType.NUMC:
-        case DataType.LONG:
-            value1 = ExtendedObject.convertl(value1);
-            value2 = ExtendedObject.convertl(value2);
-            break;
-        }
-        
-        return (value1.equals(value2))? object : null;
-    }
-    
     protected static final ExtendedObject readobjects(ExtendedObject[] objects,
             String op1, Object op2) {
         for (ExtendedObject object : objects) {
-            object = readobject(object, op1, op2);
-            if (object == null)
+            if (!Documents.equals(object, op1, op2))
                 continue;
             return object;
         }

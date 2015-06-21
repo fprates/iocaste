@@ -161,6 +161,40 @@ public class Documents extends AbstractServiceInterface {
         call(message);
     }
     
+    public static final boolean equals(ExtendedObject object,
+            String op1, Object op2) {
+        int type;
+        Object value1 = object.get(op1);
+        Object value2 = op2;
+        
+        type = object.getModel().getModelItem(op1).getDataElement().getType();
+        switch (type) {
+        case DataType.INT:
+            value1 = ExtendedObject.converti(value1);
+            value2 = ExtendedObject.converti(value2);
+            break;
+        case DataType.NUMC:
+        case DataType.LONG:
+            value1 = ExtendedObject.convertl(value1);
+            value2 = ExtendedObject.convertl(value2);
+            break;
+        }
+        
+        return value1.equals(value2);
+    }
+    
+    public static final boolean equals(
+            ExtendedObject obj1, ExtendedObject obj2, String field) {
+        Object value1, value2;
+        
+        value1 = obj1.get(field);
+        value2 = obj2.get(field);
+        if (value1 == null)
+            return (value2 == null);
+        
+        return equals(obj1, field, value2);
+    }
+    
     /**
      * 
      * @param name
@@ -359,10 +393,13 @@ public class Documents extends AbstractServiceInterface {
             ExtendedObject object, Set<String> ignore) {
         DocumentModel model = object.getModel();
         
-        for (DocumentModelItem item : model.getItens())
-            if (!ignore.contains(item.getName()) &&
-                    !isInitial(item.getDataElement(), object.get(item)))
+        for (DocumentModelItem item : model.getItens()) {
+            if ((ignore != null) && ignore.contains(item.getName()))
+                continue;
+        
+            if (!isInitial(item.getDataElement(), object.get(item)))
                 return false;
+        }
         
         return true;
     }
