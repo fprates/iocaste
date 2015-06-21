@@ -31,18 +31,18 @@ public class CommonStyle {
         dashboard.width = "calc(100% - 220px)";
         dashboard.height = "calc(100% - 70px)";
         dashboard.bgcolor = "#202020";
-        dashboard.itembgcolor = "#f0f0f0";
+        dashboard.itembgcolor = "#303030";
         dashboard.focusbgcolor = "#505050";
         dashboard.font.focuscolor = "#ffffff";
-        dashboard.font.color = "#000000";
+        dashboard.font.color = "#e0e0e0";
         dashboard.font.size = "12pt";
-        dashboard.border.all.color = "#e0e0e0";
+        dashboard.border.all.color = "#000000";
         
         context.width = "220px";
         context.height = "calc(100% - 70px)";
-        context.bgcolor = "#303030";
+        context.bgcolor = dashboard.itembgcolor;
         context.shade = "#202020";
-        context.actionbgcolor = "#3030ff";
+        context.actionbgcolor = context.bgcolor;
         context.groupbgcolor = "#606060";
         context.focusbgcolor = "#505050";
         context.font.color = "#ffffff";

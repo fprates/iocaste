@@ -142,10 +142,11 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         style.put("padding", "1em");
         style.put("display", "inline");
         style.put("background-color", profile.dashboard.itembgcolor);
-        style.put("border-radius", "3px");
         style.put("border-style", "solid");
         style.put("border-color", profile.dashboard.border.all.color);
+        style.put("border-width", "1px");
         style.put("font-size", profile.dashboard.font.size);
+        style.put("transition", "0.25s");
         
         mouseover = getStyle(name, OUTER).concat("_mouseover");
         stylesheet.clone(mouseover, getStyle(name, OUTER)).put(
