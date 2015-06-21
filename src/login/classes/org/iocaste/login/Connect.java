@@ -10,34 +10,39 @@ public class Connect extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        String username, secret, locale, task;
-        ExtendedObject object;
+        Context extcontext;
+        String secret, locale, task;
         Iocaste iocaste = new Iocaste(context.function);
         
-        username = getdfst("login", "USERNAME");
+        extcontext = getExtendedContext();
+        extcontext.uname = getdfst("login", "USERNAME");
         secret = getdfst("login", "SECRET");
         locale = getdfst("login", "LOCALE");
         
-        if (!iocaste.login(username, secret, locale)) {
+        if (!iocaste.login(extcontext.uname, secret, locale)) {
             message(Const.ERROR, "invalid.login");
             return;
         }
         
-        context.function.export("username", username);
+        context.function.export("username", extcontext.uname);
         if (iocaste.isInitialSecret()) {
             redirect("changesecret");
             return;
         }
         
-        object = getObject("LOGIN_EXTENSION", username);
-        if (object != null) {
-            task = object.getst("TASK");
-            if (task != null) {
-                taskredirect(task);
-                return;
-            }
+        task = getUserTask(extcontext.uname);
+        if (task == null) {
+            context.function.exec("iocaste-tasksel", "main");
+            return;
         }
+
+        taskredirect(task);
+    }
+    
+    protected final String getUserTask(String username) {
+        ExtendedObject object;
         
-        context.function.exec("iocaste-tasksel", "main");
+        object = getObject("LOGIN_EXTENSION", username);
+        return (object == null)? null : object.getst("TASK");
     }
 }

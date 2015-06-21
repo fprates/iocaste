@@ -12,6 +12,7 @@ public class Context implements ExtendedContext {
     private DataElement username, secret;
     public DocumentModel loginmodel, chgscrtmodel;
     public Properties messages;
+    public String uname;
     
     public Context() {
         username = dataElementInstance(

@@ -1,14 +1,15 @@
 package org.iocaste.login;
 
-import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.Const;
 
-public class ChangeSecret extends AbstractActionHandler {
+public class ChangeSecret extends Connect {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
+        String task;
+        Context extcontext;
         String secret = getdfst("chgscrt", "SECRET");
         String confirm = getdfst("chgscrt", "CONFIRM");
         
@@ -19,7 +20,14 @@ public class ChangeSecret extends AbstractActionHandler {
              * não queremos que essa seja a página inicial
              */
             context.function.dontPushPage();
-            context.function.exec("iocaste-tasksel", "main");
+            extcontext = getExtendedContext();
+            task = getUserTask(extcontext.uname);
+            if (task == null) {
+                context.function.exec("iocaste-tasksel", "main");
+                return;
+            }
+
+            taskredirect(task);
             return;
         }
         
