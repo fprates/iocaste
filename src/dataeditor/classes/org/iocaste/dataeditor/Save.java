@@ -12,10 +12,12 @@ public class Save extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
+        String name;
         Context extcontext;
         Query query;
         ExtendedObject[] objects;
         boolean skip;
+        long value;
         
         
         extcontext = getExtendedContext();
@@ -29,19 +31,32 @@ public class Save extends AbstractActionHandler {
         if (objects == null)
             return;
         
+        extcontext.items.clear();
         for (ExtendedObject object : objects) {
             skip = false;
-            for (DocumentModelKey key : object.getModel().getKeys())
-                if (Documents.isInitial(object, key.getModelItemName())) {
+            for (DocumentModelKey key : object.getModel().getKeys()) {
+                name = key.getModelItemName();
+                if (!Documents.isInitial(object, name))
+                    continue;
+                
+                if (extcontext.number == null) {
                     skip = true;
                     break;
                 }
+                
+                if (Documents.isInitial(object))
+                    continue;
+                
+                value = getNextNumber(extcontext.number);
+                object.set(key.getModelItemName(), value);
+                break;
+            }
             
             if (!skip)
                 save(object);
+            extcontext.items.add(object);
         }
         
-        extcontext.items = objects;
         message(Const.STATUS, "entries.saved");
 
     }

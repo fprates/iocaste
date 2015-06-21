@@ -3,6 +3,7 @@ package org.iocaste.dataeditor;
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
 
@@ -47,10 +48,18 @@ public class Load extends AbstractActionHandler {
     }
     
     public static final void execute(Context extcontext) {
+        ExtendedObject[] items;
         Query query = new Query();
+        
         query.setModel(extcontext.model);
         query.setNS(extcontext.ns);
-        extcontext.items = extcontext.documents.select(query);
+        items = extcontext.documents.select(query);
+        if (items == null)
+            return;
+        
+        extcontext.items.clear();
+        for (ExtendedObject item : items)
+            extcontext.items.add(item);
     }
 
 }
