@@ -32,7 +32,6 @@ public class LinkRenderer extends Renderer {
             atag = new XMLElement("span");
             atag.addInner(link.getText());
             atag.add("class", link.getStyleClass());
-            
             tags.add(atag);
             return tags;
         }
@@ -40,8 +39,8 @@ public class LinkRenderer extends Renderer {
         atag = new XMLElement("a");
         atag.add("id", link.getHtmlName());
         atag.add("class", link.getStyleClass());
-
         tags.add(atag);
+
         if (link.isAbsolute())
             href = link.getAction();
         else
@@ -103,6 +102,9 @@ public class LinkRenderer extends Renderer {
             else
                 atag.addInner("");
         }
+        
+        if (link.size() > 0)
+            atag.addChildren(renderElements(link.getElements(), config));
         
         return tags;
     }

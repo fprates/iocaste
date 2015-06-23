@@ -2,6 +2,7 @@ package org.iocaste.shell.common;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.documents.common.DataType;
 
@@ -14,20 +15,25 @@ import org.iocaste.documents.common.DataType;
  * @author francisco.prates
  *
  */
-public class Link extends AbstractControlComponent {
+public class Link extends AbstractControlComponent implements Container {
     private static final long serialVersionUID = 667738108271176995L;
     private boolean absolute;
     private Map<String, LinkEntry> values;
-    private String image;
+    private String image, container;
     
     public Link(View view, String name, String action) {
         super(view, Const.LINK, name);
-        init(name, action);
+        init(null, name, action);
     }
     
     public Link(Container container, String name, String action) {
         super(container, Const.LINK, name);
-        init(name, action);
+        init(container, name, action);
+    }
+
+    @Override
+    public void add(Element element) {
+        getLinkContainer().add(element);
     }
 
     public final void add(String name, String value) {
@@ -42,6 +48,26 @@ public class Link extends AbstractControlComponent {
     public final void add(String name, Object value, int type) {
         values.put(name, new LinkEntry(value, type));
     }
+
+    @Override
+    public void clear() {
+        getLinkContainer().clear();
+    }
+
+    @Override
+    public <T extends Element> T getElement(String name) {
+        return getLinkContainer().getElement(name);
+    }
+
+    @Override
+    public <T extends Element> Set<T> getElements() {
+        return getLinkContainer().getElements();
+    }
+
+    @Override
+    public String[] getElementsNames() {
+        return getLinkContainer().getElementsNames();
+    }
     
     /**
      * Retorna endereço da imagem.
@@ -49,6 +75,10 @@ public class Link extends AbstractControlComponent {
      */
     public final String getImage() {
         return image;
+    }
+    
+    private final LinkContainer getLinkContainer() {
+        return (LinkContainer)getView().getElement(container);
     }
     
     /**
@@ -59,12 +89,14 @@ public class Link extends AbstractControlComponent {
         return values;
     }
     
-    private final void init(String name, String action) {
+    private final void init(Container parent, String name, String action) {
         setText(name);
         setAction(action);
         setStyleClass("link");
         absolute = false;
         values = new HashMap<>();
+        container = name.concat("_cnt");
+        new LinkContainer(parent, container);
     }
     
     /**
@@ -73,6 +105,16 @@ public class Link extends AbstractControlComponent {
      */
     public final boolean isAbsolute() {
         return absolute;
+    }
+
+    @Override
+    public boolean isMultiLine() {
+        return false;
+    }
+
+    @Override
+    public void remove(Element element) {
+        getLinkContainer().remove(element);
     }
     
     /**
@@ -93,4 +135,18 @@ public class Link extends AbstractControlComponent {
     public final void setImage(String image) {
         this.image = image;
     }
+
+    @Override
+    public int size() {
+        return getLinkContainer().size();
+    }
+}
+
+class LinkContainer extends AbstractContainer {
+    private static final long serialVersionUID = 1L;
+
+    public LinkContainer(Container container, String name) {
+        super(container, Const.DUMMY, name);
+    }
+    
 }
