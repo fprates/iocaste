@@ -17,18 +17,26 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
         String group;
         Internal internal;
         
-        group = getGroup(dashname);
-        
         internal = new Internal();
         internal.name = name;
         internal.dashname = dashname;
-        internal.value = value;
-        internal.type = type;
-        internal.suffix = "_dbitem_link";
-        internal.cntstyle = "std_dash_context_cnt";
-        internal.lnkstyle = "std_dash_context_lnk";
-        internal.action = (group == null)? internal.dashname : group;
-        add(internal);
+        
+        if (value == null) {
+            System.err.println("group");
+            internal.cntstyle = "std_dash_context_grp";
+            internal.lnkstyle = "std_dash_context_txt";
+            internal.suffix = "_item";
+            addText(internal);
+        } else {
+            group = getGroup(dashname);
+            internal.value = value;
+            internal.type = type;
+            internal.suffix = "_dbitem_link";
+            internal.cntstyle = "std_dash_context_cnt";
+            internal.lnkstyle = "std_dash_context_lnk";
+            internal.action = (group == null)? internal.dashname : group;
+            add(internal);
+        }
     }
     
     protected final void add(Internal internal) {
