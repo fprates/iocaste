@@ -33,6 +33,10 @@ public class Link extends AbstractControlComponent implements Container {
 
     @Override
     public void add(Element element) {
+        if (element.getHtmlName().equals(container)) {
+            getView().add((Container)element);
+            return;
+        }
         getLinkContainer().add(element);
     }
 
@@ -96,7 +100,7 @@ public class Link extends AbstractControlComponent implements Container {
         absolute = false;
         values = new HashMap<>();
         container = name.concat("_cnt");
-        new LinkContainer(parent, container);
+        new LinkContainer(this, container);
     }
     
     /**
