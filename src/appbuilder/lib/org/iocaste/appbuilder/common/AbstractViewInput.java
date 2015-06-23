@@ -98,10 +98,6 @@ public abstract class AbstractViewInput {
         dbget(dashboard, name).add(key, value);
     }
     
-    protected void dbtextadd(String dashboard, String name, String value) {
-        dbget(dashboard, name).addText(value);
-    }
-    
     protected final void dflistset(
             String form, String item, ExtendedObject[] objects) {
         dflistset(form, item, objects, item);

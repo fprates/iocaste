@@ -6,9 +6,11 @@ import org.iocaste.appbuilder.common.dashboard.AbstractDashboardRenderer;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.PanelPageItem;
 import org.iocaste.appbuilder.common.style.CommonStyle;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.StandardContainer;
+import org.iocaste.shell.common.Text;
 
 public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
     private AbstractPanelPage page;
@@ -19,10 +21,26 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
     
     @Override
     public void add(String dashname, String name, Object value, int type) {
-        PanelPageItem item;
-        StringBuilder sb;
-        String linkname, action;
+        Text text;
         Link link;
+        
+        if (type != DataType.CHAR)
+            return;
+        
+        link = context.view.getElement(dashname.concat("_dbitem_link"));
+        link.add(getChoice(dashname), value, type);
+        
+        text = context.view.getElement(dashname.concat("_txt"));
+        text.setText((String)value);
+    }
+
+    @Override
+    public void build(Container parent, String name) {
+        PanelPageItem item;
+        Container container;
+        String style, linkname, htmlname, action;
+        Link link;
+        StringBuilder sb;
         
         linkname = name.concat("_dbitem_link");
         sb = new StringBuilder("javascript:");
@@ -31,33 +49,18 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
             sb.append("setElementDisplay('").
                     append(item.dashctx).
                     append("_container', '").
-                    append(item.dash.equals(dashname)? "inline');" : "none');");
+                    append(item.dash.equals(name)? "inline');" : "none');");
         }
         
         action = sb.toString();
-        link = new Link(getContainer(dashname, INNER), linkname, action);
+        link = new Link(parent, linkname, action);
         link.setStyleClass("std_dash_item");
-        link.setText(name);
-        link.add(getChoice(dashname), value, type);
+        link.setText(null);
         link.setAbsolute(true);
-    }
-
-    @Override
-    public void addText(String dashname, String name) {
-        // TODO Stub de método gerado automaticamente
-        
-    }
-
-    @Override
-    public void build(Container parent, String name) {
-        PanelPageItem item;
-        Container container;
-        String style, linkname, htmlname;
         
         style = getStyle(name, OUTER).substring(1);
         
-        container = new StandardContainer(
-                parent, getContainerName(name, OUTER));
+        container = new StandardContainer(link, getContainerName(name, OUTER));
         container.setStyleClass(style);
         container.setVisible(false);
         
@@ -86,11 +89,13 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
                 append(linkname).
                 append("_dbitem_link', 'std_dash_item_mouseover')").
                 toString());
-
+        
         style = getStyle(name, INNER).substring(1);
         container = new StandardContainer(
                 container, getContainerName(name, INNER));
         container.setStyleClass(style);
+        
+        new Text(container, name.concat("_txt"));
     }
 
     @Override
@@ -115,7 +120,6 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
             name = new StringBuilder(".std_dash_item:").
                     append(suffix).toString();
             style = stylesheet.newElement(name);
-            style.put("display", "block");
             style.put("text-decoration", "none");
             style.put("text-align", "center");
             style.put("color", profile.dashboard.font.color);

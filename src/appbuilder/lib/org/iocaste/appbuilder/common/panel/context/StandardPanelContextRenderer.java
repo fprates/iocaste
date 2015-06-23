@@ -65,19 +65,6 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
                 append(style).append("_mouseover')").toString());
     }
     
-    @Override
-    public void addText(String dashname, String name) {
-        Internal internal;
-        
-        internal = new Internal();
-        internal.name = name;
-        internal.dashname = dashname;
-        internal.cntstyle = "std_dash_context_grp";
-        internal.lnkstyle = "std_dash_context_txt";
-        internal.suffix = "_item";
-        addText(internal);
-    }
-    
     protected final void addText(Internal internal) {
         Container container;
         String name;

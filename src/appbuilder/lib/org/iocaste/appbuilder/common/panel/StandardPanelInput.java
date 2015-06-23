@@ -49,7 +49,7 @@ public class StandardPanelInput extends AbstractViewInput {
                 ctxitem = item.context.entries.get(text);
                 switch (ctxitem.type) {
                 case GROUP:
-                    dbtextadd(destination, item.dashctx, ctxitem.group);
+                    dbitemadd(destination, item.dashctx, ctxitem.group);
                     
                     for (String texti : entrieskeys) {
                         ctxitemi = item.context.entries.get(texti);

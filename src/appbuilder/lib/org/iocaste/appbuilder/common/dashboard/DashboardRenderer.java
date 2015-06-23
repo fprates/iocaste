@@ -11,8 +11,6 @@ public interface DashboardRenderer {
     public abstract void add(
             String dashname, String name, Object value, int type);
     
-    public abstract void addText(String dashname, String name);
-    
     public abstract void build(Container container, String name);
     
     public abstract void config();

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.iocaste.documents.common.DataType;
-import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 
 public class DashboardComponent {
@@ -57,15 +56,6 @@ public class DashboardComponent {
         internalAdd(item, value, DataType.SHORT);
     }
     
-    public final void addText(String name) {
-        ContentEntry entry;
-        
-        entry = new ContentEntry(Const.TEXT, name);
-        if (!hide)
-            entry.visible = true;
-        content.add(entry);
-    }
-    
     public final void build() {
         Container container;
 
@@ -78,16 +68,7 @@ public class DashboardComponent {
                 container.setVisible(true);
         
         for (ContentEntry entry : content) {
-            switch (entry.type) {
-            case TEXT:
-                renderer.addText(name, entry.name);
-                break;
-            case LINK:
-                renderer.add(name, entry.name, entry.value, entry.dtype);
-                break;
-            default:
-                break;
-            }
+            renderer.add(name, entry.name, entry.value, entry.dtype);
             renderer.setVisible(name, entry.visible);
         }
     }
@@ -129,7 +110,7 @@ public class DashboardComponent {
         if (name == null)
             throw new RuntimeException("dashboard item undefined.");
         
-        content.add(new ContentEntry(Const.LINK, name, value, type));
+        content.add(new ContentEntry(name, value, type));
     }
     
     public final void show() {
@@ -138,19 +119,16 @@ public class DashboardComponent {
 }
 
 class ContentEntry {
-    public Const type;
     public String name;
     public Object value;
     public int dtype;
     public boolean visible;
     
-    public ContentEntry(Const type, String name) {
-        this.type = type;
+    public ContentEntry(String name) {
         this.name = name;
     }
     
-    public ContentEntry(Const type, String name, Object value, int dtype) {
-        this.type = type;
+    public ContentEntry(String name, Object value, int dtype) {
         this.name = name;
         this.value = value;
         this.dtype = dtype;

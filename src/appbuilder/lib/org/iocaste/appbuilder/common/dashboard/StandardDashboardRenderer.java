@@ -5,13 +5,11 @@ import java.util.Map;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.StandardContainer;
-import org.iocaste.shell.common.Text;
 
 public class StandardDashboardRenderer extends AbstractDashboardRenderer {
 
     @Override
-    public void add(String dashname, String name, Object value, int type)
-    {
+    public void add(String dashname, String name, Object value, int type) {
         String linkname, action, group;
         Link link;
         
@@ -23,16 +21,6 @@ public class StandardDashboardRenderer extends AbstractDashboardRenderer {
         link.setStyleClass("db_dash_item");
         link.setText(name);
         link.add(entries.get(action).choose, value, type);
-    }
-    
-    @Override
-    public void addText(String dashname, String name) {
-        String textname;
-        Text text;
-        
-        textname = name.concat("_item");
-        text = new Text(getContainer(dashname, INNER), textname);
-        text.setText(name);
     }
     
     @Override
