@@ -32,7 +32,7 @@ public class MainConfig extends AbstractViewConfig {
         stylesheet.get(".std_panel_context").put("display", "none");
         
         style = stylesheet.newElement(".logincnt");
-        style.put("top", "20em");
+        style.put("top", "30%");
         style.put("position", "relative");
         
         style = stylesheet.newElement(".loginform");
