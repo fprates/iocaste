@@ -15,6 +15,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.InputComponent;
@@ -351,6 +352,16 @@ public abstract class AbstractActionHandler {
     
     protected final ExtendedObject select(String model, Object ns, Object key) {
         return documents.getObject(model, ns, key);
+    }
+    
+    protected final void setFocus(String element) {
+        context.view.setFocus(context.view.getElement(element));
+    }
+    
+    protected final void setFocus(String container, String field) {
+        Container parent = context.view.getElement(container);
+        
+        context.view.setFocus(parent.getElement(field));
     }
     
     protected final ExtendedObject[] tableitemsget(String tabletool) {

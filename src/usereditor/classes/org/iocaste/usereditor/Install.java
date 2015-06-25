@@ -34,6 +34,7 @@ public class Install extends AbstractInstallObject {
         messages.put("SU01", "Gerenciamento de usuários");
         messages.put("SURNAME", "Sobrenome");
         messages.put("taskstab", "Tarefas");
+        messages.put("undefined.password", "Senha não especificada.");
         messages.put("update", "Atualizar");
         messages.put("user.already.exists", "Usuário já existe.");
         messages.put("user.dropped", "Usuário removido com sucesso.");

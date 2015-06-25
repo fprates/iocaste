@@ -17,16 +17,23 @@ public class Save extends AbstractActionHandler {
         Query query;
         Authority authority;
         User user;
-        String name;
+        String name, secret;
         ExtendedObject object;
 
         object = getdf("identity");
+        secret = object.getst("SECRET");
+        if (secret == null) {
+            setFocus("identity", "SECRET");
+            message(Const.ERROR, "undefined.password");
+            return;
+        }
+        
         extcontext = getExtendedContext();
         extcontext.userdata.username = object.get("USERNAME");
         
         user = new User();
         user.setUsername(extcontext.userdata.username);
-        user.setSecret(object.getst("SECRET"));
+        user.setSecret(secret);
         user.setFirstname(object.getst("FIRSTNAME"));
         user.setSurname(object.getst("SURNAME"));
         user.setInitialSecret(object.getbl("INIT"));
