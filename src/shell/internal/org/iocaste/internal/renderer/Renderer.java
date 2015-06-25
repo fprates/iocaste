@@ -204,11 +204,15 @@ public class Renderer {
      * @return
      */
     protected static final String toString(InputComponent input) {
-        Object value = input.get();
         DataElement element = Shell.getDataElement(input);
+        Object value = input.get();
         
-        if (element == null || value == null)
-            return (String)value;
+        if (element == null || value == null) {
+            if ((value != null) && input.isBooleanComponent())
+                return ((Boolean)value)? "on" : "off";
+            else
+                return (String)value;
+        }
         
         return Shell.toString(value, element, input.getLocale(),
                 input.isBooleanComponent());
