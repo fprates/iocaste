@@ -23,7 +23,6 @@ package org.iocaste.shell.common;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
@@ -158,24 +157,12 @@ public class DataForm extends AbstractContainer {
     }
     
     public final void importModel(String name, Function function) {
-        importModel(name, function, null);
-    }
-    
-    public final void importModel(
-            String name, Function function, Map<String, Const> types) {
         DocumentModel model = new Documents(function).getModel(name);
-        importModel(model, types);
-        
+        importModel(model);
     }
     
     public final void importModel(DocumentModel model) {
-        importModel(model, null);
-    }
-    
-    public final void importModel(DocumentModel model, Map<String, Const> types)
-    {
         String name;
-        Const type;
         DataElement dataelement;
         DataItem dataitem;
         int length;
@@ -186,15 +173,7 @@ public class DataForm extends AbstractContainer {
             dataelement = item.getDataElement();
             name = item.getName();
             
-            if (types == null) {
-                type = Const.TEXT_FIELD;
-            } else {
-                type = types.get(name);
-                if (type == null)
-                    type = Const.TEXT_FIELD;
-            }
-            
-            dataitem = new DataItem(this, type, name);
+            dataitem = new DataItem(this, Const.TEXT_FIELD, name);
             dataitem.setModelItem(item);
             length = dataelement.getLength();
             dataitem.setLength(length);

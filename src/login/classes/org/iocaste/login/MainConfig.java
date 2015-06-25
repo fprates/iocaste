@@ -1,6 +1,5 @@
 package org.iocaste.login;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
@@ -21,7 +20,6 @@ public class MainConfig extends AbstractViewConfig {
         DataForm form;
         Context extcontext;
         StyleSheet stylesheet;
-        Map<String, Const> types;
         Map<String, String> style;
         
         context.view.setTitle("authentic");
@@ -82,13 +80,11 @@ public class MainConfig extends AbstractViewConfig {
         
         getElement("logincnt").setStyleClass("logincnt");
         
-        types = new HashMap<>();
-        types.put("LOCALE", Const.LIST_BOX);
-        
         extcontext = getExtendedContext();
         form = getElement("login");
         form.setStyleClass("loginform");
-        form.importModel(extcontext.loginmodel, types);
+        form.importModel(extcontext.loginmodel);
+        form.get("LOCALE").setComponentType(Const.LIST_BOX);
         
         for (Element element : form.getElements()) {
             if (!element.isDataStorable())
