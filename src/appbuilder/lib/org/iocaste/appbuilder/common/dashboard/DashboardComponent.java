@@ -33,7 +33,7 @@ public class DashboardComponent {
     }
     
     public final void add(String item) {
-        internalAdd(item, item, DataType.CHAR);
+        internalAdd(item, null, DataType.CHAR);
     }
     
     public final void add(String item, String value) {

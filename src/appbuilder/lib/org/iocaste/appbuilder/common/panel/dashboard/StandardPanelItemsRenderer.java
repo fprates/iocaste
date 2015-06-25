@@ -27,6 +27,9 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
         if (type != DataType.CHAR)
             return;
         
+        if (value == null)
+            value = name;
+        
         link = context.view.getElement(dashname.concat("_dbitem_link"));
         link.add(getChoice(dashname), value, type);
         

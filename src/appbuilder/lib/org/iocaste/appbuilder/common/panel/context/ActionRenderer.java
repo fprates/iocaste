@@ -14,7 +14,18 @@ public class ActionRenderer extends StandardPanelContextRenderer {
         Button button;
         String style;
         
-        if ((value != null) && value.equals("submit")) {
+        if (value == null) {
+            internal = new Internal();
+            internal.name = name;
+            internal.dashname = dashname;
+            internal.cntstyle = "std_dash_context_grp";
+            internal.lnkstyle = "std_dash_context_txt";
+            internal.suffix = "_item";
+            addText(internal);
+            return;
+        }
+        
+        if (value.equals("submit")) {
             if (name.equals("validate"))
                 return;
             
@@ -39,6 +50,7 @@ public class ActionRenderer extends StandardPanelContextRenderer {
         internal.action = (group == null)? internal.dashname : group;
         internal.submit = true;
         add(internal);
+        
     }
 
     @Override

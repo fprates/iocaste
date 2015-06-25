@@ -22,7 +22,7 @@ public class LinkRenderer extends Renderer {
         DataElement element;
         LinkEntry entry;
         XMLElement atag, imgtag;
-        String text, href, image;
+        String text, href, image, htmlname;
         StringBuilder onclick;
         Map<String, LinkEntry> parameters;
         Parameter parameter;
@@ -36,8 +36,9 @@ public class LinkRenderer extends Renderer {
             return tags;
         }
         
+        htmlname = link.getHtmlName();
         atag = new XMLElement("a");
-        atag.add("id", link.getHtmlName());
+        atag.add("id", htmlname);
         atag.add("class", link.getStyleClass());
         tags.add(atag);
 
@@ -55,6 +56,11 @@ public class LinkRenderer extends Renderer {
             onclick = new StringBuilder();
             for (String name : parameters.keySet()) {
                 entry = parameters.get(name);
+                if (entry.value == null)
+                    throw new RuntimeException(new StringBuilder(name).
+                            append(" is an unreferenced parameter of ").
+                            append(htmlname).toString());
+                
                 onclick.append("setValue('").append(name).
                         append("', '").append(entry.value).
                         append("');");
@@ -63,6 +69,7 @@ public class LinkRenderer extends Renderer {
                 element = null;
                 switch (entry.type) {
                 case DataType.CHAR:
+                    
                     element = new DataElement(name);
                     element.setType(entry.type);
                     element.setUpcase(DataType.KEEPCASE);

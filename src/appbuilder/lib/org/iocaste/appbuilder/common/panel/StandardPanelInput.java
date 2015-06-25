@@ -32,7 +32,7 @@ public class StandardPanelInput extends AbstractViewInput {
         Set<String> entrieskeys;
         
         for (String action : page.getActions())
-            dbitemadd("actions", action, action);
+            dbitemadd("actions", action, action, action);
         
         submit = page.getSubmit();
         if (submit != null)
@@ -49,7 +49,7 @@ public class StandardPanelInput extends AbstractViewInput {
                 ctxitem = item.context.entries.get(text);
                 switch (ctxitem.type) {
                 case GROUP:
-                    dbitemadd(destination, item.dashctx, ctxitem.group, null);
+                    dbitemadd(destination, item.dashctx, ctxitem.group);
                     
                     for (String texti : entrieskeys) {
                         ctxitemi = item.context.entries.get(texti);

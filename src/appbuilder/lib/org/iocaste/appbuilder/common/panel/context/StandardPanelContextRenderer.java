@@ -22,7 +22,6 @@ public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
         internal.dashname = dashname;
         
         if (value == null) {
-            System.err.println("group");
             internal.cntstyle = "std_dash_context_grp";
             internal.lnkstyle = "std_dash_context_txt";
             internal.suffix = "_item";
