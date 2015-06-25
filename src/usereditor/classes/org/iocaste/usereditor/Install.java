@@ -20,9 +20,11 @@ public class Install extends AbstractInstallObject {
         messages.put("create", "Criar");
         messages.put("delete", "Remover");
         messages.put("display", "Exibir");
+        messages.put("extratab", "Extras");
         messages.put("FIRSTNAME", "Nome");
         messages.put("GROUP", "Grupo de tarefas");
         messages.put("idtab", "Identificação");
+        messages.put("INIT", "Senha inicial?");
         messages.put("invalid.user", "Usuário inválido.");
         messages.put("PROFILE", "Perfil");
         messages.put("profiletab", "Perfis");
