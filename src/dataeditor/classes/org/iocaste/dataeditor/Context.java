@@ -10,7 +10,7 @@ import org.iocaste.documents.common.ExtendedObject;
 
 public class Context implements ExtendedContext {
     public List<ExtendedObject> items;
-    public String action, model, number;
+    public String action, model, number, appname;
     public DocumentModelItem nsitem;
     public Object ns;
     public Documents documents;
