@@ -3,6 +3,8 @@ package org.iocaste.internal.renderer;
 import java.util.Map;
 
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.ListBox;
@@ -25,18 +27,24 @@ public class ListBoxRenderer extends Renderer {
      */
     private static final XMLElement _render(InputComponent input,
             Map<String, Object> values) {
+        Container container;
         XMLElement optiontag = null, selecttag= new XMLElement("select");
-        String value, name = input.getHtmlName();
+        String style, value, name = input.getHtmlName();
         
         selecttag.add("name", name);
         selecttag.add("id", name);
 
+        container = input.getContainer();
+        if ((container != null) && (container.getType() == Const.TABLE_ITEM))
+            style = "table_cell_content";
+        else
+            style = input.getStyleClass();
+        
         if (!input.isEnabled()) {
-            selecttag.add("class", new StringBuilder(input.getStyleClass()).
-                    append("_disabled").toString());
+            selecttag.add("class", style.concat("_disabled"));
             selecttag.add("disabled", "disabled");
         } else {
-            selecttag.add("class", input.getStyleClass());
+            selecttag.add("class", style);
         }
         
         addEvents(selecttag, input);
