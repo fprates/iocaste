@@ -11,8 +11,6 @@ import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.protocol.GenericService;
-import org.iocaste.protocol.Message;
 
 public class DisplayConfig extends AbstractViewConfig {
 
@@ -23,30 +21,6 @@ public class DisplayConfig extends AbstractViewConfig {
         config.context = context;
         config.mode = TableTool.DISPLAY;
         configTable(config);
-    }
-
-    private Map<String, FieldProperty> getFieldsProperties(
-            PageBuilderContext context, Context extcontext) {
-        String url;
-        GenericService service;
-        Message message;
-        Map<String, FieldProperty> fields;
-        
-        if (extcontext.appname == null)
-            return null;
-        
-        url = new StringBuilder("/").append(extcontext.appname).
-                append("/view.html").toString();
-        
-        message = new Message("fields_properties_get");
-        message.add("page", context.view.getPageName());
-        service = new GenericService(context.function, url);
-        try {
-            fields = service.invoke(message);
-            return fields;
-        } catch (Exception e) {
-            return null;
-        }
     }
     
     protected final void configTable(TableConfig config) {
@@ -67,7 +41,8 @@ public class DisplayConfig extends AbstractViewConfig {
         ttdata.mode = config.mode;
         ttdata.mark = config.mark;
 
-        config.properties = getFieldsProperties(config.context, extcontext);
+        config.properties = GetFieldsProperties.
+                execute(config.context, extcontext);
         
         documents = new Documents(config.context.function);
         config.model = documents.getModel(extcontext.model);

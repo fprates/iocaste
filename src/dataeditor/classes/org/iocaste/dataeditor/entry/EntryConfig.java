@@ -1,13 +1,17 @@
 package org.iocaste.dataeditor.entry;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractViewConfig;
+import org.iocaste.appbuilder.common.FieldProperty;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.dataeditor.Context;
+import org.iocaste.dataeditor.GetFieldsProperties;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
 
 public class EntryConfig extends AbstractViewConfig {
 
@@ -15,8 +19,11 @@ public class EntryConfig extends AbstractViewConfig {
     protected void execute(PageBuilderContext context) {
         Context extcontext;
         DataForm dataform;
-        InputComponent input;
+        DataItem item;
         DocumentModel model;
+        FieldProperty property;
+        Map<String, FieldProperty> properties;
+        boolean keyset, focusset;
         
         getNavControl().setTitle("add.entry");
         
@@ -25,21 +32,38 @@ public class EntryConfig extends AbstractViewConfig {
         
         dataform = getElement("detail");
         dataform.importModel(model);
-        
-        if (extcontext.number != null)
-            for (Element element : dataform.getElements()) {
-                input = (InputComponent)element;
-                if (!model.isKey(input.getModelItem()))
-                    continue;
-                input.setEnabled(false);
-                break;
-            }
-        
+
+        properties = GetFieldsProperties.execute(context, extcontext);
+        keyset = focusset = false;
         for (Element element : dataform.getElements()) {
-            if (!element.isEnabled())
+            item = (DataItem)element;
+            if ((extcontext.number != null) && !keyset) {
+                if (model.isKey(item.getModelItem())) {
+                    item.setEnabled(false);
+                    keyset = true;
+                }
+            }
+            
+            if (!focusset && element.isEnabled()) {
+                context.view.setFocus(element);
+                focusset = true;
+            }
+            
+            if (properties == null)
                 continue;
-            context.view.setFocus(element);
-            return;
+            
+            property = properties.get(item.getName());
+            if (property == null)
+                continue;
+            
+            if (property.type != null)
+                item.setComponentType(property.type);
+            
+            if (property.values == null)
+                continue;
+            
+            for (String key : property.values.keySet())
+                item.add(key, property.values.get(key));
         }
     }
 }
