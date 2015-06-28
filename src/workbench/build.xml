@@ -49,11 +49,6 @@
         	
             <classpath refid="dependencies"/>
         </javac>
-        
-        <copy todir="${builddir}/${ant.project.name}/classes">
-            <fileset dir="${basedir}/src/${ant.project.name}/classes"
-            	excludes="**/*.java"/>
-        </copy>
     	
         <!-- pacote .war -->
         <war destfile="${warfilename}"
