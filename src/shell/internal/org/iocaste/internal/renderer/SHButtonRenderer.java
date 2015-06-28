@@ -11,7 +11,7 @@ public class SHButtonRenderer extends Renderer {
         
         imgtag = new XMLElement("img");
         imgtag.add("src", "/iocaste-shell/images/u6.png");
-        imgtag.add("style", "width:60%; height:60%; vertical-align:middle;"
+        imgtag.add("style", "width:15px; height:15px; vertical-align:middle;"
                 + "float:right");
         
         htmlname = sh.getHtmlName();
