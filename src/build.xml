@@ -76,7 +76,10 @@
     <!-- aplicações começam a partir daqui -->
     <target name="compile">
     	<property name="auto.deploy" value="true"/>
+    	
     	<ant antfile="${basedir}/src/build.xml" target="compile.base"/>
+    	
+        <ant antfile="${basedir}/src/transport/build-robot.xml"/>
     	
         <!-- login -->
         <ant antfile="${basedir}/src/login/build.xml"/>

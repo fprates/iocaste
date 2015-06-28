@@ -44,8 +44,20 @@
             <lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
         	<lib dir="${builddir}/appbuilder/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
+        	<classes dir="${basedir}/src/${ant.project.name}/classes"/>
         </war>
     	
+    	<java jar="${builddir}/transport/transport-robot.jar" fork="true">
+    		<arg value="--host"/>
+    		<arg value="192.168.1.108:8080"/>
+    		<arg value="--user"/>
+    		<arg value="admin"/>
+    		<arg value="--password"/>
+    		<arg value="iocaste"/>
+    		<arg value="--file"/>
+    		<arg value="${builddir}/${ant.project.name}/${warfilename}"/>
+    	</java>
+    		
     	<ant antfile="${basedir}/src/deploy.xml">
     		<property name="war.file" value="${warfilename}"/>
     		<property name="war.target" value="${war.target}"/>
