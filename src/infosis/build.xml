@@ -1,66 +1,18 @@
 <project name="infosis" default="compile">
-    <property name="server.class" value="org.iocaste.${ant.project.name}.Servlet"/>
-    <property name="warfilename" value="${basedir}/iocaste-${ant.project.name}.war"/>
+    <property name="transport.dir"
+    	value="${basedir}/transport/iocaste-${ant.project.name}"/>
 	
     <target name="compile">
-        <mkdir dir="${builddir}/${ant.project.name}/web"/>
-        <mkdir dir="${builddir}/${ant.project.name}/lib"/>
-        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
-    	
-        <!-- dependências -->
-        <path id="dependencies">
-            <fileset dir="${builddir}/core/lib"/>
-            <fileset dir="${builddir}/shell/lib"/>
-            <fileset dir="${builddir}/documents/lib"/>
-            <fileset dir="${builddir}/packagetool/lib"/>
-        	<fileset dir="${builddir}/appbuilder/lib"/>
-            <fileset dir="${builddir}/${ant.project.name}/lib"/>
-            <fileset dir="${basedir}/lib"/>
-            <fileset dir="${basedir}/ext"/>
-        </path>
+        <mkdir dir="${transport.dir}/web"/>
+        <mkdir dir="${transport.dir}/lib"/>
+        <mkdir dir="${transport.dir}/classes"/>
         
         <!-- substituições -->
-        <copy todir="${builddir}/${ant.project.name}/web"
+        <copy todir="${transport.dir}/web"
             file="${basedir}/src/${ant.project.name}/web/web.xml"/>
-        
-        <replace file="${builddir}/${ant.project.name}/web/web.xml"
-            token="@server.class@" value="${server.class}"/>
     	
-        <!-- compilação classes -->
-        <javac srcdir="${basedir}/src/${ant.project.name}/classes"
-            destdir="${builddir}/${ant.project.name}/classes"
-        	debug="${debug.status}">
-        	
-            <classpath refid="dependencies"/>
-        </javac>
-        
-        <!-- pacote .war -->
-        <war destfile="${warfilename}"
-            webxml="${builddir}/${ant.project.name}/web/web.xml">
-            <lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
-            <lib dir="${builddir}/core/lib" includes="*.jar"/>
-            <lib dir="${builddir}/shell/lib" includes="*.jar"/>
-            <lib dir="${builddir}/documents/lib" includes="*.jar"/>
-            <lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
-        	<lib dir="${builddir}/appbuilder/lib" includes="*.jar"/>
-            <classes dir="${builddir}/${ant.project.name}/classes"/>
-        	<classes dir="${basedir}/src/${ant.project.name}/classes"/>
-        </war>
-    	
-    	<java jar="${builddir}/transport/transport-robot.jar" fork="true">
-    		<arg value="--host"/>
-    		<arg value="192.168.1.108:8080"/>
-    		<arg value="--user"/>
-    		<arg value="admin"/>
-    		<arg value="--password"/>
-    		<arg value="iocaste"/>
-    		<arg value="--file"/>
-    		<arg value="${builddir}/${ant.project.name}/${warfilename}"/>
-    	</java>
-    		
-    	<ant antfile="${basedir}/src/deploy.xml">
-    		<property name="war.file" value="${warfilename}"/>
-    		<property name="war.target" value="${war.target}"/>
-        </ant>
+    	<copy todir="${transport.dir}/classes">
+    		<fileset dir="${basedir}/src/${ant.project.name}/classes"/>
+    	</copy>
     </target>
 </project>

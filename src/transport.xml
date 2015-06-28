@@ -1,0 +1,25 @@
+<project name="transport" default="run">
+    <target name="run" if="transport">
+    	<tstamp>
+    	   <format property="archive" pattern="yyyyMMddhhmmss"/>
+    	</tstamp>
+    		
+        <zip basedir="${basedir}/transport"
+        	destfile="${basedir}/${archive}.zip"/>
+    	
+    	<delete dir="${basedir}/transport"/>
+    	
+        <java jar="${builddir}/transport/transport-robot.jar" fork="true">
+            <arg value="--host"/>
+            <arg value="192.168.1.108:8080"/>
+            <arg value="--user"/>
+            <arg value="admin"/>
+            <arg value="--password"/>
+            <arg value="iocaste"/>
+            <arg value="--file"/>
+            <arg value="${basedir}/${archive}.zip"/>
+        </java>
+    	
+    	<delete file="${basedir}/${archive}.zip"/>
+    </target>
+</project>

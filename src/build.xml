@@ -155,6 +155,7 @@
     		destfile="${basedir}/ext/iocaste.jar"/>
     	
     	<delete dir="${basedir}/ext/common"/>
-    	<ant antfile="${basedir}/src/build.xml" target="clean"/>
+    	<ant antfile="${basedir}/src/transport.xml"/>
+        <ant antfile="${basedir}/src/build.xml" target="clean"/>
     </target>
 </project>
