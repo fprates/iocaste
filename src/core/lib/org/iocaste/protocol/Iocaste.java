@@ -272,6 +272,13 @@ public final class Iocaste extends AbstractServiceInterface {
         call(message);
     }
     
+    public final void unzip(String target, String... source) {
+        Message message = new Message("unzip");
+        message.add("target", target);
+        message.add("source", source);
+        call(message);
+    }
+    
     /**
      * 
      * @param user
