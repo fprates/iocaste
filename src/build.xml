@@ -52,6 +52,9 @@
     	<!-- external-lib -->
     	<ant antfile="${basedir}/src/external/build-lib.xml"/>
     	
+    	<!-- transport-lib -->
+    	<ant antfile="${basedir}/src/transport/build-lib.xml"/>
+    	
         <!-- report -->
         <!-- <ant antfile ="${basedir}/src/report/build.xml"/> -->
     </target>
@@ -129,6 +132,9 @@
     	<!-- external -->
     	<ant antfile="${basedir}/src/external/build.xml"/>
     	
+    	<!-- transport -->
+    	<ant antfile="${basedir}/src/transport/build.xml"/>
+    	
         <!-- template -->
         <ant antfile="${basedir}/src/template/build.xml"/>
     	
@@ -148,6 +154,7 @@
     		<fileset dir="${builddir}/tasksel/lib/" excludes="*.jar"/>
     		<fileset dir="${builddir}/log/lib/" excludes="*.jar"/>
     		<fileset dir="${builddir}/external/lib/" excludes="*.jar"/>
+    		<fileset dir="${builddir}/transport/lib/" excludes="*.jar"/>
     	<!--    <fileset dir="${builddir}/report/lib" excludes="*.jar"/> -->
     	</copy>
     	

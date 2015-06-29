@@ -1,7 +1,15 @@
 package org.iocaste.transport.robot;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.iocaste.external.common.AbstractExternalApplication;
 import org.iocaste.protocol.Message;
+import org.iocaste.transport.common.Transport;
 
 public class Main extends AbstractExternalApplication {
 	
@@ -13,7 +21,29 @@ public class Main extends AbstractExternalApplication {
 	
 	@Override
 	protected final void execute(Message message) {
-		
+        Transport transport;
+        SeekableByteChannel sbc;
+        Path path;
+		String id, filename = message.getString("--file");
+		ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
+
+        transport = new Transport(connector);
+        path = Paths.get(filename);
+        id = transport.start(filename);
+        try {
+            sbc = Files.newByteChannel(path);
+            while (sbc.read(buffer) > 0) {
+                buffer.rewind();
+                transport.send(id, buffer.array());
+                buffer.flip();
+            }
+        } catch (IOException e) {
+            transport.cancel(id);
+            System.err.println("I/O error reading archive.");
+            System.exit(1);
+        }
+        
+        transport.finish(id);
 	}
 	
 	public static final void main(String[] args) {

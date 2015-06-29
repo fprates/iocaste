@@ -1,5 +1,5 @@
 <project name="transport" default="run">
-    <target name="run" if="transport">
+    <target name="run" if="transport.host">
     	<tstamp>
     	   <format property="archive" pattern="yyyyMMddhhmmss"/>
     	</tstamp>
