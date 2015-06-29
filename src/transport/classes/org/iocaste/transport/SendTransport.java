@@ -1,8 +1,7 @@
 package org.iocaste.transport;
 
-import java.nio.ByteBuffer;
-
 import org.iocaste.protocol.AbstractHandler;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 public class SendTransport extends AbstractHandler {
@@ -13,9 +12,10 @@ public class SendTransport extends AbstractHandler {
         byte[] data = message.get("buffer");
         Services services = getFunction();
         TransportEntry entry = services.transfers.get(id);
-        ByteBuffer buffer = ByteBuffer.wrap(data);
+        Iocaste iocaste = new Iocaste(services);
         
-        entry.channel.write(buffer);
+        iocaste.write(entry.kernelid, data);
+        
         return null;
     }
 

@@ -1,16 +1,10 @@
 package org.iocaste.transport;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.texteditor.common.TextEditorTool;
+import org.iocaste.protocol.Iocaste;
 
 public class Services extends AbstractFunction {
     public Map<String, TransportEntry> transfers;
@@ -24,39 +18,12 @@ public class Services extends AbstractFunction {
     }
     
     public final void instance(String filename) throws Exception {
-        Path path;
-        OpenOption[] options = {
-                StandardOpenOption.APPEND,
-                StandardOpenOption.CREATE
-        };
         TransportEntry entry = new TransportEntry();
+        Iocaste iocaste = new Iocaste(this);
         
-        mkdir();
-        
-        entry.filename = getPath(filename);
-        path = Paths.get(entry.filename);
-        entry.channel = Files.newByteChannel(path, options);
+        iocaste.mkdir("transport");
+        entry.kernelid = iocaste.file(Iocaste.CREATE, "transport", filename);
+        entry.filename = filename;
         transfers.put(filename, entry);
-    }
-    
-    public final String getPath(String... args) {
-        String path = TextEditorTool.composeFileName(
-                System.getProperty("user.home"), "iocaste", "transport");
-        
-        if (args != null)
-            for (String arg : args)
-                if (arg != null)
-                    path = TextEditorTool.composeFileName(path, arg);
-        
-        return path;
-    }
-    
-    public final void mkdir(String... args) throws Exception {
-        File file;
-        String path = getPath(args);
-        
-        file = new File(path);
-        if (!file.exists())
-            file.mkdirs();
     }
 }

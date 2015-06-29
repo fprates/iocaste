@@ -3,6 +3,7 @@ package org.iocaste.transport;
 import java.io.File;
 
 import org.iocaste.protocol.AbstractHandler;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 public class CancelTransport extends AbstractHandler {
@@ -13,7 +14,7 @@ public class CancelTransport extends AbstractHandler {
         Services services = getFunction();
         TransportEntry entry = services.transfers.get(id);
         
-        entry.channel.close();
+        new Iocaste(services).close(entry.kernelid);
         new File(entry.filename).delete();
         services.transfers.remove(id);
         return null;
