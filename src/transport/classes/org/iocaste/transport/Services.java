@@ -33,13 +33,13 @@ public class Services extends AbstractFunction {
         
         mkdir();
         
-        path = Paths.get(filename);
         entry.filename = getPath(filename);
+        path = Paths.get(entry.filename);
         entry.channel = Files.newByteChannel(path, options);
         transfers.put(filename, entry);
     }
     
-    private final String getPath(String... args) {
+    public final String getPath(String... args) {
         String path = TextEditorTool.composeFileName(
                 System.getProperty("user.home"), "iocaste", "transport");
         
@@ -51,9 +51,9 @@ public class Services extends AbstractFunction {
         return path;
     }
     
-    private final void mkdir() throws Exception {
+    public final void mkdir(String... args) throws Exception {
         File file;
-        String path = getPath();
+        String path = getPath(args);
         
         file = new File(path);
         if (!file.exists())

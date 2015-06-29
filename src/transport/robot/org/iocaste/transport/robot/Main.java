@@ -29,7 +29,7 @@ public class Main extends AbstractExternalApplication {
 
         transport = new Transport(connector);
         path = Paths.get(filename);
-        id = transport.start(filename);
+        id = transport.start(path.getFileName().toString());
         try {
             channel = Files.newByteChannel(path);
             while (channel.read(buffer) > 0) {

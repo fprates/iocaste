@@ -42,6 +42,7 @@
             <lib dir="${builddir}/core/lib" includes="*.jar"/>
             <lib dir="${builddir}/shell/lib" includes="*.jar"/>
             <lib dir="${builddir}/documents/lib" includes="*.jar"/>
+        	<lib dir="${builddir}/texteditor/lib" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
         
