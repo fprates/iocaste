@@ -22,7 +22,7 @@ public class Main extends AbstractExternalApplication {
 	@Override
 	protected final void execute(Message message) {
         Transport transport;
-        SeekableByteChannel sbc;
+        SeekableByteChannel channel;
         Path path;
 		String id, filename = message.getString("--file");
 		ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
@@ -31,12 +31,13 @@ public class Main extends AbstractExternalApplication {
         path = Paths.get(filename);
         id = transport.start(filename);
         try {
-            sbc = Files.newByteChannel(path);
-            while (sbc.read(buffer) > 0) {
+            channel = Files.newByteChannel(path);
+            while (channel.read(buffer) > 0) {
                 buffer.rewind();
                 transport.send(id, buffer.array());
                 buffer.flip();
             }
+            channel.close();
         } catch (IOException e) {
             transport.cancel(id);
             System.err.println("I/O error reading archive.");

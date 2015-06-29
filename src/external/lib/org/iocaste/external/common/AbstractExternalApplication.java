@@ -118,6 +118,8 @@ public abstract class AbstractExternalApplication {
         
         if (!preconfig.noconnect)
         	connect(message);
+        
+        execute(message);
 	}
 	
 	protected final void option(String name, int option) {

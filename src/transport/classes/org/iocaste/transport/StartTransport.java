@@ -7,8 +7,11 @@ public class StartTransport extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+        String filename = message.getString("filename");
+        Services services = getFunction();
+        
+        services.instance(filename);
+        return filename;
     }
 
 }
