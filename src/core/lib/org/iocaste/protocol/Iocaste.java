@@ -10,6 +10,7 @@ import org.iocaste.protocol.user.User;
 
 public final class Iocaste extends AbstractServiceInterface {
     public static final String SERVERNAME = "/iocaste-kernel/service.html";
+    public static final int CREATE = 0;
     
     public Iocaste(Function function) {
         initService(function, SERVERNAME);
@@ -29,6 +30,12 @@ public final class Iocaste extends AbstractServiceInterface {
         message.add("in", in);
         message.add("out", out);
         return call(message);
+    }
+    
+    public final void close(String id) {
+        Message message = new Message("close");
+        message.add("id", id);
+        call(message);
     }
     
     /**
@@ -63,6 +70,13 @@ public final class Iocaste extends AbstractServiceInterface {
         Message message = new Message("drop_user");
         message.add("username", username);
         call(message);
+    }
+    
+    public final String file(int option, String... args) {
+        Message message = new Message("file");
+        message.add("option", option);
+        message.add("args", args);
+        return call(message);
     }
     
     /**
@@ -198,6 +212,12 @@ public final class Iocaste extends AbstractServiceInterface {
         return call(message);
     }
     
+    public final void mkdir(String... args) {
+        Message message = new Message("mkdir");
+        message.add("args", args);
+        call(message);
+    }
+    
     /**
      * 
      */
@@ -272,5 +292,12 @@ public final class Iocaste extends AbstractServiceInterface {
     	message.add("query", query);
     	message.add("criteria", criteria);
     	return call(message);
+    }
+    
+    public final void write(String id, byte[] buffer) {
+        Message message = new Message("write");
+        message.add("id", id);
+        message.add("buffer", buffer);
+        call(message);
     }
 }
