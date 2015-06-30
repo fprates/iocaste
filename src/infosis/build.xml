@@ -3,15 +3,13 @@
     	value="${basedir}/transport/iocaste-${ant.project.name}"/>
 	
     <target name="compile">
-        <mkdir dir="${transport.dir}/web"/>
-        <mkdir dir="${transport.dir}/lib"/>
-        <mkdir dir="${transport.dir}/classes"/>
+        <mkdir dir="${transport.dir}/WEB-INF/lib"/>
+        <mkdir dir="${transport.dir}/WEB-INF/classes"/>
         
-        <!-- substituições -->
-        <copy todir="${transport.dir}/web"
+        <copy todir="${transport.dir}/WEB-INF"
             file="${basedir}/src/${ant.project.name}/web/web.xml"/>
     	
-    	<copy todir="${transport.dir}/classes">
+    	<copy todir="${transport.dir}/WEB-INF/classes">
     		<fileset dir="${basedir}/src/${ant.project.name}/classes"/>
     	</copy>
     </target>
