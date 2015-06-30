@@ -15,7 +15,7 @@ public class Fetch extends AbstractHandler {
         Iocaste iocaste = new Iocaste(services);
         String path = Paths.get("workbench", file).toString();
         
-        iocaste.rmalldir("workbench", file);
+        iocaste.rmdir("workbench", file);
         iocaste.mkdir("workbench", file);
         iocaste.unzip(path, "transport", file);
         
