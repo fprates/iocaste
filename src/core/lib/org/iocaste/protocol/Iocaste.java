@@ -74,6 +74,12 @@ public final class Iocaste extends AbstractServiceInterface {
         call(message);
     }
     
+    public final boolean exists(String... args) {
+        Message message = new Message("file_exists");
+        message.add("args", args);
+        return call(message);
+    }
+    
     public final String file(int option, String... args) {
         Message message = new Message("file");
         message.add("option", option);

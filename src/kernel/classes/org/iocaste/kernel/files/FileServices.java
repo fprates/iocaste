@@ -23,6 +23,7 @@ public class FileServices extends AbstractFunction {
         entries = new HashMap<>();
         export("close", new FileClose());
         export("file", new FileOperations());
+        export("file_exists", new FileExists());
         export("files_get", new GetFiles());
         export("mkdir", new MakeDirectory());
         export("rmdir", new RemoveDirectory());
@@ -177,4 +178,16 @@ class FileClose extends AbstractHandler {
         entry.channel.close();
         files.remove(id);
     }
+}
+
+class FileExists extends AbstractHandler {
+
+    @Override
+    public Object run(Message message) throws Exception {
+        String[] args = message.get("args");
+        String path = FileServices.getPath(args);
+        File file = new File(path);
+        return file.exists();
+    }
+     
 }
