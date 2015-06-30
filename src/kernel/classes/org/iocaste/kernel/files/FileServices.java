@@ -1,8 +1,6 @@
 package org.iocaste.kernel.files;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
@@ -10,29 +8,25 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.files.UnzippedEntry;
 
 public class FileServices extends AbstractFunction {
     public Map<String, Map<String, FileEntry>> entries;
     
     public FileServices() {
         entries = new HashMap<>();
+        export("close", new FileClose());
         export("file", new FileOperations());
         export("mkdir", new MakeDirectory());
-        export("write", new FileWrite());
-        export("close", new FileClose());
+        export("rmdir", new RemoveDirectory());
         export("unzip", new Unzip());
+        export("write", new FileWrite());
     }
 
     private static final String composeFileName(String... names) {
@@ -184,52 +178,38 @@ class FileClose extends AbstractHandler {
     }
 }
 
-class Unzip extends AbstractHandler {
-    private static final int BUFFER_SIZE = 64 * 1024;
+class RemoveDirectory extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        ZipEntry zipentry;
-        ZipInputStream zis;
-        FileInputStream fis;
-        File file;
-        String id, filename;
-        List<UnzippedEntry> entries;
-        UnzippedEntry entry;
-        String sessionid = message.getSessionid();
-        String target = message.get("target");
-        String[] source = message.get("source");
-        byte[] buffer = new byte[BUFFER_SIZE];
-        FileServices services = getFunction();
-        FileClose close = services.get("close");
-        FileOperations fileop = services.get("file");
-        FileWrite write = services.get("write");
-        MakeDirectory mkdir = services.get("mkdir");
+        String[] args = message.get("args");
+        boolean all = message.getbool("all");
+        String path = FileServices.getPath(args);
+        File file = new File(path);
         
-        filename = FileServices.getPath(source);
-        file = new File(filename);
-        fis = new FileInputStream(file);
-        zis = new ZipInputStream(new BufferedInputStream(fis));
-        entries = null;
-        while ((zipentry = zis.getNextEntry()) != null) {
-            if (entries == null)
-                entries = new ArrayList<>();
+        if (!all)
+            return file.delete();
+        
+        return recursive(file);
+    }
+    
+    private boolean recursive(File file) {
+        File child;
+        String[] files = file.list();
+        
+        if (files == null)
+            return file.delete();
+        
+        for (String name : files) {
+            child = new File(name);
+            if (child.isDirectory() && !recursive(child))
+                return false;
             
-            entry = new UnzippedEntry(entries, zipentry);
-            if (entry.directory) {
-                mkdir.run(target, entry.name);
-                continue;
-            }
-            
-            id = fileop.create(services, sessionid, target, entry.name);
-            while ((zis.read(buffer, 0, BUFFER_SIZE)) > 0)
-                write.run(services, sessionid, id, buffer);
-            close.run(services, sessionid, id);
+            if (!child.delete())
+                return false;
         }
         
-        fis.close();
-        file.delete();
-        return entries;
+        return true;
     }
     
 }

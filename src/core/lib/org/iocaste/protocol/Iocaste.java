@@ -220,6 +220,21 @@ public final class Iocaste extends AbstractServiceInterface {
         call(message);
     }
     
+    public final boolean rmalldir(String... args) {
+        return rmdir(true, args);
+    }
+    
+    public final boolean rmdir(String... args) {
+        return rmdir(false, args);
+    }
+    
+    private final boolean rmdir(boolean all, String... args) {
+        Message message = new Message("rmdir");
+        message.add("args", args);
+        message.add("all", all);
+        return call(message);
+    }
+    
     /**
      * 
      */
