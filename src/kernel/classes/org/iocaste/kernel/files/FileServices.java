@@ -22,11 +22,11 @@ public class FileServices extends AbstractFunction {
     public FileServices() {
         entries = new HashMap<>();
         export("close", new FileClose());
+        export("delete", new DeleteFile());
         export("file", new FileOperations());
         export("file_exists", new FileExists());
         export("files_get", new GetFiles());
         export("mkdir", new MakeDirectory());
-        export("rmdir", new RemoveDirectory());
         export("unzip", new Unzip());
         export("write", new FileWrite());
     }

@@ -5,7 +5,7 @@ import java.io.File;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
 
-public class RemoveDirectory extends AbstractHandler {
+public class DeleteFile extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {

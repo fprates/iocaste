@@ -57,6 +57,17 @@ public final class Iocaste extends AbstractServiceInterface {
         call(message);
     }
     
+    public final boolean delete(String... args) {
+        return delete(false, args);
+    }
+    
+    private final boolean delete(boolean all, String... args) {
+        Message message = new Message("delete");
+        message.add("args", args);
+        message.add("all", all);
+        return call(message);
+    }
+    
     /**
      * Desconecta usuário atual da sessão.
      */
@@ -232,19 +243,8 @@ public final class Iocaste extends AbstractServiceInterface {
         call(message);
     }
     
-    public final boolean rmalldir(String... args) {
-        return rmdir(true, args);
-    }
-    
     public final boolean rmdir(String... args) {
-        return rmdir(false, args);
-    }
-    
-    private final boolean rmdir(boolean all, String... args) {
-        Message message = new Message("rmdir");
-        message.add("args", args);
-        message.add("all", all);
-        return call(message);
+        return delete(true, args);
     }
     
     /**
