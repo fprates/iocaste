@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import org.iocaste.external.common.AbstractExternalApplication;
 import org.iocaste.protocol.Message;
 import org.iocaste.transport.common.Transport;
+import org.iocaste.workbench.common.Workbench;
 
 public class Main extends AbstractExternalApplication {
 	
@@ -21,15 +22,18 @@ public class Main extends AbstractExternalApplication {
 	
 	@Override
 	protected final void execute(Message message) {
+	    Workbench workbench;
         Transport transport;
         SeekableByteChannel channel;
         Path path;
-		String id, filename = message.getString("--file");
+		String id, name;
+		String filename = message.getString("--file");
 		ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
 
         transport = new Transport(connector);
         path = Paths.get(filename);
-        id = transport.start(path.getFileName().toString());
+        name = path.getFileName().toString();
+        id = transport.start(name);
         try {
             channel = Files.newByteChannel(path);
             while (channel.read(buffer) > 0) {
@@ -45,6 +49,10 @@ public class Main extends AbstractExternalApplication {
         }
         
         transport.finish(id);
+        
+        workbench = new Workbench(connector);
+        workbench.fetch(name);
+        workbench.build(name);
 	}
 	
 	public static final void main(String[] args) {
