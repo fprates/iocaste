@@ -10,7 +10,9 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -19,6 +21,7 @@ import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
+import org.iocaste.protocol.files.UnzippedEntry;
 
 public class FileServices extends AbstractFunction {
     public Map<String, Map<String, FileEntry>> entries;
@@ -190,7 +193,9 @@ class Unzip extends AbstractHandler {
         ZipInputStream zis;
         FileInputStream fis;
         File file;
-        String id, name, filename;
+        String id, filename;
+        List<UnzippedEntry> entries;
+        UnzippedEntry entry;
         String sessionid = message.getSessionid();
         String target = message.get("target");
         String[] source = message.get("source");
@@ -205,14 +210,18 @@ class Unzip extends AbstractHandler {
         file = new File(filename);
         fis = new FileInputStream(file);
         zis = new ZipInputStream(new BufferedInputStream(fis));
+        entries = null;
         while ((zipentry = zis.getNextEntry()) != null) {
-            name = zipentry.getName();
-            if (zipentry.isDirectory()) {
-                mkdir.run(target, name);
+            if (entries == null)
+                entries = new ArrayList<>();
+            
+            entry = new UnzippedEntry(entries, zipentry);
+            if (entry.directory) {
+                mkdir.run(target, entry.name);
                 continue;
             }
             
-            id = fileop.create(services, sessionid, target, name);
+            id = fileop.create(services, sessionid, target, entry.name);
             while ((zis.read(buffer, 0, BUFFER_SIZE)) > 0)
                 write.run(services, sessionid, id, buffer);
             close.run(services, sessionid, id);
@@ -220,7 +229,7 @@ class Unzip extends AbstractHandler {
         
         fis.close();
         file.delete();
-        return null;
+        return entries;
     }
     
 }
