@@ -10,7 +10,7 @@ import java.util.zip.ZipInputStream;
 
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.files.UnzippedEntry;
+import org.iocaste.protocol.files.FileEntry;
 
 public class Unzip extends AbstractHandler {
     private static final int BUFFER_SIZE = 64 * 1024;
@@ -22,8 +22,8 @@ public class Unzip extends AbstractHandler {
         FileInputStream fis;
         File file;
         String id, filename;
-        List<UnzippedEntry> entries;
-        UnzippedEntry entry;
+        List<FileEntry> entries;
+        FileEntry entry;
         String sessionid = message.getSessionid();
         String target = message.get("target");
         String[] source = message.get("source");
@@ -43,7 +43,7 @@ public class Unzip extends AbstractHandler {
             if (entries == null)
                 entries = new ArrayList<>();
             
-            entry = new UnzippedEntry(entries, zipentry);
+            entry = new FileEntry(entries, zipentry);
             if (entry.directory) {
                 mkdir.run(target, entry.name);
                 continue;

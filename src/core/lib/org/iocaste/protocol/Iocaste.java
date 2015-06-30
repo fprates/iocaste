@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.iocaste.protocol.files.UnzippedEntry;
+import org.iocaste.protocol.files.FileEntry;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 
@@ -98,6 +98,12 @@ public final class Iocaste extends AbstractServiceInterface {
      */
     public final String getCurrentApp() {
         return call(new Message("get_current_app"));
+    }
+    
+    public final List<FileEntry> getFiles(String... args) {
+        Message message = new Message("files_get");
+        message.add("args", args);
+        return call(message);
     }
     
     /**
@@ -289,7 +295,7 @@ public final class Iocaste extends AbstractServiceInterface {
         call(message);
     }
     
-    public final List<UnzippedEntry> unzip(String target, String... source) {
+    public final List<FileEntry> unzip(String target, String... source) {
         Message message = new Message("unzip");
         message.add("target", target);
         message.add("source", source);

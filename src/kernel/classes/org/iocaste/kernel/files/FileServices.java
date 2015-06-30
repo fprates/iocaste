@@ -17,12 +17,13 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 public class FileServices extends AbstractFunction {
-    public Map<String, Map<String, FileEntry>> entries;
+    public Map<String, Map<String, InternalFileEntry>> entries;
     
     public FileServices() {
         entries = new HashMap<>();
         export("close", new FileClose());
         export("file", new FileOperations());
+        export("files_get", new GetFiles());
         export("mkdir", new MakeDirectory());
         export("rmdir", new RemoveDirectory());
         export("unzip", new Unzip());
@@ -54,9 +55,9 @@ public class FileServices extends AbstractFunction {
         return path;
     }
     
-    public final FileEntry instance(String sessionid, String... args) {
-        Map<String, FileEntry> files;
-        FileEntry entry;
+    public final InternalFileEntry instance(String sessionid, String... args) {
+        Map<String, InternalFileEntry> files;
+        InternalFileEntry entry;
         
         files = entries.get(sessionid);
         if (files == null) {
@@ -64,7 +65,7 @@ public class FileServices extends AbstractFunction {
             entries.put(sessionid, files);
         }
         
-        entry = new FileEntry();
+        entry = new InternalFileEntry();
         entry.filename = getPath(args);
         files.put(entry.filename, entry);
         
@@ -72,7 +73,7 @@ public class FileServices extends AbstractFunction {
     }
 }
 
-class FileEntry {
+class InternalFileEntry {
     public String filename;
     public SeekableByteChannel channel;
 }
@@ -117,7 +118,7 @@ class FileOperations extends AbstractHandler {
     
     public final String create(FileServices services, String sessionid,
             String... args) throws Exception {
-        FileEntry entry;
+        InternalFileEntry entry;
         Path path;
         OpenOption[] options = {
                 StandardOpenOption.CREATE,
@@ -147,7 +148,7 @@ class FileWrite extends AbstractHandler {
     
     public final void run(FileServices services, String sessionid, String id,
             byte[] data) throws Exception {
-        FileEntry entry = services.entries.get(sessionid).get(id);
+        InternalFileEntry entry = services.entries.get(sessionid).get(id);
         ByteBuffer buffer = ByteBuffer.wrap(data);
 
         entry.channel.write(buffer);
@@ -170,46 +171,10 @@ class FileClose extends AbstractHandler {
     
     public final void run(FileServices services, String sessionid, String id)
             throws Exception {
-        Map<String, FileEntry> files = services.entries.get(sessionid);
-        FileEntry entry = files.get(id);
+        Map<String, InternalFileEntry> files = services.entries.get(sessionid);
+        InternalFileEntry entry = files.get(id);
         
         entry.channel.close();
         files.remove(id);
     }
-}
-
-class RemoveDirectory extends AbstractHandler {
-
-    @Override
-    public Object run(Message message) throws Exception {
-        String[] args = message.get("args");
-        boolean all = message.getbool("all");
-        String path = FileServices.getPath(args);
-        File file = new File(path);
-        
-        if (!all)
-            return file.delete();
-        
-        return recursive(file);
-    }
-    
-    private boolean recursive(File file) {
-        File child;
-        String[] files = file.list();
-        
-        if (files == null)
-            return file.delete();
-        
-        for (String name : files) {
-            child = new File(name);
-            if (child.isDirectory() && !recursive(child))
-                return false;
-            
-            if (!child.delete())
-                return false;
-        }
-        
-        return true;
-    }
-    
 }
