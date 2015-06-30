@@ -52,6 +52,9 @@
     	<!-- external-lib -->
     	<ant antfile="${basedir}/src/external/build-lib.xml"/>
     	
+    	<!-- workbench-lib -->
+    	<ant antfile="${basedir}/src/workbench/build-lib.xml"/>
+    	
     	<!-- transport-lib -->
     	<ant antfile="${basedir}/src/transport/build-lib.xml"/>
     	
