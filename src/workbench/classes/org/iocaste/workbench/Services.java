@@ -11,13 +11,10 @@ import org.iocaste.workbench.shell.Package;
 
 public class Services extends AbstractFunction {
 
-//    public Services() {
-//        export("compile", "compile");
-//        export("create_package", "createPackage");
-//        export("create_project", "createProject");
-//        export("load", "load");
-//        export("save", "save");
-//    }
+    public Services() {
+        export("build", new Build());
+        export("fetch", new Fetch());
+    }
 //    
 //    public final void compile(Message message) throws Exception {
 //        Project project = message.get("project");

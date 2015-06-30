@@ -11,34 +11,15 @@ public class Workbench extends AbstractServiceInterface {
         initService(function, SERVICENAME);
     }
     
-    public final void compile(Project project) {
-        Message message = new Message("compile");
-        message.add("project", project);
+    public final void build(String file) {
+        Message message = new Message("build");
+        message.add("file", file);
         call(message);
     }
     
-    public final String create(String project) {
-        Message message = new Message("create_project");
-        message.add("name", project);
-        return call(message);
-    }
-    
-    public final String create(String pkgname, String project) {
-        Message message = new Message("create_package");
-        message.add("package", pkgname);
-        message.add("project", project);
-        return call(message);
-    }
-    
-    public final Project load(String name) {
-        Message message = new Message("load");
-        message.add("name", name);
-        return call(message);
-    }
-    
-    public final String save(Source source) {
-        Message message = new Message("save");
-        message.add("source", source);
+    public final String fetch(String file) {
+        Message message = new Message("fetch");
+        message.add("file", file);
         return call(message);
     }
 }
