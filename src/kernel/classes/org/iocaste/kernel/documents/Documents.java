@@ -82,8 +82,25 @@ public class Documents extends AbstractFunction {
         StringBuilder values = new StringBuilder(") values (");
         StringBuilder where = new StringBuilder(" where ");
         Map<String, String> queries = new HashMap<>();
+        DocumentModelItem[] items;
         
-        for (DocumentModelItem modelitem : model.getItens()) {
+        try {
+            items = model.getItens();
+        } catch (Exception e) {
+            /*
+             * corrupted model. don't generate queries.
+             */
+            return null;
+        }
+        
+        for (DocumentModelItem modelitem : items) {
+            if (modelitem == null) {
+                System.err.println(new StringBuilder("null item for model ").
+                        append(model.getName()).
+                        append(". ignoring it.").toString());
+                continue;
+            }
+            
             iskey = model.isKey(modelitem);
             
             if (k++ > 0) {

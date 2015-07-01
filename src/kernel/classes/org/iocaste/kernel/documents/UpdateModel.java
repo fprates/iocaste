@@ -73,6 +73,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
         InsertDataElement insert;
         GetDocumentModel getmodel;
         DocumentModel oldmodel;
+        UpdateData data;
         DocumentModel model = message.get("model");
         String name = model.getName();
         Documents documents = getFunction();
@@ -91,7 +92,13 @@ public class UpdateModel extends AbstractDocumentsHandler {
         ns = model.getNamespace();
         if ((ns != null) && (oldns == null) && (ns.getTableFieldName() != null))
             addTableKey(connection, refstmt, ns, dbtype);
+
+        data = new UpdateData();
         
+        /*
+         * atualiza tabela
+         */
+        data.tablename = model.getTableName();
         for (DocumentModelItem item : model.getItens()) {
             if (item.getDataElement() == null) {
                 reference = item.getReference();
@@ -100,13 +107,46 @@ public class UpdateModel extends AbstractDocumentsHandler {
                             getmodel, connection, documents, reference));
             }
             
+            if (data.tablename == null)
+                continue;
+            
+            if (!oldmodel.contains(item)) {
+                if (item.getTableFieldName() != null)
+                    addTableColumn(connection, refstmt, item, dbtype);
+            } else {
+                data.model = item.getDocumentModel();
+                data.fieldname = item.getTableFieldName();
+                
+                data.olditem = oldmodel.getModelItem(item.getName());
+                data.oldfieldname = data.olditem.getTableFieldName();
+                
+                data.item = item;
+                data.ddelement = item.getDataElement();
+                data.reference = item.getReference();
+                data.connection = connection;
+                updateTable(data);
+            }
+        }
+        
+        for (DocumentModelItem olditem : oldmodel.getItens()) {
+            if (model.contains(olditem))
+                continue;
+            
+            if (olditem.getTableFieldName() == null)
+                continue;
+            
+            if (removeTableColumn(connection, olditem) == 0)
+                throw new IocasteException("error on remove table column");
+        }
+        
+        /*
+         * atualiza modelos
+         */
+        for (DocumentModelItem item : model.getItens()) {
             if (!oldmodel.contains(item)) {
                 insert.run(connection, item.getDataElement());                
                 if (insertModelItem(connection, item) == 0)
                     throw new IocasteException("error on model insert");
-                
-                if (item.getTableFieldName() != null)
-                    addTableColumn(connection, refstmt, item, dbtype);
             } else {
                 if (updateModelItem(connection, item, oldmodel) == 0)
                     throw new IocasteException("error on model update");
@@ -119,10 +159,6 @@ public class UpdateModel extends AbstractDocumentsHandler {
 
             if (removeModelItem(connection, olditem) == 0)
                 throw new IocasteException("error on remove model item");
-            
-            if (olditem.getTableFieldName() != null)
-                if (removeTableColumn(connection, olditem) == 0)
-                    throw new IocasteException("error on remove table column");
         }
         
         queries = documents.parseQueries(model);
@@ -161,12 +197,6 @@ public class UpdateModel extends AbstractDocumentsHandler {
         data.connection = connection;
         
         update(connection, QUERIES[DEL_SH_REF], getComposedName(data.olditem));
-
-        /*
-         * renomeia campo da tabela
-         */
-        if (data.tablename != null)
-            updateTable(data);
         
         /*
          * atualização do modelo
@@ -222,16 +252,30 @@ public class UpdateModel extends AbstractDocumentsHandler {
         case "hsqldb":
             query = sb.append(" alter column ").toString();
             break;
+        case "mysql":
+            query = sb.toString().concat(" modify column ");
+            break;
         default:
             query = sb.append(" modify column ").toString();
             break;
         }
-        
+
         if (!data.fieldname.equals(data.oldfieldname)) {
-            sb = new StringBuilder(query).
-                    append(data.oldfieldname).
-                    append(" rename to ").
-                    append(data.fieldname);
+            switch (dbtype) {
+            case "mysql":
+                sb.append(" change column ").
+                        append(data.oldfieldname).
+                        append(" ").
+                        append(data.fieldname);
+                
+                setTableFieldsString(sb, data.ddelement, dbtype);
+                break;
+            default:
+                sb.append(data.oldfieldname).
+                append(" rename to ").
+                append(data.fieldname);
+                break;
+            }
             
             update(data.connection, sb.toString());
         }

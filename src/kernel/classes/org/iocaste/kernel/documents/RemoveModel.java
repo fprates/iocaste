@@ -18,6 +18,7 @@ public class RemoveModel extends AbstractDocumentsHandler {
         String modelname = message.getString("model_name");
         DocumentModel model;
         Connection connection;
+        DocumentModelItem[] items;
         
         documents = getFunction();
         connection = documents.database.getDBConnection(message.getSessionid());
@@ -33,10 +34,30 @@ public class RemoveModel extends AbstractDocumentsHandler {
                         append(": error on removing key").toString());
         }
         
-        for (DocumentModelItem item : model.getItens())
-            if (removeModelItem(connection, item) == 0)
-                throw new IocasteException(new StringBuilder(modelname).
-                        append(": error on removing item").toString());
+        try {
+            items = model.getItens();
+        } catch (Exception e) {
+            /*
+             * model is corrupted.
+             */
+            items = null;
+        }
+        
+        if (items != null)
+            for (DocumentModelItem item : items) {
+                if (item == null) {
+                    System.err.println(new StringBuilder("null item for model ").
+                            append(model.getName()).
+                            append(". ignoring it.").toString());
+                    continue;
+                }
+                
+                try {
+                    removeModelItem(connection, item);
+                } catch (Exception e) {
+                    continue;
+                }
+            }
         
         tablename = model.getTableName();
         if ((tablename != null) &&

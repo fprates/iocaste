@@ -116,6 +116,8 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
             return null;
         
         queries = documents.parseQueries(document);
+        if (queries == null)
+            return document;
         
         documents.cache.queries.put(modelname, queries);
         documents.cache.models.put(modelname, document);
