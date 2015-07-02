@@ -118,6 +118,9 @@ public class FunctionHandler implements JCoServerFunctionHandler {
             name = field.getName();
             
             structitem = structitems.get(name);
+            if (structitem == null)
+                continue;
+            
             switch (structitem.geti("TYPE")) {
             case DataType.BOOLEAN:
                 value = (sapstructure.getChar(name) == 'X');
