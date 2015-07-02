@@ -55,7 +55,7 @@ public class Main extends AbstractExternalApplication {
         workbench.build(name);
 	}
 	
-	public static final void main(String[] args) {
+	public static final void main(String[] args) throws Exception {
 		new Main().init(args);
 	}
 }

@@ -1,16 +1,10 @@
 package org.quantic.iocasteconnector;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.external.common.AbstractExternalApplication;
-import org.iocaste.external.common.External;
-import org.iocaste.external.common.IocasteConnector;
 import org.iocaste.protocol.Message;
 
-import com.sap.conn.jco.JCoException;
 import com.sap.conn.jco.ext.Environment;
 import com.sap.conn.jco.server.DefaultServerHandlerFactory;
 import com.sap.conn.jco.server.JCoServer;
@@ -26,19 +20,18 @@ public class Main extends AbstractExternalApplication {
 	}
 
 	@Override
-	protected void execute(Message message) {
+	protected void execute(Message message) throws Exception {
         DefaultServerHandlerFactory.FunctionHandlerFactory factory;
         JCoServer server;
         JCoServerFunctionHandler handler;
         RFCDataProvider provider;
-        External external;
-        IocasteConnector connector;
         ComplexDocument config;
         Command stream;
         String name, text;
         
         stream = new Command();
         stream.port = message.getString("--port");
+        stream.locale = message.getString("--language");
         
         System.out.print("getting connection data from iocaste...");
         config = external.getConnectionData(stream.port);
@@ -78,7 +71,7 @@ public class Main extends AbstractExternalApplication {
         server.start();
 	}
 	
-	public static final void main(String[] args) {
+	public static final void main(String[] args) throws Exception {
 		new Main().init(args);
 	}
 }

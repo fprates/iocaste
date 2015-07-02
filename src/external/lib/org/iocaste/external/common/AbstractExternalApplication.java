@@ -71,9 +71,9 @@ public abstract class AbstractExternalApplication {
 		parameters.put(name, entry);
 	}
 	
-	protected abstract void execute(Message message);
+	protected abstract void execute(Message message) throws Exception;
 	
-	public final void init(String[] args) {
+	public final void init(String[] args) throws Exception {
         Message message;
         int stage;
         String key, value;
