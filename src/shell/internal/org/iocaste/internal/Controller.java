@@ -33,6 +33,7 @@ public class Controller {
     private static final int LOW_RANGE = 3;
     private static final int HIGH_RANGE = 4;
     public static Map<String, String> messages;
+    private static Map<Integer, String> msgconv;
     
     static {
         messages = new HashMap<>();
@@ -42,6 +43,11 @@ public class Controller {
         messages.put("invalid.value", "Valor inválido.");
         messages.put("not.connected", "Não conectado");
         messages.put("user.not.authorized", "Usuário não autorizado.");
+        
+        msgconv= new HashMap<>();
+        msgconv.put(Controller.EINITIAL, "field.is.obligatory");
+        msgconv.put(Controller.EMISMATCH, "field.type.mismatch");
+        msgconv.put(Controller.EINVALID_REFERENCE, "invalid.value");
     }
     
     /**
@@ -419,9 +425,10 @@ public class Controller {
             
             if (hasValidReference(input, ri, config))
                 continue;
-            
+
             status.input = input;
             status.error = EINVALID_REFERENCE;
+            status.msgtype = (input.isEnabled())? Const.ERROR : Const.WARNING;
         }
     }
     
@@ -448,6 +455,7 @@ public class Controller {
             
             evhandler.setView(config.state.view);
             evhandler.setInputError(status.error);
+            evhandler.setErrorType(status.msgtype);
             evhandler.onEvent(EventHandler.ON_CLICK,
                     status.control.getAction());
             config.state.reloadable = false;
@@ -601,28 +609,25 @@ public class Controller {
         else
             processInputs(config, status);
         
-        if (status.input != null) {
-            config.state.view.setFocus(status.input);
-            config.state.reloadable = false;
-            
-            switch (status.error) {
-            case EINITIAL:
-                message(config, Const.ERROR, "field.is.obligatory");
-                break;
-                
-            case EMISMATCH:
-                message(config, Const.ERROR, "field.type.mismatch");
-                break;
-                
-            case EINVALID_REFERENCE:
-                message(config, Const.ERROR, "invalid.value");
-                break;
-                
-            case EVALIDATION:
-                message(config, Const.ERROR, status.message);
-                break;
-            }
+        if (status.input == null)
+            return status;
+        
+        config.state.view.setFocus(status.input);
+        config.state.reloadable = false;
+        
+        if (status.error == 0)
+            return status;
+
+        switch (status.error) {
+        case EVALIDATION:
+            status.msgtype = Const.ERROR;
+            break;
+        default:
+            status.message = msgconv.get(status.error);
+            break;
         }
+        
+        message(config, status.msgtype, status.message);
         
         return status;
     }

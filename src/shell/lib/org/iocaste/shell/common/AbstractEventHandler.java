@@ -3,6 +3,7 @@ package org.iocaste.shell.common;
 public abstract class AbstractEventHandler implements EventHandler {
     private static final long serialVersionUID = -1224820444752670125L;
     private byte inputerror;
+    private Const msgtype;
     private View view;
     
     /**
@@ -11,6 +12,10 @@ public abstract class AbstractEventHandler implements EventHandler {
      */
     protected final byte getInputError() {
         return inputerror;
+    }
+    
+    protected final Const getErrorType() {
+        return msgtype;
     }
     
     /**
@@ -29,6 +34,16 @@ public abstract class AbstractEventHandler implements EventHandler {
     @Override
     public abstract void onEvent(byte event, String args);
 
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.EventHandler#setErrorType(
+     *    org.iocaste.shell.common.Const)
+     */
+    @Override
+    public final void setErrorType(Const msgtype) {
+        this.msgtype = msgtype;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.EventHandler#setInputError(byte)

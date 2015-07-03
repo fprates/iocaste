@@ -51,7 +51,7 @@ public class PageRenderer extends AbstractRenderer {
             throw new IocasteException(status.fatal);
         
         config.event = status.event;
-        if (status.error > 0 || status.event)
+        if ((status.msgtype == Const.ERROR) || status.event)
             return;
         
         message = new Message("exec_action");

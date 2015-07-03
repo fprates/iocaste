@@ -80,7 +80,7 @@ class OnClickHandler extends AbstractEventHandler {
         Container container;
         String name;
         
-        if (getInputError() != 0)
+        if (getErrorType() == Const.ERROR)
             return;
 
         view = getView();

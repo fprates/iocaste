@@ -20,6 +20,12 @@ public interface EventHandler extends Serializable {
     
     /**
      * 
+     * @param msgtype
+     */
+    public abstract void setErrorType(Const msgtype);
+    
+    /**
+     * 
      * @param error
      */
     public abstract void setInputError(byte error);
