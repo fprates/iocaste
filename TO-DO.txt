@@ -1,73 +1,41 @@
 ﻿TO-DO
 
-Sem prioridade definida:
+iocaste-appbuilder
+-Implement a remote spec, config, style and input provider, so the consumer app doesn't need to be rebuilt on each view update (only for StandardPanel).
+-Define expected behavior in AbstractDashboardRenderer, so StandardDashboardRenderer can be dropped;
+-AbstractDashboardRenderer must store its key-value pair not in view element, but in its own map;
+-Filter and Reorder dashes positions (based on each of its key-value pairs);
+-Move dashcontext from left bar to dash's bottom;
+-Split DataForm behavior from its context (DataFormTool and DataFormContext, maybe?);
+-Replace javascript events for css events when possible;
 
-- exhandler
-arquivar logs
-envio de logs para desenvolvedor
-suporte a stacktrace no nível de chamada de funções
+iocaste-texteditor
+-Replace current file implementation by kernel's;
 
-- report
-efetuar testes e avaliar necessidades
+iocaste-kernel
+-Turn security manager on;
+-Support for slaves bases: Login on master base, route to specific slave base);
+-DO NOT EXPOSE PASSWORD throught the API; (reimplement password aquisition from iocaste-userditor);
+-Turn kernel object and package aware;
+-Avoid app see objects of other packages;
 
-- usereditor
-implementar grupos de usuários
+iocaste-transport
+-Transport archive with projects' source code to a target;
+-Further binary redistribution to other targets;
 
-- styleeditor
-completar implementação
+iocaste-workbench
+-Unpacking, building and deploying in target (needs further elaboration);
 
-- packagetool
-implementar validaçao de dependências
-permitir inclusão de dados de projeto no versionamento
-implementar atualização on-line
+iocaste-shell
+-View structure deduplication. Store it no more. Just update and send it to the app;
+-Move current state structures to kernel: SessionContext, PageContext;
+-Support https;
+-'mobile version' flag at the login page (implement a MobileRenderer (inherited from current HtmlRenderer, maybe?)). Reimplement TableRenderer proper render in small screens;
+-Strip all control logic from Table. Move it to TableTool (including mark behavior);
+-Support for multiple pages in TableRenderer;
+-Move DataForm implementation to iocaste-appbuilder. It's too complex to be here.
 
-- datadict
-permitir adicionar autorização
-melhorar atualização de elemento de dados
+Iocaste-documents
+-Implement of ProcessModel and BusinessProcess (ComplexDocument's tree);
+-Implement standard BusinessProcess editor (needs further elaboration).
 
-- dataview
-tornar edição transacional
-melhorar layout de edição
-
-- help
-efetuar testes e avaliar necessidades
-
-- transport
-redefinir módulo para gerar scripts de instalação
-
-- documents
-implementar visão
-implementar range (revisar)
-
-- shell
-diálogos modais
-implementar componente de detalhe
-implementar informações técnicas do elemento
-permitir anexar documentação à mensagem de erro
-implementar calendário para campos tipo data
-
-- core
-informação sobre versão do núcleo
-
-- infosis
-implementar formato para impressão
-
-- login
-transportar instalação de programas para módulo adequado
-melhorar seleção de idiomas
-suporte à conexão segura
-suporte à criptografia
-
-- external
-permitir configurar interface do webservice
-implementar protocolo para leitura de telas
-implementar comunicação de webservice com o módulo
-
-- search-help
-implementar exibição modal (depende do shell)
-
-- não relacionados
-implementar importação/exportação de dados
-implementar log de eventos
-melhorar documentação das APIs
-implementar spool de impressão
