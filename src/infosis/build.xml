@@ -2,7 +2,7 @@
     <property name="transport.dir"
     	value="${basedir}/transport/iocaste-${ant.project.name}"/>
 	
-    <target name="compile">
+    <target name="compile" if="transport.host">
         <mkdir dir="${transport.dir}/WEB-INF/lib"/>
         <mkdir dir="${transport.dir}/WEB-INF/classes"/>
         
