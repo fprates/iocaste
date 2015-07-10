@@ -23,6 +23,9 @@
         <copy todir="${builddir}/${ant.project.name}/web"
             file="${basedir}/src/${ant.project.name}/web/web.xml"/>
         
+        <replace file="${builddir}/${ant.project.name}/web/web.xml"
+            token="@server.class@" value="${server.class}"/>
+        
         <!-- compilação lib -->
         <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
             destdir="${builddir}/${ant.project.name}/lib"

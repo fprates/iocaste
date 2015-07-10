@@ -6,7 +6,6 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
 import org.iocaste.appbuilder.common.cmodelviewer.DisplayConfig;
 import org.iocaste.appbuilder.common.cmodelviewer.Load;
@@ -20,7 +19,6 @@ public class Main extends AbstractModelViewer {
     
     @Override
     public final void config(PageBuilderContext context) throws Exception {
-        String module = getParameter("module");
         String msgsource = getParameter("msgsource");
         AppBuilderLink link = getReceivedLink();
         Map<Object, Object> messages = new HashMap<>();
@@ -42,10 +40,7 @@ public class Main extends AbstractModelViewer {
         link.validate = new Validate();
         link.save = new Save();
         
-        if (module == null)
-            loadManagedModule(context, link);
-        else
-            loadRemoteModule(context, module);
+        loadManagedModule(context, link);
     }
     
     @Override
@@ -55,37 +50,5 @@ public class Main extends AbstractModelViewer {
         defaultinstall.setProgramAuthorization("APPBUILDER.EXECUTE");
         
         installObject("messages", new TextsInstall());
-    }
-    
-    private void loadRemoteModule(PageBuilderContext context, String module)
-            throws Exception {
-        String view;
-        AutomatedViewSpec spec;
-        int index;
-        ViewSpecItem.TYPES[] types;
-        String[] args;
-        byte[] buffer = getApplicationContext(module);
-        String[] lines = new String(buffer).split("\n");
-
-        types = ViewSpecItem.TYPES.values();
-        spec = null;
-        for (String line : lines) {
-            args = line.split(":");
-            index = Integer.parseInt(args[1]);
-            if ((index == -1) || (index >= 200))
-                continue;
-            
-            switch (types[index]) {
-            case VIEW:
-                args = args[0].split("\\.");
-                view = args[args.length - 1];
-                spec = new AutomatedViewSpec();
-                context.instance(view).set(spec);
-                break;
-            default:
-                spec.add(args);
-                break;
-            }
-        }
     }
 }
