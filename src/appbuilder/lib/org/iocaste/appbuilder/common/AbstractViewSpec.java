@@ -7,6 +7,7 @@ import java.util.Map;
 import org.iocaste.docmanager.common.Manager;
 
 public abstract class AbstractViewSpec {
+    protected String parent;
     private Map<String, ViewSpecItem> items;
     private PageBuilderContext context;
     private boolean initialized;
@@ -131,8 +132,10 @@ public abstract class AbstractViewSpec {
     public final void run(ViewSpecItem item, PageBuilderContext context) {
         this.context = context;
         items.clear();
-        if (item != null)
-            items.put(item.getName(), item);
+        if (item != null) {
+            parent = item.getName();
+            items.put(parent, item);
+        }
         execute(context);
     }
     
