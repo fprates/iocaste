@@ -114,14 +114,21 @@ public class DocumentExtractor {
             }
             
             to = conversion.getTo();
-            model = models.get(to);
-            if (model == null) {
-                model = documents.getModel(to);
+            if (to == null) {
+                model = object.getModel();
                 if (model == null)
                     throw new RuntimeException(
-                            to.concat(" is an invalid model."));
-                
-                models.put(to, model);
+                            "conversion has an undefined model");
+            } else {
+                model = models.get(to);
+                if (model == null) {
+                    model = documents.getModel(to);
+                    if (model == null)
+                        throw new RuntimeException(
+                                to.concat(" is an invalid model."));
+                    
+                    models.put(to, model);
+                }
             }
 
             rule = conversion.getRule();
