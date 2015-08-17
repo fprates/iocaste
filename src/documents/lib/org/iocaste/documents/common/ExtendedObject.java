@@ -213,7 +213,17 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
      * @return valor do campo do tipo double
      */
     public final double getd(String name) {
-        Object value = getNumericValue(name);
+        Object value;
+        
+        if (!byname.containsKey(name))
+            throw new RuntimeException(new StringBuilder(name).
+                    append(" isn't a valid field name for ").
+                    append(model.getName()).toString());
+        
+        value = get(name);
+        if (value == null)
+            return 0;
+        
         return convertd(value);
     }
 
