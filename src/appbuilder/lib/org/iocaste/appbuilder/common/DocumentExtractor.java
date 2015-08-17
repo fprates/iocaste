@@ -18,7 +18,7 @@ import org.iocaste.shell.common.DataForm;
 public class DocumentExtractor {
     private PageBuilderContext context;
     private DataConversion hconversion;
-    private Map<String, DataConversion> items;
+    private List<DataConversion> conversions;
     private Documents documents;
     private Manager manager;
     private boolean ignoreinitialhead;
@@ -26,17 +26,13 @@ public class DocumentExtractor {
     
     public DocumentExtractor(PageBuilderContext context, String manager) {
         this.context = context;
-        items = new HashMap<>();
+        conversions = new ArrayList<>();
         documents = new Documents(context.function);
         this.manager = context.getManager(manager);
     }
     
-    public final void addItems(String tabletool) {
-        addItems(tabletool, null);
-    }
-    
-    public final void addItems(String tabletool, DataConversion conversion) {
-        items.put(tabletool, conversion);
+    public final void add(DataConversion conversion) {
+        conversions.add(conversion);
     }
     
     private static ExtendedObject conversion(
@@ -177,9 +173,8 @@ public class DocumentExtractor {
         int i;
         List<TableToolItem> ttitems;
         TableToolEntry entry;
-        DataConversion conversion;
         DocumentModel model;
-        String to, dfsource;
+        String to, source;
         ExtendedObject head;
         ExtendedObject[] objects;
         DataForm form;
@@ -195,11 +190,11 @@ public class DocumentExtractor {
         
         switch (hconversion.getSourceType()) {
         case DataConversion.DATAFORM:
-            dfsource = (String)hconversion.getSource();
-            if (dfsource == null)
+            source = (String)hconversion.getSource();
+            if (source == null)
                 break;
             
-            form = context.view.getElement(dfsource);
+            form = context.view.getElement(source);
             head = form.getObject();
             break;
         case DataConversion.OBJECT:
@@ -221,19 +216,15 @@ public class DocumentExtractor {
         head = conversion(
                 ns, head, model, hconversion, documents, ignoreinitialhead);
         document.setHeader(head);
-        for (String name : items.keySet()) {
-            objects = null;
-            conversion = items.get(name);
-            if (conversion != null)
-                switch (conversion.getSourceType()) {
-                case DataConversion.OBJECTS:
-                    objects = (ExtendedObject[])conversion.getSource();
-                    break;
-                }
-            
-            if (objects == null) {
+        for (DataConversion conversion : conversions) {
+            switch (conversion.getSourceType()) {
+            case DataConversion.OBJECTS:
+                objects = (ExtendedObject[])conversion.getSource();
+                break;
+            case DataConversion.TABLETOOL:
+                source = (String)conversion.getSource();
                 entry = context.getView(pagename).getComponents().
-                        tabletools.get(name);
+                        tabletools.get(source);
                 ttitems = entry.data.getItems();
                 if (ttitems == null)
                     continue;
@@ -242,6 +233,9 @@ public class DocumentExtractor {
                 i = 0;
                 for (TableToolItem item : ttitems)
                     objects[i++] = item.object;
+                break;
+            default:
+                continue;
             }
 
             extractItems(ns, documents, conversion, document, objects);

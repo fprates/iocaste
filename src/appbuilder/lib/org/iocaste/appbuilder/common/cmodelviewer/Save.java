@@ -47,7 +47,8 @@ public class Save extends AbstractActionHandler {
             tbname = name.concat("_table");
             model = cmodel.getItems().get(name);
             conversion = new DataConversion(model.getName());
-            extractor.addItems(tbname, conversion);
+            conversion.tbsource(tbname);
+            extractor.add(conversion);
 
             tabletool = components.getTableToolData(tbname);
             for (DocumentModelItem item : model.getItens()) {

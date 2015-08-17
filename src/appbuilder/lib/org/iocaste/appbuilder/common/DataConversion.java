@@ -13,6 +13,7 @@ public class DataConversion {
     public static final byte DATAFORM = 1;
     public static final byte OBJECT = 2;
     public static final byte OBJECTS = 3;
+    public static final byte TABLETOOL = 4;
     private String to;
     private Map<String, FieldConversion> fields;
     private Object source;
@@ -98,6 +99,12 @@ public class DataConversion {
         sourcetype = OBJECTS;
         this.source = source;
     }
+    
+    public final void tbsource(String tabletool) {
+        sourcetype = TABLETOOL;
+        source = tabletool;
+    }
+    
     public final void to(String model) {
         to = model;
     }
