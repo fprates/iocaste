@@ -94,6 +94,10 @@ public class ViewContext {
         actionhandlers.put(action, handler);
     }
     
+    public final void reset() {
+        components.reset();
+    }
+    
     /**
      * 
      * @param extcontext

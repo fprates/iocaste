@@ -196,6 +196,7 @@ public class BuilderCustomView extends AbstractCustomView {
             _context.view.clear();
             viewspec.run(_context);
             viewctx = _context.getView(view);
+            viewctx.reset();
             for (ViewSpecItem item : viewspec.getItems())
                 buildItem(_context, viewctx.getComponents(), item);
             

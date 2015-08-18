@@ -46,6 +46,14 @@ public class ViewComponents {
         return tabletools.get(name).data;
     }
     
+    public final void reset() {
+        tabletools.clear();
+        dashboards.clear();
+        dashboardgroups.clear();
+        reporttools.clear();
+        editors.clear();
+    }
+    
     public final void set(TableToolData data) {
         tabletools.get(data.name).data = data;
     }
