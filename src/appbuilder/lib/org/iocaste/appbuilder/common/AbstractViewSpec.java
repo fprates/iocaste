@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.iocaste.docmanager.common.Manager;
 
-public abstract class AbstractViewSpec {
+public abstract class AbstractViewSpec implements ViewSpec {
     protected String parent;
     private Map<String, ViewSpecItem> items;
     private PageBuilderContext context;
@@ -57,12 +57,14 @@ public abstract class AbstractViewSpec {
         return items.get(name);
     }
     
+    @Override
     @SuppressWarnings("unchecked")
     public final <T extends ExtendedContext> T getExtendedContext() {
         return (T)context.getView(context.view.getPageName()).
                 getExtendedContext();
     }
-    
+
+    @Override
     public final Collection<ViewSpecItem> getItems() {
         return items.values();
     }
@@ -70,7 +72,8 @@ public abstract class AbstractViewSpec {
     protected final Manager getManager(String name) {
         return context.getManager(name);
     }
-    
+
+    @Override
     public final boolean isInitialized() {
         return initialized;
     }
@@ -138,17 +141,19 @@ public abstract class AbstractViewSpec {
         }
         execute(context);
     }
-    
+
+    @Override
     public final void setInitialized(boolean initialized) {
         this.initialized = initialized;
     }
-    
+
+    @Override
     public final void skip(String parent) {
         put(parent, ViewSpecItem.TYPES.SKIP, new StringBuilder("skip").
                 append(skipnr++).toString());
     }
     
-    protected final void spec(String parent, AbstractViewSpec spec) {
+    protected final void spec(String parent, ViewSpec spec) {
         spec.run(items.get(parent), context);
         for (ViewSpecItem item : spec.getItems())
             items.put(item.getName(), item);

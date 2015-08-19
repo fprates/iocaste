@@ -22,7 +22,7 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.Validator;
 import org.iocaste.texteditor.common.TextEditor;
 
-public abstract class AbstractViewInput {
+public abstract class AbstractViewInput implements ViewInput {
     private PageBuilderContext context;
     private boolean init;
     
@@ -169,6 +169,10 @@ public abstract class AbstractViewInput {
     
     protected abstract void init(PageBuilderContext context);
 
+    protected final void input(ViewInput input) {
+        input.run(context, init);
+    }
+    
     protected final void inputset(String name, Object value) {
         InputComponent input = context.view.getElement(name);
         input.set(value);
@@ -222,6 +226,7 @@ public abstract class AbstractViewInput {
         reportset(report, items.toArray(new ExtendedObject[0]));
     }
     
+    @Override
     public final void run(PageBuilderContext context, boolean init) {
         this.context = context;
         this.init = init;
