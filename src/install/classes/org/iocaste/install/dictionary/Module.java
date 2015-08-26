@@ -12,6 +12,7 @@ public abstract class Module {
     public static final byte NUMC = 0;
     public static final byte CHAR = 1;
     public static final byte BOOLEAN = 2;
+    public static final byte CONSTRAINT = 127;
     public static final byte INSERT = 0;
     private Map<String, Table> tables, extra;
     private List<Query> queries;

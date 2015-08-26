@@ -91,7 +91,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
         oldns = oldmodel.getNamespace();
         ns = model.getNamespace();
         if ((ns != null) && (oldns == null) && (ns.getTableFieldName() != null))
-            addTableKey(connection, refstmt, ns, dbtype);
+            addTableKey(connection, model, refstmt, ns, dbtype);
 
         data = new UpdateData();
         
@@ -112,7 +112,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
             
             if (!oldmodel.contains(item)) {
                 if (item.getTableFieldName() != null)
-                    addTableColumn(connection, refstmt, item, dbtype);
+                    addTableColumn(connection, oldmodel, refstmt, item, dbtype);
             } else {
                 data.model = item.getDocumentModel();
                 data.fieldname = item.getTableFieldName();
@@ -128,16 +128,17 @@ public class UpdateModel extends AbstractDocumentsHandler {
             }
         }
         
-        for (DocumentModelItem olditem : oldmodel.getItens()) {
-            if (model.contains(olditem))
-                continue;
-            
-            if (olditem.getTableFieldName() == null)
-                continue;
-            
-            if (removeTableColumn(connection, olditem) == 0)
-                throw new IocasteException("error on remove table column");
-        }
+        if (oldmodel.getTableName() != null)
+            for (DocumentModelItem olditem : oldmodel.getItens()) {
+                if (model.contains(olditem))
+                    continue;
+                
+                if (olditem.getTableFieldName() == null)
+                    continue;
+                
+                if (removeTableColumn(connection, olditem) == 0)
+                    throw new IocasteException("error on remove table column");
+            }
         
         /*
          * atualiza modelos

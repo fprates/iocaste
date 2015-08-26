@@ -167,18 +167,25 @@ public class DBConfigRequest {
         case DBNames.MSSQL:
             config.dbname = config.dbname.toUpperCase();
             config.dbdriver = DBNames.DRIVERS[DBNames.MSSQL];
-            config.iurl = "jdbc:sqlserver://".concat(config.host);
-            config.url = new StringBuilder(config.iurl).
-                    append(";databaseName=").
-                    append(config.dbname).toString();
             
             switch (config.option) {
             case DBConfig.CHANGE_BASE:
                 init = new String[1];
                 init[0] = MSSQL_INIT[4].concat(config.dbname);
-                
+            case DBConfig.KEEP_BASE:
+                config.iurl = new StringBuilder("jdbc:sqlserver://").
+                        append(config.host).
+                        append(";databaseName=").
+                        append(config.dbname).toString();
+                config.url = config.iurl;
                 break;
             case DBConfig.NEW_BASE:
+                config.url = new StringBuilder("jdbc:sqlserver://").
+                        append(config.host).toString();
+                config.iurl = new StringBuilder(config.url).
+                        append(";databaseName=").
+                        append(config.dbname).toString();
+                
                 init = new String[4];
                 init[0] = MSSQL_INIT[0];
                 init[1] = new StringBuilder(MSSQL_INIT[1]).

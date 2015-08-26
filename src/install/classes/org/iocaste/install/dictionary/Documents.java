@@ -25,8 +25,11 @@ public class Documents extends Module {
         range002 = tableInstance("RANGE002");
         range002.key("NMSPC", CHAR, 128);
         range002.key("SERIE", CHAR, 14);
-        range002.ref("RNGID", CHAR, 12, "RANGE001", "IDENT");
+        range002.add("RNGID", CHAR, 12);
         range002.add("CRRNT", NUMC, 12);
+        range002.constraint("RANGE002_RNGID_RANGE001", "RANGE001",
+                new String[] {"NMSPC", "RNGID"},
+                new String[] {"NMSPC", "IDENT"});
         
         docs001 = tableInstance("DOCS001");
         docs001.key("DOCID", CHAR, 24);
@@ -234,10 +237,12 @@ public class Documents extends Module {
                 "NUMBER_RANGE.CURRENT", null);
         docs001.clear();
         
+        range001.set("nmspc", "");
         range001.set("ident", "AUTHINDEX");
         range001.set("crrnt", 5);
         insert(range001);
 
+        range001.set("nmspc", "");
         range001.set("ident", "PROFILEINDEX");
         range001.set("crrnt", 2);
         insert(range001);

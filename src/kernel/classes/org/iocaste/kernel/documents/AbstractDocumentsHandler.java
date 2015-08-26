@@ -82,21 +82,23 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         "update RANGE002 set crrnt = ? where SERIE = ? and NMSPC = ?"
     };
     
-    protected final int addTableKey(Connection connection, String refstmt,
-            DocumentModelItem item, String dbtype) throws Exception {
-        return addTableColumn(connection, refstmt, item, dbtype, true);
-    }
-    
-    protected final int addTableColumn(Connection connection, String refstmt,
-            DocumentModelItem item, String dbtype) throws Exception {
-        return addTableColumn(connection, refstmt, item, dbtype, false);
-    }
-    
-    protected final int addTableColumn(Connection connection, String refstmt,
-            DocumentModelItem item, String dbtype, boolean key)
+    protected final int addTableKey(Connection connection, DocumentModel model,
+            String refstmt, DocumentModelItem item, String dbtype)
                     throws Exception {
+        return addTableColumn(connection, model, refstmt, item, dbtype, true);
+    }
+    
+    protected final int addTableColumn(Connection connection,
+            DocumentModel model, String refstmt, DocumentModelItem item,
+            String dbtype) throws Exception {
+        return addTableColumn(connection, model, refstmt, item, dbtype, false);
+    }
+    
+    protected final int addTableColumn(Connection connection,
+            DocumentModel model, String refstmt, DocumentModelItem item,
+            String dbtype, boolean key) throws Exception {
         DocumentModelItem reference;
-        String modelname = item.getDocumentModel().getTableName();
+        String modelname = model.getTableName();
         StringBuilder sb = new StringBuilder("alter table ").append(modelname);
         DataElement ddelement = item.getDataElement();
         
