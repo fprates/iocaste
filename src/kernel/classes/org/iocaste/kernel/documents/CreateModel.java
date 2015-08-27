@@ -90,13 +90,13 @@ public class CreateModel extends AbstractDocumentsHandler {
             } else {
                 refmodel = reference.getDocumentModel();
             }
-            
-            if (nsfield != null)
+
+            namespace = refmodel.getNamespace();
+            if ((nsfield != null) && (namespace != null))
                 fkc = new String[] {nsfield, tname};
             else
                 fkc = new String[] {tname};
             
-            namespace = refmodel.getNamespace();
             if (namespace != null)
                 rfc = new String[] {
                     namespace.getTableFieldName(),
