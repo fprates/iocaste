@@ -19,7 +19,8 @@ import org.iocaste.install.dictionary.Module;
 import org.iocaste.install.dictionary.Package;
 import org.iocaste.install.dictionary.SH;
 import org.iocaste.install.dictionary.Shell;
-import org.iocaste.install.dictionary.Table;
+import org.iocaste.kernel.common.DBNames;
+import org.iocaste.kernel.common.Table;
 import org.iocaste.shell.common.DataForm;
 
 public class DBConfigRequest {

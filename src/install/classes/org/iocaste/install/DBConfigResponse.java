@@ -1,5 +1,6 @@
 package org.iocaste.install;
 
+import org.iocaste.kernel.common.DBNames;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;

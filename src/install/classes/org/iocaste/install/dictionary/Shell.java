@@ -2,6 +2,9 @@ package org.iocaste.install.dictionary;
 
 import java.util.List;
 
+import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.common.Table;
+
 public class Shell extends Module {
     
     public Shell(byte dbtype) {
@@ -18,19 +21,19 @@ public class Shell extends Module {
         Table docs005;
         
         shell001 = tableInstance("SHELL001");
-        shell001.key("SNAME", CHAR, 15);
+        shell001.key("SNAME", DataType.CHAR, 15);
 
         shell002 = tableInstance("SHELL002");
-        shell002.key("EINDX", CHAR, 18);
-        shell002.ref("SNAME", CHAR, 15, "SHELL001", "SNAME");
-        shell002.add("ENAME", CHAR, 60);
+        shell002.key("EINDX", DataType.CHAR, 18);
+        shell002.ref("SNAME", DataType.CHAR, 15, "SHELL001", "SNAME");
+        shell002.add("ENAME", DataType.CHAR, 60);
         
         shell003 = tableInstance("SHELL003");
-        shell003.key("PINDX", CHAR, 21);
-        shell003.ref("EINDX", CHAR, 18, "SHELL002", "EINDX");
-        shell003.ref("SNAME", CHAR, 15, "SHELL001", "SNAME");
-        shell003.add("PNAME", CHAR, 60);
-        shell003.add("VALUE", CHAR, 60);
+        shell003.key("PINDX", DataType.CHAR, 21);
+        shell003.ref("EINDX", DataType.CHAR, 18, "SHELL002", "EINDX");
+        shell003.ref("SNAME", DataType.CHAR, 15, "SHELL001", "SNAME");
+        shell003.add("PNAME", DataType.CHAR, 60);
+        shell003.add("VALUE", DataType.CHAR, 60);
 
         docs001 = getTable("DOCS001");
         docs002 = getTable("DOCS002");

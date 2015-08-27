@@ -1,4 +1,4 @@
-package org.iocaste.install.dictionary;
+package org.iocaste.kernel.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.iocaste.install.DBNames;
+import org.iocaste.documents.common.DataType;
 
 public class Table {
     private String name;
@@ -14,18 +14,20 @@ public class Table {
     private Map<String, Field> fields;
     private Map<String, Object> values;
     
-    public Table(String name) {
+    public Table(String name, byte sqldb) {
         this.name = name;
+        this.sqldb = sqldb;
         fields = new LinkedHashMap<>();
         values = new HashMap<>();
     }
     
-    private final void add(String name, byte type, int len, boolean key,
+    private final void add(String name, int type, int len, int dec, boolean key,
             String tableref, String fieldref, String[] fkc, String[] rfc) {
         Field field = new Field();
         
         field.type = type;
         field.len = len;
+        field.dec = dec;
         field.key = key;
         field.tableref = tableref;
         field.fieldref = fieldref;
@@ -42,38 +44,48 @@ public class Table {
         return values;
     }
     
-    public final void add(String name, byte type, int len) {
-        add(name, type, len, false, null, null, null, null);
+    public final void add(String name, int type, int len) {
+        add(name, type, len, 0, false, null, null, null, null);
+    }
+    
+    public final void add(String name, int type, int len, int dec) {
+        add(name, type, len, dec, false, null, null, null, null);
     }
     
     public final void constraint(String constraint, String tableref,
             String[] fkc, String[] rfc) {
-        add(constraint, Module.CONSTRAINT, 0, false, tableref, null, fkc, rfc);
+        add(constraint,
+                DataType.CONSTRAINT, 0, 0, false, tableref, null, fkc, rfc);
     }
     
     public final String getName() {
         return name;
     }
     
-    public final byte getType(String field) {
+    public final int getType(String field) {
         return fields.get(field).type;
     }
     
-    public final void key(String name, byte type, int len) {
-        add(name, type, len, true, null, null, null, null);
+    public final void key(String name, int type, int len) {
+        add(name, type, len, 0, true, null, null, null, null);
     }
     
-    public final void ref(String name, byte type, int len, String tableref,
+    public final void key(String name, int type, int len, int dec) {
+        add(name, type, len, dec, true, null, null, null, null);
+    }
+    
+    public final void ref(String name, int type, int len, String tableref,
             String fieldref) {
-        add(name, type, len, false, tableref, fieldref, null, null);
+        add(name, type, len, 0, false, tableref, fieldref, null, null);
+    }
+    
+    public final void ref(String name, int type, int dec, int len,
+            String tableref, String fieldref) {
+        add(name, type, len, dec, false, tableref, fieldref, null, null);
     }
     
     public final void set(String name, Object value) {
         values.put(name.toUpperCase(), value);
-    }
-    
-    public final void setSQLDB(byte sqldb) {
-        this.sqldb = sqldb;
     }
     
     /*
@@ -93,7 +105,7 @@ public class Table {
             field = fields.get(fname);
             
             switch (field.type) {
-            case Module.CONSTRAINT:
+            case DataType.CONSTRAINT:
                 foreignkey = new StringBuilder("constraint fk_").
                         append(fname).
                         append(" foreign key (");
@@ -115,13 +127,22 @@ public class Table {
                 foreignkey.append(")");
                 fks.add(foreignkey.toString());
                 continue;
-            case Module.NUMC:
+            case DataType.NUMC:
                 item = new StringBuilder(fname).append(" numeric(");
                 break;
-            case Module.CHAR:
+            case DataType.CHAR:
                 item = new StringBuilder(fname).append(" varchar(");
                 break;
-            case Module.BOOLEAN:
+            case DataType.DATE:
+                item = new StringBuilder(fname).append(" date");
+                break;
+            case DataType.DEC:
+                item = new StringBuilder(fname).append(" decimal(");
+                break;
+            case DataType.TIME:
+                item = new StringBuilder(name).append(" time");
+                break;
+            case DataType.BOOLEAN:
                 item = new StringBuilder(fname);
                 switch (sqldb) {
                 case DBNames.POSTGRES:
@@ -139,8 +160,16 @@ public class Table {
                 break;
             }
             
-            if (field.len > 0)
-                item.append(field.len).append(")");
+            switch (field.type) {
+            case DataType.CHAR:
+            case DataType.NUMC:
+                if (field.len > 0)
+                    item.append(field.len).append(")");
+                
+                if (field.dec > 0)
+                    item.append(",").append(field.dec).append(")");
+                break;
+            }
             
             items.add(item.toString());
             
@@ -187,8 +216,7 @@ public class Table {
 }
 
 class Field {
-    public byte type;
-    public int len;
+    public int type, len, dec;
     public boolean key;
     public String tableref, fieldref;
     public String[] fkc, rfc;

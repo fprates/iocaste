@@ -3,6 +3,7 @@ package org.iocaste.install.dictionary;
 import java.util.List;
 
 import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.common.Table;
 
 public class Login extends Module {
 

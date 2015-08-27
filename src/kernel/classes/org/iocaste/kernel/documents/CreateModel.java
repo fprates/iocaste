@@ -6,21 +6,12 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.kernel.common.DBNames;
+import org.iocaste.kernel.common.Table;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class CreateModel extends AbstractDocumentsHandler {
-    
-    private final void addKey(StringBuilder sbk, DocumentModelItem item) {
-        String tname = item.getTableFieldName();
-        
-        if (sbk.length() == 0)
-            sbk.append(", primary key(");
-        else
-            sbk.append(", ");
-        
-        sbk.append(tname);
-    }
     
     /**
      * 
@@ -35,25 +26,35 @@ public class CreateModel extends AbstractDocumentsHandler {
         DocumentModel refmodel;
         DataElement dataelement;
         DocumentModelItem reference, namespace;
-        String tname, query, refname, dbtype, refstmt;
-        int size;
-        StringBuilder sb, sbk = null;
+        String[] fkc, rfc;
+        int size, dec;
+        byte dbtype;
+        Table table;
+        String tname, refname, modelname, constraint;
+        String nsfield = null;
         DocumentModelItem[] itens = model.getItens();
         
         getmodel = documents.get("get_document_model");
-        dbtype = getSystemParameter(documents, "dbtype");
         size = itens.length - 1;
-        refstmt = getReferenceStatement(documents);
-        sb = new StringBuilder("create table ").append(model.getTableName()).
-                append("(");
+        
+        modelname = model.getTableName();
+        switch (getSystemParameter(documents, "dbtype")) {
+        case "postgres":
+            dbtype = DBNames.POSTGRES;
+            break;
+        default:
+            dbtype = DBNames.MYSQL;
+            break;
+        }
+        table = new Table(modelname, dbtype);
 
         namespace = model.getNamespace();
         if (namespace != null) {
-            sbk = new StringBuilder();
-            addKey(sbk, namespace);
-            sb.append(namespace.getTableFieldName());
-            setTableFieldsString(sb, namespace.getDataElement(), dbtype);
-            sb.append(", ");
+            dataelement = namespace.getDataElement();
+            size = dataelement.getLength();
+            dec = dataelement.getDecimals();
+            nsfield = namespace.getTableFieldName();
+            table.key(nsfield, dataelement.getType(), size, dec);
         }
         
         for (DocumentModelItem item : itens) {
@@ -61,43 +62,56 @@ public class CreateModel extends AbstractDocumentsHandler {
             if (tname == null)
                 throw new IocasteException(new StringBuilder(model.getName()).
                         append(": Table field name is null.").toString());
-            
-            sb.append(tname);
+
             dataelement = item.getDataElement();
-            setTableFieldsString(sb, dataelement, dbtype);
+            size = dataelement.getLength();
+            dec = dataelement.getDecimals();
             if (model.isKey(item)) {
-                if (sbk == null)
-                    sbk = new StringBuilder();
-                addKey(sbk, item);
+                table.key(tname, dataelement.getType(), size, dec);
+                continue;
             }
+            
+            table.add(tname, dataelement.getType(), size, dec);
             
             reference = item.getReference();
-            if (reference != null) {
-                if (reference.isDummy()) {
-                    refname = reference.getDocumentModel().getName();
-                    refmodel = getmodel.run(connection, documents, refname);
-                    refname = getComposedName(reference);
-                    reference = refmodel.getModelItem(reference.getName());
-                    if (reference == null)
-                        throw new IocasteException(new StringBuilder(refname).
-                                append(": is an invalid reference.").
-                                toString());
-                }
-                
-                sb.append(refstmt).append(reference.getDocumentModel().
-                        getTableName()).append("(").
-                        append(reference.getTableFieldName()).append(")");
+            if (reference == null)
+                continue;
+            
+            refmodel = null;
+            if (reference.isDummy()) {
+                refname = reference.getDocumentModel().getName();
+                refmodel = getmodel.run(connection, documents, refname);
+                refname = getComposedName(reference);
+                reference = refmodel.getModelItem(reference.getName());
+                if (reference == null)
+                    throw new IocasteException(new StringBuilder(refname).
+                            append(": is an invalid reference.").
+                            toString());
+            } else {
+                refmodel = reference.getDocumentModel();
             }
             
-            if (size != item.getIndex())
-                sb.append(", ");
+            if (nsfield != null)
+                fkc = new String[] {nsfield, tname};
+            else
+                fkc = new String[] {tname};
+            
+            namespace = refmodel.getNamespace();
+            if (namespace != null)
+                rfc = new String[] {
+                    namespace.getTableFieldName(),
+                    reference.getTableFieldName()};
+            else
+                rfc = new String[] {reference.getTableFieldName()};
+            
+            constraint = new StringBuilder(modelname).append("_").
+                    append(tname).append("_").
+                    append(refmodel.getTableName()).toString();
+            
+            table.constraint(constraint, refmodel.getTableName(), fkc, rfc);
         }
         
-        if (sbk != null)
-            sb.append(sbk).append(")");
-
-        query = sb.append(")").toString();
-        return update(connection, query);
+        return update(connection, table.toString());
     }
     
     /**

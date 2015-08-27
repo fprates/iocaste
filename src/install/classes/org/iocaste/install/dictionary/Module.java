@@ -6,13 +6,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.iocaste.install.DBNames;
+import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.common.DBNames;
+import org.iocaste.kernel.common.Table;
 
 public abstract class Module {
-    public static final byte NUMC = 0;
-    public static final byte CHAR = 1;
-    public static final byte BOOLEAN = 2;
-    public static final byte CONSTRAINT = 127;
     public static final byte INSERT = 0;
     private Map<String, Table> tables, extra;
     private List<Query> queries;
@@ -194,9 +192,8 @@ public abstract class Module {
     }
     
     protected final Table tableInstance(String name) {
-        Table table = new Table(name);
+        Table table = new Table(name, dbtype);
         
-        table.setSQLDB(dbtype);
         tables.put(name, table);
         
         return table;
@@ -207,7 +204,7 @@ class Query {
     private byte command, dbtype;
     private String tablename;
     private Map<String, Object> values;
-    private Map<String, Byte> types;
+    private Map<String, Integer> types;
     
     public Query(byte command, Table table, byte dbtype) {
         this.command = command;
@@ -244,13 +241,13 @@ class Query {
                 value = values.get(field);
                 _into.append(field);
                 switch (types.get(field)) {
-                case Module.CHAR:
+                case DataType.CHAR:
                     if (value == null)
                         _values.append("null");
                     else
                         _values.append("'").append(value).append("'");
                     break;
-                case Module.BOOLEAN:
+                case DataType.BOOLEAN:
                     switch (dbtype) {
                     case DBNames.POSTGRES:
                         _values.append((boolean)value? "'1'" : "'0'");
@@ -260,7 +257,7 @@ class Query {
                         break;
                     }
                     break;
-                case Module.NUMC:
+                case DataType.NUMC:
                     _values.append(value);
                     break;
                 }

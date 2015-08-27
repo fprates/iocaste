@@ -40,6 +40,7 @@ public class DataType {
     public static final int SHORT = 9;
     public static final int EXTENDED = 10;
     public static final int TABLE = 11;
+    public static final int CONSTRAINT = 255;
     
     public static final boolean UPPERCASE = true;
     public static final boolean KEEPCASE = false;

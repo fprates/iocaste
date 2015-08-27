@@ -51,6 +51,7 @@ public class Update extends AbstractHandler {
         } catch (SQLServerException e) {
             i = e.getErrorCode();
             switch (i) {
+            case 3701: // drop table error
             case 2627: // constraint error code
                 return -1;
             }

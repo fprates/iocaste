@@ -143,7 +143,6 @@
     	
     	<copy todir="${basedir}/ext/common">
     		<fileset dir="${builddir}/core/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/kernel/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/documents/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/shell/lib" excludes="*.jar"/>
     		<fileset dir="${builddir}/packagetool/lib" excludes="*.jar"/>

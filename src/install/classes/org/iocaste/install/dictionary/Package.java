@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.common.Table;
+
 public class Package extends Module {
 
     public Package(byte dbtype) {
@@ -24,23 +27,23 @@ public class Package extends Module {
         Table docs001, docs002, docs003, docs004, docs005, docs006;
         
         language = tableInstance("LANG");
-        language.key("LOCAL", CHAR, 5);
+        language.key("LOCAL", DataType.CHAR, 5);
         
         package001 = tableInstance("PACKAGE001");
-        package001.key("IDENT", CHAR, 60);
+        package001.key("IDENT", DataType.CHAR, 60);
 
         package002 = tableInstance("PACKAGE002");
-        package002.key("IDENT", CHAR, 72);
-        package002.ref("PACKG", CHAR, 60, "PACKAGE001", "IDENT");
-        package002.add("INAME", CHAR, 60);
-        package002.add("MODEL", CHAR, 24);
+        package002.key("IDENT", DataType.CHAR, 72);
+        package002.ref("PACKG", DataType.CHAR, 60, "PACKAGE001", "IDENT");
+        package002.add("INAME", DataType.CHAR, 60);
+        package002.add("MODEL", DataType.CHAR, 24);
         
         messages = tableInstance("MSGSRC");
-        messages.key("MSGID", CHAR, 70);
-        messages.add("MSGNM", CHAR, 64);
-        messages.ref("LOCAL", CHAR, 5, "LANG", "LOCAL");
-        messages.ref("PKGNM", CHAR, 60, "PACKAGE001", "IDENT");
-        messages.add("MSGTX", CHAR, 255);
+        messages.key("MSGID", DataType.CHAR, 70);
+        messages.add("MSGNM", DataType.CHAR, 64);
+        messages.ref("LOCAL", DataType.CHAR, 5, "LANG", "LOCAL");
+        messages.ref("PKGNM", DataType.CHAR, 60, "PACKAGE001", "IDENT");
+        messages.add("MSGTX", DataType.CHAR, 255);
 
         docs001 = getTable("DOCS001");
         docs002 = getTable("DOCS002");

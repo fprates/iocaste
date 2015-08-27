@@ -2,6 +2,9 @@ package org.iocaste.install.dictionary;
 
 import java.util.List;
 
+import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.common.Table;
+
 public class Documents extends Module {
 
     public Documents(byte dbtype) {
@@ -18,56 +21,56 @@ public class Documents extends Module {
         Table range002;
         
         range001 = tableInstance("RANGE001");
-        range001.key("NMSPC", CHAR, 128);
-        range001.key("IDENT", CHAR, 12);
-        range001.add("CRRNT", NUMC, 12);
+        range001.key("NMSPC", DataType.CHAR, 128);
+        range001.key("IDENT", DataType.CHAR, 12);
+        range001.add("CRRNT", DataType.NUMC, 12);
         
         range002 = tableInstance("RANGE002");
-        range002.key("NMSPC", CHAR, 128);
-        range002.key("SERIE", CHAR, 14);
-        range002.add("RNGID", CHAR, 12);
-        range002.add("CRRNT", NUMC, 12);
+        range002.key("NMSPC", DataType.CHAR, 128);
+        range002.key("SERIE", DataType.CHAR, 14);
+        range002.add("RNGID", DataType.CHAR, 12);
+        range002.add("CRRNT", DataType.NUMC, 12);
         range002.constraint("RANGE002_RNGID_RANGE001", "RANGE001",
                 new String[] {"NMSPC", "RNGID"},
                 new String[] {"NMSPC", "IDENT"});
         
         docs001 = tableInstance("DOCS001");
-        docs001.key("DOCID", CHAR, 24);
-        docs001.add("TNAME", CHAR, 24);
-        docs001.add("CLASS", CHAR, 255);
-        docs001.add("NSCOL", CHAR, 48);
-        docs001.add("NSTYP", NUMC, 1);
-        docs001.add("NSLEN", NUMC, 4);
-        docs001.add("PKGNM", CHAR, 60);
+        docs001.key("DOCID", DataType.CHAR, 24);
+        docs001.add("TNAME", DataType.CHAR, 24);
+        docs001.add("CLASS", DataType.CHAR, 255);
+        docs001.add("NSCOL", DataType.CHAR, 48);
+        docs001.add("NSTYP", DataType.NUMC, 1);
+        docs001.add("NSLEN", DataType.NUMC, 4);
+        docs001.add("PKGNM", DataType.CHAR, 60);
 
         docs003 = tableInstance("DOCS003");
-        docs003.key("ENAME", CHAR, 48);
-        docs003.add("DECIM", NUMC, 2);
-        docs003.add("LNGTH", NUMC, 4);
-        docs003.add("ETYPE", NUMC, 1);
-        docs003.add("UPCAS", BOOLEAN, 1);
-        docs003.add("ATYPE", NUMC, 2);
+        docs003.key("ENAME", DataType.CHAR, 48);
+        docs003.add("DECIM", DataType.NUMC, 2);
+        docs003.add("LNGTH", DataType.NUMC, 4);
+        docs003.add("ETYPE", DataType.NUMC, 1);
+        docs003.add("UPCAS", DataType.BOOLEAN, 1);
+        docs003.add("ATYPE", DataType.NUMC, 2);
 
         docs002 = tableInstance("DOCS002");
-        docs002.key("INAME", CHAR, 48);
-        docs002.ref("DOCID", CHAR, 24, "DOCS001", "DOCID");
-        docs002.add("NRITM", NUMC, 3);
-        docs002.add("FNAME", CHAR, 24);
-        docs002.ref("ENAME", CHAR, 48, "DOCS003", "ENAME");
-        docs002.add("ATTRB", CHAR, 64);
-        docs002.add("ITREF", CHAR, 48);
+        docs002.key("INAME", DataType.CHAR, 48);
+        docs002.ref("DOCID", DataType.CHAR, 24, "DOCS001", "DOCID");
+        docs002.add("NRITM", DataType.NUMC, 3);
+        docs002.add("FNAME", DataType.CHAR, 24);
+        docs002.ref("ENAME", DataType.CHAR, 48, "DOCS003", "ENAME");
+        docs002.add("ATTRB", DataType.CHAR, 64);
+        docs002.add("ITREF", DataType.CHAR, 48);
 
         docs004 = tableInstance("DOCS004");
-        docs004.key("INAME", CHAR, 48);
-        docs004.ref("DOCID", CHAR, 24, "DOCS001", "DOCID");
+        docs004.key("INAME", DataType.CHAR, 48);
+        docs004.ref("DOCID", DataType.CHAR, 24, "DOCS001", "DOCID");
 
         docs005 = tableInstance("DOCS005");
-        docs005.key("TNAME", CHAR, 24);
-        docs005.ref("DOCID", CHAR, 24, "DOCS001", "DOCID");
+        docs005.key("TNAME", DataType.CHAR, 24);
+        docs005.ref("DOCID", DataType.CHAR, 24, "DOCS001", "DOCID");
 
         docs006 = tableInstance("DOCS006");
-        docs006.key("INAME", CHAR, 48);
-        docs006.ref("ITREF", CHAR, 48, "DOCS002", "INAME");
+        docs006.key("INAME", DataType.CHAR, 48);
+        docs006.ref("ITREF", DataType.CHAR, 48, "DOCS002", "INAME");
 
         /*
          * Models

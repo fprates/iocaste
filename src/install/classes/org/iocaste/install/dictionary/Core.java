@@ -2,6 +2,9 @@ package org.iocaste.install.dictionary;
 
 import java.util.List;
 
+import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.common.Table;
+
 public class Core extends Module {
 
     public Core(byte dbtype) {
@@ -17,44 +20,44 @@ public class Core extends Module {
         Table users000, users001, users002, auth001, auth002, auth003, auth004;
         
         users000 = tableInstance("USERS000");
-        users000.add("CRRNT", NUMC, 5);
+        users000.add("CRRNT", DataType.NUMC, 5);
         
         users001 = tableInstance("USERS001");
-        users001.key("UNAME", CHAR, 12);
-        users001.add("SECRT", CHAR, 12);
-        users001.add("FNAME", CHAR, 64);
-        users001.add("SNAME", CHAR, 64);
-        users001.add("USRID", NUMC, 5);
-        users001.add("INIT", BOOLEAN, 1);
+        users001.key("UNAME", DataType.CHAR, 12);
+        users001.add("SECRT", DataType.CHAR, 12);
+        users001.add("FNAME", DataType.CHAR, 64);
+        users001.add("SNAME", DataType.CHAR, 64);
+        users001.add("USRID", DataType.NUMC, 5);
+        users001.add("INIT", DataType.BOOLEAN, 1);
 
         auth001 = tableInstance("AUTH001");
-        auth001.key("AUTNM", CHAR, 24);
-        auth001.add("OBJCT", CHAR, 12);
-        auth001.add("ACTIO", CHAR, 12);
-        auth001.add("AUTID", NUMC, 5);
+        auth001.key("AUTNM", DataType.CHAR, 24);
+        auth001.add("OBJCT", DataType.CHAR, 12);
+        auth001.add("ACTIO", DataType.CHAR, 12);
+        auth001.add("AUTID", DataType.NUMC, 5);
 
         auth002 = tableInstance("AUTH002");
-        auth002.key("IDENT", NUMC, 8);
-        auth002.ref("AUTNM", CHAR, 24, "AUTH001", "AUTNM");
-        auth002.add("PARAM", CHAR, 12);
-        auth002.add("VALUE", CHAR, 64);
+        auth002.key("IDENT", DataType.NUMC, 8);
+        auth002.ref("AUTNM", DataType.CHAR, 24, "AUTH001", "AUTNM");
+        auth002.add("PARAM", DataType.CHAR, 12);
+        auth002.add("VALUE", DataType.CHAR, 64);
 
         auth003 = tableInstance("AUTH003");
-        auth003.key("PRFNM", CHAR, 12);
-        auth003.add("PRFID", NUMC, 5);
-        auth003.add("CRRNT", NUMC, 8);
+        auth003.key("PRFNM", DataType.CHAR, 12);
+        auth003.add("PRFID", DataType.NUMC, 5);
+        auth003.add("CRRNT", DataType.NUMC, 8);
 
         auth004 = tableInstance("AUTH004");
-        auth004.key("IDENT", NUMC, 8);
-        auth004.ref("PRFNM", CHAR, 12, "AUTH003", "PRFNM");
-        auth004.ref("AUTNM", CHAR, 24, "AUTH001", "AUTNM");
-        auth004.add("OBJCT", CHAR, 12);
-        auth004.add("ACTIO", CHAR, 12);
+        auth004.key("IDENT", DataType.NUMC, 8);
+        auth004.ref("PRFNM", DataType.CHAR, 12, "AUTH003", "PRFNM");
+        auth004.ref("AUTNM", DataType.CHAR, 24, "AUTH001", "AUTNM");
+        auth004.add("OBJCT", DataType.CHAR, 12);
+        auth004.add("ACTIO", DataType.CHAR, 12);
 
         users002 = tableInstance("USERS002");
-        users002.key("IDENT", NUMC, 8);
-        users002.ref("UNAME", CHAR, 12, "USERS001", "UNAME");
-        users002.ref("PRFNM", CHAR, 12, "AUTH003", "PRFNM");
+        users002.key("IDENT", DataType.NUMC, 8);
+        users002.ref("UNAME", DataType.CHAR, 12, "USERS001", "UNAME");
+        users002.ref("PRFNM", DataType.CHAR, 12, "AUTH003", "PRFNM");
 
         users000.set("crrnt", 1);
         insert(users000);

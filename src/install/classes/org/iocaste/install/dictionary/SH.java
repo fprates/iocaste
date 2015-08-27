@@ -2,6 +2,9 @@ package org.iocaste.install.dictionary;
 
 import java.util.List;
 
+import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.common.Table;
+
 public class SH extends Module {
 
     public SH(byte dbtype) {
@@ -18,18 +21,18 @@ public class SH extends Module {
         Table docs001, docs002, docs003, docs004, docs005, docs006;
         
         shcab = tableInstance("SHCAB");
-        shcab.key("IDENT", CHAR, 24);
-        shcab.ref("DOCID", CHAR, 24, "DOCS001", "DOCID");
-        shcab.ref("EXPRT", CHAR, 48, "DOCS002", "INAME");
+        shcab.key("IDENT", DataType.CHAR, 24);
+        shcab.ref("DOCID", DataType.CHAR, 24, "DOCS001", "DOCID");
+        shcab.ref("EXPRT", DataType.CHAR, 48, "DOCS002", "INAME");
 
         shitm = tableInstance("SHITM");
-        shitm.key("INAME", CHAR, 48);
-        shitm.ref("SHCAB", CHAR, 24, "SHCAB", "IDENT");
-        shitm.ref("MDITM", CHAR, 48, "DOCS002", "INAME");
+        shitm.key("INAME", DataType.CHAR, 48);
+        shitm.ref("SHCAB", DataType.CHAR, 24, "SHCAB", "IDENT");
+        shitm.ref("MDITM", DataType.CHAR, 48, "DOCS002", "INAME");
 
         shref = tableInstance("SHREF");
-        shref.key("INAME", CHAR, 48);
-        shref.ref("SHCAB", CHAR, 24, "SHCAB", "IDENT");
+        shref.key("INAME", DataType.CHAR, 48);
+        shref.ref("SHCAB", DataType.CHAR, 24, "SHCAB", "IDENT");
 
         shcab.set("ident", "SH_MODEL");
         shcab.set("docid", "MODEL");

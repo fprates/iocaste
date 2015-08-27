@@ -1,4 +1,4 @@
-package org.iocaste.install;
+package org.iocaste.kernel.common;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
