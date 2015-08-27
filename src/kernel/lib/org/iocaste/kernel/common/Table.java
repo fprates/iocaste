@@ -163,11 +163,14 @@ public class Table {
             switch (field.type) {
             case DataType.CHAR:
             case DataType.NUMC:
+            case DataType.DEC:
                 if (field.len > 0)
-                    item.append(field.len).append(")");
+                    item.append(field.len);
                 
                 if (field.dec > 0)
-                    item.append(",").append(field.dec).append(")");
+                    item.append(",").append(field.dec);
+                
+                item.append(")");
                 break;
             }
             
