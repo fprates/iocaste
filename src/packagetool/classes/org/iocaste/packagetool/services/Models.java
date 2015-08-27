@@ -37,8 +37,7 @@ public class Models {
         
         for (String modelname : models.keySet()) {
             if (state.documents.getModel(modelname) != null)
-                    throw new IocasteException(new StringBuilder(modelname).
-                            append(" has been already created.").toString());
+                continue;
             
             model = models.get(modelname);
             install(model, modelname, state);
