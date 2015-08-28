@@ -134,13 +134,28 @@ public class Table {
                 item = new StringBuilder(fname).append(" varchar(");
                 break;
             case DataType.DATE:
-                item = new StringBuilder(fname).append(" date");
+                switch (sqldb) {
+                case DBNames.MSSQL1:
+                    item = new StringBuilder(fname).append(" datetime");
+                    break;
+                default:
+                    item = new StringBuilder(fname).append(" date");
+                    break;
+                }
                 break;
             case DataType.DEC:
                 item = new StringBuilder(fname).append(" decimal(");
                 break;
             case DataType.TIME:
-                item = new StringBuilder(name).append(" time");
+                switch (sqldb) {
+                case DBNames.MSSQL1:
+                    item = new StringBuilder(fname).append(" datetime");
+                    break;
+                default:
+                    item = new StringBuilder(name).append(" time");
+                    break;
+                }
+                
                 break;
             case DataType.BOOLEAN:
                 item = new StringBuilder(fname);

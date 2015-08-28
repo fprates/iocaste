@@ -42,6 +42,12 @@ public class CreateModel extends AbstractDocumentsHandler {
         case "postgres":
             dbtype = DBNames.POSTGRES;
             break;
+        case "mssql1":
+            dbtype = DBNames.MSSQL1;
+            break;
+        case "mssql2":
+            dbtype = DBNames.MSSQL2;
+            break;
         default:
             dbtype = DBNames.MYSQL;
             break;

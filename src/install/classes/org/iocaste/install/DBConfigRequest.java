@@ -163,11 +163,13 @@ public class DBConfigRequest {
     
     private static final String[] getDBInitializator(Config config) {
         String[] init = null;
+        byte dbtype = DBNames.names.get(config.dbtype);
         
-        switch (DBNames.names.get(config.dbtype)) {
-        case DBNames.MSSQL:
+        switch (dbtype) {
+        case DBNames.MSSQL1:
+        case DBNames.MSSQL2:
             config.dbname = config.dbname.toUpperCase();
-            config.dbdriver = DBNames.DRIVERS[DBNames.MSSQL];
+            config.dbdriver = DBNames.DRIVERS[dbtype];
             
             switch (config.option) {
             case DBConfig.CHANGE_BASE:
@@ -206,7 +208,7 @@ public class DBConfigRequest {
             break;
         case DBNames.HSQLDB:
             config.dbname = config.dbname.toUpperCase();
-            config.dbdriver = DBNames.DRIVERS[DBNames.HSQLDB];
+            config.dbdriver = DBNames.DRIVERS[dbtype];
             config.iurl = new StringBuilder("jdbc:hsqldb:hsql://").
                     append(config.host).
                     append("/").
@@ -224,7 +226,7 @@ public class DBConfigRequest {
             break;
         case DBNames.MYSQL:
             config.dbname = config.dbname.toUpperCase();
-            config.dbdriver = DBNames.DRIVERS[DBNames.MYSQL];
+            config.dbdriver = DBNames.DRIVERS[dbtype];
             config.iurl = "jdbc:mysql://".concat(config.host);
             config.url = new StringBuilder(config.iurl).
                     append("/").
@@ -247,7 +249,7 @@ public class DBConfigRequest {
             
             break;
         case DBNames.POSTGRES:
-            config.dbdriver = DBNames.DRIVERS[DBNames.POSTGRES];
+            config.dbdriver = DBNames.DRIVERS[dbtype];
             config.iurl = new StringBuilder("jdbc:postgresql://").
                     append(config.host).append("/template1").toString();
             config.url = new StringBuilder("jdbc:postgresql://").
