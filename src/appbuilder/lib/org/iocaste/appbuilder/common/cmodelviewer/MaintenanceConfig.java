@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
+import org.iocaste.appbuilder.common.GetFieldsProperties;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.docmanager.common.Manager;
 
@@ -17,6 +18,8 @@ public class MaintenanceConfig extends AbstractViewConfig {
         configdata.mode = ConfigData.UPDATE;
         configdata.context = context;
         configdata.mark = true;
+        configdata.fieldproperties = GetFieldsProperties.
+                execute(context, extcontext.link.appname);
         
         getNavControl().setTitle(context.view.getPageName());
         

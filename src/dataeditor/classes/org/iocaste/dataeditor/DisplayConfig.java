@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.FieldProperty;
+import org.iocaste.appbuilder.common.GetFieldsProperties;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
@@ -42,7 +43,7 @@ public class DisplayConfig extends AbstractViewConfig {
         ttdata.mark = config.mark;
 
         config.properties = GetFieldsProperties.
-                execute(config.context, extcontext);
+                execute(config.context, extcontext.appname);
         
         documents = new Documents(config.context.function);
         config.model = documents.getModel(extcontext.model);

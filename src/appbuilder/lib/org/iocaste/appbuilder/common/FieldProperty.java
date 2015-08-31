@@ -9,5 +9,6 @@ public class FieldProperty implements Serializable {
     private static final long serialVersionUID = 5649667185035050916L;
 
     public Const type;
+    public boolean setsecretstate, secret;
     public Map<String, Object> values;
 }

@@ -4,9 +4,9 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.FieldProperty;
+import org.iocaste.appbuilder.common.GetFieldsProperties;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.dataeditor.Context;
-import org.iocaste.dataeditor.GetFieldsProperties;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.DataForm;
@@ -33,7 +33,7 @@ public class EntryConfig extends AbstractViewConfig {
         dataform = getElement("detail");
         dataform.importModel(model);
 
-        properties = GetFieldsProperties.execute(context, extcontext);
+        properties = GetFieldsProperties.execute(context, extcontext.appname);
         keyset = focusset = false;
         for (Element element : dataform.getElements()) {
             item = (DataItem)element;

@@ -1,6 +1,10 @@
 package org.iocaste.external;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AppBuilderLink;
+import org.iocaste.appbuilder.common.FieldProperty;
+import org.iocaste.appbuilder.common.GetFieldsProperties;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
@@ -15,6 +19,19 @@ import org.iocaste.external.install.TextsInstall;
 
 public class Main extends AbstractModelViewer {
 
+    @Override
+    public void config(GetFieldsProperties config) {
+        Map<String, FieldProperty> properties;
+        FieldProperty property;
+        
+        property = new FieldProperty();
+        property.setsecretstate = true;
+        property.secret = true;
+
+        properties = config.instance("main");
+        properties.put("SECRET", property);
+    }
+    
     @Override
     public void config(PageBuilderContext context) throws Exception {
         AppBuilderLink link;

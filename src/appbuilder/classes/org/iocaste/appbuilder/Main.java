@@ -14,11 +14,15 @@ import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceInput;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceSpec;
 import org.iocaste.appbuilder.common.cmodelviewer.Save;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
+import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.Documents;
 
 public class Main extends AbstractModelViewer {
     
     @Override
     public final void config(PageBuilderContext context) throws Exception {
+        ComplexModel cmodel;
+        Documents documents;
         String msgsource = getParameter("msgsource");
         AppBuilderLink link = getReceivedLink();
         Map<Object, Object> messages = new HashMap<>();
@@ -39,6 +43,13 @@ public class Main extends AbstractModelViewer {
         link.displayload = new Load(link.display1view);
         link.validate = new Validate();
         link.save = new Save();
+
+        if (link.cmodel != null) {
+            documents = new Documents(context.function);
+            cmodel = documents.getComplexModel(link.cmodel);
+            if (cmodel != null)
+                link.appname = cmodel.getHeader().getPackage();
+        }
         
         loadManagedModule(context, link);
     }

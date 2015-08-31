@@ -1,5 +1,8 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
+import java.util.Map;
+
+import org.iocaste.appbuilder.common.FieldProperty;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.documents.common.ComplexModel;
@@ -13,4 +16,5 @@ public class ConfigData {
     public byte mode;
     public boolean mark;
     public PageBuilderContext context;
+    public Map<String, FieldProperty> fieldproperties;
 }
