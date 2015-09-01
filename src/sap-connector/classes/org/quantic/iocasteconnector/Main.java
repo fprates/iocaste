@@ -35,6 +35,8 @@ public class Main extends AbstractExternalApplication {
         
         System.out.print("getting connection data from iocaste...");
         config = external.getConnectionData(stream.port);
+        external.disconnect();
+        
         if (config == null) {
             System.err.println("connection data not found.");
             return;

@@ -57,8 +57,11 @@ public class RemoveModel extends AbstractDocumentsHandler {
         if (tablename != null)
             update(connection, QUERIES[DEL_MODEL_REF], tablename);
         
+        try {
         update(connection, QUERIES[DEL_MODEL], modelname);
-        
+        } catch (Exception e) {
+            // avoid any error on mssql.
+        }
         documents.cache.queries.remove(modelname);
         documents.cache.models.remove(modelname);
         
@@ -66,8 +69,11 @@ public class RemoveModel extends AbstractDocumentsHandler {
             return 1;
         
         query = new StringBuilder("drop table ").append(tablename).toString();
+        try {
         update(connection, query);
-        
+        } catch (Exception e) {
+            
+        }
         return 1;
     }
     

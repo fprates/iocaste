@@ -53,7 +53,8 @@ public abstract class AbstractExternalApplication {
         host = "http://".concat(host);
         connector = new IocasteConnector(host);
         external = new External(connector);
-        if (!external.connect(user, secret, locale)) {
+        external.setConnection(user, secret, locale);
+        if (!external.connect()) {
             System.err.println("Connection failed.");
             System.exit(1);
         }
