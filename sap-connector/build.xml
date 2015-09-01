@@ -14,13 +14,14 @@
         <!-- compilação classes -->
     	<mkdir dir="${builddir}"/>
     	
-        <javac srcdir="${basedir}/sap-connector/src" destdir="${builddir}"
-        	debug="${debug.status}">
+        <javac srcdir="${basedir}/src/sap-connector/classes"
+        	destdir="${builddir}" debug="${debug.status}">
             <classpath refid="dependencies"/>
         </javac>
         
         <copy todir="${builddir}">
-            <fileset dir="${basedir}/sap-connector/src" excludes="**/*.java"/>
+            <fileset dir="${basedir}/src/sap-connector/classes"
+            	excludes="**/*.java"/>
         </copy>
     		
         <!-- pacote .jar -->
