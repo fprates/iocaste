@@ -108,7 +108,7 @@ public abstract class AbstractTableOperation {
                 item = new StringBuilder(data.fname).append(" datetime");
                 break;
             default:
-                item = new StringBuilder(data.tname).append(" time");
+                item = new StringBuilder(data.fname).append(" time");
                 break;
             }
             
