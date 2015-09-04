@@ -204,6 +204,7 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         ExtendedObject[] parameters;
 
         try {
+            external.connect();
             sapfunctionname = sapfunction.getName();
             log(sapfunctionname, " invoked.");
             
@@ -266,6 +267,8 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
+        } finally {
+            external.disconnect();
         }
         
     }
