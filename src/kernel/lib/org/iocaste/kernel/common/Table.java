@@ -1,29 +1,32 @@
 package org.iocaste.kernel.common;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataType;
 
 public class Table {
     private String name;
-    private byte sqldb;
+    private boolean droppedkey;
     private Map<String, Field> fields;
     private Map<String, Object> values;
     
-    public Table(String name, byte sqldb) {
+    public Table(String name) {
         this.name = name;
-        this.sqldb = sqldb;
         fields = new LinkedHashMap<>();
         values = new HashMap<>();
     }
     
     private final void add(String name, int type, int len, int dec, boolean key,
-            String tableref, String fieldref, String[] fkc, String[] rfc) {
-        Field field = new Field();
+            String tableref, String fieldref, String fkc, String rfc) {
+        Field field;
+        
+        field = fields.get(name);
+        if (field == null) {
+            field = new Field();
+            fields.put(name, field);
+        }
         
         field.type = type;
         field.len = len;
@@ -31,13 +34,37 @@ public class Table {
         field.key = key;
         field.tableref = tableref;
         field.fieldref = fieldref;
-        field.fkc = fkc;
-        field.rfc = rfc;
-        fields.put(name, field);
+        if (fkc == null)
+            return;
+        field.fkc.add(fkc);
+        field.rfc.add(rfc);
     }
     
     public final void clear() {
+        droppedkey = false;
         values.clear();
+    }
+    
+    private final void drop(String name, boolean key) {
+        Field field;
+        
+        if (key) {
+            droppedkey = true; 
+            return;
+        }
+
+        field = new Field();
+        field.type = (key)? DataType.CONSTRAINT : 0;
+        field.operation = "drop";
+        fields.put(name, field);
+    }
+    
+    public final void drop(String name) {
+        drop(name, false);
+    }
+    
+    public final void dropkey(String name) {
+        drop(name, true);
     }
     
     public final Map<String, Object> getValues() {
@@ -54,8 +81,23 @@ public class Table {
     
     public final void constraint(String constraint, String tableref,
             String[] fkc, String[] rfc) {
+        for (int i = 0; i < fkc.length; i++)
+            add(constraint, DataType.CONSTRAINT,
+                    0, 0, false, tableref, null, fkc[i], rfc[i]);
+    }
+    
+    public final void constraint(String constraint, String tableref,
+            String fkc, String rfc) {
         add(constraint,
                 DataType.CONSTRAINT, 0, 0, false, tableref, null, fkc, rfc);
+    }
+    
+    public final boolean isKeyDropped() {
+        return droppedkey;
+    }
+    
+    public final Map<String, Field> getFields() {
+        return fields;
     }
     
     public final String getName() {
@@ -74,6 +116,20 @@ public class Table {
         add(name, type, len, dec, true, null, null, null, null);
     }
     
+    public final void pkconstraint(String constraint, String fieldname) {
+        Field field;
+        
+        field = fields.get(constraint);
+        if (field == null) {
+            field = new Field();
+            field.key = true;
+            field.type = DataType.CONSTRAINT;
+            fields.put(constraint, field);
+        }
+        
+        field.pks.add(fieldname);
+    }
+    
     public final void ref(String name, int type, int len, String tableref,
             String fieldref) {
         add(name, type, len, 0, false, tableref, fieldref, null, null);
@@ -88,154 +144,14 @@ public class Table {
         values.put(name.toUpperCase(), value);
     }
     
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        boolean init;
-        StringBuilder primarykey = null;
-        StringBuilder foreignkey, item, sb;
-        Field field = null;
-        List<String> items = new ArrayList<>();
-        List<String> fks = new ArrayList<>();
+    public final void update(String name, int type, int len, int dec) {
+        Field field;
         
-        for (String fname : fields.keySet()) {
-            field = fields.get(fname);
-            
-            switch (field.type) {
-            case DataType.CONSTRAINT:
-                foreignkey = new StringBuilder("constraint fk_").
-                        append(fname).
-                        append(" foreign key (");
-                for (int i = 0; i < field.fkc.length; i++) {
-                    if (i > 0)
-                        foreignkey.append(",");
-                    foreignkey.append(field.fkc[i]);
-                }
-                
-                foreignkey.append(") references ").
-                        append(field.tableref).
-                        append("(");
-                for (int i = 0; i < field.rfc.length; i++) {
-                    if (i > 0)
-                        foreignkey.append(",");
-                    foreignkey.append(field.rfc[i]);
-                }
-                
-                foreignkey.append(")");
-                fks.add(foreignkey.toString());
-                continue;
-            case DataType.NUMC:
-                item = new StringBuilder(fname).append(" numeric(");
-                break;
-            case DataType.CHAR:
-                item = new StringBuilder(fname).append(" varchar(");
-                break;
-            case DataType.DATE:
-                switch (sqldb) {
-                case DBNames.MSSQL1:
-                    item = new StringBuilder(fname).append(" datetime");
-                    break;
-                default:
-                    item = new StringBuilder(fname).append(" date");
-                    break;
-                }
-                break;
-            case DataType.DEC:
-                item = new StringBuilder(fname).append(" decimal(");
-                break;
-            case DataType.TIME:
-                switch (sqldb) {
-                case DBNames.MSSQL1:
-                    item = new StringBuilder(fname).append(" datetime");
-                    break;
-                default:
-                    item = new StringBuilder(name).append(" time");
-                    break;
-                }
-                
-                break;
-            case DataType.BOOLEAN:
-                item = new StringBuilder(fname);
-                switch (sqldb) {
-                case DBNames.POSTGRES:
-                    item.append(" boolean");
-                    break;
-                default:
-                    item.append(" bit");
-                    break;
-                }
-                
-                items.add(item.toString());
-                continue;
-            default:
-                item = null;
-                break;
-            }
-            
-            switch (field.type) {
-            case DataType.CHAR:
-            case DataType.NUMC:
-            case DataType.DEC:
-                if (field.len > 0)
-                    item.append(field.len);
-                
-                if (field.dec > 0)
-                    item.append(",").append(field.dec);
-                
-                item.append(")");
-                break;
-            }
-            
-            items.add(item.toString());
-            
-            if (field.tableref != null) {
-                foreignkey = new StringBuilder("constraint fk_").
-                        append(name).append("_").
-                        append(fname).append("_").append(field.tableref).
-                        append(" foreign key (").append(fname).
-                        append(") references ").append(field.tableref).
-                        append("(").append(field.fieldref).append(")");
-                fks.add(foreignkey.toString());
-            }
-            
-            if (field.key) {
-                if (primarykey == null)
-                    primarykey = new StringBuilder("constraint pk_").
-                            append(name).
-                            append(" primary key(");
-                else
-                    primarykey.append(", ");
-                
-                primarykey.append(fname);
-            }
-        }
-        
-        sb = new StringBuilder("create table ").append(name).append(" (");
-        init = true;
-        for (String item_ : items) {
-            if (!init)
-                sb.append(",");
-            sb.append(item_);
-            init = false;
-        }
-        
-        if (primarykey != null)
-            sb.append(", ").append(primarykey).append(")");
-        
-        for (String fk : fks)
-            sb.append(", ").append(fk);
-        
-        sb.append(")");
-        return sb.toString();
+        field = new Field();
+        field.type = type;
+        field.len = len;
+        field.dec = dec;
+        field.operation = "modify";
+        fields.put(name, field);
     }
-}
-
-class Field {
-    public int type, len, dec;
-    public boolean key;
-    public String tableref, fieldref;
-    public String[] fkc, rfc;
 }

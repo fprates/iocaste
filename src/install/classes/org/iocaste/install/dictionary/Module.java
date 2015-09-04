@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataType;
+import org.iocaste.kernel.common.CreateTable;
 import org.iocaste.kernel.common.DBNames;
 import org.iocaste.kernel.common.Table;
 
@@ -30,9 +31,10 @@ public abstract class Module {
     
     protected final List<String> compile() {
         List<String> batch = new ArrayList<>();
+        CreateTable create = new CreateTable(dbtype);
         
         for (String name : tables.keySet())
-            batch.add(tables.get(name).toString());
+            batch.add(create.compose(tables.get(name)));
         
         for (Query query : queries)
             batch.add(query.toString());
@@ -192,7 +194,7 @@ public abstract class Module {
     }
     
     protected final Table tableInstance(String name) {
-        Table table = new Table(name, dbtype);
+        Table table = new Table(name);
         
         tables.put(name, table);
         

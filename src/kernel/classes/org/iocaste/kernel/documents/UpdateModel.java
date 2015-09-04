@@ -1,27 +1,171 @@
 package org.iocaste.kernel.documents;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.kernel.common.AlterTable;
+import org.iocaste.kernel.common.Table;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class UpdateModel extends AbstractDocumentsHandler {
+
+    private void dbupdate(UpdateData data) throws Exception {
+        boolean namespaced, initial;
+        DocumentModel oldmodel;
+        List<String> statements;
+        String statement, name;
+        DocumentModelItem ns, oldns;
+        DataElement element;
+
+        statements = new ArrayList<>();
+        name = data.model.getName();
+        oldmodel = data.getmodel.run(data.connection, data.documents, name);
+        oldns = oldmodel.getNamespace();
+        ns = data.model.getNamespace();
+        nsupdate(data, statements, oldns, ns);
+        namespaced = (statements.size() > 0);
+        
+        initial = true;
+        for (DocumentModelKey key : data.model.getKeys()) {
+            name = key.getModelItemName();
+            
+            data.item = data.model.getModelItem(name);
+            data.olditem = oldmodel.getModelItem(name);
+            if (data.olditem != null) {
+                if (!namespaced)
+                    continue;
+                data.table.pkconstraint(
+                        "pk_".concat(data.tablename),
+                        data.item.getTableFieldName());
+                initial = false;
+                continue;
+            }
+            
+            if (data.item.getDataElement() == null)
+                retrieveDataElement(data);
+            
+            element = data.item.getDataElement();
+            data.table.key(
+                    data.item.getTableFieldName(),
+                    element.getType(),
+                    element.getLength());
+            initial = false;
+        }
+        
+        if (!initial) {
+            statement = data.altertable.compose(data.table);
+            statements.add(statement);
+        }
+        
+        /*
+         * atualiza campos
+         */
+        data.table.clear();
+        initial = true;
+        for (DocumentModelItem item : data.model.getItens()) {
+            if (data.model.isKey(item))
+                continue;
+            
+            data.item = item;
+            data.element = data.item.getDataElement();
+            if (data.element == null)
+                retrieveDataElement(data);
+
+            data.fieldname = item.getTableFieldName();
+            data.reference = item.getReference();
+            
+            if (!oldmodel.contains(data.item)) {
+                if (data.item.getTableFieldName() == null)
+                    continue;
+                addTableColumn(statements, data);
+            } else {
+                data.olditem = oldmodel.getModelItem(data.item.getName());
+                data.oldfieldname = data.olditem.getTableFieldName();
+                updateTable(data);
+            }
+            
+            initial = false;
+        }
+        
+        if (!initial) {
+            statement = data.altertable.compose(data.table);
+            statements.add(statement);
+        }
+
+        /*
+         * remove campos
+         */
+        if (oldmodel.getTableName() != null) {
+            data.table.clear();
+            initial = true;
+            for (DocumentModelItem olditem : oldmodel.getItens()) {
+                if (data.model.contains(olditem))
+                    continue;
+                
+                if (olditem.getTableFieldName() == null)
+                    continue;
+                
+                data.table.drop(olditem.getTableFieldName());
+                initial = false;
+            }
+            
+            if (!initial) {
+                statement = data.altertable.compose(data.table);
+                statements.add(statement);
+            }
+        }
+        
+        for (String stmt : statements)
+            update(data.connection, stmt);
+    }
     
-    private final DataElement getElementByReference(GetDocumentModel getmodel,
-            Connection connection, Documents documents,
+    private final DataElement getElementByReference(UpdateData data,
             DocumentModelItem reference) throws Exception {
         DocumentModel model;
         
         if (!reference.isDummy())
             return reference.getDataElement();
         
-        model = getmodel.run(connection, documents,
+        model = data.getmodel.run(data.connection, data.documents,
                 reference.getDocumentModel().getName());
         return model.getModelItem(reference.getName()).getDataElement();
+    }
+    
+    private final void nsupdate(UpdateData data, List<String> statements,
+            DocumentModelItem oldns, DocumentModelItem ns) {
+        String nstablefield, tablename, statement;
+        DataElement element;
+        
+        if ((ns != null) && (oldns == null)) {
+            nstablefield = ns.getTableFieldName();
+            if (nstablefield == null)
+                return;
+            tablename = new StringBuilder("pk_").
+                    append(data.table.getName()).toString();
+            data.table.dropkey(tablename);
+            statement = data.altertable.compose(data.table);
+            statements.add(statement);
+
+            data.table.clear();
+            element = ns.getDataElement();
+            data.table.key(
+                    nstablefield, element.getType(), element.getLength());
+        }
+        
+//        if ((ns == null) && (oldns != null)) {
+//            nstablefield = oldns.getTableFieldName();
+//            if (nstablefield == null)
+//                return;
+//            element = oldns.getDataElement();
+//            table.drop(nstablefield);
+//        }
     }
     
     /**
@@ -56,116 +200,75 @@ public class UpdateModel extends AbstractDocumentsHandler {
         return 1;
     }
     
-    private final int removeTableColumn(Connection connection,
-            DocumentModelItem item) throws Exception {
-        String fieldname = item.getTableFieldName();
-        String tablename = item.getDocumentModel().getTableName();
-        String query = new StringBuilder("alter table ").append(tablename).
-                append(" drop column ").append(fieldname).toString();
+    private final void retrieveDataElement(UpdateData data) throws Exception {
+        DocumentModelItem reference = data.item.getReference();
         
-        return (update(connection, query) < 0)? 0 : 1;
+        if (reference == null)
+            return;
+        data.item.setDataElement(getElementByReference(data, reference));
     }
-
+    
     @Override
     public Object run(Message message) throws Exception {
-        Map<String, String> queries;
-        DocumentModelItem reference, ns, oldns;
-        InsertDataElement insert;
-        GetDocumentModel getmodel;
         DocumentModel oldmodel;
+        Map<String, String> queries;
+        InsertDataElement insert;
         UpdateData data;
-        DocumentModel model = message.get("model");
-        String name = model.getName();
-        Documents documents = getFunction();
-        String refstmt = getReferenceStatement(documents);
-        String dbtype = getSystemParameter(documents, "dbtype");
+        String name;
         String sessionid = message.getSessionid();
-        Connection connection = documents.database.getDBConnection(sessionid);
-        
-        getmodel = documents.get("get_document_model");
-        oldmodel = getmodel.run(connection, documents, name);
-        insert = documents.get("insert_data_element");
-
-        prepareElements(connection, documents, model);
-        
-        oldns = oldmodel.getNamespace();
-        ns = model.getNamespace();
-        if ((ns != null) && (oldns == null) && (ns.getTableFieldName() != null))
-            addTableKey(connection, model, refstmt, ns, dbtype);
 
         data = new UpdateData();
+        data.documents = getFunction();
+        data.model = message.get("model");
+        data.tablename = data.model.getTableName();
+        data.connection = data.documents.database.getDBConnection(sessionid);
+        data.getmodel = data.documents.get("get_document_model");
+        data.dbtype = getSystemParameter(data.documents, "dbtype");
+        data.table = new Table(data.tablename);
+        data.altertable = new AlterTable(data.dbtype);
         
-        /*
-         * atualiza tabela
-         */
-        data.tablename = model.getTableName();
-        for (DocumentModelItem item : model.getItens()) {
-            if (item.getDataElement() == null) {
-                reference = item.getReference();
-                if (reference != null)
-                    item.setDataElement(getElementByReference(
-                            getmodel, connection, documents, reference));
-            }
-            
-            if (data.tablename == null)
-                continue;
-            
-            if (!oldmodel.contains(item)) {
-                if (item.getTableFieldName() != null)
-                    addTableColumn(connection, oldmodel, refstmt, item, dbtype);
-            } else {
-                data.model = item.getDocumentModel();
-                data.fieldname = item.getTableFieldName();
-                
-                data.olditem = oldmodel.getModelItem(item.getName());
-                data.oldfieldname = data.olditem.getTableFieldName();
-                
-                data.item = item;
-                data.ddelement = item.getDataElement();
-                data.reference = item.getReference();
-                data.connection = connection;
-                updateTable(data);
-            }
-        }
+        prepareElements(data.connection, data.documents, data.model);
         
-        if (oldmodel.getTableName() != null)
-            for (DocumentModelItem olditem : oldmodel.getItens()) {
-                if (model.contains(olditem))
-                    continue;
-                
-                if (olditem.getTableFieldName() == null)
-                    continue;
-                
-                if (removeTableColumn(connection, olditem) == 0)
-                    throw new IocasteException("error on remove table column");
-            }
-        
+        if (data.tablename != null)
+            dbupdate(data);
+
         /*
          * atualiza modelos
          */
-        for (DocumentModelItem item : model.getItens()) {
+        name = data.model.getName();
+        insert = data.documents.get("insert_data_element");
+        oldmodel = data.getmodel.run(data.connection, data.documents, name);
+        for (DocumentModelItem item : data.model.getItens()) {
+            data.item = item;
+            data.fieldname = item.getTableFieldName();
+            data.element = item.getDataElement();
+            data.reference = item.getReference();
+            
+            data.olditem = oldmodel.getModelItem(item.getName());
+            data.oldfieldname = data.olditem.getTableFieldName();
+            
             if (!oldmodel.contains(item)) {
-                insert.run(connection, item.getDataElement());                
-                if (insertModelItem(connection, item) == 0)
+                insert.run(data.connection, data.element);                
+                if (insertModelItem(data.connection, item) == 0)
                     throw new IocasteException("error on model insert");
             } else {
-                if (updateModelItem(connection, item, oldmodel) == 0)
+                if (updateModelItem(data, oldmodel) == 0)
                     throw new IocasteException("error on model update");
             }
         }
         
         for (DocumentModelItem olditem : oldmodel.getItens()) {
-            if (model.contains(olditem))
+            if (data.model.contains(olditem))
                 continue;
 
-            if (removeModelItem(connection, olditem) == 0)
+            if (removeModelItem(data.connection, olditem) == 0)
                 throw new IocasteException("error on remove model item");
         }
-        
-        queries = documents.parseQueries(model);
-        documents.cache.queries.put(name, queries);
-        documents.cache.models.remove(name);
-        documents.cache.models.put(name, model);
+
+        queries = data.documents.parseQueries(data.model);
+        data.documents.cache.queries.put(name, queries);
+        data.documents.cache.models.remove(name);
+        data.documents.cache.models.put(name, data.model);
         
         return 1;
     }
@@ -178,62 +281,52 @@ public class UpdateModel extends AbstractDocumentsHandler {
      * @return
      * @throws Exception
      */
-    private final int updateModelItem(Connection connection,
-            DocumentModelItem item, DocumentModel oldmodel) throws Exception {
+    private final int updateModelItem(UpdateData data, DocumentModel oldmodel)
+            throws Exception {
         String shname;
         Object[] criteria;
-        UpdateData data;
         
-        data = new UpdateData();
-        data.model = item.getDocumentModel();
-        data.fieldname = item.getTableFieldName();
-        
-        data.olditem = oldmodel.getModelItem(item.getName());
-        data.oldfieldname = data.olditem.getTableFieldName();
-        data.tablename = data.model.getTableName();
-        
-        data.item = item;
-        data.ddelement = item.getDataElement();
-        data.reference = item.getReference();
-        data.connection = connection;
-        
-        update(connection, QUERIES[DEL_SH_REF], getComposedName(data.olditem));
+        update(
+                data.connection,
+                QUERIES[DEL_SH_REF],
+                getComposedName(data.olditem));
         
         /*
          * atualização do modelo
          */
         criteria = new Object[5];
         
-        criteria[0] = data.ddelement.getDecimals();
-        criteria[1] = data.ddelement.getLength();
-        criteria[2] = data.ddelement.getType();
-        criteria[3] = data.ddelement.isUpcase();
-        criteria[4] = data.ddelement.getName();
+        criteria[0] = data.element.getDecimals();
+        criteria[1] = data.element.getLength();
+        criteria[2] = data.element.getType();
+        criteria[3] = data.element.isUpcase();
+        criteria[4] = data.element.getName();
 
-        if (update(connection, QUERIES[UPDATE_ELEMENT], criteria) == 0)
+        if (update(data.connection, QUERIES[UPDATE_ELEMENT], criteria) == 0)
             throw new IocasteException(
                     "error on update data element");
         
         criteria = new Object[7];
         
         criteria[0] = data.model.getName();
-        criteria[1] = item.getIndex();
-        criteria[2] = item.getTableFieldName();
-        criteria[3] = data.ddelement.getName();
-        criteria[4] = item.getAttributeName();
+        criteria[1] = data.item.getIndex();
+        criteria[2] = data.item.getTableFieldName();
+        criteria[3] = data.element.getName();
+        criteria[4] = data.item.getAttributeName();
         criteria[5] = (data.reference == null)?
                 null : getComposedName(data.reference);
-        criteria[6] = getComposedName(item);
+        criteria[6] = getComposedName(data.item);
         
-        if (update(connection, QUERIES[UPDATE_ITEM], criteria) == 0)
+        if (update(data.connection, QUERIES[UPDATE_ITEM], criteria) == 0)
             throw new IocasteException(
                     "error on update model item");
         
-        shname = item.getSearchHelp();
+        shname = data.item.getSearchHelp();
         if (Documents.isInitial(shname))
             return 1;
         
-        if (update(connection, QUERIES[INS_SH_REF], criteria[6], shname) == 0)
+        if (update(
+                data.connection, QUERIES[INS_SH_REF], criteria[6], shname) == 0)
             throw new IocasteException(
                     "error on insert sh reference");
         
@@ -241,91 +334,25 @@ public class UpdateModel extends AbstractDocumentsHandler {
     }
     
     private final void updateTable(UpdateData data) throws Exception {
-        StringBuilder sb;
-        String dbtype, query;
-        Documents documents;
+        data.table.update(
+                data.fieldname,
+                data.element.getType(),
+                data.element.getLength(),
+                data.element.getDecimals());
         
-        documents = getFunction();
-        dbtype = getSystemParameter(documents, "dbtype");
-        
-        sb = new StringBuilder("alter table ").append(data.tablename);
-        switch (dbtype) {
-        case "hsqldb":
-            query = sb.append(" alter column ").toString();
-            break;
-        case "mysql":
-            query = sb.toString().concat(" modify column ");
-            break;
-        default:
-            query = sb.append(" modify column ").toString();
-            break;
-        }
-
-        if (!data.fieldname.equals(data.oldfieldname)) {
-            switch (dbtype) {
-            case "mysql":
-                sb.append(" change column ").
-                        append(data.oldfieldname).
-                        append(" ").
-                        append(data.fieldname);
-                
-                setTableFieldsString(sb, data.ddelement, dbtype);
-                break;
-            default:
-                sb.append(data.oldfieldname).
-                append(" rename to ").
-                append(data.fieldname);
-                break;
-            }
-            
-            update(data.connection, sb.toString());
-        }
-        
-        /*
-         * atualização das característica dos itens da tabela
-         */
-        sb = new StringBuilder(query);
-        sb.append(data.fieldname);
-        
-        setTableFieldsString(sb, data.ddelement, dbtype);
-        
-        query = sb.toString();
-        update(data.connection, query);
-        
-        if (data.reference != null) {
-            if (data.olditem.getReference() != null)
-                return;
-            
-            query = new StringBuilder("alter table ").
-                    append(data.tablename).
-                    append(" add foreign key (").
-                    append(data.item.getTableFieldName()).
-                    append(") references ").
-                    append(data.reference.getDocumentModel().getTableName()).
-                    append("(").
-                    append(data.reference.getTableFieldName()).
-                    append(")").toString();
-            
-            update(data.connection, query);
-            return;
-        }
-        
-        if (data.olditem.getReference() == null)
-            return;
-        
-        query = new StringBuilder("alter table").
-                append(data.tablename).
-                append(" drop constraint ").
-                append(data.item.getTableFieldName()).toString();
-        
-        update(data.connection, query);
+        if (data.reference != null)
+            addTableColumnReference(data);
     }
 }
 
 class UpdateData {
+    public Documents documents;
     public DocumentModel model;
-    public String fieldname, oldfieldname, tablename;
+    public String fieldname, oldfieldname, tablename, dbtype;
     public DocumentModelItem olditem, reference, item;
-    public DataElement ddelement;
+    public DataElement element;
     public Connection connection;
+    public GetDocumentModel getmodel;
+    public Table table;
+    public AlterTable altertable;
 }

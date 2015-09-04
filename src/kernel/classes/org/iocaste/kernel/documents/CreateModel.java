@@ -6,7 +6,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
-import org.iocaste.kernel.common.DBNames;
+import org.iocaste.kernel.common.CreateTable;
 import org.iocaste.kernel.common.Table;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
@@ -28,9 +28,8 @@ public class CreateModel extends AbstractDocumentsHandler {
         DocumentModelItem reference, namespace;
         String[] fkc, rfc;
         int size, dec;
-        byte dbtype;
         Table table;
-        String tname, refname, modelname, constraint;
+        String tname, refname, modelname, constraint, dbtype;
         String nsfield = null;
         DocumentModelItem[] itens = model.getItens();
         
@@ -38,21 +37,7 @@ public class CreateModel extends AbstractDocumentsHandler {
         size = itens.length - 1;
         
         modelname = model.getTableName();
-        switch (getSystemParameter(documents, "dbtype")) {
-        case "postgres":
-            dbtype = DBNames.POSTGRES;
-            break;
-        case "mssql1":
-            dbtype = DBNames.MSSQL1;
-            break;
-        case "mssql2":
-            dbtype = DBNames.MSSQL2;
-            break;
-        default:
-            dbtype = DBNames.MYSQL;
-            break;
-        }
-        table = new Table(modelname, dbtype);
+        table = new Table(modelname);
 
         namespace = model.getNamespace();
         if (namespace != null) {
@@ -117,7 +102,8 @@ public class CreateModel extends AbstractDocumentsHandler {
             table.constraint(constraint, refmodel.getTableName(), fkc, rfc);
         }
         
-        return update(connection, table.toString());
+        dbtype = getSystemParameter(documents, "dbtype");
+        return update(connection, new CreateTable(dbtype).compose(table));
     }
     
     /**

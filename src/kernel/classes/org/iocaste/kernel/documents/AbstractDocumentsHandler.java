@@ -1,6 +1,7 @@
 package org.iocaste.kernel.documents;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
@@ -82,38 +83,50 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         "update RANGE002 set crrnt = ? where SERIE = ? and NMSPC = ?"
     };
     
-    protected final int addTableKey(Connection connection, DocumentModel model,
-            String refstmt, DocumentModelItem item, String dbtype)
-                    throws Exception {
-        return addTableColumn(connection, model, refstmt, item, dbtype, true);
+    protected final void addTableKey(List<String> statements,
+            UpdateData data) throws Exception {
+        addTableColumn(statements, data, true);
     }
     
-    protected final int addTableColumn(Connection connection,
-            DocumentModel model, String refstmt, DocumentModelItem item,
-            String dbtype) throws Exception {
-        return addTableColumn(connection, model, refstmt, item, dbtype, false);
+    protected final void addTableColumn(List<String> statements,
+            UpdateData data) throws Exception {
+        addTableColumn(statements, data, false);
     }
     
-    protected final int addTableColumn(Connection connection,
-            DocumentModel model, String refstmt, DocumentModelItem item,
-            String dbtype, boolean key) throws Exception {
-        DocumentModelItem reference;
-        String modelname = model.getTableName();
-        StringBuilder sb = new StringBuilder("alter table ").append(modelname);
-        DataElement ddelement = item.getDataElement();
+    protected final void addTableColumn(List<String> statements,
+            UpdateData data, boolean key) throws Exception {
         
-        sb.append((key)? " add key " : " add column ").append(
-                item.getTableFieldName());
-        setTableFieldsString(sb, ddelement, dbtype);
+        if (key)
+            data.table.key(
+                    data.fieldname,
+                    data.element.getType(),
+                    data.element.getLength(),
+                    data.element.getDecimals());
+        else
+            data.table.add(
+                    data.fieldname,
+                    data.element.getType(),
+                    data.element.getLength(),
+                    data.element.getDecimals());
+
+        if (data.reference != null)
+            addTableColumnReference(data);
+    }
+    
+    protected final void addTableColumnReference(UpdateData data) {
+        String constraint, tableref;
         
-        reference = item.getReference();
-        if (reference != null)
-            sb.append(refstmt).
-                    append(reference.getDocumentModel().getTableName()).
-                    append("(").
-                    append(reference.getTableFieldName()).append(")");
+        tableref = data.reference.getDocumentModel().getTableName();
+        constraint = new StringBuilder("fk_").
+                append(data.tablename).append("_").
+                append(data.fieldname).append("_").
+                append(tableref).toString();
         
-        return update(connection, sb.toString());
+        data.table.constraint(
+                constraint,
+                tableref,
+                data.fieldname,
+                data.reference.getTableFieldName());
     }
     
     /**
@@ -225,15 +238,6 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         }
         
         return null;
-    }
-    
-    protected final String getReferenceStatement(Documents documents)
-            throws Exception {
-        String dbtype = getSystemParameter(documents, "dbtype");
-        if (dbtype.equals("mysql") || dbtype.equals("postgres"))
-            return " references ";
-        else
-            return " foreign key references ";
     }
     
     protected final int insertModelItem(Connection connection,
