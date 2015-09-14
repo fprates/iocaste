@@ -137,6 +137,9 @@
     	
     	<!-- transport -->
     	<ant antfile="${basedir}/src/transport/build.xml"/>
+        
+        <!-- copy utility -->
+        <ant antfile="${basedir}/src/copy/build.xml"/>
     	
         <!-- template -->
         <ant antfile="${basedir}/src/template/build.xml"/>
