@@ -571,6 +571,12 @@ public class Documents extends AbstractServiceInterface {
         return call(message);
     }
     
+    public final int save(ExtendedObject[] objects) {
+        Message message = new Message("save_documents");
+        message.add("objects", objects);
+        return call(message);
+    }
+    
     /**
      * Seleciona entradas de tabela a partir de query.
      * 
