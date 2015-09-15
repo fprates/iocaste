@@ -17,7 +17,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
     public final DocumentModel build(Connection connection, Documents documents,
             String modelname) throws Exception {
         DataElement element;
-        DocumentModel document;
+        DocumentModel document, reference;
         int i;
         String itemref, name, namespace;
         String[] composed;
@@ -66,8 +66,9 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
                 itemref = (String)columns.get("ITREF");
                 if (itemref != null) {
                     composed = itemref.split("\\.");
-                    item.setReference(run(connection, documents, composed[0]).
-                            getModelItem(composed[1]));
+                    reference = run(connection, documents, composed[0]);
+                    if (reference != null)
+                        item.setReference(reference.getModelItem(composed[1]));
                 }
                 
                 shlines = select(connection, QUERIES[SH_REFERENCE], 0, name);
