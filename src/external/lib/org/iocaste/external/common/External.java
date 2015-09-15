@@ -49,7 +49,7 @@ public class External extends AbstractServiceInterface {
         ComplexDocument connection;
         
         external = new External(function);
-        connection = external.getConnectionData("PRD");
+        connection = external.getConnectionData(port);
         if (connection == null)
             throw new RuntimeException("remote connection config undefined.");
         
