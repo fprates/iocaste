@@ -26,7 +26,7 @@ public class SaveDocuments extends AbstractDocumentsHandler {
             if (savedocument.run(connection, object) != 1)
                 throw new IocasteException("error on saving object.");
         
-        return null;
+        return 1;
     }
 
 }

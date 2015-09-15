@@ -67,13 +67,21 @@ public class Update extends AbstractHandler {
         } catch (SQLSyntaxErrorException e) {
             throw e;
         } catch (SQLException e) {
-            if (database.config.dbtype.equals("hsqldb")) {
+            switch (database.config.dbtype) {
+            case "hsqldb":
                 i = e.getErrorCode();
-                switch(i) {
+                switch (i) {
                 case -177:
                     throw e;
                 }
-                    
+                break;
+            case "mysql":
+                i = e.getErrorCode();
+                switch (i) {
+                case 1205:
+                    throw e;
+                }
+                break;
             }
             return -1;
         } finally {

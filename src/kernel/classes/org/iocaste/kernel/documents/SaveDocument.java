@@ -1,6 +1,7 @@
 package org.iocaste.kernel.documents;
 
 import java.sql.Connection;
+import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -21,10 +22,12 @@ public class SaveDocument extends AbstractDocumentsHandler {
     
     public int run(Connection connection, ExtendedObject object)
             throws Exception {
+        GetDocumentModel getmodel;
         Object[] criteria;
         DocumentModelItem ns;
-        String query;
+        String query, modelname;
         Documents documents;
+        Map<String,String> queries;
         DocumentModel model = object.getModel();
         DocumentModelItem[] itens = model.getItens();
         int i = itens.length;
@@ -45,7 +48,15 @@ public class SaveDocument extends AbstractDocumentsHandler {
         }
         
         documents = getFunction();
-        query = documents.cache.queries.get(model.getName()).get("insert");
+        modelname = model.getName();
+        queries = documents.cache.queries.get(modelname);
+        if (queries == null) {
+            getmodel = documents.get("get_document_model");
+            getmodel.run(connection, documents, modelname);
+            queries = documents.cache.queries.get(model.getName());
+        }
+        
+        query = queries.get("insert");
         return update(connection, query, criteria);
     }
 }
