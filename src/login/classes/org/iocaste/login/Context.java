@@ -1,7 +1,6 @@
 package org.iocaste.login;
 
-import java.util.Properties;
-
+import org.iocaste.appbuilder.common.AbstractMessagesSource;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
@@ -11,7 +10,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 public class Context implements ExtendedContext {
     private DataElement username, secret;
     public DocumentModel loginmodel, chgscrtmodel;
-    public Properties messages;
+    public Messages messages;
     public String uname;
     
     public Context() {
@@ -21,18 +20,7 @@ public class Context implements ExtendedContext {
                 "SECRET", DataType.CHAR, 12, DataType.KEEPCASE);
         loginmodel = loginmodel();
         chgscrtmodel = chgscrtmodel();
-        
-        messages = new Properties();
-        messages.put("authentic", "Autenticação");
-        messages.put("changesecret", "Alterar");
-        messages.put("CONFIRM", "Repita a senha");
-        messages.put("connect", "Conectar");
-        messages.put("invalid.login", "Usuário ou senha inválidos.");
-        messages.put("LOCALE", "Idioma");
-        messages.put("password.change", "Alteração de senha");
-        messages.put("password.mismatch", "Senhas não são iguais.");
-        messages.put("SECRET", "Senha");
-        messages.put("USERNAME", "Usuário");
+        messages = new Messages();
     }
 
     private final DocumentModel chgscrtmodel() {
@@ -106,5 +94,21 @@ public class Context implements ExtendedContext {
         model.add(item);
         
         return item;
+    }
+}
+
+class Messages extends AbstractMessagesSource {
+    
+    public Messages() {
+        put("authentic", "Autenticação");
+        put("changesecret", "Alterar");
+        put("CONFIRM", "Repita a senha");
+        put("connect", "Conectar");
+        put("invalid.login", "Usuário ou senha inválidos.");
+        put("LOCALE", "Idioma");
+        put("password.change", "Alteração de senha");
+        put("password.mismatch", "Senhas não são iguais.");
+        put("SECRET", "Senha");
+        put("USERNAME", "Usuário");
     }
 }

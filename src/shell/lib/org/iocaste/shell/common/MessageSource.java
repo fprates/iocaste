@@ -28,7 +28,7 @@ public class MessageSource {
      * Define properties com mensagens.
      * @param messages mensagens.
      */
-    public final void addMessages(Map<Object, Object> messages) {
+    public final void addMessages(Map<String, String> messages) {
         this.messages.putAll(messages);
     }
     

@@ -1,8 +1,6 @@
 package org.iocaste.appbuilder;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.iocaste.appbuilder.common.AbstractMessagesSource;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
@@ -25,12 +23,8 @@ public class Main extends AbstractModelViewer {
         Documents documents;
         String msgsource = getParameter("msgsource");
         AppBuilderLink link = getReceivedLink();
-        Map<Object, Object> messages = new HashMap<>();
         
-        messages.put("code.exists", "Documento já existe.");
-        messages.put("invalid.code", "Código de documento inválido.");
-        messages.put("record.saved", "Documento %s gravado com sucesso.");
-        addMessages(messages);
+        add(new Messages());
         
         if (msgsource != null)
             setMessageSource(msgsource);
@@ -61,5 +55,14 @@ public class Main extends AbstractModelViewer {
         defaultinstall.setProgramAuthorization("APPBUILDER.EXECUTE");
         
         installObject("messages", new TextsInstall());
+    }
+}
+
+class Messages extends AbstractMessagesSource {
+    
+    public Messages() {
+        put("code.exists", "Documento já existe.");
+        put("invalid.code", "Código de documento inválido.");
+        put("record.saved", "Documento %s gravado com sucesso.");
     }
 }

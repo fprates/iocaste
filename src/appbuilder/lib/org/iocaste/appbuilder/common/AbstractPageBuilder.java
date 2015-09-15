@@ -21,6 +21,11 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         export("install", "install");
         export("fields_properties_get", new GetFieldsProperties());
     }
+
+    
+    protected final void add(AbstractMessagesSource messages) {
+        addMessages(messages.get());
+    }
     
     public abstract void config(PageBuilderContext context) throws Exception;
     

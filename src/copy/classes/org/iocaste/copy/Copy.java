@@ -43,6 +43,7 @@ public class Copy extends AbstractActionHandler {
         iocaste.commit();
         
         external.disconnect();
+        message(Const.STATUS, "sucessful.copy");
     }
 
 }

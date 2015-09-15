@@ -47,7 +47,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * 
      * @param messages
      */
-    protected final void addMessages(Map<Object, Object> messages) {
+    protected final void addMessages(Map<String, String> messages) {
         getviewdata.addMessages(messages);
     }
     

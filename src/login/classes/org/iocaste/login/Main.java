@@ -26,7 +26,7 @@ public class Main extends AbstractPageBuilder {
         profile.content.bgcolor = "#202020";
         profile.content.width = "100%";
         
-        addMessages(extcontext.messages);
+        add(extcontext.messages);
     }
 
     @Override

@@ -19,7 +19,7 @@ public class GetViewData extends AbstractHandler {
     public Map<String, List<String>> validables;
     public Map<String, Validator> validators;
     
-    public final void addMessages(Map<Object, Object> messages) {
+    public final void addMessages(Map<String, String> messages) {
         this.messages.addMessages(messages);
     }
     

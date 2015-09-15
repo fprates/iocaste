@@ -1,5 +1,6 @@
 package org.iocaste.copy;
 
+import org.iocaste.appbuilder.common.AbstractMessagesSource;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
@@ -12,6 +13,8 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) throws Exception {
         StandardPanel panel;
         Context extcontext;
+        
+        add(new Messages());
         
         extcontext = new Context();
         panel = new StandardPanel(context);
@@ -38,4 +41,16 @@ class MainPage extends AbstractPanelPage {
         submit("copy", new Copy());
     }
     
+}
+
+class Messages extends AbstractMessagesSource {
+    
+    public Messages() {
+        put("COPY", "Copiar");
+        put("NAME", "Modelo");
+        put("NAMESPACE", "Namespace");
+        put("no.records", "Sem registros para copiar.");
+        put("PORT_NAME", "Porta de comunicação");
+        put("sucessful.copy", "Cópia bem sucedida.");
+    }
 }
