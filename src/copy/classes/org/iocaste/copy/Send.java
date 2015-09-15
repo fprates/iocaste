@@ -13,9 +13,12 @@ public class Send extends AbstractHandler {
         ExtendedObject[] objects = message.get("objects");
         
         documents = new Documents(getFunction());
-        for (ExtendedObject object : objects)
-            documents.save(object);
-        return null;
+        try {
+            return documents.save(objects);
+        } catch (Exception e) {
+            documents.rollback();
+            throw e;
+        }
     }
 
 }
