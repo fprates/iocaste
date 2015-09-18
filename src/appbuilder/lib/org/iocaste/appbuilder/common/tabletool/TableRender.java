@@ -103,6 +103,7 @@ public class TableRender extends AbstractTableHandler {
                 container, context.data.name.concat("_table"));
         context.table.setVisibleLines(context.data.vlines);
         context.table.setHeader(!context.data.noheader);
+        context.table.setBorderStyle(context.data.borderstyle);
         context.data.last = 0;
         
         model(function, context);

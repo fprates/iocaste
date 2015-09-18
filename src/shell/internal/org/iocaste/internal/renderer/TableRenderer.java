@@ -140,7 +140,7 @@ public class TableRenderer extends Renderer {
         }
         
         divtag = new XMLElement("div");
-        divtag.add("style", table.getBorderStyle());
+        divtag.add("class", table.getBorderStyle());
         divtag.addChild(tabletag);
         
         /*
