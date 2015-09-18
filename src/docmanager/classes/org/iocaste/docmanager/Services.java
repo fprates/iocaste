@@ -48,7 +48,7 @@ public class Services extends AbstractFunction {
         DocumentModelItem headerkey;
         String itemkey, modelname, reference, charitemid, charid, itemformat;
         long numid, numitemid;
-        int i, keytype;
+        int i, keytype, itemdigits;
         Object id;
         String cmodelname = message.get("cmodel_name");
         ExtendedObject head = message.get("head");
@@ -97,9 +97,9 @@ public class Services extends AbstractFunction {
         head.setNS(ns);
         document.setHeader(head);
         document.setNS(ns);
-        itemformat = message.getString("item_format");
-        if (itemformat == null)
-            itemformat = "%02d";
+        itemdigits = message.geti("item_digits");
+        itemformat = new StringBuilder("%0").
+                append(itemdigits).append("d").toString();
         
         for (ExtendedObject[] group : groups) {
             i = 0;
@@ -116,7 +116,7 @@ public class Services extends AbstractFunction {
                     id = charid;
                     break;
                 default:
-                    numitemid = (numid * 100) + i;
+                    numitemid = (numid * (int)(Math.pow(10, itemdigits))) + i;
                     item.set(itemkey, numitemid);
                     id = numid;
                     break;

@@ -33,13 +33,13 @@ public class DocumentManager extends AbstractServiceInterface {
     
     public final ComplexDocument save(String cmodelname, Object ns,
             ExtendedObject head, Collection<ExtendedObject[]> groups,
-            String itemformat) {
+            int itemdigits) {
         Message message = new Message("save");
         message.add("cmodel_name", cmodelname);
         message.add("head", head);
         message.add("groups", groups);
         message.add("ns", ns);
-        message.add("item_format", itemformat);
+        message.add("item_digits", itemdigits);
         return call(message);
     }
 }
