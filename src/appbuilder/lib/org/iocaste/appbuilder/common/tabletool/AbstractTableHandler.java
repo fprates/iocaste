@@ -132,9 +132,7 @@ public abstract class AbstractTableHandler {
     
     protected static final void additems(TableTool tabletool,
             Context context, List<TableToolItem> items) {
-        int j;
         int vlines = context.table.getVisibleLines();
-        int total = context.table.size();
         
         if ((items == null) || (items.size() == 0)) {
             if (vlines == 0)
@@ -143,17 +141,14 @@ public abstract class AbstractTableHandler {
             for (int i = 0; i < vlines; i++)
                 additem(tabletool, context, null, -1);
         } else {
-            j = -1;
-            for (TableToolItem item : items) {
-                j++;
-                if ((vlines == j) && (vlines > 0))
-                    break;
-                
+            for (TableToolItem item : items)
                 additem(tabletool, context, item, -1);
-            }
         }
-        
-        context.table.setTopLine(total);
+    }
+    
+    private static final <T extends Element> T getElement(
+            TableToolData data, String name) {
+        return data.context.view.getElement(name.concat(data.name));
     }
     
     protected static final Table getTable(TableToolData data) {
@@ -207,6 +202,11 @@ public abstract class AbstractTableHandler {
         extcontext.table.clear();
         extcontext.data = data;
         extcontext.data.last = 0;
+        extcontext.accept = getElement(data, TableTool.ACCEPT);
+        extcontext.add = getElement(data, TableTool.ADD);
+        extcontext.remove = getElement(data, TableTool.REMOVE);
+        extcontext.prev = getElement(data, TableTool.PREVIOUS);
+        extcontext.next = getElement(data, TableTool.NEXT);
         setObjects(tabletool, extcontext);
     }
     
@@ -216,6 +216,7 @@ public abstract class AbstractTableHandler {
      */
     protected static final void setObjects(TableTool tabletool, Context context)
     {
+        boolean visible;
         List<TableToolItem> items = context.data.getItems();
         
         if (items.size() == 0) {
@@ -232,6 +233,9 @@ public abstract class AbstractTableHandler {
         }
         
         additems(tabletool, context, items);
+        visible = (items.size() > context.data.vlines);
+        context.prev.setVisible(visible);
+        context.next.setVisible(visible);
     }
     
     /**
@@ -262,5 +266,5 @@ public abstract class AbstractTableHandler {
 class Context {
     public TableToolData data;
     public Table table;
-    public Button accept, add, remove;
+    public Button accept, add, remove, prev, next;
 }

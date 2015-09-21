@@ -5,12 +5,16 @@ import java.util.Set;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
+import org.iocaste.appbuilder.common.tabletool.actions.AcceptAction;
+import org.iocaste.appbuilder.common.tabletool.actions.AddAction;
+import org.iocaste.appbuilder.common.tabletool.actions.NextAction;
+import org.iocaste.appbuilder.common.tabletool.actions.PreviousAction;
+import org.iocaste.appbuilder.common.tabletool.actions.RemoveAction;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -20,12 +24,13 @@ import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Validator;
 import org.iocaste.shell.common.View;
-import org.iocaste.shell.common.ViewCustomAction;
 
 public class TableTool {
     public static final String ADD = "add";
     public static final String REMOVE = "remove";
     public static final String ACCEPT = "accept";
+    public static final String PREVIOUS = "previous";
+    public static final String NEXT = "next";
     public static final byte CONTINUOUS_UPDATE = 0;
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
@@ -201,10 +206,12 @@ public class TableTool {
      */
     private final void init(AbstractContext context, TableToolData data) {
         this.context = context;
-        accept = new Action(this, data, ACCEPT).getName();
-        add = new Action(this, data, ADD).getName();
-        remove = new Action(this, data, REMOVE).getName();
-
+        accept = new AcceptAction(this, data).getName();
+        add = new AddAction(this, data).getName();
+        remove = new RemoveAction(this, data).getName();
+        new PreviousAction(this, data);
+        new NextAction(this, data);
+        
         setTableData(data);
         TableRender.run(this, context.function, data);
         installValidators(data);
@@ -230,6 +237,22 @@ public class TableTool {
                 context.function.validate(input, column.validator); 
             }
         }
+    }
+    
+    public final void next() {
+        Table table = getTable();
+        int topline = table.getTopLine() + getTableData().vlines;
+        if (topline > table.size())
+            return;
+        getTable().setTopLine(topline);
+    }
+    
+    public final void previous() {
+        Table table = getTable();
+        int topline = table.getTopLine() - getTableData().vlines;
+        if (topline < 0)
+            return;
+        getTable().setTopLine(topline);
     }
     
     public final void refresh(TableToolData data) {
@@ -316,38 +339,4 @@ public class TableTool {
 class ValidatorData {
     public Class<? extends Validator> validator;
     public String[] inputs;
-}
-
-class Action implements ViewCustomAction {
-    private static final long serialVersionUID = 7220679345842901434L;
-    private String action, name;
-    private TableTool tabletool;
-    
-    public Action(TableTool tabletool, TableToolData data, String action) {
-        name = action.concat(data.name);
-        ((AbstractPage)tabletool.getContext().function).register(name, this);
-        
-        this.tabletool = tabletool;
-        this.action = action;
-    }
-    
-    @Override
-    public void execute(AbstractContext context) throws Exception {
-        switch (action) {
-        case TableTool.ACCEPT:
-            tabletool.accept();
-            break;
-        case TableTool.ADD:
-            tabletool.add();
-            break;
-        case TableTool.REMOVE:
-            tabletool.remove();
-            break;
-        }
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
 }

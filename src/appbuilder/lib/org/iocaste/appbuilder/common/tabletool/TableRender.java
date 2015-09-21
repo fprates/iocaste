@@ -93,9 +93,14 @@ public class TableRender extends AbstractTableHandler {
                 container, TableTool.ACCEPT.concat(context.data.name));
         context.add = new Button(
                 container, TableTool.ADD.concat(context.data.name));
-        context.remove = new Button(container,
-                TableTool.REMOVE.concat(context.data.name));
-        
+        context.remove = new Button(
+                container, TableTool.REMOVE.concat(context.data.name));
+        context.prev = new Button(
+                container, TableTool.PREVIOUS.concat(context.data.name));
+        context.prev.setText("<");
+        context.next = new Button(
+                container, TableTool.NEXT.concat(context.data.name));
+        context.next.setText(">");
         new StandardContainer(container, context.data.name.concat("_skip")).
                 setStyleClass("tt_skip");
         
