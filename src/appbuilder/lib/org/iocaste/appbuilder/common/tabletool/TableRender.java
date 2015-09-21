@@ -8,7 +8,6 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Function;
-import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.StyleSheet;
@@ -89,18 +88,7 @@ public class TableRender extends AbstractTableHandler {
         style.put("padding", "0.2em");
         style.put("margin", "0px");
         
-        context.accept = new Button(
-                container, TableTool.ACCEPT.concat(context.data.name));
-        context.add = new Button(
-                container, TableTool.ADD.concat(context.data.name));
-        context.remove = new Button(
-                container, TableTool.REMOVE.concat(context.data.name));
-        context.prev = new Button(
-                container, TableTool.PREVIOUS.concat(context.data.name));
-        context.prev.setText("<");
-        context.next = new Button(
-                container, TableTool.NEXT.concat(context.data.name));
-        context.next.setText(">");
+        tabletool.buildControls(container);
         new StandardContainer(container, context.data.name.concat("_skip")).
                 setStyleClass("tt_skip");
         
@@ -112,7 +100,7 @@ public class TableRender extends AbstractTableHandler {
         context.data.last = 0;
         
         model(function, context);
-        setMode(context);
+        setMode(tabletool, context);
         setObjects(tabletool, context);
     }
 

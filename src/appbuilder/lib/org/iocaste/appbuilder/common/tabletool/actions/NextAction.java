@@ -9,6 +9,7 @@ public class NextAction extends TableToolAction {
 
     public NextAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, TableTool.NEXT);
+        setText(">");
     }
 
     @Override

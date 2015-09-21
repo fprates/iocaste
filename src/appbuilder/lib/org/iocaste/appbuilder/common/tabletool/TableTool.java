@@ -1,21 +1,27 @@
 package org.iocaste.appbuilder.common.tabletool;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.tabletool.actions.AcceptAction;
 import org.iocaste.appbuilder.common.tabletool.actions.AddAction;
+import org.iocaste.appbuilder.common.tabletool.actions.FirstAction;
+import org.iocaste.appbuilder.common.tabletool.actions.LastAction;
 import org.iocaste.appbuilder.common.tabletool.actions.NextAction;
 import org.iocaste.appbuilder.common.tabletool.actions.PreviousAction;
 import org.iocaste.appbuilder.common.tabletool.actions.RemoveAction;
+import org.iocaste.appbuilder.common.tabletool.actions.TableToolAction;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
@@ -31,6 +37,8 @@ public class TableTool {
     public static final String ACCEPT = "accept";
     public static final String PREVIOUS = "previous";
     public static final String NEXT = "next";
+    public static final String FIRST = "first";
+    public static final String LAST = "last";
     public static final byte CONTINUOUS_UPDATE = 0;
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
@@ -38,9 +46,10 @@ public class TableTool {
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
     private AbstractContext context;
-    private String accept, add, remove, name;
+    private String name;
     private TableToolData data;
     private DocumentModel model;
+    private Map<String, TableToolAction> actions;
     
     public TableTool(PageBuilderContext context, String name) {
         ViewContext viewcontext = context.getView();
@@ -57,12 +66,10 @@ public class TableTool {
      * 
      */
     public final void accept() {
-        Table table = getTable();
-        
-        context.view.getElement(accept).setVisible(false);
-        context.view.getElement(add).setVisible(true);
-        context.view.getElement(remove).setVisible(true);
-        table.setTopLine(0);
+        getActionElement("accept").setVisible(false);
+        getActionElement("add").setVisible(true);
+        getActionElement("remove").setVisible(true);
+        getTable().setTopLine(0);
     }
     
     /**
@@ -75,9 +82,9 @@ public class TableTool {
             data.vlines++;
             break;
         default:
-            context.view.getElement(accept).setVisible(true);
-            context.view.getElement(add).setVisible(false);
-            context.view.getElement(remove).setVisible(false);
+            getActionElement("accept").setVisible(true);
+            getActionElement("add").setVisible(false);
+            getActionElement("remove").setVisible(false);
             break;
         }
         
@@ -104,12 +111,21 @@ public class TableTool {
         installValidators(data);
     }
     
+    public final void buildControls(Container container) {
+        for (String name : actions.keySet())
+            actions.get(name).build(container);
+    }
+    
     /**
      * 
      */
     public final void clear() {
         getTable().clear();
         getTableData().last = 0;
+    }
+    
+    public final void first() {
+        getTable().setTopLine(0);
     }
     
     /**
@@ -161,6 +177,10 @@ public class TableTool {
         return object;
     }
     
+    public final Element getActionElement(String name) {
+        return context.view.getElement(actions.get(name).getName());
+    }
+    
     /**
      * 
      * @return
@@ -206,11 +226,17 @@ public class TableTool {
      */
     private final void init(AbstractContext context, TableToolData data) {
         this.context = context;
-        accept = new AcceptAction(this, data).getName();
-        add = new AddAction(this, data).getName();
-        remove = new RemoveAction(this, data).getName();
-        new PreviousAction(this, data);
-        new NextAction(this, data);
+        actions = new LinkedHashMap<>();
+        for (TableToolAction action : new TableToolAction[] {
+                new AcceptAction(this, data),
+                new AddAction(this, data),
+                new RemoveAction(this, data),
+                new FirstAction(this, data),
+                new PreviousAction(this, data),
+                new NextAction(this, data),
+                new LastAction(this, data)
+        })
+            actions.put(action.getAction(), action);
         
         setTableData(data);
         TableRender.run(this, context.function, data);
@@ -239,12 +265,21 @@ public class TableTool {
         }
     }
     
+    public final void last() {
+        Table table = getTable();
+        int topline = getTableData().vlines;
+        int pages = table.size() / topline;
+        
+        topline *= pages;
+        table.setTopLine(topline);
+    }
+    
     public final void next() {
         Table table = getTable();
         int topline = table.getTopLine() + getTableData().vlines;
         if (topline > table.size())
             return;
-        getTable().setTopLine(topline);
+        table.setTopLine(topline);
     }
     
     public final void previous() {
@@ -252,7 +287,7 @@ public class TableTool {
         int topline = table.getTopLine() - getTableData().vlines;
         if (topline < 0)
             return;
-        getTable().setTopLine(topline);
+        table.setTopLine(topline);
     }
     
     public final void refresh(TableToolData data) {
@@ -325,6 +360,16 @@ public class TableTool {
             context = (PageBuilderContext)this.context;
             context.getView().getComponents().set(data);
         }
+    }
+    
+    public final void setVisibleNavigation(boolean visible) {
+        for (String action : new String[] {
+                TableTool.FIRST,
+                TableTool.LAST,
+                TableTool.PREVIOUS,
+                TableTool.NEXT
+        })
+            getActionElement(action).setVisible(visible);
     }
     
     /**

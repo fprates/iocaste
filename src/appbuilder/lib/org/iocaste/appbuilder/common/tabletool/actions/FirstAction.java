@@ -4,17 +4,17 @@ import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.shell.common.AbstractContext;
 
-public class PreviousAction extends TableToolAction {
-    private static final long serialVersionUID = 3180662889953589672L;
+public class FirstAction extends TableToolAction {
+    private static final long serialVersionUID = 5093350441578939032L;
 
-    public PreviousAction(TableTool tabletool, TableToolData data) {
-        super(tabletool, data, TableTool.PREVIOUS);
-        setText("<");
+    public FirstAction(TableTool tabletool, TableToolData data) {
+        super(tabletool, data, TableTool.FIRST);
+        setText("<<");
     }
 
     @Override
     public void execute(AbstractContext context) throws Exception {
-        tabletool.previous();
+        tabletool.first();
     }
 
 }

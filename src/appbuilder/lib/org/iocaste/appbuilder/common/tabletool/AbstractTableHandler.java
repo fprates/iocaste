@@ -8,7 +8,6 @@ import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -146,11 +145,6 @@ public abstract class AbstractTableHandler {
         }
     }
     
-    private static final <T extends Element> T getElement(
-            TableToolData data, String name) {
-        return data.context.view.getElement(name.concat(data.name));
-    }
-    
     protected static final Table getTable(TableToolData data) {
         return data.context.view.getElement(data.name.concat("_table"));
     }
@@ -159,20 +153,20 @@ public abstract class AbstractTableHandler {
      * 
      * @param mode
      */
-    protected static final void setMode(Context context) {
+    protected static final void setMode(TableTool tabletool, Context context) {
         switch (context.data.mode) {
         case TableTool.UPDATE:
         case TableTool.CONTINUOUS_UPDATE:
-            context.accept.setVisible(false);
-            context.add.setVisible(true);
-            context.remove.setVisible(true);
+            tabletool.getActionElement("accept").setVisible(false);
+            tabletool.getActionElement("add").setVisible(true);
+            tabletool.getActionElement("remove").setVisible(true);
             break;
             
         case TableTool.DISPLAY:
         case TableTool.CONTINUOUS_DISPLAY:
-            context.accept.setVisible(false);
-            context.add.setVisible(false);
-            context.remove.setVisible(false);
+            tabletool.getActionElement("accept").setVisible(false);
+            tabletool.getActionElement("add").setVisible(false);
+            tabletool.getActionElement("remove").setVisible(false);
             context.table.setEnabled(false);
             for (String column : context.data.columns.keySet())
                 context.data.columns.get(column).disabled = true;
@@ -202,11 +196,6 @@ public abstract class AbstractTableHandler {
         extcontext.table.clear();
         extcontext.data = data;
         extcontext.data.last = 0;
-        extcontext.accept = getElement(data, TableTool.ACCEPT);
-        extcontext.add = getElement(data, TableTool.ADD);
-        extcontext.remove = getElement(data, TableTool.REMOVE);
-        extcontext.prev = getElement(data, TableTool.PREVIOUS);
-        extcontext.next = getElement(data, TableTool.NEXT);
         setObjects(tabletool, extcontext);
     }
     
@@ -234,8 +223,7 @@ public abstract class AbstractTableHandler {
         
         additems(tabletool, context, items);
         visible = (items.size() > context.data.vlines);
-        context.prev.setVisible(visible);
-        context.next.setVisible(visible);
+        tabletool.setVisibleNavigation(visible);
     }
     
     /**
@@ -266,5 +254,4 @@ public abstract class AbstractTableHandler {
 class Context {
     public TableToolData data;
     public Table table;
-    public Button accept, add, remove, prev, next;
 }
