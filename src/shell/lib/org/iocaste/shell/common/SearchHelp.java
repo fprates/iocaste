@@ -183,7 +183,8 @@ public class SearchHelp extends PopupControl {
             if (!element.isDataStorable()) {
                 component = (Component)element;
                 value = object.get(modelitem.getName());
-                component.setText((value == null)? "" : value.toString());
+                if (component.getText() == null)
+                    component.setText((value == null)? "" : value.toString());
                 if (element.getType() != Const.LINK)
                     continue;
                 

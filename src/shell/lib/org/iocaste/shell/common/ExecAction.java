@@ -26,6 +26,8 @@ public class ExecAction extends AbstractHandler {
     
     @Override
     public Object run(Message message) throws Exception {
+        Element element;
+        ControlComponent control;
         Validator validator;
         InputComponent input;
         List<String> handlers;
@@ -66,6 +68,15 @@ public class ExecAction extends AbstractHandler {
         }
         
         customaction = customactions.get(context.action);
+        if (customaction == null) {
+            element = context.view.getElement(context.action);
+            if (element.isControlComponent()) {
+                control = (ControlComponent)element;
+                context.action = control.getAction();
+                customaction = customactions.get(context.action);
+            }
+        }
+        
         if (customaction != null) {
             customaction.execute(context);
         } else {

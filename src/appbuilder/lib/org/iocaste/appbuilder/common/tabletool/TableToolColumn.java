@@ -8,7 +8,7 @@ import org.iocaste.shell.common.TableColumn;
 
 public class TableToolColumn implements Serializable {
     private static final long serialVersionUID = -4664704410408423891L;
-    public String name, sh, action, validator;
+    public String name, sh, action, validator, text;
     public boolean disabled;
     public Const type;
     public Map<String, Object> values;

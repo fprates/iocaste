@@ -8,6 +8,7 @@ import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.CheckBox;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -30,6 +31,7 @@ public abstract class AbstractTableHandler {
         InputComponent input;
         String name, paramlink, nsinput;
         Link link;
+        Button button;
         TableItem item;
         ExtendedObject object;
         TableColumn[] tcolumns = context.table.getColumns();
@@ -58,9 +60,8 @@ public abstract class AbstractTableHandler {
                     element = new Text(item, name);
                     break;
                 case LIST_BOX:
-                    input = new ListBox(item, name);
+                    element = input = new ListBox(item, name);
                     input.setDataElement(delement);
-                    element = input;
                     if (column.values == null)
                         break;
                     
@@ -68,13 +69,11 @@ public abstract class AbstractTableHandler {
                         ((ListBox)input).add(vname, column.values.get(vname));
                     break;
                 case TEXT_FIELD:
-                    input = new TextField(item, name);
+                    element = input = new TextField(item, name);
                     input.setDataElement(delement);
-                    element = input;
                     break;
                 case LINK:
-                    link = new Link(item, name, column.action);
-                    element = link;
+                    element = link = new Link(item, name, column.action);
                     if (object == null)
                         break;
 
@@ -86,6 +85,11 @@ public abstract class AbstractTableHandler {
                             append(".").append(name).toString();
                     
                     link.add(paramlink, value.toString());
+                    break;
+                case BUTTON:
+                    element = button = new Button(item, name);
+                    button.setAction(column.action);
+                    button.setText(column.text);
                     break;
                 default:
                     throw new RuntimeException("component type not supported"
