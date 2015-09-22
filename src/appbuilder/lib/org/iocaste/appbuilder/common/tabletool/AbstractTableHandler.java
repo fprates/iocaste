@@ -74,6 +74,7 @@ public abstract class AbstractTableHandler {
                     break;
                 case LINK:
                     element = link = new Link(item, name, column.action);
+                    link.setText(null);
                     if (object == null)
                         break;
 
