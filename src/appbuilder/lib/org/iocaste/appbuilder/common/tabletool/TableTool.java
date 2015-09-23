@@ -227,6 +227,10 @@ public class TableTool {
     private final void init(AbstractContext context, TableToolData data) {
         this.context = context;
         actions = new LinkedHashMap<>();
+        if (data.actions != null)
+            for (String action : data.actions)
+                actions.put(action, new CustomAction(this, data, action));
+        
         for (TableToolAction action : new TableToolAction[] {
                 new AcceptAction(this, data),
                 new AddAction(this, data),

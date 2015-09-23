@@ -41,8 +41,6 @@ public class Table extends AbstractContainer {
     private Map<String, TableColumn> columns;
     private byte seltype;
     private RadioGroup group;
-    private Container linecontrol;
-    private String[] actions;
     private String text, borderstyle;
     private int topline, vlines;
     
@@ -78,15 +76,6 @@ public class Table extends AbstractContainer {
             throw new RuntimeException("Table column has already exists.");
         
         columns.put(column.getName(), column);
-    }
-    
-    /**
-     * - not ready, do not use - 
-     * @param action
-     * @return
-     */
-    public final String getAction(byte action) {
-        return actions[action];
     }
     
     /**
@@ -128,14 +117,6 @@ public class Table extends AbstractContainer {
      */
     public Set<TableItem> getItems() {
         return getElements();
-    }
-    
-    /**
-     * - not ready, do not use -
-     * @return
-     */
-    public final Container getLineControl() {
-        return linecontrol;
     }
     
     /**
@@ -196,7 +177,6 @@ public class Table extends AbstractContainer {
         columns = new LinkedHashMap<>();
         seltype = MULTIPLE;
         group = new RadioGroup(this, getName().concat(".mark"));
-        actions = new String[2];
         borderstyle = "width: 100%; overflow: auto;";
         
         setStyleClass("table_area");
@@ -215,15 +195,6 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * - not ready, do not use - 
-     * @param action
-     * @param method
-     */
-    public final void setAction(byte action, String method) {
-        actions[action] = method;
-    }
-    
-    /**
      * 
      * @param borderstyle
      */
@@ -237,14 +208,6 @@ public class Table extends AbstractContainer {
      */
     public final void setHeader(boolean header) {
         this.header = header;
-    }
-    
-    /**
-     * - not ready, do not use -
-     * @param linecontrol
-     */
-    public final void setLineControl(Container linecontrol) {
-        this.linecontrol = linecontrol;
     }
     
     /**

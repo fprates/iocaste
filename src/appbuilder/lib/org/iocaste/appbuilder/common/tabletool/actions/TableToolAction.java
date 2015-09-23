@@ -3,7 +3,6 @@ package org.iocaste.appbuilder.common.tabletool.actions;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ViewCustomAction;
@@ -13,11 +12,17 @@ public abstract class TableToolAction implements ViewCustomAction {
     private String action, name, text;
     private TableToolData data;
     protected TableTool tabletool;
-    
+
     public TableToolAction(
             TableTool tabletool, TableToolData data, String action) {
+        this(tabletool, data, action, true);
+    }
+    
+    public TableToolAction(TableTool tabletool,
+            TableToolData data, String action, boolean register) {
         name = action.concat(data.name);
-        ((AbstractPage)tabletool.getContext().function).register(name, this);
+        if (register)
+            tabletool.getContext().function.register(name, this);
         
         this.tabletool = tabletool;
         this.action = action;

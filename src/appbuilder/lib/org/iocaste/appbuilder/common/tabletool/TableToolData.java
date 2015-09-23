@@ -19,7 +19,7 @@ public class TableToolData implements Serializable {
     public boolean mark, enabled, noheader;
     public int vlines, step, last, increment;
     public byte mode;
-    public String[] hide, show, enableonly, ordering;
+    public String[] hide, show, enableonly, ordering, actions;
     public Map<String, TableToolColumn> columns;
     
     public TableToolData() {
