@@ -35,12 +35,15 @@ public abstract class AbstractTableHandler {
         ExtendedObject object;
         TableColumn[] tcolumns = context.table.getColumns();
         TableItem item = new TableItem(context.table, pos);
-         
-        ttitem.set(item);
-        if (ttitem != null)
-            item.setSelected(ttitem.selected);
         
-        object = (ttitem == null)? null : ttitem.object;
+        if (ttitem != null) {
+            object = ttitem.object;
+            ttitem.set(item);
+            item.setSelected(ttitem.selected);
+        } else {
+            object = null;
+        }
+        
         nsinput = null;
         for (TableColumn tcolumn : tcolumns) {
             if (tcolumn.isMark())
