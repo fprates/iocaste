@@ -16,7 +16,9 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.RangeOption;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
+import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.EventHandler;
@@ -318,6 +320,22 @@ public class Controller {
         config.state.messagetext = messages.get(text);
     }
     
+    private static final boolean isElementVisible(Element element) {
+        Container container;
+        
+        if (element == null)
+            return true;
+        
+        if (!element.isVisible())
+            return false;
+        
+        if (element.isContainable())
+            container = ((Container)element).getContainer();
+        else
+            container = ((Component)element).getContainer();
+        
+        return isElementVisible(container);
+    }
     /**
      * 
      * @param config
@@ -349,6 +367,9 @@ public class Controller {
             
             input = (InputComponent)element;
             if (!input.isSelectable())
+                continue;
+            
+            if (!isElementVisible(input))
                 continue;
             
             setString(config.values, name, "off");

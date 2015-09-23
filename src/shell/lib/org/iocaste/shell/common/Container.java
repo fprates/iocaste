@@ -46,6 +46,12 @@ public interface Container extends Element {
     public abstract void clear();
     
     /**
+     * 
+     * @return
+     */
+    public abstract Container getContainer();
+    
+    /**
      * Retorna elemento por seu nome html.
      * @param name nome html.
      * @return

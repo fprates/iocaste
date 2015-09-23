@@ -39,6 +39,7 @@ public abstract class AbstractContainer
     extends AbstractElement implements Container {
     private static final long serialVersionUID = 8676224931708725226L;
     private Map<String, String> elements;
+    private String container;
 
     public AbstractContainer(View view, Const type, String name) {
         super(type, name);
@@ -53,6 +54,7 @@ public abstract class AbstractContainer
         
         elements = new LinkedHashMap<>();
         container.add(this);
+        this.container = container.getHtmlName();
         setLocale(container.getLocale());
     }
     
@@ -83,6 +85,17 @@ public abstract class AbstractContainer
         for (String name : elements.values())
             view.remove(view.getElement(name));
         elements.clear();
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Container#getContainer()
+     */
+    @Override
+    public final Container getContainer() {
+        if (container == null)
+            return null;
+        return (Container)getView().getElement(container);
     }
     
     /*

@@ -66,23 +66,23 @@ public class TableRender extends AbstractTableHandler {
     }
     
     public static final void run(TableTool tabletool, Function function,
-            TableToolData data) {
+            Context context) {
         StyleSheet stylesheet;
         Container container, supercontainer;
         Map<String, String> style;
-        Context context = new Context();
         
-        context.data = data;
-        if (data.container != null) {
-            supercontainer = data.context.view.getElement(data.container);
-            container = new StandardContainer(supercontainer, data.name);
+        if (context.data.container != null) {
+            supercontainer = context.data.context.view.getElement(
+                    context.data.container);
+            container = new StandardContainer(
+                    supercontainer, context.data.name);
         } else {
-            container = data.context.view.getElement(data.name);
+            container = context.data.context.view.getElement(context.data.name);
         }
         
-        container.setStyleClass(data.style);
+        container.setStyleClass(context.data.style);
         
-        stylesheet = data.context.view.styleSheetInstance();
+        stylesheet = context.data.context.view.styleSheetInstance();
         style = stylesheet.newElement(".tt_skip");
         style.put("border-style", "none");
         style.put("padding", "0.2em");
@@ -94,7 +94,6 @@ public class TableRender extends AbstractTableHandler {
         
         context.table = new Table(
                 container, context.data.name.concat("_table"));
-        context.table.setVisibleLines(context.data.vlines);
         context.table.setHeader(!context.data.noheader);
         context.table.setBorderStyle(context.data.borderstyle);
         context.data.last = 0;

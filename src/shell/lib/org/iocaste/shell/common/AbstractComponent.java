@@ -33,22 +33,19 @@ package org.iocaste.shell.common;
 public abstract class AbstractComponent extends AbstractElement
       implements Component {
     private static final long serialVersionUID = -5327168368336946819L;
-    private Container container;
-    private String text;
+    private String container, text;
     
     public AbstractComponent(View view, Const type, String name) {
         super(type, name);
-        
         view.index(this);
     }
     
     public AbstractComponent(Container container, Const type, String name) {
         super(type, name);
-        
-        this.container = container;
         if (container == null)
             throw new RuntimeException(
                     name.concat(" had an undefined container."));
+        this.container = container.getHtmlName();
         container.add(this);
     }
     
@@ -58,7 +55,7 @@ public abstract class AbstractComponent extends AbstractElement
      */
     @Override
     public final Container getContainer() {
-        return container;
+        return getView().getElement(container);
     }
     
     /*
@@ -85,9 +82,13 @@ public abstract class AbstractComponent extends AbstractElement
      */
     @Override
     public void setHtmlName(String htmlname) {
+        Container container;
+        View view = getView();
+        
         super.setHtmlName(htmlname);
+        container = view.getElement(this.container);
         if (container == null)
-            getView().index(this);
+            view.index(this);
         else
             container.add(this);
     }

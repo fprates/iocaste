@@ -42,7 +42,7 @@ public class Table extends AbstractContainer {
     private byte seltype;
     private RadioGroup group;
     private String text, borderstyle;
-    private int topline, vlines;
+    private int topline;
     
     public Table(View view, String name) {
         super(view, Const.TABLE, name);
@@ -144,14 +144,6 @@ public class Table extends AbstractContainer {
     }
     
     /**
-     * Retorna quantidade de linhas visíveis
-     * @return
-     */
-    public final int getVisibleLines() {
-        return vlines;
-    }
-    
-    /**
      * Retorna status de exibição da header.
      * @return true, exibe header.
      */
@@ -240,14 +232,6 @@ public class Table extends AbstractContainer {
      */
     public final void setTopLine(int topline) {
         this.topline = topline;
-    }
-    
-    /**
-     * Define quantidade de linhas visíveis
-     * @param vlines
-     */
-    public final void setVisibleLines(int vlines) {
-        this.vlines = vlines;
     }
     
     @Override

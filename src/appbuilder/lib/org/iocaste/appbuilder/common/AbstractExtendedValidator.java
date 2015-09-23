@@ -45,8 +45,8 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
             if (!isItemElementMatch(element, value))
                 continue;
             
-            ttitem = new TableToolItem();
-            ttitem.item = item;
+            ttitem = new TableToolItem(entry.data);
+            ttitem.set(item);
             ttitem.selected = item.isSelected();
             ttitem.object = entry.component.get(entry.data, item);
             
@@ -68,13 +68,14 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
     
     protected final void setInputs(TableToolItem ttitem) {
         String name;
-        Table table = ttitem.item.getTable();
+        TableItem item = ttitem.get();
+        Table table = item.getTable();
         
         for (TableColumn column : table.getColumns()) {
             if (column.isMark())
                 continue;
             name = column.getName();
-            setInput(ttitem.item, name, ttitem.object.get(name));
+            setInput(item, name, ttitem.object.get(name));
         }
     }
     

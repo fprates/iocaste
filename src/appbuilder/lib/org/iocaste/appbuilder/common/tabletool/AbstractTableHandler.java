@@ -32,11 +32,11 @@ public abstract class AbstractTableHandler {
         String name, paramlink, nsinput;
         Link link;
         Button button;
-        TableItem item;
         ExtendedObject object;
         TableColumn[] tcolumns = context.table.getColumns();
-        
-        item = new TableItem(context.table, pos);
+        TableItem item = new TableItem(context.table, pos);
+         
+        ttitem.set(item);
         if (ttitem != null)
             item.setSelected(ttitem.selected);
         
@@ -133,10 +133,27 @@ public abstract class AbstractTableHandler {
         
         tabletool.set(item, object);
     }
+
+    public static final void setItemsVisibility(TableTool tabletool,
+            Context context, List<TableToolItem> ttitems) {
+        boolean visible;
+        int l, topline, lastline, vlines;
+        
+        l = 0;
+        topline = context.table.getTopLine();
+        vlines = (context.data.vlines == 0)?
+                ttitems.size() : context.data.vlines;
+        lastline = topline + vlines - 1;
+        for (TableToolItem ttitem : ttitems) {
+            visible = !((l < topline) || (l > lastline));
+            ttitem.get().setVisible(visible);
+            l++;
+        }
+    }
     
     protected static final void additems(TableTool tabletool,
             Context context, List<TableToolItem> items) {
-        int vlines = context.table.getVisibleLines();
+        int vlines = context.data.vlines;
         
         if ((items == null) || (items.size() == 0)) {
             if (vlines == 0)
@@ -147,6 +164,7 @@ public abstract class AbstractTableHandler {
         } else {
             for (TableToolItem item : items)
                 additem(tabletool, context, item, -1);
+            setItemsVisibility(tabletool, context, items);
         }
     }
     
@@ -193,7 +211,7 @@ public abstract class AbstractTableHandler {
         if (context.data.show != null)
             setVisibility(context, true, context.data.show);
     }
-    
+
     protected static void setObject(TableTool tabletool, TableToolData data) {
         Context extcontext = new Context();
         

@@ -2,12 +2,10 @@ package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
@@ -21,11 +19,9 @@ public class TableRenderer extends Renderer {
      * @return
      */
     public static final XMLElement render(Table table, Config config) {
-        Locale locale;
         String title, name, text;
-        Parameter parameter;
         Set<TableItem> items;
-        int vlines, lastline, topline, size, i;
+        int topline, i;
         XMLElement tag, trtag, thtag, divtag;
         XMLElement tabletag = new XMLElement("table");
         List<InputComponent> hidden = new ArrayList<>();
@@ -69,27 +65,16 @@ public class TableRenderer extends Renderer {
         }
         
         items = table.getItems();
-        size = items.size();
         if (items.size() == 0) {
             tabletag.addInner("");
         } else {
             tag = new XMLElement("tbody");
-            vlines = table.getVisibleLines();
             topline = table.getTopLine();
-            
-            if (vlines == 0)
-                lastline = topline + size;
-            else
-                lastline = topline + vlines;
             
             i = 0;
             for (TableItem item : items) {
-                if (i++ < topline)
+                if ((i++ < topline) || !item.isVisible())
                     continue;
-                
-                if ((i - 1) == lastline)
-                    break;
-                
                 tags.clear();
                 tags.add(TableItemRenderer.render(table, item, config));
                 hidden.addAll(TableItemRenderer.getHidden());
@@ -102,25 +87,6 @@ public class TableRenderer extends Renderer {
         divtag = new XMLElement("div");
         divtag.add("class", table.getBorderStyle());
         divtag.addChild(tabletag);
-        
-        /*
-         * componentes de entrada de colunas invisíveis são tratados
-         * como parâmetros, pois precisam ter seu conteúdo armazenado.
-         */
-        locale = table.getLocale();
-        for (InputComponent input : hidden) {
-            parameter = new Parameter(config.getView(), input.getHtmlName());
-            parameter.setModelItem(input.getModelItem());
-            parameter.setLocale(locale);
-            parameter.setNSReference(input.getNSReference());
-            
-            if (input.isBooleanComponent())
-                parameter.set((input.isSelected())? "on" : "off");
-            else
-                parameter.set(input.get());
-            
-            divtag.addChild(ParameterRenderer.render(parameter));
-        }
         return divtag;
     }
 }

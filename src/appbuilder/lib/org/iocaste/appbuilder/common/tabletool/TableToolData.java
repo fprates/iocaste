@@ -34,7 +34,7 @@ public class TableToolData implements Serializable {
     public final void add(ExtendedObject object) {
         TableToolItem item;
         
-        item = new TableToolItem();
+        item = new TableToolItem(this);
         item.object = object;
         items.add(item);
     }
