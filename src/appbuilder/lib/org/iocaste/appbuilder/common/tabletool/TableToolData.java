@@ -31,12 +31,13 @@ public class TableToolData implements Serializable {
         items = new ArrayList<>();
     }
     
-    public final void add(ExtendedObject object) {
+    public final TableToolItem add(ExtendedObject object) {
         TableToolItem item;
         
         item = new TableToolItem(this);
         item.object = object;
         items.add(item);
+        return item;
     }
     
     public final void add(Collection<ExtendedObject> objects) {

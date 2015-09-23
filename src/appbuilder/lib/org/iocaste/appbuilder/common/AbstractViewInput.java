@@ -242,10 +242,11 @@ public abstract class AbstractViewInput implements ViewInput {
         entry.update = !init;
     }
     
-    protected final void tableitemadd(String table, ExtendedObject object) {
+    protected final TableToolItem tableitemadd(String table, ExtendedObject object) {
         TableToolEntry entry = getTableEntry(table);
-        entry.data.add(object);
+        TableToolItem item = entry.data.add(object);
         entry.update = !init;
+        return item;
     }
     
     protected final void tableitemsadd(String table) {
