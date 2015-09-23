@@ -10,9 +10,9 @@ public class MainInput extends AbstractViewInput {
         Context extcontext;
         
         extcontext = getExtendedContext();
-        tableitemsadd("inpackages", extcontext.installed);
-        tableitemsadd("unpackages", extcontext.uninstalled);
-        tableitemsadd("erpackages", extcontext.invalid);
+        tableitemsset("inpackages", extcontext.installed);
+        tableitemsset("unpackages", extcontext.uninstalled);
+        tableitemsset("erpackages", extcontext.invalid);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class ProjectInput extends AbstractViewInput {
             dbitemadd("project", "views", view);
         
         if (extcontext.links != null) {
-            tableitemsadd("links", extcontext.links);
+            tableitemsset("links", extcontext.links);
             extcontext.links = null;
         }
         

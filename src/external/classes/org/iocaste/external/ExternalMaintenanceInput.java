@@ -13,7 +13,7 @@ public class ExternalMaintenanceInput extends MaintenanceInput {
         extcontext = getExtendedContext();
         if (extcontext.modelitems.size() > 0) {
             if (extcontext.document == null) {
-                tableitemsadd("items_table", extcontext.modelitems);
+                tableitemsset("items_table", extcontext.modelitems);
             } else {
                 extcontext.document.remove("items");
                 extcontext.document.add(

@@ -6,17 +6,14 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 public class StructureInput extends AbstractViewInput {
 
     @Override
-    protected void execute(PageBuilderContext context) {
-        // TODO Stub de método gerado automaticamente
-
-    }
+    protected void execute(PageBuilderContext context) { }
 
     @Override
     protected void init(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
         
         dfset("head", extcontext.head);
-        tableitemsadd("items", extcontext.items);
+        tableitemsset("items", extcontext.items);
     }
 
 }

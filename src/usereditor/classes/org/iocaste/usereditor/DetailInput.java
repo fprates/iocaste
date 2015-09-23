@@ -18,8 +18,8 @@ public class DetailInput extends AbstractViewInput {
             dfset("identity", "USERNAME", extcontext.userdata.username);
         }
         
-        tableitemsadd("profiles", extcontext.userdata.profiles);
-        tableitemsadd("tasks", extcontext.userdata.tasks);
+        tableitemsset("profiles", extcontext.userdata.profiles);
+        tableitemsset("tasks", extcontext.userdata.tasks);
     }
 
     @Override

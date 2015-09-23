@@ -236,15 +236,21 @@ public abstract class AbstractViewInput implements ViewInput {
             execute(context);
     }
     
+    protected final void tableitemadd(String table, ExtendedObject object) {
+        TableToolEntry entry = getTableEntry(table);
+        entry.data.add(object);
+        entry.update = !init;
+    }
+    
     protected final void tableitemsadd(String table) {
         addtablecollection(table, null);
     }
     
-    protected final void tableitemsadd(String table, ExtendedObject[] objects) {
+    protected final void tableitemsset(String table, ExtendedObject[] objects) {
         addtablearray(table, objects);
     }
     
-    protected final void tableitemsadd(
+    protected final void tableitemsset(
             String table, Collection<ExtendedObject> objects) {
         addtablecollection(table, objects);
     }
@@ -254,7 +260,7 @@ public abstract class AbstractViewInput implements ViewInput {
         addtableitems(table, items);
     }
     
-    protected final void tableitemsadd(String table, DataConversion conversion)
+    protected final void tableitemsset(String table, DataConversion conversion)
     {
         Documents documents = new Documents(context.function);
         ExtendedObject[] objects = DocumentExtractor.extractItems(

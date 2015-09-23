@@ -9,7 +9,7 @@ public class ItemsInput extends AbstractViewInput {
     protected void execute(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
         
-        tableitemsadd("items", extcontext.items);
+        tableitemsset("items", extcontext.items);
     }
 
     @Override

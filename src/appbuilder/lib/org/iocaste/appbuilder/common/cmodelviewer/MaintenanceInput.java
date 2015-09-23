@@ -29,7 +29,7 @@ public class MaintenanceInput extends AbstractViewInput {
         dfset("base", extcontext.document.getHeader());
         cmodel = extcontext.document.getModel();
         for (String name : cmodel.getItems().keySet())
-            tableitemsadd(name.concat("_table"), extcontext.document.
+            tableitemsset(name.concat("_table"), extcontext.document.
                     getItems(name));
         
         loadInputTexts(context);
