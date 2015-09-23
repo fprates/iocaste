@@ -6,7 +6,7 @@ import org.iocaste.shell.common.InputComponent;
 
 public class InputStatus {
     public ControlComponent control = null;
-    public byte error = 0;
+    public int error = 0;
     public Const msgtype;
     public InputComponent input = null;
     public String fatal = null, message = null;
