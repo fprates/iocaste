@@ -55,6 +55,10 @@ public class TableToolData implements Serializable {
             add(object);
     }
     
+    public final void clear() {
+        items.clear();
+    }
+    
     public final List<TableToolItem> getItems() {
         return items;
     }
