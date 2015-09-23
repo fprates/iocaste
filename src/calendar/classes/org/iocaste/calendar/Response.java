@@ -64,6 +64,7 @@ public class Response {
         style.put("border-style", "solid");
         style.put("border-width", "2px");
         style.put("border-color", "rgb(176, 176, 176)");
+        style.put("z-index", "1");
         
         style = stylesheet.newElement(".calkey");
         style.put("padding", "0px");

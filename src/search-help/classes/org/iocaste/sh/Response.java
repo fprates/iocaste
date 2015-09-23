@@ -140,6 +140,7 @@ public class Response {
         style.put("border-color", BORDER);
         style.put("border-width", "2px"); 
         style.put("overflow", "hidden");
+        style.put("z-index", "1");
         
         style = stylesheet.newElement(".shdatacnt");
         style.put("overflow", "auto");
