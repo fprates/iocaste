@@ -250,7 +250,8 @@ public abstract class AbstractTableHandler {
         }
         
         additems(tabletool, context, items);
-        visible = (items.size() > context.data.vlines);
+        visible = ((items.size() > context.data.vlines) &&
+                (context.data.vlines > 0));
         tabletool.setVisibleNavigation(visible);
     }
     
