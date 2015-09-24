@@ -287,6 +287,8 @@ public class TableTool {
         List<TableToolItem> items = extcontext.data.getItems();
         int topline = extcontext.table.getTopLine() + extcontext.data.vlines;
         
+        if (topline > items.size())
+            return;
         extcontext.table.setTopLine(topline);
         AbstractTableHandler.setItemsVisibility(this, extcontext, items);
     }
@@ -296,6 +298,8 @@ public class TableTool {
         List<TableToolItem> items = extcontext.data.getItems();
         int topline = extcontext.table.getTopLine() - extcontext.data.vlines;
         
+        if (topline < 0)
+            return;
         extcontext.table.setTopLine(topline);
         AbstractTableHandler.setItemsVisibility(this, extcontext, items);
     }
