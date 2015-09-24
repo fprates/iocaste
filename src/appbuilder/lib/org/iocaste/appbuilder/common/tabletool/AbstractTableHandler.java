@@ -40,12 +40,11 @@ public abstract class AbstractTableHandler {
             object = ttitem.object;
             ttitem.set(item);
             item.setSelected(ttitem.selected);
+            if (ttitem.highlighted)
+                item.setStyleClass(context.data.highlightstyle);
         } else {
             object = null;
         }
-        
-        if (ttitem.highlighted)
-            item.setStyleClass(context.data.highlightstyle);
         
         nsinput = null;
         for (TableColumn tcolumn : tcolumns) {
