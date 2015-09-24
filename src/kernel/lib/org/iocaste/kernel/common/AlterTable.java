@@ -33,6 +33,11 @@ public class AlterTable extends AbstractTableOperation {
         for (String fname : fields.keySet()) {
             data.field = fields.get(fname);
             data.fname = fname;
+            if ((data.field.operation != null) &&
+                    data.field.operation.equals("drop")) {
+                data.items.put(fname, fname);
+                continue;
+            }
             buildItem(data);
         }
 
@@ -43,6 +48,10 @@ public class AlterTable extends AbstractTableOperation {
                 sb.append((init)? " add " : ", add ");
             else
                 switch (data.field.operation) {
+                case "drop":
+                    sb.append((init)?
+                            " drop column " : ", drop column ");
+                    break;
                 case "modify":
                     switch (sqldb) {
                     case DBNames.MSSQL1:
