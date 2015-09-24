@@ -8,6 +8,7 @@ public class InputStatus {
     public ControlComponent control = null;
     public int error = 0;
     public Const msgtype;
+    public Object[] msgargs;
     public InputComponent input = null;
     public String fatal = null, message = null;
     public boolean event = false;

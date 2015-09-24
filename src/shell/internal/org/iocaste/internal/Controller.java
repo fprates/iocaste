@@ -42,7 +42,7 @@ public class Controller {
         messages.put("field.is.obligatory", "Campo é obrigatório.");
         messages.put("field.type.mismatch",
                 "Tipo de valor incompatível com campo.");
-        messages.put("invalid.value", "Valor inválido.");
+        messages.put("invalid.value", "Valor inválido (%s).");
         messages.put("not.connected", "Não conectado");
         messages.put("user.not.authorized", "Usuário não autorizado.");
         
@@ -315,9 +315,10 @@ public class Controller {
     }
     
     private static final void message(
-            ControllerData config, Const type, String text) {
+            ControllerData config, Const type, String text, Object... args) {
         config.state.messagetype = type;
         config.state.messagetext = messages.get(text);
+        config.state.messageargs = args;
     }
     
     private static final boolean isElementVisible(Element element) {
@@ -450,6 +451,7 @@ public class Controller {
             status.input = input;
             status.error = EINVALID_REFERENCE;
             status.msgtype = (input.isEnabled())? Const.ERROR : Const.WARNING;
+            status.msgargs = new Object[] {name};
         }
     }
     
@@ -648,7 +650,7 @@ public class Controller {
             break;
         }
         
-        message(config, status.msgtype, status.message);
+        message(config, status.msgtype, status.message, status.msgargs);
         
         return status;
     }
