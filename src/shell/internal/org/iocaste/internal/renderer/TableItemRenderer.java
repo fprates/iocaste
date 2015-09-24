@@ -33,13 +33,16 @@ public class TableItemRenderer extends Renderer {
             Config config) {
         Component component;
         TableColumn column;
-        String text;
+        String text, style;
         TableColumn[] columns = table.getColumns();
         int i = 0;
         XMLElement tdtag, trtag = new XMLElement("tr");
         List<XMLElement> tags = new ArrayList<>();
         
         hidden = new ArrayList<>();
+        style = item.getStyleClass();
+        if (style != null)
+            trtag.add("class", style);
         
         for (Element element : item.getElements()) {
             column = columns[i++];

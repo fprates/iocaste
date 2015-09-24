@@ -7,7 +7,7 @@ public class TableToolItem {
     private String item;
     private TableToolData data;
     public ExtendedObject object;
-    public boolean selected;
+    public boolean selected, highlighted;
     
     public TableToolItem(TableToolData data) {
         this.data = data;

@@ -44,6 +44,9 @@ public abstract class AbstractTableHandler {
             object = null;
         }
         
+        if (ttitem.highlighted)
+            item.setStyleClass(context.data.highlightstyle);
+        
         nsinput = null;
         for (TableColumn tcolumn : tcolumns) {
             if (tcolumn.isMark())
