@@ -80,14 +80,14 @@ public class UpdateModel extends AbstractDocumentsHandler {
 
             data.fieldname = item.getTableFieldName();
             data.reference = item.getReference();
-            
-            if (!oldmodel.contains(data.item)) {
+            data.olditem = oldmodel.getModelItem(data.item.getName());
+            if (data.olditem != null)
+                data.oldfieldname = data.olditem.getTableFieldName();
+            if ((data.olditem == null) || (data.oldfieldname == null)) {
                 if (data.item.getTableFieldName() == null)
                     continue;
                 addTableColumn(statements, data);
             } else {
-                data.olditem = oldmodel.getModelItem(data.item.getName());
-                data.oldfieldname = data.olditem.getTableFieldName();
                 updateTable(data);
             }
             
