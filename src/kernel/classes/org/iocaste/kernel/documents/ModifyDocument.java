@@ -24,7 +24,7 @@ public class ModifyDocument extends AbstractDocumentsHandler {
         List<Object> criteria = new ArrayList<>();
         List<Object> uargs = new ArrayList<>();
         List<Object> iargs = new ArrayList<>();
-        
+
         for (DocumentModelItem item : model.getItens()) {
             value = object.get(item);
             
@@ -34,12 +34,16 @@ public class ModifyDocument extends AbstractDocumentsHandler {
             else
                 uargs.add(value);
         }
-        
+
+        value = object.getNS();
+        if (value != null) {
+            uargs.add(value);
+            criteria.add(value);
+        }
         uargs.addAll(criteria);
         nrregs = 0;
         name = model.getName();
         documents = getFunction();
-        
         query = documents.cache.queries.get(name).get("update");
         if (query == null)
             return 0;
