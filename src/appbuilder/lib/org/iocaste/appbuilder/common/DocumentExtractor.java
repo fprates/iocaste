@@ -249,9 +249,8 @@ public class DocumentExtractor {
         }
         
         document.setNS(ns);
-        manager.save(document);
         
-        return document;
+        return manager.save(document);
     }
     
     public final void setHeader(DataConversion conversion) {
