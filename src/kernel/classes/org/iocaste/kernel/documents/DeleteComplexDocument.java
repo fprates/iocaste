@@ -7,6 +7,7 @@ import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Query;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class DeleteComplexDocument extends AbstractDocumentsHandler {
@@ -37,6 +38,7 @@ public class DeleteComplexDocument extends AbstractDocumentsHandler {
         Query query;
         Map<String, DocumentModel> models;
         ComplexModel cmodel;
+        int err;
         
         getcmodel = data.documents.get("get_complex_model");
         cmodel = getcmodel.run(data.connection, data.documents, data.cmodel);
@@ -51,7 +53,12 @@ public class DeleteComplexDocument extends AbstractDocumentsHandler {
             query.setNS(data.ns);
             reference = getReferenceItem(model, headerkey);
             query.andEqual(reference.getName(), data.key);
-            update.run(data.connection, data.documents, query);
+            err = update.run(data.connection, data.documents, query);
+            if (err >= 0)
+                continue;
+            throw new IocasteException(new StringBuilder(
+                    "erro updating complex model ").append(cmodel.getName()).
+                    toString());
         }
         
         query = new Query("delete");
