@@ -2,6 +2,8 @@ package org.iocaste.kernel.common;
 
 import java.util.Map;
 
+import org.iocaste.documents.common.DataType;
+
 public class AlterTable extends AbstractTableOperation {
 
     public AlterTable(byte sqldb) {
@@ -49,21 +51,11 @@ public class AlterTable extends AbstractTableOperation {
             else
                 switch (data.field.operation) {
                 case "drop":
-                    sb.append((init)?
-                            " drop column " : ", drop column ");
+                    drop(sb, data, init);
                     break;
                 case "modify":
-                    switch (sqldb) {
-                    case DBNames.MSSQL1:
-                    case DBNames.MSSQL2:
-                        sb.append((init)?
-                                " alter column " : ", alter column ");
-                        break;
-                    case DBNames.MYSQL:
-                        sb.append((init)?
-                                " modify column " : ", modify column ");
-                        break;
-                    }
+                    modify(sb, init);
+                    break;
                 }
             sb.append(data.items.get(key));
             init = false;
@@ -75,5 +67,37 @@ public class AlterTable extends AbstractTableOperation {
         }
         
         return sb.toString();
+    }
+    
+    private final void drop(StringBuilder sb, BuildData data, boolean init) {
+        switch (data.field.type) {
+        case DataType.CONSTRAINT:
+            switch (sqldb) {
+            case DBNames.MYSQL:
+                sb.append((init)? " drop foreign key " : ", drop foreign key ");
+                break;
+            default:
+                sb.append((init)? " drop constraint " : ", drop constraint ");
+                break;
+            }
+            break;
+        default:
+            sb.append((init)?
+                    " drop column " : ", drop column ");
+            break;
+        }
+    }
+    
+    private final void modify(StringBuilder sb, boolean init) {
+        switch (sqldb) {
+        case DBNames.MYSQL:
+            sb.append((init)?
+                    " modify column " : ", modify column ");
+            break;
+        default:
+            sb.append((init)?
+                    " alter column " : ", alter column ");
+            break;
+        }
     }
 }

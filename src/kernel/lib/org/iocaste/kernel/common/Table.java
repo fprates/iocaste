@@ -7,6 +7,9 @@ import java.util.Map;
 import org.iocaste.documents.common.DataType;
 
 public class Table {
+    public static final byte REGULAR = 0;
+    public static final byte KEY = 1;
+    public static final byte REFERENCE = 2;
     private String name;
     private boolean droppedkey;
     private Map<String, Field> fields;
@@ -46,26 +49,37 @@ public class Table {
         values.clear();
     }
     
-    private final void drop(String name, boolean key) {
+    private final void drop(String name, byte type) {
         Field field;
         
-        if (key) {
+        switch (type) {
+        case KEY:
             droppedkey = true; 
             return;
+        case REFERENCE:
+            field = new Field();
+            field.type = DataType.CONSTRAINT;
+            break;
+        default:
+            field = new Field();
+            field.type = 0;
+            break;
         }
 
-        field = new Field();
-        field.type = (key)? DataType.CONSTRAINT : 0;
         field.operation = "drop";
         fields.put(name, field);
     }
     
     public final void drop(String name) {
-        drop(name, false);
+        drop(name, REGULAR);
     }
     
     public final void dropkey(String name) {
-        drop(name, true);
+        drop(name, KEY);
+    }
+    
+    public final void dropreference(String name) {
+        drop(name, REFERENCE);
     }
     
     public final Map<String, Object> getValues() {

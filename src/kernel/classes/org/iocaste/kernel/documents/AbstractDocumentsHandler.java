@@ -110,23 +110,28 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
                     data.element.getDecimals());
 
         if (data.reference != null)
-            addTableColumnReference(data);
+            addTableColumnReference(data, data.reference);
     }
     
-    protected final void addTableColumnReference(UpdateData data) {
+    protected final void addTableColumnReference(
+            UpdateData data, DocumentModelItem reference) {
         String constraint, tableref;
         
-        tableref = data.reference.getDocumentModel().getTableName();
-        constraint = new StringBuilder("fk_").
-                append(data.tablename).append("_").
-                append(data.fieldname).append("_").
-                append(tableref).toString();
-        
+        tableref = reference.getDocumentModel().getTableName();
+        constraint = getColumnReferenceName(tableref, data);
         data.table.constraint(
                 constraint,
                 tableref,
                 data.fieldname,
-                data.reference.getTableFieldName());
+                reference.getTableFieldName());
+    }
+    
+    private final String getColumnReferenceName(
+            String tableref, UpdateData data) {
+        return new StringBuilder("fk_").
+                append(data.tablename).append("_").
+                append(data.fieldname).append("_").
+                append(tableref).toString();
     }
     
     /**
@@ -336,6 +341,15 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
                 createde.prepare(element);
             }   
         }
+    }
+    
+    protected final void removeTableColumnReference(
+            UpdateData data, DocumentModelItem reference) {
+        String constraint, tableref;
+        
+        tableref = reference.getDocumentModel().getTableName();
+        constraint = getColumnReferenceName(tableref, data);
+        data.table.dropreference(constraint);
     }
     
     @Override

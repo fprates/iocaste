@@ -333,14 +333,23 @@ public class UpdateModel extends AbstractDocumentsHandler {
     }
     
     private final void updateTable(UpdateData data) throws Exception {
+        DocumentModelItem oldreference;
         data.table.update(
                 data.fieldname,
                 data.element.getType(),
                 data.element.getLength(),
                 data.element.getDecimals());
         
-        if (data.reference != null)
-            addTableColumnReference(data);
+        if (data.reference != null) {
+            addTableColumnReference(data, data.reference);
+            return;
+        }
+        
+        oldreference = data.olditem.getReference();
+        if (oldreference == null)
+            return;
+        
+        removeTableColumnReference(data, oldreference);
     }
 }
 
