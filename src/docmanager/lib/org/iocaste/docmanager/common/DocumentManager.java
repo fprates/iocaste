@@ -1,6 +1,7 @@
 package org.iocaste.docmanager.common;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
@@ -33,13 +34,13 @@ public class DocumentManager extends AbstractServiceInterface {
     
     public final ComplexDocument save(String cmodelname, Object ns,
             ExtendedObject head, Collection<ExtendedObject[]> groups,
-            int itemdigits) {
+            Map<String, Integer> itemsdigits) {
         Message message = new Message("save");
         message.add("cmodel_name", cmodelname);
         message.add("head", head);
         message.add("groups", groups);
         message.add("ns", ns);
-        message.add("item_digits", itemdigits);
+        message.add("item_digits", itemsdigits);
         return call(message);
     }
 }

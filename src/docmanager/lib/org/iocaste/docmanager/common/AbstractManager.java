@@ -2,6 +2,7 @@ package org.iocaste.docmanager.common;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
@@ -19,16 +20,21 @@ public abstract class AbstractManager implements Manager {
     private ComplexModel cmodel;
     private String[] messages;
     private Documents documents;
-    private int itemdigits;
+    private Map<String, Integer> itemsdigits;
     
     public AbstractManager(String cmodelname, Function function) {
+        Map<String, DocumentModel> items;
+        
         docmanager = new DocumentManager(function);
         documents = new Documents(function);
-        itemdigits = 2;
         cmodel = documents.getComplexModel(cmodelname);
         if (cmodel == null)
             throw new RuntimeException(
                     cmodelname.concat(" is an invalid complex model"));
+        itemsdigits = new HashMap<>();
+        items = cmodel.getItems();
+        for (String model : cmodel.getItems().keySet())
+            itemsdigits.put(items.get(model).getName(), 2);
     }
     
     @Override
@@ -219,7 +225,7 @@ public abstract class AbstractManager implements Manager {
     @Override
     public ComplexDocument save(Object ns, ExtendedObject head,
             Collection<ExtendedObject[]> groups) {
-        return docmanager.save(cmodel.getName(), ns, head, groups, itemdigits);
+        return docmanager.save(cmodel.getName(), ns, head, groups, itemsdigits);
     }
     
     /*
@@ -241,8 +247,8 @@ public abstract class AbstractManager implements Manager {
      * 
      * @param itemformat
      */
-    protected final void setItemDigits(int itemdigits) {
-        this.itemdigits = itemdigits;
+    protected final void setItemDigits(String item, int itemdigits) {
+        itemsdigits.put(cmodel.getItems().get(item).getName(), itemdigits);
     }
     
     /**

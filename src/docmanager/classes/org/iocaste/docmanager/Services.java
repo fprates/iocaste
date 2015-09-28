@@ -42,13 +42,14 @@ public class Services extends AbstractFunction {
     }
     
     public final ComplexDocument save(Message message) {
-        Map<String, String> keys, references;
+        Map<String, String> keys, references, itemsformats;
         Map<String, DocumentModel> models;
+        Map<String, Integer> itemsdigits;
         DocumentModel model;
         DocumentModelItem headerkey;
         String itemkey, modelname, reference, charitemid, charid, itemformat;
         long numid, numitemid;
-        int i, keytype, itemdigits;
+        int i, keytype;
         Object id;
         String cmodelname = message.get("cmodel_name");
         ExtendedObject head = message.get("head");
@@ -97,9 +98,11 @@ public class Services extends AbstractFunction {
         head.setNS(ns);
         document.setHeader(head);
         document.setNS(ns);
-        itemdigits = message.geti("item_digits");
-        itemformat = new StringBuilder("%0").
-                append(itemdigits).append("d").toString();
+        itemsdigits = message.get("item_digits");
+        itemsformats = new HashMap<>();
+        for (String name : itemsdigits.keySet())
+            itemsformats.put(name, new StringBuilder("%0").
+                append(itemsdigits.get(name)).append("d").toString());
         
         for (ExtendedObject[] group : groups) {
             i = 0;
@@ -111,12 +114,14 @@ public class Services extends AbstractFunction {
                 reference = references.get(modelname);
                 switch (keytype) {
                 case DataType.CHAR:
+                    itemformat = itemsformats.get(modelname);
                     charitemid = charid.concat(String.format(itemformat, i));
                     item.set(itemkey, charitemid);
                     id = charid;
                     break;
                 default:
-                    numitemid = (numid * (int)(Math.pow(10, itemdigits))) + i;
+                    numitemid = itemsdigits.get(modelname);
+                    numitemid = (numid * (int)(Math.pow(10, numitemid))) + i;
                     item.set(itemkey, numitemid);
                     id = numid;
                     break;
