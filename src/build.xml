@@ -141,6 +141,9 @@
         <!-- copy utility -->
         <ant antfile="${basedir}/src/copy/build.xml"/>
     	
+    	<!-- upload utility -->
+    	<ant antfile="${basedir}/src/upload/build.xml"/>
+    	
         <!-- template -->
         <ant antfile="${basedir}/src/template/build.xml"/>
     	
