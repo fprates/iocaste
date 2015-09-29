@@ -10,7 +10,7 @@ import java.util.Map;
  *
  */
 public class DataItem extends AbstractInputComponent
-        implements RangeInputComponent {
+        implements RangeInputComponent, MultipartElement {
     private static final long serialVersionUID = 3376883855229003535L;
     private Map<String, Object> values;
     private String highname, lowname, label;
@@ -77,6 +77,11 @@ public class DataItem extends AbstractInputComponent
     public final Map<String, Object> getValues() {
         return values;
     }
+    
+    @Override
+    public boolean hasMultipartSupport() {
+        return (getComponentType() == Const.FILE_ENTRY);
+    };
     
     /*
      * (non-Javadoc)

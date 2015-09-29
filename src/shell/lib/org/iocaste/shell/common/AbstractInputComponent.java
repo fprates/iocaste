@@ -22,12 +22,13 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private Object value;
     private DocumentModelItem modelitem;
     private boolean secret, obligatory;
-    private int length, vlength;
+    private int length, vlength, error;
     private Const type;
     private DataElement dataelement;
     private SearchHelp search;
     private Calendar calendar;
     private String master, nsreference;
+    private byte[] content;
 
     public AbstractInputComponent(View view, Const type, Const type_,
             String name) {
@@ -67,6 +68,10 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final Const getComponentType() {
         return type;
+    }
+
+    public final byte[] getContent() {
+        return content;
     }
 
     /*
@@ -109,6 +114,10 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final Date getdt() {
         return (Date)value;
+    }
+    
+    public final int getError() {
+        return error;
     }
     
     /*
@@ -333,6 +342,10 @@ public abstract class AbstractInputComponent extends AbstractComponent
         this.type = type;
     }
     
+    public final void setContent(byte[] content) {
+        this.content = content;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#setDataElement(
@@ -341,6 +354,10 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final void setDataElement(DataElement dataelement) {
         this.dataelement = dataelement;
+    }
+    
+    public final void setError(int error) {
+        this.error = error;
     }
     
     /*

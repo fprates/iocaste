@@ -62,6 +62,9 @@ public class DataItemRenderer {
         case TEXT_FIELD:
             coltag.addChild(TextFieldRenderer.render(dataitem, null, config));
             break;
+        case FILE_ENTRY:
+            coltag.addChild(FileEntryRenderer.render(dataitem));
+            break;
         default:
             throw new RuntimeException(new StringBuilder("Component type ").
                                 append(componenttype).append(" not supported.").
