@@ -22,7 +22,11 @@
 package org.iocaste.documents.common;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,6 +34,7 @@ import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.Shell;
 
 /**
  * Serviços do módulo de documentos
@@ -75,6 +80,65 @@ public class Documents extends AbstractServiceInterface {
         new Iocaste(function).commit();
     }
     
+    public static final Object convertValue(
+            String value, DataElement dataelement, Locale locale) {
+        NumberFormat numberformat;
+        DateFormat dateformat;
+        
+        switch(dataelement.getType()) {
+        case DataType.DEC:
+            if (Shell.isInitial(value))
+                return 0d;
+            
+            try {
+                numberformat = NumberFormat.getNumberInstance(locale);
+                return numberformat.parse(value).doubleValue();
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        case DataType.DATE:
+            if (Shell.isInitial(value))
+                return null;
+            
+            try {
+                dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM,
+                        locale);
+                return dateformat.parse(value);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        case DataType.TIME:
+            if (Shell.isInitial(value))
+                return null;
+            
+            try {
+                dateformat = DateFormat.getTimeInstance(DateFormat.MEDIUM,
+                        locale);
+                return dateformat.parse(value);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        case DataType.BYTE:
+        case DataType.INT:
+        case DataType.LONG:
+        case DataType.SHORT:
+        case DataType.NUMC:
+            if (Shell.isInitial(value))
+                return new BigDecimal(0);
+            
+            return new BigDecimal(value);
+        case DataType.CHAR:
+            if (Shell.isInitial(value))
+                return null;
+            
+            if (dataelement.isUpcase())
+                return value.toUpperCase();
+            
+            return value;
+        default:
+            return null;
+        }
+    }
     /**
      * Registra modelo complexo.
      * 

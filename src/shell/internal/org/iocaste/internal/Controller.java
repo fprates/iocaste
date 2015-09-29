@@ -73,68 +73,17 @@ public class Controller {
     }
     
     private static Object convertValue(String value, InputComponent input) {
-        NumberFormat numberformat;
-        DateFormat dateformat;
         Locale locale = input.getLocale();
         DataElement dataelement = Shell.getDataElement(input);
         
-        switch(dataelement.getType()) {
-        case DataType.DEC:
-            if (Shell.isInitial(value))
-                return 0d;
-            
-            try {
-                numberformat = NumberFormat.getNumberInstance(locale);
-                return numberformat.parse(value).doubleValue();
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-        case DataType.DATE:
-            if (Shell.isInitial(value))
-                return null;
-            
-            try {
-                dateformat = DateFormat.getDateInstance(DateFormat.MEDIUM,
-                        locale);
-                return dateformat.parse(value);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-        case DataType.TIME:
-            if (Shell.isInitial(value))
-                return null;
-            
-            try {
-                dateformat = DateFormat.getTimeInstance(DateFormat.MEDIUM,
-                        locale);
-                return dateformat.parse(value);
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-        case DataType.BYTE:
-        case DataType.INT:
-        case DataType.LONG:
-        case DataType.SHORT:
-        case DataType.NUMC:
-            if (Shell.isInitial(value))
-                return new BigDecimal(0);
-            
-            return new BigDecimal(value);
-        case DataType.CHAR:
-            if (Shell.isInitial(value))
-                return null;
-            
-            if (dataelement.isUpcase())
-                return value.toUpperCase();
-            
-            return value;
+        switch (dataelement.getType()) {
         case DataType.BOOLEAN:
             if (input.isBooleanComponent())
                 return !value.equals("off");
             
             return value;
         default:
-            return null;
+            return Documents.convertValue(value, dataelement, locale);
         }
     }
     
