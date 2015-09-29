@@ -9,6 +9,7 @@ public class RemoveAction extends TableToolAction {
 
     public RemoveAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, TableTool.REMOVE);
+        setText("-");
     }
 
     @Override

@@ -9,6 +9,7 @@ public class AddAction extends TableToolAction {
 
     public AddAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, TableTool.ADD);
+        setText("+");
     }
 
     @Override
