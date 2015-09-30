@@ -2,6 +2,7 @@ package org.iocaste.upload.install;
 
 import org.iocaste.appbuilder.common.AbstractInstallObject;
 import org.iocaste.appbuilder.common.ComplexModelInstall;
+import org.iocaste.appbuilder.common.MessagesInstall;
 import org.iocaste.appbuilder.common.ModelInstall;
 import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.DataElement;
@@ -19,6 +20,7 @@ public class LayoutInstall extends AbstractInstallObject {
         DataElement layoutid, layoutitem, ignore, column;
         DocumentModelItem layoutkey, modelname, modelitem;
         SearchHelpData shd;
+        MessagesInstall messages;
         
         layoutid = elementchar("UPL_LAYOUT_ID", 25, DataType.UPPERCASE);
         layoutitem = elementchar("UPL_COLUMN_KEY", 30, DataType.UPPERCASE);
@@ -67,6 +69,26 @@ public class LayoutInstall extends AbstractInstallObject {
         cmodel = cmodelInstance("UPL_LAYOUT");
         cmodel.header("head");
         cmodel.item("columns", "columns");
+        
+        /*
+         * translations
+         */
+        messages = messageInstance("pt_BR");
+        messages.put("ID", "Código");
+        messages.put("IGNORE", "Ignorar");
+        messages.put("layoutcreate", "Criar layout");
+        messages.put("layoutcreate1", "Editar layout");
+        messages.put("layoutdisplay", "Exibir layout");
+        messages.put("layoutdisplay1", "Exibir layout");
+        messages.put("layoutedit", "Selecionar layout");
+        messages.put("layoutedit1", "Editar layout");
+        messages.put("MODEL", "Modelo");
+        messages.put("MODEL_ITEM", "Item de modelo");
+        messages.put("NAME", "Nome");
+        messages.put("UPLLAYOUTCH", "Alterar layout");
+        messages.put("UPLLAYOUTCR", "Criar layout");
+        messages.put("UPLLAYOUTDS", "Exibir layout");
+        messages.put("UPLOAD", "Upload");
     }
 
 }

@@ -26,5 +26,6 @@ public class MainConfig extends AbstractViewConfig {
         input.setComponentType(Const.FILE_ENTRY);
         
         dataform.get("LAYOUT").setObligatory(true);
+        dataform.get("TRUNCATE_CHAR").setComponentType(Const.CHECKBOX);
     }
 }

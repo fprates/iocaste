@@ -23,6 +23,8 @@ public class OptionsInstall extends AbstractInstallObject {
                 "LAYOUT", getItem("layoutkey")), "UPL_SH_LAYOUT");
         model.item(
                 "IGNORE_FIRST_LINES", ignore);
+        model.item(
+                "TRUNCATE_CHAR", elementbool("UPL_BOOLEAN"));
     }
 
 }

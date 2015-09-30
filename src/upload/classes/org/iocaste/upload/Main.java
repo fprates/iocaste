@@ -1,5 +1,6 @@
 package org.iocaste.upload;
 
+import org.iocaste.appbuilder.common.AbstractMessagesSource;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -44,6 +45,8 @@ public class Main extends AbstractPageBuilder {
         panel.instance("main", new MainPage(), extcontext);
         
         context.addManager("layout", new LayoutManager(context.function));
+        
+        add(new Messages());
     }
 
 }
@@ -57,4 +60,17 @@ class MainPage extends AbstractPanelPage {
         action("upload", new Upload());
     }
     
+}
+
+class Messages extends AbstractMessagesSource {
+    
+    public Messages() {
+        put("columns", "Colunas");
+        put("FILE", "Arquivo");
+        put("IGNORE_FIRST_LINES", "Primeiras linhas ignoradas");
+        put("iocaste-upload", "Utilitário de carga");
+        put("LAYOUT", "Layout");
+        put("TRUNCATE_CHAR", "Truncar caracteres excedentes");
+        put("upload", "Carregar");
+    }
 }
