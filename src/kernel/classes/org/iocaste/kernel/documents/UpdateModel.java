@@ -214,7 +214,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
         Map<String, String> queries;
         InsertDataElement insert;
         UpdateData data;
-        String name;
+        String name, itemname;
         String sessionid = message.getSessionid();
 
         data = new UpdateData();
@@ -249,10 +249,10 @@ public class UpdateModel extends AbstractDocumentsHandler {
                 if (insertModelItem(data.connection, item) == 0)
                     throw new IocasteException("error on model insert");
             } else {
-                data.olditem = oldmodel.getModelItem(item.getName());
+                itemname = item.getName();
+                data.olditem = oldmodel.getModelItem(itemname);
                 data.oldfieldname = data.olditem.getTableFieldName();
-                if (updateModelItem(data, oldmodel) == 0)
-                    throw new IocasteException("error on model update");
+                updateModelItem(data, oldmodel);
             }
         }
         
@@ -280,13 +280,12 @@ public class UpdateModel extends AbstractDocumentsHandler {
      * @return
      * @throws Exception
      */
-    private final int updateModelItem(UpdateData data, DocumentModel oldmodel)
+    private final void updateModelItem(UpdateData data, DocumentModel model)
             throws Exception {
         String shname;
         Object[] criteria;
         
-        update(
-                data.connection,
+        update(data.connection,
                 QUERIES[DEL_SH_REF],
                 getComposedName(data.olditem));
         
@@ -294,19 +293,18 @@ public class UpdateModel extends AbstractDocumentsHandler {
          * atualização do modelo
          */
         criteria = new Object[5];
-        
         criteria[0] = data.element.getDecimals();
         criteria[1] = data.element.getLength();
         criteria[2] = data.element.getType();
         criteria[3] = data.element.isUpcase();
         criteria[4] = data.element.getName();
 
-        if (update(data.connection, QUERIES[UPDATE_ELEMENT], criteria) == 0)
+        if (update(data.connection, QUERIES[UPDATE_ELEMENT], criteria) < 0)
             throw new IocasteException(
-                    "error on update data element");
+                    new StringBuilder("error updating data element ").
+                            append(criteria[4]).toString());
         
         criteria = new Object[7];
-        
         criteria[0] = data.model.getName();
         criteria[1] = data.item.getIndex();
         criteria[2] = data.item.getTableFieldName();
@@ -316,20 +314,19 @@ public class UpdateModel extends AbstractDocumentsHandler {
                 null : getComposedName(data.reference);
         criteria[6] = getComposedName(data.item);
         
-        if (update(data.connection, QUERIES[UPDATE_ITEM], criteria) == 0)
+        if (update(data.connection, QUERIES[UPDATE_ITEM], criteria) < 0)
             throw new IocasteException(
-                    "error on update model item");
+                    new StringBuilder("error updating model item").
+                            append(criteria[6]).toString());
         
         shname = data.item.getSearchHelp();
         if (Documents.isInitial(shname))
-            return 1;
+            return;
         
         if (update(
-                data.connection, QUERIES[INS_SH_REF], criteria[6], shname) == 0)
+                data.connection, QUERIES[INS_SH_REF], criteria[6], shname) < 0)
             throw new IocasteException(
                     "error on insert sh reference");
-        
-        return 1;
     }
     
     private final void updateTable(UpdateData data) throws Exception {
