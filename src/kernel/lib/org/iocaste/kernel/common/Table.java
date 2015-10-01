@@ -45,7 +45,6 @@ public class Table {
     
     public final void clear() {
         droppedkey = false;
-        fields.clear();
         values.clear();
     }
     
