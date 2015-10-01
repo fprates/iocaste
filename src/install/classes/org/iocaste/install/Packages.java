@@ -11,7 +11,16 @@ public class Packages {
             "iocaste-setup",
             "iocaste-calendar",
             "iocaste-search-help",
-            "iocaste-appbuilder"
+            "iocaste-appbuilder",
+            "iocaste-usereditor",
+            "iocaste-dataeditor",
+            "iocaste-datadict",
+            "iocaste-dataview",
+            "iocaste-gconfigview",
+            "iocaste-external",
+            "iocaste-copy",
+            "iocaste-upload",
+            "iocaste-masterdata"
             };
 
     public static final void install(Function function) {
