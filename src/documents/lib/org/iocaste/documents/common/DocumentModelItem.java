@@ -258,7 +258,10 @@ public class DocumentModelItem implements Comparable<DocumentModelItem>,
         
         model = reference.getDocumentModel();
         if (!model.isKey(reference))
-            throw new RuntimeException("reference isn't model key");
+            throw new RuntimeException(new StringBuilder("reference ").
+                    append(model.getName()).append(".").
+                    append(reference.getName()).append(" isn't model key.").
+                    toString());
     }
     
     /**
