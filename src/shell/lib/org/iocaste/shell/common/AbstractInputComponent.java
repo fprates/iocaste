@@ -19,7 +19,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 public abstract class AbstractInputComponent extends AbstractComponent
     implements InputComponent {
     private static final long serialVersionUID = 7276777605716326451L;
-    private Object value;
+    private Object value, ns;
     private DocumentModelItem modelitem;
     private boolean secret, obligatory;
     private int length, vlength, error;
@@ -172,6 +172,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     }
     
     /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#getNS()
+     */
+    @Override
+    public final Object getNS() {
+        return ns;
+    }
+    
+    /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#getNSReference()
      */
@@ -318,6 +327,17 @@ public abstract class AbstractInputComponent extends AbstractComponent
     }
     
     /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#set(
+     *     java.lang.Object, java.lang.Object)
+     */
+    @Override
+    public void set(Object ns, Object value) {
+        this.ns = ns;
+        this.value = value;
+    }
+    
+    /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#setCalendar(
      *    org.iocaste.shell.common.Calendar)
@@ -403,6 +423,14 @@ public abstract class AbstractInputComponent extends AbstractComponent
         this.modelitem = modelitem;
     }
 
+    /**
+     * 
+     * @param ns
+     */
+    protected final void setNS(Object ns) {
+        this.ns = ns;
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#setObligatory(boolean)

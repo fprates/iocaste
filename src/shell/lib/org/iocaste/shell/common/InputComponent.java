@@ -92,6 +92,12 @@ public interface InputComponent extends Component {
      * 
      * @return
      */
+    public abstract Object getNS();
+    
+    /**
+     * 
+     * @return
+     */
     public abstract String getNSReference();
     
     /**
@@ -165,6 +171,13 @@ public interface InputComponent extends Component {
      * @param value valor
      */
     public abstract void set(Object value);
+    
+    /**
+     * Ajusta o valor do componente.
+     * @param ns namespace
+     * @param value valor
+     */
+    public abstract void set(Object ns, Object value);
     
     /**
      * 

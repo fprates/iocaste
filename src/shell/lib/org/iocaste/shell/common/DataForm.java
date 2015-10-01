@@ -233,7 +233,7 @@ public class DataForm extends AbstractContainer {
             
             item = (DataItem)element;
             name = item.getName();
-            item.set(object.get(name));
+            item.set(object.getNS(), object.get(name));
         }
     }
     

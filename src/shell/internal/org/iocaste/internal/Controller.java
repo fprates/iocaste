@@ -152,7 +152,7 @@ public class Controller {
             nsinput = config.state.view.getElement(nsreference);
             ns = nsinput.get();
         } else {
-            ns = null;
+            ns = input.getNS();
         }
         object = documents.getObject(
                 reference.getDocumentModel().getName(),
