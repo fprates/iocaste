@@ -308,7 +308,7 @@ public class Controller {
         for (String name : config.pagectx.inputs) {
             value = getString(config.values, name);
             
-            if (value != null)
+            if ((value != null) && (value.length() > 0))
                 continue;
             
             element = config.state.view.getElement(name);
