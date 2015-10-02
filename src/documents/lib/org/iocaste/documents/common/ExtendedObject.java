@@ -204,7 +204,8 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
      * @return
      */
     public final boolean getbl(String name) {
-        return (boolean)get(name);
+        Object value = get(name);
+        return (value == null)? false : (boolean)value;
     }
     
     /**
