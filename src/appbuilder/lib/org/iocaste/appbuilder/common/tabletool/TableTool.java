@@ -102,7 +102,7 @@ public class TableTool {
         getActionElement("accept").setVisible(false);
         getActionElement("add").setVisible(true);
         getActionElement("remove").setVisible(true);
-        extcontext.table.setTopLine(0);
+        extcontext.data.topline = 0;
     }
     
     /**
@@ -160,7 +160,7 @@ public class TableTool {
         Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
         
-        extcontext.table.setTopLine(0);
+        extcontext.data.topline = 0;
         AbstractTableHandler.setItemsVisibility(this, extcontext, items);
     }
     
@@ -272,35 +272,35 @@ public class TableTool {
     }
     
     public final void last() {
+        int pages;
         Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
-        int topline = extcontext.data.vlines;
-        int pages = extcontext.table.size() / topline;
         
-        topline *= pages;
-        extcontext.table.setTopLine(topline);
+        extcontext.data.topline = extcontext.data.vlines;
+        pages = extcontext.table.size() / extcontext.data.topline;
+        extcontext.data.topline *= pages;
         AbstractTableHandler.setItemsVisibility(this, extcontext, items);
     }
     
     public final void next() {
         Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
-        int topline = extcontext.table.getTopLine() + extcontext.data.vlines;
+        int topline = extcontext.data.topline + extcontext.data.vlines;
         
         if (topline > items.size())
             return;
-        extcontext.table.setTopLine(topline);
+        extcontext.data.topline = topline;
         AbstractTableHandler.setItemsVisibility(this, extcontext, items);
     }
     
     public final void previous() {
         Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
-        int topline = extcontext.table.getTopLine() - extcontext.data.vlines;
+        int topline = extcontext.data.topline - extcontext.data.vlines;
         
         if (topline < 0)
             return;
-        extcontext.table.setTopLine(topline);
+        extcontext.data.topline = topline;
         AbstractTableHandler.setItemsVisibility(this, extcontext, items);
     }
     

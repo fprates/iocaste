@@ -142,15 +142,14 @@ public abstract class AbstractTableHandler {
     public static final void setItemsVisibility(TableTool tabletool,
             Context context, List<TableToolItem> ttitems) {
         boolean visible;
-        int l, topline, lastline, vlines;
+        int l, lastline, vlines;
         
         l = 0;
-        topline = context.table.getTopLine();
         vlines = (context.data.vlines == 0)?
                 ttitems.size() : context.data.vlines;
-        lastline = topline + vlines - 1;
+        lastline = context.data.topline + vlines - 1;
         for (TableToolItem ttitem : ttitems) {
-            visible = !((l < topline) || (l > lastline));
+            visible = !((l < context.data.topline) || (l > lastline));
             ttitem.get().setVisible(visible);
             l++;
         }

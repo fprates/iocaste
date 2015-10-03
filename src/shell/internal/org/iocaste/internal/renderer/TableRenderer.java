@@ -21,7 +21,6 @@ public class TableRenderer extends Renderer {
     public static final XMLElement render(Table table, Config config) {
         String title, name, text;
         Set<TableItem> items;
-        int topline, i;
         XMLElement tag, trtag, thtag, divtag;
         XMLElement tabletag = new XMLElement("table");
         List<InputComponent> hidden = new ArrayList<>();
@@ -69,11 +68,8 @@ public class TableRenderer extends Renderer {
             tabletag.addInner("");
         } else {
             tag = new XMLElement("tbody");
-            topline = table.getTopLine();
-            
-            i = 0;
             for (TableItem item : items) {
-                if ((i++ < topline) || !item.isVisible())
+                if (!item.isVisible())
                     continue;
                 tags.clear();
                 tags.add(TableItemRenderer.render(table, item, config));

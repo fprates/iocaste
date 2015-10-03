@@ -17,7 +17,7 @@ public class TableToolData implements Serializable {
     public String name, container, style, borderstyle, highlightstyle;
     public String itemcolumn, model, nsfield;
     public boolean mark, enabled, noheader;
-    public int vlines, step, last, increment;
+    public int vlines, step, last, increment, topline;
     public byte mode;
     public String[] hide, show, enableonly, ordering, actions;
     public Map<String, TableToolColumn> columns;
