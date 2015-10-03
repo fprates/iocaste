@@ -308,21 +308,37 @@ public class TableTool {
         Context extcontext = getExtendedContext();
         List<TableToolItem> ttitems;
         TableToolItem ttitem;
+        int startline, endline, i;
         Set<TableItem> items = extcontext.table.getItems();
-        int size = items.size();
+        
+        if (items.size() == 0)
+            return;
         
         ttitems = data.getItems();
-        ttitems.clear();
-        
-        if (size == 0)
-            return;
-
-        for (TableItem item : items) {
-            ttitem = new TableToolItem(data);
-            ttitem.object = get(data, item);
-            ttitem.selected = item.isSelected();
-            ttitem.set(item);
-            ttitems.add(ttitem);
+        if (data.vlines == 0) {
+            ttitems.clear();
+            for (TableItem item : items) {
+                ttitem = new TableToolItem(data);
+                ttitem.object = get(data, item);
+                ttitem.selected = item.isSelected();
+                ttitem.set(item);
+                ttitems.add(ttitem);
+            }
+        } else {
+            startline = data.topline;
+            endline = startline + data.vlines;
+            i = -1;
+            for (TableItem item : items) {
+                i++;
+                if (i < startline)
+                    continue;
+                if (i > endline)
+                    break;
+                ttitem = ttitems.get(i);
+                ttitem.object = get(data, item);
+                ttitem.selected = item.isSelected();
+                ttitem.set(item);
+            }
         }
     }
     
