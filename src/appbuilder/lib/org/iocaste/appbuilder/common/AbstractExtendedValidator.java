@@ -26,14 +26,20 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
         Element element;
         Object value;
         TableToolItem ttitem;
+        ViewComponents components;
+        TableToolEntry entry;
+        Set<TableItem> items;
         String name = input.getName();
         String htmlname = input.getHtmlName();
         PageBuilderContext context = getContext();
-        ViewComponents components = context.
-                getView(context.view.getPageName()).getComponents();
-        TableToolEntry entry = components.tabletools.get(tname);
-        Set<TableItem> items = entry.component.getItems();
+        ViewContext viewctx = context.getView(context.view.getPageName());
         
+        if (viewctx == null)
+            return null;
+        
+        components = viewctx.getComponents();
+        entry = components.tabletools.get(tname);
+        items = entry.component.getItems();
         if (items == null)
             return null;
         
