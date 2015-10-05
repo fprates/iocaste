@@ -241,6 +241,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param validator
      */
     public final void register(String name, Validator validator) {
+        validator.setContext(getviewdata.context);
         getviewdata.validators.put(name, validator);
     }
     

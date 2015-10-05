@@ -3,12 +3,15 @@ package org.iocaste.appbuilder.common;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.documents.common.Documents;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
+import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.View;
 
 public abstract class AbstractPageBuilder extends AbstractPage {
@@ -16,10 +19,12 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     private StandardInstallContext installcontext;
     private PageBuilderDefaultInstall defaultinstall;
     private BuilderCustomAction customaction;
+    private Map<String, AbstractExtendedValidator> validators;
     
     public AbstractPageBuilder() {
         export("install", "install");
         export("fields_properties_get", new GetFieldsProperties());
+        validators = new HashMap<>();
     }
 
     
@@ -30,6 +35,10 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     public abstract void config(PageBuilderContext context) throws Exception;
     
     public void config(GetFieldsProperties config) { };
+    
+    protected final void description(String name, String model, String field) {
+        validate(name, new DescriptionValidate(model, field));
+    }
     
     protected byte[] getApplicationContext(String installctx) throws Exception {
         byte[] buffer;
@@ -53,12 +62,20 @@ public abstract class AbstractPageBuilder extends AbstractPage {
      */
     @Override
     public AbstractContext init(View view) throws Exception {
+        AbstractExtendedValidator validator;
+        Documents documents = null;
         
         context = new PageBuilderContext();
         context.view = view;
         context.function = this;
         config(context);
-        
+        for (String key : validators.keySet()) {
+            if (documents == null)
+                documents = new Documents(context.function);
+            validator = validators.get(key);
+            validator.setDocuments(documents);
+            register(key, validator);
+        }
         customaction = new BuilderCustomAction();
         reassignCustomActions(context);
         
@@ -118,5 +135,23 @@ public abstract class AbstractPageBuilder extends AbstractPage {
                 register(action, customaction);
             }
         }
+    }
+    
+    protected final void validate(
+            String name, AbstractExtendedValidator validator) {
+        validators.put(name, validator);
+    }
+}
+
+class DescriptionValidate extends AbstractExtendedValidator {
+    
+    public DescriptionValidate(String model, String field) {
+        setTextReference(model, field);
+    }
+
+    @Override
+    protected void validate(PageBuilderContext context) {
+        InputComponent input = getInput();
+        input.setText(getText(input.get()));
     }
 }

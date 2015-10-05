@@ -3,6 +3,8 @@ package org.iocaste.appbuilder.common;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
+import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractValidator;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -11,6 +13,8 @@ import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 
 public abstract class AbstractExtendedValidator extends AbstractValidator {
+    private String textmodel, textfield;
+    private Documents documents;
     
     /**
      * 
@@ -62,8 +66,21 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
      * @param value
      * @return
      */
-    public String getText(PageBuilderContext context, Object value) {
-        return null;
+    public String getText(Object value) {
+        ExtendedObject object;
+        
+        if (value == null)
+            return null;
+
+        object = documents.getObject(textmodel, value);
+        if (object == null)
+            return null;
+        
+        return object.getst(textfield);
+    }
+    
+    public final void setDocuments(Documents documents) {
+        this.documents = documents;
     }
     
     protected final void setInputs(TableToolItem ttitem) {
@@ -77,6 +94,11 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
             name = column.getName();
             setInput(item, name, ttitem.object.get(name));
         }
+    }
+    
+    protected final void setTextReference(String model, String field) {
+        textmodel = model;
+        textfield = field;
     }
     
     /**

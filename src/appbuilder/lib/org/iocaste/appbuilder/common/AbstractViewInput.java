@@ -202,7 +202,7 @@ public abstract class AbstractViewInput implements ViewInput {
             input = (InputComponent)element;
             for (Validator validator : validators) {
                 exvalidator = (AbstractExtendedValidator)validator;
-                input.setText(exvalidator.getText(context, input.get()));
+                input.setText(exvalidator.getText(input.get()));
             }
         }
     }
