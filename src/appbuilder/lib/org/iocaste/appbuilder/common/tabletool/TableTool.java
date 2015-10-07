@@ -317,11 +317,10 @@ public class TableTool {
         
         ttitems = data.getItems();
         if (data.vlines > 0) {
-            i = -1;
             startline = data.topline;
             endline = startline + data.vlines;
         } else {
-            i = startline = endline = 0;
+            startline = endline = 0;
         }
         
         ttitemssize = ttitems.size();
@@ -329,7 +328,8 @@ public class TableTool {
         if (itemsdif > 0)
             for (int j = 0; j < itemsdif; j++)
                 ttitems.add(new TableToolItem(data));
-        
+
+        i = -1;
         for (TableItem item : items) {
             i++;
             if (data.vlines > 0) {
