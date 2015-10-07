@@ -326,7 +326,9 @@ public class UpdateModel extends AbstractDocumentsHandler {
         if (update(
                 data.connection, QUERIES[INS_SH_REF], criteria[6], shname) < 0)
             throw new IocasteException(
-                    "error on insert sh reference");
+                    new StringBuilder("error on insert sh ").append(shname).
+                    append(" reference for ").append(criteria[0]).
+                    append(".").append(criteria[3]).toString());
     }
     
     private final void updateTable(UpdateData data) throws Exception {
