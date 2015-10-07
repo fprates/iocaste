@@ -231,6 +231,14 @@ public abstract class AbstractActionHandler {
                 status, context.getManager(manager).getMessage(msgid), args);
     }
     
+    private static final boolean matchObjects(
+            ExtendedObject object, Map<String, Object> keys) {
+        for (String key : keys.keySet())
+            if (!Documents.equals(object, key, keys.get(key)))
+                return false;
+        return true;
+    }
+    
     protected final void message(Const type, String text, Object... args) {
         context.function.message(type, text, args);
     }
@@ -239,23 +247,35 @@ public abstract class AbstractActionHandler {
         return documents.modify(object);
     }
     
-    protected static final ExtendedObject readobjects(ExtendedObject[] objects,
-            String op1, Object op2) {
-        for (ExtendedObject object : objects) {
-            if (!Documents.equals(object, op1, op2))
-                continue;
-            return object;
-        }
-        
+    protected static final ExtendedObject readobjects(
+            ExtendedObject[] objects, String op1, Object op2) {
+        for (ExtendedObject object : objects)
+            if (Documents.equals(object, op1, op2))
+                return object;
+        return null;
+    }
+
+    protected static final ExtendedObject readobjects(
+            ExtendedObject[] objects, Map<String, Object> keys) {
+        for (ExtendedObject object : objects)
+            if (matchObjects(object, keys))
+                return object;
         return null;
     }
     
     protected static final ExtendedObject readobjects(
-            Collection<ExtendedObject> objects, String op1, String op2) {
+            Collection<ExtendedObject> objects, String op1, Object op2) {
         for (ExtendedObject object : objects)
-            if (object.get(op1).equals(op2))
+            if (Documents.equals(object, op1, op2))
                 return object;
-        
+        return null;
+    }
+
+    protected static final ExtendedObject readobjects(
+            Collection<ExtendedObject> objects, Map<String, Object> keys) {
+        for (ExtendedObject object : objects)
+            if (matchObjects(object, keys))
+                return object;
         return null;
     }
     
