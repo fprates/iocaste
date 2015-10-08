@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -145,6 +146,20 @@ public class HtmlRenderer {
         if (csselements.size() == 0)
             styletag.addInner("");
         
+        properties = csselements.get(".screen_locked");
+        if (properties == null) {
+            properties = new HashMap<>();
+            properties.put("position", "fixed");
+            properties.put("top", "0px");
+            properties.put("left", "0px");
+            properties.put("width", "100%");
+            properties.put("height", "100%");
+            properties.put("z-index", "99999");
+            properties.put("opacity", "0");
+            properties.put("background-color", "#000000");
+            csselements.put(".screen_locked", properties);
+        }
+        
         for (String element : csselements.keySet()) {
             properties = csselements.get(element);
             styletag.addInner(element+" {");
@@ -189,6 +204,7 @@ public class HtmlRenderer {
         
         bodytag.addChildren(bodycontent);
         bodytag.addChild(MessageRenderer.render(pagectx, config));
+        bodytag.addChild(ScreenLock.render());
         tags.add(renderHeader(view, config));
         tags.add(bodytag);
         htmltag.addChildren(tags);

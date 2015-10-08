@@ -16,6 +16,7 @@ function formSubmit(formname, actionname, value) {
     var form = document.getElementById(formname);
     var action = document.getElementById(actionname);
     
+    setClassStyle('screen_lock', 'screen_locked');
     action.value = value;
     form.submit();
 }

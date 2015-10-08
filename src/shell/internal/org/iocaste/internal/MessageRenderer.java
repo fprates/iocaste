@@ -13,8 +13,10 @@ public class MessageRenderer {
         Text text;
         
         xmlmsg.add("class", "message_box");
-        if (pagectx.messagetext == null)
+        if (pagectx.messagetext == null) {
+            xmlmsg.addInner("");
             return xmlmsg;
+        }
         
         text = new Text(config.getView(), "navbar.message");
         setMessage(text, (pagectx.messagetype == null)?
