@@ -33,6 +33,7 @@ public abstract class AbstractTableHandler {
         Link link;
         Button button;
         ExtendedObject object;
+        TableToolCell cell;
         TableColumn[] tcolumns = context.table.getColumns();
         TableItem item = new TableItem(context.table, pos);
         
@@ -126,6 +127,10 @@ public abstract class AbstractTableHandler {
                 else
                     input.setNSReference(context.data.nsfield);
             }
+            
+            cell = ttitem.getCell(name);
+            if ((cell != null) && (cell.style != null))
+                element.setStyleClass(cell.style);
         }
         
         if (object == null)
