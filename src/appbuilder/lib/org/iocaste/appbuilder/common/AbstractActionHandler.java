@@ -157,6 +157,11 @@ public abstract class AbstractActionHandler {
         return context.getManager(manager).get(id);
     }
     
+    protected final ComplexDocument getDocument(
+            String manager, Object ns, Object id) {
+        return context.getManager(manager).get(ns, id);
+    }
+    
     protected Const getErrorType() {
         return context.function.getMessageType();
     }
