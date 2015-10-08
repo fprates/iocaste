@@ -42,6 +42,7 @@ public class View implements Serializable {
     private String title, appname, pagename;
     private List<String> lines;
     private List<Container> containers;
+    private List<HeaderLink> links;
     private Map<String, Map<String, String>> sheet;
     private Map<String, Element> elements;
     private Locale locale;
@@ -65,10 +66,18 @@ public class View implements Serializable {
         elements.put(container.getHtmlName(), container);
     }
     
+    public final void add(HeaderLink link) {
+        if (links == null)
+            links = new ArrayList<>();
+        links.add(link);
+    }
+    
     public final void clear() {
         containers.clear();
         elements.clear();
         lines.clear();
+        if (links != null)
+            links.clear();
     }
     
     /**
@@ -147,6 +156,10 @@ public class View implements Serializable {
      */
     public final Element getFocus() {
         return elementfocus;
+    }
+    
+    public final List<HeaderLink> getLinks() {
+        return links;
     }
     
     /**

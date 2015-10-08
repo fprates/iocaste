@@ -16,6 +16,7 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
@@ -71,12 +72,13 @@ public class HtmlRenderer {
      */
     private final XMLElement renderHeader(View view, Config config) {
         StyleSheet stylesheet;
+        XMLElement linktag;
+        List<HeaderLink> links;
         Element focus = view.getFocus();
         String focusname, title = view.getTitle();
         XMLElement headtag = new XMLElement("head");
         XMLElement metatag = new XMLElement("meta");
         XMLElement titletag = new XMLElement("title");
-        
         metatag.add("http-equiv", "Content-Type");
         metatag.add("content", "text/html; charset=utf-8");
         headtag.addChild(metatag);
@@ -94,8 +96,19 @@ public class HtmlRenderer {
             config.addOnload(new StringBuffer("document.getElementById('").
                     append(focusname).append("').focus();").toString());
         }
-        
         headtag.addChild(titletag);
+        
+        links = view.getLinks();
+        if (links != null)
+            for (HeaderLink link : links) {
+                linktag = new XMLElement("link");
+                linktag.add("rel", link.rel);
+                if (link.type != null)
+                    linktag.add("type", link.type);
+                linktag.add("href", link.href);
+                headtag.addChild(linktag);
+            }
+        
         if (script != null)
             headtag.addChild(renderJavaScript(script, config));
         stylesheet = view.styleSheetInstance();
