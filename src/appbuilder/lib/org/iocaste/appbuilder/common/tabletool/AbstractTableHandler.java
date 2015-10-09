@@ -128,6 +128,8 @@ public abstract class AbstractTableHandler {
                     input.setNSReference(context.data.nsfield);
             }
             
+            if (ttitem == null)
+                continue;
             cell = ttitem.getCell(name);
             if ((cell != null) && (cell.style != null))
                 element.setStyleClass(cell.style);
