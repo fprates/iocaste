@@ -25,7 +25,7 @@ public class Registry {
         pkgitem.set("PACKAGE", state.pkgname);
         pkgitem.set("MODEL", model);
 
-        state.log.add(pkgitem);
+        state.log.push(pkgitem);
     }
     
     /**

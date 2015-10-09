@@ -41,6 +41,21 @@ public class PackageInstall extends AbstractHandler {
         return header;
     }
 
+    private final void removeModels(State state) {
+        ExtendedObject object;
+        String name, modelname;
+        
+        for (int i = 0; i < state.log.size(); i++) {
+            object = state.log.pop();
+            name = object.get("MODEL");
+            if (name == null || !name.equals("MODEL"))
+                continue;
+            
+            modelname = object.get("NAME");
+            state.documents.removeModel(modelname);
+        }
+    }
+    
     @Override
     public Object run(Message message) throws Exception {
         IsInstalled isinstalled;
@@ -57,7 +72,7 @@ public class PackageInstall extends AbstractHandler {
         Authorization[] authorizations;
         String[] dependencies;
         State state;
-        String name, modelname, defaultstyle;
+        String defaultstyle;
         Set<String> texts;
         Map<String, StyleSheet> stylesheets;
         Map<String, Map<String, Long>> numbers;
@@ -205,14 +220,7 @@ public class PackageInstall extends AbstractHandler {
             if (state.installed > 1)
                 state.documents.rollback();
             
-            for (ExtendedObject object : state.log) {
-                name = object.get("MODEL");
-                if (name == null || !name.equals("MODEL"))
-                    continue;
-                
-                modelname = object.get("NAME");
-                state.documents.removeModel(modelname);
-            }
+            removeModels(state);
             
             state.documents.commit();
             throw e;

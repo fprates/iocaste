@@ -36,8 +36,10 @@ public class Models {
         DocumentModel model;
         
         for (String modelname : models.keySet()) {
-            if (state.documents.getModel(modelname) != null)
+            if (state.documents.getModel(modelname) != null) {
+                Registry.add(modelname, "MODEL", state);
                 continue;
+            }
             
             model = models.get(modelname);
             install(model, modelname, state);

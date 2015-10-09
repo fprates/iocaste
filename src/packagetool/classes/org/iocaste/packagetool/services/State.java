@@ -1,10 +1,9 @@
 package org.iocaste.packagetool.services;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
@@ -19,12 +18,12 @@ public class State {
     public InstallData data;
     public Function function;
     public Map<String, Map<String, String>> messages;
-    public List<ExtendedObject> log;
+    public Stack<ExtendedObject> log;
     public long pkgitem;
     public byte installed;
     
     public State() {
-        log = new ArrayList<>();
+        log = new Stack<>();
         shm = new HashMap<>();
     }
 }
