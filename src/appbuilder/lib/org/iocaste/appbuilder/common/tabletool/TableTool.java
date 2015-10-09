@@ -161,7 +161,7 @@ public class TableTool {
         List<TableToolItem> items = extcontext.data.getItems();
         
         extcontext.data.topline = 0;
-        AbstractTableHandler.setItemsVisibility(this, extcontext, items);
+        move(extcontext, items);
     }
     
     /**
@@ -277,9 +277,28 @@ public class TableTool {
         List<TableToolItem> items = extcontext.data.getItems();
         
         extcontext.data.topline = extcontext.data.vlines;
-        pages = extcontext.table.size() / extcontext.data.topline;
+        pages = items.size() / extcontext.data.topline;
         extcontext.data.topline *= pages;
-        AbstractTableHandler.setItemsVisibility(this, extcontext, items);
+        move(extcontext, items);
+    }
+
+    private final void move(Context context, List<TableToolItem> ttitems) {
+        TableToolItem ttitem;
+        int l, lastline;
+        
+        l = context.data.topline;
+        lastline = ttitems.size() - 1;
+        for (TableItem item : context.table.getItems()) {
+            if (l > lastline) {
+                set(item, null);
+                continue;
+            }
+            
+            ttitem = ttitems.get(l);
+            ttitem.set(item);
+            set(item, ttitem.object);
+            l++;
+        }
     }
     
     public final void next() {
@@ -290,7 +309,7 @@ public class TableTool {
         if (topline > items.size())
             return;
         extcontext.data.topline = topline;
-        AbstractTableHandler.setItemsVisibility(this, extcontext, items);
+        move(extcontext, items);
     }
     
     public final void previous() {
@@ -301,7 +320,7 @@ public class TableTool {
         if (topline < 0)
             return;
         extcontext.data.topline = topline;
-        AbstractTableHandler.setItemsVisibility(this, extcontext, items);
+        move(extcontext, items);
     }
     
     public final void refresh(TableToolData data) {

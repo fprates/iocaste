@@ -145,25 +145,10 @@ public abstract class AbstractTableHandler {
         
         tabletool.set(item, object);
     }
-
-    public static final void setItemsVisibility(TableTool tabletool,
-            Context context, List<TableToolItem> ttitems) {
-        boolean visible;
-        int l, lastline, vlines;
-        
-        l = 0;
-        vlines = (context.data.vlines == 0)?
-                ttitems.size() : context.data.vlines;
-        lastline = context.data.topline + vlines - 1;
-        for (TableToolItem ttitem : ttitems) {
-            visible = !((l < context.data.topline) || (l > lastline));
-            ttitem.get().setVisible(visible);
-            l++;
-        }
-    }
     
     protected static final void additems(TableTool tabletool,
             Context context, List<TableToolItem> items) {
+        int l, lastline;
         int vlines = context.data.vlines;
         
         if ((items == null) || (items.size() == 0)) {
@@ -173,9 +158,16 @@ public abstract class AbstractTableHandler {
             for (int i = 0; i < vlines; i++)
                 additem(tabletool, context, null, -1);
         } else {
-            for (TableToolItem item : items)
+            l = -1;
+            lastline = context.data.topline + vlines - 1;
+            for (TableToolItem item : items) {
+                l++;
+                if (l < context.data.topline)
+                    continue;
+                if (l > lastline)
+                    break;
                 additem(tabletool, context, item, -1);
-            setItemsVisibility(tabletool, context, items);
+            }
         }
     }
     

@@ -182,7 +182,8 @@ public class SearchHelp extends PopupControl {
             modelitem = column.getModelItem();
             if (!element.isDataStorable()) {
                 component = (Component)element;
-                value = object.get(modelitem.getName());
+                value = (object == null)? null :
+                    object.get(modelitem.getName());
                 if (component.getText() == null)
                     component.setText((value == null)? "" : value.toString());
                 if (element.getType() != Const.LINK)
@@ -206,6 +207,11 @@ public class SearchHelp extends PopupControl {
             
             if (modelitem == null)
                 continue;
+            
+            if (object == null) {
+                input.set(null);
+                continue;
+            }
             
             if (column.isNamespace())
                 value = object.getNS();
