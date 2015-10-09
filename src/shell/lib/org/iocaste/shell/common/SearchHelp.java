@@ -184,7 +184,8 @@ public class SearchHelp extends PopupControl {
                 component = (Component)element;
                 value = (object == null)? null :
                     object.get(modelitem.getName());
-                component.setText((value == null)? "" : value.toString());
+                if (!column.isValueLocked())
+                    component.setText((value == null)? "" : value.toString());
                 if (element.getType() != Const.LINK)
                     continue;
                 

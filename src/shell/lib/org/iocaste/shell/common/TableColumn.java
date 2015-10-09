@@ -14,6 +14,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 public class TableColumn implements Serializable {
     private static final long serialVersionUID = -39703809895121317L;
     private boolean visible, mark, rendertextonly, translatable, namespace;
+    private boolean valuelocked;
     private String name, text;
     private DocumentModelItem modelitem;
     private DataElement de;
@@ -96,6 +97,10 @@ public class TableColumn implements Serializable {
         return translatable;
     }
     
+    public final boolean isValueLocked() {
+        return valuelocked;
+    }
+    
     /**
      * Retorna visibilidade da coluna.
      * @return true, se visível.
@@ -174,6 +179,10 @@ public class TableColumn implements Serializable {
      */
     public final void setTranslatable(boolean translatable) {
         this.translatable = translatable;
+    }
+    
+    public final void setValueLocked(boolean valuelocked) {
+        this.valuelocked = valuelocked;
     }
     
     /**
