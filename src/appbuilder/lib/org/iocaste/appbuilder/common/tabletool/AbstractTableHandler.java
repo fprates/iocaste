@@ -24,7 +24,6 @@ public abstract class AbstractTableHandler {
     
     protected static TableItem additem(TableTool tabletool,
             Context context, TableToolItem ttitem, int pos) {
-        Object value;
         TableToolColumn column;
         Element element;
         DataElement delement;
@@ -81,17 +80,9 @@ public abstract class AbstractTableHandler {
                 case LINK:
                     element = link = new Link(item, name, column.action);
                     link.setText(null);
-                    if (object == null)
-                        break;
-
-                    value = object.get(name);
-                    if (value == null)
-                        break;
-                    
                     paramlink = new StringBuilder(context.data.name).
                             append(".").append(name).toString();
-                    
-                    link.add(paramlink, value.toString());
+                    link.add(paramlink, null);
                     break;
                 case BUTTON:
                     element = button = new Button(item, name);
