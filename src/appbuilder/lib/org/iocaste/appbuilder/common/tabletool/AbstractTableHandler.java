@@ -159,6 +159,8 @@ public abstract class AbstractTableHandler {
                 additem(tabletool, context, null, -1);
         } else {
             l = -1;
+            if (vlines == 0)
+                vlines = context.data.getItems().size();
             lastline = context.data.topline + vlines - 1;
             for (TableToolItem item : items) {
                 l++;
