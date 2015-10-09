@@ -159,7 +159,6 @@ public class SearchHelp extends PopupControl {
      */
     public static final void setTableItem(AbstractContext context, Table table,
             TableItem item, ExtendedObject object) {
-        Parameter parameter;
         Link link;
         Element element;
         Object value;
@@ -167,6 +166,7 @@ public class SearchHelp extends PopupControl {
         DocumentModelItem modelitem;
         Component component;
         String name;
+        Map<String, LinkEntry> parameters;
         TableColumn[] columns = table.getColumns();
         
         for (TableColumn column : columns) {
@@ -184,20 +184,19 @@ public class SearchHelp extends PopupControl {
                 component = (Component)element;
                 value = (object == null)? null :
                     object.get(modelitem.getName());
-                if (component.getText() == null)
-                    component.setText((value == null)? "" : value.toString());
+                component.setText((value == null)? "" : value.toString());
                 if (element.getType() != Const.LINK)
                     continue;
                 
                 link = (Link)element;
-                parameter = column.getParameter();
-                if (parameter == null) {
-                    parameter = new Parameter(context.view, name);
-                    column.setParameter(parameter);
+                parameters = link.getParametersMap();
+                if (parameters.size() == 0) {
+                    link.add(name, value, modelitem.getDataElement().getType());
+                } else {
+                    for (String key : parameters.keySet())
+                        parameters.get(key).value = value;
                 }
                 
-                link.add(parameter.getName(), value,
-                        modelitem.getDataElement().getType());
                 continue;
             }
             

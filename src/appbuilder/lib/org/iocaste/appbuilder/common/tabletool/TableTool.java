@@ -285,17 +285,25 @@ public class TableTool {
     private final void move(Context context, List<TableToolItem> ttitems) {
         TableToolItem ttitem;
         int l, lastline;
+        Set<TableItem> items;
         
+        items = context.table.getItems();
+        l = context.data.vlines - items.size();
+        if (l > 0)
+            for (int i= 0; i < l; i++)
+                items.add(TableRender.additem(this, context, null, -1));
         l = context.data.topline;
         lastline = ttitems.size() - 1;
-        for (TableItem item : context.table.getItems()) {
+        for (TableItem item : items) {
             if (l > lastline) {
                 set(item, null);
+                item.setVisible(false);
                 continue;
             }
-            
+
             ttitem = ttitems.get(l);
             ttitem.set(item);
+            item.setVisible(true);
             set(item, ttitem.object);
             l++;
         }

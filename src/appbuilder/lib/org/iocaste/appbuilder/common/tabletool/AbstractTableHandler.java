@@ -22,7 +22,7 @@ import org.iocaste.shell.common.TextField;
 
 public abstract class AbstractTableHandler {
     
-    protected static void additem(TableTool tabletool,
+    protected static TableItem additem(TableTool tabletool,
             Context context, TableToolItem ttitem, int pos) {
         Object value;
         TableToolColumn column;
@@ -136,7 +136,7 @@ public abstract class AbstractTableHandler {
         }
         
         if (object == null)
-            return;
+            return item;
         
         if (context.data.itemcolumn != null) {
             context.data.last += context.data.increment; 
@@ -144,6 +144,7 @@ public abstract class AbstractTableHandler {
         }
         
         tabletool.set(item, object);
+        return item;
     }
     
     protected static final void additems(TableTool tabletool,
