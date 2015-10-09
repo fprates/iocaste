@@ -48,7 +48,7 @@ public class ExecAction extends AbstractHandler {
         context.action = context.control = message.getString("action");
         for (String name : validables.keySet()) {
             input = (InputComponent)view.getElement(name);
-            if (input == null)
+            if ((input == null) || !input.isEnabled())
                 continue;
             
             handlers = validables.get(name);

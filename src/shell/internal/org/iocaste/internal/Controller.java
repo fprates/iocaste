@@ -386,7 +386,8 @@ public class Controller {
         for (String name : config.values.keySet()) {
             element = config.state.view.getElement(name);
             
-            if (element == null || !element.isDataStorable())
+            if (element == null || !element.isDataStorable() ||
+                    !element.isEnabled())
                 continue;
             
             input = (InputComponent)element;
