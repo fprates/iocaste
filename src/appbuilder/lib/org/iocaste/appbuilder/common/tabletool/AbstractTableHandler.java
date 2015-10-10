@@ -218,8 +218,9 @@ public abstract class AbstractTableHandler {
      */
     protected static final void setObjects(TableTool tabletool, Context context)
     {
-        boolean visible;
         List<TableToolItem> items = context.data.getItems();
+        
+        tabletool.setVisibleNavigation(context, items);
         
         if (items.size() == 0) {
             switch(context.data.mode) {
@@ -235,9 +236,6 @@ public abstract class AbstractTableHandler {
         }
         
         additems(tabletool, context, items);
-        visible = ((items.size() > context.data.vlines) &&
-                (context.data.vlines > 0));
-        tabletool.setVisibleNavigation(visible);
     }
     
     /**

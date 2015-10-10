@@ -445,7 +445,11 @@ public class TableTool {
         }
     }
     
-    public final void setVisibleNavigation(boolean visible) {
+    public final void setVisibleNavigation(
+            Context context, List<TableToolItem> ttitems) {
+        boolean visible;
+        visible = ((ttitems.size() > context.data.vlines) &&
+                (context.data.vlines > 0));
         for (String action : new String[] {
                 TableTool.FIRST,
                 TableTool.LAST,
