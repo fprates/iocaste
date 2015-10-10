@@ -32,16 +32,12 @@ public abstract class AbstractTableHandler {
         Link link;
         Button button;
         ExtendedObject object;
-        TableToolCell cell;
         TableColumn[] tcolumns = context.table.getColumns();
         TableItem item = new TableItem(context.table, pos);
         
         if (ttitem != null) {
             object = ttitem.object;
             ttitem.set(item);
-            item.setSelected(ttitem.selected);
-            if (ttitem.highlighted)
-                item.setStyleClass(context.data.highlightstyle);
         } else {
             object = null;
         }
@@ -118,13 +114,10 @@ public abstract class AbstractTableHandler {
                 else
                     input.setNSReference(context.data.nsfield);
             }
-            
-            if (ttitem == null)
-                continue;
-            cell = ttitem.getCell(name);
-            if ((cell != null) && (cell.style != null))
-                element.setStyleClass(cell.style);
         }
+        
+        if (ttitem != null)
+            tabletool.setLineProperties(context, tcolumns, ttitem);
         
         if (object == null)
             return item;

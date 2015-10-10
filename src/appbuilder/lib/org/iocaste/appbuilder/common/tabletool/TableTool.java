@@ -27,6 +27,7 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Validator;
 import org.iocaste.shell.common.View;
@@ -286,6 +287,7 @@ public class TableTool {
         TableToolItem ttitem;
         int l, lastline;
         Set<TableItem> items;
+        TableColumn[] columns;
         
         items = context.table.getItems();
         l = context.data.vlines - items.size();
@@ -294,6 +296,7 @@ public class TableTool {
                 items.add(TableRender.additem(this, context, null, -1));
         l = context.data.topline;
         lastline = ttitems.size() - 1;
+        columns = context.table.getColumns();
         for (TableItem item : items) {
             if (l > lastline) {
                 set(item, null);
@@ -305,6 +308,7 @@ public class TableTool {
             ttitem.set(item);
             item.setVisible(true);
             set(item, ttitem.object);
+            setLineProperties(context, columns, ttitem);
             l++;
         }
     }
@@ -393,6 +397,25 @@ public class TableTool {
     public final void set(TableItem item, ExtendedObject object) {
         Context extcontext = getExtendedContext();
         SearchHelp.setTableItem(context, extcontext.table, item, object);
+    }
+    
+    public final void setLineProperties(
+            Context context, TableColumn[] columns, TableToolItem ttitem) {
+        String name;
+        TableToolCell cell;
+        TableItem item = ttitem.get();
+        
+        item.setSelected(ttitem.selected);
+        if (ttitem.highlighted)
+            item.setStyleClass(context.data.highlightstyle);
+        else
+            item.setStyleClass(null);
+        for (TableColumn column : columns) {
+            name = column.getName();
+            cell = ttitem.getCell(name);
+            if ((cell != null) && (cell.style != null))
+                item.get(name).setStyleClass(cell.style);
+        }
     }
     
     /**
