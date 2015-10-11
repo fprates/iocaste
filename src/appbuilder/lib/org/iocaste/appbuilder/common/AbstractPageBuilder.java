@@ -150,7 +150,7 @@ class DescriptionValidate extends AbstractExtendedValidator {
     }
 
     @Override
-    protected void validate(PageBuilderContext context) {
+    protected void validate() {
         InputComponent input = getInput();
         input.setText(getText(input.get()));
     }

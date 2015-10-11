@@ -56,7 +56,7 @@ public class ExecAction extends AbstractHandler {
                 validator = validators.get(validatorname);
                 validator.clear();
                 validator.setInput(input);
-                validator.validate();
+                validator.validate(context);
                 error = validator.getMessage();
                 if (error == null)
                     continue;

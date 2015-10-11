@@ -14,7 +14,6 @@ package org.iocaste.shell.common;
 public abstract class AbstractValidator implements Validator {
     private String message;
     private InputComponent input;
-    private AbstractContext context;
     
     @Override
     public final void clear() {
@@ -39,24 +38,6 @@ public abstract class AbstractValidator implements Validator {
         component = (Component)element;
         text = component.getText();
         return text.equals(value);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    protected final <T extends AbstractContext> T getContext() {
-        return (T)context;
-    }
-    
-    /**
-     * 
-     * @param name
-     * @return
-     */
-    protected final <T extends Element> T getElement(String name) {
-        return context.view.getElement(name);
     }
     
     /**
@@ -99,16 +80,6 @@ public abstract class AbstractValidator implements Validator {
     
     /*
      * (não-Javadoc)
-     * @see org.iocaste.shell.common.Validator#setContext(
-     *    org.iocaste.shell.common.AbstractContext)
-     */
-    @Override
-    public final void setContext(AbstractContext context) {
-        this.context = context;
-    }
-    
-    /*
-     * (não-Javadoc)
      * @see org.iocaste.shell.common.Validator#setInput(
      *    org.iocaste.shell.common.InputComponent)
      */
@@ -128,10 +99,11 @@ public abstract class AbstractValidator implements Validator {
     }
     
     /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.Validator#validate()
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Validator#validate(
+     *     org.iocaste.shell.common.AbstractContext)
      */
     @Override
-    public abstract void validate() throws Exception;
+    public abstract void validate(AbstractContext context) throws Exception;
 
 }

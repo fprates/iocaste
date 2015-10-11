@@ -6,9 +6,7 @@ public interface Validator {
     
     public abstract String getMessage();
     
-    public abstract void setContext(AbstractContext context);
-    
     public abstract void setInput(InputComponent input);
     
-    public abstract void validate() throws Exception;
+    public abstract void validate(AbstractContext context) throws Exception;
 }

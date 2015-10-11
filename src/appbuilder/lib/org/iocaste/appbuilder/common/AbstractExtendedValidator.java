@@ -5,6 +5,7 @@ import java.util.Set;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractValidator;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -15,6 +16,25 @@ import org.iocaste.shell.common.TableItem;
 public abstract class AbstractExtendedValidator extends AbstractValidator {
     private String textmodel, textfield;
     private Documents documents;
+    private PageBuilderContext context;
+    
+    /**
+     * 
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    protected final <T extends AbstractContext> T getContext() {
+        return (T)context;
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    protected final <T extends Element> T getElement(String name) {
+        return context.view.getElement(name);
+    }
     
     /**
      * 
@@ -31,7 +51,6 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
         Set<TableItem> items;
         String name = input.getName();
         String htmlname = input.getHtmlName();
-        PageBuilderContext context = getContext();
         ViewContext viewctx = context.getView(context.view.getPageName());
         
         if (viewctx == null)
@@ -111,14 +130,15 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
      * 
      * @param context
      */
-    protected abstract void validate(PageBuilderContext context);
+    protected abstract void validate();
     
     /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.AbstractValidator#validate()
      */
     @Override
-    public final void validate() {
-        validate((PageBuilderContext)getContext());
+    public final void validate(AbstractContext context) {
+        this.context = (PageBuilderContext)context;
+        validate();
     }
 }
