@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
@@ -173,7 +174,14 @@ public class DataForm extends AbstractContainer {
             dataelement = item.getDataElement();
             name = item.getName();
             
-            dataitem = new DataItem(this, Const.TEXT_FIELD, name);
+            switch (dataelement.getType()) {
+            case DataType.BOOLEAN:
+                dataitem = new DataItem(this, Const.CHECKBOX, name);
+                break;
+            default:
+                dataitem = new DataItem(this, Const.TEXT_FIELD, name);
+                break;
+            }
             dataitem.setModelItem(item);
             length = dataelement.getLength();
             dataitem.setLength(length);
