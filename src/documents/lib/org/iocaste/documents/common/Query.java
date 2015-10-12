@@ -84,10 +84,7 @@ public class Query implements Serializable {
     }
     
     private final void enclose(boolean begin) {
-        if (begin)
-            add(null, WhereClause.BE, null, null);
-        else
-            add(null, WhereClause.EE, null, null);
+        add(null, (begin)? WhereClause.BE : WhereClause.EE, null, null);
     }
     
     public final void endEnclose() {

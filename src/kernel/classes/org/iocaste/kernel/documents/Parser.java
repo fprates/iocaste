@@ -16,38 +16,11 @@ import org.iocaste.protocol.IocasteException;
 
 public class Parser {
     
-    private static final void addClause(StringBuilder sb, List<Object> values,
-            String operator, String condition, Object value) {
-        sb.append(" ").append(operator).append(condition);
+    private static final void addClause(WhereData data, String operator,
+            String condition, Object value) {
+        data.sb.append(" ").append(operator).append(condition);
         if (value != null)
-            values.add(value);
-    }
-    
-    private static final void addEntriesClause(StringBuilder sb,
-            List<Object> values, String operator, String condition,
-            Object value, ExtendedObject[] entries) throws IocasteException {
-        String name;
-        StringBuilder entryclause;
-
-        if (entries == null || entries.length == 0)
-            throw new IocasteException("no entries for selection.");
-        
-        sb.append(" (");
-        entryclause = null;
-        for (ExtendedObject entry : entries) {
-            if (entryclause == null)
-                entryclause = new StringBuilder();
-            else
-                entryclause.append(" or ");
-            
-            name = (String)value;
-            if (!entry.getModel().contains((String)value))
-                throw new IocasteException(name.concat(" is an invalid "
-                        + "item for query entries"));
-            addClause(
-                    entryclause, values, operator, condition, entry.get(name));
-        }
-        sb.append(entryclause).append(" )");
+            data.values.add(value);
     }
     
     private static final String columns(Connection connection, Query query,
@@ -112,16 +85,20 @@ public class Parser {
         return sb.toString();
     }
     
-    private static final String getOperator(Connection connection,
-            String[] composed, DocumentModel tablemodel, Documents documents)
-                    throws Exception {
+    private static final String getOperator(WhereData wheredata, String field)
+            throws Exception {
         GetDocumentModel getmodel;
         DocumentModel model;
         DocumentModelItem item;
-        
+        String[] composed;
+
+        composed = field.split("\\.", 2);
         if (composed.length > 1) {
-            getmodel = documents.get("get_document_model");
-            model = getmodel.run(connection, documents, composed[0]);
+            getmodel = wheredata.documents.get("get_document_model");
+            model = getmodel.run(
+                    wheredata.connection,
+                    wheredata.documents,
+                    composed[0]);
             if (model == null)
                 throw new IocasteException(new StringBuilder(composed[0]).
                         append(" is an invalid model.").toString());
@@ -136,11 +113,11 @@ public class Parser {
                     append(".").
                     append(item.getTableFieldName()).toString();
         } else {
-            item = tablemodel.getModelItem(composed[0]);
+            item = wheredata.tablemodel.getModelItem(composed[0]);
             if (item == null)
                 throw new IocasteException(new StringBuilder(composed[0]).
                         append(" is an invalid item for ").
-                        append(tablemodel.getTableName()).toString());
+                        append(wheredata.tablemodel.getTableName()).toString());
             return item.getTableFieldName();
         }
     }
@@ -262,34 +239,36 @@ public class Parser {
         DocumentModelItem nsitem;
         Object value;
         String field;
-        String[] composed;
-        ExtendedObject[] entries;
-        StringBuilder sb = null;
-        boolean afterfirst = false;
+        boolean afterfirst = false, entriesprocessed = false;
         String operator = null;
         int enclose = 0, level = 0;
-        List<WhereClause> clauses = query.getWhere();
+        WhereData data;
         
-        entries = query.getEntries();
-        for (WhereClause clause : clauses) {
+        data = new WhereData();
+        data.entries = query.getEntries();
+        data.connection = connection;
+        data.tablemodel = tablemodel;
+        data.documents = documents;
+        data.clauses = query.getWhere();
+        data.query = query;
+        data.values = values;
+        for (WhereClause clause : data.clauses) {
             field = clause.getField();
             if (!afterfirst) {
                 afterfirst = true;
-                sb = new StringBuilder(" where");
+                data.sb = new StringBuilder(" where");
             } else {
                 if (field != null && operator != null)
-                    sb.append(" ").append(operator);
+                    data.sb.append(" ").append(operator);
             }
             
             if (enclose > level) {
-                sb.append(" (");
+                data.sb.append(" (");
                 level = enclose;
             }
             
             if (field != null) {
-                composed = field.split("\\.", 2);
-                operator = getOperator(
-                        connection, composed, tablemodel, documents);
+                operator = getOperator(data, field);
             } else {
                 switch (clause.getCondition()) {
                 case WhereClause.BE:
@@ -302,75 +281,124 @@ public class Parser {
             }
             
             if (enclose < level) {
-                sb.append(" )");
+                data.sb.append(" )");
                 level = enclose;
                 continue;
             }
             
             value = clause.getValue();
             switch (clause.getCondition()) {
+            case WhereClause.EQ_ENTRY:
+            case WhereClause.NE_ENTRY:
+            case WhereClause.LT_ENTRY:
+            case WhereClause.LE_ENTRY:
+            case WhereClause.GT_ENTRY:
+            case WhereClause.GE_ENTRY:
+                if (entriesprocessed) {
+                    operator = null;
+                    continue;
+                }
+                if (data.entries == null || data.entries.length == 0)
+                        throw new IocasteException("no entries for selection.");
+                operator = whereEntries(data);
+                entriesprocessed = true;
+                continue;
             case WhereClause.EQ:
-                addClause(sb, values, operator,
+                addClause(data, operator,
                         (value == null)? " is NULL" : " = ?", value);
                 break;
-            case WhereClause.EQ_ENTRY:
-                addEntriesClause(sb, values, operator, " = ?", value, entries);
-                break;
             case WhereClause.NE:
-                addClause(sb, values, operator, " <> ?", value);
-                break;
-            case WhereClause.NE_ENTRY:
-                addEntriesClause(sb, values, operator, " <> ?", value, entries);
+                addClause(data, operator, " <> ?", value);
                 break;
             case WhereClause.LT:
-                addClause(sb, values, operator, " < ?", value);
-                break;
-            case WhereClause.LT_ENTRY:
-                addEntriesClause(sb, values, operator, " < ?", value, entries);
+                addClause(data, operator, " < ?", value);
                 break;
             case WhereClause.LE:
-                addClause(sb, values, operator, " <= ?", value);
-                break;
-            case WhereClause.LE_ENTRY:
-                addEntriesClause(sb, values, operator, " <= ?", value, entries);
+                addClause(data, operator, " <= ?", value);
                 break;
             case WhereClause.GT:
-                addClause(sb, values, operator, " > ?", value);
-                break;
-            case WhereClause.GT_ENTRY:
-                addEntriesClause(sb, values, operator, " > ?", value, entries);
+                addClause(data, operator, " > ?", value);
                 break;
             case WhereClause.GE:
-                addClause(sb, values, operator, " >= ?", value);
-                break;
-            case WhereClause.GE_ENTRY:
-                addEntriesClause(sb, values, operator, " >= ?", value, entries);
+                addClause(data, operator, " >= ?", value);
                 break;
             case WhereClause.IN:
-                addClause(sb, values, operator, " in ", value);
+                addClause(data, operator, " in ", value);
                 break;
             case WhereClause.CP:
-                addClause(sb, values, operator, " like ?", value);
+                addClause(data, operator, " like ?", value);
                 break;
             }
             operator = clause.getOperator();
         }
-
+        
         nsitem = tablemodel.getNamespace();
         if (nsitem != null) {
-            if (sb == null)
-                sb = new StringBuilder(" where (");
+            if (data.sb == null)
+                data.sb = new StringBuilder(" where (");
             else
-                sb.append(" and (");
+                data.sb.append(" and (");
             
             field = nsitem.getTableFieldName();
-            sb.append(field).append(" = ?)");
+            data.sb.append(field).append(" = ?)");
             
             value = query.getNS();
             values.add((value == null)? "" : value);
         }
 
-        return (sb == null)? null : sb.toString();
+        return (data.sb == null)? null : data.sb.toString();
+    }
+    
+    private static final String whereEntries(WhereData data) throws Exception {
+        Object value;
+        int qt = 0;
+        String condition = null, operator = null;
+        
+        data.sb.append(" (");
+        for (ExtendedObject entry : data.entries) {
+            data.sb.append((operator == null)? " (" : " ) or (");
+            condition = null;
+            qt = 0;
+            for (WhereClause clause : data.clauses) {
+                if (condition != null)
+                    data.sb.append(" ").append(condition);
+                operator = getOperator(data, clause.getField());
+                value = entry.get((String)clause.getValue());
+                switch (clause.getCondition()) {
+                case WhereClause.EQ_ENTRY:
+                    addClause(data, operator,
+                            (value == null)? " is NULL" : " = ?", value);
+                    qt++;
+                    break;
+                case WhereClause.NE_ENTRY:
+                    addClause(data, operator, " <> ?", value);
+                    qt++;
+                    break;
+                case WhereClause.LT_ENTRY:
+                    addClause(data, operator, " < ?", value);
+                    qt++;
+                    break;
+                case WhereClause.LE_ENTRY:
+                    addClause(data, operator, " <= ?", value);
+                    qt++;
+                    break;
+                case WhereClause.GT_ENTRY:
+                    addClause(data, operator, " > ?", value);
+                    qt++;
+                    break;
+                case WhereClause.GE_ENTRY:
+                    addClause(data, operator, " >= ?", value);
+                    qt++;
+                    break;
+                default:
+                    condition = null;
+                    continue;
+                }
+                condition = clause.getOperator();
+            }
+        }
+        data.sb.append(") )");
+        return (qt != data.clauses.size())? condition : null;
     }
 }
 
@@ -383,4 +411,15 @@ class Components {
         temp = "";
         criteria = new ArrayList<Object>();
     }
+}
+
+class WhereData {
+    public ExtendedObject[] entries;
+    public StringBuilder sb;
+    public List<Object> values;
+    public List<WhereClause> clauses;
+    public Query query;
+    public Connection connection;
+    public DocumentModel tablemodel;
+    public Documents documents;
 }
