@@ -4,4 +4,6 @@
 /lib-external/
 /lib-shell/
 /lib-report/
+/connectors/
 *.war
+

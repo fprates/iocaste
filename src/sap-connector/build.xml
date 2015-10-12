@@ -1,0 +1,44 @@
+<project name="sap-connector" default="compile">
+    <property name="builddir" value="${basedir}/build"/>
+    <property name="debug.status" value="true"/>
+    <property name="connectorsdir"
+        value="${basedir}/connectors/${ant.project.name}"/>
+    
+    <target name="compile">
+        <delete dir="${connectorsdir}"/>
+        <mkdir dir="${builddir}/${ant.project.name}/classes"/>
+        
+        <!-- dependências -->
+        <path id="dependencies">
+            <fileset dir="${basedir}/ext"/>
+        </path>
+        
+        <!-- compilação classes -->
+        <javac srcdir="${basedir}/src/${ant.project.name}/classes"
+            destdir="${builddir}/${ant.project.name}/classes"
+            debug="${debug.status}">
+            <classpath refid="dependencies"/>
+        </javac>
+            
+        <!-- pacote .jar -->
+        <jar basedir="${builddir}/${ant.project.name}/classes"
+            destfile="${connectorsdir}/${ant.project.name}.jar">
+            <manifest>
+                <attribute name="Class-Path"
+                    value="./ext/iocaste.jar ./ext/sapjco3.jar"/>
+                <attribute name="Main-class"
+                    value="org.quantic.iocasteconnector.Main"/>
+            </manifest>
+        </jar>
+        
+        <copy todir="${connectorsdir}">
+            <fileset dir="${basedir}/src/${ant.project.name}">
+                <exclude name="**/classes/"/>
+                <exclude name="**/*.xml"/>
+            </fileset>
+        </copy>
+        
+        <zip zipfile="${connectorsdir}/../${ant.project.name}.zip"
+            basedir="${connectorsdir}"/>
+    </target>
+</project>
