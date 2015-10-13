@@ -160,7 +160,8 @@ public class TableTool {
     public final void first() {
         Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
-        
+
+        save(extcontext, items);
         extcontext.data.topline = 0;
         move(extcontext, items);
     }
@@ -277,12 +278,13 @@ public class TableTool {
         Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
         
+        save(extcontext, items);
         extcontext.data.topline = extcontext.data.vlines;
         pages = items.size() / extcontext.data.topline;
         extcontext.data.topline *= pages;
         move(extcontext, items);
     }
-
+    
     private final void move(Context context, List<TableToolItem> ttitems) {
         TableToolItem ttitem;
         int l, lastline;
@@ -320,6 +322,7 @@ public class TableTool {
         
         if (topline > items.size())
             return;
+        save(extcontext, items);
         extcontext.data.topline = topline;
         move(extcontext, items);
     }
@@ -331,6 +334,7 @@ public class TableTool {
         
         if (topline < 0)
             return;
+        save(extcontext, items);
         extcontext.data.topline = topline;
         move(extcontext, items);
     }
@@ -339,7 +343,7 @@ public class TableTool {
         Context extcontext = getExtendedContext();
         List<TableToolItem> ttitems;
         TableToolItem ttitem;
-        int startline, endline, i, ttitemssize, itemsdif;
+        int startline, i, ttitemssize, itemsdif;
         Set<TableItem> items = extcontext.table.getItems();
         int itemssize = items.size();
         
@@ -349,9 +353,8 @@ public class TableTool {
         ttitems = data.getItems();
         if (data.vlines > 0) {
             startline = data.topline;
-            endline = startline + data.vlines;
         } else {
-            startline = endline = 0;
+            startline = 0;
         }
         
         ttitemssize = ttitems.size();
@@ -360,16 +363,13 @@ public class TableTool {
             for (int j = 0; j < itemsdif; j++)
                 ttitems.add(new TableToolItem(data));
 
-        i = -1;
+        i = startline;
         for (TableItem item : items) {
-            i++;
-            if (data.vlines > 0) {
-                if (i < startline)
-                    continue;
-                if (i > endline)
-                    break;
+            try {
+                ttitem = ttitems.get(i++);
+            } catch (IndexOutOfBoundsException e) {
+                break;
             }
-            ttitem = ttitems.get(i);
             ttitem.object = get(data, item);
             ttitem.selected = item.isSelected();
             ttitem.set(item);
@@ -384,6 +384,22 @@ public class TableTool {
         for (TableItem item : extcontext.table.getItems())
             if (item.isSelected())
                 extcontext.table.remove(item);
+    }
+
+    private final void save(Context context, List<TableToolItem> ttitems) {
+        TableToolItem ttitem;
+        int l = context.data.topline;
+        Set<TableItem> items = context.table.getItems();
+        
+        for (TableItem item : items) {
+            try {
+                ttitem = ttitems.get(l);
+            } catch (IndexOutOfBoundsException e) {
+                break;
+            }
+            ttitem.selected = item.isSelected();
+            l++;
+        }
     }
     
     /**
