@@ -1,11 +1,5 @@
 package org.iocaste.gateway;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -16,30 +10,28 @@ public class Main extends AbstractExternalApplication {
 
     @Override
     protected void config() {
-        option("--gw-port", KEY_VALUE, "70000");
+        option("--gw-port", KEY_VALUE, "60080");
     }
 
     @Override
     protected void execute(Message message) throws Exception {
         ServerSocket localsocket;
         Socket remotesocket;
-        BufferedWriter writer;
-        BufferedReader reader;
-        String line;
         int port = Integer.parseInt(message.getString("--gw-port"));
         
         localsocket = new ServerSocket(port);
-        remotesocket = localsocket.accept();
-        writer = new BufferedWriter(
-                new OutputStreamWriter(remotesocket.getOutputStream()));
-        reader = new BufferedReader(
-                new InputStreamReader(remotesocket.getInputStream()));
-        while ((line = reader.readLine()) != null) {
-            
+        try {
+            while (true) {
+                remotesocket = localsocket.accept();
+                new Dispatcher(remotesocket, connector).start();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            localsocket.close();
         }
-        localsocket.close();
     }
-
+    
     public static final void main(String[] args) throws Exception {
         new Main().init(args);
     }

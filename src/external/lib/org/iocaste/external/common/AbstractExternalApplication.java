@@ -23,7 +23,7 @@ public abstract class AbstractExternalApplication {
 		required("--host", KEY_VALUE);
 		required("--user", KEY_VALUE);
 		option("--password", KEY_VALUE);
-		option("--language", KEY_VALUE);
+		option("--language", KEY_VALUE, "pt_BR");
 		config();
 	}
 	
