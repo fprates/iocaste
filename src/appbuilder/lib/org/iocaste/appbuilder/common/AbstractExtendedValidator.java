@@ -97,6 +97,10 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
         if (value == null)
             return null;
 
+        if (textmodel == null)
+            throw new RuntimeException(
+                    "Texts source model undefined for validator.");
+        
         object = documents.getObject(textmodel, value);
         if (object == null)
             return null;
