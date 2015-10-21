@@ -47,6 +47,10 @@ public abstract class AbstractActionHandler {
         return getDashboardFactory(dashboard).get(item).getst();
     }
     
+    protected final void delete(ExtendedObject object) {
+        documents.delete(object);
+    }
+    
     protected final DocumentExtractor documentExtractorInstance(String manager)
     {
         return new DocumentExtractor(context, manager);

@@ -6,15 +6,13 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 public class ItemsInput extends AbstractViewInput {
 
     @Override
-    protected void execute(PageBuilderContext context) {
-        Context extcontext = getExtendedContext();
-        
-        tableitemsset("items", extcontext.items);
-    }
+    protected void execute(PageBuilderContext context) { }
 
     @Override
     protected void init(PageBuilderContext context) {
-        execute(context);
+        Context extcontext = getExtendedContext();
+        
+        tableitemsset("items", extcontext.items);
     }
 
 }

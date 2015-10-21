@@ -9,7 +9,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class Context implements ExtendedContext {
-    public List<ExtendedObject> items;
+    public List<ExtendedObject> items, originals;
     public String action, model, number, appname;
     public DocumentModelItem nsitem;
     public Object ns;
@@ -18,5 +18,6 @@ public class Context implements ExtendedContext {
     
     public Context() {
         items = new ArrayList<>();
+        originals = new ArrayList<>();
     }
 }

@@ -58,8 +58,11 @@ public class Load extends AbstractActionHandler {
             return;
         
         extcontext.items.clear();
-        for (ExtendedObject item : items)
+        extcontext.originals.clear();
+        for (ExtendedObject item : items) {
             extcontext.items.add(item);
+            extcontext.originals.add(item);
+        }
     }
 
 }
