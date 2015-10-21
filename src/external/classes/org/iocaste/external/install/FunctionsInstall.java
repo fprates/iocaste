@@ -47,6 +47,7 @@ public class FunctionsInstall extends AbstractInstallObject {
         model.values(DataType.TIME, "Hora");
         model.values(DataType.EXTENDED, "Objeto extendido");
         model.values(DataType.TABLE, "Tabela");
+        model.values(DataType.BOOLEAN, "Booleano");
         
         shd = searchHelpInstance("XTRNL_SH_ITEM_TYPE", "XTRNL_ITEM_TYPE");
         shd.setExport("TYPE");
