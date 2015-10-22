@@ -211,6 +211,8 @@ public class PageRenderer extends AbstractRenderer {
             
             startRender(sessionid, resp, pagectx);
         } catch (Exception e) {
+            if (pagectx == null)
+                throw e;
             pagectx = createExceptionContext(sessionid, pagectx, e);
             resp.reset();
             startRender(sessionid, resp, pagectx);
