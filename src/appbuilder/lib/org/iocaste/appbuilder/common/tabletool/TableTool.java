@@ -380,10 +380,18 @@ public class TableTool {
      * 
      */
     public final void remove() {
+        int i = 0;
         Context extcontext = getExtendedContext();
-        for (TableItem item : extcontext.table.getItems())
-            if (item.isSelected())
-                extcontext.table.remove(item);
+        List<TableToolItem> items = extcontext.data.getItems();
+        for (TableItem item : extcontext.table.getItems()) {
+            if (!item.isSelected()) {
+                i++;
+                continue;
+            }
+            extcontext.table.remove(item);
+            items.remove(i + extcontext.data.topline);
+        }
+        save(extcontext, items);
     }
 
     private final void save(Context context, List<TableToolItem> ttitems) {
