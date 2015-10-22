@@ -10,15 +10,22 @@ import org.iocaste.protocol.Message;
 
 public class DeleteDocument extends AbstractDocumentsHandler {
 
-    @Override
+    @Override    
     public Object run(Message message) throws Exception {
-        String query;
         Connection connection;
-        Documents documents;
+        Documents documents = getFunction();
+        ExtendedObject object = message.get("object");
+        
+        connection = documents.database.getDBConnection(message.getSessionid());
+        return run(documents, connection, object);
+    }
+
+    public int run(Documents documents, Connection connection,
+            ExtendedObject object) throws Exception {
+        String query;
         DocumentModel model;
         Set<DocumentModelKey> keys;
         Object[] criteria;
-        ExtendedObject object = message.get("object");
         int i = 0;
 
         model = object.getModel();
@@ -28,8 +35,6 @@ public class DeleteDocument extends AbstractDocumentsHandler {
             criteria[i++] = object.get(model.getModelItem(
                     key.getModelItemName()));
         
-        documents = getFunction();
-        connection = documents.database.getDBConnection(message.getSessionid());
         query = documents.cache.queries.get(model.getName()).get("delete");
         return update(connection, query, criteria);
     }

@@ -13,9 +13,21 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class GetComplexDocument extends AbstractDocumentsHandler {
-
     @Override
     public Object run(Message message) throws Exception {
+        CDocumentData data = new CDocumentData();
+        data.cdname = message.getString("name");
+        data.id = message.get("id");
+        data.ns = message.get("ns");
+        data.documents = getFunction();
+        data.sessionid = message.getSessionid();
+        data.connection = data.documents.database.
+                getDBConnection(data.sessionid);
+        
+        return run(data);
+    }
+
+    public ComplexDocument run(CDocumentData data) throws Exception {
         GetComplexModel getcmodel;
         GetObject getobject;
         SelectDocument select;
@@ -27,22 +39,16 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
         Query query;
         ComplexModel cmodel;
         DocumentModelItem reference, headerkey;
-        String cdname = message.getString("name");
-        Object id = message.get("id");
-        Object ns = message.get("ns");
-        String sessionid = message.getSessionid();
-        Documents documents = getFunction();
-        Connection connection = documents.database.getDBConnection(sessionid);
         
-        getcmodel = documents.get("get_complex_model");
-        cmodel = getcmodel.run(connection, documents, cdname);
+        getcmodel = data.documents.get("get_complex_model");
+        cmodel = getcmodel.run(data.connection, data.documents, data.cdname);
         if (cmodel == null)
             throw new IocasteException(
-                    cdname.concat(" complex model undefined."));
+                    data.cdname.concat(" complex model undefined."));
         
-        getobject = documents.get("get_object");
-        object = getobject.run(connection, documents,
-                cmodel.getHeader().getName(), ns, id);
+        getobject = data.documents.get("get_object");
+        object = getobject.run(data.connection, data.documents,
+                cmodel.getHeader().getName(), data.ns, data.id);
         if (object == null)
             return null;
         
@@ -51,7 +57,7 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
         if (headerkey == null)
             throw new IocasteException("no valid key found.");
 
-        select = documents.get("select_document");
+        select = data.documents.get("select_document");
         document = new ComplexDocument(cmodel);
         document.setHeader(object);
         models = cmodel.getItems();
@@ -59,10 +65,10 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
             model = models.get(name);
             query = new Query();
             query.setModel(model.getName());
-            query.setNS(ns);
+            query.setNS(data.ns);
             reference = getReferenceItem(model, headerkey);
-            query.andEqual(reference.getName(), id);
-            objects = select.run(connection, query);
+            query.andEqual(reference.getName(), data.id);
+            objects = select.run(data.connection, query);
             if (objects == null)
                 continue;
             document.add(objects);
@@ -71,4 +77,11 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
         return document;
     }
 
+}
+
+class CDocumentData {
+    String cdname, sessionid;
+    Object id, ns;
+    Documents documents;
+    Connection connection;
 }

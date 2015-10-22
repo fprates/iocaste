@@ -14,12 +14,19 @@ public class ModifyDocument extends AbstractDocumentsHandler {
 
     @Override
     public Object run(Message message) throws Exception {
+        ExtendedObject object = message.get("object");
+        Documents documents = getFunction();
+        Connection connection = documents.database.
+                getDBConnection(message.getSessionid());
+        
+        return run(documents, connection, object);
+    }
+    
+    public int run(Documents documents, Connection connection,
+            ExtendedObject object) throws Exception {
         String query, name;
         Object value;
         int nrregs;
-        Documents documents;
-        Connection connection;
-        ExtendedObject object = message.get("object");
         DocumentModel model = object.getModel();
         List<Object> criteria = new ArrayList<>();
         List<Object> uargs = new ArrayList<>();
@@ -48,7 +55,6 @@ public class ModifyDocument extends AbstractDocumentsHandler {
         if (query == null)
             return 0;
         
-        connection = documents.database.getDBConnection(message.getSessionid());
         nrregs = update(connection, query, uargs.toArray());
         
         query = documents.cache.queries.get(name).get("insert");

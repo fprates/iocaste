@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -503,6 +504,14 @@ public class Documents extends AbstractServiceInterface {
         return call(message);
     }
     
+    private static final boolean matchObjects(
+            ExtendedObject object, Map<String, Object> keys) {
+        for (String key : keys.keySet())
+            if (!Documents.equals(object, key, keys.get(key)))
+                return false;
+        return true;
+    }
+    
     /**
      * Atualiza entrada especificada pelo objeto extendido.
      * @param object objeto a ser atualizado.
@@ -557,6 +566,38 @@ public class Documents extends AbstractServiceInterface {
             to.set(name, from.get(item));
         }
         to.setNS(from.getNS());
+    }
+    
+    public static final ExtendedObject readobjects(
+            ExtendedObject[] objects, String op1, Object op2) {
+        for (ExtendedObject object : objects)
+            if (Documents.equals(object, op1, op2))
+                return object;
+        return null;
+    }
+
+    public static final ExtendedObject readobjects(
+            ExtendedObject[] objects, Map<String, Object> keys) {
+        for (ExtendedObject object : objects)
+            if (matchObjects(object, keys))
+                return object;
+        return null;
+    }
+    
+    public static final ExtendedObject readobjects(
+            Collection<ExtendedObject> objects, String op1, Object op2) {
+        for (ExtendedObject object : objects)
+            if (Documents.equals(object, op1, op2))
+                return object;
+        return null;
+    }
+
+    public static final ExtendedObject readobjects(
+            Collection<ExtendedObject> objects, Map<String, Object> keys) {
+        for (ExtendedObject object : objects)
+            if (matchObjects(object, keys))
+                return object;
+        return null;
     }
     
     /**
