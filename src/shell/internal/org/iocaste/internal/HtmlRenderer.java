@@ -19,6 +19,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
+import org.iocaste.shell.common.ViewTitle;
 
 public class HtmlRenderer {
     private String username;
@@ -75,7 +76,8 @@ public class HtmlRenderer {
         XMLElement linktag;
         List<HeaderLink> links;
         Element focus = view.getFocus();
-        String focusname, title = view.getTitle();
+        String focusname;
+        ViewTitle title = view.getTitle();
         XMLElement headtag = new XMLElement("head");
         XMLElement metatag = new XMLElement("meta");
         XMLElement titletag = new XMLElement("title");
@@ -89,7 +91,7 @@ public class HtmlRenderer {
                 "width=device-width, initial-scale=1.0, user-scalable=no");
         headtag.addChild(metatag);
         
-        titletag.addInner((title == null)? "Iocaste" : title);
+        titletag.addInner((title.text == null)? "Iocaste" : title.text);
 
         if (focus != null) {
             focusname = focus.getHtmlName();

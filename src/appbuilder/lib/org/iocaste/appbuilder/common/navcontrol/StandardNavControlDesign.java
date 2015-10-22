@@ -13,6 +13,7 @@ import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.ViewTitle;
 
 public class StandardNavControlDesign implements NavControlDesign {
     protected StandardContainer buttonbar;
@@ -30,9 +31,10 @@ public class StandardNavControlDesign implements NavControlDesign {
      */
     @Override
     public final void build(Container container, PageBuilderContext context) {
-        Text text, title;
+        Text text;
         Link link;
-        String name, titletext;
+        String name;
+        ViewTitle title;
         Iocaste iocaste;
         PageStackItem[] positions;
         User user;
@@ -73,11 +75,11 @@ public class StandardNavControlDesign implements NavControlDesign {
              * a posição no próprio handler.
              */
             context.function.register(name, new NavControlCustomAction(name));
-            titletext = position.getTitle();
+            title = position.getTitle();
             
             link = new Link(container, name, name);
             link.setStyleClass("nc_nav_link");
-            link.setText((titletext == null)? name : titletext);
+            link.setText((title.text == null)? name : title.text);
             link.setCancellable(true);
             
             text = new Text(container, name.concat(".separator"));
@@ -86,13 +88,13 @@ public class StandardNavControlDesign implements NavControlDesign {
         }
 
         iocaste = new Iocaste(context.function);
-        name = context.view.getTitle();
+        name = context.view.getTitle().text;
         if (name == null)
             name = iocaste.getCurrentApp();
         
-        title = new Text(container, "this");
-        title.setStyleClass("nc_text");
-        title.setText(name);
+        text = new Text(container, "this");
+        text.setStyleClass("nc_text");
+        text.setText(name);
         
         user = iocaste.getUserData(iocaste.getUsername());
         text = new Text(container, "username");

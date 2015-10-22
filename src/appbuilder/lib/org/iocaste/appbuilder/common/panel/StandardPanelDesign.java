@@ -16,6 +16,7 @@ import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Text;
+import org.iocaste.shell.common.ViewTitle;
 
 public class StandardPanelDesign implements NavControlDesign {
     private boolean offline;
@@ -29,11 +30,12 @@ public class StandardPanelDesign implements NavControlDesign {
     
     @Override
     public void build(Container container, PageBuilderContext context) {
+        ViewTitle title;
         Button button;
         Link link;
         Text text;
         Map<String, String> style;
-        String name, address;
+        String address;
         boolean backrule;
         StyleSheet stylesheet;
         CommonStyle profile;
@@ -58,17 +60,17 @@ public class StandardPanelDesign implements NavControlDesign {
         style.put("border-bottom-color", profile.content.bgcolor);
         container.setStyleClass("std_navcontrol_head");
         
-        name = context.view.getTitle();
+        title = context.view.getTitle();
         if (offline) {
             if (iocaste == null)
                 iocaste = new Iocaste(context.function);
             offline = !iocaste.isConnected();
         }
         
-        if (!offline && (name == null))
-            name = iocaste.getCurrentApp();
+        if (!offline && (title.text == null))
+            title.text = iocaste.getCurrentApp();
         
-        if (name == null)
+        if (title.text == null)
             return;
         
         if (!offline) {
@@ -138,8 +140,8 @@ public class StandardPanelDesign implements NavControlDesign {
         
         text = new Text(container, "navcontrol_title");
         text.setStyleClass("std_navcontrol_title");
-        text.setText(name);
-        context.view.setTitle(name);
+        text.setText((title.args == null)? title.text :
+            String.format(title.text, title.args));
     }
 
     @Override

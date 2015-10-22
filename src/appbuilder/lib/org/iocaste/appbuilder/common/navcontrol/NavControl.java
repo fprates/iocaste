@@ -53,8 +53,8 @@ public class NavControl {
         this.design = design;
     }
     
-    public final void setTitle(String title) {
-        context.view.setTitle(title);
+    public final void setTitle(String title, Object... args) {
+        context.view.setTitle(title, args);
     }
     
     public final void submit(String action) {

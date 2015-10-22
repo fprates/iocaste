@@ -26,18 +26,22 @@ public class GetViewData extends AbstractHandler {
     private final void fillTranslations(View view) {
         String text;
         Map<String, Element> elements;
+        ViewTitle title;
         
         elements = view.getElements();
         for (String name : elements.keySet())
             elements.get(name).translate(messages);
         
-        text = view.getTitle();
+        title = view.getTitle();
+        if (title.text == null)
+            return;
+        text = messages.get(title.text);
         if (text == null)
             return;
-        text = messages.get(text);
-        if (text == null)
-            return;
-        view.setTitle(text);
+        if ((title.args == null || title.args.length == 0))
+            view.setTitle(text, title.args);
+        else
+            view.setTitle(String.format(text, title.args));
     }
     
     @Override

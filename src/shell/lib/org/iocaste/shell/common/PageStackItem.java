@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 public class PageStackItem implements Serializable {
     private static final long serialVersionUID = -5578481174763146570L;
-    private String app, page, title;
+    private String app, page;
+    private ViewTitle title;
     
     public PageStackItem(String app, String page) {
         this.app = app;
@@ -28,14 +29,14 @@ public class PageStackItem implements Serializable {
     /**
      * @return o title
      */
-    public final String getTitle() {
+    public final ViewTitle getTitle() {
         return title;
     }
     
     /**
      * @param title o title a ser configurado
      */
-    public final void setTitle(String title) {
+    public final void setTitle(ViewTitle title) {
         this.title = title;
     }
     

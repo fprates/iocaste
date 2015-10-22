@@ -34,6 +34,7 @@ public abstract class AbstractComponent extends AbstractElement
       implements Component {
     private static final long serialVersionUID = -5327168368336946819L;
     private String container, text;
+    private Object[] args;
     
     public AbstractComponent(View view, Const type, String name) {
         super(type, name);
@@ -62,8 +63,18 @@ public abstract class AbstractComponent extends AbstractElement
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Component#getText()
      */
+    @Override
     public final String getText() {
         return text;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.Component#getTextArgs()
+     */
+    @Override
+    public final Object[] getTextArgs() {
+        return args;
     }
     
     /*
@@ -95,10 +106,12 @@ public abstract class AbstractComponent extends AbstractElement
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.Component#setText(java.lang.String)
+     * @see org.iocaste.shell.common.Component#setText(
+     *    java.lang.String, java.lang.Object[])
      */
-    public final void setText(String text) {
+    public final void setText(String text, Object... args) {
         this.text = text;
+        this.args = args;
     }
     
     @Override
@@ -120,9 +133,11 @@ public abstract class AbstractComponent extends AbstractElement
         
         message = messages.get(getName());
         if (message != null)
-            return message;
+            return (args == null)? message : String.format(message, args);
         if (this.text == null)
             return null;
-        return messages.get(text);
+        message = messages.get(text);
+        return (args == null || args.length == 0)?
+                message : String.format(message, args);
     }
 }

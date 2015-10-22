@@ -81,10 +81,9 @@ public class SessionContext {
     public final void pushPage(View view) {
         String appname = view.getAppName();
         String pagename = view.getPageName();
-        String title = view.getTitle();
         PageStackItem entry = new PageStackItem(appname, pagename);
         
-        entry.setTitle(title);
+        entry.setTitle(view.getTitle());
         pagestack.push(entry);
     }
     

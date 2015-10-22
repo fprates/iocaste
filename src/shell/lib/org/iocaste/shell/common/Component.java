@@ -42,10 +42,16 @@ public interface Component extends Element {
     public abstract String getText();
     
     /**
+     * 
+     * @return
+     */
+    public abstract Object[] getTextArgs();
+    
+    /**
      * Ajusta texto do component
      * @param text
      */
-    public abstract void setText(String text);
+    public abstract void setText(String text, Object... args);
     
     /**
      * Ajusta permissão para tradução

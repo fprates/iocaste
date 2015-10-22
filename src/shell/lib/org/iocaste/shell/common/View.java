@@ -39,19 +39,20 @@ public class View implements Serializable {
     public static final boolean INITIALIZE = true;
     private byte[] content;
     private Element elementfocus;
-    private String title, appname, pagename;
+    private String appname, pagename;
     private List<String> lines;
     private List<Container> containers;
     private List<HeaderLink> links;
     private Map<String, Map<String, String>> sheet;
     private Map<String, Element> elements;
     private Locale locale;
+    private ViewTitle title;
     
     public View(String appname, String pagename) {
         lines = new ArrayList<>();
         containers = new ArrayList<>();
         elements = new HashMap<>();
-        
+        title = new ViewTitle();
         this.appname = appname;
         this.pagename = pagename;
     }
@@ -190,7 +191,7 @@ public class View implements Serializable {
      * Retorna título da página.
      * @return título
      */
-    public final String getTitle() {
+    public final ViewTitle getTitle() {
         return title;
     }
     
@@ -260,8 +261,9 @@ public class View implements Serializable {
      * Ajusta título da visão.
      * @param title título
      */
-    public final void setTitle(String title) {
-        this.title = title;
+    public final void setTitle(String text, Object... args) {
+        title.text = text;
+        title.args = args;
     }
     
     public final StyleSheet styleSheetInstance() {
