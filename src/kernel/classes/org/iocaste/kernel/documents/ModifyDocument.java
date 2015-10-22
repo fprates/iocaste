@@ -46,6 +46,7 @@ public class ModifyDocument extends AbstractDocumentsHandler {
         if (value != null) {
             uargs.add(value);
             criteria.add(value);
+            iargs.add(value);
         }
         uargs.addAll(criteria);
         nrregs = 0;
