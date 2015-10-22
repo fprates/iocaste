@@ -18,14 +18,14 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         ModifyDocument modify;
         GetComplexDocument getcdoc;
         Map<String, DocumentModel> models;
-        ExtendedObject[] objects;
+        ExtendedObject[] nobjects, oobjects;
         ComplexDocument original;
         Map<String, Object> keys;
         ComplexDocument document = message.get("document");
         ComplexModel cmodel = document.getModel();
         CDocumentData data = new CDocumentData();
 
-        data.cdname = document.getModel().getName();
+        data.cdname = cmodel.getName();
         data.id = document.getKey();
         data.ns = document.getNS();
         data.documents = getFunction();
@@ -39,8 +39,8 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         modify.run(data.documents, data.connection, document.getHeader());
         models = cmodel.getItems();
         for (String name : models.keySet()) {
-            objects = document.getItems(name);
-            for (ExtendedObject item : objects)
+            nobjects = document.getItems(name);
+            for (ExtendedObject item : nobjects)
                 modify.run(data.documents, data.connection, item);
         }
         
@@ -48,10 +48,13 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
             return null;
         
         delete = data.documents.get("delete_document");
+        keys = null;
         for (String name : models.keySet()) {
-            objects = original.getItems(name);
-            keys = null;
-            for (ExtendedObject object : objects) {
+            oobjects = original.getItems(name);
+            nobjects = document.getItems(name);
+            if (keys != null)
+                keys.clear();
+            for (ExtendedObject object : oobjects) {
                 if (keys == null) {
                     keys = new HashMap<>();
                     for (DocumentModelKey key : object.getModel().getKeys()) {
@@ -64,7 +67,7 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
                     keys.put(key, object.get(key));
                 
                 if (org.iocaste.documents.common.Documents.
-                        readobjects(objects, keys) == null)
+                        readobjects(nobjects, keys) == null)
                     delete.run(data.documents, data.connection, object);
             }
         }

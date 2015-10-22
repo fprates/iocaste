@@ -134,7 +134,6 @@ public class Services extends AbstractFunction {
             document.add(group);
         }
 
-        documents.deleteComplexDocument(cmodelname, id);
         documents.save(document);
         
         return document;
