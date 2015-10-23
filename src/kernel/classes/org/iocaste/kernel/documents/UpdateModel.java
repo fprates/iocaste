@@ -20,7 +20,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
         boolean namespaced, initial;
         DocumentModel oldmodel;
         List<String> statements;
-        String statement, name;
+        String name;
         DocumentModelItem ns, oldns;
         DataElement element;
 
@@ -59,10 +59,8 @@ public class UpdateModel extends AbstractDocumentsHandler {
             initial = false;
         }
         
-        if (!initial) {
-            statement = data.altertable.compose(data.table);
-            statements.add(statement);
-        }
+        if (!initial)
+            data.altertable.compose(statements, data.table);
         
         /*
          * atualiza campos
@@ -94,10 +92,8 @@ public class UpdateModel extends AbstractDocumentsHandler {
             initial = false;
         }
         
-        if (!initial) {
-            statement = data.altertable.compose(data.table);
-            statements.add(statement);
-        }
+        if (!initial)
+            data.altertable.compose(statements, data.table);
 
         /*
          * remove campos
@@ -116,10 +112,8 @@ public class UpdateModel extends AbstractDocumentsHandler {
                 initial = false;
             }
             
-            if (!initial) {
-                statement = data.altertable.compose(data.table);
-                statements.add(statement);
-            }
+            if (!initial)
+                data.altertable.compose(statements, data.table);
         }
         
         for (String stmt : statements)
@@ -140,7 +134,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
     
     private final void nsupdate(UpdateData data, List<String> statements,
             DocumentModelItem oldns, DocumentModelItem ns) {
-        String nstablefield, tablename, statement;
+        String nstablefield, tablename;
         DataElement element;
         
         if ((ns != null) && (oldns == null)) {
@@ -150,8 +144,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
             tablename = new StringBuilder("pk_").
                     append(data.table.getName()).toString();
             data.table.dropkey(tablename);
-            statement = data.altertable.compose(data.table);
-            statements.add(statement);
+            data.altertable.compose(statements, data.table);
 
             data.table.clear();
             element = ns.getDataElement();

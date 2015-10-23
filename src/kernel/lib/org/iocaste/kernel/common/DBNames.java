@@ -9,6 +9,7 @@ public class DBNames {
     public static final byte HSQLDB = 2;
     public static final byte POSTGRES = 3;
     public static final byte MSSQL2 = 4;
+    public static final byte LAST = MSSQL2;
     public static Map<String, Byte> names;
     public static final String[] DRIVERS = {
         "com.mysql.jdbc.Driver",
