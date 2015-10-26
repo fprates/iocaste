@@ -31,6 +31,7 @@ import java.io.Serializable;
 public class DocumentModelItem implements Comparable<DocumentModelItem>,
             Serializable {
     private static final long serialVersionUID = 7353680713818082301L;
+    public static final int MAX_FNAME_LEN = 24;
     private DocumentModel document;
     private DataElement dataelement;
     private String name, attribname, gettername, settername, fieldname, sh;

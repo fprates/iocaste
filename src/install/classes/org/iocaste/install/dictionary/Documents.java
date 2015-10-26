@@ -3,6 +3,7 @@ package org.iocaste.install.dictionary;
 import java.util.List;
 
 import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.kernel.common.Table;
 
 public class Documents extends Module {
@@ -55,7 +56,7 @@ public class Documents extends Module {
         docs002.key("INAME", DataType.CHAR, 48);
         docs002.ref("DOCID", DataType.CHAR, 24, "DOCS001", "DOCID");
         docs002.add("NRITM", DataType.NUMC, 3);
-        docs002.add("FNAME", DataType.CHAR, 24);
+        docs002.add("FNAME", DataType.CHAR, DocumentModelItem.MAX_FNAME_LEN);
         docs002.ref("ENAME", DataType.CHAR, 48, "DOCS003", "ENAME");
         docs002.add("ATTRB", DataType.CHAR, 64);
         docs002.add("ITREF", DataType.CHAR, 48);
@@ -85,7 +86,8 @@ public class Documents extends Module {
         insertElement(docs003,
                 "MODEL.CLASS", 0, 255, 0, false);
         insertElement(docs003,
-                "MODELITEM.FIELDNAME", 0, 24, 0, true);
+                "MODELITEM.FIELDNAME", 0, DocumentModelItem.MAX_FNAME_LEN, 0,
+                        true);
         insertElement(docs003,
                 "DATAELEMENT.LENGTH", 0, 4, 3, false);
         insertElement(docs003,

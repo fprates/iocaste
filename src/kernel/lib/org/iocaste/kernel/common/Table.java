@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.DocumentModelItem;
 
 public class Table {
     public static final byte REGULAR = 0;
@@ -24,6 +25,13 @@ public class Table {
     private final void add(String name, int type, int len, int dec, boolean key,
             String tableref, String fieldref, String fkc, String rfc) {
         Field field;
+        
+        if ((name.length() > DocumentModelItem.MAX_FNAME_LEN) &&
+                (type != DataType.CONSTRAINT))
+            throw new RuntimeException(new StringBuilder(name).
+                    append(" name exceeds limit of ").
+                    append(DocumentModelItem.MAX_FNAME_LEN).
+                    append(" bytes.").toString());
         
         field = fields.get(name);
         if (field == null) {
