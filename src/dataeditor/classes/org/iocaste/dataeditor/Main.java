@@ -30,6 +30,8 @@ public class Main extends AbstractPageBuilder {
         extcontext.model = getParameter("model");
         extcontext.number = getParameter("number");
         extcontext.documents = new Documents(context.function);
+        if (extcontext.action != null)
+            extcontext.auto = true;
         if (extcontext.model != null) {
             model = new Documents(context.function).getModel(extcontext.model);
             if (model != null) {

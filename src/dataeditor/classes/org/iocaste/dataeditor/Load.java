@@ -20,9 +20,8 @@ public class Load extends AbstractActionHandler {
         DocumentModel model;
 
         extcontext = getExtendedContext();
-        if (extcontext.action == null)
+        if (!extcontext.auto)
             extcontext.model = getdfkeyst("model");
-        
         model = extcontext.documents.getModel(extcontext.model);
         if (model == null) {
             message(Const.ERROR, "invalid.model");

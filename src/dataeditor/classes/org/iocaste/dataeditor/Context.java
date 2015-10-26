@@ -15,6 +15,7 @@ public class Context implements ExtendedContext {
     public Object ns;
     public Documents documents;
     public ExtendedObject object;
+    public boolean auto;
     
     public Context() {
         items = new ArrayList<>();
