@@ -9,11 +9,13 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.tabletool.actions.AcceptAction;
 import org.iocaste.appbuilder.common.tabletool.actions.AddAction;
+import org.iocaste.appbuilder.common.tabletool.actions.DeselectAllAction;
 import org.iocaste.appbuilder.common.tabletool.actions.FirstAction;
 import org.iocaste.appbuilder.common.tabletool.actions.LastAction;
 import org.iocaste.appbuilder.common.tabletool.actions.NextAction;
 import org.iocaste.appbuilder.common.tabletool.actions.PreviousAction;
 import org.iocaste.appbuilder.common.tabletool.actions.RemoveAction;
+import org.iocaste.appbuilder.common.tabletool.actions.SelectAllAction;
 import org.iocaste.appbuilder.common.tabletool.actions.TableToolAction;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -33,13 +35,6 @@ import org.iocaste.shell.common.Validator;
 import org.iocaste.shell.common.View;
 
 public class TableTool {
-    public static final String ADD = "add";
-    public static final String REMOVE = "remove";
-    public static final String ACCEPT = "accept";
-    public static final String PREVIOUS = "previous";
-    public static final String NEXT = "next";
-    public static final String FIRST = "first";
-    public static final String LAST = "last";
     public static final byte CONTINUOUS_UPDATE = 0;
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
@@ -77,6 +72,8 @@ public class TableTool {
                 actions.put(action, new CustomAction(this, data, action));
         
         for (TableToolAction action : new TableToolAction[] {
+                new SelectAllAction(this, data),
+                new DeselectAllAction(this, data),
                 new AcceptAction(this, data),
                 new AddAction(this, data),
                 new RemoveAction(this, data),
@@ -93,6 +90,9 @@ public class TableTool {
         TableRender.run(this, context.function, extcontext);
         installValidators(extcontext);
         model = new Documents(context.function).getModel(data.model);
+        for (String key : actions.keySet())
+            if (actions.get(key).isMarkable())
+                getActionElement(key).setVisible(extcontext.data.mark);
     }
     
     /**
@@ -410,6 +410,16 @@ public class TableTool {
         }
     }
     
+    public final void selectAll(boolean mark) {
+        Context extcontext = getExtendedContext();
+        List<TableToolItem> items = extcontext.data.getItems();
+        
+        for (TableItem item : extcontext.table.getItems())
+            item.setSelected(mark);
+        for (TableToolItem item : items)
+            item.selected = mark;
+    }
+    
     /**
      * Importa objeto extendido.
      * 
@@ -474,13 +484,9 @@ public class TableTool {
         boolean visible;
         visible = ((ttitems.size() > context.data.vlines) &&
                 (context.data.vlines > 0));
-        for (String action : new String[] {
-                TableTool.FIRST,
-                TableTool.LAST,
-                TableTool.PREVIOUS,
-                TableTool.NEXT
-        })
-            getActionElement(action).setVisible(visible);
+        for (String action : actions.keySet())
+            if (actions.get(action).isNavigable())
+                getActionElement(action).setVisible(visible);
     }
     
     /**

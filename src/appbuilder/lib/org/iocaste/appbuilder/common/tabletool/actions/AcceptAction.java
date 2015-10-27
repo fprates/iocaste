@@ -8,7 +8,7 @@ public class AcceptAction extends TableToolAction {
     private static final long serialVersionUID = 1596429561800912771L;
 
     public AcceptAction(TableTool tabletool, TableToolData data) {
-        super(tabletool, data, TableTool.ACCEPT);
+        super(tabletool, data, "accept");
     }
 
     @Override

@@ -12,6 +12,7 @@ public abstract class TableToolAction implements ViewCustomAction {
     private String action, name, text;
     private TableToolData data;
     protected TableTool tabletool;
+    protected boolean navigable, markable;
 
     public TableToolAction(
             TableTool tabletool, TableToolData data, String action) {
@@ -29,7 +30,7 @@ public abstract class TableToolAction implements ViewCustomAction {
         this.data = data;
     }
     
-    public Button build(Container container) {
+    public final Button build(Container container) {
         Button button = new Button(container, action.concat(data.name));
         if (text != null)
             button.setText(text);
@@ -39,15 +40,31 @@ public abstract class TableToolAction implements ViewCustomAction {
     @Override
     public abstract void execute(AbstractContext context) throws Exception;
     
-    public String getAction() {
+    public final String getAction() {
         return action;
     }
     
-    public String getName() {
+    public final String getName() {
         return name;
     }
     
-    protected void setText(String text) {
+    public final boolean isMarkable() {
+        return markable;
+    }
+    
+    public final boolean isNavigable() {
+        return navigable;
+    }
+    
+    protected final void setMarkable(boolean markable) {
+        this.markable = markable;
+    }
+    
+    protected final void setNavigable(boolean navigable) {
+        this.navigable = navigable;
+    }
+    
+    protected final void setText(String text) {
         this.text = text;
     }
 }

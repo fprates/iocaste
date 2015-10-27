@@ -8,8 +8,9 @@ public class FirstAction extends TableToolAction {
     private static final long serialVersionUID = 5093350441578939032L;
 
     public FirstAction(TableTool tabletool, TableToolData data) {
-        super(tabletool, data, TableTool.FIRST);
+        super(tabletool, data, "first");
         setText("<<");
+        setNavigable(true);
     }
 
     @Override

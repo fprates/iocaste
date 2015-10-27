@@ -8,8 +8,9 @@ public class LastAction extends TableToolAction {
     private static final long serialVersionUID = -2813334485389060483L;
 
     public LastAction(TableTool tabletool, TableToolData data) {
-        super(tabletool, data, TableTool.LAST);
+        super(tabletool, data, "last");
         setText(">>");
+        setNavigable(true);
     }
 
     @Override

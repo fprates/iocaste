@@ -8,8 +8,9 @@ public class PreviousAction extends TableToolAction {
     private static final long serialVersionUID = 3180662889953589672L;
 
     public PreviousAction(TableTool tabletool, TableToolData data) {
-        super(tabletool, data, TableTool.PREVIOUS);
+        super(tabletool, data, "previous");
         setText("<");
+        setNavigable(true);
     }
 
     @Override

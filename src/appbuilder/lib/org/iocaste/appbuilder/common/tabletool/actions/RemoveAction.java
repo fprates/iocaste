@@ -8,7 +8,7 @@ public class RemoveAction extends TableToolAction {
     private static final long serialVersionUID = -1396102406654090643L;
 
     public RemoveAction(TableTool tabletool, TableToolData data) {
-        super(tabletool, data, TableTool.REMOVE);
+        super(tabletool, data, "remove");
         setText("-");
     }
 
