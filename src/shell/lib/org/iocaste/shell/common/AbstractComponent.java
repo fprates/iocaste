@@ -137,6 +137,8 @@ public abstract class AbstractComponent extends AbstractElement
         if (this.text == null)
             return null;
         message = messages.get(text);
+        if (message == null)
+            return null;
         return (args == null || args.length == 0)?
                 message : String.format(message, args);
     }
