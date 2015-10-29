@@ -71,7 +71,7 @@ public class Documents extends AbstractFunction {
     public final Map<String, String> parseQueries(DocumentModel model) {
         DocumentModelItem ns;
         String fieldname;
-        boolean iskey, keystarted, setok, started;
+        boolean iskey, keystarted, istarted, ustarted;
         DocumentModelItem[] items;
         String tablename;
         StringBuilder update, insert, delete, values, where;
@@ -87,14 +87,14 @@ public class Documents extends AbstractFunction {
         }
 
         tablename = model.getTableName();
-        update = new StringBuilder("update ").append(tablename).append(" set ");
+        update = null;
         insert = new StringBuilder("insert into ").
                 append(tablename).append(" (");
         delete = new StringBuilder("delete from ").append(tablename);
         values = new StringBuilder(") values (");
         where = new StringBuilder(" where ");
         queries = new HashMap<>();
-        started = keystarted = setok = false;
+        ustarted = istarted = keystarted = false;
         for (DocumentModelItem modelitem : items) {
             if (modelitem == null) {
                 System.err.println(new StringBuilder("null item for model ").
@@ -103,7 +103,7 @@ public class Documents extends AbstractFunction {
                 continue;
             }
             
-            if (started) {
+            if (istarted) {
                 insert.append(", ");
                 values.append(", ");
             }
@@ -117,14 +117,18 @@ public class Documents extends AbstractFunction {
             values.append("?");
             if (iskey) {
                 where.append(fieldname).append(" = ?");
-                keystarted = started = true;
+                keystarted = true;
             } else {
-                if (started)
+                if (update == null)
+                    update = new StringBuilder("update ").
+                        append(tablename).append(" set ");
+                if (ustarted)
                     update.append(", ");
                 else
-                    started = true;
+                    ustarted = true;
                 update.append(fieldname).append(" = ?");
             }
+            istarted = true;
         }
 
         ns = model.getNamespace();
@@ -136,18 +140,15 @@ public class Documents extends AbstractFunction {
             values.append(", ?");
         }
         
-        if (setok)
-            update.append(where);
-        
         insert.append(values).append(")");
-        delete.append(where);
-        
         queries.put("insert", insert.toString());
-        
-        if (setok)
-            queries.put("update", update.toString());
-        
+        delete.append(where);
         queries.put("delete", delete.toString());
+        if (update != null) {
+            update.append(where);
+            queries.put("update", update.toString());
+        }
+        
         return queries;
     }
 }
