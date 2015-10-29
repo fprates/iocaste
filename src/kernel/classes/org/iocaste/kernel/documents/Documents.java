@@ -71,19 +71,11 @@ public class Documents extends AbstractFunction {
     public final Map<String, String> parseQueries(DocumentModel model) {
         DocumentModelItem ns;
         String fieldname;
-        boolean iskey, setok = false;
-        int k = 0;
-        String tablename = model.getTableName();
-        StringBuilder update = new StringBuilder("update ").
-                append(tablename).append(" set ");
-        StringBuilder insert = new StringBuilder("insert into ").
-                append(tablename).append(" (");
-        StringBuilder delete = new StringBuilder("delete from ").
-                append(tablename);
-        StringBuilder values = new StringBuilder(") values (");
-        StringBuilder where = new StringBuilder(" where ");
-        Map<String, String> queries = new HashMap<>();
+        boolean iskey, keystarted, setok, started;
         DocumentModelItem[] items;
+        String tablename;
+        StringBuilder update, insert, delete, values, where;
+        Map<String, String> queries;
         
         try {
             items = model.getItens();
@@ -93,7 +85,16 @@ public class Documents extends AbstractFunction {
              */
             return null;
         }
-        
+
+        tablename = model.getTableName();
+        update = new StringBuilder("update ").append(tablename).append(" set ");
+        insert = new StringBuilder("insert into ").
+                append(tablename).append(" (");
+        delete = new StringBuilder("delete from ").append(tablename);
+        values = new StringBuilder(") values (");
+        where = new StringBuilder(" where ");
+        queries = new HashMap<>();
+        started = keystarted = setok = false;
         for (DocumentModelItem modelitem : items) {
             if (modelitem == null) {
                 System.err.println(new StringBuilder("null item for model ").
@@ -102,30 +103,28 @@ public class Documents extends AbstractFunction {
                 continue;
             }
             
-            iskey = model.isKey(modelitem);
-            
-            if (k++ > 0) {
+            if (started) {
                 insert.append(", ");
                 values.append(", ");
-                if (iskey) {
-                    where.append(" and ");
-                    setok = false;
-                } else {
-                    if (setok)
-                        update.append(", ");
-                    
-                    setok = true;
-                }
             }
+
+            iskey = model.isKey(modelitem);
+            if (keystarted && iskey)
+                where.append(" and ");
             
             fieldname = modelitem.getTableFieldName();
             insert.append(fieldname);
-            
             values.append("?");
-            if (iskey)
+            if (iskey) {
                 where.append(fieldname).append(" = ?");
-            else
+                keystarted = started = true;
+            } else {
+                if (started)
+                    update.append(", ");
+                else
+                    started = true;
                 update.append(fieldname).append(" = ?");
+            }
         }
 
         ns = model.getNamespace();
