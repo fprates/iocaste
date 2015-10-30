@@ -1,7 +1,5 @@
 package org.iocaste.external;
 
-import java.util.Map;
-
 import org.iocaste.protocol.AbstractIocasteServlet;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
@@ -15,12 +13,12 @@ public class Servlet extends AbstractIocasteServlet {
         authorize("connect", null);
     }
     
-    protected final Message getMessage(
-            String sessionid, Service service, Map<String, String[]> parameters)
-                    throws Exception {
+    @Override
+    protected final Message getMessage(String sessionid, Service service)
+            throws Exception {
         Message message;
         
-        message = super.getMessage(sessionid, service, parameters);
+        message = super.getMessage(sessionid, service);
         if (message.getSessionid() == null)
             message.setSessionid(sessionid);
         return message;

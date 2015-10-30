@@ -77,7 +77,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
 
         try {
             configureStreams(service, context);
-            message = getMessage(sessionid, service, req.getParameterMap());
+            message = getMessage(sessionid, service);
             complexid = message.getSessionid();
             requests.put(complexid, req);
             preRun(message);
@@ -112,8 +112,8 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
         }
     }
     
-    protected Message getMessage(String sessionid, Service service,
-            Map<String, String[]> parameters) throws Exception {
+    protected Message getMessage(String sessionid, Service service)
+            throws Exception {
         return service.getMessage();
     }
     
