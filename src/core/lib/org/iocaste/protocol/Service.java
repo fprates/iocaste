@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -15,10 +17,18 @@ public class Service {
     private OutputStream os;
     private String sessionid;
     private String urlname;
+    private int type, port;
     
     public Service(String sessionid, String urlname) {
         this.urlname = urlname;
         this.sessionid = sessionid;
+        type = 0;
+    }
+    
+    public Service(String urlname, int port) {
+        this.urlname = urlname;
+        this.port = port;
+        type = 1;
     }
     
     public final InputStream getInpustStream() {
@@ -47,27 +57,49 @@ public class Service {
     }
     
     public final Object call(Message message) {
+        Socket socket;
         Message response;
         ObjectOutputStream oos;
         ObjectInputStream ois;
+        InputStream cis;
+        OutputStream cos;
         Throwable cause;
+        URL url;
+        URLConnection urlcon;
         
         message.setSessionid(sessionid);
         
         try {
-            URL url = new URL(urlname);
-            URLConnection urlcon = url.openConnection();
+            switch (type) {
+            case 0:
+                socket = null;
+                url = new URL(urlname);
+                urlcon = url.openConnection();
+                urlcon.setDoInput(true);
+                urlcon.setDoOutput(true);
+                cos = urlcon.getOutputStream();
+                break;
+            default:
+                urlcon = null;
+                socket = new Socket(InetAddress.getByName(urlname), port);
+                cos = socket.getOutputStream();
+                break;
+            }
             
-            urlcon.setDoInput(true);
-            urlcon.setDoOutput(true);
-            
-            oos = new ObjectOutputStream(
-                    new BufferedOutputStream(urlcon.getOutputStream()));
+            oos = new ObjectOutputStream(new BufferedOutputStream(cos));
             oos.writeObject(message);
             oos.flush();
             
-            ois = new ObjectInputStream(
-                    new BufferedInputStream(urlcon.getInputStream()));
+            switch (type) {
+            case 0:
+                cis = urlcon.getInputStream();
+                break;
+            default:
+                cis = socket.getInputStream();
+                break;
+            }
+            
+            ois = new ObjectInputStream(new BufferedInputStream(cis));
             response = (Message)ois.readObject();
             ois.close();
             oos.close();
