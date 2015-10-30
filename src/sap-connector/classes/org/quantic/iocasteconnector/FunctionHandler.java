@@ -155,7 +155,7 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         return result;
     }
     
-    private Map<String, ExtendedObject> extractStructureItems(
+    private static Map<String, ExtendedObject> extractStructureItems(
             Map<String, ComplexDocument> structures, String name) {
         ExtendedObject[] objects;
         Map<String, ExtendedObject> structitems;
@@ -274,7 +274,7 @@ public class FunctionHandler implements JCoServerFunctionHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private final void moveTableToSAP(
+    private static final void moveTableToSAP(
             Map<String, ExtendedObject> structureitems, JCoTable saptable,
             Object from) {
         List<Map<String, Object>> lines;
@@ -324,7 +324,7 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         System.out.println(sb.toString());
     }
     
-    private final void prepareToExport(Context context) {
+    public static final void prepareToExport(Context context) {
         JCoParameterList list;
         boolean istable;
         String name, structurename;

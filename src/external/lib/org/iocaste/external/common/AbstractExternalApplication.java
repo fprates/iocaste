@@ -1,5 +1,7 @@
 package org.iocaste.external.common;
 
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,16 +17,27 @@ public abstract class AbstractExternalApplication {
 	protected IocasteConnector connector;
 	protected External external;
 	protected ApplicationDefaultConfig preconfig;
+	private Map<Integer, Server> servers;
 	
 	public AbstractExternalApplication() {
 		parameters = new HashMap<>();
 		preconfig = new ApplicationDefaultConfig();
+		servers = new HashMap<>();
 		
 		required("--host", KEY_VALUE);
 		required("--user", KEY_VALUE);
 		option("--password", KEY_VALUE);
 		option("--language", KEY_VALUE, "pt_BR");
 		config();
+	}
+	
+	protected final void addListenner(int port, AbstractListenner listenner) {
+	    Server server = new Server();
+	    server.port = port;
+	    server.connector = connector;
+	    server.listenner = listenner;
+	    servers.put(port, server);
+	    server.start();
 	}
 	
 	protected abstract void config();
@@ -140,4 +153,33 @@ class ParameterEntry {
 	public int option;
 	public boolean required;
 	public String value;
+}
+
+class Server extends Thread {
+    public int port;
+    public IocasteConnector connector;
+    public AbstractListenner listenner;
+    
+    public final void run() {
+        ServerSocket localsocket;
+        Socket remotesocket;
+        
+        try {
+            listenner.setConnector(connector);
+            localsocket = new ServerSocket(60000);
+            try {
+                while (true) {
+                    remotesocket = localsocket.accept();
+                    listenner.setSocket(remotesocket);
+                    listenner.start();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                localsocket.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

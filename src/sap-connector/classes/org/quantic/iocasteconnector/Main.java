@@ -5,6 +5,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.external.common.AbstractExternalApplication;
 import org.iocaste.protocol.Message;
 
+import com.sap.conn.jco.JCoDestinationManager;
 import com.sap.conn.jco.ext.Environment;
 import com.sap.conn.jco.server.DefaultServerHandlerFactory;
 import com.sap.conn.jco.server.JCoServer;
@@ -21,6 +22,7 @@ public class Main extends AbstractExternalApplication {
 
 	@Override
 	protected void execute(Message message) throws Exception {
+	    IocasteListenner listenner;
         DefaultServerHandlerFactory.FunctionHandlerFactory factory;
         JCoServer server;
         JCoServerFunctionHandler handler;
@@ -28,6 +30,7 @@ public class Main extends AbstractExternalApplication {
         ComplexDocument config;
         Command stream;
         String name, text;
+        ExtendedObject portdata;
         
         stream = new Command();
         stream.port = message.getString("--port");
@@ -43,12 +46,13 @@ public class Main extends AbstractExternalApplication {
         }
         
         System.out.println("ok");
-
+        
         text = config.getHeader().getst("TEXT");
         System.out.println("* Connecting to " + text);
         System.out.print("registering sap data provider...");
         provider = new RFCDataProvider();
-        provider.setConfig(config.getHeader(), stream.locale);
+        portdata = config.getHeader();
+        provider.setConfig(portdata, stream.locale);
         
         Environment.registerDestinationDataProvider(provider);
         Environment.registerServerDataProvider(provider);
@@ -69,6 +73,13 @@ public class Main extends AbstractExternalApplication {
         
         server.setCallHandlerFactory(factory);
 
+        System.out.print("bringing up iocaste listenners...");
+        listenner = new IocasteListenner();
+        listenner.destination = JCoDestinationManager.
+                getDestination(portdata.getst("PORT_NAME"));
+        addListenner(60000, listenner);
+        System.out.println("ok");
+        
         System.out.println("listenning to connections...");
         server.start();
 	}
