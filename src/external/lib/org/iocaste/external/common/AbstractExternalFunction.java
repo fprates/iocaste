@@ -2,9 +2,10 @@ package org.iocaste.external.common;
 
 import java.net.Socket;
 
-public abstract class AbstractListenner extends Thread {
+public abstract class AbstractExternalFunction extends Thread {
     private Socket socket;
     private IocasteConnector connector;
+    protected External external;
     
     @Override
     public final void run() {
@@ -20,6 +21,10 @@ public abstract class AbstractListenner extends Thread {
     
     public final void setConnector(IocasteConnector connector) {
         this.connector = connector;
+    }
+    
+    public final void setExternal(External external) {
+        this.external = external;
     }
     
     public final void setSocket(Socket socket) {

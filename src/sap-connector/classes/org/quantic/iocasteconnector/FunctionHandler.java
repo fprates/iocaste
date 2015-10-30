@@ -191,17 +191,38 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         return tables;
     }
 
+    public static final Map<String, ExtendedObject> getFunction(
+            Function function, String sapfunctionname) {
+        ComplexDocument functionmodel;
+        Map<String, ExtendedObject> items;
+        ExtendedObject[] parameters;
+        String name;
+
+        functionmodel = new Documents(function).
+                getComplexDocument("XTRNL_FUNCTION", null, sapfunctionname);
+        
+        parameters = functionmodel.getItems("parameters");
+        if (parameters == null)
+            throw new RuntimeException("failed recovering parameters.");
+
+        items = new HashMap<>();
+        for (ExtendedObject object : parameters) {
+            name = object.getst("NAME");
+            items.put(name, object);
+        }
+        
+        return items;
+    }
+    
     @Override
     public void handleRequest(JCoServerContext sapcontext,
             JCoFunction sapfunction) throws AbapException, AbapClassException {
         Context context;
         JCoParameterList list;
-        String servername, functionname, sapfunctionname, name;
+        String servername, functionname, sapfunctionname;
         Message message;
         GenericService service;
-        ComplexDocument functionmodel;
         Map<String, Object> extracted;
-        ExtendedObject[] parameters;
 
         try {
             external.connect();
@@ -215,20 +236,8 @@ public class FunctionHandler implements JCoServerFunctionHandler {
                 return;
             }
 
-            functionmodel = new Documents(function).
-                    getComplexDocument("XTRNL_FUNCTION", null, sapfunctionname);
-            
-            parameters = functionmodel.getItems("parameters");
-            if (parameters == null)
-                throw new RuntimeException("failed recovering parameters.");
-
             context = new Context();
-            for (ExtendedObject object : parameters) {
-                name = object.getst("NAME");
-                log("parameter ", name, " recovered.");
-                context.items.put(name, object);
-            }
-
+            context.items = getFunction(function, sapfunctionname);
             context.lists.put(
                     "importing", sapfunction.getImportParameterList());
             context.lists.put(
@@ -368,7 +377,6 @@ class Context {
     public Map<String, ComplexDocument> structures;
     
     public Context() {
-        items = new HashMap<>();
         lists = new HashMap<>();
         result = new HashMap<>();
     }

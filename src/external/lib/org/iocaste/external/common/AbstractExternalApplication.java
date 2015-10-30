@@ -31,11 +31,13 @@ public abstract class AbstractExternalApplication {
 		config();
 	}
 	
-	protected final void addListenner(int port, AbstractListenner listenner) {
+	protected final void addListenner(
+	        int port, AbstractExternalFunction listenner) {
 	    Server server = new Server();
 	    server.port = port;
 	    server.connector = connector;
 	    server.listenner = listenner;
+	    server.external = external;
 	    servers.put(port, server);
 	    server.start();
 	}
@@ -158,7 +160,8 @@ class ParameterEntry {
 class Server extends Thread {
     public int port;
     public IocasteConnector connector;
-    public AbstractListenner listenner;
+    public AbstractExternalFunction listenner;
+    public External external;
     
     public final void run() {
         ServerSocket localsocket;
@@ -166,6 +169,7 @@ class Server extends Thread {
         
         try {
             listenner.setConnector(connector);
+            listenner.setExternal(external);
             localsocket = new ServerSocket(60000);
             try {
                 while (true) {
