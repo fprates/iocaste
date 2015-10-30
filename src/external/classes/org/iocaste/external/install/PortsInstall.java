@@ -91,6 +91,7 @@ public class PortsInstall extends AbstractInstallObject {
         model.item(
                 "TEXT", "PRTTX", text);
         
+        model.values(00, "Iocaste");
         model.values(01, "SAP");
         
         shd = searchHelpInstance("XTRNL_SH_PORTS_TYPES", "XTRNL_PORT_TYPE");
