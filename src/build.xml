@@ -58,6 +58,9 @@
     	<!-- transport-lib -->
     	<ant antfile="${basedir}/src/transport/build-lib.xml"/>
     	
+    	<!-- mail -->
+    	<ant antfile="${basedir}/src/mail/build.xml"/>
+    	
         <!-- report -->
         <!-- <ant antfile ="${basedir}/src/report/build.xml"/> -->
     </target>
@@ -169,6 +172,7 @@
     		<fileset dir="${builddir}/log/lib/" excludes="*.jar"/>
     		<fileset dir="${builddir}/external/lib/" excludes="*.jar"/>
     		<fileset dir="${builddir}/transport/lib/" excludes="*.jar"/>
+    		<fileset dir="${builddir}/mail/lib/" excludes="*.jar"/>
     	<!--    <fileset dir="${builddir}/report/lib" excludes="*.jar"/> -->
     	</copy>
     	
