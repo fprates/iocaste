@@ -1,6 +1,8 @@
 package org.quantic.iocasteconnector;
 
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.iocaste.external.common.AbstractExternalFunction;
 import org.iocaste.external.common.IocasteConnector;
@@ -10,13 +12,19 @@ import org.iocaste.protocol.Service;
 
 import com.sap.conn.jco.JCoDestination;
 import com.sap.conn.jco.JCoFunction;
+import com.sap.conn.jco.JCoRuntimeException;
 
 public class IocasteListenner extends AbstractExternalFunction {
-    public JCoDestination destination;
+    private JCoDestination destination;
 
+    public IocasteListenner(JCoDestination destination) {
+        this.destination = destination;
+    }
+    
     @Override
     public void execute(Socket socket, IocasteConnector connector)
             throws Exception {
+        Map<String, Object> values;
         Service service;
         Message message;
         String name;
@@ -47,9 +55,25 @@ public class IocasteListenner extends AbstractExternalFunction {
                     "changing", sapfunction.getChangingParameterList());
             context.lists.put(
                     "tables", sapfunction.getTableParameterList());
+            context.structures = external.
+                    getFunctionStructures(name);
+            context.result = new HashMap<>();
+            for (String keylist : new String[] {
+                    "importing", "changing", "tables"
+            }) {
+                values = message.get(keylist);
+                if (values == null)
+                    continue;
+                for (String key : values.keySet())
+                    context.result.put(key, values.get(key));
+            }
             
             FunctionHandler.prepareToExport(context);
             sapfunction.execute(destination);
+            service.messageReturn(message, null);
+        } catch (JCoRuntimeException e) {
+            e.printStackTrace();
+            service.messageException(message, new Exception(e.getMessage()));
         } catch (Exception e) {
             e.printStackTrace();
             service.messageException(message, e);

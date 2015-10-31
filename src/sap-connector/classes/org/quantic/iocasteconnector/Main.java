@@ -5,6 +5,7 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.external.common.AbstractExternalApplication;
 import org.iocaste.protocol.Message;
 
+import com.sap.conn.jco.JCoDestination;
 import com.sap.conn.jco.JCoDestinationManager;
 import com.sap.conn.jco.ext.Environment;
 import com.sap.conn.jco.server.DefaultServerHandlerFactory;
@@ -22,10 +23,10 @@ public class Main extends AbstractExternalApplication {
 
 	@Override
 	protected void execute(Message message) throws Exception {
-	    IocasteListenner listenner;
         DefaultServerHandlerFactory.FunctionHandlerFactory factory;
         JCoServer server;
         JCoServerFunctionHandler handler;
+        JCoDestination destination;
         RFCDataProvider provider;
         ComplexDocument config;
         Command stream;
@@ -66,6 +67,11 @@ public class Main extends AbstractExternalApplication {
         factory = new DefaultServerHandlerFactory.FunctionHandlerFactory();
         for (ExtendedObject object : config.getItems("functions")) {
             name = object.getst("FUNCTION");
+            text = object.getst("SERVICE");
+            if (text == null) {
+                System.out.println("- no handler for "+name+". skipping.");
+                continue;
+            }
             handler = new FunctionHandler(connector, external, object);
             factory.registerHandler(name, handler);
             System.out.println("- " + name + " registered.");
@@ -74,10 +80,9 @@ public class Main extends AbstractExternalApplication {
         server.setCallHandlerFactory(factory);
 
         System.out.print("bringing up iocaste listenners...");
-        listenner = new IocasteListenner();
-        listenner.destination = JCoDestinationManager.
+        destination = JCoDestinationManager.
                 getDestination(portdata.getst("PORT_NAME"));
-        addListenner(60000, listenner);
+        addListenner(60000, () -> new IocasteListenner(destination));
         System.out.println("ok");
         
         System.out.println("listenning to connections...");

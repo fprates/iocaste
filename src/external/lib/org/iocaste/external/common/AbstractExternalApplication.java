@@ -2,7 +2,9 @@ package org.iocaste.external.common;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.iocaste.protocol.Message;
@@ -32,11 +34,11 @@ public abstract class AbstractExternalApplication {
 	}
 	
 	protected final void addListenner(
-	        int port, AbstractExternalFunction listenner) {
+	        int port, ListennerFactory factory) {
 	    Server server = new Server();
 	    server.port = port;
 	    server.connector = connector;
-	    server.listenner = listenner;
+	    server.factory = factory;
 	    server.external = external;
 	    servers.put(port, server);
 	    server.start();
@@ -160,20 +162,41 @@ class ParameterEntry {
 class Server extends Thread {
     public int port;
     public IocasteConnector connector;
-    public AbstractExternalFunction listenner;
     public External external;
+    public ListennerFactory factory;
+    private List<AbstractExternalFunction> listenners;
     
+    public Server() {
+        listenners = new ArrayList<>();
+    }
+    
+    private final AbstractExternalFunction get() {
+        AbstractExternalFunction listenner;
+        
+        for (AbstractExternalFunction efunction : listenners)
+            if (!efunction.isAlive())
+                return efunction;
+        
+        listenner = factory.instance();
+        listenners.add(listenner);
+        return listenner;
+    }
+    
+    @Override
     public final void run() {
         ServerSocket localsocket;
         Socket remotesocket;
+        AbstractExternalFunction listenner = null;
         
         try {
-            listenner.setConnector(connector);
-            listenner.setExternal(external);
             localsocket = new ServerSocket(60000);
             try {
                 while (true) {
                     remotesocket = localsocket.accept();
+                    
+                    listenner = get();
+                    listenner.setConnector(connector);
+                    listenner.setExternal(external);
                     listenner.setSocket(remotesocket);
                     listenner.start();
                 }
