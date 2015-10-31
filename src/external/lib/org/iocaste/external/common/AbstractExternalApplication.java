@@ -2,9 +2,7 @@ package org.iocaste.external.common;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.iocaste.protocol.Message;
@@ -164,23 +162,6 @@ class Server extends Thread {
     public IocasteConnector connector;
     public External external;
     public ListennerFactory factory;
-    private List<AbstractExternalFunction> listenners;
-    
-    public Server() {
-        listenners = new ArrayList<>();
-    }
-    
-    private final AbstractExternalFunction get() {
-        AbstractExternalFunction listenner;
-        
-        for (AbstractExternalFunction efunction : listenners)
-            if (!efunction.isAlive())
-                return efunction;
-        
-        listenner = factory.instance();
-        listenners.add(listenner);
-        return listenner;
-    }
     
     @Override
     public final void run() {
@@ -193,8 +174,7 @@ class Server extends Thread {
             try {
                 while (true) {
                     remotesocket = localsocket.accept();
-                    
-                    listenner = get();
+                    listenner = factory.instance();
                     listenner.setConnector(connector);
                     listenner.setExternal(external);
                     listenner.setSocket(remotesocket);

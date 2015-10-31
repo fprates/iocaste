@@ -44,6 +44,7 @@ public class IocasteListenner extends AbstractExternalFunction {
                         append(name).
                         append(" not found.").toString());
             
+            System.out.print("invoking "+name+"...");
             external.connect();
             context = new Context();
             context.items = FunctionHandler.getFunction(connector, name);
@@ -71,6 +72,7 @@ public class IocasteListenner extends AbstractExternalFunction {
             FunctionHandler.prepareToExport(context);
             sapfunction.execute(destination);
             service.messageReturn(message, null);
+            System.out.println("ok.");
         } catch (JCoRuntimeException e) {
             e.printStackTrace();
             service.messageException(message, new Exception(e.getMessage()));
