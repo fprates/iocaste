@@ -286,6 +286,7 @@ public class FunctionHandler implements JCoServerFunctionHandler {
     private static final void moveTableToSAP(
             Map<String, ExtendedObject> structureitems, JCoTable saptable,
             Object from) {
+        ExtendedObject object;
         List<Map<String, Object>> lines;
         int type;
         Object value;
@@ -295,7 +296,10 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         for (Map<String, Object> line : lines) {
             saptable.appendRow();
             for (String key : line.keySet()) {
-                type = structureitems.get(key).geti("TYPE");
+                object = structureitems.get(key);
+                if (object == null)
+                    continue;
+                type = object.geti("TYPE");
                 value = line.get(key);
                 switch (type) {
                 case DataType.DEC:

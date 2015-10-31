@@ -1,5 +1,6 @@
 package org.iocaste.external.common;
 
+import java.io.IOException;
 import java.net.Socket;
 
 public abstract class AbstractExternalFunction extends Thread {
@@ -13,6 +14,12 @@ public abstract class AbstractExternalFunction extends Thread {
             execute(socket, connector);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     
