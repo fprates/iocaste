@@ -19,10 +19,12 @@ public class Main extends AbstractExternalApplication {
 	protected void config() {
 		required("--port", KEY_VALUE);
 		option("--language", KEY_VALUE, "pt_BR");
+		option("--listenner-port", KEY_VALUE, "60000");
 	}
 
 	@Override
 	protected void execute(Message message) throws Exception {
+        int listennerport;
         DefaultServerHandlerFactory.FunctionHandlerFactory factory;
         JCoServer server;
         JCoServerFunctionHandler handler;
@@ -36,6 +38,7 @@ public class Main extends AbstractExternalApplication {
         stream = new Command();
         stream.port = message.getString("--port");
         stream.locale = message.getString("--language");
+        listennerport = Integer.parseInt(message.getString("--listenner-port"));
         
         System.out.print("getting connection data from iocaste...");
         config = external.getConnectionData(stream.port);
@@ -82,7 +85,7 @@ public class Main extends AbstractExternalApplication {
         System.out.print("bringing up iocaste listenners...");
         destination = JCoDestinationManager.
                 getDestination(portdata.getst("PORT_NAME"));
-        addListenner(60000, () -> new IocasteListenner(destination));
+        addListenner(listennerport, () -> new IocasteListenner(destination));
         System.out.println("ok");
         
         System.out.println("listenning to connections...");
