@@ -1,12 +1,17 @@
 package org.iocaste.mail.common;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 public class MailDocument implements Serializable {
     private static final long serialVersionUID = -3679276936328394101L;
     private String subject, from, content;
     private Set<String> to;
+    
+    public MailDocument() {
+        to = new HashSet<>();
+    }
     
     public final void addTo(String email) {
         to.add(email);
