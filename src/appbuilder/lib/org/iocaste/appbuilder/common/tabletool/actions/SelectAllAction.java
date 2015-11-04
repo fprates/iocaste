@@ -10,6 +10,7 @@ public class SelectAllAction extends TableToolAction {
     public SelectAllAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, "select_all");
         setText("☑");
+        setMarkable(true);
     }
     
     @Override
