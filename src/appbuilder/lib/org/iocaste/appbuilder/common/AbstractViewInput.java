@@ -59,7 +59,7 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected void dbitemadd(String dashboard, String name, String value) {
-        dbget(dashboard, name).add(value);
+        dbget(dashboard, name).add(value, value);
     }
     
     protected void dbitemadd(String dashboard, String name, byte value) {
