@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class XMLElement implements Serializable {
     private static final long serialVersionUID = 3065700337817067863L;
-    private String name;
+    private String name, head;
     private Map<String, String> attributes;
     private List<XMLElement> elements;
     private List<String> inner;
@@ -71,13 +71,21 @@ public class XMLElement implements Serializable {
             inner.add(line);
     }
     
+    public final void head(String head) {
+        this.head = head;
+    }
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     public final String toString() {
-        StringBuilder sb = new StringBuilder("<").append(name);
+        StringBuilder sb = new StringBuilder();
         
+        if (head != null)
+            sb.append(head).append("\n");
+        
+        sb.append("<").append(name);
         for (String name : attributes.keySet())
             sb.append(" ").append(name).append("=\"").append(
                     attributes.get(name)).append("\"");
