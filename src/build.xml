@@ -146,12 +146,6 @@
     	
     	<!-- upload utility -->
     	<ant antfile="${basedir}/src/upload/build.xml"/>
-
-        <!-- gateway -->
-        <ant antfile="${basedir}/src/gateway/build.xml"/>
-
-        <!-- sap-connector -->
-        <ant antfile="${basedir}/src/sap-connector/build.xml"/>
         	
         <!-- template -->
         <ant antfile="${basedir}/src/template/build.xml"/>
@@ -178,6 +172,12 @@
     	
     	<jar basedir="${basedir}/ext/common"
     		destfile="${basedir}/ext/iocaste.jar"/>
+
+        <!-- gateway -->
+        <ant antfile="${basedir}/src/gateway/build.xml"/>
+
+        <!-- sap-connector -->
+        <ant antfile="${basedir}/src/sap-connector/build.xml"/>
     	
     	<delete dir="${basedir}/ext/common"/>
     	<ant antfile="${basedir}/src/transport.xml"/>

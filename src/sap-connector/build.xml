@@ -37,7 +37,9 @@
                 <exclude name="**/*.xml"/>
             </fileset>
         </copy>
-        
+
+        <mkdir dir="${connectorsdir}/ext"/>
+        <copy file="${basedir}/ext/iocaste.jar" todir="${connectorsdir}/ext"/>
         <zip zipfile="${connectorsdir}/../${ant.project.name}.zip"
             basedir="${connectorsdir}"/>
     </target>

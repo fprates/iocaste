@@ -19,6 +19,14 @@ public class External extends AbstractServiceInterface {
         initService(function, SERVICE);
     }
     
+    public final <T> T call(String address, int port, Message message) {
+        Message extmessage = new Message("extern_call");
+        extmessage.add("message", message);
+        extmessage.add("address", address);
+        extmessage.add("port", port);
+        return call(extmessage);
+    }
+    
     public final boolean connect() {
         Message message;
         String sessionid;

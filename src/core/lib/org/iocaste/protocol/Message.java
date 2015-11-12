@@ -199,4 +199,20 @@ public class Message implements Serializable {
     public final void setSessionid(String sessionid) {
         this.sessionid = sessionid;
     }
+    
+    @Override
+    public final String toString() {
+        Object value;
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append("function=").append(id).append("\n");
+        for (String key : values.keySet()) {
+            sb.append(key).append("=");
+            value = values.get(key);
+            if (value != null)
+                sb.append(value.toString());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 }
