@@ -13,6 +13,7 @@ public class XMLElement implements Serializable {
     private Map<String, String> attributes;
     private List<XMLElement> elements;
     private List<String> inner;
+    private boolean linebreak;
     
     public XMLElement(String name) {
         this.name = name;
@@ -75,6 +76,10 @@ public class XMLElement implements Serializable {
         this.head = head;
     }
     
+    public final void setLineBreak(boolean linebreak) {
+        this.linebreak = linebreak;
+    }
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#toString()
@@ -92,14 +97,17 @@ public class XMLElement implements Serializable {
         
         if (inner.size() == 0 && elements.size() == 0)
             return sb.append("/>\n").toString();
-        else
-            sb.append(">\n");
+        
+        sb.append((elements.size() == 0)? ">" : ">\n");
         
         for (XMLElement element : elements)
             sb.append(element.toString());
         
-        for (String line : inner)
-            sb.append(line).append("\n");
+        for (String line : inner) {
+            sb.append(line);
+            if (linebreak)
+                sb.append("\n");
+        }
         
         sb.append("</").append(name).append(">\n");
         

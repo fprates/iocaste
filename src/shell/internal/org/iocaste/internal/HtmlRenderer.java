@@ -130,6 +130,7 @@ public class HtmlRenderer {
             Config config) {
         XMLElement scripttag = new XMLElement("script");
         
+        scripttag.setLineBreak(true);
         scripttag.add("type", "text/javascript");
         scripttag.addInner("function initialize() {");
         
@@ -158,6 +159,7 @@ public class HtmlRenderer {
         }
         
         styletag.add("type", "text/css");
+        styletag.setLineBreak(true);
         if (csselements.size() == 0)
             styletag.addInner("");
         
