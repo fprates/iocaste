@@ -32,6 +32,12 @@ public interface ControlComponent extends Element {
     public abstract boolean isPopup();
     
     /**
+     * 
+     * @return
+     */
+    public abstract boolean isScreenLockable();
+    
+    /**
      * Define uma ação, para quando ação for diferente do nome do componente.
      * @param action nome da ação.
      */
@@ -49,4 +55,10 @@ public interface ControlComponent extends Element {
      * @param cancellable true, para cancelável.
      */
     public abstract void setCancellable(boolean cancellable);
+    
+    /**
+     * 
+     * @param nolock
+     */
+    public abstract void setNoScreenLock(boolean nolock);
 }

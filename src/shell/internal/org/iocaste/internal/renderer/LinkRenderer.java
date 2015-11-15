@@ -23,7 +23,7 @@ public class LinkRenderer extends Renderer {
         LinkEntry entry;
         XMLElement atag, imgtag;
         String text, href, image, htmlname;
-        StringBuilder onclick;
+        StringBuilder onclick, hrefsb;
         Map<String, LinkEntry> parameters;
         Parameter parameter;
         List<XMLElement> tags = new ArrayList<>();
@@ -42,14 +42,21 @@ public class LinkRenderer extends Renderer {
         atag.add("class", link.getStyleClass());
         tags.add(atag);
 
-        if (link.isAbsolute())
+        if (link.isAbsolute()) {
             href = link.getAction();
-        else
-            href = new StringBuilder("javascript:formSubmit('").
-                    append(config.getCurrentForm()).
-                    append("', '").append(config.getCurrentAction()).
-                    append("', '").append(link.getAction()).
-                    append("');").toString();
+        } else {
+            if (link.isScreenLockable())
+                hrefsb = new StringBuilder("javascript:formSubmit('");
+            else
+                hrefsb = new StringBuilder("javascript:formSubmitNoLock('");
+            
+            hrefsb.append(config.getCurrentForm()).
+                   append("', '").append(config.getCurrentAction()).
+                   append("', '").append(link.getAction()).
+                   append("');");
+            
+            href = hrefsb.toString();
+        }
         
         parameters = link.getParametersMap();
         if (parameters.size() > 0) {

@@ -21,6 +21,14 @@ function formSubmit(formname, actionname, value) {
     form.submit();
 }
 
+function formSubmitNoLock(formname, actionname, value) {
+    var form = document.getElementById(formname);
+    var action = document.getElementById(actionname);
+    
+    action.value = value;
+    form.submit();
+}
+
 function getClassStyle(id) {
     return document.getElementById(id).className;
 }

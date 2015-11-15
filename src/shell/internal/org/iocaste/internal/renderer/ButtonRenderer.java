@@ -18,8 +18,12 @@ public class ButtonRenderer extends Renderer {
         String htmlname = button.getHtmlName();
         XMLElement buttontag= new XMLElement("input");
         
-        onclick = new StringBuilder("formSubmit('").
-                append(config.getCurrentForm()).
+        if (button.isScreenLockable())
+            onclick = new StringBuilder("formSubmit('");
+        else
+            onclick = new StringBuilder("formSubmitNoLock('");
+        
+        onclick.append(config.getCurrentForm()).
                 append("', '").append(config.getCurrentAction()).
                 append("', '").append(htmlname).append("');");
         

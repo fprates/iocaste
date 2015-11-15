@@ -33,7 +33,7 @@ package org.iocaste.shell.common;
 public abstract class AbstractControlComponent extends AbstractComponent
         implements ControlComponent {
     private static final long serialVersionUID = -6444029817491608067L;
-    private boolean cancellable, stacking;
+    private boolean cancellable, stacking, noscreenlock;
     private String action;
     
     public AbstractControlComponent(View view, Const type, String name) {
@@ -113,6 +113,15 @@ public abstract class AbstractControlComponent extends AbstractComponent
     
     /*
      * (non-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#isScreenLockable()
+     */
+    @Override
+    public final boolean isScreenLockable() {
+        return noscreenlock;
+    }
+    
+    /*
+     * (non-Javadoc)
      * @see org.iocaste.shell.common.ControlComponent#setAction(
      *     java.lang.String)
      */
@@ -137,5 +146,14 @@ public abstract class AbstractControlComponent extends AbstractComponent
     @Override
     public final void setCancellable(boolean cancellable) {
         this.cancellable = cancellable;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.ControlComponent#setNoScreenLock(boolean)
+     */
+    @Override
+    public final void setNoScreenLock(boolean nolock) {
+        noscreenlock = nolock;
     }
 }

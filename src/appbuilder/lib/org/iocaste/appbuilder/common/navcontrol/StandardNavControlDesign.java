@@ -125,11 +125,13 @@ public class StandardNavControlDesign implements NavControlDesign {
         case NavControl.NORMAL:
             link = new Link(buttonbar, action, action);
             link.setStyleClass(buttoncfg.style);
+            link.setNoScreenLock(buttoncfg.nolock);
             break;
         case NavControl.SUBMIT:
             button = new Button(buttonbar, action);
             button.setSubmit(true);
             button.setStyleClass(buttoncfg.style);
+            button.setNoScreenLock(buttoncfg.nolock);
             break;
         }
     }

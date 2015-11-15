@@ -45,6 +45,11 @@ public class NavControl {
         return (T)design;
     }
     
+    public final void noScreenLockFor(String... actions) {
+        for (String action : actions)
+            buttons.get(action).nolock = true;
+    }
+    
     public final void setControlStyle(String control, String style) {
         buttons.get(control).style = style;
     }
