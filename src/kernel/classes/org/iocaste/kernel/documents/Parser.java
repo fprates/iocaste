@@ -27,7 +27,9 @@ public class Parser {
             Documents documents) throws Exception {
         GetDocumentModel getmodel;
         String[] columns, joinmember;
+        String field;
         DocumentModel model, tablemodel;
+        DocumentModelItem item;
         StringBuilder sb = new StringBuilder();
         boolean afterfirst = false;
         
@@ -69,6 +71,11 @@ public class Parser {
                 
                 columns = clause.getOperator(0).split("\\.");
                 model = getmodel.run(connection, documents, columns[0]);
+                if (model == null)
+                    throw new IocasteException(new StringBuilder(columns[0]).
+                            append(" is an invalid table in inner join.").
+                            toString());
+                
                 sb.append(model.getTableName());
                 sb.append(".");
                 sb.append(model.getModelItem(columns[1]).
@@ -77,8 +84,14 @@ public class Parser {
                 model = getmodel.run(connection, documents, name);
                 sb.append(model.getTableName());
                 sb.append(".");
-                sb.append(model.getModelItem(clause.getOperator(1)).
-                        getTableFieldName());
+                
+                field = clause.getOperator(1);
+                item = model.getModelItem(field);
+                if (item == null)
+                    throw new IocasteException(new StringBuilder(field).
+                            append(" is an invalid item for ").
+                            append(name).toString());
+                sb.append(item.getTableFieldName());
             }
         }
         
@@ -339,6 +352,8 @@ public class Parser {
             else
                 data.sb.append(" and (");
             
+            if (query.getJoins() != null)
+                data.sb.append(data.tablemodel.getTableName()).append(".");
             field = nsitem.getTableFieldName();
             data.sb.append(field).append(" = ?)");
             
