@@ -1,6 +1,11 @@
 package org.iocaste.appbuilder.common.reporttool;
 
+import java.util.Map;
+
+import org.iocaste.appbuilder.common.ModelBuilder;
 import org.iocaste.appbuilder.common.tabletool.AbstractTableHandler;
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.DataForm;
 
 public class ReportTool {
@@ -16,9 +21,27 @@ public class ReportTool {
         refresh();
     }
     
+    public static final DocumentModel buildModel(ReportToolData data) {
+        ModelBuilder modelbuilder;
+        ReportToolStageItem item;
+        Map<String, ReportToolStageItem> items;
+        
+        items = (data.isInput())? data.input.items : data.output.items;
+        modelbuilder = new ModelBuilder(data.name.concat("_model"));
+        for (String itemname : items.keySet()) {
+            item = items.get(itemname);
+            modelbuilder.add(itemname, item.element);
+        }
+        return modelbuilder.get();
+    }
+    
     private DataForm getDataForm() {
         String dfname = data.name.concat("_report_input");
         return data.context.view.getElement(dfname);
+    }
+    
+    public final ExtendedObject getInput() {
+        return getDataForm().getObject();
     }
     
     public final void refresh() {

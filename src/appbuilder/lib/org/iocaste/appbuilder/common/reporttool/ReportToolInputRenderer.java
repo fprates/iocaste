@@ -1,6 +1,5 @@
 package org.iocaste.appbuilder.common.reporttool;
 
-import org.iocaste.appbuilder.common.ModelBuilder;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
@@ -8,7 +7,6 @@ import org.iocaste.shell.common.DataForm;
 public class ReportToolInputRenderer {
     
     public static final void run(ReportToolData data) {
-        ModelBuilder modelbuilder;
         ReportToolStageItem item;
         DocumentModel model;
         String name = data.name.concat("_report_input");
@@ -19,12 +17,7 @@ public class ReportToolInputRenderer {
             dataform.setStyleClass(data.input.outerstyle);
         
         if (data.input.items.size() > 0) {
-            modelbuilder = new ModelBuilder(data.name.concat("_model"));
-            for (String itemname : data.input.items.keySet()) {
-                item = data.input.items.get(itemname);
-                modelbuilder.add(itemname, item.element);
-            }
-            model = modelbuilder.get();
+            model = ReportTool.buildModel(data);
             dataform.importModel(model);
         } else {
             if (data.input.model == null)

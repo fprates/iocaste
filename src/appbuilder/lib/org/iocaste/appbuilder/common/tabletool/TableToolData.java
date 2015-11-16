@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.ModelBuilder;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
 
@@ -17,12 +17,12 @@ public class TableToolData implements Serializable {
     public AbstractContext context;
     public String name, container, style, borderstyle, highlightstyle;
     public String itemcolumn, model, nsfield;
+    public DocumentModel refmodel;
     public boolean mark, enabled, noheader;
     public int vlines, step, last, increment, topline;
     public byte mode;
     public String[] hide, show, enableonly, ordering, actions;
     public Map<String, TableToolColumn> columns;
-    public ModelBuilder modelbuilder;
     
     public TableToolData() {
         vlines = 15;

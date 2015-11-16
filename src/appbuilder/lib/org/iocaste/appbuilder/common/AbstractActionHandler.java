@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
@@ -318,6 +319,15 @@ public abstract class AbstractActionHandler {
             else
                 context.function.keepView();
         }
+    }
+    
+    protected final ExtendedObject reportinputget(String report) {
+        ReportToolEntry entry = context.getView().getComponents().
+                reporttools.get(report);
+        if (entry == null)
+            throw new RuntimeException(new StringBuilder(report).
+                    append(" is an invalid report.").toString());
+        return entry.component.getInput();
     }
     
     public final void run(AbstractContext context) throws Exception {

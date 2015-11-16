@@ -12,7 +12,8 @@ public class ReportToolOutputRenderer {
         data.output.ttdata.name = data.name;
         data.output.ttdata.mode = TableTool.DISPLAY;
         data.output.ttdata.vlines = 0;
-        
+        data.output.ttdata.refmodel = ReportTool.buildModel(data);
+        data.output.ttdata.style = data.output.outerstyle;
         data.output.tabletool = new TableTool(data.output.ttdata);
     }
 }

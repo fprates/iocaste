@@ -30,8 +30,8 @@ public class TableRender extends AbstractTableHandler {
         if (context.data.model != null)
             model = new Documents(function).getModel(context.data.model);
         
-        if ((model == null) && (context.data.modelbuilder != null))
-            model = context.data.modelbuilder.get();
+        if (context.data.refmodel != null)
+            model = context.data.refmodel;
         
         if (model == null)
             throw new RuntimeException("model not defined.");

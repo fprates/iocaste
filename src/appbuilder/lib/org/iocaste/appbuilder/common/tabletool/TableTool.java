@@ -89,7 +89,12 @@ public class TableTool {
         setTableData(data);
         TableRender.run(this, context.function, extcontext);
         installValidators(extcontext);
-        model = new Documents(context.function).getModel(data.model);
+        
+        if (data.model != null)
+            model = new Documents(context.function).getModel(data.model);
+        else
+            model = data.refmodel;
+        
         for (String key : actions.keySet())
             if (actions.get(key).isMarkable())
                 getActionElement(key).setVisible(extcontext.data.mark);
