@@ -11,8 +11,8 @@ public class OutputConfig extends AbstractViewConfig {
         Context extcontext = getExtendedContext();
         ReportToolData reporttool = getReportTool("items");
         
-        reporttool.model = extcontext.model.getName();
-        getNavControl().setTitle(reporttool.model);
+        reporttool.output.model = extcontext.model.getName();
+        getNavControl().setTitle(reporttool.output.model);
     }
 
 }

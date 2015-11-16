@@ -7,12 +7,13 @@ public class ReportToolData {
     private static final byte OUTPUT = 1;
     private byte stage;
     public AbstractContext context;
-    public String name, model;
+    public String name;
     public ReportToolStage input, output;
     
     public ReportToolData(AbstractContext context, String name) {
         this.context = context;
         this.name = name;
+        stage = OUTPUT;
         input = new ReportToolStage(this);
         output = new ReportToolStage(this);
     }
