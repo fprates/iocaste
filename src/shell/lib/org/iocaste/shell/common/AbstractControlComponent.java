@@ -117,7 +117,7 @@ public abstract class AbstractControlComponent extends AbstractComponent
      */
     @Override
     public final boolean isScreenLockable() {
-        return noscreenlock;
+        return !noscreenlock;
     }
     
     /*
