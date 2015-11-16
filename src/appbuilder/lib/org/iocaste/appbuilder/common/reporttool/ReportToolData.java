@@ -1,6 +1,5 @@
 package org.iocaste.appbuilder.common.reporttool;
 
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
 
 public class ReportToolData {
@@ -9,7 +8,6 @@ public class ReportToolData {
     private byte stage;
     public AbstractContext context;
     public String name, model;
-    public ExtendedObject[] objects;
     public ReportToolStage input, output;
     
     public ReportToolData(AbstractContext context, String name) {

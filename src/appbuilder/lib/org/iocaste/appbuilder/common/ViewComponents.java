@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
-import org.iocaste.appbuilder.common.reporttool.ReportTool;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
-import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
+import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.texteditor.common.TextEditor;
 
 public class ViewComponents {
@@ -42,10 +42,6 @@ public class ViewComponents {
         reporttools.put(data.name, entry);
     }
     
-    public final TableToolData getTableToolData(String name) {
-        return tabletools.get(name).data;
-    }
-    
     public final void reset() {
         tabletools.clear();
         dashboards.clear();
@@ -59,13 +55,3 @@ public class ViewComponents {
     }
 }
 
-class TableToolEntry {
-    public TableTool component;
-    public TableToolData data;
-    public boolean update;
-}
-
-class ReportToolEntry {
-    public ReportTool component;
-    public ReportToolData data;
-}

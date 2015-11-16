@@ -5,16 +5,14 @@ import org.iocaste.appbuilder.common.tabletool.TableToolData;
 
 public class ReportToolOutputRenderer {
 
-    public static final void execute(ReportToolData data) {
-        TableToolData ttdata;
+    public static final void run(ReportToolData data) {
+        data.output.ttdata = new TableToolData();
+        data.output.ttdata.context = data.context;
+        data.output.ttdata.container = data.name;
+        data.output.ttdata.name = data.name;
+        data.output.ttdata.mode = TableTool.DISPLAY;
+        data.output.ttdata.vlines = 0;
         
-        ttdata = new TableToolData();
-        ttdata.context = data.context;
-        ttdata.container = data.name;
-        ttdata.name = data.name;
-        ttdata.mode = TableTool.DISPLAY;
-        ttdata.vlines = 0;
-        
-        new TableTool(ttdata);
+        data.output.tabletool = new TableTool(data.output.ttdata);
     }
 }

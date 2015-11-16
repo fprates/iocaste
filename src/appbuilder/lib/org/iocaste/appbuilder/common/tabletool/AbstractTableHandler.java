@@ -202,7 +202,7 @@ public abstract class AbstractTableHandler {
             setVisibility(context, true, context.data.show);
     }
 
-    protected static void setObject(TableTool tabletool, TableToolData data) {
+    public static void setObject(TableTool tabletool, TableToolData data) {
         Context extcontext = new Context();
         
         extcontext.table = getTable(data);
@@ -216,8 +216,7 @@ public abstract class AbstractTableHandler {
      * 
      * @param objects
      */
-    protected static final void setObjects(TableTool tabletool, Context context)
-    {
+    protected static final void setObjects(TableTool tabletool, Context context) {
         List<TableToolItem> items = context.data.getItems();
         
         tabletool.setVisibleNavigation(context, items);

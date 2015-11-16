@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common;
 
 import java.util.Set;
 
+import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;

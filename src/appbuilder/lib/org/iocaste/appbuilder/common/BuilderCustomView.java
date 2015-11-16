@@ -8,9 +8,11 @@ import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.appbuilder.common.reporttool.ReportTool;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
-import org.iocaste.appbuilder.common.tabletool.SetObjects;
+import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
+import org.iocaste.appbuilder.common.tabletool.AbstractTableHandler;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
+import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
@@ -217,7 +219,7 @@ public class BuilderCustomView extends AbstractCustomView {
         if (_context.isInputUpdatable() && viewinput != null) {
             _context.setInputUpdate(false);
             viewinput.run(_context, false);
-            updateTables(_context);
+            updateComponents(_context);
         }
     }
     
@@ -239,19 +241,17 @@ public class BuilderCustomView extends AbstractCustomView {
         this.view = view;
     }
     
-    private final void updateTables(PageBuilderContext context) {
+    private final void updateComponents(PageBuilderContext context) {
         ViewComponents components;
         
         components = context.getView(context.view.getPageName()).
                 getComponents();
-        if (components.tabletools.size() == 0)
-            return;
+        for (TableToolEntry entry : components.tabletools.values())
+            if (entry.update)
+                AbstractTableHandler.setObject(entry.component, entry.data);
         
-        for (TableToolEntry entry : components.tabletools.values()) {
-            if (!entry.update)
-                continue;
-            
-            SetObjects.run(entry.component, entry.data);
-        }
+        for (ReportToolEntry entry :  components.reporttools.values())
+            if (entry.update)
+                entry.component.refresh();
     }
 }

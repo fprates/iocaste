@@ -49,7 +49,7 @@ public class TableTool {
     
     public TableTool(PageBuilderContext context, String name) {
         this(context, context.getView().getComponents().
-                getTableToolData(name), name);
+                tabletools.get(name).data, name);
     }
     
     public TableTool(TableToolData data) {
@@ -240,7 +240,7 @@ public class TableTool {
             return extcontext;
         
         viewcontext = ((PageBuilderContext)context).getView();
-        extcontext.data = viewcontext.getComponents().getTableToolData(name);
+        extcontext.data = viewcontext.getComponents().tabletools.get(name).data;
         return extcontext;
     }
     
@@ -459,7 +459,7 @@ public class TableTool {
     public final void setObjects(ExtendedObject[] objects) {
         Context extcontext = getExtendedContext();
         extcontext.data.set(objects);
-        SetObjects.run(this, extcontext.data);
+        AbstractTableHandler.setObject(this, extcontext.data);
         installValidators(extcontext);
     }
     

@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
+import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
@@ -217,8 +219,16 @@ public abstract class AbstractViewInput implements ViewInput {
         area.add(line);
     }
     
+    protected final void reportset(String report, ExtendedObject object) {
+        ReportToolEntry entry = getViewComponents().reporttools.get(report);
+        entry.data.input.object = object;
+        entry.update = true;
+    }
+    
     protected final void reportset(String report, ExtendedObject[] items) {
-        getViewComponents().reporttools.get(report).data.objects = items;
+        ReportToolEntry entry = getViewComponents().reporttools.get(report);
+        entry.data.output.objects = items;
+        entry.update = true;
     }
     
     protected final void reportset(

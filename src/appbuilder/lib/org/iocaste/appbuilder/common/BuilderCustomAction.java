@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.ViewCustomAction;
 
