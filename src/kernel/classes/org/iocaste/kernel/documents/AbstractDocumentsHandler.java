@@ -194,6 +194,11 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         i = 0;
         for (String column : query.getColumns()) {
             composed = column.split("\\.");
+            if (model.contains(composed[1]))
+                throw new IocasteException(
+                        new StringBuilder("model has already has item ").
+                        append(composed[1]).toString());
+            
             item = new DocumentModelItem(composed[1]);
             itemref = ((DocumentModel)getmodel.run(
                     connection, documents, composed[0])).
