@@ -1,31 +1,16 @@
 package org.iocaste.appbuilder.common.reporttool;
 
-import org.iocaste.appbuilder.common.tabletool.TableTool;
-import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 
 public class ReportTool {
     private Table table;
-    private boolean translate;
     
     public ReportTool(ReportToolData data) {
-        TableToolData ttdata;
-        
-        ttdata = new TableToolData();
-        ttdata.context = data.context;
-        ttdata.container = data.container;
-        ttdata.name = data.name;
-        ttdata.model = data.model;
-        ttdata.mode = TableTool.DISPLAY;
-        ttdata.vlines = 0;
-        ttdata.set(data.objects);
-        
-        new TableTool(ttdata);
-    }
-    
-    public final void setTranslatable(boolean translate) {
-        this.translate = translate;
+        if (data.isInput())
+            ReportToolInputRenderer.run(data);
+        else
+            ReportToolOutputRenderer.execute(data);
     }
     
     public final void visible(String... columns) {

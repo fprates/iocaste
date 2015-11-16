@@ -25,12 +25,16 @@ public class TableRender extends AbstractTableHandler {
         DocumentModelItem[] items;
         DocumentModelItem item;
         TableToolColumn column;
-        DocumentModel model = new Documents(function).
-                getModel(context.data.model);
+        DocumentModel model = null;
+        
+        if (context.data.model != null)
+            model = new Documents(function).getModel(context.data.model);
+        
+        if ((model == null) && (context.data.modelbuilder != null))
+            model = context.data.modelbuilder.get();
         
         if (model == null)
-            throw new RuntimeException(context.data.model.
-                    concat(" is an invalid model."));
+            throw new RuntimeException("model not defined.");
 
         if (context.data.ordering == null) {
             items = model.getItens();

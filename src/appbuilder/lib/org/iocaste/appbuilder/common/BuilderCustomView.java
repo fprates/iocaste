@@ -112,9 +112,7 @@ public class BuilderCustomView extends AbstractCustomView {
             new ListBox(container, name);
             break;
         case REPORT_TOOL:
-            rtdata = new ReportToolData();
-            rtdata.context = context;
-            rtdata.name = name;
+            rtdata = new ReportToolData(context, name);
             new StandardContainer(container, rtdata.name);
             components.add(rtdata);
             break;
