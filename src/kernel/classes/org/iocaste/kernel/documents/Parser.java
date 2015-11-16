@@ -11,6 +11,8 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.JoinClause;
 import org.iocaste.documents.common.Query;
+import org.iocaste.documents.common.ValueRange;
+import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.documents.common.WhereClause;
 import org.iocaste.protocol.IocasteException;
 
@@ -252,6 +254,7 @@ public class Parser {
         DocumentModelItem nsitem;
         Object value;
         String field;
+        byte condition;
         boolean afterfirst = false, entriesprocessed = false;
         String operator = null;
         int enclose = 0, level = 0;
@@ -300,7 +303,8 @@ public class Parser {
             }
             
             value = clause.getValue();
-            switch (clause.getCondition()) {
+            condition = clause.getCondition();
+            switch (condition) {
             case WhereClause.EQ_ENTRY:
             case WhereClause.NE_ENTRY:
             case WhereClause.LT_ENTRY:
@@ -316,30 +320,11 @@ public class Parser {
                 operator = whereEntries(data);
                 entriesprocessed = true;
                 continue;
-            case WhereClause.EQ:
-                addClause(data, operator,
-                        (value == null)? " is NULL" : " = ?", value);
+            case WhereClause.RG:
+                whereRange(data, operator, (ValueRange)value);
                 break;
-            case WhereClause.NE:
-                addClause(data, operator, " <> ?", value);
-                break;
-            case WhereClause.LT:
-                addClause(data, operator, " < ?", value);
-                break;
-            case WhereClause.LE:
-                addClause(data, operator, " <= ?", value);
-                break;
-            case WhereClause.GT:
-                addClause(data, operator, " > ?", value);
-                break;
-            case WhereClause.GE:
-                addClause(data, operator, " >= ?", value);
-                break;
-            case WhereClause.IN:
-                addClause(data, operator, " in ", value);
-                break;
-            case WhereClause.CP:
-                addClause(data, operator, " like ?", value);
+            default:
+                whereSimple(data, condition, operator, value);
                 break;
             }
             operator = clause.getOperator();
@@ -414,6 +399,55 @@ public class Parser {
         }
         data.sb.append(") )");
         return (qt != data.clauses.size())? condition : null;
+    }
+    
+    private static final void whereRange(
+            WhereData data, String operator, ValueRange range) {
+        byte condition;
+        
+        for (ValueRangeItem rangeitem : range.getItens()) {
+            condition = rangeitem.getOption().getOperator();
+            switch (condition) {
+            case WhereClause.BT:
+                addClause(data, operator, " >= ", rangeitem.getLow());
+                addClause(data, operator, " <= ", rangeitem.getHigh());
+                break;
+            default:
+                whereSimple(data, condition, operator, rangeitem.getLow());
+                break;
+            }
+        }
+    }
+    
+    private static final void whereSimple(
+            WhereData data, byte condition, String operator, Object value) {
+        switch (condition) {
+        case WhereClause.EQ:
+            addClause(data, operator,
+                    (value == null)? " is NULL" : " = ?", value);
+            break;
+        case WhereClause.NE:
+            addClause(data, operator, " <> ?", value);
+            break;
+        case WhereClause.LT:
+            addClause(data, operator, " < ?", value);
+            break;
+        case WhereClause.LE:
+            addClause(data, operator, " <= ?", value);
+            break;
+        case WhereClause.GT:
+            addClause(data, operator, " > ?", value);
+            break;
+        case WhereClause.GE:
+            addClause(data, operator, " >= ?", value);
+            break;
+        case WhereClause.IN:
+            addClause(data, operator, " in ", value);
+            break;
+        case WhereClause.CP:
+            addClause(data, operator, " like ?", value);
+            break;
+        }
     }
 }
 

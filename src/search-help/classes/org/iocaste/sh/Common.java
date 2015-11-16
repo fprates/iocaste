@@ -4,7 +4,6 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.documents.common.ValueRange;
-import org.iocaste.documents.common.ValueRangeItem;
 
 public class Common {
     
@@ -27,36 +26,7 @@ public class Common {
         
         for (String name : context.criteria.keySet()) {
             range = context.criteria.get(name);
-            for (ValueRangeItem rangeitem : range.getItens()) {
-                switch (rangeitem.getOption()) {
-                case BT:
-                    query.andGE(name, rangeitem.getLow());
-                    query.andLE(name, rangeitem.getHigh());
-                    break;
-                case CP:
-                    query.andLike(name, rangeitem.getLow().toString().
-                            replaceAll("[*]", "%"));
-                    break;
-                case EQ:
-                    query.andEqual(name, rangeitem.getLow());
-                    break;
-                case GE:
-                    query.andGE(name, rangeitem.getLow());
-                    break;
-                case GT:
-                    query.andGT(name, rangeitem.getLow());
-                    break;
-                case LE:
-                    query.andLE(name, rangeitem.getLow());
-                    break;
-                case LT:
-                    query.andLT(name, rangeitem.getLow());
-                    break;
-                case NE:
-                    query.andNot(name, rangeitem.getLow());
-                    break;
-                }
-            }
+            query.andIn(name, range);
         }
         
         return documents.select(query);

@@ -1,22 +1,22 @@
 package org.iocaste.documents.common;
 
 public enum RangeOption {
-    EQ("="),
-    NE("<>"),
-    LT("<"),
-    GT(">"),
-    LE("<="),
-    GE(">="),
-    BT("AND"),
-    CP("LIKE");
+    EQ(WhereClause.EQ),
+    NE(WhereClause.NE),
+    LT(WhereClause.LT),
+    GT(WhereClause.GT),
+    LE(WhereClause.LE),
+    GE(WhereClause.GE),
+    BT(WhereClause.BT),
+    CP(WhereClause.CP);
     
-    private String operator;
+    private byte operator;
     
-    RangeOption(String operator) {
+    RangeOption(byte operator) {
         this.operator = operator;
     }
     
-    public final String getOperator() {
+    public final byte getOperator() {
         return operator;
     }
 }

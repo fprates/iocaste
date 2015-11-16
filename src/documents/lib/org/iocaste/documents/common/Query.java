@@ -59,6 +59,12 @@ public class Query implements Serializable {
         add(field, WhereClause.IN, values, "and");
     }
 
+    public final void andIn(String field, ValueRange range) {
+        beginEnclose();
+        add(field, WhereClause.RG, range, "and");
+        endEnclose();
+    }
+    
     public final void andLE(String field, Object value) {
         add(field, WhereClause.LE, value, "and");
     }
