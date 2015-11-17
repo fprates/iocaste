@@ -272,6 +272,7 @@ public class Controller {
     
     private static final boolean isElementVisible(Element element) {
         Container container;
+        String htmlname;
         
         if (element == null)
             return true;
@@ -283,6 +284,14 @@ public class Controller {
             container = ((Container)element).getContainer();
         else
             container = ((Component)element).getContainer();
+        
+        htmlname = element.getHtmlName();
+        if (htmlname.equals(container.getHtmlName()))
+            throw new RuntimeException(new StringBuilder(
+                    "element-container lock detected for '").
+                    append(htmlname).
+                    append("'. element has the same name of its container.").
+                    toString());
         
         return isElementVisible(container);
     }
