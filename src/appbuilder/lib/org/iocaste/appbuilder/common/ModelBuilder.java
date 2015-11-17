@@ -28,6 +28,7 @@ public class ModelBuilder {
         for (String name : items.keySet()) {
             item = new DocumentModelItem(name);
             item.setDataElement(items.get(name));
+            item.setSearchHelp(item.getSearchHelp());
             model.add(item);
         }
         

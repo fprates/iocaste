@@ -41,6 +41,8 @@ public class ReportToolInputRenderer {
             if (item.values != null)
                 for (String key : item.values.keySet())
                     dfitem.add(key, item.values.get(key));
+            if (item.sh != null)
+                dfitem.getModelItem().setSearchHelp(item.sh);
         }
     }
 }
