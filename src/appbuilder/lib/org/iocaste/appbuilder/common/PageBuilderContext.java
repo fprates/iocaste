@@ -10,7 +10,6 @@ import org.iocaste.shell.common.AbstractContext;
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewContext> viewcontexts;
     private Map<String, Manager> managers;
-    private boolean inputupdate;
     public DownloadData downloaddata;
     
     public PageBuilderContext() {
@@ -74,7 +73,7 @@ public class PageBuilderContext extends AbstractContext {
      * @return
      */
     public final boolean isInputUpdatable() {
-        return inputupdate;
+        return getView().isInputUpdatable();
     }
     
     /**
@@ -82,6 +81,6 @@ public class PageBuilderContext extends AbstractContext {
      * @param inputupdate
      */
     public final void setInputUpdate(boolean inputupdate) {
-        this.inputupdate = inputupdate;
+        getView().setInputUpdate(inputupdate);
     }
 }

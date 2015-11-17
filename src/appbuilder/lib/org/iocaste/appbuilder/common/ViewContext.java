@@ -12,7 +12,7 @@ public class ViewContext {
     private ViewComponents components;
     private Map<String, AbstractActionHandler> actionhandlers;
     private ExtendedContext extcontext;
-    private boolean updateview;
+    private boolean updateview, inputupdate;
     
     public ViewContext(String name) {
         components = new ViewComponents();
@@ -81,6 +81,14 @@ public class ViewContext {
      * 
      * @return
      */
+    public final boolean isInputUpdatable() {
+        return inputupdate;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public final boolean isUpdatable() {
         return updateview;
     }
@@ -128,6 +136,14 @@ public class ViewContext {
      */
     public final void set(AbstractViewInput input) {
         this.input = input;
+    }
+    
+    /**
+     * 
+     * @param inputupdate
+     */
+    public final void setInputUpdate(boolean inputupdate) {
+        this.inputupdate = inputupdate;
     }
     
     /**
