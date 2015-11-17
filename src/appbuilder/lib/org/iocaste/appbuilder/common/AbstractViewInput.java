@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
@@ -116,6 +117,14 @@ public abstract class AbstractViewInput implements ViewInput {
         }
     }
     
+    protected final void dflistset(
+            String form, String item, Map<String, Object> values) {
+        DataItem input = getinput(form, item);
+        
+        for (String key : values.keySet())
+            input.add(key, values.get(key));
+    }
+    
     protected final void dfset(String form, String item, Object value) {
         getinput(form, item).set(value);
     }
@@ -219,14 +228,27 @@ public abstract class AbstractViewInput implements ViewInput {
         area.add(line);
     }
     
+    private final ReportToolEntry reportentryget(String report) {
+        return context.getView().getComponents().reporttools.get(report);
+    }
+    
+    protected final void reportlistset(
+            String report, String field, Map<String, Object> values) {
+        ReportToolEntry entry = reportentryget(report);
+        if (entry == null)
+            throw new RuntimeException(new StringBuilder(report).
+                    append(" is an invalid report.").toString());
+        entry.data.input.items.get(field).values = values;
+    }
+    
     protected final void reportset(String report, ExtendedObject object) {
-        ReportToolEntry entry = getViewComponents().reporttools.get(report);
+        ReportToolEntry entry = reportentryget(report);
         entry.data.input.object = object;
         entry.update = true;
     }
     
     protected final void reportset(String report, ExtendedObject[] items) {
-        ReportToolEntry entry = getViewComponents().reporttools.get(report);
+        ReportToolEntry entry = reportentryget(report);
         entry.data.output.objects = items;
         entry.update = true;
     }

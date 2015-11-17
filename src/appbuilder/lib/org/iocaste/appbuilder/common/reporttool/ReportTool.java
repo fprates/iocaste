@@ -36,8 +36,8 @@ public class ReportTool {
     }
     
     private DataForm getDataForm() {
-        String dfname = data.name.concat("_report_input");
-        return data.context.view.getElement(dfname);
+        return data.context.view.getElement(
+                ReportToolInputRenderer.getInputFormName(data));
     }
     
     public final ExtendedObject getInput() {

@@ -321,9 +321,12 @@ public abstract class AbstractActionHandler {
         }
     }
     
+    private final ReportToolEntry reportentryget(String report) {
+        return context.getView().getComponents().reporttools.get(report);
+    }
+    
     protected final ExtendedObject reportinputget(String report) {
-        ReportToolEntry entry = context.getView().getComponents().
-                reporttools.get(report);
+        ReportToolEntry entry = reportentryget(report);
         if (entry == null)
             throw new RuntimeException(new StringBuilder(report).
                     append(" is an invalid report.").toString());
