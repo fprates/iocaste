@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
@@ -38,11 +39,15 @@ public class ReportToolStage {
             insert(name, model);
     }
     
-    private void insert(String name, DocumentModel model) {
+    public void add(String fieldname, DataElement element) {
         ReportToolStageItem item;
         
         item = new ReportToolStageItem();
-        item.element = model.getModelItem(name).getDataElement();
-        items.put(name, item);
+        item.element = element;
+        items.put(fieldname, item);
+    }
+    
+    private void insert(String name, DocumentModel model) {
+        add(name, model.getModelItem(name).getDataElement());
     }
 }
