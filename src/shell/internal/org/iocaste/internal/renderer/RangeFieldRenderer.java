@@ -3,7 +3,9 @@ package org.iocaste.internal.renderer;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.ValueRange;
 import org.iocaste.documents.common.ValueRangeItem;
+import org.iocaste.internal.Input;
 import org.iocaste.protocol.utils.XMLElement;
+import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.RangeFieldPair;
@@ -22,6 +24,7 @@ public class RangeFieldRenderer extends Renderer {
         RangeFieldPair[] elements;
         XMLElement to, tabletag, trtag, tdtag;
         InputComponent input;
+        Calendar calendar;
         int length;
         
         low = rangeinput.getLowHtmlName();
@@ -41,7 +44,8 @@ public class RangeFieldRenderer extends Renderer {
         tabletag = new XMLElement("table");
         trtag = new XMLElement("tr");
         tabletag.addChild(trtag);
-        
+
+        calendar = input.getCalendar();
         for (Element element : elements) {
             tdtag = new XMLElement("td");
             trtag.addChild(tdtag);
@@ -63,6 +67,10 @@ public class RangeFieldRenderer extends Renderer {
             tfield.setDataElement(dataelement);
             tfield.setSearchHelp(input.getSearchHelp());
             tfield.setLocale(input.getLocale());
+
+            if (calendar != null)
+                Input.generateCalendar(
+                        config.getView(), rangeinput.getContainer(), tfield);
             
             if (dataelement != null) {
                 length = dataelement.getLength();

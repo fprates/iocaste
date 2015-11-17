@@ -57,28 +57,33 @@ public class Input {
      */
     private final void generateCalendar(InputComponent input,
             InputData inputdata) {
+        generateCalendar(inputdata.view, inputdata.container, input);
+    }
+    
+    public static final void generateCalendar(
+            View view, Container container, InputComponent input) {
         Calendar master, earlycal, latecal;
         String htmlname, early, late;
         Map<String, Element> elements;
         
         htmlname = input.getHtmlName().concat(".cal");
-        master = new Calendar(inputdata.container, htmlname);
+        master = new Calendar(container, htmlname);
         master.setEarly(early = "early_".concat(htmlname));
         master.setLate(late = "late_".concat(htmlname));
         input.setCalendar(master);
         
-        earlycal = new Calendar(inputdata.container, early, Calendar.EARLY);
+        earlycal = new Calendar(container, early, Calendar.EARLY);
         earlycal.setMaster(htmlname);
         earlycal.setText("<");
         
-        latecal = new Calendar(inputdata.container, late, Calendar.LATE);
+        latecal = new Calendar(container, late, Calendar.LATE);
         latecal.setMaster(htmlname);
         latecal.setText(">");
         
-        if (!inputdata.container.isMultiLine())
+        if (!container.isMultiLine())
             return;
         
-        elements = inputdata.view.getElements();
+        elements = view.getElements();
         elements.put(htmlname, master);
         elements.put(early, earlycal);
         elements.put(late, latecal);
