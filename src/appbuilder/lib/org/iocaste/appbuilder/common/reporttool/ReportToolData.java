@@ -7,7 +7,7 @@ public class ReportToolData {
     private static final byte OUTPUT = 1;
     private byte stage;
     public AbstractContext context;
-    public String name;
+    public String name, nsreference;
     public ReportToolStage input, output;
     
     public ReportToolData(AbstractContext context, String name) {

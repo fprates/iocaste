@@ -43,6 +43,8 @@ public class ReportToolInputRenderer {
                     dfitem.add(key, item.values.get(key));
             if (item.sh != null)
                 dfitem.getModelItem().setSearchHelp(item.sh);
+            if ((data.nsreference != null) && data.nsreference.equals(itemname))
+                dataform.setNSReference(dfitem.getHtmlName());
         }
     }
 }

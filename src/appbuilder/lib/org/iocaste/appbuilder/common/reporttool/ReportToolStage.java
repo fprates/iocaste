@@ -13,7 +13,7 @@ import org.iocaste.documents.common.ExtendedObject;
 
 public class ReportToolStage {
     private Documents documents;
-    public String outerstyle, model;;
+    public String outerstyle, model, nsreference;
     public Map<String, ReportToolStageItem> items;
     public ExtendedObject object;
     public ExtendedObject[] objects;
