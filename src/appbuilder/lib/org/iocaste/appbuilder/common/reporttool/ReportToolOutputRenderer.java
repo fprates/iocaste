@@ -9,7 +9,7 @@ public class ReportToolOutputRenderer {
         data.output.ttdata = new TableToolData();
         data.output.ttdata.context = data.context;
         data.output.ttdata.container = data.name;
-        data.output.ttdata.name = data.name;
+        data.output.ttdata.name = data.name.concat("_report");
         data.output.ttdata.mode = TableTool.DISPLAY;
         data.output.ttdata.vlines = 0;
         data.output.ttdata.style = data.output.outerstyle;
