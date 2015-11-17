@@ -263,13 +263,6 @@ public class Controller {
         }
     }
     
-    private static final void message(
-            ControllerData config, Const type, String text, Object... args) {
-        config.state.messagetype = type;
-        config.state.messagetext = messages.get(text);
-        config.state.messageargs = args;
-    }
-    
     private static final boolean isElementVisible(Element element) {
         Container container;
         String htmlname;
@@ -285,16 +278,26 @@ public class Controller {
         else
             container = ((Component)element).getContainer();
         
-        htmlname = element.getHtmlName();
-        if (htmlname.equals(container.getHtmlName()))
-            throw new RuntimeException(new StringBuilder(
+        if (container != null) {
+            htmlname = element.getHtmlName();
+            if (htmlname.equals(container.getHtmlName()))
+                throw new RuntimeException(new StringBuilder(
                     "element-container lock detected for '").
                     append(htmlname).
                     append("'. element has the same name of its container.").
                     toString());
+        }
         
         return isElementVisible(container);
     }
+    
+    private static final void message(
+            ControllerData config, Const type, String text, Object... args) {
+        config.state.messagetype = type;
+        config.state.messagetext = messages.get(text);
+        config.state.messageargs = args;
+    }
+    
     /**
      * 
      * @param config
