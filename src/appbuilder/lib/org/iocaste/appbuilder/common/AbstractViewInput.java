@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -238,6 +239,22 @@ public abstract class AbstractViewInput implements ViewInput {
         if (entry == null)
             throw new RuntimeException(new StringBuilder(report).
                     append(" is an invalid report.").toString());
+        entry.data.input.items.get(field).values = values;
+    }
+    
+    protected final void reportlistset(
+            String report, String field, ExtendedObject[] objects) {
+        Map<String, Object> values;
+        Object value;
+        ReportToolEntry entry = reportentryget(report);
+        if (entry == null)
+            throw new RuntimeException(new StringBuilder(report).
+                    append(" is an invalid report.").toString());
+        values = new LinkedHashMap<>();
+        for (ExtendedObject object : objects) {
+            value = object.get(field);
+            values.put(value.toString(), value);
+        }
         entry.data.input.items.get(field).values = values;
     }
     
