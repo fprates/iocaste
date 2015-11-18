@@ -25,6 +25,7 @@ import org.iocaste.shell.common.EventHandler;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.Shell;
+import org.iocaste.shell.common.View;
 
 public class Controller {
     private static final int EINITIAL = 1;
@@ -310,7 +311,7 @@ public class Controller {
         String value;
         DataElement dataelement;
         InputComponent input;
-        RangeInputStatus ri = new RangeInputStatus();
+        RangeInputStatus ri;
         
         /*
          * Componentes selecionáveis (como checkboxes), só fornecem
@@ -336,7 +337,8 @@ public class Controller {
             
             setString(config.values, name, "off");
         }
-        
+
+        ri = new RangeInputStatus();
         for (String name : config.values.keySet()) {
             element = config.state.view.getElement(name);
             
@@ -345,6 +347,7 @@ public class Controller {
             
             value = getString(config.values, name);
             input = (InputComponent)element;
+            
             ri.type = 0;
             if (input.isSelectable() && input.isStackable())
                 ri.type = 2;
@@ -357,15 +360,13 @@ public class Controller {
                 input.set(value);
                 break;
             case 1:
-                ri.master = config.state.view.getElement(input.getMaster());
-                if (name.equals(ri.master.getLowHtmlName()))
+                ri.set(config.state.view, input.getMaster());
+                if (name.equals(ri.state.master.getLowHtmlName()))
                     ri.type = LOW_RANGE;
                 else
                     ri.type = HIGH_RANGE;
                 
-                ri.addCount(ri.master.getHtmlName());
                 ri.value = value;
-                
                 break;
             }
             
@@ -472,16 +473,14 @@ public class Controller {
             name = input.getHtmlName();
         
         if (isValueInitial(object, dataelement, input.isBooleanComponent())) {
-            if (ri.getCount(name) == 2)
-                ri.clearCount(name);
             ri.value = object;
             return;
         }
 
-        range = ri.master.get();
+        range = ri.state.master.get();
         if (range == null) {
             range = new ValueRange();
-            ri.master.set(range);
+            ri.state.master.set(range);
         }
 
         if (range.length() > 0)
@@ -494,29 +493,31 @@ public class Controller {
         
         switch (ri.type) {
         case LOW_RANGE:
-            if (dataelement.getType() == DataType.CHAR) {
-                value = (String)object;
-                if (ri.getCount(name) != 2 || rangeitem.getOption() == null) {
-                    if (value != null && value.contains("*"))
-                        rangeitem.setOption(RangeOption.CP);
-                    else
-                        rangeitem.setOption(RangeOption.EQ);
+            if (!ri.state.high) {
+                if (dataelement.getType() == DataType.CHAR) {
+                    value = (String)object;
+                    if (rangeitem.getOption() == null) {
+                        if (value != null && value.contains("*"))
+                            rangeitem.setOption(RangeOption.CP);
+                        else
+                            rangeitem.setOption(RangeOption.EQ);
+                    }
+                } else {
+                    rangeitem.setOption(RangeOption.EQ);
                 }
-            } else {
-                rangeitem.setOption(RangeOption.EQ);
             }
 
             rangeitem.setLow(object);
+            ri.state.low = true;
             break;
         default:
             rangeitem.setOption(RangeOption.BT);
             rangeitem.setHigh(object);
+            ri.state.high = true;
             break;
         }
         
         ri.value = object;
-        if (ri.getCount(name) == 2)
-            ri.clearCount(name);
     }
     
     /**
@@ -619,30 +620,28 @@ public class Controller {
 }
 
 class RangeInputStatus {
-    public byte type;
+    private Map<String, RangeInputState> states;
+    public RangeInputState state;
     public Object value;
-    public RangeInputComponent master;
-    private Map<String, Byte> state;
+    public int type;
     
     public RangeInputStatus() {
-        state = new HashMap<>();
+        states = new HashMap<>();
     }
     
-    public final void addCount(String name) {
-        byte count;
+    public final void set(View view, String name) {
+        RangeInputComponent component = view.getElement(name);
         
-        if (state.containsKey(name))
-            count = state.get(name);
-        else
-            count = 0;
-        state.put(name, ++count);
+        state = states.get(name);
+        if (state != null)
+            return;
+        state = new RangeInputState();
+        state.master = component;
+        states.put(name, state);
     }
-    
-    public final void clearCount(String name) {
-        state.put(name, (byte)0);
-    }
-    
-    public final byte getCount(String name) {
-        return state.get(name);
-    }
+}
+
+class RangeInputState {
+    public boolean low, high;
+    public RangeInputComponent master;
 }

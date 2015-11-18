@@ -14,7 +14,6 @@ public class DataItem extends AbstractInputComponent
     private static final long serialVersionUID = 3376883855229003535L;
     private Map<String, Object> values;
     private String highname, lowname, label;
-    private boolean rangecomponent;
     
     public DataItem(DataForm form, Const type, String name) {
         super(form, Const.DATA_ITEM, type, name);
@@ -22,7 +21,6 @@ public class DataItem extends AbstractInputComponent
         values = new LinkedHashMap<String, Object>();
         setStyleClass("form_cell");
         setLength(20);
-        rangecomponent = (type == Const.RANGE_FIELD);
         setHtmlName(new StringBuilder(form.getName()).
                 append(".").
                 append(name).toString());
@@ -114,18 +112,7 @@ public class DataItem extends AbstractInputComponent
      */
     @Override
     public final boolean isValueRangeComponent() {
-        return rangecomponent;
-    }
-    
-    /*
-     * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractInputComponent#setComponentType(
-     *     org.iocaste.shell.common.Const)
-     */
-    @Override
-    public final void setComponentType(Const type) {
-        super.setComponentType(type);
-        rangecomponent = (type == Const.RANGE_FIELD);
+        return (getComponentType() == Const.RANGE_FIELD);
     }
     
     /*

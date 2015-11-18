@@ -6,6 +6,7 @@ import org.iocaste.documents.common.ValueRangeItem;
 import org.iocaste.internal.Input;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Calendar;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.PopupControl;
@@ -113,7 +114,8 @@ public class RangeFieldRenderer extends Renderer {
             style = "display: inline;";
             tdtag.addChild(TextFieldRenderer.render(tfield, style, config));
             popupcontrol = config.getPopupControl();
-            if ((calendar == null) || (popupcontrol == null))
+            if ((calendar == null) || (popupcontrol == null) ||
+                    (popupcontrol.getType() != Const.CALENDAR))
                 continue;
             fromcal = (Calendar)popupcontrol;
             copyCalendar(view, calendar, fromcal);
