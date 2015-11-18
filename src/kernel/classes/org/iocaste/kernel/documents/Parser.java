@@ -445,7 +445,8 @@ public class Parser {
             addClause(data, operator, " in ", value);
             break;
         case WhereClause.CP:
-            addClause(data, operator, " like ?", value);
+            addClause(data, operator, " like ?",
+                    value.toString().replaceAll("\\*", "%"));
             break;
         }
     }
