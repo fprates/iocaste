@@ -8,14 +8,33 @@ import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.PopupControl;
 import org.iocaste.shell.common.RangeFieldPair;
 import org.iocaste.shell.common.RangeInputComponent;
 import org.iocaste.shell.common.TextField;
+import org.iocaste.shell.common.View;
 
 public class RangeFieldRenderer extends Renderer {
 
+    private static final void copyCalendar(
+            View view, Calendar to, Calendar from) {
+        switch (from.getMode()) {
+        case Calendar.EARLY:
+            ((Calendar)view.getElement(to.getEarly())).setDate(from.getDate());
+            break;
+        case Calendar.LATE:
+            ((Calendar)view.getElement(to.getLate())).setDate(from.getDate());
+            break;
+        default:
+            to.setDate(from.getDate());
+            break;
+        }
+    }
+    
     public static final XMLElement render(
             RangeInputComponent rangeinput, Config config) {
+        View view;
+        PopupControl popupcontrol;
         String style, low, high;
         DataElement dataelement;
         ValueRange range;
@@ -24,17 +43,18 @@ public class RangeFieldRenderer extends Renderer {
         RangeFieldPair[] elements;
         XMLElement to, tabletag, trtag, tdtag;
         InputComponent input;
-        Calendar calendar;
+        Calendar calendar, fromcal;
         int length;
         
         low = rangeinput.getLowHtmlName();
         high = rangeinput.getHighHtmlName();
+        view = config.getView();
         
         elements = new RangeFieldPair[3];
-        elements[0] = new RangeFieldPair(config.getView(), low);
+        elements[0] = new RangeFieldPair(view, low);
         elements[0].setMaster(rangeinput);
         elements[1] = null;
-        elements[2] = new RangeFieldPair(config.getView(), high);
+        elements[2] = new RangeFieldPair(view, high);
         elements[2].setMaster(rangeinput);
         
         input = (InputComponent)rangeinput;
@@ -68,9 +88,17 @@ public class RangeFieldRenderer extends Renderer {
             tfield.setSearchHelp(input.getSearchHelp());
             tfield.setLocale(input.getLocale());
 
-            if (calendar != null)
+            if (calendar != null) {
                 Input.generateCalendar(
-                        config.getView(), rangeinput.getContainer(), tfield);
+                        view, rangeinput.getContainer(), tfield);
+                
+                for (Calendar childcal : new Calendar[] {
+                        (Calendar)view.getElement(calendar.getName()),
+                        (Calendar)view.getElement(calendar.getEarly()),
+                        (Calendar)view.getElement(calendar.getLate())
+                })
+                    copyCalendar(view, tfield.getCalendar(), childcal);
+            }
             
             if (dataelement != null) {
                 length = dataelement.getLength();
@@ -84,6 +112,13 @@ public class RangeFieldRenderer extends Renderer {
             
             style = "display: inline;";
             tdtag.addChild(TextFieldRenderer.render(tfield, style, config));
+            popupcontrol = config.getPopupControl();
+            if ((calendar == null) || (popupcontrol == null))
+                continue;
+            fromcal = (Calendar)popupcontrol;
+            copyCalendar(view, calendar, fromcal);
+            if (fromcal.getMaster() != null)
+                calendar.setDate(tfield.getCalendar().getDate());
         }
         
         return tabletag;
