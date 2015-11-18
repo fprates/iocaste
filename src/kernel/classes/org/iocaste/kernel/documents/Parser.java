@@ -409,8 +409,8 @@ public class Parser {
             condition = rangeitem.getOption().getOperator();
             switch (condition) {
             case WhereClause.BT:
-                addClause(data, operator, " >= ", rangeitem.getLow());
-                addClause(data, operator, " <= ", rangeitem.getHigh());
+                addClause(data, operator, " >= ? and", rangeitem.getLow());
+                addClause(data, operator, " <= ?", rangeitem.getHigh());
                 break;
             default:
                 whereSimple(data, condition, operator, rangeitem.getLow());
