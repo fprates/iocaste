@@ -23,6 +23,7 @@ public class Documents extends AbstractFunction {
         export("create_complex_model", new CreateCModel());
         protect("create_data_element", new CreateDataElement());
         export("create_model", new CreateModel());
+        export("create_models", new CreateModels());
         export("create_number_factory", new CreateNumberFactory());
         export("delete_document", new DeleteDocument());
         export("delete_complex_document", new DeleteComplexDocument());
@@ -52,6 +53,11 @@ public class Documents extends AbstractFunction {
     
     public final int getModelItemLen(String name) {
         return cache.mmodel.getModelItem(name).getDataElement().getLength();
+    }
+    
+    private final StringBuilder initUpdateStatement(String tablename) {
+        return new StringBuilder("update ").
+                append(tablename).append(" set ");
     }
     
     /**
@@ -120,8 +126,7 @@ public class Documents extends AbstractFunction {
                 keystarted = true;
             } else {
                 if (update == null)
-                    update = new StringBuilder("update ").
-                        append(tablename).append(" set ");
+                    update = initUpdateStatement(tablename);
                 if (ustarted)
                     update.append(", ");
                 else
@@ -135,7 +140,13 @@ public class Documents extends AbstractFunction {
         if (ns != null) {
             fieldname = ns.getTableFieldName();
             insert.append(", ").append(fieldname);
-            update.append(", ").append(fieldname).append(" = ?");
+            if (update == null) {
+                update = initUpdateStatement(tablename);
+                ustarted = true;
+            } else {
+                update.append(", ");
+            }
+            update.append(fieldname).append(" = ?");
             where.append(" and ").append(fieldname).append(" = ?");
             values.append(", ?");
         }

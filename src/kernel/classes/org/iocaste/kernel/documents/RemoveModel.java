@@ -14,7 +14,7 @@ public class RemoveModel extends AbstractDocumentsHandler {
     public Object run(Message message) throws Exception {
         GetDocumentModel getmodel;
         Documents documents;
-        String tablename, name, query;
+        String tablename, name;
         String modelname = message.getString("model_name");
         DocumentModel model;
         Connection connection;
@@ -68,13 +68,7 @@ public class RemoveModel extends AbstractDocumentsHandler {
         if (tablename == null)
             return 1;
         
-        query = new StringBuilder("drop table ").append(tablename).toString();
-        try {
-        update(connection, query);
-        } catch (Exception e) {
-            
-        }
-        return 1;
+        return removeTable(connection, tablename);
     }
     
     /**
@@ -106,6 +100,18 @@ public class RemoveModel extends AbstractDocumentsHandler {
 
         update(connection, QUERIES[DEL_ELEMENT], name);
         
+        return 1;
+    }
+    
+    public int removeTable(Connection connection, String tablename) {
+        StringBuilder sb;
+        
+        sb = new StringBuilder("drop table ").append(tablename);
+        try {
+            update(connection, sb.toString());
+        } catch (Exception e) {
+            
+        }
         return 1;
     }
 

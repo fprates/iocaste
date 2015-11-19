@@ -166,6 +166,12 @@ public class Documents extends AbstractServiceInterface {
         return call(message);
     }
     
+    public final int createModels(DocumentModel[] models) {
+        Message message = new Message("create_models");
+        message.add("models", models);
+        return call(message);
+    }
+    
     /**
      * 
      * @param name

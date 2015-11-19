@@ -20,7 +20,7 @@ public class CreateModel extends AbstractDocumentsHandler {
      * @return
      * @throws Exception
      */
-    private final int createTable(Connection connection, Documents documents,
+    public final int createTable(Connection connection, Documents documents,
             DocumentModel model) throws Exception {
         GetDocumentModel getmodel;
         DocumentModel refmodel;
@@ -236,7 +236,7 @@ public class CreateModel extends AbstractDocumentsHandler {
      * @param cache
      * @throws Exception
      */
-    private final void registerModel(Connection connection, Documents documents,
+    public final void registerModel(Connection connection, Documents documents,
             DocumentModel model) throws Exception {
         registerDataElements(connection, documents, model);
         registerDocumentHeader(connection, documents, model);
