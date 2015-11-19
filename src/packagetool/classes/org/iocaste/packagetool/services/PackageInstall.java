@@ -40,21 +40,6 @@ public class PackageInstall extends AbstractHandler {
         header.set("NAME", state.pkgname);
         return header;
     }
-
-    private final void removeModels(State state) {
-        ExtendedObject object;
-        String name, modelname;
-        
-        for (int i = 0; i < state.log.size(); i++) {
-            object = state.log.pop();
-            name = object.get("MODEL");
-            if (name == null || !name.equals("MODEL"))
-                continue;
-            
-            modelname = object.get("NAME");
-            state.documents.removeModel(modelname);
-        }
-    }
     
     @Override
     public Object run(Message message) throws Exception {
@@ -219,10 +204,6 @@ public class PackageInstall extends AbstractHandler {
         } catch (Exception e) {
             if (state.installed > 1)
                 state.documents.rollback();
-            
-            removeModels(state);
-            
-            state.documents.commit();
             throw e;
         }
     }

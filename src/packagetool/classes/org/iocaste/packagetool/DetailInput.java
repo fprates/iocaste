@@ -13,10 +13,10 @@ public class DetailInput extends AbstractViewInput {
         if (extcontext.exception == null)
             return;
         
-        context.view.print(extcontext.exception.getMessage());
-        context.view.print("\n");
+        context.view.println(extcontext.exception.getMessage());
+        context.view.println(null);
         for (StackTraceElement trace : extcontext.exception.getStackTrace())
-            context.view.print(trace.toString());
+            context.view.println(trace.toString());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.iocaste.packagetool.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,17 +34,28 @@ public class Models {
     
     public static final void installAll(Map<String, DocumentModel> models,
             State state) throws Exception {
-        DocumentModel model;
+        int error;
+        List<DocumentModel> toinstall;
         
+        toinstall = new ArrayList<>();
         for (String modelname : models.keySet()) {
             if (state.documents.getModel(modelname) != null) {
                 Registry.add(modelname, "MODEL", state);
                 continue;
             }
             
-            model = models.get(modelname);
-            install(model, modelname, state);
+            toinstall.add(models.get(modelname));
         }
+        
+        if (toinstall.size() == 0)
+            return;
+        error = state.documents.
+                createModels(toinstall.toArray(new DocumentModel[0]));
+        if (error < 0)
+            throw new IocasteException(
+                    new StringBuilder("error creating models.").toString());
+        for (DocumentModel installed : toinstall)
+            install(installed, installed.getName(), state);
     }
     
     public static final void install(DocumentModel model, String modelname,
@@ -53,13 +65,7 @@ public class Models {
         ExtendedObject header;
         
         model.setPackage(state.pkgname);
-        if (state.documents.createModel(model) < 0)
-            throw new IocasteException(new StringBuilder("error on create ").
-                    append(modelname).
-                    append(" model.").toString());
-        
         Registry.add(modelname, "MODEL", state);
-        
         extractsh(model, state);
         
         /*
