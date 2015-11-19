@@ -1,8 +1,8 @@
 package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
@@ -12,7 +12,7 @@ public class ExecAction extends AbstractHandler {
     public AbstractContext context;
     public ViewState state;
     public Map<String, ViewCustomAction> customactions;
-    public Map<String, List<String>> validables;
+    public Map<String, Set<String>> validables;
     public Map<String, Validator> validators;
     
     private final String getMessage(String message) {
@@ -30,7 +30,7 @@ public class ExecAction extends AbstractHandler {
         ControlComponent control;
         Validator validator;
         InputComponent input;
-        List<String> handlers;
+        Set<String> handlers;
         ViewCustomAction customaction;
         Method method;
         String error;

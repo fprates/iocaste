@@ -1,9 +1,9 @@
 package org.iocaste.shell.common;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
@@ -139,9 +139,9 @@ public abstract class AbstractPage extends AbstractFunction {
         return getviewdata.state.servername;
     }
     
-    public final List<Validator> getValidators(String input) {
-        List<Validator> validators;
-        List<String> validables = getviewdata.validables.get(input);
+    public final Set<Validator> getValidators(String input) {
+        Set<Validator> validators;
+        Set<String> validables = getviewdata.validables.get(input);
         
         if (validables == null)
             return null;
@@ -149,7 +149,7 @@ public abstract class AbstractPage extends AbstractFunction {
         validators = null;
         for (String name : validables) {
             if (validators == null)
-                validators = new ArrayList<>();
+                validators = new LinkedHashSet<>();
             validators.add(getviewdata.validators.get(name));
         }
         
@@ -321,10 +321,10 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param validator
      */
     public final void validate(String input, String validator) {
-        List<String> validators = getviewdata.validables.get(input);
+        Set<String> validators = getviewdata.validables.get(input);
         
         if (validators == null) {
-            validators = new ArrayList<>();
+            validators = new LinkedHashSet<>();
             getviewdata.validables.put(input, validators);
         }
         

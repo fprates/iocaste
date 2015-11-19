@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
@@ -196,7 +197,7 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected void loadInputTexts(PageBuilderContext context) {
-        List<Validator> validators;
+        Set<Validator> validators;
         AbstractExtendedValidator exvalidator;
         Element element;
         InputComponent input;

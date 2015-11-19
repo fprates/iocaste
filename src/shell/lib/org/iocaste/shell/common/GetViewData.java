@@ -1,9 +1,9 @@
 package org.iocaste.shell.common;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
@@ -16,7 +16,7 @@ public class GetViewData extends AbstractHandler {
     public AbstractContext context;
     public Map<String, ViewCustomAction> customactions;
     public Map<String, CustomView> customviews;
-    public Map<String, List<String>> validables;
+    public Map<String, Set<String>> validables;
     public Map<String, Validator> validators;
     
     public final void addMessages(Map<String, String> messages) {
