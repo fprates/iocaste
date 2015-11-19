@@ -214,7 +214,12 @@ public class View implements Serializable {
      * @param line
      */
     public final void print(String line) {
-        lines.add(line);
+        lines.add((line == null)? "" : line);
+    }
+    
+    public final void println(String line) {
+        print(line);
+        lines.add("\n");
     }
     
     /**
