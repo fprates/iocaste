@@ -203,11 +203,15 @@ public class UpdateModel extends AbstractDocumentsHandler {
     
     @Override
     public Object run(Message message) throws Exception {
+        DataElement element;
+        DocumentModelItem namespace;
+        RemoveModel removemodel;
+        CreateModel createmodel;
         DocumentModel oldmodel;
         Map<String, String> queries;
         InsertDataElement insert;
         UpdateData data;
-        String name, itemname;
+        String name, itemname, oldtablename;
         String sessionid = message.getSessionid();
 
         data = new UpdateData();
@@ -221,16 +225,28 @@ public class UpdateModel extends AbstractDocumentsHandler {
         data.altertable = new AlterTable(data.dbtype);
         
         prepareElements(data.connection, data.documents, data.model);
-        
+
+        name = data.model.getName();
+        oldmodel = data.getmodel.run(data.connection, data.documents, name);
+        oldtablename = oldmodel.getTableName();
         if (data.tablename != null)
-            dbupdate(data);
+            if (oldtablename != null) {
+                dbupdate(data);
+            } else {
+                createmodel = data.documents.get("create_model");
+                createmodel.createTable(
+                        data.connection, data.documents, data.model);
+            }
+        else
+            if (oldtablename != null) {
+                removemodel = data.documents.get("remove_model");
+                removemodel.removeTable(data.connection, oldtablename);
+            }
 
         /*
          * atualiza modelos
          */
-        name = data.model.getName();
         insert = data.documents.get("insert_data_element");
-        oldmodel = data.getmodel.run(data.connection, data.documents, name);
         for (DocumentModelItem item : data.model.getItens()) {
             data.item = item;
             data.fieldname = item.getTableFieldName();
@@ -257,6 +273,14 @@ public class UpdateModel extends AbstractDocumentsHandler {
                 throw new IocasteException("error on remove model item");
         }
 
+        namespace = data.model.getNamespace();
+        element = (namespace != null)? namespace.getDataElement() : null;
+        update(data.connection, QUERIES[UPDATE_MODEL_HEAD],
+                data.tablename,
+                (namespace != null)? namespace.getTableFieldName() : null,
+                (element != null)? element.getType() : null,
+                (element != null)? element.getLength() : null,
+                name);
         queries = data.documents.parseQueries(data.model);
         data.documents.cache.queries.put(name, queries);
         data.documents.cache.models.remove(name);

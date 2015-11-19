@@ -47,6 +47,7 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
     protected static final byte UPDATE_RANGE = 25;
     protected static final byte RANGE_SERIE = 26;
     protected static final byte UPDATE_SERIES = 27;
+    protected static final byte UPDATE_MODEL_HEAD = 28;
     protected static final String[] QUERIES = {
         "select * from DOCS001 where docid = ?",
         "select * from DOCS002 where docid = ?",
@@ -80,7 +81,9 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
         "select CRRNT from RANGE001 where ident = ? and nmspc = ?",
         "update RANGE001 set crrnt = ? where ident = ? and nmspc = ?",
         "select CRRNT from RANGE002 where SERIE = ? and NMSPC = ?",
-        "update RANGE002 set crrnt = ? where SERIE = ? and NMSPC = ?"
+        "update RANGE002 set crrnt = ? where SERIE = ? and NMSPC = ?",
+        "update DOCS001 set TNAME = ?, nscol = ?, nstyp = ?, nslen = ? " +
+                "where DOCID = ?"
     };
     
     protected final void addTableKey(List<String> statements,
