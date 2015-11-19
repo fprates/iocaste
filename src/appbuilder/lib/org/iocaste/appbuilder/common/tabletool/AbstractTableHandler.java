@@ -79,11 +79,13 @@ public abstract class AbstractTableHandler {
                     paramlink = new StringBuilder(context.data.name).
                             append(".").append(name).toString();
                     link.add(paramlink, null);
+                    link.setNoScreenLock(column.nolock);
                     break;
                 case BUTTON:
                     element = button = new Button(item, name);
                     button.setAction(column.action);
                     button.setText(column.text);
+                    button.setNoScreenLock(column.nolock);
                     break;
                 default:
                     throw new RuntimeException("component type not supported"
