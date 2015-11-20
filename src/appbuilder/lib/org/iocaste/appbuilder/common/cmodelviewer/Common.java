@@ -9,13 +9,14 @@ import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 
 public class Common {
 
     public static final void formConfig(ConfigData formdata) {
         InputComponent input;
-        boolean key;
+        boolean key, enabled;
         DocumentModel model;
         DocumentModelItem[] items;
         DataForm form;
@@ -42,12 +43,21 @@ public class Common {
                 
                 break;
             case "base":
+                if (model.getNamespace() != null) {
+                    for (Element element : form.getElements())
+                        if (form.isNSReference(element.getName())) {
+                            element.setVisible(false);
+                            element.setEnabled(false);
+                            break;
+                        }
+                }
+                
                 for (DocumentModelItem item : items) {
-                    key = model.isKey(item);
                     input = form.get(item.getName());
+                    key = model.isKey(item);
+                    enabled = (!key && (formdata.mode == ConfigData.UPDATE));
                     input.setVisible(!key);
-                    input.setEnabled(
-                            (!key && (formdata.mode == ConfigData.UPDATE)));
+                    input.setEnabled(enabled);
                     
                     if (formdata.fieldproperties != null)
                         inputConfig(formdata, input);

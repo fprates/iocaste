@@ -228,6 +228,14 @@ public class DataForm extends AbstractContainer {
         return keyrequired;
     }
     
+    public final boolean isNSReference(String name) {
+        String test;
+        if (nsreference == null)
+            return false;
+        test = getView().getElement(nsreference).getName();
+        return name.equals(test);
+    }
+    
     /**
      * Ajusta quantidade de colunas.
      * @param columns quantidade
@@ -260,6 +268,11 @@ public class DataForm extends AbstractContainer {
             name = item.getName();
             item.set(object.getNS(), object.get(name));
         }
+    }
+    
+    public final void setNS(Object value) {
+        DataItem input = getView().getElement(nsreference);
+        input.set(value);
     }
     
     /**

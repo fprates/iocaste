@@ -155,6 +155,10 @@ public abstract class AbstractActionHandler {
         return getdfinput(dataform, field).getl();
     }
     
+    protected final Object getdfns(String dataform) {
+        return getdf(dataform).getNS();
+    }
+    
     protected final String getdfst(String dataform, String field) {
         return getdfinput(dataform, field).getst();
     }

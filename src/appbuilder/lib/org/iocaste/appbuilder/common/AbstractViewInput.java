@@ -132,17 +132,21 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected final void dfset(String form, ExtendedObject object) {
-        ((DataForm)context.view.getElement(form)).setObject(object);
+        ((DataForm)getElement(form)).setObject(object);
     }
     
     protected final void dfkeyset(String form, Object value) {
-        DataForm df = context.view.getElement(form);
+        DataForm df = getElement(form);
         DocumentModel model = df.getModel();
         
         for (DocumentModelKey key : model.getKeys()) {
             getinput(form, key.getModelItemName()).set(value);
             break;
         }
+    }
+    
+    protected final void dfnsset(String form, Object ns) {
+        ((DataForm)getElement(form)).setNS(ns);
     }
     
     protected abstract void execute(PageBuilderContext context);
@@ -159,7 +163,7 @@ public abstract class AbstractViewInput implements ViewInput {
     
     @SuppressWarnings("unchecked")
     private <T extends InputComponent> T getinput(String form, String item) {
-        return (T)((DataForm)context.view.getElement(form)).get(item);
+        return (T)((DataForm)getElement(form)).get(item);
     }
     
     protected final Manager getManager(String name) {
@@ -187,12 +191,12 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected final void inputset(String name, Object value) {
-        InputComponent input = context.view.getElement(name);
+        InputComponent input = getElement(name);
         input.set(value);
     }
     
     protected void listadd(String name, String text, Object value) {
-        ListBox input = context.view.getElement(name);
+        ListBox input = getElement(name);
         input.add(text, value);
     }
     
@@ -203,7 +207,7 @@ public abstract class AbstractViewInput implements ViewInput {
         InputComponent input;
         
         for (String name : context.view.getElements().keySet()) {
-            element = context.view.getElement(name);
+            element = getElement(name);
             
             if (!element.isDataStorable() || !element.isVisible())
                 continue;
@@ -226,7 +230,7 @@ public abstract class AbstractViewInput implements ViewInput {
         if (line == null)
             return;
         
-        area = context.view.getElement("printarea");
+        area = getElement("printarea");
         area.add(line);
     }
     
@@ -292,7 +296,8 @@ public abstract class AbstractViewInput implements ViewInput {
         entry.update = !init;
     }
     
-    protected final TableToolItem tableitemadd(String table, ExtendedObject object) {
+    protected final TableToolItem tableitemadd(
+            String table, ExtendedObject object) {
         TableToolEntry entry = getTableEntry(table);
         TableToolItem item = entry.data.add(object);
         entry.update = !init;
@@ -332,7 +337,7 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected final void textset(String name, String text) {
-        Text element = context.view.getElement(name);
+        Text element = getElement(name);
         element.setText(text);
     }
 }
