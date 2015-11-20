@@ -85,6 +85,31 @@ public class DataForm extends AbstractContainer {
         lines.add(entries);
     }
     
+    private final void append(DocumentModelItem item) {
+        String name;
+        DataElement dataelement;
+        DataItem dataitem;
+        int length;
+        
+        dataelement = item.getDataElement();
+        name = item.getName();
+        
+        switch (dataelement.getType()) {
+        case DataType.BOOLEAN:
+            dataitem = new DataItem(this, Const.CHECKBOX, name);
+            break;
+        default:
+            dataitem = new DataItem(this, Const.TEXT_FIELD, name);
+            break;
+        }
+        dataitem.setModelItem(item);
+        length = dataelement.getLength();
+        dataitem.setLength(length);
+        dataitem.setVisibleLength(length);
+        dataitem.setDataElement(dataelement);
+        dataitem.setNSReference(nsreference);
+    }
+    
     /**
      * Limpa valores do formulário.
      */
@@ -142,6 +167,10 @@ public class DataForm extends AbstractContainer {
     	InputComponent input;
     	ExtendedObject object = new ExtendedObject(model);
     	
+    	if (nsreference != null) {
+    	    input = getView().getElement(nsreference);
+            object.setNS(input.get());
+    	}
         for (Element element: getElements()) {
         	if (!element.isDataStorable())
                 continue;
@@ -163,32 +192,20 @@ public class DataForm extends AbstractContainer {
     }
     
     public final void importModel(DocumentModel model) {
-        String name;
-        DataElement dataelement;
-        DataItem dataitem;
-        int length;
+        DocumentModelItem namespace;
+        InputComponent nsfield;
         
         clear();
-        
-        for (DocumentModelItem item : model.getItens()) {
-            dataelement = item.getDataElement();
-            name = item.getName();
-            
-            switch (dataelement.getType()) {
-            case DataType.BOOLEAN:
-                dataitem = new DataItem(this, Const.CHECKBOX, name);
-                break;
-            default:
-                dataitem = new DataItem(this, Const.TEXT_FIELD, name);
-                break;
-            }
-            dataitem.setModelItem(item);
-            length = dataelement.getLength();
-            dataitem.setLength(length);
-            dataitem.setVisibleLength(length);
-            dataitem.setDataElement(dataelement);
-            dataitem.setNSReference(nsreference);
+        namespace = model.getNamespace();
+        if (namespace != null) {
+            append(namespace);
+            nsfield = get(namespace.getName());
+            nsreference = nsfield.getHtmlName();
+            nsfield.setObligatory(true);
         }
+        
+        for (DocumentModelItem item : model.getItens())
+            append(item);
         
         this.model = model;
     }
