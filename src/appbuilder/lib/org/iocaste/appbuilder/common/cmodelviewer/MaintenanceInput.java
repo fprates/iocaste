@@ -14,7 +14,6 @@ public class MaintenanceInput extends AbstractViewInput {
         DataForm form = getElement("base");
         Context extcontext = getExtendedContext();
         
-        dfnsset("head", extcontext.ns);
         dfkeyset("head", extcontext.id);
         for (Element element : form.getElements()) {
             if (!element.isDataStorable() || !element.isVisible() ||
@@ -27,9 +26,13 @@ public class MaintenanceInput extends AbstractViewInput {
         if (extcontext.document == null)
             return;
 
-        dfnsset("base", extcontext.ns);
-        dfset("base", extcontext.document.getHeader());
         cmodel = extcontext.document.getModel();
+        if (cmodel.getHeader().getNamespace() != null) {
+            dfnsset("head", extcontext.ns);
+            dfnsset("base", extcontext.ns);
+        }
+        
+        dfset("base", extcontext.document.getHeader());
         for (String name : cmodel.getItems().keySet())
             tableitemsset(name.concat("_table"), extcontext.document.
                     getItems(name));
