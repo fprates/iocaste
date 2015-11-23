@@ -22,7 +22,6 @@ public class PackageUpdate extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        DocumentModel model;
         Uninstall uninstall;
         Set<String> types;
         String defaultstyle;
@@ -45,13 +44,8 @@ public class PackageUpdate extends AbstractHandler {
         state.pkgname = message.getString("name");
         
         models = state.data.getModels();
-        for (String name : models.keySet()) {
-            model = models.get(name);
-            if (state.documents.getModel(name) == null)
-                Models.install(model, name, state);
-            else
-                Models.update(model, name, state);
-        }
+        if (models.size() > 0)
+            Models.updateAll(models, state);
         
         types = new HashSet<>();
         types.add("SH");

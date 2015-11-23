@@ -32,9 +32,19 @@ public class Models {
         }
     }
     
+    private static final void installAll(
+            List<DocumentModel> toinstall, State state) throws Exception {
+        int error = state.documents.
+                createModels(toinstall.toArray(new DocumentModel[0]));
+        if (error < 0)
+            throw new IocasteException(
+                    new StringBuilder("error creating models.").toString());
+        for (DocumentModel installed : toinstall)
+            install(installed, installed.getName(), state);
+    }
+    
     public static final void installAll(Map<String, DocumentModel> models,
             State state) throws Exception {
-        int error;
         DocumentModel model;
         List<DocumentModel> toinstall;
         
@@ -52,13 +62,7 @@ public class Models {
         
         if (toinstall.size() == 0)
             return;
-        error = state.documents.
-                createModels(toinstall.toArray(new DocumentModel[0]));
-        if (error < 0)
-            throw new IocasteException(
-                    new StringBuilder("error creating models.").toString());
-        for (DocumentModel installed : toinstall)
-            install(installed, installed.getName(), state);
+        installAll(toinstall, state);
     }
     
     public static final void install(DocumentModel model, String modelname,
@@ -75,8 +79,10 @@ public class Models {
          * recupera modelo para trazer as queries.
          */
         model = state.documents.getModel(model.getName());
-        values = state.data.getValues(model);
+        if (model == null)
+            return;
         
+        values = state.data.getValues(model);
         if (values == null)
             return;
         
@@ -120,5 +126,27 @@ public class Models {
             
             state.documents.modify(header);
         }
+    }
+    
+    public static final void updateAll(
+            Map<String, DocumentModel> models, State state) throws Exception {
+        DocumentModel model;
+        List<DocumentModel> toinstall;
+        
+        toinstall = new ArrayList<>();
+        for (String name : models.keySet()) {
+            model = models.get(name);
+            if (state.documents.getModel(name) != null) {
+                update(model, name, state);
+                continue;
+            }
+            
+            model.setPackage(state.pkgname);
+            toinstall.add(model);
+        }
+        
+        if (toinstall.size() == 0)
+            return;
+        installAll(toinstall, state);
     }
 }

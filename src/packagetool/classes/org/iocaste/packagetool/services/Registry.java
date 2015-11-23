@@ -19,7 +19,7 @@ public class Registry {
                 state.documents.getModel("PACKAGE_ITEM"));
         String code;
         
-        code = String.format("%03d%s", state.pkgitem++, name);
+        code = String.format("%s%03d", state.pkgname, state.pkgitem++);
         pkgitem.set("CODE", code);
         pkgitem.set("NAME", name);
         pkgitem.set("PACKAGE", state.pkgname);
