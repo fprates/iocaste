@@ -125,6 +125,7 @@ public abstract class Module {
         docs001.set("docid", docid);
         docs001.set("tname", tname);
         docs001.set("class", class_);
+        docs001.set("pkgnm", "iocaste-kernel");
         insert(docs001);
         
         docs005.set("tname", tname);

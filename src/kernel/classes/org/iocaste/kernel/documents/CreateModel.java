@@ -29,16 +29,21 @@ public class CreateModel extends AbstractDocumentsHandler {
         String[] fkc, rfc;
         int size, dec;
         Table table;
-        String tname, refname, modelname, constraint, dbtype;
+        String tname, refname, tablename, constraint, dbtype, pkgname;
+        DocumentModelItem[] items;
         String nsfield = null;
-        DocumentModelItem[] itens = model.getItens();
-        
-        getmodel = documents.get("get_document_model");
-        size = itens.length - 1;
-        
-        modelname = model.getTableName();
-        table = new Table(modelname);
 
+        pkgname = model.getPackage();
+        if (pkgname == null)
+            throw new IocasteException(new StringBuilder(
+                    "package not specified for model ").
+                    append(model.getName()).toString());
+        
+        items = model.getItens();
+        getmodel = documents.get("get_document_model");
+        size = items.length - 1;
+        tablename = model.getTableName();
+        table = new Table(tablename);
         namespace = model.getNamespace();
         if (namespace != null) {
             dataelement = namespace.getDataElement();
@@ -48,7 +53,7 @@ public class CreateModel extends AbstractDocumentsHandler {
             table.key(nsfield, dataelement.getType(), size, dec);
         }
         
-        for (DocumentModelItem item : itens) {
+        for (DocumentModelItem item : items) {
             tname = item.getTableFieldName();
             if (tname == null)
                 throw new IocasteException(new StringBuilder(model.getName()).
@@ -82,6 +87,9 @@ public class CreateModel extends AbstractDocumentsHandler {
                 refmodel = reference.getDocumentModel();
             }
 
+            if (!refmodel.getPackage().equals(pkgname))
+                continue;
+            
             namespace = refmodel.getNamespace();
             if ((nsfield != null) && (namespace != null))
                 fkc = new String[] {nsfield, tname};
@@ -95,7 +103,7 @@ public class CreateModel extends AbstractDocumentsHandler {
             else
                 rfc = new String[] {reference.getTableFieldName()};
             
-            constraint = new StringBuilder(modelname).append("_").
+            constraint = new StringBuilder(tablename).append("_").
                     append(tname).append("_").
                     append(refmodel.getTableName()).toString();
             

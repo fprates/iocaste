@@ -35,6 +35,7 @@ public class Models {
     public static final void installAll(Map<String, DocumentModel> models,
             State state) throws Exception {
         int error;
+        DocumentModel model;
         List<DocumentModel> toinstall;
         
         toinstall = new ArrayList<>();
@@ -44,7 +45,9 @@ public class Models {
                 continue;
             }
             
-            toinstall.add(models.get(modelname));
+            model = models.get(modelname);
+            model.setPackage(state.pkgname);
+            toinstall.add(model);
         }
         
         if (toinstall.size() == 0)
