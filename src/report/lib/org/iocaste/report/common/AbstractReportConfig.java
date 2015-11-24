@@ -53,6 +53,8 @@ public abstract class AbstractReportConfig extends AbstractViewConfig {
             config = rtdata.output;
             break;
         }
+        
+        config(context);
     }
     
     public final void setViewerData(ReportViewerData data) {

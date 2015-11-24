@@ -31,12 +31,14 @@ public class StandardPanelInput extends AbstractViewInput {
         PanelPageItemContextEntry ctxitem, ctxitemi;
         Set<String> entrieskeys;
         
-        for (String action : page.getActions())
-            dbitemadd("actions", action, action, action);
-        
-        submit = page.getSubmit();
-        if (submit != null)
-            dbitemadd("actions", submit, submit, "submit");
+        if (page.isContextRenderizable()) {
+            for (String action : page.getActions())
+                dbitemadd("actions", action, action, action);
+            
+            submit = page.getSubmit();
+            if (submit != null)
+                dbitemadd("actions", submit, submit, "submit");
+        }
         
         for (String name : page.items.keySet()) {
             item = page.items.get(name);

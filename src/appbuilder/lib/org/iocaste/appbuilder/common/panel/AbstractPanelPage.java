@@ -20,10 +20,12 @@ public abstract class AbstractPanelPage {
     private Set<String> actions;
     private String submit;
     public Map<String, PanelPageItem> items;
+    public boolean renderctx;
     
     public AbstractPanelPage() {
         items = new LinkedHashMap<>();
         actions = new HashSet<>();
+        renderctx = true;
     }
     
     protected void action(String action, AbstractActionHandler handler) {
@@ -73,6 +75,10 @@ public abstract class AbstractPanelPage {
         items.put(name, item);
         return item;
     }
+
+    public final boolean isContextRenderizable() {
+        return renderctx;
+    }
     
     protected final void put(String action, AbstractActionHandler handler) {
         view.put(action, handler);
@@ -88,6 +94,10 @@ public abstract class AbstractPanelPage {
     
     protected final void set(AbstractPanelSpec spec) {
         this.spec = spec;
+    }
+    
+    protected final void setRenderContext(boolean renderctx) {
+        this.renderctx = renderctx;
     }
     
     public final void setViewContext(ViewContext view) {

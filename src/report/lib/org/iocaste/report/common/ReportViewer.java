@@ -8,9 +8,6 @@ public class ReportViewer {
     private StandardPanel panel;
     
     public ReportViewer(ReportViewerData data) {
-        if (data.extcontext == null)
-            data.extcontext = new ReportContext();
-        
         data.input.config.setViewerData(data);
         if (data.input.input == null)
             data.input.input = new ReportInputInput();
@@ -37,6 +34,7 @@ class InputPanelPage extends AbstractPanelPage {
     
     @Override
     public void execute() {
+        setRenderContext(!data.norenderctx);
         set(new ReportInputSpec());
         set(data.input.config);
         set(data.input.input);
@@ -54,6 +52,7 @@ class OutputPanelPage extends AbstractPanelPage {
     
     @Override
     public void execute() {
+        setRenderContext(!data.norenderctx);
         set(new ReportOutputSpec());
         set(data.output.config);
         set(data.output.input);

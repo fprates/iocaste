@@ -17,7 +17,7 @@ public abstract class AbstractReportInput extends AbstractViewInput {
     
     @Override
     protected final void execute(PageBuilderContext context) {
-        ReportContext extcontext = getExtendedContext();
+        AbstractReportContext extcontext = getExtendedContext();
         switch (stage) {
         case INPUT:
             reportset("head", extcontext.object);

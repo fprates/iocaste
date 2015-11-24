@@ -62,33 +62,34 @@ class StandardPanelConfig extends AbstractViewConfig {
         style.put("font-family", profile.content.font.family);
         getElement("content").setStyleClass("std_panel_content");
         
-        style = stylesheet.newElement(".std_panel_context");
-        style.put("top", CONTENT_TOP);
-        style.put("left", "0px");
-        style.put("width", profile.context.width);
-        style.put("height", profile.context.height);
-        style.put("float", "left");
-        style.put("display", "inline");
-        style.put("position", "fixed");
-        style.put("overflow", "auto");
-        style.put("background-color", profile.context.bgcolor);
-        style.put("border-right-style", "solid");
-        style.put("border-right-width", "2px");
-        style.put("border-right-color", profile.content.bgcolor);
-        getElement("context").setStyleClass("std_panel_context");
-        
         design = new StandardPanelDesign();
         design.setSubmit(page.getSubmit());
         getNavControl().setDesign(design);
         
-        getDashboard("actions").setRenderer(new ActionRenderer());
-        getDashboard("dashcontext").setRenderer(
-                new StandardPanelContextRenderer());
+        if (page.isContextRenderizable()) {
+            style = stylesheet.newElement(".std_panel_context");
+            style.put("top", CONTENT_TOP);
+            style.put("left", "0px");
+            style.put("width", profile.context.width);
+            style.put("height", profile.context.height);
+            style.put("float", "left");
+            style.put("display", "inline");
+            style.put("position", "fixed");
+            style.put("overflow", "auto");
+            style.put("background-color", profile.context.bgcolor);
+            style.put("border-right-style", "solid");
+            style.put("border-right-width", "2px");
+            style.put("border-right-color", profile.content.bgcolor);
+            
+            getElement("context").setStyleClass("std_panel_context");
+            getDashboard("actions").setRenderer(new ActionRenderer());
+            getDashboard("dashcontext").setRenderer(
+                    new StandardPanelContextRenderer());
+        }
         
         extconfig = page.getConfig();
         if (extconfig == null)
             return;
-        
         
         config(extconfig);
     }
