@@ -170,7 +170,7 @@ class Server extends Thread {
         AbstractExternalFunction listenner = null;
         
         try {
-            localsocket = new ServerSocket(60000);
+            localsocket = new ServerSocket(port);
             try {
                 while (true) {
                     remotesocket = localsocket.accept();
