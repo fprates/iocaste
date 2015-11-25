@@ -3,6 +3,7 @@ package org.iocaste.report.common;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.report.common.data.ReportViewerData;
+import org.iocaste.report.common.export.CSVGenerate;
 
 public class ReportViewer {
     private StandardPanel panel;
@@ -59,8 +60,10 @@ class OutputPanelPage extends AbstractPanelPage {
         
         setRenderContext(!data.norenderctx);
         set(new ReportOutputSpec());
-        set(data.output.config);
+        set(new ReportOutputConfig(data));
         set(data.output.input);
+        if (data.export != null)
+            action("csv", new CSVGenerate(data.export));
         for (String key : data.output.actions.keySet())
             action(key, data.output.actions.get(key));
     }
