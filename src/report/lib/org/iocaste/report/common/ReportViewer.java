@@ -8,11 +8,9 @@ public class ReportViewer {
     private StandardPanel panel;
     
     public ReportViewer(ReportViewerData data) {
-        data.input.config.setViewerData(data);
         if (data.input.input == null)
             data.input.input = new ReportInputInput();
-
-        data.output.config.setViewerData(data);
+        
         if (data.output.input == null)
             data.output.input = new ReportOutputInput();
         
@@ -34,11 +32,15 @@ class InputPanelPage extends AbstractPanelPage {
     
     @Override
     public void execute() {
+        data.input.config.setViewerData(data);
+        data.input.input.setViewerData(data);
+        data.select.setViewerData(data);
+        
         setRenderContext(!data.norenderctx);
         set(new ReportInputSpec());
         set(data.input.config);
         set(data.input.input);
-        action("select", new ReportSelect());
+        action("select", data.select);
     }
     
 }
@@ -52,14 +54,19 @@ class OutputPanelPage extends AbstractPanelPage {
     
     @Override
     public void execute() {
+        data.output.config.setViewerData(data);
+        data.output.input.setViewerData(data);
+        
         setRenderContext(!data.norenderctx);
         set(new ReportOutputSpec());
         set(data.output.config);
         set(data.output.input);
+        for (String key : data.output.actions.keySet())
+            action(key, data.output.actions.get(key));
     }
     
 }
 
-class ReportInputInput extends AbstractReportInputInput { }
+class ReportInputInput extends AbstractReportInput { }
 
-class ReportOutputInput extends AbstractReportOutputInput { }
+class ReportOutputInput extends AbstractReportInput { }

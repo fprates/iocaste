@@ -5,27 +5,20 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.report.common.data.ReportViewerData;
 
 public abstract class AbstractReportInput extends AbstractViewInput {
-    protected static final byte INPUT = 0;
-    protected static final byte OUTPUT = 1;
-    private byte stage;
-    
-    public AbstractReportInput(byte stage) {
-        this.stage = stage;
-    }
+    private ReportViewerData data;
     
     @Override
     protected final void execute(PageBuilderContext context) {
         AbstractReportContext extcontext = getExtendedContext();
-        switch (stage) {
-        case INPUT:
+        String page = context.view.getPageName();
+        
+        if (page.equals(data.input.name))
             reportset("head", extcontext.object);
-            break;
-        case OUTPUT:
+        else
             reportset("output", extcontext.items);
-            break;
-        }
     }
 
     @Override
@@ -39,5 +32,9 @@ public abstract class AbstractReportInput extends AbstractViewInput {
 
     public final void setList(String field, ExtendedObject[] values) {
         reportlistset("head", field, values);
+    }
+    
+    public final void setViewerData(ReportViewerData data) {
+        this.data = data;
     }
 }

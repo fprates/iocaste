@@ -9,37 +9,33 @@ import org.iocaste.report.common.data.ReportViewerData;
 import org.iocaste.shell.common.Form;
 
 public abstract class AbstractReportConfig extends AbstractViewConfig {
-    protected static final byte INPUT = 0;
-    protected static final byte OUTPUT = 1;
-    private byte stage;
     private ReportViewerData data;
-    protected ReportToolStage config;
     
-    public AbstractReportConfig(byte stage) {
-        this.stage = stage;
-    }
-    
-    protected abstract void config(PageBuilderContext context);
+    public abstract void config(
+            PageBuilderContext context, ReportToolStage config);
     
     @Override
     protected final void execute(PageBuilderContext context) {
         NavControl navcontrol;
         ReportToolData rtdata;
         Form container;
+        String page;
         
         navcontrol = getNavControl();
         navcontrol.setDesign(data.ncdesign);
         navcontrol.setTitle(data.titletext, data.titleargs);
         
-        switch (stage) {
-        case INPUT:
+        page = context.view.getPageName();
+        if (page.equals(data.input.name)) {
             navcontrol.add("select");
             
             rtdata = getReportTool("head");
             rtdata.doInput();
-            config = rtdata.input;
-            break;
-        case OUTPUT:
+            config(context, rtdata.input);
+            return;
+        }
+        
+        if (page.equals(data.output.name)) {
             for (String key : data.output.actions.keySet()) {
                 navcontrol.add(key);
                 navcontrol.noScreenLockFor(key);
@@ -50,11 +46,8 @@ public abstract class AbstractReportConfig extends AbstractViewConfig {
             
             rtdata = getReportTool("output");
             rtdata.doOutput();
-            config = rtdata.output;
-            break;
+            config(context, rtdata.output);
         }
-        
-        config(context);
     }
     
     public final void setViewerData(ReportViewerData data) {

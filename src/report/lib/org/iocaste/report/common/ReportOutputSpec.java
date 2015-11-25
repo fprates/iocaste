@@ -7,8 +7,7 @@ public class ReportOutputSpec extends AbstractPanelSpec {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        // TODO Auto-generated method stub
-        
+        reporttool(parent, "output");
     }
 
 }
