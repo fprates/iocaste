@@ -56,6 +56,7 @@ public class CSVGenerate extends AbstractActionHandler {
 
         content = compose(getExtendedContext());
         iocaste = new Iocaste(context.function);
+        path[path.length - 1] = context.downloaddata.filename;
         iocaste.delete(path);
         fd = iocaste.file(Iocaste.CREATE, path);
         iocaste.write(fd, content);
