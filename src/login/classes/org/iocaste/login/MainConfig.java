@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.panel.StandardPanelConfig;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.DataForm;
@@ -25,7 +26,12 @@ public class MainConfig extends AbstractViewConfig {
         context.view.setTitle("authentic");
         
         stylesheet = context.view.styleSheetInstance();
-        stylesheet.get(".outer_content").put("left", "0px");
+        style = stylesheet.get(".outer_content");
+        style.put("left", "0px");
+        style.put("width", "100%");
+        style.put("height", new StringBuilder("calc(100% - ").
+                append(StandardPanelConfig.CONTENT_TOP).
+                append(")").toString());
         
         stylesheet.get(".std_panel_context").put("display", "none");
         

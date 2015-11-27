@@ -1,7 +1,10 @@
 package org.iocaste.login;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.panel.StandardPanelConfig;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
@@ -17,9 +20,16 @@ public class ChangeSecretConfig extends AbstractViewConfig {
         DataForm form;
         InputComponent item;
         StyleSheet stylesheet;
+        Map<String, String> style;
         
         stylesheet = context.view.styleSheetInstance();
-        stylesheet.get(".outer_content").put("left", "0px");
+        style = stylesheet.get(".outer_content");
+        style.put("left", "0px");
+        style.put("width", "100%");
+        style.put("height", new StringBuilder("calc(100% - ").
+                append(StandardPanelConfig.CONTENT_TOP).
+                append(")").toString());
+        
         stylesheet.get(".loginform").put("width", "19em");
         stylesheet.get(".std_panel_context").put("display", "none");
         
