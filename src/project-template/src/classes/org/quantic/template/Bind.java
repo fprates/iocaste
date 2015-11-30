@@ -3,7 +3,7 @@ package org.quantic.template;
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Const;
-import org.quantic.externaltest.common.Template;
+import org.quantic.template.common.Template;
 
 public class Bind extends AbstractActionHandler {
 
