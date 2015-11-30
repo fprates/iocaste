@@ -24,7 +24,7 @@ public class WhereClause implements Serializable {
     public static final byte EE_ENTRY = 17;
     public static final byte CP = 18;
     public static final byte RG = 19;
-    public static final byte BT= 20;
+    public static final byte BT = 20;
     private String field, operator;
     private byte condition;
     private Object value;
@@ -51,5 +51,85 @@ public class WhereClause implements Serializable {
 
     public final Object getValue() {
         return value;
+    }
+    
+    @Override
+    public final String toString() {
+        String op;
+        
+        switch (condition) {
+        case EQ:
+            op = " = ";
+            break;
+        case NE:
+            op = " <> ";
+            break;
+        case LT:
+            op = " < ";
+            break;
+        case LE:
+            op = " <= ";
+            break;
+        case GT:
+            op = " > ";
+            break;
+        case GE:
+            op = " => ";
+            break;
+        case IN:
+            op = " in ";
+            break;
+        case BE:
+            op = " ( ";
+            break;
+        case EE:
+            op = " ) ";
+            break;
+        case EQ_ENTRY:
+            op = " =[] ";
+            break;
+        case NE_ENTRY:
+            op = " <>[] ";
+            break;
+        case LT_ENTRY:
+            op = " <[] ";
+            break;
+        case LE_ENTRY:
+            op = " <=[] ";
+            break;
+        case GT_ENTRY:
+            op = " >[] ";
+            break;
+        case GE_ENTRY:
+            op = " =>[] ";
+            break;
+        case IN_ENTRY:
+            op = " in[] ";
+            break;
+        case BE_ENTRY:
+            op = " ([] ";
+            break;
+        case EE_ENTRY:
+            op = " []) ";
+            break;
+        case CP:
+            op = " like ";
+            break;
+        case RG:
+            op = " in ";
+            break;
+        case BT:
+            op = " => <= ";
+            break;
+        default:
+            op = null;
+            break;
+        }
+        
+        return new StringBuilder((operator == null)? "" : operator).
+                append(" ").
+                append((field == null)? "" : field).
+                append(op).
+                append((value == null)? "null" : value.toString()).toString();
     }
 }

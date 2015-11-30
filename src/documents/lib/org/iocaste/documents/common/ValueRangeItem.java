@@ -40,4 +40,12 @@ public class ValueRangeItem implements Serializable {
     public final void setSign(RangeSign sign) {
         this.sign = sign;
     }
+    
+    @Override
+    public final String toString() {
+        return new StringBuilder("low: ").append(low).
+                append(", high: ").append(high).
+                append(", sign: ").append(sign).
+                append(", option: ").append(option).toString();
+    }
 }

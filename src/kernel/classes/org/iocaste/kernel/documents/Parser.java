@@ -2,6 +2,7 @@ package org.iocaste.kernel.documents;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,16 +28,16 @@ public class Parser {
     
     private static final String columns(Connection connection, Query query,
             Documents documents) throws Exception {
-        GetDocumentModel getmodel;
         String[] columns, joinmember;
         String field;
         DocumentModel model, tablemodel;
         DocumentModelItem item;
+        Map<String, DocumentModel> models;
         StringBuilder sb = new StringBuilder();
         boolean afterfirst = false;
         
-        getmodel = documents.get("get_document_model");
-        tablemodel = getmodel.run(connection, documents, query.getModel());
+        models = new HashMap<>();
+        tablemodel = getModel(models, connection, documents, query.getModel());
         columns = query.getColumns();
         if (columns != null)
             for (String column : columns) {
@@ -49,7 +50,8 @@ public class Parser {
                 
                 joinmember = column.split("\\.");
                 if (joinmember.length > 1) {
-                    model = getmodel.run(connection, documents, joinmember[0]);
+                    model = getModel(
+                            models, connection, documents, joinmember[0]);
                     sb.append(model.getTableName()).append(".");
                     column = joinmember[1];
                 } else {
@@ -62,7 +64,8 @@ public class Parser {
         sb.append(" from ").append(tablemodel.getTableName());
         for (String name : query.getJoins()) {
             sb.append(" inner join ");
-            sb.append(getmodel.run(connection, documents, name).getTableName());
+            sb.append(getModel(models,
+                    connection, documents, name).getTableName());
             sb.append(" on ");
             afterfirst = false;
             for (JoinClause clause : query.getJoinClauses(name)) {
@@ -72,7 +75,7 @@ public class Parser {
                     afterfirst = true;
                 
                 columns = clause.getOperator(0).split("\\.");
-                model = getmodel.run(connection, documents, columns[0]);
+                model = getModel(models, connection, documents, columns[0]);
                 if (model == null)
                     throw new IocasteException(new StringBuilder(columns[0]).
                             append(" is an invalid table in inner join.").
@@ -80,24 +83,47 @@ public class Parser {
                 
                 sb.append(model.getTableName());
                 sb.append(".");
-                sb.append(model.getModelItem(columns[1]).
-                        getTableFieldName());
-                sb.append("=");
-                model = getmodel.run(connection, documents, name);
+                if (clause.isNS())
+                    field = model.getNamespace().getTableFieldName();
+                else
+                    field = model.getModelItem(columns[1]).getTableFieldName();
+                sb.append(field).append("=");
+                model = getModel(models, connection, documents, name);
                 sb.append(model.getTableName());
                 sb.append(".");
                 
-                field = clause.getOperator(1);
-                item = model.getModelItem(field);
+                if (clause.isNS()) {
+                    item = model.getNamespace();
+                } else {
+                    field = clause.getOperator(1);
+                    item = model.getModelItem(field);
+                }
+                
                 if (item == null)
                     throw new IocasteException(new StringBuilder(field).
                             append(" is an invalid item for ").
                             append(name).toString());
-                sb.append(item.getTableFieldName());
+                field = item.getTableFieldName();
+                sb.append(field);
             }
         }
         
         return sb.toString();
+    }
+    
+    private static final DocumentModel getModel(
+            Map<String, DocumentModel> models, Connection connection,
+            Documents documents, String name) throws Exception {
+        DocumentModel model;
+        GetDocumentModel getmodel;
+        
+        getmodel = documents.get("get_document_model");
+        model = models.get(name);
+        if (model != null)
+            return model;
+        model = getmodel.run(connection, documents, name);
+        models.put(name, model);
+        return model;
     }
     
     private static final String getOperator(WhereData wheredata, String field)

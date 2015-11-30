@@ -28,7 +28,7 @@ public class XMLElement implements Serializable {
      * @param value
      */
     public final void add(String name, Object value) {
-        attributes.put(name, (value == null)? null : value.toString());
+        attributes.put(name, (value == null)? "" : value.toString());
     }
     
     /**

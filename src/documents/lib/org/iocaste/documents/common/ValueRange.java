@@ -27,4 +27,9 @@ public class ValueRange implements Serializable {
     public final int length() {
         return itens.size();
     }
+    
+    @Override
+    public final String toString() {
+        return itens.toString();
+    }
 }

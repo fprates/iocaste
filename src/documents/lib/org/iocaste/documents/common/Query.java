@@ -156,6 +156,11 @@ public class Query implements Serializable {
     }
     
     public final void join(String model, String field1, String field2) {
+        join(model, field1, field2, false);
+    }
+    
+    private final void join(
+            String model, String field1, String field2, boolean ns) {
         List<JoinClause> clauses;
         
         if (!join.containsKey(model)) {
@@ -165,7 +170,11 @@ public class Query implements Serializable {
             clauses = join.get(model);
         }
         
-        clauses.add(new JoinClause(field1, field2));
+        clauses.add(new JoinClause(field1, field2, ns));
+    }
+    
+    public final void joinNS(String model, String joinmodel) {
+        join(model, joinmodel, null, true);
     }
     
     public final boolean mustSkipError() {
