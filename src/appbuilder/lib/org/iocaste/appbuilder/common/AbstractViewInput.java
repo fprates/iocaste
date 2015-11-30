@@ -212,7 +212,7 @@ public abstract class AbstractViewInput implements ViewInput {
             if (!element.isDataStorable() || !element.isVisible())
                 continue;
             
-            validators = context.function.getValidators(name);
+            validators = context.function.getValidables().get(name);
             if (validators == null)
                 continue;
             

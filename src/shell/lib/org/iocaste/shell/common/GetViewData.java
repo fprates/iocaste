@@ -3,7 +3,6 @@ package org.iocaste.shell.common;
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
@@ -16,8 +15,6 @@ public class GetViewData extends AbstractHandler {
     public AbstractContext context;
     public Map<String, ViewCustomAction> customactions;
     public Map<String, CustomView> customviews;
-    public Map<String, Set<String>> validables;
-    public Map<String, Validator> validators;
     
     public final void addMessages(Map<String, String> messages) {
         this.messages.addMessages(messages);
@@ -74,11 +71,10 @@ public class GetViewData extends AbstractHandler {
         if (initializable) {
             customactions.clear();
             customviews.clear();
-            validators.clear();
-            validables.clear();
             context = page.init(view);
             context.view = view;
             context.function = page;
+            context.function.unregisterValidators();
         }
         
         customview = customviews.get(view.getPageName());

@@ -12,8 +12,6 @@ public class ExecAction extends AbstractHandler {
     public AbstractContext context;
     public ViewState state;
     public Map<String, ViewCustomAction> customactions;
-    public Map<String, Set<String>> validables;
-    public Map<String, Validator> validators;
     
     private final String getMessage(String message) {
         String text;
@@ -28,12 +26,11 @@ public class ExecAction extends AbstractHandler {
     public Object run(Message message) throws Exception {
         Element element;
         ControlComponent control;
-        Validator validator;
         InputComponent input;
-        Set<String> handlers;
         ViewCustomAction customaction;
         Method method;
         String error;
+        Map<String, Set<Validator>> validables;
         View view = message.get("view");
         AbstractPage page = getFunction();
         
@@ -46,14 +43,13 @@ public class ExecAction extends AbstractHandler {
         state.rapp = state.rpage = null;
         state.initialize = false;
         context.action = context.control = message.getString("action");
+        validables = context.function.getValidables();
         for (String name : validables.keySet()) {
             input = (InputComponent)view.getElement(name);
             if ((input == null) || !input.isEnabled())
                 continue;
             
-            handlers = validables.get(name);
-            for (String validatorname : handlers) {
-                validator = validators.get(validatorname);
+            for (Validator validator : validables.get(name)) {
                 validator.clear();
                 validator.setInput(input);
                 validator.validate(context);

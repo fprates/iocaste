@@ -19,24 +19,25 @@ import org.iocaste.protocol.Message;
  */
 public abstract class AbstractPage extends AbstractFunction {
     private GetViewData getviewdata;
+    private Map<String, Validator> validators;
+    private Map<String, Set<Validator>> validables;
     
     public AbstractPage() {
         ExecAction execaction;
         MessageSource messages = new MessageSource();
         
+        validators = new HashMap<>();
+        validables = new HashMap<>();
+        
         getviewdata = new GetViewData();
         getviewdata.state = new ViewState();
         getviewdata.customviews = new HashMap<>();
         getviewdata.customactions = new HashMap<>();
-        getviewdata.validators = new HashMap<>();
-        getviewdata.validables = new HashMap<>();
         getviewdata.setMessages(messages);
         
         execaction = new ExecAction();
         execaction.state = getviewdata.state;
         execaction.customactions = getviewdata.customactions;
-        execaction.validators = getviewdata.validators;
-        execaction.validables = getviewdata.validables;
         execaction.setMessages(messages);
         
         export("get_view_data", getviewdata);
@@ -139,21 +140,8 @@ public abstract class AbstractPage extends AbstractFunction {
         return getviewdata.state.servername;
     }
     
-    public final Set<Validator> getValidators(String input) {
-        Set<Validator> validators;
-        Set<String> validables = getviewdata.validables.get(input);
-        
-        if (validables == null)
-            return null;
-
-        validators = null;
-        for (String name : validables) {
-            if (validators == null)
-                validators = new LinkedHashSet<>();
-            validators.add(getviewdata.validators.get(name));
-        }
-        
-        return validators;
+    public final Map<String, Set<Validator>> getValidables() {
+        return validables;
     }
     
     /**
@@ -241,7 +229,7 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param validator
      */
     public final void register(String name, Validator validator) {
-        getviewdata.validators.put(name, validator);
+        validators.put(name, validator);
     }
     
     /**
@@ -298,6 +286,10 @@ public abstract class AbstractPage extends AbstractFunction {
         getviewdata.state.reloadable = reloadable;
     }
     
+    public final void unregisterValidators() {
+        validables.clear();
+    }
+    
     /**
      * Atualiza uma visão, não necessariamente a visão atual.
      * @param view visão a ser atualizada.
@@ -320,14 +312,20 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param input
      * @param validator
      */
-    public final void validate(String input, String validator) {
-        Set<String> validators = getviewdata.validables.get(input);
+    public final void validate(String input, String validatorname) {
+        Validator validator;
+        Set<Validator> validators = validables.get(input);
         
         if (validators == null) {
             validators = new LinkedHashSet<>();
-            getviewdata.validables.put(input, validators);
+            validables.put(input, validators);
         }
         
-        validators.add(validator);       
+        validator = this.validators.get(validatorname);
+        if (validator == null)
+            throw new RuntimeException(new StringBuilder("validator ").
+                    append(validatorname).
+                    append(" not registered.").toString());
+        validators.add(validator);
     }
 }
