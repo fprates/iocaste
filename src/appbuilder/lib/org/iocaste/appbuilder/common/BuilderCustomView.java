@@ -2,155 +2,110 @@ package org.iocaste.appbuilder.common;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.factories.SpecFactory;
+import org.iocaste.appbuilder.common.factories.StandardContainerFactory;
+import org.iocaste.appbuilder.common.factories.TabbedPaneFactory;
+import org.iocaste.appbuilder.common.factories.TabbedPaneItemFactory;
+import org.iocaste.appbuilder.common.factories.TableToolFactory;
+import org.iocaste.appbuilder.common.factories.TextEditorFactory;
+import org.iocaste.appbuilder.common.factories.TextFactory;
+import org.iocaste.appbuilder.common.factories.TextFieldFactory;
+import org.iocaste.appbuilder.common.factories.ButtonFactory;
+import org.iocaste.appbuilder.common.factories.DashboardFactoryFactory;
+import org.iocaste.appbuilder.common.factories.DashboardGroupFactory;
+import org.iocaste.appbuilder.common.factories.DashboardItemFactory;
+import org.iocaste.appbuilder.common.factories.DataFormFactory;
+import org.iocaste.appbuilder.common.factories.ExpandBarFactory;
+import org.iocaste.appbuilder.common.factories.FileUploadFactory;
+import org.iocaste.appbuilder.common.factories.FormFactory;
+import org.iocaste.appbuilder.common.factories.LinkFactory;
+import org.iocaste.appbuilder.common.factories.ListBoxFactory;
+import org.iocaste.appbuilder.common.factories.NavControlFactory;
+import org.iocaste.appbuilder.common.factories.NodeListFactory;
+import org.iocaste.appbuilder.common.factories.ParameterFactory;
+import org.iocaste.appbuilder.common.factories.PrintAreaFactory;
+import org.iocaste.appbuilder.common.factories.RadioButtonFactory;
+import org.iocaste.appbuilder.common.factories.RadioGroupFactory;
+import org.iocaste.appbuilder.common.factories.ReportToolFactory;
+import org.iocaste.appbuilder.common.factories.SkipFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.appbuilder.common.reporttool.ReportTool;
-import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
 import org.iocaste.appbuilder.common.tabletool.AbstractTableHandler;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
-import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.Button;
-import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.ExpandBar;
-import org.iocaste.shell.common.FileEntry;
-import org.iocaste.shell.common.Form;
-import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.ListBox;
-import org.iocaste.shell.common.NodeList;
-import org.iocaste.shell.common.Parameter;
-import org.iocaste.shell.common.PrintArea;
-import org.iocaste.shell.common.RadioGroup;
-import org.iocaste.shell.common.StandardContainer;
-import org.iocaste.shell.common.TabbedPane;
-import org.iocaste.shell.common.TabbedPaneItem;
-import org.iocaste.shell.common.Text;
-import org.iocaste.shell.common.TextField;
-import org.iocaste.texteditor.common.TextEditor;
-import org.iocaste.texteditor.common.TextEditorTool;
 
 public class BuilderCustomView extends AbstractCustomView {
-    private TextEditor editor;
-    private NavControl navcontrol;
     private String view;
+    private Map<ViewSpecItem.TYPES, SpecFactory> factories;
+    
+    public BuilderCustomView() {
+        factories = new HashMap<>();
+        factories.put(ViewSpecItem.TYPES.FORM,
+                new FormFactory());
+        factories.put(ViewSpecItem.TYPES.PAGE_CONTROL,
+                new NavControlFactory());
+        factories.put(ViewSpecItem.TYPES.TABBED_PANE,
+                new TabbedPaneFactory());
+        factories.put(ViewSpecItem.TYPES.TABBED_PANE_ITEM,
+                new TabbedPaneItemFactory());
+        factories.put(ViewSpecItem.TYPES.STANDARD_CONTAINER,
+                new StandardContainerFactory());
+        factories.put(ViewSpecItem.TYPES.TEXT_EDITOR,
+                new TextEditorFactory());
+        factories.put(ViewSpecItem.TYPES.TABLE_TOOL,
+                new TableToolFactory());
+        factories.put(ViewSpecItem.TYPES.DATA_FORM,
+                new DataFormFactory());
+        factories.put(ViewSpecItem.TYPES.DASHBOARD,
+                new DashboardFactoryFactory());
+        factories.put(ViewSpecItem.TYPES.DASHBOARD_GROUP,
+                new DashboardGroupFactory());
+        factories.put(ViewSpecItem.TYPES.DASHBOARD_ITEM,
+                new DashboardItemFactory());
+        factories.put(ViewSpecItem.TYPES.EXPAND_BAR,
+                new ExpandBarFactory());
+        factories.put(ViewSpecItem.TYPES.NODE_LIST,
+                new NodeListFactory());
+        factories.put(ViewSpecItem.TYPES.TEXT,
+                new TextFactory());
+        factories.put(ViewSpecItem.TYPES.LINK,
+                new LinkFactory());
+        factories.put(ViewSpecItem.TYPES.LISTBOX,
+                new ListBoxFactory());
+        factories.put(ViewSpecItem.TYPES.REPORT_TOOL,
+                new ReportToolFactory());
+        factories.put(ViewSpecItem.TYPES.FILE_UPLOAD,
+                new FileUploadFactory());
+        factories.put(ViewSpecItem.TYPES.BUTTON,
+                new ButtonFactory());
+        factories.put(ViewSpecItem.TYPES.RADIO_BUTTON,
+                new RadioButtonFactory());
+        factories.put(ViewSpecItem.TYPES.RADIO_GROUP,
+                new RadioGroupFactory());
+        factories.put(ViewSpecItem.TYPES.SKIP,
+                new SkipFactory());
+        factories.put(ViewSpecItem.TYPES.TEXT_FIELD,
+                new TextFieldFactory());
+        factories.put(ViewSpecItem.TYPES.PRINT_AREA,
+                new PrintAreaFactory());
+        factories.put(ViewSpecItem.TYPES.PARAMETER,
+                new ParameterFactory());
+    }
     
     private void buildItem(PageBuilderContext context,
             ViewComponents components, ViewSpecItem item) {
-        RadioGroup group;
-        String[] names;
-        DashboardFactory dashboard;
-        DashboardComponent dashboardgroup;
-        TableToolData ttdata;
-        ReportToolData rtdata;
-        String parent = item.getParent();
-        Container container;
+        SpecFactory factory;
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
-        String name = item.getName();
-
-        container = context.view.getElement(parent);
         
-        switch (types[item.getType()]) {
-        case FORM:
-            new Form(context.view, name);
-            break;
-        case PAGE_CONTROL:
-            navcontrol = new NavControl((Form)container, context);
-            break;
-        case STANDARD_CONTAINER:
-            new StandardContainer(container, name);
-            break;
-        case TABBED_PANE:
-            new TabbedPane(container, name);
-            break;
-        case TABBED_PANE_ITEM:
-            new TabbedPaneItem((TabbedPane)container, name);
-            break;
-        case TABLE_TOOL:
-            ttdata = new TableToolData();
-            ttdata.context = context;
-            ttdata.name = name;
-            new StandardContainer(container, ttdata.name);
-            components.add(ttdata);
-            break;
-        case DATA_FORM:
-            new DataForm(container, name);
-            break;
-        case DASHBOARD:
-            dashboard = new DashboardFactory(container, context, name);
-            components.dashboards.put(name, dashboard);
-            break;
-        case DASHBOARD_GROUP:
-            dashboard = components.dashboards.get(parent);
-            dashboardgroup = dashboard.instance(name);
-            components.dashboardgroups.put(name, dashboardgroup);
-            break;
-        case DASHBOARD_ITEM:
-            dashboard = components.dashboards.get(parent);
-            if (dashboard == null) {
-                dashboardgroup = components.dashboardgroups.get(parent);
-                dashboardgroup.instance(name);
-            } else {
-                dashboard.instance(name);
-            }
-            break;
-        case EXPAND_BAR:
-            new ExpandBar(container, name);
-            break;
-        case NODE_LIST:
-            new NodeList(container, name);
-            break;
-        case TEXT:
-            new Text(container, name);
-            break;
-        case LINK:
-            new Link(container, name, name);
-            break;
-        case LISTBOX:
-            new ListBox(container, name);
-            break;
-        case REPORT_TOOL:
-            rtdata = new ReportToolData(context, name);
-            new StandardContainer(container, rtdata.name);
-            components.add(rtdata);
-            break;
-        case TEXT_EDITOR:
-            editor = new TextEditorTool(context).instance(container, name);
-            components.editors.put(name, editor);
-            break;
-        case TEXT_FIELD:
-            new TextField(container, name);
-            break;
-        case FILE_UPLOAD:
-            new FileEntry(container, name);
-            break;
-        case BUTTON:
-            new Button(container, name);
-            break;
-        case RADIO_GROUP:
-            new RadioGroup(container, name);
-            break;
-        case RADIO_BUTTON:
-            names = name.split("\\.", 2);
-            group = context.view.getElement(names[0]);
-            group.button(container, names[1]);
-            break;
-        case SKIP:
-            new StandardContainer(container, name).setStyleClass("skip");
-            break;
-        case PRINT_AREA:
-            new PrintArea(container, name);
-            break;
-        case PARAMETER:
-            new Parameter(container, name);
-            break;
-        default:
-            break;
-        }
+        factory = factories.get(types[item.getType()]);
+        if (factory != null)
+            factory.run(context, components, item);
         
         for (ViewSpecItem child : item.getItems())
             buildItem(context, components, child);
@@ -179,6 +134,7 @@ public class BuilderCustomView extends AbstractCustomView {
      */
     @Override
     public void execute(AbstractContext context) throws Exception {
+        NavControl navcontrol;
         ViewContext viewctx;
         AbstractViewSpec viewspec = getViewSpec();
         ViewConfig viewconfig = getViewConfig();
@@ -200,7 +156,8 @@ public class BuilderCustomView extends AbstractCustomView {
             viewctx.reset();
             for (ViewSpecItem item : viewspec.getItems())
                 buildItem(_context, viewctx.getComponents(), item);
-            
+
+            navcontrol = factories.get(ViewSpecItem.TYPES.PAGE_CONTROL).get();
             if (viewconfig != null) {
                 viewconfig.setNavControl(navcontrol);
                 viewconfig.run(_context);
