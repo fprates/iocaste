@@ -48,7 +48,7 @@ class StandardPanelConfig extends AbstractViewConfig {
         style.put("width", new StringBuilder("calc(100% - ").
                 append(profile.context.width).
                 append(")").toString());
-        style.put("height", "calc(100% -"+CONTENT_TOP+")");
+        style.put("height", "calc(100% - "+CONTENT_TOP+")");
         style.put("padding", "0px");
         style.put("margin", "0px");
         getElement("outercontent").setStyleClass("outer_content");
