@@ -41,8 +41,7 @@ public class TableItemRenderer extends Renderer {
         
         hidden = new ArrayList<>();
         style = item.getStyleClass();
-        if (style != null)
-            trtag.add("class", style);
+        trtag.add("class", style);
         
         for (Element element : item.getElements()) {
             column = columns[i++];

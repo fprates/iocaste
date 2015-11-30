@@ -157,8 +157,7 @@ public class TextFieldRenderer extends Renderer {
         
         tagt = new XMLElement("table");
         tagt.addChild(tagl);
-        if (tablestyle != null)
-            tagt.add("style", tablestyle);
+        tagt.add("style", tablestyle);
         
         return tagt;
     }
