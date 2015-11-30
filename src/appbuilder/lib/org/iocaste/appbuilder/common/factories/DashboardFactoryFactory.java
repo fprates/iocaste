@@ -11,5 +11,11 @@ public class DashboardFactoryFactory extends AbstractSpecFactory {
         dashboard = new DashboardFactory(container, context, name);
         components.dashboards.put(name, dashboard);
     }
+    
+    @Override
+    public final void generate() {
+        for (DashboardFactory factory : components.dashboards.values())
+            factory.build();
+    }
 
 }

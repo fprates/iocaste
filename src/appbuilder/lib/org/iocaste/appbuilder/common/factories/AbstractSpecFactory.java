@@ -14,6 +14,9 @@ public abstract class AbstractSpecFactory implements SpecFactory {
     protected abstract void execute();
 
     @Override
+    public void generate() { }
+    
+    @Override
     public <T> T get() {
         return null;
     }
@@ -29,5 +32,8 @@ public abstract class AbstractSpecFactory implements SpecFactory {
         
         execute();
     }
+    
+    @Override
+    public void update() { }
 
 }

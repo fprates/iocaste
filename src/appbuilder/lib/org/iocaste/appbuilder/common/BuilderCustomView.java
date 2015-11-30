@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.factories.SpecFactory;
 import org.iocaste.appbuilder.common.factories.StandardContainerFactory;
 import org.iocaste.appbuilder.common.factories.TabbedPaneFactory;
@@ -33,11 +32,6 @@ import org.iocaste.appbuilder.common.factories.RadioGroupFactory;
 import org.iocaste.appbuilder.common.factories.ReportToolFactory;
 import org.iocaste.appbuilder.common.factories.SkipFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
-import org.iocaste.appbuilder.common.reporttool.ReportTool;
-import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
-import org.iocaste.appbuilder.common.tabletool.AbstractTableHandler;
-import org.iocaste.appbuilder.common.tabletool.TableTool;
-import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.shell.common.AbstractContext;
 
 public class BuilderCustomView extends AbstractCustomView {
@@ -46,64 +40,63 @@ public class BuilderCustomView extends AbstractCustomView {
     
     public BuilderCustomView() {
         factories = new HashMap<>();
-        factories.put(ViewSpecItem.TYPES.FORM,
-                new FormFactory());
-        factories.put(ViewSpecItem.TYPES.PAGE_CONTROL,
-                new NavControlFactory());
-        factories.put(ViewSpecItem.TYPES.TABBED_PANE,
-                new TabbedPaneFactory());
-        factories.put(ViewSpecItem.TYPES.TABBED_PANE_ITEM,
-                new TabbedPaneItemFactory());
-        factories.put(ViewSpecItem.TYPES.STANDARD_CONTAINER,
-                new StandardContainerFactory());
-        factories.put(ViewSpecItem.TYPES.TEXT_EDITOR,
-                new TextEditorFactory());
-        factories.put(ViewSpecItem.TYPES.TABLE_TOOL,
-                new TableToolFactory());
-        factories.put(ViewSpecItem.TYPES.DATA_FORM,
-                new DataFormFactory());
+        factories.put(ViewSpecItem.TYPES.BUTTON,
+                new ButtonFactory());
         factories.put(ViewSpecItem.TYPES.DASHBOARD,
                 new DashboardFactoryFactory());
         factories.put(ViewSpecItem.TYPES.DASHBOARD_GROUP,
                 new DashboardGroupFactory());
         factories.put(ViewSpecItem.TYPES.DASHBOARD_ITEM,
                 new DashboardItemFactory());
+        factories.put(ViewSpecItem.TYPES.DATA_FORM,
+                new DataFormFactory());
+        factories.put(ViewSpecItem.TYPES.FILE_UPLOAD,
+                new FileUploadFactory());
+        factories.put(ViewSpecItem.TYPES.FORM,
+                new FormFactory());
         factories.put(ViewSpecItem.TYPES.EXPAND_BAR,
                 new ExpandBarFactory());
-        factories.put(ViewSpecItem.TYPES.NODE_LIST,
-                new NodeListFactory());
-        factories.put(ViewSpecItem.TYPES.TEXT,
-                new TextFactory());
         factories.put(ViewSpecItem.TYPES.LINK,
                 new LinkFactory());
         factories.put(ViewSpecItem.TYPES.LISTBOX,
                 new ListBoxFactory());
+        factories.put(ViewSpecItem.TYPES.NODE_LIST,
+                new NodeListFactory());
+        factories.put(ViewSpecItem.TYPES.PAGE_CONTROL,
+                new NavControlFactory());
+        factories.put(ViewSpecItem.TYPES.PARAMETER,
+                new ParameterFactory());
+        factories.put(ViewSpecItem.TYPES.PRINT_AREA,
+                new PrintAreaFactory());
         factories.put(ViewSpecItem.TYPES.REPORT_TOOL,
                 new ReportToolFactory());
-        factories.put(ViewSpecItem.TYPES.FILE_UPLOAD,
-                new FileUploadFactory());
-        factories.put(ViewSpecItem.TYPES.BUTTON,
-                new ButtonFactory());
+        factories.put(ViewSpecItem.TYPES.SKIP,
+                new SkipFactory());
+        factories.put(ViewSpecItem.TYPES.STANDARD_CONTAINER,
+                new StandardContainerFactory());
+        factories.put(ViewSpecItem.TYPES.TABBED_PANE,
+                new TabbedPaneFactory());
+        factories.put(ViewSpecItem.TYPES.TABBED_PANE_ITEM,
+                new TabbedPaneItemFactory());
+        factories.put(ViewSpecItem.TYPES.TEXT_EDITOR,
+                new TextEditorFactory());
+        factories.put(ViewSpecItem.TYPES.TABLE_TOOL,
+                new TableToolFactory());
+        factories.put(ViewSpecItem.TYPES.TEXT,
+                new TextFactory());
+        factories.put(ViewSpecItem.TYPES.TEXT_FIELD,
+                new TextFieldFactory());
         factories.put(ViewSpecItem.TYPES.RADIO_BUTTON,
                 new RadioButtonFactory());
         factories.put(ViewSpecItem.TYPES.RADIO_GROUP,
                 new RadioGroupFactory());
-        factories.put(ViewSpecItem.TYPES.SKIP,
-                new SkipFactory());
-        factories.put(ViewSpecItem.TYPES.TEXT_FIELD,
-                new TextFieldFactory());
-        factories.put(ViewSpecItem.TYPES.PRINT_AREA,
-                new PrintAreaFactory());
-        factories.put(ViewSpecItem.TYPES.PARAMETER,
-                new ParameterFactory());
     }
     
     private void buildItem(PageBuilderContext context,
             ViewComponents components, ViewSpecItem item) {
         SpecFactory factory;
-        ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
         
-        factory = factories.get(types[item.getType()]);
+        factory = getFactory(item);
         if (factory != null)
             factory.run(context, components, item);
         
@@ -134,6 +127,7 @@ public class BuilderCustomView extends AbstractCustomView {
      */
     @Override
     public void execute(AbstractContext context) throws Exception {
+        SpecFactory factory;
         NavControl navcontrol;
         ViewContext viewctx;
         AbstractViewSpec viewspec = getViewSpec();
@@ -169,7 +163,11 @@ public class BuilderCustomView extends AbstractCustomView {
             viewspec.setInitialized(!viewctx.isUpdatable());
             if (viewinput != null) {
                 viewinput.run(_context, true);
-                generateComponents(_context);
+                for (ViewSpecItem item : viewspec.getItems()) {
+                    factory = getFactory(item);
+                    if (factory != null)
+                        factory.generate();
+                }
             }
             return;
         }
@@ -177,39 +175,21 @@ public class BuilderCustomView extends AbstractCustomView {
         if (_context.isInputUpdatable() && viewinput != null) {
             _context.setInputUpdate(false);
             viewinput.run(_context, false);
-            updateComponents(_context);
+            for (ViewSpecItem item : viewspec.getItems()) {
+                factory = getFactory(item);
+                if (factory != null)
+                    factory.update();
+            }
         }
     }
     
-    private final void generateComponents(PageBuilderContext context) {
-        ViewComponents components = context.
-                getView(context.view.getPageName()).getComponents();
+    private final SpecFactory getFactory(ViewSpecItem item) {
+        ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
         
-        for (DashboardFactory factory : components.dashboards.values())
-            factory.build();
-            
-        for (TableToolEntry entry : components.tabletools.values())
-            entry.component = new TableTool(context, entry.data.name);
-        
-        for (ReportToolEntry entry : components.reporttools.values())
-            entry.component = new ReportTool(entry.data);
+        return factories.get(types[item.getType()]);
     }
     
     public final void setView(String view) {
         this.view = view;
-    }
-    
-    private final void updateComponents(PageBuilderContext context) {
-        ViewComponents components;
-        
-        components = context.getView(context.view.getPageName()).
-                getComponents();
-        for (TableToolEntry entry : components.tabletools.values())
-            if (entry.update)
-                AbstractTableHandler.setObject(entry.component, entry.data);
-        
-        for (ReportToolEntry entry :  components.reporttools.values())
-            if (entry.update)
-                entry.component.refresh();
     }
 }
