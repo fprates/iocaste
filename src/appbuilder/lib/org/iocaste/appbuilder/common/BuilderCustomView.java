@@ -161,13 +161,13 @@ public class BuilderCustomView extends AbstractCustomView {
                 navcontrol.build(_context);
             
             viewspec.setInitialized(!viewctx.isUpdatable());
-            if (viewinput != null) {
+            if (viewinput != null)
                 viewinput.run(_context, true);
-                for (ViewSpecItem item : viewspec.getItems()) {
-                    factory = getFactory(item);
-                    if (factory != null)
-                        factory.generate();
-                }
+            
+            for (ViewSpecItem item : viewspec.getItems()) {
+                factory = getFactory(item);
+                if (factory != null)
+                    factory.generate();
             }
             return;
         }
