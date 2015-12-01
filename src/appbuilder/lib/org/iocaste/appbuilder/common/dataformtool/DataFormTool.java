@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common.dataformtool;
 
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
+import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
@@ -47,8 +48,13 @@ public class DataFormTool extends AbstractComponentTool {
             dataform.show(data.show);
         dataform.setEnabled(!data.disabled);
         for (String name : data.items.keySet()) {
-            input = dataform.get(name);
             item = data.items.get(name);
+            input = dataform.get(name);
+            if ((data.model == null) && (input == null)) {
+                input = new DataItem(dataform, (item.componenttype == null)?
+                        Const.TEXT_FIELD : item.componenttype, name);
+                input.setDataElement(item.element);
+            }
             input.setSecret(item.secret);
             input.setObligatory(item.required);
             input.setEnabled(!data.disabled & !item.disabled);
