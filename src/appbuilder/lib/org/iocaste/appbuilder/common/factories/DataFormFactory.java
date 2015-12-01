@@ -29,8 +29,10 @@ public class DataFormFactory extends AbstractSpecFactory {
         subentries = components.entries.get(ViewSpecItem.TYPES.DATA_FORM);
         if (subentries == null)
             return;
-        for (ComponentEntry entry : subentries.values())
+        for (ComponentEntry entry : subentries.values()) {
             entry.component = new DataFormTool(entry);
+            entry.component.run();
+        }
     }
     
     @Override

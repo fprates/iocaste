@@ -9,6 +9,11 @@ public abstract class AbstractComponentTool {
         this.entry = entry;
     }
     
+    @SuppressWarnings("unchecked")
+    protected final <T extends AbstractComponentData> T getComponentData() {
+        return (T)entry.data;
+    }
+    
     protected final <T extends Element> T getElement(String name) {
         return entry.data.context.view.getElement(name);
     }
