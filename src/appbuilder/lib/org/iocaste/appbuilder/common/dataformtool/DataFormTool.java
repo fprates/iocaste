@@ -16,7 +16,10 @@ public class DataFormTool extends AbstractComponentTool {
     public void refresh() {
         DataFormToolData data = (DataFormToolData)entry.data;
         DataForm form = getElement(getHtmlName());
-        form.setObject(data.object);
+        if (data.object == null)
+            form.clearInputs();
+        else
+            form.setObject(data.object);
     }
 
     @Override
@@ -43,13 +46,12 @@ public class DataFormTool extends AbstractComponentTool {
         if (data.show != null)
             dataform.show(data.show);
         dataform.setEnabled(!data.disabled);
-        
         for (String name : data.items.keySet()) {
             input = dataform.get(name);
             item = data.items.get(name);
             input.setSecret(item.secret);
             input.setObligatory(item.required);
-            input.setEnabled(!item.disabled);
+            input.setEnabled(!data.disabled & !item.disabled);
             input.setVisible(!item.invisible);
             if (item.sh != null)
                 data.model.getModelItem(name).setSearchHelp(item.sh);

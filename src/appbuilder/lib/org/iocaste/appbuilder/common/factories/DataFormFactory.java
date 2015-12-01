@@ -32,6 +32,7 @@ public class DataFormFactory extends AbstractSpecFactory {
         for (ComponentEntry entry : subentries.values()) {
             entry.component = new DataFormTool(entry);
             entry.component.run();
+            entry.component.refresh();
         }
     }
     
