@@ -11,4 +11,5 @@ public class DataFormToolItem {
     public boolean secret, focus, required, invisible, disabled;
     public Map<String, Object> values;
     public DataElement element;
+    public Object value;
 }

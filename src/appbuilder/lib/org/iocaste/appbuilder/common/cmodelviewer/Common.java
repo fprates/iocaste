@@ -2,65 +2,64 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.FieldProperty;
 import org.iocaste.appbuilder.common.ViewComponents;
+import org.iocaste.appbuilder.common.ViewSpecItem;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
 
 public class Common {
 
     public static final void formConfig(ConfigData formdata) {
-        InputComponent input;
-        boolean key, enabled;
+        boolean key;
         DocumentModel model;
         DocumentModelItem[] items;
-        DataForm form;
+        Map<String, ComponentEntry> forms;
+        DataFormToolData form;
+        DataFormToolItem item;
         
         model = formdata.cmodel.getHeader();
         items = model.getItens();
+        forms = formdata.context.getView().getComponents().entries.
+                get(ViewSpecItem.TYPES.DATA_FORM);
         for (String name : new String[] {"head", "base"}) {
-            form = formdata.context.view.getElement(name);
-            form.importModel(model);
-            form.setEnabled(false);
+            form = (DataFormToolData)forms.get(name).data;
+            form.model = model;
             
             switch(name) {
             case "head":
-                for (DocumentModelItem item : items) {
-                    key = model.isKey(item);
+                form.disabled = true;
+                for (DocumentModelItem mitem : items) {
+                    key = model.isKey(mitem);
                     if (key)
-                        formdata.hkey = item;
-                    input = form.get(item.getName());
-                    input.setVisible(key);
-                    
+                        formdata.hkey = mitem;
+                    item = form.itemInstance(mitem.getName());
+                    item.invisible = !key;
                     if (formdata.fieldproperties != null)
-                        inputConfig(formdata, input);
+                        inputConfig(formdata, item);
                 }
                 
                 break;
             case "base":
                 if (model.getNamespace() != null) {
-                    for (Element element : form.getElements())
-                        if (form.isNSReference(element.getName())) {
-                            element.setVisible(false);
-                            element.setEnabled(false);
-                            break;
-                        }
+                    item = form.nsItemInstance();
+                    item.invisible = item.disabled = true;
                 }
                 
-                for (DocumentModelItem item : items) {
-                    input = form.get(item.getName());
-                    key = model.isKey(item);
-                    enabled = (!key && (formdata.mode == ConfigData.UPDATE));
-                    input.setVisible(!key);
-                    input.setEnabled(enabled);
-                    
+                for (DocumentModelItem mitem : items) {
+                    item = form.itemInstance(mitem.getName());
+                    key = model.isKey(mitem);
+                    item.disabled = key || (formdata.mode != ConfigData.UPDATE);
+                    item.invisible = key;
+                    if (!item.focus && !item.disabled)
+                        item.focus = true;
                     if (formdata.fieldproperties != null)
-                        inputConfig(formdata, input);
+                        inputConfig(formdata, item);
                 }
                 
                 break;
@@ -89,11 +88,12 @@ public class Common {
         }
     }
     
-    private static void inputConfig(ConfigData formdata, InputComponent input) {
+    private static void inputConfig(ConfigData formdata, DataFormToolItem item)
+    {
         FieldProperty property;
         
-        property = formdata.fieldproperties.get(input.getName());
+        property = formdata.fieldproperties.get(item.name);
         if ((property != null) && (property.setsecretstate))
-            input.setSecret(property.secret);
+            item.secret = property.secret;
     }
 }

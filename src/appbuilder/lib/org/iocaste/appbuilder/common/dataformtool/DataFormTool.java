@@ -6,6 +6,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
+import org.iocaste.shell.common.Element;
 
 public class DataFormTool extends AbstractComponentTool {
     
@@ -15,12 +16,19 @@ public class DataFormTool extends AbstractComponentTool {
     
     @Override
     public void refresh() {
+        DataFormToolItem item;
         DataFormToolData data = (DataFormToolData)entry.data;
         DataForm form = getElement(getHtmlName());
-        if (data.object == null)
+        
+        if (data.object == null) {
             form.clearInputs();
-        else
+            for (String name : data.items.keySet()) {
+                item = data.items.get(name);
+                form.get(name).set(item.value);
+            }
+        } else {
             form.setObject(data.object);
+        }
     }
 
     @Override
@@ -47,6 +55,14 @@ public class DataFormTool extends AbstractComponentTool {
         if (data.show != null)
             dataform.show(data.show);
         dataform.setEnabled(!data.disabled);
+
+        if (data.nsitem != null)
+            for (Element element : dataform.getElements())
+                if (dataform.isNSReference(element.getName())) {
+                    setItem(data, (DataItem)element, data.nsitem);
+                    break;
+                }
+        
         for (String name : data.items.keySet()) {
             item = data.items.get(name);
             input = dataform.get(name);
@@ -55,21 +71,24 @@ public class DataFormTool extends AbstractComponentTool {
                         Const.TEXT_FIELD : item.componenttype, name);
                 input.setDataElement(item.element);
             }
-            input.setSecret(item.secret);
-            input.setObligatory(item.required);
-            input.setEnabled(!data.disabled & !item.disabled);
-            input.setVisible(!item.invisible);
             if (item.sh != null)
                 data.model.getModelItem(name).setSearchHelp(item.sh);
-            if (item.componenttype != null)
-                input.setComponentType(item.componenttype);
-            if (item.focus == true)
-                data.context.view.setFocus(input);
-            if (item.values != null)
-                for (String key : item.values.keySet())
-                    input.add(key, item.values.get(key));
+            setItem(data, input, item);
         }
-        
     }
-
+    
+    private void setItem(DataFormToolData data,
+            DataItem input, DataFormToolItem item) {
+        input.setSecret(item.secret);
+        input.setObligatory(item.required);
+        input.setEnabled(!data.disabled & !item.disabled);
+        input.setVisible(!item.invisible);
+        if (item.componenttype != null)
+            input.setComponentType(item.componenttype);
+        if (item.focus == true)
+            data.context.view.setFocus(input);
+        if (item.values != null)
+            for (String key : item.values.keySet())
+                input.add(key, item.values.get(key));
+    }
 }

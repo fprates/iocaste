@@ -2,10 +2,9 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.InputComponent;
 
 public class SelectConfig extends AbstractViewConfig {
     private String cmodel;
@@ -16,22 +15,18 @@ public class SelectConfig extends AbstractViewConfig {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        InputComponent input;
-        DocumentModel model = getManager(cmodel).getModel().getHeader();
-        DataForm head = getElement("head");
+        DataFormToolItem item;
+        DataFormToolData head = getDataFormTool("head");
         
         getNavControl().setTitle(context.view.getPageName());
         
-        head.importModel(model);
-        head.setKeyRequired(true);
-        for (DocumentModelItem item : model.getItens()) {
-            input = head.get(item.getName());
-            if (!model.isKey(item)) {
-                input.setVisible(false);
-                continue;
-            }
-            
-            context.view.setFocus(input);
+        head.model = getManager(cmodel).getModel().getHeader();
+        for (DocumentModelItem mitem : head.model.getItens()) {
+            item = head.itemInstance(mitem.getName());
+            if (!head.model.isKey(mitem))
+                item.invisible = true;
+            else
+                item.focus = item.required = true;
         }
     }
 }

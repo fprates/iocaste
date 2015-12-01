@@ -24,20 +24,20 @@ public class ProjectInput extends AbstractViewInput {
             extcontext.links = null;
         }
         
-        if (extcontext.view != null) {
-            projectview = extcontext.views.get(extcontext.view);
-            for (String name : projectview.treeitems.keySet()) {
-                treeitem = projectview.treeitems.get(name);
-                ((Text)getElement(treeitem.text)).setText(name);
-                
-                link = getElement(treeitem.link);
-                link.setText("+");
-                link.setAction("add");
-                link.add("name", name);
-                link.add("viewname", extcontext.view);
-                link.add("container", treeitem.container);
-            }
-        }
+//        if (extcontext.view != null) {
+//            projectview = extcontext.views.get(extcontext.view);
+//            for (String name : projectview.treeitems.keySet()) {
+//                treeitem = projectview.treeitems.get(name);
+//                ((Text)getElement(treeitem.text)).setText(name);
+//                
+//                link = getElement(treeitem.link);
+//                link.setText("+");
+//                link.setAction("add");
+//                link.add("name", name);
+//                link.add("viewname", extcontext.view);
+//                link.add("container", treeitem.container);
+//            }
+//        }
     }
     @Override
     protected void init(PageBuilderContext context) {

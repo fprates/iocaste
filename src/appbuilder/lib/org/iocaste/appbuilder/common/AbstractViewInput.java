@@ -19,7 +19,6 @@ import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.ListBox;
@@ -104,7 +103,7 @@ public abstract class AbstractViewInput implements ViewInput {
         dbget(dashboard, name).add(key, value);
     }
     
-    private final DataFormToolData dfget(String name) {
+    private final ComponentEntry dfget(String name) {
         Map<String, ComponentEntry> subentries;
         ComponentEntry entry;
         
@@ -117,7 +116,7 @@ public abstract class AbstractViewInput implements ViewInput {
         if (entry == null)
             throw new RuntimeException(
                     name.concat(" is an invalid dataform component."));
-        return (DataFormToolData)entry.data;
+        return entry;
     }
     
     protected final void dflistset(
@@ -128,7 +127,9 @@ public abstract class AbstractViewInput implements ViewInput {
     protected final void dflistset(
             String form, String item, ExtendedObject[] objects, String field) {
         Object value;
-        DataFormToolItem dfitem = dfget(form).itemInstance(item);
+        ComponentEntry entry = dfget(form);
+        DataFormToolItem dfitem =
+                ((DataFormToolData)entry.data).itemInstance(item);
         
         if (dfitem.values == null)
             dfitem.values = new LinkedHashMap<>();
@@ -137,50 +138,62 @@ public abstract class AbstractViewInput implements ViewInput {
             value = object.get(field);
             dfitem.values.put(value.toString(), value);
         }
+        entry.update = true;
     }
     
     protected final void dflistset(
             String form, String item, Map<String, Object> values) {
-        dfget(form).itemInstance(item).values = values;
+        ComponentEntry entry = dfget(form);
+        ((DataFormToolData)entry.data).itemInstance(item).values = values;
+        entry.update = true;
     }
     
     protected final void dfset(String form, String item, Object value) {
-        getinput(form, item).set(value);
+        ComponentEntry entry = dfget(form);
+        ((DataFormToolData)entry.data).itemInstance(item).value = value;
+        entry.update = true;
     }
     
     protected final void dfset(String form, ExtendedObject object) {
-        DataFormToolData data = dfget(form);
-        data.object = object;
+        ComponentEntry entry = dfget(form);
+        ((DataFormToolData)entry.data).object = object;
+        entry.update = true;
+        
     }
     
     protected final void dfkeyset(String form, Object value) {
-        DataForm df = getElement(form);
-        DocumentModel model = df.getModel();
+        DocumentModel model = null;
+        ComponentEntry entry = dfget(form);
+        DataFormToolData df = ((DataFormToolData)entry.data);
+        
+        if (df.model != null)
+            model = df.model;
+        if (df.modelname != null)
+            model = new Documents(context.function).getModel(df.modelname);
         
         for (DocumentModelKey key : model.getKeys()) {
-            getinput(form, key.getModelItemName()).set(value);
+            df.itemInstance(key.getModelItemName()).value = value;
             break;
         }
+        entry.update = true;
     }
     
     protected final void dfnsset(String form, Object ns) {
-        ((DataForm)getElement(form)).setNS(ns);
+        ComponentEntry entry = dfget(form);
+        DataFormToolData df = ((DataFormToolData)entry.data);
+        df.nsItemInstance().value = ns;
+        entry.update = true;
     }
     
     protected abstract void execute(PageBuilderContext context);
     
-    protected <T extends Element> T getElement(String name) {
+    private <T extends Element> T getElement(String name) {
         return context.view.getElement(name);
     }
     
     @SuppressWarnings("unchecked")
     protected final <T extends ExtendedContext> T getExtendedContext() {
         return (T)context.getView().getExtendedContext();
-    }
-    
-    @SuppressWarnings("unchecked")
-    private <T extends InputComponent> T getinput(String form, String item) {
-        return (T)((DataForm)getElement(form)).get(item);
     }
     
     protected final Manager getManager(String name) {
