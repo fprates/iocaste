@@ -297,10 +297,17 @@ public class DataForm extends AbstractContainer {
      * @param fields
      */
     public final void show(String... fields) {
+        InputComponent input;
+        
         for (Element element : getElements())
             element.setVisible(false);
         
-        for (String field : fields)
-            get(field).setVisible(true);
+        for (String field : fields) {
+            input = get(field);
+            if (input == null)
+                throw new RuntimeException(
+                        field.concat(" is an invalid dataform item."));
+            input.setVisible(true);
+        }
     }
 }

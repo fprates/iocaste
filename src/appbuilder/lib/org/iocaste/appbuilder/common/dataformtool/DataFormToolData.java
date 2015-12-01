@@ -10,9 +10,10 @@ import org.iocaste.documents.common.ExtendedObject;
 
 public class DataFormToolData extends AbstractComponentData {
     public ExtendedObject object;
-    public String style, modelname;
+    public String style, modelname, sh;
     public DocumentModel model;
     public Map<String, DataFormToolItem> items;
+    public String[] show;
     
     public DataFormToolData() {
         super(TYPES.DATA_FORM);

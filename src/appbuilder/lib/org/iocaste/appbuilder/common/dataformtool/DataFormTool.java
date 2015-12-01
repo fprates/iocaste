@@ -34,15 +34,21 @@ public class DataFormTool extends AbstractComponentTool {
         setHtmlName(dataform.getHtmlName());
         if (data.model != null)
             dataform.importModel(data.model);
-        if (data.modelname != null)
+        if (data.modelname != null) {
             dataform.importModel(data.modelname, data.context.function);
+            data.model = dataform.getModel();
+        }
         if (data.style != null)
             dataform.setStyleClass(data.style);
+        if (data.show != null)
+            dataform.show(data.show);
         for (String name : data.items.keySet()) {
             input = dataform.get(name);
             item = data.items.get(name);
             input.setSecret(item.secret);
             input.setObligatory(item.required);
+            if (item.sh != null)
+                data.model.getModelItem(name).setSearchHelp(item.sh);
             if (item.componenttype != null)
                 input.setComponentType(item.componenttype);
             if (item.focus == true)
