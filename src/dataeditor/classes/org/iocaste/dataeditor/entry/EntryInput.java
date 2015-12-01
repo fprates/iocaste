@@ -9,17 +9,18 @@ public class EntryInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        // TODO Auto-generated method stub
-        
+        Context extcontext = getExtendedContext();
+        if (extcontext.object != null)
+            dfset("detail", extcontext.object);
     }
 
     @Override
     protected void init(PageBuilderContext context) {
         FieldProperty property;
+        Context extcontext;
         
-        Context extcontext = getExtendedContext();
-        if (extcontext.object != null)
-            dfset("detail", extcontext.object);
+        execute(context);
+        extcontext = getExtendedContext();
         if (extcontext.properties == null)
             return;
         for (String key : extcontext.properties.keySet()) {
