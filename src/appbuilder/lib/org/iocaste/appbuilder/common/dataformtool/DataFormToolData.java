@@ -20,9 +20,14 @@ public class DataFormToolData extends AbstractComponentData {
     }
     
     public final DataFormToolItem itemInstance(String name) {
-        DataFormToolItem item = new DataFormToolItem();
-        item.name = name;
-        items.put(name, item);
+        DataFormToolItem item;
+        
+        item = items.get(name);
+        if (item == null) {
+            item = new DataFormToolItem();
+            item.name = name;
+            items.put(name, item);
+        }
         return item;
     }
 }

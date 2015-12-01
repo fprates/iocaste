@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
@@ -18,7 +20,6 @@ import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.ListBox;
@@ -103,6 +104,22 @@ public abstract class AbstractViewInput implements ViewInput {
         dbget(dashboard, name).add(key, value);
     }
     
+    private final DataFormToolData dfget(String name) {
+        Map<String, ComponentEntry> subentries;
+        ComponentEntry entry;
+        
+        subentries = context.getView().getComponents().entries.
+                get(ViewSpecItem.TYPES.DATA_FORM);
+        if (subentries == null)
+            throw new RuntimeException(
+                    name.concat(" is an invalid dataform component."));
+        entry = subentries.get(name);
+        if (entry == null)
+            throw new RuntimeException(
+                    name.concat(" is an invalid dataform component."));
+        return (DataFormToolData)entry.data;
+    }
+    
     protected final void dflistset(
             String form, String item, ExtendedObject[] objects) {
         dflistset(form, item, objects, item);
@@ -111,20 +128,20 @@ public abstract class AbstractViewInput implements ViewInput {
     protected final void dflistset(
             String form, String item, ExtendedObject[] objects, String field) {
         Object value;
-        DataItem input = getinput(form, item);
+        DataFormToolItem dfitem = dfget(form).itemInstance(item);
+        
+        if (dfitem.values == null)
+            dfitem.values = new LinkedHashMap<>();
         
         for (ExtendedObject object : objects) {
             value = object.get(field);
-            input.add(value.toString(), value);
+            dfitem.values.put(value.toString(), value);
         }
     }
     
     protected final void dflistset(
             String form, String item, Map<String, Object> values) {
-        DataItem input = getinput(form, item);
-        
-        for (String key : values.keySet())
-            input.add(key, values.get(key));
+        dfget(form).itemInstance(item).values = values;
     }
     
     protected final void dfset(String form, String item, Object value) {
@@ -132,7 +149,8 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected final void dfset(String form, ExtendedObject object) {
-        ((DataForm)getElement(form)).setObject(object);
+        DataFormToolData data = dfget(form);
+        data.object = object;
     }
     
     protected final void dfkeyset(String form, Object value) {
@@ -157,8 +175,7 @@ public abstract class AbstractViewInput implements ViewInput {
     
     @SuppressWarnings("unchecked")
     protected final <T extends ExtendedContext> T getExtendedContext() {
-        return (T)context.getView(context.view.getPageName()).
-                getExtendedContext();
+        return (T)context.getView().getExtendedContext();
     }
     
     @SuppressWarnings("unchecked")
