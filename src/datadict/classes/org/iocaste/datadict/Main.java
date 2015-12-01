@@ -17,6 +17,7 @@ public class Main extends AbstractPageBuilder {
         view.set(new SelectSpec());
         view.set(new SelectConfig());
         view.put("show", new ShowObject());
+        view.set(new Context(context));
         
         view = context.instance(STRUCTURE);
         view.set(new StructureSpec());

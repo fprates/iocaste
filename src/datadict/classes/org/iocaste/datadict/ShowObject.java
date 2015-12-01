@@ -26,7 +26,8 @@ public class ShowObject extends AbstractActionHandler {
         List<ExtendedObject> items;
         ObjectExtractor extractor;
         DocumentModel model;
-        Context extcontext = new Context();
+        Context extcontext;
+        
         String name = getdfst("model", "NAME");
         Documents documents = new Documents(context.function);
         
@@ -36,7 +37,7 @@ public class ShowObject extends AbstractActionHandler {
             return;
         }
         
-        extcontext.modelname = name;
+        extcontext = getExtendedContext();
         extcontext.head = instance("MODEL");
         extcontext.head.setInstance(model);
         

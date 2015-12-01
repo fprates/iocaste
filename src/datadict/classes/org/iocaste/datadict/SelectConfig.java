@@ -2,30 +2,31 @@ package org.iocaste.datadict;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.navcontrol.NavControl;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataItem;
-import org.iocaste.shell.common.Element;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
+import org.iocaste.documents.common.DocumentModelItem;
 
 public class SelectConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        DataForm dataform;
-        NavControl navcontrol;
+        DataFormToolData dataform;
+        DataFormToolItem item;
+        Context extcontext;
         
-        navcontrol = getNavControl();
-        navcontrol.add("show");
+        getNavControl().add("show");
         
-        dataform = getElement("model");
-        dataform.importModel("MODEL", context.function);
-        for (Element element : dataform.getElements())
-            if (element.getName().equals("NAME")) {
-                element.setVisible(true);
-                ((DataItem)element).setObligatory(true);
-                context.view.setFocus(element);
-            } else{
-                element.setVisible(false);
+        extcontext = getExtendedContext();
+        dataform = getDataFormTool("model");
+        dataform.model = extcontext.model;
+        for (DocumentModelItem mitem : dataform.model.getItens()) {
+            item = dataform.itemInstance(mitem.getName());
+            if (item.name.equals("NAME")) {
+                item.invisible = false;
+                item.focus = item.required = true;
+            } else {
+                item.invisible = true;
             }
+        }
     }
 }
