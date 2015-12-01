@@ -186,23 +186,24 @@ public class DocumentExtractor {
         ExtendedObject head;
         ExtendedObject[] objects;
         DataForm form;
-        String pagename;
         ComplexDocument document;
+        ViewComponents components;
         
         if (hconversion == null)
             throw new RuntimeException("no conversion rule for header.");
 
         head = null;
-        pagename = context.view.getPageName();
         document = manager.instance();
-        
+        components = context.getView().getComponents();
+
         switch (hconversion.getSourceType()) {
         case DataConversion.DATAFORM:
             source = (String)hconversion.getSource();
             if (source == null)
                 break;
             
-            form = context.view.getElement(source);
+            form = components.entries.get(ViewSpecItem.TYPES.DATA_FORM).
+                    get(source).component.getElement();
             head = form.getObject();
             break;
         case DataConversion.OBJECT:
@@ -231,8 +232,7 @@ public class DocumentExtractor {
                 break;
             case DataConversion.TABLETOOL:
                 source = (String)conversion.getSource();
-                entry = context.getView(pagename).getComponents().
-                        tabletools.get(source);
+                entry = components.tabletools.get(source);
                 ttitems = entry.data.getItems();
                 if (ttitems == null)
                     continue;
