@@ -2,30 +2,25 @@ package org.iocaste.dataview;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 
 public class MainConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        InputComponent input;
         Context extcontext;
-        DataForm form;
+        DataFormToolData form;
+        DataFormToolItem item;
         
         extcontext = getExtendedContext();
         
-        form = getElement("model");
-        form.importModel(extcontext.modelmodel);
-        for (Element element : form.getElements())
-            element.setVisible(false);
+        form = getDataFormTool("model");
+        form.model = extcontext.modelmodel;
+        form.show = new String[] {"NAME"};
+        item = form.itemInstance("NAME");
+        item.required = item.focus = true;
         
-        input = form.get("NAME");
-        input.setVisible(true);
-        input.setObligatory(true);
-
-        context.view.setFocus(input);
         getNavControl().setTitle("dataview-selection");
     }
 
