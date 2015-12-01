@@ -32,7 +32,6 @@ public class Controller {
     private static final int EMISMATCH = 2;
     private static final int EINVALID_REFERENCE = 3;
     private static final int WINVALID_ACTION = 4;
-    private static final int EVALIDATION = 5;
     private static final int LOW_RANGE = 3;
     private static final int HIGH_RANGE = 4;
     public static Map<String, String> messages;
@@ -374,6 +373,7 @@ public class Controller {
                     !isValueCompatible(input, ri)) {
                 status.input = input;
                 status.error = EMISMATCH;
+                status.msgtype = Const.ERROR;
                 input.set(null);
                 continue;
             }
@@ -390,6 +390,7 @@ public class Controller {
                     input.isEnabled()) {
                 status.input = input;
                 status.error = EINITIAL;
+                status.msgtype = Const.ERROR;
             }
         }
         
@@ -586,6 +587,7 @@ public class Controller {
         message(config, Const.NONE, null);
         if (controlname.equals("")) {
             status.error = WINVALID_ACTION;
+            status.msgtype = Const.WARNING;
             return status;
         }
         
@@ -604,15 +606,7 @@ public class Controller {
         if (status.error == 0)
             return status;
 
-        switch (status.error) {
-        case EVALIDATION:
-            status.msgtype = Const.ERROR;
-            break;
-        default:
-            status.message = msgconv.get(status.error);
-            break;
-        }
-        
+        status.message = msgconv.get(status.error);
         message(config, status.msgtype, status.message, status.msgargs);
         
         return status;
