@@ -4,12 +4,11 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.panel.StandardPanelConfig;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataItem;
-import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.StyleSheet;
 
 public class MainConfig extends AbstractViewConfig {
@@ -17,8 +16,8 @@ public class MainConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         Button button;
-        DataItem input;
-        DataForm form;
+        DataFormToolData form;
+        DataFormToolItem item;
         Context extcontext;
         StyleSheet stylesheet;
         Map<String, String> style;
@@ -87,30 +86,19 @@ public class MainConfig extends AbstractViewConfig {
         getElement("logincnt").setStyleClass("logincnt");
         
         extcontext = getExtendedContext();
-        form = getElement("login");
-        form.setStyleClass("loginform");
-        form.importModel(extcontext.loginmodel);
-        form.get("LOCALE").setComponentType(Const.LIST_BOX);
+        form = getDataFormTool("login");
+        form.style = "loginform";
+        form.model = extcontext.loginmodel;
         
-        for (Element element : form.getElements()) {
-            if (!element.isDataStorable())
-                continue;
-            
-            input = (DataItem)element;
-            input.setObligatory(true);
-            switch (element.getName()) {
-            case "LOCALE":
-                input.set("pt_BR");
-                input.add("Português", "pt_BR");
-                break;
-            case "SECRET":
-                input.setSecret(true);
-                break;
-            case "USERNAME":
-                context.view.setFocus(input);
-                break;
-            }
-        }
+        item = form.itemInstance("USERNAME");
+        item.focus = item.required = true;
+        
+        item = form.itemInstance("LOCALE");
+        item.componenttype = Const.LIST_BOX;
+        item.required = true;
+        
+        item = form.itemInstance("SECRET");
+        item.secret = item.required = true;
         
         button = getElement("connect");
         button.setSubmit(true);

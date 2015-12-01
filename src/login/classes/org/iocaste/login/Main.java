@@ -43,6 +43,7 @@ class MainPage extends AbstractPanelPage {
     public void execute() {
         set(new MainSpec());
         set(new MainConfig());
+        set(new MainInput());
         
         put("connect", new Connect());
     }

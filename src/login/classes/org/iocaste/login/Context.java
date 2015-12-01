@@ -6,12 +6,14 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.ExtendedObject;
 
 public class Context implements ExtendedContext {
     private DataElement username, secret;
     public DocumentModel loginmodel, chgscrtmodel;
     public Messages messages;
     public String uname;
+    public ExtendedObject object;
     
     public Context() {
         username = dataElementInstance(

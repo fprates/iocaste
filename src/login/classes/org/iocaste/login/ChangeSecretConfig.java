@@ -4,11 +4,10 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.panel.StandardPanelConfig;
 import org.iocaste.shell.common.Button;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.StyleSheet;
 
 public class ChangeSecretConfig extends AbstractViewConfig {
@@ -17,8 +16,8 @@ public class ChangeSecretConfig extends AbstractViewConfig {
     protected void execute(PageBuilderContext context) {
         Button button;
         Context extcontext;
-        DataForm form;
-        InputComponent item;
+        DataFormToolData form;
+        DataFormToolItem item;
         StyleSheet stylesheet;
         Map<String, String> style;
         
@@ -34,27 +33,19 @@ public class ChangeSecretConfig extends AbstractViewConfig {
         stylesheet.get(".std_panel_context").put("display", "none");
         
         getElement("chgscrtcnt").setStyleClass("logincnt");
+
+        getNavControl().setTitle("password.change");
         
         extcontext = getExtendedContext();
-        form = getElement("chgscrt");
-        form.setStyleClass("loginform");
-        form.importModel(extcontext.chgscrtmodel);
+        form = getDataFormTool("chgscrt");
+        form.style = "loginform";
+        form.model = extcontext.chgscrtmodel;
+        item = form.itemInstance("SECRET");
+        item.secret = item.required = item.focus = true;
         
-        for (Element element : form.getElements()) {
-            if (!element.isDataStorable())
-                continue;
-            
-            item = (InputComponent)element;
-            item.setSecret(true);
-            item.setObligatory(true);
-            switch (element.getName()) {
-            case "SECRET":
-                context.view.setFocus(item);
-                break;
-            }
-        }
+        item = form.itemInstance("CONFIRM");
+        item.secret = item.required = true;
         
-        context.view.setTitle("password.change");
         button = getElement("changesecret");
         button.setSubmit(true);
     }
