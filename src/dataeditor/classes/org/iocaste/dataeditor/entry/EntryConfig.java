@@ -1,28 +1,26 @@
 package org.iocaste.dataeditor.entry;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.FieldProperty;
 import org.iocaste.appbuilder.common.GetFieldsProperties;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.dataeditor.Context;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataItem;
-import org.iocaste.shell.common.Element;
 
 public class EntryConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
+        String name;
         Context extcontext;
-        DataForm dataform;
-        DataItem item;
+        DataFormToolData dataform;
+        DataFormToolItem item;
         DocumentModel model;
         FieldProperty property;
-        Map<String, FieldProperty> properties;
         boolean keyset, focusset;
         
         getNavControl().setTitle("add.entry");
@@ -30,40 +28,30 @@ public class EntryConfig extends AbstractViewConfig {
         extcontext = getExtendedContext();
         model = new Documents(context.function).getModel(extcontext.model);
         
-        dataform = getElement("detail");
-        dataform.importModel(model);
+        dataform = getDataFormTool("detail");
+        dataform.model = model;
 
-        properties = GetFieldsProperties.execute(context, extcontext.appname);
+        extcontext.properties =
+                GetFieldsProperties.execute(context, extcontext.appname);
         keyset = focusset = false;
-        for (Element element : dataform.getElements()) {
-            item = (DataItem)element;
-            if ((extcontext.number != null) && !keyset) {
-                if (model.isKey(item.getModelItem())) {
-                    item.setEnabled(false);
-                    keyset = true;
-                }
-            }
+        for (DocumentModelItem mitem : model.getItens()) {
+            name = mitem.getName();
+            item = dataform.itemInstance(name);
+            if ((extcontext.number != null) && !keyset)
+                if (model.isKey(mitem))
+                    item.disabled = keyset = true;
             
-            if (!focusset && element.isEnabled()) {
-                context.view.setFocus(element);
-                focusset = true;
-            }
+            if (!focusset && !item.disabled)
+                item.focus = focusset = true;
             
-            if (properties == null)
+            if (extcontext.properties == null)
                 continue;
             
-            property = properties.get(item.getName());
+            property = extcontext.properties.get(name);
             if (property == null)
                 continue;
             
-            if (property.type != null)
-                item.setComponentType(property.type);
-            
-            if (property.values == null)
-                continue;
-            
-            for (String key : property.values.keySet())
-                item.add(key, property.values.get(key));
+            item.componenttype = property.type;
         }
     }
 }
