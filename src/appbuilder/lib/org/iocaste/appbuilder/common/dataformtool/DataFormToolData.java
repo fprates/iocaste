@@ -16,6 +16,7 @@ public class DataFormToolData extends AbstractComponentData {
     public Map<String, DataFormToolItem> items;
     public String[] show;
     public boolean disabled;
+    public int columns;
     
     public DataFormToolData() {
         super(TYPES.DATA_FORM);

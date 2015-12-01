@@ -1,5 +1,8 @@
 package org.iocaste.appbuilder.common.dataformtool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.shell.common.Const;
@@ -39,6 +42,7 @@ public class DataFormTool extends AbstractComponentTool {
         DataForm dataform;
         DataFormToolData data = getComponentData();
         Container container = getElement(data.name);
+        List<String> columns = null;
         
         htmlname = new StringBuilder(data.name).
                 append("_").append(data.type.toString()).toString();
@@ -52,10 +56,15 @@ public class DataFormTool extends AbstractComponentTool {
         }
         if (data.style != null)
             dataform.setStyleClass(data.style);
-        if (data.show != null)
+        if (data.show != null) {
             dataform.show(data.show);
+            if (data.columns > 0) {
+                dataform.setColumns(data.columns);
+                columns = new ArrayList<>();
+            }
+        }
+        
         dataform.setEnabled(!data.disabled);
-
         if (data.nsitem != null)
             for (Element element : dataform.getElements())
                 if (dataform.isNSReference(element.getName())) {
@@ -74,6 +83,15 @@ public class DataFormTool extends AbstractComponentTool {
             if (item.sh != null)
                 data.model.getModelItem(name).setSearchHelp(item.sh);
             setItem(data, input, item);
+            if (item.ns)
+                dataform.setNSReference(input.getHighHtmlName());
+            if (columns == null)
+                continue;
+            columns.add(name);
+            if (columns.size() != data.columns)
+                continue;
+            dataform.addLine(columns.toArray(new String[0]));
+            columns.clear();
         }
     }
     
