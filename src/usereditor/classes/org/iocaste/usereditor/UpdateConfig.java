@@ -1,13 +1,13 @@
 package org.iocaste.usereditor;
 
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
-import org.iocaste.shell.common.DataForm;
 
 public class UpdateConfig extends DetailConfig {
 
     @Override
-    protected void config(DataForm identity, DataForm extras,
+    protected void config(DataFormToolData identity, DataFormToolData extras,
             TableToolData tasks, TableToolData profiles) {
         tasks.mode = TableTool.UPDATE;
         tasks.mark = true;

@@ -2,34 +2,24 @@ package org.iocaste.usereditor;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.documents.common.Documents;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 
 public class MainConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        InputComponent input;
-        DataForm form;
+        DataFormToolData form;
+        DataFormToolItem item;
         
         getNavControl().setTitle("user-selection");
         
-        form = getElement("selection");
-        form.importModel(new Documents(context.function).getModel("LOGIN"));
-        for (Element element : form.getElements()) {
-            switch (element.getName()) {
-            case "USERNAME":
-                input = (InputComponent)element;
-                context.view.setFocus(input);
-                input.getModelItem().setSearchHelp("SH_USER");
-                input.setObligatory(true);
-                break;
-            default:
-                element.setVisible(false);
-                break;
-            }
-        }
+        form = getDataFormTool("selection");
+        form.modelname = "LOGIN";
+        form.show = new String[] {"USERNAME"};
+        item = form.itemInstance("USERNAME");
+        item.focus = true;
+        item.sh = "SH_USER";
+        item.required = true;
     }
 }
