@@ -53,6 +53,22 @@ public abstract class AbstractActionHandler {
         documents.delete(object);
     }
     
+    private DataForm dfget(String name) {
+        Map<String, ComponentEntry> subentries;
+        ComponentEntry entry;
+        
+        subentries = components.entries.get(ViewSpecItem.TYPES.DATA_FORM);
+        if (subentries == null)
+            throw new RuntimeException(name.concat(
+                    " is an invalid dataform."));
+        
+        entry = subentries.get(name);
+        if (entry == null)
+            throw new RuntimeException(name.concat(
+                    " is an invalid dataform."));
+        return entry.component.getElement();
+    }
+    
     protected final DocumentExtractor documentExtractorInstance(String manager)
     {
         return new DocumentExtractor(context, manager);
@@ -100,8 +116,7 @@ public abstract class AbstractActionHandler {
     }
     
     protected ExtendedObject getdf(String name) {
-        DataForm dataform = context.view.getElement(name);
-        return dataform.getObject();
+        return dfget(name).getObject();
     }
     
     protected <T> T getdf(String dataform, String field) {
@@ -114,13 +129,8 @@ public abstract class AbstractActionHandler {
     
     private InputComponent getdfinput(String dataform, String field) {
         InputComponent input;
-        DataForm form = (DataForm)context.view.getElement(dataform);
         
-        if (form == null)
-            throw new RuntimeException(dataform.concat(
-                    " isn't a valid dataform."));
-        
-        input = form.get(field);        
+        input = dfget(dataform).get(field);
         if (input == null)
             throw new RuntimeException(field.concat(" isn't a valid field."));
         
@@ -128,7 +138,7 @@ public abstract class AbstractActionHandler {
     }
     
     private final InputComponent getdfinputkey(String dataform) {
-        DataForm df = context.view.getElement(dataform);
+        DataForm df = dfget(dataform);
         for (DocumentModelKey key : df.getModel().getKeys())
             return getdfinput(dataform, key.getModelItemName());
 

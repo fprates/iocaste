@@ -7,7 +7,6 @@ import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 
 public class DataFormTool extends AbstractComponentTool {
-    private String formname;
     
     public DataFormTool(ComponentEntry entry) {
         super(entry);
@@ -16,22 +15,23 @@ public class DataFormTool extends AbstractComponentTool {
     @Override
     public void refresh() {
         DataFormToolData data = (DataFormToolData)entry.data;
-        DataForm form = getElement(formname);
+        DataForm form = getElement(getHtmlName());
         form.setObject(data.object);
     }
 
     @Override
     public void run() {
+        String htmlname;
         DataFormToolItem item;
         DataItem input;
         DataForm dataform;
         DataFormToolData data = getComponentData();
         Container container = getElement(data.name);
         
-        formname = new StringBuilder(data.name).
+        htmlname = new StringBuilder(data.name).
                 append("_").append(data.type.toString()).toString();
-        dataform = new DataForm(container, formname);
-        formname = dataform.getHtmlName();
+        dataform = new DataForm(container, htmlname);
+        setHtmlName(dataform.getHtmlName());
         if (data.model != null)
             dataform.importModel(data.model);
         if (data.modelname != null)

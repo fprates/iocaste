@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common;
 import org.iocaste.shell.common.Element;
 
 public abstract class AbstractComponentTool {
+    private String htmlname;
     protected ComponentEntry entry;
     
     public AbstractComponentTool(ComponentEntry entry) {
@@ -14,11 +15,23 @@ public abstract class AbstractComponentTool {
         return (T)entry.data;
     }
     
+    public final <T extends Element> T getElement() {
+        return getElement(htmlname);
+    }
+    
     protected final <T extends Element> T getElement(String name) {
         return entry.data.context.view.getElement(name);
+    }
+    
+    protected final String getHtmlName() {
+        return htmlname;
     }
     
     public abstract void refresh();
     
     public abstract void run();
+    
+    protected final void setHtmlName(String htmlname) {
+        this.htmlname = htmlname;
+    }
 }
