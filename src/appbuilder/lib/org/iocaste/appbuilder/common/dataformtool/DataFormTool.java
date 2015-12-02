@@ -57,6 +57,7 @@ public class DataFormTool extends AbstractComponentTool {
         DataFormToolItem item;
         DataItem input;
         DataForm dataform;
+        ComponentEntry nsentry;
         DataFormToolData data = getComponentData();
         Container container = getElement(data.name);
         List<String> columns = null;
@@ -74,10 +75,16 @@ public class DataFormTool extends AbstractComponentTool {
         if (data.style != null)
             dataform.setStyleClass(data.style);
         if (data.show != null) {
-            dataform.show(data.show);
             if (data.columns > 0) {
                 dataform.setColumns(data.columns);
                 columns = new ArrayList<>();
+                for (String column : data.show)
+                    if (column != null)
+                        columns.add(column);
+                dataform.show(columns.toArray(new String[0]));
+                columns.clear();
+            } else {
+                dataform.show(data.show);
             }
         }
         
@@ -88,6 +95,11 @@ public class DataFormTool extends AbstractComponentTool {
                     setItem(data, (DataItem)element, data.nsitem);
                     break;
                 }
+        if (data.nsdata != null) {
+            nsentry = data.context.getView().getComponents().entries.
+                    get(data.nsdata.name);
+            dataform.setNSReference(nsentry.component.getNSField());
+        }
         
         for (String name : data.items.keySet()) {
             item = data.items.get(name);
