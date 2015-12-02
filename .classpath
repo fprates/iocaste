@@ -17,7 +17,7 @@
 	<classpathentry kind="src" path="src/datadict/classes"/>
 	<classpathentry kind="src" path="src/help/classes"/>
 	<classpathentry kind="src" path="src/documents/lib"/>
-	<classpathentry excluding="hibernate.cfg.xml" kind="src" path="src/shell/classes"/>
+	<classpathentry excluding="META-INF/shell.js" kind="src" path="src/shell/classes"/>
 	<classpathentry kind="src" path="src/shell/lib"/>
 	<classpathentry kind="src" path="src/core/lib"/>
 	<classpathentry kind="src" path="src/infosis/classes"/>
