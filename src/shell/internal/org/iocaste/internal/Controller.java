@@ -39,7 +39,7 @@ public class Controller {
     
     static {
         messages = new HashMap<>();
-        messages.put("field.is.obligatory", "Campo é obrigatório.");
+        messages.put("field.is.obligatory", "Campo é obrigatório (%s).");
         messages.put("field.type.mismatch",
                 "Tipo de valor incompatível com campo.");
         messages.put("invalid.value", "Valor inválido (%s).");
@@ -391,6 +391,7 @@ public class Controller {
                 status.input = input;
                 status.error = EINITIAL;
                 status.msgtype = Const.ERROR;
+                status.msgargs = new String[] {input.getHtmlName()};
             }
         }
         
@@ -415,7 +416,7 @@ public class Controller {
             status.input = input;
             status.error = EINVALID_REFERENCE;
             status.msgtype = (input.isEnabled())? Const.ERROR : Const.WARNING;
-            status.msgargs = new Object[] {name};
+            status.msgargs = new String[] {name};
         }
     }
     
