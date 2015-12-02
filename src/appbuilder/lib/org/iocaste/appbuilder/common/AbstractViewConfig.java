@@ -63,14 +63,12 @@ public abstract class AbstractViewConfig implements ViewConfig {
     }
     
     protected final DataFormToolData getDataFormTool(String name) {
-        DataFormToolData dfdata;
+        ComponentEntry entry;
         
-        dfdata = (DataFormToolData)context.getView().getComponents().
-                entries.get(name).data;
-        if (dfdata == null)
-            throw new RuntimeException(
-                    name.concat(" is an invalid dataform component."));
-        return dfdata;
+        entry = getViewComponents().entries.get(name);
+        if (entry == null)
+            return null;
+        return (DataFormToolData)entry.data;
     }
     
     /**
