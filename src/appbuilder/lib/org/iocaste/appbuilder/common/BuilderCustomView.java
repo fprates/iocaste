@@ -164,8 +164,8 @@ public class BuilderCustomView extends AbstractCustomView {
             if (viewinput != null)
                 viewinput.run(_context, true);
             
-            for (ViewSpecItem item : viewspec.getItems()) {
-                factory = getFactory(item);
+            for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {
+                factory = factories.get(type);
                 if (factory != null)
                     factory.generate();
             }

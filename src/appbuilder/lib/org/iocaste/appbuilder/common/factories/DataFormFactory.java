@@ -4,12 +4,13 @@ import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.dataformtool.DataFormTool;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StandardContainer;
 
 public class DataFormFactory extends AbstractSpecFactory {
     
     @Override
-    protected void execute() {
+    protected void execute(Container container, String parent, String name) {
         DataFormToolData dfdata;
         
         dfdata = new DataFormToolData();

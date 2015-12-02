@@ -6,12 +6,11 @@ import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.shell.common.Container;
 
 public abstract class AbstractSpecFactory implements SpecFactory {
-    protected String name, parent;
-    protected Container container;
     protected PageBuilderContext context;
     protected ViewComponents components;
     
-    protected abstract void execute();
+    protected abstract void execute(
+            Container container, String parent, String name);
 
     @Override
     public void generate() { }
@@ -24,13 +23,12 @@ public abstract class AbstractSpecFactory implements SpecFactory {
     @Override
     public final void run(PageBuilderContext context, ViewComponents components,
             ViewSpecItem item) {
-        name = item.getName();
-        parent = item.getParent();
-        container = context.view.getElement(parent);
+        String parent = item.getParent();
+        Container container = context.view.getElement(parent);
         this.context = context;
         this.components = components;
         
-        execute();
+        execute(container, parent, item.getName());
     }
     
     @Override

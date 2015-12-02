@@ -4,12 +4,13 @@ import org.iocaste.appbuilder.common.tabletool.AbstractTableHandler;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StandardContainer;
 
 public class TableToolFactory extends AbstractSpecFactory {
 
     @Override
-    protected void execute() {
+    protected void execute(Container container, String parent, String name) {
         TableToolData ttdata;
         
         ttdata = new TableToolData();

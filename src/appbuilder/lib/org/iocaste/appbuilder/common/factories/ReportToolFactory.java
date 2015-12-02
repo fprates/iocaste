@@ -3,12 +3,13 @@ package org.iocaste.appbuilder.common.factories;
 import org.iocaste.appbuilder.common.reporttool.ReportTool;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StandardContainer;
 
 public class ReportToolFactory extends AbstractSpecFactory {
 
     @Override
-    protected void execute() {
+    protected void execute(Container container, String parent, String name) {
         ReportToolData rtdata;
         
         rtdata = new ReportToolData();
