@@ -12,4 +12,5 @@ public class DataFormToolItem {
     public Map<String, Object> values;
     public DataElement element;
     public Object value;
+    public int length, vlength;
 }
