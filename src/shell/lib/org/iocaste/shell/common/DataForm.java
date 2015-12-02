@@ -268,6 +268,8 @@ public class DataForm extends AbstractContainer {
             name = item.getName();
             item.set(object.getNS(), object.get(name));
         }
+        
+        setNS(object.getNS());
     }
     
     public final void setNS(Object value) {
