@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common.factories;
 
+import org.iocaste.appbuilder.common.ViewComponents;
 import org.iocaste.appbuilder.common.reporttool.ReportTool;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
@@ -20,13 +21,13 @@ public class ReportToolFactory extends AbstractSpecFactory {
     }
     
     @Override
-    public final void generate() {
+    public final void generate(ViewComponents components) {
         for (ReportToolEntry entry : components.reporttools.values())
             entry.component = new ReportTool(entry.data);
     }
     
     @Override
-    public final void update() {
+    public final void update(ViewComponents components) {
         for (ReportToolEntry entry :  components.reporttools.values())
             if (entry.update)
                 entry.component.refresh();

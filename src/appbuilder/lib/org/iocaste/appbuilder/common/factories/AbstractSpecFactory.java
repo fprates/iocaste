@@ -13,7 +13,7 @@ public abstract class AbstractSpecFactory implements SpecFactory {
             Container container, String parent, String name);
 
     @Override
-    public void generate() { }
+    public void generate(ViewComponents components) { }
     
     @Override
     public <T> T get() {
@@ -32,6 +32,6 @@ public abstract class AbstractSpecFactory implements SpecFactory {
     }
     
     @Override
-    public void update() { }
+    public void update(ViewComponents components) { }
 
 }

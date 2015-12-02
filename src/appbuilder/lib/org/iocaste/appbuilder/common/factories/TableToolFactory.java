@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common.factories;
 
+import org.iocaste.appbuilder.common.ViewComponents;
 import org.iocaste.appbuilder.common.tabletool.AbstractTableHandler;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -21,13 +22,13 @@ public class TableToolFactory extends AbstractSpecFactory {
     }
 
     @Override
-    public final void generate() {
+    public final void generate(ViewComponents components) {
         for (TableToolEntry entry : components.tabletools.values())
             entry.component = new TableTool(context, entry.data.name);
     }
     
     @Override
-    public final void update() {
+    public final void update(ViewComponents components) {
         for (TableToolEntry entry : components.tabletools.values())
             if (entry.update)
                 AbstractTableHandler.setObject(entry.component, entry.data);

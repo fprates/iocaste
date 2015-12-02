@@ -130,6 +130,7 @@ public class BuilderCustomView extends AbstractCustomView {
         SpecFactory factory;
         NavControl navcontrol;
         ViewContext viewctx;
+        ViewComponents components;
         AbstractViewSpec viewspec = getViewSpec();
         ViewConfig viewconfig = getViewConfig();
         AbstractViewInput viewinput = getViewInput();
@@ -140,16 +141,17 @@ public class BuilderCustomView extends AbstractCustomView {
             _context.downloaddata = null;
             return;
         }
-        
+
+        viewctx = _context.getView(view);
+        components = viewctx.getComponents();
         if (!viewspec.isInitialized()) {
             _context.setInputUpdate(false);
             _context.view.clear();
             _context.function.unregisterValidators();
             viewspec.run(_context);
-            viewctx = _context.getView(view);
             viewctx.reset();
             for (ViewSpecItem item : viewspec.getItems())
-                buildItem(_context, viewctx.getComponents(), item);
+                buildItem(_context, components, item);
 
             navcontrol = factories.get(ViewSpecItem.TYPES.PAGE_CONTROL).get();
             if (viewconfig != null) {
@@ -167,7 +169,7 @@ public class BuilderCustomView extends AbstractCustomView {
             for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {
                 factory = factories.get(type);
                 if (factory != null)
-                    factory.generate();
+                    factory.generate(components);
             }
             return;
         }
@@ -178,7 +180,7 @@ public class BuilderCustomView extends AbstractCustomView {
             for (ViewSpecItem item : viewspec.getItems()) {
                 factory = getFactory(item);
                 if (factory != null)
-                    factory.update();
+                    factory.update(components);
             }
         }
     }

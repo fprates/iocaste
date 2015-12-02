@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common.factories;
 
 import org.iocaste.appbuilder.common.ComponentEntry;
+import org.iocaste.appbuilder.common.ViewComponents;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.dataformtool.DataFormTool;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
@@ -22,7 +23,7 @@ public class DataFormFactory extends AbstractSpecFactory {
     }
     
     @Override
-    public final void generate() {
+    public final void generate(ViewComponents components) {
         for (ComponentEntry entry : components.entries.values()) {
             if (!entry.data.type.equals(ViewSpecItem.TYPES.DATA_FORM))
                 continue;
@@ -33,7 +34,7 @@ public class DataFormFactory extends AbstractSpecFactory {
     }
     
     @Override
-    public final void update() {
+    public final void update(ViewComponents components) {
         for (ComponentEntry entry : components.entries.values()) {
             if (!entry.data.type.equals(ViewSpecItem.TYPES.DATA_FORM))
                 continue;

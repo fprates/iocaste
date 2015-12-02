@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common.factories;
 
+import org.iocaste.appbuilder.common.ViewComponents;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.shell.common.Container;
 
@@ -14,7 +15,7 @@ public class DashboardFactoryFactory extends AbstractSpecFactory {
     }
     
     @Override
-    public final void generate() {
+    public final void generate(ViewComponents components) {
         for (DashboardFactory factory : components.dashboards.values())
             factory.build();
     }

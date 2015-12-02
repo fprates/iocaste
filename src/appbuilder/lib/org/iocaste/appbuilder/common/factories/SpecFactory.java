@@ -6,12 +6,12 @@ import org.iocaste.appbuilder.common.ViewSpecItem;
 
 public interface SpecFactory {
 
-    public abstract void generate();
+    public abstract void generate(ViewComponents components);
     
     public abstract <T> T get();
     
     public abstract void run(PageBuilderContext context,
             ViewComponents components, ViewSpecItem item);
     
-    public abstract void update();
+    public abstract void update(ViewComponents components);
 }
