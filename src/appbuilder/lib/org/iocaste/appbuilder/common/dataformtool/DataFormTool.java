@@ -114,8 +114,12 @@ public class DataFormTool extends AbstractComponentTool {
             setItem(data, input, item);
             if (item.ns)
                 dataform.setNSReference(input.getHighHtmlName());
-            if (columns == null)
-                continue;
+        }
+
+        if (columns == null)
+            return;
+        
+        for (String name : data.show) {
             columns.add(name);
             if (columns.size() != data.columns)
                 continue;
