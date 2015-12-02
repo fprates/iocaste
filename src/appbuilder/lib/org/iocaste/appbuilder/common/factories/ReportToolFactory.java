@@ -11,7 +11,9 @@ public class ReportToolFactory extends AbstractSpecFactory {
     protected void execute() {
         ReportToolData rtdata;
         
-        rtdata = new ReportToolData(context, name);
+        rtdata = new ReportToolData();
+        rtdata.context = context;
+        rtdata.name = name;
         new StandardContainer(container, rtdata.name);
         components.add(rtdata);
     }

@@ -27,6 +27,10 @@ public abstract class AbstractComponentTool {
         return htmlname;
     }
     
+    public String getNSField() {
+        return null;
+    }
+    
     public abstract void refresh();
     
     public abstract void run();

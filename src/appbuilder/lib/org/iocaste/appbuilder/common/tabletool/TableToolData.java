@@ -1,21 +1,19 @@
 package org.iocaste.appbuilder.common.tabletool;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.AbstractComponentData;
+import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.AbstractContext;
 
-public class TableToolData implements Serializable {
-    private static final long serialVersionUID = -5741139329515555543L;
+public class TableToolData extends AbstractComponentData {
     private List<TableToolItem> items;
-    public AbstractContext context;
-    public String name, container, style, borderstyle, highlightstyle;
+    public String container, style, borderstyle, highlightstyle;
     public String itemcolumn, model, nsfield;
     public DocumentModel refmodel;
     public boolean mark, enabled, noheader;
@@ -25,6 +23,7 @@ public class TableToolData implements Serializable {
     public Map<String, TableToolColumn> columns;
     
     public TableToolData() {
+        super(ViewSpecItem.TYPES.TABLE_TOOL);
         vlines = 15;
         step = 1;
         enabled = true;

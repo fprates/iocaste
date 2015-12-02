@@ -23,10 +23,6 @@ public class DataFormToolData extends AbstractComponentData {
         items = new HashMap<>();
     }
     
-    public final DataFormToolItem nsItemInstance() {
-        return (nsitem == null)? nsitem = new DataFormToolItem() : nsitem;
-    }
-    
     public final DataFormToolItem itemInstance(String name) {
         DataFormToolItem item;
         
@@ -37,5 +33,9 @@ public class DataFormToolData extends AbstractComponentData {
             items.put(name, item);
         }
         return item;
+    }
+    
+    public final DataFormToolItem nsItemInstance() {
+        return (nsitem == null)? nsitem = new DataFormToolItem() : nsitem;
     }
 }

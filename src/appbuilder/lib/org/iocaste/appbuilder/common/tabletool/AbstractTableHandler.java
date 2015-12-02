@@ -2,6 +2,8 @@ package org.iocaste.appbuilder.common.tabletool;
 
 import java.util.List;
 
+import org.iocaste.appbuilder.common.ComponentEntry;
+import org.iocaste.appbuilder.common.ViewComponents;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -32,6 +34,8 @@ public abstract class AbstractTableHandler {
         Link link;
         Button button;
         ExtendedObject object;
+        ViewComponents components;
+        ComponentEntry entry;
         TableColumn[] tcolumns = context.table.getColumns();
         TableItem item = new TableItem(context.table, pos);
         
@@ -41,7 +45,8 @@ public abstract class AbstractTableHandler {
         } else {
             object = null;
         }
-        
+
+        components = context.data.context.getView().getComponents();
         nsinput = null;
         for (TableColumn tcolumn : tcolumns) {
             if (tcolumn.isMark())
@@ -111,10 +116,21 @@ public abstract class AbstractTableHandler {
                 nsinput = element.getHtmlName();
             
             if (input != null) {
-                if (nsinput != null)
+                if (nsinput != null) {
                     input.setNSReference(nsinput);
-                else
+                    continue;
+                }
+                
+                if (context.data.nsfield != null) {
                     input.setNSReference(context.data.nsfield);
+                    continue;
+                }
+                
+                if (context.data.nsdata == null)
+                    continue;
+                
+                entry = components.entries.get(context.data.nsdata.name);
+                input.setNSReference(entry.component.getNSField());
             }
         }
         

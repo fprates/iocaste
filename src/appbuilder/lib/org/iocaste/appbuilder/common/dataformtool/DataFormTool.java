@@ -18,6 +18,23 @@ public class DataFormTool extends AbstractComponentTool {
     }
     
     @Override
+    public final String getNSField() {
+        DataFormToolData dfdata = (DataFormToolData)entry.data;
+        DataForm df = getElement();
+        
+        if (dfdata.nsitem != null) {
+            for (Element element : df.getElements())
+                if (df.isNSReference(element.getName()))
+                    return element.getHtmlName();
+            return null;
+        }
+        for (String key : dfdata.items.keySet())
+            if (dfdata.items.get(key).ns)
+                return df.get(key).getHtmlName();
+        return null;
+    }
+    
+    @Override
     public void refresh() {
         DataFormToolItem item;
         DataFormToolData data = (DataFormToolData)entry.data;

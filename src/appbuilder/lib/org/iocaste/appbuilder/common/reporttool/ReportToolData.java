@@ -1,18 +1,17 @@
 package org.iocaste.appbuilder.common.reporttool;
 
-import org.iocaste.shell.common.AbstractContext;
+import org.iocaste.appbuilder.common.AbstractComponentData;
+import org.iocaste.appbuilder.common.ViewSpecItem;
 
-public class ReportToolData {
+public class ReportToolData extends AbstractComponentData {
     private static final byte INPUT = 0;
     private static final byte OUTPUT = 1;
     private byte stage;
-    public AbstractContext context;
-    public String name, nsreference;
+    public String nsreference;
     public ReportToolStage input, output;
     
-    public ReportToolData(AbstractContext context, String name) {
-        this.context = context;
-        this.name = name;
+    public ReportToolData() {
+        super(ViewSpecItem.TYPES.REPORT_TOOL);
         stage = OUTPUT;
         input = new ReportToolStage(this);
         output = new ReportToolStage(this);
