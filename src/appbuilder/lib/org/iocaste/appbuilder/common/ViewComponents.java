@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
@@ -12,7 +13,7 @@ import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.texteditor.common.TextEditor;
 
 public class ViewComponents {
-    public Map<ViewSpecItem.TYPES, Map<String, ComponentEntry>> entries;
+    public Map<String, ComponentEntry> entries;
     public Map<String, TableToolEntry> tabletools;
     public Map<String, DashboardFactory> dashboards;
     public Map<String, DashboardComponent> dashboardgroups;
@@ -20,7 +21,7 @@ public class ViewComponents {
     public Map<String, TextEditor> editors;
     
     public ViewComponents() {
-        entries = new HashMap<>();
+        entries = new LinkedHashMap<>();
         tabletools = new HashMap<>();
         dashboards = new HashMap<>();
         dashboardgroups = new HashMap<>();
@@ -29,18 +30,9 @@ public class ViewComponents {
     }
     
     public final void add(AbstractComponentData data) {
-        ComponentEntry entry;
-        Map<String, ComponentEntry> subentries;
-        
-        subentries = entries.get(data.type);
-        if (subentries == null) {
-            subentries = new HashMap<>();
-            entries.put(data.type, subentries);
-        }
-        
-        entry = new ComponentEntry();
+        ComponentEntry entry = new ComponentEntry();
         entry.data = data;
-        subentries.put(data.name, entry);
+        entries.put(data.name, entry);
     }
     
     public final void add(TableToolData data) {
@@ -60,8 +52,7 @@ public class ViewComponents {
     }
     
     public final void reset() {
-        for (Map<String, ComponentEntry> subentries : entries.values())
-            subentries.clear();
+        entries.clear();
         tabletools.clear();
         dashboards.clear();
         dashboardgroups.clear();

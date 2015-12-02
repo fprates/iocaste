@@ -54,15 +54,9 @@ public abstract class AbstractActionHandler {
     }
     
     private DataForm dfget(String name) {
-        Map<String, ComponentEntry> subentries;
         ComponentEntry entry;
         
-        subentries = components.entries.get(ViewSpecItem.TYPES.DATA_FORM);
-        if (subentries == null)
-            throw new RuntimeException(name.concat(
-                    " is an invalid dataform."));
-        
-        entry = subentries.get(name);
+        entry = components.entries.get(name);
         if (entry == null)
             throw new RuntimeException(name.concat(
                     " is an invalid dataform."));

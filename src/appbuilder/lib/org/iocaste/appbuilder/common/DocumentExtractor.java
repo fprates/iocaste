@@ -202,8 +202,7 @@ public class DocumentExtractor {
             if (source == null)
                 break;
             
-            form = components.entries.get(ViewSpecItem.TYPES.DATA_FORM).
-                    get(source).component.getElement();
+            form = components.entries.get(source).component.getElement();
             head = form.getObject();
             break;
         case DataConversion.OBJECT:

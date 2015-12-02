@@ -104,15 +104,9 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     private final ComponentEntry dfget(String name) {
-        Map<String, ComponentEntry> subentries;
         ComponentEntry entry;
         
-        subentries = context.getView().getComponents().entries.
-                get(ViewSpecItem.TYPES.DATA_FORM);
-        if (subentries == null)
-            throw new RuntimeException(
-                    name.concat(" is an invalid dataform component."));
-        entry = subentries.get(name);
+        entry = context.getView().getComponents().entries.get(name);
         if (entry == null)
             throw new RuntimeException(
                     name.concat(" is an invalid dataform component."));

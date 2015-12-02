@@ -5,7 +5,6 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.FieldProperty;
 import org.iocaste.appbuilder.common.ViewComponents;
-import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -19,16 +18,15 @@ public class Common {
         boolean key;
         DocumentModel model;
         DocumentModelItem[] items;
-        Map<String, ComponentEntry> forms;
         DataFormToolData form;
         DataFormToolItem item;
+        Map<String, ComponentEntry> entries;
         
+        entries = formdata.context.getView().getComponents().entries;
         model = formdata.cmodel.getHeader();
         items = model.getItens();
-        forms = formdata.context.getView().getComponents().entries.
-                get(ViewSpecItem.TYPES.DATA_FORM);
         for (String name : new String[] {"head", "base"}) {
-            form = (DataFormToolData)forms.get(name).data;
+            form = (DataFormToolData)entries.get(name).data;
             form.model = model;
             
             switch(name) {

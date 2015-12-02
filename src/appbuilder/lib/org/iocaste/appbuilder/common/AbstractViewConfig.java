@@ -1,7 +1,5 @@
 package org.iocaste.appbuilder.common;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
@@ -66,12 +64,9 @@ public abstract class AbstractViewConfig implements ViewConfig {
     
     protected final DataFormToolData getDataFormTool(String name) {
         DataFormToolData dfdata;
-        Map<String, ComponentEntry> subentries = context.getView().
-                getComponents().entries.get(ViewSpecItem.TYPES.DATA_FORM);
-        if (subentries == null)
-            throw new RuntimeException(
-                    name.concat(" is an invalid dataform component."));
-        dfdata = (DataFormToolData)subentries.get(name).data;
+        
+        dfdata = (DataFormToolData)context.getView().getComponents().
+                entries.get(name).data;
         if (dfdata == null)
             throw new RuntimeException(
                     name.concat(" is an invalid dataform component."));

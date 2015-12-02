@@ -1,7 +1,5 @@
 package org.iocaste.appbuilder.common.factories;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.dataformtool.DataFormTool;
@@ -24,12 +22,9 @@ public class DataFormFactory extends AbstractSpecFactory {
     
     @Override
     public final void generate() {
-        Map<String, ComponentEntry> subentries;
-        
-        subentries = components.entries.get(ViewSpecItem.TYPES.DATA_FORM);
-        if (subentries == null)
-            return;
-        for (ComponentEntry entry : subentries.values()) {
+        for (ComponentEntry entry : components.entries.values()) {
+            if (!entry.data.type.equals(ViewSpecItem.TYPES.DATA_FORM))
+                continue;
             entry.component = new DataFormTool(entry);
             entry.component.run();
             entry.component.refresh();
@@ -38,13 +33,11 @@ public class DataFormFactory extends AbstractSpecFactory {
     
     @Override
     public final void update() {
-        Map<String, ComponentEntry> subentries;
-        
-        subentries = components.entries.get(ViewSpecItem.TYPES.DATA_FORM);
-        if (subentries == null)
-            return;
-        for (ComponentEntry entry : subentries.values())
+        for (ComponentEntry entry : components.entries.values()) {
+            if (!entry.data.type.equals(ViewSpecItem.TYPES.DATA_FORM))
+                continue;
             if (entry.update)
                 entry.component.refresh();
+        }
     }
 }
