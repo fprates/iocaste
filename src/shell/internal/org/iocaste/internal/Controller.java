@@ -475,7 +475,16 @@ public class Controller {
             name = input.getHtmlName();
         
         if (isValueInitial(object, dataelement, input.isBooleanComponent())) {
-            ri.value = object;
+            ri.value = null;
+            if (!ri.state.low) {
+                ri.state.master.set(null);
+                ri.state.low = true;
+                return;
+            }
+            
+            if (!ri.state.high)
+                ri.state.high = true;
+            
             return;
         }
 
