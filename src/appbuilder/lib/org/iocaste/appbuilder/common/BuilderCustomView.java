@@ -127,6 +127,7 @@ public class BuilderCustomView extends AbstractCustomView {
      */
     @Override
     public void execute(AbstractContext context) throws Exception {
+        ComponentEntry entry;
         SpecFactory factory;
         NavControl navcontrol;
         ViewContext viewctx;
@@ -165,6 +166,16 @@ public class BuilderCustomView extends AbstractCustomView {
             viewspec.setInitialized(!viewctx.isUpdatable());
             if (viewinput != null)
                 viewinput.run(_context, true);
+
+            for (String key : components.entries.keySet()) {
+                entry = components.entries.get(key);
+                factory = factories.get(entry.data.type);
+                if (factory == null)
+                    continue;
+                factory.generate(entry);
+                entry.component.run();
+                entry.component.refresh();
+            }
             
             for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {
                 factory = factories.get(type);
@@ -177,6 +188,15 @@ public class BuilderCustomView extends AbstractCustomView {
         if (_context.isInputUpdatable() && viewinput != null) {
             _context.setInputUpdate(false);
             viewinput.run(_context, false);
+            for (String key : components.entries.keySet()) {
+                entry = components.entries.get(key);
+                factory = factories.get(entry.data.type);
+                if (factory == null)
+                    continue;
+                if (entry.update)
+                    entry.component.refresh();
+            }
+            
             for (ViewSpecItem item : viewspec.getItems()) {
                 factory = getFactory(item);
                 if (factory != null)

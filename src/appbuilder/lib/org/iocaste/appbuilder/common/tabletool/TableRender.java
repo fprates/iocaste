@@ -96,8 +96,7 @@ public class TableRender extends AbstractTableHandler {
         new StandardContainer(container, context.data.name.concat("_skip")).
                 setStyleClass("tt_skip");
         
-        context.table = new Table(
-                container, context.data.name.concat("_table"));
+        context.table = new Table(container, context.htmlname);
         context.table.setHeader(!context.data.noheader);
         context.table.setBorderStyle(context.data.borderstyle);
         context.data.last = 0;

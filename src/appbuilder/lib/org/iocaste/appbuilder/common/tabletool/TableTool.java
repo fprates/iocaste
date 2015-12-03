@@ -31,11 +31,9 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.SearchHelp;
-import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Validator;
-import org.iocaste.shell.common.View;
 
 public class TableTool extends AbstractComponentTool {
     public static final byte CONTINUOUS_UPDATE = 0;
@@ -137,16 +135,6 @@ public class TableTool extends AbstractComponentTool {
         save(extcontext, items);
         extcontext.data.topline = 0;
         move(extcontext, items);
-    }
-    
-    /**
-     * 
-     * @param view
-     * @param data
-     * @return
-     */
-    public static final Table get(View view, TableToolData data) {
-        return view.getElement(data.name.concat("_table"));
     }
     
     /**
@@ -500,10 +488,10 @@ public class TableTool extends AbstractComponentTool {
             actions.put(action.getAction(), action);
         
         extcontext.data = data;
-        
+        extcontext.htmlname = data.name.concat("_table");
+        setHtmlName(extcontext.htmlname);
         setTableData(data);
         TableRender.run(this, context.function, extcontext);
-        setHtmlName(data.name.concat("_table"));
         installValidators(extcontext);
         
         if (data.model != null)

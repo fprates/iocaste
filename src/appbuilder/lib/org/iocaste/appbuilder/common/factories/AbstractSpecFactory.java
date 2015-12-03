@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common.factories;
 
+import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewComponents;
 import org.iocaste.appbuilder.common.ViewSpecItem;
@@ -12,6 +13,9 @@ public abstract class AbstractSpecFactory implements SpecFactory {
     protected abstract void execute(
             Container container, String parent, String name);
 
+
+    public void generate(ComponentEntry entry) { }
+    
     @Override
     public void generate(ViewComponents components) { }
     

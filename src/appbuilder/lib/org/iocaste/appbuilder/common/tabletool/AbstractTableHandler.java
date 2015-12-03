@@ -281,6 +281,7 @@ public abstract class AbstractTableHandler {
 }
 
 class Context {
+    public String htmlname;
     public TableToolData data;
     public Table table;
 }
