@@ -3,8 +3,8 @@ package org.iocaste.appbuilder.common.reporttool;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.tabletool.TableTool;
-import org.iocaste.appbuilder.common.tabletool.TableToolData;
+import org.iocaste.appbuilder.common.AbstractComponentData;
+import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -17,8 +17,8 @@ public class ReportToolStage {
     public Map<String, ReportToolStageItem> items;
     public ExtendedObject object;
     public ExtendedObject[] objects;
-    public TableTool tabletool;
-    public TableToolData ttdata;
+    public AbstractComponentTool toolcomponent;
+    public AbstractComponentData tooldata;
     
     public ReportToolStage(ReportToolData data) {
         documents = new Documents(data.context.function);

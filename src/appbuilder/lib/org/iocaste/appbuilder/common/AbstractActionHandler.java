@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
-import org.iocaste.appbuilder.common.reporttool.ReportTool;
+import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
@@ -330,11 +330,11 @@ public abstract class AbstractActionHandler {
     }
     
     protected final ExtendedObject reportinputget(String report) {
-        ReportTool reporttool = components.getComponent(report);
-        if (reporttool == null)
+        ReportToolData data = components.getComponentData(report);
+        if (data == null)
             throw new RuntimeException(new StringBuilder(report).
                     append(" is an invalid report.").toString());
-        return reporttool.getInput();
+        return data.input.object;
     }
     
     public final void run(AbstractContext context) throws Exception {

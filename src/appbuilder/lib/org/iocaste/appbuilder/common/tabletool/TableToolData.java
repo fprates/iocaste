@@ -13,7 +13,7 @@ import org.iocaste.documents.common.ExtendedObject;
 
 public class TableToolData extends AbstractComponentData {
     private List<TableToolItem> items;
-    public String container, style, borderstyle, highlightstyle;
+    public String style, borderstyle, highlightstyle;
     public String itemcolumn, model, nsfield;
     public DocumentModel refmodel;
     public boolean mark, enabled, noheader;

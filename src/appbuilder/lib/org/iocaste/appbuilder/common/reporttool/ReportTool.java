@@ -5,9 +5,9 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ModelBuilder;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.DataForm;
 
 public class ReportTool extends AbstractComponentTool {
     
@@ -29,37 +29,25 @@ public class ReportTool extends AbstractComponentTool {
         return modelbuilder.get();
     }
     
-    private DataForm getDataForm() {
-        return entry.data.context.view.getElement(
-                ReportToolInputRenderer.getInputFormName(entry.data));
-    }
-    
-    public final ExtendedObject getInput() {
-        return getDataForm().getObject();
-    }
-    
     @Override
     public final void refresh() {
         ReportToolData data = (ReportToolData)entry.data;
         if (data.isInput()) {
-            if (data.input.object != null)
-                getDataForm().setObject(data.input.object);
-            else
-                getDataForm().clearInputs();
+            ((DataFormToolData)data.input.tooldata).object = data.input.object;
+            data.input.toolcomponent.refresh();
         } else {
-            data.output.ttdata.set(data.output.objects);
-            data.output.tabletool.refresh();
+            ((TableToolData)data.output.tooldata).set(data.output.objects);
+            data.output.toolcomponent.refresh();
         }
     }
 
     @Override
     public void run() {
         ReportToolData data = (ReportToolData)entry.data;
-        if (data.isInput())
-            ReportToolInputRenderer.run(data);
-        else
-            ReportToolOutputRenderer.run(data);
         
-        refresh();
+        if (data.isInput())
+            data.input.toolcomponent.run();
+        else
+            data.output.toolcomponent.run();
     }
 }

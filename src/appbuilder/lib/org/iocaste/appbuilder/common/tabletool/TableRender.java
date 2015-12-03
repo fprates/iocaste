@@ -72,18 +72,10 @@ public class TableRender extends AbstractTableHandler {
     public static final void run(TableTool tabletool, Function function,
             Context context) {
         StyleSheet stylesheet;
-        Container container, supercontainer;
+        Container container;
         Map<String, String> style;
         
-        if (context.data.container != null) {
-            supercontainer = context.data.context.view.getElement(
-                    context.data.container);
-            container = new StandardContainer(
-                    supercontainer, context.data.name);
-        } else {
-            container = context.data.context.view.getElement(context.data.name);
-        }
-        
+        container = context.data.context.view.getElement(context.data.name);
         container.setStyleClass(context.data.style);
         
         stylesheet = context.data.context.view.styleSheetInstance();

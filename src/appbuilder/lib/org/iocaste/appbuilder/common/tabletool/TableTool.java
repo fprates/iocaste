@@ -47,11 +47,6 @@ public class TableTool extends AbstractComponentTool {
     private String name;
     private DocumentModel model;
     private Map<String, TableToolAction> actions;
-
-    public TableTool(TableToolData data) {
-        this(new ComponentEntry());
-        entry.data = data;
-    }
     
     /**
      * 
