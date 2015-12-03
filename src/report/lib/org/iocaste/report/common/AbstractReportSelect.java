@@ -21,8 +21,7 @@ public abstract class AbstractReportSelect extends AbstractActionHandler {
         inputrefresh();
         extcontext = getExtendedContext();
         
-        rtdata = new ReportToolData();
-        rtdata.context = context;
+        rtdata = new ReportToolData(context);
         rtdata.name = "output";
         data.output.config.config(context, rtdata.output);
         outputmodel = ReportTool.buildModel(rtdata);

@@ -10,7 +10,7 @@ import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
-import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
+import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
@@ -32,21 +32,21 @@ public abstract class AbstractViewInput implements ViewInput {
     
     private final void addtablearray(
             String table, ExtendedObject[] objects) {
-        ComponentEntry entry = getTableEntry(table);
+        ComponentEntry entry = getComponentEntry(table);
         ((TableToolData)entry.data).set(objects);
         entry.update = !init;
     }
     
     private final void addtablecollection(
             String table, Collection<ExtendedObject> objects) {
-        ComponentEntry entry = getTableEntry(table);
+        ComponentEntry entry = getComponentEntry(table);
         ((TableToolData)entry.data).set(objects);
         entry.update = !init;
     }
     
     private final void addtableitems(
             String table, List<TableToolItem> items) {
-        ComponentEntry entry = getTableEntry(table);
+        ComponentEntry entry = getComponentEntry(table);
         ((TableToolData)entry.data).set(items);
         entry.update = !init;
     }
@@ -180,6 +180,13 @@ public abstract class AbstractViewInput implements ViewInput {
     
     protected abstract void execute(PageBuilderContext context);
     
+    private final ComponentEntry getComponentEntry(String name) {
+        ComponentEntry entry = getViewComponents().entries.get(name);
+        if (entry != null)
+            return entry;
+        throw new RuntimeException(name.concat(" is an invalid tabletool."));
+    }
+    
     private <T extends Element> T getElement(String name) {
         return context.view.getElement(name);
     }
@@ -191,16 +198,6 @@ public abstract class AbstractViewInput implements ViewInput {
     
     protected final Manager getManager(String name) {
         return context.getManager(name);
-    }
-    
-    private final ComponentEntry getTableEntry(String name) {
-        ComponentEntry entry = getViewComponents().entries.get(name);
-        TableToolData tabletool = (TableToolData)entry.data;
-        
-        if (tabletool != null)
-            return entry;
-        
-        throw new RuntimeException(name.concat(" is an invalid tabletool."));
     }
     
     private final ViewComponents getViewComponents() {
@@ -257,24 +254,21 @@ public abstract class AbstractViewInput implements ViewInput {
         area.add(line);
     }
     
-    private final ReportToolEntry reportentryget(String report) {
-        return context.getView().getComponents().reporttools.get(report);
-    }
-    
     protected final void reportlistset(
             String report, String field, Map<String, Object> values) {
-        ReportToolEntry entry = reportentryget(report);
+        ComponentEntry entry = getComponentEntry(report);
         if (entry == null)
             throw new RuntimeException(new StringBuilder(report).
                     append(" is an invalid report.").toString());
-        entry.data.input.items.get(field).values = values;
+        ((ReportToolData)entry.data).input.items.get(field).values = values;
+        entry.update = true;
     }
     
     protected final void reportlistset(
             String report, String field, ExtendedObject[] objects) {
         Map<String, Object> values;
         Object value;
-        ReportToolEntry entry = reportentryget(report);
+        ComponentEntry entry = getComponentEntry(report);
         if (entry == null)
             throw new RuntimeException(new StringBuilder(report).
                     append(" is an invalid report.").toString());
@@ -283,18 +277,19 @@ public abstract class AbstractViewInput implements ViewInput {
             value = object.get(field);
             values.put(value.toString(), value);
         }
-        entry.data.input.items.get(field).values = values;
+        ((ReportToolData)entry.data).input.items.get(field).values = values;
+        entry.update = true;
     }
     
     protected final void reportset(String report, ExtendedObject object) {
-        ReportToolEntry entry = reportentryget(report);
-        entry.data.input.object = object;
+        ComponentEntry entry = getComponentEntry(report);
+        ((ReportToolData)entry.data).input.object = object;
         entry.update = true;
     }
     
     protected final void reportset(String report, ExtendedObject[] items) {
-        ReportToolEntry entry = reportentryget(report);
-        entry.data.output.objects = items;
+        ComponentEntry entry = getComponentEntry(report);
+        ((ReportToolData)entry.data).output.objects = items;
         entry.update = true;
     }
     
@@ -314,14 +309,14 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected final void tableclear(String table) {
-        ComponentEntry entry = getTableEntry(table);
+        ComponentEntry entry = getComponentEntry(table);
         ((TableToolData)entry.data).clear();
         entry.update = !init;
     }
     
     protected final TableToolItem tableitemadd(
             String table, ExtendedObject object) {
-        ComponentEntry entry = getTableEntry(table);
+        ComponentEntry entry = getComponentEntry(table);
         TableToolItem item = ((TableToolData)entry.data).add(object);
         entry.update = !init;
         return item;

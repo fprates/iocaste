@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common.reporttool;
 
+import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
@@ -8,7 +9,7 @@ import org.iocaste.shell.common.DataItem;
 public class ReportToolInputRenderer {
     private static final String SUFFIX = "_report_input";
     
-    public static final String getInputFormName(ReportToolData data) {
+    public static final String getInputFormName(AbstractComponentData data) {
         return data.name.concat(SUFFIX);
     }
     

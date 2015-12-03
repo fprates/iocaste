@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common.reporttool;
 
 import org.iocaste.appbuilder.common.AbstractComponentData;
+import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 
 public class ReportToolData extends AbstractComponentData {
@@ -10,8 +11,9 @@ public class ReportToolData extends AbstractComponentData {
     public String nsreference;
     public ReportToolStage input, output;
     
-    public ReportToolData() {
+    public ReportToolData(PageBuilderContext context) {
         super(ViewSpecItem.TYPES.REPORT_TOOL);
+        this.context = context;
         stage = OUTPUT;
         input = new ReportToolStage(this);
         output = new ReportToolStage(this);

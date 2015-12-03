@@ -2,23 +2,17 @@ package org.iocaste.appbuilder.common.reporttool;
 
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.AbstractComponentTool;
+import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ModelBuilder;
-import org.iocaste.appbuilder.common.tabletool.AbstractTableHandler;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.DataForm;
 
-public class ReportTool {
-    private ReportToolData data;
+public class ReportTool extends AbstractComponentTool {
     
-    public ReportTool(ReportToolData data) {
-        this.data = data;
-        if (data.isInput())
-            ReportToolInputRenderer.run(data);
-        else
-            ReportToolOutputRenderer.run(data);
-        
-        refresh();
+    public ReportTool(ComponentEntry entry) {
+        super(entry);
     }
     
     public static final DocumentModel buildModel(ReportToolData data) {
@@ -36,15 +30,17 @@ public class ReportTool {
     }
     
     private DataForm getDataForm() {
-        return data.context.view.getElement(
-                ReportToolInputRenderer.getInputFormName(data));
+        return entry.data.context.view.getElement(
+                ReportToolInputRenderer.getInputFormName(entry.data));
     }
     
     public final ExtendedObject getInput() {
         return getDataForm().getObject();
     }
     
+    @Override
     public final void refresh() {
+        ReportToolData data = (ReportToolData)entry.data;
         if (data.isInput()) {
             if (data.input.object != null)
                 getDataForm().setObject(data.input.object);
@@ -52,17 +48,18 @@ public class ReportTool {
                 getDataForm().clearInputs();
         } else {
             data.output.ttdata.set(data.output.objects);
-            AbstractTableHandler.setObject(
-                    data.output.tabletool, data.output.ttdata);
+            data.output.tabletool.refresh();
         }
     }
-    
-//    public final void visible(String... columns) {
-//        TableTool
-//        for (TableColumn column : table.getColumns())
-//            column.setVisible(false);
-//        
-//        for (String column : columns)
-//            table.getColumn(column).setVisible(true);
-//    }
+
+    @Override
+    public void run() {
+        ReportToolData data = (ReportToolData)entry.data;
+        if (data.isInput())
+            ReportToolInputRenderer.run(data);
+        else
+            ReportToolOutputRenderer.run(data);
+        
+        refresh();
+    }
 }

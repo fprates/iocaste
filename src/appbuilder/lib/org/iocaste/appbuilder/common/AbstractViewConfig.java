@@ -123,7 +123,7 @@ public abstract class AbstractViewConfig implements ViewConfig {
      * @return
      */
     protected final ReportToolData getReportTool(String name) {
-        return getViewComponents().reporttools.get(name).data;
+        return getViewComponents().getComponentData(name);
     }
     
     /**

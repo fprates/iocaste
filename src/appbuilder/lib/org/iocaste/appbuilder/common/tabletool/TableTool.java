@@ -337,6 +337,11 @@ public class TableTool extends AbstractComponentTool {
         extcontext.data.topline = topline;
         move(extcontext, items);
     }
+
+    @Override
+    public void refresh() {
+        AbstractTableHandler.setObject(this, (TableToolData)entry.data);
+    }
     
     /**
      * 
@@ -354,6 +359,44 @@ public class TableTool extends AbstractComponentTool {
             items.remove(i + extcontext.data.topline);
         }
         save(extcontext, items);
+    }
+
+    @Override
+    public void run() {
+        TableToolData data = (TableToolData)entry.data;
+        
+        if (data.actions != null)
+            for (String action : data.actions)
+                actions.put(action, new CustomAction(this, data, action));
+        
+        for (TableToolAction action : new TableToolAction[] {
+                new SelectAllAction(this, data),
+                new DeselectAllAction(this, data),
+                new AcceptAction(this, data),
+                new AddAction(this, data),
+                new RemoveAction(this, data),
+                new FirstAction(this, data),
+                new PreviousAction(this, data),
+                new NextAction(this, data),
+                new LastAction(this, data)
+        })
+            actions.put(action.getAction(), action);
+        
+        extcontext.data = data;
+        extcontext.htmlname = data.name.concat("_table");
+        setHtmlName(extcontext.htmlname);
+        setTableData(data);
+        TableRender.run(this, context.function, extcontext);
+        installValidators(extcontext);
+        
+        if (data.model != null)
+            model = new Documents(context.function).getModel(data.model);
+        else
+            model = data.refmodel;
+        
+        for (String key : actions.keySet())
+            if (actions.get(key).isMarkable())
+                getActionElement(key).setVisible(extcontext.data.mark);
     }
 
     private final void save(Context context, List<TableToolItem> ttitems) {
@@ -459,49 +502,6 @@ public class TableTool extends AbstractComponentTool {
     public final int size() {
         Context extcontext = getExtendedContext();
         return extcontext.table.size();
-    }
-
-    @Override
-    public void refresh() {
-        AbstractTableHandler.setObject(this, (TableToolData)entry.data);
-    }
-
-    @Override
-    public void run() {
-        TableToolData data = (TableToolData)entry.data;
-        
-        if (data.actions != null)
-            for (String action : data.actions)
-                actions.put(action, new CustomAction(this, data, action));
-        
-        for (TableToolAction action : new TableToolAction[] {
-                new SelectAllAction(this, data),
-                new DeselectAllAction(this, data),
-                new AcceptAction(this, data),
-                new AddAction(this, data),
-                new RemoveAction(this, data),
-                new FirstAction(this, data),
-                new PreviousAction(this, data),
-                new NextAction(this, data),
-                new LastAction(this, data)
-        })
-            actions.put(action.getAction(), action);
-        
-        extcontext.data = data;
-        extcontext.htmlname = data.name.concat("_table");
-        setHtmlName(extcontext.htmlname);
-        setTableData(data);
-        TableRender.run(this, context.function, extcontext);
-        installValidators(extcontext);
-        
-        if (data.model != null)
-            model = new Documents(context.function).getModel(data.model);
-        else
-            model = data.refmodel;
-        
-        for (String key : actions.keySet())
-            if (actions.get(key).isMarkable())
-                getActionElement(key).setVisible(extcontext.data.mark);
     }
 }
 
