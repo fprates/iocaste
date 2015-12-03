@@ -67,20 +67,4 @@ public class PageBuilderContext extends AbstractContext {
         viewcontexts.put(name, context);
         return context;
     }
-    
-    /**
-     * 
-     * @return
-     */
-    public final boolean isInputUpdatable() {
-        return getView().isInputUpdatable();
-    }
-    
-    /**
-     * 
-     * @param inputupdate
-     */
-    public final void setInputUpdate(boolean inputupdate) {
-        getView().setInputUpdate(inputupdate);
-    }
 }

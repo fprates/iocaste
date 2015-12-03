@@ -32,23 +32,17 @@ public abstract class AbstractViewInput implements ViewInput {
     
     private final void addtablearray(
             String table, ExtendedObject[] objects) {
-        ComponentEntry entry = getComponentEntry(table);
-        ((TableToolData)entry.data).set(objects);
-        entry.update = !init;
+        ((TableToolData)getComponentData(table)).set(objects);
     }
     
     private final void addtablecollection(
             String table, Collection<ExtendedObject> objects) {
-        ComponentEntry entry = getComponentEntry(table);
-        ((TableToolData)entry.data).set(objects);
-        entry.update = !init;
+        ((TableToolData)getComponentData(table)).set(objects);
     }
     
     private final void addtableitems(
             String table, List<TableToolItem> items) {
-        ComponentEntry entry = getComponentEntry(table);
-        ((TableToolData)entry.data).set(items);
-        entry.update = !init;
+        ((TableToolData)getComponentData(table)).set(items);
     }
     
     private DashboardComponent dbget(String dashboard, String name) {
@@ -102,16 +96,6 @@ public abstract class AbstractViewInput implements ViewInput {
         dbget(dashboard, name).add(key, value);
     }
     
-    private final ComponentEntry dfget(String name) {
-        ComponentEntry entry;
-        
-        entry = context.getView().getComponents().entries.get(name);
-        if (entry == null)
-            throw new RuntimeException(
-                    name.concat(" is an invalid dataform component."));
-        return entry;
-    }
-    
     protected final void dflistset(
             String form, String item, ExtendedObject[] objects) {
         dflistset(form, item, objects, item);
@@ -120,9 +104,8 @@ public abstract class AbstractViewInput implements ViewInput {
     protected final void dflistset(
             String form, String item, ExtendedObject[] objects, String field) {
         Object value;
-        ComponentEntry entry = dfget(form);
-        DataFormToolItem dfitem =
-                ((DataFormToolData)entry.data).itemInstance(item);
+        DataFormToolItem dfitem = ((DataFormToolData)getComponentData(form)).
+                itemInstance(item);
         
         if (dfitem.values == null)
             dfitem.values = new LinkedHashMap<>();
@@ -131,33 +114,27 @@ public abstract class AbstractViewInput implements ViewInput {
             value = object.get(field);
             dfitem.values.put(value.toString(), value);
         }
-        entry.update = true;
     }
     
     protected final void dflistset(
             String form, String item, Map<String, Object> values) {
-        ComponentEntry entry = dfget(form);
-        ((DataFormToolData)entry.data).itemInstance(item).values = values;
-        entry.update = true;
+        ((DataFormToolData)
+                getComponentData(form)).itemInstance(item).values = values;
     }
     
     protected final void dfset(String form, String item, Object value) {
-        ComponentEntry entry = dfget(form);
-        ((DataFormToolData)entry.data).itemInstance(item).value = value;
-        entry.update = true;
+        ((DataFormToolData)
+                getComponentData(form)).itemInstance(item).value = value;
     }
     
     protected final void dfset(String form, ExtendedObject object) {
-        ComponentEntry entry = dfget(form);
-        ((DataFormToolData)entry.data).object = object;
-        entry.update = true;
+        ((DataFormToolData)getComponentData(form)).object = object;
         
     }
     
     protected final void dfkeyset(String form, Object value) {
         DocumentModel model = null;
-        ComponentEntry entry = dfget(form);
-        DataFormToolData df = ((DataFormToolData)entry.data);
+        DataFormToolData df = getComponentData(form);
         
         if (df.model != null)
             model = df.model;
@@ -168,22 +145,21 @@ public abstract class AbstractViewInput implements ViewInput {
             df.itemInstance(key.getModelItemName()).value = value;
             break;
         }
-        entry.update = true;
     }
     
     protected final void dfnsset(String form, Object ns) {
-        ComponentEntry entry = dfget(form);
-        DataFormToolData df = ((DataFormToolData)entry.data);
+        DataFormToolData df = getComponentData(form);
         df.nsItemInstance().value = ns;
-        entry.update = true;
     }
     
     protected abstract void execute(PageBuilderContext context);
     
-    private final ComponentEntry getComponentEntry(String name) {
-        ComponentEntry entry = getViewComponents().entries.get(name);
-        if (entry != null)
-            return entry;
+    @SuppressWarnings("unchecked")
+    private final <T extends AbstractComponentData> T getComponentData(
+            String name) {
+        AbstractComponentData data = getViewComponents().getComponentData(name);
+        if (data != null)
+            return (T)data;
         throw new RuntimeException(name.concat(" is an invalid tabletool."));
     }
     
@@ -256,41 +232,30 @@ public abstract class AbstractViewInput implements ViewInput {
     
     protected final void reportlistset(
             String report, String field, Map<String, Object> values) {
-        ComponentEntry entry = getComponentEntry(report);
-        if (entry == null)
-            throw new RuntimeException(new StringBuilder(report).
-                    append(" is an invalid report.").toString());
-        ((ReportToolData)entry.data).input.items.get(field).values = values;
-        entry.update = true;
+        ((ReportToolData)
+                getComponentData(report)).input.items.get(
+                        field).values = values;
     }
     
     protected final void reportlistset(
             String report, String field, ExtendedObject[] objects) {
         Map<String, Object> values;
         Object value;
-        ComponentEntry entry = getComponentEntry(report);
-        if (entry == null)
-            throw new RuntimeException(new StringBuilder(report).
-                    append(" is an invalid report.").toString());
         values = new LinkedHashMap<>();
         for (ExtendedObject object : objects) {
             value = object.get(field);
             values.put(value.toString(), value);
         }
-        ((ReportToolData)entry.data).input.items.get(field).values = values;
-        entry.update = true;
+        ((ReportToolData)getComponentData(report)).input.items.get(
+                field).values = values;
     }
     
     protected final void reportset(String report, ExtendedObject object) {
-        ComponentEntry entry = getComponentEntry(report);
-        ((ReportToolData)entry.data).input.object = object;
-        entry.update = true;
+        ((ReportToolData)getComponentData(report)).input.object = object;
     }
     
     protected final void reportset(String report, ExtendedObject[] items) {
-        ComponentEntry entry = getComponentEntry(report);
-        ((ReportToolData)entry.data).output.objects = items;
-        entry.update = true;
+        ((ReportToolData)getComponentData(report)).output.objects = items;
     }
     
     protected final void reportset(
@@ -309,16 +274,13 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected final void tableclear(String table) {
-        ComponentEntry entry = getComponentEntry(table);
-        ((TableToolData)entry.data).clear();
-        entry.update = !init;
+        ((TableToolData)getComponentData(table)).clear();
     }
     
     protected final TableToolItem tableitemadd(
             String table, ExtendedObject object) {
-        ComponentEntry entry = getComponentEntry(table);
-        TableToolItem item = ((TableToolData)entry.data).add(object);
-        entry.update = !init;
+        TableToolItem item = ((TableToolData)getComponentData(table)).
+                add(object);
         return item;
     }
     

@@ -36,8 +36,6 @@ public class ImportModel extends AbstractActionHandler {
             object.set("TYPE", item.getDataElement().getType());
             extcontext.modelitems.add(object);
         }
-        
-        inputrefresh();
     }
 
 }

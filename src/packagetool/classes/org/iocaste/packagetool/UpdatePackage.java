@@ -44,6 +44,5 @@ public class UpdatePackage extends AbstractActionHandler {
             message(Const.WARNING, "some.packages.failed");
         else
             message(Const.STATUS, "package.updated");
-        inputrefresh();
     }
 }

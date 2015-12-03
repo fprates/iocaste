@@ -60,9 +60,6 @@ public class Save extends AbstractActionHandler {
             }
         }
         
-        if (extcontext.id == null)
-            inputrefresh();
-        
         extractor.setNS(extcontext.ns);
         extcontext.document = extractor.save();
         extcontext.id = extcontext.document.getKey();

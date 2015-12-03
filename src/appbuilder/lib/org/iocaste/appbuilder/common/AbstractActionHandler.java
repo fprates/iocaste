@@ -232,10 +232,6 @@ public abstract class AbstractActionHandler {
         spec.setInitialized(false);
     }
     
-    protected final void inputrefresh() {
-        context.setInputUpdate(true);
-    }
-    
     protected final ExtendedObject instance(String model) {
         return new ExtendedObject(documents.getModel(model));
     }
@@ -313,20 +309,18 @@ public abstract class AbstractActionHandler {
             viewspec = null;
         }
         
-        if ((rappname == null) && (rpagename != null)) {
-            if ((viewspec != null) && viewspec.isInitialized())
-                context.setInputUpdate(true);
-        } else {
-            if (rviewctx == null) {
-                context.function.keepView();
-                return;
-            }
-            
-            if ((viewspec != null) && rviewctx.isUpdatable())
-                viewspec.setInitialized(false);
-            else
-                context.function.keepView();
+        if ((rappname == null) && (rpagename != null))
+            return;
+        
+        if (rviewctx == null) {
+            context.function.keepView();
+            return;
         }
+        
+        if ((viewspec != null) && rviewctx.isUpdatable())
+            viewspec.setInitialized(false);
+        else
+            context.function.keepView();
     }
     
     protected final ExtendedObject reportinputget(String report) {

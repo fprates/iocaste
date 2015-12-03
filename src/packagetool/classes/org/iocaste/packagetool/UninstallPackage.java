@@ -48,7 +48,6 @@ public class UninstallPackage extends AbstractActionHandler {
             message(Const.WARNING, "some.packages.failed");
         else
             message(Const.STATUS, "package.uninstalled");
-        inputrefresh();
     }
 
     public static final void storeException(Exception e, String pkgname,

@@ -146,7 +146,6 @@ public class BuilderCustomView extends AbstractCustomView {
         viewctx = _context.getView(view);
         components = viewctx.getComponents();
         if (!viewspec.isInitialized()) {
-            _context.setInputUpdate(false);
             _context.view.clear();
             _context.function.unregisterValidators();
             viewspec.run(_context);
@@ -185,16 +184,14 @@ public class BuilderCustomView extends AbstractCustomView {
             return;
         }
         
-        if (_context.isInputUpdatable() && viewinput != null) {
-            _context.setInputUpdate(false);
+        if (viewinput != null) {
             viewinput.run(_context, false);
             for (String key : components.entries.keySet()) {
                 entry = components.entries.get(key);
                 factory = factories.get(entry.data.type);
                 if (factory == null)
                     continue;
-                if (entry.update)
-                    entry.component.refresh();
+                entry.component.refresh();
             }
             
             for (ViewSpecItem item : viewspec.getItems()) {

@@ -50,8 +50,6 @@ public class InstallPackage extends AbstractActionHandler {
             new TaskSelector(context.function).refresh();
             message(Const.STATUS, "package.installed");
         }
-        
-        inputrefresh();
     }
     
 }

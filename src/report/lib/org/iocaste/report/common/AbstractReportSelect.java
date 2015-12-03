@@ -18,14 +18,12 @@ public abstract class AbstractReportSelect extends AbstractActionHandler {
     protected void execute(PageBuilderContext context) throws Exception {
         ReportToolData rtdata;
         
-        inputrefresh();
-        extcontext = getExtendedContext();
-        
         rtdata = new ReportToolData(context);
         rtdata.name = "output";
         data.output.config.config(context, rtdata.output);
         outputmodel = ReportTool.buildModel(rtdata);
         
+        extcontext = getExtendedContext();
         extcontext.object = reportinputget("head");
         extcontext.items.clear();
         select(context);
