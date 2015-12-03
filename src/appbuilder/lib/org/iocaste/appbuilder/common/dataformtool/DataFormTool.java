@@ -120,7 +120,7 @@ public class DataFormTool extends AbstractComponentTool {
                 data.model.getModelItem(name).setSearchHelp(item.sh);
             setItem(data, input, item);
             if (item.ns)
-                dataform.setNSReference(input.getHighHtmlName());
+                dataform.setNSReference(input.getHtmlName());
         }
 
         if (columns == null)

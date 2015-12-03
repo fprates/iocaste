@@ -252,26 +252,6 @@ public class DataForm extends AbstractContainer {
         this.keyrequired = keyrequired;
     }
     
-    /**
-     * Lê a partir de objeto extendido.
-     * @param object object extendido.
-     */
-    public final void setObject(ExtendedObject object) {
-        DataItem item;
-        String name;
-        
-        for (Element element : getElements()) {
-            if (!element.isDataStorable())
-                continue;
-            
-            item = (DataItem)element;
-            name = item.getName();
-            item.set(object.getNS(), object.get(name));
-        }
-        
-        setNS(object.getNS());
-    }
-    
     public final void setNS(Object value) {
         DataItem input = getView().getElement(nsreference);
         input.set(value);
@@ -292,6 +272,27 @@ public class DataForm extends AbstractContainer {
             item = (DataItem)element;
             item.setNSReference(nsreference);
         }
+    }
+    
+    /**
+     * Lê a partir de objeto extendido.
+     * @param object object extendido.
+     */
+    public final void setObject(ExtendedObject object) {
+        DataItem item;
+        String name;
+        
+        for (Element element : getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            
+            item = (DataItem)element;
+            name = item.getName();
+            item.set(object.getNS(), object.get(name));
+        }
+        
+        if (nsreference != null)
+            setNS(object.getNS());
     }
     
     /**
