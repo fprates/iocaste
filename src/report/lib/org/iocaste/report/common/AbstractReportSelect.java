@@ -42,6 +42,15 @@ public abstract class AbstractReportSelect extends AbstractActionHandler {
         return object;
     }
     
+    protected final ExtendedObject reportinputget(String report) {
+        ReportToolData rtdata = data.context.getView().getComponents().
+                getComponentData(report);
+        if (rtdata == null)
+            throw new RuntimeException(new StringBuilder(report).
+                    append(" is an invalid report.").toString());
+        return rtdata.input.object;
+    }
+    
     protected abstract void select(PageBuilderContext context) throws Exception;
     
     public final void setViewerData(ReportViewerData data) {

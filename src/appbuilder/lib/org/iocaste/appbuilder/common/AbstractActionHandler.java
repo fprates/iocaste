@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
-import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
@@ -323,14 +322,6 @@ public abstract class AbstractActionHandler {
             context.function.keepView();
     }
     
-    protected final ExtendedObject reportinputget(String report) {
-        ReportToolData data = components.getComponentData(report);
-        if (data == null)
-            throw new RuntimeException(new StringBuilder(report).
-                    append(" is an invalid report.").toString());
-        return data.input.object;
-    }
-    
     public final void run(AbstractContext context) throws Exception {
         run(context, REDIRECT);
     }
@@ -385,20 +376,29 @@ public abstract class AbstractActionHandler {
         context.view.setFocus(parent.getElement(field));
     }
     
-    protected final ExtendedObject[] tableitemsget(String tabletool) {
+    public static final ExtendedObject[] tableitemsget(TableToolData data) {
         ExtendedObject[] objects;
-        int i = 0;
-        List<TableToolItem> items = ((TableToolData)components.
-                getComponentData(tabletool)).getItems();
+        int i;
+        List<TableToolItem> items = data.getItems();
         
         if (items == null)
             return null;
         
-        objects = new ExtendedObject[items.size()];
+        i = items.size();
+        if (i == 0)
+            return null;
+        
+        objects = new ExtendedObject[i];
+        i = 0;
         for (TableToolItem item : items)
             objects[i++] = item.object;
         
         return objects;
+    }
+    
+    protected final ExtendedObject[] tableitemsget(String tabletool) {
+        TableToolData ttdata = components.getComponentData(tabletool);
+        return tableitemsget(ttdata);
     }
     
     protected final List<ExtendedObject> tableselectedget(String tabletool) {

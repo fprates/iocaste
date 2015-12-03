@@ -2,6 +2,8 @@ package org.iocaste.appbuilder.common.reporttool;
 
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.AbstractActionHandler;
+import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ModelBuilder;
@@ -27,6 +29,21 @@ public class ReportTool extends AbstractComponentTool {
             modelbuilder.add(itemname, item.element);
         }
         return modelbuilder.get();
+    }
+    
+    @Override
+    public final void load(AbstractComponentData data) {
+        ReportToolData rtdata = (ReportToolData)entry.data;
+        
+        if (rtdata.isInput()) {
+            rtdata.input.toolcomponent.load(rtdata.input.tooldata);
+            rtdata.input.object =
+                    ((DataFormToolData)rtdata.input.tooldata).object;
+        } else {
+            rtdata.output.toolcomponent.load(rtdata.output.tooldata);
+            rtdata.output.objects = AbstractActionHandler.
+                    tableitemsget((TableToolData)rtdata.output.tooldata);
+        }
     }
     
     @Override

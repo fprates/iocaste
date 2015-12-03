@@ -8,8 +8,6 @@ import java.util.Set;
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
-import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.tabletool.actions.AcceptAction;
 import org.iocaste.appbuilder.common.tabletool.actions.AddAction;
 import org.iocaste.appbuilder.common.tabletool.actions.DeselectAllAction;
@@ -42,9 +40,7 @@ public class TableTool extends AbstractComponentTool {
     public static final byte CONTINUOUS_DISPLAY = 3;
     public static final byte DISABLED = 0;
     public static final byte ENABLED = 1;
-    private AbstractContext context;
     private Context extcontext;
-    private String name;
     private DocumentModel model;
     private Map<String, TableToolAction> actions;
     
@@ -55,8 +51,6 @@ public class TableTool extends AbstractComponentTool {
      */
     public TableTool(ComponentEntry entry) {
         super(entry);
-        this.context = entry.data.context;
-        this.name = entry.data.name;
         extcontext = new Context();
         actions = new LinkedHashMap<>();
     }
@@ -65,7 +59,6 @@ public class TableTool extends AbstractComponentTool {
      * 
      */
     public final void accept() {
-        Context extcontext = getExtendedContext();
         getActionElement("accept").setVisible(false);
         getActionElement("add").setVisible(true);
         getActionElement("remove").setVisible(true);
@@ -76,7 +69,6 @@ public class TableTool extends AbstractComponentTool {
      * 
      */
     public final void add() {
-        Context extcontext = getExtendedContext();
         switch (extcontext.data.mode) {
         case TableTool.CONTINUOUS_UPDATE:
             extcontext.data.vlines++;
@@ -96,7 +88,7 @@ public class TableTool extends AbstractComponentTool {
      * 
      */
     public final void additems() {
-        additems(getExtendedContext(), null);
+        additems(extcontext, null);
     }
     
     /**
@@ -118,13 +110,11 @@ public class TableTool extends AbstractComponentTool {
      * 
      */
     public final void clear() {
-        Context context = getExtendedContext();
-        context.table.clear();
-        context.data.last = 0;
+        extcontext.table.clear();
+        extcontext.data.last = 0;
     }
     
     public final void first() {
-        Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
 
         save(extcontext, items);
@@ -172,7 +162,7 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final Element getActionElement(String name) {
-        return context.view.getElement(actions.get(name).getName());
+        return entry.data.context.view.getElement(actions.get(name).getName());
     }
     
     /**
@@ -180,23 +170,7 @@ public class TableTool extends AbstractComponentTool {
      * @return
      */
     public final AbstractContext getContext() {
-        return context;
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    private final Context getExtendedContext() {
-        ViewContext viewcontext; 
-
-        extcontext.table = getElement();
-        if (name == null)
-            return extcontext;
-        
-        viewcontext = ((PageBuilderContext)context).getView();
-        extcontext.data = viewcontext.getComponents().getComponentData(name);
-        return extcontext;
+        return entry.data.context;
     }
     
     /**
@@ -204,7 +178,6 @@ public class TableTool extends AbstractComponentTool {
      * @return
      */
     public final Set<TableItem> getItems() {
-        Context extcontext = getExtendedContext();
         return extcontext.table.getItems();
     }
     
@@ -223,14 +196,13 @@ public class TableTool extends AbstractComponentTool {
             
             for (TableItem item : extcontext.table.getItems()) {
                 input = item.get(name);
-                context.function.validate(input, column.validator); 
+                entry.data.context.function.validate(input, column.validator);
             }
         }
     }
     
     public final void last() {
         int pages;
-        Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
         
         save(extcontext, items);
@@ -243,7 +215,6 @@ public class TableTool extends AbstractComponentTool {
     @Override
     public final void load(AbstractComponentData componentdata) {
         TableToolData data = (TableToolData)componentdata;
-        Context extcontext = getExtendedContext();
         List<TableToolItem> ttitems;
         TableToolItem ttitem;
         int startline, i, ttitemssize, itemsdif;
@@ -310,7 +281,6 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void next() {
-        Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
         int topline = extcontext.data.topline + extcontext.data.vlines;
         
@@ -322,7 +292,6 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void previous() {
-        Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
         int topline = extcontext.data.topline - extcontext.data.vlines;
         
@@ -343,7 +312,6 @@ public class TableTool extends AbstractComponentTool {
      */
     public final void remove() {
         int i = 0;
-        Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
         for (TableItem item : extcontext.table.getItems()) {
             if (!item.isSelected()) {
@@ -380,12 +348,12 @@ public class TableTool extends AbstractComponentTool {
         extcontext.data = data;
         extcontext.htmlname = data.name.concat("_table");
         setHtmlName(extcontext.htmlname);
-        setTableData(data);
-        TableRender.run(this, context.function, extcontext);
+        TableRender.run(this, entry.data.context.function, extcontext);
         installValidators(extcontext);
         
         if (data.model != null)
-            model = new Documents(context.function).getModel(data.model);
+            model = new Documents(
+                    entry.data.context.function).getModel(data.model);
         else
             model = data.refmodel;
         
@@ -411,7 +379,6 @@ public class TableTool extends AbstractComponentTool {
     }
     
     public final void selectAll(boolean mark) {
-        Context extcontext = getExtendedContext();
         List<TableToolItem> items = extcontext.data.getItems();
         
         for (TableItem item : extcontext.table.getItems())
@@ -429,8 +396,8 @@ public class TableTool extends AbstractComponentTool {
      * @param object
      */
     public final void set(TableItem item, ExtendedObject object) {
-        Context extcontext = getExtendedContext();
-        SearchHelp.setTableItem(context, extcontext.table, item, object);
+        SearchHelp.setTableItem(
+                entry.data.context, extcontext.table, item, object);
     }
     
     public final void setLineProperties(
@@ -457,27 +424,9 @@ public class TableTool extends AbstractComponentTool {
      * @param objects
      */
     public final void setObjects(ExtendedObject[] objects) {
-        Context extcontext = getExtendedContext();
         extcontext.data.set(objects);
         AbstractTableHandler.setObject(this, extcontext.data);
         installValidators(extcontext);
-    }
-    
-    /**
-     * 
-     * @param data
-     */
-    public final void setTableData(TableToolData data) {
-        PageBuilderContext context;
-        Context extcontext = getExtendedContext();
-        
-        if (name == null) {
-            extcontext.data = data;
-        } else {
-            context = (PageBuilderContext)this.context;
-            context.getView().getComponents().entries.get(data.name).data =
-                    data;
-        }
     }
     
     public final void setVisibleNavigation(
@@ -495,7 +444,6 @@ public class TableTool extends AbstractComponentTool {
      * @return
      */
     public final int size() {
-        Context extcontext = getExtendedContext();
         return extcontext.table.size();
     }
 }

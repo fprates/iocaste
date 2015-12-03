@@ -63,7 +63,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
             dfentry.data = dfdata;
             rtdata.input.toolcomponent = new DataFormTool(dfentry);
         } else {
-            ttdata = (TableToolData)rtdata.input.tooldata;
+            ttdata = (TableToolData)rtdata.output.tooldata;
             ttdata.context = entry.data.context;
             ttdata.name = entry.data.name;
             ttdata.mode = TableTool.DISPLAY;
