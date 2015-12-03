@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
@@ -179,8 +179,8 @@ public class DocumentExtractor {
     
     public final ComplexDocument save() {
         int i;
+        TableToolData ttdata;
         List<TableToolItem> ttitems;
-        TableToolEntry entry;
         DocumentModel model;
         String to, source;
         ExtendedObject head;
@@ -231,8 +231,8 @@ public class DocumentExtractor {
                 break;
             case DataConversion.TABLETOOL:
                 source = (String)conversion.getSource();
-                entry = components.tabletools.get(source);
-                ttitems = entry.data.getItems();
+                ttdata = components.getComponentData(source);
+                ttitems = ttdata.getItems();
                 if (ttitems == null)
                     continue;
                 

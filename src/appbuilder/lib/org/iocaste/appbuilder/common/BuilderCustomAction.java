@@ -3,7 +3,6 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.ViewCustomAction;
 
@@ -29,6 +28,7 @@ public class BuilderCustomAction implements ViewCustomAction {
 
     @Override
     public final void execute(AbstractContext context) throws Exception {
+        ViewComponents components;
         String view = context.view.getPageName();
         AbstractActionHandler handler = handlers.get(view).
                 get(context.action);
@@ -36,16 +36,10 @@ public class BuilderCustomAction implements ViewCustomAction {
         if (handler == null)
             throw new RuntimeException(
                     context.action.concat(" isn't a valid action."));
-        
-        loadTableObjects((PageBuilderContext)context);
+
+        components = ((PageBuilderContext)context).getView().getComponents();
+        for (ComponentEntry entry : components.entries.values())
+            entry.component.load(entry.data);
         handler.run(context);
-    }
-    
-    private final void loadTableObjects(PageBuilderContext context) {
-        ViewComponents components = context.
-                getView(context.view.getPageName()).getComponents();
-        
-        for (TableToolEntry entry : components.tabletools.values())
-            entry.component.refresh(entry.data);
     }
 }

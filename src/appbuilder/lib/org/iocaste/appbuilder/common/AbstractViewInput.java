@@ -12,7 +12,6 @@ import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
-import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
@@ -33,22 +32,22 @@ public abstract class AbstractViewInput implements ViewInput {
     
     private final void addtablearray(
             String table, ExtendedObject[] objects) {
-        TableToolEntry entry = getTableEntry(table);
-        entry.data.set(objects);
+        ComponentEntry entry = getTableEntry(table);
+        ((TableToolData)entry.data).set(objects);
         entry.update = !init;
     }
     
     private final void addtablecollection(
             String table, Collection<ExtendedObject> objects) {
-        TableToolEntry entry = getTableEntry(table);
-        entry.data.set(objects);
+        ComponentEntry entry = getTableEntry(table);
+        ((TableToolData)entry.data).set(objects);
         entry.update = !init;
     }
     
     private final void addtableitems(
             String table, List<TableToolItem> items) {
-        TableToolEntry entry = getTableEntry(table);
-        entry.data.set(items);
+        ComponentEntry entry = getTableEntry(table);
+        ((TableToolData)entry.data).set(items);
         entry.update = !init;
     }
     
@@ -194,9 +193,9 @@ public abstract class AbstractViewInput implements ViewInput {
         return context.getManager(name);
     }
     
-    private final TableToolEntry getTableEntry(String name) {
-        TableToolEntry entry = getViewComponents().tabletools.get(name);
-        TableToolData tabletool = entry.data;
+    private final ComponentEntry getTableEntry(String name) {
+        ComponentEntry entry = getViewComponents().entries.get(name);
+        TableToolData tabletool = (TableToolData)entry.data;
         
         if (tabletool != null)
             return entry;
@@ -315,15 +314,15 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected final void tableclear(String table) {
-        TableToolEntry entry = getTableEntry(table);
-        entry.data.clear();
+        ComponentEntry entry = getTableEntry(table);
+        ((TableToolData)entry.data).clear();
         entry.update = !init;
     }
     
     protected final TableToolItem tableitemadd(
             String table, ExtendedObject object) {
-        TableToolEntry entry = getTableEntry(table);
-        TableToolItem item = entry.data.add(object);
+        ComponentEntry entry = getTableEntry(table);
+        TableToolItem item = ((TableToolData)entry.data).add(object);
         entry.update = !init;
         return item;
     }

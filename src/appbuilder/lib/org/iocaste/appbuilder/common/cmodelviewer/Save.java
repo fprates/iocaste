@@ -50,7 +50,7 @@ public class Save extends AbstractActionHandler {
             conversion.tbsource(tbname);
             extractor.add(conversion);
 
-            tabletool = components.tabletools.get(tbname).data;
+            tabletool = components.getComponentData(tbname);
             for (DocumentModelItem item : model.getItens()) {
                 itemname = item.getName();
                 if ((tabletool.itemcolumn != null &&

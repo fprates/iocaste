@@ -1,10 +1,10 @@
 package org.iocaste.appbuilder.common.factories;
 
+import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ViewComponents;
-import org.iocaste.appbuilder.common.tabletool.AbstractTableHandler;
+import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
-import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.StandardContainer;
 
@@ -23,14 +23,16 @@ public class TableToolFactory extends AbstractSpecFactory {
 
     @Override
     public final void generate(ViewComponents components) {
-        for (TableToolEntry entry : components.tabletools.values())
-            entry.component = new TableTool(context, entry.data.name);
+        for (ComponentEntry entry : components.entries.values())
+            if (entry.data.type.equals(ViewSpecItem.TYPES.TABLE_TOOL))
+                entry.component = new TableTool(entry);
     }
     
     @Override
     public final void update(ViewComponents components) {
-        for (TableToolEntry entry : components.tabletools.values())
-            if (entry.update)
-                AbstractTableHandler.setObject(entry.component, entry.data);
+        for (ComponentEntry entry : components.entries.values())
+            if (entry.update &&
+                    entry.data.type.equals(ViewSpecItem.TYPES.TABLE_TOOL))
+                entry.component.refresh();
     }
 }

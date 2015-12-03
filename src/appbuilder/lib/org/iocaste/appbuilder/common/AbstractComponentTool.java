@@ -31,6 +31,8 @@ public abstract class AbstractComponentTool {
         return null;
     }
     
+    public void load(AbstractComponentData data) { }
+    
     public abstract void refresh();
     
     public abstract void run();

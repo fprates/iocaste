@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common.dataformtool;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.shell.common.Const;
@@ -32,6 +33,12 @@ public class DataFormTool extends AbstractComponentTool {
             if (dfdata.items.get(key).ns)
                 return df.get(key).getHtmlName();
         return null;
+    }
+    
+    @Override
+    public final void load(AbstractComponentData data) {
+        DataForm dataform = getElement();
+        ((DataFormToolData)data).object = dataform.getObject();
     }
     
     @Override

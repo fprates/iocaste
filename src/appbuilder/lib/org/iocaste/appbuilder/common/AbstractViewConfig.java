@@ -132,7 +132,7 @@ public abstract class AbstractViewConfig implements ViewConfig {
      * @return
      */
     protected final TableToolData getTableTool(String name) {
-        return getViewComponents().tabletools.get(name).data;
+        return getViewComponents().getComponentData(name);
     }
     
     /**
@@ -140,7 +140,7 @@ public abstract class AbstractViewConfig implements ViewConfig {
      * @return
      */
     private final ViewComponents getViewComponents() {
-        return context.getView(context.view.getPageName()).getComponents();
+        return context.getView().getComponents();
     }
     
     /*

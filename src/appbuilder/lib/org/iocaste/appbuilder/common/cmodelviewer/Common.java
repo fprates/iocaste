@@ -74,7 +74,7 @@ public class Common {
         models = griddata.cmodel.getItems();
         for (String name : models.keySet()) {
             model = models.get(name);
-            tabletool = components.tabletools.get(name.concat("_table")).data;
+            tabletool = components.getComponentData(name.concat("_table"));
             tabletool.model = model.getName();
             tabletool.mode = griddata.mode;
             tabletool.mark = griddata.mark;

@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.appbuilder.common.AbstractComponentData;
+import org.iocaste.appbuilder.common.AbstractComponentTool;
+import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.tabletool.actions.AcceptAction;
@@ -34,7 +37,7 @@ import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Validator;
 import org.iocaste.shell.common.View;
 
-public class TableTool {
+public class TableTool extends AbstractComponentTool {
     public static final byte CONTINUOUS_UPDATE = 0;
     public static final byte UPDATE = 1;
     public static final byte DISPLAY = 2;
@@ -46,14 +49,10 @@ public class TableTool {
     private String name;
     private DocumentModel model;
     private Map<String, TableToolAction> actions;
-    
-    public TableTool(PageBuilderContext context, String name) {
-        this(context, context.getView().getComponents().
-                tabletools.get(name).data, name);
-    }
-    
+
     public TableTool(TableToolData data) {
-        this(data.context, data, null);
+        this(new ComponentEntry());
+        entry.data = data;
     }
     
     /**
@@ -61,43 +60,12 @@ public class TableTool {
      * @param context
      * @param data
      */
-    public TableTool(AbstractContext context, TableToolData data, String name) {
-        this.context = context;
-        this.name = name;
+    public TableTool(ComponentEntry entry) {
+        super(entry);
+        this.context = entry.data.context;
+        this.name = entry.data.name;
         extcontext = new Context();
         actions = new LinkedHashMap<>();
-        
-        if (data.actions != null)
-            for (String action : data.actions)
-                actions.put(action, new CustomAction(this, data, action));
-        
-        for (TableToolAction action : new TableToolAction[] {
-                new SelectAllAction(this, data),
-                new DeselectAllAction(this, data),
-                new AcceptAction(this, data),
-                new AddAction(this, data),
-                new RemoveAction(this, data),
-                new FirstAction(this, data),
-                new PreviousAction(this, data),
-                new NextAction(this, data),
-                new LastAction(this, data)
-        })
-            actions.put(action.getAction(), action);
-        
-        extcontext.data = data;
-        
-        setTableData(data);
-        TableRender.run(this, context.function, extcontext);
-        installValidators(extcontext);
-        
-        if (data.model != null)
-            model = new Documents(context.function).getModel(data.model);
-        else
-            model = data.refmodel;
-        
-        for (String key : actions.keySet())
-            if (actions.get(key).isMarkable())
-                getActionElement(key).setVisible(extcontext.data.mark);
     }
     
     /**
@@ -239,13 +207,12 @@ public class TableTool {
     private final Context getExtendedContext() {
         ViewContext viewcontext; 
 
-        extcontext.table = context.view.getElement(
-                extcontext.data.name.concat("_table"));
+        extcontext.table = getElement();
         if (name == null)
             return extcontext;
         
         viewcontext = ((PageBuilderContext)context).getView();
-        extcontext.data = viewcontext.getComponents().tabletools.get(name).data;
+        extcontext.data = viewcontext.getComponents().getComponentData(name);
         return extcontext;
     }
     
@@ -288,6 +255,45 @@ public class TableTool {
         pages = items.size() / extcontext.data.topline;
         extcontext.data.topline *= pages;
         move(extcontext, items);
+    }
+    
+    @Override
+    public final void load(AbstractComponentData componentdata) {
+        TableToolData data = (TableToolData)componentdata;
+        Context extcontext = getExtendedContext();
+        List<TableToolItem> ttitems;
+        TableToolItem ttitem;
+        int startline, i, ttitemssize, itemsdif;
+        Set<TableItem> items = extcontext.table.getItems();
+        int itemssize = items.size();
+        
+        if (itemssize == 0)
+            return;
+        
+        ttitems = data.getItems();
+        if (data.vlines > 0) {
+            startline = data.topline;
+        } else {
+            startline = 0;
+        }
+        
+        ttitemssize = ttitems.size();
+        itemsdif = itemssize - ttitemssize;
+        if (itemsdif > 0)
+            for (int j = 0; j < itemsdif; j++)
+                ttitems.add(new TableToolItem(data));
+
+        i = startline;
+        for (TableItem item : items) {
+            try {
+                ttitem = ttitems.get(i++);
+            } catch (IndexOutOfBoundsException e) {
+                break;
+            }
+            ttitem.object = get(data, item);
+            ttitem.selected = item.isSelected();
+            ttitem.set(item);
+        }
     }
     
     private final void move(Context context, List<TableToolItem> ttitems) {
@@ -342,43 +348,6 @@ public class TableTool {
         save(extcontext, items);
         extcontext.data.topline = topline;
         move(extcontext, items);
-    }
-    
-    public final void refresh(TableToolData data) {
-        Context extcontext = getExtendedContext();
-        List<TableToolItem> ttitems;
-        TableToolItem ttitem;
-        int startline, i, ttitemssize, itemsdif;
-        Set<TableItem> items = extcontext.table.getItems();
-        int itemssize = items.size();
-        
-        if (itemssize == 0)
-            return;
-        
-        ttitems = data.getItems();
-        if (data.vlines > 0) {
-            startline = data.topline;
-        } else {
-            startline = 0;
-        }
-        
-        ttitemssize = ttitems.size();
-        itemsdif = itemssize - ttitemssize;
-        if (itemsdif > 0)
-            for (int j = 0; j < itemsdif; j++)
-                ttitems.add(new TableToolItem(data));
-
-        i = startline;
-        for (TableItem item : items) {
-            try {
-                ttitem = ttitems.get(i++);
-            } catch (IndexOutOfBoundsException e) {
-                break;
-            }
-            ttitem.object = get(data, item);
-            ttitem.selected = item.isSelected();
-            ttitem.set(item);
-        }
     }
     
     /**
@@ -480,7 +449,8 @@ public class TableTool {
             extcontext.data = data;
         } else {
             context = (PageBuilderContext)this.context;
-            context.getView().getComponents().set(data);
+            context.getView().getComponents().entries.get(data.name).data =
+                    data;
         }
     }
     
@@ -501,6 +471,49 @@ public class TableTool {
     public final int size() {
         Context extcontext = getExtendedContext();
         return extcontext.table.size();
+    }
+
+    @Override
+    public void refresh() {
+        AbstractTableHandler.setObject(this, (TableToolData)entry.data);
+    }
+
+    @Override
+    public void run() {
+        TableToolData data = (TableToolData)entry.data;
+        
+        if (data.actions != null)
+            for (String action : data.actions)
+                actions.put(action, new CustomAction(this, data, action));
+        
+        for (TableToolAction action : new TableToolAction[] {
+                new SelectAllAction(this, data),
+                new DeselectAllAction(this, data),
+                new AcceptAction(this, data),
+                new AddAction(this, data),
+                new RemoveAction(this, data),
+                new FirstAction(this, data),
+                new PreviousAction(this, data),
+                new NextAction(this, data),
+                new LastAction(this, data)
+        })
+            actions.put(action.getAction(), action);
+        
+        extcontext.data = data;
+        
+        setTableData(data);
+        TableRender.run(this, context.function, extcontext);
+        setHtmlName(data.name.concat("_table"));
+        installValidators(extcontext);
+        
+        if (data.model != null)
+            model = new Documents(context.function).getModel(data.model);
+        else
+            model = data.refmodel;
+        
+        for (String key : actions.keySet())
+            if (actions.get(key).isMarkable())
+                getActionElement(key).setVisible(extcontext.data.mark);
     }
 }
 

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
-import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
@@ -398,8 +398,8 @@ public abstract class AbstractActionHandler {
     protected final ExtendedObject[] tableitemsget(String tabletool) {
         ExtendedObject[] objects;
         int i = 0;
-        TableToolEntry entry = components.tabletools.get(tabletool);
-        List<TableToolItem> items = entry.data.getItems();
+        List<TableToolItem> items = ((TableToolData)components.
+                getComponentData(tabletool)).getItems();
         
         if (items == null)
             return null;
@@ -413,8 +413,8 @@ public abstract class AbstractActionHandler {
     
     protected final List<ExtendedObject> tableselectedget(String tabletool) {
         List<ExtendedObject> objects;
-        TableToolEntry entry = components.tabletools.get(tabletool);
-        List<TableToolItem> items = entry.data.getItems();
+        List<TableToolItem> items = ((TableToolData)components.
+                getComponentData(tabletool)).getItems();
         
         if (items == null)
             return null;

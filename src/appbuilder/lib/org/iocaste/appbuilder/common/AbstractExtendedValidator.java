@@ -2,7 +2,8 @@ package org.iocaste.appbuilder.common;
 
 import java.util.Set;
 
-import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -48,18 +49,20 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
         Object value;
         TableToolItem ttitem;
         ViewComponents components;
-        TableToolEntry entry;
         Set<TableItem> items;
+        TableTool tabletool;
+        TableToolData ttdata;
         String name = input.getName();
         String htmlname = input.getHtmlName();
-        ViewContext viewctx = context.getView(context.view.getPageName());
+        ViewContext viewctx = context.getView();
         
         if (viewctx == null)
             return null;
         
         components = viewctx.getComponents();
-        entry = components.tabletools.get(tname);
-        items = entry.component.getItems();
+        tabletool = components.getComponent(tname);
+        ttdata = components.getComponentData(tname);
+        items = tabletool.getItems();
         if (items == null)
             return null;
         
@@ -75,10 +78,10 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
             if (!isItemElementMatch(element, value))
                 continue;
             
-            ttitem = new TableToolItem(entry.data);
+            ttitem = new TableToolItem(ttdata);
             ttitem.set(item);
             ttitem.selected = item.isSelected();
-            ttitem.object = entry.component.get(entry.data, item);
+            ttitem.object = tabletool.get(ttdata, item);
             
             return ttitem;
         }

@@ -8,13 +8,10 @@ import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.reporttool.ReportToolEntry;
-import org.iocaste.appbuilder.common.tabletool.TableToolData;
-import org.iocaste.appbuilder.common.tabletool.TableToolEntry;
 import org.iocaste.texteditor.common.TextEditor;
 
 public class ViewComponents {
     public Map<String, ComponentEntry> entries;
-    public Map<String, TableToolEntry> tabletools;
     public Map<String, DashboardFactory> dashboards;
     public Map<String, DashboardComponent> dashboardgroups;
     public Map<String, ReportToolEntry> reporttools;
@@ -22,7 +19,6 @@ public class ViewComponents {
     
     public ViewComponents() {
         entries = new LinkedHashMap<>();
-        tabletools = new HashMap<>();
         dashboards = new HashMap<>();
         dashboardgroups = new HashMap<>();
         reporttools = new HashMap<>();
@@ -35,14 +31,6 @@ public class ViewComponents {
         entries.put(data.name, entry);
     }
     
-    public final void add(TableToolData data) {
-        TableToolEntry entry;
-        
-        entry = new TableToolEntry();
-        entry.data = data;
-        tabletools.put(data.name, entry);
-    }
-    
     public final void add(ReportToolData data) {
         ReportToolEntry entry;
         
@@ -51,17 +39,23 @@ public class ViewComponents {
         reporttools.put(data.name, entry);
     }
     
+    @SuppressWarnings("unchecked")
+    public final <T extends AbstractComponentTool> T getComponent(String name) {
+        return (T)entries.get(name).component;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public final <T extends AbstractComponentData> T getComponentData(
+            String name) {
+        return (T)entries.get(name).data;
+    }
+    
     public final void reset() {
         entries.clear();
-        tabletools.clear();
         dashboards.clear();
         dashboardgroups.clear();
         reporttools.clear();
         editors.clear();
-    }
-    
-    public final void set(TableToolData data) {
-        tabletools.get(data.name).data = data;
     }
 }
 
