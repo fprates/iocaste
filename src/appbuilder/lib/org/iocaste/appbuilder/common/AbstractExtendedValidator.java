@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common;
 
 import java.util.Set;
 
+import org.iocaste.appbuilder.common.dataformtool.DataFormTool;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
@@ -9,6 +10,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractValidator;
+import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
@@ -22,20 +24,33 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
     
     /**
      * 
+     * @param name
      * @return
      */
-    @SuppressWarnings("unchecked")
-    protected final <T extends AbstractContext> T getContext() {
-        return (T)context;
+    protected final ExtendedObject dfget(String name) {
+        DataFormTool dftool = context.getView().getComponents().
+                getComponent(name);
+        return ((DataForm)dftool.getElement()).getObject();
     }
     
     /**
      * 
      * @param name
+     * @param object
+     */
+    protected final void dfset(String name, ExtendedObject object) {
+        DataFormTool dftool = context.getView().getComponents().
+                getComponent(name);
+        ((DataForm)dftool.getElement()).setObject(object);
+    }
+    
+    /**
+     * 
      * @return
      */
-    protected final <T extends Element> T getElement(String name) {
-        return context.view.getElement(name);
+    @SuppressWarnings("unchecked")
+    protected final <T extends AbstractContext> T getContext() {
+        return (T)context;
     }
     
     /**
