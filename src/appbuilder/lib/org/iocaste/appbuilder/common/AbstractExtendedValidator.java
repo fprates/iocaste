@@ -13,8 +13,6 @@ import org.iocaste.shell.common.AbstractValidator;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
-import org.iocaste.shell.common.Table;
-import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 
 public abstract class AbstractExtendedValidator extends AbstractValidator {
@@ -48,9 +46,12 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
      * 
      * @return
      */
-    @SuppressWarnings("unchecked")
-    protected final <T extends AbstractContext> T getContext() {
-        return (T)context;
+    protected final PageBuilderContext getContext() {
+        return context;
+    }
+    
+    protected final <T extends ExtendedContext> T getExtendedContext() {
+        return context.getView().getExtendedContext();
     }
     
     /**
@@ -129,19 +130,6 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
     
     public final void setDocuments(Documents documents) {
         this.documents = documents;
-    }
-    
-    protected final void setInputs(TableToolItem ttitem) {
-        String name;
-        TableItem item = ttitem.get();
-        Table table = item.getTable();
-        
-        for (TableColumn column : table.getColumns()) {
-            if (column.isMark())
-                continue;
-            name = column.getName();
-            setInput(item, name, ttitem.object.get(name));
-        }
     }
     
     protected final void setTextReference(String model, String field) {

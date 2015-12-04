@@ -88,16 +88,6 @@ public abstract class AbstractValidator implements Validator {
         this.input = input;
     }
     
-    /**
-     * 
-     * @param item
-     * @param name
-     * @param value
-     */
-    public final void setInput(TableItem item, String name, Object value) {
-        ((InputComponent)item.get(name)).set(value);
-    }
-    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Validator#validate(
