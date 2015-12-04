@@ -6,7 +6,6 @@ public class AddItems extends AbstractTableHandler {
         Context context = new Context();
         
         context.data = data;
-        context.table = getTable(context.data);
         additems(tabletool, context, context.data.getItems());
     }
 

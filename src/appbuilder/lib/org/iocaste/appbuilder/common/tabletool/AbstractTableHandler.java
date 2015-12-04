@@ -36,8 +36,9 @@ public abstract class AbstractTableHandler {
         ExtendedObject object;
         ViewComponents components;
         ComponentEntry entry;
-        TableColumn[] tcolumns = context.table.getColumns();
-        TableItem item = new TableItem(context.table, pos);
+        Table table = tabletool.getElement();
+        TableColumn[] tcolumns = table.getColumns();
+        TableItem item = new TableItem(table, pos);
         
         if (ttitem != null) {
             object = ttitem.object;
@@ -176,15 +177,12 @@ public abstract class AbstractTableHandler {
         }
     }
     
-    protected static final Table getTable(TableToolData data) {
-        return data.context.view.getElement(data.name.concat("_table"));
-    }
-    
     /**
      * 
      * @param mode
      */
     protected static final void setMode(TableTool tabletool, Context context) {
+        Table table = tabletool.getElement();
         switch (context.data.mode) {
         case TableTool.UPDATE:
         case TableTool.CONTINUOUS_UPDATE:
@@ -198,7 +196,7 @@ public abstract class AbstractTableHandler {
             tabletool.getActionElement("accept").setVisible(false);
             tabletool.getActionElement("add").setVisible(false);
             tabletool.getActionElement("remove").setVisible(false);
-            context.table.setEnabled(false);
+            table.setEnabled(false);
             for (String column : context.data.columns.keySet())
                 context.data.columns.get(column).disabled = true;
             if (context.data.enableonly == null)
@@ -213,18 +211,18 @@ public abstract class AbstractTableHandler {
             break;
         }
 
-        context.table.setMark(context.data.mark);
+        table.setMark(context.data.mark);
         if (context.data.hide != null)
-            setVisibility(context, false, context.data.hide);
+            setVisibility(tabletool, context, false, context.data.hide);
         if (context.data.show != null)
-            setVisibility(context, true, context.data.show);
+            setVisibility(tabletool, context, true, context.data.show);
     }
 
     public static void setObject(TableTool tabletool, TableToolData data) {
         Context extcontext = new Context();
+        Table table = tabletool.getElement();
         
-        extcontext.table = getTable(data);
-        extcontext.table.clear();
+        table.clear();
         extcontext.data = data;
         extcontext.data.last = 0;
         setObjects(tabletool, extcontext);
@@ -236,14 +234,14 @@ public abstract class AbstractTableHandler {
      */
     protected static final void setObjects(TableTool tabletool, Context context) {
         List<TableToolItem> items = context.data.getItems();
+        Table table = tabletool.getElement();
         
         tabletool.setVisibleNavigation(context, items);
-        
         if (items.size() == 0) {
             switch(context.data.mode) {
             case TableTool.CONTINUOUS_DISPLAY:
             case TableTool.CONTINUOUS_UPDATE:
-                context.table.clear();
+                table.clear();
                 return;
             case TableTool.UPDATE:
             case TableTool.DISPLAY:
@@ -261,16 +259,17 @@ public abstract class AbstractTableHandler {
      * @param visible
      * @param columns
      */
-    private static final void setVisibility(
+    private static final void setVisibility(TableTool tabletool,
             Context context, boolean visible, String... columns) {
         TableColumn tcolumn;
+        Table table = tabletool.getElement();
         
-        for (TableColumn column : context.table.getColumns())
+        for (TableColumn column : table.getColumns())
             if (!column.isMark())
                 column.setVisible(!visible);
         
         for (String column : columns) {
-            tcolumn = context.table.getColumn(column);
+            tcolumn = table.getColumn(column);
             if (tcolumn == null)
                 throw new RuntimeException(
                         column.concat(" is an invalid column."));
@@ -283,5 +282,4 @@ public abstract class AbstractTableHandler {
 class Context {
     public String htmlname;
     public TableToolData data;
-    public Table table;
 }

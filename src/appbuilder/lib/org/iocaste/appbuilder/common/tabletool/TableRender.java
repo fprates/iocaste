@@ -20,7 +20,8 @@ public class TableRender extends AbstractTableHandler {
      * 
      * @param modelname
      */
-    private static final void model(Function function, Context context) {
+    private static final void model(
+            TableTool tabletool, Function function, Context context) {
         String itemname;
         DocumentModelItem[] items;
         DocumentModelItem item;
@@ -48,7 +49,7 @@ public class TableRender extends AbstractTableHandler {
             if (item != null) {
                 itemname = item.getName();
                 column = new TableToolColumn(context.data, itemname);
-                setTableToolColumn(context, column, itemname, item);
+                setTableToolColumn(tabletool, column, itemname, item);
                 column.tcolumn.setNamespace(true);
             }
         }
@@ -59,7 +60,7 @@ public class TableRender extends AbstractTableHandler {
                 column = new TableToolColumn(context.data, name);
             item = model.getModelItem(name);
             
-            setTableToolColumn(context, column, name, item);
+            setTableToolColumn(tabletool, column, name, item);
             
             if (item.getSearchHelp() == null)
                 item.setSearchHelp(column.sh);
@@ -74,6 +75,7 @@ public class TableRender extends AbstractTableHandler {
         StyleSheet stylesheet;
         Container container;
         Map<String, String> style;
+        Table table;
         
         container = context.data.context.view.getElement(context.data.name);
         container.setStyleClass(context.data.style);
@@ -88,20 +90,20 @@ public class TableRender extends AbstractTableHandler {
         new StandardContainer(container, context.data.name.concat("_skip")).
                 setStyleClass("tt_skip");
         
-        context.table = new Table(container, context.htmlname);
-        context.table.setHeader(!context.data.noheader);
-        context.table.setBorderStyle(context.data.borderstyle);
+        table = new Table(container, context.htmlname);
+        table.setHeader(!context.data.noheader);
+        table.setBorderStyle(context.data.borderstyle);
         context.data.last = 0;
         
-        model(function, context);
+        model(tabletool, function, context);
         setMode(tabletool, context);
         setObjects(tabletool, context);
     }
 
-    private static final void setTableToolColumn(Context context,
+    private static final void setTableToolColumn(TableTool tabletool,
             TableToolColumn column, String name, DocumentModelItem item) {
         
-        column.tcolumn = new TableColumn(context.table, name);
+        column.tcolumn = new TableColumn((Table)tabletool.getElement(), name);
         column.tcolumn.setMark(false);
         column.tcolumn.setVisible(true);
         column.tcolumn.setModelItem(item);

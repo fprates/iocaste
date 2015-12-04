@@ -55,6 +55,8 @@ public class Shell extends AbstractServiceInterface {
         case DataType.SHORT:
         case DataType.NUMC:
             return (new Long(input.getl()).equals(value));
+        case DataType.DEC:
+            return (new Double(input.getd()).equals(value));
         }
         
         return ivalue.equals(value);

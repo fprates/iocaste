@@ -29,6 +29,7 @@ import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.SearchHelp;
+import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Validator;
@@ -110,7 +111,7 @@ public class TableTool extends AbstractComponentTool {
      * 
      */
     public final void clear() {
-        extcontext.table.clear();
+        getTable().clear();
         extcontext.data.last = 0;
     }
     
@@ -178,7 +179,11 @@ public class TableTool extends AbstractComponentTool {
      * @return
      */
     public final Set<TableItem> getItems() {
-        return extcontext.table.getItems();
+        return getTable().getItems();
+    }
+    
+    private final Table getTable() {
+        return (Table)getElement();
     }
     
     /**
@@ -188,13 +193,14 @@ public class TableTool extends AbstractComponentTool {
     private final void installValidators(Context extcontext) {
         InputComponent input;
         TableToolColumn column;
+        Table table = getTable();
         
         for (String name : extcontext.data.columns.keySet()) {
             column = extcontext.data.columns.get(name);
             if (column.validator == null)
                 continue;
             
-            for (TableItem item : extcontext.table.getItems()) {
+            for (TableItem item : table.getItems()) {
                 input = item.get(name);
                 entry.data.context.function.validate(input, column.validator);
             }
@@ -218,8 +224,11 @@ public class TableTool extends AbstractComponentTool {
         List<TableToolItem> ttitems;
         TableToolItem ttitem;
         int startline, i, ttitemssize, itemsdif;
-        Set<TableItem> items = extcontext.table.getItems();
-        int itemssize = items.size();
+        Set<TableItem> items;
+        int itemssize;
+        
+        items = getTable().getItems();
+        itemssize = items.size();
         
         if (itemssize == 0)
             return;
@@ -255,15 +264,16 @@ public class TableTool extends AbstractComponentTool {
         int l, lastline;
         Set<TableItem> items;
         TableColumn[] columns;
+        Table table = getTable();
         
-        items = context.table.getItems();
+        items = table.getItems();
         l = context.data.vlines - items.size();
         if (l > 0)
             for (int i= 0; i < l; i++)
                 items.add(TableRender.additem(this, context, null, -1));
         l = context.data.topline;
         lastline = ttitems.size() - 1;
-        columns = context.table.getColumns();
+        columns = table.getColumns();
         for (TableItem item : items) {
             if (l > lastline) {
                 set(item, null);
@@ -313,12 +323,14 @@ public class TableTool extends AbstractComponentTool {
     public final void remove() {
         int i = 0;
         List<TableToolItem> items = extcontext.data.getItems();
-        for (TableItem item : extcontext.table.getItems()) {
+        Table table = getTable();
+        
+        for (TableItem item : table.getItems()) {
             if (!item.isSelected()) {
                 i++;
                 continue;
             }
-            extcontext.table.remove(item);
+            table.remove(item);
             items.remove(i + extcontext.data.topline);
         }
         save(extcontext, items);
@@ -365,7 +377,7 @@ public class TableTool extends AbstractComponentTool {
     private final void save(Context context, List<TableToolItem> ttitems) {
         TableToolItem ttitem;
         int l = context.data.topline;
-        Set<TableItem> items = context.table.getItems();
+        Set<TableItem> items = getTable().getItems();
         
         for (TableItem item : items) {
             try {
@@ -381,7 +393,7 @@ public class TableTool extends AbstractComponentTool {
     public final void selectAll(boolean mark) {
         List<TableToolItem> items = extcontext.data.getItems();
         
-        for (TableItem item : extcontext.table.getItems())
+        for (TableItem item : getTable().getItems())
             item.setSelected(mark);
         for (TableToolItem item : items)
             item.selected = mark;
@@ -397,7 +409,7 @@ public class TableTool extends AbstractComponentTool {
      */
     public final void set(TableItem item, ExtendedObject object) {
         SearchHelp.setTableItem(
-                entry.data.context, extcontext.table, item, object);
+                entry.data.context, getTable(), item, object);
     }
     
     public final void setLineProperties(
@@ -437,14 +449,6 @@ public class TableTool extends AbstractComponentTool {
         for (String action : actions.keySet())
             if (actions.get(action).isNavigable())
                 getActionElement(action).setVisible(visible);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    public final int size() {
-        return extcontext.table.size();
     }
 }
 
