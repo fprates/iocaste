@@ -38,7 +38,8 @@ public class DataFormTool extends AbstractComponentTool {
     @Override
     public final void load(AbstractComponentData data) {
         DataForm dataform = getElement();
-        ((DataFormToolData)data).object = dataform.getObject();
+        if (dataform.getModel() != null)
+            ((DataFormToolData)data).object = dataform.getObject();
     }
     
     @Override
