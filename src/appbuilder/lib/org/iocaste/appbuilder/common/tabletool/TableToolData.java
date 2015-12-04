@@ -37,6 +37,7 @@ public class TableToolData extends AbstractComponentData {
         
         item = new TableToolItem(this);
         item.object = object;
+        item.position += items.size();
         items.add(item);
         return item;
     }

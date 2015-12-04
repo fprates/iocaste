@@ -8,6 +8,7 @@ public class TableToolItem {
     private TableToolData data;
     private TableToolCells cells;
     public ExtendedObject object;
+    public int position;
     public boolean selected, highlighted;
     
     public TableToolItem(TableToolData data) {

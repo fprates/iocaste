@@ -68,6 +68,7 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
         Set<TableItem> items;
         TableTool tabletool;
         TableToolData ttdata;
+        int i;
         String name = input.getName();
         String htmlname = input.getHtmlName();
         ViewContext viewctx = context.getView();
@@ -82,7 +83,9 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
         if (items == null)
             return null;
         
+        i = 0;
         for (TableItem item : items) {
+            i++;
             if (item == null)
                 continue;
             
@@ -98,7 +101,7 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
             ttitem.set(item);
             ttitem.selected = item.isSelected();
             ttitem.object = tabletool.get(ttdata, item);
-            
+            ttitem.position = ttdata.topline + i - 1;
             return ttitem;
         }
         

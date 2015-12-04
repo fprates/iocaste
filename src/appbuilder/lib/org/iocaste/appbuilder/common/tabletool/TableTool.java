@@ -243,9 +243,11 @@ public class TableTool extends AbstractComponentTool {
         ttitemssize = ttitems.size();
         itemsdif = itemssize - ttitemssize;
         if (itemsdif > 0)
-            for (int j = 0; j < itemsdif; j++)
-                ttitems.add(new TableToolItem(data));
-
+            for (int j = 0; j < itemsdif; j++) {
+                ttitem = new TableToolItem(data);
+                ttitem.position += ttitems.size();
+                ttitems.add(ttitem);
+            }
         i = startline;
         for (TableItem item : items) {
             try {
