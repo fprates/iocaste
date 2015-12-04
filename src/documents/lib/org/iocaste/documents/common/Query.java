@@ -2,6 +2,7 @@ package org.iocaste.documents.common;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,6 +38,21 @@ public class Query implements Serializable {
     
     public final void addColumns(String... columns) {
         this.columns = columns;
+    }
+    
+    public final void andEntries(String field, Collection<?> entries) {
+        boolean first;
+        
+        beginEnclose();
+        first = true;
+        for (Object entry : entries)
+            if (first) {
+                first = !first;
+                andEqual(field, entry);
+            } else {
+                orEqual(field, entry);
+            }
+        endEnclose();
     }
     
     public final void andEqual(String field, Object value) {
