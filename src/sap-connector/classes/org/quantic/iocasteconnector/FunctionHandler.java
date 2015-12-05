@@ -55,8 +55,11 @@ public class FunctionHandler implements JCoServerFunctionHandler {
         while (it.hasNext()) {
             field = it.next();
             name = field.getName();
-            
             functionitem = context.items.get(name);
+            if (functionitem == null)
+                continue;
+//                throw new RuntimeException(new StringBuilder("Parameter ").
+//                        append(name).append(" not configured.").toString());
             switch (functionitem.geti("TYPE")) {
             case DataType.BOOLEAN:
                 value = (list.getChar(name) == 'X');
@@ -364,6 +367,8 @@ public class FunctionHandler implements JCoServerFunctionHandler {
                 }
                 
                 functionitem = context.items.get(name);
+                if (functionitem == null)
+                    continue;
                 structurename = functionitem.get("STRUCTURE");
                 structureitems = extractStructureItems(
                         context.structures, structurename);
