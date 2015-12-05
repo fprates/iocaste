@@ -24,6 +24,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
     
     @Override
     public final void generate(ComponentEntry entry) {
+        boolean hasfocus;
         DataFormToolItem dfitem;
         ReportToolStageItem item;
         DocumentModel model;
@@ -48,6 +49,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
                 dfdata.modelname = rtdata.input.model;
             }
             
+            hasfocus = false;
             for (String itemname : rtdata.input.items.keySet()) {
                 item = rtdata.input.items.get(itemname);
                 dfitem = dfdata.itemInstance(itemname);
@@ -57,6 +59,8 @@ public class ReportToolFactory extends AbstractSpecFactory {
                 if ((rtdata.input.nsreference != null) &&
                         rtdata.input.nsreference.equals(itemname))
                     dfitem.ns = true;
+                if (!hasfocus)
+                    hasfocus = dfitem.focus = true;
             }
             
             dfentry = new ComponentEntry();
