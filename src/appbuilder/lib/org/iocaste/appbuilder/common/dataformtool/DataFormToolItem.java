@@ -6,7 +6,7 @@ import org.iocaste.documents.common.DataElement;
 import org.iocaste.shell.common.Const;
 
 public class DataFormToolItem {
-    public String name, sh, validate;
+    public String name, sh, validate, label;
     public Const componenttype;
     public boolean secret, focus, required, invisible, disabled, ns;
     public Map<String, Object> values;
