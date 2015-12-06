@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
+import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.docmanager.common.Manager;
@@ -16,10 +18,12 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
+import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.FileEntry;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.TextArea;
 import org.iocaste.shell.common.ViewState;
 import org.iocaste.tasksel.common.TaskSelector;
@@ -371,9 +375,23 @@ public abstract class AbstractActionHandler {
     }
     
     protected final void setFocus(String container, String field) {
-        Container parent = context.view.getElement(container);
-        
-        context.view.setFocus(parent.getElement(field));
+        DataForm dataform = components.getComponent(container).getElement();
+        context.view.setFocus(dataform.get(field));
+    }
+    
+    protected final void setFocus(String table, String column, int line) {
+        TableItem titem;
+        int i = 0;
+        TableTool component = components.getComponent(table);
+        Set<Element> elements = ((Table)component.getElement()).getElements();
+        for (Element element : elements) {
+            titem = (TableItem)element;
+            if (i == line) {
+                context.view.setFocus(titem.get(column));
+                return;
+            }
+            i++;
+        }
     }
     
     public static final ExtendedObject[] tableitemsget(TableToolData data) {
