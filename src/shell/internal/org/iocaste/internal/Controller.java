@@ -387,7 +387,7 @@ public class Controller {
                 continue;
             
             if (input.isObligatory() && isInitial(input, ri) &&
-                    input.isEnabled()) {
+                    input.isEnabled() && input.isVisible()) {
                 status.input = input;
                 status.error = EINITIAL;
                 status.msgtype = Const.ERROR;
