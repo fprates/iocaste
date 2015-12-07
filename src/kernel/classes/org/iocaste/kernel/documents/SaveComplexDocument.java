@@ -66,8 +66,9 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
                 for (String key : keys.keySet())
                     keys.put(key, object.get(key));
                 
-                if (org.iocaste.documents.common.Documents.
-                        readobjects(nobjects, keys) == null)
+                if ((nobjects.length == 0) ||
+                        (org.iocaste.documents.common.Documents.
+                        readobjects(nobjects, keys) == null))
                     delete.run(data.documents, data.connection, object);
             }
         }

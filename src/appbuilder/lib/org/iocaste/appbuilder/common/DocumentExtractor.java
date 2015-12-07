@@ -102,8 +102,11 @@ public class DocumentExtractor {
         result = (document == null)? new ArrayList<ExtendedObject>() : null;
         
         if ((objects == null) &&
-                (conversion.getSourceType() == DataConversion.OBJECTS))
+                (conversion.getSourceType() == DataConversion.OBJECTS)) {
             objects = (ExtendedObject[])conversion.getSource();
+            if (objects == null)
+                return null;
+        }
         
         for (ExtendedObject object : objects) {
             if (conversion == null) {
@@ -224,6 +227,7 @@ public class DocumentExtractor {
         head = conversion(
                 ns, head, model, hconversion, documents, ignoreinitialhead);
         document.setHeader(head);
+        document.remove();
         for (DataConversion conversion : conversions) {
             switch (conversion.getSourceType()) {
             case DataConversion.OBJECTS:
