@@ -9,7 +9,7 @@ public interface DashboardRenderer {
     public static final byte OUTER = 1;
     
     public abstract void add(
-            String dashname, String name, Object value, int type);
+            String dashname, String name, Object value, int type, String text);
     
     public abstract void build(Container container, String name);
     

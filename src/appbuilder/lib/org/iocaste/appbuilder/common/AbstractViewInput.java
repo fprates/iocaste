@@ -57,43 +57,48 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected void dbitemadd(String dashboard, String name, String value) {
-        dbget(dashboard, name).add(value, value);
+        dbget(dashboard, name).add(value, value, null);
     }
     
     protected void dbitemadd(String dashboard, String name, byte value) {
-        dbget(dashboard, name).add(Byte.toString(value), value);
+        dbget(dashboard, name).add(Byte.toString(value), value, null);
     }
     
     protected void dbitemadd(String dashboard, String name, int value) {
-        dbget(dashboard, name).add(Integer.toString(value), value);
+        dbget(dashboard, name).add(Integer.toString(value), value, null);
     }
     
     protected void dbitemadd(String dashboard, String name, long value) {
-        dbget(dashboard, name).add(Long.toString(value), value);
+        dbget(dashboard, name).add(Long.toString(value), value, null);
     }
     
     protected void dbitemadd(String dashboard, String name, short value) {
-        dbget(dashboard, name).add(Short.toString(value), value);
+        dbget(dashboard, name).add(Short.toString(value), value, null);
     }
     
     protected void dbitemadd(String dashboard, String name, String key,
             byte value) {
-        dbget(dashboard, name).add(key, value);
+        dbget(dashboard, name).add(key, value, null);
     }
     
     protected void dbitemadd(String dashboard, String name, String key,
             int value) {
-        dbget(dashboard, name).add(key, value);
+        dbget(dashboard, name).add(key, value, null);
     }
     
     protected void dbitemadd(String dashboard, String name, String key,
             long value) {
-        dbget(dashboard, name).add(key, value);
+        dbget(dashboard, name).add(key, value, null);
     }
     
     protected void dbitemadd(String dashboard, String name, String key,
             String value) {
-        dbget(dashboard, name).add(key, value);
+        dbget(dashboard, name).add(key, value, null);
+    }
+    
+    protected void dbitemadd(String dashboard, String name, String key,
+            String value, String text) {
+        dbget(dashboard, name).add(key, value, text);
     }
     
     protected final void dflistset(

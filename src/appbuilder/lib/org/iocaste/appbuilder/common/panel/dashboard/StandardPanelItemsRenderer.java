@@ -20,8 +20,9 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
     }
     
     @Override
-    public void add(String dashname, String name, Object value, int type) {
-        Text text;
+    public void add(
+            String dashname, String name, Object value, int type, String text) {
+        Text ltext;
         Link link;
         
         if (type != DataType.CHAR)
@@ -31,10 +32,12 @@ public class StandardPanelItemsRenderer extends AbstractDashboardRenderer {
             value = name;
         
         link = context.view.getElement(dashname.concat("_dbitem_link"));
+        if (text != null)
+            link.setText(text);
         link.add(getChoice(dashname), value, type);
         
-        text = context.view.getElement(dashname.concat("_txt"));
-        text.setText((String)value);
+        ltext = context.view.getElement(dashname.concat("_txt"));
+        ltext.setText((String)value);
     }
 
     @Override

@@ -13,7 +13,8 @@ import org.iocaste.shell.common.Text;
 public class StandardPanelContextRenderer extends AbstractDashboardRenderer {
     
     @Override
-    public void add(String dashname, String name, Object value, int type) {
+    public void add(
+            String dashname, String name, Object value, int type, String text) {
         String group;
         Internal internal;
         

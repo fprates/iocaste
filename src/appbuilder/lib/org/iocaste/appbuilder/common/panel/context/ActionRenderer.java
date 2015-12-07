@@ -8,7 +8,8 @@ import org.iocaste.shell.common.Button;
 public class ActionRenderer extends StandardPanelContextRenderer {
     
     @Override
-    public void add(String dashname, String name, Object value, int type) {
+    public void add(
+            String dashname, String name, Object value, int type, String text) {
         String group;
         Internal internal;
         Button button;

@@ -9,7 +9,8 @@ import org.iocaste.shell.common.StandardContainer;
 public class StandardDashboardRenderer extends AbstractDashboardRenderer {
 
     @Override
-    public void add(String dashname, String name, Object value, int type) {
+    public void add(
+            String dashname, String name, Object value, int type, String text) {
         String linkname, action, group;
         Link link;
         
@@ -19,7 +20,7 @@ public class StandardDashboardRenderer extends AbstractDashboardRenderer {
         
         link = new Link(getContainer(dashname, INNER), linkname, action);
         link.setStyleClass("db_dash_item");
-        link.setText(name);
+        link.setText((text == null)? name : text);
         link.add(entries.get(action).choose, value, type);
     }
     

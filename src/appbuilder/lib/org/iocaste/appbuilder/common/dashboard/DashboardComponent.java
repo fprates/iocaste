@@ -33,27 +33,27 @@ public class DashboardComponent {
     }
     
     public final void add(String item) {
-        internalAdd(item, null, DataType.CHAR);
+        internalAdd(item, null, DataType.CHAR, null);
     }
     
-    public final void add(String item, String value) {
-        internalAdd(item, value, DataType.CHAR);
+    public final void add(String item, String value, String text) {
+        internalAdd(item, value, DataType.CHAR, text);
     }
     
-    public final void add(String item, int value) {
-        internalAdd(item, value, DataType.INT);
+    public final void add(String item, int value, String text) {
+        internalAdd(item, value, DataType.INT, text);
     }
     
-    public final void add(String item, long value) {
-        internalAdd(item, value, DataType.LONG);
+    public final void add(String item, long value, String text) {
+        internalAdd(item, value, DataType.LONG, text);
     }
     
-    public final void add(String item, byte value) {
-        internalAdd(item, value, DataType.BYTE);
+    public final void add(String item, byte value, String text) {
+        internalAdd(item, value, DataType.BYTE, text);
     }
     
-    public final void add(String item, short value) {
-        internalAdd(item, value, DataType.SHORT);
+    public final void add(String item, short value, String text) {
+        internalAdd(item, value, DataType.SHORT, text);
     }
     
     public final void build() {
@@ -68,7 +68,8 @@ public class DashboardComponent {
                 container.setVisible(true);
         
         for (ContentEntry entry : content) {
-            renderer.add(name, entry.name, entry.value, entry.dtype);
+            renderer.add(
+                    name, entry.name, entry.value, entry.dtype, entry.text);
             renderer.setVisible(name, entry.visible);
         }
     }
@@ -106,11 +107,12 @@ public class DashboardComponent {
         components.add(name);
     }
     
-    private final void internalAdd(String name, Object value, int type) {
+    private final void internalAdd(
+            String name, Object value, int type, String text) {
         if (name == null)
             throw new RuntimeException("dashboard item undefined.");
         
-        content.add(new ContentEntry(name, value, type));
+        content.add(new ContentEntry(name, value, type, text));
     }
     
     public final void show() {
@@ -119,7 +121,7 @@ public class DashboardComponent {
 }
 
 class ContentEntry {
-    public String name;
+    public String name, text;
     public Object value;
     public int dtype;
     public boolean visible;
@@ -128,9 +130,10 @@ class ContentEntry {
         this.name = name;
     }
     
-    public ContentEntry(String name, Object value, int dtype) {
+    public ContentEntry(String name, Object value, int dtype, String text) {
         this.name = name;
         this.value = value;
         this.dtype = dtype;
+        this.text = text;
     }
 }
