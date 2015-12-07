@@ -18,7 +18,7 @@ public class TableColumn implements Serializable {
     private String name, text;
     private DocumentModelItem modelitem;
     private DataElement de;
-    private int length;
+    private int length, vlength;
     
     public TableColumn(Table table, String name) {
         visible = true;
@@ -71,6 +71,10 @@ public class TableColumn implements Serializable {
     
     public final String getText() {
         return text;
+    }
+    
+    public final int getVisibleLength() {
+        return vlength;
     }
     
     /**
@@ -191,6 +195,10 @@ public class TableColumn implements Serializable {
      */
     public final void setVisible(boolean visible) {
         this.visible = visible;
+    }
+    
+    public final void setVisibleLength(int vlength) {
+        this.vlength = vlength;
     }
     
     @Override

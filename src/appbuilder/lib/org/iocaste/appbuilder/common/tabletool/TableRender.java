@@ -65,8 +65,10 @@ public class TableRender extends AbstractTableHandler {
             if (item.getSearchHelp() == null)
                 item.setSearchHelp(column.sh);
             
-            if (column.size > 0)
-                column.tcolumn.setLength(column.size);
+            if (column.length > 0)
+                column.tcolumn.setLength(column.length);
+            if (column.vlength > 0)
+                column.tcolumn.setVisibleLength(column.vlength);
         }
     }
     

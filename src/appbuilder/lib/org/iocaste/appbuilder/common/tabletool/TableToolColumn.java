@@ -13,7 +13,7 @@ public class TableToolColumn implements Serializable {
     public Const type;
     public Map<String, Object> values;
     public TableColumn tcolumn;
-    public int size;
+    public int length, vlength;
     
     public TableToolColumn(TableToolData data, String name) {
         this.name = name;

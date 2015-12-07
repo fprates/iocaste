@@ -22,7 +22,7 @@ public class MainConfig extends AbstractViewConfig {
             tabletool.model = "PACKAGE_GRID";
             tabletool.mark = true;
             tabletool.vlines = 0;
-            new TableToolColumn(tabletool, "EXCEPTION").size = 80;
+            new TableToolColumn(tabletool, "EXCEPTION").length = 80;
         }
     }
 
