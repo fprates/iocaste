@@ -323,6 +323,7 @@ public class TableTool extends AbstractComponentTool {
      * 
      */
     public final void remove() {
+        int index;
         int i = 0;
         List<TableToolItem> items = extcontext.data.getItems();
         Table table = getTable();
@@ -333,7 +334,9 @@ public class TableTool extends AbstractComponentTool {
                 continue;
             }
             table.remove(item);
-            items.remove(i + extcontext.data.topline);
+            index = i + extcontext.data.topline;
+            if (items.size() > index)
+                items.remove(index);
         }
         save(extcontext, items);
     }
