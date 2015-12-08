@@ -293,6 +293,12 @@ public abstract class AbstractViewInput implements ViewInput {
         addtablecollection(table, null);
     }
     
+    protected final TableToolItem tableitemset(
+            String table, int index, ExtendedObject object) {
+        TableToolData data = getComponentData(table);
+        return data.set(index, object);
+    }
+    
     protected final void tableitemsset(String table, ExtendedObject[] objects) {
         addtablearray(table, objects);
     }

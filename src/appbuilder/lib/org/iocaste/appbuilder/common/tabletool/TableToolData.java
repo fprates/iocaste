@@ -79,4 +79,16 @@ public class TableToolData extends AbstractComponentData {
     public final void set(List<TableToolItem> items) {
         this.items = items;
     }
+    
+    public final TableToolItem set(int index, ExtendedObject object) {
+        TableToolItem item;
+        
+        try {
+            item = items.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+        item.object = object;
+        return item;
+    }
 }
