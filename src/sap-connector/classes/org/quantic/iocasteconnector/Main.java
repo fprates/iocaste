@@ -85,7 +85,8 @@ public class Main extends AbstractExternalApplication {
         System.out.print("bringing up iocaste listenners...");
         destination = JCoDestinationManager.
                 getDestination(portdata.getst("PORT_NAME"));
-        addListenner(listennerport, () -> new IocasteListenner(destination));
+        addListenner(
+                listennerport, () -> new IocasteListenner(destination, config));
         System.out.println("ok");
         
         System.out.println("listenning to connections...");

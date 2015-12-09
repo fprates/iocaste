@@ -19,71 +19,39 @@ public class PortsInstall extends AbstractInstallObject {
         DocumentModelItem porttypeid, portnameref, functionid;
         DataElement portname, porttype, text, host, sapprgid, sapgwserv;
         DataElement sapclient, sapsystemnumber, username, secret, portfunction;
-        DataElement service, servicefunction;
+        DataElement service, servicefunction, preconn, postconn;
         SearchHelpData shd;
         
-        portname = new DataElement("XTRNL_PORT_NAME");
-        portname.setType(DataType.CHAR);
-        portname.setLength(12);
-        portname.setUpcase(true);
-        
-        portfunction = new DataElement("XTRNL_PORT_FUNCT");
-        portfunction.setType(DataType.CHAR);
-        portfunction.setLength(15);
-        portfunction.setUpcase(true);
-        
-        porttype = new DataElement("XTRNL_PORT_TYPE");
-        porttype.setType(DataType.NUMC);
-        porttype.setLength(2);
-        
-        text = new DataElement("XTRNL_TEXT");
-        text.setType(DataType.CHAR);
-        text.setLength(45);
-        text.setUpcase(false);
-        
-        host = new DataElement("XTRNL_HOST");
-        host.setType(DataType.CHAR);
-        host.setLength(128);
-        host.setUpcase(false);
-        
-        sapgwserv = new DataElement("XTRNL_SAPGWSERV");
-        sapgwserv.setType(DataType.CHAR);
-        sapgwserv.setLength(64);
-        sapgwserv.setUpcase(false);
-        
-        sapprgid = new DataElement("XTRNL_SAPPRGID");
-        sapprgid.setType(DataType.CHAR);
-        sapprgid.setLength(12);
-        sapprgid.setUpcase(true);
-        
-        sapclient = new DataElement("XTRNL_SAPCLIENT");
-        sapclient.setType(DataType.CHAR);
-        sapclient.setLength(3);
-        sapclient.setUpcase(true);
-        
-        sapsystemnumber = new DataElement("XTRNL_SAPSYSNR");
-        sapsystemnumber.setType(DataType.NUMC);
-        sapsystemnumber.setLength(2);
-        
-        username = new DataElement("XTRNL_USERNAME");
-        username.setType(DataType.CHAR);
-        username.setLength(64);
-        username.setUpcase(true);
-        
-        secret = new DataElement("XTRNL_SECRET");
-        secret.setType(DataType.CHAR);
-        secret.setLength(64);
-        secret.setUpcase(false);
-        
-        service = new DataElement("XTRNL_SERVICE");
-        service.setType(DataType.CHAR);
-        service.setLength(64);
-        service.setUpcase(false);
-        
-        servicefunction = new DataElement("XTRNL_SERVICE_FUNCTION");
-        servicefunction.setType(DataType.CHAR);
-        servicefunction.setLength(32);
-        servicefunction.setUpcase(false);
+        portname = elementchar(
+                "XTRNL_PORT_NAME", 12, DataType.UPPERCASE);
+        portfunction = elementchar(
+                "XTRNL_PORT_FUNCT", 15, DataType.UPPERCASE);
+        porttype = elementnumc(
+                "XTRNL_PORT_TYPE", 2);
+        text = elementchar(
+                "XTRNL_TEXT", 45, DataType.KEEPCASE);
+        host = elementchar(
+                "XTRNL_HOST", 128, DataType.KEEPCASE);
+        sapgwserv = elementchar(
+                "XTRNL_SAPGWSERV", 64, DataType.KEEPCASE);
+        sapprgid = elementchar(
+                "XTRNL_SAPPRGID", 12, DataType.UPPERCASE);
+        sapclient = elementchar(
+                "XTRNL_SAPCLIENT", 3, DataType.UPPERCASE);
+        sapsystemnumber = elementnumc(
+                "XTRNL_SAPSYSNR", 2);
+        username = elementchar(
+                "XTRNL_USERNAME", 64, DataType.UPPERCASE);
+        secret = elementchar(
+                "XTRNL_SECRET", 64, DataType.KEEPCASE);
+        service = elementchar(
+                "XTRNL_SERVICE", 64, DataType.KEEPCASE);
+        servicefunction = elementchar(
+                "XTRNL_SERVICE_FUNCTION", 32, DataType.KEEPCASE);
+        preconn = elementchar(
+                "XTRNL_PRE_CONN", 128, DataType.KEEPCASE);
+        postconn = elementchar(
+                "XTRNL_POST_CONN", 128, DataType.KEEPCASE);
         
         model = modelInstance("XTRNL_PORT_TYPE", "XTRNLPORTTP");
         porttypeid = searchhelp(model.key(
@@ -126,6 +94,10 @@ public class PortsInstall extends AbstractInstallObject {
                 "SECRET", "SECRT", secret);
         model.item(
                 "SAP_SYSTEM_NUMBER", "SAPSYSNR", sapsystemnumber);
+        model.item(
+                "PRE_CONNECTION", "PRECN", preconn);
+        model.item(
+                "POST_CONNECTION", "PSTCN", postconn);
         
         shd = searchHelpInstance("XTRNL_SH_PORTS", "XTRNL_PORT_HEAD");
         shd.setExport("PORT_NAME");

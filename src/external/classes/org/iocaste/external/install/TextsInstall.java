@@ -42,6 +42,8 @@ public class TextsInstall extends AbstractInstallObject {
         messages.put("NAME", "Nome");
         messages.put("PORT_NAME", "Porta");
         messages.put("PORT_TYPE", "Tipo de porta");
+        messages.put("POST_CONNECTION", "Script pós-conexão");
+        messages.put("PRE_CONNECTION", "Script pré-conexão");
         messages.put("SAP_GWHOST", "Endereço gateway (SAP)");
         messages.put("SAP_GWSERVER", "Porta gateway (SAP)");
         messages.put("SAP_PROGRAM_ID", "ID Programa (SAP)");

@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.external.common.AbstractExternalFunction;
 import org.iocaste.external.common.IocasteConnector;
 import org.iocaste.protocol.IocasteException;
@@ -16,9 +17,12 @@ import com.sap.conn.jco.JCoRuntimeException;
 
 public class IocasteListenner extends AbstractExternalFunction {
     private JCoDestination destination;
+    private ComplexDocument portconfig;
 
-    public IocasteListenner(JCoDestination destination) {
+    public IocasteListenner(
+            JCoDestination destination, ComplexDocument portconfig) {
         this.destination = destination;
+        this.portconfig = portconfig;
     }
     
     @Override
@@ -27,7 +31,7 @@ public class IocasteListenner extends AbstractExternalFunction {
         Map<String, Object> values;
         Service service;
         Message message;
-        String name;
+        String name, preconn, postconn;
         JCoFunction sapfunction;
         Context context;
         
@@ -70,8 +74,14 @@ public class IocasteListenner extends AbstractExternalFunction {
             }
             
             FunctionHandler.prepareToExport(context);
+            preconn = portconfig.getHeader().getst("PRE_CONNECTION");
+            if (preconn != null)
+                rtexecute(preconn);
             sapfunction.execute(destination);
             service.messageReturn(message, null);
+            postconn = portconfig.getHeader().getst("POST_CONNECTION");
+            if (postconn != null)
+                rtexecute(postconn);
             System.out.println("ok.");
         } catch (JCoRuntimeException e) {
             e.printStackTrace();
@@ -82,5 +92,9 @@ public class IocasteListenner extends AbstractExternalFunction {
         } finally {
             external.disconnect();
         }
+    }
+    
+    private void rtexecute(String command) throws Exception {
+        Runtime.getRuntime().exec(command);
     }
 }
