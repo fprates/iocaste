@@ -9,15 +9,18 @@ public class ReportViewer {
     private StandardPanel panel;
     
     public ReportViewer(ReportViewerData data) {
-        if (data.input.input == null)
-            data.input.input = new ReportInputInput();
+        panel = new StandardPanel(data.context);
+        
+        if (data.input.name != null) {
+            if (data.input.input == null)
+                data.input.input = new ReportInputInput();
+            
+            panel.instance(
+                    data.input.name, new InputPanelPage(data), data.extcontext);
+        }
         
         if (data.output.input == null)
             data.output.input = new ReportOutputInput();
-        
-        panel = new StandardPanel(data.context);
-        panel.instance(
-                data.input.name, new InputPanelPage(data), data.extcontext);
         panel.instance(
                 data.output.name, new OutputPanelPage(data), data.extcontext);
     }
