@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.cmodelviewer.DisplayConfig;
-import org.iocaste.shell.common.DataForm;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.shell.common.NodeList;
 import org.iocaste.shell.common.StyleSheet;
 
@@ -12,7 +12,7 @@ public class ExternalDisplayConfig extends DisplayConfig {
 
     @Override
     public final void execute(PageBuilderContext context) {
-        DataForm form;
+        DataFormToolData form;
         Map<String, String> style;
         StyleSheet stylesheet;
         NodeList node;
@@ -43,10 +43,10 @@ public class ExternalDisplayConfig extends DisplayConfig {
         style.put("height", "0px");
         style.put("width", "0px");
         
-        form = getElement("importobj");
-        form.importModel("XTRNL_IMPORT_OBJECT", context.function);
-        form.setStyleClass("xtrnl_import_form");
-        form.get("NAME").setLabel("modelname");
+        form = getDataFormTool("importobj");
+        form.modelname = "XTRNL_IMPORT_OBJECT";
+        form.style  = "xtrnl_import_form";
+        form.itemInstance("NAME").label = "modelname";
         
         node = getElement("import");
         node.setStyleClass("xtrnl_import");
