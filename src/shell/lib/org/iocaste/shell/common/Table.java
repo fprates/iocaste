@@ -219,8 +219,20 @@ public class Table extends AbstractContainer {
     
     @Override
     public final void translate(MessageSource messages) {
-        for (String name : columns.keySet())
-            columns.get(name).setText(messages.get(name));
+        TableColumn column;
+        String text;
+        
+        for (String name : columns.keySet()) {
+            column = columns.get(name);
+            text = column.getText();
+            if (text == null) {
+                column.setText(messages.get(name));
+            } else {
+                text = messages.get(text);
+                if (text != null)
+                    column.setText(text);
+            }
+        }
     }
     
     /**

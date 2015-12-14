@@ -15,8 +15,8 @@ public class ReportToolData extends AbstractComponentData {
         super(ViewSpecItem.TYPES.REPORT_TOOL);
         this.context = context;
         stage = OUTPUT;
-        input = new ReportToolStage(this);
-        output = new ReportToolStage(this);
+        input = new ReportToolStage();
+        output = new ReportToolStage();
     }
     
     public final void doInput() {

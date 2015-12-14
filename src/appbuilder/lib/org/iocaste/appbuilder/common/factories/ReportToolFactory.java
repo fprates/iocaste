@@ -9,6 +9,7 @@ import org.iocaste.appbuilder.common.reporttool.ReportTool;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.reporttool.ReportToolStageItem;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
+import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DocumentModel;
 
@@ -30,6 +31,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
         DocumentModel model;
         ComponentEntry ttentry, dfentry;
         TableToolData ttdata;
+        TableToolColumn ttcol;
         DataFormToolData dfdata;
         ReportToolData rtdata = (ReportToolData)entry.data;
             
@@ -61,6 +63,8 @@ public class ReportToolFactory extends AbstractSpecFactory {
                     dfitem.ns = true;
                 if (!hasfocus)
                     hasfocus = dfitem.focus = true;
+                if (item.label != null)
+                    dfitem.label = item.label;
             }
             
             dfentry = new ComponentEntry();
@@ -75,9 +79,15 @@ public class ReportToolFactory extends AbstractSpecFactory {
             ttdata.style = rtdata.output.outerstyle;
             ttdata.model = rtdata.output.model;
             rtdata.output.tooldata = ttdata;
-            if (rtdata.output.items.size() > 0)
+            if (rtdata.output.items.size() > 0) {
                 ttdata.refmodel = ReportTool.buildModel(rtdata);
-
+                for (String key : rtdata.output.items.keySet()) {
+                    item = rtdata.output.items.get(key);
+                    ttcol = new TableToolColumn(ttdata, key);
+                    ttcol.label = item.label;
+                    ttcol.length = item.element.getLength();
+                }
+            }
             ttentry = new ComponentEntry();
             ttentry.data = ttdata;
             rtdata.output.toolcomponent = new TableTool(ttentry);

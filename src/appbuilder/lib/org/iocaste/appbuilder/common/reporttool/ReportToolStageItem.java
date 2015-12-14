@@ -9,5 +9,5 @@ public class ReportToolStageItem {
     public Const type;
     public DataElement element;
     public Map<String, Object> values;
-    public String sh;
+    public String sh, model, label;
 }

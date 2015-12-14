@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common.reporttool;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
@@ -10,6 +11,7 @@ import org.iocaste.appbuilder.common.ModelBuilder;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.Documents;
 
 public class ReportTool extends AbstractComponentTool {
     
@@ -21,11 +23,23 @@ public class ReportTool extends AbstractComponentTool {
         ModelBuilder modelbuilder;
         ReportToolStageItem item;
         Map<String, ReportToolStageItem> items;
+        Map<String, DocumentModel> models;
+        DocumentModel model;
+        Documents documents = new Documents(data.context.function);
         
         items = (data.isInput())? data.input.items : data.output.items;
         modelbuilder = new ModelBuilder(data.name.concat("_model"));
+        models = new HashMap<>();
         for (String itemname : items.keySet()) {
             item = items.get(itemname);
+            if ((item.element == null) && (item.model != null)) {
+                model = models.get(item.model);
+                if (model == null) {
+                    model = documents.getModel(item.model);
+                    models.put(item.model, model);
+                }
+                item.element = model.getModelItem(itemname).getDataElement();
+            }
             modelbuilder.add(itemname, item.element);
         }
         return modelbuilder.get();
