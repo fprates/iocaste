@@ -1,5 +1,7 @@
 package org.quantic.iocasteconnector;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +14,7 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 
 import com.sap.conn.jco.JCoDestination;
+import com.sap.conn.jco.JCoException;
 import com.sap.conn.jco.JCoFunction;
 import com.sap.conn.jco.JCoRuntimeException;
 
@@ -34,6 +37,7 @@ public class IocasteListenner extends AbstractExternalFunction {
         String name, preconn, postconn;
         JCoFunction sapfunction;
         Context context;
+        int err;
         
         service = new Service(null, socket.getInetAddress().getHostAddress());
         service.setInputStream(socket.getInputStream());
@@ -42,14 +46,26 @@ public class IocasteListenner extends AbstractExternalFunction {
         
         try {
             name = message.getId();
+            System.out.print("invoking "+name+"...");
+            if (!external.connect())
+                throw new IocasteException("not connected.");
+            
+            preconn = portconfig.getHeader().getst("PRE_CONNECTION");
+            if (preconn != null) {
+                System.out.print("pre-connecting... ");
+                err = rtexecute(preconn);
+                if (err == 0)
+                    System.out.println("ok");
+                else
+                    System.err.println(new StringBuilder("returned ").
+                            append(err).toString());
+            }
             sapfunction = destination.getRepository().getFunction(name);
             if (sapfunction == null)
                 throw new IocasteException(new StringBuilder("SAP function ").
                         append(name).
                         append(" not found.").toString());
             
-            System.out.print("invoking "+name+"...");
-            external.connect();
             context = new Context();
             context.items = FunctionHandler.getFunction(connector, name);
             context.lists.put(
@@ -74,15 +90,12 @@ public class IocasteListenner extends AbstractExternalFunction {
             }
             
             FunctionHandler.prepareToExport(context);
-            preconn = portconfig.getHeader().getst("PRE_CONNECTION");
-            if (preconn != null)
-                rtexecute(preconn);
             sapfunction.execute(destination);
             service.messageReturn(message, null);
-            postconn = portconfig.getHeader().getst("POST_CONNECTION");
-            if (postconn != null)
-                rtexecute(postconn);
             System.out.println("ok.");
+        } catch (JCoException e) {
+            e.printStackTrace();
+            service.messageException(message, new Exception(e.getMessage()));
         } catch (JCoRuntimeException e) {
             e.printStackTrace();
             service.messageException(message, new Exception(e.getMessage()));
@@ -90,11 +103,37 @@ public class IocasteListenner extends AbstractExternalFunction {
             e.printStackTrace();
             service.messageException(message, e);
         } finally {
+            postconn = portconfig.getHeader().getst("POST_CONNECTION");
+            if (postconn != null) {
+                System.out.print("pos-connecting... ");
+                err = rtexecute(postconn);
+                if (err == 0)
+                    System.out.println("ok");
+                else
+                    System.err.println(new StringBuilder("returned ").
+                            append(err).toString());
+            }
             external.disconnect();
         }
     }
     
-    private void rtexecute(String command) throws Exception {
-        Runtime.getRuntime().exec(command);
+    private int rtexecute(String command) throws Exception {
+        BufferedReader inputreader, errorreader;
+        String line;
+        Process process;
+        
+        process = Runtime.getRuntime().exec(command);
+        inputreader = new BufferedReader(
+                new InputStreamReader(process.getInputStream()));
+        errorreader = new BufferedReader(
+                new InputStreamReader(process.getErrorStream()));
+        while ((line = inputreader.readLine()) != null)
+            System.out.println(line);
+        inputreader.close();
+        while ((line = errorreader.readLine()) != null)
+            System.err.println(line);
+        errorreader.close();
+        process.waitFor();
+        return process.exitValue();
     }
 }

@@ -1,5 +1,8 @@
 package org.quantic.iocasteconnector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.external.common.AbstractExternalApplication;
@@ -25,15 +28,17 @@ public class Main extends AbstractExternalApplication {
 	@Override
 	protected void execute(Message message) throws Exception {
         int listennerport;
+        boolean registerable;
         DefaultServerHandlerFactory.FunctionHandlerFactory factory;
         JCoServer server;
-        JCoServerFunctionHandler handler;
         JCoDestination destination;
         RFCDataProvider provider;
         ComplexDocument config;
         Command stream;
-        String name, text;
+        String text;
         ExtendedObject portdata;
+        FunctionConfig function;
+        List<FunctionConfig> functions;
         
         stream = new Command();
         stream.port = message.getString("--port");
@@ -53,34 +58,31 @@ public class Main extends AbstractExternalApplication {
         
         text = config.getHeader().getst("TEXT");
         System.out.println("* Connecting to " + text);
-        System.out.print("registering sap data provider...");
-        provider = new RFCDataProvider();
+
+        registerable = false;
+        functions = new ArrayList<>();
+        for (ExtendedObject object : config.getItems("functions")) {
+            function = new FunctionConfig();
+            functions.add(function);
+            function.name = object.getst("FUNCTION");
+            function.service = object.getst("SERVICE");
+            if (function.service == null)
+                continue;
+            
+            function.handler = new FunctionHandler(connector, external, object);
+            registerable = true;
+        }
+        
         portdata = config.getHeader();
+        
+        System.out.print("registering sap data provider...");
+        
+        provider = new RFCDataProvider();
         provider.setConfig(portdata, stream.locale);
         
         Environment.registerDestinationDataProvider(provider);
         Environment.registerServerDataProvider(provider);
         System.out.println("ok");
-        
-        System.out.print("trying registering on SAP...");
-        server = JCoServerFactory.getServer(stream.port);
-        System.out.println("ok");
-        
-        System.out.println("registering RFCs...");
-        factory = new DefaultServerHandlerFactory.FunctionHandlerFactory();
-        for (ExtendedObject object : config.getItems("functions")) {
-            name = object.getst("FUNCTION");
-            text = object.getst("SERVICE");
-            if (text == null) {
-                System.out.println("- no handler for "+name+". skipping.");
-                continue;
-            }
-            handler = new FunctionHandler(connector, external, object);
-            factory.registerHandler(name, handler);
-            System.out.println("- " + name + " registered.");
-        }
-        
-        server.setCallHandlerFactory(factory);
 
         System.out.print("bringing up iocaste listenners...");
         destination = JCoDestinationManager.
@@ -89,11 +91,38 @@ public class Main extends AbstractExternalApplication {
                 listennerport, () -> new IocasteListenner(destination, config));
         System.out.println("ok");
         
-        System.out.println("listenning to connections...");
-        server.start();
+        if (registerable) {
+            System.out.print("trying registering on SAP...");
+            server = JCoServerFactory.getServer(stream.port);
+            System.out.println("ok");
+            
+            System.out.println("registering RFCs...");
+            factory = new DefaultServerHandlerFactory.FunctionHandlerFactory();
+            for (FunctionConfig fc : functions) {
+                if (fc.service == null) {
+                    System.out.println(new StringBuilder("- no handler for ").
+                            append(fc.name).
+                            append(". skipping.").toString());
+                    continue;
+                }
+                factory.registerHandler(fc.name, fc.handler);
+                System.out.println("- " + fc.name + " registered.");
+            }
+            server.setCallHandlerFactory(factory);
+            
+            System.out.println("listenning to connections...");
+            server.start();
+        } else {
+            System.out.println("listenning to connections...");
+        }
 	}
 	
 	public static final void main(String[] args) throws Exception {
 		new Main().init(args);
 	}
+}
+
+class FunctionConfig {
+    String name, service;
+    JCoServerFunctionHandler handler;
 }
