@@ -20,16 +20,19 @@ public class CSVGenerate extends AbstractActionHandler {
     
     private final byte[] compose(AbstractReportContext extcontext) {
         StringBuilder buffer;
+        ReportPrintItem printitem;
         String value;
-        Map<String, String> values;
+        Map<String, ReportPrintItem> values;
         
         buffer = new StringBuilder();
         values = new LinkedHashMap<>();
         for (ExtendedObject item : extcontext.items) {
             values.clear();
-            export.formatValues(values, item);
+            export.setValues(values);
+            export.formatValues(item);
             for (String key : values.keySet()) {
-                value = values.get(key);
+                printitem = values.get(key);
+                value = printitem.getValue();
                 buffer.append((value == null)? "" : value).append(";");
             }
             buffer.append("\n");
