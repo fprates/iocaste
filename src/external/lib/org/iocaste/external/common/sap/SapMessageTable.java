@@ -34,8 +34,8 @@ public class SapMessageTable {
             for (DocumentModelItem mitem : model.getItens()) {
                 mname = mitem.getName();
                 line.put(mname, item.get(mname));
-                lines.add(line);
             }
+            lines.add(line);
         }
         
         tables.put(name, lines);
