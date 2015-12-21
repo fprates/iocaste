@@ -20,22 +20,22 @@ public class CSVGenerate extends AbstractActionHandler {
     
     private final byte[] compose(AbstractReportContext extcontext) {
         StringBuilder buffer;
-        ReportPrintItem printitem;
-        String value;
         Map<String, ReportPrintItem> values;
+        boolean head = false;
         
         buffer = new StringBuilder();
         values = new LinkedHashMap<>();
+        export.setValues(values);
         for (ExtendedObject item : extcontext.items) {
-            values.clear();
-            export.setValues(values);
-            export.formatValues(item);
-            for (String key : values.keySet()) {
-                printitem = values.get(key);
-                value = printitem.getValue();
-                buffer.append((value == null)? "" : value).append(";");
+            if (!head) {
+                values.clear();
+                export.printHeader(item.getModel());
+                printline(buffer, values);
+                head = true;
             }
-            buffer.append("\n");
+            values.clear();
+            export.formatValues(item);
+            printline(buffer, values);
         }
         buffer.append("\0");
         return buffer.toString().getBytes();
@@ -75,5 +75,18 @@ public class CSVGenerate extends AbstractActionHandler {
             sb.append(File.separator).append(token);
         sb.append(ext);
         return sb.toString();
+    }
+    
+    private final void printline(StringBuilder buffer,
+            Map<String, ReportPrintItem> values) {
+        ReportPrintItem printitem;
+        String value;
+        
+        for (String key : values.keySet()) {
+            printitem = values.get(key);
+            value = printitem.getValue();
+            buffer.append((value == null)? "" : value).append(";");
+        }
+        buffer.append("\n");
     }
 }

@@ -8,6 +8,7 @@ import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Shell;
 
@@ -20,6 +21,10 @@ public abstract class AbstractOutputExport {
     
     public abstract void formatValues(ExtendedObject object);
 
+    protected final PageBuilderContext getContext() {
+        return context;
+    }
+    
     protected final String getDateString(ExtendedObject item, String name) {
         Date date;
         
@@ -69,6 +74,8 @@ public abstract class AbstractOutputExport {
         }
         return print(column, value);
     }
+    
+    public void printHeader(DocumentModel model) { }
     
     public final void setContext(PageBuilderContext context) {
         this.context = context;
