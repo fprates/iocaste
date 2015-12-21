@@ -9,6 +9,7 @@ import java.util.Map;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.external.common.AbstractExternalFunction;
 import org.iocaste.external.common.IocasteConnector;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
@@ -45,10 +46,8 @@ public class IocasteListenner extends AbstractExternalFunction {
         message = service.getMessage();
         
         try {
-            name = message.getId();
-            System.out.print("invoking "+name+"...");
             if (!external.connect())
-                throw new IocasteException("not connected.");
+                throw new IocasteException("iocaste connection failed.");
             
             preconn = portconfig.getHeader().getst("PRE_CONNECTION");
             if (preconn != null) {
@@ -60,6 +59,9 @@ public class IocasteListenner extends AbstractExternalFunction {
                     System.err.println(new StringBuilder("returned ").
                             append(err).toString());
             }
+            
+            name = message.getId();
+            System.out.print("invoking "+name+"...");
             sapfunction = destination.getRepository().getFunction(name);
             if (sapfunction == null)
                 throw new IocasteException(new StringBuilder("SAP function ").
@@ -92,14 +94,18 @@ public class IocasteListenner extends AbstractExternalFunction {
             FunctionHandler.prepareToExport(context);
             sapfunction.execute(destination);
             service.messageReturn(message, null);
+            new Iocaste(connector).commit();
             System.out.println("ok.");
         } catch (JCoException e) {
+            new Iocaste(connector).rollback();
             e.printStackTrace();
             service.messageException(message, new Exception(e.getMessage()));
         } catch (JCoRuntimeException e) {
+            new Iocaste(connector).rollback();
             e.printStackTrace();
             service.messageException(message, new Exception(e.getMessage()));
         } catch (Exception e) {
+            new Iocaste(connector).rollback();
             e.printStackTrace();
             service.messageException(message, e);
         } finally {
