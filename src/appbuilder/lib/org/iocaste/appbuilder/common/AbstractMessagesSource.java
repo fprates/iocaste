@@ -14,6 +14,10 @@ public class AbstractMessagesSource {
         return messages;
     }
     
+    public final String get(String name) {
+        return messages.get(name);
+    }
+    
     public final void put(String name, String message) {
         messages.put(name, message);
     }
