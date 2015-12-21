@@ -86,6 +86,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
                     ttcol = new TableToolColumn(ttdata, key);
                     ttcol.label = item.label;
                     ttcol.length = item.element.getLength();
+                    ttcol.vlength = item.vlength;
                 }
             }
             ttentry = new ComponentEntry();

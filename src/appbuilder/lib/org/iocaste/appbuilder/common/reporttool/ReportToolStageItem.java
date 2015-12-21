@@ -10,4 +10,5 @@ public class ReportToolStageItem {
     public DataElement element;
     public Map<String, Object> values;
     public String sh, model, label;
+    public int vlength;
 }
