@@ -40,7 +40,7 @@ public class FormRenderer extends Renderer {
         parameter = new Parameter(config.getView(), "pagetrack");
         parameter.set(config.getPageTrack());
         hiddentag = ParameterRenderer.render(parameter);
-        formtag.addInner(hiddentag.toString());
+        formtag.addChild(hiddentag);
 
         content = new XMLElement("div");
         content.add("class", container.getStyleClass());
