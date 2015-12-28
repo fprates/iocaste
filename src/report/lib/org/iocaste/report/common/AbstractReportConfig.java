@@ -37,6 +37,8 @@ public abstract class AbstractReportConfig extends AbstractViewConfig {
         
         if (page.equals(data.output.name)) {
             for (String key : data.output.actions.keySet()) {
+                if (data.output.actions.get(key) == null)
+                    continue;
                 navcontrol.add(key);
                 navcontrol.noScreenLockFor(key);
             }

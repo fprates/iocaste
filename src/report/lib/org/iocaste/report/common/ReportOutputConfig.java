@@ -20,8 +20,10 @@ public class ReportOutputConfig extends AbstractViewConfig {
         if (data.export == null)
             return;
         navcontrol = getNavControl();
-        navcontrol.add("csv");
-        navcontrol.noScreenLockFor("csv");
+        if (context.getView().getActionHandler("csv") != null) {
+            navcontrol.add("csv");
+            navcontrol.noScreenLockFor("csv");
+        }
     }
 
 }

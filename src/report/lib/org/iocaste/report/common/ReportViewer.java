@@ -1,5 +1,6 @@
 package org.iocaste.report.common;
 
+import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.report.common.data.ReportViewerData;
@@ -58,6 +59,8 @@ class OutputPanelPage extends AbstractPanelPage {
     
     @Override
     public void execute() {
+        AbstractActionHandler handler;
+        
         data.output.config.setViewerData(data);
         data.output.input.setViewerData(data);
         
@@ -65,10 +68,13 @@ class OutputPanelPage extends AbstractPanelPage {
         set(new ReportOutputSpec());
         set(new ReportOutputConfig(data));
         set(data.output.input);
-        if (data.export != null)
+        for (String key : data.output.actions.keySet()) {
+            handler = data.output.actions.get(key);
+            if (handler != null)
+                action(key, handler);
+        }
+        if ((data.export != null) && !data.output.actions.containsKey("csv"))
             action("csv", new CSVGenerate(data.export));
-        for (String key : data.output.actions.keySet())
-            action(key, data.output.actions.get(key));
     }
     
 }
