@@ -11,4 +11,5 @@ public class ReportToolStageItem {
     public Map<String, Object> values;
     public String sh, model, label;
     public int vlength;
+    public boolean required;
 }

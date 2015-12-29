@@ -58,6 +58,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
                 dfitem.componenttype = item.type;
                 dfitem.values = item.values;
                 dfitem.sh = item.sh;
+                dfitem.required = item.required;
                 if ((rtdata.input.nsreference != null) &&
                         rtdata.input.nsreference.equals(itemname))
                     dfitem.ns = true;
