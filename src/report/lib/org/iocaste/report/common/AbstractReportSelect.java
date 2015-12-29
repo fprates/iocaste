@@ -30,14 +30,19 @@ public abstract class AbstractReportSelect extends AbstractActionHandler {
         
         rtdata = new ReportToolData(context);
         rtdata.name = "output";
-        data.output.config.config(context, rtdata.output);
-        outputmodel = ReportTool.buildModel(rtdata);
         extcontext = getExtendedContext();
         if (data.input.name != null)
             extcontext.object = reportinputget("head");
+        preselect(context);
+        if (context.function.getMessageType() == Const.ERROR)
+            return;
+        
+        data.output.config.config(context, rtdata.output);
+        outputmodel = ReportTool.buildModel(rtdata);
         extcontext.items.clear();
         cache.clear();
         select(context);
+        
         if (extcontext.items.size() == 0) {
             message(Const.ERROR, "no.match");
             return;
@@ -75,6 +80,8 @@ public abstract class AbstractReportSelect extends AbstractActionHandler {
         extcontext.items.add(object);
         return object;
     }
+    
+    protected void preselect(PageBuilderContext context) { }
     
     protected final ExtendedObject reportinputget(String report) {
         ReportToolData rtdata = data.context.getView().getComponents().
