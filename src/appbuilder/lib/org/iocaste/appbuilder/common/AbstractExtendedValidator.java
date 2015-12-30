@@ -10,6 +10,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractValidator;
+import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
@@ -133,6 +134,19 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
     
     public final void setDocuments(Documents documents) {
         this.documents = documents;
+    }
+    
+    protected final void setFocus(String name) {
+        context.view.setFocus(context.view.getElement(name));
+    }
+    
+    protected final void setFocus(String parent, String name) {
+        AbstractComponentTool tool;
+        Container container;
+        
+        tool = context.getView().getComponents().getComponent(parent);
+        container = tool.getElement();
+        context.view.setFocus(container.getElement(name));
     }
     
     protected final void setTextReference(String model, String field) {
