@@ -40,10 +40,14 @@ public class Query implements Serializable {
         this.columns = columns;
     }
     
+    public final void andEnclose() {
+        enclose(true, "and");
+    }
+    
     public final void andEntries(String field, Collection<?> entries) {
         boolean first;
         
-        beginEnclose();
+        andEnclose();
         first = true;
         for (Object entry : entries)
             if (first) {
@@ -76,7 +80,7 @@ public class Query implements Serializable {
     }
 
     public final void andIn(String field, ValueRange range) {
-        beginEnclose();
+        andEnclose();
         add(field, WhereClause.RG, range, "and");
         endEnclose();
     }
@@ -97,20 +101,16 @@ public class Query implements Serializable {
         add(field, WhereClause.NE, value, "and");
     }
     
-    public final void beginEnclose() {
-        enclose(true);
-    }
-    
     public final void descending() {
         descending = true;
     }
     
-    private final void enclose(boolean begin) {
-        add(null, (begin)? WhereClause.BE : WhereClause.EE, null, null);
+    private final void enclose(boolean begin, String condition) {
+        add(null, (begin)? WhereClause.BE : WhereClause.EE, null, condition);
     }
     
     public final void endEnclose() {
-        enclose(false);
+        enclose(false, null);
     }
     
     public final void forEntries(ExtendedObject[] entries) {
@@ -199,6 +199,10 @@ public class Query implements Serializable {
     
     public final void orderBy(String... fields) {
         orderby = fields;
+    }
+    
+    public final void orEnclose() {
+        enclose(true, "or");
     }
     
     public final void orEqual(String field, Object value) {

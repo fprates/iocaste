@@ -281,10 +281,10 @@ public class Parser {
         Object value;
         String field;
         byte condition;
-        boolean afterfirst = false, entriesprocessed = false;
-        String operator = null;
-        int enclose = 0, level = 0;
         WhereData data;
+        boolean afterfirst = false, entriesprocessed = false;
+        boolean skipcondition = false;
+        String operator = null;
         
         data = new WhereData();
         data.entries = query.getEntries();
@@ -300,13 +300,14 @@ public class Parser {
                 afterfirst = true;
                 data.sb = new StringBuilder(" where");
             } else {
-                if (field != null && operator != null)
-                    data.sb.append(" ").append(operator);
-            }
-            
-            if (enclose > level) {
-                data.sb.append(" (");
-                level = enclose;
+                operator = clause.getOperator();
+                if (field != null) {
+                    data.sb.append(" ");
+                    if ((operator != null) && !skipcondition)
+                        data.sb.append(operator);
+                    else
+                        skipcondition = false;
+                }
             }
             
             if (field != null) {
@@ -314,18 +315,15 @@ public class Parser {
             } else {
                 switch (clause.getCondition()) {
                 case WhereClause.BE:
-                    enclose++;
+                    if (operator != null)
+                        data.sb.append(" ").append(operator);
+                    data.sb.append(" (");
+                    skipcondition = true;
                     continue;
                 case WhereClause.EE:
-                    enclose--;
-                    break;
+                    data.sb.append(" )");
+                    continue;
                 }
-            }
-            
-            if (enclose < level) {
-                data.sb.append(" )");
-                level = enclose;
-                continue;
             }
             
             value = clause.getValue();
@@ -344,7 +342,7 @@ public class Parser {
                 if (data.entries == null || data.entries.length == 0)
                         throw new IocasteException("no entries for selection.");
                 operator = whereEntries(data);
-                entriesprocessed = true;
+                entriesprocessed = skipcondition = true;
                 continue;
             case WhereClause.RG:
                 whereRange(data, operator, (ValueRange)value);
@@ -353,7 +351,6 @@ public class Parser {
                 whereSimple(data, condition, operator, value);
                 break;
             }
-            operator = clause.getOperator();
         }
         
         nsitem = tablemodel.getNamespace();
