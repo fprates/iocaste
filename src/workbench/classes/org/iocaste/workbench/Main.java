@@ -1,55 +1,54 @@
 package org.iocaste.workbench;
 
-import org.iocaste.appbuilder.common.AbstractPageBuilder;
+import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.ViewContext;
-import org.iocaste.texteditor.common.TextEditorTool;
+import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
+import org.iocaste.appbuilder.common.cmodelviewer.DisplayConfig;
+import org.iocaste.appbuilder.common.cmodelviewer.Load;
+import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceInput;
+import org.iocaste.appbuilder.common.cmodelviewer.Save;
+import org.iocaste.appbuilder.common.cmodelviewer.Validate;
+import org.iocaste.workbench.install.ProjectInstall;
+import org.iocaste.workbench.project.ProjectConfig;
+import org.iocaste.workbench.project.ProjectSpec;
 
-public class Main extends AbstractPageBuilder {
-    private static final String MAIN = "main";
-    public static final String PRJC = "project_create";
+public class Main extends AbstractModelViewer {
     
     @Override
     public void config(PageBuilderContext context) {
-        ViewContext view;
-        Context extcontext = new Context();
+        AppBuilderLink link;
         
-        extcontext.repository = TextEditorTool.composeFileName(
-                System.getProperty("user.dir"), "iocaste","iocaste-workbench");
+        link = getReceivedLink();
+        link.displayconfig = new DisplayConfig();
+        link.maintenancespec = new ProjectSpec();
+        link.maintenanceinput = new MaintenanceInput();
+        link.maintenanceconfig = new ProjectConfig();
+        link.updateload = new Load(link.edit1view);
+        link.displayload = new Load(link.display1view);
+        link.validate = new Validate();
+        link.save = new Save();
         
-        view = context.instance(MAIN);
-        view.set(extcontext);
-        view.set(new MainSpec());
-        view.set(new MainConfig());
-        view.put("create", new ProjectCreate());
-        view.put("open", new ProjectOpen());
-        
-        
-        view = context.instance(PRJC);
-        view.set(extcontext);
-        view.set(new ProjectSpec());
-        view.set(new ProjectConfig());
-        view.set(new ProjectInput());
-        view.put("create", new ObjectProjectCreate());
-        view.put("add", new ComponentViewAdd());
-        view.put("components", new ComponentChoose());
-        view.put("save", new ProjectSave());
-        view.put("attributes", new AttributesSet());
-        view.put("views", new ProjectViewDisplay());
-        view.put("create_element", new SwitchPanel("element"));
-        view.put("cancel_element", new SwitchPanel("model"));
-        view.setUpdate(true);
+        loadManagedModule(context, link);
     }
 
     @Override
     protected void installConfig(PageBuilderDefaultInstall defaultinstall) {
-        defaultinstall.setLink("WORKBENCH", "iocaste-workbench");
-        defaultinstall.setProfile("WORKBENCH");
-        defaultinstall.setProgramAuthorization("WORKBENCH.EXECUTE");
-        defaultinstall.addToTaskGroup("DEVELOP", "WORKBENCH");
+        AppBuilderLink link;
         
-        installObject("models", new ModelsInstall());
+        defaultinstall.setProfile("DEVELOP");
+        defaultinstall.setProgramAuthorization("WB");
+        
+        link = defaultinstall.builderLinkInstance();
+        link.change = "WBPROJECTCH";
+        link.create = "WBPROJECTCR";
+        link.display = "WBPROJECTDS";
+        link.entity = "project";
+        link.cmodel = "WB_PROJECT";
+        link.taskgroup = "DEVELOP";
+        link.appname = "iocaste-workbench";
+        
+        installObject("project", new ProjectInstall());
     }
 
 }

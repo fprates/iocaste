@@ -9,17 +9,17 @@ public class ProjectCreate extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        Context extcontext = getExtendedContext();
-        
-        extcontext.project = getdfst("head", "PROJECT_ID");
-        extcontext.projectdir = new StringBuilder(extcontext.repository).
-                append(File.separator).
-                append(extcontext.project).toString();
-        
-        extcontext.view = null;
-        extcontext.links = null;
-        extcontext.views.clear();
-        redirect(Main.PRJC);
+//        Context extcontext = getExtendedContext();
+//        
+//        extcontext.project = getdfst("head", "PROJECT_ID");
+//        extcontext.projectdir = new StringBuilder(extcontext.repository).
+//                append(File.separator).
+//                append(extcontext.project).toString();
+//        
+//        extcontext.view = null;
+//        extcontext.links = null;
+//        extcontext.views.clear();
+//        redirect(Main.PRJC);
     }
 
 }

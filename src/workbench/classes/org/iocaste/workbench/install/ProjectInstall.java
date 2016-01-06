@@ -1,33 +1,71 @@
 package org.iocaste.workbench.install;
 
+import org.iocaste.appbuilder.common.AbstractInstallObject;
+import org.iocaste.appbuilder.common.ComplexModelInstall;
+import org.iocaste.appbuilder.common.ModelInstall;
+import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
-import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.DocumentModelKey;
-import org.iocaste.documents.common.DummyElement;
-import org.iocaste.packagetool.common.InstallData;
 
-public class Models {
-    public static final void install(InstallData data) {
-//        DataElement element, sourceid, sourcename;
-//        DocumentModel model;
-//        DocumentModelItem item, projectname, packageid;
-//        
-//        /*
-//         * Projeto
-//         */
-//        model = data.getModel("WB_PROJECT", "WB_PROJECT", null);
-//        
-//        element = new DataElement("WB_PROJECT_NAME");
-//        element.setType(DataType.CHAR);
-//        element.setLength(32);
-//        element.setUpcase(true);
-//        projectname = new DocumentModelItem("PROJECT_NAME");
-//        projectname.setTableFieldName("PRJNM");
-//        projectname.setDataElement(element);
-//        model.add(new DocumentModelKey(projectname));
-//        model.add(projectname);
+public class ProjectInstall extends AbstractInstallObject {
+
+    @Override
+    protected void execute(StandardInstallContext context) throws Exception {
+        DataElement projectname, projectscreen, text, screenname;
+        DataElement screenspecitemid, screenspecitemname;
+        ModelInstall model;
+        ComplexModelInstall cmodel;
+        DocumentModelItem project, screen;
+
+        projectname = elementchar("WB_PROJECT_NAME", 32, true);
+        text = elementchar("WB_TEXT", 32, false);
+        projectscreen = elementchar("WB_PROJECT_SCREEN", 35, true);
+        screenname = elementchar("WB_SCREEN_NAME", 16, true);
+        screenspecitemid = elementchar("WB_SCREEN_SPEC_ITEM", 38, true);
+        screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, true);
+        
+        /*
+         * project header
+         */
+        model = tag("header", modelInstance(
+                "WB_PROJECT_HEAD", "WBPRJCTHD"));
+        project = model.key(
+                "PROJECT_NAME", "PRJNM", projectname);
+        model.item(
+                "TEXT", "PRJTX", text);
+        
+        /*
+         * project screens
+         */
+        model = tag("screens", modelInstance(
+                "WB_PROJECT_SCREENS", "WBPRJCTSCR"));
+        screen = model.key(
+                "PROJECT_SCREEN", "SCRID", projectscreen);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.item(
+                "SCREEN_NAME", "SCRNM", screenname);
+        
+        /*
+         * project screen spec items
+         */
+        model = tag("screen_spec_items", modelInstance(
+                "WB_SCREEN_SPEC_ITEMS", "WBSCRSPECIT"));
+        model.key(
+                "ITEM_ID", "ITMID", screenspecitemid);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.reference(
+                "SCREEN", "SCRID", screen);
+        model.item(
+                "NAME", "SITNM", screenspecitemname);
+        /*
+         * project document
+         */
+        cmodel = cmodelInstance("WB_PROJECT");
+        cmodel.header("header");
+        cmodel.item("screen", "screens");
+        cmodel.item("screen_spec_item", "screen_spec_items");
 //        
 //        element = new DataElement("WB_PROJECT_ID");
 //        element.setType(DataType.NUMC);
@@ -126,5 +164,6 @@ public class Models {
 //        item.setTableFieldName("SRCNM");
 //        item.setDataElement(sourcename);
 //        model.add(item);
+        
     }
 }
