@@ -5,11 +5,13 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
 import org.iocaste.appbuilder.common.cmodelviewer.DisplayConfig;
+import org.iocaste.appbuilder.common.cmodelviewer.EntityCustomPage;
 import org.iocaste.appbuilder.common.cmodelviewer.Load;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceInput;
 import org.iocaste.appbuilder.common.cmodelviewer.Save;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
 import org.iocaste.workbench.install.ProjectInstall;
+import org.iocaste.workbench.project.ModelAdd;
 import org.iocaste.workbench.project.ProjectConfig;
 import org.iocaste.workbench.project.ProjectSpec;
 
@@ -28,6 +30,7 @@ public class Main extends AbstractModelViewer {
         link.displayload = new Load(link.display1view);
         link.validate = new Validate();
         link.save = new Save();
+        link.custompage = new WorkbenchCustomPage();
         
         loadManagedModule(context, link);
     }
@@ -51,4 +54,13 @@ public class Main extends AbstractModelViewer {
         installObject("project", new ProjectInstall());
     }
 
+}
+
+class WorkbenchCustomPage extends EntityCustomPage {
+    
+    @Override
+    public final void execute() {
+        super.execute();
+        put("model_add", new ModelAdd());
+    }
 }

@@ -5,7 +5,9 @@ import org.iocaste.appbuilder.common.ComplexModelInstall;
 import org.iocaste.appbuilder.common.ModelInstall;
 import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.packagetool.common.SearchHelpData;
 
 public class ProjectInstall extends AbstractInstallObject {
 
@@ -13,10 +15,12 @@ public class ProjectInstall extends AbstractInstallObject {
     protected void execute(StandardInstallContext context) throws Exception {
         DataElement projectname, projectscreen, text, screenname, modelname;
         DataElement screenspecitemid, screenspecitemname, projectmodel;
-        DataElement modelitemid, modelitemname;
+        DataElement modelitemid, modelitemname, typeid, typetext;
+        DataElement modelitemlength;
         ModelInstall model;
         ComplexModelInstall cmodel;
-        DocumentModelItem project, screen, modelid;
+        DocumentModelItem project, screen, modelid, datatype;
+        SearchHelpData shd;
 
         projectname = elementchar("WB_PROJECT_NAME", 32, true);
         text = elementchar("WB_TEXT", 32, false);
@@ -28,6 +32,35 @@ public class ProjectInstall extends AbstractInstallObject {
         modelname = elementchar("WB_MODEL_NAME", 24, true);
         modelitemid = elementchar("WB_MODEL_ITEM", 38, true);
         modelitemname = elementchar("WB_MODEL_ITEM_NAME", 24, true);
+        modelitemlength = elementnumc("WB_MODEL_ITEM_LENGTH", 4);
+        typeid = elementnumc("WB_TYPE_ID", 2);
+        typetext = elementchar("WB_TYPE_TEXT", 16, false);
+        
+        /*
+         * Tipos de dados
+         */
+        model = modelInstance(
+                "WB_DATA_TYPE", "WBMDLITTP");
+        datatype = model.key(
+                "TYPE", "TYPID", typeid);
+        model.item(
+                "TEXT", "TYPTX", typetext);
+        
+        model.values(DataType.CHAR, "Caracter");
+        model.values(DataType.DATE, "Data");
+        model.values(DataType.DEC, "Decimal");
+        model.values(DataType.NUMC, "Numerico inteiro");
+        model.values(DataType.TIME, "Hora");
+        model.values(DataType.BOOLEAN, "Booleano");
+        model.values(DataType.BYTE, "Byte integer");
+        model.values(DataType.INT, "Integer");
+        model.values(DataType.LONG, "Long integer");
+        model.values(DataType.SHORT, "Short integer");
+        
+        shd = searchHelpInstance("WB_SH_TYPE_ID", "WB_DATA_TYPE");
+        shd.setExport("TYPE");
+        shd.add("TYPE");
+        shd.add("TEXT");
         
         /*
          * project header
@@ -90,6 +123,10 @@ public class ProjectInstall extends AbstractInstallObject {
                 "MODEL", "MDLID", modelid);
         model.item(
                 "NAME", "MDLNM", modelitemname);
+        searchhelp(model.item(
+                "TYPE", "MDLTY", datatype), "WB_SH_TYPE_ID");
+        model.item(
+                "LENGTH", "LNGTH", modelitemlength);
         
         /*
          * project document
