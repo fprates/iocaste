@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -19,13 +20,17 @@ public class MaintenanceSpec extends AbstractPanelSpec {
         tabbedpane("content", "tabs");
         tabbedpaneitem("tabs", "basetab");
         dataform("basetab", "base");
-        tabs(model.getItems());
+        tabs(extcontext, model.getItems());
     }
 
-    protected void tabs(Map<String, DocumentModel> models) {
+    protected void tabs(Context extcontext, Map<String, DocumentModel> models) {
+        String tablename;
+        
         for (String name : models.keySet()) {
             tabbedpaneitem("tabs", name);
-            tabletool(name, name.concat("_table"));
+            tablename = name.concat("_table");
+            tabletool(name, tablename);
+            extcontext.tabletools.put(tablename, new LinkedHashMap<>());
         }
     }
 }

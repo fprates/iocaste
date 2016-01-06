@@ -13,19 +13,21 @@ public class MaintenanceInput extends AbstractViewInput {
         
         dfkeyset("head", extcontext.id);
         
-        if (extcontext.document == null)
-            return;
-
-        cmodel = extcontext.document.getModel();
-        if (cmodel.getHeader().getNamespace() != null) {
-            dfnsset("head", extcontext.ns);
-            dfnsset("base", extcontext.ns);
+        if (extcontext.document != null) {
+            cmodel = extcontext.document.getModel();
+            if (cmodel.getHeader().getNamespace() != null) {
+                dfnsset("head", extcontext.ns);
+                dfnsset("base", extcontext.ns);
+            }
+            
+            dfset("base", extcontext.document.getHeader());
+            for (String name : cmodel.getItems().keySet())
+                tableitemsset(name.concat("_table"), extcontext.document.
+                        getItems(name));
         }
         
-        dfset("base", extcontext.document.getHeader());
-        for (String name : cmodel.getItems().keySet())
-            tableitemsset(name.concat("_table"), extcontext.document.
-                    getItems(name));
+        for (String name : extcontext.tabletools.keySet())
+            tableitemsset(name, extcontext.tabletools.get(name).values());
         
         loadInputTexts(context);
     }
