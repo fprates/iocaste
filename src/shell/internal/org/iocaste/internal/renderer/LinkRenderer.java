@@ -63,10 +63,13 @@ public class LinkRenderer extends Renderer {
             onclick = new StringBuilder();
             for (String name : parameters.keySet()) {
                 entry = parameters.get(name);
-                if (entry.value == null)
+                if (entry == null)
                     throw new RuntimeException(new StringBuilder(name).
                             append(" is an unreferenced parameter of ").
                             append(htmlname).toString());
+                
+                if (entry.value == null)
+                    entry.value = "";
                 
                 onclick.append("setValue('").append(name).
                         append("', '").append(entry.value).

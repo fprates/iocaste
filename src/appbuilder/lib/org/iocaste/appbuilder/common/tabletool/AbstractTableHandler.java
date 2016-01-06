@@ -138,8 +138,10 @@ public abstract class AbstractTableHandler {
         if (ttitem != null)
             tabletool.setLineProperties(context, tcolumns, ttitem);
         
-        if (object == null)
+        if (object == null) {
+            tabletool.set(item, null);
             return item;
+        }
         
         if (context.data.itemcolumn != null) {
             context.data.last += context.data.increment; 
