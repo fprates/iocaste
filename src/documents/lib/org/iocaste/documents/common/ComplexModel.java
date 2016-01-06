@@ -2,6 +2,7 @@ package org.iocaste.documents.common;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.DocumentModel;
@@ -33,7 +34,7 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
     private Map<String, String> reverseitems;
     
     public ComplexModel(String name) {
-        items = new HashMap<>();
+        items = new LinkedHashMap<>();
         reverseitems = new HashMap<>();
         this.name = name;
     }
