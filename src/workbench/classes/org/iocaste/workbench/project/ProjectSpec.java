@@ -9,17 +9,22 @@ public class ProjectSpec extends MaintenanceSpec {
     
     @Override
     protected final void tabs(Map<String, DocumentModel> models) {
+        String detail = null;
+        
         for (String name : models.keySet()) {
             switch (name) {
             case "screen":
+            case "model":
                 tabbedpaneitem("tabs", name);
-                tabletool(name, "screen_table");
-                standardcontainer(name, "screen_detail");
-                dataform("screen_detail", "screen_header");
-                tabbedpane("screen_detail", "screen_detail_pane");
+                detail = name.concat("_detail");
+                tabletool(name, name.concat("_table"));
+                standardcontainer(name, detail);
+                dataform(detail, name.concat("_header"));
+                tabbedpane(detail, detail.concat("_pane"));
                 break;
+            case "model_item":
             case "screen_spec_item":
-                screendetail(name);
+                screendetail(detail, name);
                 break;
             default:
                 tabbedpaneitem("tabs", name);
@@ -29,8 +34,8 @@ public class ProjectSpec extends MaintenanceSpec {
         }
     }
     
-    private final void screendetail(String name) {
-        tabbedpaneitem("screen_detail_pane", name);
+    private final void screendetail(String detail, String name) {
+        tabbedpaneitem(detail.concat("_pane"), name);
         tabletool(name, name.concat("_table"));
     }
 }

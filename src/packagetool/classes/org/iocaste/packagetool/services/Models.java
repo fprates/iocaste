@@ -32,20 +32,39 @@ public class Models {
         }
     }
     
-    private static final void installAll(
+    private static final void installAll(Map<String, DocumentModel> models,
             List<DocumentModel> toinstall, State state) throws Exception {
-        int error = state.documents.
+        DocumentModel modelreference;
+        DocumentModelItem reference;
+        int error;
+        
+        for (DocumentModel installed : toinstall) {
+            installed.setPackage(state.pkgname);
+            for (DocumentModelItem item : installed.getItens()) {
+                reference = item.getReference();
+                if (reference == null)
+                    continue;
+                modelreference = reference.getDocumentModel();
+                if (!models.containsKey(modelreference.getName()))
+                    continue;
+                if (modelreference.getPackage() == null)
+                    modelreference.setPackage(state.pkgname);
+            }
+        }
+        
+        error = state.documents.
                 createModels(toinstall.toArray(new DocumentModel[0]));
+        
         if (error < 0)
             throw new IocasteException(
                     new StringBuilder("error creating models.").toString());
+        
         for (DocumentModel installed : toinstall)
             install(installed, installed.getName(), state);
     }
     
     public static final void installAll(Map<String, DocumentModel> models,
             State state) throws Exception {
-        DocumentModel model;
         List<DocumentModel> toinstall;
         
         toinstall = new ArrayList<>();
@@ -54,15 +73,12 @@ public class Models {
                 Registry.add(modelname, "MODEL", state);
                 continue;
             }
-            
-            model = models.get(modelname);
-            model.setPackage(state.pkgname);
-            toinstall.add(model);
+            toinstall.add(models.get(modelname));
         }
         
         if (toinstall.size() == 0)
             return;
-        installAll(toinstall, state);
+        installAll(models, toinstall, state);
     }
     
     public static final void install(DocumentModel model, String modelname,
@@ -140,13 +156,11 @@ public class Models {
                 update(model, name, state);
                 continue;
             }
-            
-            model.setPackage(state.pkgname);
             toinstall.add(model);
         }
         
         if (toinstall.size() == 0)
             return;
-        installAll(toinstall, state);
+        installAll(models, toinstall, state);
     }
 }
