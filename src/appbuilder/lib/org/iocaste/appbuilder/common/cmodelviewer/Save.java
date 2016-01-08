@@ -17,13 +17,10 @@ public class Save extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        ViewComponents components;
-        DocumentModel model;
         DocumentExtractor extractor;
         DataConversion conversion;
         ComplexModel cmodel;
-        String keyname, tbname, itemname;
-        TableToolData tabletool;
+        String keyname;
         Context extcontext = getExtendedContext();
         
         cmodel = getManager(extcontext.link.cmodel).getModel();
@@ -41,6 +38,22 @@ public class Save extends AbstractActionHandler {
         extractor = documentExtractorInstance(extcontext.link.cmodel);
         extractor.setHeader(conversion);
         extractor.ignoreInitialHead();
+        extractor.setNS(extcontext.ns);
+        tabs(extractor, context, cmodel);
+        extcontext.document = extractor.save();
+        extcontext.id = extcontext.document.getKey();
+        
+        managerMessage(extcontext.link.cmodel, Const.STATUS, Manager.SAVED,
+                extcontext.id);
+    }
+    
+    protected void tabs(DocumentExtractor extractor,
+            PageBuilderContext context, ComplexModel cmodel) {
+        DataConversion conversion;
+        ViewComponents components;
+        DocumentModel model;
+        TableToolData tabletool;
+        String tbname, itemname;
         
         components = context.getView().getComponents();
         for (String name : cmodel.getItems().keySet()) {
@@ -59,13 +72,6 @@ public class Save extends AbstractActionHandler {
                     conversion.ignore(itemname);
             }
         }
-        
-        extractor.setNS(extcontext.ns);
-        extcontext.document = extractor.save();
-        extcontext.id = extcontext.document.getKey();
-        
-        managerMessage(extcontext.link.cmodel, Const.STATUS, Manager.SAVED,
-                extcontext.id);
     }
 
 }
