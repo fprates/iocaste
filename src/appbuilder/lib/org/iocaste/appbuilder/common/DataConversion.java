@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +15,7 @@ public class DataConversion {
     public static final byte OBJECT = 2;
     public static final byte OBJECTS = 3;
     public static final byte TABLETOOL = 4;
+    public static final byte COLLECTION = 5;
     private String to;
     private Map<String, FieldConversion> fields;
     private Object source;
@@ -97,6 +99,11 @@ public class DataConversion {
     
     public final void source(ExtendedObject[] source) {
         sourcetype = OBJECTS;
+        this.source = source;
+    }
+    
+    public final void source(Collection<ExtendedObject> source) {
+        sourcetype = COLLECTION;
         this.source = source;
     }
     

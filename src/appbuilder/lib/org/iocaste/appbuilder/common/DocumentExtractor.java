@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -87,12 +88,15 @@ public class DocumentExtractor {
         return object;
     }
     
+    @SuppressWarnings("unchecked")
     public static final ExtendedObject[] extractItems(
             Object ns,
             Documents documents,
             DataConversion conversion,
             ComplexDocument document,
             ExtendedObject[] objects) {
+        Collection<ExtendedObject> collection;
+        int i;
         DataConversionRule rule;
         List<ExtendedObject> result;
         String to;
@@ -101,11 +105,22 @@ public class DocumentExtractor {
         
         result = (document == null)? new ArrayList<ExtendedObject>() : null;
         
-        if ((objects == null) &&
-                (conversion.getSourceType() == DataConversion.OBJECTS)) {
-            objects = (ExtendedObject[])conversion.getSource();
-            if (objects == null)
-                return null;
+        if (objects == null) {
+            switch (conversion.getSourceType()) {
+            case DataConversion.OBJECTS:
+                objects = (ExtendedObject[])conversion.getSource();
+                if (objects == null)
+                    return null;
+                break;
+            case DataConversion.COLLECTION:
+                collection = (Collection<ExtendedObject>)conversion.getSource();
+                if (collection == null)
+                    return null;
+                objects = new ExtendedObject[collection.size()];
+                i = 0;
+                for (ExtendedObject extobject : collection)
+                    objects[i++] = extobject;
+            }
         }
         
         for (ExtendedObject object : objects) {
