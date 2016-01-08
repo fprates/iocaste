@@ -13,6 +13,12 @@ public class MaintenanceInput extends AbstractViewInput {
         
         dfkeyset("head", extcontext.id);
         
+        for (String name : extcontext.dataforms.keySet())
+            dfset(name, extcontext.dataforms.get(name));
+        
+        for (String name : extcontext.tabletools.keySet())
+            tableitemsset(name, extcontext.tabletools.get(name).values());
+        
         if (extcontext.document != null) {
             cmodel = extcontext.document.getModel();
             if (cmodel.getHeader().getNamespace() != null) {
@@ -25,9 +31,6 @@ public class MaintenanceInput extends AbstractViewInput {
                 tableitemsset(name.concat("_table"), extcontext.document.
                         getItems(name));
         }
-        
-        for (String name : extcontext.tabletools.keySet())
-            tableitemsset(name, extcontext.tabletools.get(name).values());
         
         loadInputTexts(context);
     }
