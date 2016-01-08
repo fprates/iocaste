@@ -11,6 +11,7 @@ public class ReportViewer {
     
     public ReportViewer(ReportViewerData data) {
         panel = new StandardPanel(data.context);
+        data.export.setTranslations(data.translations);
         
         if (data.input.name != null) {
             if (data.input.input == null)

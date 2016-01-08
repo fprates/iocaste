@@ -22,6 +22,7 @@ public class CSVGenerate extends AbstractActionHandler {
         StringBuilder buffer;
         Map<String, ReportPrintItem> values;
         boolean head = false;
+        Map<String, String> translations = export.getTranslations();
         
         buffer = new StringBuilder();
         values = new LinkedHashMap<>();
@@ -30,7 +31,7 @@ public class CSVGenerate extends AbstractActionHandler {
             if (!head) {
                 values.clear();
                 export.printHeader(item.getModel());
-                printline(buffer, values);
+                printline(translations, buffer, values);
                 head = true;
             }
             values.clear();
@@ -79,13 +80,26 @@ public class CSVGenerate extends AbstractActionHandler {
     
     private final void printline(StringBuilder buffer,
             Map<String, ReportPrintItem> values) {
+        printline(null, buffer, values);
+    }
+    
+    private final void printline(Map<String, String> translations,
+            StringBuilder buffer, Map<String, ReportPrintItem> values) {
         ReportPrintItem printitem;
-        String value;
+        String value, translated;
         
         for (String key : values.keySet()) {
             printitem = values.get(key);
             value = printitem.getValue();
-            buffer.append((value == null)? "" : value).append(";");
+            if (value != null) {
+                if ((translations != null) && translations.containsKey(value))
+                    translated = translations.get(value);
+                else
+                    translated = value;
+            } else {
+                translated = "";
+            }
+            buffer.append(translated).append(";");
         }
         buffer.append("\n");
     }

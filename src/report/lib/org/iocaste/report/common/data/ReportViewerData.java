@@ -1,5 +1,7 @@
 package org.iocaste.report.common.data;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.navcontrol.NavControlDesign;
 import org.iocaste.report.common.AbstractReportContext;
@@ -12,6 +14,7 @@ public class ReportViewerData {
     public AbstractReportSelect select;
     public AbstractOutputExport export;
     public ReportViewerDataStage input, output;
+    public Map<String, String> translations;
     public NavControlDesign ncdesign;
     public String titletext;
     public Object[] titleargs;
