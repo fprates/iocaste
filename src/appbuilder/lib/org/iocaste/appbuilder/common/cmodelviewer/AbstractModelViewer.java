@@ -1,6 +1,5 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
-import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -51,7 +50,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         EntityDisplayPage displaypage;
         StandardPanel panel;
         AbstractPanelSpec selspec;
-        AbstractActionHandler inputvalidate;
         String entityaction;
         Manager manager;
         
@@ -66,7 +64,8 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         context.addManager(link.cmodel, manager);
         
         selspec = new SelectSpec();
-        inputvalidate = new InputValidate();
+        if (link.inputvalidate == null)
+            link.inputvalidate = new InputValidate();
         panel = new StandardPanel(context);
 
         CommonStyle.get().head.bgcolor = "#3030ff";
@@ -89,7 +88,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         custompage = (link.custompage == null)?
                 new EntityCustomPage() : link.custompage;
         custompage.link = link;
-        custompage.inputvalidate = inputvalidate;
         
         for (String view : new String[] {
                 link.createview, link.create1view, link.edit1view}) {
@@ -131,12 +129,5 @@ class RuntimeManager extends AbstractManager {
         messages[SAVED] = "record.saved";
         setMessages(messages);
     }
-    
-}
-
-class InputValidate extends AbstractActionHandler {
-
-    @Override
-    protected void execute(PageBuilderContext context) throws Exception { }
     
 }

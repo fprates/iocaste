@@ -15,6 +15,7 @@ public class AppBuilderLink {
     public ViewConfig updateselectconfig, maintenanceconfig, displayconfig;
     public AbstractViewInput maintenanceinput;
     public AbstractActionHandler save, validate, updateload, displayload;
+    public AbstractActionHandler inputvalidate;
     public EntityPage entitypage;
     public EntityCustomPage custompage;
     public EntityDisplayPage displaypage;
