@@ -6,7 +6,7 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.TextArea;
 import org.iocaste.shell.common.TextField;
-import org.iocaste.workbench.Context;
+import org.iocaste.workbench.WorkbenchContext;
 
 public class WorkbenchShell {
 

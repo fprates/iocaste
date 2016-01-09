@@ -4,7 +4,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.workbench.Common;
-import org.iocaste.workbench.Context;
+import org.iocaste.workbench.WorkbenchContext;
 import org.iocaste.workbench.compiler.Compile;
 
 public class Project {

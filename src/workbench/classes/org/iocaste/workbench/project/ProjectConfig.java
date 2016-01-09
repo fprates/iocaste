@@ -63,7 +63,7 @@ public class ProjectConfig extends MaintenanceConfig {
         
         column = new TableToolColumn(tabletool, "MODEL_NAME");
         column.type = Const.LINK;
-        column.action = "modelpick";
+        column.action = "model_pick";
         
         tabletool = getTableTool("screen_spec_item_table");
         tabletool.hide = new String[] {"ITEM_ID", "PROJECT", "SCREEN"};

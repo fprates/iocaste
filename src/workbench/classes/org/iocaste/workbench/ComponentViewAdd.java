@@ -7,12 +7,12 @@ public class ComponentViewAdd extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        Context extcontext = getExtendedContext();
-        
-        extcontext.name = getinputst("name");
-        extcontext.view = getinputst("viewname");
-        extcontext.container = getinputst("container");
-        extcontext.viewoptions = true;
+//        WorkbenchContext extcontext = getExtendedContext();
+//        
+//        extcontext.name = getinputst("name");
+//        extcontext.view = getinputst("viewname");
+//        extcontext.container = getinputst("container");
+//        extcontext.viewoptions = true;
     }
 
 }

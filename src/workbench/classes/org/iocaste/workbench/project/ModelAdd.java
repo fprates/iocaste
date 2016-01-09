@@ -2,23 +2,24 @@ package org.iocaste.workbench.project;
 
 import java.util.Collection;
 
-import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.cmodelviewer.Context;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
+import org.iocaste.workbench.WorkbenchValidate;
 
-public class ModelAdd extends AbstractActionHandler {
+public class ModelAdd extends WorkbenchValidate {
 
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected void execute(PageBuilderContext context) {
         String name;
         Context extcontext;
         Documents documents;
         ExtendedObject object;
         Collection<ExtendedObject> objects;
         
+        super.execute(context);
         name = getinputst("model_name");
         if (name == null) {
             message(Const.ERROR, "model.name.required");

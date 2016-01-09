@@ -4,7 +4,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Form;
 import org.iocaste.texteditor.common.TextEditorTool;
 import org.iocaste.workbench.Common;
-import org.iocaste.workbench.Context;
+import org.iocaste.workbench.WorkbenchContext;
 
 public class Editor {
 //    public static final void output(Context context) {

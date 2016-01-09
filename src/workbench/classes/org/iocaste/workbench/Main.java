@@ -8,10 +8,10 @@ import org.iocaste.appbuilder.common.cmodelviewer.DisplayConfig;
 import org.iocaste.appbuilder.common.cmodelviewer.EntityCustomPage;
 import org.iocaste.appbuilder.common.cmodelviewer.Load;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceInput;
-import org.iocaste.appbuilder.common.cmodelviewer.Save;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
 import org.iocaste.workbench.install.ProjectInstall;
 import org.iocaste.workbench.project.ModelAdd;
+import org.iocaste.workbench.project.ModelPick;
 import org.iocaste.workbench.project.ProjectConfig;
 import org.iocaste.workbench.project.ProjectSpec;
 
@@ -29,8 +29,10 @@ public class Main extends AbstractModelViewer {
         link.updateload = new Load(link.edit1view);
         link.displayload = new Load(link.display1view);
         link.validate = new Validate();
-        link.save = new Save();
+        link.save = new ProjectSave();
         link.custompage = new WorkbenchCustomPage();
+        link.inputvalidate = new WorkbenchValidate();
+        setExtendedContext(new WorkbenchContext());
         
         loadManagedModule(context, link);
     }
@@ -62,5 +64,6 @@ class WorkbenchCustomPage extends EntityCustomPage {
     public final void execute() {
         super.execute();
         put("model_add", new ModelAdd());
+        put("model_pick", new ModelPick());
     }
 }

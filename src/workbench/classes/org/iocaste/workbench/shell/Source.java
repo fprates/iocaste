@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.workbench.Common;
-import org.iocaste.workbench.Context;
+import org.iocaste.workbench.WorkbenchContext;
 
 public class Source {
     

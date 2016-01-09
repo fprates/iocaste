@@ -7,10 +7,10 @@ public class AttributesSet extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        Context extcontext = getExtendedContext();
-        
-        extcontext.hideAll();
-        extcontext.linksgrid = true;
+//        WorkbenchContext extcontext = getExtendedContext();
+//        
+//        extcontext.hideAll();
+//        extcontext.linksgrid = true;
     }
 
 }

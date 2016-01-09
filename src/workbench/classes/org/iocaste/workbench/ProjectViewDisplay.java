@@ -7,11 +7,11 @@ public class ProjectViewDisplay extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        Context extcontext = getExtendedContext();
-        
-        extcontext.view = dbactiongetst("project", "views");
-        extcontext.hideAll();
-        extcontext.viewtree = true;
+//        WorkbenchContext extcontext = getExtendedContext();
+//        
+//        extcontext.view = dbactiongetst("project", "views");
+//        extcontext.hideAll();
+//        extcontext.viewtree = true;
     }
 
 }
