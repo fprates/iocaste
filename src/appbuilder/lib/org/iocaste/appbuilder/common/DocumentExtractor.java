@@ -87,16 +87,52 @@ public class DocumentExtractor {
         
         return object;
     }
-    
+
     @SuppressWarnings("unchecked")
+    private static ExtendedObject[] convertItems(DataConversion conversion,
+            ViewComponents components) {
+        String source;
+        Collection<ExtendedObject> collection;
+        ExtendedObject[] objects;
+        TableToolData ttdata;
+        List<TableToolItem> ttitems;
+        int i;
+        
+        switch (conversion.getSourceType()) {
+        case DataConversion.OBJECTS:
+            return (ExtendedObject[])conversion.getSource();
+        case DataConversion.COLLECTION:
+            collection = (Collection<ExtendedObject>)conversion.getSource();
+            if (collection == null)
+                break;
+            objects = new ExtendedObject[collection.size()];
+            i = 0;
+            for (ExtendedObject extobject : collection)
+                objects[i++] = extobject;
+            return objects;
+        case DataConversion.TABLETOOL:
+            source = (String)conversion.getSource();
+            ttdata = components.getComponentData(source);
+            ttitems = ttdata.getItems();
+            if (ttitems == null)
+                break;
+            objects = new ExtendedObject[ttitems.size()];
+            i = 0;
+            for (TableToolItem item : ttitems)
+                objects[i++] = item.object;
+        default:
+            break;
+        }
+        return null;
+    }
+    
     public static final ExtendedObject[] extractItems(
+            PageBuilderContext context,
             Object ns,
             Documents documents,
             DataConversion conversion,
             ComplexDocument document,
             ExtendedObject[] objects) {
-        Collection<ExtendedObject> collection;
-        int i;
         DataConversionRule rule;
         List<ExtendedObject> result;
         String to;
@@ -106,21 +142,10 @@ public class DocumentExtractor {
         result = (document == null)? new ArrayList<ExtendedObject>() : null;
         
         if (objects == null) {
-            switch (conversion.getSourceType()) {
-            case DataConversion.OBJECTS:
-                objects = (ExtendedObject[])conversion.getSource();
-                if (objects == null)
-                    return null;
-                break;
-            case DataConversion.COLLECTION:
-                collection = (Collection<ExtendedObject>)conversion.getSource();
-                if (collection == null)
-                    return null;
-                objects = new ExtendedObject[collection.size()];
-                i = 0;
-                for (ExtendedObject extobject : collection)
-                    objects[i++] = extobject;
-            }
+            objects = convertItems(
+                    conversion, context.getView().getComponents());
+            if (objects == null)
+                return null;
         }
         
         for (ExtendedObject object : objects) {
@@ -154,7 +179,8 @@ public class DocumentExtractor {
             if (rule != null)
                 rule.beforeConversion(object);
             
-            object = conversion(ns, object, model, conversion, documents, false);
+            object = conversion(
+                    ns, object, model, conversion, documents, false);
             if (object == null)
                 continue;
             
@@ -196,9 +222,6 @@ public class DocumentExtractor {
     }
     
     public final ComplexDocument save() {
-        int i;
-        TableToolData ttdata;
-        List<TableToolItem> ttitems;
         DocumentModel model;
         String to, source;
         ExtendedObject head;
@@ -244,27 +267,8 @@ public class DocumentExtractor {
         document.setHeader(head);
         document.remove();
         for (DataConversion conversion : conversions) {
-            switch (conversion.getSourceType()) {
-            case DataConversion.OBJECTS:
-                objects = (ExtendedObject[])conversion.getSource();
-                break;
-            case DataConversion.TABLETOOL:
-                source = (String)conversion.getSource();
-                ttdata = components.getComponentData(source);
-                ttitems = ttdata.getItems();
-                if (ttitems == null)
-                    continue;
-                
-                objects = new ExtendedObject[ttitems.size()];
-                i = 0;
-                for (TableToolItem item : ttitems)
-                    objects[i++] = item.object;
-                break;
-            default:
-                continue;
-            }
-
-            extractItems(ns, documents, conversion, document, objects);
+            objects = convertItems(conversion, components);
+            extractItems(context, ns, documents, conversion, document, objects);
         }
         
         document.setNS(ns);

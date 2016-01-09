@@ -317,7 +317,7 @@ public abstract class AbstractViewInput implements ViewInput {
     {
         Documents documents = new Documents(context.function);
         ExtendedObject[] objects = DocumentExtractor.extractItems(
-                null, documents, conversion, null, null);
+                context, null, documents, conversion, null, null);
         
         addtablearray(table, objects);
     }
