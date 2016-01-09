@@ -9,11 +9,11 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 public class InputValidate extends AbstractActionHandler {
 
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected void execute(PageBuilderContext context) {
         refresh(context);
     }
     
-    private final void refresh(PageBuilderContext context) {
+    protected void refresh(PageBuilderContext context) {
         Context extcontext;
         Map<String, ComponentEntry> entries;
         ComponentEntry entry;

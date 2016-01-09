@@ -1,6 +1,5 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
-import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.DataConversion;
 import org.iocaste.appbuilder.common.DocumentExtractor;
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -13,7 +12,7 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.shell.common.Const;
 
-public class Save extends AbstractActionHandler {
+public class Save extends InputValidate {
     
     @Override
     protected void execute(PageBuilderContext context) {
@@ -21,8 +20,10 @@ public class Save extends AbstractActionHandler {
         DataConversion conversion;
         ComplexModel cmodel;
         String keyname;
-        Context extcontext = getExtendedContext();
+        Context extcontext;
         
+        super.execute(context);
+        extcontext = getExtendedContext();
         cmodel = getManager(extcontext.link.cmodel).getModel();
         conversion = new DataConversion();
         conversion.dfsource("base");
