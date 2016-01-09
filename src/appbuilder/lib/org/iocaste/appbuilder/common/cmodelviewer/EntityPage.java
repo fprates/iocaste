@@ -1,6 +1,8 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
+import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.AppBuilderLink;
+import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
@@ -13,6 +15,7 @@ public class EntityPage extends AbstractPanelPage {
     @Override
     public void execute() {
         set(spec);
+        set(new SelectInput());
         
         switch (action) {
         case AbstractModelViewer.CREATE:
@@ -28,6 +31,7 @@ public class EntityPage extends AbstractPanelPage {
             action(action, link.displayload);
             break;
         }
+        submit("validate", link.inputvalidate);
     }
     
     private final void setSelectConfig(ViewConfig config, AppBuilderLink link) {
@@ -36,5 +40,20 @@ public class EntityPage extends AbstractPanelPage {
         else
             set(config);
     }
+}
 
+class SelectInput extends AbstractViewInput {
+
+    @Override
+    protected void execute(PageBuilderContext context) {
+        Context extcontext = getExtendedContext();
+        for (String key : extcontext.dataforms.keySet())
+            dfset(key, extcontext.dataforms.get(key));
+    }
+
+    @Override
+    protected void init(PageBuilderContext context) {
+        execute(context);
+    }
+    
 }

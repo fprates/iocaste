@@ -28,7 +28,7 @@ public class DataItemRenderer {
             text = inputname;
         
         view = config.getView();
-        colname = new Text(view, "");
+        colname = new Text(view, inputname.concat("_form_item_text"));
         colname.setStyleClass("item_form_name");
         colname.setText(text);
         

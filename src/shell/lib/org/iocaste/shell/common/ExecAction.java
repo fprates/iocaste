@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.protocol.AbstractHandler;
+import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class ExecAction extends AbstractHandler {
@@ -65,6 +66,11 @@ public class ExecAction extends AbstractHandler {
         customaction = customactions.get(context.action);
         if (customaction == null) {
             element = context.view.getElement(context.action);
+            if (element == null)
+                throw new IocasteException(new StringBuilder(
+                        "no defined element for \"").append(context.action).
+                        append("\".").toString());
+            
             if (element.isControlComponent()) {
                 control = (ControlComponent)element;
                 context.action = control.getAction();
