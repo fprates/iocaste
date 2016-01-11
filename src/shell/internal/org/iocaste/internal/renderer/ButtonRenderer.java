@@ -13,10 +13,16 @@ public class ButtonRenderer extends Renderer {
      */
     public static final XMLElement render(Button button, Config config) {
         StringBuilder onclick;
-        String text = button.getText();
-        String name = button.getName();
-        String htmlname = button.getHtmlName();
-        XMLElement buttontag= new XMLElement("input");
+        String text, name, htmlname;
+        XMLElement buttontag;
+        
+        if (!button.isVisible())
+            return null;
+        
+        text = button.getText();
+        name = button.getName();
+        htmlname = button.getHtmlName();
+        buttontag = new XMLElement("input");
         
         if (button.isScreenLockable())
             onclick = new StringBuilder("formSubmit('");

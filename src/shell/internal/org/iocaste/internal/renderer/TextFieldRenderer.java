@@ -48,17 +48,23 @@ public class TextFieldRenderer extends Renderer {
         Container container;
         PopupControl popupcontrol;
         StringBuilder sb;
-        String tftext, calname, shname;
+        String tftext, calname, shname, name, value;
         Text text;
         SearchHelp search;
         Calendar calendar;
         XMLElement tagt, tagl, tagc, spantag, inputtag;
         boolean required;
-        DataElement dataelement = Shell.getDataElement(input);
-        int length = (dataelement == null)? input.getLength() :
-            dataelement.getLength();
-        String name = input.getHtmlName(), value = toString(input);
+        DataElement dataelement;
+        int length;
         
+        if (!input.isVisible())
+            return ParameterRenderer.render(input);
+        
+        dataelement = Shell.getDataElement(input);
+        length = (dataelement == null)? input.getLength() :
+            dataelement.getLength();
+        name = input.getHtmlName();
+        value = toString(input);
         if (value == null)
             value = "";
         
