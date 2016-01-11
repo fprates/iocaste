@@ -9,6 +9,7 @@ public class MaintenanceInput extends AbstractViewInput {
     @Override
     protected void execute(PageBuilderContext context) {
         ComplexModel cmodel;
+        TableToolContextEntry entry;
         Context extcontext = getExtendedContext();
         
         dfkeyset("head", extcontext.id);
@@ -16,8 +17,20 @@ public class MaintenanceInput extends AbstractViewInput {
         for (String name : extcontext.dataforms.keySet())
             dfset(name, extcontext.dataforms.get(name));
         
-        for (String name : extcontext.tabletools.keySet())
-            tableitemsset(name, extcontext.tabletools.get(name).values());
+        for (String name : extcontext.tabletools.keySet()) {
+            entry = extcontext.tabletools.get(name);
+            switch (entry.source) {
+            case TableToolContextEntry.DOCUMENT:
+                if (extcontext.document == null)
+                    continue;
+                tableitemsset(
+                        name, extcontext.document.getItems(entry.cmodelitem));
+                break;
+            case TableToolContextEntry.BUFFER:
+                tableitemsset(name, entry.items.values());
+                break;
+            }
+        }
         
         if (extcontext.document != null) {
             cmodel = extcontext.document.getModel();
@@ -27,9 +40,6 @@ public class MaintenanceInput extends AbstractViewInput {
             }
             
             dfset("base", extcontext.document.getHeader());
-            for (String name : cmodel.getItems().keySet())
-                tableitemsset(name.concat("_table"), extcontext.document.
-                        getItems(name));
         }
         
         loadInputTexts(context);

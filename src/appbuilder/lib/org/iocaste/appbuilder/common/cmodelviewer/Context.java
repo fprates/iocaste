@@ -13,7 +13,7 @@ public class Context implements ExtendedContext {
     public String redirect; 
     public ComplexDocument document;
     public AppBuilderLink link;
-    public Map<String, Map<Integer, ExtendedObject>> tabletools;
+    public Map<String, TableToolContextEntry> tabletools;
     public Map<String, ExtendedObject> dataforms;
     
     public Context() {
@@ -22,16 +22,22 @@ public class Context implements ExtendedContext {
     }
     
     public final void add(String ttname, ExtendedObject object) {
-        Map<Integer, ExtendedObject> items = tabletools.get(ttname);
-        items.put(items.size(), object);
+        TableToolContextEntry entry = tabletools.get(ttname);
+        entry.items.put(entry.items.size(), object);
     }
     
     public final void set(String ttname, ExtendedObject[] objects) {
-        Map<Integer, ExtendedObject> items = tabletools.get(ttname);
-        items.clear();
+        TableToolContextEntry entry = tabletools.get(ttname);
+        entry.items.clear();
         if (objects == null)
             return;
         for (int i = 0; i < objects.length; i++)
-            items.put(i, objects[i]);
+            entry.items.put(i, objects[i]);
+    }
+    
+    public final TableToolContextEntry tableInstance(String ttname) {
+        TableToolContextEntry entry = new TableToolContextEntry();
+        tabletools.put(ttname, entry);
+        return entry;
     }
 }

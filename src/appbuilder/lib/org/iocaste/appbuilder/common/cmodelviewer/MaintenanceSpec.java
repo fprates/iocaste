@@ -1,6 +1,5 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -30,7 +29,7 @@ public class MaintenanceSpec extends AbstractPanelSpec {
             tabbedpaneitem("tabs", name);
             tablename = name.concat("_table");
             tabletool(name, tablename);
-            extcontext.tabletools.put(tablename, new LinkedHashMap<>());
+            extcontext.tableInstance(tablename).cmodelitem = name;
         }
     }
 }

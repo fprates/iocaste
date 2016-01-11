@@ -120,6 +120,7 @@ public class DocumentExtractor {
             i = 0;
             for (TableToolItem item : ttitems)
                 objects[i++] = item.object;
+            return objects;
         default:
             break;
         }

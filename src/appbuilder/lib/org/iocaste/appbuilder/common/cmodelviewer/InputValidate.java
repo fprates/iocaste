@@ -14,6 +14,7 @@ public class InputValidate extends AbstractActionHandler {
     }
     
     protected void refresh(PageBuilderContext context) {
+        TableToolContextEntry ttentry;
         Context extcontext;
         Map<String, ComponentEntry> entries;
         ComponentEntry entry;
@@ -27,7 +28,18 @@ public class InputValidate extends AbstractActionHandler {
                 extcontext.dataforms.put(key, getdf(key));
                 break;
             case TABLE_TOOL:
-                extcontext.set(key, tableitemsget(key));
+                ttentry = extcontext.tabletools.get(key);
+                switch (ttentry.source) {
+                case TableToolContextEntry.DOCUMENT:
+                    if (extcontext.document == null)
+                        continue;
+                    extcontext.document.remove(ttentry.cmodelitem);
+                    extcontext.document.add(tableitemsget(key));
+                    break;
+                case TableToolContextEntry.BUFFER:
+                    extcontext.set(key, tableitemsget(key));
+                    break;
+                }
                 break;
             default:
                 break;
