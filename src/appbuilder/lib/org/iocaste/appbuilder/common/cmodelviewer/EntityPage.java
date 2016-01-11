@@ -47,8 +47,9 @@ class SelectInput extends AbstractViewInput {
     @Override
     protected void execute(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
-        for (String key : extcontext.dataforms.keySet())
-            dfset(key, extcontext.dataforms.get(key));
+        PageContext page = extcontext.getPageContext();
+        for (String key : page.dataforms.keySet())
+            dfset(key, page.dataforms.get(key));
     }
 
     @Override

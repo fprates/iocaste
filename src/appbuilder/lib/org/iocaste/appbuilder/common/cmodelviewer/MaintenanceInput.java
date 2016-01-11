@@ -11,14 +11,15 @@ public class MaintenanceInput extends AbstractViewInput {
         ComplexModel cmodel;
         TableToolContextEntry entry;
         Context extcontext = getExtendedContext();
+        PageContext page = extcontext.getPageContext();
         
         dfkeyset("head", extcontext.id);
         
-        for (String name : extcontext.dataforms.keySet())
-            dfset(name, extcontext.dataforms.get(name));
+        for (String name : page.dataforms.keySet())
+            dfset(name, page.dataforms.get(name));
         
-        for (String name : extcontext.tabletools.keySet()) {
-            entry = extcontext.tabletools.get(name);
+        for (String name : page.tabletools.keySet()) {
+            entry = page.tabletools.get(name);
             switch (entry.source) {
             case TableToolContextEntry.DOCUMENT:
                 if (extcontext.document == null)

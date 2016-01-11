@@ -54,7 +54,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         Manager manager;
         
         if (extcontext == null)
-            extcontext = new Context();
+            extcontext = new Context(context);
         
         extcontext.link = link;
         extcontext.redirect = (link.number == null)?

@@ -53,7 +53,7 @@ public class Main extends AbstractModelViewer {
             break;
         }
         
-        setExtendedContext(new ExternalContext());
+        setExtendedContext(new ExternalContext(context));
         loadManagedModule(context, link);
     }
 

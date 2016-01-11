@@ -1,23 +1,18 @@
 package org.iocaste.external;
 
-import org.iocaste.appbuilder.common.PageBuilderContext;
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.cmodelviewer.Context;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceSpec;
-import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.DocumentModel;
 
 public class ExternalMaintenanceSpec extends MaintenanceSpec {
 
     @Override
-    public final void execute(PageBuilderContext context) {
-        Context extcontext = getExtendedContext();
-        ComplexModel model = getManager(extcontext.link.cmodel).getModel();
+    protected void tabs(Context extcontext, Map<String, DocumentModel> models) {
+        String tablename;
         
-        dataform("content", "head");
-        skip("content");
-        tabbedpane("content", "tabs");
-        tabbedpaneitem("tabs", "basetab");
-        dataform("basetab", "base");
-        for (String name : model.getItems().keySet()) {
+        for (String name : models.keySet()) {
             tabbedpaneitem("tabs", name);
             if (name.equals("items")) {
                 nodelist(name, "import");
@@ -25,7 +20,9 @@ public class ExternalMaintenanceSpec extends MaintenanceSpec {
                 button("import", "importmodel");
             }
             
-            tabletool(name, name.concat("_table"));
+            tablename = name.concat("_table");
+            tabletool(name, tablename);
+            extcontext.tableInstance(tablename).cmodelitem = name;
         }
     }
 }

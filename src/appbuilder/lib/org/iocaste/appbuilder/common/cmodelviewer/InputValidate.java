@@ -18,17 +18,19 @@ public class InputValidate extends AbstractActionHandler {
         Context extcontext;
         Map<String, ComponentEntry> entries;
         ComponentEntry entry;
+        PageContext page;
         
         extcontext = getExtendedContext();
         entries = context.getView().getComponents().entries;
+        page = extcontext.getPageContext();
         for (String key : entries.keySet()) {
             entry = entries.get(key);
             switch (entry.data.type) {
             case DATA_FORM:
-                extcontext.dataforms.put(key, getdf(key));
+                page.dataforms.put(key, getdf(key));
                 break;
             case TABLE_TOOL:
-                ttentry = extcontext.tabletools.get(key);
+                ttentry = page.tabletools.get(key);
                 switch (ttentry.source) {
                 case TableToolContextEntry.DOCUMENT:
                     if (extcontext.document == null)
