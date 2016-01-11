@@ -1,10 +1,10 @@
 package org.iocaste.workbench.project;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.cmodelviewer.Context;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceSpec;
+import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.documents.common.DocumentModel;
 
 public class ProjectSpec extends MaintenanceSpec {
@@ -13,10 +13,13 @@ public class ProjectSpec extends MaintenanceSpec {
     protected final void tabs(
             Context extcontext, Map<String, DocumentModel> models) {
         String addbar, tablename;
+        TableToolContextEntry entry;
         String detail = null;
         
         for (String name : models.keySet()) {
             tablename = name.concat("_table");
+            entry = extcontext.tableInstance(tablename);
+            entry.cmodelitem = name;
             switch (name) {
             case "screen":
             case "model":
@@ -31,9 +34,11 @@ public class ProjectSpec extends MaintenanceSpec {
                 standardcontainer(name, detail);
                 dataform(detail, name.concat("_header"));
                 tabbedpane(detail, detail.concat("_pane"));
+                entry.source = TableToolContextEntry.BUFFER;
                 break;
             case "model_item":
             case "screen_spec_item":
+                entry.source = TableToolContextEntry.BUFFER;
                 screendetail(detail, name);
                 break;
             default:
@@ -41,8 +46,6 @@ public class ProjectSpec extends MaintenanceSpec {
                 tabletool(name, tablename);
                 break;
             }
-            
-            extcontext.tabletools.put(tablename, new LinkedHashMap<>());
         }
     }
     

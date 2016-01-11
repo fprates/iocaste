@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.cmodelviewer.Context;
+import org.iocaste.appbuilder.common.cmodelviewer.PageContext;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
@@ -18,6 +19,7 @@ public class ModelAdd extends WorkbenchValidate {
         Documents documents;
         ExtendedObject object;
         Collection<ExtendedObject> objects;
+        PageContext page;
         
         super.execute(context);
         name = getinputst("model_name");
@@ -28,7 +30,8 @@ public class ModelAdd extends WorkbenchValidate {
         }
 
         extcontext = getExtendedContext();
-        objects = extcontext.tabletools.get("model_table").values();
+        page = extcontext.getPageContext();
+        objects = page.tabletools.get("model_table").items.values();
         if (Documents.readobjects(objects, "MODEL_NAME", name) != null) {
             message(Const.ERROR, "model.already.added");
             setFocus("model_name");

@@ -14,7 +14,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.TextField;
 
-public class ProjectConfig extends MaintenanceConfig {
+public class ProjectEditConfig extends MaintenanceConfig {
 
     @Override
     protected final void execute(PageBuilderContext context) {
