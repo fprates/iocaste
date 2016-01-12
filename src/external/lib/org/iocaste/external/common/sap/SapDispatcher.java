@@ -1,5 +1,7 @@
 package org.iocaste.external.common.sap;
 
+import java.util.Map;
+
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 
@@ -15,14 +17,16 @@ public class SapDispatcher {
     }
     
     @SuppressWarnings("unchecked")
-    public final <T> T call(String sapfunction, SapMessage sapmessage) {
+    public final Map<String, Object> call(String sapfunction, SapMessage sapmessage) {
         Service service;
         Message message = new Message(sapfunction);
         
+        message.add("importing", sapmessage.importing);
+        message.add("changing", sapmessage.changing);
         message.add("tables", sapmessage.tparameters.getTables());
         message.add("port", port);
         service = new Service(host, 60000);
-        return (T)service.call(message);
+        return (Map<String, Object>)service.call(message);
     }
     
     public final void setPort(String name) {

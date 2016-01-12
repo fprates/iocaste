@@ -69,17 +69,10 @@ public class IocasteListenner extends AbstractExternalFunction {
                         append(" not found.").toString());
             
             context = new Context();
-            context.items = FunctionHandler.getFunction(connector, name);
-            context.lists.put(
-                    "importing", sapfunction.getImportParameterList());
-            context.lists.put(
-                    "exporting", sapfunction.getExportParameterList());
-            context.lists.put(
-                    "changing", sapfunction.getChangingParameterList());
-            context.lists.put(
-                    "tables", sapfunction.getTableParameterList());
-            context.structures = external.
-                    getFunctionStructures(name);
+            context.items = AbstractSAPFunctionHandler.
+                    getFunction(connector, name);
+            AbstractSAPFunctionHandler.transfer(context, sapfunction);
+            context.structures = external.getFunctionStructures(name);
             context.result = new HashMap<>();
             for (String keylist : new String[] {
                     "importing", "changing", "tables"
@@ -91,9 +84,11 @@ public class IocasteListenner extends AbstractExternalFunction {
                     context.result.put(key, values.get(key));
             }
             
-            FunctionHandler.prepareToExport(context);
+            AbstractSAPFunctionHandler.prepareToExport(context);
             sapfunction.execute(destination);
-            service.messageReturn(message, null);
+            AbstractSAPFunctionHandler.transfer(context, sapfunction);
+            AbstractSAPFunctionHandler.extract(context);
+            service.messageReturn(message, context.result);
             new Iocaste(connector).commit();
             System.out.println("ok.");
         } catch (JCoException e) {
