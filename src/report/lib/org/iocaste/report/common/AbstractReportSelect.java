@@ -48,6 +48,9 @@ public abstract class AbstractReportSelect extends AbstractActionHandler {
             return;
         }
         
+        if (data.dataonly)
+            return;
+        
         init(data.output.name, extcontext);
         redirect(data.output.name);
     }

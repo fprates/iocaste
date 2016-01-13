@@ -18,7 +18,7 @@ public class ReportViewerData {
     public NavControlDesign ncdesign;
     public String titletext;
     public Object[] titleargs;
-    public boolean norenderctx;
+    public boolean norenderctx, dataonly;
     
     public ReportViewerData(PageBuilderContext context) {
         this.context = context;
