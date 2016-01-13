@@ -13,6 +13,7 @@ import org.iocaste.protocol.user.User;
 public final class Iocaste extends AbstractServiceInterface {
     public static final String SERVERNAME = "/iocaste-kernel/service.html";
     public static final int CREATE = 0;
+    public static final int READ = 1;
     
     public Iocaste(Function function) {
         initService(function, SERVERNAME);
@@ -241,6 +242,12 @@ public final class Iocaste extends AbstractServiceInterface {
         Message message = new Message("mkdir");
         message.add("args", args);
         call(message);
+    }
+    
+    public final byte[] read(String id) {
+        Message message = new Message("read");
+        message.add("id", id);
+        return call(message);
     }
     
     public final boolean rmdir(String... args) {

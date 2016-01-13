@@ -1,7 +1,9 @@
 package org.iocaste.kernel.files;
 
 import java.io.File;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
@@ -28,6 +30,7 @@ public class FileServices extends AbstractFunction {
         export("files_get", new GetFiles());
         export("mkdir", new MakeDirectory());
         export("unzip", new Unzip());
+        export("read", new FileRead());
         export("write", new FileWrite());
     }
 
@@ -77,6 +80,8 @@ public class FileServices extends AbstractFunction {
 class InternalFileEntry {
     public String filename;
     public SeekableByteChannel channel;
+    public FileChannel fchannel;
+    public RandomAccessFile file;
 }
 
 class MakeDirectory extends AbstractHandler {
@@ -112,6 +117,8 @@ class FileOperations extends AbstractHandler {
         switch (option) {
         case Iocaste.CREATE:
             return create(services, sessionid, args);
+        case Iocaste.READ:
+            return openr(services, sessionid, args);
         }
         
         return null;
@@ -131,6 +138,41 @@ class FileOperations extends AbstractHandler {
         entry.channel = Files.newByteChannel(path, options);
 
         return entry.filename;
+    }
+    
+    private final String openr(FileServices services, String sessionid,
+            String... args) throws Exception {
+        InternalFileEntry entry;
+
+        entry = services.instance(sessionid, args);
+        entry.file = new RandomAccessFile(entry.filename, "r");
+        entry.fchannel = entry.file.getChannel();
+        return entry.filename;
+    }
+}
+
+class FileRead extends AbstractHandler {
+
+    @Override
+    public Object run(Message message) throws Exception {
+        int part, total;
+        String id = message.getString("id");
+        FileServices services = getFunction();
+        String sessionid = message.getSessionid();
+        InternalFileEntry entry = services.entries.get(sessionid).get(id);
+        ByteBuffer page = ByteBuffer.allocate(1024);
+        byte[] buffer = new byte[(int)entry.fchannel.size()];
+        
+        total = 0;
+        while((part = entry.fchannel.read(page)) > 0) {
+            page.flip();
+            page.get(buffer, total, part);
+            page.clear();
+            total += part;
+        }
+        
+        
+        return buffer;
     }
 }
 
@@ -175,7 +217,12 @@ class FileClose extends AbstractHandler {
         Map<String, InternalFileEntry> files = services.entries.get(sessionid);
         InternalFileEntry entry = files.get(id);
         
-        entry.channel.close();
+        if (entry.channel != null)
+            entry.channel.close();
+        if (entry.fchannel != null) {
+            entry.fchannel.close();
+            entry.file.close();
+        }
         files.remove(id);
     }
 }
