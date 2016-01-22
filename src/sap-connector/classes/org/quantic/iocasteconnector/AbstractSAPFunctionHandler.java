@@ -14,17 +14,19 @@ import org.iocaste.protocol.Function;
 
 import com.sap.conn.jco.AbapClassException;
 import com.sap.conn.jco.AbapException;
+import com.sap.conn.jco.JCoDestinationManager;
 import com.sap.conn.jco.JCoField;
 import com.sap.conn.jco.JCoFunction;
 import com.sap.conn.jco.JCoParameterList;
 import com.sap.conn.jco.JCoRecord;
 import com.sap.conn.jco.JCoTable;
+import com.sap.conn.jco.ext.Environment;
 import com.sap.conn.jco.server.JCoServerContext;
 import com.sap.conn.jco.server.JCoServerFunctionHandler;
 
 public abstract class AbstractSAPFunctionHandler implements
         JCoServerFunctionHandler {
-    
+	
     public static final void extract(Context context) {
         JCoParameterList list;
         Map<String, Object> extracted;
@@ -301,6 +303,29 @@ public abstract class AbstractSAPFunctionHandler implements
             }
         }
     }
+    
+	public static final void register(Command stream)
+			throws Exception {
+        ExtendedObject portdata;
+        
+        portdata = stream.portconfig.getHeader();
+        stream.provider = new RFCDataProvider();
+        stream.provider.setConfig(portdata, stream.locale);
+        
+        Environment.registerDestinationDataProvider(stream.provider);
+        Environment.registerServerDataProvider(stream.provider);
+        System.out.println("ok");
+
+        System.out.print("bringing up iocaste listenners...");
+        stream.destination = JCoDestinationManager.
+        		getDestination(portdata.getst("PORT_NAME"));
+	}
+	
+	public static final void unregister(Command stream) {
+		Environment.unregisterServerDataProvider(stream.provider);
+		Environment.unregisterDestinationDataProvider(stream.provider);
+		stream.provider = null;
+	}
     
     public static final void transfer(Context context, JCoFunction  sapfunction)
     {

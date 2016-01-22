@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.external.common.AbstractExternalFunction;
 import org.iocaste.external.common.IocasteConnector;
 import org.iocaste.protocol.Iocaste;
@@ -14,19 +13,15 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
 
-import com.sap.conn.jco.JCoDestination;
 import com.sap.conn.jco.JCoException;
 import com.sap.conn.jco.JCoFunction;
 import com.sap.conn.jco.JCoRuntimeException;
 
 public class IocasteListenner extends AbstractExternalFunction {
-    private JCoDestination destination;
-    private ComplexDocument portconfig;
+	private Command stream;
 
-    public IocasteListenner(
-            JCoDestination destination, ComplexDocument portconfig) {
-        this.destination = destination;
-        this.portconfig = portconfig;
+    public IocasteListenner(Command stream) {
+    	this.stream = stream;
     }
     
     @Override
@@ -48,8 +43,8 @@ public class IocasteListenner extends AbstractExternalFunction {
         try {
             if (!external.connect())
                 throw new IocasteException("iocaste connection failed.");
-            
-            preconn = portconfig.getHeader().getst("PRE_CONNECTION");
+
+            preconn = stream.portconfig.getHeader().getst("PRE_CONNECTION");
             if (preconn != null) {
                 System.out.print("pre-connecting... ");
                 err = rtexecute(preconn);
@@ -58,11 +53,16 @@ public class IocasteListenner extends AbstractExternalFunction {
                 else
                     System.err.println(new StringBuilder("returned ").
                             append(err).toString());
+                
+                if (stream.provider != null)
+                	AbstractSAPFunctionHandler.unregister(stream);
+                AbstractSAPFunctionHandler.register(stream);
             }
             
             name = message.getId();
             System.out.print("invoking "+name+"...");
-            sapfunction = destination.getRepository().getFunction(name);
+            
+            sapfunction = stream.destination.getRepository().getFunction(name);
             if (sapfunction == null)
                 throw new IocasteException(new StringBuilder("SAP function ").
                         append(name).
@@ -85,7 +85,7 @@ public class IocasteListenner extends AbstractExternalFunction {
             }
             
             AbstractSAPFunctionHandler.prepareToExport(context);
-            sapfunction.execute(destination);
+            sapfunction.execute(stream.destination);
             AbstractSAPFunctionHandler.transfer(context, sapfunction);
             AbstractSAPFunctionHandler.extract(context);
             service.messageReturn(message, context.result);
@@ -104,8 +104,9 @@ public class IocasteListenner extends AbstractExternalFunction {
             e.printStackTrace();
             service.messageException(message, e);
         } finally {
-            postconn = portconfig.getHeader().getst("POST_CONNECTION");
+            postconn = stream.portconfig.getHeader().getst("POST_CONNECTION");
             if (postconn != null) {
+            	AbstractSAPFunctionHandler.unregister(stream);
                 System.out.print("pos-connecting... ");
                 err = rtexecute(postconn);
                 if (err == 0)

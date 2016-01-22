@@ -3,14 +3,10 @@ package org.quantic.iocasteconnector;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.external.common.AbstractExternalApplication;
 import org.iocaste.protocol.Message;
 
-import com.sap.conn.jco.JCoDestination;
-import com.sap.conn.jco.JCoDestinationManager;
-import com.sap.conn.jco.ext.Environment;
 import com.sap.conn.jco.server.DefaultServerHandlerFactory;
 import com.sap.conn.jco.server.JCoServer;
 import com.sap.conn.jco.server.JCoServerFactory;
@@ -31,12 +27,8 @@ public class Main extends AbstractExternalApplication {
         boolean registerable;
         DefaultServerHandlerFactory.FunctionHandlerFactory factory;
         JCoServer server;
-        JCoDestination destination;
-        RFCDataProvider provider;
-        ComplexDocument config;
         Command stream;
         String text;
-        ExtendedObject portdata;
         FunctionConfig function;
         List<FunctionConfig> functions;
         
@@ -46,22 +38,23 @@ public class Main extends AbstractExternalApplication {
         listennerport = Integer.parseInt(message.getString("--listenner-port"));
         
         System.out.print("getting connection data from iocaste...");
-        config = external.getConnectionData(stream.port);
+
+        stream.portconfig = external.getConnectionData(stream.port);
         external.disconnect();
         
-        if (config == null) {
+        if (stream.portconfig == null) {
             System.err.println("connection data not found.");
             return;
         }
         
         System.out.println("ok");
         
-        text = config.getHeader().getst("TEXT");
+        text = stream.portconfig.getHeader().getst("TEXT");
         System.out.println("* Connecting to " + text);
 
         registerable = false;
         functions = new ArrayList<>();
-        for (ExtendedObject object : config.getItems("functions")) {
+        for (ExtendedObject object : stream.portconfig.getItems("functions")) {
             function = new FunctionConfig();
             functions.add(function);
             function.name = object.getst("FUNCTION");
@@ -73,25 +66,14 @@ public class Main extends AbstractExternalApplication {
             registerable = true;
         }
         
-        portdata = config.getHeader();
-        
         System.out.print("registering sap data provider...");
-        
-        provider = new RFCDataProvider();
-        provider.setConfig(portdata, stream.locale);
-        
-        Environment.registerDestinationDataProvider(provider);
-        Environment.registerServerDataProvider(provider);
+        AbstractSAPFunctionHandler.register(stream);
         System.out.println("ok");
-
-        System.out.print("bringing up iocaste listenners...");
-        destination = JCoDestinationManager.
-                getDestination(portdata.getst("PORT_NAME"));
-        addListenner(
-                listennerport, () -> new IocasteListenner(destination, config));
-        System.out.println("ok");
+        
+        addListenner(listennerport, () -> new IocasteListenner(stream));
         
         if (registerable) {
+            
             System.out.print("trying registering on SAP...");
             server = JCoServerFactory.getServer(stream.port);
             System.out.println("ok");
