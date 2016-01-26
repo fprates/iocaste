@@ -2,16 +2,14 @@ package org.iocaste.gconfigview;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.DataItem;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
 
 public class DetailConfig extends AbstractViewConfig {
     private byte mode;
@@ -23,10 +21,10 @@ public class DetailConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         Context extcontext;
-        InputComponent input;
+        DataFormToolItem input;
         String name;
         int type;
-        DataForm form;
+        DataFormToolData form;
         DocumentModel model;
         DocumentModelItem item;
         DataElement de;
@@ -45,23 +43,22 @@ public class DetailConfig extends AbstractViewConfig {
             model.add(item);
         }
         
-        form = getElement("package.config");
-        form.importModel(model);
-        for (Element element : form.getElements()) {
-            input = (InputComponent)element;
+        form = getDataFormTool("package.config");
+        form.model = model;
+        for (DocumentModelItem mitem : model.getItens()) {
+            input = form.itemInstance(mitem.getName());
             
-            switch (input.getDataElement().getType()) {
+            switch (mitem.getDataElement().getType()) {
             case DataType.BOOLEAN:
-                input = new DataItem(form, Const.CHECKBOX, input.getName());
+                input.componenttype = Const.CHECKBOX;
                 break;
             default:
-                input = new DataItem(form, Const.TEXT_FIELD, input.getName());
-                input.setLength(256);
-                input.setVisibleLength(20);
+                input.length = 256;
+                input.vlength = 20;
                 break;
             }
             
-            input.setEnabled(mode == Context.EDIT);
+            input.disabled = !(mode == Context.EDIT);
         }
         
         getNavControl().setTitle(Context.TITLES[mode]);

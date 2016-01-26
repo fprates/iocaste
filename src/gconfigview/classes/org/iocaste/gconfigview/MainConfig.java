@@ -2,30 +2,30 @@ package org.iocaste.gconfigview;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.Element;
-import org.iocaste.shell.common.InputComponent;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
+import org.iocaste.documents.common.DocumentModelItem;
 
 public class MainConfig extends AbstractViewConfig {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        InputComponent input;
-        DataForm form;
+        DataFormToolData form;
+        DataFormToolItem input;
         Context extcontext;
         
         extcontext = getExtendedContext();
         
-        form = getElement("package");
-        form.importModel(extcontext.globalcfgmodel);
-        for (Element element : form.getElements())
-            element.setVisible(false);
+        form = getDataFormTool("package");
+        form.model = extcontext.globalcfgmodel;
+        for (DocumentModelItem item : extcontext.globalcfgmodel.getItens())
+            form.itemInstance(item.getName()).invisible = true;
         
-        input = form.get("NAME");
-        input.setObligatory(true);
-        input.setVisible(true);
+        input = form.itemInstance("NAME");
+        input.required = true;
+        input.invisible = false;
+        input.focus = true;
         
-        context.view.setFocus(input);
         getNavControl().setTitle(Context.TITLES[Context.SELECT]);
     }
 
