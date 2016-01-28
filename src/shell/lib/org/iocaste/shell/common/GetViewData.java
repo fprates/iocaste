@@ -56,13 +56,10 @@ public class GetViewData extends AbstractHandler {
         state.protocol = message.get("protocol");
         state.port = message.geti("port");
         state.servername = message.get("servername");
-        state.keepview = false;
-        state.reloadable = false;
-        state.rapp = null;
-        state.rpage = null;
-        state.contenttype = null;
-        state.pagecall = false;
-        state.dontpushpage = false;
+        state.keepview = state.reloadable = false;
+        state.rapp = state.rpage = state.contenttype = null;
+        state.contentencoding = null;
+        state.pagecall = state.dontpushpage = false;
         state.headervalues.clear();
         if (context != null)
             context.view = view;
@@ -107,10 +104,11 @@ public class GetViewData extends AbstractHandler {
             fillTranslations(view);
         
         state.parameters.clear();
-        viewreturn = new Object[3];
+        viewreturn = new Object[4];
         viewreturn[0] = view;
         viewreturn[1] = state.headervalues;
         viewreturn[2] = state.contenttype;
+        viewreturn[3] = state.contentencoding;
         return viewreturn;
     }
 

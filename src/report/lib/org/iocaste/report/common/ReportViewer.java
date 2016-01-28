@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.report.common.data.ReportViewerData;
+import org.iocaste.report.common.export.AbstractOutputExport;
 import org.iocaste.report.common.export.CSVGenerate;
 
 public class ReportViewer {
@@ -11,7 +12,8 @@ public class ReportViewer {
     
     public ReportViewer(ReportViewerData data) {
         panel = new StandardPanel(data.context);
-        data.export.setTranslations(data.translations);
+        for (AbstractOutputExport export : data.export.values())
+            export.setTranslations(data.translations);
         
         if (data.input.name != null) {
             if (data.input.input == null)

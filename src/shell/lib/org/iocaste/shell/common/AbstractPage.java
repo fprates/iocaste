@@ -257,6 +257,10 @@ public abstract class AbstractPage extends AbstractFunction {
         return execaction.run(message);
     }
     
+    public final void setContentEncoding(String contentencoding) {
+        getviewdata.state.contentencoding = contentencoding;
+    }
+    
     public final void setContentType(String contenttype) {
         getviewdata.state.contenttype = contenttype;
     }

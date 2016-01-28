@@ -15,7 +15,7 @@ import org.iocaste.shell.common.View;
 public class PageContext {
     private View view;
     private AppContext appctx;
-    private String name, username, contexturl, contenttype;
+    private String name, username, contexturl, contenttype, contentencoding;
     private boolean reloadable, initialize, keepview;
     private List<FileItem> files;
     private Set<String> actions;
@@ -50,6 +50,14 @@ public class PageContext {
      */
     public final AppContext getAppContext() {
         return appctx;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public final String getContentEncoding() {
+        return contentencoding;
     }
     
     /**
@@ -185,6 +193,14 @@ public class PageContext {
      */
     public final void setAppContext(AppContext appctx) {
         this.appctx = appctx;
+    }
+    
+    /**
+     * 
+     * @param contentencoding
+     */
+    public final void setContentEncoding(String contentencoding) {
+        this.contentencoding = contentencoding;
     }
     
     /**

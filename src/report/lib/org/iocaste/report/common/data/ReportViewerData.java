@@ -1,5 +1,6 @@
 package org.iocaste.report.common.data;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
@@ -12,7 +13,7 @@ public class ReportViewerData {
     public PageBuilderContext context;
     public AbstractReportContext extcontext;
     public AbstractReportSelect select;
-    public AbstractOutputExport export;
+    public Map<String, AbstractOutputExport> export;
     public ReportViewerDataStage input, output;
     public Map<String, String> translations;
     public NavControlDesign ncdesign;
@@ -24,5 +25,6 @@ public class ReportViewerData {
         this.context = context;
         input = new ReportViewerDataStage();
         output = new ReportViewerDataStage();
+        export = new HashMap<>();
     }
 }
