@@ -19,11 +19,18 @@ public class ProjectSave extends Save {
     
     @Override
     protected void refresh(PageBuilderContext context) {
+        WorkbenchContext extcontext;
+        
         try {
             execute("validate");
         } catch (Exception e) {
             new RuntimeException(e);
         }
+        
+        extcontext = getExtendedContext();
+        for (String model : extcontext.models.keySet())
+            for (ExtendedObject object : extcontext.models.get(model))
+                object.set("MODEL", model);
     }
     
     @Override
