@@ -12,9 +12,9 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.report.common.AbstractReportContext;
 
 public class CSVGenerate extends AbstractActionHandler {
-    private AbstractOutputExport export;
+    private Map<String, AbstractOutputExport> export;
     
-    public CSVGenerate(AbstractOutputExport export) {
+    public CSVGenerate(Map<String, AbstractOutputExport> export) {
         this.export = export;
     }
     
@@ -22,20 +22,20 @@ public class CSVGenerate extends AbstractActionHandler {
         StringBuilder buffer;
         Map<String, ReportPrintItem> values;
         boolean head = false;
-        Map<String, String> translations = export.getTranslations();
+        Map<String, String> translations = extcontext.export.getTranslations();
         
-        buffer = new StringBuilder();
+        buffer = new StringBuilder("\ufeff");
         values = new LinkedHashMap<>();
-        export.setValues(values);
+        extcontext.export.setValues(values);
         for (ExtendedObject item : extcontext.items) {
             if (!head) {
                 values.clear();
-                export.printHeader(item.getModel());
+                extcontext.export.printHeader(item.getModel());
                 printline(translations, buffer, values);
                 head = true;
             }
             values.clear();
-            export.formatValues(item);
+            extcontext.export.formatValues(item);
             printline(buffer, values);
         }
         buffer.append("\0");
@@ -48,17 +48,21 @@ public class CSVGenerate extends AbstractActionHandler {
         Iocaste iocaste;
         byte[] content;
         String[] path;
+        AbstractReportContext extcontext;
         
-        export.setContext(context);
-        export.setOutputFile(context);
-        path = export.getPath();
+        extcontext = getExtendedContext();
+        extcontext.export = this.export.get(context.action);
+        extcontext.export.setContext(context);
+        extcontext.export.setOutputFile(context);
+        path = extcontext.export.getPath();
         context.downloaddata = new DownloadData();
         context.downloaddata.filename = path[path.length - 1].concat(".csv");
         context.downloaddata.fullname = path(".csv", path);
         context.downloaddata.contenttype = "text/csv";
-        path = export.getPath();
+        context.downloaddata.contentencoding = extcontext.export.getEncoding();
+        path = extcontext.export.getPath();
 
-        content = compose(getExtendedContext());
+        content = compose(extcontext);
         iocaste = new Iocaste(context.function);
         path[path.length - 1] = context.downloaddata.filename;
         iocaste.delete(path);

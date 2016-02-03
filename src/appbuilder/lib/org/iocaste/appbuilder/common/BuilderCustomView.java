@@ -112,7 +112,10 @@ public class BuilderCustomView extends AbstractCustomView {
         fis.read(content);
         fis.close();
         
-        context.function.setContentType(context.downloaddata.contenttype);
+        context.function.setContentType(
+                context.downloaddata.contenttype);
+        context.function.setContentEncoding(
+                context.downloaddata.contentencoding);
         context.function.setHeader("Content-Disposition",
                 new StringBuilder("attachment; filename=\"").
                 append(context.downloaddata.filename).

@@ -13,7 +13,8 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Shell;
 
 public abstract class AbstractOutputExport {
-    private String path[];
+    private String encoding;
+    private String[] path;
     private PageBuilderContext context;
     private DataElement datede;
     private Locale locale;
@@ -34,6 +35,10 @@ public abstract class AbstractOutputExport {
         
         date = item.getdt(name);
         return Shell.toString(date, datede, locale, false);
+    }
+    
+    public final String getEncoding() {
+        return encoding;
     }
     
     protected final <T extends ExtendedContext> T getExtendedContext() {
@@ -85,6 +90,10 @@ public abstract class AbstractOutputExport {
     public final void setContext(PageBuilderContext context) {
         this.context = context;
         locale = context.view.getLocale();
+    }
+    
+    protected final void setEncoding(String encoding) {
+        this.encoding = encoding;
     }
     
     public abstract void setOutputFile(PageBuilderContext context);
