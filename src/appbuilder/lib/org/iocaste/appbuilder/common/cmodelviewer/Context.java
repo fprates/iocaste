@@ -37,16 +37,22 @@ public class Context implements ExtendedContext {
     }
     
     public final void pageInstance() {
-        String pagename = context.view.getPageName();
-        pages.put(pagename, new PageContext());
+        pageInstance(context.view.getPageName());
+    }
+    
+    public final void pageInstance(String page) {
+        if (!pages.containsKey(page))
+            pages.put(page, new PageContext());
     }
     
     public final void set(String ttname, ExtendedObject[] objects) {
-        String pagename;
+        set(context.view.getPageName(), ttname, objects);
+    }
+    public final void set(String page, String ttname, ExtendedObject[] objects)
+    {
         TableToolContextEntry entry;
 
-        pagename = context.view.getPageName();
-        entry = pages.get(pagename).tabletools.get(ttname);
+        entry = pages.get(page).tabletools.get(ttname);
         entry.items.clear();
         if (objects == null)
             return;
@@ -55,9 +61,20 @@ public class Context implements ExtendedContext {
     }
     
     public final TableToolContextEntry tableInstance(String ttname) {
-        String pagename = context.view.getPageName();
-        TableToolContextEntry entry = new TableToolContextEntry();
-        pages.get(pagename).tabletools.put(ttname, entry);
+        return tableInstance(context.view.getPageName(), ttname);
+    }
+    
+    public final TableToolContextEntry tableInstance(String page, String ttname)
+    {
+        TableToolContextEntry entry;
+        PageContext pagectx;
+        
+        pagectx = pages.get(page);
+        entry = pagectx.tabletools.get(ttname);
+        if (entry == null) {
+            entry = new TableToolContextEntry();
+            pagectx.tabletools.put(ttname, entry);
+        }
         return entry;
     }
 }
