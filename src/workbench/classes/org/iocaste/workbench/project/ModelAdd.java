@@ -3,8 +3,8 @@ package org.iocaste.workbench.project;
 import java.util.Collection;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageContext;
 import org.iocaste.appbuilder.common.cmodelviewer.Context;
-import org.iocaste.appbuilder.common.cmodelviewer.PageContext;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;

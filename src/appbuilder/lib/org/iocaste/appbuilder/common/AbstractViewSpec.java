@@ -133,12 +133,18 @@ public abstract class AbstractViewSpec implements ViewSpec {
     }
     
     public final void run(ViewSpecItem item, PageBuilderContext context) {
+        ExtendedContext extcontext;
+        
         this.context = context;
         items.clear();
         if (item != null) {
             parent = item.getName();
             items.put(parent, item);
         }
+        
+        extcontext = getExtendedContext();
+        if (extcontext != null)
+            extcontext.pageInstance();
         execute(context);
     }
 

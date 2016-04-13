@@ -15,7 +15,7 @@ public class Main extends AbstractPageBuilder {
         Context extcontext;
         CommonStyle profile;
 
-        extcontext = new Context();
+        extcontext = new Context(context);
         
         panel = new StandardPanel(context);
         panel.instance("authentic", new MainPage(), extcontext);

@@ -1,21 +1,23 @@
 package org.iocaste.login;
 
+import org.iocaste.appbuilder.common.AbstractExtendedContext;
 import org.iocaste.appbuilder.common.AbstractMessagesSource;
-import org.iocaste.appbuilder.common.ExtendedContext;
+import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
 
-public class Context implements ExtendedContext {
+public class Context extends AbstractExtendedContext {
     private DataElement username, secret;
     public DocumentModel loginmodel, chgscrtmodel;
     public Messages messages;
     public String uname;
     public ExtendedObject object;
     
-    public Context() {
+    public Context(PageBuilderContext context) {
+        super(context);
         username = dataElementInstance(
                 "USERNAME", DataType.CHAR, 12, DataType.UPPERCASE);
         secret = dataElementInstance(

@@ -14,7 +14,7 @@ public class Main extends AbstractPageBuilder {
         StandardPanel panel;
         Context extcontext;
         
-        extcontext = new Context();
+        extcontext = new Context(context);
         extcontext.ex = getParameter("exception");
         extcontext.exview = getParameter("exview");
         extcontext.messages.put("unknown", "desconhecido");

@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.ExtendedContext;
+import org.iocaste.appbuilder.common.AbstractExtendedContext;
 import org.iocaste.appbuilder.common.FieldProperty;
+import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 
-public class Context implements ExtendedContext {
+public class Context extends AbstractExtendedContext {
     public Map<String, FieldProperty> properties;
     public List<ExtendedObject> items, originals;
     public String action, model, number, appname;
@@ -20,7 +21,8 @@ public class Context implements ExtendedContext {
     public ExtendedObject object;
     public boolean auto;
     
-    public Context() {
+    public Context(PageBuilderContext context) {
+        super(context);
         items = new ArrayList<>();
         originals = new ArrayList<>();
     }

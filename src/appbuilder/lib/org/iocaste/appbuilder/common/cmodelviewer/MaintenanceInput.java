@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageContext;
 import org.iocaste.documents.common.ComplexModel;
 
 public class MaintenanceInput extends AbstractViewInput {

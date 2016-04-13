@@ -58,11 +58,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
 	<classpathentry kind="lib" path="lib/sqljdbc4.jar"/>
-	<classpathentry kind="lib" path="lib/postgresql-jdbc-9.2.1002.jar"/>
 	<classpathentry kind="lib" path="ext/servlet-api.jar"/>
 	<classpathentry kind="lib" path="ext/sapjco3.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java.jar"/>
 	<classpathentry kind="lib" path="lib-shell/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="lib-mail/javax.mail.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-jdbc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

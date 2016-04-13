@@ -7,9 +7,6 @@ public class SelectSpec extends AbstractPanelSpec {
 
     @Override
     public void execute(PageBuilderContext context) {
-        Context extcontext = getExtendedContext();
-        
-        extcontext.pageInstance();
         dataform("content", "head");
     }
 

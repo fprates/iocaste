@@ -11,10 +11,10 @@ public class TasksInput extends AbstractViewInput {
     protected void execute(PageBuilderContext context) {
         String text;
         Set<TaskEntry> entries;
-        Context extcontext = getExtendedContext();
+        Main function = (Main)context.function;
         
-        for (String name : extcontext.groups.keySet()) {
-            entries = extcontext.groups.get(name);
+        for (String name : function.groups.keySet()) {
+            entries = function.groups.get(name);
             for (TaskEntry entry : entries) {
                 text = entry.getText();
                 if (text == null)

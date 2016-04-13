@@ -24,7 +24,7 @@ public class Main extends AbstractPageBuilder {
         ViewContext view;
         Context extcontext;
         
-        extcontext = new Context();
+        extcontext = new Context(context);
         reload(context, extcontext);
         
         view = context.instance("main");

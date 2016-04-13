@@ -26,7 +26,7 @@ public class Main extends AbstractPageBuilder {
         StandardPanel panel;
         
         panel = new StandardPanel(context);
-        panel.instance(MAIN, new MainPage(), new Context());
+        panel.instance(MAIN, new MainPage(), new Context(context));
 //        int i;
 //        ViewContext view;
 //        Context extcontext = new Context();

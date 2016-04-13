@@ -24,7 +24,7 @@ public class Main extends AbstractPageBuilder {
         DocumentModel model;
         AbstractActionHandler load;
         StandardPanel panel;
-        Context extcontext = new Context();
+        Context extcontext = new Context(context);
         
         extcontext.action = getParameter("action");
         extcontext.model = getParameter("model");

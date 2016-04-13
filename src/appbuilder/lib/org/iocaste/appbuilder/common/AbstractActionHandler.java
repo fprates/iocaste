@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.appbuilder.common.cmodelviewer.Context;
+import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
@@ -324,6 +326,42 @@ public abstract class AbstractActionHandler {
             viewspec.setInitialized(false);
         else
             context.function.keepView();
+    }
+    
+    protected void refresh(PageBuilderContext context) {
+        TableToolContextEntry ttentry;
+        Context extcontext;
+        Map<String, ComponentEntry> entries;
+        ComponentEntry entry;
+        PageContext page;
+        
+        extcontext = getExtendedContext();
+        entries = context.getView().getComponents().entries;
+        page = extcontext.getPageContext();
+        for (String key : entries.keySet()) {
+            entry = entries.get(key);
+            switch (entry.data.type) {
+            case DATA_FORM:
+                page.dataforms.put(key, getdf(key));
+                break;
+            case TABLE_TOOL:
+                ttentry = page.tabletools.get(key);
+                switch (ttentry.source) {
+                case TableToolContextEntry.DOCUMENT:
+                    if (extcontext.document == null)
+                        continue;
+                    extcontext.document.remove(ttentry.cmodelitem);
+                    extcontext.document.add(tableitemsget(key));
+                    break;
+                case TableToolContextEntry.BUFFER:
+                    extcontext.set(key, tableitemsget(key));
+                    break;
+                }
+                break;
+            default:
+                break;
+            }
+        }
     }
     
     public final void run(AbstractContext context) throws Exception {

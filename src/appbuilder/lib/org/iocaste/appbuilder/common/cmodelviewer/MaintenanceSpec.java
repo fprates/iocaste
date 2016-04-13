@@ -14,8 +14,6 @@ public class MaintenanceSpec extends AbstractPanelSpec {
         Context extcontext = getExtendedContext();
         ComplexModel model = getManager(extcontext.link.cmodel).getModel();
         
-        extcontext.pageInstance();
-        
         dataform("content", "head");
         skip("content");
         tabbedpane("content", "tabs");

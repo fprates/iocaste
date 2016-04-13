@@ -7,12 +7,12 @@ public class TasksSpec extends AbstractViewSpec {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        Context extcontext = getExtendedContext();
+        Main function = (Main)context.function;
         
         form("main");
         navcontrol("main");
         dashboard("main", "groups");
-        for (String name : extcontext.groups.keySet())
+        for (String name : function.groups.keySet())
             dashboardgroup("groups", name);
     }
 

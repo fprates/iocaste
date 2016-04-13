@@ -1,8 +1,9 @@
-package org.iocaste.appbuilder.common.cmodelviewer;
+package org.iocaste.appbuilder.common;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class PageContext {

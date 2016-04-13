@@ -1,7 +1,7 @@
 package org.iocaste.workbench.project;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.cmodelviewer.PageContext;
+import org.iocaste.appbuilder.common.PageContext;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.workbench.WorkbenchContext;
 import org.iocaste.workbench.WorkbenchValidate;
