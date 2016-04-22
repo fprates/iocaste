@@ -3,6 +3,8 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.GetFieldsProperties;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageContext;
+import org.iocaste.appbuilder.common.TableToolHandler;
 import org.iocaste.docmanager.common.Manager;
 
 public class MaintenanceConfig extends AbstractViewConfig {
@@ -12,6 +14,11 @@ public class MaintenanceConfig extends AbstractViewConfig {
         ConfigData configdata;
         Context extcontext = getExtendedContext();
         Manager manager = getManager(extcontext.link.cmodel);
+        PageContext pagectx = extcontext.getPageContext();
+        TableToolHandler handler = new CModelTableToolHandler();
+        
+        for (String name : pagectx.tabletools.keySet())
+            pagectx.tabletools.get(name).handler = handler;
         
         configdata = new ConfigData();
         configdata.cmodel = manager.getModel();

@@ -29,7 +29,8 @@ public class MaintenanceSpec extends AbstractPanelSpec {
             tabbedpaneitem("tabs", name);
             tablename = name.concat("_table");
             tabletool(name, tablename);
-            extcontext.tableInstance(tablename).cmodelitem = name;
+            extcontext.models.put(tablename, name);
+            extcontext.tableInstance(tablename);
         }
     }
 }

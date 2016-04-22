@@ -22,7 +22,7 @@ public class ExternalMaintenanceSpec extends MaintenanceSpec {
             
             tablename = name.concat("_table");
             tabletool(name, tablename);
-            extcontext.tableInstance(tablename).cmodelitem = name;
+            extcontext.models.put(tablename, name);
         }
     }
 }

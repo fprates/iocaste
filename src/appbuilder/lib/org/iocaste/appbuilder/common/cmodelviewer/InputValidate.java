@@ -7,6 +7,6 @@ public class InputValidate extends AbstractActionHandler {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        refresh(context);
+        refresh();
     }
 }

@@ -18,7 +18,7 @@ import org.iocaste.documents.common.ExtendedObject;
 public class ProjectSave extends Save {
     
     @Override
-    protected void refresh(PageBuilderContext context) {
+    protected void refresh() {
         WorkbenchContext extcontext;
         
         try {

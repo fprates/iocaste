@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.appbuilder.common.cmodelviewer.Context;
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
@@ -328,9 +327,9 @@ public abstract class AbstractActionHandler {
             context.function.keepView();
     }
     
-    protected void refresh(PageBuilderContext context) {
+    protected void refresh() {
         TableToolContextEntry ttentry;
-        Context extcontext;
+        AbstractExtendedContext extcontext;
         Map<String, ComponentEntry> entries;
         ComponentEntry entry;
         PageContext page;
@@ -346,16 +345,11 @@ public abstract class AbstractActionHandler {
                 break;
             case TABLE_TOOL:
                 ttentry = page.tabletools.get(key);
-                switch (ttentry.source) {
-                case TableToolContextEntry.DOCUMENT:
-                    if (extcontext.document == null)
-                        continue;
-                    extcontext.document.remove(ttentry.cmodelitem);
-                    extcontext.document.add(tableitemsget(key));
-                    break;
-                case TableToolContextEntry.BUFFER:
+                if (ttentry.handler != null) {
+                    ttentry.handler.setExtendedContext(extcontext);
+                    ttentry.handler.action(key, tableitemsget(key));
+                } else {
                     extcontext.set(key, tableitemsget(key));
-                    break;
                 }
                 break;
             default:

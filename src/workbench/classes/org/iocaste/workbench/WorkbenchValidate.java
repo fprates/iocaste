@@ -1,16 +1,15 @@
 package org.iocaste.workbench;
 
-import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.cmodelviewer.InputValidate;
 
 public class WorkbenchValidate extends InputValidate {
 
     @Override
-    protected final void refresh(PageBuilderContext context) {
+    protected final void refresh() {
         String model;
         WorkbenchContext extcontext;
         
-        super.refresh(context);
+        super.refresh();
         model = getdfst("model_header", "MODEL_NAME");
         if (model == null)
             return;
