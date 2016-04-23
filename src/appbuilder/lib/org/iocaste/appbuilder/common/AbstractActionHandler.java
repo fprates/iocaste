@@ -332,19 +332,17 @@ public abstract class AbstractActionHandler {
         AbstractExtendedContext extcontext;
         Map<String, ComponentEntry> entries;
         ComponentEntry entry;
-        PageContext page;
         
         extcontext = getExtendedContext();
         entries = context.getView().getComponents().entries;
-        page = extcontext.getPageContext();
         for (String key : entries.keySet()) {
             entry = entries.get(key);
             switch (entry.data.type) {
             case DATA_FORM:
-                page.dataforms.put(key, getdf(key));
+                extcontext.set(key, getdf(key));
                 break;
             case TABLE_TOOL:
-                ttentry = page.tabletools.get(key);
+                ttentry = extcontext.tableInstance(key);
                 if (ttentry.handler != null) {
                     ttentry.handler.setExtendedContext(extcontext);
                     ttentry.handler.action(key, tableitemsget(key));

@@ -10,20 +10,20 @@ public class ModelPick extends WorkbenchValidate {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        String model;
-        ExtendedObject modelheader;
-        WorkbenchContext extcontext;
-        PageContext page;
-        
-        super.execute(context);
-        model = getinputst("model_table.MODEL_NAME");
-        modelheader = getdf("model_header");
-        modelheader.set("MODEL_NAME", model);
-
-        extcontext = getExtendedContext();
-        page = extcontext.getPageContext();
-        page.dataforms.put("model_header", modelheader);
-        extcontext.set("model_item_table", extcontext.models.get(model));
+//        String model;
+//        ExtendedObject modelheader;
+//        WorkbenchContext extcontext;
+//        PageContext page;
+//        
+//        super.execute(context);
+//        model = getinputst("model_table.MODEL_NAME");
+//        modelheader = getdf("model_header");
+//        modelheader.set("MODEL_NAME", model);
+//
+//        extcontext = getExtendedContext();
+//        page = extcontext.getPageContext();
+//        page.dataforms.put("model_header", modelheader);
+//        extcontext.set("model_item_table", extcontext.models.get(model));
     }
 
 }

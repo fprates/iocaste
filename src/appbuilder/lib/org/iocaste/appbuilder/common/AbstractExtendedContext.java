@@ -15,6 +15,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         pages = new HashMap<>();
     }
     
+    @Override
     public final void add(String ttname, ExtendedObject object) {
         String pagename;
         TableToolContextEntry entry;
@@ -24,9 +25,17 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         entry.items.put(entry.items.size(), object);
     }
     
-    public final PageContext getPageContext() {
-        String pagename = context.view.getPageName();
-        return pages.get(pagename);
+    @Override
+    public final ExtendedObject dfobjectget(String dfname) {
+        return dfobjectget(context.view.getPageName(), dfname);
+    }
+    
+    @Override
+    public final ExtendedObject dfobjectget(String page, String dfname) {
+        PageContext pagectx;
+        
+        pagectx = pages.get(page);
+        return pagectx.dataforms.get(dfname);
     }
     
     @Override
@@ -40,10 +49,12 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
             pages.put(page, new PageContext());
     }
     
+    @Override
     public final void set(String ttname, ExtendedObject[] objects) {
         set(context.view.getPageName(), ttname, objects);
     }
 
+    @Override
     public final void set(String page, String ttname, ExtendedObject[] objects)
     {
         TableToolContextEntry entry;
@@ -55,11 +66,24 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         for (int i = 0; i < objects.length; i++)
             entry.items.put(i, objects[i]);
     }
+
+    @Override
+    public final void set(String dfname, ExtendedObject object) {
+        set(context.view.getPageName(), dfname, object);
+    }
     
+    @Override
+    public final void set(String page, String dfname, ExtendedObject object) {
+        PageContext pagectx = pages.get(page);
+        pagectx.dataforms.put(dfname, object);
+    }
+    
+    @Override
     public final TableToolContextEntry tableInstance(String ttname) {
         return tableInstance(context.view.getPageName(), ttname);
     }
     
+    @Override
     public final TableToolContextEntry tableInstance(String page, String ttname)
     {
         TableToolContextEntry entry;

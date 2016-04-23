@@ -1,9 +1,11 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.AppBuilderLink;
+import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.PageContext;
 import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
@@ -48,9 +50,17 @@ class SelectInput extends AbstractViewInput {
     @Override
     protected void execute(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
-        PageContext page = extcontext.getPageContext();
-        for (String key : page.dataforms.keySet())
-            dfset(key, page.dataforms.get(key));
+        Map<String, ComponentEntry> entries;
+        
+        entries = context.getView().getComponents().entries;
+        for (String key : entries.keySet())
+            switch (entries.get(key).data.type) {
+            case DATA_FORM:
+                dfset(key, extcontext.dfobjectget(key));
+                break;
+            default:
+                break;
+            }
     }
 
     @Override

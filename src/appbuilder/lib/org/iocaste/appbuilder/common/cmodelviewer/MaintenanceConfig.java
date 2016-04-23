@@ -1,9 +1,11 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractViewConfig;
+import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.GetFieldsProperties;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.PageContext;
 import org.iocaste.appbuilder.common.TableToolHandler;
 import org.iocaste.docmanager.common.Manager;
 
@@ -12,13 +14,20 @@ public class MaintenanceConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         ConfigData configdata;
+        Map<String, ComponentEntry> entries;
         Context extcontext = getExtendedContext();
         Manager manager = getManager(extcontext.link.cmodel);
-        PageContext pagectx = extcontext.getPageContext();
         TableToolHandler handler = new CModelTableToolHandler();
         
-        for (String name : pagectx.tabletools.keySet())
-            pagectx.tabletools.get(name).handler = handler;
+        entries = context.getView().getComponents().entries;
+        for (String name : entries.keySet())
+            switch (entries.get(name).data.type) {
+            case TABLE_TOOL:
+                extcontext.tableInstance(name).handler = handler;
+                break;
+            default:
+                break;
+            }
         
         configdata = new ConfigData();
         configdata.cmodel = manager.getModel();
