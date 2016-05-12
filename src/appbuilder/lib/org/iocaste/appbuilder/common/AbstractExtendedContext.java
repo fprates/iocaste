@@ -17,11 +17,14 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     
     @Override
     public final void add(String ttname, ExtendedObject object) {
-        String pagename;
+        add(context.view.getPageName(), ttname, object);
+    }
+    
+    @Override
+    public final void add(String page, String ttname, ExtendedObject object) {
         TableToolContextEntry entry;
         
-        pagename = context.view.getPageName();
-        entry = pages.get(pagename).tabletools.get(ttname);
+        entry = pages.get(page).tabletools.get(ttname);
         entry.items.put(entry.items.size(), object);
     }
     

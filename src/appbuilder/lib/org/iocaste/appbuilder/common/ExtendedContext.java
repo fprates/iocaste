@@ -6,6 +6,8 @@ import org.iocaste.documents.common.ExtendedObject;
 public interface ExtendedContext {
 
     public abstract void add(String ttname, ExtendedObject object);
+
+    public abstract void add(String page, String ttname, ExtendedObject object);
     
     public abstract ExtendedObject dfobjectget(String dfname);
     
