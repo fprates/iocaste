@@ -28,6 +28,8 @@ public class StandardPanel {
         page.setViewContext(view);
         page.execute();
         
+        extcontext.pageInstance(name);
+        
         reassignActions(view, page);
     }
     
