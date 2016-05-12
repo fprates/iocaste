@@ -98,3 +98,9 @@ function setValue(name, value) {
 	var param = document.getElementById(name);
 	param.value = value;
 }
+
+window.onpopstate = function(event) {
+   history.go(1)
+};
+
+history.pushState(null, null, "#");
