@@ -10,7 +10,6 @@ import org.iocaste.documents.common.DummyElement;
 import org.iocaste.documents.common.DummyModelItem;
 import org.iocaste.packagetool.common.InstallData;
 import org.iocaste.packagetool.common.SearchHelpData;
-import org.iocaste.shell.common.StyleSheet;
 
 public abstract class AbstractInstallObject {
     private StandardInstallContext context;
@@ -126,9 +125,6 @@ public abstract class AbstractInstallObject {
         return shd;
     }
     
-    protected final void setApplicationStyle(String name) {
-        data.setApplicationStyle(name);
-    }
     public final DocumentModelItem tag(String name, DocumentModelItem item) {
         context.setItem(name, item);
         return item;
@@ -137,11 +133,5 @@ public abstract class AbstractInstallObject {
     public final ModelInstall tag(String tag, ModelInstall model) {
         context.setModel(tag, model);
         return model;
-    }
-    
-    protected final StyleSheet styleInstance(String name) {
-        StyleSheet stylesheet = new StyleSheet();
-        data.setStyleSheet(name, stylesheet);
-        return stylesheet;
     }
 }

@@ -58,16 +58,6 @@ public class SessionContext {
     
     /**
      * 
-     * @param name
-     */
-    public final void invalidateStyle(String name) {
-        for (AppContext appctx : apps.values())
-            if ((appctx.stylename != null) && appctx.stylename.equals(name))
-                appctx.invalidateStyle();
-    }
-    
-    /**
-     * 
      * @return
      */
     public final PageStackItem popPage() {

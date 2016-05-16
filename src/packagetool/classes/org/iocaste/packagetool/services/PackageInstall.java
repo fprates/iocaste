@@ -18,7 +18,6 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
-import org.iocaste.shell.common.StyleSheet;
 
 public class PackageInstall extends AbstractHandler {
     
@@ -57,9 +56,7 @@ public class PackageInstall extends AbstractHandler {
         Authorization[] authorizations;
         String[] dependencies;
         State state;
-        String defaultstyle;
         Set<String> texts;
-        Map<String, StyleSheet> stylesheets;
         Map<String, Map<String, Long>> numbers;
         
         state = new State();
@@ -182,17 +179,6 @@ public class PackageInstall extends AbstractHandler {
             texts = state.data.getTexts();
             if (texts.size() > 0)
                 InstallTexts.init(texts, state);
-            
-            /*
-             * registra estilos
-             */
-            defaultstyle = state.data.getApplicationStyle();
-            if (defaultstyle != null)
-                InstallStyles.setDefaultStyle(state, defaultstyle);
-            
-            stylesheets = state.data.getStyleSheets();
-            if (stylesheets.size() > 0)
-                InstallStyles.init(stylesheets, state);
             
             /*
              * grava itens instalados

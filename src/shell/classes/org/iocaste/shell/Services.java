@@ -1,13 +1,9 @@
 package org.iocaste.shell;
 
-import java.util.List;
-
-import org.iocaste.internal.SessionContext;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AccessTicket;
 import org.iocaste.shell.common.PageStackItem;
-import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public class Services extends AbstractFunction {
@@ -22,9 +18,6 @@ public class Services extends AbstractFunction {
         export("push_page", "pushPage");
         export("remove_ticket", "removeTicket");
         export("set_pages_position", "setPagesPosition");
-        export("style_remove", "removeStyle");
-        export("style_save", "saveStyle");
-        export("style_invalidate", "invalidateStyle");
         export("update_view", "updateView");
     }
     
@@ -88,14 +81,6 @@ public class Services extends AbstractFunction {
     /**
      * 
      * @param message
-     */
-    public final void invalidateStyle(Message message) {
-        PageRenderer.invalidateStyle(message.getString("style"));
-    }
-    
-    /**
-     * 
-     * @param message
      * @return
      */
     public final PageStackItem popPage(Message message) {
@@ -115,11 +100,6 @@ public class Services extends AbstractFunction {
         PageRenderer.pushPage(sessionid, view);
     }
     
-    public final void removeStyle(Message message) {
-        String name = message.getString("name");
-        StyleServices.remove(this, name);
-    }
-    
     /**
      * 
      * @param message
@@ -128,20 +108,6 @@ public class Services extends AbstractFunction {
         String ticket = message.getString("ticket");
         
         PageRenderer.removeTicket(ticket, this);
-    }
-    
-    /**
-     * 
-     * @param message
-     */
-    public final void saveStyle(Message message) {
-        String name = message.get("name");
-        StyleSheet stylesheet = message.get("style");
-        
-        StyleServices.save(this, name, stylesheet);
-        for (List<SessionContext> sessions : PageRenderer.apps.values())
-            for (SessionContext session : sessions)
-                session.invalidateStyle(name);
     }
     
     /**

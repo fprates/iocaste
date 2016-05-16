@@ -32,7 +32,6 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.PageStackItem;
-import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public abstract class AbstractRenderer extends HttpServlet implements Function {
@@ -44,7 +43,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     private static final byte AUTHORIZATION_ERROR = 1;
     private String jsessionid, servername;
     public static Map<String, List<SessionContext>> apps;
-    protected Map<String, Map<String, String>> defaultstyle;
     protected String hostname, protocol;
     protected int port;
 
@@ -111,12 +109,10 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             }
         }
         
-        if (sessionctx.contains(contextdata.appname)) {
+        if (sessionctx.contains(contextdata.appname))
             appctx = sessionctx.getAppContext(contextdata.appname);
-        } else {
+        else
             appctx = new AppContext(contextdata.appname);
-            appctx.stylename = getAppStyle(contextdata.appname, contextdata);
-        }
         
         pagectx = new PageContext(contextdata.pagename);
         pagectx.setAppContext(appctx);
@@ -144,7 +140,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         Input input;
         Message message;
         Map<String, Object> parameters;
-        Map<String, Map<String, String>> style;
         AppContext appctx;
         View view;
         Service service;
@@ -158,23 +153,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         if (appname == null || pagename == null)
             throw new IocasteException("page not especified.");
         
-        if (appctx.getStyleSheet() == null) {
-            if (defaultstyle == null)
-                defaultstyle = Style.get("DEFAULT", this);
-            
-            if (!appctx.stylename.equals("DEFAULT"))
-                style = Style.get(appctx.stylename, this);
-            else
-                style = defaultstyle;
-            
-            appctx.setStyleSheet(style);
-        }
-        
         view = pagectx.getViewData(); 
         if (!pagectx.keepView() || view == null)
             view = new View(appname, pagename);
-        
-        view.setStyleSheet(appctx.getStyleSheet());
         
         message = new Message("get_view_data");
         message.add("view", view);
@@ -299,30 +280,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     @Override
     public final <T extends Handler> T get(String handler) {
         return null;
-    }
-    
-    @SuppressWarnings("unchecked")
-    protected String getAppStyle(String appname, ContextData contextdata) {
-        CheckedSelect select;
-        Object[] results;
-        String style;
-        Map<String, Object> line;
-        
-        select = new CheckedSelect(this);
-        select.setFrom("SHELL005");
-        select.setWhere("APPNM = ?", appname);
-        results = select.execute();
-        
-        if (results == null)
-            return "DEFAULT";
-        
-        for (Object result : results) {
-            line = (Map<String, Object>)result;
-            style = (String)line.get("STYLE");
-            return style;
-        }
-        
-        return "DEFAULT";
     }
     
     /**
@@ -505,15 +462,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         int logid = Integer.parseInt(complexid[1]);
         
         return apps.get(complexid[0]).get(logid).home();
-    }
-    
-    /**
-     * 
-     */
-    public static final void invalidateStyle(String name) {
-        for (String sessionid : apps.keySet())
-            for (SessionContext sessionctx : apps.get(sessionid))
-                sessionctx.invalidateStyle(name);
     }
     
     /*
@@ -898,9 +846,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             PageContext pagectx) throws Exception {
         TrackingData tracking;
         HtmlRenderer renderer;
-        StyleSheet userstyle;
         String username;
-        AppContext appctx;
         View view;
         boolean hasrendered;
 
@@ -918,11 +864,6 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
          * ajusta e chama o renderizador
          */
         username = pagectx.getUsername();
-        userstyle = view.styleSheetInstance();
-        appctx = pagectx.getAppContext();
-        if (userstyle != null)
-            appctx.setStyleSheet(userstyle.getElements());
-        
         renderer = new HtmlRenderer();
         renderer.setPageContext(pagectx);
         renderer.setUsername((username == null)? NOT_CONNECTED : username);

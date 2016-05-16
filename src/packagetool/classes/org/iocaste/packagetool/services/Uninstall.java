@@ -131,10 +131,6 @@ public class Uninstall extends AbstractHandler {
             InstallTexts.uninstall(name, function);
             documents.delete(object);
             return;
-        case "STYLE":
-            InstallStyles.uninstall(name, function);
-            documents.delete(object);
-            return;
         case "DATA_ELEMENT":
             documents.delete(object);
             return;

@@ -16,7 +16,6 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
 import org.iocaste.protocol.user.UserProfile;
-import org.iocaste.shell.common.StyleSheet;
 
 public class PackageUpdate extends AbstractHandler {
 
@@ -24,8 +23,6 @@ public class PackageUpdate extends AbstractHandler {
     public Object run(Message message) throws Exception {
         Uninstall uninstall;
         Set<String> types;
-        String defaultstyle;
-        Map<String, StyleSheet> stylesheets;
         Map<String, DocumentModel> models;
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
@@ -75,14 +72,6 @@ public class PackageUpdate extends AbstractHandler {
         state.messages = state.data.getMessages();
         if (state.messages.size() > 0)
             InstallMessages.init(state);
-        
-        defaultstyle = state.data.getApplicationStyle();
-        if (defaultstyle != null)
-            InstallStyles.setDefaultStyle(state, defaultstyle);
-        
-        stylesheets = state.data.getStyleSheets();
-        if (stylesheets.size() > 0)
-            InstallStyles.init(stylesheets, state);
         
         authorizations = state.data.getAuthorizations();
         if (authorizations.length > 0)
