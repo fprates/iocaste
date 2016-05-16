@@ -1,11 +1,9 @@
 package org.iocaste.shell.common;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StyleSheet implements Serializable {
-    private static final long serialVersionUID = -4046926566191263132L;
+public class StyleSheet {
     private Map<String, Map<String, String>> stylesheet;
     
     public StyleSheet(Map<String, Map<String, String>> stylesheet) {
@@ -31,7 +29,7 @@ public class StyleSheet implements Serializable {
     }
     
     public final Map<String, String> newElement(String name) {
-        Map<String, String> element = new HashMap<String, String>();
+        Map<String, String> element = new HashMap<>();
         
         stylesheet.put(name, element);
         return element;

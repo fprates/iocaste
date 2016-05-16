@@ -20,7 +20,8 @@ public class ChangeSecretConfig extends AbstractViewConfig {
         DataFormToolItem item;
         StyleSheet stylesheet;
         Map<String, String> style;
-        
+
+        Style.set(context);
         stylesheet = context.view.styleSheetInstance();
         style = stylesheet.get(".outer_content");
         style.put("left", "0px");
