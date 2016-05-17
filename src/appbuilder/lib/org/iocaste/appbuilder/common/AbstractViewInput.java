@@ -15,15 +15,17 @@ import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.appbuilder.common.tiles.TilesData;
 import org.iocaste.docmanager.common.Manager;
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.shell.common.Component;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.PrintArea;
-import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.Validator;
 import org.iocaste.texteditor.common.TextEditor;
 
@@ -211,6 +213,15 @@ public abstract class AbstractViewInput implements ViewInput {
         input.add(text, value);
     }
     
+    protected void linkadd(String name, ExtendedObject object, String field) {
+        DataElement delement = object.getModel().getModelItem(field).
+                getDataElement();
+        Link link = getElement(name);
+        String pname = new StringBuilder(name).append("_").append(field).
+                toString();
+        link.add(pname, object.get(field), delement.getType());
+    }
+    
     protected void loadInputTexts(PageBuilderContext context) {
         Set<Validator> validators;
         AbstractExtendedValidator exvalidator;
@@ -345,7 +356,7 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected final void textset(String name, String text) {
-        Text element = getElement(name);
+        Component element = getElement(name);
         element.setText(text);
     }
     
