@@ -38,7 +38,7 @@ public class ChangeSecretConfig extends AbstractViewConfig {
         getNavControl().setTitle("password.change");
         
         extcontext = getExtendedContext();
-        form = getDataFormTool("chgscrt");
+        form = getTool("chgscrt");
         form.style = "loginform";
         form.model = extcontext.chgscrtmodel;
         item = form.itemInstance("SECRET");

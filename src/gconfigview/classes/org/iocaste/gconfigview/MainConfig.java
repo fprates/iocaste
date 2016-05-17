@@ -16,7 +16,7 @@ public class MainConfig extends AbstractViewConfig {
         
         extcontext = getExtendedContext();
         
-        form = getDataFormTool("package");
+        form = getTool("package");
         form.model = extcontext.globalcfgmodel;
         for (DocumentModelItem item : extcontext.globalcfgmodel.getItens())
             form.itemInstance(item.getName()).invisible = true;

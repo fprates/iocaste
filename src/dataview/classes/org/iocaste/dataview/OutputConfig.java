@@ -9,7 +9,7 @@ public class OutputConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
-        ReportToolData reporttool = getReportTool("items");
+        ReportToolData reporttool = getTool("items");
         
         reporttool.output.model = extcontext.model.getName();
         getNavControl().setTitle(reporttool.output.model);

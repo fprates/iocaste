@@ -33,7 +33,7 @@ public class ExternalMaintenanceConfig extends MaintenanceConfig {
         style = stylesheet.clone(".xtrnl_import_form", ".form");
         style.put("padding", "0px");
         
-        form = getDataFormTool("importobj");
+        form = getTool("importobj");
         form.modelname = "XTRNL_IMPORT_OBJECT";
         form.style = "xtrnl_import_form";
         form.itemInstance("NAME").label = "modelname";

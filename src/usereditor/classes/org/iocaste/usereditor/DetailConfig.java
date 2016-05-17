@@ -20,7 +20,7 @@ public abstract class DetailConfig extends AbstractViewConfig {
         DataFormToolData identity, extras;
         DataFormToolItem item;
         
-        identity = getDataFormTool("identity");
+        identity = getTool("identity");
         identity.modelname = "LOGIN";
         identity.itemInstance("ID").invisible = true;
         identity.itemInstance("INIT").componenttype = Const.CHECKBOX;
@@ -29,16 +29,16 @@ public abstract class DetailConfig extends AbstractViewConfig {
         item = identity.itemInstance("SECRET");
         item.secret = item.focus = true;
         
-        extras = getDataFormTool("extras");
+        extras = getTool("extras");
         extras.modelname = "LOGIN_EXTENSION";
         extras.itemInstance("USERNAME").invisible = true;
         
-        tasks = getTableTool("tasks");
+        tasks = getTool("tasks");
         tasks.model = "USER_TASKS_GROUPS";
         tasks.show = new String[] {"GROUP"};
         new TableToolColumn(tasks, "GROUP").sh = "SH_TASKS_GROUPS";
 
-        profiles = getTableTool("profiles");
+        profiles = getTool("profiles");
         profiles.model = "USER_AUTHORITY";
         profiles.show = new String[] {"PROFILE"};
         new TableToolColumn(profiles, "PROFILE").sh = "SH_USER_PROFILE";

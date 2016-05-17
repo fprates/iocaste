@@ -34,7 +34,7 @@ public class DisplayConfig extends AbstractViewConfig {
         extcontext = getExtendedContext();
         getNavControl().setTitle(extcontext.model);
         
-        ttdata = getTableTool("items");
+        ttdata = getTool("items");
         ttdata.context = config.context;
         ttdata.name = "items";
         ttdata.model = extcontext.model;

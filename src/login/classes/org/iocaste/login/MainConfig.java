@@ -22,7 +22,7 @@ public class MainConfig extends AbstractViewConfig {
         getElement("logincnt").setStyleClass("logincnt");
         
         extcontext = getExtendedContext();
-        form = getDataFormTool("login");
+        form = getTool("login");
         form.style = "loginform";
         form.model = extcontext.loginmodel;
         

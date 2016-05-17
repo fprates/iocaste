@@ -15,7 +15,7 @@ public class MainConfig extends AbstractViewConfig {
         
         extcontext = getExtendedContext();
         
-        form = getDataFormTool("model");
+        form = getTool("model");
         form.model = extcontext.modelmodel;
         form.show = new String[] {"NAME"};
         item = form.itemInstance("NAME");

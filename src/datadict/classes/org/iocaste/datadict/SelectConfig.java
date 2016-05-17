@@ -17,7 +17,7 @@ public class SelectConfig extends AbstractViewConfig {
         getNavControl().add("show");
         
         extcontext = getExtendedContext();
-        dataform = getDataFormTool("model");
+        dataform = getTool("model");
         dataform.model = extcontext.model;
         for (DocumentModelItem mitem : dataform.model.getItens()) {
             item = dataform.itemInstance(mitem.getName());

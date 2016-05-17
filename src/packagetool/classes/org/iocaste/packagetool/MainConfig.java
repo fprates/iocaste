@@ -17,7 +17,7 @@ public class MainConfig extends AbstractViewConfig {
                 "unpackages",
                 "erpackages"
                 }) {
-            tabletool = getTableTool(name);
+            tabletool = getTool(name);
             tabletool.mode = TableTool.DISPLAY;
             tabletool.model = "PACKAGE_GRID";
             tabletool.mark = true;

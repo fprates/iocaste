@@ -43,7 +43,7 @@ public class ExternalDisplayConfig extends DisplayConfig {
         style.put("height", "0px");
         style.put("width", "0px");
         
-        form = getDataFormTool("importobj");
+        form = getTool("importobj");
         form.modelname = "XTRNL_IMPORT_OBJECT";
         form.style  = "xtrnl_import_form";
         form.itemInstance("NAME").label = "modelname";

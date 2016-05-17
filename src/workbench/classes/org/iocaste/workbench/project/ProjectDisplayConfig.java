@@ -47,13 +47,13 @@ public class ProjectDisplayConfig extends DisplayConfig {
         getElement("model_name").setVisible(false);
         getElement("model_add").setVisible(false);
         
-        tabletool = getTableTool("screen_table");
+        tabletool = getTool("screen_table");
         tabletool.style = "wb_screen_table";
         tabletool.mark = false;
         tabletool.noheader = true;
         tabletool.mode = TableTool.CONTINUOUS_DISPLAY;
         
-        tabletool = getTableTool("model_table");
+        tabletool = getTool("model_table");
         tabletool.style = "wb_model_table";
         tabletool.mark = false;
         tabletool.noheader = true;
@@ -63,12 +63,12 @@ public class ProjectDisplayConfig extends DisplayConfig {
         column.type = Const.LINK;
         column.action = "model_pick";
         
-        tabletool = getTableTool("screen_spec_item_table");
+        tabletool = getTool("screen_spec_item_table");
         tabletool.hide = new String[] {"ITEM_ID", "PROJECT", "SCREEN"};
 //        tabletool.mode = TableTool.CONTINUOUS_UPDATE;
 //        tabletool.vlines = 20;
         
-        tabletool = getTableTool("model_item_table");
+        tabletool = getTool("model_item_table");
         tabletool.hide = new String[] {"ITEM_ID", "PROJECT", "MODEL"};
 //        tabletool.mode = TableTool.CONTINUOUS_UPDATE;
 //        tabletool.vlines = 20;
@@ -76,12 +76,12 @@ public class ProjectDisplayConfig extends DisplayConfig {
         getElement("screen_detail").setStyleClass("wb_detail");
         getElement("model_detail").setStyleClass("wb_detail");
         
-        dataform = getDataFormTool("screen_header");
+        dataform = getTool("screen_header");
         dataform.modelname = "WB_PROJECT_SCREENS";
         dataform.show = new String[] {"SCREEN_NAME"};
         dataform.disabled = true;
         
-        dataform = getDataFormTool("model_header");
+        dataform = getTool("model_header");
         dataform.modelname = "WB_PROJECT_MODELS";
         dataform.show = new String[] {"MODEL_NAME"};
         dataform.disabled = true;

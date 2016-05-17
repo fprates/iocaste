@@ -29,7 +29,7 @@ public abstract class AbstractReportConfig extends AbstractViewConfig {
         if (page.equals(data.input.name)) {
             navcontrol.add("select");
             
-            rtdata = getReportTool("head");
+            rtdata = getTool("head");
             rtdata.doInput();
             config(context, rtdata.input);
             return;
@@ -46,7 +46,7 @@ public abstract class AbstractReportConfig extends AbstractViewConfig {
             container = getElement("main");
             container.setEnctype("multipart/form-data");
             
-            rtdata = getReportTool("output");
+            rtdata = getTool("output");
             rtdata.doOutput();
             config(context, rtdata.output);
         }

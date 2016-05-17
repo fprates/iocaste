@@ -2,10 +2,7 @@ package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
 import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
-import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
-import org.iocaste.appbuilder.common.reporttool.ReportToolData;
-import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.TabbedPane;
@@ -34,6 +31,10 @@ public abstract class AbstractViewConfig implements ViewConfig {
         return getViewComponents().dashboards.get(name);
     }
     
+    protected final <T extends AbstractComponentData> T getTool(String name) {
+        return getViewComponents().getComponentData(name);
+    }
+    
     /**
      * 
      * @param dashboard
@@ -60,15 +61,6 @@ public abstract class AbstractViewConfig implements ViewConfig {
             throw new RuntimeException(
                     name.concat(" is an invalid dashboard component."));
         return component;
-    }
-    
-    protected final DataFormToolData getDataFormTool(String name) {
-        ComponentEntry entry;
-        
-        entry = getViewComponents().entries.get(name);
-        if (entry == null)
-            return null;
-        return (DataFormToolData)entry.data;
     }
     
     /**
@@ -115,24 +107,6 @@ public abstract class AbstractViewConfig implements ViewConfig {
      */
     protected final TabbedPaneItem getTabbedItem(String tab, String name) {
         return ((TabbedPane)getElement(tab)).getElement(name);
-    }
-    
-    /**
-     * 
-     * @param name
-     * @return
-     */
-    protected final ReportToolData getReportTool(String name) {
-        return getViewComponents().getComponentData(name);
-    }
-    
-    /**
-     * 
-     * @param name
-     * @return
-     */
-    protected final TableToolData getTableTool(String name) {
-        return getViewComponents().getComponentData(name);
     }
     
     /**

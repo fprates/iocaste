@@ -16,7 +16,7 @@ public class PropertiesConfig extends AbstractViewConfig {
         extcontext = getExtendedContext();
         navcontrol.setTitle(extcontext.title);
         
-        reporttool = getReportTool("properties");
+        reporttool = getTool("properties");
         reporttool.output.model = extcontext.model.getName();
     }
 

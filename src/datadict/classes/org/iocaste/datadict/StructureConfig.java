@@ -16,11 +16,11 @@ public class StructureConfig extends AbstractViewConfig {
         TableToolColumn column;
         Context extcontext = getExtendedContext();
         
-        dataform = getDataFormTool("head");
+        dataform = getTool("head");
         dataform.model = extcontext.model;
         dataform.disabled = true;
         
-        tabletool = getTableTool("items");
+        tabletool = getTool("items");
         tabletool.model = "DD_MODEL_ITEM";
         tabletool.mode = TableTool.DISPLAY;
         tabletool.vlines = 0;

@@ -17,7 +17,7 @@ public class SelectConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         DataFormToolItem item;
-        DataFormToolData head = getDataFormTool("head");
+        DataFormToolData head = getTool("head");
         NavControl navcontrol = getNavControl();
         
         navcontrol.setTitle(context.view.getPageName());
