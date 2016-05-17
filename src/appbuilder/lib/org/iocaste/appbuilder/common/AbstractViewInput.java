@@ -30,6 +30,7 @@ import org.iocaste.texteditor.common.TextEditor;
 public abstract class AbstractViewInput implements ViewInput {
     private PageBuilderContext context;
     private boolean init;
+    private String prefix;
     
     private final void addtablearray(
             String table, ExtendedObject[] objects) {
@@ -170,7 +171,15 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     private <T extends Element> T getElement(String name) {
-        return context.view.getElement(name);
+        String elementname;
+        
+        if (prefix != null)
+            elementname = new StringBuilder(prefix).append("_").
+                    append(name).toString();
+        else
+            elementname = name;
+        
+        return context.view.getElement(elementname);
     }
     
     @SuppressWarnings("unchecked")
@@ -271,8 +280,15 @@ public abstract class AbstractViewInput implements ViewInput {
     
     @Override
     public final void run(PageBuilderContext context, boolean init) {
+        run(context, init, null);
+    }
+    
+    @Override
+    public final void run(PageBuilderContext context, boolean init,
+            String prefix) {
         this.context = context;
         this.init = init;
+        this.prefix = prefix;
         if (init)
             init(context);
         else

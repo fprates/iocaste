@@ -10,6 +10,7 @@ public class TilesData extends AbstractComponentData {
     private ExtendedObject[] objects;
     public ViewSpec spec;
     public ViewConfig config;
+    public AbstractTileInput input;
     
     public TilesData() {
         super(ViewSpecItem.TYPES.TILES);

@@ -55,10 +55,12 @@ public class TilesTool extends AbstractComponentTool {
         builder.setView(data.context.view.getPageName());
         builder.setViewSpec(data.spec);
         builder.setViewConfig(data.config);
-        
+        builder.setViewInput(data.input);
         for (ExtendedObject object : data.get()) {
             name = new StringBuilder(data.name).append("_").append(i++).
                     toString();
+            if (data.input != null)
+                data.input.set(object);
             builder.execute(data.context, itemspec, name);
         }
     }

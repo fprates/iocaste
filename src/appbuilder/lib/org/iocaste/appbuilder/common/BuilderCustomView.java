@@ -147,7 +147,7 @@ public class BuilderCustomView extends AbstractCustomView {
             config.run(_context, prefix);
         
         if (input != null)
-            input.run(_context, true);
+            input.run(_context, true, prefix);
 
         viewctxcomponents = viewctx.getComponents();
         for (String key : components.entries.keySet()) {
