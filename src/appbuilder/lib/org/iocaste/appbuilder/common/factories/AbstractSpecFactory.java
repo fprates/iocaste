@@ -34,16 +34,24 @@ public abstract class AbstractSpecFactory implements SpecFactory {
             ViewSpecItem item, String prefix) {
         String name;
         AbstractComponentData data;
+        Container container;
         String parent = item.getParent();
-        Container container = context.view.getElement(parent);
         this.context = context;
         this.components = components;
 
-        if (prefix == null)
+        if (prefix == null) {
             name = item.getName();
-        else
+            container = context.view.getElement(parent);
+        } else {
             name = new StringBuilder(prefix).append("_").append(
                     item.getName()).toString();
+            container = context.view.getElement(parent);
+            if (container == null) {
+                parent = new StringBuilder(prefix).append("_").
+                        append(parent).toString();
+                container = context.view.getElement(parent);
+            }
+        }
         
         data = dataInstance();
         if (data == null) {
