@@ -40,39 +40,39 @@ public class StandardPanelInput extends AbstractViewInput {
                 dbitemadd("actions", submit, submit, "submit");
         }
         
-        for (String name : page.items.keySet()) {
-            item = page.items.get(name);
-            if (item.dashboard)
-                dbitemadd("dashitems", item.dash, item.name);
-            
-            entrieskeys = item.context.entries.keySet();
-            destination = (item.dashboard)? "dashcontext" : "actions";
-            for (String text : entrieskeys) {
-                ctxitem = item.context.entries.get(text);
-                switch (ctxitem.type) {
-                case GROUP:
-                    dbitemadd(destination, item.dashctx, ctxitem.group);
-                    
-                    for (String texti : entrieskeys) {
-                        ctxitemi = item.context.entries.get(texti);
-                        if ((ctxitemi.group == null) ||
-                                (ctxitemi.type == PanelPageEntryType.GROUP) ||
-                                !ctxitem.group.equals(ctxitemi.group))
-                            continue;
-
-                        dbitemadd(destination, item.dashctx, texti,
-                                ctxitemi.task);
-                    }
-                    break;
-                default:
-                    if (ctxitem.group != null)
-                        break;
-                    
-                    dbitemadd(destination, item.dashctx, text, ctxitem.task);
-                    break;
-                }
-            }
-        }
+//        for (String name : page.items.keySet()) {
+//            item = page.items.get(name);
+//            if (item.dashboard)
+//                dbitemadd("dashitems", item.dash, item.name);
+//            
+//            entrieskeys = item.context.entries.keySet();
+//            destination = (item.dashboard)? "dashcontext" : "actions";
+//            for (String text : entrieskeys) {
+//                ctxitem = item.context.entries.get(text);
+//                switch (ctxitem.type) {
+//                case GROUP:
+//                    dbitemadd(destination, item.dashctx, ctxitem.group);
+//                    
+//                    for (String texti : entrieskeys) {
+//                        ctxitemi = item.context.entries.get(texti);
+//                        if ((ctxitemi.group == null) ||
+//                                (ctxitemi.type == PanelPageEntryType.GROUP) ||
+//                                !ctxitem.group.equals(ctxitemi.group))
+//                            continue;
+//
+//                        dbitemadd(destination, item.dashctx, texti,
+//                                ctxitemi.task);
+//                    }
+//                    break;
+//                default:
+//                    if (ctxitem.group != null)
+//                        break;
+//                    
+//                    dbitemadd(destination, item.dashctx, text, ctxitem.task);
+//                    break;
+//                }
+//            }
+//        }
         
         input = page.getInput();
         if (input != null)

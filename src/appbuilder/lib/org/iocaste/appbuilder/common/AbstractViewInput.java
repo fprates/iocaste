@@ -13,6 +13,7 @@ import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
+import org.iocaste.appbuilder.common.tiles.TilesData;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -330,5 +331,14 @@ public abstract class AbstractViewInput implements ViewInput {
     protected final void textset(String name, String text) {
         Text element = getElement(name);
         element.setText(text);
+    }
+    
+    protected final void tilesset(String name, ExtendedObject[] objects) {
+        ((TilesData)getComponentData(name)).set(objects);
+    }
+    
+    protected final void tilesset(
+            String name, Collection<ExtendedObject> objects) {
+        tilesset(name, objects.toArray(new ExtendedObject[0]));
     }
 }

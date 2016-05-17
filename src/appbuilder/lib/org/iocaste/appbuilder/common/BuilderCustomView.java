@@ -13,6 +13,7 @@ import org.iocaste.appbuilder.common.factories.TableToolFactory;
 import org.iocaste.appbuilder.common.factories.TextEditorFactory;
 import org.iocaste.appbuilder.common.factories.TextFactory;
 import org.iocaste.appbuilder.common.factories.TextFieldFactory;
+import org.iocaste.appbuilder.common.factories.TilesFactory;
 import org.iocaste.appbuilder.common.factories.ButtonFactory;
 import org.iocaste.appbuilder.common.factories.DashboardFactoryFactory;
 import org.iocaste.appbuilder.common.factories.DashboardGroupFactory;
@@ -87,6 +88,8 @@ public class BuilderCustomView extends AbstractCustomView {
                 new TextFactory());
         factories.put(ViewSpecItem.TYPES.TEXT_FIELD,
                 new TextFieldFactory());
+        factories.put(ViewSpecItem.TYPES.TILES,
+                new TilesFactory());
         factories.put(ViewSpecItem.TYPES.RADIO_BUTTON,
                 new RadioButtonFactory());
         factories.put(ViewSpecItem.TYPES.RADIO_GROUP,

@@ -186,4 +186,8 @@ public abstract class AbstractViewSpec implements ViewSpec {
     protected final void textfield(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TEXT_FIELD, name);
     }
+    
+    protected final void tiles(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.TILES, name);
+    }
 }

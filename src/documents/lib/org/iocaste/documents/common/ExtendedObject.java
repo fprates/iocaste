@@ -327,7 +327,7 @@ public class ExtendedObject implements Comparable<ExtendedObject>,
         
         hash = 0;
         for (Object value : values.values())
-            hash += value.hashCode();
+            hash += ((value == null)? 0 : value.hashCode());
         
         return hash;
     }
