@@ -19,7 +19,13 @@ public abstract class AbstractSpecFactory implements SpecFactory {
     
     protected void execute(Container container, String parent, String name) { }
 
-    public void generate(ComponentEntry entry) { }
+    @Override
+    public void generate(ComponentEntry entry, String prefix) { }
+    
+    @Override
+    public void generate(ComponentEntry entry) {
+        generate(entry, null);
+    }
     
     @Override
     public void generate(ViewComponents components) { }

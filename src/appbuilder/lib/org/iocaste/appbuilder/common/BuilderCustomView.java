@@ -131,9 +131,7 @@ public class BuilderCustomView extends AbstractCustomView {
             String prefix) {
         ComponentEntry entry;
         SpecFactory factory;
-        ViewComponents viewctxcomponents;
         PageBuilderContext _context = (PageBuilderContext)context;
-        ViewContext viewctx = _context.getView(getView());
         ViewComponents components = new ViewComponents();;
         ViewSpec spec = getViewSpec();
         ViewConfig config = getViewConfig();
@@ -149,16 +147,16 @@ public class BuilderCustomView extends AbstractCustomView {
         if (input != null)
             input.run(_context, true, prefix);
 
-        viewctxcomponents = viewctx.getComponents();
         for (String key : components.entries.keySet()) {
             entry = components.entries.get(key);
             factory = factories.get(entry.data.type);
             if (factory == null)
                 continue;
-            factory.generate(entry);
+            factory.generate(entry, prefix);
+            if (entry.component == null)
+                continue;
             entry.component.run();
             entry.component.refresh();
-            viewctxcomponents.add(entry.data);
         }
         
         for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {

@@ -9,6 +9,8 @@ public interface SpecFactory {
 
     public abstract void generate(ComponentEntry entry);
     
+    public abstract void generate(ComponentEntry entry, String prefix);
+    
     public abstract void generate(ViewComponents components);
     
     public abstract <T> T get();

@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common.tiles;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
@@ -8,12 +9,10 @@ import org.iocaste.appbuilder.common.BuilderCustomView;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.CustomView;
-import org.iocaste.shell.common.StandardContainer;
 
 public class TilesTool extends AbstractComponentTool {
-    List<Tile> tiles;
+    private Map<String, Tile> tiles;
     
     /**
      * 
@@ -22,15 +21,20 @@ public class TilesTool extends AbstractComponentTool {
      */
     public TilesTool(ComponentEntry entry) {
         super(entry);
+        tiles = new HashMap<>();
+    }
+    
+    public Tile get(String name) {
+        return tiles.get(name);
     }
     
     @Override
     public final void load(AbstractComponentData componentdata) {
-        TilesData data = (TilesData)componentdata;
-        
-        for (Tile tile : tiles) {
-            
-        }
+//        TilesData data = (TilesData)componentdata;
+//        
+//        for (Tile tile : tiles) {
+//            
+//        }
     }
 
     @Override
@@ -40,28 +44,24 @@ public class TilesTool extends AbstractComponentTool {
 
     @Override
     public void run() {
+        Tile tile;
         CustomView builder;
-        String name;
         ViewSpecItem itemspec;
-        int i;
         TilesData data = (TilesData)entry.data;
         
+        tiles.clear();
         itemspec = data.context.getView().getSpec().get(entry.data.name);
-        if (itemspec == null)
-            return;
-        
-        i = 0;
         builder = new BuilderCustomView();
         builder.setView(data.context.view.getPageName());
         builder.setViewSpec(data.spec);
         builder.setViewConfig(data.config);
         builder.setViewInput(data.input);
         for (ExtendedObject object : data.get()) {
-            name = new StringBuilder(data.name).append("_").append(i++).
-                    toString();
             if (data.input != null)
                 data.input.set(object);
-            builder.execute(data.context, itemspec, name);
+            tile = new Tile(tiles, data.name);
+            tile.set(object);
+            builder.execute(data.context, itemspec, tile.getName());
         }
     }
 }

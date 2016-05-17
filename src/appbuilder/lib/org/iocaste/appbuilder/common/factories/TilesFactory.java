@@ -11,9 +11,10 @@ public class TilesFactory extends AbstractSpecFactory {
     protected AbstractComponentData dataInstance() {
         return new TilesData();
     }
-
+    
     @Override
-    public final void generate(ComponentEntry entry) {
-        entry.component = new TilesTool(entry);
+    public final void generate(ComponentEntry entry, String prefix) {
+        if (prefix == null)
+            entry.component = new TilesTool(entry);
     }
 }
