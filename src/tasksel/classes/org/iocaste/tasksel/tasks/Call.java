@@ -1,20 +1,16 @@
-package org.iocaste.tasksel;
+package org.iocaste.tasksel.tasks;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Const;
+import org.iocaste.tasksel.Common;
 
 public class Call extends AbstractActionHandler {
-    private String dash;
-    
-    public Call(String dash) {
-        this.dash = dash;
-    }
     
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        String task = dbactiongetst("groups", dash);
-
+        String task = getinputst("tileitem_NAME");
+        
         if (Common.call(context.function, task) == 0)
             return;
         

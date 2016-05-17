@@ -1,8 +1,6 @@
 package org.iocaste.tasksel;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
@@ -10,21 +8,21 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.appbuilder.common.panel.PanelPageItem;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
-import org.iocaste.appbuilder.common.panel.dashboard.StandardDashboardConfig;
-import org.iocaste.appbuilder.common.panel.dashboard.StandardDashboardSpec;
 import org.iocaste.appbuilder.common.style.CommonStyle;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.tasksel.groups.GroupsPanelPage;
+import org.iocaste.tasksel.tasks.TasksPanelPage;
 
 public class Main extends AbstractPageBuilder {
     public static final String MAIN = "main";
-    public Map<String, Set<TaskEntry>> groups;
+    public Set<ExtendedObject> entries;
     public PageBuilderContext context;
-    public TaskPanelPage page;
+    public GroupsPanelPage page;
     
     public Main() {
         export("task_redirect", new Redirect());
@@ -36,16 +34,21 @@ public class Main extends AbstractPageBuilder {
         StandardPanel panel;
         CommonStyle profile;
         Context extcontext;
+        AbstractPanelPage tasks;
         
         extcontext = new Context(context);
-        groups = getLists();
+        entries = getLists();
         this.context = context;
 
-        page = new TaskPanelPage();
+        page = new GroupsPanelPage();
         page.function = this;
         
         panel = new StandardPanel(context);
         panel.instance(MAIN, page, extcontext);
+        
+        tasks = new TasksPanelPage();
+        panel = new StandardPanel(context);
+        panel.instance("tasks", tasks, extcontext);
         
         profile = CommonStyle.get();
         profile.content.bgcolor = "#202020";
@@ -57,13 +60,13 @@ public class Main extends AbstractPageBuilder {
      * @param context
      * @return
      */
-    private final Map<String, Set<TaskEntry>> getLists() {
+    private final Set<ExtendedObject> getLists() {
         Query query;
-        Set<TaskEntry> entries;
-        TaskEntry entry;
+        ExtendedObject entry;
         ExtendedObject[] result, mobject;
-        Map<String, Set<TaskEntry>> lists;
+        Set<ExtendedObject> entries;
         String groupname, language, taskname, username;
+        DocumentModel model;
         Iocaste iocaste = new Iocaste(this);
         Documents documents = new Documents(this);
         
@@ -78,21 +81,12 @@ public class Main extends AbstractPageBuilder {
         if (result == null)
             return null;
         
+        model = documents.getModel("TASK_TILE_ENTRY");
         language = iocaste.getLocale().toString(); 
-        lists = new LinkedHashMap<>();
+        entries = new LinkedHashSet<>();
         for (ExtendedObject object : result) {
             groupname = object.get("GROUP");
-            if (lists.containsKey(groupname)) {
-                entries = lists.get(groupname);
-            } else {
-                entries = new LinkedHashSet<>();
-                lists.put(groupname, entries);
-            }
-            
-            taskname = object.get("NAME");
-            entry = new TaskEntry();
-            entry.setName(taskname);
-            entries.add(entry);
+            taskname = object.getst("NAME");
             
             query = new Query();
             query.setModel("TASK_ENTRY_TEXT");
@@ -100,11 +94,16 @@ public class Main extends AbstractPageBuilder {
             query.andEqual("LANGUAGE", language);
             query.setMaxResults(1);
             mobject = documents.select(query);
+            
+            entry = new ExtendedObject(model);
+            entry.set("GROUP", groupname);
+            entry.set("NAME", taskname);
             if (mobject != null)
-                entry.setText((String)mobject[0].get("TEXT"));
+                entry.set("TEXT", mobject[0].getst("TEXT"));
+            entries.add(entry);
         }
         
-        return lists;
+        return entries;
     }
     
     @Override
@@ -122,7 +121,7 @@ public class Main extends AbstractPageBuilder {
     public final void refresh() {
         ViewContext view;
         
-        groups = getLists();
+        entries = getLists();
         view = context.getView(Main.MAIN);
         view.getSpec().setInitialized(false);
         
@@ -131,36 +130,5 @@ public class Main extends AbstractPageBuilder {
         
         StandardPanel.reassignActions(view, page);
         reassignActions();
-    }
-}
-
-class TaskPanelPage extends AbstractPanelPage {
-    public Main function;
-    
-    public final void execute() {
-        set(new StandardDashboardSpec(this));
-        set(new StandardDashboardConfig(this));
-        update();
-        refresh();
-    }
-    
-    public final void refresh() {
-        PanelPageItem item;
-        String text;
-        Set<TaskEntry> entries;
-        
-        function.page = this;
-        items.clear();
-        for (String name : function.groups.keySet()) {
-            item = instance(name);
-            entries = function.groups.get(name);
-            for (TaskEntry entry : entries) {
-                text = entry.getText();
-                if (text == null)
-                    text = entry.getName();
-                
-                item.context.call(text, entry.getName());
-            }
-        }
     }
 }
