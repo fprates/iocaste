@@ -6,5 +6,7 @@ public interface ViewConfig {
 
     public abstract void run(PageBuilderContext context);
     
+    public abstract void run(PageBuilderContext context, String prefix);
+    
     public abstract void setNavControl(NavControl navcontrol);
 }

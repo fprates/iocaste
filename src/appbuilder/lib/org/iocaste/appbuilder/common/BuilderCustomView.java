@@ -37,7 +37,6 @@ import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.StyleSheet;
 
 public class BuilderCustomView extends AbstractCustomView {
-    private String view;
     private Map<ViewSpecItem.TYPES, SpecFactory> factories;
     
     public BuilderCustomView() {
@@ -97,15 +96,15 @@ public class BuilderCustomView extends AbstractCustomView {
     }
     
     private void buildItem(PageBuilderContext context,
-            ViewComponents components, ViewSpecItem item) {
+            ViewComponents components, ViewSpecItem item, String prefix) {
         SpecFactory factory;
         
         factory = getFactory(item);
         if (factory != null)
-            factory.run(context, components, item);
+            factory.run(context, components, item, prefix);
         
         for (ViewSpecItem child : item.getItems())
-            buildItem(context, components, child);
+            buildItem(context, components, child, prefix);
     }
     
     private final void download(PageBuilderContext context) throws Exception {
@@ -127,6 +126,48 @@ public class BuilderCustomView extends AbstractCustomView {
         context.view.setContent(content);
     }
     
+    @Override
+    public void execute(AbstractContext context, ViewSpecItem itemspec,
+            String prefix) {
+        ComponentEntry entry;
+        SpecFactory factory;
+        ViewComponents viewctxcomponents;
+        PageBuilderContext _context = (PageBuilderContext)context;
+        ViewContext viewctx = _context.getView(getView());
+        ViewComponents components = new ViewComponents();;
+        ViewSpec spec = getViewSpec();
+        ViewConfig config = getViewConfig();
+        ViewInput input = getViewInput();
+        
+        spec.run(itemspec, _context);
+        for (ViewSpecItem item : spec.getItems())
+            buildItem(_context, components, item, prefix);
+        
+        if (config != null)
+            config.run(_context, prefix);
+        
+        if (input != null)
+            input.run(_context, true);
+
+        viewctxcomponents = viewctx.getComponents();
+        for (String key : components.entries.keySet()) {
+            entry = components.entries.get(key);
+            factory = factories.get(entry.data.type);
+            if (factory == null)
+                continue;
+            factory.generate(entry);
+            entry.component.run();
+            entry.component.refresh();
+            viewctxcomponents.add(entry.data);
+        }
+        
+        for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {
+            factory = factories.get(type);
+            if (factory != null)
+                factory.generate(components);
+        }
+    }
+    
     /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.CustomView#execute(
@@ -140,9 +181,9 @@ public class BuilderCustomView extends AbstractCustomView {
         ViewContext viewctx;
         ViewComponents components;
         StyleSheet stylesheet;
-        AbstractViewSpec viewspec = getViewSpec();
+        ViewSpec viewspec = getViewSpec();
         ViewConfig viewconfig = getViewConfig();
-        AbstractViewInput viewinput = getViewInput();
+        ViewInput viewinput = getViewInput();
         PageBuilderContext _context = (PageBuilderContext)context;
         
         if (_context.downloaddata != null) {
@@ -151,7 +192,7 @@ public class BuilderCustomView extends AbstractCustomView {
             return;
         }
 
-        viewctx = _context.getView(view);
+        viewctx = _context.getView(getView());
         components = viewctx.getComponents();
         if (!viewspec.isInitialized()) {
             stylesheet = DefaultApplicationStyle.instance();
@@ -160,8 +201,9 @@ public class BuilderCustomView extends AbstractCustomView {
             _context.function.unregisterValidators();
             viewspec.run(_context);
             viewctx.reset();
+            
             for (ViewSpecItem item : viewspec.getItems())
-                buildItem(_context, components, item);
+                buildItem(_context, components, item, null);
 
             navcontrol = factories.get(ViewSpecItem.TYPES.PAGE_CONTROL).get();
             if (viewconfig != null) {
@@ -216,9 +258,5 @@ public class BuilderCustomView extends AbstractCustomView {
         ViewSpecItem.TYPES[] types = ViewSpecItem.TYPES.values();
         
         return factories.get(types[item.getType()]);
-    }
-    
-    public final void setView(String view) {
-        this.view = view;
     }
 }

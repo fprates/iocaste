@@ -11,6 +11,7 @@ import org.iocaste.shell.common.TabbedPaneItem;
 public abstract class AbstractViewConfig implements ViewConfig {
     private PageBuilderContext context;
     private NavControl navcontrol;
+    private String prefix;
     
     /**
      * 
@@ -69,7 +70,14 @@ public abstract class AbstractViewConfig implements ViewConfig {
      * @return
      */
     protected final <T extends Element> T getElement(String name) {
-        return context.view.getElement(name);
+        String elementname;
+        
+        if (prefix == null)
+            elementname = name;
+        else
+            elementname = new StringBuilder(prefix).append("_").append(
+                    name).toString();
+        return context.view.getElement(elementname);
     }
     
     /**
@@ -125,6 +133,18 @@ public abstract class AbstractViewConfig implements ViewConfig {
     @Override
     public final void run(PageBuilderContext context) {
         this.context = context;
+        execute(context);
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.appbuilder.common.ViewConfig#run(
+     *    org.iocaste.appbuilder.common.PageBuilderContext, java.lang.String)
+     */
+    @Override
+    public final void run(PageBuilderContext context, String prefix) {
+        this.context = context;
+        this.prefix = prefix;
         execute(context);
     }
     

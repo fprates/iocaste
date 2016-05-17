@@ -31,21 +31,29 @@ public abstract class AbstractSpecFactory implements SpecFactory {
     
     @Override
     public final void run(PageBuilderContext context, ViewComponents components,
-            ViewSpecItem item) {
+            ViewSpecItem item, String prefix) {
+        String name;
         AbstractComponentData data;
         String parent = item.getParent();
         Container container = context.view.getElement(parent);
         this.context = context;
         this.components = components;
+
+        if (prefix == null)
+            name = item.getName();
+        else
+            name = new StringBuilder(prefix).append("_").append(
+                    item.getName()).toString();
         
         data = dataInstance();
         if (data == null) {
-            execute(container, parent, item.getName());
+            execute(container, parent, name);
             return;
         }
         data.context = context;
-        data.name = item.getName();
-        new StandardContainer(container, data.name);
+        data.name = name;
+        if (prefix == null)
+            new StandardContainer(container, data.name);
         components.add(data);
     }
     

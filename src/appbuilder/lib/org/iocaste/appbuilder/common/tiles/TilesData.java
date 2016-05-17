@@ -1,12 +1,15 @@
 package org.iocaste.appbuilder.common.tiles;
 
 import org.iocaste.appbuilder.common.AbstractComponentData;
+import org.iocaste.appbuilder.common.ViewConfig;
+import org.iocaste.appbuilder.common.ViewSpec;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class TilesData extends AbstractComponentData {
     private ExtendedObject[] objects;
-    public TileRenderer tilerenderer;
+    public ViewSpec spec;
+    public ViewConfig config;
     
     public TilesData() {
         super(ViewSpecItem.TYPES.TILES);

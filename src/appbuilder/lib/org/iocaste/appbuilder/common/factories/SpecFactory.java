@@ -14,7 +14,7 @@ public interface SpecFactory {
     public abstract <T> T get();
     
     public abstract void run(PageBuilderContext context,
-            ViewComponents components, ViewSpecItem item);
+            ViewComponents components, ViewSpecItem item, String prefix);
     
     public abstract void update(ViewComponents components);
 }
