@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
-import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
@@ -47,62 +45,6 @@ public abstract class AbstractViewInput implements ViewInput {
     private final void addtableitems(
             String table, List<TableToolItem> items) {
         ((TableToolData)getComponentData(table)).set(items);
-    }
-    
-    private DashboardComponent dbget(String dashboard, String name) {
-        ViewComponents components = getViewComponents();
-        DashboardFactory factory = components.dashboards.get(dashboard);
-        
-        if (factory != null)
-            return factory.get(name);
-        
-        factory = components.dashboardgroups.get(dashboard).getFactory();
-        return factory.get(name);
-    }
-    
-    protected void dbitemadd(String dashboard, String name, String value) {
-        dbget(dashboard, name).add(value, value, null);
-    }
-    
-    protected void dbitemadd(String dashboard, String name, byte value) {
-        dbget(dashboard, name).add(Byte.toString(value), value, null);
-    }
-    
-    protected void dbitemadd(String dashboard, String name, int value) {
-        dbget(dashboard, name).add(Integer.toString(value), value, null);
-    }
-    
-    protected void dbitemadd(String dashboard, String name, long value) {
-        dbget(dashboard, name).add(Long.toString(value), value, null);
-    }
-    
-    protected void dbitemadd(String dashboard, String name, short value) {
-        dbget(dashboard, name).add(Short.toString(value), value, null);
-    }
-    
-    protected void dbitemadd(String dashboard, String name, String key,
-            byte value) {
-        dbget(dashboard, name).add(key, value, null);
-    }
-    
-    protected void dbitemadd(String dashboard, String name, String key,
-            int value) {
-        dbget(dashboard, name).add(key, value, null);
-    }
-    
-    protected void dbitemadd(String dashboard, String name, String key,
-            long value) {
-        dbget(dashboard, name).add(key, value, null);
-    }
-    
-    protected void dbitemadd(String dashboard, String name, String key,
-            String value) {
-        dbget(dashboard, name).add(key, value, null);
-    }
-    
-    protected void dbitemadd(String dashboard, String name, String key,
-            String value, String text) {
-        dbget(dashboard, name).add(key, value, text);
     }
     
     protected final void dflistset(

@@ -15,9 +15,6 @@ import org.iocaste.appbuilder.common.factories.TextFactory;
 import org.iocaste.appbuilder.common.factories.TextFieldFactory;
 import org.iocaste.appbuilder.common.factories.TilesFactory;
 import org.iocaste.appbuilder.common.factories.ButtonFactory;
-import org.iocaste.appbuilder.common.factories.DashboardFactoryFactory;
-import org.iocaste.appbuilder.common.factories.DashboardGroupFactory;
-import org.iocaste.appbuilder.common.factories.DashboardItemFactory;
 import org.iocaste.appbuilder.common.factories.DataFormFactory;
 import org.iocaste.appbuilder.common.factories.ExpandBarFactory;
 import org.iocaste.appbuilder.common.factories.FileUploadFactory;
@@ -43,12 +40,6 @@ public class BuilderCustomView extends AbstractCustomView {
         factories = new HashMap<>();
         factories.put(ViewSpecItem.TYPES.BUTTON,
                 new ButtonFactory());
-        factories.put(ViewSpecItem.TYPES.DASHBOARD,
-                new DashboardFactoryFactory());
-        factories.put(ViewSpecItem.TYPES.DASHBOARD_GROUP,
-                new DashboardGroupFactory());
-        factories.put(ViewSpecItem.TYPES.DASHBOARD_ITEM,
-                new DashboardItemFactory());
         factories.put(ViewSpecItem.TYPES.DATA_FORM,
                 new DataFormFactory());
         factories.put(ViewSpecItem.TYPES.FILE_UPLOAD,

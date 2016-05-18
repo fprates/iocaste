@@ -7,8 +7,8 @@ public class MainInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        for (String name : Main.ACTIONS)
-            dbitemadd("menu", name, name);
+//        for (String name : Main.ACTIONS)
+//            dbitemadd("menu", name, name);
     }
 
     @Override

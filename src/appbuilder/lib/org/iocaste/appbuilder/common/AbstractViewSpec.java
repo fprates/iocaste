@@ -21,18 +21,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
         put(parent, ViewSpecItem.TYPES.BUTTON, name);
     }
     
-    protected final void dashboard(String parent, String name) {
-        put(parent, ViewSpecItem.TYPES.DASHBOARD, name);
-    }
-    
-    protected final void dashboardgroup(String parent, String name) {
-        put(parent, ViewSpecItem.TYPES.DASHBOARD_GROUP, name);
-    }
-    
-    protected final void dashboarditem(String parent, String name) {
-        put(parent, ViewSpecItem.TYPES.DASHBOARD_ITEM, name);
-    }
-    
     protected final void dataform(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.DATA_FORM, name);
     }

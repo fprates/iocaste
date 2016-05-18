@@ -7,11 +7,11 @@ public class MainSpec extends AbstractViewSpec {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        form("main");
-        navcontrol("main");
-        dashboard("main", "menu");
-        for (String name : Main.ACTIONS)
-            dashboarditem("menu", name);
+//        form("main");
+//        navcontrol("main");
+//        dashboard("main", "menu");
+//        for (String name : Main.ACTIONS)
+//            dashboarditem("menu", name);
     }
 
 }

@@ -4,20 +4,14 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.dashboard.DashboardComponent;
-import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.texteditor.common.TextEditor;
 
 public class ViewComponents {
     public Map<String, ComponentEntry> entries;
-    public Map<String, DashboardFactory> dashboards;
-    public Map<String, DashboardComponent> dashboardgroups;
     public Map<String, TextEditor> editors;
     
     public ViewComponents() {
         entries = new LinkedHashMap<>();
-        dashboards = new HashMap<>();
-        dashboardgroups = new HashMap<>();
         editors = new HashMap<>();
     }
     
@@ -40,8 +34,6 @@ public class ViewComponents {
     
     public final void reset() {
         entries.clear();
-        dashboards.clear();
-        dashboardgroups.clear();
         editors.clear();
     }
 }

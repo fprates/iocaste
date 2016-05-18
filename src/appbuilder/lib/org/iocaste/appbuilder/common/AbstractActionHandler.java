@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
-import org.iocaste.appbuilder.common.dashboard.DashboardFactory;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
@@ -39,18 +38,6 @@ public abstract class AbstractActionHandler {
     
     protected final void back() {
         context.function.back();
-    }
-
-    protected final int dbactiongeti(String dashboard, String item) {
-        return getDashboardFactory(dashboard).get(item).geti();
-    }
-    
-    protected final long dbactiongetl(String dashboard, String item) {
-        return getDashboardFactory(dashboard).get(item).getl();
-    }
-    
-    protected final String dbactiongetst(String dashboard, String item) {
-        return getDashboardFactory(dashboard).get(item).getst();
     }
     
     protected final void delete(ExtendedObject object) {
@@ -97,20 +84,6 @@ public abstract class AbstractActionHandler {
     
     protected final String filenameget(String fileentry) {
         return fileentryget(fileentry).get();
-    }
-
-    private DashboardFactory getDashboardFactory(String dashboard) {
-        DashboardFactory factory = components.dashboards.get(dashboard);
-        
-        if (factory != null)
-            return factory;
-        
-        factory = components.dashboardgroups.get(dashboard).getFactory();
-        if (factory == null)
-            throw new RuntimeException(dashboard.concat(
-                    " is an invalid dashboard factory."));
-        
-        return factory;
     }
     
     protected ExtendedObject getdf(String name) {

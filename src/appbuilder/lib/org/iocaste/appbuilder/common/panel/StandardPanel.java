@@ -45,22 +45,22 @@ public class StandardPanel {
     }
 }
 
-class TaskCall extends AbstractActionHandler {
-    public static final int PANEL = 0;
-    public static final int CONTEXT = 1;
-    private String source, dashctx;
-    
-    public TaskCall(String source, String dashctx) {
-        this.dashctx = dashctx;
-        this.source = source;
-    }
-    
-    @Override
-    protected void execute(PageBuilderContext context) throws Exception {
-        String task;
-
-        task = dbactiongetst(source, dashctx);
-        taskredirect(task);
-    }
-    
-}
+//class TaskCall extends AbstractActionHandler {
+//    public static final int PANEL = 0;
+//    public static final int CONTEXT = 1;
+//    private String source, dashctx;
+//    
+//    public TaskCall(String source, String dashctx) {
+//        this.dashctx = dashctx;
+//        this.source = source;
+//    }
+//    
+//    @Override
+//    protected void execute(PageBuilderContext context) throws Exception {
+//        String task;
+//
+//        task = dbactiongetst(source, dashctx);
+//        taskredirect(task);
+//    }
+//    
+//}
