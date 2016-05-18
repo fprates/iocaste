@@ -5,6 +5,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
+import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.StyleSheet;
@@ -27,6 +28,8 @@ class StandardPanelConfig extends AbstractViewConfig {
         Map<String, String> corestyle, appbuilderstyle;
         GenericService service;
         Message message;
+        NavControl navcontrol;
+        String submit;
         
         message = new Message("stylesheet_get");
         service = new GenericService(context.function, SERVICE);
@@ -42,6 +45,13 @@ class StandardPanelConfig extends AbstractViewConfig {
         }
         
         getElement("outercontent").setStyleClass("content_area");
+        
+        navcontrol = getNavControl();
+        for (String action : page.getActions())
+            navcontrol.add(action);
+        submit = page.getSubmit();
+        if (submit != null)
+            navcontrol.submit(submit);
         
         extconfig = page.getConfig();
         if (extconfig == null)

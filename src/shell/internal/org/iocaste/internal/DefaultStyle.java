@@ -5,6 +5,8 @@ import java.util.Map;
 import org.iocaste.shell.common.StyleSheet;
 
 public class DefaultStyle {
+    private static final String FONT_COLOR = "#444";
+    private static final String FONT_FAMILY = "sans-serif";
     private static final String BODY = "#ffffff";
     private static final String BORDER = "#a0a0a0";
     private static final String STDPDDNG = "0.5em";
@@ -21,7 +23,6 @@ public class DefaultStyle {
         stylesheet = new StyleSheet();
         
         style = stylesheet.newElement("body");
-        style.put("font-size", "12pt");
         style.put("background-color", BODY);
         style.put("margin", "0px");
         style.put("padding", "0px");
@@ -101,6 +102,9 @@ public class DefaultStyle {
         style.put("vertical-align", "middle");
         style.put("margin", "0px");
         style.put("padding", "0px");
+        style.put("text-align", "right");
+        style.put("color", FONT_COLOR);
+        style.put("font-family", FONT_FAMILY);
         
         stylesheet.newElement(".link:hover").put("color", "#505050");
         stylesheet.newElement(".link:link").put("color", "blue");
@@ -223,9 +227,10 @@ public class DefaultStyle {
         style.put("border-color", BORDER);
         style.put("border-width", "1px");
         style.put("border-radius", ROUND);
-        style.put("font-style", "normal");
+        style.put("color", FONT_COLOR);
+        style.put("font-family", FONT_FAMILY);
         style.put("font-size", INPUT_FONTSIZE);
-        style.put("color", "black");
+        style.put("font-style", "normal");
 
         style = stylesheet.newElement(".text_field_disabled");
         style.put("padding", "0px");
