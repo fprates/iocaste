@@ -1,7 +1,5 @@
 package org.iocaste.appbuilder.common.navcontrol;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.user.User;
@@ -11,13 +9,11 @@ import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
-import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewTitle;
 
 public class StandardNavControlDesign implements NavControlDesign {
     protected StandardContainer buttonbar;
-    private PageBuilderContext context;
     private Container container;
     private Shell shell;
     private String loginapp;
@@ -37,13 +33,11 @@ public class StandardNavControlDesign implements NavControlDesign {
         ViewTitle title;
         Iocaste iocaste;
         PageStackItem[] positions;
+        Container trackbar;
 //        User user;
         
         this.container = container;
-        this.context = context;
-
         container.setStyleClass("nc_container");
-
         iocaste = new Iocaste(context.function);
         if (iocaste.isConnected()) {
             if (shell == null);
@@ -53,6 +47,8 @@ public class StandardNavControlDesign implements NavControlDesign {
             if (loginapp == null)
                 loginapp = shell.getLoginApp();
             
+            trackbar = new StandardContainer(container, "nc_trackbar");
+            trackbar.setStyleClass("nc_trackbar");
             for (PageStackItem position : positions) {
                 name = getAddress(position);
                 if (name.equals(loginapp))
@@ -67,12 +63,12 @@ public class StandardNavControlDesign implements NavControlDesign {
                         name, new NavControlCustomAction(name));
                 title = position.getTitle();
                 
-                link = new Link(container, name, name);
+                link = new Link(trackbar, name, name);
                 link.setStyleClass("nc_nav_link");
                 link.setText((title.text == null)? name : title.text);
                 link.setCancellable(true);
                 
-                text = new Text(container, name.concat(".separator"));
+                text = new Text(trackbar, name.concat(".separator"));
                 text.setText("&gt;");
                 text.setStyleClass("nc_text");
             }
@@ -99,7 +95,6 @@ public class StandardNavControlDesign implements NavControlDesign {
      */
     @Override
     public void buildButton(String action, NavControlButton buttoncfg) {
-        Link link;
         Text text;
         Button button;
         
@@ -110,20 +105,11 @@ public class StandardNavControlDesign implements NavControlDesign {
             text.setText("|");
             text.setStyleClass("nc_nav_separator");
         }
-        
-        switch (buttoncfg.type) {
-        case NavControl.NORMAL:
-            link = new Link(buttonbar, action, action);
-            link.setStyleClass(buttoncfg.style);
-            link.setNoScreenLock(buttoncfg.nolock);
-            break;
-        case NavControl.SUBMIT:
-            button = new Button(buttonbar, action);
-            button.setSubmit(true);
-            button.setStyleClass(buttoncfg.style);
-            button.setNoScreenLock(buttoncfg.nolock);
-            break;
-        }
+
+        button = new Button(buttonbar, action);
+        button.setSubmit(buttoncfg.type != NavControl.NORMAL);
+        button.setStyleClass(buttoncfg.style);
+        button.setNoScreenLock(buttoncfg.nolock);
     }
     
     /**
