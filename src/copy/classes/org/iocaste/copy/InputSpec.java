@@ -1,9 +1,9 @@
 package org.iocaste.copy;
 
+import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
 
-public class InputSpec extends AbstractPanelSpec {
+public class InputSpec extends AbstractViewSpec {
 
     @Override
     protected void execute(PageBuilderContext context) {

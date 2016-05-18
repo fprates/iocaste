@@ -2,12 +2,12 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 
-public class MaintenanceSpec extends AbstractPanelSpec {
+public class MaintenanceSpec extends AbstractViewSpec {
     
     @Override
     public void execute(PageBuilderContext context) {

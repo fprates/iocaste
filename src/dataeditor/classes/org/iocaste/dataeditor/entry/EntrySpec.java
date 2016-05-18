@@ -1,9 +1,9 @@
 package org.iocaste.dataeditor.entry;
 
+import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
 
-public class EntrySpec extends AbstractPanelSpec {
+public class EntrySpec extends AbstractViewSpec {
 
     @Override
     protected void execute(PageBuilderContext context) {

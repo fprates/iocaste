@@ -31,75 +31,75 @@ public class StandardNavControlDesign implements NavControlDesign {
      */
     @Override
     public final void build(Container container, PageBuilderContext context) {
-        Text text;
-        Link link;
-        String name;
-        ViewTitle title;
-        Iocaste iocaste;
-        PageStackItem[] positions;
-        User user;
-        StyleSheet stylesheet;
-        Map<String, String> style;
-        
-        this.container = container;
-        this.context = context;
-        
-        stylesheet = context.view.styleSheetInstance();
-        stylesheet.clone(".nc_text", ".text").put("display", "inline");
-        
-        style = stylesheet.clone(".nc_usertext", ".text");
-        style.put("display", "inline");
-        style.put("text-align", "right");
-        style.put("right", "0px");
-        style.put("position", "absolute");
-        
-        cloneLink(stylesheet, ".nc_nav_link:hover", ".link:hover");
-        cloneLink(stylesheet, ".nc_nav_link:link", ".link:link");
-        cloneLink(stylesheet, ".nc_nav_link:active", ".link:active");
-        cloneLink(stylesheet, ".nc_nav_link:visited", ".link:visited");
-
-        if (shell == null);
-            shell = new Shell(context.function);
-        positions = shell.getPagesPositions();
-        if (loginapp == null)
-            loginapp = shell.getLoginApp();
-        
-        for (PageStackItem position : positions) {
-            name = getAddress(position);
-            if (name.equals(loginapp))
-                continue;
-            
-            /*
-             * esse link pode cancelar o processamento de entradas,
-             * portanto não adianta adicionar parâmetro. vamos guardar
-             * a posição no próprio handler.
-             */
-            context.function.register(name, new NavControlCustomAction(name));
-            title = position.getTitle();
-            
-            link = new Link(container, name, name);
-            link.setStyleClass("nc_nav_link");
-            link.setText((title.text == null)? name : title.text);
-            link.setCancellable(true);
-            
-            text = new Text(container, name.concat(".separator"));
-            text.setText("&gt;");
-            text.setStyleClass("nc_text");
-        }
-
-        iocaste = new Iocaste(context.function);
-        name = context.view.getTitle().text;
-        if (name == null)
-            name = iocaste.getCurrentApp();
-        
-        text = new Text(container, "this");
-        text.setStyleClass("nc_text");
-        text.setText(name);
-        
-        user = iocaste.getUserData(iocaste.getUsername());
-        text = new Text(container, "username");
-        text.setText(user.getFirstname());
-        text.setStyleClass("nc_usertext");
+//        Text text;
+//        Link link;
+//        String name;
+//        ViewTitle title;
+//        Iocaste iocaste;
+//        PageStackItem[] positions;
+//        User user;
+//        StyleSheet stylesheet;
+//        Map<String, String> style;
+//        
+//        this.container = container;
+//        this.context = context;
+//        
+//        stylesheet = context.view.styleSheetInstance();
+//        stylesheet.clone(".nc_text", ".text").put("display", "inline");
+//        
+//        style = stylesheet.clone(".nc_usertext", ".text");
+//        style.put("display", "inline");
+//        style.put("text-align", "right");
+//        style.put("right", "0px");
+//        style.put("position", "absolute");
+//        
+//        cloneLink(stylesheet, ".nc_nav_link:hover", ".link:hover");
+//        cloneLink(stylesheet, ".nc_nav_link:link", ".link:link");
+//        cloneLink(stylesheet, ".nc_nav_link:active", ".link:active");
+//        cloneLink(stylesheet, ".nc_nav_link:visited", ".link:visited");
+//
+//        if (shell == null);
+//            shell = new Shell(context.function);
+//        positions = shell.getPagesPositions();
+//        if (loginapp == null)
+//            loginapp = shell.getLoginApp();
+//        
+//        for (PageStackItem position : positions) {
+//            name = getAddress(position);
+//            if (name.equals(loginapp))
+//                continue;
+//            
+//            /*
+//             * esse link pode cancelar o processamento de entradas,
+//             * portanto não adianta adicionar parâmetro. vamos guardar
+//             * a posição no próprio handler.
+//             */
+//            context.function.register(name, new NavControlCustomAction(name));
+//            title = position.getTitle();
+//            
+//            link = new Link(container, name, name);
+//            link.setStyleClass("nc_nav_link");
+//            link.setText((title.text == null)? name : title.text);
+//            link.setCancellable(true);
+//            
+//            text = new Text(container, name.concat(".separator"));
+//            text.setText("&gt;");
+//            text.setStyleClass("nc_text");
+//        }
+//
+//        iocaste = new Iocaste(context.function);
+//        name = context.view.getTitle().text;
+//        if (name == null)
+//            name = iocaste.getCurrentApp();
+//        
+//        text = new Text(container, "this");
+//        text.setStyleClass("nc_text");
+//        text.setText(name);
+//        
+//        user = iocaste.getUserData(iocaste.getUsername());
+//        text = new Text(container, "username");
+//        text.setText(user.getFirstname());
+//        text.setStyleClass("nc_usertext");
     }
     
     /*

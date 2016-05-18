@@ -5,7 +5,6 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
-import org.iocaste.appbuilder.common.style.CommonStyle;
 
 public class Main extends AbstractPageBuilder {
 
@@ -31,8 +30,6 @@ public class Main extends AbstractPageBuilder {
         
         panel = new StandardPanel(context);
         panel.instance("main", new MainPage(), extcontext);
-        
-        CommonStyle.get().head.bgcolor = "#ff0000";
     }
 
     @Override

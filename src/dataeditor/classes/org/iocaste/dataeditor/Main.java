@@ -6,7 +6,6 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
-import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.dataeditor.entry.AddEntry;
 import org.iocaste.dataeditor.entry.EntryConfig;
 import org.iocaste.dataeditor.entry.EntrySpec;
@@ -129,8 +128,6 @@ class MainPage extends AbstractPanelPage {
     public void execute() {
         set(new SelectionSpec());
         set(new SelectionConfig());
-        
-        CommonStyle.get().head.bgcolor = "#3030ff";
         
         action("display", new Load("display"));
         action("edit", new Load("edit"));

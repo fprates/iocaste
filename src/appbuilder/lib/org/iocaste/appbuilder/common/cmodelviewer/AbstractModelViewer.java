@@ -4,9 +4,8 @@ import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
+import org.iocaste.appbuilder.common.ViewSpec;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
-import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.protocol.Function;
@@ -49,7 +48,7 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         EntityCustomPage custompage;
         EntityDisplayPage displaypage;
         StandardPanel panel;
-        AbstractPanelSpec selspec;
+        ViewSpec selspec;
         String entityaction;
         Manager manager;
         
@@ -67,8 +66,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         if (link.inputvalidate == null)
             link.inputvalidate = new InputValidate();
         panel = new StandardPanel(context);
-
-        CommonStyle.get().head.bgcolor = "#3030ff";
         
         for (String action : new String[] {CREATE, EDIT, DISPLAY}) {
             if ((link.number != null) && action.equals(CREATE) &&

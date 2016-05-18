@@ -1,9 +1,9 @@
 package org.iocaste.dataview;
 
+import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
 
-public class OutputSpec extends AbstractPanelSpec {
+public class OutputSpec extends AbstractViewSpec {
 
     @Override
     protected void execute(PageBuilderContext context) {

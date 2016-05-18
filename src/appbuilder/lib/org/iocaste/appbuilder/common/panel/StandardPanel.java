@@ -4,15 +4,12 @@ import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
-import org.iocaste.appbuilder.common.style.CommonStyle;
 
 public class StandardPanel {
     private PageBuilderContext context;
     
     public StandardPanel(PageBuilderContext context) {
         this.context = context;
-        CommonStyle.style = "default";
-        CommonStyle.instance("default");
     }
 
     public final void instance(
@@ -35,16 +32,16 @@ public class StandardPanel {
     
     public static final void reassignActions(
             ViewContext view, AbstractPanelPage page) {
-        PanelPageItem item;
-        String source;
-        
-        for (String key : page.items.keySet()) {
-            item = page.items.get(key);
-            
-            source = (item.dashboard)? "dashcontext" : "actions";
-            item.dashctx = key.concat("_pagectx");
-            view.put(item.dashctx, new TaskCall(source, item.dashctx));
-        }
+//        PanelPageItem item;
+//        String source;
+//        
+//        for (String key : page.items.keySet()) {
+//            item = page.items.get(key);
+//            
+//            source = (item.dashboard)? "dashcontext" : "actions";
+//            item.dashctx = key.concat("_pagectx");
+//            view.put(item.dashctx, new TaskCall(source, item.dashctx));
+//        }
     }
 }
 

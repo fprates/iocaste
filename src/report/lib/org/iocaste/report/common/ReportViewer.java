@@ -44,7 +44,6 @@ class InputPanelPage extends AbstractPanelPage {
         data.input.input.setViewerData(data);
         data.select.setViewerData(data);
         
-        setRenderContext(!data.norenderctx);
         set(new ReportInputSpec());
         set(data.input.config);
         set(data.input.input);
@@ -67,7 +66,6 @@ class OutputPanelPage extends AbstractPanelPage {
         data.output.config.setViewerData(data);
         data.output.input.setViewerData(data);
         
-        setRenderContext(!data.norenderctx);
         set(new ReportOutputSpec());
         set(new ReportOutputConfig(data));
         set(data.output.input);

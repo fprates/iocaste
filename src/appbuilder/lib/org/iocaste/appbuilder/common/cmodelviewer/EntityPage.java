@@ -7,12 +7,12 @@ import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
+import org.iocaste.appbuilder.common.ViewSpec;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
-import org.iocaste.appbuilder.common.panel.AbstractPanelSpec;
 
 public class EntityPage extends AbstractPanelPage {
     public String action;
-    public AbstractPanelSpec spec;
+    public ViewSpec spec;
     public AppBuilderLink link;
     
     @Override

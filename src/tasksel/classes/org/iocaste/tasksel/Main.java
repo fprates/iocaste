@@ -9,7 +9,6 @@ import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
-import org.iocaste.appbuilder.common.style.CommonStyle;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -32,7 +31,6 @@ public class Main extends AbstractPageBuilder {
     @Override
     public final void config(PageBuilderContext context) {
         StandardPanel panel;
-        CommonStyle profile;
         Context extcontext;
         AbstractPanelPage tasks;
         
@@ -41,7 +39,6 @@ public class Main extends AbstractPageBuilder {
         this.context = context;
 
         page = new GroupsPanelPage();
-        page.function = this;
         
         panel = new StandardPanel(context);
         panel.instance(MAIN, page, extcontext);
@@ -49,10 +46,6 @@ public class Main extends AbstractPageBuilder {
         tasks = new TasksPanelPage();
         panel = new StandardPanel(context);
         panel.instance("tasks", tasks, extcontext);
-        
-        profile = CommonStyle.get();
-        profile.content.bgcolor = "#202020";
-        profile.head.bgcolor = "#3030ff";
     }
     
     /**
@@ -126,7 +119,6 @@ public class Main extends AbstractPageBuilder {
         view.getSpec().setInitialized(false);
         
         setReloadableView(true);
-        page.refresh();
         
         StandardPanel.reassignActions(view, page);
         reassignActions();
