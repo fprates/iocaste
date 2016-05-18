@@ -1,10 +1,10 @@
-package org.iocaste.appbuilder.common;
+package org.iocaste.internal;
 
 import java.util.Map;
 
 import org.iocaste.shell.common.StyleSheet;
 
-public class DefaultApplicationStyle {
+public class DefaultStyle {
     private static final String BODY = "#ffffff";
     private static final String BORDER = "#a0a0a0";
     private static final String STDPDDNG = "0.5em";
@@ -23,6 +23,8 @@ public class DefaultApplicationStyle {
         style = stylesheet.newElement("body");
         style.put("font-size", "12pt");
         style.put("background-color", BODY);
+        style.put("margin", "0px");
+        style.put("padding", "0px");
         
         style = stylesheet.newElement(".button");
         style.put("padding", "3px");

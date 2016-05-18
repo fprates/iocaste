@@ -60,9 +60,6 @@ public class Renderer {
         case FORM:
             config.setCurrentForm(container.getHtmlName());
             xmltag = FormRenderer.render((Form)container, config);
-//            xmltag.addChildren(config.getToForm());
-//            config.clearToForm();
-            
             tags.add(xmltag);
             break;
             

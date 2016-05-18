@@ -31,7 +31,6 @@ import org.iocaste.appbuilder.common.factories.ReportToolFactory;
 import org.iocaste.appbuilder.common.factories.SkipFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.StyleSheet;
 
 public class BuilderCustomView extends AbstractCustomView {
     private Map<ViewSpecItem.TYPES, SpecFactory> factories;
@@ -169,7 +168,6 @@ public class BuilderCustomView extends AbstractCustomView {
         NavControl navcontrol;
         ViewContext viewctx;
         ViewComponents components;
-        StyleSheet stylesheet;
         ViewSpec viewspec = getViewSpec();
         ViewConfig viewconfig = getViewConfig();
         ViewInput viewinput = getViewInput();
@@ -184,9 +182,7 @@ public class BuilderCustomView extends AbstractCustomView {
         viewctx = _context.getView(getView());
         components = viewctx.getComponents();
         if (!viewspec.isInitialized()) {
-            stylesheet = DefaultApplicationStyle.instance();
             _context.view.clear();
-            _context.view.setStyleSheet(stylesheet.getElements());
             _context.function.unregisterValidators();
             viewspec.run(_context);
             viewctx.reset();

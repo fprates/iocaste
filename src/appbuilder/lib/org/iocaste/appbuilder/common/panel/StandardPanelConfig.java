@@ -5,12 +5,14 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
+import org.iocaste.protocol.GenericService;
+import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.StyleSheet;
 
 public 
 
 class StandardPanelConfig extends AbstractViewConfig {
-    public static final String CONTENT_TOP = "70px";
+    private static final String SERVICE = "/iocaste-appbuilder/services.html";
     private AbstractPanelPage page;
     
     public StandardPanelConfig(AbstractPanelPage page) {
@@ -20,32 +22,26 @@ class StandardPanelConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         ViewConfig extconfig;
-        Map<String, String> style;
         StyleSheet stylesheet;
+        Map<String, Map<String, String>> appbuildersheet;
+        Map<String, String> corestyle, appbuilderstyle;
+        GenericService service;
+        Message message;
+        
+        message = new Message("stylesheet_get");
+        service = new GenericService(context.function, SERVICE);
+        appbuildersheet = service.invoke(message);
         
         stylesheet = context.view.styleSheetInstance();
-        stylesheet.get("body").put("margin", "0px");
+        for (String selector : appbuildersheet.keySet()) {
+            corestyle = stylesheet.get(selector);
+            if (corestyle == null)
+                corestyle = stylesheet.newElement(selector);
+            appbuilderstyle = appbuildersheet.get(selector);
+            corestyle.putAll(appbuilderstyle);
+        }
         
-        style = stylesheet.newElement(".form_content");
-        style.put("height", "100%");
-        style.put("width", "100%");
-        style.put("overflow", "auto");
-        style.put("float", "left");
-        style.put("position", "fixed");
-
-        style = stylesheet.newElement(".outer_content");
-        style.put("font-size", "12pt");
-        style.put("top", CONTENT_TOP);
-        style.put("position", "fixed");
-        style.put("height", "calc(100% - "+CONTENT_TOP+")");
-        style.put("padding", "0px");
-        style.put("margin", "0px");
-        getElement("outercontent").setStyleClass("outer_content");
-        
-        style = stylesheet.newElement(".std_panel_content");
-        style.put("position", "relative");
-        style.put("overflow", "auto");
-        getElement("content").setStyleClass("std_panel_content");
+        getElement("outercontent").setStyleClass("content_area");
         
         extconfig = page.getConfig();
         if (extconfig == null)

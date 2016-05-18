@@ -157,6 +157,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         if (!pagectx.keepView() || view == null)
             view = new View(appname, pagename);
         
+        view.setStyleSheet(DefaultStyle.instance().getElements());
+        
         message = new Message("get_view_data");
         message.add("view", view);
         message.add("init", pagectx.isInitializableView());

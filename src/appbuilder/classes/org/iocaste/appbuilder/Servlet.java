@@ -8,7 +8,6 @@ public class Servlet extends AbstractIocasteServlet {
     @Override
     protected void config() {
         register(new Services());
-        authorize("style_profile_get", null);
         authorize("stylesheet_get", null);
     }
 

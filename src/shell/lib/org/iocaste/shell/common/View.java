@@ -272,6 +272,6 @@ public class View implements Serializable {
     }
     
     public final StyleSheet styleSheetInstance() {
-        return new StyleSheet(sheet);
+        return (sheet != null)? new StyleSheet(sheet) : new StyleSheet();
     }
 }

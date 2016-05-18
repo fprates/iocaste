@@ -31,7 +31,6 @@ public class FormRenderer extends Renderer {
         formtag.add("action", "index.html");
         formtag.add("id", htmlname);
         formtag.add("name", htmlname);
-        formtag.add("style", "height: 100%");
         
         addEvents(formtag, container);
         if (enctype != null)
