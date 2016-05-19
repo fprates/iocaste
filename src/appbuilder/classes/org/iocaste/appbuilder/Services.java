@@ -14,6 +14,7 @@ public class Services extends AbstractFunction {
     private static final String FONT_COLOR = "#444";
     private static final String FONT_FAMILY = "sans-serif";
     private static final String FRAME_COLOR = "rgb(237, 237, 237)";
+    private static final String HEADER_HEIGHT = "142px";
     public Map<String, Map<String, String>> style;
     
     public Services() {
@@ -24,32 +25,41 @@ public class Services extends AbstractFunction {
         style.put("max-width", CONTENT_WIDTH);
         style.put("margin-left", "auto");
         style.put("margin-right", "auto");
-        style.put("margin-top", "1em");
+        style.put("margin-top", HEADER_HEIGHT);
         style.put("margin-bottom", "0px");
         style.put("padding", "0px");
+        
+        style = stylesheet.newElement(".nc_inner_container");
+        style.put("max-width", CONTENT_WIDTH);
+        style.put("margin", "auto");
         
         style = stylesheet.newElement(".nc_trackbar");
         style.put("margin-left", "0px");
         style.put("margin-right", "0px");
-        style.put("margin-top", "1em");
+        style.put("margin-top", "5px");
         style.put("margin-bottom", "0px");
         style.put("border-style", "none");
+        style.put("height", "20px");
         
         style = stylesheet.newElement(".nc_title");
         style.put("font-size", "2.4rem");
         style.put("font-weight", "300");
         style.put("width", "100%");
+        style.put("height", "44px");
         style.put("color", FONT_COLOR);
         style.put("font-family", FONT_FAMILY);
         style.put("margin-left", "0px");
         style.put("margin-right", "0px");
-        style.put("margin-top", "1em");
+        style.put("margin-top", "15px");
         style.put("margin-bottom", "0px");
         style.put("padding", "0px");
         
         style = stylesheet.newElement(".nc_container");
-        style.put("max-width", CONTENT_WIDTH);
-        style.put("margin", "auto");
+        style.put("position", "fixed");
+        style.put("width", "100%");
+        style.put("height", HEADER_HEIGHT);
+        style.put("top", "0px");
+        style.put("background-color", BACKGROUND_COLOR);
         
         style = stylesheet.newElement(".nc_text");
         style.put("display", "inline");
@@ -89,7 +99,7 @@ public class Services extends AbstractFunction {
         style.put("display", "block");
         style.put("padding", "0px");
         style.put("height", "40px");
-        style.put("margin-top", "1em");
+        style.put("margin-top", "15px");
         style.put("margin-bottom", "0px");
         style.put("margin-left", "0px");
         style.put("margin-right", "0px");

@@ -2,7 +2,6 @@ package org.iocaste.appbuilder.common.navcontrol;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.protocol.Iocaste;
-import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
@@ -14,7 +13,6 @@ import org.iocaste.shell.common.ViewTitle;
 
 public class StandardNavControlDesign implements NavControlDesign {
     protected StandardContainer buttonbar;
-    private Container container;
     private Shell shell;
     private String loginapp;
     
@@ -33,11 +31,14 @@ public class StandardNavControlDesign implements NavControlDesign {
         ViewTitle title;
         Iocaste iocaste;
         PageStackItem[] positions;
-        Container trackbar;
+        Container trackbar, inner;
 //        User user;
         
-        this.container = container;
         container.setStyleClass("nc_container");
+        inner = new StandardContainer(container, "nc_inner");
+        inner.setStyleClass("nc_inner_container");
+        trackbar = new StandardContainer(inner, "nc_trackbar");
+        
         iocaste = new Iocaste(context.function);
         if (iocaste.isConnected()) {
             if (shell == null);
@@ -47,7 +48,6 @@ public class StandardNavControlDesign implements NavControlDesign {
             if (loginapp == null)
                 loginapp = shell.getLoginApp();
             
-            trackbar = new StandardContainer(container, "nc_trackbar");
             trackbar.setStyleClass("nc_trackbar");
             for (PageStackItem position : positions) {
                 name = getAddress(position);
@@ -78,7 +78,7 @@ public class StandardNavControlDesign implements NavControlDesign {
         if (name == null)
             name = iocaste.getCurrentApp();
         
-        text = new Text(container, "this");
+        text = new Text(inner, "this");
         text.setStyleClass("nc_title");
         text.setText(name);
         
@@ -86,6 +86,9 @@ public class StandardNavControlDesign implements NavControlDesign {
 //        text = new Text(container, "username");
 //        text.setText(user.getFirstname());
 //        text.setStyleClass("nc_usertext");
+        
+        buttonbar = new StandardContainer(inner, "navbar.container");
+        buttonbar.setStyleClass("nc_nav_buttonbar");
     }
     
     /*
@@ -95,34 +98,12 @@ public class StandardNavControlDesign implements NavControlDesign {
      */
     @Override
     public void buildButton(String action, NavControlButton buttoncfg) {
-        Text text;
         Button button;
-        
-        if (buttonbar == null) {
-            buttonbar = buildButtonBar();
-        } else {
-            text = new Text(buttonbar, action.concat("_separator"));
-            text.setText("|");
-            text.setStyleClass("nc_nav_separator");
-        }
 
         button = new Button(buttonbar, action);
         button.setSubmit(buttoncfg.type != NavControl.NORMAL);
         button.setStyleClass(buttoncfg.style);
         button.setNoScreenLock(buttoncfg.nolock);
-    }
-    
-    /**
-     * 
-     * @return
-     */
-    protected final StandardContainer buildButtonBar() {
-        StandardContainer buttonbar;
-        
-        buttonbar = new StandardContainer(container, "navbar.container");
-        buttonbar.setStyleClass("nc_nav_buttonbar");
-        
-        return buttonbar;
     }
     
     public static String getAddress(PageStackItem position) {
