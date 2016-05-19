@@ -47,11 +47,11 @@ class StandardPanelConfig extends AbstractViewConfig {
         getElement("outercontent").setStyleClass("content_area");
         
         navcontrol = getNavControl();
-        for (String action : page.getActions())
-            navcontrol.add(action);
         submit = page.getSubmit();
         if (submit != null)
             navcontrol.submit(submit);
+        for (String action : page.getActions())
+            navcontrol.add(action);
         
         extconfig = page.getConfig();
         if (extconfig == null)
