@@ -129,6 +129,17 @@ public class Services extends AbstractFunction {
         style.put("color", CLICKABLE_COLOR);
         style.put("background-color", BACKGROUND_COLOR);
         
+        style = stylesheet.newElement(".main_logo");
+        style.put("background-image",
+                "url(\"/iocaste-shell/images/main_logo.png\")");
+        style.put("background-repeat", "no-repeat");
+        style.put("float", "right");
+        style.put("width", "100px");
+        style.put("height", "44px");
+        style.put("position", "relative");
+        style.put("right", "0px");
+        style.put("margin-top", "13px");
+        
         this.style = stylesheet.getElements();
         export("stylesheet_get", new GetStyleSheet());
     }

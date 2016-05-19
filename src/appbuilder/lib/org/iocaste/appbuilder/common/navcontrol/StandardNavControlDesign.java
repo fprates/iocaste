@@ -31,13 +31,14 @@ public class StandardNavControlDesign implements NavControlDesign {
         ViewTitle title;
         Iocaste iocaste;
         PageStackItem[] positions;
-        Container trackbar, inner;
+        Container trackbar, inner, logo;
 //        User user;
         
         container.setStyleClass("nc_container");
         inner = new StandardContainer(container, "nc_inner");
         inner.setStyleClass("nc_inner_container");
         trackbar = new StandardContainer(inner, "nc_trackbar");
+        trackbar.setStyleClass("nc_trackbar");
         
         iocaste = new Iocaste(context.function);
         if (iocaste.isConnected()) {
@@ -48,7 +49,6 @@ public class StandardNavControlDesign implements NavControlDesign {
             if (loginapp == null)
                 loginapp = shell.getLoginApp();
             
-            trackbar.setStyleClass("nc_trackbar");
             for (PageStackItem position : positions) {
                 name = getAddress(position);
                 if (name.equals(loginapp))
@@ -77,6 +77,9 @@ public class StandardNavControlDesign implements NavControlDesign {
         name = context.view.getTitle().text;
         if (name == null)
             name = iocaste.getCurrentApp();
+        
+        logo = new StandardContainer(inner, "logo");
+        logo.setStyleClass("main_logo");
         
         text = new Text(inner, "this");
         text.setStyleClass("nc_title");
