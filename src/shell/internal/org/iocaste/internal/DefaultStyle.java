@@ -6,7 +6,7 @@ import org.iocaste.shell.common.StyleSheet;
 
 public class DefaultStyle {
     private static final String FONT_COLOR = "#444";
-    private static final String FONT_FAMILY = "sans-serif";
+    private static final String FONT_FAMILY = "\"Verdana\", sans-serif";
     private static final String BODY = "#ffffff";
     private static final String BORDER = "#a0a0a0";
     private static final String STDPDDNG = "0.5em";

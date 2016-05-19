@@ -12,7 +12,7 @@ public class Services extends AbstractFunction {
     private static final String CONTENT_WIDTH = "1400px";
     private static final String CLICKABLE_COLOR = "#298eea";
     private static final String FONT_COLOR = "#444";
-    private static final String FONT_FAMILY = "sans-serif";
+    private static final String FONT_FAMILY = "\"Verdana\", sans-serif";
     private static final String FRAME_COLOR = "rgb(237, 237, 237)";
     private static final String HEADER_HEIGHT = "142px";
     public Map<String, Map<String, String>> style;
@@ -28,6 +28,7 @@ public class Services extends AbstractFunction {
         style.put("margin-top", HEADER_HEIGHT);
         style.put("margin-bottom", "0px");
         style.put("padding", "0px");
+        style.put("overflow", "auto");
         
         style = stylesheet.newElement(".nc_inner_container");
         style.put("max-width", CONTENT_WIDTH);
