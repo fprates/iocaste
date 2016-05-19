@@ -207,6 +207,7 @@ public abstract class AbstractActionHandler {
             throw new RuntimeException(new StringBuilder("undefined spec for ").
                     append(view).toString());
         spec.setInitialized(false);
+        extcontext.pageInstance(view);
     }
     
     protected final ExtendedObject instance(String model) {

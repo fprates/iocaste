@@ -11,6 +11,10 @@ public class StandardPanel {
         this.context = context;
     }
 
+    public final void instance(String name, AbstractPanelPage page) {
+        instance(name, page, null);
+    }
+
     public final void instance(
             String name, AbstractPanelPage page, ExtendedContext extcontext) {
         ViewContext view;
@@ -24,7 +28,8 @@ public class StandardPanel {
         page.setViewContext(view);
         page.execute();
         
-        extcontext.pageInstance(name);
+        if (extcontext != null)
+            extcontext.pageInstance(name);
     }
         
 }
