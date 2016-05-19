@@ -5,7 +5,8 @@ import java.util.List;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.ViewContext;
+import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
+import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -21,28 +22,17 @@ public class Main extends AbstractPageBuilder {
     
     @Override
     public void config(PageBuilderContext context) throws Exception {
-        ViewContext view;
         Context extcontext;
+        StandardPanel panel;
         
         extcontext = new Context(context);
         reload(context, extcontext);
         
-        view = context.instance("main");
-        view.set(extcontext);
-        view.set(new MainSpec());
-        view.set(new MainConfig());
-        view.set(new MainInput());
-        view.put("indetail", new DetailPackage("inpackages"));
-        view.put("undetail", new DetailPackage("unpackages"));
-        view.put("erdetail", new DetailPackage("erpackages"));
-        view.put("install", new InstallPackage());
-        view.put("remove", new UninstallPackage());
-        view.put("update", new UpdatePackage());
+        panel = new StandardPanel(context);
+        panel.instance("main", new MainPanel(), extcontext);
         
-        view = context.instance("detail");
-        view.set(extcontext);
-        view.set(new DetailSpec());
-        view.set(new DetailInput());
+        panel = new StandardPanel(context);
+        panel.instance("detail", new DetailPanel(), extcontext);
     }
 
     @Override
@@ -99,4 +89,31 @@ public class Main extends AbstractPageBuilder {
                 extcontext.uninstalled.add(object);
         }
     }
+}
+
+class MainPanel extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new MainSpec());
+        set(new MainConfig());
+        set(new MainInput());
+        put("indetail", new DetailPackage("inpackages"));
+        put("undetail", new DetailPackage("unpackages"));
+        put("erdetail", new DetailPackage("erpackages"));
+        put("install", new InstallPackage());
+        put("remove", new UninstallPackage());
+        put("update", new UpdatePackage());
+    }
+    
+}
+
+class DetailPanel extends AbstractPanelPage {
+
+    @Override
+    public void execute() {
+        set(new DetailSpec());
+        set(new DetailInput());
+    }
+    
 }

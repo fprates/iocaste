@@ -7,8 +7,7 @@ public class DetailSpec extends AbstractViewSpec {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        form("main");
-        navcontrol("main");
+        
     }
 
 }

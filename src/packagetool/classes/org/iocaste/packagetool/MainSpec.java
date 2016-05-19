@@ -7,10 +7,7 @@ public class MainSpec extends AbstractViewSpec {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        form("main");
-        navcontrol("main");
-        
-        tabbedpane("main", "packages");
+        tabbedpane(parent, "packages");
         
         tabbedpaneitem("packages", "installed");
         button("installed", "indetail");
