@@ -7,9 +7,7 @@ public class StructureSpec extends AbstractViewSpec {
 
     @Override
     public final void execute(PageBuilderContext context) {
-        form("main");
-        navcontrol("main");
-        dataform("main", "head");
-        tabletool("main", "items");
+        dataform(parent, "head");
+        tabletool(parent, "items");
     }
 }

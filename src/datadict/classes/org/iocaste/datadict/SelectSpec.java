@@ -7,8 +7,6 @@ public class SelectSpec extends AbstractViewSpec {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        form("main");
-        navcontrol("main");
-        dataform("main", "model");
+        dataform(parent, "model");
     }
 }
