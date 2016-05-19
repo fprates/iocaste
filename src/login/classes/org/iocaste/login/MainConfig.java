@@ -1,5 +1,7 @@
 package org.iocaste.login;
 
+import java.util.Map;
+
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
@@ -15,10 +17,17 @@ public class MainConfig extends AbstractViewConfig {
         DataFormToolData form;
         DataFormToolItem item;
         Context extcontext;
+        Map<String, String> style;
         
         context.view.setTitle("authentic");
 
         Style.set(context);
+        style = context.view.styleSheetInstance().get(".nc_title");
+        style.put("text-align", "center");
+        style.put("margin-left", "auto");
+        style.put("margin-right", "auto");
+        style.put("width", "600px");
+        
         getElement("logincnt").setStyleClass("logincnt");
         
         extcontext = getExtendedContext();
@@ -38,5 +47,6 @@ public class MainConfig extends AbstractViewConfig {
         
         button = getElement("connect");
         button.setSubmit(true);
+        button.setStyleClass("loginsubmit");
     }
 }
