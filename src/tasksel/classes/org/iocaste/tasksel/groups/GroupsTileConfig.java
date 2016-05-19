@@ -1,26 +1,24 @@
 package org.iocaste.tasksel.groups;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Link;
-import org.iocaste.shell.common.StyleSheet;
+import org.iocaste.tasksel.Style;
 
 public class GroupsTileConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        Map<String, String> style;
         Link tileitem;
-        StyleSheet stylesheet = context.view.styleSheetInstance();
         
-        style = stylesheet.newElement(".tilestyle");
-        style.put("border-style", "solid");
-        getElement("frame").setStyleClass("tilestyle");
+        Style.set(context);
+        
+        getElement("frame").setStyleClass("tile_frame");
+        getElement("name").setStyleClass("tile_text");
         
         tileitem = getElement("tileitem");
         tileitem.setAction("group");
+        tileitem.setStyleClass("tile_item");
     }
     
 }

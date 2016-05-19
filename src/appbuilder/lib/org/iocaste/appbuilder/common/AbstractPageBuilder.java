@@ -108,7 +108,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         installcontext.put(name, object);
     }
     
-    protected final void reassignCustomActions(PageBuilderContext context) {
+    private final void reassignCustomActions(PageBuilderContext context) {
         ViewContext viewctx;
         BuilderCustomView customview;
         AbstractViewSpec viewspec;

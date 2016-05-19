@@ -6,7 +6,6 @@ import java.util.Set;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
-import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.documents.common.DocumentModel;
@@ -107,20 +106,9 @@ public class Main extends AbstractPageBuilder {
         installObject("main", new InstallObject());
     }
     
-    public final void reassignActions() {
-        reassignCustomActions(context);
-    }
-    
     public final void refresh() {
-        ViewContext view;
-        
         entries = getLists();
-        view = context.getView(Main.MAIN);
-        view.getSpec().setInitialized(false);
-        
+        context.getView(Main.MAIN).getSpec().setInitialized(false);
         setReloadableView(true);
-        
-        StandardPanel.reassignActions(view, page);
-        reassignActions();
     }
 }

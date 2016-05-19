@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.ExtendedContext;
+import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.ViewInput;
@@ -78,7 +79,25 @@ public abstract class AbstractPanelPage {
         put(action, handler);
     }
     
+    protected final void task(String action, String task) {
+        put(action, new TaskCall(task));
+    }
+    
     protected final void update() {
         view.setUpdate(true);
     }
+}
+
+class TaskCall extends AbstractActionHandler {
+    private String task;
+    
+    public TaskCall(String task) {
+        this.task = task;
+    }
+    
+    @Override
+    protected void execute(PageBuilderContext context) throws Exception {
+        taskredirect(task);
+    }
+    
 }
