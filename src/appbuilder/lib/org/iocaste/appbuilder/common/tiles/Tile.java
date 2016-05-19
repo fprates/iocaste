@@ -2,11 +2,9 @@ package org.iocaste.appbuilder.common.tiles;
 
 import java.util.Map;
 
-import org.iocaste.documents.common.ExtendedObject;
-
 public class Tile {
     private String name;
-    private ExtendedObject object;
+    private Object object;
     
     public Tile(Map<String, Tile> tiles, String name) {
         int i = tiles.size();
@@ -18,11 +16,11 @@ public class Tile {
         return name;
     }
     
-    public final ExtendedObject get() {
+    public final Object get() {
         return object;
     }
     
-    public final void set(ExtendedObject object) {
+    public final void set(Object object) {
         this.object = object;
     }
 }

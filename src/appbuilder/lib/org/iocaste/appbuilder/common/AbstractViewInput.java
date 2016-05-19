@@ -302,12 +302,11 @@ public abstract class AbstractViewInput implements ViewInput {
         element.setText(text);
     }
     
-    protected final void tilesset(String name, ExtendedObject[] objects) {
+    protected final void tilesset(String name, Object[] objects) {
         ((TilesData)getComponentData(name)).set(objects);
     }
     
-    protected final void tilesset(
-            String name, Collection<ExtendedObject> objects) {
-        tilesset(name, objects.toArray(new ExtendedObject[0]));
+    protected final void tilesset(String name, Collection<?> objects) {
+        tilesset(name, objects.toArray());
     }
 }

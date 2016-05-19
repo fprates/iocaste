@@ -8,7 +8,6 @@ import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.BuilderCustomView;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ViewSpecItem;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.CustomView;
 
 public class TilesTool extends AbstractComponentTool {
@@ -47,6 +46,7 @@ public class TilesTool extends AbstractComponentTool {
         Tile tile;
         CustomView builder;
         ViewSpecItem itemspec;
+        Object[] objects;
         TilesData data = (TilesData)entry.data;
         
         tiles.clear();
@@ -56,7 +56,11 @@ public class TilesTool extends AbstractComponentTool {
         builder.setViewSpec(data.spec);
         builder.setViewConfig(data.config);
         builder.setViewInput(data.input);
-        for (ExtendedObject object : data.get()) {
+        
+        objects = data.get();
+        if (objects == null)
+            return;
+        for (Object object : objects) {
             if (data.input != null)
                 data.input.set(object);
             tile = new Tile(tiles, data.name);
