@@ -30,8 +30,6 @@ public class Main extends AbstractPageBuilder {
         
         panel = new StandardPanel(context);
         panel.instance("main", new MainPanel(), extcontext);
-        
-        panel = new StandardPanel(context);
         panel.instance("detail", new DetailPanel(), extcontext);
     }
 
