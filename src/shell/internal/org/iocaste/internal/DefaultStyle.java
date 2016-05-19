@@ -11,7 +11,7 @@ public class DefaultStyle {
     private static final String BORDER = "#a0a0a0";
     private static final String STDPDDNG = "0.5em";
     private static final String INPUT_FONTSIZE = "11pt";
-    private static final String ROUND = "2px";
+    private static final String ROUND = "3px";
 
     public static StyleSheet instance() {
         StyleSheet stylesheet;
@@ -221,7 +221,7 @@ public class DefaultStyle {
         stylesheet.newElement(".text").put("margin", "0px");
 
         style = stylesheet.newElement(".text_field");
-        style.put("padding", "0px");
+        style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
         style.put("border-color", BORDER);
@@ -231,9 +231,22 @@ public class DefaultStyle {
         style.put("font-family", FONT_FAMILY);
         style.put("font-size", INPUT_FONTSIZE);
         style.put("font-style", "normal");
+        
+        style = stylesheet.newElement(".text_field_internallabel");
+        style.put("padding", "10px");
+        style.put("margin", "0px");
+        style.put("border-style", "solid");
+        style.put("border-color", BORDER);
+        style.put("border-width", "1px");
+        style.put("border-radius", ROUND);
+        style.put("color", FONT_COLOR);
+        style.put("font-family", FONT_FAMILY);
+        style.put("font-size", INPUT_FONTSIZE);
+        style.put("font-style", "normal");
+        style.put("display", "block");
 
         style = stylesheet.newElement(".text_field_disabled");
-        style.put("padding", "0px");
+        style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
         style.put("border-color", BORDER);
@@ -242,9 +255,21 @@ public class DefaultStyle {
         style.put("font-style", "normal");
         style.put("font-size", INPUT_FONTSIZE);
         style.put("color", BORDER);
+        
+        style = stylesheet.newElement(".text_field_disabled_internallabel");
+        style.put("padding", "10px");
+        style.put("margin", "0px");
+        style.put("border-style", "solid");
+        style.put("border-color", BORDER);
+        style.put("border-width", "1px");
+        style.put("border-radius", ROUND);
+        style.put("font-style", "normal");
+        style.put("font-size", INPUT_FONTSIZE);
+        style.put("color", BORDER);
+        style.put("display", "block");
 
         style = stylesheet.newElement(".text_field_disabled_right");
-        style.put("padding", "0px");
+        style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
         style.put("border-color", BORDER);
@@ -255,8 +280,22 @@ public class DefaultStyle {
         style.put("color", BORDER);
         style.put("text-align", "right");
 
+        style = stylesheet.newElement(
+                ".text_field_disabled_right_internallabel");
+        style.put("padding", "10px");
+        style.put("margin", "0px");
+        style.put("border-style", "solid");
+        style.put("border-color", BORDER);
+        style.put("border-width", "1px");
+        style.put("border-radius", ROUND);
+        style.put("font-style", "normal");
+        style.put("font-size", INPUT_FONTSIZE);
+        style.put("color", BORDER);
+        style.put("text-align", "right");
+        style.put("display", "block");
+
         style = stylesheet.newElement(".text_field_right");
-        style.put("padding", "0px");
+        style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
         style.put("border-color", BORDER);
@@ -266,6 +305,19 @@ public class DefaultStyle {
         style.put("font-size", INPUT_FONTSIZE);
         style.put("color", "black");
         style.put("text-align", "right");
+        
+        style = stylesheet.newElement(".text_field_right_internallabel");
+        style.put("padding", "10px");
+        style.put("margin", "0px");
+        style.put("border-style", "solid");
+        style.put("border-color", BORDER);
+        style.put("border-width", "1px");
+        style.put("border-radius", ROUND);
+        style.put("font-style", "normal");
+        style.put("font-size", INPUT_FONTSIZE);
+        style.put("color", "black");
+        style.put("text-align", "right");
+        style.put("display", "block");
 
         style = stylesheet.newElement(".textarea");
         style.put("width", "100%");
