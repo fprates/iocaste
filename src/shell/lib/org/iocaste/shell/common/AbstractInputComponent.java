@@ -29,6 +29,7 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private Calendar calendar;
     private String master, nsreference;
     private byte[] content;
+    private boolean placeholder;
 
     public AbstractInputComponent(View view, Const type, Const type_,
             String name) {
@@ -223,6 +224,15 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final int getVisibleLength() {
         return vlength;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#hasPlaceHolder()
+     */
+    @Override
+    public final boolean hasPlaceHolder() {
+        return placeholder;
     }
     
     /**
@@ -432,6 +442,16 @@ public abstract class AbstractInputComponent extends AbstractComponent
     }
     
     /*
+     * (não-Javadoc)
+     * @see org.iocaste.shell.common.InputComponent#setNSReference(
+     *    java.lang.String)
+     */
+    @Override
+    public final void setNSReference(String nsreference) {
+        this.nsreference = nsreference;
+    }
+    
+    /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.InputComponent#setObligatory(boolean)
      */
@@ -440,14 +460,9 @@ public abstract class AbstractInputComponent extends AbstractComponent
         this.obligatory = obligatory;
     }
     
-    /*
-     * (não-Javadoc)
-     * @see org.iocaste.shell.common.InputComponent#setNSReference(
-     *    java.lang.String)
-     */
     @Override
-    public final void setNSReference(String nsreference) {
-        this.nsreference = nsreference;
+    public final void setPlaceHolder(boolean placeholder) {
+        this.placeholder = placeholder;
     }
     
     /*

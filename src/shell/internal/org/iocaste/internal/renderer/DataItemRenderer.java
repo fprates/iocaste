@@ -28,23 +28,25 @@ public class DataItemRenderer {
             text = inputname;
         
         view = config.getView();
-        colname = new Text(view, inputname.concat("_form_item_text"));
-        colname.setStyleClass("item_form_name");
-        colname.setText(text);
-        
-        coltag = new XMLElement("td");
-        coltag.add("class", dataitem.getStyleClass());
-        coltag.addChild(TextRenderer.render(colname, config));
-        
-        modelitem = dataitem.getModelItem();
-        if (modelitem != null)
-            model = modelitem.getDocumentModel();
-        
-        if (model != null && form.isKeyRequired() &&
-                model.isKey(dataitem.getModelItem()))
-            dataitem.setObligatory(true);
-        
-        itemtag.addChild(coltag);
+        if (!dataitem.hasPlaceHolder()) {
+            colname = new Text(view, inputname.concat("_form_item_text"));
+            colname.setStyleClass("item_form_name");
+            colname.setText(text);
+            
+            coltag = new XMLElement("td");
+            coltag.add("class", dataitem.getStyleClass());
+            coltag.addChild(TextRenderer.render(colname, config));
+            
+            modelitem = dataitem.getModelItem();
+            if (modelitem != null)
+                model = modelitem.getDocumentModel();
+            
+            if (model != null && form.isKeyRequired() &&
+                    model.isKey(dataitem.getModelItem()))
+                dataitem.setObligatory(true);
+            
+            itemtag.addChild(coltag);
+        }
         
         coltag = new XMLElement("td");
         coltag.add("class", dataitem.getStyleClass());

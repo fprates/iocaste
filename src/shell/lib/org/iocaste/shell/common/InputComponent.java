@@ -101,6 +101,12 @@ public interface InputComponent extends Component {
     public abstract String getNSReference();
     
     /**
+     * 
+     * @return
+     */
+    public abstract boolean hasPlaceHolder();
+    
+    /**
      * Retorna ajuda de pesquisa associada.
      * @return ajuda de pesquisa
      */
@@ -231,6 +237,12 @@ public interface InputComponent extends Component {
      * @param obligatory true, para campo obrigatório
      */
     public abstract void setObligatory(boolean obligatory);
+    
+    /**
+     * 
+     * @param placeholder
+     */
+    public abstract void setPlaceHolder(boolean placeholder);
     
     /**
      * Define ajuda de pesquisa para esse campo.

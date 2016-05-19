@@ -15,7 +15,7 @@ public class DataFormToolData extends AbstractComponentData {
     public DocumentModel model;
     public Map<String, DataFormToolItem> items;
     public String[] show;
-    public boolean disabled;
+    public boolean disabled, internallabel;
     public int columns;
     
     public DataFormToolData() {

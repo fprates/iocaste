@@ -29,12 +29,14 @@ public class TextFieldRenderer extends Renderer {
 
     public static final XMLElement render(DataItem dataitem, String tbstyle,
             Config config) {
-        return _render(dataitem, TextField.STYLE, tbstyle, config);
+        return _render(dataitem,
+                TextField.STYLE, tbstyle, config, dataitem.getLabel());
     }
     
     public static final XMLElement render(TextField textfield, String tbstyle,
             Config config) {
-        return _render(textfield, textfield.getStyleClass(), tbstyle, config);
+        return _render(textfield, textfield.getStyleClass(),
+                tbstyle, config, textfield.getName());
     }
     
     /**
@@ -44,7 +46,7 @@ public class TextFieldRenderer extends Renderer {
      * @return
      */
     private static final XMLElement _render(InputComponent input,
-            String style, String tablestyle, Config config) {
+            String style, String tablestyle, Config config, String label) {
         Container container;
         PopupControl popupcontrol;
         StringBuilder sb;
@@ -72,7 +74,6 @@ public class TextFieldRenderer extends Renderer {
         inputtag.add("type", (!input.isSecret())? "text" : "password");
         inputtag.add("name", name);
         inputtag.add("id", name);
-        inputtag.add("size", Integer.toString(input.getVisibleLength()));
         inputtag.add("maxlength", Integer.toString(length));
         inputtag.add("value", value);
         inputtag.add("onfocus", new StringBuilder("send('").append(name).
@@ -96,6 +97,13 @@ public class TextFieldRenderer extends Renderer {
                 sb.append("_right");
                 break;
             }
+
+        if (input.hasPlaceHolder()) {
+            inputtag.add("placeholder", label);
+            sb.append("_internallabel");
+        } else {
+            inputtag.add("size", Integer.toString(input.getVisibleLength()));
+        }
         
         inputtag.add("class", sb.toString());
         addEvents(inputtag, input);
