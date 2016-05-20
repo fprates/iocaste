@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common.cmodelviewer;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,5 +13,9 @@ public class TableToolContextEntry {
     
     public TableToolContextEntry() {
         items = new LinkedHashMap<>();
+    }
+    
+    public Collection<ExtendedObject> getItems() {
+        return items.values();
     }
 }

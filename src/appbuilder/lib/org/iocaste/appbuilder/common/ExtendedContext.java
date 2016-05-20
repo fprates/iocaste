@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
+import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.ExtendedObject;
 
 public interface ExtendedContext {
@@ -12,6 +13,10 @@ public interface ExtendedContext {
     public abstract ExtendedObject dfobjectget(String dfname);
     
     public abstract ExtendedObject dfobjectget(String page, String dfname);
+    
+    public abstract boolean isInstantializedTable(String ttname);
+    
+    public abstract boolean isInstantializedTable(String page, String ttname);
     
     public abstract void pageInstance();
     
@@ -25,6 +30,10 @@ public interface ExtendedContext {
 
     public abstract void set(String page, String ttname,
             ExtendedObject[] objects);
+    
+    public abstract void set(String ttname, TableToolItem ttitem);
+    
+    public abstract void set(String page, String ttname, TableToolItem ttitem);
     
     public abstract TableToolContextEntry tableInstance(String ttname);
     

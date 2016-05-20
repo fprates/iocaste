@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
+import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.ExtendedObject;
 
 public abstract class AbstractExtendedContext implements ExtendedContext {
@@ -42,6 +43,17 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     }
     
     @Override
+    public final boolean isInstantializedTable(String ttname) {
+        return isInstantializedTable(context.view.getPageName(), ttname);
+    }
+    
+    @Override
+    public final boolean isInstantializedTable(String page, String ttname) {
+        PageContext pagectx = pages.get(page);
+        return pagectx.tabletools.containsKey(ttname);
+    }
+    
+    @Override
     public final void pageInstance() {
         pageInstance(context.view.getPageName());
     }
@@ -69,6 +81,14 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         for (int i = 0; i < objects.length; i++)
             entry.items.put(i, objects[i]);
     }
+    
+    private final void set(
+            String page, String ttname, ExtendedObject object, int i) {
+        TableToolContextEntry entry;
+
+        entry = pages.get(page).tabletools.get(ttname);
+        entry.items.put(i, object);
+    }
 
     @Override
     public final void set(String dfname, ExtendedObject object) {
@@ -79,6 +99,16 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     public final void set(String page, String dfname, ExtendedObject object) {
         PageContext pagectx = pages.get(page);
         pagectx.dataforms.put(dfname, object);
+    }
+    
+    @Override
+    public final void set(String ttname, TableToolItem ttitem) {
+        set(context.view.getPageName(), ttname, ttitem);
+    }
+    
+    @Override
+    public final void set(String page, String ttname, TableToolItem ttitem) {
+        set(page, ttname, ttitem.object, ttitem.position);
     }
     
     @Override
