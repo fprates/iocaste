@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.Shell;
@@ -73,6 +74,9 @@ public class StandardNavControlDesign implements NavControlDesign {
                 text.setStyleClass("nc_text");
             }
         }
+        
+        context.view.add(new HeaderLink(
+                "shortcut icon", "/iocaste-shell/images/favicon.ico"));
         
         name = context.view.getTitle().text;
         if (name == null)
