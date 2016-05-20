@@ -6,14 +6,9 @@ import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
-import org.iocaste.protocol.GenericService;
-import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.StyleSheet;
 
-public 
-
-class StandardPanelConfig extends AbstractViewConfig {
-    private static final String SERVICE = "/iocaste-appbuilder/services.html";
+public class StandardPanelConfig extends AbstractViewConfig {
     private AbstractPanelPage page;
     
     public StandardPanelConfig(AbstractPanelPage page) {
@@ -22,25 +17,18 @@ class StandardPanelConfig extends AbstractViewConfig {
     
     @Override
     protected void execute(PageBuilderContext context) {
-        ViewConfig extconfig;
         StyleSheet stylesheet;
-        Map<String, Map<String, String>> appbuildersheet;
         Map<String, String> corestyle, appbuilderstyle;
-        GenericService service;
-        Message message;
+        ViewConfig extconfig;
         NavControl navcontrol;
         String submit;
         
-        message = new Message("stylesheet_get");
-        service = new GenericService(context.function, SERVICE);
-        appbuildersheet = service.invoke(message);
-        
         stylesheet = context.view.styleSheetInstance();
-        for (String selector : appbuildersheet.keySet()) {
+        for (String selector : context.appbuildersheet.keySet()) {
             corestyle = stylesheet.get(selector);
             if (corestyle == null)
                 corestyle = stylesheet.newElement(selector);
-            appbuilderstyle = appbuildersheet.get(selector);
+            appbuilderstyle = context.appbuildersheet.get(selector);
             corestyle.putAll(appbuilderstyle);
         }
         

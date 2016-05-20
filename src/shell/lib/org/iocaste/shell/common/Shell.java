@@ -22,6 +22,11 @@ import org.iocaste.protocol.utils.XMLElement;
  */
 public class Shell extends AbstractServiceInterface {
     public static final String SERVER_NAME = "/iocaste-shell/services.html";
+    public static final int BACKGROUND_COLOR = 0;
+    public static final int CLICKABLE_COLOR = 1;
+    public static final int FONT_COLOR = 2;
+    public static final int FONT_FAMILY = 3;
+    public static final int FRAME_COLOR = 4;
     
     public Shell(Function function) {
         initService(function, SERVER_NAME);

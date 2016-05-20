@@ -1,14 +1,12 @@
 package org.iocaste.internal;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
 
 public class DefaultStyle {
-    private static final String FONT_COLOR = "#444";
-    private static final String FONT_FAMILY = "\"Verdana\", sans-serif";
-    private static final String BODY = "#ffffff";
-    private static final String BORDER = "#a0a0a0";
     private static final String STDPDDNG = "0.5em";
     private static final String INPUT_FONTSIZE = "11pt";
     private static final String ROUND = "3px";
@@ -16,24 +14,41 @@ public class DefaultStyle {
     public static StyleSheet instance() {
         StyleSheet stylesheet;
         Map<String, String> style;
+        Map<Integer, String> constants;
+        String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
+        String FRAME_COLOR;
         
         /*
          * default style
          */
         stylesheet = new StyleSheet();
         
+        constants = new HashMap<>();
+        constants.put(Shell.FONT_COLOR, "#444");
+        constants.put(Shell.FONT_FAMILY, "\"Verdana\", sans-serif");
+        constants.put(Shell.BACKGROUND_COLOR, "#ffffff");
+        constants.put(Shell.CLICKABLE_COLOR, "#298eea");
+        constants.put(Shell.FRAME_COLOR, "rgb(237, 237, 237)");
+        stylesheet.setConstants(constants);
+
+        FONT_COLOR = constants.get(Shell.FONT_COLOR);
+        FONT_FAMILY = constants.get(Shell.FONT_FAMILY);
+        BACKGROUND_COLOR = constants.get(Shell.BACKGROUND_COLOR);
+        CLICKABLE_COLOR = constants.get(Shell.CLICKABLE_COLOR);
+        FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
+        
         style = stylesheet.newElement("body");
-        style.put("background-color", BODY);
+        style.put("background-color", BACKGROUND_COLOR);
         style.put("margin", "0px");
         style.put("padding", "0px");
         
         style = stylesheet.newElement(".button");
         style.put("padding", "3px");
         style.put("margin", "0px");
-        style.put("background-color", BODY);
+        style.put("background-color", BACKGROUND_COLOR);
         style.put("font-weight", "bold");
         style.put("display", "inline");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-radius", ROUND);
         style.put("border-width", "1px");
         style.put("border-style", "solid");
@@ -41,11 +56,11 @@ public class DefaultStyle {
         
         style = stylesheet.newElement(".eb_edge");
         style.put("color", "#ffffff");
-        style.put("background-color", BORDER);
+        style.put("background-color", FRAME_COLOR);
         style.put("border-width", "0px");
         style.put("border-style", "none");
         style.put("border-collapse", "collapse");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("padding", "3px");
         style.put("margin-bottom", "0px");
         style.put("width", "100%");
@@ -54,7 +69,7 @@ public class DefaultStyle {
         style.put("text-align", "left");
 
         style = stylesheet.newElement(".eb_external");
-        style.put("background-color", BODY);
+        style.put("background-color", BACKGROUND_COLOR);
         style.put("border-style", "none");
         style.put("margin-bottom", "3px");
 
@@ -63,7 +78,7 @@ public class DefaultStyle {
         style.put("border-width", "1px");
         style.put("border-style", "solid");
         style.put("border-collapse", "collapse");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("padding-top", "3px");
         style.put("padding-bottom", "0px");
         style.put("padding-left", "3px");
@@ -77,8 +92,7 @@ public class DefaultStyle {
         style.put("margin", "0px");
         style.put("text-align", "center");
         style.put("font-weight", "bold");
-        style.put("font-family",
-                "\"Verdana Bold\",\"Verdana\", \"sans-serif\"");
+        style.put("font-family", FONT_FAMILY);
         
         style = stylesheet.newElement(".form");
         style.put("padding", STDPDDNG);
@@ -107,23 +121,23 @@ public class DefaultStyle {
         style.put("font-family", FONT_FAMILY);
         
         stylesheet.newElement(".link:hover").put("color", "#505050");
-        stylesheet.newElement(".link:link").put("color", "blue");
-        stylesheet.newElement(".link:active").put("color", "blue");
-        stylesheet.newElement(".link:visited").put("color", "red");
+        stylesheet.newElement(".link:link").put("color", CLICKABLE_COLOR);
+        stylesheet.newElement(".link:active").put("color", CLICKABLE_COLOR);
+        stylesheet.newElement(".link:visited").put("color", CLICKABLE_COLOR);
         
         style = stylesheet.newElement(".list_box");
-        style.put("background-color", BODY);
+        style.put("background-color", BACKGROUND_COLOR);
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("font-weight", "normal");
         style.put("font-size", "12pt");
         style.put("padding", "3px");
 
         style = stylesheet.newElement(".list_box_disabled");
-        style.put("background-color", BODY);
+        style.put("background-color", BACKGROUND_COLOR);
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("font-weight", "normal");
         style.put("font-size", "12pt");
@@ -136,11 +150,11 @@ public class DefaultStyle {
 
         style = stylesheet.newElement(".sh_button");
         style.put("text-align", "center");
-        style.put("background-color", BODY);
+        style.put("background-color", BACKGROUND_COLOR);
         style.put("font-weight", "bold");
         style.put("border-style", "solid");
         style.put("border-width", "1px");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-radius", "11px");
         style.put("height", "22px");
         style.put("width", "22px");
@@ -166,14 +180,14 @@ public class DefaultStyle {
         style.put("margin", "0px");
         style.put("padding", "0px");
         style.put("border-collapse", "collapse");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-style", "solid");
         style.put("border-width", "1px");
 
         style = stylesheet.newElement(".table_cell");
         style.put("padding", "0px");
         style.put("margin", "0px");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-style", "solid");
         style.put("border-width", "1px");
 
@@ -185,7 +199,7 @@ public class DefaultStyle {
         style.put("font-size", INPUT_FONTSIZE);
 
         style = stylesheet.newElement(".table_cell_content_disabled");
-        style.put("color", BORDER);
+        style.put("color", FRAME_COLOR);
         style.put("padding", "0px");
         style.put("margin", "0px");
         style.put("border-style", "none");
@@ -201,7 +215,7 @@ public class DefaultStyle {
         style.put("font-size", INPUT_FONTSIZE);
 
         style = stylesheet.newElement(".table_cell_content_disabled_right");
-        style.put("color", BORDER);
+        style.put("color", FRAME_COLOR);
         style.put("padding", "0px");
         style.put("margin", "0px");
         style.put("border-style", "none");
@@ -210,11 +224,11 @@ public class DefaultStyle {
         style.put("font-size", INPUT_FONTSIZE);
         
         style = stylesheet.newElement(".table_header");
-        style.put("background-color", BORDER);
+        style.put("background-color", FRAME_COLOR);
         style.put("font-weight", "bold");
         style.put("padding", "0.3em");
         style.put("margin", "0px");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-style", "solid");
         style.put("border-width", "1px");
         
@@ -224,7 +238,7 @@ public class DefaultStyle {
         style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("border-radius", ROUND);
         style.put("color", FONT_COLOR);
@@ -236,7 +250,7 @@ public class DefaultStyle {
         style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("border-radius", ROUND);
         style.put("color", FONT_COLOR);
@@ -249,35 +263,35 @@ public class DefaultStyle {
         style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("border-radius", ROUND);
         style.put("font-style", "normal");
         style.put("font-size", INPUT_FONTSIZE);
-        style.put("color", BORDER);
+        style.put("color", FRAME_COLOR);
         
         style = stylesheet.newElement(".text_field_disabled_internallabel");
         style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("border-radius", ROUND);
         style.put("font-style", "normal");
         style.put("font-size", INPUT_FONTSIZE);
-        style.put("color", BORDER);
+        style.put("color", FRAME_COLOR);
         style.put("display", "block");
 
         style = stylesheet.newElement(".text_field_disabled_right");
         style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("border-radius", ROUND);
         style.put("font-style", "normal");
         style.put("font-size", INPUT_FONTSIZE);
-        style.put("color", BORDER);
+        style.put("color", FRAME_COLOR);
         style.put("text-align", "right");
 
         style = stylesheet.newElement(
@@ -285,12 +299,12 @@ public class DefaultStyle {
         style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("border-radius", ROUND);
         style.put("font-style", "normal");
         style.put("font-size", INPUT_FONTSIZE);
-        style.put("color", BORDER);
+        style.put("color", FRAME_COLOR);
         style.put("text-align", "right");
         style.put("display", "block");
 
@@ -298,7 +312,7 @@ public class DefaultStyle {
         style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("border-radius", ROUND);
         style.put("font-style", "normal");
@@ -310,7 +324,7 @@ public class DefaultStyle {
         style.put("padding", "10px");
         style.put("margin", "0px");
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("border-radius", ROUND);
         style.put("font-style", "normal");
@@ -324,7 +338,7 @@ public class DefaultStyle {
         style.put("background-color", "#ffffff");
         style.put("border-style", "solid");
         style.put("border-width", "1px");
-        style.put("border-color", BORDER);
+        style.put("border-color", FRAME_COLOR);
         style.put("font-style", "normal");
         style.put("font-size", INPUT_FONTSIZE);
 
@@ -347,10 +361,10 @@ public class DefaultStyle {
         style.put("padding-bottom", "0.3em");
         style.put("padding-left", "1.5em");
         style.put("padding-right", "1.5em");
-        style.put("background-color", BORDER);
+        style.put("background-color", FRAME_COLOR);
 
         style = stylesheet.newElement(".tp_button_unfocused");
-        style.put("background-color", BODY);
+        style.put("background-color", BACKGROUND_COLOR);
         style.put("font-size", "12pt");
         style.put("font-weight", "bold");
         style.put("text-align", "center");
@@ -370,17 +384,17 @@ public class DefaultStyle {
         style.put("padding", STDPDDNG);
         style.put("overflow", "auto");
         style.put("border-width", "1px");
-        style.put("border-top-color", BORDER);
+        style.put("border-top-color", FRAME_COLOR);
         style.put("border-top-style", "solid");
         style.put("border-right-style", "none");
-        style.put("border-bottom-color", BORDER);
+        style.put("border-bottom-color", FRAME_COLOR);
         style.put("border-bottom-style", "solid");
         style.put("border-left-style", "none");
 
         style = stylesheet.newElement(".tp_outer");
         style.put("border-top-width", "1px");
         style.put("border-top-style", "solid");
-        style.put("border-top-color", BORDER);
+        style.put("border-top-color", FRAME_COLOR);
         
         style = stylesheet.newElement(".warning_message");
         style.put("background-color", "#ffff00");
@@ -389,8 +403,7 @@ public class DefaultStyle {
         style.put("margin", "0px");
         style.put("text-align", "center");
         style.put("font-weight", "bold");
-        style.put("font-family",
-                "\"Verdana Bold\",\"Verdana\", \"sans-serif\"");
+        style.put("font-family", FONT_FAMILY);
         
         return stylesheet;
     }

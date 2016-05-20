@@ -47,6 +47,7 @@ public class View implements Serializable {
     private Map<String, Element> elements;
     private Locale locale;
     private ViewTitle title;
+    private Object[][] styleconst;
     
     public View(String appname, String pagename) {
         lines = new ArrayList<>();
@@ -254,6 +255,14 @@ public class View implements Serializable {
         this.locale = locale;
     }
     
+    public final void setStyleConst(Map<Integer, String> constants) {
+        styleconst = new Object[constants.size()][2];
+        for (Integer i : constants.keySet()) {
+            styleconst[i][0] = i;
+            styleconst[i][1] = constants.get(i);
+        }
+    }
+    
     /**
      * Ajusta folha de estilos.
      * @param sheet nome
@@ -272,6 +281,16 @@ public class View implements Serializable {
     }
     
     public final StyleSheet styleSheetInstance() {
-        return (sheet != null)? new StyleSheet(sheet) : new StyleSheet();
+        StyleSheet stylesheet;
+        Map<Integer, String> constants;
+        
+        stylesheet = (sheet != null)? new StyleSheet(sheet) : new StyleSheet();
+        if (styleconst != null) {
+            constants = new HashMap<>();
+            for (int i = 0; i < styleconst.length; i++)
+                constants.put((int)styleconst[i][0], (String)styleconst[i][1]);
+            stylesheet.setConstants(constants);
+        }
+        return stylesheet;
     }
 }

@@ -32,6 +32,7 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.PageStackItem;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public abstract class AbstractRenderer extends HttpServlet implements Function {
@@ -143,6 +144,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         AppContext appctx;
         View view;
         Service service;
+        StyleSheet stylesheet;
         
         appctx = pagectx.getAppContext();
         appname = appctx.getName();
@@ -157,7 +159,9 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         if (!pagectx.keepView() || view == null)
             view = new View(appname, pagename);
         
-        view.setStyleSheet(DefaultStyle.instance().getElements());
+        stylesheet = DefaultStyle.instance();
+        view.setStyleSheet(stylesheet.getElements());
+        view.setStyleConst(stylesheet.getConstants());
         
         message = new Message("get_view_data");
         message.add("view", view);

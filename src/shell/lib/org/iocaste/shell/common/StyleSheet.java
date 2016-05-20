@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class StyleSheet {
     private Map<String, Map<String, String>> stylesheet;
+    private Map<Integer, String> constants;
     
     public StyleSheet(Map<String, Map<String, String>> stylesheet) {
         this.stylesheet = stylesheet;
@@ -22,6 +23,10 @@ public class StyleSheet {
     
     public final Map<String, String> get(String name) {
         return stylesheet.get(name);
+    }
+    
+    public final Map<Integer, String> getConstants() {
+        return constants;
     }
     
     public final Map<String, Map<String, String>> getElements() {
@@ -46,5 +51,9 @@ public class StyleSheet {
         Map<String, String> properties = stylesheet.get(element);
         
         properties.remove(property);
+    }
+    
+    public final void setConstants(Map<Integer, String> contants) {
+        this.constants = contants;
     }
 }

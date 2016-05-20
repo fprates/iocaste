@@ -5,22 +5,34 @@ import java.util.Map;
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
 
 public class Services extends AbstractFunction {
-    private static final String BACKGROUND_COLOR = "#ffffff";
-    private static final String CONTENT_WIDTH = "1400px";
-    private static final String CLICKABLE_COLOR = "#298eea";
-    private static final String FONT_COLOR = "#444";
-    private static final String FONT_FAMILY = "\"Verdana\", sans-serif";
-    private static final String FRAME_COLOR = "rgb(237, 237, 237)";
-    private static final String HEADER_HEIGHT = "142px";
-    public Map<String, Map<String, String>> style;
     
     public Services() {
+        export("stylesheet_get", new GetStyleSheet());
+    }
+}
+
+class GetStyleSheet extends AbstractHandler {
+    private static final String CONTENT_WIDTH = "1400px";
+    private static final String HEADER_HEIGHT = "142px";
+
+    @Override
+    public Object run(Message message) throws Exception {
         Map<String, String> style;
+        String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
+        String FRAME_COLOR;
+        Map<Integer, String> constants = message.get("style_constants");
         StyleSheet stylesheet = new StyleSheet();
 
+        FONT_COLOR = constants.get(Shell.FONT_COLOR);
+        FONT_FAMILY = constants.get(Shell.FONT_FAMILY);
+        BACKGROUND_COLOR = constants.get(Shell.BACKGROUND_COLOR);
+        CLICKABLE_COLOR = constants.get(Shell.CLICKABLE_COLOR);
+        FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
+        
         style = stylesheet.newElement(".content_area");
         style.put("max-width", CONTENT_WIDTH);
         style.put("margin-left", "auto");
@@ -140,17 +152,7 @@ public class Services extends AbstractFunction {
         style.put("right", "0px");
         style.put("margin-top", "13px");
         
-        this.style = stylesheet.getElements();
-        export("stylesheet_get", new GetStyleSheet());
-    }
-}
-
-class GetStyleSheet extends AbstractHandler {
-
-    @Override
-    public Object run(Message message) throws Exception {
-        Services services = getFunction();
-        return services.style;
+        return stylesheet.getElements();
     }
     
 }

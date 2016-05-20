@@ -8,13 +8,16 @@ import java.util.Map;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.packagetool.common.InstallData;
+import org.iocaste.protocol.GenericService;
 import org.iocaste.protocol.Message;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.shell.common.InputComponent;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 
 public abstract class AbstractPageBuilder extends AbstractPage {
+    private static final String SERVICE = "/iocaste-appbuilder/services.html";
     private PageBuilderContext context;
     private StandardInstallContext installcontext;
     private PageBuilderDefaultInstall defaultinstall;
@@ -62,7 +65,10 @@ public abstract class AbstractPageBuilder extends AbstractPage {
      */
     @Override
     public AbstractContext init(View view) throws Exception {
+        GenericService service;
+        Message message;
         AbstractExtendedValidator validator;
+        StyleSheet stylesheet;
         Documents documents = null;
         
         context = new PageBuilderContext();
@@ -78,6 +84,12 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         }
         customaction = new BuilderCustomAction();
         reassignCustomActions(context);
+        
+        stylesheet = context.view.styleSheetInstance();
+        message = new Message("stylesheet_get");
+        message.add("style_constants", stylesheet.getConstants());
+        service = new GenericService(context.function, SERVICE);
+        context.appbuildersheet = service.invoke(message);
         
         return context;
     }
