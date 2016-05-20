@@ -114,7 +114,6 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         AbstractViewSpec viewspec;
         ViewConfig viewconfig;
         AbstractViewInput viewinput;
-        AbstractActionHandler handler;
         
         for (String name : context.getViews()) {
             viewctx = context.getView(name);
@@ -129,12 +128,17 @@ public abstract class AbstractPageBuilder extends AbstractPage {
             customview.setView(name);
             
             register(name, customview);
-            for (String action : viewctx.getActions()) {
-                handler = viewctx.getActionHandler(action);
-                customaction.addHandler(name, action, handler);
-                register(action, customaction);
-            }
+            for (String action : viewctx.getActions())
+                register(name, action, viewctx);
         }
+    }
+    
+    public final void register(String view, String action, ViewContext viewctx)
+    {
+        AbstractActionHandler handler;
+        handler = viewctx.getActionHandler(action);
+        customaction.addHandler(view, action, handler);
+        register(action, customaction);
     }
     
     protected final void validate(
