@@ -2,28 +2,26 @@ package org.iocaste.copy;
 
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.shell.common.DataForm;
-import org.iocaste.shell.common.InputComponent;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
+import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 
 public class InputConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        DataForm form;
-        InputComponent input;
+        DataFormToolData form;
+        DataFormToolItem item;
         
-        form = getElement("model");
-        form.importModel("MODEL", context.function);
-        form.show("NAME", "NAMESPACE");
-        input = form.get("NAME");
-        input.setObligatory(true);
-        context.view.setFocus(input);
+        form = getTool("model");
+        form.modelname = "MODEL";
+        form.show = new String[] {"NAME", "NAMESPACE"};
+        item = form.itemInstance("NAME");
+        item.required = item.focus = true;
         
-        form = getElement("port");
-        form.importModel("XTRNL_PORT_HEAD", context.function);
-        form.show("PORT_NAME");
-        input = form.get("PORT_NAME");
-        input.setObligatory(true);
+        form = getTool("port");
+        form.modelname = "XTRNL_PORT_HEAD";
+        form.show = new String[] {"PORT_NAME"};
+        form.itemInstance("PORT_NAME").required = true;
     }
 
 }
