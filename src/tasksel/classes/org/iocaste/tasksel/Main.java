@@ -38,12 +38,10 @@ public class Main extends AbstractPageBuilder {
         this.context = context;
 
         page = new GroupsPanelPage();
+        tasks = new TasksPanelPage();
         
         panel = new StandardPanel(context);
         panel.instance(MAIN, page, extcontext);
-        
-        tasks = new TasksPanelPage();
-        panel = new StandardPanel(context);
         panel.instance("tasks", tasks, extcontext);
     }
     
