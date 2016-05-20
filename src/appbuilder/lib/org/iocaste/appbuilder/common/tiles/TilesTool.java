@@ -93,7 +93,7 @@ public class TilesTool extends AbstractComponentTool {
                 itemspec = tile.specItemInstance();
             builder.execute(data.context, itemspec, tile.getName());
             if (!data.action)
-                return;
+                continue;
             linkname = Tile.getLinkName(tile);
             link = data.context.view.getElement(linkname);
             link.setText("");
