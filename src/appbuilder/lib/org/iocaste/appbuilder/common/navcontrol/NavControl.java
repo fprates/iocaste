@@ -27,7 +27,6 @@ public class NavControl {
         
         button = new NavControlButton();
         button.type = NORMAL;
-        button.style = "nc_nav_action";
         buttons.put(action, button);
     }
     
@@ -50,10 +49,6 @@ public class NavControl {
             buttons.get(action).nolock = true;
     }
     
-    public final void setControlStyle(String control, String style) {
-        buttons.get(control).style = style;
-    }
-    
     public final void setDesign(NavControlDesign design) {
         this.design = design;
     }
@@ -67,7 +62,6 @@ public class NavControl {
         
         button = new NavControlButton();
         button.type = SUBMIT;
-        button.style = "nc_nav_submit";
         buttons.put(action, button);
     }
 }

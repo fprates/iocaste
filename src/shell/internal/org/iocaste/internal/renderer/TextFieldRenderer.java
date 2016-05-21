@@ -80,10 +80,12 @@ public class TextFieldRenderer extends Renderer {
                 append("', '&event=onfocus', null)").toString());
         
         container = input.getContainer();
-        if ((container != null) && (container.getType() == Const.TABLE_ITEM))
+        if ((container != null) && (container.getType() == Const.TABLE_ITEM)) {
             sb = new StringBuilder("table_cell_content");
-        else
+            tablestyle = "float:right";
+        } else {
             sb = new StringBuilder(style);
+        }
         
         if (!input.isEnabled()) {
             sb.append("_disabled");

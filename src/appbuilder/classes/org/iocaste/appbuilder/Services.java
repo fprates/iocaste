@@ -110,7 +110,10 @@ class GetStyleSheet extends AbstractHandler {
         style.put("border-bottom-width", "2px");
         style.put("border-bottom-color", FRAME_COLOR);
         style.put("display", "block");
-        style.put("padding", "0px");
+        style.put("padding-top", "4px");
+        style.put("padding-bottom", "0px");
+        style.put("padding-right", "0px");
+        style.put("padding-left", "0px");
         style.put("height", "40px");
         style.put("margin-top", "15px");
         style.put("margin-bottom", "0px");
@@ -121,25 +124,6 @@ class GetStyleSheet extends AbstractHandler {
         style.put("color", FONT_COLOR);
         style.put("font-size", "10pt");
         style.put("display", "inline");
-        
-        style = stylesheet.newElement(".nc_nav_submit");
-        style.put("color", BACKGROUND_COLOR);
-        style.put("font-size", "10pt");
-        style.put("border-style", "none");
-        style.put("border-radius", "3px");
-        style.put("background-color", CLICKABLE_COLOR);
-        style.put("height", "36px");
-        style.put("margin-top", "2px");
-        style.put("padding-top", "0px");
-        style.put("padding-bottom", "0px");
-        style.put("padding-left", "1em");
-        style.put("padding-right", "1em");
-        style.put("font-family", FONT_FAMILY);
-        style.put("vertical-align", "middle");
-        
-        style = stylesheet.clone(".nc_nav_action", ".nc_nav_submit");
-        style.put("color", CLICKABLE_COLOR);
-        style.put("background-color", BACKGROUND_COLOR);
         
         style = stylesheet.newElement(".main_logo");
         style.put("background-image",

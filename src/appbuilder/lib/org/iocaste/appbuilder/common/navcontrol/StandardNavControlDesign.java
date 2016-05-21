@@ -109,7 +109,6 @@ public class StandardNavControlDesign implements NavControlDesign {
 
         button = new Button(buttonbar, action);
         button.setSubmit(buttoncfg.type != NavControl.NORMAL);
-        button.setStyleClass(buttoncfg.style);
         button.setNoScreenLock(buttoncfg.nolock);
     }
     
