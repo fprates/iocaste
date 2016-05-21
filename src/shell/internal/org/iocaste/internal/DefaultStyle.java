@@ -140,7 +140,7 @@ public class DefaultStyle {
         style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("font-weight", "normal");
-        style.put("font-size", "12pt");
+        style.put("font-size", INPUT_FONTSIZE);
         style.put("padding", "3px");
 
         style = stylesheet.newElement(".list_box_disabled");

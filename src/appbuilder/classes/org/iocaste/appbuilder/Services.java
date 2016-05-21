@@ -17,7 +17,7 @@ public class Services extends AbstractFunction {
 
 class GetStyleSheet extends AbstractHandler {
     private static final String CONTENT_WIDTH = "1400px";
-    private static final String HEADER_HEIGHT = "142px";
+    private static final String HEADER_HEIGHT = "146px";
 
     @Override
     public Object run(Message message) throws Exception {
