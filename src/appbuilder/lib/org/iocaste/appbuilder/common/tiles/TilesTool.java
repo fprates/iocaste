@@ -8,6 +8,7 @@ import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.BuilderCustomView;
 import org.iocaste.appbuilder.common.ComponentEntry;
+import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
@@ -60,6 +61,7 @@ public class TilesTool extends AbstractComponentTool {
         ViewContext view;
         Link link;
         AbstractPageBuilder function;
+        ExtendedContext extcontext;
         TilesData data = (TilesData)entry.data;
         
         pagename = data.context.view.getPageName();
@@ -88,6 +90,7 @@ public class TilesTool extends AbstractComponentTool {
             function = null;
         }
         
+        extcontext = view.getExtendedContext();
         for (int i = 0; i < objects.length; i++) {
             if (data.input != null)
                 data.input.set(objects[i]);
@@ -95,6 +98,7 @@ public class TilesTool extends AbstractComponentTool {
             tile.set(objects[i]);
             if (data.action)
                 itemspec = tile.specItemInstance();
+            extcontext.set(tile);
             builder.execute(data.context, itemspec, tile.getName());
             if (!data.action)
                 continue;

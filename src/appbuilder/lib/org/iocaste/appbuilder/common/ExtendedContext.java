@@ -2,6 +2,7 @@ package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
+import org.iocaste.appbuilder.common.tiles.Tile;
 import org.iocaste.documents.common.ExtendedObject;
 
 public interface ExtendedContext {
@@ -26,6 +27,8 @@ public interface ExtendedContext {
     
     public abstract void pageInstance(String page);
 
+    public abstract void set(Tile tile);
+    
     public abstract void set(String dfname, ExtendedObject object);
     
     public abstract void set(String page, String dfname, ExtendedObject object);
@@ -49,4 +52,5 @@ public interface ExtendedContext {
     public abstract TableToolContextEntry tableInstance(
             String page, String ttname);
 
+    public abstract <T> T tileobjectget();
 }

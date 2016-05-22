@@ -5,12 +5,14 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
+import org.iocaste.appbuilder.common.tiles.Tile;
 import org.iocaste.documents.common.ExtendedObject;
 
 public abstract class AbstractExtendedContext implements ExtendedContext {
     private PageBuilderContext context;
     private Map<String, PageContext> pages;
-
+    private Tile tile;
+    
     public AbstractExtendedContext(PageBuilderContext context) {
         this.context = context;
         pages = new HashMap<>();
@@ -73,6 +75,11 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     public final void pageInstance(String page) {
         if (!pages.containsKey(page))
             pages.put(page, new PageContext());
+    }
+    
+    @Override
+    public final void set(Tile tile) {
+        this.tile = tile;
     }
     
     @Override
@@ -147,4 +154,11 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         }
         return entry;
     }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T tileobjectget() {
+        return (T)tile.get();
+    }
+    
 }
