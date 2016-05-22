@@ -251,6 +251,7 @@ public class DefaultStyle {
         style.put("font-family", FONT_FAMILY);
         style.put("font-size", INPUT_FONTSIZE);
 
+        // textfield
         style = stylesheet.newElement(".text_field");
         style.put("padding", "10px");
         style.put("margin", "0px");
@@ -263,93 +264,57 @@ public class DefaultStyle {
         style.put("font-size", INPUT_FONTSIZE);
         style.put("font-style", "normal");
         
-        style = stylesheet.newElement(".text_field_internallabel");
-        style.put("padding", "10px");
-        style.put("margin", "0px");
-        style.put("border-style", "solid");
-        style.put("border-color", FRAME_COLOR);
-        style.put("border-width", "1px");
-        style.put("border-radius", ROUND);
-        style.put("color", FONT_COLOR);
-        style.put("font-family", FONT_FAMILY);
-        style.put("font-size", INPUT_FONTSIZE);
-        style.put("font-style", "normal");
+        // textfield c/ placeholder
+        style = stylesheet.clone(".text_field_internallabel", ".text_field");
         style.put("display", "block");
 
-        style = stylesheet.newElement(".text_field_disabled");
-        style.put("padding", "10px");
-        style.put("margin", "0px");
-        style.put("border-style", "solid");
-        style.put("border-color", FRAME_COLOR);
-        style.put("border-width", "1px");
-        style.put("border-radius", ROUND);
-        style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
+        // textfield desabilitado
+        style = stylesheet.clone(".text_field_disabled", ".text_field");
         style.put("color", DISABLED_FONT_COLOR);
         
-        style = stylesheet.newElement(".text_field_disabled_internallabel");
-        style.put("padding", "10px");
-        style.put("margin", "0px");
-        style.put("border-style", "solid");
-        style.put("border-color", FRAME_COLOR);
-        style.put("border-width", "1px");
-        style.put("border-radius", ROUND);
-        style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
-        style.put("color", DISABLED_FONT_COLOR);
+        // textfield c/ placeholder desabilitado
+        style = stylesheet.clone(
+                ".text_field_disabled_internallabel", ".text_field_disabled");
         style.put("display", "block");
 
-        style = stylesheet.newElement(".text_field_disabled_right");
-        style.put("padding", "10px");
-        style.put("margin", "0px");
-        style.put("border-style", "solid");
-        style.put("border-color", FRAME_COLOR);
-        style.put("border-width", "1px");
-        style.put("border-radius", ROUND);
-        style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
-        style.put("color", DISABLED_FONT_COLOR);
+        // textfield direito desabilitado
+        style = stylesheet.clone(
+                ".text_field_disabled_right", ".text_field_disabled");
         style.put("text-align", "right");
 
-        style = stylesheet.newElement(
-                ".text_field_disabled_right_internallabel");
-        style.put("padding", "10px");
-        style.put("margin", "0px");
-        style.put("border-style", "solid");
-        style.put("border-color", FRAME_COLOR);
-        style.put("border-width", "1px");
-        style.put("border-radius", ROUND);
-        style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
-        style.put("color", DISABLED_FONT_COLOR);
-        style.put("text-align", "right");
+        // textfield direito desabilitado c/ placeholder
+        style = stylesheet.clone(".text_field_disabled_right_internallabel",
+                ".text_field_disabled_internallabel");
         style.put("display", "block");
 
-        style = stylesheet.newElement(".text_field_right");
-        style.put("padding", "10px");
-        style.put("margin", "0px");
-        style.put("border-style", "solid");
-        style.put("border-color", FRAME_COLOR);
-        style.put("border-width", "1px");
-        style.put("border-radius", ROUND);
-        style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
-        style.put("color", FONT_COLOR);
+        // textfield direito
+        style = stylesheet.clone(".text_field_right", ".text_field");
         style.put("text-align", "right");
         
-        style = stylesheet.newElement(".text_field_right_internallabel");
-        style.put("padding", "10px");
-        style.put("margin", "0px");
-        style.put("border-style", "solid");
-        style.put("border-color", FRAME_COLOR);
-        style.put("border-width", "1px");
-        style.put("border-radius", ROUND);
-        style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
-        style.put("color", FONT_COLOR);
+        // textfield direito c/ placeholder
+        style = stylesheet.clone(".text_field_right_internallabel",
+                ".text_field_internallabel");
         style.put("text-align", "right");
-        style.put("display", "block");
 
+        // textfield com foco
+        style = stylesheet.clone(".text_field:focus", ".text_field");
+        style.put("border-color", CLICKABLE_COLOR);
+        
+        // textfield c/ placeholder c/ foco
+        style = stylesheet.clone(".text_field_internallabel:focus",
+                ".text_field_internallabel");
+        style.put("border-color", CLICKABLE_COLOR);
+
+        // textfield direito c/ foco
+        style = stylesheet.clone(".text_field_right:focus",
+                ".text_field_right");
+        style.put("border-color", CLICKABLE_COLOR);
+        
+        // textfield direito c/ placeholder c/ foco
+        style = stylesheet.clone(".text_field_right_internallabel:focus",
+                ".text_field_right_internallabel");
+        style.put("border-color", CLICKABLE_COLOR);
+        
         style = stylesheet.newElement(".textarea");
         style.put("width", "100%");
         style.put("background-color", "#ffffff");
