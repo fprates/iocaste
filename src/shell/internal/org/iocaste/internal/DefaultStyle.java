@@ -204,31 +204,29 @@ public class DefaultStyle {
         style.put("font-style", "normal");
         style.put("font-size", INPUT_FONTSIZE);
 
-        style = stylesheet.newElement(".table_cell_content_disabled");
+        style = stylesheet.clone(".table_cell_content_disabled",
+                ".table_cell_content");
         style.put("color", DISABLED_FONT_COLOR);
-        style.put("padding", "0px");
-        style.put("margin", "0px");
-        style.put("border-style", "none");
-        style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
 
-        style = stylesheet.newElement(".table_cell_content_right");
-        style.put("color", FONT_COLOR);
-        style.put("padding", "0px");
-        style.put("margin", "0px");
-        style.put("border-style", "none");
+        style = stylesheet.clone(".table_cell_content_right",
+                ".table_cell_content");
         style.put("text-align", "right");
-        style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
 
-        style = stylesheet.newElement(".table_cell_content_disabled_right");
-        style.put("color", DISABLED_FONT_COLOR);
-        style.put("padding", "0px");
-        style.put("margin", "0px");
-        style.put("border-style", "none");
+        style = stylesheet.clone(".table_cell_content_disabled_right",
+                ".table_cell_content_disabled");
         style.put("text-align", "right");
-        style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
+
+        style = stylesheet.clone(".table_cell_content:focus",
+                ".table_cell_content");
+        style.put("border-bottom-style", "solid");
+        style.put("border-bottom-width", "1px");
+        style.put("border-bottom-color", CLICKABLE_COLOR);
+
+        style = stylesheet.clone(".table_cell_content_right:focus",
+                ".table_cell_content_right");
+        style.put("border-bottom-style", "solid");
+        style.put("border-bottom-width", "1px");
+        style.put("border-bottom-color", CLICKABLE_COLOR);
         
         style = stylesheet.newElement(".table_header");
         style.put("color", FONT_COLOR);
