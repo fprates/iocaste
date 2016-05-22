@@ -200,9 +200,12 @@ public class DefaultStyle {
         style.put("color", FONT_COLOR);
         style.put("padding", "0px");
         style.put("margin", "0px");
-        style.put("border-style", "none");
         style.put("font-style", "normal");
         style.put("font-size", INPUT_FONTSIZE);
+        style.put("border-style", "solid");
+        style.put("border-width", "1px");
+        style.put("border-color", BACKGROUND_COLOR);
+        style.put("border-radius", "3px");
 
         style = stylesheet.clone(".table_cell_content_disabled",
                 ".table_cell_content");
@@ -218,15 +221,11 @@ public class DefaultStyle {
 
         style = stylesheet.clone(".table_cell_content:focus",
                 ".table_cell_content");
-        style.put("border-bottom-style", "solid");
-        style.put("border-bottom-width", "1px");
-        style.put("border-bottom-color", CLICKABLE_COLOR);
+        style.put("border-color", CLICKABLE_COLOR);
 
         style = stylesheet.clone(".table_cell_content_right:focus",
-                ".table_cell_content_right");
-        style.put("border-bottom-style", "solid");
-        style.put("border-bottom-width", "1px");
-        style.put("border-bottom-color", CLICKABLE_COLOR);
+                ".table_cell_content:focus");
+        style.put("text-align", "right");
         
         style = stylesheet.newElement(".table_header");
         style.put("color", FONT_COLOR);
