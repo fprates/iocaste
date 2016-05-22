@@ -135,10 +135,6 @@ public class DefaultStyle {
         stylesheet.newElement(".link:visited").put("color", CLICKABLE_COLOR);
         
         style = stylesheet.newElement(".list_box");
-        style.put("background-color", BACKGROUND_COLOR);
-        style.put("border-style", "solid");
-        style.put("border-color", FRAME_COLOR);
-        style.put("border-width", "1px");
         style.put("font-weight", "normal");
         style.put("font-size", INPUT_FONTSIZE);
         style.put("padding", "3px");
@@ -248,7 +244,12 @@ public class DefaultStyle {
         style.put("border-left-width", "0px");
         style.put("border-right-width", "0px");
         
-        stylesheet.newElement(".text").put("margin", "0px");
+        style = stylesheet.newElement(".text");
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("color", FONT_COLOR);
+        style.put("font-family", FONT_FAMILY);
+        style.put("font-size", INPUT_FONTSIZE);
 
         style = stylesheet.newElement(".text_field");
         style.put("padding", "10px");

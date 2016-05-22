@@ -33,6 +33,7 @@ public class StandardPanelConfig extends AbstractViewConfig {
         }
         
         getElement("outercontent").setStyleClass("content_area");
+        getElement("content").addEvent("style", "margin-top:3px");
         
         navcontrol = getNavControl();
         submit = page.getSubmit();
