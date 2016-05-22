@@ -164,6 +164,14 @@ public abstract class AbstractViewInput implements ViewInput {
         link.add(pname, object.get(field), delement.getType());
     }
     
+    protected void linkadd(String name, String parameter, Object value) {
+        Link link = getElement(name);
+        String pname = new StringBuilder(name).append("_").append(parameter).
+                toString();
+        
+        link.add(pname, (value == null)? null : value.toString());
+    }
+    
     protected void loadInputTexts(PageBuilderContext context) {
         Set<Validator> validators;
         AbstractExtendedValidator exvalidator;
