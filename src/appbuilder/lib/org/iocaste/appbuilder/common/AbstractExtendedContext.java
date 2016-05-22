@@ -43,6 +43,17 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     }
     
     @Override
+    public final ExtendedObject get(String ttname, int line) {
+        return get(context.view.getPageName(), ttname, line);
+    }
+    
+    @Override
+    public final ExtendedObject get(String page, String ttname, int line) {
+        PageContext pagectx = pages.get(page);
+        return pagectx.tabletools.get(ttname).items.get(line);
+    }
+    
+    @Override
     public final boolean isInstantializedTable(String ttname) {
         return isInstantializedTable(context.view.getPageName(), ttname);
     }
@@ -81,8 +92,14 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         for (int i = 0; i < objects.length; i++)
             entry.items.put(i, objects[i]);
     }
+
+    @Override
+    public final void set(String ttname, ExtendedObject object, int line) {
+        set(context.view.getPageName(), ttname, object, line);
+    }
     
-    private final void set(
+    @Override
+    public final void set(
             String page, String ttname, ExtendedObject object, int i) {
         TableToolContextEntry entry;
 

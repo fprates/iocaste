@@ -13,6 +13,10 @@ public interface ExtendedContext {
     public abstract ExtendedObject dfobjectget(String dfname);
     
     public abstract ExtendedObject dfobjectget(String page, String dfname);
+
+    public abstract ExtendedObject get(String ttname, int line);
+    
+    public abstract ExtendedObject get(String page, String ttname, int line);
     
     public abstract boolean isInstantializedTable(String ttname);
     
@@ -34,6 +38,11 @@ public interface ExtendedContext {
     public abstract void set(String ttname, TableToolItem ttitem);
     
     public abstract void set(String page, String ttname, TableToolItem ttitem);
+
+    public abstract void set(String ttname, ExtendedObject object, int line);
+    
+    public abstract void set(String page, String ttname,
+            ExtendedObject object, int line);
     
     public abstract TableToolContextEntry tableInstance(String ttname);
     
