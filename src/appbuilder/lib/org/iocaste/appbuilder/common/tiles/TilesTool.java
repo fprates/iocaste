@@ -71,6 +71,10 @@ public class TilesTool extends AbstractComponentTool {
         builder.setViewConfig(data.config);
         builder.setViewInput(data.input);
         
+        if (data.style != null)
+            data.context.view.getElement(tilesspec.getName()).
+                    setStyleClass(data.style);
+        
         objects = data.get();
         if (objects == null)
             return;
