@@ -11,7 +11,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
     private Map<String, ViewSpecItem> items;
     private PageBuilderContext context;
     private boolean initialized;
-    private int skipnr;
     
     public AbstractViewSpec() {
         items = new LinkedHashMap<>();
@@ -133,12 +132,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
     @Override
     public final void setInitialized(boolean initialized) {
         this.initialized = initialized;
-    }
-
-    @Override
-    public final void skip(String parent) {
-        put(parent, ViewSpecItem.TYPES.SKIP, new StringBuilder("skip").
-                append(skipnr++).toString());
     }
     
     protected final void spec(String parent, ViewSpec spec) {

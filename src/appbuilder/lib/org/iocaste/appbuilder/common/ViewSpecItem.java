@@ -25,7 +25,6 @@ public class ViewSpecItem {
         BUTTON("button"),
         RADIO_BUTTON("radiobutton"),
         RADIO_GROUP("radiogroup"),
-        SKIP("skip"),
         TEXT_FIELD("textfield"),
         TILES("tiles"),
         PRINT_AREA("printarea"),

@@ -28,7 +28,6 @@ import org.iocaste.appbuilder.common.factories.PrintAreaFactory;
 import org.iocaste.appbuilder.common.factories.RadioButtonFactory;
 import org.iocaste.appbuilder.common.factories.RadioGroupFactory;
 import org.iocaste.appbuilder.common.factories.ReportToolFactory;
-import org.iocaste.appbuilder.common.factories.SkipFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.shell.common.AbstractContext;
 
@@ -61,8 +60,6 @@ public class BuilderCustomView extends AbstractCustomView {
                 new PrintAreaFactory());
         factories.put(ViewSpecItem.TYPES.REPORT_TOOL,
                 new ReportToolFactory());
-        factories.put(ViewSpecItem.TYPES.SKIP,
-                new SkipFactory());
         factories.put(ViewSpecItem.TYPES.STANDARD_CONTAINER,
                 new StandardContainerFactory());
         factories.put(ViewSpecItem.TYPES.TABBED_PANE,

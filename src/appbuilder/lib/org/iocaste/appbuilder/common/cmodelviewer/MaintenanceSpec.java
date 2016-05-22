@@ -15,7 +15,6 @@ public class MaintenanceSpec extends AbstractViewSpec {
         ComplexModel model = getManager(extcontext.link.cmodel).getModel();
         
         dataform("content", "head");
-        skip("content");
         tabbedpane("content", "tabs");
         tabbedpaneitem("tabs", "basetab");
         dataform("basetab", "base");

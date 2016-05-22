@@ -15,7 +15,5 @@ public interface ViewSpec {
     public abstract void run(ViewSpecItem item, PageBuilderContext context);
     
     public abstract void setInitialized(boolean initialized);
-    
-    public abstract void skip(String parent);
 
 }
