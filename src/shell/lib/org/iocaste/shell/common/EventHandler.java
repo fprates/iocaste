@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public interface EventHandler extends Serializable {
     public static final byte ON_CLICK = 0;
+    public static final byte ON_FOCUS = 1;
     
     /**
      * 

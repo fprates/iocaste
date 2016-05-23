@@ -76,6 +76,8 @@ public class TextFieldRenderer extends Renderer {
         inputtag.add("id", name);
         inputtag.add("maxlength", Integer.toString(length));
         inputtag.add("value", value);
+        inputtag.add("onfocus", new StringBuilder("_send('").append(name).
+                append("', '&event=onfocus', null)").toString());
         
         container = input.getContainer();
         if ((container != null) && (container.getType() == Const.TABLE_ITEM)) {

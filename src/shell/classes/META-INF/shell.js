@@ -39,7 +39,7 @@ function revertElementDisplay(id) {
     setElementDisplay(id, (display == "none")? "block" : "none");
 }
 
-function send(actionname, args, response) {
+function _send(actionname, args, response) {
     var pagetrack = document.getElementById("pagetrack").value;
     var url = "index.html";
     var param = "pagetrack="+pagetrack+"&action="+actionname;
@@ -49,7 +49,7 @@ function send(actionname, args, response) {
         param += args;
     
     xmlhttp.onreadystatechange = function() {
-        sendCallback(actionname, response, xmlhttp);
+        _sendCallback(actionname, response, xmlhttp);
     }
     
     xmlhttp.open("POST", url, true);
@@ -60,7 +60,7 @@ function send(actionname, args, response) {
     xmlhttp.send(param);
 }
 
-function sendCallback(action, area, xmlhttp) {
+function _sendCallback(action, area, xmlhttp) {
     if (area == null)
         return;
         

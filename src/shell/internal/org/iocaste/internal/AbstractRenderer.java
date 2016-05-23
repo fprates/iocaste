@@ -585,12 +585,15 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         config.sessionid = getComplexId(sessionid, config.logid);
         config.servername = getServerName();
         config.pagectx = pagectx;
+        
+        if (parameters.containsKey("event"))
+            config.execonevent(parameters);
         callController(config);
         
         /*
          * processa atualização na visão após chamada do controlador
          */
-        if (actionname.length() == 0)
+        if ((actionname == null) || (actionname.length() == 0))
             action = null;
         else
             action = config.state.view.getElement(actionname);
