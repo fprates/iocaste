@@ -22,12 +22,7 @@ public class StandardViewInput extends AbstractViewInput {
                 break;
             case TABLE_TOOL:
                 ttentry = extcontext.tableInstance(name);
-                if (ttentry.handler != null) {
-                    ttentry.handler.setExtendedContext(extcontext);
-                    tableitemsset(name, ttentry.handler.input(name));
-                } else {
-                    tableitemsset(name, ttentry.items.values());
-                }
+                tableitemsset(name, ttentry.getItems());
                 break;
             default:
                 break;

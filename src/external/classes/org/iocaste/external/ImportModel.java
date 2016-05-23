@@ -34,7 +34,7 @@ public class ImportModel extends AbstractActionHandler {
             object = instance("XTRNL_STRUCTURE_ITEM");
             object.set("NAME", item.getName());
             object.set("TYPE", item.getDataElement().getType());
-            extcontext.modelitems.add(object);
+            extcontext.add("items_table", object);
         }
     }
 

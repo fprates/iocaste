@@ -17,7 +17,7 @@ public class MaintenanceConfig extends AbstractViewConfig {
         Map<String, ComponentEntry> entries;
         Context extcontext = getExtendedContext();
         Manager manager = getManager(extcontext.link.cmodel);
-        TableToolHandler handler = new CModelTableToolHandler();
+        TableToolHandler handler = new CModelTableToolHandler(extcontext);
         
         entries = context.getView().getComponents().entries;
         for (String name : entries.keySet())

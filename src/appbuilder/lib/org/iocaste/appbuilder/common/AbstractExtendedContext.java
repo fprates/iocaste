@@ -28,7 +28,10 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         TableToolContextEntry entry;
         
         entry = pages.get(page).tabletools.get(ttname);
-        entry.items.put(entry.items.size(), object);
+        if ((entry.handler != null) && entry.handler.isInitialized())
+            entry.handler.add(ttname, object);
+        else
+            entry.items.put(entry.items.size(), object);
     }
     
     @Override
@@ -105,8 +108,11 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         entry.items.clear();
         if (objects == null)
             return;
-        for (int i = 0; i < objects.length; i++)
-            entry.items.put(i, objects[i]);
+        if ((entry.handler != null) && entry.handler.isInitialized())
+            entry.handler.add(ttname, objects);
+        else
+            for (int i = 0; i < objects.length; i++)
+                entry.items.put(i, objects[i]);
     }
 
     @Override
@@ -158,7 +164,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         pagectx = pages.get(page);
         entry = pagectx.tabletools.get(ttname);
         if (entry == null) {
-            entry = new TableToolContextEntry();
+            entry = new TableToolContextEntry(ttname);
             pagectx.tabletools.put(ttname, entry);
         }
         return entry;

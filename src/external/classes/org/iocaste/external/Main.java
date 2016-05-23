@@ -10,6 +10,7 @@ import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.cmodelviewer.AbstractModelViewer;
 import org.iocaste.appbuilder.common.cmodelviewer.EntityCustomPage;
 import org.iocaste.appbuilder.common.cmodelviewer.Load;
+import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceInput;
 import org.iocaste.appbuilder.common.cmodelviewer.Save;
 import org.iocaste.appbuilder.common.cmodelviewer.SelectConfig;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
@@ -41,7 +42,7 @@ public class Main extends AbstractModelViewer {
         case "externalstruct":
             link.maintenancespec = new ExternalMaintenanceSpec();
             link.maintenanceconfig = new ExternalMaintenanceConfig();
-            link.maintenanceinput = new ExternalMaintenanceInput();
+            link.maintenanceinput = new MaintenanceInput();
             link.createselectconfig = new SelectConfig("XTRNL_STRUCTURE");
             link.displayconfig = new ExternalDisplayConfig();
             link.validate = new Validate();
