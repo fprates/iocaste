@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.cmodelviewer.DataFormContextEntry;
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.appbuilder.common.tiles.Tile;
@@ -35,16 +36,34 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     }
     
     @Override
+    public final DataFormContextEntry dataformInstance(String dfname) {
+        return dataformInstance(context.view.getPageName(), dfname);
+    }
+    
+    @Override
+    public final DataFormContextEntry dataformInstance(
+            String page, String dfname) {
+        DataFormContextEntry entry;
+        PageContext pagectx;
+        
+        pagectx = pages.get(page);
+        entry = pagectx.dataforms.get(dfname);
+        if (entry == null) {
+            entry = new DataFormContextEntry();
+            pagectx.dataforms.put(dfname, entry);
+        }
+        return entry;
+    }
+    
+    @Override
     public final ExtendedObject dfobjectget(String dfname) {
         return dfobjectget(context.view.getPageName(), dfname);
     }
     
     @Override
     public final ExtendedObject dfobjectget(String page, String dfname) {
-        PageContext pagectx;
-        
-        pagectx = pages.get(page);
-        return pagectx.dataforms.get(dfname);
+        DataFormContextEntry entry = pages.get(page).dataforms.get(dfname);
+        return (entry.handler != null)? entry.handler.get() : entry.object;
     }
     
     @Override
@@ -136,8 +155,11 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     
     @Override
     public final void set(String page, String dfname, ExtendedObject object) {
-        PageContext pagectx = pages.get(page);
-        pagectx.dataforms.put(dfname, object);
+        DataFormContextEntry entry = pages.get(page).dataforms.get(dfname);
+        if (entry.handler != null)
+            entry.handler.set(dfname, object);
+        else
+            entry.object = object;
     }
     
     @Override
@@ -148,6 +170,33 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final void set(String page, String ttname, TableToolItem ttitem) {
         set(page, ttname, ttitem.object, ttitem.position);
+    }
+
+    @Override
+    public final void setDataHandler(ContextDataHandler handler) {
+        setDataHandler(handler, null, null);
+    }
+    
+    @Override
+    public final void setDataHandler(ContextDataHandler handler,
+            String[] dataforms, String[] tabletools) {
+        TableToolContextEntry ttentry;
+        DataFormContextEntry dfentry;
+        PageContext pagectx = pages.get(context.view.getPageName());
+        
+        if (tabletools == null)
+            tabletools = pagectx.tabletools.keySet().toArray(new String[0]);
+        for (String key : tabletools) {
+            ttentry = pagectx.tabletools.get(key);
+            ttentry.handler = handler;
+        }
+
+        if (dataforms == null)
+            dataforms = pagectx.dataforms.keySet().toArray(new String[0]);
+        for (String key : dataforms) {
+            dfentry = pagectx.dataforms.get(key);
+            dfentry.handler = handler;
+        }
     }
     
     @Override

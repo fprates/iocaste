@@ -7,7 +7,7 @@ public class SelectSpec extends AbstractViewSpec {
 
     @Override
     public void execute(PageBuilderContext context) {
-        dataform("content", "head");
+        dataform(parent, "head");
     }
 
 }

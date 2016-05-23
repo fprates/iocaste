@@ -14,8 +14,8 @@ public class MaintenanceSpec extends AbstractViewSpec {
         Context extcontext = getExtendedContext();
         ComplexModel model = getManager(extcontext.link.cmodel).getModel();
         
-        dataform("content", "head");
-        tabbedpane("content", "tabs");
+        dataform(parent, "head");
+        tabbedpane(parent, "tabs");
         tabbedpaneitem("tabs", "basetab");
         dataform("basetab", "base");
         tabs(extcontext, model.getItems());
@@ -29,7 +29,6 @@ public class MaintenanceSpec extends AbstractViewSpec {
             tablename = name.concat("_table");
             tabletool(name, tablename);
             extcontext.models.put(tablename, name);
-            extcontext.tableInstance(tablename);
         }
     }
 }

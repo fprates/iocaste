@@ -4,10 +4,11 @@ import org.iocaste.appbuilder.common.AbstractTableToolHandler;
 import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.documents.common.ExtendedObject;
 
-public class CModelTableToolHandler extends AbstractTableToolHandler {
+public class CModelHandler extends AbstractTableToolHandler {
 
-    public CModelTableToolHandler(ExtendedContext extcontext) {
+    public CModelHandler(ExtendedContext extcontext) {
         super(extcontext);
+        extcontext.setDataHandler(this, new String[] {"head", "base"}, null);
     }
     
     @Override
@@ -27,9 +28,14 @@ public class CModelTableToolHandler extends AbstractTableToolHandler {
     }
     
     @Override
-    public ExtendedObject[] input(String ttname) {
+    public ExtendedObject get() {
         Context cmodelctx = (Context)extcontext;
-        
+        return (!isInitialized())? null : cmodelctx.document.getHeader();
+    }
+    
+    @Override
+    public ExtendedObject[] get(String ttname) {
+        Context cmodelctx = (Context)extcontext;
         return (!isInitialized())? null : cmodelctx.document.getItems(
                 cmodelctx.models.get(ttname));
     }
@@ -40,5 +46,11 @@ public class CModelTableToolHandler extends AbstractTableToolHandler {
         if (cmodelctx == null)
             return false;
         return (cmodelctx.document != null);
+    }
+    
+    @Override
+    public final void set(String dfname, ExtendedObject object) {
+        Context cmodelctx = (Context)extcontext;
+        cmodelctx.document.setHeader(object);
     }
 }

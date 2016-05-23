@@ -1,5 +1,6 @@
 package org.iocaste.appbuilder.common;
 
+import org.iocaste.appbuilder.common.cmodelviewer.DataFormContextEntry;
 import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.appbuilder.common.tiles.Tile;
@@ -10,6 +11,11 @@ public interface ExtendedContext {
     public abstract void add(String ttname, ExtendedObject object);
 
     public abstract void add(String page, String ttname, ExtendedObject object);
+
+    public abstract DataFormContextEntry dataformInstance(String dfname);
+
+    public abstract DataFormContextEntry dataformInstance(
+            String page, String dfname);
     
     public abstract ExtendedObject dfobjectget(String dfname);
     
@@ -48,6 +54,11 @@ public interface ExtendedContext {
     
     public abstract void set(String page, String ttname,
             ExtendedObject object, int line);
+    
+    public abstract void setDataHandler(ContextDataHandler handler);
+    
+    public abstract void setDataHandler(ContextDataHandler handler,
+            String[] dataforms, String[] tabletools);
     
     public abstract TableToolContextEntry tableInstance(String ttname);
     

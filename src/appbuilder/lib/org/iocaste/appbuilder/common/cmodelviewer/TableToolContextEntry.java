@@ -6,14 +6,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.iocaste.appbuilder.common.TableToolHandler;
+import org.iocaste.appbuilder.common.ContextDataHandler;
 import org.iocaste.documents.common.ExtendedObject;
 
 public class TableToolContextEntry {
     private String name;
     private List<ExtendedObject> citems;
     public Map<Integer, ExtendedObject> items;
-    public TableToolHandler handler;
+    public ContextDataHandler handler;
     
     public TableToolContextEntry(String name) {
         items = new LinkedHashMap<>();
@@ -22,7 +22,7 @@ public class TableToolContextEntry {
     }
     
     private Collection<ExtendedObject> getItems(String name) {
-        ExtendedObject[] objects = handler.input(name);
+        ExtendedObject[] objects = handler.get(name);
         
         if (objects == null)
             return null;
