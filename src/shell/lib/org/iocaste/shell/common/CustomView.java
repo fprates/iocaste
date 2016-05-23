@@ -9,7 +9,7 @@ import org.iocaste.shell.common.AbstractContext;
 public interface CustomView {
 
     public abstract void execute(AbstractContext context, ViewSpecItem itemspec,
-            String prefix);
+            String prefix, boolean processparent);
     
     public abstract void execute(AbstractContext context) throws Exception;
     

@@ -1,8 +1,5 @@
 package org.iocaste.appbuilder.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ViewSpecItem {
     
     public enum TYPES {        
@@ -44,21 +41,11 @@ public class ViewSpecItem {
     
     private String parent, name;
     private int type;
-    private List<ViewSpecItem> items;
     
     public ViewSpecItem(String parent, TYPES type, String name) {
         this.parent = parent;
         this.type = type.ordinal();
         this.name = name;
-        items = new ArrayList<>();
-    }
-    
-    public final void add(ViewSpecItem item) {
-        items.add(item);
-    }
-    
-    public final List<ViewSpecItem> getItems() {
-        return items;
     }
     
     public final String getName() {

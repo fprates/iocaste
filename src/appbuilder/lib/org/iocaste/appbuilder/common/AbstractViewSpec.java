@@ -96,8 +96,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
     private final void put(String parent, ViewSpecItem.TYPES type, String name)
     {
         ViewSpecItem item = new ViewSpecItem(parent, type, name);
-        
-        items.get(parent).add(item);
         items.put(name, item);
     }
     

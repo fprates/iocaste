@@ -89,9 +89,6 @@ public class BuilderCustomView extends AbstractCustomView {
         factory = getFactory(item);
         if (factory != null)
             factory.run(context, components, item, prefix);
-        
-        for (ViewSpecItem child : item.getItems())
-            buildItem(context, components, child, prefix);
     }
     
     private final void download(PageBuilderContext context) throws Exception {
@@ -115,7 +112,7 @@ public class BuilderCustomView extends AbstractCustomView {
     
     @Override
     public void execute(AbstractContext context, ViewSpecItem itemspec,
-            String prefix) {
+            String prefix, boolean processparent) {
         ComponentEntry entry;
         SpecFactory factory;
         PageBuilderContext _context = (PageBuilderContext)context;
@@ -126,7 +123,8 @@ public class BuilderCustomView extends AbstractCustomView {
         
         spec.run(itemspec, _context);
         for (ViewSpecItem item : spec.getItems())
-            buildItem(_context, components, item, prefix);
+            if ((itemspec != item) || processparent)
+                buildItem(_context, components, item, prefix);
         
         if (config != null)
             config.run(_context, prefix);
