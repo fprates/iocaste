@@ -156,7 +156,7 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     @Override
     public final void set(String page, String dfname, ExtendedObject object) {
         DataFormContextEntry entry = pages.get(page).dataforms.get(dfname);
-        if (entry.handler != null)
+        if ((entry.handler != null) && entry.handler.isInitialized())
             entry.handler.set(dfname, object);
         else
             entry.object = object;
