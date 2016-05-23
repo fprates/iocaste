@@ -23,6 +23,8 @@ public interface ExtendedContext {
     
     public abstract boolean isInstantializedTable(String page, String ttname);
     
+    public abstract void move(String pageto, String pagefrom);
+    
     public abstract void pageInstance();
     
     public abstract void pageInstance(String page);

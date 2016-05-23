@@ -65,6 +65,15 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
         PageContext pagectx = pages.get(page);
         return pagectx.tabletools.containsKey(ttname);
     }
+
+    @Override
+    public final void move(String pageto, String pagefrom) {
+        PageContext pagectxfrom = pages.get(pagefrom);
+        PageContext pagectxto = pages.get(pageto);
+        
+        pagectxto.dataforms.putAll(pagectxfrom.dataforms);
+        pagectxto.tabletools.putAll(pagectxfrom.tabletools);
+    }
     
     @Override
     public final void pageInstance() {
