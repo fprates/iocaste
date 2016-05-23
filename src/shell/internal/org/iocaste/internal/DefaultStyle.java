@@ -43,6 +43,7 @@ public class DefaultStyle {
         style.put("background-color", BACKGROUND_COLOR);
         style.put("margin", "0px");
         style.put("padding", "0px");
+        style.put("text-rendering", "optimizeLegibility");
         
         style = stylesheet.newElement(".button");
         style.put("padding-top", "0px");
