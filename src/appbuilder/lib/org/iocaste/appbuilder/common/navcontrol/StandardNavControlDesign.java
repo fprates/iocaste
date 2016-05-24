@@ -78,7 +78,8 @@ public class StandardNavControlDesign implements NavControlDesign {
         context.view.add(new HeaderLink(
                 "shortcut icon", "/iocaste-shell/images/favicon.ico"));
         
-        name = context.view.getTitle().text;
+        title = context.view.getTitle();
+        name = title.text;
         if (name == null)
             name = iocaste.getCurrentApp();
         
@@ -87,7 +88,7 @@ public class StandardNavControlDesign implements NavControlDesign {
         
         text = new Text(inner, "this");
         text.setStyleClass("nc_title");
-        text.setText(name);
+        text.setText(name, title.args);
         
 //        user = iocaste.getUserData(iocaste.getUsername());
 //        text = new Text(container, "username");
