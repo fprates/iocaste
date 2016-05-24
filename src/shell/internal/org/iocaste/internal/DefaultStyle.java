@@ -8,7 +8,6 @@ import org.iocaste.shell.common.StyleSheet;
 
 public class DefaultStyle {
     private static final String STDPDDNG = "0.5em";
-    private static final String INPUT_FONTSIZE = "11pt";
     private static final String ROUND = "3px";
 
     public static StyleSheet instance() {
@@ -16,7 +15,7 @@ public class DefaultStyle {
         Map<String, String> style;
         Map<Integer, String> constants;
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
-        String FRAME_COLOR, DISABLED_FONT_COLOR;
+        String FRAME_COLOR, DISABLED_FONT_COLOR, FONT_SIZE;
         
         /*
          * default style
@@ -25,11 +24,13 @@ public class DefaultStyle {
         
         constants = new HashMap<>();
         constants.put(Shell.FONT_COLOR, "#444");
-        constants.put(Shell.FONT_FAMILY, "\"Verdana\", sans-serif");
+        constants.put(Shell.FONT_FAMILY,
+                "\"Verdana\", \"Dejavu Sans\", sans-serif");
         constants.put(Shell.BACKGROUND_COLOR, "#ffffff");
         constants.put(Shell.CLICKABLE_COLOR, "#298eea");
         constants.put(Shell.FRAME_COLOR, "rgb(237, 237, 237)");
         constants.put(Shell.DISABLED_FONT_COLOR, "rgb(150, 150, 150)");
+        constants.put(Shell.FONT_SIZE, "11pt");
         stylesheet.setConstants(constants);
 
         FONT_COLOR = constants.get(Shell.FONT_COLOR);
@@ -38,6 +39,7 @@ public class DefaultStyle {
         CLICKABLE_COLOR = constants.get(Shell.CLICKABLE_COLOR);
         FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
         DISABLED_FONT_COLOR = constants.get(Shell.DISABLED_FONT_COLOR);
+        FONT_SIZE = constants.get(Shell.FONT_SIZE);
         
         style = stylesheet.newElement("body");
         style.put("background-color", BACKGROUND_COLOR);
@@ -130,14 +132,18 @@ public class DefaultStyle {
         style.put("color", FONT_COLOR);
         style.put("font-family", FONT_FAMILY);
         
-        stylesheet.newElement(".link:hover").put("color", "#505050");
-        stylesheet.newElement(".link:link").put("color", CLICKABLE_COLOR);
-        stylesheet.newElement(".link:active").put("color", CLICKABLE_COLOR);
-        stylesheet.newElement(".link:visited").put("color", CLICKABLE_COLOR);
+        style = stylesheet.newElement(".link:link");
+        style.put("color", CLICKABLE_COLOR);
+        style.put("font-family", FONT_FAMILY);
+        style.put("font-size", FONT_SIZE);
+        style.put("text-decoration", "none");
+        stylesheet.clone(".link:hover", ".link:link").put("color", FONT_COLOR);
+        stylesheet.clone(".link:active", ".link:link");
+        stylesheet.clone(".link:visited", ".link:link");
         
         style = stylesheet.newElement(".list_box");
         style.put("font-weight", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
+        style.put("font-size", FONT_SIZE);
         style.put("padding", "3px");
 
         style = stylesheet.newElement(".list_box_disabled");
@@ -146,7 +152,7 @@ public class DefaultStyle {
         style.put("border-color", FRAME_COLOR);
         style.put("border-width", "1px");
         style.put("font-weight", "normal");
-        style.put("font-size", "12pt");
+        style.put("font-size", FONT_SIZE);
         style.put("padding", "3px");
         
         style = stylesheet.newElement(".message_box");
@@ -202,7 +208,7 @@ public class DefaultStyle {
         style.put("padding", "0px");
         style.put("margin", "0px");
         style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
+        style.put("font-size", FONT_SIZE);
         style.put("border-style", "solid");
         style.put("border-width", "1px");
         style.put("border-color", BACKGROUND_COLOR);
@@ -231,7 +237,7 @@ public class DefaultStyle {
         style = stylesheet.newElement(".table_header");
         style.put("color", FONT_COLOR);
         style.put("font-family", FONT_FAMILY);
-        style.put("font-size", INPUT_FONTSIZE);
+        style.put("font-size", FONT_SIZE);
         style.put("font-weight", "bold");
         style.put("padding", "0.3em");
         style.put("margin", "0px");
@@ -247,7 +253,7 @@ public class DefaultStyle {
         style.put("padding", "0px");
         style.put("color", FONT_COLOR);
         style.put("font-family", FONT_FAMILY);
-        style.put("font-size", INPUT_FONTSIZE);
+        style.put("font-size", FONT_SIZE);
 
         // textfield
         style = stylesheet.newElement(".text_field");
@@ -259,7 +265,7 @@ public class DefaultStyle {
         style.put("border-radius", ROUND);
         style.put("color", FONT_COLOR);
         style.put("font-family", FONT_FAMILY);
-        style.put("font-size", INPUT_FONTSIZE);
+        style.put("font-size", FONT_SIZE);
         style.put("font-style", "normal");
         
         // textfield c/ placeholder
@@ -320,14 +326,14 @@ public class DefaultStyle {
         style.put("border-width", "1px");
         style.put("border-color", FRAME_COLOR);
         style.put("font-style", "normal");
-        style.put("font-size", INPUT_FONTSIZE);
+        style.put("font-size", FONT_SIZE);
 
         style = stylesheet.newElement(".tftext");
         style.put("padding", "0px");
         style.put("margin", "0px");
         
         style = stylesheet.newElement(".tp_button_focused");
-        style.put("font-size", "12pt");
+        style.put("font-size", FONT_SIZE);
         style.put("font-weight", "bold");
         style.put("text-align", "center");
         style.put("border-bottom-style", "solid");
@@ -346,7 +352,7 @@ public class DefaultStyle {
 
         style = stylesheet.newElement(".tp_button_unfocused");
         style.put("background-color", BACKGROUND_COLOR);
-        style.put("font-size", "12pt");
+        style.put("font-size", FONT_SIZE);
         style.put("font-weight", "bold");
         style.put("text-align", "center");
         style.put("border-bottom-style", "none");
