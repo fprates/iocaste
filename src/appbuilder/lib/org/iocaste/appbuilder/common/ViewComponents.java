@@ -29,7 +29,8 @@ public class ViewComponents {
     @SuppressWarnings("unchecked")
     public final <T extends AbstractComponentData> T getComponentData(
             String name) {
-        return (T)entries.get(name).data;
+        ComponentEntry entry = entries.get(name);
+        return (entry == null)? null : (T)entry.data;
     }
     
     public final void reset() {
