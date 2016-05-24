@@ -1,9 +1,5 @@
 package org.quantic.iocasteconnector;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.external.common.External;
 import org.iocaste.protocol.Function;
@@ -13,7 +9,6 @@ import org.iocaste.protocol.Message;
 import com.sap.conn.jco.AbapClassException;
 import com.sap.conn.jco.AbapException;
 import com.sap.conn.jco.JCoFunction;
-import com.sap.conn.jco.JCoParameterList;
 import com.sap.conn.jco.server.JCoServerContext;
 
 public class FunctionHandler extends AbstractSAPFunctionHandler {
@@ -96,14 +91,3 @@ public class FunctionHandler extends AbstractSAPFunctionHandler {
     }
 }
 
-class Context {
-    public Map<String, Object> result;
-    public Map<String, JCoParameterList> lists;
-    public Map<String, ExtendedObject> items;
-    public Map<String, ComplexDocument> structures;
-    
-    public Context() {
-        lists = new HashMap<>();
-        result = new HashMap<>();
-    }
-}

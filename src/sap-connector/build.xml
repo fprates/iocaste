@@ -39,7 +39,11 @@
         </copy>
 
         <mkdir dir="${connectorsdir}/ext"/>
-        <copy file="${basedir}/ext/iocaste.jar" todir="${connectorsdir}/ext"/>
+        <copy todir="${connectorsdir}/ext">
+        	<fileset file="${basedir}/ext/iocaste.jar"/>
+        	<fileset file="${basedir}/ext/libsapjco3.so"/>
+            <fileset file="${basedir}/ext/sapjco3.jar"/>
+        </copy>
         <zip zipfile="${connectorsdir}/../${ant.project.name}.zip"
             basedir="${connectorsdir}"/>
     </target>
