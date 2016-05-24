@@ -334,41 +334,32 @@ public class DefaultStyle {
         style = stylesheet.newElement(".tftext");
         style.put("padding", "0px");
         style.put("margin", "0px");
-        
-        style = stylesheet.newElement(".tp_button_focused");
-        style.put("font-size", FONT_SIZE);
-        style.put("font-weight", "bold");
-        style.put("text-align", "center");
-        style.put("border-bottom-style", "solid");
-        style.put("border-top-style", "none");
-        style.put("border-top-width", "3px");
-        style.put("border-left-style", "none");
-        style.put("border-right-style", "none");
-        style.put("border-bottom-color", CLICKABLE_COLOR);
-        style.put("border-bottom-width", "3px");
-        style.put("padding-top", "0.3em");
-        style.put("padding-bottom", "0.3em");
-        style.put("padding-left", "1.5em");
-        style.put("padding-right", "1.5em");
-        style.put("background-color", FRAME_COLOR);
-        style.put("color", FONT_COLOR);
 
-        style = stylesheet.newElement(".tp_button_unfocused");
-        style.put("background-color", BACKGROUND_COLOR);
+        style = stylesheet.newElement(".tp_button");
         style.put("font-size", FONT_SIZE);
+        style.put("font-family", FONT_FAMILY);
         style.put("font-weight", "bold");
         style.put("text-align", "center");
-        style.put("border-bottom-style", "none");
         style.put("border-top-style", "none");
         style.put("border-top-width", "3px");
         style.put("border-left-style", "none");
         style.put("border-right-style", "none");
+        style.put("border-bottom-width", "3px");
         style.put("padding-top", "0.3em");
         style.put("padding-bottom", "0.3em");
         style.put("padding-left", "1.5em");
         style.put("padding-right", "1.5em");
         style.put("margin", "0px");
         style.put("color", FONT_COLOR);
+        
+        style = stylesheet.clone(".tp_button_focused", ".tp_button");
+        style.put("border-bottom-style", "solid");
+        style.put("border-bottom-color", CLICKABLE_COLOR);
+        style.put("background-color", FRAME_COLOR);
+
+        style = stylesheet.clone(".tp_button_unfocused", ".tp_button");
+        style.put("border-bottom-style", "none");
+        style.put("background-color", BACKGROUND_COLOR);
 
         style = stylesheet.newElement(".tp_item");
         style.put("margin", "0px");
