@@ -21,11 +21,13 @@ public class DefaultStyle {
          * default style
          */
         stylesheet = new StyleSheet();
+        stylesheet.setLink("https://fonts.googleapis.com/css?family=Lato:400' "
+                + "rel='stylesheet' type='text/css");
         
         constants = new HashMap<>();
         constants.put(Shell.FONT_COLOR, "#444");
         constants.put(Shell.FONT_FAMILY,
-                "\"Verdana\", \"Dejavu Sans\", sans-serif");
+                "'Lato', 'Dejavu Sans', sans-serif");
         constants.put(Shell.BACKGROUND_COLOR, "#ffffff");
         constants.put(Shell.CLICKABLE_COLOR, "#298eea");
         constants.put(Shell.FRAME_COLOR, "rgb(237, 237, 237)");

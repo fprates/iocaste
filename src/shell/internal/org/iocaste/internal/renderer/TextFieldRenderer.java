@@ -197,8 +197,7 @@ public class TextFieldRenderer extends Renderer {
         sourceview = config.getView();
         stylesheet = sourceview.styleSheetInstance();
         view = new View(control.getApplication(), "main");
-        view.setStyleSheet(stylesheet.getElements());
-        view.setStyleConst(stylesheet.getConstants());
+        view.importStyle(stylesheet);
         
         parameters = new HashMap<>();
         parameters.put("control", control);
@@ -213,7 +212,7 @@ public class TextFieldRenderer extends Renderer {
         view = (View)viewreturn[0];
         
         control.update(view);
-        config.getView().setStyleSheet(view.styleSheetInstance().getElements());
+        config.getView().importStyle(view.styleSheetInstance());
         
         tags = new ArrayList<>();
         for (Container container : view.getContainers())

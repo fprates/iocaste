@@ -216,7 +216,7 @@ public class BuilderCustomView extends AbstractCustomView {
             return;
         } else {
             if (viewconfig != null)
-                context.view.setStyleSheet(viewconfig.getStyleSheet());
+                context.view.importStyle(viewconfig.getStyleSheet());
         }
         
         if (viewinput != null) {

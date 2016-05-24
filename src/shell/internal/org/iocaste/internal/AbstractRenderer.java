@@ -30,6 +30,7 @@ import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.ControlComponent;
+import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.MultipartElement;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.StyleSheet;
@@ -136,7 +137,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     protected View createView(String sessionid, PageContext pagectx)
             throws Exception {
         Object[] viewreturn;
-        String complexid, appname, pagename;
+        String complexid, appname, pagename, csslink;
         int logid;
         Input input;
         Message message;
@@ -145,6 +146,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         View view;
         Service service;
         StyleSheet stylesheet;
+        HeaderLink link;
         
         appctx = pagectx.getAppContext();
         appname = appctx.getName();
@@ -160,8 +162,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             view = new View(appname, pagename);
         
         stylesheet = DefaultStyle.instance();
-        view.setStyleSheet(stylesheet.getElements());
-        view.setStyleConst(stylesheet.getConstants());
+        view.importStyle(stylesheet);
         
         message = new Message("get_view_data");
         message.add("view", view);
@@ -212,6 +213,12 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             Common.rollback(getServerName(), complexid);
             new Iocaste(this).rollback();
             throw e;
+        }
+        
+        csslink = stylesheet.getLink();
+        if (csslink != null) {
+            link = new HeaderLink("stylesheet", "text/css", csslink);
+            view.add(link);
         }
         
         return view;

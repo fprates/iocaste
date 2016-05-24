@@ -1,10 +1,9 @@
 package org.iocaste.appbuilder.common;
 
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.TabbedPane;
 import org.iocaste.shell.common.TabbedPaneItem;
 
@@ -12,7 +11,7 @@ public abstract class AbstractViewConfig implements ViewConfig {
     private PageBuilderContext context;
     private NavControl navcontrol;
     private String prefix;
-    private Map<String, Map<String, String>> stylesheet;
+    private StyleSheet stylesheet;
     
     /**
      * 
@@ -87,7 +86,7 @@ public abstract class AbstractViewConfig implements ViewConfig {
     }
     
     @Override
-    public final Map<String, Map<String, String>> getStyleSheet() {
+    public final StyleSheet getStyleSheet() {
         return stylesheet;
     }
     
@@ -108,7 +107,7 @@ public abstract class AbstractViewConfig implements ViewConfig {
     public final void run(PageBuilderContext context) {
         this.context = context;
         execute(context);
-        stylesheet = context.view.styleSheetInstance().getElements();
+        stylesheet = context.view.styleSheetInstance();
     }
     
     /*

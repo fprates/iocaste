@@ -6,6 +6,7 @@ import java.util.Map;
 public class StyleSheet {
     private Map<String, Map<String, String>> stylesheet;
     private Map<Integer, String> constants;
+    private String link;
     
     public StyleSheet(Map<String, Map<String, String>> stylesheet) {
         this.stylesheet = stylesheet;
@@ -33,6 +34,10 @@ public class StyleSheet {
         return stylesheet;
     }
     
+    public final String getLink() {
+        return link;
+    }
+    
     public final Map<String, String> newElement(String name) {
         Map<String, String> element = new HashMap<>();
         
@@ -55,5 +60,9 @@ public class StyleSheet {
     
     public final void setConstants(Map<Integer, String> contants) {
         this.constants = contants;
+    }
+    
+    public final void setLink(String link) {
+        this.link = link;
     }
 }
