@@ -131,6 +131,7 @@ public class DefaultStyle {
         style.put("text-align", "right");
         style.put("color", FONT_COLOR);
         style.put("font-family", FONT_FAMILY);
+        style.put("font-size", FONT_SIZE);
         
         style = stylesheet.newElement(".link:link");
         style.put("color", CLICKABLE_COLOR);

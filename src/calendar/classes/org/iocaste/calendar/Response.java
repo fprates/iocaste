@@ -66,23 +66,27 @@ public class Response {
         style.put("border-color", "rgb(176, 176, 176)");
         style.put("z-index", "1");
         
-        style = stylesheet.newElement(".calkey");
+        style = stylesheet.clone(".calkey:link", ".link:link");
         style.put("padding", "0px");
         style.put("margin", "0px");
         style.put("text-align", "middle");
         style.put("font-weight", "normal");
         style.put("display", "block");
-        style.put("text-decoration", "none");
+        style = stylesheet.clone(".calkey:hover", ".calkey:link");
+        style = stylesheet.clone(".calkey:visited", ".calkey:link");
+        style = stylesheet.clone(".calkey:active", ".calkey:link");
         
-        style = stylesheet.newElement(".today");
+        style = stylesheet.clone(".today:link", ".link:link");
         style.put("padding", "0px");
         style.put("margin", "0px");
         style.put("text-align", "middle");
         style.put("font-weight", "bold");
         style.put("display", "block");
-        style.put("text-decoration", "none");
+        style = stylesheet.clone(".today:hover", ".today:link");
+        style = stylesheet.clone(".today:visited", ".today:link");
+        style = stylesheet.clone(".today:active", ".today:link");
         
-        style = stylesheet.newElement(".month");
+        style = stylesheet.clone(".month", ".text");
         style.put("display", "inline");
         style.put("text-decoration", "none");
         

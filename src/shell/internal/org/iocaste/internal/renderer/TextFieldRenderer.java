@@ -193,16 +193,18 @@ public class TextFieldRenderer extends Renderer {
         tracking = config.getTracking();
         service = new Service(tracking.sessionid, tracking.contexturl);
         message = new Message("get_view_data");
-        view = new View(control.getApplication(), "main");
+
         sourceview = config.getView();
         stylesheet = sourceview.styleSheetInstance();
+        view = new View(control.getApplication(), "main");
+        view.setStyleSheet(stylesheet.getElements());
+        view.setStyleConst(stylesheet.getConstants());
         
         parameters = new HashMap<>();
         parameters.put("control", control);
         parameters.put("msgsource", sourceview.getAppName());
         parameters.put("action", config.getCurrentAction());
         parameters.put("form", config.getCurrentForm());
-        view.setStyleSheet(stylesheet.getElements());
         
         message.add("view", view);
         message.add("init", true);
