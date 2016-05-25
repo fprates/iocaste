@@ -13,20 +13,21 @@ import com.sap.conn.jco.server.JCoServerFactory;
 import com.sap.conn.jco.server.JCoServerFunctionHandler;
 
 public class Main extends AbstractExternalApplication {
-
-	@Override
-	protected void config() {
-		required("--port", KEY_VALUE);
-		option("--language", KEY_VALUE, "pt_BR");
-		option("--listenner-port", KEY_VALUE, "60000");
-	}
+    private JCoServer server;
+    private static Main instance;
+    
+    @Override
+    protected void config() {
+        required("--port", KEY_VALUE);
+        option("--language", KEY_VALUE, "pt_BR");
+        option("--listenner-port", KEY_VALUE, "60000");
+    }
 
 	@Override
 	protected void execute(Message message) throws Exception {
         int listennerport;
         boolean registerable;
         DefaultServerHandlerFactory.FunctionHandlerFactory factory;
-        JCoServer server;
         Command stream;
         String text;
         FunctionConfig function;
@@ -73,7 +74,6 @@ public class Main extends AbstractExternalApplication {
         addListenner(listennerport, () -> new IocasteListenner(stream));
         
         if (registerable) {
-            
             System.out.print("trying registering on SAP...");
             server = JCoServerFactory.getServer(stream.port);
             System.out.println("ok");
@@ -101,6 +101,21 @@ public class Main extends AbstractExternalApplication {
 	
 	public static final void main(String[] args) throws Exception {
 		new Main().init(args);
+	}
+	
+	public static final void start(String[] args) throws Exception {
+	    instance = new Main();
+	    instance.init(args);
+	}
+	
+	public final void stop() {
+	    server.stop();
+	    external.disconnect();
+        System.out.println("finishing connections...");
+	}
+	
+	public static final void stop(String[] args) {
+	    instance.stop();
 	}
 }
 

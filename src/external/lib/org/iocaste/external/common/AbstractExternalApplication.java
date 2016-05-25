@@ -1,9 +1,13 @@
 package org.iocaste.external.common;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.iocaste.protocol.Message;
 
@@ -28,6 +32,7 @@ public abstract class AbstractExternalApplication {
 		required("--user", KEY_VALUE);
 		option("--password", KEY_VALUE);
 		option("--language", KEY_VALUE, "pt_BR");
+		option("--config-file", KEY_VALUE);
 		config();
 	}
 	
@@ -89,10 +94,30 @@ public abstract class AbstractExternalApplication {
 	
 	protected abstract void execute(Message message) throws Exception;
 	
+	private final Message getParametersFromFile(String file) throws Exception {
+        Properties properties;
+        BufferedReader reader;
+        Message message;
+        
+        reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(file)));
+        message = new Message("execute");
+        properties = new Properties();
+        properties.load(reader);
+        
+        for (Object key : properties.keySet()) {
+            message.add(String.format("--%s", key),
+                    properties.getProperty((String)key));
+        }
+        
+        reader.close();
+        return message;
+	}
+	
 	public final void init(String[] args) throws Exception {
         Message message;
         int stage;
-        String key, value;
+        String key, value, configfile;
         ParameterEntry entry;
         
         message = new Message("execute");
@@ -117,6 +142,10 @@ public abstract class AbstractExternalApplication {
                 continue;
             }
         }
+        
+        configfile = message.getString("--config-file");
+        if (configfile != null)
+            message = getParametersFromFile(configfile);
         
         for (String name : parameters.keySet()) {
         	entry = parameters.get(name);

@@ -36,8 +36,9 @@
                 <exclude name="**/classes/"/>
                 <exclude name="**/*.xml"/>
             </fileset>
+        	<fileset file="${basedir}/x86/prunsrv.exe"/>
         </copy>
-
+    		
         <mkdir dir="${connectorsdir}/ext"/>
         <copy todir="${connectorsdir}/ext">
         	<fileset file="${basedir}/ext/iocaste.jar"/>
