@@ -122,9 +122,12 @@ public class DataFormTool extends AbstractComponentTool {
             setItem(data, input, item);
             if (item.ns)
                 dataform.setNSReference(input.getHtmlName());
-            input.setPlaceHolder(data.internallabel);
         }
 
+        if (data.internallabel)
+            for (Element element : dataform.getElements())
+                ((DataItem)element).setPlaceHolder(true);
+        
         if (columns == null)
             return;
         
