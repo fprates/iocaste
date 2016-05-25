@@ -109,7 +109,6 @@ public class DefaultStyle {
         style.put("font-family", FONT_FAMILY);
         
         style = stylesheet.newElement(".form");
-        style.put("padding", STDPDDNG);
         style.put("border-width", "0px");
         style.put("border-style", "none");
         
@@ -257,10 +256,9 @@ public class DefaultStyle {
         style.put("color", FONT_COLOR);
         style.put("font-family", FONT_FAMILY);
         style.put("font-size", FONT_SIZE);
-
-        // textfield
-        style = stylesheet.newElement(".text_field");
-        style.put("padding", "10px");
+        
+        // textfield base
+        style = stylesheet.newElement(".text_field_base");
         style.put("margin", "0px");
         style.put("border-style", "solid");
         style.put("border-color", FRAME_COLOR);
@@ -270,10 +268,18 @@ public class DefaultStyle {
         style.put("font-family", FONT_FAMILY);
         style.put("font-size", FONT_SIZE);
         style.put("font-style", "normal");
+
+        // textfield
+        style = stylesheet.clone(".text_field", ".text_field_base");
+        style.put("padding", "10px");
         
         // textfield c/ placeholder
-        style = stylesheet.clone(".text_field_internallabel", ".text_field");
+        style = stylesheet.clone(".text_field_internallabel",
+                ".text_field_base");
         style.put("display", "block");
+        style.put("padding-top", "10px");
+        style.put("padding-bottom", "10px");
+        style.put("width", "100%");
 
         // textfield desabilitado
         style = stylesheet.clone(".text_field_disabled", ".text_field");
