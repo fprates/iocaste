@@ -96,12 +96,9 @@ public class Response {
                     link = new Link(tableitem, "choose", action);
                     link.setText(value.toString());
                     link.setAbsolute(true);
-                    link.setStyleClass("shkey");
                 } else {
-                    column.setRenderTextOnly(true);
                     text = new Text(tableitem, name);
                     text.setText((value == null)? "" : value.toString());
-                    text.setStyleClass("shcol");
                 }
                 
                 if (!sh.contains(name))
@@ -123,15 +120,6 @@ public class Response {
         Documents documents = new Documents(context.function);
         StyleSheet stylesheet = context.view.styleSheetInstance();
         Map<Integer, String> constants = stylesheet.getConstants();
-        String FONT_SIZE = constants.get(Shell.FONT_SIZE);
-        
-        style = stylesheet.newElement(".shkey");
-        style.put("font-size", FONT_SIZE);
-        style.put("display", "block");
-        style.put("text-decoration", "none");
-        
-        style = stylesheet.newElement(".shcol");
-        style.put("font-size", FONT_SIZE);
         
         style = stylesheet.newElement(".shcnt");
         style.put("position", "absolute");

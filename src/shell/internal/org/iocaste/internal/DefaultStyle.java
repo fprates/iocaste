@@ -113,6 +113,10 @@ public class DefaultStyle {
         style.put("padding", "0px");
         style.put("display", "block");
         style.put("vertical-align", "middle");
+        style.put("color", BACKGROUND_COLOR);
+        style.put("font-family", FONT_FAMILY);
+        style.put("font-size", FONT_SIZE);
+        style.put("text-align", "center");
         
         style = stylesheet.newElement(".ctxmenu_link:link");
         style.put("color", BACKGROUND_COLOR);
