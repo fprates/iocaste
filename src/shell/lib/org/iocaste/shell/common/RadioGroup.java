@@ -74,6 +74,8 @@ public class RadioGroup extends AbstractInputComponent {
         for (String name : items) {
             input = view.getElement(name);
             input.setSelected(name.equals(iname));
+            if (input.isSelected())
+                super.set(value);
         }
     }
 }

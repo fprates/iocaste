@@ -11,13 +11,13 @@ import java.util.Set;
 public class RadioButton extends AbstractInputComponent {
     private static final long serialVersionUID = 4032308949086603543L;
     private int index;
-    private RadioGroup group;
+    private String group;
     
     public RadioButton(RadioGroup group, Container container, String name,
             int index) {
         super(container, Const.RADIO_BUTTON, null, name);
         this.index = index;
-        this.group = group;
+        this.group = group.getHtmlName();
         
         group.rename(getHtmlName(), name);
         setSelected(false);
@@ -28,7 +28,7 @@ public class RadioButton extends AbstractInputComponent {
      * @return
      */
     public final RadioGroup getGroup() {
-        return group;
+        return getView().getElement(group);
     }
     
     /*
@@ -37,7 +37,7 @@ public class RadioButton extends AbstractInputComponent {
      */
     @Override
     public final Set<InputComponent> getStackComponents() {
-        return group.getComponents();
+        return getGroup().getComponents();
     }
     
     /**
@@ -83,7 +83,7 @@ public class RadioButton extends AbstractInputComponent {
     @Override
     public final void setHtmlName(String htmlname) {
         if (group != null)
-            group.rename(htmlname, getHtmlName());
+            getGroup().rename(htmlname, getHtmlName());
         super.setHtmlName(htmlname);
     }
 }
