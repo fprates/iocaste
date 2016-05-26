@@ -164,7 +164,8 @@ public class TextFieldRenderer extends Renderer {
         if (calendar != null) {
             tag = new XMLElement("li");
             tag.add("class", "ctxmenu_item");
-            tag.addChild(CalendarButtonRenderer.render(calendar, config));
+            tag.addChild(ContextMenuButtonRenderer.render(
+                    calendar.getHtmlName(), config, "calendar"));
             options.addChild(tag);
             if (popupcontrol != null) {
                 calname = popupcontrol.getName();
@@ -182,7 +183,8 @@ public class TextFieldRenderer extends Renderer {
         if (search != null) {
             tag = new XMLElement("li");
             tag.add("class", "ctxmenu_item");
-            tag.addChild(SHButtonRenderer.render(search, config));
+            tag.addChild(ContextMenuButtonRenderer.render(
+                    search.getHtmlName(), config, "values"));
             options.addChild(tag);
             if (popupcontrol != null) {
                 shname = popupcontrol.getHtmlName();

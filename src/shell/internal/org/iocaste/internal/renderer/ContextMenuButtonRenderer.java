@@ -2,15 +2,13 @@ package org.iocaste.internal.renderer;
 
 import org.iocaste.internal.Controller;
 import org.iocaste.protocol.utils.XMLElement;
-import org.iocaste.shell.common.Calendar;
 
-public class CalendarButtonRenderer extends Renderer {
+public class ContextMenuButtonRenderer extends Renderer {
     
-    public static final XMLElement render(Calendar calendar, Config config) {
+    public static final XMLElement render(
+            String htmlname, Config config, String text) {
         XMLElement linktag;
-        String onclick, htmlname;
-        
-        htmlname = calendar.getHtmlName();
+        String onclick;
         
         onclick = new StringBuilder("javascript:formSubmit('").
                 append(config.getCurrentForm()).
@@ -19,7 +17,8 @@ public class CalendarButtonRenderer extends Renderer {
         linktag = new XMLElement("a");
         linktag.add("name", htmlname);
         linktag.add("href", onclick);
-        linktag.addInner(Controller.messages.get("calendar"));
+        linktag.add("class", "ctxmenu_link");
+        linktag.addInner(Controller.messages.get(text));
         return linktag;
     }
 }

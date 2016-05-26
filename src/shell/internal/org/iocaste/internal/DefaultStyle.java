@@ -112,11 +112,17 @@ public class DefaultStyle {
         style.put("margin", "0px");
         style.put("padding", "0px");
         style.put("display", "block");
-        style.put("text-align", "center");
+        style.put("vertical-align", "middle");
+        
+        style = stylesheet.newElement(".ctxmenu_link:link");
         style.put("color", BACKGROUND_COLOR);
         style.put("font-family", FONT_FAMILY);
         style.put("font-size", FONT_SIZE);
-        style.put("vertical-align", "middle");
+        style.put("text-align", "center");
+        stylesheet.clone(".ctxmenu_link:hover", ".ctxmenu_link:link").
+                put("color", FONT_COLOR);
+        stylesheet.clone(".ctxmenu_link:active", ".ctxmenu_link:link");
+        stylesheet.clone(".ctxmenu_link:visited", ".ctxmenu_link:link");
         
         style = stylesheet.newElement(".eb_edge");
         style.put("color", BACKGROUND_COLOR);
