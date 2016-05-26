@@ -36,6 +36,7 @@ public class TextFieldRenderer extends Renderer {
         return (required || tftext || search || calendar);
         
     }
+    
     public static final XMLElement render(DataItem dataitem, String tbstyle,
             Config config) {
         return _render(dataitem,
@@ -231,7 +232,12 @@ public class TextFieldRenderer extends Renderer {
         button.add("class", "button_ctxmenu_open");
         button.add("style", "display:inline");
         button.add("onclick", new StringBuilder(
-                setElementDisplay(menu, "inline-block")).
+                setElementDisplayOfClass(".ctxmenu", "none")).
+                append(setElementDisplayOfClass(
+                        ".button_ctxmenu_close", "none")).
+                append(setElementDisplayOfClass(
+                        ".button_ctxmenu_open", "inline")).
+                append(setElementDisplay(menu, "inline-block")).
                 append(setElementDisplay(open, "none")).
                 append(setElementDisplay(close, "inline")).toString());
         button.addInner("+");
@@ -283,5 +289,12 @@ public class TextFieldRenderer extends Renderer {
     private static final String setElementDisplay(String name, String value) {
         return new StringBuilder("setElementDisplay('").append(name).
                 append("','").append(value).append("');").toString();
+    }
+
+    private static final String setElementDisplayOfClass(
+            String style, String display) {
+        return new StringBuilder("setElementDisplayOfClass('").
+                append(style).append("','").append(display).append("');").
+                toString();
     }
 }

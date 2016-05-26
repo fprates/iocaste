@@ -1,3 +1,4 @@
+
 function closeCal() {
     var cal = document.getElementById('calstdcnt');
     cal.style.display='none';
@@ -74,6 +75,13 @@ function setClassStyle(id, classname) {
 
 function setElementDisplay(id, state) {
     document.getElementById(id).style.display = state;
+}
+
+function setElementDisplayOfClass(style, display) {
+   var elements = document.querySelectorAll(style);
+   for (var i = 0; i < elements.length; i++) {
+      elements[i].style.display = display;
+   }
 }
 
 function setFieldCal(name, value) {
