@@ -68,6 +68,7 @@ public class Response {
         style.put("border-width", "1px");
         style.put("border-color", constants.get(Shell.FRAME_COLOR));
         style.put("z-index", "1");
+        style.put("margin-top", "2em");
         
         style = stylesheet.clone(".calkey:link", ".link:link");
         style.put("padding", "0px");

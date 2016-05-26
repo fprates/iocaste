@@ -27,7 +27,15 @@ import org.iocaste.shell.common.View;
 
 public class TextFieldRenderer extends Renderer {
 
-
+    private static final boolean allowContextMenu(InputComponent input) {
+        boolean required = input.isObligatory();
+        boolean calendar = (input.isEnabled() && (input.getCalendar() != null));
+        boolean tftext = (input.getText() != null);
+        boolean search = (input.getSearchHelp() != null);
+        
+        return (required || tftext || search || calendar);
+        
+    }
     public static final XMLElement render(DataItem dataitem, String tbstyle,
             Config config) {
         return _render(dataitem,
@@ -122,14 +130,8 @@ public class TextFieldRenderer extends Renderer {
         tag.add("style", "display:inline;float:left;");
         inputtag.add("size", Integer.toString(input.getVisibleLength()));
         inputtag.add("class", sb.toString());
-
-        required = input.isObligatory();
-        search = input.getSearchHelp();
-        tftext = input.getText();
-        calendar = input.getCalendar();
         
-        if (!required && (tftext == null) && (search == null) &&
-                (calendar == null))
+        if (!allowContextMenu(input))
             return tagt;
         
         tfcontext = name.concat("_menu");
@@ -139,13 +141,16 @@ public class TextFieldRenderer extends Renderer {
         tag = new XMLElement("li");
         renderCloseMenuButton(tag, tfcontext, name);
         tagt.addChild(tag);
-
+        tag = new XMLElement("li");
         options = new XMLElement("ul");
         options.add("id", tfcontext);
         options.add("style", "display:none");
         options.add("class", "ctxmenu");
-        tagt.addChild(options);
-        
+        tag.addChild(options);
+        tagt.addChild(tag);
+
+
+        required = input.isObligatory();
         if (required) {
             tag = new XMLElement("li");
             tag.add("class", "ctxmenu_item");
@@ -154,7 +159,8 @@ public class TextFieldRenderer extends Renderer {
         }
 
         popupcontrol = config.getPopupControl();
-        if ((calendar != null) && input.isEnabled()) {
+        calendar = input.getCalendar();
+        if (calendar != null) {
             tag = new XMLElement("li");
             tag.add("class", "ctxmenu_item");
             tag.addChild(CalendarButtonRenderer.render(calendar, config));
@@ -163,25 +169,32 @@ public class TextFieldRenderer extends Renderer {
                 calname = popupcontrol.getName();
                 if ((calname.equals(calendar.getEarly()) ||
                      calname.equals(calendar.getLate()) ||
-                     calname.equals(calendar.getName())))
-                    tagt.addChildren(renderPopup(config));
+                     calname.equals(calendar.getName()))) {
+                    tag = new XMLElement("li");
+                    tag.addChildren(renderPopup(config));
+                    tagt.addChild(tag);
+                }
             }
         }
 
+        search = input.getSearchHelp();
         if (search != null) {
             tag = new XMLElement("li");
             tag.add("class", "ctxmenu_item");
             tag.addChild(SHButtonRenderer.render(search, config));
             options.addChild(tag);
-            
             if (popupcontrol != null) {
                 shname = popupcontrol.getHtmlName();
                 if (shname.equals(search.getHtmlName()) ||
-                    shname.equals(search.getChild()))
-                   tagt.addChildren(renderPopup(config));
+                    shname.equals(search.getChild())) {
+                    tag = new XMLElement("li");
+                    tag.addChildren(renderPopup(config));
+                    tagt.addChild(tag);
+                }
             }
         }
 
+        tftext = input.getText();
         if (tftext != null) {
             text = new Text(config.getView(), "");
             text.setTag("li");
