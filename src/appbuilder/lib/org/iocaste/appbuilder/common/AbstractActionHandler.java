@@ -196,6 +196,10 @@ public abstract class AbstractActionHandler {
         
     }
     
+    protected final void home() {
+        context.function.home();
+    }
+    
     protected final void init(String view, ExtendedContext extcontext) {
         AbstractViewSpec spec;
         
