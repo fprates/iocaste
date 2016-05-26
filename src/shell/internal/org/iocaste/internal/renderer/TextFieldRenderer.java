@@ -123,12 +123,12 @@ public class TextFieldRenderer extends Renderer {
         inputtag.add("class", sb.toString());
 
         required = input.isObligatory();
-        popupcontrol = config.getPopupControl();
         search = input.getSearchHelp();
         tftext = input.getText();
+        calendar = input.getCalendar();
         
-        if (!required && (tftext == null) && (popupcontrol == null) &&
-                (search == null))
+        if (!required && (tftext == null) && (search == null) &&
+                (calendar == null))
             return tagt;
         
         tfcontext = name.concat("_menu");
@@ -151,8 +151,8 @@ public class TextFieldRenderer extends Renderer {
             tag.addInner("required");
             options.addChild(tag);
         }
-        
-        calendar = input.getCalendar();
+
+        popupcontrol = config.getPopupControl();
         if ((calendar != null) && input.isEnabled()) {
             tag = new XMLElement("li");
             tag.add("class", "ctxmenu_item");
