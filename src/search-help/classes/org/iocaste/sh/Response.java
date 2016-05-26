@@ -15,6 +15,7 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.SearchHelp;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
@@ -24,8 +25,6 @@ import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.View;
 
 public class Response {
-    private static final String BODY = "#ffffff";
-    private static final String BORDER = "#a0a0a0";
     
     private static final void addCriteria(Context context, SearchHelp sh,
             Container container) {
@@ -123,22 +122,25 @@ public class Response {
         Map<String, String> style;
         Documents documents = new Documents(context.function);
         StyleSheet stylesheet = context.view.styleSheetInstance();
+        Map<Integer, String> constants = stylesheet.getConstants();
+        String FONT_SIZE = constants.get(Shell.FONT_SIZE);
         
         style = stylesheet.newElement(".shkey");
-        style.put("font-size", "12pt");
+        style.put("font-size", FONT_SIZE);
         style.put("display", "block");
         style.put("text-decoration", "none");
         
-        stylesheet.newElement(".shcol").put("font-size", "12pt");
+        style = stylesheet.newElement(".shcol");
+        style.put("font-size", FONT_SIZE);
         
         style = stylesheet.newElement(".shcnt");
         style.put("position", "absolute");
-        style.put("background-color", BODY);
+        style.put("background-color", constants.get(Shell.BACKGROUND_COLOR));
         style.put("float", "left");
         style.put("padding", "10px");
         style.put("border-style", "solid");
-        style.put("border-color", BORDER);
-        style.put("border-width", "2px"); 
+        style.put("border-color", constants.get(Shell.FRAME_COLOR));
+        style.put("border-width", "1px");
         style.put("overflow", "hidden");
         style.put("z-index", "1");
         

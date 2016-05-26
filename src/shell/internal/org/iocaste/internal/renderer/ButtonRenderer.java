@@ -24,14 +24,17 @@ public class ButtonRenderer extends Renderer {
         htmlname = button.getHtmlName();
         buttontag = new XMLElement("input");
         
-        if (button.isScreenLockable())
-            onclick = new StringBuilder("formSubmit('");
-        else
-            onclick = new StringBuilder("formSubmitNoLock('");
-        
-        onclick.append(config.getCurrentForm()).
-                append("', '").append(config.getCurrentAction()).
-                append("', '").append(htmlname).append("');");
+        if (button.getEvent("onclick") == null) {
+            if (button.isScreenLockable())
+                onclick = new StringBuilder("formSubmit('");
+            else
+                onclick = new StringBuilder("formSubmitNoLock('");
+            
+            onclick.append(config.getCurrentForm()).
+                    append("', '").append(config.getCurrentAction()).
+                    append("', '").append(htmlname).append("');");
+            buttontag.add("onclick", onclick.toString());
+        }
         
         if (button.getType() == Const.BUTTON)
             buttontag.add("type", (!button.isSubmit())? "button" : "submit");
@@ -42,7 +45,6 @@ public class ButtonRenderer extends Renderer {
         buttontag.add("id", htmlname);
         buttontag.add("class", button.getStyleClass());
         buttontag.add("value", (text == null)? name : text);
-        buttontag.add("onClick", onclick.toString());
         if (!button.isEnabled())
             buttontag.add("disabled", "disabled");
         

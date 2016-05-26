@@ -46,15 +46,15 @@ public class TextFieldRenderer extends Renderer {
      * @return
      */
     private static final XMLElement _render(InputComponent input,
-            String style, String tablestyle, Config config, String label) {
+            String style, String cellstyle, Config config, String label) {
         Container container;
         PopupControl popupcontrol;
         StringBuilder sb;
-        String tftext, calname, shname, name, value;
+        String tftext, calname, shname, name, value, tfcontext;
         Text text;
         SearchHelp search;
         Calendar calendar;
-        XMLElement tagt, inputtag, tag;
+        XMLElement tagt, inputtag, tag, options;
         boolean required;
         DataElement dataelement;
         int length;
@@ -82,11 +82,11 @@ public class TextFieldRenderer extends Renderer {
         container = input.getContainer();
         if ((container != null) && (container.getType() == Const.TABLE_ITEM)) {
             sb = new StringBuilder("table_cell_content");
-            tablestyle = "float:right;margin:0px;padding:0px;"
+            cellstyle = "float:right;margin:0px;padding:0px;"
                     + "list-style-type: none";
         } else {
             sb = new StringBuilder(style);
-            tablestyle = "margin:0px;padding:0px;list-style-type: none";
+            cellstyle = "margin:0px;padding:0px;list-style-type: none";
         }
         
         if (!input.isEnabled()) {
@@ -107,7 +107,7 @@ public class TextFieldRenderer extends Renderer {
         tag = new XMLElement("li");
         tag.addChild(inputtag);
         tagt = new XMLElement("ul");
-        tagt.add("style", tablestyle);
+        tagt.add("style", cellstyle);
         tagt.addChild(tag);
 
         if (input.hasPlaceHolder()) {
@@ -121,48 +121,66 @@ public class TextFieldRenderer extends Renderer {
         tag.add("style", "display:inline;float:left;");
         inputtag.add("size", Integer.toString(input.getVisibleLength()));
         inputtag.add("class", sb.toString());
+
         required = input.isObligatory();
+        popupcontrol = config.getPopupControl();
+        search = input.getSearchHelp();
+        tftext = input.getText();
+        
+        if (!required && (tftext == null) && (popupcontrol == null) &&
+                (search == null))
+            return tagt;
+        
+        tfcontext = name.concat("_menu");
+        tag = new XMLElement("li");
+        renderOpenMenuButton(tag, tfcontext, name);
+        tagt.addChild(tag);
+        tag = new XMLElement("li");
+        renderCloseMenuButton(tag, tfcontext, name);
+        tagt.addChild(tag);
+
+        options = new XMLElement("ul");
+        options.add("id", tfcontext);
+        options.add("style", "display:none");
+        options.add("class", "ctxmenu");
+        tagt.addChild(options);
+        
         if (required) {
             tag = new XMLElement("li");
-            tag.add("style", "display:inline;float:left;");
-            tag.add("class", "text");
-            tag.addInner("!");
-            tagt.addChild(tag);
+            tag.add("class", "ctxmenu_item");
+            tag.addInner("required");
+            options.addChild(tag);
         }
-
-        popupcontrol = config.getPopupControl();
+        
         calendar = input.getCalendar();
         if ((calendar != null) && input.isEnabled()) {
             tag = new XMLElement("li");
-            tag.add("style", "display:inline;float:left;");
+            tag.add("class", "ctxmenu_item");
+            tag.addChild(CalendarButtonRenderer.render(calendar, config));
+            options.addChild(tag);
             if (popupcontrol != null) {
                 calname = popupcontrol.getName();
                 if ((calname.equals(calendar.getEarly()) ||
                      calname.equals(calendar.getLate()) ||
                      calname.equals(calendar.getName())))
-                    tag.addChildren(renderPopup(config));
+                    tagt.addChildren(renderPopup(config));
             }
-            
-            tag.addChild(CalendarButtonRenderer.render(calendar, config));
-            tagt.addChild(tag);
         }
 
-        search = input.getSearchHelp();
         if (search != null) {
             tag = new XMLElement("li");
-            tag.add("style", "display:inline;float:left;");
+            tag.add("class", "ctxmenu_item");
+            tag.addChild(SHButtonRenderer.render(search, config));
+            options.addChild(tag);
+            
             if (popupcontrol != null) {
                 shname = popupcontrol.getHtmlName();
                 if (shname.equals(search.getHtmlName()) ||
                     shname.equals(search.getChild()))
-                   tag.addChildren(renderPopup(config));
+                   tagt.addChildren(renderPopup(config));
             }
-            
-            tag.addChild(SHButtonRenderer.render(search, config));
-            tagt.addChild(tag);
         }
 
-        tftext = input.getText();
         if (tftext != null) {
             text = new Text(config.getView(), "");
             text.setTag("li");
@@ -173,6 +191,36 @@ public class TextFieldRenderer extends Renderer {
         }
         
         return tagt;
+    }
+    
+    private static final void renderCloseMenuButton(XMLElement button,
+            String menu, String name) {
+        String open = name.concat("_openmenu");
+        String close = name.concat("_closemenu");
+        
+        button.add("id", close);
+        button.add("class", "button_ctxmenu_close");
+        button.add("style", "display:none");
+        button.add("onclick", new StringBuilder(
+                setElementDisplay(menu, "none")).
+                append(setElementDisplay(open, "inline")).
+                append(setElementDisplay(close, "none")).toString());
+        button.addInner("-");
+    }
+    
+    private static final void renderOpenMenuButton(XMLElement button,
+            String menu, String name) {
+        String open = name.concat("_openmenu");
+        String close = name.concat("_closemenu");
+        
+        button.add("id", open);
+        button.add("class", "button_ctxmenu_open");
+        button.add("style", "display:inline");
+        button.add("onclick", new StringBuilder(
+                setElementDisplay(menu, "inline-block")).
+                append(setElementDisplay(open, "none")).
+                append(setElementDisplay(close, "inline")).toString());
+        button.addInner("+");
     }
     
     private static final List<XMLElement> renderPopup(Config config) {
@@ -216,5 +264,10 @@ public class TextFieldRenderer extends Renderer {
             Renderer.renderContainer(tags, container, config);
         
         return tags;
+    }
+    
+    private static final String setElementDisplay(String name, String value) {
+        return new StringBuilder("setElementDisplay('").append(name).
+                append("','").append(value).append("');").toString();
     }
 }

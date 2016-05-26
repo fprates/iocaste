@@ -69,7 +69,7 @@ public abstract class AbstractElement implements Element {
      */
     @Override
     public final void addEvent(String name, String value) {
-        events.put(name, value);
+        events.put(name.toLowerCase(), value);
     }
     
     /*

@@ -9,10 +9,9 @@ public class CalendarButtonRenderer extends Renderer {
         XMLElement imgtag, linktag;
         String onclick, htmlname;
         
-        imgtag = new XMLElement("img");
-        imgtag.add("src", "/iocaste-shell/images/u160.png");
+        imgtag = new XMLElement("span");
         imgtag.add("style", "width:85%; height:85%; vertical-align:middle");
-        
+        imgtag.addInner("Calendário");
         htmlname = calendar.getHtmlName();
         onclick = new StringBuilder("javascript:formSubmit('").
                 append(config.getCurrentForm()).

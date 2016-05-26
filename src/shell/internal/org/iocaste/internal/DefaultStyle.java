@@ -67,9 +67,59 @@ public class DefaultStyle {
         style.put("text-align", "center");
         style.put("vertical-align", "middle");
         style.put("height", "36px");
+
+        style = stylesheet.newElement(".button_ctxmenu_open");
+        style.put("margin-top", "0px");
+        style.put("margin-bottom", "0px");
+        style.put("margin-left", "2px");
+        style.put("margin-right", "0px");
+        style.put("padding", "0px");
+        style.put("width", "20px");
+        style.put("height", "20px");
+        style.put("float", "left");
+        style.put("color", BACKGROUND_COLOR);
+        style.put("vertical-align", "middle");
+        style.put("font-weight", "normal");
+        style.put("font-size", FONT_SIZE);
+        style.put("background-color", CLICKABLE_COLOR);
+        style.put("border-style", "none");
+        style.put("text-align", "center");
+        style.put("border-top-left-radius", ROUND);
+        style.put("border-top-right-radius", ROUND);
+        style.put("border-bottom-left-radius", ROUND);
+        style.put("border-bottom-right-radius", ROUND);
+        
+        style = stylesheet.clone(".button_ctxmenu_close",
+                ".button_ctxmenu_open");
+        style.put("border-top-right-radius", "0px");
+        style.put("border-bottom-right-radius", "0px");
+        
+        style = stylesheet.newElement(".ctxmenu");
+        style.put("margin", "0px");
+        style.put("padding", "1em");
+        style.put("z-index", "1");
+        style.put("float", "left");
+        style.put("list-style-type", "none");
+        style.put("border-style", "none");
+        style.put("background-color", CLICKABLE_COLOR);
+        style.put("position", "absolute");
+        style.put("border-top-left-radius", "0px");
+        style.put("border-top-right-radius", ROUND);
+        style.put("border-bottom-left-radius", ROUND);
+        style.put("border-bottom-right-radius", ROUND);
+        
+        style = stylesheet.newElement(".ctxmenu_item");
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("display", "block");
+        style.put("text-align", "center");
+        style.put("color", BACKGROUND_COLOR);
+        style.put("font-family", FONT_FAMILY);
+        style.put("font-size", FONT_SIZE);
+        style.put("vertical-align", "middle");
         
         style = stylesheet.newElement(".eb_edge");
-        style.put("color", "#ffffff");
+        style.put("color", BACKGROUND_COLOR);
         style.put("background-color", FRAME_COLOR);
         style.put("border-width", "0px");
         style.put("border-style", "none");
@@ -78,7 +128,7 @@ public class DefaultStyle {
         style.put("padding", "3px");
         style.put("margin-bottom", "0px");
         style.put("width", "100%");
-        style.put("font-size", "12pt");
+        style.put("font-size", FONT_SIZE);
         style.put("font-weight", "normal");
         style.put("text-align", "left");
 

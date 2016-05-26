@@ -11,6 +11,7 @@ import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.PopupControl;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
@@ -53,17 +54,19 @@ public class Response {
         StyleSheet stylesheet;
         Locale locale;
         Map<String, String> style;
+        Map<Integer, String> constants;
         
         stylesheet = context.view.styleSheetInstance();
+        constants = stylesheet.getConstants();
         style = stylesheet.newElement(".calcnt");
         style.put("position", "absolute");
         style.put("padding", "10px");
         style.put("float", "left");
         style.put("overflow", "hidden");
-        style.put("background-color", "#ffffff");
+        style.put("background-color", constants.get(Shell.BACKGROUND_COLOR));
         style.put("border-style", "solid");
-        style.put("border-width", "2px");
-        style.put("border-color", "rgb(176, 176, 176)");
+        style.put("border-width", "1px");
+        style.put("border-color", constants.get(Shell.FRAME_COLOR));
         style.put("z-index", "1");
         
         style = stylesheet.clone(".calkey:link", ".link:link");
