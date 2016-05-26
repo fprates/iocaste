@@ -54,7 +54,7 @@ public class TextFieldRenderer extends Renderer {
         Text text;
         SearchHelp search;
         Calendar calendar;
-        XMLElement tagt, tagl, tagc, spantag, inputtag;
+        XMLElement tagt, inputtag, tag;
         boolean required;
         DataElement dataelement;
         int length;
@@ -69,7 +69,7 @@ public class TextFieldRenderer extends Renderer {
         value = toString(input);
         if (value == null)
             value = "";
-        
+
         inputtag = new XMLElement("input");
         inputtag.add("type", (!input.isSecret())? "text" : "password");
         inputtag.add("name", name);
@@ -82,9 +82,11 @@ public class TextFieldRenderer extends Renderer {
         container = input.getContainer();
         if ((container != null) && (container.getType() == Const.TABLE_ITEM)) {
             sb = new StringBuilder("table_cell_content");
-            tablestyle = "float:right";
+            tablestyle = "float:right;margin:0px;padding:0px;"
+                    + "list-style-type: none";
         } else {
             sb = new StringBuilder(style);
+            tablestyle = "margin:0px;padding:0px;list-style-type: none";
         }
         
         if (!input.isEnabled()) {
@@ -99,81 +101,76 @@ public class TextFieldRenderer extends Renderer {
                 sb.append("_right");
                 break;
             }
+        
+        addEvents(inputtag, input);
+
+        tag = new XMLElement("li");
+        tag.addChild(inputtag);
+        tagt = new XMLElement("ul");
+        tagt.add("style", tablestyle);
+        tagt.addChild(tag);
 
         if (input.hasPlaceHolder()) {
+            tag.add("style", "display:inline;float:left;width:100%;");
             inputtag.add("placeholder", label);
             sb.append("_internallabel");
-        } else {
-            inputtag.add("size", Integer.toString(input.getVisibleLength()));
+            inputtag.add("class", sb.toString());
+            return tagt;
         }
-        
+
+        tag.add("style", "display:inline;float:left;");
+        inputtag.add("size", Integer.toString(input.getVisibleLength()));
         inputtag.add("class", sb.toString());
-        addEvents(inputtag, input);
-        
+        required = input.isObligatory();
+        if (required) {
+            tag = new XMLElement("li");
+            tag.add("style", "display:inline;float:left;");
+            tag.add("class", "text");
+            tag.addInner("!");
+            tagt.addChild(tag);
+        }
+
         popupcontrol = config.getPopupControl();
         calendar = input.getCalendar();
-        search = input.getSearchHelp();
-        required = input.isObligatory();
-        tftext = input.getText();
-        if ((search == null) && (calendar == null) && !required &&
-                (tftext == null))
-            return inputtag;
-        
-        tagc = new XMLElement("td");
-        tagc.addChild(inputtag);
-        tagl = new XMLElement("tr");
-        tagl.addChild(tagc);
-
         if ((calendar != null) && input.isEnabled()) {
-            tagc = new XMLElement("td");
+            tag = new XMLElement("li");
+            tag.add("style", "display:inline;float:left;");
             if (popupcontrol != null) {
                 calname = popupcontrol.getName();
                 if ((calname.equals(calendar.getEarly()) ||
                      calname.equals(calendar.getLate()) ||
                      calname.equals(calendar.getName())))
-                    tagc.addChildren(renderPopup(config));
+                    tag.addChildren(renderPopup(config));
             }
             
-            tagc.addChild(CalendarButtonRenderer.render(calendar, config));
-            tagl.addChild(tagc);
+            tag.addChild(CalendarButtonRenderer.render(calendar, config));
+            tagt.addChild(tag);
         }
-        
+
+        search = input.getSearchHelp();
         if (search != null) {
-            tagc = new XMLElement("td");
+            tag = new XMLElement("li");
+            tag.add("style", "display:inline;float:left;");
             if (popupcontrol != null) {
                 shname = popupcontrol.getHtmlName();
                 if (shname.equals(search.getHtmlName()) ||
                     shname.equals(search.getChild()))
-                   tagc.addChildren(renderPopup(config));
+                   tag.addChildren(renderPopup(config));
             }
             
-            tagc.addChild(SHButtonRenderer.render(search, config));
-            tagl.addChild(tagc);
+            tag.addChild(SHButtonRenderer.render(search, config));
+            tagt.addChild(tag);
         }
-        
-        if (required) {
-            spantag = new XMLElement("input");
-            spantag.add("type", "button");
-            spantag.add("class", "sh_button");
-            spantag.add("value", "!");
-            spantag.add("disabled", "disabled");
-            tagc = new XMLElement("td");
-            tagc.addChild(spantag);
-            tagl.addChild(tagc);
-        }
-        
+
+        tftext = input.getText();
         if (tftext != null) {
             text = new Text(config.getView(), "");
+            text.setTag("li");
             text.setStyleClass("tftext");
             text.setText(tftext);
-            tagc = new XMLElement("td");
-            tagc.addChild(TextRenderer.render(text, config));
-            tagl.addChild(tagc);
+            tag = TextRenderer.render(text, config);
+            tagt.addChild(tag);
         }
-        
-        tagt = new XMLElement("table");
-        tagt.addChild(tagl);
-        tagt.add("style", tablestyle);
         
         return tagt;
     }

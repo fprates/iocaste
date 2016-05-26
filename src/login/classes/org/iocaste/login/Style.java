@@ -17,6 +17,9 @@ public class Style {
         style.put("width", "15em");
         style.put("margin", "auto");
         
+        style = stylesheet.newElement(".loginform");
+        style.put("width", "100%");
+        
         style = stylesheet.clone(".loginsubmit", ".button");
         style.put("width", "100%");
         style.put("margin", "auto");
