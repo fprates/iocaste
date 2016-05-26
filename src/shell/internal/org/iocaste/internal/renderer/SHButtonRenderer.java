@@ -1,5 +1,6 @@
 package org.iocaste.internal.renderer;
 
+import org.iocaste.internal.Controller;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.SearchHelp;
 
@@ -18,7 +19,7 @@ public class SHButtonRenderer extends Renderer {
         linktag = new XMLElement("a");
         linktag.add("name", htmlname);
         linktag.add("href", onclick);
-        linktag.addInner("values");
+        linktag.addInner(Controller.messages.get("values"));
         return linktag;
     }
 }

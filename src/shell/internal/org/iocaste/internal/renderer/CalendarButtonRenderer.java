@@ -1,5 +1,6 @@
 package org.iocaste.internal.renderer;
 
+import org.iocaste.internal.Controller;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Calendar;
 
@@ -11,7 +12,7 @@ public class CalendarButtonRenderer extends Renderer {
         
         imgtag = new XMLElement("span");
         imgtag.add("style", "width:85%; height:85%; vertical-align:middle");
-        imgtag.addInner("Calendário");
+        imgtag.addInner(Controller.messages.get("calendar"));
         htmlname = calendar.getHtmlName();
         onclick = new StringBuilder("javascript:formSubmit('").
                 append(config.getCurrentForm()).

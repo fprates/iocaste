@@ -39,12 +39,15 @@ public class Controller {
     
     static {
         messages = new HashMap<>();
+        messages.put("calendar", "Calendário");
         messages.put("field.is.obligatory", "Campo é obrigatório (%s).");
         messages.put("field.type.mismatch",
                 "Tipo de valor incompatível com campo.");
         messages.put("invalid.value", "Valor inválido (%s).");
         messages.put("not.connected", "Não conectado");
+        messages.put("required", "Obrigatório");
         messages.put("user.not.authorized", "Usuário não autorizado.");
+        messages.put("values", "Valores possíveis");
         
         msgconv= new HashMap<>();
         msgconv.put(Controller.EINITIAL, "field.is.obligatory");

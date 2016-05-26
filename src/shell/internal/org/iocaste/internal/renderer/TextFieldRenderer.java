@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
+import org.iocaste.internal.Controller;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
@@ -148,7 +149,7 @@ public class TextFieldRenderer extends Renderer {
         if (required) {
             tag = new XMLElement("li");
             tag.add("class", "ctxmenu_item");
-            tag.addInner("required");
+            tag.addInner(Controller.messages.get("required"));
             options.addChild(tag);
         }
 
