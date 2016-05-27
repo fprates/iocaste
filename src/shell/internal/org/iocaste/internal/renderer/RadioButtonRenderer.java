@@ -1,8 +1,5 @@
 package org.iocaste.internal.renderer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.RadioButton;
 
@@ -13,11 +10,13 @@ public class RadioButtonRenderer extends Renderer {
      * @param radiobutton
      * @return
      */
-    public static final List<XMLElement> render(RadioButton radiobutton,
+    public static final XMLElement render(RadioButton radiobutton,
             Config config) {
-        XMLElement rbtag, rbtexttag;
+        XMLElement labeltag, rbtag, rbtexttag;
         String text;
-        List<XMLElement> elements = new ArrayList<>();
+        
+        labeltag = new XMLElement("label");
+        labeltag.add("class", radiobutton.getStyleClass());
         
         text = radiobutton.getHtmlName();
         rbtag = new XMLElement("input");
@@ -30,15 +29,15 @@ public class RadioButtonRenderer extends Renderer {
             rbtag.add("checked", "checked");
         
         addEvents(rbtag, radiobutton);
-        elements.add(rbtag);
+        labeltag.addChild(rbtag);
         
         text = radiobutton.getText();
         if (text != null) {
             rbtexttag = new XMLElement("span");
             rbtexttag.addInner(text);
-            elements.add(rbtexttag);
+            labeltag.addChild(rbtexttag);
         }
         
-        return elements;
+        return labeltag;
     }
 }

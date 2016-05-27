@@ -152,7 +152,7 @@ public class Renderer {
             break;
             
         case RADIO_BUTTON:
-            tags.addAll(RadioButtonRenderer.render((RadioButton)element,
+            tags.add(RadioButtonRenderer.render((RadioButton)element,
                     config));
             break;
         

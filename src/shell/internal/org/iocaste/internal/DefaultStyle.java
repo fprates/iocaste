@@ -222,6 +222,11 @@ public class DefaultStyle {
         style.put("bottom", "0px");
         style.put("width", "100%");
 
+        style = stylesheet.newElement(".radio_button");
+        style.put("font-family", FONT_FAMILY);
+        style.put("font-size", FONT_SIZE);
+        style.put("color", FONT_COLOR);
+        
         style = stylesheet.newElement(".sh_button");
         style.put("text-align", "center");
         style.put("background-color", BACKGROUND_COLOR);
