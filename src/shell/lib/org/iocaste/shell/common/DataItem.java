@@ -117,7 +117,8 @@ public class DataItem extends AbstractInputComponent
     
     /*
      * (non-Javadoc)
-     * @see org.iocaste.shell.common.AbstractInputComponent#setHtmlName(java.lang.String)
+     * @see org.iocaste.shell.common.AbstractInputComponent#setHtmlName(
+     *    java.lang.String)
      */
     @Override
     public final void setHtmlName(String name) {
@@ -144,7 +145,14 @@ public class DataItem extends AbstractInputComponent
      */
     @Override
     public final void translate(MessageSource messages) {
-        if (isTranslatable())
-            this.label = getTranslation(messages, getName());
+        if (!isTranslatable())
+            return;
+        if (label == null)
+            label = getTranslation(messages, getName());
+        else
+            label = messages.get(label);
+        if (label == null)
+            label = getTranslation(messages, getName());
+            
     }
 }
