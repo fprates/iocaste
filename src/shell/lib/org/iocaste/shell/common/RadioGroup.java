@@ -15,6 +15,7 @@ import java.util.Set;
 public class RadioGroup extends AbstractInputComponent {
     private static final long serialVersionUID = -1996756052092584844L;
     private Set<String> items;
+    private String buttonstyle;
     
     public RadioGroup(View view, String name) {
         super(view, Const.RADIO_GROUP, null, name);
@@ -41,6 +42,10 @@ public class RadioGroup extends AbstractInputComponent {
         return components;
     }
     
+    public final String getButtonStyleClass() {
+        return buttonstyle;
+    }
+    
     public final RadioButton getSelected() {
         RadioButton rb;
         View view = getView();
@@ -56,6 +61,7 @@ public class RadioGroup extends AbstractInputComponent {
     
     private final void init() {
         items = new LinkedHashSet<>();
+        buttonstyle = "radio_button";
     }
     
     public final void rename(String to, String from) {
@@ -77,5 +83,12 @@ public class RadioGroup extends AbstractInputComponent {
             if (input.isSelected())
                 super.set(value);
         }
+    }
+    
+    public final void setButtonStyleClass(String styleclass) {
+        View view = getView();
+        buttonstyle = styleclass;
+        for (String name : items)
+            ((RadioButton)view.getElement(name)).setStyleClass(styleclass);
     }
 }

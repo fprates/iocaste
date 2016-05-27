@@ -18,7 +18,7 @@ public class RadioButton extends AbstractInputComponent {
         super(container, Const.RADIO_BUTTON, null, name);
         this.index = index;
         this.group = group.getHtmlName();
-        setStyleClass("radio_button");
+        setStyleClass(group.getButtonStyleClass());
         
         group.rename(getHtmlName(), name);
         setSelected(false);
