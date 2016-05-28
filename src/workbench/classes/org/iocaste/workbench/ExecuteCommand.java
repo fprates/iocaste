@@ -85,13 +85,10 @@ public class ExecuteCommand extends AbstractActionHandler {
                     continue;
                 }
                 sb.append(buffer[i]);
-                if (i != (buffer.length - 1))
-                    continue;
-                
-                value = sb.toString();
-                if (value.length() == 0)
-                    value = null;
             }
+            value = sb.toString();
+            if (value.length() == 0)
+                value = null;
             parameters.put(name, value);
         }
         
