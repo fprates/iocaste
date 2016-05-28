@@ -99,13 +99,17 @@ public class Main extends AbstractExternalApplication {
         }
 	}
 	
-	public static final void main(String[] args) throws Exception {
-		new Main().init(args);
+	public static final void main(String[] args) {
+		start(args);
 	}
 	
-	public static final void start(String[] args) throws Exception {
-	    instance = new Main();
-	    instance.init(args);
+	public static final void start(String[] args) {
+	    try {
+    	    instance = new Main();
+    	    instance.init(args);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 	
 	public final void stop() {
