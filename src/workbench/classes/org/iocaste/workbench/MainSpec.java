@@ -7,9 +7,7 @@ public class MainSpec extends AbstractViewSpec {
 
     @Override
     public void execute(PageBuilderContext context) {
-        form("main");
-        navcontrol("main");
-        dataform("main", "head");
+        textfield(parent, "command");
     }
 
 }
