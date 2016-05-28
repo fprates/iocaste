@@ -21,15 +21,13 @@ public class DirectoryWrite extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         DirectoryEngine engine;
-        DirectoryLeaf leaf;
         String symbol = message.get("symbol");
         Directory root = message.get("directory");
         byte type = message.getb("type");
         
-        leaf = root.get();
         engine = engines.get(type);
-        engine.start(FileServices.getSymbolPath(symbol), leaf);
-        write(leaf, engine);
+        engine.start(FileServices.getSymbolPath(symbol), root);
+        write(root.get(), engine);
         engine.write();
         return null;
     }
