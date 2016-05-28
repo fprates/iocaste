@@ -13,7 +13,7 @@ public class GetObject extends AbstractDocumentsHandler {
     
     @Override
     public Object run(Message message) throws Exception {
-        String name = message.getString("modelname");
+        String name = message.getst("modelname");
         Object key = message.get("key");
         Object ns = message.get("ns");
         String sessionid = message.getSessionid();

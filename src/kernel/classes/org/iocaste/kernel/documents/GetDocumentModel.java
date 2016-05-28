@@ -94,7 +94,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
     }
     @Override
     public Object run(Message message) throws Exception {
-        String modelname = message.getString("name");
+        String modelname = message.getst("name");
         Documents documents = getFunction();
         String sessionid = message.getSessionid();
         Connection connection = documents.database.getDBConnection(sessionid);

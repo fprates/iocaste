@@ -22,7 +22,7 @@ public class Build extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String filename = message.getString("file");
+        String filename = message.getst("file");
         Iocaste iocaste = new Iocaste(getFunction());
         List<FileEntry> entries = iocaste.getFiles("workbench", filename);
         

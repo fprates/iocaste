@@ -61,7 +61,7 @@ public class PackageInstall extends AbstractHandler {
         
         state = new State();
         state.data = message.get("data");
-        state.pkgname = message.getString("name");
+        state.pkgname = message.getst("name");
         state.function = getFunction();
         state.documents = new Documents(state.function);
         

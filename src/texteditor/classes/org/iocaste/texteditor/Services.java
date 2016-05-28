@@ -46,7 +46,7 @@ public class Services extends AbstractFunction {
         File file;
         Map<String, String> pages;
         String textname = message.get("textname");
-        String id = message.getString("id");
+        String id = message.getst("id");
         String path = getPath(textname, id);
             
         file = new File(path);

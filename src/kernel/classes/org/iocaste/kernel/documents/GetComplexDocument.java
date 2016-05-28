@@ -16,7 +16,7 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
     @Override
     public Object run(Message message) throws Exception {
         CDocumentData data = new CDocumentData();
-        data.cdname = message.getString("name");
+        data.cdname = message.getst("name");
         data.id = message.get("id");
         data.ns = message.get("ns");
         data.documents = getFunction();

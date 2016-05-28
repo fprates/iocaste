@@ -53,10 +53,10 @@ public abstract class AbstractExternalApplication {
 		String host, user, secret, locale;
         char[] buffer;
 		
-		host = message.getString("--host");
-		user = message.getString("--user");
-		secret = message.getString("--password");
-        locale = message.getString("--language");
+		host = message.getst("--host");
+		user = message.getst("--user");
+		secret = message.getst("--password");
+        locale = message.getst("--language");
         
         if (secret == null) {
             System.out.print("Password:");
@@ -143,14 +143,14 @@ public abstract class AbstractExternalApplication {
             }
         }
         
-        configfile = message.getString("--config-file");
+        configfile = message.getst("--config-file");
         if (configfile != null)
             message = getParametersFromFile(configfile);
         
         for (String name : parameters.keySet()) {
         	entry = parameters.get(name);
         	if (!entry.required) {
-        		value = message.getString(name);
+        		value = message.getst(name);
         		if ((entry.value != null) && (value == null))
         			message.add(name, entry.value);
         		continue;

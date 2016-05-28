@@ -18,7 +18,7 @@ public class Select extends AbstractDatabaseHandler {
     @Override
     public Object run(Message message) throws Exception {
         Database database = getFunction();
-        String query = message.getString("query");
+        String query = message.getst("query");
         Object[] criteria = message.get("criteria");
         int rows = message.geti("rows");
         Connection connection = database.

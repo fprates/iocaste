@@ -37,7 +37,7 @@ class Register extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String name = message.getString("name");
+        String name = message.getst("name");
         Services function = getFunction();
         
         if (!function.handlers.containsKey(name))
@@ -51,8 +51,8 @@ class Install extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String server = message.getString("server");
-        String name = message.getString("name");
+        String server = message.getst("server");
+        String name = message.getst("name");
         Services function = getFunction();
         
         function.handlers.get(server).put(name, null);
@@ -66,7 +66,7 @@ class ExternCall extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         Service service;
-        String address = message.getString("address");
+        String address = message.getst("address");
         int port = message.geti("port");
         
         service = new Service(new ExternCallStream(address, port));

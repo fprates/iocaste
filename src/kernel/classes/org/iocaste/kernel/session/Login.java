@@ -22,9 +22,9 @@ public class Login extends AbstractHandler {
         User user;
         GetUserData getuserdata;
         Session session = getFunction();
-        String[] composed, locale_ = message.getString("locale").split("_");
-        String username = message.getString("user");
-        String secret = message.getString("secret");
+        String[] composed, locale_ = message.getst("locale").split("_");
+        String username = message.getst("user");
+        String secret = message.getst("secret");
         String sessionid = message.getSessionid();
         
         if (sessionid == null)

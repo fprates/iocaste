@@ -33,7 +33,7 @@ public class CreateNumberFactory extends AbstractDocumentsHandler {
         element = model.getModelItem("IDENT").getDataElement();
         
         l = element.getLength();
-        name = message.getString("name");
+        name = message.getst("name");
         if (name.length() > l)
             throw new IocasteException(new StringBuilder(name).
                     append(" has invalid range name length (").

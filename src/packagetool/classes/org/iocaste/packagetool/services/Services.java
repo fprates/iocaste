@@ -24,8 +24,8 @@ public class Services extends AbstractFunction {
      */
     public final void assignTaskGroup(Message message) throws Exception {
         ExtendedObject group;
-        String groupname = message.getString("group");
-        String username = message.getString("username");
+        String groupname = message.getst("group");
+        String username = message.getst("username");
         State state = new State();
         
         state.documents = new Documents(this);
@@ -34,7 +34,7 @@ public class Services extends AbstractFunction {
     }
     
     public final InstallData getDataFromFile(Message message) throws Exception {
-        String file = message.getString("file");
+        String file = message.getst("file");
         
         return InstallDataBuild.execute(file, this);
     }

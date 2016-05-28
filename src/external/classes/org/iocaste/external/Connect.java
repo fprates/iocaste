@@ -11,9 +11,9 @@ public class Connect extends AbstractHandler {
         Iocaste iocaste;
         String sessionid;
         Services services = getFunction();
-        String user = message.getString("user");
-        String secret = message.getString("secret");
-        String locale = message.getString("locale");
+        String user = message.getst("user");
+        String secret = message.getst("secret");
+        String locale = message.getst("locale");
         
         sessionid = new StringBuilder(message.getSessionid()).
                 append(":").append(services.counter+1).toString();

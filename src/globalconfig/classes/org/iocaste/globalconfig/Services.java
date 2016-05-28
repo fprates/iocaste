@@ -62,7 +62,7 @@ public class Services extends AbstractFunction {
         Object value;
         ExtendedObject object, globalconfig;
         Documents documents = new Documents(this);
-        String appname = message.getString("appname");
+        String appname = message.getst("appname");
         
         globalconfig = documents.getObject("GLOBAL_CONFIG", appname);
         if (globalconfig == null) {
@@ -83,7 +83,7 @@ public class Services extends AbstractFunction {
         object = new ExtendedObject(model);
         object.set("ID", itemid);
         object.set("GLOBAL_CONFIG", appname);
-        object.set("NAME", message.getString("name"));
+        object.set("NAME", message.getst("name"));
         
         ptype = convertClassType((Class<?>)message.get("type"));
         object.set("TYPE", ptype);
@@ -107,7 +107,7 @@ public class Services extends AbstractFunction {
         Iocaste iocaste = new Iocaste(this);
         String appname = iocaste.getCurrentApp();
         Documents documents = new Documents(this);
-        String name = message.getString("name");
+        String name = message.getst("name");
 
         query = new Query();
         query.setModel("GLOBAL_CONFIG_ITEM");
@@ -167,7 +167,7 @@ public class Services extends AbstractFunction {
     
     public final void remove(Message message) {
         Query[] queries;
-        String appname = message.getString("name");
+        String appname = message.getst("name");
         
         if (appname == null)
             return;

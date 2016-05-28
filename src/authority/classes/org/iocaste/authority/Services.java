@@ -35,7 +35,7 @@ public class Services extends AbstractFunction {
      */
     public final void addAuthorization(Message message) {
         Authorization authorization = message.get("authorization");
-        String profile = message.getString("profile");
+        String profile = message.getst("profile");
         
         addAuthorization(profile, authorization);
     }
@@ -79,8 +79,8 @@ public class Services extends AbstractFunction {
     public final void assignAuthorization(Message message) throws Exception {
         Query query;
         Authorization authorization;
-        String username = message.getString("username");
-        String profilename = message.getString("profile");
+        String username = message.getst("username");
+        String profilename = message.getst("profile");
         Documents documents = new Documents(this);
         ExtendedObject[] profiles;
         
@@ -108,8 +108,8 @@ public class Services extends AbstractFunction {
     public final void assignProfile(Message message) throws Exception {
         int userid, id, profileid;
         DocumentModel model;
-        String username = message.getString("username");
-        String profile = message.getString("profile");
+        String username = message.getst("username");
+        String profile = message.getst("profile");
         Documents documents = new Documents(this);
         ExtendedObject object = documents.getObject("LOGIN", username);
         
@@ -142,7 +142,7 @@ public class Services extends AbstractFunction {
         Query query;
         Authorization authorization;
         ExtendedObject[] parameters;
-        String name = message.getString("name");
+        String name = message.getst("name");
         Documents documents = new Documents(this);
         ExtendedObject authobject = documents.getObject("AUTHORIZATION", name);
         
@@ -175,7 +175,7 @@ public class Services extends AbstractFunction {
     public final UserProfile getProfile(Message message) {
         UserProfile profile;
         Documents documents = new Documents(this);
-        String name = message.getString("name");
+        String name = message.getst("name");
         ExtendedObject object = documents.getObject("USER_PROFILE", name);
         
         if (object == null)
@@ -194,7 +194,7 @@ public class Services extends AbstractFunction {
         Query query;
         Set<String> names;
         ExtendedObject[] objects;
-        String username = message.getString("username");
+        String username = message.getst("username");
         Documents documents = new Documents(this);
         
         query = new Query();
@@ -218,7 +218,7 @@ public class Services extends AbstractFunction {
      */
     public final int remove(Message message) {
         Query[] queries = new Query[3];
-        String name = message.getString("name");
+        String name = message.getst("name");
         Documents documents = new Documents(this);
         
         queries[0] = new Query("delete");
@@ -242,7 +242,7 @@ public class Services extends AbstractFunction {
      */
     public final int removeProfile(Message message) {
         Query[] queries = new Query[2];
-        String name = message.getString("name");
+        String name = message.getst("name");
         Documents documents = new Documents(this);
         
         queries[0] = new Query("delete");

@@ -8,7 +8,7 @@ public class SetCurrentApp extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         String sessionid = message.getSessionid();
-        String currentapp = message.getString("current_app");
+        String currentapp = message.getst("current_app");
         Session session = getFunction();
         
         session.sessions.get(sessionid).setCurrentApp(currentapp);

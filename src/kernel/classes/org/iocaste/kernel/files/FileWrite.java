@@ -9,7 +9,7 @@ public class FileWrite extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String id = message.getString("id");
+        String id = message.getst("id");
         String sessionid = message.getSessionid();
         byte[] data = message.get("buffer");
         FileServices services = getFunction();

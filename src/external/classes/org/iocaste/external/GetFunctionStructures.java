@@ -19,7 +19,7 @@ public class GetFunctionStructures extends AbstractHandler {
         String structurename, functionname;
         Documents documents = new Documents(getFunction());
 
-        functionname = message.getString("function");
+        functionname = message.getst("function");
         function = documents.getComplexDocument(
                 "XTRNL_FUNCTION", null, functionname);
         

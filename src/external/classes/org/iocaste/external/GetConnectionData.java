@@ -12,7 +12,7 @@ public class GetConnectionData extends AbstractHandler {
         Documents documents;
         String name;
         
-        name = message.getString("name");
+        name = message.getst("name");
         if (name == null)
             throw new IocasteException("connection name not specified.");
         

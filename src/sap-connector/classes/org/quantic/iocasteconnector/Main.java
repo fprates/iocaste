@@ -34,9 +34,9 @@ public class Main extends AbstractExternalApplication {
         List<FunctionConfig> functions;
         
         stream = new Command();
-        stream.port = message.getString("--port");
-        stream.locale = message.getString("--language");
-        listennerport = Integer.parseInt(message.getString("--listenner-port"));
+        stream.port = message.getst("--port");
+        stream.locale = message.getst("--language");
+        listennerport = Integer.parseInt(message.getst("--listenner-port"));
         
         System.out.print("getting connection data from iocaste...");
 

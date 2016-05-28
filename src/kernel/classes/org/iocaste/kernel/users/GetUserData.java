@@ -15,7 +15,7 @@ public class GetUserData extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String username = message.getString("username");
+        String username = message.getst("username");
         User user = run(username);
         
         user.setSecret(null);

@@ -30,7 +30,61 @@ public class Message implements Serializable {
      * @param name
      * @param value
      */
+    public final void add(String name, byte value) {
+        values.put(name, value);
+    }
+
+    /**
+     * 
+     * @param name
+     * @param value
+     */
+    public final void add(String name, char value) {
+        values.put(name, value);
+    }
+
+    /**
+     * 
+     * @param name
+     * @param value
+     */
+    public final void add(String name, double value) {
+        values.put(name, value);
+    }
+
+    /**
+     * 
+     * @param name
+     * @param value
+     */
+    public final void add(String name, float value) {
+        values.put(name, value);
+    }
+    
+    /**
+     * 
+     * @param name
+     * @param value
+     */
     public final void add(String name, int value) {
+        values.put(name, value);
+    }
+
+    /**
+     * 
+     * @param name
+     * @param value
+     */
+    public final void add(String name, long value) {
+        values.put(name, value);
+    }
+
+    /**
+     * 
+     * @param name
+     * @param value
+     */
+    public final void add(String name, short value) {
         values.put(name, value);
     }
     
@@ -70,7 +124,7 @@ public class Message implements Serializable {
     public final byte getb(String name) {
         Object value = values.get(name);
         
-        return (value == null)? 0 : (byte)value;
+        return (byte)((value == null)? 0 : (byte)value);
     }
     
     /**
@@ -81,7 +135,7 @@ public class Message implements Serializable {
     public final char getc(String name) {
         Object value = values.get(name);
         
-        return (value == null)? 0 : (char)value;
+        return (char)((value == null)? 0 : value);
     }
     
     /**
@@ -92,7 +146,7 @@ public class Message implements Serializable {
     public final double getd(String name) {
         Object value = values.get(name);
         
-        return (value == null)? 0 : (double)value;
+        return (double)((value == null)? 0 : value);
     }
     
     /**
@@ -111,7 +165,7 @@ public class Message implements Serializable {
     public final float getf(String name) {
         Object value = values.get(name);
         
-        return (value == null)? 0 : (float)value;
+        return (float)((value == null)? 0 : value);
     }
     
     /**
@@ -130,7 +184,7 @@ public class Message implements Serializable {
     public final int geti(String name) {
         Object value = values.get(name);
         
-        return (value == null)? 0 : (int)value;
+        return (int)((value == null)? 0 : value);
     }
     
     /**
@@ -141,7 +195,7 @@ public class Message implements Serializable {
     public final long getl(String name) {
         Object value = values.get(name);
         
-        return (value == null)? 0l : (long)value;
+        return (long)((value == null)? 0 : value);
     }
     
     /**
@@ -168,7 +222,7 @@ public class Message implements Serializable {
     public final short getsh(String name) {
         Object value = values.get(name);
         
-        return (value == null)? 0 : (short)value;
+        return (short)((value == null)? 0 : value);
     }
     
     /**
@@ -176,7 +230,7 @@ public class Message implements Serializable {
      * @param name
      * @return
      */
-    public final String getString(String name) {
+    public final String getst(String name) {
         try {
             return (String)values.get(name);
         } catch (ClassCastException e) {

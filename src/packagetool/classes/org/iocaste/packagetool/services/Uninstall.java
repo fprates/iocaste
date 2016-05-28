@@ -139,7 +139,7 @@ public class Uninstall extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String pkgname = message.getString("package");
+        String pkgname = message.getst("package");
         
         if (pkgname == null)
             throw new IocasteException("package name not specified.");

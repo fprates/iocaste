@@ -15,7 +15,7 @@ public class RemoveModel extends AbstractDocumentsHandler {
         GetDocumentModel getmodel;
         Documents documents;
         String tablename, name;
-        String modelname = message.getString("model_name");
+        String modelname = message.getst("model_name");
         DocumentModel model;
         Connection connection;
         DocumentModelItem[] items;

@@ -13,7 +13,7 @@ public class Services extends AbstractFunction {
     
     public final ConversionResult conversion(Message message)
             throws Exception {
-        String xml = message.getString("xml");
+        String xml = message.getst("xml");
         ConversionRules data = message.get("data");
         
         return Convesion.execute(xml, data);

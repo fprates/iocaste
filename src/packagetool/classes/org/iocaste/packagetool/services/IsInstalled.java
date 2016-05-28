@@ -9,7 +9,7 @@ public class IsInstalled extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String pkgname = message.getString("package");
+        String pkgname = message.getst("package");
         
         return run(pkgname);
     }

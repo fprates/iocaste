@@ -97,7 +97,7 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     public final InstallData install(Message message) throws Exception {
         Map<String, AbstractInstallObject> objects;
         InstallData data;
-        String pkgname = message.getString("name");
+        String pkgname = message.getst("name");
         
         installcontext = new StandardInstallContext();
         defaultinstall = new PageBuilderDefaultInstall(pkgname);

@@ -10,7 +10,7 @@ public class FileRead extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         int part, total;
-        String id = message.getString("id");
+        String id = message.getst("id");
         FileServices services = getFunction();
         String sessionid = message.getSessionid();
         InternalFileEntry entry = services.entries.get(sessionid).get(id);

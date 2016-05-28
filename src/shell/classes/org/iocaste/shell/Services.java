@@ -61,8 +61,8 @@ public class Services extends AbstractFunction {
      */
     public final View getView(Message message) {
         String sessionid = message.getSessionid();
-        String appname = message.getString("app_name");
-        String pagename = message.getString("page_name");
+        String appname = message.getst("app_name");
+        String pagename = message.getst("page_name");
         
         return PageRenderer.getView(sessionid, appname, pagename);
     }
@@ -105,7 +105,7 @@ public class Services extends AbstractFunction {
      * @param message
      */
     public final void removeTicket(Message message) {
-        String ticket = message.getString("ticket");
+        String ticket = message.getst("ticket");
         
         PageRenderer.removeTicket(ticket, this);
     }
@@ -116,7 +116,7 @@ public class Services extends AbstractFunction {
      */
     public final void setPagesPosition(Message message) {
         String sessionid = message.getSessionid();
-        String position = message.getString("position");
+        String position = message.getst("position");
         
         PageRenderer.setPagesPosition(sessionid, position);
     }

@@ -13,7 +13,7 @@ public class RemoveNumberFactory extends AbstractDocumentsHandler {
         Documents documents;
         Connection connection;
         Query query;
-        String name = message.getString("name");
+        String name = message.getst("name");
         
         documents = getFunction();
         update = documents.get("update_document");

@@ -61,7 +61,7 @@ public class PageRenderer extends AbstractRenderer {
         for (String name : config.values.keySet())
             message.add(name, config.values.get(name));
 
-        control = config.state.view.getElement(message.getString("action"));
+        control = config.state.view.getElement(message.getst("action"));
         if ((control != null) && control.isPopup()) {
             config.popupcontrol = (PopupControl)control;
             config.contexturl = composeUrl(

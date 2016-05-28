@@ -12,7 +12,7 @@ public class GetSystemParameter extends AbstractHandler {
 
     @Override
     public final Object run(Message message) {
-        String name = message.getString("parameter");
+        String name = message.getst("parameter");
         return run(name);
     }
     

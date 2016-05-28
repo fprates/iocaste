@@ -23,7 +23,7 @@ public class GetNextNumber extends AbstractDocumentsHandler {
         Connection connection;
         String serie;
         Object ns;
-        String range = message.getString("range");
+        String range = message.getst("range");
         
         if (range == null)
             throw new IocasteException("Numeric range not specified.");
@@ -32,7 +32,7 @@ public class GetNextNumber extends AbstractDocumentsHandler {
         select = documents.database.get("select");
         connection = documents.database.getDBConnection(message.getSessionid());
         
-        serie = message.getString("serie");
+        serie = message.getst("serie");
         ns = message.get("ns");
         ns = (ns != null)? ns = ns.toString() : "";
         

@@ -15,9 +15,9 @@ public class CheckedSelect extends AbstractHandler {
         Select select;
         Object[] results;
         Connection connection;
-        String query, columns = message.getString("columns");
-        String from = message.getString("from");
-        String where = message.getString("where");
+        String query, columns = message.getst("columns");
+        String from = message.getst("from");
+        String where = message.getst("where");
         Object[] criteria = message.get("criteria");
         Map<String, String[]> ijoin = message.get("inner_join");
         StringBuilder sb = new StringBuilder("select ");

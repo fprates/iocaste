@@ -11,7 +11,7 @@ public class Redirect extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         ViewState state = new ViewState();
-        String task = message.getString("task");
+        String task = message.getst("task");
         AbstractPage function = getFunction();
         
         switch (Common.call(function, task)) {

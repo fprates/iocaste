@@ -63,7 +63,7 @@ public class Services extends AbstractFunction {
      * @throws Exception
      */
     public final ExtendedObject[] get(Message message) throws Exception {
-        String name = message.getString("name");
+        String name = message.getst("name");
         
         return load(name);
     }
@@ -127,7 +127,7 @@ public class Services extends AbstractFunction {
         Query query;
         ExtendedObject[] shdata;
         Documents documents = new Documents(this);
-        String shname = message.getString("shname");
+        String shname = message.getst("shname");
         
         query = new Query();
         query.setModel("SH_REFERENCE");
@@ -202,7 +202,7 @@ public class Services extends AbstractFunction {
      * @return
      */
     public final int unassign(Message message) {
-        String shname = message.getString("name");
+        String shname = message.getst("name");
         Query query = new Query("delete");
         
         query.setModel("SH_REFERENCE");

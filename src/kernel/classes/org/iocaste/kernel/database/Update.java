@@ -20,7 +20,7 @@ public class Update extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         Database database = getFunction();
-        String query = message.getString("query");
+        String query = message.getst("query");
         Object[] criteria = message.get("criteria");
         Connection connection = database.
                 getDBConnection(message.getSessionid());

@@ -53,7 +53,7 @@ public class GetFieldsProperties extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         AbstractPageBuilder function = getFunction();
-        String page = message.getString("page");
+        String page = message.getst("page");
         
         if (!fields.containsKey(page))
             function.config(this);

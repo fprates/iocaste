@@ -25,7 +25,7 @@ public class Install extends AbstractFunction {
      */
     public final ViewState execAction(Message message) throws Exception {
         View view = message.get("view");
-        String controlname = message.getString("action");
+        String controlname = message.getst("action");
         ControlComponent control = view.getElement(controlname);
         
         /*
@@ -58,8 +58,8 @@ public class Install extends AbstractFunction {
      * @throws Exception
      */
     public final View getViewData(Message message) throws Exception {
-        String page = message.getString("page");
-        String app = message.getString("app");
+        String page = message.getst("page");
+        String app = message.getst("app");
         
         /*
          * TODO pode ser movido para o servidor

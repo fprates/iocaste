@@ -16,7 +16,7 @@ public class GetSessionInfo extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String sessionid = message.getString("sessionid");
+        String sessionid = message.getst("sessionid");
         Session session = getFunction();
         Connection connection = session.database.
                 getDBConnection(message.getSessionid());

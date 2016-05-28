@@ -20,7 +20,7 @@ public class CallProcedure extends AbstractDatabaseHandler {
         int i;
         ResultSet rs;
         Database database = getFunction();
-        String sql = message.getString("sql");
+        String sql = message.getst("sql");
         Map<String, Object> in = message.get("in");
         Map<String, Integer> out = message.get("out");
         String sessionid = message.getSessionid();

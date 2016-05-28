@@ -11,7 +11,7 @@ public class SetUserPassword extends AbstractHandler {
         UpdateUser update;
         User user;
         String sessionid = message.getSessionid();
-        String secret = message.getString("secret");
+        String secret = message.getst("secret");
         Users users = getFunction();
         
         user = users.session.sessions.get(sessionid).getUser();

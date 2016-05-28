@@ -18,7 +18,7 @@ public class DropUser extends AbstractHandler {
     public Object run(Message message) throws Exception {
         Users users = getFunction();
         String sessionid = message.getSessionid();
-        String username = message.getString("username");
+        String username = message.getst("username");
         Update update = users.database.get("update");
         Connection connection = users.database.getDBConnection(sessionid);
         

@@ -11,7 +11,7 @@ public class GetDataElement extends AbstractDocumentsHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String name = message.getString("name");
+        String name = message.getst("name");
         Documents documents = getFunction();
         String sessionid = message.getSessionid(); 
         Connection connection = documents.database.getDBConnection(sessionid);

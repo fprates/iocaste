@@ -17,7 +17,7 @@ public class Main extends AbstractExternalApplication {
     protected void execute(Message message) throws Exception {
         ServerSocket localsocket;
         Socket remotesocket;
-        int port = Integer.parseInt(message.getString("--gw-port"));
+        int port = Integer.parseInt(message.getst("--gw-port"));
         
         localsocket = new ServerSocket(port);
         try {

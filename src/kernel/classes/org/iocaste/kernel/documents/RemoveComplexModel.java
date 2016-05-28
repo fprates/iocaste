@@ -12,7 +12,7 @@ public class RemoveComplexModel extends AbstractDocumentsHandler {
         UpdateDocument update;
         Query query;
         int error;
-        String name = message.getString("name");
+        String name = message.getst("name");
         String sessionid = message.getSessionid();
         Documents documents = getFunction();
         Connection connection = documents.database.getDBConnection(sessionid);

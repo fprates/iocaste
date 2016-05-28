@@ -43,7 +43,7 @@ public class ExecAction extends AbstractHandler {
         state.view = view;
         state.rapp = state.rpage = null;
         state.initialize = false;
-        context.action = context.control = message.getString("action");
+        context.action = context.control = message.getst("action");
         validables = context.function.getValidables();
         for (String name : validables.keySet()) {
             input = (InputComponent)view.getElement(name);

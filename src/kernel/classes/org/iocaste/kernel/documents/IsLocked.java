@@ -9,8 +9,8 @@ public class IsLocked extends AbstractDocumentsHandler {
     @Override
     public Object run(Message message) throws Exception {
         String sessionid = message.getSessionid();
-        String modelname = message.getString("model");
-        String key = message.getString("key");
+        String modelname = message.getst("model");
+        String key = message.getst("key");
         Documents documents = getFunction();
         
         return run(documents, modelname, key, sessionid);

@@ -27,7 +27,7 @@ public class Main extends AbstractExternalApplication {
         SeekableByteChannel channel;
         Path path;
 		String id, name;
-		String filename = message.getString("--file");
+		String filename = message.getst("--file");
 		ByteBuffer buffer = ByteBuffer.allocate(64 * 1024);
 
         transport = new Transport(connector);

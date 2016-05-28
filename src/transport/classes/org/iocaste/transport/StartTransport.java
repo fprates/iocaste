@@ -7,7 +7,7 @@ public class StartTransport extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String filename = message.getString("filename");
+        String filename = message.getst("filename");
         Services services = getFunction();
         
         services.instance(filename);

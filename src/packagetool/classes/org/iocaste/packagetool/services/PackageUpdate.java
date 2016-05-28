@@ -38,7 +38,7 @@ public class PackageUpdate extends AbstractHandler {
         state.data = message.get("data");
         state.function = getFunction();
         state.documents = new Documents(state.function);
-        state.pkgname = message.getString("name");
+        state.pkgname = message.getst("name");
         
         models = state.data.getModels();
         if (models.size() > 0)
