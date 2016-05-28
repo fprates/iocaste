@@ -10,7 +10,7 @@ public class Fetch extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        String file = message.getString("file");
+        String file = message.getst("file");
         Services services = getFunction();
         Iocaste iocaste = new Iocaste(services);
         String path = Paths.get("workbench", file).toString();
