@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.iocaste.protocol.files.Directory;
 import org.iocaste.protocol.files.FileEntry;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.protocol.user.User;
@@ -14,6 +15,7 @@ public final class Iocaste extends AbstractServiceInterface {
     public static final String SERVERNAME = "/iocaste-kernel/service.html";
     public static final int CREATE = 0;
     public static final int READ = 1;
+    public static final byte JAR = 1;
     
     public Iocaste(Function function) {
         initService(function, SERVERNAME);
@@ -341,6 +343,14 @@ public final class Iocaste extends AbstractServiceInterface {
         Message message = new Message("write");
         message.add("id", id);
         message.add("buffer", buffer);
+        call(message);
+    }
+    
+    public final void write(String dirsymbol, Directory directory, byte type) {
+        Message message = new Message("directory_write");
+        message.add("symbol", dirsymbol);
+        message.add("directory", directory);
+        message.add("type", type);
         call(message);
     }
 }

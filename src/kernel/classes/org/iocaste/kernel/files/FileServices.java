@@ -7,6 +7,7 @@ import java.nio.channels.SeekableByteChannel;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.iocaste.kernel.files.directory.DirectoryWrite;
 import org.iocaste.protocol.AbstractFunction;
 
 public class FileServices extends AbstractFunction {
@@ -16,6 +17,7 @@ public class FileServices extends AbstractFunction {
         entries = new HashMap<>();
         export("close", new FileClose());
         export("delete", new DeleteFile());
+        export("directory_write", new DirectoryWrite());
         export("file", new FileOperations());
         export("file_exists", new FileExists());
         export("files_get", new GetFiles());
@@ -25,7 +27,7 @@ public class FileServices extends AbstractFunction {
         export("write", new FileWrite());
     }
 
-    private static final String composeFileName(String... names) {
+    public static final String composeFileName(String... names) {
         StringBuilder sb = new StringBuilder();
         
         for (String name : names) {
@@ -48,6 +50,17 @@ public class FileServices extends AbstractFunction {
                     path = composeFileName(path, arg);
         
         return path;
+    }
+    
+    public static final String getSymbolPath(String symbol) {
+        switch (symbol) {
+        case "WEBAPPS":
+            return composeFileName(
+                    System.getProperty("catalina.home"),
+                    "webapps");
+        default:
+            return null;
+        }
     }
     
     public final InternalFileEntry instance(String sessionid, String... args) {
