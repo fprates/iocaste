@@ -13,7 +13,7 @@ public class Compile extends AbstractCommand {
     private CompileData data;
 
     public Compile() {
-        required("project");
+        optional("project");
         data = new CompileData();
     }
     
@@ -37,8 +37,17 @@ public class Compile extends AbstractCommand {
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         ComplexDocument document;
-        
+
+        data.extcontext = getExtendedContext();
         data.project = parameters.get("project");
+        if ((data.project == null) && (data.extcontext.project == null)) {
+            message(Const.ERROR, "undefined.project");
+            return;
+        }
+        
+        if (data.project == null)
+            data.project = data.extcontext.project.getstKey();
+        
         document = getDocument("project", data.project);
         if (document == null) {
             message(Const.ERROR, "invalid.project");

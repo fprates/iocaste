@@ -10,8 +10,9 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Const;
 
 public class ExecuteCommand extends AbstractActionHandler {
-    private static final byte TOKEN = 0;
+    private static final byte FUNCTION = 0;
     private static final byte STRING = 1;
+    private static final byte PARAMETER = 2;
     private static final byte NAME = 0;
     private static final byte VALUE = 1;
     
@@ -27,38 +28,38 @@ public class ExecuteCommand extends AbstractActionHandler {
         char[] buffer = function.toCharArray();
         List<String> tokens = new ArrayList<>();
         
-        type = TOKEN;
+        type = FUNCTION;
         function = null;
         sb = new StringBuilder();
         for (int i = 0; i < buffer.length; i++) {
             switch (buffer[i]) {
             case ' ':
-                if (type == STRING)
-                    break;
-                if (function == null)
-                    function = sb.toString();
-                else
-                    tokens.add(sb.toString());
+                if (type != PARAMETER) {
+                    type = PARAMETER;
+                    if (function != null)
+                        tokens.add(sb.toString());
+                    else
+                        function = sb.toString();
+                    sb.setLength(0);
+                    continue;
+                }
+                tokens.add(sb.toString());
                 sb.setLength(0);
-                    
                 continue;
             case '\"':
-                if (type == TOKEN)
+                if (type != STRING)
                     type = STRING;
                 else
-                    type = TOKEN;
+                    type = PARAMETER;
                 break;
             }
             sb.append(buffer[i]);
-            if (i != (buffer.length - 1))
-                continue;
-            if (function != null) {
-                tokens.add(sb.toString());
-                continue;
-            }
-            function = sb.toString();
-            tokens.add(function);
         }
+        
+        if (function == null)
+            function = sb.toString();
+        else
+            tokens.add(sb.toString());
         
         command = extcontext.commands.get(function);
         if (command == null) {
