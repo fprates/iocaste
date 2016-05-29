@@ -1,13 +1,6 @@
 package org.iocaste.workbench;
 
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractFunction;
-import org.iocaste.protocol.Message;
-import org.iocaste.texteditor.common.TextEditorTool;
-import org.iocaste.workbench.common.Project;
-import org.iocaste.workbench.common.Source;
-import org.iocaste.workbench.compiler.Compile;
-import org.iocaste.workbench.shell.Package;
 
 public class Services extends AbstractFunction {
 

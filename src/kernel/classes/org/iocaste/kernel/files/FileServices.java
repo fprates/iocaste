@@ -56,8 +56,10 @@ public class FileServices extends AbstractFunction {
         switch (symbol) {
         case "WEBAPPS":
             return composeFileName(
-                    System.getProperty("catalina.home"),
-                    "webapps");
+                    File.separator, "var", "lib", "tomcat", "webapps");
+        case "WORKBENCH_LIBS":
+            return composeFileName(getSymbolPath("WEBAPPS"),
+                    "iocaste-workbench", "WEB-INF", "lib");
         default:
             return null;
         }
