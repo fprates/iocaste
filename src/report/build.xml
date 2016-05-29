@@ -13,6 +13,7 @@
             <fileset dir="${builddir}/search-help/lib"/>
             <fileset dir="${builddir}/packagetool/lib"/>
         	<fileset dir="${builddir}/appbuilder/lib"/>
+        	<fileset dir="${builddir}/docmanager/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>

@@ -52,9 +52,6 @@
     	<!-- external-lib -->
     	<ant antfile="${basedir}/src/external/build-lib.xml"/>
     	
-    	<!-- workbench-lib -->
-    	<ant antfile="${basedir}/src/workbench/build-lib.xml"/>
-    	
     	<!-- transport-lib -->
     	<ant antfile="${basedir}/src/transport/build-lib.xml"/>
     	
@@ -63,6 +60,29 @@
     	
         <!-- report -->
     	<ant antfile ="${basedir}/src/report/build.xml"/>
+        
+        <copy todir="${basedir}/ext/common">
+            <fileset dir="${builddir}/core/lib" excludes="*.jar"/>
+            <fileset dir="${builddir}/documents/lib" excludes="*.jar"/>
+            <fileset dir="${builddir}/shell/lib" excludes="*.jar"/>
+            <fileset dir="${builddir}/packagetool/lib" excludes="*.jar"/>
+            <fileset dir="${builddir}/globalconfig/lib" excludes="*.jar"/>
+            <fileset dir="${builddir}/authority/lib" excludes="*.jar"/>
+            <fileset dir="${builddir}/texteditor/lib" excludes="*.jar"/>
+            <fileset dir="${builddir}/svg/lib" excludes="*.jar"/>
+            <fileset dir="${builddir}/docmanager/lib/" excludes="*.jar"/>
+            <fileset dir="${builddir}/appbuilder/lib/" excludes="*.jar"/>
+            <fileset dir="${builddir}/tasksel/lib/" excludes="*.jar"/>
+            <fileset dir="${builddir}/log/lib/" excludes="*.jar"/>
+            <fileset dir="${builddir}/external/lib/" excludes="*.jar"/>
+            <fileset dir="${builddir}/transport/lib/" excludes="*.jar"/>
+            <fileset dir="${builddir}/mail/lib/" excludes="*.jar"/>
+            <fileset dir="${builddir}/report/lib" excludes="*.jar"/>
+        </copy>
+        
+        <jar basedir="${basedir}/ext/common"
+        	destfile="${basedir}/ext/iocaste.jar"/>
+        <delete dir="${basedir}/ext/common"/>
     </target>
 
     <target name="clean">
@@ -88,7 +108,7 @@
     	
     	<ant antfile="${basedir}/src/build.xml" target="compile.base"/>
     	
-        <ant antfile="${basedir}/src/transport/build-robot.xml"/>
+        <!--<ant antfile="${basedir}/src/transport/build-robot.xml"/>-->
     	
         <!-- login -->
         <ant antfile="${basedir}/src/login/build.xml"/>
@@ -149,29 +169,6 @@
         	
         <!-- template -->
         <ant antfile="${basedir}/src/template/build.xml"/>
-    	
-    	<copy todir="${basedir}/ext/common">
-    		<fileset dir="${builddir}/core/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/documents/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/shell/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/packagetool/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/globalconfig/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/authority/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/texteditor/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/workbench/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/svg/lib" excludes="*.jar"/>
-    		<fileset dir="${builddir}/docmanager/lib/" excludes="*.jar"/>
-    		<fileset dir="${builddir}/appbuilder/lib/" excludes="*.jar"/>
-    		<fileset dir="${builddir}/tasksel/lib/" excludes="*.jar"/>
-    		<fileset dir="${builddir}/log/lib/" excludes="*.jar"/>
-    		<fileset dir="${builddir}/external/lib/" excludes="*.jar"/>
-    		<fileset dir="${builddir}/transport/lib/" excludes="*.jar"/>
-    		<fileset dir="${builddir}/mail/lib/" excludes="*.jar"/>
-    		<fileset dir="${builddir}/report/lib" excludes="*.jar"/>
-    	</copy>
-    	
-    	<jar basedir="${basedir}/ext/common"
-    		destfile="${basedir}/ext/iocaste.jar"/>
 
         <!-- gateway -->
         <ant antfile="${basedir}/src/gateway/build.xml"/>
@@ -179,7 +176,6 @@
         <!-- sap-connector -->
         <ant antfile="${basedir}/src/sap-connector/build.xml"/>
     	
-    	<delete dir="${basedir}/ext/common"/>
     	<ant antfile="${basedir}/src/transport.xml"/>
         <ant antfile="${basedir}/src/build.xml" target="clean"/>
     </target>

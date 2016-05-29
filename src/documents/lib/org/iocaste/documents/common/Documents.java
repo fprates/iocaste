@@ -35,7 +35,6 @@ import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.Shell;
 
 /**
  * Serviços do módulo de documentos
@@ -88,7 +87,7 @@ public class Documents extends AbstractServiceInterface {
         
         switch(dataelement.getType()) {
         case DataType.DEC:
-            if (Shell.isInitial(value))
+            if (Documents.isInitial(value))
                 return 0d;
             
             try {
@@ -98,7 +97,7 @@ public class Documents extends AbstractServiceInterface {
                 throw new RuntimeException(e);
             }
         case DataType.DATE:
-            if (Shell.isInitial(value))
+            if (Documents.isInitial(value))
                 return null;
             
             try {
@@ -109,7 +108,7 @@ public class Documents extends AbstractServiceInterface {
                 throw new RuntimeException(e);
             }
         case DataType.TIME:
-            if (Shell.isInitial(value))
+            if (Documents.isInitial(value))
                 return null;
             
             try {
@@ -124,12 +123,12 @@ public class Documents extends AbstractServiceInterface {
         case DataType.LONG:
         case DataType.SHORT:
         case DataType.NUMC:
-            if (Shell.isInitial(value))
+            if (Documents.isInitial(value))
                 return new BigDecimal(0);
             
             return new BigDecimal(value);
         case DataType.CHAR:
-            if (Shell.isInitial(value))
+            if (Documents.isInitial(value))
                 return null;
             
             if (dataelement.isUpcase())

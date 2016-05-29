@@ -4,12 +4,6 @@
         
         <!-- dependências -->
         <path id="dependencies">
-            <fileset dir="${builddir}/shell/lib"/>
-            <fileset dir="${builddir}/documents/lib"/>
-            <fileset dir="${builddir}/packagetool/lib"/>
-            <fileset dir="${builddir}/appbuilder/lib"/>
-            <fileset dir="${builddir}/external/lib"/>
-        	<fileset dir="${builddir}/workbench/lib"/>
             <fileset dir="${basedir}/lib"/>
             <fileset dir="${basedir}/ext"/>
         </path>

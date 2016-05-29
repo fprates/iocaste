@@ -12,7 +12,6 @@ import org.iocaste.appbuilder.common.ExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
-import org.iocaste.shell.common.CustomView;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.StyleSheet;
 
@@ -55,7 +54,7 @@ public class TilesTool extends AbstractComponentTool {
     public void run() {
         String linkname, pagename;
         Tile tile;
-        CustomView builder;
+        BuilderCustomView builder;
         ViewSpecItem itemspec, tilesspec;
         Object[] objects;
         ViewContext view;
