@@ -8,6 +8,7 @@ public class MainSpec extends AbstractViewSpec {
     @Override
     public void execute(PageBuilderContext context) {
         textfield(parent, "command");
+        printarea(parent);
     }
 
 }

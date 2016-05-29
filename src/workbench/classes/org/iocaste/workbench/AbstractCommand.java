@@ -20,9 +20,10 @@ public abstract class AbstractCommand extends AbstractActionHandler {
             if ((arguments.get(key) == REQUIRED) &&
                     !parameters.containsKey(key))
                 return "parameter.required";
-        for (String key : parameters.keySet())
-            if (!arguments.containsKey(key))
-                return "invalid.parameter";
+        if (arguments.size() > 0)
+            for (String key : parameters.keySet())
+                if (!arguments.containsKey(key))
+                    return "invalid.parameter";
         return null;
     }
     

@@ -7,8 +7,12 @@ public class MainInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        // TODO Auto-generated method stub
-        
+        Context extcontext = getExtendedContext();
+        if (extcontext.output.size() == 0)
+            return;
+        for (String line : extcontext.output)
+            print(line);
+        extcontext.output.clear();
     }
 
     @Override
