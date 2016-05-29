@@ -12,6 +12,7 @@ import org.iocaste.workbench.project.ProjectAdd;
 import org.iocaste.workbench.project.ProjectList;
 import org.iocaste.workbench.project.ProjectUse;
 import org.iocaste.workbench.project.compile.Compile;
+import org.iocaste.workbench.project.view.ViewAdd;
 
 public class Context extends AbstractExtendedContext {
     public Map<String, AbstractCommand> commands;
@@ -26,6 +27,7 @@ public class Context extends AbstractExtendedContext {
         commands.put("project-add", new ProjectAdd());
         commands.put("project-list", new ProjectList());
         commands.put("project-use", new ProjectUse());
+        commands.put("view-add", new ViewAdd());
     }
 
 }
