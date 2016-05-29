@@ -1,6 +1,5 @@
 package org.iocaste.kernel.files.directory;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -11,6 +10,7 @@ import java.util.jar.JarOutputStream;
 
 import org.iocaste.kernel.files.FileServices;
 import org.iocaste.protocol.files.Directory;
+import org.iocaste.protocol.files.DirectoryInstance;
 import org.iocaste.protocol.files.DirectoryLeaf;
 
 public class JarEngine implements DirectoryEngine {
@@ -20,8 +20,7 @@ public class JarEngine implements DirectoryEngine {
     @Override
     public final void dir(DirectoryLeaf leaf) throws Exception {
         if (leaf != root)
-            jar.putNextEntry(
-                    new JarEntry(leaf.getPath().concat(File.separator)));
+            jar.putNextEntry(new JarEntry(leaf.getPath()));
     }
     
     @Override
@@ -29,27 +28,37 @@ public class JarEngine implements DirectoryEngine {
         FileChannel channel;
         String file;
         int limit;
+        DirectoryInstance instance;
         FileInputStream fis;
         ByteBuffer buffer = null;
         
         file = leaf.getPath();
         jar.putNextEntry(new JarEntry(file));
-        fis = new FileInputStream(file);
-        channel = fis.getChannel();
-        
-        if (buffer == null)
-            buffer = ByteBuffer.allocate(64*1024);
-        
-        buffer.rewind();
-        while ((limit = channel.read(buffer)) > 0) {
-            buffer.flip();
-            if (buffer.hasArray())
-                jar.write(buffer.array(), 0, limit);
-            buffer.clear();
+        instance = leaf.getInstance();
+        switch (instance.getAction()) {
+        case DirectoryInstance.COPY:
+            file = FileServices.composeFileName(instance.getSource());
+            file = FileServices.composeFileName(
+                    FileServices.getSymbolPath(instance.getSourceSymbol()),
+                    file);
+            fis = new FileInputStream(file);
+            channel = fis.getChannel();
+            
+            if (buffer == null)
+                buffer = ByteBuffer.allocate(64*1024);
+            
+            buffer.rewind();
+            while ((limit = channel.read(buffer)) > 0) {
+                buffer.flip();
+                if (buffer.hasArray())
+                    jar.write(buffer.array(), 0, limit);
+                buffer.clear();
+            }
+            
+            channel.close();
+            fis.close();
+            break;
         }
-        
-        channel.close();
-        fis.close();
         jar.closeEntry();
     }
     

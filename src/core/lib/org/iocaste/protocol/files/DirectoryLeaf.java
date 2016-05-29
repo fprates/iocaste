@@ -13,6 +13,7 @@ public class DirectoryLeaf implements Serializable {
     private DirectoryLeaf parent;
     private String name;
     private byte type;
+    private DirectoryInstance instance;
     
     public DirectoryLeaf(DirectoryLeaf parent, String name, byte type) {
         children = new HashMap<>();
@@ -21,8 +22,10 @@ public class DirectoryLeaf implements Serializable {
         this.type = type;
     }
     
-    public final void add(String name, byte type) {
-        children.put(name, new DirectoryLeaf(this, name, type));
+    public final DirectoryLeaf add(String name, byte type) {
+        DirectoryLeaf leaf = new DirectoryLeaf(this, name, type);
+        children.put(name, leaf);
+        return leaf;
     }
     
     public final boolean contains(String dir) {
@@ -37,17 +40,28 @@ public class DirectoryLeaf implements Serializable {
         return children;
     }
     
+    public final DirectoryInstance getInstance() {
+        return instance;
+    }
+    
     public final String getPath() {
         String parentname;
+        StringBuilder sb;
         
         if (parent == null)
             return File.separator;
         parentname = parent.getPath();
-        return new StringBuilder(parentname).
-                append(File.separator).append(name).toString();
+        sb = new StringBuilder(parentname).append(name);
+        if (type == DIR)
+            sb.append(File.separator);
+        return sb.toString();
     }
     
     public final byte getType() {
         return type;
+    }
+    
+    public final void setInstance(DirectoryInstance instance) {
+        this.instance = instance;
     }
 }

@@ -13,12 +13,30 @@ public class Directory implements Serializable {
     }
     
     public final void addDir(String... dirs) {
-        DirectoryLeaf leave = root;
+        DirectoryLeaf leaf = root;
         for (String dir : dirs) {
-            if (!leave.contains(dir))
-                leave.add(dir, DirectoryLeaf.DIR);
-            leave = leave.get(dir);
+            if (!leaf.contains(dir))
+                leaf.add(dir, DirectoryLeaf.DIR);
+            leaf = leaf.get(dir);
         }
+    }
+    
+    private final DirectoryLeaf addFile(String... path) {
+        DirectoryLeaf leaf = root;
+        int i = 0;
+        int t = path.length - 1;
+        
+        for (String dir : path) {
+            if (!leaf.contains(dir)) {
+                if (i < t)
+                    throw new RuntimeException("Invalid path");
+                return leaf.add(path[i], DirectoryLeaf.FILE);
+            }
+            i++;
+            leaf = leaf.get(dir);
+        }
+        
+        return null;
     }
     
     public final DirectoryLeaf get() {
@@ -27,5 +45,10 @@ public class Directory implements Serializable {
     
     public final String getName() {
         return name;
+    }
+    
+    public DirectoryInstance copy(String... target) {
+        DirectoryLeaf leaf = addFile(target);
+        return new DirectoryInstance(leaf, DirectoryInstance.COPY);
     }
 }
