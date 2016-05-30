@@ -27,6 +27,7 @@ public class PackageUpdate extends AbstractHandler {
         Map<String, String> links;
         Map<TaskGroup, Set<User>> tasksgroups;
         Map<UserProfile, Set<User>> profiles;
+        Map<String, Map<String, Long>> numbers;
         Authorization[] authorizations;
         ComplexModel[] cmodels;
         SearchHelpData[] shdata;
@@ -54,6 +55,7 @@ public class PackageUpdate extends AbstractHandler {
         types.add("TSKITEM");
         types.add("TASK");
         types.add("CMODEL");
+        types.add("NUMBER");
         
         services = getFunction();
         uninstall = services.get("uninstall");
@@ -92,6 +94,13 @@ public class PackageUpdate extends AbstractHandler {
         tasksgroups = state.data.getTasksGroups();
         if (tasksgroups.size() > 0)
             InstallTasksGroups.init(tasksgroups, state);
+        
+        numbers = state.data.getNumberFactories();
+        for (String factory : numbers.keySet()) {
+            state.documents.createNumberFactory(
+                    factory, null, numbers.get(factory));
+            Registry.add(factory, "NUMBER", state);
+        }
         
         /*
          * grava itens instalados
