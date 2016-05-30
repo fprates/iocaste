@@ -305,9 +305,9 @@ public abstract class AbstractViewInput implements ViewInput {
         editor.getElement(context).set(text);
     }
     
-    protected final void textset(String name, String text) {
+    protected final void textset(String name, String text, Object... args) {
         Component element = getElement(name);
-        element.setText(text);
+        element.setText(text, args);
     }
     
     protected final void tilesset(String name, Object[] objects) {

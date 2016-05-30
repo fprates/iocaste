@@ -131,12 +131,9 @@ public abstract class AbstractComponent extends AbstractElement
     protected final String getTranslation(MessageSource messages, String name) {
         String message;
         
-        message = messages.get(getName());
-        if (message != null)
-            return (args == null)? message : String.format(message, args);
-        if (this.text == null)
-            return null;
-        message = messages.get(text);
+        message = messages.get((this.text != null)? this.text : getName());
+        if ((message == null) && (name != null))
+            message = messages.get(name);
         if (message == null)
             return null;
         return (args == null || args.length == 0)?
