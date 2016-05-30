@@ -40,6 +40,8 @@ public class StandardNavControlDesign implements NavControlDesign {
         inner.setStyleClass("nc_inner_container");
         trackbar = new StandardContainer(inner, "nc_trackbar");
         trackbar.setStyleClass("nc_trackbar");
+        title = context.view.getTitle();
+        name = title.text;
         
         iocaste = new Iocaste(context.function);
         if (iocaste.isConnected()) {
@@ -73,19 +75,16 @@ public class StandardNavControlDesign implements NavControlDesign {
                 text.setText("&gt;");
                 text.setStyleClass("nc_text");
             }
+            if (name == null)
+                name = iocaste.getCurrentApp();
         }
         
         context.view.add(new HeaderLink(
                 "shortcut icon", "/iocaste-shell/images/favicon.ico"));
         
-        title = context.view.getTitle();
-        name = title.text;
-        if (name == null)
-            name = iocaste.getCurrentApp();
-        
         logo = new StandardContainer(inner, "logo");
         logo.setStyleClass("main_logo");
-        
+
         text = new Text(inner, "this");
         text.setStyleClass("nc_title");
         text.setText(name, title.args);
