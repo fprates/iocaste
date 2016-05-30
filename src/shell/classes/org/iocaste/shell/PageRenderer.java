@@ -1,5 +1,7 @@
 package org.iocaste.shell;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -123,6 +125,8 @@ public class PageRenderer extends AbstractRenderer {
             String sessionid, int logid) {
         SessionContext sessionctx;
         PageContext pagectx;
+        Enumeration<String> parameternames;
+        String key;
         ContextData contextdata = new ContextData();
         String login = req.getParameter("login-manager");
         
@@ -136,6 +140,13 @@ public class PageRenderer extends AbstractRenderer {
         sessionctx = apps.get(sessionid).get(logid);
         sessionctx.loginapp = new StringBuilder(contextdata.appname).
             append(".").append(contextdata.pagename).toString();
+
+        parameternames = req.getParameterNames();
+        while (parameternames.hasMoreElements()) {
+            key = (String)parameternames.nextElement();
+            pagectx.parameters.put(key, req.getParameterValues(key)[0]);
+        }
+        
         return pagectx;
     }
     
