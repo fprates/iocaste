@@ -41,7 +41,7 @@ public class StandardNavControlDesign implements NavControlDesign {
         trackbar = new StandardContainer(inner, "nc_trackbar");
         trackbar.setStyleClass("nc_trackbar");
         title = context.view.getTitle();
-        name = title.text;
+        name = "iocaste";
         
         iocaste = new Iocaste(context.function);
         if (iocaste.isConnected()) {
@@ -75,7 +75,7 @@ public class StandardNavControlDesign implements NavControlDesign {
                 text.setText("&gt;");
                 text.setStyleClass("nc_text");
             }
-            if (name == null)
+            if (title.text == null)
                 name = iocaste.getCurrentApp();
         }
         
@@ -87,7 +87,7 @@ public class StandardNavControlDesign implements NavControlDesign {
 
         text = new Text(inner, "this");
         text.setStyleClass("nc_title");
-        text.setText(name, title.args);
+        text.setText((title.text == null)? name : title.text, title.args);
         
 //        user = iocaste.getUserData(iocaste.getUsername());
 //        text = new Text(container, "username");
