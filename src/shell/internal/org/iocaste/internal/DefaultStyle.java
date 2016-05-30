@@ -351,9 +351,9 @@ public class DefaultStyle {
         style.put("color", DISABLED_FONT_COLOR);
         
         // textfield c/ placeholder desabilitado
-        style = stylesheet.clone(
-                ".text_field_disabled_internallabel", ".text_field_disabled");
-        style.put("display", "block");
+        style = stylesheet.clone(".text_field_disabled_internallabel",
+                ".text_field_internallabel");
+        style.put("color", DISABLED_FONT_COLOR);
 
         // textfield direito desabilitado
         style = stylesheet.clone(
