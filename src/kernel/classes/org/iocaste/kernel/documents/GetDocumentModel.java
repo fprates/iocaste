@@ -75,7 +75,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
                         if (!broken)
                             throw e;
                         /*
-                         * queremos recuperar o modelo à todo custo.
+                         * podemos recuperar o modelo à todo custo.
                          * mas avisamos que está corrompido.
                          */
                         document.corrupted();
