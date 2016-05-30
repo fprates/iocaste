@@ -43,6 +43,7 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     private String name, tablename, classname, pkgname;
     private Map<String, DocumentModelItem> itens;
     private Set<DocumentModelKey> keys;
+    private boolean corrupted;
     
     public DocumentModel(String name) {
         this.name = name;
@@ -97,6 +98,10 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
      */
     public final boolean contains(String name) {
         return itens.containsKey(name);
+    }
+    
+    public final void corrupted() {
+        corrupted = true;
     }
     
     /*
@@ -198,6 +203,10 @@ public class DocumentModel implements Comparable<DocumentModel>, Serializable {
     @Override
     public int hashCode() {
         return (name == null)?0 : name.hashCode();
+    }
+
+    public final boolean isCorrupted() {
+        return corrupted;
     }
     
     /**

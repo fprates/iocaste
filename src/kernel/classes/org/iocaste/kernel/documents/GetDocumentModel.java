@@ -67,8 +67,17 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
                 if (itemref != null) {
                     composed = itemref.split("\\.");
                     reference = run(connection, documents, composed[0]);
-                    if (reference != null)
-                        item.setReference(reference.getModelItem(composed[1]));
+                    try {
+                        if (reference != null)
+                            item.setReference(
+                                    reference.getModelItem(composed[1]));
+                    } catch (Exception e) {
+                        /*
+                         * queremos recuperar o modelo à todo custo.
+                         * mas avisamos que está corrompido.
+                         */
+                        document.corrupted();
+                    }
                 }
                 
                 shlines = select(connection, QUERIES[SH_REFERENCE], 0, name);
