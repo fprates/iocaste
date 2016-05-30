@@ -66,10 +66,13 @@ public class ExecAction extends AbstractHandler {
         customaction = customactions.get(context.action);
         if (customaction == null) {
             element = context.view.getElement(context.action);
-            if (element == null)
+            if (element == null) {
+                if (context.action.length() == 0)
+                    return state;
                 throw new IocasteException(new StringBuilder(
                         "no defined element for \"").append(context.action).
                         append("\".").toString());
+            }
             
             if (element.isControlComponent()) {
                 control = (ControlComponent)element;

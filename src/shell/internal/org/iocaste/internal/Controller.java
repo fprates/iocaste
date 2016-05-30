@@ -31,7 +31,6 @@ public class Controller {
     private static final int EINITIAL = 1;
     private static final int EMISMATCH = 2;
     private static final int EINVALID_REFERENCE = 3;
-    private static final int WINVALID_ACTION = 4;
     private static final int LOW_RANGE = 3;
     private static final int HIGH_RANGE = 4;
     public static Map<String, String> messages;
@@ -598,12 +597,6 @@ public class Controller {
         }
         
         message(config, Const.NONE, null);
-        if (controlname.equals("")) {
-            status.error = WINVALID_ACTION;
-            status.msgtype = Const.WARNING;
-            return status;
-        }
-        
         element = config.state.view.getElement(controlname);
         if (element != null)
             processInputsStage(element, config, status);
