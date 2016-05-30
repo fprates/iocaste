@@ -68,7 +68,8 @@ public class CreateModels extends AbstractDocumentsHandler {
             name = model.getTableName();
             if (name == null)
                 continue;
-            oldmodel = getmodel.run(connection, documents, model.getName());
+            oldmodel = getmodel.run(
+                    connection, documents, model.getName(), true);
             if (oldmodel != null)
                 recursiveRemove(connection, documents, oldmodel);
             code = createmodel.createTable(connection, documents, model);

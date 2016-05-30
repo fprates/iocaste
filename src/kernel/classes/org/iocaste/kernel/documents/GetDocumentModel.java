@@ -15,7 +15,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
 
     @SuppressWarnings("unchecked")
     public final DocumentModel build(Connection connection, Documents documents,
-            String modelname) throws Exception {
+            String modelname, boolean broken) throws Exception {
         DataElement element;
         DocumentModel document, reference;
         int i;
@@ -66,12 +66,14 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
                 itemref = (String)columns.get("ITREF");
                 if (itemref != null) {
                     composed = itemref.split("\\.");
-                    reference = run(connection, documents, composed[0]);
+                    reference = run(connection, documents, composed[0], broken);
                     try {
                         if (reference != null)
                             item.setReference(
                                     reference.getModelItem(composed[1]));
                     } catch (Exception e) {
+                        if (!broken)
+                            throw e;
                         /*
                          * queremos recuperar o modelo à todo custo.
                          * mas avisamos que está corrompido.
@@ -107,11 +109,16 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         Documents documents = getFunction();
         String sessionid = message.getSessionid();
         Connection connection = documents.database.getDBConnection(sessionid);
-        return run(connection, documents, modelname);
+        return run(connection, documents, modelname, false);
+    }
+
+    public DocumentModel run(Connection connection, Documents documents,
+            String modelname) throws Exception {
+        return run(connection, documents, modelname, false);
     }
     
     public DocumentModel run(Connection connection, Documents documents,
-            String modelname) throws Exception {
+            String modelname, boolean broken) throws Exception {
         Map<String, String> queries;
         DocumentModel document;
         
@@ -121,7 +128,7 @@ public class GetDocumentModel extends AbstractDocumentsHandler {
         if (documents.cache.models.containsKey(modelname))
             return documents.cache.models.get(modelname);
         
-        document = build(connection, documents, modelname);
+        document = build(connection, documents, modelname, broken);
         if (document == null)
             return null;
         
