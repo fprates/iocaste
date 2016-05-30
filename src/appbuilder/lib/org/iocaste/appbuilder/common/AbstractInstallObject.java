@@ -67,6 +67,14 @@ public abstract class AbstractInstallObject {
         return element;
     }
     
+    protected final DataElement elementtime(String name) {
+        DataElement element = new DataElement(name);
+        
+        element.setType(DataType.TIME);
+        context.put(name, element);
+        return element;
+    }
+    
     protected abstract void execute(StandardInstallContext context)
             throws Exception ;
     
