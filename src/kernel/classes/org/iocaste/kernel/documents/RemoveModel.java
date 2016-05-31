@@ -5,11 +5,48 @@ import java.sql.Connection;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.documents.common.Query;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class RemoveModel extends AbstractDocumentsHandler {
 
+    public static final void recursive(Connection connection,
+            Documents documents, DocumentModel model) throws Exception {
+        DocumentModel reference;
+        String[] tokens;
+        ExtendedObject[] objects;
+        Query query;
+        String field, modelname;
+        String name = model.getTableName();
+        SelectDocument select = documents.get("select_document");
+        GetDocumentModel getmodel = documents.get("get_document_model");
+        RemoveModel removemodel = documents.get("remove_model");
+        String pkg = model.getPackage();
+        
+        modelname = model.getName();
+        for (DocumentModelItem item : model.getItens()) {
+            field = new StringBuilder(modelname).
+                    append(".").append(item.getName()).toString();
+            query = new Query();
+            query.setModel("FOREIGN_KEY");
+            query.andEqual("ITEM_NAME", field);
+            objects = select.run(connection, query);
+            if (objects == null)
+                continue;
+            for (ExtendedObject object : objects) {
+                tokens = object.getst("REFERENCE").split("\\.");
+                reference = getmodel.run(
+                        connection, documents, tokens[0], true);
+                if (reference.getPackage().equals(pkg));
+                    recursive(connection, documents, reference);
+            }
+        }
+        
+        removemodel.removeTable(connection, name);
+    }
+    
     @Override
     public Object run(Message message) throws Exception {
         GetDocumentModel getmodel;
@@ -26,7 +63,7 @@ public class RemoveModel extends AbstractDocumentsHandler {
         model = getmodel.run(connection, documents, modelname);
         if (model == null)
             return 0;
-        
+
         for (DocumentModelKey key : model.getKeys()) {
             name = getComposedName(model.getModelItem(key.getModelItemName()));
             update(connection, QUERIES[DEL_KEY], name);
