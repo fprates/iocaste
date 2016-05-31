@@ -250,7 +250,7 @@ public class Documents extends AbstractServiceInterface {
             break;
         }
         
-        return value1.equals(value2);
+        return (value1 == null)? (value1 == value2) : value1.equals(value2);
     }
     
     public static final boolean equals(
