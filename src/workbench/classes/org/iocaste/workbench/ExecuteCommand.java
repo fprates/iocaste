@@ -34,6 +34,8 @@ public class ExecuteCommand extends AbstractActionHandler {
         for (int i = 0; i < buffer.length; i++) {
             switch (buffer[i]) {
             case ' ':
+                if (type == STRING)
+                    break;
                 if (type != PARAMETER) {
                     type = PARAMETER;
                     if (function != null)

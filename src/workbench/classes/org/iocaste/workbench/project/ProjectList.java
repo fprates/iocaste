@@ -1,6 +1,7 @@
 package org.iocaste.workbench.project;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
@@ -13,6 +14,7 @@ public class ProjectList extends AbstractCommand {
     protected void execute(PageBuilderContext context) throws Exception {
         Query query;
         ExtendedObject[] objects;
+        ComplexDocument project;
         Context extcontext = getExtendedContext();
         
         query = new Query();
@@ -23,8 +25,11 @@ public class ProjectList extends AbstractCommand {
             return;
         }
         for (ExtendedObject object : objects) {
-            extcontext.output.add(object.getst("PROJECT_NAME"));
+            project = getDocument("project", object.getst("PROJECT_NAME"));
+            extcontext.output.add(project.getstKey());
+            extcontext.output.add("- Telas");
+            for (ExtendedObject screen : project.getItems("screen"))
+                extcontext.output.add(screen.getst("SCREEN_NAME"));
         }
     }
-
 }

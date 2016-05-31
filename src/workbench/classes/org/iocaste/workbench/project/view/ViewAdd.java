@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
@@ -17,10 +18,8 @@ public class ViewAdd extends AbstractCommand {
     
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        ExtendedObject[] objects;
         ExtendedObject view;
         String name, project;
-        Map<String, Object> criteria;
         Context extcontext = getExtendedContext();
         
         if (extcontext.project == null) {
@@ -30,16 +29,10 @@ public class ViewAdd extends AbstractCommand {
         
         name = parameters.get("name");
         project = extcontext.project.getstKey();
-        objects = extcontext.project.getItems("screen");
-        if ((objects != null) && (objects.length > 0)) {
-            criteria = new HashMap<>();
-            criteria.put("PROJECT_SCREEN", name);
-            criteria.put("PROJECT", project);
-            view = readobjects(objects, criteria);
-            if (view != null) {
-                message(Const.ERROR, "view.already.exists");
-                return;
-            }
+        view = getView(extcontext.project, name);
+        if (view != null) {
+            message(Const.ERROR, "view.already.exists");
+            return;
         }
         
         view = instance("WB_PROJECT_SCREENS");
@@ -50,4 +43,17 @@ public class ViewAdd extends AbstractCommand {
         extcontext.output.add(String.format("view %s created.", name));
     }
 
+    public static final ExtendedObject getView(
+            ComplexDocument project, String name) {
+        ExtendedObject[] objects;
+        Map<String, Object> criteria;
+        
+        objects = project.getItems("screen");
+        if ((objects == null) || (objects.length == 0))
+            return null;
+        criteria = new HashMap<>();
+        criteria.put("SCREEN_NAME", name);
+        criteria.put("PROJECT", project.getstKey());
+        return readobjects(objects, criteria);
+    }
 }

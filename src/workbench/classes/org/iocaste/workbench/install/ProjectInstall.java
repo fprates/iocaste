@@ -16,7 +16,7 @@ public class ProjectInstall extends AbstractInstallObject {
         DataElement projectname, projectscreen, text, screenname, modelname;
         DataElement screenspecitemid, screenspecitemname, projectmodel;
         DataElement modelitemid, modelitemname, typeid, typetext;
-        DataElement modelitemlength;
+        DataElement modelitemlength, screenitemtype;
         ModelInstall model;
         ComplexModelInstall cmodel;
         DocumentModelItem project, screen, modelid, datatype;
@@ -28,6 +28,7 @@ public class ProjectInstall extends AbstractInstallObject {
         screenname = elementchar("WB_SCREEN_NAME", 16, true);
         screenspecitemid = elementchar("WB_SCREEN_SPEC_ITEM", 38, true);
         screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, true);
+        screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
         projectmodel = elementchar("WB_PROJECT_MODEL", 35, true);
         modelname = elementchar("WB_MODEL_NAME", 24, true);
         modelitemid = elementchar("WB_MODEL_ITEM", 38, true);
@@ -96,7 +97,11 @@ public class ProjectInstall extends AbstractInstallObject {
         model.reference(
                 "SCREEN", "SCRID", screen);
         model.item(
+                "PARENT", "SITPA", screenspecitemname);
+        model.item(
                 "NAME", "SITNM", screenspecitemname);
+        model.item(
+                "TYPE", "ITTYP", screenitemtype);
         
         /*
          * model header
