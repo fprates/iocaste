@@ -8,6 +8,7 @@ public class MainInput extends AbstractViewInput {
     @Override
     protected void execute(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
+        inputset("command", null);
         if (extcontext.output.size() == 0)
             return;
         for (String line : extcontext.output)
