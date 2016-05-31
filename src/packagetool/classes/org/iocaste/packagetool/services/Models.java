@@ -1,6 +1,6 @@
 package org.iocaste.packagetool.services;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +30,27 @@ public class Models {
             }
             itens.add(modelitem);
         }
+    }
+    
+    private static final DocumentModel fixPackageReference(
+            Map<String, DocumentModel> models, String name, State state) {
+        DocumentModel model, modelreference;
+        DocumentModelItem reference;
+        
+        model = models.get(name);
+        model.setPackage(state.pkgname);
+        for (DocumentModelItem item : model.getItens()) {
+            reference = item.getReference();
+            if (reference == null)
+                continue;
+            modelreference = reference.getDocumentModel();
+            if (!models.containsKey(modelreference.getName()))
+                continue;
+            if (modelreference.getPackage() == null)
+                modelreference.setPackage(state.pkgname);
+        }
+        
+        return model;
     }
     
     public static final void install(DocumentModel model, String modelname,
@@ -65,35 +86,26 @@ public class Models {
     }
     
     public static final void installAll(Map<String, DocumentModel> models,
-            State state) throws Exception {
-        DocumentModel model, modelreference;
-        DocumentModelItem reference;
+            List<String> toinstall, State state) throws Exception {
         int error, i;
-        DocumentModel[] toinstall = new DocumentModel[models.size()];
+        DocumentModel[] _models;
         
         i = 0;
-        for (String name : models.keySet()) {
-            model = models.get(name);
-            model.setPackage(state.pkgname);
-            for (DocumentModelItem item : model.getItens()) {
-                reference = item.getReference();
-                if (reference == null)
-                    continue;
-                modelreference = reference.getDocumentModel();
-                if (!models.containsKey(modelreference.getName()))
-                    continue;
-                if (modelreference.getPackage() == null)
-                    modelreference.setPackage(state.pkgname);
-            }
-            toinstall[i++] = model;
+        if (toinstall != null) {
+            _models = new DocumentModel[toinstall.size()];
+            for (String name : toinstall)
+                _models[i++] = fixPackageReference(models, name, state);
+        } else {
+            _models = new DocumentModel[models.size()];
+            for (String name : models.keySet())
+                _models[i++] = fixPackageReference(models, name, state);
         }
-        
-        error = state.documents.createModels(toinstall);
+        error = state.documents.createModels(_models);
         if (error < 0)
             throw new IocasteException(
                     new StringBuilder("error creating models.").toString());
         
-        for (DocumentModel installed : toinstall)
+        for (DocumentModel installed : _models)
             install(installed, installed.getName(), state);
     }
     
@@ -131,20 +143,20 @@ public class Models {
     public static final void updateAll(
             Map<String, DocumentModel> models, State state) throws Exception {
         DocumentModel model;
-        Map<String, DocumentModel> toinstall;
+        List<String> toinstall;
         
-        toinstall = new LinkedHashMap<>();
+        toinstall = new ArrayList<>();
         for (String name : models.keySet()) {
             model = models.get(name);
             if (state.documents.getModel(name) != null) {
                 update(model, name, state);
                 continue;
             }
-            toinstall.put(name, model);
+            toinstall.add(name);
         }
         
         if (toinstall.size() == 0)
             return;
-        installAll(toinstall, state);
+        installAll(models, toinstall, state);
     }
 }

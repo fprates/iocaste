@@ -55,7 +55,6 @@ public class PackageUpdate extends AbstractHandler {
         types.add("TSKITEM");
         types.add("TASK");
         types.add("CMODEL");
-        types.add("NUMBER");
         
         services = getFunction();
         uninstall = services.get("uninstall");

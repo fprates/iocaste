@@ -96,7 +96,7 @@ public class PackageInstall extends AbstractHandler {
              */
             models = state.data.getModels();
             if (models.size() > 0) {
-                Models.installAll(models, state);
+                Models.installAll(models, null, state);
                 state.documents.commit();
             }
             
