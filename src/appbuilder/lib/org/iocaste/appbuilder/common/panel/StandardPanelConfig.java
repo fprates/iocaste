@@ -20,7 +20,6 @@ public class StandardPanelConfig extends AbstractViewConfig {
     @Override
     protected void execute(PageBuilderContext context) {
         StyleSheet stylesheet;
-        Map<String, String> corestyle, appbuilderstyle;
         Map<String, Map<String, String>> sheet;
         ViewConfig extconfig;
         NavControl navcontrol;
@@ -35,15 +34,10 @@ public class StandardPanelConfig extends AbstractViewConfig {
             media.setFeature((String)context.appbuildersheet[i][2]);
             sheet = (Map<String, Map<String, String>>)
                     context.appbuildersheet[i][3];
-            for (String selector : sheet.keySet()) {
-                corestyle = stylesheet.get(mediakey, selector);
-                if (corestyle == null)
-                    corestyle = stylesheet.newElement(mediakey, selector);
-                appbuilderstyle = sheet.get(selector);
-                corestyle.putAll(appbuilderstyle);
-            }
+            stylesheet.add(mediakey, sheet);
         }
-        
+
+        context.view.importStyle(stylesheet);
         getElement("outercontent").setStyleClass("content_area");
         getElement("content").addEvent("style", "margin-top:3px");
         

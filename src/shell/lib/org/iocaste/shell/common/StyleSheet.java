@@ -15,6 +15,11 @@ public class StyleSheet {
         instanceMedia("default");
     }
 
+    public final void add(String media, Map<String, Map<String, String>> style)
+    {
+        stylesheet.get(media).putAll(style);
+    }
+    
     public final Map<String, String> clone(String media, String to, String from)
     {
         Map<String, String> clone;
@@ -64,8 +69,7 @@ public class StyleSheet {
         media = this.media.get(name);
         if (media != null)
             return media;
-        media = new Media();
-        this.media.put(name, media);
+        media = new Media(this.media, name);
         this.stylesheet.put(name, new HashMap<>());
         return media;
     }
