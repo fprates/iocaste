@@ -1,12 +1,15 @@
 package org.iocaste.appbuilder;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.protocol.AbstractFunction;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
+import org.iocaste.shell.common.Media;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StyleSheet;
+import org.iocaste.shell.common.View;
 
 public class Services extends AbstractFunction {
     
@@ -16,31 +19,61 @@ public class Services extends AbstractFunction {
 }
 
 class GetStyleSheet extends AbstractHandler {
-    private static final String CONTENT_WIDTH = "1400px";
+    private Map<String, String[]> resolutions;
     private static final String HEADER_HEIGHT = "146px";
 
+    public GetStyleSheet() {
+        resolutions = new HashMap<>();
+        resolutions.put("default",
+                new String[] {null, "400px"});
+        resolutions.put("screen768",
+                new String[] {"min-width:768px", "708px"});
+        resolutions.put("screen1020",
+                new String[] {"min-width:1020px", "960px"});
+        resolutions.put("screen1230",
+                new String[] {"min-width:1230px", "1170px"});
+        resolutions.put("screen1440",
+                new String[] {"min-width:1440px", "1380px"});
+        resolutions.put("screen1600",
+                new String[] {"min-width:1600px", "1540px"});
+    }
+    
     @Override
     public Object run(Message message) throws Exception {
         Map<String, String> style;
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
         String FRAME_COLOR;
+        Media media;
+        String[] width;
         Map<Integer, String> constants = message.get("style_constants");
         StyleSheet stylesheet = new StyleSheet();
-
+        
         FONT_COLOR = constants.get(Shell.FONT_COLOR);
         FONT_FAMILY = constants.get(Shell.FONT_FAMILY);
         BACKGROUND_COLOR = constants.get(Shell.BACKGROUND_COLOR);
         CLICKABLE_COLOR = constants.get(Shell.CLICKABLE_COLOR);
         FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
         
-        style = stylesheet.newElement(".content_area");
-        style.put("max-width", CONTENT_WIDTH);
-        style.put("margin-left", "auto");
-        style.put("margin-right", "auto");
-        style.put("margin-top", HEADER_HEIGHT);
-        style.put("margin-bottom", "0px");
-        style.put("padding", "0px");
-        style.put("overflow", "auto");
+        for (String mediakey : resolutions.keySet()) {
+            width = resolutions.get(mediakey);
+            
+            media = stylesheet.instanceMedia(mediakey);
+            media.setDevice("screen");
+            media.setFeature(width[0]);
+            
+            style = stylesheet.newElement(mediakey, ".content_area");
+            style.put("max-width", width[1]);
+            style.put("margin-left", "auto");
+            style.put("margin-right", "auto");
+            style.put("margin-top", HEADER_HEIGHT);
+            style.put("margin-bottom", "0px");
+            style.put("padding", "0px");
+            style.put("overflow", "auto");
+            
+            style = stylesheet.newElement(mediakey, ".nc_inner_container");
+            style.put("max-width", width[1]);
+            style.put("margin", "auto");
+        }
         
         style = stylesheet.newElement(".main_logo");
         style.put("background-image",
@@ -59,10 +92,6 @@ class GetStyleSheet extends AbstractHandler {
         style.put("height", HEADER_HEIGHT);
         style.put("top", "0px");
         style.put("background-color", BACKGROUND_COLOR);
-        
-        style = stylesheet.newElement(".nc_inner_container");
-        style.put("max-width", CONTENT_WIDTH);
-        style.put("margin", "auto");
         
         style = stylesheet.newElement(".nc_nav_buttonbar");
         style.put("width", "100%");
@@ -136,7 +165,7 @@ class GetStyleSheet extends AbstractHandler {
 //        style.put("right", "0px");
 //        style.put("position", "absolute");
         
-        return stylesheet.getElements();
+        return View.convertStyleSheet(stylesheet);
     }
     
 }

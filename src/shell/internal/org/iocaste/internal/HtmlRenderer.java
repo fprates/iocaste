@@ -17,6 +17,7 @@ import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.HeaderLink;
+import org.iocaste.shell.common.Media;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.View;
 import org.iocaste.shell.common.ViewTitle;
@@ -115,7 +116,7 @@ public class HtmlRenderer {
             headtag.addChild(renderJavaScript(script, config));
         stylesheet = view.styleSheetInstance();
         if (stylesheet != null)
-            headtag.addChild(renderStyleSheet(stylesheet.getElements()));
+            headtag.addChild(renderStyleSheet(stylesheet));
         
         return headtag;
     }
@@ -148,46 +149,60 @@ public class HtmlRenderer {
      * @param csselements
      * @return
      */
-    private final XMLElement renderStyleSheet(
-            Map<String, Map<String, String>> csselements) {
+    private final XMLElement renderStyleSheet(StyleSheet stylesheet) {
         Map<String, String> properties;
-        XMLElement styletag = new XMLElement("style");
-        
-        if (csselements == null) {
-            styletag.addInner("");
-            return styletag;
-        }
-        
+        Media media;
+        boolean defaultmedia;
+        XMLElement styletag;
+        Map<String, Map<String, String>> csselements;
+        Map<String, Media> medias = stylesheet.getMedias();
+
+        styletag = new XMLElement("style");
         styletag.add("type", "text/css");
         styletag.setLineBreak(true);
-        if (csselements.size() == 0)
-            styletag.addInner("");
-        
-        properties = csselements.get(".screen_locked");
-        if (properties == null) {
-            properties = new HashMap<>();
-            properties.put("position", "fixed");
-            properties.put("top", "0px");
-            properties.put("left", "0px");
-            properties.put("width", "100%");
-            properties.put("height", "100%");
-            properties.put("z-index", "99999");
-            properties.put("opacity", "0");
-            properties.put("background-color", "#000000");
-            csselements.put(".screen_locked", properties);
+            
+        for (String mediakey : medias.keySet()) {
+            media = medias.get(mediakey);
+            defaultmedia = mediakey.equals("default");
+            csselements = stylesheet.getElements(mediakey);
+            if (!defaultmedia) {
+                styletag.addInner(new StringBuilder("@media ").
+                        append(media.getDevice()).append(" and (").
+                        append(media.getFeature()).append(") {").toString());
+            } else {
+                properties = csselements.get(".screen_locked");
+                if (properties == null) {
+                    properties = new HashMap<>();
+                    properties.put("position", "fixed");
+                    properties.put("top", "0px");
+                    properties.put("left", "0px");
+                    properties.put("width", "100%");
+                    properties.put("height", "100%");
+                    properties.put("z-index", "99999");
+                    properties.put("opacity", "0");
+                    properties.put("background-color", "#000000");
+                    csselements.put(".screen_locked", properties);
+                }
+            }
+            
+            if ((csselements != null) && (csselements.size() > 0))
+                for (String element : csselements.keySet()) {
+                    properties = csselements.get(element);
+                    styletag.addInner(element+" {");
+                    
+                    for (String property: properties.keySet())
+                        styletag.addInner(new StringBuilder(property).
+                                append(": ").append(properties.get(property)).
+                                append(";").toString());
+                    
+                    styletag.addInner("}");
+                }
+            
+            
+            if (!defaultmedia)
+                styletag.addInner("}");
         }
         
-        for (String element : csselements.keySet()) {
-            properties = csselements.get(element);
-            styletag.addInner(element+" {");
-            
-            for (String property: properties.keySet())
-                styletag.addInner(new StringBuffer(property).append(": ").
-                        append(properties.get(property)).
-                        append(";").toString());
-            
-            styletag.addInner("}");
-        }
         
         return styletag;
     }

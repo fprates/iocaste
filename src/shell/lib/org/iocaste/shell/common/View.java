@@ -43,7 +43,7 @@ public class View implements Serializable {
     private List<String> lines;
     private List<Container> containers;
     private List<HeaderLink> links;
-    private Map<String, Map<String, String>> sheet;
+    private Object[][] sheet;
     private Map<String, Element> elements;
     private Locale locale;
     private ViewTitle title;
@@ -87,6 +87,25 @@ public class View implements Serializable {
      */
     public final void clearPrintLines() {
         lines.clear();
+    }
+    
+    public static final Object[][] convertStyleSheet(StyleSheet stylesheet) {
+        Object[][] sheet;
+        int l;
+        Media media;
+        Map<String, Media> medias;
+        
+        l = 0;
+        medias = stylesheet.getMedias();
+        sheet = new Object[medias.size()][4];
+        for (String key : medias.keySet()) {
+            media = medias.get(key);
+            sheet[l][0] = key;
+            sheet[l][1] = media.getDevice();
+            sheet[l][2] = media.getFeature();
+            sheet[l++][3] = stylesheet.getElements(key);
+        }
+        return sheet;
     }
     
     /*
@@ -205,7 +224,7 @@ public class View implements Serializable {
             styleconst[i][1] = constants.get(i);
         }
         
-        this.sheet = stylesheet.getElements();
+        this.sheet = convertStyleSheet(stylesheet);
     }
     
     /**
@@ -276,17 +295,30 @@ public class View implements Serializable {
         title.args = args;
     }
     
+    @SuppressWarnings("unchecked")
     public final StyleSheet styleSheetInstance() {
+        String mediakey;
         StyleSheet stylesheet;
+        Media media;
         Map<Integer, String> constants;
         
-        stylesheet = (sheet != null)? new StyleSheet(sheet) : new StyleSheet();
+        stylesheet = new StyleSheet();
+        for (int i = 0; i < sheet.length; i++) {
+            mediakey = (String)sheet[i][0];
+            media = stylesheet.instanceMedia(mediakey);
+            media.setDevice((String)sheet[i][1]);
+            media.setFeature((String)sheet[i][2]);
+            stylesheet.set(mediakey,
+                    (Map<String, Map<String, String>>)sheet[i][3]);
+        }
+        
         if (styleconst != null) {
             constants = new HashMap<>();
             for (int i = 0; i < styleconst.length; i++)
                 constants.put((int)styleconst[i][0], (String)styleconst[i][1]);
             stylesheet.setConstants(constants);
         }
+        
         return stylesheet;
     }
 }

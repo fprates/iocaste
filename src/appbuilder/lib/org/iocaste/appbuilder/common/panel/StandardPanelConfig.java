@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
+import org.iocaste.shell.common.Media;
 import org.iocaste.shell.common.StyleSheet;
 
 public class StandardPanelConfig extends AbstractViewConfig {
@@ -15,21 +16,32 @@ public class StandardPanelConfig extends AbstractViewConfig {
         this.page = page;
     }
     
+    @SuppressWarnings("unchecked")
     @Override
     protected void execute(PageBuilderContext context) {
         StyleSheet stylesheet;
         Map<String, String> corestyle, appbuilderstyle;
+        Map<String, Map<String, String>> sheet;
         ViewConfig extconfig;
         NavControl navcontrol;
-        String submit;
+        Media media;
+        String submit, mediakey;
         
         stylesheet = context.view.styleSheetInstance();
-        for (String selector : context.appbuildersheet.keySet()) {
-            corestyle = stylesheet.get(selector);
-            if (corestyle == null)
-                corestyle = stylesheet.newElement(selector);
-            appbuilderstyle = context.appbuildersheet.get(selector);
-            corestyle.putAll(appbuilderstyle);
+        for (int i = 0; i < context.appbuildersheet.length; i++) {
+            mediakey = (String)context.appbuildersheet[i][0];
+            media = stylesheet.instanceMedia(mediakey);
+            media.setDevice((String)context.appbuildersheet[i][1]);
+            media.setFeature((String)context.appbuildersheet[i][2]);
+            sheet = (Map<String, Map<String, String>>)
+                    context.appbuildersheet[i][3];
+            for (String selector : sheet.keySet()) {
+                corestyle = stylesheet.get(mediakey, selector);
+                if (corestyle == null)
+                    corestyle = stylesheet.newElement(mediakey, selector);
+                appbuilderstyle = sheet.get(selector);
+                corestyle.putAll(appbuilderstyle);
+            }
         }
         
         getElement("outercontent").setStyleClass("content_area");
@@ -47,5 +59,6 @@ public class StandardPanelConfig extends AbstractViewConfig {
             return;
         
         config(extconfig);
+        context.view.importStyle(stylesheet);
     }
 }
