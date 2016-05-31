@@ -8,6 +8,7 @@ import org.iocaste.appbuilder.common.DataConversion;
 import org.iocaste.appbuilder.common.DataConversionRule;
 import org.iocaste.appbuilder.common.ObjectExtractor;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.cmodelviewer.TableToolContextEntry;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
@@ -23,43 +24,42 @@ public class ShowObject extends AbstractActionHandler {
         ExtendedObject object;
         DataConversion conversion;
         List<ExtendedObject> objects;
-        List<ExtendedObject> items;
         ObjectExtractor extractor;
         DocumentModel model;
         Context extcontext;
-        
+        TableToolContextEntry table;
         String name = getdfst("model", "NAME");
-        Documents documents = new Documents(context.function);
         
-        model = documents.getModel(name);
+        model = new Documents(context.function).getModel(name);
         if (model == null) {
             message(Const.ERROR, "model.not.found");
             return;
         }
         
         extcontext = getExtendedContext();
-        extcontext.head = instance("MODEL");
-        extcontext.head.setInstance(model);
-        
-        items = new ArrayList<>();
+        init(Main.STRUCTURE, extcontext);
+        object = instance("MODEL");
+        object.setInstance(model);
+        extcontext.dataformInstance(Main.STRUCTURE, "head");
+        extcontext.set(Main.STRUCTURE, "head", object);
+
+        objects = new ArrayList<>();
         for (DocumentModelItem item : model.getItens()) {
             object = instance("MODELITEM");
             object.setInstance(item);
-            items.add(object);
+            objects.add(object);
         }
-        
+
+        table = extcontext.tableInstance(Main.STRUCTURE, "items");
+        table.items.clear();
         conversion = new DataConversion("DD_MODEL_ITEM");
         conversion.rule(new ModelItemRule(model));
         extractor = new ObjectExtractor(context, conversion);
-        objects = new ArrayList<>();
-        for (ExtendedObject item : items) {
+        for (ExtendedObject item : objects) {
             conversion.source(item);
-            object = extractor.instance();
-            objects.add(object);
+            extcontext.add(Main.STRUCTURE, "items", extractor.instance());
         }
-         
-        extcontext.items = objects.toArray(new ExtendedObject[0]);
-        context.getView(Main.STRUCTURE).set(extcontext);
+        
         redirect(Main.STRUCTURE);
     }
 }

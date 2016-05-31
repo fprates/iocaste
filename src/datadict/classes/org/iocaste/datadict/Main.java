@@ -3,6 +3,7 @@ package org.iocaste.datadict;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
+import org.iocaste.appbuilder.common.StandardViewInput;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 
@@ -49,7 +50,7 @@ class StructurePanel extends AbstractPanelPage {
     public void execute() {
         set(new StructureSpec());
         set(new StructureConfig());
-        set(new StructureInput());
+        set(new StandardViewInput());
     }
     
 }
