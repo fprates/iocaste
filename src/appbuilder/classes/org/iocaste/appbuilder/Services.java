@@ -26,16 +26,16 @@ class GetStyleSheet extends AbstractHandler {
         resolutions = new HashMap<>();
         resolutions.put("default",
                 new String[] {null, "400px"});
-        resolutions.put("screen768",
-                new String[] {"min-width:768px", "708px"});
-        resolutions.put("screen1020",
-                new String[] {"min-width:1020px", "960px"});
-        resolutions.put("screen1230",
-                new String[] {"min-width:1230px", "1170px"});
-        resolutions.put("screen1440",
-                new String[] {"min-width:1440px", "1380px"});
-        resolutions.put("screen1600",
-                new String[] {"min-width:1600px", "1540px"});
+        resolutions.put("screen768", new String[] {"screen and "
+                + "(min-width:768px) and (max-width:1019px)", "708px"});
+        resolutions.put("screen1020", new String[] {"screen and "
+                + "(min-width:1020px) and (max-width:1229px)", "960px"});
+        resolutions.put("screen1230", new String[] {"screen and "
+                + "(min-width:1230px) and (max-width:1439px)", "1170px"});
+        resolutions.put("screen1440", new String[] {"screen and "
+                + "(min-width:1440px) and (max-width:1599px)", "1380px"});
+        resolutions.put("screen1600", new String[] {"screen and "
+                + "(min-width:1600px)", "1540px"});
     }
     
     @Override
@@ -58,8 +58,7 @@ class GetStyleSheet extends AbstractHandler {
             width = resolutions.get(mediakey);
             
             media = stylesheet.instanceMedia(mediakey);
-            media.setDevice("screen");
-            media.setFeature(width[0]);
+            media.setRule(width[0]);
             
             style = stylesheet.newElement(mediakey, ".content_area");
             style.put("max-width", width[1]);

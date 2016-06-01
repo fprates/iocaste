@@ -97,13 +97,12 @@ public class View implements Serializable {
         
         l = 0;
         medias = stylesheet.getMedias();
-        sheet = new Object[medias.size()][4];
+        sheet = new Object[medias.size()][3];
         for (String key : medias.keySet()) {
             media = medias.get(key);
             sheet[l][0] = key;
-            sheet[l][1] = media.getDevice();
-            sheet[l][2] = media.getFeature();
-            sheet[l++][3] = stylesheet.getElements(key);
+            sheet[l][1] = media.getRule();
+            sheet[l++][2] = stylesheet.getElements(key);
         }
         return sheet;
     }
@@ -307,10 +306,9 @@ public class View implements Serializable {
             for (int i = 0; i < sheet.length; i++) {
                 mediakey = (String)sheet[i][0];
                 media = stylesheet.instanceMedia(mediakey);
-                media.setDevice((String)sheet[i][1]);
-                media.setFeature((String)sheet[i][2]);
+                media.setRule((String)sheet[i][1]);
                 stylesheet.set(mediakey,
-                        (Map<String, Map<String, String>>)sheet[i][3]);
+                        (Map<String, Map<String, String>>)sheet[i][2]);
             }
         
         if (styleconst != null) {

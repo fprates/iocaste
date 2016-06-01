@@ -167,8 +167,7 @@ public class HtmlRenderer {
             csselements = stylesheet.getElements(mediakey);
             if (!defaultmedia) {
                 styletag.addInner(new StringBuilder("@media ").
-                        append(media.getDevice()).append(" and (").
-                        append(media.getFeature()).append(") {").toString());
+                        append(media.getRule()).append(" {").toString());
             } else {
                 properties = csselements.get(".screen_locked");
                 if (properties == null) {

@@ -30,10 +30,9 @@ public class StandardPanelConfig extends AbstractViewConfig {
         for (int i = 0; i < context.appbuildersheet.length; i++) {
             mediakey = (String)context.appbuildersheet[i][0];
             media = stylesheet.instanceMedia(mediakey);
-            media.setDevice((String)context.appbuildersheet[i][1]);
-            media.setFeature((String)context.appbuildersheet[i][2]);
+            media.setRule((String)context.appbuildersheet[i][1]);
             sheet = (Map<String, Map<String, String>>)
-                    context.appbuildersheet[i][3];
+                    context.appbuildersheet[i][2];
             stylesheet.add(mediakey, sheet);
         }
 

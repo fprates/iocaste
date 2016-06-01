@@ -7,27 +7,18 @@ import java.util.Map;
  *
  */
 public class Media {
-    private String device, feature;
+    private String rule;
     
     public Media(Map<String, Media> medias, String name) {
         medias.put(name, this);
     }
     
-    public final String getDevice() {
-        return device;
-    }
-
-    public final String getFeature() {
-        return feature;
+    public final String getRule() {
+        return rule;
     }
     
-    public final void setDevice(String device) {
-        this.device = device;
+    public final void setRule(String rule) {
+        this.rule = rule;
     }
-
-    public final void setFeature(String feature) {
-        this.feature = feature;
-    }
-    
     
 }
