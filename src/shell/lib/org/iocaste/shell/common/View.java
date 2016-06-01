@@ -303,14 +303,15 @@ public class View implements Serializable {
         Map<Integer, String> constants;
         
         stylesheet = new StyleSheet();
-        for (int i = 0; i < sheet.length; i++) {
-            mediakey = (String)sheet[i][0];
-            media = stylesheet.instanceMedia(mediakey);
-            media.setDevice((String)sheet[i][1]);
-            media.setFeature((String)sheet[i][2]);
-            stylesheet.set(mediakey,
-                    (Map<String, Map<String, String>>)sheet[i][3]);
-        }
+        if (sheet != null)
+            for (int i = 0; i < sheet.length; i++) {
+                mediakey = (String)sheet[i][0];
+                media = stylesheet.instanceMedia(mediakey);
+                media.setDevice((String)sheet[i][1]);
+                media.setFeature((String)sheet[i][2]);
+                stylesheet.set(mediakey,
+                        (Map<String, Map<String, String>>)sheet[i][3]);
+            }
         
         if (styleconst != null) {
             constants = new HashMap<>();
