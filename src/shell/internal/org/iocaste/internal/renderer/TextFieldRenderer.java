@@ -127,6 +127,11 @@ public class TextFieldRenderer extends Renderer {
             inputtag.add("class", sb.toString());
             return tagt;
         }
+        
+        if (input.hasNoHelper()) {
+            inputtag.add("class", sb.toString());
+            return tagt;
+        }
 
         tag.add("style", "display:inline;float:left;");
         inputtag.add("size", Integer.toString(input.getVisibleLength()));

@@ -30,7 +30,8 @@ public abstract class AbstractInputComponent extends AbstractComponent
     private String master, nsreference;
     private byte[] content;
     private boolean placeholder;
-
+    private boolean nohelper;
+    
     public AbstractInputComponent(View view, Const type, Const type_,
             String name) {
         super(view, type, name);
@@ -224,6 +225,14 @@ public abstract class AbstractInputComponent extends AbstractComponent
     @Override
     public final int getVisibleLength() {
         return vlength;
+    }
+    
+    /*
+     * 
+     */
+    @Override
+    public final boolean hasNoHelper() {
+        return nohelper;
     }
     
     /*
@@ -433,6 +442,14 @@ public abstract class AbstractInputComponent extends AbstractComponent
         this.modelitem = modelitem;
     }
 
+    /*
+     * 
+     */
+    @Override
+    public final void setNoHelper(boolean nohelper) {
+        this.nohelper = nohelper;
+    }
+    
     /**
      * 
      * @param ns

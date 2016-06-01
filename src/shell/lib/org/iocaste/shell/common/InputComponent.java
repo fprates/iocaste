@@ -129,6 +129,8 @@ public interface InputComponent extends Component {
      * @return
      */
     public abstract int getVisibleLength();
+
+    public abstract boolean hasNoHelper();
     
     /**
      * Indica se é o valor é booleano.
@@ -225,6 +227,8 @@ public interface InputComponent extends Component {
      * @param modelitem item de modelo
      */
     public abstract void setModelItem(DocumentModelItem modelitem);
+    
+    public abstract void setNoHelper(boolean nohelper);
     
     /**
      * 
