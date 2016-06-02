@@ -101,6 +101,11 @@ public final class Iocaste extends AbstractServiceInterface {
         return call(message);
     }
     
+    public final String[] getAvailablePackages() {
+        Message message = new Message("packages_get");
+        return call(message);
+    }
+    
     /**
      * Retorna objeto do contexto informado.
      * @param name nome do contexto

@@ -8,6 +8,7 @@ import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.database.Database;
 import org.iocaste.kernel.documents.Documents;
 import org.iocaste.kernel.files.FileServices;
+import org.iocaste.kernel.packages.Packages;
 import org.iocaste.kernel.session.IsConnected;
 import org.iocaste.kernel.session.Session;
 import org.iocaste.kernel.users.Users;
@@ -48,7 +49,7 @@ public class Servlet extends AbstractIocasteServlet {
         register(new Services());
         register(documents);
         register(new FileServices());
-        
+        register(new Packages());
         
         authorize("is_connected", null);
         authorize("login", null);

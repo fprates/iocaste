@@ -1,7 +1,5 @@
 package org.iocaste.packagetool;
 
-import java.util.List;
-
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
@@ -12,6 +10,7 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.packagetool.common.PackageTool;
 import org.iocaste.packagetool.services.IsInstalled;
+import org.iocaste.protocol.Iocaste;
 
 public class Main extends AbstractPageBuilder {
     
@@ -60,11 +59,11 @@ public class Main extends AbstractPageBuilder {
         IsInstalled isinstalled;
         ExtendedObject object;
         DocumentModel model;
-        List<String> packages;
+        String[] packages;
         PackageTool pkgtool;
          
         model = new Documents(context.function).getModel("PACKAGE_GRID");
-        packages = PackageTool.getAvailablePackages();
+        packages = new Iocaste(context.function).getAvailablePackages();
         pkgtool = new PackageTool(context.function);
         isinstalled = get("is_installed");
         

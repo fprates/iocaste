@@ -1,12 +1,10 @@
 package org.iocaste.packagetool.common;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
+import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.GenericService;
+import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 
 public class PackageTool extends AbstractServiceInterface {
@@ -47,25 +45,6 @@ public class PackageTool extends AbstractServiceInterface {
     
     /**
      * 
-     * @return
-     */
-    public static final List<String> getAvailablePackages() {
-        String home = System.getProperty("catalina.home");
-        File dir = new File(new StringBuilder(home).
-                append(System.getProperty("file.separator")).
-                append("webapps").toString());
-        File[] files = dir.listFiles();
-        List<String> list = new ArrayList<>();
-        
-        for (File file : files)
-            if (file.isDirectory())
-                list.add(file.getName());
-        
-        return list;
-    }
-    
-    /**
-     * 
      * @param name
      * @return
      */
@@ -85,8 +64,9 @@ public class PackageTool extends AbstractServiceInterface {
      * @param name
      * @return
      */
-    public static final boolean hasPackage(String name) {
-        List<String> files = getAvailablePackages();
+    public static final boolean hasPackage(
+            PageBuilderContext context, String name) {
+        String[] files = new Iocaste(context.function).getAvailablePackages();
         
         for (String filename : files)
             if (filename.equals(name))
