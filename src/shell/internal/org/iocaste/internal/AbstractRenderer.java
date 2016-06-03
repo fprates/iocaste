@@ -424,7 +424,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
          */
         pagectx.setFiles(files);
         if (sequence != pagectx.getSequence()) {
-            pagestackitem = home(getComplexId(contextdata.sessionid, logid));
+            pagestackitem = home(
+                    getComplexId(contextdata.sessionid, logid), null);
             if (pagestackitem != null) {
                 contextdata.appname = pagestackitem.getApp();
                 contextdata.pagename = pagestackitem.getPage();
@@ -470,11 +471,11 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
      * @param getSessionId()
      * @return
      */
-    public static final PageStackItem home(String sessionid) {
+    public static final PageStackItem home(String sessionid, String page) {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
         
-        return apps.get(complexid[0]).get(logid).home();
+        return apps.get(complexid[0]).get(logid).home(page);
     }
     
     /*

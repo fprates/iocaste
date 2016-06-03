@@ -74,8 +74,8 @@ public class Services extends AbstractFunction {
      */
     public final PageStackItem home(Message message) {
         String sessionid = message.getSessionid();
-        
-        return PageRenderer.home(sessionid);
+        String page = message.getst("page");
+        return PageRenderer.home(sessionid, page);
     }
     
     /**

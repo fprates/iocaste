@@ -197,7 +197,11 @@ public abstract class AbstractActionHandler {
     }
     
     protected final void home() {
-        context.function.home();
+        context.function.home(null);
+    }
+    
+    protected final void home(String page) {
+        context.function.home(page);
     }
     
     protected final void init(String view, ExtendedContext extcontext) {

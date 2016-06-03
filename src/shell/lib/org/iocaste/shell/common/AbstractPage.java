@@ -164,7 +164,15 @@ public abstract class AbstractPage extends AbstractFunction {
      * @param view visão atual
      */
     public void home() {
-        PageStackItem entry = new Shell(this).home(getviewdata.context.view);
+        home(null);
+    }
+    
+    /**
+     * Retorna à página inicial.
+     * @param view visão atual
+     */
+    public void home(String page) {
+        PageStackItem entry = new Shell(this).home(page);
         redirect(entry.getApp(), entry.getPage(), false);
         dontPushPage();
     }

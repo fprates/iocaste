@@ -165,8 +165,10 @@ public class Shell extends AbstractServiceInterface {
      * @param view
      * @return
      */
-    public final PageStackItem home(View view) {
-        return call(new Message("home"));
+    public final PageStackItem home(String page) {
+        Message message = new Message("home");
+        message.add("page", page);
+        return call(message);
     }
     
     /**

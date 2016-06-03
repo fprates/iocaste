@@ -47,11 +47,14 @@ public class SessionContext {
      * 
      * @return
      */
-    public final PageStackItem home() {
+    public final PageStackItem home(String page) {
         PageStackItem home = null;
         
-        while (pagestack.size() > 1)
+        while (pagestack.size() > 1) {
             home = pagestack.pop();
+            if ((page != null) && home.getPage().equals(page))
+                break;
+        }
         
         return home;
     }
