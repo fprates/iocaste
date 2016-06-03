@@ -12,10 +12,10 @@ public class ApplicationEngine extends AbstractPageBuilder {
     @Override
     protected void installConfig(PageBuilderDefaultInstall defaultinstall)
             throws Exception {
-        byte[] buffer = getApplicationContext(
-                getRealPath("META-INF", "context.txt"));
-        
-        installObject("auto", new AutomatedInstall(buffer));
+//        byte[] buffer = getApplicationContext(
+//                getRealPath("META-INF", "context.txt"));
+//        
+//        installObject("auto", new AutomatedInstall(buffer));
     }
 
 }

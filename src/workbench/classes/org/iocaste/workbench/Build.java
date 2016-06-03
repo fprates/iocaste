@@ -24,7 +24,7 @@ public class Build extends AbstractHandler {
     public Object run(Message message) throws Exception {
         String filename = message.getst("file");
         Iocaste iocaste = new Iocaste(getFunction());
-        List<FileEntry> entries = iocaste.getFiles("workbench", filename);
+        FileEntry[] entries = iocaste.getFiles("workbench", filename);
         
 //        iocaste.compile("workbench", filename)
 //        
