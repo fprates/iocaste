@@ -15,7 +15,8 @@ public class TextRegister extends AbstractHandler {
         
         iocaste.mkdir("texteditor", name);
         files = iocaste.getFiles("texteditor", name);
-        iocaste.delete(files);
+        if (files != null)
+            iocaste.delete(files);
         return null;
     }
 
