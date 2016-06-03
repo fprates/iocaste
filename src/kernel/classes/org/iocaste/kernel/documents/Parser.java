@@ -372,8 +372,25 @@ public class Parser {
         return (data.sb == null)? null : data.sb.toString();
     }
     
+    private static final boolean isValidEntriesCondition(byte condition) {
+        switch (condition) {
+        case WhereClause.EQ_ENTRY:
+        case WhereClause.NE_ENTRY:
+        case WhereClause.LT_ENTRY:
+        case WhereClause.LE_ENTRY:
+        case WhereClause.GT_ENTRY:
+        case WhereClause.GE_ENTRY:
+            return true;
+        default:
+            return false;
+        }
+    }
+    
     private static final String whereEntries(WhereData data) throws Exception {
         Object value;
+        String field;
+        byte clausecondition;
+        boolean isentries;
         int qt = 0;
         String condition = null, operator = null;
         
@@ -383,11 +400,19 @@ public class Parser {
             condition = null;
             qt = 0;
             for (WhereClause clause : data.clauses) {
+                clausecondition = clause.getCondition();
+                field = clause.getField();
+                if (field == null) {
+                    isentries = isValidEntriesCondition(clausecondition);
+                    if (!isentries)
+                        break;
+                }
+                
                 if (condition != null)
                     data.sb.append(" ").append(condition);
-                operator = getOperator(data, clause.getField());
+                operator = getOperator(data, field);
                 value = entry.get((String)clause.getValue());
-                switch (clause.getCondition()) {
+                switch (clausecondition) {
                 case WhereClause.EQ_ENTRY:
                     addClause(data, operator,
                             (value == null)? " is NULL" : " = ?", value);
