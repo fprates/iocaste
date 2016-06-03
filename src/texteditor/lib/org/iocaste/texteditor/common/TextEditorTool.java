@@ -89,20 +89,6 @@ public class TextEditorTool extends AbstractServiceInterface {
         new PackageTool(context.function).install(data, app);
     }
     
-    public static final void removeCompleteDir(String dir) {
-        File origin = new File(dir);
-        File[] files = origin.listFiles();
-        
-        if (files != null)
-            for (File file : files) {
-                if (file.isDirectory())
-                    removeCompleteDir(file.getAbsolutePath());
-                file.delete();
-            }
-        
-        origin.delete();
-    }
-    
     public final void set(TextEditor editor, String id, String text) {
         TextArea textarea = context.view.getElement(editor.getName());
         textarea.set(text);
