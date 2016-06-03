@@ -26,7 +26,7 @@ public class Log extends AbstractServiceInterface {
     public final void commit() {
         Message message = new Message("commit");
         
-        message.add("messages", messages);
+        message.add("messages", messages.toArray(new String[0]));
         call(message);
         message.clear();
     }
