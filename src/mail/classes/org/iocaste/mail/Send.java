@@ -23,7 +23,7 @@ public class Send extends AbstractHandler {
         Session session;
         Set<String> to;
         MailData data = message.get("data");
-        Properties properties = System.getProperties();
+        Properties properties = new Properties();
 
         properties.put("mail.smtp.host", data.smtphost);
         properties.put("mail.smtp.port", data.smtpport);
