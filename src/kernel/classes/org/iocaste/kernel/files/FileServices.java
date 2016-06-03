@@ -18,6 +18,7 @@ public class FileServices extends AbstractFunction {
         export("close", new FileClose());
         export("delete", new DeleteFile());
         export("directory_write", new DirectoryWrite());
+        export("entries_delete", new FileEntriesDelete());
         export("file", new FileOperations());
         export("file_exists", new FileExists());
         export("files_get", new GetFiles());

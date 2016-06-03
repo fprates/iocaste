@@ -24,7 +24,9 @@ public class FileOperations extends AbstractHandler {
         case Iocaste.CREATE:
             return create(services, sessionid, args);
         case Iocaste.READ:
-            return openr(services, sessionid, args);
+            return open(services, sessionid, "r", args);
+        case Iocaste.WRITE:
+            return open(services, sessionid, "rw", args);
         }
         
         return null;
@@ -42,16 +44,15 @@ public class FileOperations extends AbstractHandler {
         entry = services.instance(sessionid, args);
         path = Paths.get(entry.filename);
         entry.channel = Files.newByteChannel(path, options);
-
         return entry.filename;
     }
     
-    private final String openr(FileServices services, String sessionid,
-            String... args) throws Exception {
+    private final String open(FileServices services, String sessionid,
+            String mode, String... args) throws Exception {
         InternalFileEntry entry;
 
         entry = services.instance(sessionid, args);
-        entry.file = new RandomAccessFile(entry.filename, "r");
+        entry.file = new RandomAccessFile(entry.filename, mode);
         entry.fchannel = entry.file.getChannel();
         return entry.filename;
     }

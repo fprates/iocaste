@@ -1,8 +1,6 @@
 package org.iocaste.kernel.files;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
@@ -12,7 +10,7 @@ public class GetFiles extends AbstractHandler {
 
     @Override
     public Object run(Message message) throws Exception {
-        List<FileEntry> files;
+        FileEntry[] files;
         String[] list;
         String[] args = message.get("args");
         String path = FileServices.getPath(args);
@@ -25,10 +23,10 @@ public class GetFiles extends AbstractHandler {
         if (list == null)
             return null;
         
-        files = new ArrayList<>();
-        for (String name : list) {
-            file = new File(name);
-            new FileEntry(files, file);
+        files = new FileEntry[list.length];
+        for (int i = 0; i < list.length; i++) {
+            file = new File(list[i]);
+            files[i] = new FileEntry(list[i], args, file.isDirectory());
         }
         
         return files;

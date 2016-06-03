@@ -43,7 +43,9 @@ public class Unzip extends AbstractHandler {
             if (entries == null)
                 entries = new ArrayList<>();
             
-            entry = new FileEntry(entries, zipentry);
+            entry = new FileEntry(
+                    zipentry.getName(), source, zipentry.isDirectory());
+            entries.add(entry);
             if (entry.directory) {
                 mkdir.run(target, entry.name);
                 continue;
@@ -57,7 +59,7 @@ public class Unzip extends AbstractHandler {
         
         fis.close();
         file.delete();
-        return entries;
+        return entries.toArray(new FileEntry[0]);
     }
     
 }

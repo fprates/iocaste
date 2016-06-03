@@ -15,6 +15,7 @@ public final class Iocaste extends AbstractServiceInterface {
     public static final String SERVERNAME = "/iocaste-kernel/service.html";
     public static final int CREATE = 0;
     public static final int READ = 1;
+    public static final int WRITE = 2;
     public static final byte JAR = 1;
     
     public Iocaste(Function function) {
@@ -62,6 +63,12 @@ public final class Iocaste extends AbstractServiceInterface {
     
     public final boolean delete(String... args) {
         return delete(false, args);
+    }
+    
+    public final void delete(FileEntry[] files) {
+        Message message = new Message("entries_delete");
+        message.add("files", files);
+        call(message);
     }
     
     private final boolean delete(boolean all, String... args) {
@@ -125,7 +132,7 @@ public final class Iocaste extends AbstractServiceInterface {
         return call(new Message("get_current_app"));
     }
     
-    public final List<FileEntry> getFiles(String... args) {
+    public final FileEntry[] getFiles(String... args) {
         Message message = new Message("files_get");
         message.add("args", args);
         return call(message);
