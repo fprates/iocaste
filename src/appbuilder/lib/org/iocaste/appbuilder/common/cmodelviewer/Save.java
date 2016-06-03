@@ -23,7 +23,6 @@ public class Save extends AbstractActionHandler {
         String keyname;
         Context extcontext;
         
-        refresh();
         extcontext = getExtendedContext();
         cmodel = getManager(extcontext.link.cmodel).getModel();
         conversion = new DataConversion();

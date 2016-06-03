@@ -343,6 +343,7 @@ public abstract class AbstractActionHandler {
         
         components = viewctx.getComponents();
         documents = new Documents(context.function);
+        refresh();
         execute(this.context);
         if (redirectflag)
             redirectContext(this.context, viewctx);
