@@ -20,7 +20,7 @@ public class GetFiles extends AbstractHandler {
             return null;
         
         list = file.list();
-        if (list == null)
+        if ((list == null) || (list.length == 0))
             return null;
         
         files = new FileEntry[list.length];
