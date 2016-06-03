@@ -1,6 +1,5 @@
 package org.iocaste.report.common.export;
 
-import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -44,7 +43,6 @@ public class CSVGenerate extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        String fd;
         Iocaste iocaste;
         byte[] content;
         String[] path;
@@ -57,7 +55,6 @@ public class CSVGenerate extends AbstractActionHandler {
         path = extcontext.export.getPath();
         context.downloaddata = new DownloadData();
         context.downloaddata.filename = path[path.length - 1].concat(".csv");
-        context.downloaddata.fullname = path(".csv", path);
         context.downloaddata.contenttype = "text/csv";
         context.downloaddata.contentencoding = extcontext.export.getEncoding();
         path = extcontext.export.getPath();
@@ -66,20 +63,9 @@ public class CSVGenerate extends AbstractActionHandler {
         iocaste = new Iocaste(context.function);
         path[path.length - 1] = context.downloaddata.filename;
         iocaste.delete(path);
-        fd = iocaste.file(Iocaste.CREATE, path);
-        iocaste.write(fd, content);
-        iocaste.close(fd);
-    }
-    
-    private final String path(String ext, String... path) {
-        StringBuilder sb;
-        
-        sb = new StringBuilder(System.getProperty("user.home")).
-                append(File.separator).append("iocaste");
-        for (String token : path)
-            sb.append(File.separator).append(token);
-        sb.append(ext);
-        return sb.toString();
+        context.downloaddata.fullname = iocaste.file(Iocaste.CREATE, path);
+        iocaste.write(context.downloaddata.fullname, content);
+        iocaste.close(context.downloaddata.fullname);
     }
     
     private final void printline(StringBuilder buffer,
