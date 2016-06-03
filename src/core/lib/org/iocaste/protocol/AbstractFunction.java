@@ -75,21 +75,6 @@ public abstract class AbstractFunction implements Function {
      * @param path
      * @return
      */
-    public final String getRealPath(String... path) {
-        String separator = System.getProperty("file.separator");
-        StringBuilder sb = new StringBuilder();
-        
-        for (String token : path)
-            sb.append(separator).append(token);
-        
-        return getRealPath(sb.toString());
-    }
-    
-    /**
-     * 
-     * @param path
-     * @return
-     */
     public final InputStream getResourceAsStream(String path) {
         return context.getResourceAsStream(path);
     }
