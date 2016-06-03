@@ -1,0 +1,32 @@
+// para utilização com security manager habilitado no tomcat
+// utilizar as regras abaixo:
+
+// os módulos precisam comunicar-se localmente.
+grant codeBase "file:${catalina.home}/webapps/-" {
+    permission java.net.SocketPermission "127.0.0.1:8080", "connect,resolve";
+};
+
+// kernel precisa de acesso irrestrito.
+grant codeBase "file:${catalina.home}/webapps/iocaste-kernel/-" {
+    permission java.security.AllPermission;
+};
+
+// install precisa se comunicar com banco de dados em qualquer
+// endereço e portas. também precisa gravar arquivos de configuração.
+grant codeBase "file:${catalina.home}/webapps/iocaste-install/-" {
+    permission java.util.PropertyPermission "file.encoding", "read";
+    permission java.net.SocketPermission "*", "connect,resolve";
+    permission java.util.PropertyPermission "user.home", "read";
+    permission java.io.FilePermission "${user.home}${file.separator}.iocaste", "write";
+    permission java.io.FilePermission "${user.home}${file.separator}.iocaste${file.separator}core.properties", "write";
+};
+
+// shell precisa gravar arquivo temporariamente para upload.
+grant codeBase "file:${catalina.home}/webapps/iocaste-shell/-" {
+    permission java.util.PropertyPermission "java.io.tmpdir", "read";
+};
+
+// mail precisa comunicar-se com servidores de email informados.
+grant codeBase "file:${catalina.home}/webapps/iocaste-mail/-" {
+    permission java.net.SocketPermission "*", "connect,resolve";
+};
