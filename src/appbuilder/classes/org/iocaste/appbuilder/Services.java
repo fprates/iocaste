@@ -24,18 +24,23 @@ class GetStyleSheet extends AbstractHandler {
 
     public GetStyleSheet() {
         resolutions = new HashMap<>();
-        resolutions.put("default",
-                new String[] {null, "400px"});
-        resolutions.put("screen768", new String[] {"screen and "
-                + "(min-width:768px) and (max-width:1019px)", "708px"});
-        resolutions.put("screen1020", new String[] {"screen and "
-                + "(min-width:1020px) and (max-width:1229px)", "960px"});
-        resolutions.put("screen1230", new String[] {"screen and "
-                + "(min-width:1230px) and (max-width:1439px)", "1170px"});
-        resolutions.put("screen1440", new String[] {"screen and "
-                + "(min-width:1440px) and (max-width:1599px)", "1380px"});
-        resolutions.put("screen1600", new String[] {"screen and "
-                + "(min-width:1600px)", "1540px"});
+        resolutions.put("default", new String[] {
+                null, "400px", "18pt"});
+        resolutions.put("screen768", new String[] {
+                "screen and (min-width:768px) and (max-width:1019px)",
+                "708px", "30pt"});
+        resolutions.put("screen1020", new String[] {
+                "screen and (min-width:1020px) and (max-width:1229px)",
+                "960px", "30pt"});
+        resolutions.put("screen1230", new String[] {
+                "screen and (min-width:1230px) and (max-width:1439px)",
+                "1170px", "30pt"});
+        resolutions.put("screen1440", new String[] {
+                "screen and (min-width:1440px) and (max-width:1599px)",
+                "1380px", "30pt"});
+        resolutions.put("screen1600", new String[] {
+                "screen and (min-width:1600px)",
+                "1540px", "30pt"});
     }
     
     @Override
@@ -72,6 +77,19 @@ class GetStyleSheet extends AbstractHandler {
             style = stylesheet.newElement(mediakey, ".nc_inner_container");
             style.put("max-width", width[1]);
             style.put("margin", "auto");
+            
+            style = stylesheet.newElement(mediakey, ".nc_title");
+            style.put("font-size", width[2]);
+            style.put("font-weight", "300");
+            style.put("width", "100%");
+            style.put("height", "44px");
+            style.put("color", FONT_COLOR);
+            style.put("font-family", FONT_FAMILY);
+            style.put("margin-left", "0px");
+            style.put("margin-right", "0px");
+            style.put("margin-top", "15px");
+            style.put("margin-bottom", "0px");
+            style.put("padding", "0px");
         }
         
         style = stylesheet.newElement(".main_logo");
@@ -136,19 +154,6 @@ class GetStyleSheet extends AbstractHandler {
         style.put("vertical-align", "middle");
         style.put("color", FONT_COLOR);
         style.put("font-family", FONT_FAMILY);
-        
-        style = stylesheet.newElement(".nc_title");
-        style.put("font-size", "2.4rem");
-        style.put("font-weight", "300");
-        style.put("width", "100%");
-        style.put("height", "44px");
-        style.put("color", FONT_COLOR);
-        style.put("font-family", FONT_FAMILY);
-        style.put("margin-left", "0px");
-        style.put("margin-right", "0px");
-        style.put("margin-top", "15px");
-        style.put("margin-bottom", "0px");
-        style.put("padding", "0px");
         
         style = stylesheet.newElement(".nc_trackbar");
         style.put("margin-left", "0px");

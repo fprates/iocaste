@@ -8,6 +8,7 @@ import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.StyleSheet;
 
 public class MainConfig extends AbstractViewConfig {
 
@@ -18,15 +19,19 @@ public class MainConfig extends AbstractViewConfig {
         DataFormToolItem item;
         Context extcontext;
         Map<String, String> style;
+        StyleSheet stylesheet;
         
         context.view.setTitle("authentic");
 
         Style.set(context);
-        style = context.view.styleSheetInstance().get(".nc_title");
-        style.put("text-align", "center");
-        style.put("margin-left", "auto");
-        style.put("margin-right", "auto");
-        style.put("width", "600px");
+        stylesheet = context.view.styleSheetInstance();
+        for (String mediakey : stylesheet.getMedias().keySet()) {
+            style = stylesheet.get(mediakey, ".nc_title");
+            style.put("text-align", "center");
+            style.put("margin-left", "auto");
+            style.put("margin-right", "auto");
+            style.put("width", "600px");
+        }
         
         getElement("logincnt").setStyleClass("logincnt");
         
