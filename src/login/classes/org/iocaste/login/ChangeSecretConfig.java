@@ -15,10 +15,10 @@ public class ChangeSecretConfig extends AbstractViewConfig {
         DataFormToolData form;
         DataFormToolItem item;
 
-        Style.set(context);
-        getElement("chgscrtcnt").setStyleClass("logincnt");
-
         getNavControl().setTitle("password.change");
+        Style.set(context);
+        
+        getElement("chgscrtcnt").setStyleClass("logincnt");
         
         extcontext = getExtendedContext();
         form = getTool("chgscrt");
@@ -32,6 +32,7 @@ public class ChangeSecretConfig extends AbstractViewConfig {
         
         button = getElement("changesecret");
         button.setSubmit(true);
+        button.setStyleClass("loginsubmit");
     }
 
 }

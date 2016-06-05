@@ -21,9 +21,9 @@ public class MainConfig extends AbstractViewConfig {
         Map<String, String> style;
         StyleSheet stylesheet;
         
-        context.view.setTitle("authentic");
-
+        getNavControl().setTitle("authentic");
         Style.set(context);
+        
         stylesheet = context.view.styleSheetInstance();
         for (String mediakey : stylesheet.getMedias().keySet()) {
             style = stylesheet.get(mediakey, ".nc_title");
