@@ -1,0 +1,13 @@
+Configuração para conexão segura:
+
+- em ${catalina.home}/conf/server.xml, descomentar:
+<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+           maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
+           clientAuth="false" sslProtocol="TLS"
+           keystoreFile="${user.home}/.keystore" keystorePassword="xxxxxx"/>
+
+- no shell:
+// a senha da keystore 'tomcat' deve ser a mesma do keystore global do java
+keytool -genkeypair -alias tomcat -keyalg RSA -keystore $HOME/.keystore -ext san=ip:127.0.0.1
+keytool -export -alias tomcat -keystore $HOME/.keystore -file quanticsrm.crt
+keytool -import -keystore $JAVA_HOME/jre/lib/security/cacerts -file quanticsrm.crt -alias tomcat

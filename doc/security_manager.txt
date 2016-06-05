@@ -1,0 +1,7 @@
+Para ativar:
+- no fedora:
+1.vi /etc/tomcat/tomcat.conf
+2.SECURITY_MANAGER="true"
+
+- vanilla:
+${catalina.home}/bin/catalina.sh start -security

@@ -4,6 +4,7 @@
 // os módulos precisam comunicar-se localmente.
 grant codeBase "file:${catalina.home}/webapps/-" {
     permission java.net.SocketPermission "127.0.0.1:8080", "connect,resolve";
+    permission java.net.SocketPermission "127.0.0.1:8443", "connect,resolve";
 };
 
 // kernel precisa de acesso irrestrito.
@@ -19,11 +20,15 @@ grant codeBase "file:${catalina.home}/webapps/iocaste-install/-" {
     permission java.util.PropertyPermission "user.home", "read";
     permission java.io.FilePermission "${user.home}${file.separator}.iocaste", "write";
     permission java.io.FilePermission "${user.home}${file.separator}.iocaste${file.separator}core.properties", "write";
+    permission java.lang.RuntimePermission "accessClassInPackage.org.apache.coyote.http11";
+    permission java.lang.RuntimePermission "accessClassInPackage.org.apache.tomcat.util.net";    
 };
 
 // shell precisa gravar arquivo temporariamente para upload.
 grant codeBase "file:${catalina.home}/webapps/iocaste-shell/-" {
     permission java.util.PropertyPermission "java.io.tmpdir", "read";
+    permission java.lang.RuntimePermission "accessClassInPackage.org.apache.coyote.http11";
+    permission java.lang.RuntimePermission "accessClassInPackage.org.apache.tomcat.util.net";
 };
 
 // mail precisa comunicar-se com servidores de email informados.

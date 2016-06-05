@@ -1,0 +1,30 @@
+ajuste de configuração sshd:
+- na máquina local
+1. gerar chave: 'ssh-keygen -t rsa';
+2. copia para máquina remota: 'ssh-copy-id user@xxx.xxx.xxx.xxx';
+
+- na máquina remota
+3. em /etc/ssh/sshd_config, alterar PermitRootLogin de 'yes' para  'without-password';
+
+Downloads:
+1. tomcat: yum install tomcat
+2. mariadb: yum install mariadb-server
+
+configuração tomcat:
+1. vi /etc/tomcat/server.xml (leia 'secure_connection.txt')
+2. vi /etc/tomcat/tomcat.conf (leia 'security-manager.txt')
+3. vi /etc/tomcat/catalina.policy (leia 'security-manager.txt')
+4. echo "CATALINA_OPTS=-Djava.security.egd=file:/dev/./urandom" > apache-tomcat/bin/setenv.sh
+5. chmod a+x apache-tomcat/bin/setenv.sh
+
+configuração mariadb:
+1. ajustar senha root:
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('xxxxxx');
+2. criar usuário iocaste:
+CREATE USER 'iocaste'@'%' IDENTIFIED BY 'xxxxxx';
+GRANT ALL PRIVILEGES ON [DB].* TO 'iocaste'@'%' WITH GRANT OPTION;
+
+fonte:
+https://mariadb.com/kb/en/mariadb/set-password/
+https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
+https://fbrx.github.io/post/fixing-tomcat-startup-performance-on-cloud-servers/
