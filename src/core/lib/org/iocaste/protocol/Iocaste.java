@@ -17,6 +17,9 @@ public final class Iocaste extends AbstractServiceInterface {
     public static final int READ = 1;
     public static final int WRITE = 2;
     public static final byte JAR = 1;
+    public static final byte OUT_PRINT = 0;
+    public static final byte ERR_PRINT = 1;
+    public static final byte ERR_CODE = 2;
     
     public Iocaste(Function function) {
         initService(function, SERVERNAME);
@@ -93,6 +96,13 @@ public final class Iocaste extends AbstractServiceInterface {
         Message message = new Message("drop_user");
         message.add("username", username);
         call(message);
+    }
+    
+    public final Object[] execute(String program, String... args) {
+        Message message = new Message("external_process_execute");
+        message.add("program", program);
+        message.add("args", args);
+        return call(message);
     }
     
     public final boolean exists(String... args) {
