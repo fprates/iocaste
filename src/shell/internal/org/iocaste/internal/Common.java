@@ -3,13 +3,14 @@ package org.iocaste.internal;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.protocol.StandardService;
 
 public class Common {
     public static final void commit(String servername, String sessionid) {
         Service service;
         Message message = new Message("commit");
         message.setSessionid(sessionid);
-        service = new Service(sessionid, new StringBuilder(servername).
+        service = new StandardService(sessionid, new StringBuilder(servername).
                 append(Iocaste.SERVERNAME).toString());
         service.call(message);
     }
@@ -18,7 +19,7 @@ public class Common {
         Service service;
         Message message = new Message("rollback");
         message.setSessionid(sessionid);
-        service = new Service(sessionid, new StringBuilder(servername).
+        service = new StandardService(sessionid, new StringBuilder(servername).
                 append(Iocaste.SERVERNAME).toString());
         service.call(message);
     }

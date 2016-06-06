@@ -132,7 +132,7 @@ public abstract class AbstractFunction implements Function {
     public final Service serviceInstance(String path) {
         String url = new StringBuffer(servername).append(path).toString();
         
-        return new Service(sessionid, url);
+        return new StandardService(sessionid, url);
     }
     
     /*

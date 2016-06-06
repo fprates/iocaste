@@ -1,5 +1,6 @@
-package org.iocaste.external;
+package org.iocaste.external.handlers;
 
+import org.iocaste.external.Services;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.Message;

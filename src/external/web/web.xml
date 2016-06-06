@@ -17,11 +17,21 @@
     </servlet-mapping>
     
     <servlet>
+        <servlet-name>iocaste_gateway</servlet-name>
+        <servlet-class>org.iocaste.external.gateway.Servlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>iocaste_gateway</servlet-name>
+        <url-pattern>/gateway.html</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>iocaste_servlet</servlet-name>
         <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
         <init-param>
             <param-name>form</param-name>
-            <param-value>org.iocaste.external.Main</param-value>
+            <param-value>org.iocaste.external.Servlet</param-value>
         </init-param>
     </servlet>
     

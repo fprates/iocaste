@@ -18,6 +18,7 @@ import org.iocaste.protocol.Function;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.protocol.StandardService;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.ControlComponent;
 import org.iocaste.shell.common.PageStackItem;
@@ -72,7 +73,7 @@ public class PageRenderer extends AbstractRenderer {
         }
         
         try {
-            service = new Service(config.sessionid,
+            service = new StandardService(config.sessionid,
                     composeUrl(config.contextname));
             
             config.state = (ViewState)service.call(message);

@@ -11,6 +11,7 @@ import org.iocaste.internal.Controller;
 import org.iocaste.internal.TrackingData;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.protocol.StandardService;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Calendar;
 import org.iocaste.shell.common.Const;
@@ -263,7 +264,7 @@ public class TextFieldRenderer extends Renderer {
         
         control = config.getPopupControl();
         tracking = config.getTracking();
-        service = new Service(tracking.sessionid, tracking.contexturl);
+        service = new StandardService(tracking.sessionid, tracking.contexturl);
         message = new Message("get_view_data");
 
         sourceview = config.getView();

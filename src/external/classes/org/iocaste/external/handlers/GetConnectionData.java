@@ -1,4 +1,4 @@
-package org.iocaste.external;
+package org.iocaste.external.handlers;
 
 import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.AbstractHandler;

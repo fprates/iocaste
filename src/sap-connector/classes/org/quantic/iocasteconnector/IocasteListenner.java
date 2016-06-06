@@ -12,6 +12,7 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.protocol.StandardService;
 
 import com.sap.conn.jco.JCoException;
 import com.sap.conn.jco.JCoFunction;
@@ -35,7 +36,8 @@ public class IocasteListenner extends AbstractExternalFunction {
         Context context;
         int err;
         
-        service = new Service(null, socket.getInetAddress().getHostAddress());
+        service = new StandardService(
+                null, socket.getInetAddress().getHostAddress());
         service.setInputStream(socket.getInputStream());
         service.setOutputStream(socket.getOutputStream());
         message = service.getMessage();

@@ -52,7 +52,6 @@
 	<classpathentry kind="src" path="src/sap-connector/classes"/>
 	<classpathentry kind="src" path="src/copy/classes"/>
 	<classpathentry kind="src" path="src/upload/classes"/>
-	<classpathentry kind="src" path="src/gateway/classes"/>
 	<classpathentry kind="src" path="src/mail/classes"/>
 	<classpathentry kind="src" path="src/mail/lib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>

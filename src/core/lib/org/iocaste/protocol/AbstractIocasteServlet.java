@@ -69,7 +69,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
         String functionid, complexid;
         String sessionid = req.getSession().getId();
         
-        service = new Service(sessionid, getUrl(req));
+        service = serviceInstance(sessionid, getUrl(req));
         context = new Context();
         context.req = req;
         context.resp = resp;
@@ -124,7 +124,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
      */
     public final String getServerName(HttpServletRequest req) {
         return new StringBuffer(req.getScheme()).append("://")
-                .append("127.0.0.1:").append(req.getServerPort()).toString();
+                .append("127.0.0.1:").append(req.getLocalPort()).toString();
     }
     
     /**
@@ -205,7 +205,7 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
         test.add("sessionid", sessionid);
         test.setSessionid(sessionid);
         
-        service = new Service(sessionid, url);
+        service = serviceInstance(sessionid, url);
         connected = (Boolean)service.call(test);
         
         if (!connected)
@@ -233,6 +233,10 @@ public abstract class AbstractIocasteServlet extends HttpServlet {
             functions.put(method, function);
         
         sfunctions.put(sessionid, functions);
+    }
+    
+    protected Service serviceInstance(String sessionid, String url) {
+        return new StandardService(sessionid, url);
     }
     
     /**

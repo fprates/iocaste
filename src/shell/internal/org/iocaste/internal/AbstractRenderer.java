@@ -26,6 +26,7 @@ import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.protocol.StandardService;
 import org.iocaste.protocol.user.Authorization;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
@@ -182,7 +183,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         }
         
         try {
-            service = new Service(complexid, composeUrl(appname));
+            service = new StandardService(complexid, composeUrl(appname));
             viewreturn = (Object[])service.call(message);
             
             view = (View)viewreturn[0];
@@ -286,7 +287,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         
         url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
                 toString();
-        service = new Service(complexid, url);
+        service = new StandardService(complexid, url);
         service.call(message);
     }
 
@@ -462,7 +463,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         
         url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
                 toString();
-        service = new Service(complexid, url);
+        service = new StandardService(complexid, url);
         return (String)service.call(message);
     }
     
@@ -503,7 +504,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         
         url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
                 toString();
-        service = new Service(complexid, url);
+        service = new StandardService(complexid, url);
         return (boolean)service.call(message);
     }
     
@@ -529,7 +530,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         
         url = new StringBuilder(getServerName()).append(Iocaste.SERVERNAME).
                 toString();
-        service = new Service(complexid, url);
+        service = new StandardService(complexid, url);
         return (Boolean)service.call(message);
     }
     
@@ -843,7 +844,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     public final Service serviceInstance(String path) {
         String url = new StringBuffer(servername).append(path).toString();
         
-        return new Service(jsessionid, url);
+        return new StandardService(jsessionid, url);
     }
 
     /*

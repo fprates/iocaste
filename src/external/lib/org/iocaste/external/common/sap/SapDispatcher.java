@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.iocaste.protocol.Message;
 import org.iocaste.protocol.Service;
+import org.iocaste.protocol.StandardService;
 
 public class SapDispatcher {
     private String port, host;
@@ -25,7 +26,7 @@ public class SapDispatcher {
         message.add("changing", sapmessage.changing);
         message.add("tables", sapmessage.tparameters.getTables());
         message.add("port", port);
-        service = new Service(host, 60000);
+        service = new StandardService(host, 60000);
         return (Map<String, Object>)service.call(message);
     }
     

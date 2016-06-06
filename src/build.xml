@@ -170,9 +170,6 @@
         <!-- template -->
         <ant antfile="${basedir}/src/template/build.xml"/>
 
-        <!-- gateway -->
-        <ant antfile="${basedir}/src/gateway/build.xml"/>
-
         <!-- sap-connector -->
         <ant antfile="${basedir}/src/sap-connector/build.xml"/>
     	
