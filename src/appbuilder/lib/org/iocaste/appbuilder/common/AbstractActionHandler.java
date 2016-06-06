@@ -315,6 +315,8 @@ public abstract class AbstractActionHandler {
         ComponentEntry entry;
         
         extcontext = getExtendedContext();
+        if (extcontext == null)
+            return;
         entries = context.getView().getComponents().entries;
         for (String key : entries.keySet()) {
             entry = entries.get(key);
