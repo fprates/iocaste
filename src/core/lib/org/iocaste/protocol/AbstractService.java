@@ -42,6 +42,11 @@ public abstract class AbstractService implements Service {
             response = stream.read();
             stream.close();
             
+            /*
+             * ajuste temporário enquanto ajustamos iocaste-external/gateway,
+             */
+            if (response == null)
+                return null;
             if (response.getException() != null)
                 throw response.getException();
             
