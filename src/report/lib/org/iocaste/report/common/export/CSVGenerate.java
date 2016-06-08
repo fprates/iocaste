@@ -43,8 +43,8 @@ public class CSVGenerate extends AbstractActionHandler {
     
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
+        String fd;
         Iocaste iocaste;
-        byte[] content;
         String[] path;
         AbstractReportContext extcontext;
         
@@ -59,13 +59,13 @@ public class CSVGenerate extends AbstractActionHandler {
         context.downloaddata.contentencoding = extcontext.export.getEncoding();
         path = extcontext.export.getPath();
 
-        content = compose(extcontext);
+        context.downloaddata.content = compose(extcontext);
         iocaste = new Iocaste(context.function);
         path[path.length - 1] = context.downloaddata.filename;
         iocaste.delete(path);
-        context.downloaddata.fullname = iocaste.file(Iocaste.CREATE, path);
-        iocaste.write(context.downloaddata.fullname, content);
-        iocaste.close(context.downloaddata.fullname);
+        fd = iocaste.file(Iocaste.CREATE, path);
+        iocaste.write(fd, context.downloaddata.content);
+        iocaste.close(fd);
     }
     
     private final void printline(StringBuilder buffer,

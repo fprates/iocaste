@@ -1,7 +1,5 @@
 package org.iocaste.appbuilder.common;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,13 +94,6 @@ public class BuilderCustomView extends AbstractCustomView
     }
     
     private final void download(PageBuilderContext context) throws Exception {
-        File file = new File(context.downloaddata.fullname);
-        FileInputStream fis = new FileInputStream(file);
-        byte[] content = new byte[fis.available()];
-        
-        fis.read(content);
-        fis.close();
-        
         context.function.setContentType(
                 context.downloaddata.contenttype);
         context.function.setContentEncoding(
@@ -111,7 +102,7 @@ public class BuilderCustomView extends AbstractCustomView
                 new StringBuilder("attachment; filename=\"").
                 append(context.downloaddata.filename).
                 append("\"").toString());
-        context.view.setContent(content);
+        context.view.setContent(context.downloaddata.content);
     }
     
     @Override

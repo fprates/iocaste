@@ -1,7 +1,8 @@
 package org.iocaste.appbuilder.common;
 
 public class DownloadData {
-    public String filename, fullname, contenttype, contentencoding;
+    public String filename, contenttype, contentencoding;
+    public byte[] content;
     
     public DownloadData() {
         contenttype = "application/octet-stream";
