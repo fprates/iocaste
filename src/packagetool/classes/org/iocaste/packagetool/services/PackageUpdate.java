@@ -8,6 +8,7 @@ import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.packagetool.common.GlobalConfigData;
 import org.iocaste.packagetool.common.SearchHelpData;
 import org.iocaste.packagetool.common.TaskGroup;
 import org.iocaste.protocol.AbstractHandler;
@@ -34,6 +35,7 @@ public class PackageUpdate extends AbstractHandler {
         DocumentModel tasks;
         State state;
         Services services;
+        Set<GlobalConfigData> configs;
         
         state = new State();
         state.data = message.get("data");
@@ -100,6 +102,10 @@ public class PackageUpdate extends AbstractHandler {
                     factory, null, numbers.get(factory));
             Registry.add(factory, "NUMBER", state);
         }
+        
+        configs = state.data.getGlobalConfigs();
+        if (configs.size() > 0)
+            InstallGlobalConfig.init(configs, state);
         
         /*
          * grava itens instalados
