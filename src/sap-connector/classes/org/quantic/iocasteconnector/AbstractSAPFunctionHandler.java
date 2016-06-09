@@ -10,6 +10,7 @@ import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
+import org.iocaste.external.common.External;
 import org.iocaste.protocol.Function;
 
 import com.sap.conn.jco.AbapClassException;
@@ -26,7 +27,16 @@ import com.sap.conn.jco.server.JCoServerFunctionHandler;
 
 public abstract class AbstractSAPFunctionHandler implements
         JCoServerFunctionHandler {
-	
+    protected static final boolean CONNECT = true;
+    protected static final boolean DONT_CONNECT = false;
+    protected External external;
+    private boolean connect;
+    
+    public AbstractSAPFunctionHandler(External external, boolean connect) {
+        this.external = external;
+        this.connect = connect;
+    }
+    
     public static final void extract(Context context) {
         JCoParameterList list;
         Map<String, Object> extracted;
@@ -200,8 +210,35 @@ public abstract class AbstractSAPFunctionHandler implements
     }
 
     @Override
-    public abstract void handleRequest(JCoServerContext arg0, JCoFunction arg1)
-            throws AbapException, AbapClassException;
+    public final void handleRequest(JCoServerContext context,
+            JCoFunction function) throws AbapException, AbapClassException {
+        try {
+            if (connect)
+                external.connect();
+            run(context, function);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AbapClassException(e);
+        } finally {
+            if (connect)
+                external.disconnect();
+        }
+    }
+    
+    protected final void log(Object... args) {
+        StringBuilder sb;
+        
+        if (args.length == 1) {
+            System.out.println(args[0]);
+            return;
+        }
+        
+        sb = new StringBuilder();
+        for (Object arg : args)
+            sb.append(arg);
+        
+        System.out.println(sb.toString());
+    }
 
     @SuppressWarnings("unchecked")
     private static final void moveTableToSAP(
@@ -320,6 +357,9 @@ public abstract class AbstractSAPFunctionHandler implements
         stream.destination = JCoDestinationManager.
         		getDestination(portdata.getst("PORT_NAME"));
 	}
+	
+	protected abstract void run(JCoServerContext context, JCoFunction function)
+	        throws Exception;
 	
 	public static final void unregister(Command stream) {
 		Environment.unregisterServerDataProvider(stream.provider);

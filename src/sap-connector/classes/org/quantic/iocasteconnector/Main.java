@@ -23,14 +23,24 @@ public class Main extends AbstractExternalApplication {
         option("--listenner-port", KEY_VALUE, "60000");
     }
 
+    private void handlerRegister(List<FunctionConfig> functions, String name,
+            String service, JCoServerFunctionHandler handler) {
+        FunctionConfig function;
+        
+        function = new FunctionConfig();
+        functions.add(function);
+        function.name = name;
+        function.service = service;
+        if (function.service != null)
+            function.handler = handler;
+    }
+    
 	@Override
 	protected void execute(Message message) throws Exception {
         int listennerport;
-        boolean registerable;
         DefaultServerHandlerFactory.FunctionHandlerFactory factory;
         Command stream;
-        String text;
-        FunctionConfig function;
+        String text, name, service;
         List<FunctionConfig> functions;
         
         stream = new Command();
@@ -53,19 +63,16 @@ public class Main extends AbstractExternalApplication {
         text = stream.portconfig.getHeader().getst("TEXT");
         System.out.println("* Connecting to " + text);
 
-        registerable = false;
         functions = new ArrayList<>();
         for (ExtendedObject object : stream.portconfig.getItems("functions")) {
-            function = new FunctionConfig();
-            functions.add(function);
-            function.name = object.getst("FUNCTION");
-            function.service = object.getst("SERVICE");
-            if (function.service == null)
-                continue;
-            
-            function.handler = new FunctionHandler(connector, external, object);
-            registerable = true;
+            name = object.getst("FUNCTION");
+            service = object.getst("SERVICE");
+            handlerRegister(functions, name,
+                    service, new FunctionHandler(connector, external, object));
         }
+        
+        handlerRegister(functions, "Z_QS05_CERT_INSTALL", "cert_install",
+                new CertificateInstall(external));
         
         System.out.print("registering sap data provider...");
         AbstractSAPFunctionHandler.register(stream);
@@ -73,30 +80,26 @@ public class Main extends AbstractExternalApplication {
         
         addListenner(listennerport, () -> new IocasteListenner(stream));
         
-        if (registerable) {
             System.out.print("trying registering on SAP...");
-            server = JCoServerFactory.getServer(stream.port);
-            System.out.println("ok");
-            
-            System.out.println("registering RFCs...");
-            factory = new DefaultServerHandlerFactory.FunctionHandlerFactory();
-            for (FunctionConfig fc : functions) {
-                if (fc.service == null) {
-                    System.out.println(new StringBuilder("- no handler for ").
-                            append(fc.name).
-                            append(". skipping.").toString());
-                    continue;
-                }
-                factory.registerHandler(fc.name, fc.handler);
-                System.out.println("- " + fc.name + " registered.");
+        server = JCoServerFactory.getServer(stream.port);
+        System.out.println("ok");
+        
+        System.out.println("registering RFCs...");
+        factory = new DefaultServerHandlerFactory.FunctionHandlerFactory();
+        for (FunctionConfig fc : functions) {
+            if (fc.service == null) {
+                System.out.println(new StringBuilder("- no handler for ").
+                        append(fc.name).
+                        append(". skipping.").toString());
+                continue;
             }
-            server.setCallHandlerFactory(factory);
-            
-            System.out.println("listenning to connections...");
-            server.start();
-        } else {
-            System.out.println("listenning to connections...");
+            factory.registerHandler(fc.name, fc.handler);
+            System.out.println("- " + fc.name + " registered.");
         }
+        server.setCallHandlerFactory(factory);
+        
+        System.out.println("listenning to connections...");
+        server.start();
 	}
 	
 	public static final void main(String[] args) {
