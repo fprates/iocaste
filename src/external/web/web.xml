@@ -31,7 +31,7 @@
         <servlet-class>org.iocaste.shell.common.IocasteServlet</servlet-class>
         <init-param>
             <param-name>form</param-name>
-            <param-value>org.iocaste.external.Servlet</param-value>
+            <param-value>org.iocaste.external.Main</param-value>
         </init-param>
     </servlet>
     
