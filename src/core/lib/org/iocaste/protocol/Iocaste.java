@@ -324,11 +324,16 @@ public final class Iocaste extends AbstractServiceInterface {
     
     /**
      * 
+     * @param username
      * @param secret
+     * @param initial
      */
-    public final void setUserPassword(String secret) {
+    public final void setUserPassword(
+            String username, String secret, boolean initial) {
         Message message = new Message("set_user_password");
+        message.add("username", username);
         message.add("secret", secret);
+        message.add("initial", initial);
         call(message);
     }
     

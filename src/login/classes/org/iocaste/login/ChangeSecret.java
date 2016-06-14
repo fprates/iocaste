@@ -14,13 +14,14 @@ public class ChangeSecret extends Connect {
         String confirm = getdfst("chgscrt", "CONFIRM");
         
         if (secret.equals(confirm)) {
-            new Iocaste(context.function).setUserPassword(secret);
+            extcontext = getExtendedContext();
+            new Iocaste(context.function).setUserPassword(
+                    extcontext.uname, secret, false);
             
             /*
              * não queremos que essa seja a página inicial
              */
             context.function.dontPushPage();
-            extcontext = getExtendedContext();
             task = getUserTask(extcontext.uname);
             if (task == null) {
                 context.function.exec("iocaste-tasksel", "main");

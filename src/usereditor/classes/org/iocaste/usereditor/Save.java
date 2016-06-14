@@ -19,7 +19,8 @@ public class Save extends AbstractActionHandler {
         User user;
         String name, secret;
         ExtendedObject object;
-
+        Iocaste iocaste;
+        
         object = getdf("identity");
         secret = object.getst("SECRET");
         if (secret == null) {
@@ -33,15 +34,14 @@ public class Save extends AbstractActionHandler {
         
         user = new User();
         user.setUsername(extcontext.userdata.username);
-        user.setSecret(secret);
         user.setFirstname(object.getst("FIRSTNAME"));
         user.setSurname(object.getst("SURNAME"));
-        user.setInitialSecret(object.getbl("INIT"));
         
+        iocaste = new Iocaste(context.function);
         if (extcontext.userdata.identity == null) {
-            new Iocaste(context.function).create(user);
+            iocaste.create(user);
         } else {
-            new Iocaste(context.function).update(user);
+            iocaste.update(user);
             query = new Query("delete");
             query.setModel("USER_AUTHORITY");
             query.andEqual("USERNAME", extcontext.userdata.username);
@@ -57,6 +57,10 @@ public class Save extends AbstractActionHandler {
             query.andEqual("USERNAME", extcontext.userdata.username);
         }
 
+        if (secret != null)
+            iocaste.setUserPassword(
+                    extcontext.userdata.username, secret, object.getbl("INIT"));
+        
         extcontext.userdata.identity = object;
         extcontext.extras = getdf("extras");
         extcontext.extras.set("USERNAME", extcontext.userdata.username);

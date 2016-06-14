@@ -5,6 +5,14 @@ import org.iocaste.kernel.session.Session;
 import org.iocaste.protocol.AbstractFunction;
 
 public class Users extends AbstractFunction {
+    public static final byte USER_GET = 0;
+    public static final byte SECRET_QUERY = 1;
+    public static final byte INIT_QUERY = 2;
+    public static final String[] QUERIES = {
+            "select UNAME, SECRT, FNAME, SNAME from USERS001 where UNAME = ?",
+            "select SECRT from USERS001 where UNAME = ?",
+            "select INIT from USERS001 where UNAME = ?"
+    };
     public Database database;
     public Session session;
     

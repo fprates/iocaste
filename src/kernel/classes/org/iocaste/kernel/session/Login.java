@@ -1,5 +1,6 @@
 package org.iocaste.kernel.session;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -13,6 +14,12 @@ import org.iocaste.protocol.user.User;
 public class Login extends AbstractHandler {
     private static final int USERNAME_MAX_LEN = 12;
     
+    private final boolean isSecretOk(Connection connection,
+            GetUserData getuserdata, User user, String secret) throws Exception
+    {
+        return (getuserdata.getSecret(connection, user).equals(secret));
+    }
+    
     @Override
     public Object run(Message message) throws Exception {
         UserContext context;
@@ -21,7 +28,8 @@ public class Login extends AbstractHandler {
         List<String> sessionslist;
         User user;
         GetUserData getuserdata;
-        Session session = getFunction();
+        Session session;
+        Connection connection;
         String[] composed, locale_ = message.getst("locale").split("_");
         String username = message.getst("user");
         String secret = message.getst("secret");
@@ -33,9 +41,12 @@ public class Login extends AbstractHandler {
         if (username.length() > USERNAME_MAX_LEN)
             return false;
 
+        session = getFunction();
+        connection = session.database.instance();
         getuserdata = session.users.get("get_user_data");
-        user = getuserdata.run(username);
-        if ((user == null) || (!user.getSecret().equals(secret)))
+        user = getuserdata.run(session.users, connection, username);
+        if ((user == null) || !isSecretOk(
+                connection, getuserdata, user, secret))
             return false;
         
         if (locale_.length == 1)

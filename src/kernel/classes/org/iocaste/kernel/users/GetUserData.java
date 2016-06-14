@@ -9,32 +9,40 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 
 public class GetUserData extends AbstractHandler {
-    private static final String QUERY =
-            "select UNAME, SECRT, FNAME, SNAME, INIT from USERS001 "
-            + "where UNAME = ?";
 
+    @SuppressWarnings("unchecked")
+    public final String getSecret(Connection connection, User user)
+            throws Exception {
+        Object[] lines;
+        Users users = getFunction();
+        Select select = users.database.get("select");
+        
+        lines = select.run(connection,
+                Users.QUERIES[Users.SECRET_QUERY], 1, user.getUsername());
+        return (lines == null)? null : (String)
+                ((Map<String, Object>)lines[0]).get("SECRT");
+    }
+    
     @Override
     public Object run(Message message) throws Exception {
         String username = message.getst("username");
-        User user = run(username);
-        
-        user.setSecret(null);
-        return user;
+        Connection connection;
+        Users users = getFunction();
+        connection = users.database.instance();
+        return run(users, connection, username);
     }
     
     @SuppressWarnings("unchecked")
-    public User run(String username) throws Exception {
+    public User run(Users users, Connection connection, String username)
+            throws Exception {
         User user;
-        Connection connection;
         Object[] lines;
         Map<String, Object> columns;
         Select select;
-        Users users = getFunction();
         
-        connection = users.database.instance();
         select = users.database.get("select");
-        lines = select.run(connection, QUERY, 1, username.toUpperCase());
-        connection.close();
+        lines = select.run(connection,
+                Users.QUERIES[Users.USER_GET], 1, username.toUpperCase());
         if (lines == null)
             return null;
         
@@ -43,8 +51,6 @@ public class GetUserData extends AbstractHandler {
         user.setUsername((String)columns.get("UNAME"));
         user.setFirstname((String)columns.get("FNAME"));
         user.setSurname((String)columns.get("SNAME"));
-        user.setSecret((String)columns.get("SECRT"));
-        user.setInitialSecret((boolean)columns.get("INIT"));
         
         return user;
     }

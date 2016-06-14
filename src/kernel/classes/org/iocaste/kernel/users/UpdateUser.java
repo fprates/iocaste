@@ -9,11 +9,8 @@ import org.iocaste.protocol.Message;
 import org.iocaste.protocol.user.User;
 
 public class UpdateUser extends AbstractHandler {
-    private static final byte UPD_USER = 0;
-    private static final String[] QUERIES = {
-        "update USERS001 set SECRT = ?, INIT = ?, FNAME = ?, SNAME = ? " +
-                "where UNAME = ?"
-    };
+    private static final String UPDATE_USER =
+        "update USERS001 set FNAME = ?, SNAME = ? where UNAME = ?";
 
     @Override
     public Object run(Message message) throws Exception {
@@ -27,21 +24,16 @@ public class UpdateUser extends AbstractHandler {
     public void run(User user, String sessionid) throws Exception {
         List<String> sids;
         String username = user.getUsername();
-        String secret = user.getSecret();
-        boolean init = user.isInitialSecret();
         String firstname = user.getFirstname();
         String surname = user.getSurname();
         Users users = getFunction();
         Update update = users.database.get("update");
         Connection connection = users.database.getDBConnection(sessionid);
         
-        update.run(connection, QUERIES[UPD_USER],
-                secret, init, firstname, surname, username);
-        
+        update.run(connection, UPDATE_USER, firstname, surname, username);
         sids = users.session.usersessions.get(user.getUsername());
         if (sids == null)
             return;
-        
         for (String sid : sids)
             users.session.sessions.get(sid).setAuthorizations(null);
     }

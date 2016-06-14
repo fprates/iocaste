@@ -1,25 +1,26 @@
 package org.iocaste.kernel.users;
 
+import java.sql.Connection;
+
+import org.iocaste.kernel.database.Update;
 import org.iocaste.protocol.AbstractHandler;
 import org.iocaste.protocol.Message;
-import org.iocaste.protocol.user.User;
 
 public class SetUserPassword extends AbstractHandler {
+    private static final String UPDATE_SECRET =
+            "update USERS001 set SECRT = ?, INIT = ? where UNAME = ?";
 
     @Override
     public Object run(Message message) throws Exception {
-        UpdateUser update;
-        User user;
-        String sessionid = message.getSessionid();
+        String username = message.getst("username");
         String secret = message.getst("secret");
+        boolean initial = message.getbl("initial");
+        String sessionid = message.getSessionid();
         Users users = getFunction();
+        Update update = users.database.get("update");
+        Connection connection = users.database.getDBConnection(sessionid);
         
-        user = users.session.sessions.get(sessionid).getUser();
-        user.setSecret(secret);
-        user.setInitialSecret(false);
-        
-        update = getFunction().get("update_user");
-        update.run(user, sessionid);
+        update.run(connection, UPDATE_SECRET, secret, initial, username);
         return null;
     }
 

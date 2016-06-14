@@ -16,8 +16,7 @@ public class CreateUser extends AbstractHandler {
     private static final byte USER_ID = 1;
     private static final byte UPD_USRID = 2;
     private static final String[] QUERIES = {
-        "insert into USERS001(uname, secrt, fname, sname, init, usrid) " +
-                "values(?, ?, ?, ?, ?, ?)",
+        "insert into USERS001(uname, fname, sname, usrid) values(?, ?, ?, ?)",
         "select CRRNT from USERS000",
         "update USERS000 set CRRNT = ?"
     };
@@ -35,16 +34,14 @@ public class CreateUser extends AbstractHandler {
         Object[] objects;
         User user = message.get("userdata");
         
-        if (user.getUsername() == null || user.getSecret() == null)
+        if (user.getUsername() == null)
             throw new IocasteException("Invalid username or password");
         
         users = getFunction();
         sessionid = message.getSessionid();
         connection = users.database.getDBConnection(sessionid);
-        
         select = users.database.get("select");
         objects = select.run(connection, QUERIES[USER_ID], 1);
-        
         if (objects == null) {
             userid = 0;
         } else {
@@ -55,10 +52,8 @@ public class CreateUser extends AbstractHandler {
         userid++;
         update = users.database.get("update");
         update.run(connection, QUERIES[INS_USER], user.getUsername(),
-                user.getSecret(),
                 user.getFirstname(),
                 user.getSurname(),
-                user.isInitialSecret(),
                 userid);
         update.run(connection, QUERIES[UPD_USRID], userid);
         return null;
