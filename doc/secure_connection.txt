@@ -7,7 +7,7 @@ Configuração para conexão segura:
            keystoreFile="${user.home}/.keystore" keystorePassword="xxxxxx"/>
 
 - no shell:
-// a senha da keystore 'tomcat' deve ser a mesma do keystore global do java
-keytool -genkeypair -alias tomcat -keyalg RSA -keystore $HOME/.keystore -ext san=ip:127.0.0.1
-keytool -export -alias tomcat -keystore $HOME/.keystore -file quanticsrm.crt
-keytool -import -keystore $JAVA_HOME/jre/lib/security/cacerts -file quanticsrm.crt -alias tomcat
+// a senha da keystore 'iocaste' deve ser a mesma do keystore global do java
+keytool -genkeypair -alias iocaste -keyalg RSA -keystore ~/.keystore -ext san=ip:xxx.xxx.xxx.xxx,ip:127.0.0.1
+keytool -export -alias iocaste -keystore $HOME/.keystore -file iocaste.crt
+keytool -import -keystore $JAVA_HOME/jre/lib/security/cacerts -file iocaste.crt -alias iocaste
