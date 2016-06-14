@@ -10,7 +10,7 @@ public class DeleteFile extends AbstractHandler {
     @Override
     public Object run(Message message) throws Exception {
         String[] args = message.get("args");
-        boolean all = message.getbool("all");
+        boolean all = message.getbl("all");
         return run(args, all);
     }
     

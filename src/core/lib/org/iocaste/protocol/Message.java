@@ -110,7 +110,7 @@ public class Message implements Serializable {
      * @param name
      * @return
      */
-    public final boolean getbool(String name) {
+    public final boolean getbl(String name) {
         Object value = values.get(name);
         
         return (value == null)? false : (boolean)value;

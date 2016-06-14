@@ -47,7 +47,7 @@ public class GetViewData extends AbstractHandler {
         Method method;
         CustomView customview;
         View view = message.get("view");
-        boolean initializable = message.getbool("init");
+        boolean initializable = message.getbl("init");
         AbstractPage page = getFunction();
         Iocaste iocaste = new Iocaste(page);
         Locale locale = iocaste.getLocale();
