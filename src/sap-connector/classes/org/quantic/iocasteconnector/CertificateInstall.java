@@ -10,18 +10,7 @@ import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 
-import org.iocaste.external.common.External;
-
-import com.sap.conn.jco.JCoFunction;
-import com.sap.conn.jco.JCoParameterList;
-import com.sap.conn.jco.server.JCoServerContext;
-
-public class CertificateInstall extends AbstractSAPFunctionHandler {
-    public static final String CERT_ALIAS = "iocaste";
-    
-    public CertificateInstall(External external) {
-        super(external, DONT_CONNECT);
-    }
+public class CertificateInstall {
     
     public static final String getCertificatePath(String path, String certnm) {
         return (path == null)? certnm : new StringBuilder(path).
@@ -35,7 +24,7 @@ public class CertificateInstall extends AbstractSAPFunctionHandler {
                 append("cacerts").toString();
     }
     
-    private final InputStream getStream(String path) throws Exception {
+    private static final InputStream getStream(String path) throws Exception {
         ByteArrayInputStream bais;
         FileInputStream fis = new FileInputStream(path);
         DataInputStream dis = new DataInputStream(fis);
@@ -47,11 +36,9 @@ public class CertificateInstall extends AbstractSAPFunctionHandler {
         return bais;
     }
 
-    @Override
-    public void run(JCoServerContext context, JCoFunction function)
-            throws Exception {
-        JCoParameterList parameters;
-        String secret, path, javahome, certname;
+    public static void run(String alias, String path, String certname,
+            char[] password) throws Exception {
+        String javahome;
         File ksfile;
         KeyStore keystore;
         FileInputStream in;
@@ -59,28 +46,27 @@ public class CertificateInstall extends AbstractSAPFunctionHandler {
         Certificate certificate;
         CertificateFactory factory;
         InputStream certificatestream;
-        char[] password;
-        
-        parameters = function.getImportParameterList();
-        secret = parameters.getString("SECRET");
-        path = parameters.getString("PATH");
-        certname = parameters.getString("CERT_NAME");
         
         javahome = System.getProperty("java.home");
-        password = secret.toCharArray();
         keystore = KeyStore.getInstance(KeyStore.getDefaultType());
         ksfile = new File(getKeyStore(javahome));
         in = new FileInputStream(ksfile);
         keystore.load(in, password);
         in.close();
 
+        if (keystore.containsAlias(alias)) {
+            System.out.println("cerificate already installed.");
+            return;
+        }
+        
         certificatestream = getStream(getCertificatePath(path, certname));
         factory = CertificateFactory.getInstance("X.509");
         certificate = factory.generateCertificate(certificatestream);
-        keystore.setCertificateEntry(CERT_ALIAS, certificate);
+        keystore.setCertificateEntry(alias, certificate);
         
         out = new FileOutputStream(ksfile);
         keystore.store(out, password);
         out.close();
+        System.out.println("cerificate installed.");
     }
 }

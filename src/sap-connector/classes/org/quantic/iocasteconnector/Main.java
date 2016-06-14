@@ -17,22 +17,24 @@ public class Main extends AbstractExternalApplication {
     private static Main instance;
     
     @Override
-    protected void config() {
+    protected final void config() {
         required("--port", KEY_VALUE);
         option("--language", KEY_VALUE, "pt_BR");
         option("--listenner-port", KEY_VALUE, "60000");
+        option("--net-debug", KEY);
     }
-
-    private void handlerRegister(List<FunctionConfig> functions, String name,
-            String service, JCoServerFunctionHandler handler) {
-        FunctionConfig function;
-        
-        function = new FunctionConfig();
-        functions.add(function);
-        function.name = name;
-        function.service = service;
-        if (function.service != null)
-            function.handler = handler;
+    
+    @Override
+    protected final void connect(Message message) throws Exception {
+        if (message.getbl("--net-debug"))
+            System.setProperty("javax.net.debug", "all");
+        if (message.getst("--cert-alias") != null)
+            CertificateInstall.run(
+                    message.getst("--cert-alias"),
+                    message.getst("--connector-path"),
+                    message.getst("--cert-name"),
+                    message.getst("--cert-secret").toCharArray());
+        super.connect(message);
     }
     
 	@Override
@@ -71,9 +73,6 @@ public class Main extends AbstractExternalApplication {
                     service, new FunctionHandler(connector, external, object));
         }
         
-        handlerRegister(functions, "Z_QS05_CERT_INSTALL", "cert_install",
-                new CertificateInstall(external));
-        
         System.out.print("registering sap data provider...");
         AbstractSAPFunctionHandler.register(stream);
         System.out.println("ok");
@@ -101,6 +100,18 @@ public class Main extends AbstractExternalApplication {
         System.out.println("listenning to connections...");
         server.start();
 	}
+
+    private void handlerRegister(List<FunctionConfig> functions, String name,
+            String service, JCoServerFunctionHandler handler) {
+        FunctionConfig function;
+        
+        function = new FunctionConfig();
+        functions.add(function);
+        function.name = name;
+        function.service = service;
+        if (function.service != null)
+            function.handler = handler;
+    }
 	
 	public static final void main(String[] args) {
 		start(args);

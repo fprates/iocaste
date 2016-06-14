@@ -49,7 +49,7 @@ public abstract class AbstractExternalApplication {
 	
 	protected abstract void config();
 	
-	private final void connect(Message message) {
+	protected void connect(Message message) throws Exception {
 		String host, user, secret, locale;
         char[] buffer;
 		
@@ -70,7 +70,6 @@ public abstract class AbstractExternalApplication {
         }
         
         System.out.print("trying connection to iocaste...");
-        host = "http://".concat(host);
         connector = new IocasteConnector(host);
         external = new External(connector);
         external.setConnection(user, secret, locale);
@@ -105,11 +104,9 @@ public abstract class AbstractExternalApplication {
         properties = new Properties();
         properties.load(reader);
         
-        for (Object key : properties.keySet()) {
+        for (Object key : properties.keySet())
             message.add(String.format("--%s", key),
                     properties.getProperty((String)key));
-        }
-        
         reader.close();
         return message;
 	}
@@ -121,7 +118,6 @@ public abstract class AbstractExternalApplication {
         ParameterEntry entry;
         
         message = new Message("execute");
-        
         stage = KEY;
         key = null;
         for (String arg : args) {
@@ -133,9 +129,16 @@ public abstract class AbstractExternalApplication {
             		System.err.println(arg.concat(" is an invalid argument."));
             		System.exit(1);
             	}
-            	if (entry.option == KEY_VALUE)
-            		stage = VALUE;
-                continue;
+            	switch (entry.option) {
+            	case KEY_VALUE:
+                    stage = VALUE;
+                    continue;
+            	case KEY:
+            	    message.add(key, true);
+            	    continue;
+            	default:
+                    continue;
+            	}
             case VALUE:
             	message.add(key, arg);
             	stage = KEY;
