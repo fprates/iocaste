@@ -11,21 +11,26 @@ public class NodeList extends AbstractContainer {
     public static final byte ORDERED = 0;
     public static final byte UNORDERED = 1;
     public static final byte DEFINITION = 2;
-    public static final byte NODE = 0;
-    public static final byte ITEM = 1;
     private byte type;
-    private String[] styles;
     
     public NodeList(Container container, String name) {
         super(container, Const.NODE_LIST, name);
-        
         init();
     }
     
     public NodeList(View view, String name) {
         super(view, Const.NODE_LIST, name);
-        
         init();
+    }
+    
+    public final void add(NodeListItem item) {
+        super.add(item);
+    }
+    
+    @Override
+    public final void add(Element element) {
+        NodeListItem item = (NodeListItem)element;
+        super.add(item);
     }
     
     /**
@@ -36,20 +41,8 @@ public class NodeList extends AbstractContainer {
         return type;
     }
     
-    /**
-     * Retorna estilo dos itens da lista.
-     * @param element categoria do elemento; NODE, ITEM.
-     * @return nome do estilo.
-     */
-    public final String getStyleClass(byte element) {
-        return styles[element];
-    }
-    
     private final void init() {
         type = UNORDERED;
-        styles = new String[2];
-        styles[NODE] = "nlnode";
-        styles[ITEM] = "nlitem";
     }
     
     /**
@@ -58,14 +51,5 @@ public class NodeList extends AbstractContainer {
      */
     public final void setListType(byte type) {
         this.type = type;
-    }
-    
-    /**
-     * Ajusta estilo dos itens da lista.
-     * @param element categoria do elemento; NODE, ITEM.
-     * @param style nome do estilo.
-     */
-    public final void setStyleClass(byte element, String style) {
-        styles[element] = style;
     }
 }

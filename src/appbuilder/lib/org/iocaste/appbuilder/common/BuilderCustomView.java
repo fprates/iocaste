@@ -4,28 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.factories.SpecFactory;
-import org.iocaste.appbuilder.common.factories.StandardContainerFactory;
-import org.iocaste.appbuilder.common.factories.TabbedPaneFactory;
-import org.iocaste.appbuilder.common.factories.TabbedPaneItemFactory;
-import org.iocaste.appbuilder.common.factories.TableToolFactory;
-import org.iocaste.appbuilder.common.factories.TextEditorFactory;
-import org.iocaste.appbuilder.common.factories.TextFactory;
-import org.iocaste.appbuilder.common.factories.TextFieldFactory;
-import org.iocaste.appbuilder.common.factories.TilesFactory;
-import org.iocaste.appbuilder.common.factories.ButtonFactory;
-import org.iocaste.appbuilder.common.factories.DataFormFactory;
-import org.iocaste.appbuilder.common.factories.ExpandBarFactory;
-import org.iocaste.appbuilder.common.factories.FileUploadFactory;
-import org.iocaste.appbuilder.common.factories.FormFactory;
-import org.iocaste.appbuilder.common.factories.LinkFactory;
-import org.iocaste.appbuilder.common.factories.ListBoxFactory;
-import org.iocaste.appbuilder.common.factories.NavControlFactory;
-import org.iocaste.appbuilder.common.factories.NodeListFactory;
-import org.iocaste.appbuilder.common.factories.ParameterFactory;
-import org.iocaste.appbuilder.common.factories.PrintAreaFactory;
-import org.iocaste.appbuilder.common.factories.RadioButtonFactory;
-import org.iocaste.appbuilder.common.factories.RadioGroupFactory;
-import org.iocaste.appbuilder.common.factories.ReportToolFactory;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.shell.common.AbstractContext;
 
@@ -37,51 +15,14 @@ public class BuilderCustomView extends AbstractCustomView
     private ViewSpec viewspec;
     
     public BuilderCustomView() {
+        SpecFactory factory;
+        
         factories = new HashMap<>();
-        factories.put(ViewSpecItem.TYPES.BUTTON,
-                new ButtonFactory());
-        factories.put(ViewSpecItem.TYPES.DATA_FORM,
-                new DataFormFactory());
-        factories.put(ViewSpecItem.TYPES.FILE_UPLOAD,
-                new FileUploadFactory());
-        factories.put(ViewSpecItem.TYPES.FORM,
-                new FormFactory());
-        factories.put(ViewSpecItem.TYPES.EXPAND_BAR,
-                new ExpandBarFactory());
-        factories.put(ViewSpecItem.TYPES.LINK,
-                new LinkFactory());
-        factories.put(ViewSpecItem.TYPES.LISTBOX,
-                new ListBoxFactory());
-        factories.put(ViewSpecItem.TYPES.NODE_LIST,
-                new NodeListFactory());
-        factories.put(ViewSpecItem.TYPES.PAGE_CONTROL,
-                new NavControlFactory());
-        factories.put(ViewSpecItem.TYPES.PARAMETER,
-                new ParameterFactory());
-        factories.put(ViewSpecItem.TYPES.PRINT_AREA,
-                new PrintAreaFactory());
-        factories.put(ViewSpecItem.TYPES.REPORT_TOOL,
-                new ReportToolFactory());
-        factories.put(ViewSpecItem.TYPES.STANDARD_CONTAINER,
-                new StandardContainerFactory());
-        factories.put(ViewSpecItem.TYPES.TABBED_PANE,
-                new TabbedPaneFactory());
-        factories.put(ViewSpecItem.TYPES.TABBED_PANE_ITEM,
-                new TabbedPaneItemFactory());
-        factories.put(ViewSpecItem.TYPES.TEXT_EDITOR,
-                new TextEditorFactory());
-        factories.put(ViewSpecItem.TYPES.TABLE_TOOL,
-                new TableToolFactory());
-        factories.put(ViewSpecItem.TYPES.TEXT,
-                new TextFactory());
-        factories.put(ViewSpecItem.TYPES.TEXT_FIELD,
-                new TextFieldFactory());
-        factories.put(ViewSpecItem.TYPES.TILES,
-                new TilesFactory());
-        factories.put(ViewSpecItem.TYPES.RADIO_BUTTON,
-                new RadioButtonFactory());
-        factories.put(ViewSpecItem.TYPES.RADIO_GROUP,
-                new RadioGroupFactory());
+        for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {
+            factory = type.factory();
+            if (factory != null);
+                factories.put(type, factory);
+        }
     }
     
     private void buildItem(PageBuilderContext context,

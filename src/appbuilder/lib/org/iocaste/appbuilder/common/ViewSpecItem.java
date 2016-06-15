@@ -1,36 +1,68 @@
 package org.iocaste.appbuilder.common;
 
+import org.iocaste.appbuilder.common.factories.ButtonFactory;
+import org.iocaste.appbuilder.common.factories.DataFormFactory;
+import org.iocaste.appbuilder.common.factories.ExpandBarFactory;
+import org.iocaste.appbuilder.common.factories.FileUploadFactory;
+import org.iocaste.appbuilder.common.factories.FormFactory;
+import org.iocaste.appbuilder.common.factories.LinkFactory;
+import org.iocaste.appbuilder.common.factories.ListBoxFactory;
+import org.iocaste.appbuilder.common.factories.NavControlFactory;
+import org.iocaste.appbuilder.common.factories.NodeListFactory;
+import org.iocaste.appbuilder.common.factories.NodeListItemFactory;
+import org.iocaste.appbuilder.common.factories.ParameterFactory;
+import org.iocaste.appbuilder.common.factories.PrintAreaFactory;
+import org.iocaste.appbuilder.common.factories.RadioButtonFactory;
+import org.iocaste.appbuilder.common.factories.RadioGroupFactory;
+import org.iocaste.appbuilder.common.factories.ReportToolFactory;
+import org.iocaste.appbuilder.common.factories.SpecFactory;
+import org.iocaste.appbuilder.common.factories.StandardContainerFactory;
+import org.iocaste.appbuilder.common.factories.TabbedPaneFactory;
+import org.iocaste.appbuilder.common.factories.TabbedPaneItemFactory;
+import org.iocaste.appbuilder.common.factories.TableToolFactory;
+import org.iocaste.appbuilder.common.factories.TextEditorFactory;
+import org.iocaste.appbuilder.common.factories.TextFactory;
+import org.iocaste.appbuilder.common.factories.TextFieldFactory;
+import org.iocaste.appbuilder.common.factories.TilesFactory;
+
 public class ViewSpecItem {
     
-    public enum TYPES {        
-        VIEW("view"),
-        FORM("form"),
-        PAGE_CONTROL("navcontrol"),
-        TABBED_PANE("tabbedpane"),
-        TABBED_PANE_ITEM("tabbedpaneitem"),
-        STANDARD_CONTAINER("standardcontainer"),
-        TEXT_EDITOR("texteditor"),
-        TABLE_TOOL("tabletool"),
-        DATA_FORM("dataform"),
-        EXPAND_BAR("expandbar"),
-        NODE_LIST("nodelist"),
-        TEXT("text"),
-        LINK("link"),
-        LISTBOX("listbox"),
-        REPORT_TOOL("reporttool"),
-        FILE_UPLOAD("fileupload"),
-        BUTTON("button"),
-        RADIO_BUTTON("radiobutton"),
-        RADIO_GROUP("radiogroup"),
-        TEXT_FIELD("textfield"),
-        TILES("tiles"),
-        PRINT_AREA("printarea"),
-        PARAMETER("parameter");
+    public enum TYPES {
+        BUTTON("button", new ButtonFactory()),
+        DATA_FORM("dataform", new DataFormFactory()),
+        EXPAND_BAR("expandbar", new ExpandBarFactory()),
+        FORM("form", new FormFactory()),
+        FILE_UPLOAD("fileupload",new FileUploadFactory()),
+        LINK("link", new LinkFactory()),
+        LISTBOX("listbox", new ListBoxFactory()),
+        NODE_LIST("nodelist", new NodeListFactory()),
+        NODE_LIST_ITEM("nodelistitem", new NodeListItemFactory()),
+        PAGE_CONTROL("navcontrol", new NavControlFactory()),
+        PRINT_AREA("printarea", new PrintAreaFactory()),
+        RADIO_BUTTON("radiobutton", new RadioButtonFactory()),
+        RADIO_GROUP("radiogroup", new RadioGroupFactory()),
+        REPORT_TOOL("reporttool", new ReportToolFactory()),
+        STANDARD_CONTAINER("standardcontainer", new StandardContainerFactory()),
+        TABBED_PANE("tabbedpane", new TabbedPaneFactory()),
+        TABBED_PANE_ITEM("tabbedpaneitem", new TabbedPaneItemFactory()),
+        TABLE_TOOL("tabletool", new TableToolFactory()),
+        TEXT("text", new TextFactory()),
+        TEXT_EDITOR("texteditor", new TextEditorFactory()),
+        TEXT_FIELD("textfield", new TextFieldFactory()),
+        TILES("tiles", new TilesFactory()),
+        PARAMETER("parameter", new ParameterFactory()),
+        VIEW("view", null);
 
         private String name;
+        private SpecFactory factory;
         
-        TYPES(String name) {
+        TYPES(String name, SpecFactory factory) {
             this.name = name;
+            this.factory = factory;
+        }
+        
+        public SpecFactory factory() {
+            return factory;
         }
         
         @Override

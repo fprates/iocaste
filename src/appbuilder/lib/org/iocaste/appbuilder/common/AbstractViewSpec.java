@@ -88,6 +88,10 @@ public abstract class AbstractViewSpec implements ViewSpec {
         put(parent, ViewSpecItem.TYPES.NODE_LIST, name);
     }
     
+    protected final void nodelistitem(String parent, String name) {
+        put(parent, ViewSpecItem.TYPES.NODE_LIST_ITEM, name);
+    }
+    
     protected final void parameter(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.PARAMETER, name);
     }

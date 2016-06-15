@@ -21,6 +21,7 @@ import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.NodeList;
+import org.iocaste.shell.common.NodeListItem;
 import org.iocaste.shell.common.Parameter;
 import org.iocaste.shell.common.PrintArea;
 import org.iocaste.shell.common.RadioButton;
@@ -90,6 +91,11 @@ public class Renderer {
         
         case NODE_LIST:
             tags.add(NodeListRenderer.render((NodeList)container, config));
+            break;
+            
+        case NODE_LIST_ITEM:
+            tags.add(NodeListItemRenderer.render(
+                    (NodeListItem)container, config));
             break;
             
         case STANDARD_CONTAINER:
