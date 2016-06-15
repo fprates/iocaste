@@ -50,7 +50,6 @@ public class ExternalDisplayConfig extends DisplayConfig {
         
         node = getElement("import");
         node.setStyleClass("xtrnl_import");
-        node.setStyleClass(NodeList.ITEM, "xtrnl_import_item");
-        
+        node.setItemsStyle("xtrnl_import_item");
     }
 }

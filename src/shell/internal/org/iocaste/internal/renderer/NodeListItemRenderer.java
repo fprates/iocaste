@@ -8,7 +8,9 @@ public class NodeListItemRenderer extends Renderer {
 
     public static final XMLElement render(NodeListItem item, Config config) {
         XMLElement nltag;
-        byte type = ((NodeList)item.getContainer()).getListType();
+        String style;
+        NodeList nodelist = (NodeList)item.getContainer();
+        byte type = nodelist.getListType();
         
         switch (type) {
         case NodeList.DEFINITION:
@@ -23,9 +25,13 @@ public class NodeListItemRenderer extends Renderer {
             nltag = new XMLElement("li");
             break;
         }
-        
+
         nltag.add("id", item.getHtmlName());
-        nltag.add("class", item.getStyleClass());
+        style = item.getStyleClass();
+        if (style == null)
+            style = nodelist.getItemsStyle();
+        if (style != null)
+            nltag.add("class", style);
         addEvents(nltag, item);
         
         nltag.addChildren(renderElements(item.getElements(), config));

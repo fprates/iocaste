@@ -16,8 +16,10 @@ public class ExternalMaintenanceSpec extends MaintenanceSpec {
             tabbedpaneitem("tabs", name);
             if (name.equals("items")) {
                 nodelist(name, "import");
-                dataform("import", "importobj");
-                button("import", "importmodel");
+                nodelistitem("import", "import_importobj");
+                dataform("import_importobj", "importobj");
+                nodelistitem("import", "import_importmodel");
+                button("import_importmodel", "importmodel");
             }
             
             tablename = name.concat("_table");

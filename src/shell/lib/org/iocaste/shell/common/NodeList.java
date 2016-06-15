@@ -12,6 +12,7 @@ public class NodeList extends AbstractContainer {
     public static final byte UNORDERED = 1;
     public static final byte DEFINITION = 2;
     private byte type;
+    private String itemsstyle;
     
     public NodeList(Container container, String name) {
         super(container, Const.NODE_LIST, name);
@@ -33,6 +34,10 @@ public class NodeList extends AbstractContainer {
         super.add(item);
     }
     
+    public final String getItemsStyle() {
+        return itemsstyle;
+    }
+    
     /**
      * Retorna tipo de lista.
      * @return ORDERED, UNORDERED, DEFINITION
@@ -43,6 +48,10 @@ public class NodeList extends AbstractContainer {
     
     private final void init() {
         type = UNORDERED;
+    }
+    
+    public final void setItemsStyle(String style) {
+        itemsstyle = style;
     }
     
     /**
