@@ -12,8 +12,18 @@ public class Shell {
 
     public static final void install(InstallData data) {
         DocumentModelItem item;
-        DataElement element;
+        DataElement element, configname, configvalue;
         DocumentModel model;
+        
+        configname = new DataElement("SHELL_CONFIG_NAME");
+        configname.setType(DataType.CHAR);
+        configname.setLength(20);
+        configname.setUpcase(true);
+        
+        configvalue = new DataElement("SHELL_CONFIG_VALUE");
+        configvalue.setType(DataType.CHAR);
+        configvalue.setLength(64);
+        configvalue.setUpcase(false);
         
         /*
          * tickets
@@ -64,5 +74,23 @@ public class Shell {
         item.setTableFieldName("LOCAL");
         item.setDataElement(element);
         model.add(item);
+        
+        /*
+         * shell config
+         */
+        model = data.getModel("SHELL_PROPERTIES", "SHELL006", null);
+        item = new DocumentModelItem("NAME");
+        item.setTableFieldName("CFGNM");
+        item.setDataElement(configname);
+        model.add(new DocumentModelKey(item));
+        model.add(item);
+        
+        item = new DocumentModelItem("VALUE");
+        item.setTableFieldName("CFGVL");
+        item.setDataElement(configvalue);
+        model.add(item);
+        
+        data.addValues(model, "LOGIN_MANAGER", "iocaste-login");
+        data.addValues(model, "EXCEPTION_HANDLER", "iocaste-exhandler");
     }
 }
