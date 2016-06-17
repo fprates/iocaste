@@ -551,8 +551,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         Enumeration<?> parameternames;
         PageContext pagectx_;
         Map<String, String[]> parameters;
-        String appname, pagename, key;
-        String pagetrack = null, actionname = null;
+        String appname, pagename, key, pagetrack = null, actionname = null;
         
         /*
          * obtem parâmetros da requisição
@@ -631,7 +630,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
          * testa autorização para execução e sequencia de telas
          */
         if (!isExecuteAuthorized(appname, config.sessionid) &&
-                (config.state.rapp != null) && apps.containsKey(sessionid)) {
+                (config.state.rapp != null) &&
+                        !config.state.rapp.equals("iocaste-login")) {
             pagectx.setError(AUTHORIZATION_ERROR);
             pagectx.message(Const.ERROR,
                     Controller.messages.get("user.not.authorized"), null);
