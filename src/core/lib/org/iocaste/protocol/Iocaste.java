@@ -20,9 +20,24 @@ public final class Iocaste extends AbstractServiceInterface {
     public static final byte OUT_PRINT = 0;
     public static final byte ERR_PRINT = 1;
     public static final byte ERR_CODE = 2;
+    public static final byte DISCONNECT_EVENT = 0;
     
     public Iocaste(Function function) {
         initService(function, SERVERNAME);
+    }
+    
+    /**
+     * 
+     * @param event
+     * @param url
+     * @param function
+     */
+    public final void addHandler(byte event, String url, String function) {
+        Message message = new Message("handler_add");
+        message.add("event", event);
+        message.add("url", url);
+        message.add("function", function);
+        call(message);
     }
     
     /**
