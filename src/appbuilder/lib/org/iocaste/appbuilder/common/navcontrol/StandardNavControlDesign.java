@@ -1,11 +1,16 @@
 package org.iocaste.appbuilder.common.navcontrol;
 
+import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.user.User;
 import org.iocaste.shell.common.Button;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.HeaderLink;
 import org.iocaste.shell.common.Link;
+import org.iocaste.shell.common.NodeList;
+import org.iocaste.shell.common.NodeListItem;
 import org.iocaste.shell.common.PageStackItem;
 import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
@@ -32,8 +37,11 @@ public class StandardNavControlDesign implements NavControlDesign {
         ViewTitle title;
         Iocaste iocaste;
         PageStackItem[] positions;
-        Container trackbar, inner, logo;
-//        User user;
+        Container trackbar, inner, logo, options;
+        ViewContext viewctx;
+        NodeList login;
+        NodeListItem loginitem;
+        User user = null;
         
         container.setStyleClass("nc_container");
         inner = new StandardContainer(container, "nc_inner");
@@ -72,6 +80,7 @@ public class StandardNavControlDesign implements NavControlDesign {
                 text.setText("&gt;");
                 text.setStyleClass("nc_text");
             }
+            user = iocaste.getUserData(iocaste.getUsername());
         }
         
         context.view.add(new HeaderLink(
@@ -85,13 +94,35 @@ public class StandardNavControlDesign implements NavControlDesign {
         text.setStyleClass("nc_title");
         text.setText(name, title.args);
         
-//        user = iocaste.getUserData(iocaste.getUsername());
-//        text = new Text(container, "username");
-//        text.setText(user.getFirstname());
-//        text.setStyleClass("nc_usertext");
-        
         buttonbar = new StandardContainer(inner, "navbar.container");
         buttonbar.setStyleClass("nc_nav_buttonbar");
+        if (user != null) {
+            login = new NodeList(buttonbar, "login");
+            login.setStyleClass("nc_login");
+            
+            loginitem = new NodeListItem(login, "login_user");
+            loginitem.setStyleClass("nc_login_item");
+            link = new Link(loginitem, "user", "user");
+            link.setText("");
+            link.setAction(setElementDisplay("login_options", "inline"));
+            link.setAbsolute(true);
+            text = new Text(link, "username");
+            text.setTag("span");
+            text.setText(user.getFirstname());
+            text.setStyleClass("nc_usertext");
+            
+            loginitem = new NodeListItem(login, "login_options");
+            loginitem.setStyleClass("nc_login_item");
+            loginitem.addEvent("style", "display:none");
+            options = new StandardContainer(loginitem, "options");
+            options.setStyleClass("nc_login_menu");
+            link = new Link(options, "logout", "logout");
+            
+            viewctx = context.getView();
+            viewctx.put("logout", new Logout());
+            ((AbstractPageBuilder)context.function).register(
+                    context.view.getPageName(), "logout", viewctx);
+        }
     }
     
     /*
@@ -112,5 +143,13 @@ public class StandardNavControlDesign implements NavControlDesign {
         return new StringBuilder(position.getApp()).
                 append(".").
                 append(position.getPage()).toString();
+    }
+    
+    private final String setElementDisplay(String id, String display) {
+        StringBuilder sb;
+        
+        sb = new StringBuilder("javascript:setElementDisplay('").
+                append(id).append("', '").append(display).append("');");
+        return sb.toString();
     }
 }

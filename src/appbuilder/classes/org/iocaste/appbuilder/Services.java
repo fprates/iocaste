@@ -162,12 +162,36 @@ class GetStyleSheet extends AbstractHandler {
         style.put("margin-bottom", "0px");
         style.put("border-style", "none");
         style.put("height", "20px");
+
+        style = stylesheet.newElement(".nc_login");
+        style.put("float", "right");
+        style.put("margin", "0px");
+        style.put("padding", "0px");
+        style.put("list-style-type", "none");
         
-//        style = stylesheet.clone(".nc_usertext", ".text");
-//        style.put("display", "inline");
-//        style.put("text-align", "right");
-//        style.put("right", "0px");
-//        style.put("position", "absolute");
+        style = stylesheet.newElement(".nc_login_item");
+        style.put("width", "100%");
+        style.put("padding", "0px");
+        
+        style = stylesheet.newElement(".nc_login_menu");
+        style.put("margin", "0px");
+        style.put("padding-top", "5px");
+        style.put("padding-bottom", "5px");
+        style.put("padding-left", "0px");
+        style.put("padding-right", "0px");
+        style.put("border-width", "1px");
+        style.put("border-style", "solid");
+        style.put("text-align", "center");
+        style.put("border-color", FRAME_COLOR);
+        style.put("background-color", BACKGROUND_COLOR);
+        style.put("width", "100%");
+        style.put("float", "left");
+        
+        style = stylesheet.newElement(".nc_usertext");
+        style.put("float", "right");
+        style.put("padding-top", "7px");
+        style.put("width", "100%");
+        style.put("text-align", "center");
         
         return View.convertStyleSheet(stylesheet);
     }
