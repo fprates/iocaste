@@ -1,12 +1,14 @@
 package org.iocaste.shell;
 
 import java.util.Enumeration;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.iocaste.internal.AbstractRenderer;
 import org.iocaste.internal.AppContext;
+import org.iocaste.internal.CheckedSelect;
 import org.iocaste.internal.Common;
 import org.iocaste.internal.ContextData;
 import org.iocaste.internal.Controller;
@@ -29,7 +31,6 @@ import org.iocaste.shell.common.ViewState;
 
 public class PageRenderer extends AbstractRenderer {
     private static final long serialVersionUID = -8143025594178489781L;
-    private static final String EXCEPTION_HANDLER = "iocaste-exhandler";
     private static TicketControl tickets;
     
     static {
@@ -103,7 +104,10 @@ public class PageRenderer extends AbstractRenderer {
         ContextData contextdata = new ContextData();
         
         contextdata.sessionid = sessionid;
-        contextdata.appname = EXCEPTION_HANDLER;
+        contextdata.appname = getConfiguredManager(this, "EXCEPTION_HANDLER");
+        if (contextdata.appname == null)
+            contextdata.appname = "iocaste-exhandler";
+        
         contextdata.pagename = "main";
         contextdata.logid = expagectx.getLogid();
         contextdata.initialize = true;
@@ -128,10 +132,14 @@ public class PageRenderer extends AbstractRenderer {
         PageContext pagectx;
         Enumeration<String> parameternames;
         String key;
-        ContextData contextdata = new ContextData();
-        String login = req.getParameter("login-manager");
+        ContextData contextdata;
         
-        contextdata.appname = (login == null)? "iocaste-login" : login;
+        contextdata = new ContextData();
+        contextdata.appname = req.getParameter("login-manager");
+        if (contextdata.appname == null)
+            contextdata.appname = getConfiguredManager(this, "LOGIN_MANAGER");
+        if (contextdata.appname == null)
+            contextdata.appname = "iocaste-login";
         contextdata.sessionid = sessionid;
         contextdata.pagename = "authentic";
         contextdata.logid = logid;
@@ -228,6 +236,24 @@ public class PageRenderer extends AbstractRenderer {
             pagectx = createExceptionContext(sessionid, pagectx, e);
             resp.reset();
             startRender(sessionid, resp, pagectx);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private final String getConfiguredManager(Function function, String name) {
+        Object[] objects;
+        CheckedSelect select;
+        
+        select = new CheckedSelect(this);
+        select.setFrom("SHELL006");
+        select.setWhere("CFGNM = ?", name);
+        try {
+            objects = select.execute();
+            if (objects == null)
+                return null;
+            return (String)((Map<String, Object>)objects[0]).get("CFGVL");
+        } catch (Exception e) {
+            return null;
         }
     }
     

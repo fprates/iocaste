@@ -1,68 +1,47 @@
 package org.iocaste.setup;
 
+import org.iocaste.appbuilder.common.AbstractInstallObject;
+import org.iocaste.appbuilder.common.ModelInstall;
+import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
-import org.iocaste.documents.common.DocumentModel;
-import org.iocaste.documents.common.DocumentModelItem;
-import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.DummyElement;
-import org.iocaste.packagetool.common.InstallData;
 
-public class Shell {
+public class Shell extends AbstractInstallObject {
 
-    public static final void install(InstallData data) {
-        DocumentModelItem item;
-        DataElement element;
-        DocumentModel model;
+    @Override
+    protected void execute(StandardInstallContext context) throws Exception {
+        DataElement ticketid, appname, pagename, username, secret, locale;
+        DataElement configname, configvalue;
+        ModelInstall model;
+
+        ticketid = elementchar("SHELL_TICKET_ID", 64, false);
+        appname = elementchar("SHELL_APPNAME", 64, false);
+        pagename = elementchar("SHELL_PAGENAME", 64, false);
+        username = new DummyElement("LOGIN.USERNAME");
+        secret = new DummyElement("LOGIN.SECRET");
+        locale = elementchar("SHELL_LOCALE", 5, false);
+        configname = elementchar("SHELL_CONFIG_NAME", 20, true);
+        configvalue = elementchar("SHELL_CONFIG_VALUE", 64, false);
         
         /*
          * tickets
          */
-        model = data.getModel("SHELL_TICKETS", "SHELL004", null);
+        model = modelInstance("SHELL_TICKETS", "SHELL004");
+        model.key("ID", "TKTID", ticketid);
+        model.item("APP_NAME", "APPNM", appname);
+        model.item("PAGE_NAME", "PAGEN", pagename);
+        model.item("USERNAME", "USRNM", username);
+        model.item("SECRET", "SECRT", secret);
+        model.item("LOCALE", "LOCAL", locale);
         
-        element = new DataElement("SHELL_TICKET_ID");
-        element.setType(DataType.CHAR);
-        element.setLength(64);
-        item = new DocumentModelItem("ID");
-        item.setTableFieldName("TKTID");
-        item.setDataElement(element);
-        model.add(item);
-        model.add(new DocumentModelKey(item));
+        /*
+         * shell config
+         */
+        model = modelInstance("SHELL_PROPERTIES", "SHELL006");
+        model.key("NAME", "CFGNM", configname);
+        model.item("VALUE", "CFGVL", configvalue);
+        model.values("LOGIN_MANAGER", "iocaste-login");
+        model.values("EXCEPTION_HANDLER", "iocaste-exhandler");
         
-        element = new DataElement("SHELL_APPNAME");
-        element.setType(DataType.CHAR);
-        element.setLength(64);
-        item = new DocumentModelItem("APP_NAME");
-        item.setTableFieldName("APPNM");
-        item.setDataElement(element);
-        model.add(item);
-        
-        element = new DataElement("SHELL_PAGENAME");
-        element.setType(DataType.CHAR);
-        element.setLength(64);
-        item = new DocumentModelItem("PAGE_NAME");
-        item.setTableFieldName("PAGEN");
-        item.setDataElement(element);
-        model.add(item);
-        
-        element = new DummyElement("LOGIN.USERNAME");
-        item = new DocumentModelItem("USERNAME");
-        item.setTableFieldName("USRNM");
-        item.setDataElement(element);
-        model.add(item);
-        
-        element = new DummyElement("LOGIN.SECRET");
-        item = new DocumentModelItem("SECRET");
-        item.setTableFieldName("SECRT");
-        item.setDataElement(element);
-        model.add(item);
-        
-        element = new DataElement("SHELL_LOCALE");
-        element.setType(DataType.CHAR);
-        element.setLength(5);
-        item = new DocumentModelItem("LOCALE");
-        item.setTableFieldName("LOCAL");
-        item.setDataElement(element);
-        model.add(item);
     }
 }

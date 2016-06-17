@@ -1,27 +1,23 @@
 package org.iocaste.setup;
 
-import org.iocaste.packagetool.common.InstallData;
-import org.iocaste.protocol.Message;
-import org.iocaste.shell.common.AbstractPage;
-import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.View;
+import org.iocaste.appbuilder.common.AbstractPageBuilder;
+import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 
-public class Main extends AbstractPage {
-    
-    public Main() {
-        export("install", "install");
-    }
-    
+public class Main extends AbstractPageBuilder {
+
     @Override
-    public final AbstractContext init(View view) {
-        return new Context();
+    public void config(PageBuilderContext context) throws Exception {
+        
     }
-    
-    public final InstallData install(Message message) {
-        return Install.init(this);
-    }
-}
 
-class Context extends AbstractContext {
-    
+    @Override
+    protected void installConfig(PageBuilderDefaultInstall defaultinstall)
+            throws Exception {
+        installObject("user", new User());
+        installObject("cmodel", new CModel());
+        installObject("gconfig", new GlobalConfig());
+        installObject("shell", new Shell());
+        installObject("main", new Install());
+    }
 }
