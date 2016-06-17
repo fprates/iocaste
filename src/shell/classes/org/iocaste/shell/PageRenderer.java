@@ -301,6 +301,11 @@ public class PageRenderer extends AbstractRenderer {
         return apps.get(complexid[0]).get(logid).popPage();
     }
     
+    public static final void removeAppEntry(String sessionid) {
+        String[] complexid = sessionid.split(":");
+        apps.remove(complexid[0]);
+    }
+    
     /**
      * 
      * @param ticketcode

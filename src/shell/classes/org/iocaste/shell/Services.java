@@ -10,10 +10,11 @@ public class Services extends AbstractFunction {
 
     public Services() {
         export("add_ticket", "addTicket");
-        export("login_app_get", "getLoginApp");
+        export("disconnect_event", new DisconnectEvent());
         export("get_pages_positions", "getPagesPositions");
         export("get_view", "getView");
         export("home", "home");
+        export("login_app_get", "getLoginApp");
         export("pop_page", "popPage");
         export("push_page", "pushPage");
         export("remove_ticket", "removeTicket");

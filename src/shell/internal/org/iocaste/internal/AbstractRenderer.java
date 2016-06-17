@@ -336,7 +336,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         AppContext appctx;
         List<SessionContext> sessions = apps.get(contextdata.sessionid);
         
-        if (contextdata.logid >= sessions.size())
+        if ((sessions == null) || (contextdata.logid >= sessions.size()))
             return null;
         
         appctx = sessions.get(contextdata.logid).getAppContext(
@@ -630,7 +630,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
          * testa autorização para execução e sequencia de telas
          */
         if (!isExecuteAuthorized(appname, config.sessionid) &&
-                config.state.rapp != null) {
+                (config.state.rapp != null) &&
+                        !config.state.rapp.equals("iocaste-login")) {
             pagectx.setError(AUTHORIZATION_ERROR);
             pagectx.message(Const.ERROR,
                     Controller.messages.get("user.not.authorized"), null);
@@ -738,8 +739,12 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     public static final void pushPage(String sessionid, View view) {
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
+        List<SessionContext> sessionsctx = apps.get(complexid[0]);
         
-        apps.get(complexid[0]).get(logid).pushPage(view);
+        if (sessionsctx == null)
+            return;
+        
+        sessionsctx.get(logid).pushPage(view);
     }
     
     /**
@@ -904,12 +909,17 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
      */
     public static final void updateView(String sessionid, View view,
             Function function) {
+        AppContext appcontext;
+        Input input;
         String[] complexid = sessionid.split(":");
         int logid = Integer.parseInt(complexid[1]);
-        AppContext appcontext = apps.get(complexid[0]).get(logid).
-                getAppContext(view.getAppName());
-        Input input = new Input();
+        List<SessionContext> sessionctx = apps.get(complexid[0]);
         
+        if (sessionctx == null)
+            return;
+        
+        appcontext = sessionctx.get(logid).getAppContext(view.getAppName());
+        input = new Input();
         input.view = view;
         input.container = null;
         input.function = function;
