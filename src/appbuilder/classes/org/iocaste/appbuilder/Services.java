@@ -47,7 +47,7 @@ class GetStyleSheet extends AbstractHandler {
     public Object run(Message message) throws Exception {
         Map<String, String> style;
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
-        String FRAME_COLOR;
+        String FRAME_COLOR, SHADOW;
         Media media;
         String[] width;
         Map<Integer, String> constants = message.get("style_constants");
@@ -58,6 +58,7 @@ class GetStyleSheet extends AbstractHandler {
         BACKGROUND_COLOR = constants.get(Shell.BACKGROUND_COLOR);
         CLICKABLE_COLOR = constants.get(Shell.CLICKABLE_COLOR);
         FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
+        SHADOW = constants.get(Shell.SHADOW);
         
         for (String mediakey : resolutions.keySet()) {
             width = resolutions.get(mediakey);
@@ -186,6 +187,7 @@ class GetStyleSheet extends AbstractHandler {
         style.put("background-color", BACKGROUND_COLOR);
         style.put("width", "100%");
         style.put("float", "left");
+        style.put("box-shadow", SHADOW);
         
         style = stylesheet.newElement(".nc_usertext");
         style.put("float", "right");

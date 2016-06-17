@@ -15,7 +15,7 @@ public class DefaultStyle {
         Map<String, String> style;
         Map<Integer, String> constants;
         String FONT_COLOR, FONT_FAMILY, BACKGROUND_COLOR, CLICKABLE_COLOR;
-        String FRAME_COLOR, DISABLED_FONT_COLOR, FONT_SIZE;
+        String FRAME_COLOR, DISABLED_FONT_COLOR, FONT_SIZE, SHADOW;
         
         /*
          * default style
@@ -33,6 +33,7 @@ public class DefaultStyle {
         constants.put(Shell.FRAME_COLOR, "rgb(237, 237, 237)");
         constants.put(Shell.DISABLED_FONT_COLOR, "rgb(150, 150, 150)");
         constants.put(Shell.FONT_SIZE, "11pt");
+        constants.put(Shell.SHADOW, "1px 1px 2px #b0b0b0");
         stylesheet.setConstants(constants);
 
         FONT_COLOR = constants.get(Shell.FONT_COLOR);
@@ -42,6 +43,7 @@ public class DefaultStyle {
         FRAME_COLOR = constants.get(Shell.FRAME_COLOR);
         DISABLED_FONT_COLOR = constants.get(Shell.DISABLED_FONT_COLOR);
         FONT_SIZE = constants.get(Shell.FONT_SIZE);
+        SHADOW = constants.get(Shell.SHADOW);
         
         style = stylesheet.newElement("body");
         style.put("background-color", BACKGROUND_COLOR);
@@ -67,6 +69,7 @@ public class DefaultStyle {
         style.put("text-align", "center");
         style.put("vertical-align", "middle");
         style.put("height", "36px");
+        style.put("box-shadow", SHADOW);
 
         style = stylesheet.newElement(".button_ctxmenu_open");
         style.put("margin-top", "0px");
@@ -77,17 +80,18 @@ public class DefaultStyle {
         style.put("width", "20px");
         style.put("height", "20px");
         style.put("float", "left");
-        style.put("color", BACKGROUND_COLOR);
+        style.put("color", CLICKABLE_COLOR);
         style.put("vertical-align", "middle");
         style.put("font-weight", "normal");
         style.put("font-size", FONT_SIZE);
-        style.put("background-color", CLICKABLE_COLOR);
+        style.put("background-color", FRAME_COLOR);
         style.put("border-style", "none");
         style.put("text-align", "center");
         style.put("border-top-left-radius", ROUND);
         style.put("border-top-right-radius", ROUND);
         style.put("border-bottom-left-radius", ROUND);
         style.put("border-bottom-right-radius", ROUND);
+        style.put("cursor", "default");
         
         style = stylesheet.clone(".button_ctxmenu_close",
                 ".button_ctxmenu_open");
@@ -101,7 +105,7 @@ public class DefaultStyle {
         style.put("float", "left");
         style.put("list-style-type", "none");
         style.put("border-style", "none");
-        style.put("background-color", CLICKABLE_COLOR);
+        style.put("background-color", FRAME_COLOR);
         style.put("position", "absolute");
         style.put("border-top-left-radius", "0px");
         style.put("border-top-right-radius", ROUND);
@@ -113,13 +117,13 @@ public class DefaultStyle {
         style.put("padding", "0px");
         style.put("display", "block");
         style.put("vertical-align", "middle");
-        style.put("color", BACKGROUND_COLOR);
+        style.put("color", CLICKABLE_COLOR);
         style.put("font-family", FONT_FAMILY);
         style.put("font-size", FONT_SIZE);
         style.put("text-align", "center");
         
         style = stylesheet.newElement(".ctxmenu_link:link");
-        style.put("color", BACKGROUND_COLOR);
+        style.put("color", CLICKABLE_COLOR);
         style.put("font-family", FONT_FAMILY);
         style.put("font-size", FONT_SIZE);
         style.put("text-align", "center");
@@ -199,7 +203,8 @@ public class DefaultStyle {
         style.put("font-family", FONT_FAMILY);
         style.put("font-size", FONT_SIZE);
         style.put("text-decoration", "none");
-        stylesheet.clone(".link:hover", ".link:link").put("color", FONT_COLOR);
+        stylesheet.clone(".link:hover", ".link:link").put(
+                "text-decoration", "underline");
         stylesheet.clone(".link:active", ".link:link");
         stylesheet.clone(".link:visited", ".link:link");
         
@@ -440,8 +445,7 @@ public class DefaultStyle {
         style.put("border-top-color", FRAME_COLOR);
         style.put("border-top-style", "solid");
         style.put("border-right-style", "none");
-        style.put("border-bottom-color", FRAME_COLOR);
-        style.put("border-bottom-style", "solid");
+        style.put("border-bottom-style", "none");
         style.put("border-left-style", "none");
 
         style = stylesheet.newElement(".tp_outer");

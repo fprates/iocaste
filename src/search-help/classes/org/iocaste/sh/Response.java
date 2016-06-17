@@ -132,6 +132,7 @@ public class Response {
         style.put("overflow", "hidden");
         style.put("z-index", "1");
         style.put("margin-top", "2em");
+        style.put("box-shadow", constants.get(Shell.SHADOW));
         
         style = stylesheet.newElement(".shdatacnt");
         style.put("overflow", "auto");

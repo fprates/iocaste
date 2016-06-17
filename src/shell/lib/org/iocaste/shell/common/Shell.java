@@ -29,6 +29,7 @@ public class Shell extends AbstractServiceInterface {
     public static final int FRAME_COLOR = 4;
     public static final int DISABLED_FONT_COLOR = 5;
     public static final int FONT_SIZE = 6;
+    public static final int SHADOW = 7;
     
     public Shell(Function function) {
         initService(function, SERVER_NAME);
