@@ -98,6 +98,11 @@ public class ViewContext {
         components.reset();
     }
     
+    public final void run(String action, PageBuilderContext context)
+            throws Exception {
+        context.action = action;
+        getActionHandler(action).run(context);
+    }
     /**
      * 
      * @param extcontext
