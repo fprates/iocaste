@@ -31,7 +31,7 @@ public class InstallTasksGroups {
             State state) throws Exception {
         int entryid;
         Query query;
-        String groupname, locale;
+        String groupname, locale, name, message;
         Map<String, String> itens, properties;
         ExtendedObject group;
         ExtendedObject[] tasks, entries, texts;
@@ -93,7 +93,12 @@ public class InstallTasksGroups {
                             properties = new HashMap<>();
                             messages.put(locale, properties);
                         }
-                        properties.put(text.getst("ENTRY"), text.getst("TEXT"));
+                        
+                        name = text.getst("ENTRY");
+                        message = text.getst("TEXT");
+                        if (message == null)
+                            message = properties.get("TEXT");
+                        properties.put(name, message);
                     }
             }
 
