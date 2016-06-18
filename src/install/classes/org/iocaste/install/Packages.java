@@ -20,7 +20,8 @@ public class Packages {
             "iocaste-external",
             "iocaste-copy",
             "iocaste-upload",
-            "iocaste-masterdata"
+            "iocaste-masterdata",
+            "iocaste-sysconfig"
             };
 
     public static final void install(Function function) {

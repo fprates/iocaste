@@ -59,8 +59,8 @@
     	<ant antfile="${basedir}/src/mail/build.xml"/>
     	
         <!-- report -->
-    	<ant antfile ="${basedir}/src/report/build.xml"/>
-        
+    	<ant antfile="${basedir}/src/report/build.xml"/>
+    	
         <copy todir="${basedir}/ext/common">
             <fileset dir="${builddir}/core/lib" excludes="*.jar"/>
             <fileset dir="${builddir}/documents/lib" excludes="*.jar"/>
@@ -166,6 +166,9 @@
     	
     	<!-- upload utility -->
     	<ant antfile="${basedir}/src/upload/build.xml"/>
+        
+        <!-- sysconfig -->
+        <ant antfile="${basedir}/src/sysconfig/build.xml"/>
         	
         <!-- template -->
         <ant antfile="${basedir}/src/template/build.xml"/>
