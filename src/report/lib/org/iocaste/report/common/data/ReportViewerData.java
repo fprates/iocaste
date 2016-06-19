@@ -15,7 +15,6 @@ public class ReportViewerData {
     public AbstractReportSelect select;
     public Map<String, AbstractOutputExport> export;
     public ReportViewerDataStage input, output;
-    public Map<String, String> translations;
     public NavControlDesign ncdesign;
     public String titletext;
     public Object[] titleargs;

@@ -12,6 +12,7 @@ import org.iocaste.report.common.AbstractReportContext;
 
 public class CSVGenerate extends AbstractActionHandler {
     private Map<String, AbstractOutputExport> export;
+    private PageBuilderContext context;
     
     public CSVGenerate(Map<String, AbstractOutputExport> export) {
         this.export = export;
@@ -21,7 +22,6 @@ public class CSVGenerate extends AbstractActionHandler {
         StringBuilder buffer;
         Map<String, ReportPrintItem> values;
         boolean head = false;
-        Map<String, String> translations = extcontext.export.getTranslations();
         
         buffer = new StringBuilder("\ufeff");
         values = new LinkedHashMap<>();
@@ -30,7 +30,7 @@ public class CSVGenerate extends AbstractActionHandler {
             if (!head) {
                 values.clear();
                 extcontext.export.printHeader(item.getModel());
-                printline(translations, buffer, values);
+                printline(buffer, values);
                 head = true;
             }
             values.clear();
@@ -48,6 +48,7 @@ public class CSVGenerate extends AbstractActionHandler {
         String[] path;
         AbstractReportContext extcontext;
         
+        this.context = context;
         extcontext = getExtendedContext();
         extcontext.export = this.export.get(context.action);
         extcontext.export.setContext(context);
@@ -70,11 +71,6 @@ public class CSVGenerate extends AbstractActionHandler {
     
     private final void printline(StringBuilder buffer,
             Map<String, ReportPrintItem> values) {
-        printline(null, buffer, values);
-    }
-    
-    private final void printline(Map<String, String> translations,
-            StringBuilder buffer, Map<String, ReportPrintItem> values) {
         ReportPrintItem printitem;
         String value, translated;
         
@@ -82,9 +78,8 @@ public class CSVGenerate extends AbstractActionHandler {
             printitem = values.get(key);
             value = printitem.getValue();
             if (value != null) {
-                if ((translations != null) && translations.containsKey(value))
-                    translated = translations.get(value);
-                else
+                translated = context.messages.get(value);
+                if (translated == null)
                     translated = value;
             } else {
                 translated = "";

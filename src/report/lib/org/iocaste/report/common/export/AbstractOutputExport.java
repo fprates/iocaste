@@ -19,7 +19,6 @@ public abstract class AbstractOutputExport {
     private DataElement datede;
     private Locale locale;
     private Map<String, ReportPrintItem> values;
-    private Map<String, String> translations;
     
     public abstract void formatValues(ExtendedObject object);
 
@@ -47,10 +46,6 @@ public abstract class AbstractOutputExport {
     
     public final String[] getPath() {
         return path;
-    }
-    
-    public final Map<String, String> getTranslations() {
-        return translations;
     }
     
     protected final ReportPrintItem print(String column, String value) {
@@ -100,10 +95,6 @@ public abstract class AbstractOutputExport {
     
     protected final void setPath(String... path) {
         this.path = path;
-    }
-    
-    public final void setTranslations(Map<String, String> translations) {
-        this.translations = translations;
     }
     
     public final void setValues(Map<String, ReportPrintItem> values) {
