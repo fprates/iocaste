@@ -9,8 +9,8 @@ public class FirstAction extends TableToolAction {
 
     public FirstAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, "first");
-        setText("<<");
         setNavigable(true);
+        setText("pt_BR", "Primeiro [<<]");
     }
 
     @Override

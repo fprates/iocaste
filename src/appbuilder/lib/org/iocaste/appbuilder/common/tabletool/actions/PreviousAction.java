@@ -9,8 +9,8 @@ public class PreviousAction extends TableToolAction {
 
     public PreviousAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, "previous");
-        setText("<");
         setNavigable(true);
+        setText("pt_BR", "Anterior [<]");
     }
 
     @Override

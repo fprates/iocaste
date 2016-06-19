@@ -122,16 +122,6 @@ public class DefaultStyle {
         style.put("font-size", FONT_SIZE);
         style.put("text-align", "center");
         
-        style = stylesheet.newElement(".ctxmenu_link:link");
-        style.put("color", CLICKABLE_COLOR);
-        style.put("font-family", FONT_FAMILY);
-        style.put("font-size", FONT_SIZE);
-        style.put("text-align", "center");
-        stylesheet.clone(".ctxmenu_link:hover", ".ctxmenu_link:link").
-                put("color", FONT_COLOR);
-        stylesheet.clone(".ctxmenu_link:active", ".ctxmenu_link:link");
-        stylesheet.clone(".ctxmenu_link:visited", ".ctxmenu_link:link");
-        
         style = stylesheet.newElement(".eb_edge");
         style.put("color", BACKGROUND_COLOR);
         style.put("background-color", FRAME_COLOR);
@@ -207,6 +197,15 @@ public class DefaultStyle {
                 "text-decoration", "underline");
         stylesheet.clone(".link:active", ".link:link");
         stylesheet.clone(".link:visited", ".link:link");
+        
+        stylesheet.clone(".ctxmenu_link:link", ".link:link").
+                put("text-align", "center");
+        stylesheet.clone(".ctxmenu_link:hover", ".link:hover").
+                put("text-align", "center");
+        stylesheet.clone(".ctxmenu_link:active", ".link:active").
+                put("text-align", "center");
+        stylesheet.clone(".ctxmenu_link:visited", ".link:visited").
+                put("text-align", "center");
         
         style = stylesheet.newElement(".list_box");
         style.put("font-weight", "normal");

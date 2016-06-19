@@ -9,8 +9,8 @@ public class DeselectAllAction extends TableToolAction {
 
     public DeselectAllAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, "deselect_all");
-        setText("☐");
         setMarkable(true);
+        setText("pt_BR", "Desmarcar todos [☐]");
     }
     
     @Override

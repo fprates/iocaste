@@ -9,8 +9,8 @@ public class NextAction extends TableToolAction {
 
     public NextAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, "next");
-        setText(">");
         setNavigable(true);
+        setText("pt_BR", "Próximo [>]");
     }
 
     @Override

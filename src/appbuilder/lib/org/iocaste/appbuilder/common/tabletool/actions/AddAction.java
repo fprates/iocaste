@@ -9,7 +9,7 @@ public class AddAction extends TableToolAction {
 
     public AddAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, "add");
-        setText("+");
+        setText("pt_BR", "Adicionar [+]");
     }
 
     @Override

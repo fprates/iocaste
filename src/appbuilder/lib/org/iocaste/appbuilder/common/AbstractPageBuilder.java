@@ -29,11 +29,6 @@ public abstract class AbstractPageBuilder extends AbstractPage {
         export("fields_properties_get", new GetFieldsProperties());
         validators = new HashMap<>();
     }
-
-    
-    protected final void add(AbstractMessagesSource messages) {
-        addMessages(messages.get());
-    }
     
     public abstract void config(PageBuilderContext context) throws Exception;
     

@@ -9,7 +9,6 @@ import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.protocol.Function;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
@@ -88,15 +87,12 @@ public class TableRender extends AbstractTableHandler {
         style.put("padding", "0.2em");
         style.put("margin", "0px");
         
-        tabletool.buildControls(container);
-        new StandardContainer(container, context.data.name.concat("_skip")).
-                setStyleClass("tt_skip");
-        
         table = new Table(container, context.htmlname);
         table.setHeader(!context.data.noheader);
         table.setBorderStyle(context.data.borderstyle);
         context.data.last = 0;
-        
+
+        tabletool.buildControls(table);
         model(tabletool, function, context);
         setMode(tabletool, context);
         setObjects(tabletool, context);

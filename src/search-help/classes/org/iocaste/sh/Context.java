@@ -11,11 +11,9 @@ import org.iocaste.shell.common.SearchHelp;
 public class Context extends AbstractContext {
     public Map<String, ValueRange> criteria;
     public SearchHelp control;
-    public Map<String, String> messages;
     public DocumentModel model;
     
     public Context() {
         criteria = new HashMap<>();
-        messages = new HashMap<>();
     }
 }

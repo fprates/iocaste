@@ -24,13 +24,13 @@ import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.SearchHelp;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Validator;
 
@@ -60,9 +60,12 @@ public class TableTool extends AbstractComponentTool {
      * 
      */
     public final void accept() {
-        getActionElement("accept").setVisible(false);
-        getActionElement("add").setVisible(true);
-        getActionElement("remove").setVisible(true);
+        Map<String, TableContextItem> ctxitems;
+        
+        ctxitems = getTable().getContextItems();
+        ctxitems.get("accept").visible = false;
+        ctxitems.get("add").visible = true;
+        ctxitems.get("remove").visible = true;
         extcontext.data.topline = 0;
     }
     
@@ -70,14 +73,17 @@ public class TableTool extends AbstractComponentTool {
      * 
      */
     public final void add() {
+        Map<String, TableContextItem> ctxitems;
+        
         switch (extcontext.data.mode) {
         case TableTool.CONTINUOUS_UPDATE:
             extcontext.data.vlines++;
             break;
         default:
-            getActionElement("accept").setVisible(true);
-            getActionElement("add").setVisible(false);
-            getActionElement("remove").setVisible(false);
+            ctxitems = getTable().getContextItems();
+            ctxitems.get("accept").visible = true;
+            ctxitems.get("add").visible = false;
+            ctxitems.get("remove").visible = false;
             break;
         }
         
@@ -102,9 +108,9 @@ public class TableTool extends AbstractComponentTool {
         installValidators(extcontext);
     }
     
-    public final void buildControls(Container container) {
+    public final void buildControls(Table table) {
         for (String name : actions.keySet())
-            actions.get(name).build(container);
+            actions.get(name).build(table);
     }
     
     /**
@@ -160,10 +166,6 @@ public class TableTool extends AbstractComponentTool {
         }
         
         return object;
-    }
-    
-    public final Element getActionElement(String name) {
-        return entry.data.context.view.getElement(actions.get(name).getName());
     }
     
     /**
@@ -343,6 +345,7 @@ public class TableTool extends AbstractComponentTool {
 
     @Override
     public void run() {
+        Map<String, TableContextItem> ctxitems;
         TableToolData data = (TableToolData)entry.data;
         
         if (data.actions != null)
@@ -373,10 +376,11 @@ public class TableTool extends AbstractComponentTool {
                     entry.data.context.function).getModel(data.model);
         else
             model = data.refmodel;
-        
+
+        ctxitems = getTable().getContextItems();
         for (String key : actions.keySet())
             if (actions.get(key).isMarkable())
-                getActionElement(key).setVisible(extcontext.data.mark);
+                ctxitems.get(key).visible = extcontext.data.mark;
     }
 
     private final void save(Context context, List<TableToolItem> ttitems) {
@@ -448,12 +452,16 @@ public class TableTool extends AbstractComponentTool {
     
     public final void setVisibleNavigation(
             Context context, List<TableToolItem> ttitems) {
+        Map<String, TableContextItem> ctxitems;
         boolean visible;
+        
         visible = ((ttitems.size() > context.data.vlines) &&
                 (context.data.vlines > 0));
+        
+        ctxitems = getTable().getContextItems();
         for (String action : actions.keySet())
             if (actions.get(action).isNavigable())
-                getActionElement(action).setVisible(visible);
+                ctxitems.get(action).visible = visible;
     }
 }
 

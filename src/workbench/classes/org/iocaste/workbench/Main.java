@@ -13,7 +13,7 @@ public class Main extends AbstractPageBuilder {
     public void config(PageBuilderContext context) {
         StandardPanel panel = new StandardPanel(context);
         
-        add(new Messages());
+        new Messages(context.messages);
         context.addManager("project", new ProjectManager(this));
         panel.instance("main", new MainPage(), new Context(context));
     }

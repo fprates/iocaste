@@ -61,14 +61,15 @@ public class TextFieldRenderer extends Renderer {
         Container container;
         PopupControl popupcontrol;
         StringBuilder sb;
-        String tftext, calname, shname, name, value, tfcontext;
+        String tftext, calname, shname, name, value;
         Text text;
         SearchHelp search;
         Calendar calendar;
-        XMLElement tagt, inputtag, tag, options;
+        XMLElement tagt, inputtag, tag;
         boolean required;
         DataElement dataelement;
         int length;
+        ContextMenu ctxmenu;
         
         if (!input.isVisible())
             return ParameterRenderer.render(input);
@@ -97,7 +98,7 @@ public class TextFieldRenderer extends Renderer {
                     + "list-style-type: none";
         } else {
             sb = new StringBuilder(style);
-            cellstyle = "margin:0px;padding:0px;list-style-type: none";
+            cellstyle = "margin:0px;padding:0px;list-style-type:none";
         }
         
         if (!input.isEnabled()) {
@@ -141,38 +142,16 @@ public class TextFieldRenderer extends Renderer {
         if (!allowContextMenu(input))
             return tagt;
         
-        tfcontext = name.concat("_menu");
-        tag = new XMLElement("li");
-        renderOpenMenuButton(tag, tfcontext, name);
-        tagt.addChild(tag);
-        tag = new XMLElement("li");
-        renderCloseMenuButton(tag, tfcontext, name);
-        tagt.addChild(tag);
-        tag = new XMLElement("li");
-        options = new XMLElement("ul");
-        options.add("id", tfcontext);
-        options.add("style", "display:none");
-        options.add("class", "ctxmenu");
-        tag.addChild(options);
-        tagt.addChild(tag);
-
-
+        ctxmenu = new ContextMenu(tagt, name);
+        ctxmenu.setMessages(Controller.messages);
         required = input.isObligatory();
-        if (required) {
-            tag = new XMLElement("li");
-            tag.add("class", "ctxmenu_item");
-            tag.addInner(Controller.messages.get("required"));
-            options.addChild(tag);
-        }
+        if (required)
+            ctxmenu.add(Controller.messages.get("required"));
 
         popupcontrol = config.getPopupControl();
         calendar = input.getCalendar();
         if (calendar != null) {
-            tag = new XMLElement("li");
-            tag.add("class", "ctxmenu_item");
-            tag.addChild(ContextMenuButtonRenderer.render(
-                    calendar.getHtmlName(), config, "calendar"));
-            options.addChild(tag);
+            ctxmenu.add(calendar.getHtmlName(), config, "calendar");
             if (popupcontrol != null) {
                 calname = popupcontrol.getName();
                 if ((calname.equals(calendar.getEarly()) ||
@@ -187,11 +166,7 @@ public class TextFieldRenderer extends Renderer {
 
         search = input.getSearchHelp();
         if (search != null) {
-            tag = new XMLElement("li");
-            tag.add("class", "ctxmenu_item");
-            tag.addChild(ContextMenuButtonRenderer.render(
-                    search.getHtmlName(), config, "values"));
-            options.addChild(tag);
+            ctxmenu.add(search.getHtmlName(), config, "values");
             if (popupcontrol != null) {
                 shname = popupcontrol.getHtmlName();
                 if (shname.equals(search.getHtmlName()) ||
@@ -214,41 +189,6 @@ public class TextFieldRenderer extends Renderer {
         }
         
         return tagt;
-    }
-    
-    private static final void renderCloseMenuButton(XMLElement button,
-            String menu, String name) {
-        String open = name.concat("_openmenu");
-        String close = name.concat("_closemenu");
-        
-        button.add("id", close);
-        button.add("class", "button_ctxmenu_close");
-        button.add("style", "display:none");
-        button.add("onclick", new StringBuilder(
-                setElementDisplay(menu, "none")).
-                append(setElementDisplay(open, "inline")).
-                append(setElementDisplay(close, "none")).toString());
-        button.addInner("-");
-    }
-    
-    private static final void renderOpenMenuButton(XMLElement button,
-            String menu, String name) {
-        String open = name.concat("_openmenu");
-        String close = name.concat("_closemenu");
-        
-        button.add("id", open);
-        button.add("class", "button_ctxmenu_open");
-        button.add("style", "display:inline");
-        button.add("onclick", new StringBuilder(
-                setElementDisplayOfClass(".ctxmenu", "none")).
-                append(setElementDisplayOfClass(
-                        ".button_ctxmenu_close", "none")).
-                append(setElementDisplayOfClass(
-                        ".button_ctxmenu_open", "inline")).
-                append(setElementDisplay(menu, "inline-block")).
-                append(setElementDisplay(open, "none")).
-                append(setElementDisplay(close, "inline")).toString());
-        button.addInner("+");
     }
     
     private static final List<XMLElement> renderPopup(Config config) {
@@ -292,17 +232,5 @@ public class TextFieldRenderer extends Renderer {
             Renderer.renderContainer(tags, container, config);
         
         return tags;
-    }
-    
-    private static final String setElementDisplay(String name, String value) {
-        return new StringBuilder("setElementDisplay('").append(name).
-                append("','").append(value).append("');").toString();
-    }
-
-    private static final String setElementDisplayOfClass(
-            String style, String display) {
-        return new StringBuilder("setElementDisplayOfClass('").
-                append(style).append("','").append(display).append("');").
-                toString();
     }
 }

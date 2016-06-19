@@ -2,12 +2,14 @@ package org.iocaste.internal.renderer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.TableItem;
 
 public class TableRenderer extends Renderer {
@@ -21,6 +23,9 @@ public class TableRenderer extends Renderer {
     public static final XMLElement render(Table table, Config config) {
         String title, name, text;
         Set<TableItem> items;
+        ContextMenu ctxmenu;
+        TableContextItem ctxitem;
+        Map<String, TableContextItem> ctxitems;
         XMLElement tag, trtag, thtag, divtag;
         XMLElement tabletag = new XMLElement("table");
         List<InputComponent> hidden = new ArrayList<>();
@@ -41,6 +46,7 @@ public class TableRenderer extends Renderer {
             tag = new XMLElement("thead");
             trtag = new XMLElement("tr");
             tag.addChild(trtag);
+            tabletag.addChild(tag);
             
             for (TableColumn column: table.getColumns()) {
                 if ((column.isMark() && !table.hasMark()) ||
@@ -49,18 +55,29 @@ public class TableRenderer extends Renderer {
                 
                 thtag = new XMLElement("th");
                 thtag.add("class", "table_header");
-                text = column.getText();
-                if (text == null) {
-                    name = column.getName();
-                    if (name != null)
-                        text = name;
+                if (column.isMark()) {
+                    tag = new XMLElement("ul");
+                    tag.add("style",
+                            "margin:0px;padding:0px;list-style-type:none");
+                    ctxmenu = new ContextMenu(tag, "mark");
+                    ctxitems = table.getContextItems();
+                    for (String itemname : ctxitems.keySet()) {
+                        ctxitem = ctxitems.get(itemname);
+                        if (ctxitem.visible)
+                            ctxmenu.add(ctxitem.htmlname, config, ctxitem.text);
+                    }
+                    thtag.addChild(tag);
+                } else {
+                    text = column.getText();
+                    if (text == null) {
+                        name = column.getName();
+                        if (name != null)
+                            text = name;
+                    }
+                    thtag.addInner(text);
                 }
-                
-                thtag.addInner(text);
                 trtag.addChild(thtag);
             }
-            
-            tabletag.addChild(tag);
         }
         
         items = table.getItems();

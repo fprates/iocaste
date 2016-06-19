@@ -1,7 +1,6 @@
 package org.iocaste.login;
 
 import org.iocaste.appbuilder.common.AbstractExtendedContext;
-import org.iocaste.appbuilder.common.AbstractMessagesSource;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
@@ -12,7 +11,6 @@ import org.iocaste.documents.common.ExtendedObject;
 public class Context extends AbstractExtendedContext {
     private DataElement username, secret;
     public DocumentModel loginmodel, chgscrtmodel;
-    public Messages messages;
     public String uname;
     public ExtendedObject object;
     
@@ -24,7 +22,6 @@ public class Context extends AbstractExtendedContext {
                 "SECRET", DataType.CHAR, 12, DataType.KEEPCASE);
         loginmodel = loginmodel();
         chgscrtmodel = chgscrtmodel();
-        messages = new Messages();
     }
 
     private final DocumentModel chgscrtmodel() {
@@ -98,21 +95,5 @@ public class Context extends AbstractExtendedContext {
         model.add(item);
         
         return item;
-    }
-}
-
-class Messages extends AbstractMessagesSource {
-    
-    public Messages() {
-        put("authentic", "Autenticação");
-        put("changesecret", "Alterar");
-        put("CONFIRM", "Repita a senha");
-        put("connect", "Conectar");
-        put("invalid.login", "Usuário ou senha inválidos.");
-        put("LOCALE", "Idioma");
-        put("password.change", "Alteração de senha");
-        put("password.mismatch", "Senhas não são iguais.");
-        put("SECRET", "Senha");
-        put("USERNAME", "Usuário");
     }
 }

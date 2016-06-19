@@ -162,6 +162,7 @@ public class Response {
         
         searchbt = "bt_".concat(searchbt);
         new Button(stdcnt, searchbt).addEvent("onClick", searchjs);
+        context.messages.instance("pt_BR");
         context.messages.put(searchbt, "Selecionar");
         
         sh = context.control;

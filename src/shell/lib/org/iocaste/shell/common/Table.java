@@ -39,6 +39,7 @@ public class Table extends AbstractContainer {
     public static final byte REMOVE = 1;
     private boolean header, mark;
     private Map<String, TableColumn> columns;
+    private Map<String, TableContextItem> context;
     private byte seltype;
     private RadioGroup group;
     private String text, borderstyle;
@@ -77,6 +78,12 @@ public class Table extends AbstractContainer {
         columns.put(column.getName(), column);
     }
     
+    public final TableContextItem addContextItem(String action) {
+        TableContextItem ctxitem = new TableContextItem();
+        context.put(action, ctxitem);
+        return ctxitem;
+    }
+    
     /**
      * 
      * @return
@@ -100,6 +107,10 @@ public class Table extends AbstractContainer {
      */
     public final TableColumn[] getColumns() {
         return columns.values().toArray(new TableColumn[0]);
+    }
+    
+    public final Map<String, TableContextItem> getContextItems() {
+        return context;
     }
     
     /**
@@ -158,6 +169,7 @@ public class Table extends AbstractContainer {
         
         header = true;
         columns = new LinkedHashMap<>();
+        context = new LinkedHashMap<>();
         seltype = MULTIPLE;
         group = new RadioGroup(this, getName().concat(".mark"));
         borderstyle = "width: 100%; overflow: auto;";
@@ -219,6 +231,7 @@ public class Table extends AbstractContainer {
     
     @Override
     public final void translate(MessageSource messages) {
+        TableContextItem ctxitem;
         TableColumn column;
         String text;
         
@@ -232,6 +245,12 @@ public class Table extends AbstractContainer {
                 if (text != null)
                     column.setText(text);
             }
+        }
+        
+        for (String name : context.keySet()) {
+            ctxitem = context.get(name);
+            if (ctxitem.text == null)
+                ctxitem.text = messages.get(ctxitem.htmlname);
         }
     }
     

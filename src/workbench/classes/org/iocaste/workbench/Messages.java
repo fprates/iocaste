@@ -1,12 +1,13 @@
 package org.iocaste.workbench;
 
-import org.iocaste.appbuilder.common.AbstractMessagesSource;
+import org.iocaste.shell.common.MessageSource;
 
-public class Messages extends AbstractMessagesSource {
+public class Messages {
 
-    public Messages() {
-        put("execute", "Executar");
-        put("iocaste.workbench", "Workbench Iocaste");
-        put("WBDSPTCHR", "Workbench");
+    public Messages(MessageSource messages) {
+        messages.put("execute", "Executar");
+        messages.put("iocaste.workbench", "Workbench Iocaste");
+        messages.put("iocaste-workbench", "Workbench Iocaste");
+        messages.put("WBDSPTCHR", "Workbench");
     }
 }

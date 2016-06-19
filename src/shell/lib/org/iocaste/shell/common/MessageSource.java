@@ -2,6 +2,7 @@ package org.iocaste.shell.common;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -17,19 +18,12 @@ import org.iocaste.protocol.Function;
  * @author francisco.prates
  *
  */
-public class MessageSource {
-    private Properties messages;
+public final class MessageSource {
+    private Map<String, Properties> messages;
+    private String locale;
     
     public MessageSource() {
-        messages = new Properties();
-    }
-    
-    /**
-     * Define properties com mensagens.
-     * @param messages mensagens.
-     */
-    public final void addMessages(Map<String, String> messages) {
-        this.messages.putAll(messages);
+        messages = new HashMap<>();
     }
     
     /**
@@ -38,7 +32,7 @@ public class MessageSource {
      * @return mensagem
      */
     public final String get(String name) {
-        return messages.getProperty(name);
+        return messages.get(locale).getProperty(name);
     }
     
     /**
@@ -49,7 +43,13 @@ public class MessageSource {
      * @return mensagem
      */
     public final String get(String name, String default_) {
-        return messages.getProperty(name, default_);
+        return messages.get(locale).getProperty(name, default_);
+    }
+    
+    public final void instance(String locale) {
+        if (!this.messages.containsKey(locale))
+            this.messages.put(locale, new Properties());
+        this.locale = locale;
     }
     
     /**
@@ -63,6 +63,7 @@ public class MessageSource {
         Query query;
         ExtendedObject[] objects;
         String tag, message;
+        Properties properties;
         
         if (locale == null)
             return;
@@ -75,10 +76,14 @@ public class MessageSource {
         if (objects == null)
             return;
         
+        properties = messages.get(locale);
+        if (properties == null)
+            instance(locale.toString());
+        
         for (ExtendedObject object : objects) {
             tag = object.get("NAME");
             message = object.get("TEXT");
-            messages.put(tag, message);
+            put(tag, message);
         }
     }
     
@@ -86,18 +91,30 @@ public class MessageSource {
      * Carrega mensagem a partir de arquivo.
      * @param path caminho do arquivo.
      */
-    public final void loadFromFile(String path) {
+    public final void loadFromFile(String locale, String path) {
         InputStream is = getClass().getResourceAsStream(path);
         
         if (is == null)
             throw new RuntimeException("Message file not found.");
         
         try {
-            messages.load(is);
+            messages.get(locale).load(is);
             is.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public final void put(String tag, String message) {
+        put(locale, tag, message);
+    }
+    
+    public final void put(String locale, String tag, String message) {
+        messages.get(locale).put(tag, message);
+    }
+    
+    public final void setLocale(Locale locale) {
+        this.locale = locale.toString();
     }
     
     public final int size() {

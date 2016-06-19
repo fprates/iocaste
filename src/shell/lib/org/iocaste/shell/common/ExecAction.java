@@ -9,18 +9,17 @@ import org.iocaste.protocol.IocasteException;
 import org.iocaste.protocol.Message;
 
 public class ExecAction extends AbstractHandler {
-    private MessageSource messages;
     public AbstractContext context;
     public ViewState state;
     public Map<String, ViewCustomAction> customactions;
     
-    private final String getMessage(String message) {
+    private final String getMessage(String tag) {
         String text;
         
-        if (message == null)
+        if (tag == null)
             return null;
-        text = messages.get(message);
-        return (text == null)? message : text;
+        text = context.messages.get(tag);
+        return (text == null)? tag : text;
     }
     
     @Override
@@ -91,9 +90,4 @@ public class ExecAction extends AbstractHandler {
         state.messagetext = getMessage(state.messagetext);
         return state;
     }
-    
-    public final void setMessages(MessageSource messages) {
-        this.messages = messages;
-    }
-
 }

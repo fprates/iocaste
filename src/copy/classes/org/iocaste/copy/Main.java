@@ -1,11 +1,11 @@
 package org.iocaste.copy;
 
-import org.iocaste.appbuilder.common.AbstractMessagesSource;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
+import org.iocaste.shell.common.MessageSource;
 
 public class Main extends AbstractPageBuilder {
 
@@ -14,8 +14,7 @@ public class Main extends AbstractPageBuilder {
         StandardPanel panel;
         Context extcontext;
         
-        add(new Messages());
-        
+        new Messages(context.messages);
         extcontext = new Context(context);
         panel = new StandardPanel(context);
         panel.instance("main", new MainPage(), extcontext);
@@ -43,14 +42,14 @@ class MainPage extends AbstractPanelPage {
     
 }
 
-class Messages extends AbstractMessagesSource {
+class Messages {
     
-    public Messages() {
-        put("COPY", "Copiar");
-        put("NAME", "Modelo");
-        put("NAMESPACE", "Namespace");
-        put("no.records", "Sem registros para copiar.");
-        put("PORT_NAME", "Porta de comunicação");
-        put("sucessful.copy", "Cópia bem sucedida.");
+    public Messages(MessageSource messages) {
+        messages.put("COPY", "Copiar");
+        messages.put("NAME", "Modelo");
+        messages.put("NAMESPACE", "Namespace");
+        messages.put("no.records", "Sem registros para copiar.");
+        messages.put("PORT_NAME", "Porta de comunicação");
+        messages.put("sucessful.copy", "Cópia bem sucedida.");
     }
 }

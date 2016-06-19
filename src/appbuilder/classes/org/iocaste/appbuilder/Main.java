@@ -1,6 +1,5 @@
 package org.iocaste.appbuilder;
 
-import org.iocaste.appbuilder.common.AbstractMessagesSource;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
@@ -14,6 +13,7 @@ import org.iocaste.appbuilder.common.cmodelviewer.Save;
 import org.iocaste.appbuilder.common.cmodelviewer.Validate;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.Documents;
+import org.iocaste.shell.common.MessageSource;
 
 public class Main extends AbstractModelViewer {
     
@@ -24,11 +24,10 @@ public class Main extends AbstractModelViewer {
         String msgsource = getParameter("msgsource");
         AppBuilderLink link = getReceivedLink();
         
-        add(new Messages());
-        
         if (msgsource != null)
             setMessageSource(msgsource);
         
+        new Messages(context.messages);
         link.displayconfig = new DisplayConfig();
         link.maintenancespec = new MaintenanceSpec();
         link.maintenanceinput = new MaintenanceInput();
@@ -58,11 +57,11 @@ public class Main extends AbstractModelViewer {
     }
 }
 
-class Messages extends AbstractMessagesSource {
+class Messages {
     
-    public Messages() {
-        put("code.exists", "Documento já existe.");
-        put("invalid.code", "Código de documento inválido.");
-        put("record.saved", "Documento %s gravado com sucesso.");
+    public Messages(MessageSource messages) {
+        messages.put("code.exists", "Documento já existe.");
+        messages.put("invalid.code", "Código de documento inválido.");
+        messages.put("record.saved", "Documento %s gravado com sucesso.");
     }
 }

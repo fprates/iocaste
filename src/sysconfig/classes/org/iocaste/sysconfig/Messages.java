@@ -1,14 +1,15 @@
 package org.iocaste.sysconfig;
 
-import org.iocaste.appbuilder.common.AbstractMessagesSource;
+import org.iocaste.shell.common.MessageSource;
 
-public class Messages extends AbstractMessagesSource {
+public class Messages {
 
-    public Messages() {
-        put("iocaste-sysconfig", "Configuração do sistema");
-        put("NAME", "Nome");
-        put("save", "Salvar");
-        put("shell_tab", "Shell");
-        put("VALUE", "Valor");
+    public Messages(MessageSource messages) {
+        messages.instance("pt_BR");
+        messages.put("iocaste-sysconfig", "Configuração do sistema");
+        messages.put("NAME", "Nome");
+        messages.put("save", "Salvar");
+        messages.put("shell_tab", "Shell");
+        messages.put("VALUE", "Valor");
     }
 }

@@ -10,29 +10,24 @@ import org.iocaste.protocol.Message;
 
 public class GetViewData extends AbstractHandler {
     private String msgsource;
-    private MessageSource messages;
     public ViewState state;
     public AbstractContext context;
     public Map<String, ViewCustomAction> customactions;
     public Map<String, CustomView> customviews;
     
-    public final void addMessages(Map<String, String> messages) {
-        this.messages.addMessages(messages);
-    }
-    
-    private final void fillTranslations(View view) {
+    private final void fillTranslations(View view, AbstractContext context) {
         String text;
         Map<String, Element> elements;
         ViewTitle title;
         
         elements = view.getElements();
         for (String name : elements.keySet())
-            elements.get(name).translate(messages);
+            elements.get(name).translate(context.messages);
         
         title = view.getTitle();
         if (title.text == null)
             return;
-        text = messages.get(title.text);
+        text = context.messages.get(title.text);
         if (text == null)
             return;
         if ((title.args == null || title.args.length == 0))
@@ -82,7 +77,7 @@ public class GetViewData extends AbstractHandler {
             method.invoke(page);
         }
         
-        if ((messages.size() == 0) || (msgsource != null)) {
+        if ((context.messages.size() == 0) || (msgsource != null)) {
             /*
              * há alguma chance que getViewData() tenha sido chamada
              * a partir de um ticket, que nesse caso teria a localização
@@ -95,13 +90,14 @@ public class GetViewData extends AbstractHandler {
                     setLocaleForElement(container, view.getLocale());
             }
             
-            messages.loadFromApplication(view.getAppName(), locale, page);
+            context.messages.loadFromApplication(
+                    view.getAppName(), locale, page);
             if (msgsource != null)
-                messages.loadFromApplication(msgsource, locale, page);
+                context.messages.loadFromApplication(msgsource, locale, page);
         }
         
-        if (messages.size() > 0)
-            fillTranslations(view);
+        if (context.messages.size() > 0)
+            fillTranslations(view, context);
         
         state.parameters.clear();
         viewreturn = new Object[4];
@@ -127,9 +123,4 @@ public class GetViewData extends AbstractHandler {
         for (Element element_ : container.getElements())
             setLocaleForElement(element_, locale);
     }
-    
-    public final void setMessages(MessageSource messages) {
-        this.messages = messages;
-    }
-
 }

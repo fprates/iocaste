@@ -9,8 +9,8 @@ public class LastAction extends TableToolAction {
 
     public LastAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, "last");
-        setText(">>");
         setNavigable(true);
+        setText("pt_BR", "Último [>>]");
     }
 
     @Override

@@ -1,12 +1,13 @@
 package org.iocaste.internal.renderer;
 
-import org.iocaste.internal.Controller;
+import java.util.Map;
+
 import org.iocaste.protocol.utils.XMLElement;
 
 public class ContextMenuButtonRenderer extends Renderer {
     
-    public static final XMLElement render(
-            String htmlname, Config config, String text) {
+    public static final XMLElement render(String htmlname, Config config,
+            Map<String, String> messages, String text) {
         XMLElement linktag;
         String onclick;
         
@@ -18,7 +19,7 @@ public class ContextMenuButtonRenderer extends Renderer {
         linktag.add("name", htmlname);
         linktag.add("href", onclick);
         linktag.add("class", "ctxmenu_link");
-        linktag.addInner(Controller.messages.get(text));
+        linktag.addInner((messages != null)? messages.get(text) : text);
         return linktag;
     }
 }

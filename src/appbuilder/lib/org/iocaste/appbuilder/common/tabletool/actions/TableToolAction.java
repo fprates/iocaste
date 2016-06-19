@@ -3,13 +3,13 @@ package org.iocaste.appbuilder.common.tabletool.actions;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.shell.common.AbstractContext;
-import org.iocaste.shell.common.Button;
-import org.iocaste.shell.common.Container;
+import org.iocaste.shell.common.Table;
+import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.ViewCustomAction;
 
 public abstract class TableToolAction implements ViewCustomAction {
     private static final long serialVersionUID = 7220679345842901434L;
-    private String action, name, text;
+    private String action, name, locale;
     private TableToolData data;
     protected TableTool tabletool;
     protected boolean navigable, markable;
@@ -30,11 +30,9 @@ public abstract class TableToolAction implements ViewCustomAction {
         this.data = data;
     }
     
-    public final Button build(Container container) {
-        Button button = new Button(container, action.concat(data.name));
-        if (text != null)
-            button.setText(text);
-        return button;
+    public final void build(Table table) {
+        TableContextItem ctxitem = table.addContextItem(action);
+        ctxitem.htmlname = action.concat(data.name);
     }
     
     @Override
@@ -64,7 +62,11 @@ public abstract class TableToolAction implements ViewCustomAction {
         this.navigable = navigable;
     }
     
-    protected final void setText(String text) {
-        this.text = text;
+    protected final void setText(String locale, String text) {
+        if (!locale.equals(this.locale)) {
+            data.context.messages.instance(locale);
+            this.locale = locale;
+        }
+        data.context.messages.put(locale, action.concat(data.name), text);
     }
 }

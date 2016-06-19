@@ -9,6 +9,7 @@ public class AcceptAction extends TableToolAction {
 
     public AcceptAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, "accept");
+        setText("pt_BR", "Aceitar");
     }
 
     @Override

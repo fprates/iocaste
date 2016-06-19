@@ -9,7 +9,7 @@ public class RemoveAction extends TableToolAction {
 
     public RemoveAction(TableTool tabletool, TableToolData data) {
         super(tabletool, data, "remove");
-        setText("-");
+        setText("pt_BR", "Remover [-]");
     }
 
     @Override

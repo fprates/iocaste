@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common.tabletool;
 
 import java.util.List;
+import java.util.Map;
 
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ViewComponents;
@@ -18,6 +19,7 @@ import org.iocaste.shell.common.Link;
 import org.iocaste.shell.common.ListBox;
 import org.iocaste.shell.common.Table;
 import org.iocaste.shell.common.TableColumn;
+import org.iocaste.shell.common.TableContextItem;
 import org.iocaste.shell.common.TableItem;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.TextField;
@@ -185,19 +187,22 @@ public abstract class AbstractTableHandler {
      */
     protected static final void setMode(TableTool tabletool, Context context) {
         Table table = tabletool.getElement();
+        Map<String, TableContextItem> ctxitems;
+        
+        ctxitems = table.getContextItems();
         switch (context.data.mode) {
         case TableTool.UPDATE:
         case TableTool.CONTINUOUS_UPDATE:
-            tabletool.getActionElement("accept").setVisible(false);
-            tabletool.getActionElement("add").setVisible(true);
-            tabletool.getActionElement("remove").setVisible(true);
+            ctxitems.get("accept").visible = false;
+            ctxitems.get("add").visible = true;
+            ctxitems.get("remove").visible = true;
             break;
             
         case TableTool.DISPLAY:
         case TableTool.CONTINUOUS_DISPLAY:
-            tabletool.getActionElement("accept").setVisible(false);
-            tabletool.getActionElement("add").setVisible(false);
-            tabletool.getActionElement("remove").setVisible(false);
+            ctxitems.get("accept").visible = false;
+            ctxitems.get("add").visible = false;
+            ctxitems.get("remove").visible = false;
             table.setEnabled(false);
             for (String column : context.data.columns.keySet())
                 context.data.columns.get(column).disabled = true;

@@ -14,11 +14,10 @@ public class Main extends AbstractPageBuilder {
         Context extcontext;
 
         extcontext = new Context(context);
-        
         panel = new StandardPanel(context);
         panel.instance("authentic", new MainPage(), extcontext);
         panel.instance("changesecret", new ChangeSecretPage(), extcontext);
-        add(extcontext.messages);
+        new Messages(context.messages);
     }
 
     @Override

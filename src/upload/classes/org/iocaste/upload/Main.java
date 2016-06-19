@@ -1,12 +1,12 @@
 package org.iocaste.upload;
 
-import org.iocaste.appbuilder.common.AbstractMessagesSource;
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.AppBuilderLink;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
+import org.iocaste.shell.common.MessageSource;
 import org.iocaste.upload.install.LayoutInstall;
 import org.iocaste.upload.install.OptionsInstall;
 
@@ -45,8 +45,7 @@ public class Main extends AbstractPageBuilder {
         panel.instance("main", new MainPage(), extcontext);
         
         context.addManager("layout", new LayoutManager(context.function));
-        
-        add(new Messages());
+        new Messages(context.messages);
     }
 
 }
@@ -62,15 +61,15 @@ class MainPage extends AbstractPanelPage {
     
 }
 
-class Messages extends AbstractMessagesSource {
+class Messages {
     
-    public Messages() {
-        put("columns", "Colunas");
-        put("FILE", "Arquivo");
-        put("IGNORE_FIRST_LINES", "Primeiras linhas ignoradas");
-        put("iocaste-upload", "Utilitário de carga");
-        put("LAYOUT", "Layout");
-        put("TRUNCATE_CHAR", "Truncar caracteres excedentes");
-        put("upload", "Carregar");
+    public Messages(MessageSource messages) {
+        messages.put("columns", "Colunas");
+        messages.put("FILE", "Arquivo");
+        messages.put("IGNORE_FIRST_LINES", "Primeiras linhas ignoradas");
+        messages.put("iocaste-upload", "Utilitário de carga");
+        messages.put("LAYOUT", "Layout");
+        messages.put("TRUNCATE_CHAR", "Truncar caracteres excedentes");
+        messages.put("upload", "Carregar");
     }
 }
