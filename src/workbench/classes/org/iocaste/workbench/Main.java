@@ -5,6 +5,7 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.workbench.install.ProjectInstall;
+import org.iocaste.workbench.install.TextsInstall;
 import org.iocaste.workbench.project.ProjectManager;
 
 public class Main extends AbstractPageBuilder {
@@ -26,6 +27,7 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.setLink("WBDSPTCHR", "iocaste-workbench");
         defaultinstall.addToTaskGroup("DEVELOP", "WBDSPTCHR");
         
+        installObject("messages", new TextsInstall());
         installObject("project", new ProjectInstall());
     }
 
