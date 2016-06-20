@@ -48,7 +48,15 @@ public class Directory implements Serializable {
     }
     
     public DirectoryInstance copy(String... target) {
+        return instance(DirectoryInstance.COPY, target);
+    }
+    
+    private DirectoryInstance instance(byte type, String[] target) {
         DirectoryLeaf leaf = addFile(target);
-        return new DirectoryInstance(leaf, DirectoryInstance.COPY);
+        return new DirectoryInstance(leaf, type);
+    }
+    
+    public DirectoryInstance file(String... target) {
+        return instance(DirectoryInstance.BUFFER, target);
     }
 }

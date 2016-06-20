@@ -9,14 +9,23 @@ public class DirectoryInstance implements Serializable {
     private String[] source;
     private String sourcesymbol;
     private byte action;
+    private byte[] content;
     
     public DirectoryInstance(DirectoryLeaf leaf, byte action) {
         leaf.setInstance(this);
         this.action = action;
     }
     
+    public final void content(String content) {
+        this.content = content.getBytes();
+    }
+    
     public final byte getAction() {
         return action;
+    }
+    
+    public final byte[] getContent() {
+        return content;
     }
     
     public final String[] getSource() {

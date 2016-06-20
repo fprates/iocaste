@@ -36,6 +36,9 @@ public class JarEngine implements DirectoryEngine {
         jar.putNextEntry(new JarEntry(file));
         instance = leaf.getInstance();
         switch (instance.getAction()) {
+        case DirectoryInstance.BUFFER:
+            jar.write(instance.getContent());
+            break;
         case DirectoryInstance.COPY:
             file = FileServices.composeFileName(instance.getSource());
             file = FileServices.composeFileName(
