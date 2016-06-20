@@ -140,6 +140,7 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
         Object[] viewreturn;
         String complexid, appname, pagename, csslink;
         int logid;
+        boolean newview;
         Input input;
         Message message;
         Map<String, Object> parameters;
@@ -159,8 +160,12 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             throw new IocasteException("page not especified.");
         
         view = pagectx.getViewData(); 
-        if (!pagectx.keepView() || view == null)
+        if (!pagectx.keepView() || view == null) {
             view = new View(appname, pagename);
+            newview = true;
+        } else {
+            newview = false;
+        }
         
         stylesheet = DefaultStyle.instance();
         view.importStyle(stylesheet);
@@ -216,10 +221,12 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
             throw e;
         }
         
-        csslink = stylesheet.getLink();
-        if (csslink != null) {
-            link = new HeaderLink("stylesheet", "text/css", csslink);
-            view.add(link);
+        if (newview) {
+            csslink = stylesheet.getLink();
+            if (csslink != null) {
+                link = new HeaderLink("stylesheet", "text/css", csslink);
+                view.add(link);
+            }
         }
         
         return view;
