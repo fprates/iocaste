@@ -501,10 +501,19 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
      * @return
      */
     protected boolean isConnected(ContextData ctxdata) {
+        String complexid = getComplexId(ctxdata.sessionid, ctxdata.logid);
+        return isConnected(complexid);
+    }
+    
+    /**
+     * 
+     * @param complexid
+     * @return
+     */
+    protected boolean isConnected(String complexid) {
         String url;
         Message message;
         Service service;
-        String complexid = getComplexId(ctxdata.sessionid, ctxdata.logid);
         
         message = new Message("is_connected");
         message.setSessionid(complexid);
@@ -638,7 +647,8 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
          * testa autorização para execução e sequencia de telas
          */
         if (!isExecuteAuthorized(appname, config.sessionid) &&
-                (config.state.rapp != null) && apps.containsKey(sessionid)) {
+                (config.state.rapp != null) &&
+                    isConnected(config.sessionid)) {
             pagectx.setError(AUTHORIZATION_ERROR);
             pagectx.message(Const.ERROR,
                     Controller.messages.get("user.not.authorized"), null);

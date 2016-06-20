@@ -28,20 +28,6 @@ public final class Iocaste extends AbstractServiceInterface {
     
     /**
      * 
-     * @param event
-     * @param url
-     * @param function
-     */
-    public final void addHandler(byte event, String url, String function) {
-        Message message = new Message("handler_add");
-        message.add("event", event);
-        message.add("url", url);
-        message.add("function", function);
-        call(message);
-    }
-    
-    /**
-     * 
      * @param sql
      * @param in
      * @param out

@@ -5,7 +5,6 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.shell.common.Const;
-import org.iocaste.shell.common.Shell;
 
 public class Connect extends AbstractActionHandler {
 
@@ -31,8 +30,6 @@ public class Connect extends AbstractActionHandler {
             return;
         }
         
-        iocaste.addHandler(Iocaste.DISCONNECT_EVENT,
-                Shell.SERVER_NAME, "disconnect_event");
         task = getUserTask(extcontext.uname);
         if (task == null) {
             context.function.exec("iocaste-tasksel", "main");
