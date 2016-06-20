@@ -5,6 +5,7 @@ import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.files.Directory;
 import org.iocaste.protocol.files.DirectoryInstance;
+import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
 import org.iocaste.workbench.Context;
@@ -16,16 +17,91 @@ public class Compile extends AbstractCommand {
         optional("project");
         data = new CompileData();
     }
+  
+    private final XMLElement createWebXML(CompileData data) {
+        XMLElement welcome, welcomefile;
+        XMLElement webapp = new XMLElement("web-app");
+        
+        webapp.head("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        webapp.add("id", data.project);
+        webapp.add("xmlns", "http://java.sun.com/xml/ns/javaee");
+        webapp.add("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        webapp.add("xsi:schemaLocation", "http://java.sun.com/xml/ns/javaee "
+                + "http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd");
+        webapp.add("version", "2.5");
+          
+        if (data.serviceclass != null)
+            createWebXMLServlet(webapp,
+                    "iocaste_server",
+                    data.serviceclass,
+                    "/services.html", null, null);
+        
+        if (data.entryclass != null)
+            createWebXMLServlet(webapp,
+                    "iocaste_servlet",
+                    "org.iocaste.shell.common.IocasteServlet",
+                    "/view.html", "form", data.entryclass);
+        
+        welcome = new XMLElement("welcome-file-list");
+        welcomefile = new XMLElement("welcome-file");
+        welcomefile.addInner("index.html");
+        welcome.addChild(welcomefile);
+        webapp.addChild(welcome);
+        
+        return webapp;
+    }
+    
+    private final void createWebXMLServlet(XMLElement webapp,
+            String name, String classname, String url, String param,
+            String value) {
+        XMLElement urlpattern, initparam, paramname, paramvalue;
+        XMLElement servlet = new XMLElement("servlet");
+        XMLElement servletname = new XMLElement("servlet-name");
+        XMLElement servletclass = new XMLElement("servlet-class");
+        XMLElement servletmapping = new XMLElement("servlet-mapping");
+        
+        servletname.addInner(name);
+        servlet.addChild(servletname);
+        
+        servletclass.addInner(classname);
+        servlet.addChild(servletclass);
+        webapp.addChild(servlet);
+  
+        urlpattern = new XMLElement("url-pattern");
+        urlpattern.addInner(url);
+        
+        servletmapping.addChild(servletname);
+        servletmapping.addChild(urlpattern);
+       
+        if (param == null)
+            return;
+      
+        initparam = new XMLElement("init-param");
+        paramname = new XMLElement("param-name");
+        paramname.addInner(param);
+        paramvalue = new XMLElement("param-value");
+        paramvalue.addInner(value);
+        initparam.addChild(paramname);
+        initparam.addChild(paramvalue);
+        servlet.addChild(initparam);
+        webapp.addChild(servletmapping);
+    }
     
     private final void deployApplication(CompileData data)
             throws Exception {
         Iocaste iocaste;
         Directory war;
-        DirectoryInstance iocastejar;
+        DirectoryInstance iocastejar, webxml;
+        XMLElement webapp;
+        
+        webapp = createWebXML(data);
         
         war = new Directory(data.project.concat(".war"));
         war.addDir("WEB-INF", "classes");
         war.addDir("WEB-INF", "lib");
+        
+        webxml = war.file("WEB-INF", "web.xml");
+        webxml.content(webapp.toString());
         
         iocastejar = war.copy("WEB-INF", "lib", "iocaste.jar");
         iocastejar.source("WORKBENCH_LIBS", "iocaste.jar");
@@ -63,7 +139,7 @@ public class Compile extends AbstractCommand {
 }
 
 class CompileData {
-    public String project;
+    public String project, serviceclass, entryclass;
     public Context extcontext;
     public PageBuilderContext context;
 }
