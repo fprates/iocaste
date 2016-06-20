@@ -21,6 +21,7 @@ public class ContextMenu {
         renderCloseMenuButton(tag, tfcontext, name);
         tagt.addChild(tag);
         tag = new XMLElement("li");
+        tag.add("style", "width:0px;padding:0px;margin:0px");
         options = new XMLElement("ul");
         options.add("id", tfcontext);
         options.add("style", "display:none");
