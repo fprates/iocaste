@@ -45,9 +45,6 @@
 	<classpathentry kind="src" path="src/log/lib"/>
 	<classpathentry kind="src" path="src/external/classes"/>
 	<classpathentry kind="src" path="src/external/lib"/>
-	<classpathentry kind="src" path="src/transport/classes"/>
-	<classpathentry kind="src" path="src/transport/robot"/>
-	<classpathentry kind="src" path="src/transport/lib"/>
 	<classpathentry kind="src" path="src/kernel/lib"/>
 	<classpathentry kind="src" path="src/sap-connector/classes"/>
 	<classpathentry kind="src" path="src/copy/classes"/>
