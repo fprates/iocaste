@@ -1,8 +1,5 @@
 package org.iocaste.appbuilder.common;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,21 +33,6 @@ public abstract class AbstractPageBuilder extends AbstractPage {
     
     protected final void description(String name, String model, String field) {
         validate(name, new DescriptionValidate(model, field));
-    }
-    
-    protected byte[] getApplicationContext(String installctx) throws Exception {
-        byte[] buffer;
-        int size;
-        InputStream is;
-        File file = new File(installctx);
-        
-        size = ((Number)file.length()).intValue();
-        buffer = new byte[size];
-        is = new FileInputStream(file);
-        is.read(buffer);
-        is.close();
-        
-        return buffer;
     }
     
     /*
