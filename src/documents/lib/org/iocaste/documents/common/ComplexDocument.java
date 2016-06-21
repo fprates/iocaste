@@ -28,7 +28,7 @@ public class ComplexDocument implements Serializable,
         header = new ExtendedObject(cmodel.getHeader());
         items = new HashMap<>();
         for (String name: cmodel.getItems().keySet())
-            items.put(name, new ArrayList<ExtendedObject>());
+            items.put(name, new ArrayList<>());
     }
     
     /**
@@ -153,6 +153,13 @@ public class ComplexDocument implements Serializable,
         for (DocumentModelKey key : cmodel.getHeader().getKeys())
             return header.getst(key.getModelItemName());
         return null;
+    }
+    
+    public final ExtendedObject instance(String item) {
+        DocumentModel model = cmodel.getItems().get(item);
+        ExtendedObject object = new ExtendedObject(model);
+        add(object);
+        return object;
     }
     
     /**
