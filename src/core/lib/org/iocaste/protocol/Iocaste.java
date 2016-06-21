@@ -99,6 +99,12 @@ public final class Iocaste extends AbstractServiceInterface {
         call(message);
     }
     
+    /**
+     * 
+     * @param program
+     * @param args
+     * @return
+     */
     public final Object[] execute(String program, String... args) {
         Message message = new Message("external_process_execute");
         message.add("program", program);
@@ -106,12 +112,23 @@ public final class Iocaste extends AbstractServiceInterface {
         return call(message);
     }
     
+    /**
+     * 
+     * @param args
+     * @return
+     */
     public final boolean exists(String... args) {
         Message message = new Message("file_exists");
         message.add("args", args);
         return call(message);
     }
     
+    /**
+     * 
+     * @param option
+     * @param args
+     * @return
+     */
     public final String file(int option, String... args) {
         Message message = new Message("file");
         message.add("option", option);
@@ -119,19 +136,12 @@ public final class Iocaste extends AbstractServiceInterface {
         return call(message);
     }
     
+    /**
+     * 
+     * @return
+     */
     public final String[] getAvailablePackages() {
         Message message = new Message("packages_get");
-        return call(message);
-    }
-    
-    /**
-     * Retorna objeto do contexto informado.
-     * @param name nome do contexto
-     * @return contexto
-     */
-    public final Object getContext(String name) {
-        Message message = new Message("get_context");
-        message.add("context_id", name);
         return call(message);
     }
     
@@ -143,6 +153,11 @@ public final class Iocaste extends AbstractServiceInterface {
         return call(new Message("get_current_app"));
     }
     
+    /**
+     * 
+     * @param args
+     * @return
+     */
     public final FileEntry[] getFiles(String... args) {
         Message message = new Message("files_get");
         message.add("args", args);
@@ -155,6 +170,18 @@ public final class Iocaste extends AbstractServiceInterface {
      */
     public final Locale getLocale() {
         return call(new Message("get_locale"));
+    }
+    
+    /**
+     * 
+     * @param file
+     * @return
+     */
+    public final byte[] getMetaContext(String pkgname, String file) {
+        Message message = new Message("meta_context_get");
+        message.add("package", pkgname);
+        message.add("file", file);
+        return call(message);
     }
     
     /**

@@ -33,13 +33,16 @@ public class Servlet extends AbstractIocasteServlet {
         Users users = new Users();
         Auth auth = new Auth();
         Documents documents = new Documents();
-
+        ProcessServices process = new ProcessServices();
+        FileServices files = new FileServices();
+        
         session = new Session();
         documents.config = config = new Config();
         
         session.database = users.database = config.database = database; 
         auth.database = documents.database = database;
         users.session = database.session = auth.session = session;
+        process.files = files;
         session.users = users;
         
         register(database);
@@ -49,9 +52,9 @@ public class Servlet extends AbstractIocasteServlet {
         register(config);
         register(new Services());
         register(documents);
-        register(new FileServices());
+        register(files);
         register(new Packages());
-        register(new ProcessServices());
+        register(process);
         
         authorize("is_connected", null);
         authorize("login", null);
