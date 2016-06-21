@@ -124,6 +124,10 @@ public class PageBuilderDefaultInstall extends AbstractInstallObject {
         profile.add(authorization);
     }
     
+    public final String getPackage() {
+        return pkgname;
+    }
+    
     public final void setLink(String link, String command) {
         links.put(link, command);
     }

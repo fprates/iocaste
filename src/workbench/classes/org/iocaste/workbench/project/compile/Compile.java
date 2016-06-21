@@ -2,6 +2,7 @@ package org.iocaste.workbench.project.compile;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.files.Directory;
 import org.iocaste.protocol.files.DirectoryInstance;
@@ -87,24 +88,62 @@ public class Compile extends AbstractCommand {
         webapp.addChild(servletmapping);
     }
     
+    private final XMLElement createInstall(CompileData data) {
+        ExtendedObject[] objects;
+        XMLElement link, linkname, linkprogram, profile;
+        XMLElement install = new XMLElement("install");
+        XMLElement links = new XMLElement("links");
+
+        install.head("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        profile = new XMLElement("profile");
+        profile.addInner("DEVELOP");
+        install.addChild(profile);
+        
+        objects = data.extcontext.project.getItems("link");
+        if (objects != null) {
+            install.addChild(links);
+            for (ExtendedObject object : objects) {
+                link = new XMLElement("link");
+                linkname = new XMLElement("name");
+                linkname.addInner(object.getst("NAME"));
+                link.addChild(linkname);
+                linkprogram = new XMLElement("program");
+                linkprogram.addInner(object.getst("COMMAND"));
+                link.addChild(linkprogram);
+                links.addChild(link);
+            }
+        }
+            
+        return install;
+    }
+    
     private final void deployApplication(CompileData data)
             throws Exception {
         Iocaste iocaste;
         Directory war;
-        DirectoryInstance iocastejar, webxml;
-        XMLElement webapp;
+        DirectoryInstance file;
+        XMLElement webapp, install;
         
+        data.entryclass =
+                "org.iocaste.workbench.common.engine.ApplicationEngine";
         webapp = createWebXML(data);
+        install = createInstall(data);
         
         war = new Directory(data.project.concat(".war"));
+        war.addDir("META-INF");
         war.addDir("WEB-INF", "classes");
         war.addDir("WEB-INF", "lib");
         
-        webxml = war.file("WEB-INF", "web.xml");
-        webxml.content(webapp.toString());
+        file = war.file("WEB-INF", "web.xml");
+        file.content(webapp.toString());
         
-        iocastejar = war.copy("WEB-INF", "lib", "iocaste.jar");
-        iocastejar.source("WORKBENCH_LIBS", "iocaste.jar");
+        file = war.file("META-INF", "install.txt");
+        file.content(install.toString());
+        
+        file = war.copy("WEB-INF", "lib", "iocaste-workbench.jar");
+        file.source("WORKBENCH_LIBS", "iocaste-workbench.jar");
+        file = war.copy("WEB-INF", "lib", "iocaste.jar");
+        file.source("WORKBENCH_LIBS", "iocaste.jar");
         
         iocaste = new Iocaste(data.context.function);
         iocaste.write("WEBAPPS", war, Iocaste.JAR);

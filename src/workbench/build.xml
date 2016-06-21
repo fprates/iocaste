@@ -4,6 +4,7 @@
     <target name="compile">
         <mkdir dir="${builddir}/${ant.project.name}/web"/>
         <mkdir dir="${builddir}/${ant.project.name}/classes"/>
+        <mkdir dir="${builddir}/${ant.project.name}/lib"/>
     	
         <!-- dependências -->
         <path id="dependencies">
@@ -18,6 +19,16 @@
                <include name="META-INF"/>
            </fileset>
         </copy>
+        
+        <!-- compilação lib -->
+        <javac srcdir="${basedir}/src/${ant.project.name}/lib" 
+            destdir="${builddir}/${ant.project.name}/lib"
+            debug="${debug.status}">
+            <classpath refid="dependencies"/>
+        </javac>
+        
+        <jar basedir="${builddir}/${ant.project.name}/lib"
+            destfile="${builddir}/${ant.project.name}/lib/iocaste-${ant.project.name}.jar"/>
     	
         <!-- compilação classes -->
         <javac srcdir="${basedir}/src/${ant.project.name}/classes"
@@ -34,6 +45,7 @@
                 <exclude name="web.xml"/>
                 <include name="**/*"/>
             </webinf>
+        	<lib dir="${builddir}/${ant.project.name}/lib" includes="*.jar"/>
             <lib file="${basedir}/ext/iocaste.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>
         </war>
