@@ -7,6 +7,7 @@ import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.DummyElement;
 import org.iocaste.packagetool.common.SearchHelpData;
 
 public class ProjectInstall extends AbstractInstallObject {
@@ -15,8 +16,8 @@ public class ProjectInstall extends AbstractInstallObject {
     protected void execute(StandardInstallContext context) throws Exception {
         DataElement projectname, projectscreen, text, screenname, modelname;
         DataElement screenspecitemid, screenspecitemname, projectmodel;
-        DataElement modelitemid, modelitemname, typeid, typetext;
-        DataElement modelitemlength, screenitemtype;
+        DataElement modelitemid, modelitemname, typeid, typetext, command;
+        DataElement modelitemlength, screenitemtype, linkid, linkname;
         ModelInstall model;
         ComplexModelInstall cmodel;
         DocumentModelItem project, screen, modelid, datatype;
@@ -36,6 +37,9 @@ public class ProjectInstall extends AbstractInstallObject {
         modelitemlength = elementnumc("WB_MODEL_ITEM_LENGTH", 4);
         typeid = elementnumc("WB_TYPE_ID", 2);
         typetext = elementchar("WB_TYPE_TEXT", 16, false);
+        linkid = elementchar("WB_LINK_ID", 50, true);
+        linkname = new DummyElement("TASKS.NAME");
+        command = new DummyElement("TASKS.COMMAND");
         
         /*
          * Tipos de dados
@@ -134,6 +138,20 @@ public class ProjectInstall extends AbstractInstallObject {
                 "LENGTH", "LNGTH", modelitemlength);
         
         /*
+         * Links
+         */
+        model = tag("links", modelInstance(
+                "WB_LINKS", "WBLINKS"));
+        model.key(
+                "LINK_ID", "LNKID", linkid);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.item(
+                "NAME", "LNKNM", linkname);
+        model.item(
+                "COMMAND", "CMMND", command);
+        
+        /*
          * project document
          */
         cmodel = cmodelInstance("WB_PROJECT");
@@ -142,5 +160,6 @@ public class ProjectInstall extends AbstractInstallObject {
         cmodel.item("screen_spec_item", "screen_spec_items");
         cmodel.item("model", "models");
         cmodel.item("model_item", "models_items");
+        cmodel.item("link", "links");
     }
 }
