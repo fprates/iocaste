@@ -100,6 +100,12 @@ public class ExecuteCommand extends AbstractActionHandler {
             message(Const.ERROR, message);
             return;
         }
+
+        message = command.isValidContext(extcontext);
+        if (message != null) {
+            message(Const.ERROR, message);
+            return;
+        }
         
         command.set(parameters);
         execute(function);

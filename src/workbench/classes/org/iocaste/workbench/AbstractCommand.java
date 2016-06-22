@@ -1,7 +1,9 @@
 package org.iocaste.workbench;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 
@@ -10,9 +12,13 @@ public abstract class AbstractCommand extends AbstractActionHandler {
     private static final byte OPTIONAL = 1;
     protected Map<String, String> parameters;
     protected Map<String, Byte> arguments;
-
+    protected Map<String, Set<String>> values;
+    protected boolean checkproject;
+    
     public AbstractCommand() {
         arguments = new HashMap<>();
+        values = new HashMap<>();
+        checkproject = true;
     }
     
     public final String areParametersValid(Map<String, String> parameters) {
@@ -21,14 +27,33 @@ public abstract class AbstractCommand extends AbstractActionHandler {
                     !parameters.containsKey(key))
                 return "parameter.required";
         if (arguments.size() > 0)
-            for (String key : parameters.keySet())
+            for (String key : parameters.keySet()) {
                 if (!arguments.containsKey(key))
                     return "invalid.parameter";
+                if (!values.containsKey(key))
+                    continue;
+                if (!values.get(key).contains(parameters.get(key)))
+                    return "invalid.value";
+            }
         return null;
     }
     
-    protected final void optional(String name) {
+    public final String isValidContext(Context extcontext) {
+        if (checkproject && (extcontext.project == null))
+            return "undefined.project";
+        return null;
+    }
+    
+    protected final void optional(String name, String... options) {
+        Set<String> test;
+        
         arguments.put(name, OPTIONAL);
+        if ((options == null) || (options.length == 0))
+            return;
+        test = new HashSet<>();
+        values.put(name, test);
+        for (String option : options)
+            test.add(option);
     }
     
     protected final void print(String text, Object... args) {
