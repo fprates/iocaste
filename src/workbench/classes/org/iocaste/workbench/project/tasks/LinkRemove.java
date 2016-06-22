@@ -18,14 +18,8 @@ public class LinkRemove extends AbstractCommand {
         ExtendedObject object;
         ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
-        
-        if (extcontext.project == null) {
-            message(Const.ERROR, "undefined.project");
-            return;
-        }
 
         name = parameters.get("name");
-        
         objects = extcontext.project.getItems("link");
         object = readobjects(objects, "NAME", name);
         if (object == null) {

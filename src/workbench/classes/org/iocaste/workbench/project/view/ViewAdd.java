@@ -22,11 +22,6 @@ public class ViewAdd extends AbstractCommand {
         String name, project;
         Context extcontext = getExtendedContext();
         
-        if (extcontext.project == null) {
-            message(Const.ERROR, "undefined.project");
-            return;
-        }
-        
         name = parameters.get("name");
         project = extcontext.project.getstKey();
         view = getView(extcontext.project, name);

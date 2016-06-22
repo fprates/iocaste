@@ -20,11 +20,6 @@ public class LinkAdd extends AbstractCommand {
         ExtendedObject object;
         ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
-        
-        if (extcontext.project == null) {
-            message(Const.ERROR, "undefined.project");
-            return;
-        }
 
         name = parameters.get("name");
         command = parameters.get("command");

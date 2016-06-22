@@ -11,6 +11,7 @@ public class ProjectAdd extends AbstractCommand {
         required("name");
         required("profile");
         optional("text");
+        checkproject = false;
     }
     
     @Override

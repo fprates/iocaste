@@ -10,6 +10,7 @@ public class ProjectUse extends AbstractCommand {
 
     public ProjectUse() {
         required("name");
+        checkproject = false;
     }
     
     @Override
