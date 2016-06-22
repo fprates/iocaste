@@ -10,13 +10,15 @@ public class LinkAdd extends AbstractCommand {
 
     public LinkAdd() {
         required("name");
-        required("program");
+        required("command");
+        optional("group");
     }
     
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        String name, program;
+        String name, command, group;
         ExtendedObject object;
+        ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
         
         if (extcontext.project == null) {
@@ -25,14 +27,23 @@ public class LinkAdd extends AbstractCommand {
         }
 
         name = parameters.get("name");
-        program = parameters.get("program");
+        command = parameters.get("command");
+        group = parameters.get("group");
+        
+        objects = extcontext.project.getItems("link");
+        object = readobjects(objects, "NAME", name);
+        if (object != null) {
+            message(Const.ERROR, "link %s already exists.", name);
+            return;
+        }
         
         object = extcontext.project.instance("link");
         object.set("NAME", name);
-        object.set("COMMAND", program);
+        object.set("COMMAND", command);
         object.set("PROJECT", extcontext.project.getstKey());
+        object.set("GROUP", group);
         save("project", extcontext.project);
-        extcontext.output.add(String.format("link %s created.", name));
+        print("link %s updated.", name);
     }
 
 }

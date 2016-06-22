@@ -13,7 +13,12 @@ import org.iocaste.workbench.Context;
 
 public class Compile extends AbstractCommand {
     private CompileData data;
-
+    private static final String[][] NAMES = {
+            {"name", "NAME"},
+            {"command", "COMMAND"},
+            {"group", "GROUP"}
+    };
+    
     public Compile() {
         optional("project");
         data = new CompileData();
@@ -90,7 +95,7 @@ public class Compile extends AbstractCommand {
     
     private final XMLElement createInstall(CompileData data) {
         ExtendedObject[] objects;
-        XMLElement link, linkname, linkprogram, profile;
+        XMLElement link, linkitem, profile;
         XMLElement install = new XMLElement("install");
         XMLElement links = new XMLElement("links");
 
@@ -104,12 +109,11 @@ public class Compile extends AbstractCommand {
             install.addChild(links);
             for (ExtendedObject object : objects) {
                 link = new XMLElement("link");
-                linkname = new XMLElement("name");
-                linkname.addInner(object.getst("NAME"));
-                link.addChild(linkname);
-                linkprogram = new XMLElement("program");
-                linkprogram.addInner(object.getst("COMMAND"));
-                link.addChild(linkprogram);
+                for (int i = 0; i < NAMES.length; i++) {
+                    linkitem = new XMLElement(NAMES[i][0]);
+                    linkitem.addInner(object.getst(NAMES[i][1]));
+                    link.addChild(linkitem);
+                }
                 links.addChild(link);
             }
         }

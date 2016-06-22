@@ -17,7 +17,7 @@ public class ProjectInstall extends AbstractInstallObject {
         DataElement projectname, projectscreen, text, screenname, modelname;
         DataElement screenspecitemid, screenspecitemname, projectmodel;
         DataElement modelitemid, modelitemname, typeid, typetext, command;
-        DataElement modelitemlength, screenitemtype, linkid, linkname;
+        DataElement modelitemlength, screenitemtype, linkid, linkname, groupid;
         ModelInstall model;
         ComplexModelInstall cmodel;
         DocumentModelItem project, screen, modelid, datatype;
@@ -40,6 +40,7 @@ public class ProjectInstall extends AbstractInstallObject {
         linkid = elementchar("WB_LINK_ID", 50, true);
         linkname = new DummyElement("TASKS.NAME");
         command = new DummyElement("TASKS.COMMAND");
+        groupid = new DummyElement("TASKS_GROUPS.NAME");
         
         /*
          * Tipos de dados
@@ -150,6 +151,8 @@ public class ProjectInstall extends AbstractInstallObject {
                 "NAME", "LNKNM", linkname);
         model.item(
                 "COMMAND", "CMMND", command);
+        model.item(
+                "GROUP", "GRPID", groupid);
         
         /*
          * project document

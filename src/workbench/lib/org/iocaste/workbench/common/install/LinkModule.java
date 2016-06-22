@@ -11,7 +11,10 @@ public class LinkModule extends AbstractInstallModule {
     @Override
     protected final void execute(ConversionResult map) {
         String name = map.getst("install.links.link.name");
-        String program = map.getst("install.links.link.program");
+        String program = map.getst("install.links.link.command");
+        String group = map.getst("install.links.link.group");
         modulectx.defaultinstall.setLink(name, program);
+        if (group != null)
+            modulectx.defaultinstall.addToTaskGroup(group, name);
     }
 }
