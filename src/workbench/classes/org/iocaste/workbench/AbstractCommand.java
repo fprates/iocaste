@@ -38,6 +38,11 @@ public abstract class AbstractCommand extends AbstractActionHandler {
         return null;
     }
     
+    protected final boolean getBooleanParameter(String name) {
+        String value = parameters.get(name);
+        return (value == null)? false : Boolean.parseBoolean(value);
+    }
+    
     public final String isValidContext(Context extcontext) {
         if (checkproject && (extcontext.project == null))
             return "undefined.project";

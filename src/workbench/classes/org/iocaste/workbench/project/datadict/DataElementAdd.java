@@ -35,7 +35,7 @@ public class DataElementAdd extends AbstractCommand {
     
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        String name, upcase;
+        String name;
         ExtendedObject object;
         ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
@@ -48,15 +48,13 @@ public class DataElementAdd extends AbstractCommand {
             return;
         }
         
-        upcase = parameters.get("upcase");
         object = extcontext.project.instance("dataelement");
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("NAME", name);
         object.set("TYPE", types.get(parameters.get("type")));
         object.set("SIZE", parameters.get("size"));
         object.set("DECIMALS", parameters.get("decimals"));
-        object.set("UPCASE",
-                (upcase == null)? false : Boolean.parseBoolean(upcase));
+        object.set("UPCASE", getBooleanParameter("upcase"));
         save("project", extcontext.project);
         print("data element %s updated.", name);
     }
