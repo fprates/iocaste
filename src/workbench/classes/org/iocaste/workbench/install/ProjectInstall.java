@@ -14,8 +14,8 @@ public class ProjectInstall extends AbstractInstallObject {
     protected void execute(StandardInstallContext context) throws Exception {
         DataElement projectname, projectscreen, text, screenname, modelname;
         DataElement screenspecitemid, screenspecitemname, projectmodel;
-        DataElement modelitemid, modelitemname, command, modeltable;
-        DataElement screenitemtype, linkid, linkname, groupid;
+        DataElement modelitemid, modelitemname, command, modeltable, modelkey;
+        DataElement screenitemtype, linkid, linkname, groupid, tableitemname;
         DataElement profile, deid, dename, detype, desize, dedec, deupcase;
         ModelInstall model;
         ComplexModelInstall cmodel;
@@ -29,10 +29,12 @@ public class ProjectInstall extends AbstractInstallObject {
         screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, true);
         screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
         projectmodel = elementchar("WB_PROJECT_MODEL", 35, true);
-        modelname = elementchar("WB_MODEL_NAME", 24, true);
+        modelname = new DummyElement("MODEL.NAME");
         modeltable = new DummyElement("MODEL.TABLE");
         modelitemid = elementchar("WB_MODEL_ITEM", 38, true);
         modelitemname = elementchar("WB_MODEL_ITEM_NAME", 24, true);
+        modelkey = elementbool("WB_BOOLEAN");
+        tableitemname = new DummyElement("MODELITEM.FIELDNAME");
         linkid = elementchar("WB_LINK_ID", 50, true);
         linkname = new DummyElement("TASKS.NAME");
         command = new DummyElement("TASKS.COMMAND");
@@ -133,9 +135,13 @@ public class ProjectInstall extends AbstractInstallObject {
         model.reference(
                 "MODEL", "MDLID", modelid);
         model.item(
-                "NAME", "MDLNM", modelitemname);
+                "NAME", "ITMNM", modelitemname);
+        model.item(
+                "FIELD", "FLDNM", tableitemname);
         model.reference(
                 "DATA_ELEMENT", "DTELM", dataelementid);
+        model.item(
+                "KEY", "MDKEY", modelkey);
         
         /*
          * Links

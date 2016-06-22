@@ -15,6 +15,7 @@ import org.iocaste.workbench.project.ProjectUse;
 import org.iocaste.workbench.project.compile.Compile;
 import org.iocaste.workbench.project.datadict.DataElementAdd;
 import org.iocaste.workbench.project.datadict.ModelAdd;
+import org.iocaste.workbench.project.datadict.ModelItemAdd;
 import org.iocaste.workbench.project.tasks.LinkAdd;
 import org.iocaste.workbench.project.tasks.LinkRemove;
 import org.iocaste.workbench.project.view.ViewAdd;
@@ -23,7 +24,7 @@ import org.iocaste.workbench.project.view.ViewSpecAdd;
 public class Context extends AbstractExtendedContext {
     public Map<String, AbstractCommand> commands;
     public List<String> output;
-    public ComplexDocument project;
+    public ComplexDocument project, model;
     
     public Context(PageBuilderContext context) {
         super(context);
@@ -36,6 +37,7 @@ public class Context extends AbstractExtendedContext {
         commands.put("link-add", new LinkAdd());
         commands.put("link-remove", new LinkRemove());
         commands.put("model-add", new ModelAdd());
+        commands.put("model-item-add", new ModelItemAdd());
         commands.put("project-add", new ProjectAdd());
         commands.put("project-list", new ProjectList());
         commands.put("project-use", new ProjectUse());
