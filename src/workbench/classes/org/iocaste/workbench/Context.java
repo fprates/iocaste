@@ -16,6 +16,7 @@ import org.iocaste.workbench.project.compile.Compile;
 import org.iocaste.workbench.project.datadict.DataElementAdd;
 import org.iocaste.workbench.project.datadict.ModelAdd;
 import org.iocaste.workbench.project.datadict.ModelItemAdd;
+import org.iocaste.workbench.project.datadict.ModelUse;
 import org.iocaste.workbench.project.tasks.LinkAdd;
 import org.iocaste.workbench.project.tasks.LinkRemove;
 import org.iocaste.workbench.project.view.ViewAdd;
@@ -37,6 +38,7 @@ public class Context extends AbstractExtendedContext {
         commands.put("link-add", new LinkAdd());
         commands.put("link-remove", new LinkRemove());
         commands.put("model-add", new ModelAdd());
+        commands.put("model-use", new ModelUse());
         commands.put("model-item-add", new ModelItemAdd());
         commands.put("project-add", new ProjectAdd());
         commands.put("project-list", new ProjectList());
