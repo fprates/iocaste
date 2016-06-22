@@ -3,7 +3,7 @@ package org.iocaste.protocol.utils;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public class XMLElement implements Serializable {
     public XMLElement(String name) {
         this.name = name;
         elements = new ArrayList<>();
-        attributes = new HashMap<>();
+        attributes = new LinkedHashMap<>();
         inner = new ArrayList<>();
     }
     
@@ -72,6 +72,28 @@ public class XMLElement implements Serializable {
             inner.add(line);
     }
     
+    public final String get(String attribute) {
+        return attributes.get(attribute);
+    }
+    
+    public final List<XMLElement> getChildren() {
+        return elements;
+    }
+    
+    public final String getName() {
+        return name;
+    }
+    
+    public final String getText() {
+        StringBuilder sb = new StringBuilder();
+        for (String line : inner) {
+            sb.append(line);
+            if (linebreak)
+                sb.append("\n");
+        }
+        return sb.toString();
+    }
+    
     public final void head(String head) {
         this.head = head;
     }
@@ -84,6 +106,7 @@ public class XMLElement implements Serializable {
      * (non-Javadoc)
      * @see java.lang.Object#toString()
      */
+    @Override
     public final String toString() {
         StringBuilder sb = new StringBuilder();
         
@@ -103,12 +126,7 @@ public class XMLElement implements Serializable {
         for (XMLElement element : elements)
             sb.append(element.toString());
         
-        for (String line : inner) {
-            sb.append(line);
-            if (linebreak)
-                sb.append("\n");
-        }
-        
+        sb.append(getText());
         sb.append("</").append(name).append(">\n");
         
         return sb.toString();
