@@ -31,6 +31,14 @@ public abstract class AbstractCommand extends AbstractActionHandler {
         arguments.put(name, OPTIONAL);
     }
     
+    protected final void print(String text, Object... args) {
+        Context extcontext = getExtendedContext();
+        if (args == null)
+            extcontext.output.add(text);
+        else
+            extcontext.output.add(String.format(text, args));
+    }
+    
     protected final void required(String name) {
         arguments.put(name, REQUIRED);
     }
