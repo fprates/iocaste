@@ -18,7 +18,7 @@ public class ProjectInstall extends AbstractInstallObject {
         DataElement screenspecitemid, screenspecitemname, projectmodel;
         DataElement modelitemid, modelitemname, typeid, typetext, command;
         DataElement modelitemlength, screenitemtype, linkid, linkname, groupid;
-        DataElement profile;
+        DataElement profile, deid, dename, detype, desize, dedec, deupcase;
         ModelInstall model;
         ComplexModelInstall cmodel;
         DocumentModelItem project, screen, modelid, datatype;
@@ -43,6 +43,12 @@ public class ProjectInstall extends AbstractInstallObject {
         command = new DummyElement("TASKS.COMMAND");
         groupid = new DummyElement("TASKS_GROUPS.NAME");
         profile = new DummyElement("USER_PROFILE.NAME");
+        deid = elementchar("WB_DEL_ID", 80, true);
+        dename = new DummyElement("DATAELEMENT.NAME");
+        detype = new DummyElement("DATAELEMENT.DECIMALS");
+        desize = new DummyElement("DATAELEMENT.LENGTH");
+        dedec = new DummyElement("DATAELEMENT.TYPE");
+        deupcase = new DummyElement("DATAELEMENT.UPCASE");
         
         /*
          * Tipos de dados
@@ -159,6 +165,26 @@ public class ProjectInstall extends AbstractInstallObject {
                 "GROUP", "GRPID", groupid);
         
         /*
+         * data elements
+         */
+        model = tag("data_elements", modelInstance(
+                "WB_DATA_ELEMENTS", "WBDATAELEMENTS"));
+        model.key(
+                "DE_ID", "DELID", deid);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.item(
+                "NAME", "DELNM", dename);
+        model.item(
+                "TYPE", "DELTY", detype);
+        model.item(
+                "SIZE", "DELEN", desize);
+        model.item(
+                "DECIMALS", "DEDEC", dedec);
+        model.item(
+                "UPCASE", "DEUPC", deupcase);
+        
+        /*
          * project document
          */
         cmodel = cmodelInstance("WB_PROJECT");
@@ -168,5 +194,6 @@ public class ProjectInstall extends AbstractInstallObject {
         cmodel.item("model", "models");
         cmodel.item("model_item", "models_items");
         cmodel.item("link", "links");
+        cmodel.item("dataelement", "data_elements");
     }
 }

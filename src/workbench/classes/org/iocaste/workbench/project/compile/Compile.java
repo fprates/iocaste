@@ -1,27 +1,40 @@
 package org.iocaste.workbench.project.compile;
 
+import java.util.Locale;
+
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.DataElement;
+import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Iocaste;
 import org.iocaste.protocol.files.Directory;
 import org.iocaste.protocol.files.DirectoryInstance;
 import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.Const;
+import org.iocaste.shell.common.Shell;
 import org.iocaste.workbench.AbstractCommand;
 import org.iocaste.workbench.Context;
 
 public class Compile extends AbstractCommand {
     private CompileData data;
-    private static final String[][] NAMES = {
+    private static final String[][] LINK = {
             {"name", "NAME"},
             {"command", "COMMAND"},
             {"group", "GROUP"}
+    };
+    private static final String[][] DE = {
+            {"name", "NAME"},
+            {"type", "TYPE"},
+            {"length", "SIZE"},
+            {"decimals", "DECIMALS"},
+            {"upcase", "UPCASE"}
     };
     
     public Compile() {
         optional("project");
         data = new CompileData();
+        checkproject = false;
     }
   
     private final XMLElement createWebXML(CompileData data) {
@@ -95,10 +108,10 @@ public class Compile extends AbstractCommand {
     
     private final XMLElement createInstall(CompileData data) {
         ExtendedObject[] objects;
-        XMLElement link, linkitem, profile;
+        XMLElement profile, links, elements;
         XMLElement install = new XMLElement("install");
-        XMLElement links = new XMLElement("links");
-
+        Locale locale = data.context.view.getLocale();
+        
         install.head("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         profile = new XMLElement("profile");
         profile.addInner(data.extcontext.project.getHeader().getst("PROFILE"));
@@ -106,18 +119,18 @@ public class Compile extends AbstractCommand {
         
         objects = data.extcontext.project.getItems("link");
         if (objects != null) {
+            links = new XMLElement("links");
             install.addChild(links);
-            for (ExtendedObject object : objects) {
-                link = new XMLElement("link");
-                for (int i = 0; i < NAMES.length; i++) {
-                    linkitem = new XMLElement(NAMES[i][0]);
-                    linkitem.addInner(object.getst(NAMES[i][1]));
-                    link.addChild(linkitem);
-                }
-                links.addChild(link);
-            }
+            itemInstall(links, objects, "link", LINK, locale);
         }
-            
+        
+        objects = data.extcontext.project.getItems("dataelement");
+        if (objects != null) {
+            elements = new XMLElement("elements");
+            install.addChild(elements);
+            itemInstall(elements, objects, "element", DE, locale);
+        }
+        
         return install;
     }
     
@@ -179,6 +192,26 @@ public class Compile extends AbstractCommand {
         message(Const.STATUS, "project.compiled");
     }
 
+    private void itemInstall(XMLElement parent, ExtendedObject[] objects,
+            String name, String[][] fields, Locale locale) {
+        XMLElement line, item;
+        Object value;
+        DocumentModel model;
+        DataElement de;
+        
+        for (ExtendedObject object : objects) {
+            model = object.getModel();
+            line = new XMLElement(name);
+            for (int i = 0; i < fields.length; i++) {
+                value = object.get(fields[i][1]);
+                de = model.getModelItem(fields[i][1]).getDataElement();
+                item = new XMLElement(fields[i][0]);
+                item.addInner(Shell.toString(value, de, locale, false));
+                line.addChild(item);
+            }
+            parent.addChild(line);
+        }
+    }
 }
 
 class CompileData {
