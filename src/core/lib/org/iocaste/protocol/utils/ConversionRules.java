@@ -14,8 +14,8 @@ public class ConversionRules implements Serializable {
         types = new HashMap<>();
     }
     
-    public final void addItems(String itemselement, String itemelement) {
-        items.put(itemselement, itemelement);
+    public final void add(String parent, String child) {
+        items.put(parent, child);
     }
     
     public final Map<String, String> getItems() {

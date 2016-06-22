@@ -94,9 +94,11 @@ public class Convesion {
         if ((rules != null) && (name != null)) {
             items = rules.getItems();
             if (items.containsKey(name)) {
-                itemslist = new ArrayList<>();
-                map.set(name, itemslist);
                 itemname = items.get(name);
+                if (itemname != null) {
+                    itemslist = new ArrayList<>();
+                    map.set(name, itemslist);
+                }
             }
         }
         
