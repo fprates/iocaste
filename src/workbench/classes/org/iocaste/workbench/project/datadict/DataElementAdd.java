@@ -37,25 +37,23 @@ public class DataElementAdd extends AbstractCommand {
     protected void execute(PageBuilderContext context) throws Exception {
         String name;
         ExtendedObject object;
-        ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
         
         name = parameters.get("name");
-        objects = extcontext.project.getItems("dataelement");
-        object = readobjects(objects, "NAME", name);
+        object = getObject("WB_DATA_ELEMENTS", name);
         if (object != null) {
             message(Const.ERROR, "data element %s already exists.", name);
             return;
         }
         
-        object = extcontext.project.instance("dataelement");
+        object = instance("WB_DATA_ELEMENTS");
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("NAME", name);
         object.set("TYPE", types.get(parameters.get("type")));
         object.set("SIZE", parameters.get("size"));
         object.set("DECIMALS", parameters.get("decimals"));
         object.set("UPCASE", getBooleanParameter("upcase"));
-        save("project", extcontext.project);
+        save(object);
         print("data element %s updated.", name);
     }
 

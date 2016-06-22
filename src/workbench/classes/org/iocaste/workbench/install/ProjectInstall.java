@@ -13,10 +13,10 @@ public class ProjectInstall extends AbstractInstallObject {
     @Override
     protected void execute(StandardInstallContext context) throws Exception {
         DataElement projectname, projectscreen, text, screenname, modelname;
-        DataElement screenspecitemid, screenspecitemname, projectmodel;
+        DataElement screenspecitemid, screenspecitemname;
         DataElement modelitemid, modelitemname, command, modeltable, modelkey;
         DataElement screenitemtype, linkid, linkname, groupid, tableitemname;
-        DataElement profile, deid, dename, detype, desize, dedec, deupcase;
+        DataElement profile, dename, detype, desize, dedec, deupcase;
         ModelInstall model;
         ComplexModelInstall cmodel;
         DocumentModelItem project, screen, modelid, dataelementid;
@@ -28,7 +28,6 @@ public class ProjectInstall extends AbstractInstallObject {
         screenspecitemid = elementchar("WB_SCREEN_SPEC_ITEM", 38, true);
         screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, true);
         screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
-        projectmodel = elementchar("WB_PROJECT_MODEL", 35, true);
         modelname = new DummyElement("MODEL.NAME");
         modeltable = new DummyElement("MODEL.TABLE");
         modelitemid = elementchar("WB_MODEL_ITEM", 38, true);
@@ -40,7 +39,6 @@ public class ProjectInstall extends AbstractInstallObject {
         command = new DummyElement("TASKS.COMMAND");
         groupid = new DummyElement("TASKS_GROUPS.NAME");
         profile = new DummyElement("USER_PROFILE.NAME");
-        deid = elementchar("WB_DEL_ID", 80, true);
         dename = new DummyElement("DATAELEMENT.NAME");
         detype = new DummyElement("DATAELEMENT.DECIMALS");
         desize = new DummyElement("DATAELEMENT.LENGTH");
@@ -90,60 +88,6 @@ public class ProjectInstall extends AbstractInstallObject {
                 "TYPE", "ITTYP", screenitemtype);
         
         /*
-         * data elements
-         */
-        model = tag("data_elements", modelInstance(
-                "WB_DATA_ELEMENTS", "WBDATAELEMENTS"));
-        dataelementid = model.key(
-                "DE_ID", "DELID", deid);
-        model.reference(
-                "PROJECT", "PRJNM", project);
-        model.item(
-                "NAME", "DELNM", dename);
-        model.item(
-                "TYPE", "DELTY", detype);
-        model.item(
-                "SIZE", "DELEN", desize);
-        model.item(
-                "DECIMALS", "DEDEC", dedec);
-        model.item(
-                "UPCASE", "DEUPC", deupcase);
-        
-        /*
-         * model header
-         */
-        model = tag("models", modelInstance(
-                "WB_MODEL_HEADER", "WBMODELHD"));
-        modelid = model.key(
-                "MODEL_ID", "MDLID", projectmodel);
-        model.reference(
-                "PROJECT", "PRJNM", project);
-        model.item(
-                "NAME", "MDLNM", modelname);
-        model.item(
-                "TABLE", "MDLTB", modeltable);
-        
-        /*
-         * model item
-         */
-        model = tag("models_items", modelInstance(
-                "WB_MODEL_ITEMS", "WBMODELIT"));
-        model.key(
-                "ITEM_ID", "ITMID", modelitemid);
-        model.reference(
-                "PROJECT", "PRJNM", project);
-        model.reference(
-                "MODEL", "MDLID", modelid);
-        model.item(
-                "NAME", "ITMNM", modelitemname);
-        model.item(
-                "FIELD", "FLDNM", tableitemname);
-        model.reference(
-                "DATA_ELEMENT", "DTELM", dataelementid);
-        model.item(
-                "KEY", "MDKEY", modelkey);
-        
-        /*
          * Links
          */
         model = tag("links", modelInstance(
@@ -166,12 +110,60 @@ public class ProjectInstall extends AbstractInstallObject {
         cmodel.header("header");
         cmodel.item("screen", "screens");
         cmodel.item("screen_spec_item", "screen_spec_items");
-        cmodel.item("dataelement", "data_elements");
-        cmodel.item("model", "models");
         cmodel.item("link", "links");
         
+        /*
+         * data elements
+         */
+        model = modelInstance(
+                "WB_DATA_ELEMENTS", "WBDATAELEMENTS");
+        dataelementid = model.key(
+                "NAME", "DELNM", dename);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.item(
+                "TYPE", "DELTY", detype);
+        model.item(
+                "SIZE", "DELEN", desize);
+        model.item(
+                "DECIMALS", "DEDEC", dedec);
+        model.item(
+                "UPCASE", "DEUPC", deupcase);
+        
+        /*
+         * model header
+         */
+        model = tag("model_head", modelInstance(
+                "WB_MODEL_HEADER", "WBMODELHD"));
+        modelid = model.key(
+                "NAME", "MDLNM", modelname);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.item(
+                "TABLE", "MDLTB", modeltable);
+        
+        /*
+         * model item
+         */
+        model = tag("model_item", modelInstance(
+                "WB_MODEL_ITEMS", "WBMODELIT"));
+        model.key(
+                "ITEM_ID", "ITMID", modelitemid);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.reference(
+                "MODEL", "MDLID", modelid);
+        model.item(
+                "NAME", "ITMNM", modelitemname);
+        model.item(
+                "FIELD", "FLDNM", tableitemname);
+        model.reference(
+                "DATA_ELEMENT", "DTELM", dataelementid);
+        model.item(
+                "KEY", "MDKEY", modelkey);
+        
         cmodel = cmodelInstance("WB_MODELS");
-        cmodel.header("models");
-        cmodel.item("item", "models_items");
+        cmodel.header("model_head");
+        cmodel.item("item", "model_item");
     }
 }
