@@ -5,10 +5,8 @@ import org.iocaste.appbuilder.common.ComplexModelInstall;
 import org.iocaste.appbuilder.common.ModelInstall;
 import org.iocaste.appbuilder.common.StandardInstallContext;
 import org.iocaste.documents.common.DataElement;
-import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DummyElement;
-import org.iocaste.packagetool.common.SearchHelpData;
 
 public class ProjectInstall extends AbstractInstallObject {
 
@@ -16,13 +14,12 @@ public class ProjectInstall extends AbstractInstallObject {
     protected void execute(StandardInstallContext context) throws Exception {
         DataElement projectname, projectscreen, text, screenname, modelname;
         DataElement screenspecitemid, screenspecitemname, projectmodel;
-        DataElement modelitemid, modelitemname, typeid, typetext, command;
-        DataElement modelitemlength, screenitemtype, linkid, linkname, groupid;
+        DataElement modelitemid, modelitemname, command, modeltable;
+        DataElement screenitemtype, linkid, linkname, groupid;
         DataElement profile, deid, dename, detype, desize, dedec, deupcase;
         ModelInstall model;
         ComplexModelInstall cmodel;
-        DocumentModelItem project, screen, modelid, datatype;
-        SearchHelpData shd;
+        DocumentModelItem project, screen, modelid, dataelementid;
 
         projectname = elementchar("WB_PROJECT_NAME", 32, true);
         text = elementchar("WB_TEXT", 32, false);
@@ -33,11 +30,9 @@ public class ProjectInstall extends AbstractInstallObject {
         screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
         projectmodel = elementchar("WB_PROJECT_MODEL", 35, true);
         modelname = elementchar("WB_MODEL_NAME", 24, true);
+        modeltable = new DummyElement("MODEL.TABLE");
         modelitemid = elementchar("WB_MODEL_ITEM", 38, true);
         modelitemname = elementchar("WB_MODEL_ITEM_NAME", 24, true);
-        modelitemlength = elementnumc("WB_MODEL_ITEM_LENGTH", 4);
-        typeid = elementnumc("WB_TYPE_ID", 2);
-        typetext = elementchar("WB_TYPE_TEXT", 16, false);
         linkid = elementchar("WB_LINK_ID", 50, true);
         linkname = new DummyElement("TASKS.NAME");
         command = new DummyElement("TASKS.COMMAND");
@@ -49,32 +44,6 @@ public class ProjectInstall extends AbstractInstallObject {
         desize = new DummyElement("DATAELEMENT.LENGTH");
         dedec = new DummyElement("DATAELEMENT.TYPE");
         deupcase = new DummyElement("DATAELEMENT.UPCASE");
-        
-        /*
-         * Tipos de dados
-         */
-        model = modelInstance(
-                "WB_DATA_TYPE", "WBMDLITTP");
-        datatype = model.key(
-                "TYPE", "TYPID", typeid);
-        model.item(
-                "TEXT", "TYPTX", typetext);
-        
-        model.values(DataType.CHAR, "Caracter");
-        model.values(DataType.DATE, "Data");
-        model.values(DataType.DEC, "Decimal");
-        model.values(DataType.NUMC, "Numerico inteiro");
-        model.values(DataType.TIME, "Hora");
-        model.values(DataType.BOOLEAN, "Booleano");
-        model.values(DataType.BYTE, "Byte integer");
-        model.values(DataType.INT, "Integer");
-        model.values(DataType.LONG, "Long integer");
-        model.values(DataType.SHORT, "Short integer");
-        
-        shd = searchHelpInstance("WB_SH_TYPE_ID", "WB_DATA_TYPE");
-        shd.setExport("TYPE");
-        shd.add("TYPE");
-        shd.add("TEXT");
         
         /*
          * project header
@@ -119,16 +88,38 @@ public class ProjectInstall extends AbstractInstallObject {
                 "TYPE", "ITTYP", screenitemtype);
         
         /*
-         * model header
+         * data elements
          */
-        model = tag("models", modelInstance(
-                "WB_PROJECT_MODELS", "WBPRJCTMDL"));
-        modelid = model.key(
-                "PROJECT_MODEL", "MDLID", projectmodel);
+        model = tag("data_elements", modelInstance(
+                "WB_DATA_ELEMENTS", "WBDATAELEMENTS"));
+        dataelementid = model.key(
+                "DE_ID", "DELID", deid);
         model.reference(
                 "PROJECT", "PRJNM", project);
         model.item(
-                "MODEL_NAME", "MDLNM", modelname);
+                "NAME", "DELNM", dename);
+        model.item(
+                "TYPE", "DELTY", detype);
+        model.item(
+                "SIZE", "DELEN", desize);
+        model.item(
+                "DECIMALS", "DEDEC", dedec);
+        model.item(
+                "UPCASE", "DEUPC", deupcase);
+        
+        /*
+         * model header
+         */
+        model = tag("models", modelInstance(
+                "WB_MODEL_HEADER", "WBMODELHD"));
+        modelid = model.key(
+                "MODEL_ID", "MDLID", projectmodel);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.item(
+                "NAME", "MDLNM", modelname);
+        model.item(
+                "TABLE", "MDLTB", modeltable);
         
         /*
          * model item
@@ -143,10 +134,8 @@ public class ProjectInstall extends AbstractInstallObject {
                 "MODEL", "MDLID", modelid);
         model.item(
                 "NAME", "MDLNM", modelitemname);
-        searchhelp(model.item(
-                "TYPE", "MDLTY", datatype), "WB_SH_TYPE_ID");
-        model.item(
-                "LENGTH", "LNGTH", modelitemlength);
+        model.reference(
+                "DATA_ELEMENT", "DTELM", dataelementid);
         
         /*
          * Links
@@ -165,35 +154,18 @@ public class ProjectInstall extends AbstractInstallObject {
                 "GROUP", "GRPID", groupid);
         
         /*
-         * data elements
-         */
-        model = tag("data_elements", modelInstance(
-                "WB_DATA_ELEMENTS", "WBDATAELEMENTS"));
-        model.key(
-                "DE_ID", "DELID", deid);
-        model.reference(
-                "PROJECT", "PRJNM", project);
-        model.item(
-                "NAME", "DELNM", dename);
-        model.item(
-                "TYPE", "DELTY", detype);
-        model.item(
-                "SIZE", "DELEN", desize);
-        model.item(
-                "DECIMALS", "DEDEC", dedec);
-        model.item(
-                "UPCASE", "DEUPC", deupcase);
-        
-        /*
          * project document
          */
         cmodel = cmodelInstance("WB_PROJECT");
         cmodel.header("header");
         cmodel.item("screen", "screens");
         cmodel.item("screen_spec_item", "screen_spec_items");
-        cmodel.item("model", "models");
-        cmodel.item("model_item", "models_items");
-        cmodel.item("link", "links");
         cmodel.item("dataelement", "data_elements");
+        cmodel.item("model", "models");
+        cmodel.item("link", "links");
+        
+        cmodel = cmodelInstance("WB_MODELS");
+        cmodel.header("models");
+        cmodel.item("item", "models_items");
     }
 }
