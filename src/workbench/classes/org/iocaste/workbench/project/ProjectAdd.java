@@ -9,6 +9,7 @@ public class ProjectAdd extends AbstractCommand {
 
     public ProjectAdd() {
         required("name");
+        required("profile");
         optional("text");
     }
     
@@ -18,6 +19,7 @@ public class ProjectAdd extends AbstractCommand {
         
         project = getManager("project").instance();
         project.set("PROJECT_NAME", parameters.get("name"));
+        project.set("PROFILE", parameters.get("profile"));
         project.set("TEXT", parameters.get("text"));
         save("project", project);
         message(Const.STATUS, "project.created");

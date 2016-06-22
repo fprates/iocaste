@@ -5,22 +5,26 @@ import org.iocaste.protocol.utils.ConversionResult;
 public abstract class AbstractInstallModule implements InstallModule {
     protected ModuleContext modulectx;
     private ConversionResult converted;
-    private String tag;
+    private String tag, item;
     
     public AbstractInstallModule(ModuleContext modulectx, String tag,
             String item) {
         this.tag = tag;
         this.modulectx = modulectx;
+        this.item = item;
         modulectx.modules.put(tag, this);
-        modulectx.mapping.addItems(tag, item);
+        modulectx.mapping.add(tag, item);
     }
     
     protected abstract void execute(ConversionResult map);
     
     @Override
     public final void run() {
-        for (ConversionResult map : converted.getList(tag))
-            execute(map);
+        if (item == null)
+            execute(converted);
+        else
+            for (ConversionResult map : converted.getList(tag))
+                execute(map);
     }
     
     @Override

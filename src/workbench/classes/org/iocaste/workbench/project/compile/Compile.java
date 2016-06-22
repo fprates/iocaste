@@ -101,7 +101,7 @@ public class Compile extends AbstractCommand {
 
         install.head("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
         profile = new XMLElement("profile");
-        profile.addInner("DEVELOP");
+        profile.addInner(data.extcontext.project.getHeader().getst("PROFILE"));
         install.addChild(profile);
         
         objects = data.extcontext.project.getItems("link");

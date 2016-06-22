@@ -5,7 +5,7 @@ import org.iocaste.protocol.utils.ConversionResult;
 public class ProfileModule extends AbstractInstallModule {
     
     public ProfileModule(ModuleContext context) {
-        super(context, "install", "profile");
+        super(context, "install.profile", null);
     }
     
     protected final void execute(ConversionResult map) {
