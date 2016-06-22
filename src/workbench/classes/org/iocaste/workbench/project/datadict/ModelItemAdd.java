@@ -14,33 +14,46 @@ public class ModelItemAdd extends AbstractCommand {
         optional("data-element");
         optional("field");
         optional("reference");
+        
+        checkmodel = true;
     }
     
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        String name;
+        String name, model, dtel;
         ExtendedObject object;
         ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
         
         name = parameters.get("name");
-        objects = extcontext.project.getItems("model");
+        model = extcontext.model.getstKey();
+        objects = extcontext.model.getItems("item");
         object = readobjects(objects, "NAME", name);
         if (object != null) {
-            message(Const.ERROR, "item %s for model %s already exists.", name);
+            message(Const.ERROR, "item %s for model %s already exists.",
+                    name, model);
             return;
         }
         
-        object = extcontext.project.instance("model");
+        dtel = parameters.get("data-element");
+        if (dtel != null) {
+            object = getObject("WB_DATA_ELEMENTS", dtel);
+            if (object == null) {
+                message(Const.ERROR, "data element %s invalid.", dtel);
+                return;
+            }
+        }
+        
+        object = extcontext.model.instance("item");
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("NAME", name);
-        object.set("MODEL", extcontext.model.getstKey());
+        object.set("MODEL", model);
         object.set("NAME", parameters.get("name"));
         object.set("FIELD", parameters.get("field"));
-        object.set("DATA_ELEMENT", parameters.get("data-element"));
+        object.set("DATA_ELEMENT", dtel);
         object.set("KEY", getBooleanParameter("key"));
-        save("project", extcontext.project);
-        print("model %s updated.", name);
+        save("model", extcontext.model);
+        print("model item %s updated.", name);
     }
 
 }

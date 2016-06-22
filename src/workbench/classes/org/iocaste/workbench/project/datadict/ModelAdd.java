@@ -1,6 +1,7 @@
 package org.iocaste.workbench.project.datadict;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
@@ -16,23 +17,24 @@ public class ModelAdd extends AbstractCommand {
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         String name;
+        ComplexDocument document;
         ExtendedObject object;
-        ExtendedObject[] objects;
-        Context extcontext = getExtendedContext();
+        Context extcontext;
         
         name = parameters.get("name");
-        objects = extcontext.project.getItems("model");
-        object = readobjects(objects, "NAME", name);
-        if (object != null) {
+        document = getManager("model").get(name);
+        if (document != null) {
             message(Const.ERROR, "model %s already exists.", name);
             return;
         }
-        
-        object = extcontext.project.instance("model");
-        object.set("PROJECT", extcontext.project.getstKey());
+
+        extcontext = getExtendedContext();
+        document = getManager("model").instance();
+        object = document.getHeader();
         object.set("NAME", name);
+        object.set("PROJECT", extcontext.project.getstKey());
         object.set("TABLE", parameters.get("table"));
-        save("project", extcontext.project);
+        save("model", document);
         print("model %s updated.", name);
     }
 
