@@ -33,6 +33,7 @@ public class UpdateModel extends AbstractDocumentsHandler {
         namespaced = (statements.size() > 0);
         
         initial = true;
+        data.table.clear();
         for (DocumentModelKey key : data.model.getKeys()) {
             name = key.getModelItemName();
             
@@ -58,15 +59,25 @@ public class UpdateModel extends AbstractDocumentsHandler {
                     element.getLength());
             initial = false;
         }
-        
-        if (!initial)
-            data.altertable.compose(statements, data.table);
+
+        /*
+         * remove campos
+         */
+        if (oldmodel.getTableName() != null)
+            for (DocumentModelItem olditem : oldmodel.getItens()) {
+                if (data.model.contains(olditem))
+                    continue;
+                
+                if (olditem.getTableFieldName() == null)
+                    continue;
+                
+                data.table.drop(olditem.getTableFieldName());
+                initial = false;
+            }
         
         /*
          * atualiza campos
          */
-        data.table.clear();
-        initial = true;
         for (DocumentModelItem item : data.model.getItens()) {
             if (data.model.isKey(item))
                 continue;
@@ -94,27 +105,6 @@ public class UpdateModel extends AbstractDocumentsHandler {
         
         if (!initial)
             data.altertable.compose(statements, data.table);
-
-        /*
-         * remove campos
-         */
-        if (oldmodel.getTableName() != null) {
-            data.table.clear();
-            initial = true;
-            for (DocumentModelItem olditem : oldmodel.getItens()) {
-                if (data.model.contains(olditem))
-                    continue;
-                
-                if (olditem.getTableFieldName() == null)
-                    continue;
-                
-                data.table.drop(olditem.getTableFieldName());
-                initial = false;
-            }
-            
-            if (!initial)
-                data.altertable.compose(statements, data.table);
-        }
         
         for (String stmt : statements)
             update(data.connection, stmt);
