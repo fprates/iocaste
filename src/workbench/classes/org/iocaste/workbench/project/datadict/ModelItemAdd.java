@@ -20,7 +20,7 @@ public class ModelItemAdd extends AbstractCommand {
     
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
-        String name, model, dtel;
+        String name, model, dtel, table, field;
         ExtendedObject object;
         ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
@@ -44,12 +44,18 @@ public class ModelItemAdd extends AbstractCommand {
             }
         }
         
+        field = parameters.get("field");
+        table = extcontext.model.getHeader().getst("TABLE");
+        if ((field == null) && (table != null)) {
+            message(Const.ERROR, "field.name.required");
+            return;
+        }
+        
         object = extcontext.model.instance("item");
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("NAME", name);
         object.set("MODEL", model);
-        object.set("NAME", parameters.get("name"));
-        object.set("FIELD", parameters.get("field"));
+        object.set("FIELD", field);
         object.set("DATA_ELEMENT", dtel);
         object.set("KEY", getBooleanParameter("key"));
         save("model", extcontext.model);

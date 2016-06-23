@@ -1,10 +1,12 @@
 package org.iocaste.workbench.common.install;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.StandardInstallContext;
+import org.iocaste.documents.common.DataElement;
 import org.iocaste.protocol.Function;
 import org.iocaste.protocol.utils.ConversionRules;
 import org.iocaste.protocol.utils.XMLConversion;
@@ -15,10 +17,12 @@ public class ModuleContext {
     public ConversionRules mapping;
     public StandardInstallContext context;
     public PageBuilderDefaultInstall defaultinstall;
+    public Map<String, DataElement> elements;
     
     public ModuleContext(Function function) {
         modules = new LinkedHashMap<>();
         conversion = new XMLConversion(function);
         mapping = new ConversionRules();
+        elements = new HashMap<>();
     }
 }

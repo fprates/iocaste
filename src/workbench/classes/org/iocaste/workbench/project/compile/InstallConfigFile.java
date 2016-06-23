@@ -37,7 +37,7 @@ public class InstallConfigFile extends AbstractConfigFile {
     public InstallConfigFile(PageBuilderContext context) {
         super(context, "install");
         directory = "META-INF";
-        file = "install.txt";
+        file = "install.xml";
     }
 
     private void itemInstall(XMLElement parent, ExtendedObject[] objects,
@@ -66,7 +66,7 @@ public class InstallConfigFile extends AbstractConfigFile {
         Query query;
         String name;
         ExtendedObject[] objects;
-        XMLElement profile, links, elements, models;
+        XMLElement profile, links, elements, models, items;
         Locale locale = data.context.view.getLocale();
         
         profile = new XMLElement("profile");
@@ -112,7 +112,9 @@ public class InstallConfigFile extends AbstractConfigFile {
                 query.andEqual("MODEL", name);
                 query.andEqual("PROJECT", data.project);
                 objects = select(query);
-                itemInstall(model, objects, "item", MODEL_ITEM, locale);
+                items = new XMLElement("items");
+                model.addChild(items);
+                itemInstall(items, objects, "item", MODEL_ITEM, locale);
             }   
         }
     }
