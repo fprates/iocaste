@@ -77,24 +77,22 @@ public class GetViewData extends AbstractHandler {
             method.invoke(page);
         }
         
-        if ((context.messages.size() == 0) || (msgsource != null)) {
-            /*
-             * há alguma chance que getViewData() tenha sido chamada
-             * a partir de um ticket, que nesse caso teria a localização
-             * definida (provavelmente) apenas depois da chamada da visão.
-             */
-            if (locale == null) {
-                locale = iocaste.getLocale();
-                view.setLocale(locale);
-                for (Container container : view.getContainers())
-                    setLocaleForElement(container, view.getLocale());
-            }
-            
-            context.messages.loadFromApplication(
-                    view.getAppName(), locale, page);
-            if (msgsource != null)
-                context.messages.loadFromApplication(msgsource, locale, page);
+        /*
+         * há alguma chance que getViewData() tenha sido chamada
+         * a partir de um ticket, que nesse caso teria a localização
+         * definida (provavelmente) apenas depois da chamada da visão.
+         */
+        if (locale == null) {
+            locale = iocaste.getLocale();
+            view.setLocale(locale);
+            for (Container container : view.getContainers())
+                setLocaleForElement(container, view.getLocale());
         }
+        
+        context.messages.loadFromApplication(
+                view.getAppName(), locale, page);
+        if (msgsource != null)
+            context.messages.loadFromApplication(msgsource, locale, page);
         
         if (context.messages.size() > 0)
             fillTranslations(view, context);
