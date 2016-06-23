@@ -113,9 +113,8 @@ class GetStyleSheet extends AbstractHandler {
         
         style = stylesheet.newElement(".nc_nav_buttonbar");
         style.put("width", "100%");
-        style.put("border-top-style", "solid");
-        style.put("border-top-width", "2px");
-        style.put("border-top-color", FRAME_COLOR);
+        style.put("border-top-style", "none");
+        style.put("border-top-width", "0px");
         style.put("border-bottom-style", "solid");
         style.put("border-bottom-width", "2px");
         style.put("border-bottom-color", FRAME_COLOR);
