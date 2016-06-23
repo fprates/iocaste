@@ -117,6 +117,7 @@ public class StandardNavControlDesign implements NavControlDesign {
             options = new StandardContainer(loginitem, "options");
             options.setStyleClass("nc_login_menu");
             link = new Link(options, "logout", "logout");
+            link.setCancellable(true);
             
             viewctx = context.getView();
             viewctx.put("logout", new Logout());
