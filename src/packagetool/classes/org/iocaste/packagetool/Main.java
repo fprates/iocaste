@@ -26,6 +26,7 @@ public class Main extends AbstractPageBuilder {
         
         extcontext = new Context(context);
         reload(context, extcontext);
+        new Messages(context.messages);
         
         panel = new StandardPanel(context);
         panel.instance("main", new MainPanel(), extcontext);
