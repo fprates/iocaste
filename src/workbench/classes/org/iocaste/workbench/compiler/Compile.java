@@ -28,7 +28,6 @@ import org.iocaste.protocol.utils.XMLElement;
 import org.iocaste.shell.common.AbstractPage;
 import org.iocaste.texteditor.common.TextEditorTool;
 import org.iocaste.workbench.Common;
-import org.iocaste.workbench.WorkbenchContext;
 
 public class Compile {
 //    private static final void addJarItems(JarOutputStream jar, String path,
