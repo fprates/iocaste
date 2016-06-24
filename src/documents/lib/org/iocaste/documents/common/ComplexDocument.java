@@ -2,6 +2,7 @@ package org.iocaste.documents.common;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -126,6 +127,14 @@ public class ComplexDocument implements Serializable,
      */
     public final ComplexDocument[] getDocuments(String name) {
         return items.get(name).documents.toArray(new ComplexDocument[0]);
+    }
+    
+    public final Map<Object, ComplexDocument> getDocumentsMap(String name) {
+        Map<Object, ComplexDocument> documents;
+        documents = new LinkedHashMap<>();
+        for (ComplexDocument document : items.get(name).documents)
+            documents.put(document.getKey(), document);
+        return documents;
     }
     
     /**
