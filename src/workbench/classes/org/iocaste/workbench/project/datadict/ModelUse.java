@@ -19,7 +19,7 @@ public class ModelUse extends AbstractCommand {
         Context extcontext = getExtendedContext();
 
         name = parameters.get("name");
-        document = getManager("model").get(name);
+        document = extcontext.project.getDocumentsMap("model").get(name);
         if (document == null) {
             message(Const.ERROR, "model %s undefined.", name);
             return;

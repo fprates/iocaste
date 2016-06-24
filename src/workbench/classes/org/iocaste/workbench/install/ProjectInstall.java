@@ -165,6 +165,6 @@ public class ProjectInstall extends AbstractInstallObject {
         cmodel.header("header");
         cmodel.item("screen", screens);
         cmodel.item("link", "links");
-        cmodel.item("models", models);
+        cmodel.item("model", models);
     }
 }

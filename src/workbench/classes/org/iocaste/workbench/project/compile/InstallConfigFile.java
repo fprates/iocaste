@@ -1,8 +1,10 @@
 package org.iocaste.workbench.project.compile;
 
 import java.util.Locale;
+import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
@@ -61,12 +63,41 @@ public class InstallConfigFile extends AbstractConfigFile {
         }
     }
     
+    private void itemInstall(XMLElement parent, Map<Object, ComplexDocument> documents,
+            String name, String[][] fields, Locale locale) {
+        XMLElement line, item, items;
+        Object value;
+        DocumentModel model;
+        DataElement de;
+        ExtendedObject object;
+        ComplexDocument document;
+        
+        for (Object key : documents.keySet()) {
+            document = documents.get(key);
+            object = document.getHeader();
+            model = object.getModel();
+            line = new XMLElement(name);
+            for (int i = 0; i < fields.length; i++) {
+                value = object.get(fields[i][1]);
+                de = model.getModelItem(fields[i][1]).getDataElement();
+                item = new XMLElement(fields[i][0]);
+                item.addInner(Shell.toString(value, de, locale, false));
+                line.addChild(item);
+            }
+            parent.addChild(line);
+            items = new XMLElement("items");
+            parent.addChild(items);
+            itemInstall(items,
+                    document.getItems("item"), "items", MODEL_ITEM, locale);
+        }
+    }
+    
     @Override
     public void run(CompileData data) {
         Query query;
-        String name;
         ExtendedObject[] objects;
-        XMLElement profile, links, elements, models, items;
+        Map<Object, ComplexDocument> documents;
+        XMLElement profile, links, elements, models;
         Locale locale = data.context.view.getLocale();
         
         profile = new XMLElement("profile");
@@ -89,34 +120,12 @@ public class InstallConfigFile extends AbstractConfigFile {
             root.addChild(elements);
             itemInstall(elements, objects, "element", DE, locale);
         }
-        
-        query = new Query();
-        query.setModel("WB_MODEL_HEADER");
-        query.andEqual("PROJECT", data.project);
-        objects = select(query);
-        if (objects != null) {
+
+        documents = data.extcontext.project.getDocumentsMap("model");
+        if (documents.size() > 0) {
             models = new XMLElement("models");
             root.addChild(models);
-            itemInstall(models, objects, "model", MODEL, locale);
-            
-            name = null;
-            for (XMLElement model : models.getChildren()) {
-                for (XMLElement property : model.getChildren()) {
-                    if (!property.getName().equals("name"))
-                        continue;
-                    name = property.getText();
-                    break;
-                }
-                query = new Query();
-                query.setModel("WB_MODEL_ITEMS");
-                query.andEqual("MODEL", name);
-                query.andEqual("PROJECT", data.project);
-                objects = select(query);
-                items = new XMLElement("items");
-                model.addChild(items);
-                itemInstall(items, objects, "item", MODEL_ITEM, locale);
-            }   
+            itemInstall(models, documents, "model", MODEL, locale);
         }
     }
-
 }
