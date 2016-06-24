@@ -1,21 +1,44 @@
 package org.iocaste.workbench.common.engine;
 
 import org.iocaste.appbuilder.common.AbstractPageBuilder;
-import org.iocaste.appbuilder.common.AbstractViewConfig;
-import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
+import org.iocaste.protocol.Iocaste;
+import org.iocaste.protocol.utils.ConversionResult;
+import org.iocaste.protocol.utils.ConversionRules;
+import org.iocaste.protocol.utils.XMLConversion;
 
 public class ApplicationEngine extends AbstractPageBuilder {
 
     @Override
     public void config(PageBuilderContext context) {
         StandardPanel panel;
+        Iocaste iocaste;
+        byte[] buffer;
+        ConversionRules mapping;
+        Context extcontext;
+        String viewname;
+        XMLConversion conversor = new XMLConversion(context.function);
+        
+        iocaste = new Iocaste(context.function);
+        buffer = iocaste.getMetaContext(context.view.getAppName(), "views.xml");
+
+        mapping = new ConversionRules();
+        mapping.add("views", "view");
+        mapping.add("views.view.spec", "item");
+        mapping.add("views.view.config", "item");
+        mapping.add("views.view.input", "item");
+        
+        extcontext = new Context(context);
+        extcontext.result = conversor.conversion(new String(buffer), mapping);
         
         panel = new StandardPanel(context);
-        panel.instance("main", new MainPage());
+        for (ConversionResult view : extcontext.result.getList("views")) {
+            viewname = view.getst("views.view.name");
+            panel.instance(viewname, new AutomatedPage(view), extcontext);
+        }
     }
     
     @Override
@@ -26,32 +49,17 @@ public class ApplicationEngine extends AbstractPageBuilder {
 
 }
 
-class MainPage extends AbstractPanelPage {
-
+class AutomatedPage extends AbstractPanelPage {
+    private ConversionResult result;
+    
+    public AutomatedPage(ConversionResult result) {
+        this.result = result;
+    }
+    
     @Override
     public void execute() {
-        set(new MainSpec());
-        set(new MainConfig());
-    }
-    
-}
-
-class MainSpec extends AbstractViewSpec {
-
-    @Override
-    protected void execute(PageBuilderContext context) {
-        // TODO Auto-generated method stub
-        
-    }
-    
-}
-
-class MainConfig extends AbstractViewConfig {
-
-    @Override
-    protected void execute(PageBuilderContext context) {
-        // TODO Auto-generated method stub
-        
+        set(new AutomatedSpec(result));
+        set(new AutomatedConfig(result));
     }
     
 }
