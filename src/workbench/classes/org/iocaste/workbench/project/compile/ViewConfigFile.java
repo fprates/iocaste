@@ -6,6 +6,9 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.utils.XMLElement;
 
 public class ViewConfigFile extends AbstractConfigFile {
+    private static final String[][] VIEW = {
+            {"name", "NAME"}
+    };
     private static final String[][] SPEC_ITEM = {
         {"name", "NAME"},
         {"parent", "PARENT"},
@@ -20,15 +23,22 @@ public class ViewConfigFile extends AbstractConfigFile {
 
     @Override
     public void run(CompileData data) {
+        ExtendedObject viewhead;
         String value;
-        XMLElement view, spec, specitem, specitemattrib;
+        XMLElement view, viewattrib, spec, specitem, specitemattrib;
         ComplexDocument[] documents;
         
         documents = data.extcontext.project.getDocuments("screen");
         for (ComplexDocument document : documents) {
             view = new XMLElement("view");
-            view.add("name", document.getstKey());
             root.addChild(view);
+            viewhead = document.getHeader();
+            for (int i = 0; i < VIEW.length; i++) {
+                viewattrib = new XMLElement(VIEW[i][0]);
+                viewattrib.addInner(viewhead.getst(VIEW[i][1]));
+                view.addChild(viewattrib);
+            }
+            
             spec = new XMLElement("spec");
             view.addChild(spec);
             for (ExtendedObject object : document.getItems("spec")) {
