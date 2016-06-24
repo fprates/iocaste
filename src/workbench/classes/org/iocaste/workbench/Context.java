@@ -21,6 +21,7 @@ import org.iocaste.workbench.project.tasks.LinkAdd;
 import org.iocaste.workbench.project.tasks.LinkRemove;
 import org.iocaste.workbench.project.view.ViewAdd;
 import org.iocaste.workbench.project.view.ViewSpecAdd;
+import org.iocaste.workbench.project.view.ViewSpecRemove;
 import org.iocaste.workbench.project.view.ViewUse;
 
 public class Context extends AbstractExtendedContext {
@@ -46,6 +47,7 @@ public class Context extends AbstractExtendedContext {
         commands.put("project-use", new ProjectUse());
         commands.put("view-add", new ViewAdd());
         commands.put("view-use", new ViewUse());
+        commands.put("viewspec-remove", new ViewSpecRemove());
         
         for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {
             name = String.format("viewspec-%s", type.toString());
