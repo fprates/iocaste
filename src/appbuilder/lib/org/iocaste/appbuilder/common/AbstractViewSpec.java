@@ -21,6 +21,11 @@ public abstract class AbstractViewSpec implements ViewSpec {
         put(parent, ViewSpecItem.TYPES.BUTTON, name);
     }
     
+    protected final void component(
+            ViewSpecItem.TYPES type, String parent, String name) {
+        put(parent, type, name);
+    }
+    
     protected final void dataform(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.DATA_FORM, name);
         if (extcontext != null)
