@@ -72,6 +72,12 @@ public class XMLElement implements Serializable {
             inner.add(line);
     }
     
+    public final void clear() {
+        attributes.clear();
+        elements.clear();;
+        inner.clear();;
+    }
+    
     public final String get(String attribute) {
         return attributes.get(attribute);
     }
