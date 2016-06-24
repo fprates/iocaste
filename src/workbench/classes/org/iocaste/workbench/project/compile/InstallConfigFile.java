@@ -86,9 +86,9 @@ public class InstallConfigFile extends AbstractConfigFile {
             }
             parent.addChild(line);
             items = new XMLElement("items");
-            parent.addChild(items);
+            line.addChild(items);
             itemInstall(items,
-                    document.getItems("item"), "items", MODEL_ITEM, locale);
+                    document.getItems("item"), "item", MODEL_ITEM, locale);
         }
     }
     
