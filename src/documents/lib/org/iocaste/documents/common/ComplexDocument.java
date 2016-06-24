@@ -164,6 +164,21 @@ public class ComplexDocument implements Serializable,
         return items.get(name).objects.toArray(new ExtendedObject[0]);
     }
     
+    public final Map<Object, ExtendedObject> getItemsMap(String name) {
+        Map<Object, ExtendedObject> items = new LinkedHashMap<>();
+        DocumentModel model = cmodel.getItems().get(name).model;
+        String key = null;
+        
+        for (DocumentModelKey modelkey : model.getKeys()) {
+            key = modelkey.getModelItemName();
+            break;
+        }
+        
+        for (ExtendedObject object : this.items.get(name).objects)
+            items.put(object.get(key), object);
+        return items;
+    }
+    
     /**
      * 
      * @return
