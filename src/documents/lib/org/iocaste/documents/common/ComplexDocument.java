@@ -1,7 +1,6 @@
 package org.iocaste.documents.common;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,14 +20,17 @@ public class ComplexDocument implements Serializable,
     private static final long serialVersionUID = -6366080783932302245L;
     private ComplexModel cmodel;
     private ExtendedObject header;
-    private Map<String, List<ExtendedObject>> items;
+    private Map<String, ComplexDocumentItems> items;
     
     public ComplexDocument(ComplexModel cmodel) {
+        Map<String, ComplexModelItem> models;
+        
         this.cmodel = cmodel;
         header = new ExtendedObject(cmodel.getHeader());
         items = new HashMap<>();
-        for (String name: cmodel.getItems().keySet())
-            items.put(name, new ArrayList<>());
+        models = cmodel.getItems();
+        for (String name: models.keySet())
+            items.put(name, new ComplexDocumentItems(models.get(name)));
     }
     
     /**
@@ -37,7 +39,6 @@ public class ComplexDocument implements Serializable,
      */
     public final void add(ExtendedObject object) {
         String alias;
-        List<ExtendedObject> objects;
         
         if (object == null)
             return;
@@ -46,8 +47,7 @@ public class ComplexDocument implements Serializable,
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
         
-        objects = items.get(alias);
-        objects.add(object);
+        items.get(alias).objects.add(object);
     }
     
     public final void add(ComplexDocument document) {
@@ -65,7 +65,23 @@ public class ComplexDocument implements Serializable,
         for (ExtendedObject object : objects)
             add(object);
     }
+    
+    /**
+     * Adds an array of items to the document
+     * @param objects array of extended objects
+     */
+    public final void add(List<ExtendedObject> objects) {
+        if (objects == null)
+            return;
+        
+        for (ExtendedObject object : objects)
+            add(object);
+    }
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     @Override
     public int compareTo(ComplexDocument document) {
         String value1, value2;
@@ -77,12 +93,30 @@ public class ComplexDocument implements Serializable,
     
     /**
      * 
+     * @param name
+     * @return
+     */
+    public final ComplexDocumentItems get(String name) {
+        return items.get(name);
+    }
+    
+    /**
+     * 
      * @return
      */
     public final byte getbKey() {
         for (DocumentModelKey key : cmodel.getHeader().getKeys())
             return header.getb(key.getModelItemName());
         return 0;
+    }
+    
+    /**
+     * Get group of complexes documents of a document.
+     * @param name group name
+     * @return group of complexes documents
+     */
+    public final ComplexDocument[] getDocuments(String name) {
+        return items.get(name).documents.toArray(new ComplexDocument[0]);
     }
     
     /**
@@ -109,7 +143,7 @@ public class ComplexDocument implements Serializable,
      * @return group of items
      */
     public final ExtendedObject[] getItems(String name) {
-        return items.get(name).toArray(new ExtendedObject[0]);
+        return items.get(name).objects.toArray(new ExtendedObject[0]);
     }
     
     /**
@@ -180,8 +214,8 @@ public class ComplexDocument implements Serializable,
      * Remove all items of the document
      */
     public final void remove() {
-        for (List<ExtendedObject> objects : items.values())
-            objects.clear();
+        for (ComplexDocumentItems items : items.values())
+            items.clear();
     }
     
     /**

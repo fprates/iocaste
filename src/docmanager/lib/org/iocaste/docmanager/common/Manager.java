@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ComplexDocumentItems;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.ExtendedObject;
 
@@ -33,10 +34,10 @@ public interface Manager {
     public abstract ComplexDocument instance();
     
     public abstract ComplexDocument save(ExtendedObject head,
-            Collection<ExtendedObject[]> items);
+            Collection<ComplexDocumentItems> items);
     
     public abstract ComplexDocument save(Object ns, ExtendedObject head,
-            Collection<ExtendedObject[]> items);
+            Collection<ComplexDocumentItems> items);
     
     public abstract ComplexDocument save(ComplexDocument document);
 }

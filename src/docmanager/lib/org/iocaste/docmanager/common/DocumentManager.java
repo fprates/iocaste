@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ComplexDocumentItems;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.AbstractServiceInterface;
 import org.iocaste.protocol.Function;
@@ -33,7 +34,7 @@ public class DocumentManager extends AbstractServiceInterface {
     }
     
     public final ComplexDocument save(String cmodelname, Object ns,
-            ExtendedObject head, Collection<ExtendedObject[]> groups,
+            ExtendedObject head, Collection<ComplexDocumentItems> groups,
             Map<String, Integer> itemsdigits) {
         Message message = new Message("save");
         message.add("cmodel_name", cmodelname);

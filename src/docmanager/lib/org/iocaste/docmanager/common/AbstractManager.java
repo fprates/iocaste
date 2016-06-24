@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ComplexDocumentItems;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DocumentModel;
@@ -208,13 +209,13 @@ public abstract class AbstractManager implements Manager {
     }
     
     /*
-     * (não-Javadoc)
+     * (non-Javadoc)
      * @see org.iocaste.docmanager.common.Manager#save(
      *    org.iocaste.documents.common.ExtendedObject, java.util.Collection)
      */
     @Override
     public ComplexDocument save(ExtendedObject head,
-            Collection<ExtendedObject[]> groups) {
+            Collection<ComplexDocumentItems> groups) {
         return save(null, head, groups);
     }
     
@@ -227,7 +228,7 @@ public abstract class AbstractManager implements Manager {
      */
     @Override
     public ComplexDocument save(Object ns, ExtendedObject head,
-            Collection<ExtendedObject[]> groups) {
+            Collection<ComplexDocumentItems> groups) {
         return docmanager.save(cmodel.getName(), ns, head, groups, itemsdigits);
     }
     
@@ -238,10 +239,10 @@ public abstract class AbstractManager implements Manager {
      */
     @Override
     public ComplexDocument save(ComplexDocument document) {
-        Collection<ExtendedObject[]> groups = new ArrayList<>();
+        Collection<ComplexDocumentItems> groups = new ArrayList<>();
         
         for (String name : cmodel.getItems().keySet())
-            groups.add(document.getItems(name));
+            groups.add(document.get(name));
         
         return save(document.getNS(), document.getHeader(), groups);
     }

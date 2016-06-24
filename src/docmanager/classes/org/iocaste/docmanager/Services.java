@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ComplexDocumentItems;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DataType;
@@ -55,7 +56,7 @@ public class Services extends AbstractFunction {
         Object id;
         String cmodelname = message.get("cmodel_name");
         ExtendedObject head = message.get("head");
-        Collection<ExtendedObject[]> groups = message.get("groups");
+        Collection<ComplexDocumentItems> groups = message.get("groups");
         Object ns = message.get("ns");
         Documents documents = new Documents(this);
         ComplexModel cmodel = documents.getComplexModel(cmodelname);
@@ -109,11 +110,11 @@ public class Services extends AbstractFunction {
             itemsformats.put(name, new StringBuilder("%0").
                 append(itemsdigits.get(name)).append("d").toString());
         
-        for (ExtendedObject[] group : groups) {
+        for (ComplexDocumentItems group : groups) {
             i = 0;
-            if (group == null)
+            if ((group == null) || (group.objects == null))
                 continue;
-            for (ExtendedObject item : group) {
+            for (ExtendedObject item : group.objects) {
                 modelname = item.getModel().getName();
                 itemkey = keys.get(modelname);
                 reference = references.get(modelname);
@@ -136,7 +137,7 @@ public class Services extends AbstractFunction {
                 item.setNS(ns);
                 item.set(reference, id);
             }
-            document.add(group);
+            document.add(group.objects);
         }
 
         documents.save(document);
