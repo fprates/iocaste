@@ -5,7 +5,8 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
-import org.iocaste.documents.common.Documents;
+import org.iocaste.documents.common.DummyElement;
+import org.iocaste.documents.common.DummyModelItem;
 import org.iocaste.packagetool.common.InstallData;
 
 public class CModel {
@@ -17,8 +18,10 @@ public class CModel {
      */
     public static final void install(InstallData data, Config config) {
         DocumentModel model;
-        DataElement element;
-        DocumentModelItem modelname, item;
+        DataElement element, modelname;
+        DocumentModelItem modelkey, item;
+        
+        modelname = new DummyElement("MODEL.NAME");
         
         /*
          * Modelo de documento complexo
@@ -37,13 +40,11 @@ public class CModel {
         model.add(new DocumentModelKey(config.cmodelname));
         
         // modelo
-        modelname = new Documents(config.function).getModel("MODEL").
-                getModelItem("NAME");
-        element = modelname.getDataElement();
+        modelkey = new DummyModelItem("MODEL", "NAME");
         item = new DocumentModelItem("MODEL");
         item.setTableFieldName("MODEL");
-        item.setDataElement(element);
-        item.setReference(modelname);
+        item.setDataElement(modelname);
+        item.setReference(modelkey);
         model.add(item);
         
         /*
@@ -82,8 +83,16 @@ public class CModel {
         // modelo
         item = new DocumentModelItem("MODEL");
         item.setTableFieldName("MODEL");
-        item.setDataElement(modelname.getDataElement());
-        item.setReference(modelname);
+        item.setDataElement(modelname);
+        model.add(item);
+        
+        // tipo de modelo
+        element = new DataElement("CMODEL_MODEL_TYPE");
+        element.setType(DataType.NUMC);
+        element.setLength(1);
+        item = new DocumentModelItem("MODEL_TYPE");
+        item.setTableFieldName("MDLTY");
+        item.setDataElement(element);
         model.add(item);
     }
 }

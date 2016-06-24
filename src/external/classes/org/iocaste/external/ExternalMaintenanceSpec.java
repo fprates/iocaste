@@ -4,15 +4,18 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.cmodelviewer.Context;
 import org.iocaste.appbuilder.common.cmodelviewer.MaintenanceSpec;
-import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.ComplexModelItem;
 
 public class ExternalMaintenanceSpec extends MaintenanceSpec {
 
     @Override
-    protected void tabs(Context extcontext, Map<String, DocumentModel> models) {
+    protected void tabs(
+            Context extcontext, Map<String, ComplexModelItem> models) {
         String tablename;
         
         for (String name : models.keySet()) {
+            if (models.get(name).model == null)
+                continue;
             tabbedpaneitem("tabs", name);
             if (name.equals("items")) {
                 nodelist(name, "import");

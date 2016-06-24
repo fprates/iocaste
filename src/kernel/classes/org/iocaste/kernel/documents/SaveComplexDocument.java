@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
-import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Message;
@@ -17,10 +17,11 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         DeleteDocument delete;
         ModifyDocument modify;
         GetComplexDocument getcdoc;
-        Map<String, DocumentModel> models;
+        Map<String, ComplexModelItem> models;
         ExtendedObject[] nobjects, oobjects;
         ComplexDocument original;
         Map<String, Object> keys;
+        ComplexModelItem cmodelitem;
         ComplexDocument document = message.get("document");
         ComplexModel cmodel = document.getModel();
         CDocumentData data = new CDocumentData();
@@ -39,6 +40,9 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         modify.run(data.documents, data.connection, document.getHeader());
         models = cmodel.getItems();
         for (String name : models.keySet()) {
+            cmodelitem = models.get(name);
+            if (cmodelitem.model == null)
+                continue;
             nobjects = document.getItems(name);
             for (ExtendedObject item : nobjects)
                 modify.run(data.documents, data.connection, item);
@@ -50,6 +54,9 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         delete = data.documents.get("delete_document");
         keys = null;
         for (String name : models.keySet()) {
+            cmodelitem = models.get(name);
+            if (cmodelitem.model == null)
+                continue;
             oobjects = original.getItems(name);
             nobjects = document.getItems(name);
             if (keys != null)

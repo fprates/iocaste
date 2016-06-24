@@ -5,7 +5,7 @@ import java.util.Map;
 import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexModel;
-import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.ComplexModelItem;
 
 public class MaintenanceSpec extends AbstractViewSpec {
     
@@ -21,10 +21,13 @@ public class MaintenanceSpec extends AbstractViewSpec {
         tabs(extcontext, model.getItems());
     }
 
-    protected void tabs(Context extcontext, Map<String, DocumentModel> models) {
+    protected void tabs(Context extcontext,
+            Map<String, ComplexModelItem> models) {
         String tablename;
         
         for (String name : models.keySet()) {
+            if (models.get(name).model == null)
+                continue;
             tabbedpaneitem("tabs", name);
             tablename = name.concat("_table");
             tabletool(name, tablename);

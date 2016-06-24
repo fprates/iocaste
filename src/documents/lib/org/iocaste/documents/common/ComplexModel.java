@@ -30,7 +30,7 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
     private static final long serialVersionUID = -2741081537248227705L;
     private String name;
     private DocumentModel header;
-    private Map<String, DocumentModel> items;
+    private Map<String, ComplexModelItem> items;
     private Map<String, String> reverseitems;
     
     public ComplexModel(String name) {
@@ -81,7 +81,7 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
      * Get the models of all groups items
      * @return models
      */
-    public final Map<String, DocumentModel> getItems() {
+    public final Map<String, ComplexModelItem> getItems() {
         return items;
     }
     
@@ -107,9 +107,14 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
      * @param name name of the group
      * @param item model of the group
      */
-    public final void put(String name, DocumentModel item) {
-        items.put(name, item);
-        reverseitems.put(item.getName(), name);
+    public final void put(String name, DocumentModel model) {
+        items.put(name, new ComplexModelItem(model));
+        reverseitems.put(model.getName(), name);
+    }
+    
+    public final void put(String name, ComplexModel cmodel) {
+        items.put(name, new ComplexModelItem(cmodel));
+        reverseitems.put(cmodel.getName(), name);
     }
     
     /**

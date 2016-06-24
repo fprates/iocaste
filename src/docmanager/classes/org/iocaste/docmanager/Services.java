@@ -7,6 +7,7 @@ import java.util.Map;
 import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
@@ -43,8 +44,9 @@ public class Services extends AbstractFunction {
     
     public final ComplexDocument save(Message message) {
         Map<String, String> keys, references, itemsformats;
-        Map<String, DocumentModel> models;
+        Map<String, ComplexModelItem> models;
         Map<String, Integer> itemsdigits;
+        ComplexModelItem cmodelitem;
         DocumentModel model;
         DocumentModelItem headerkey;
         String itemkey, modelname, reference, charitemid, charid, itemformat;
@@ -88,7 +90,10 @@ public class Services extends AbstractFunction {
         references = new HashMap<>();
         models = cmodel.getItems();
         for (String name : models.keySet()) {
-            model = models.get(name);
+            cmodelitem = models.get(name);
+            model = cmodelitem.model;
+            if (model == null)
+                continue;
             modelname = model.getName();
             keys.put(modelname, AbstractManager.getKey(model).getName());
             references.put(modelname, AbstractManager.

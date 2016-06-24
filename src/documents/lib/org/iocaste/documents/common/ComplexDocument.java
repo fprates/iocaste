@@ -50,6 +50,10 @@ public class ComplexDocument implements Serializable,
         objects.add(object);
     }
     
+    public final void add(ComplexDocument document) {
+        add(document.getHeader());
+    }
+    
     /**
      * Adds an array of items to the document
      * @param objects array of extended objects
@@ -155,11 +159,21 @@ public class ComplexDocument implements Serializable,
         return null;
     }
     
-    public final ExtendedObject instance(String item) {
-        DocumentModel model = cmodel.getItems().get(item);
-        ExtendedObject object = new ExtendedObject(model);
-        add(object);
-        return object;
+    @SuppressWarnings("unchecked")
+    public final <T> T instance(String item) {
+        ExtendedObject object;
+        ComplexDocument document;
+        ComplexModelItem cmodelitem = cmodel.getItems().get(item);
+        
+        if (cmodelitem.model != null) {
+            object = new ExtendedObject(cmodelitem.model);
+            add(object);
+            return (T)object;
+        }
+        
+        document = new ComplexDocument(cmodelitem.cmodel);
+        add(document);
+        return (T)document;
     }
     
     /**

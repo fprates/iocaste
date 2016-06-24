@@ -58,8 +58,10 @@ public class Save extends AbstractActionHandler {
         
         components = context.getView().getComponents();
         for (String name : cmodel.getItems().keySet()) {
+            model = cmodel.getItems().get(name).model;
+            if (model == null)
+                continue;
             tbname = name.concat("_table");
-            model = cmodel.getItems().get(name);
             conversion = new DataConversion(model.getName());
             conversion.tbsource(tbname);
             extractor.add(conversion);

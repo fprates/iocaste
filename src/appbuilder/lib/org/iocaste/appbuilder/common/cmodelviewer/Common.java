@@ -9,6 +9,7 @@ import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.docmanager.common.AbstractManager;
+import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 
@@ -66,22 +67,25 @@ public class Common {
     }
     
     public static final void gridConfig(ConfigData griddata) {
-        DocumentModel model;
-        Map<String, DocumentModel> models;
+        Map<String, ComplexModelItem> models;
+        ComplexModelItem cmodelitem;
         TableToolData tabletool;
         ViewComponents components = griddata.context.getView().getComponents();
         
         models = griddata.cmodel.getItems();
         for (String name : models.keySet()) {
-            model = models.get(name);
+            cmodelitem = models.get(name);
+            if (cmodelitem.model == null)
+                continue;
             tabletool = components.getComponentData(name.concat("_table"));
-            tabletool.model = model.getName();
+            tabletool.model = cmodelitem.model.getName();
             tabletool.mode = griddata.mode;
             tabletool.mark = griddata.mark;
             tabletool.vlines = 0;
             tabletool.hide = new String[] {
-                AbstractManager.getReference(model, griddata.hkey).getName(),
-                AbstractManager.getKey(model).getName()
+                AbstractManager.getReference(cmodelitem.model, griddata.hkey).
+                        getName(),
+                AbstractManager.getKey(cmodelitem.model).getName()
             };
         }
     }

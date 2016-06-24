@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -23,7 +24,8 @@ public abstract class AbstractManager implements Manager {
     private Map<String, Integer> itemsdigits;
     
     public AbstractManager(String cmodelname, Function function) {
-        Map<String, DocumentModel> items;
+        Map<String, ComplexModelItem> items;
+        DocumentModel model;
         
         docmanager = new DocumentManager(function);
         documents = new Documents(function);
@@ -33,13 +35,16 @@ public abstract class AbstractManager implements Manager {
                     cmodelname.concat(" is an invalid complex model"));
         itemsdigits = new HashMap<>();
         items = cmodel.getItems();
-        for (String model : cmodel.getItems().keySet())
-            itemsdigits.put(items.get(model).getName(), 2);
+        for (String name : cmodel.getItems().keySet()) {
+            model = items.get(name).model;
+            if (model != null)
+                itemsdigits.put(model.getName(), 2);
+        }
     }
     
     @Override
     public final ComplexDocument clone(ComplexDocument document) {
-        Map<String, DocumentModel> models;
+        Map<String, ComplexModelItem> models;
         ComplexDocument clone = instance();
         DocumentModel model = cmodel.getHeader();
         ExtendedObject object = new ExtendedObject(model);
@@ -60,11 +65,9 @@ public abstract class AbstractManager implements Manager {
          */
         models = cmodel.getItems();
         for (String name : models.keySet())
-            for (ExtendedObject source : document.getItems(name)) {
-                object = new ExtendedObject(models.get(name));
-                Documents.move(object, source);
-                clone.add(object);
-            }
+            if (models.get(name) != null)
+                for (ExtendedObject source : document.getItems(name))
+                    Documents.move(clone.instance(name), source);
         
         return clone;
     }
@@ -169,16 +172,16 @@ public abstract class AbstractManager implements Manager {
         Query query;
         ExtendedObject[] objects;
         DocumentModelItem reference;
-        DocumentModel model;
+        ComplexModelItem cmodelitem;
         
-        model = cmodel.getItems().get(itemsname);
-        if (model == null)
+        cmodelitem = cmodel.getItems().get(itemsname);
+        if (cmodelitem.model == null)
             throw new RuntimeException(new StringBuilder("items '").
                     append(itemsname).
                     append("' undefined for cmodel ").
                     append(cmodel.getName()).toString());
         
-        item = model.getModelItem(field);
+        item = cmodelitem.model.getModelItem(field);
         reference = item.getReference();
         if (reference == null)
             return null;
@@ -248,7 +251,8 @@ public abstract class AbstractManager implements Manager {
      * @param itemformat
      */
     protected final void setItemDigits(String item, int itemdigits) {
-        itemsdigits.put(cmodel.getItems().get(item).getName(), itemdigits);
+        ComplexModelItem cmodelitem = cmodel.getItems().get(item);
+        itemsdigits.put(cmodelitem.model.getName(), itemdigits);
     }
     
     /**

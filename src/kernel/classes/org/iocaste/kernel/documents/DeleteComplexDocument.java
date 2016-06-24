@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Query;
@@ -34,9 +35,10 @@ public class DeleteComplexDocument extends AbstractDocumentsHandler {
         GetComplexModel getcmodel;
         UpdateDocument update;
         DocumentModelItem headerkey, reference;
-        DocumentModel model, header;
+        DocumentModel header;
         Query query;
-        Map<String, DocumentModel> models;
+        ComplexModelItem cmodelitem;
+        Map<String, ComplexModelItem> models;
         ComplexModel cmodel;
         int err;
         
@@ -47,11 +49,13 @@ public class DeleteComplexDocument extends AbstractDocumentsHandler {
         models = cmodel.getItems();
         update = data.documents.get("update_document");
         for (String item : models.keySet()) {
-            model = models.get(item);
+            cmodelitem = models.get(item);
+            if (cmodelitem.model == null)
+                continue;
             query = new Query("delete");
-            query.setModel(model.getName());
+            query.setModel(cmodelitem.model.getName());
             query.setNS(data.ns);
-            reference = getReferenceItem(model, headerkey);
+            reference = getReferenceItem(cmodelitem.model, headerkey);
             query.andEqual(reference.getName(), data.key);
             err = update.run(data.connection, data.documents, query);
             if (err >= 0)

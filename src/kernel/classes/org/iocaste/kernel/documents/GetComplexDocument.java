@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.ExtendedObject;
@@ -35,7 +36,8 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
         ComplexDocument document;
         ExtendedObject object;
         ExtendedObject[] objects;
-        Map<String, DocumentModel> models;
+        ComplexModelItem cmodelitem;
+        Map<String, ComplexModelItem> models;
         Query query;
         ComplexModel cmodel;
         DocumentModelItem reference, headerkey;
@@ -62,11 +64,13 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
         document.setHeader(object);
         models = cmodel.getItems();
         for (String name : models.keySet()) {
-            model = models.get(name);
+            cmodelitem = models.get(name);
+            if (cmodelitem.model == null)
+                continue;
             query = new Query();
-            query.setModel(model.getName());
+            query.setModel(cmodelitem.model.getName());
             query.setNS(data.ns);
-            reference = getReferenceItem(model, headerkey);
+            reference = getReferenceItem(cmodelitem.model, headerkey);
             query.andEqual(reference.getName(), data.id);
             objects = select.run(data.connection, query);
             if (objects == null)

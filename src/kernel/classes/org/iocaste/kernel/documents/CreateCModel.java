@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.Map;
 
 import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Message;
@@ -14,7 +15,8 @@ public class CreateCModel extends AbstractDocumentsHandler {
     public Object run(Message message) throws Exception {
         SaveDocument save;
         ExtendedObject object;
-        Map<String, DocumentModel> items;
+        Map<String, ComplexModelItem> items;
+        ComplexModelItem cmodelitem;
         Documents documents = getFunction();
         String sessionid = message.getSessionid();
         GetDocumentModel getmodel = documents.get("get_document_model");
@@ -33,13 +35,20 @@ public class CreateCModel extends AbstractDocumentsHandler {
         model = getmodel.run(connection, documents, "COMPLEX_MODEL_ITEM");
         items = cmodel.getItems();
         for (String name : items.keySet()) {
+            cmodelitem = items.get(name);
             object = new ExtendedObject(model);
             object.set("IDENT", new StringBuilder(cmodelname).
                     append("_").
                     append(name).toString());
             object.set("NAME", name);
             object.set("CMODEL", cmodelname);
-            object.set("MODEL", items.get(name).getName());
+            if (cmodelitem.model != null) {
+                object.set("MODEL", cmodelitem.model.getName());
+                object.set("MODEL_TYPE", 0);
+            } else {
+                object.set("MODEL", cmodelitem.cmodel.getName());
+                object.set("MODEL_TYPE", 1);
+            }
             save.run(connection, object);
         }
         

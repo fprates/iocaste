@@ -19,4 +19,8 @@ public class ComplexModelInstall {
     public final void item(String name, String modeltag) {
         cmodel.put(name, context.getModel(modeltag).getModel());
     }
+    
+    public final void item(String name, ComplexModelInstall cmodelinst) {
+        cmodel.put(name, cmodelinst.cmodel);
+    }
 }

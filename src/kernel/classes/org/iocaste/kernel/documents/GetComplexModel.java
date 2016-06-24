@@ -23,6 +23,7 @@ public class GetComplexModel extends AbstractDocumentsHandler {
     
     public ComplexModel run(Connection connection, Documents documents,
             String name) throws Exception {
+        int modeltype;
         String modelname;
         DocumentModel model;
         SelectDocument select;
@@ -30,7 +31,7 @@ public class GetComplexModel extends AbstractDocumentsHandler {
         GetDocumentModel getmodel;
         ExtendedObject object;
         ExtendedObject[] objects;
-        ComplexModel cmodel;
+        ComplexModel cmodel, _cmodel;
         Query query;
         
         getobject = documents.get("get_object");
@@ -52,14 +53,27 @@ public class GetComplexModel extends AbstractDocumentsHandler {
             return cmodel;
         
         for (ExtendedObject item : objects) {
+            modeltype = item.geti("MODEL_TYPE");
             modelname = item.getst("MODEL");
-            model = getmodel.run(connection, documents, modelname);
-            if (model == null)
-                throw new IocasteException(new StringBuilder(name).
-                        append(" complex model corrupted. Item model ").
-                        append(modelname).append(" not found.").toString());
-            
-            cmodel.put(item.getst("NAME"), model);
+            switch (modeltype) {
+            case 0:
+                model = getmodel.run(connection, documents, modelname);
+                if (model == null)
+                    throw new IocasteException(new StringBuilder(name).
+                            append(" complex model corrupted. Item model ").
+                            append(modelname).append(" not found.").toString());
+                cmodel.put(item.getst("NAME"), model);
+                break;
+            case 1:
+                _cmodel = run(connection, documents, modelname);
+                if (_cmodel == null)
+                    throw new IocasteException(new StringBuilder(name).
+                            append(" complex model corrupted. Item cmodel ").
+                            append(modelname).append(" not found.").toString());
+                cmodel.put(item.getst("NAME"), _cmodel);
+                break;
+            default:
+            }
         }
         
         return cmodel;
