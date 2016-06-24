@@ -165,7 +165,6 @@ public class ComplexDocument implements Serializable,
     }
     
     public final Map<Object, ExtendedObject> getItemsMap(String name) {
-        Map<Object, ExtendedObject> items = new LinkedHashMap<>();
         DocumentModel model = cmodel.getItems().get(name).model;
         String key = null;
         
@@ -174,8 +173,15 @@ public class ComplexDocument implements Serializable,
             break;
         }
         
+        return getItemsMap(name, key);
+    }
+    
+    public final Map<Object, ExtendedObject> getItemsMap(
+            String name, String field) {
+        Map<Object, ExtendedObject> items = new LinkedHashMap<>();
+        
         for (ExtendedObject object : this.items.get(name).objects)
-            items.put(object.get(key), object);
+            items.put(object.get(field), object);
         return items;
     }
     
