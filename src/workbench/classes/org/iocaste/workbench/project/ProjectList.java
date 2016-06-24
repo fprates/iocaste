@@ -35,8 +35,8 @@ public class ProjectList extends AbstractCommand {
             print("- Perfil: %s", object.getst("PROFILE"));
             
             print("- Telas");
-            for (ExtendedObject screen : project.getItems("screen"))
-                print(screen.getst("SCREEN_NAME"));
+            for (ComplexDocument screen : project.getDocuments("screen"))
+                print(screen.getstKey());
             
             print("- Links");
             for (ExtendedObject link : project.getItems("link"))
@@ -46,7 +46,8 @@ public class ProjectList extends AbstractCommand {
             printddojects("WB_DATA_ELEMENTS", projectname);
             
             print("- Modelos");
-            printddojects("WB_MODEL_HEADER", projectname);
+            for (ComplexDocument document : project.getDocuments("models"))
+                print(document.getstKey());
         }
     }
     
@@ -59,7 +60,7 @@ public class ProjectList extends AbstractCommand {
         query.andEqual("PROJECT", project);
         objects = select(query);
         if (objects != null)
-        for (ExtendedObject dtel : objects)
-            print(dtel.getst("NAME"));
+            for (ExtendedObject dtel : objects)
+                print(dtel.getst("NAME"));
     }
 }

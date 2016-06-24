@@ -35,6 +35,7 @@ public class ModelAdd extends AbstractCommand {
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("TABLE", parameters.get("table"));
         save("model", document);
+        extcontext.project.add(document);
         print("model %s updated.", name);
     }
 

@@ -12,18 +12,17 @@ public class ProjectInstall extends AbstractInstallObject {
 
     @Override
     protected void execute(StandardInstallContext context) throws Exception {
-        DataElement projectname, projectscreen, text, screenname, modelname;
+        DataElement projectname, text, screenname, modelname;
         DataElement screenspecitemid, screenspecitemname;
         DataElement modelitemid, modelitemname, command, modeltable, modelkey;
         DataElement screenitemtype, linkid, linkname, groupid, tableitemname;
         DataElement profile, dename, detype, desize, dedec, deupcase;
         ModelInstall model;
-        ComplexModelInstall cmodel;
+        ComplexModelInstall cmodel, models, screens;
         DocumentModelItem project, screen, modelid, dataelementid;
 
         projectname = elementchar("WB_PROJECT_NAME", 32, true);
         text = elementchar("WB_TEXT", 32, false);
-        projectscreen = elementchar("WB_PROJECT_SCREEN", 35, true);
         screenname = elementchar("WB_SCREEN_NAME", 16, true);
         screenspecitemid = elementchar("WB_SCREEN_SPEC_ITEM", 38, true);
         screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, true);
@@ -58,36 +57,6 @@ public class ProjectInstall extends AbstractInstallObject {
                 "TEXT", "PRJTX", text);
         
         /*
-         * project screens
-         */
-        model = tag("screens", modelInstance(
-                "WB_PROJECT_SCREENS", "WBPRJCTSCR"));
-        screen = model.key(
-                "PROJECT_SCREEN", "SCRID", projectscreen);
-        model.reference(
-                "PROJECT", "PRJNM", project);
-        model.item(
-                "SCREEN_NAME", "SCRNM", screenname);
-        
-        /*
-         * project screen spec items
-         */
-        model = tag("screen_spec_items", modelInstance(
-                "WB_SCREEN_SPEC_ITEMS", "WBSCRSPECIT"));
-        model.key(
-                "ITEM_ID", "ITMID", screenspecitemid);
-        model.reference(
-                "PROJECT", "PRJNM", project);
-        model.reference(
-                "SCREEN", "SCRID", screen);
-        model.item(
-                "PARENT", "SITPA", screenspecitemname);
-        model.item(
-                "NAME", "SITNM", screenspecitemname);
-        model.item(
-                "TYPE", "ITTYP", screenitemtype);
-        
-        /*
          * Links
          */
         model = tag("links", modelInstance(
@@ -102,15 +71,6 @@ public class ProjectInstall extends AbstractInstallObject {
                 "COMMAND", "CMMND", command);
         model.item(
                 "GROUP", "GRPID", groupid);
-        
-        /*
-         * project document
-         */
-        cmodel = cmodelInstance("WB_PROJECT");
-        cmodel.header("header");
-        cmodel.item("screen", "screens");
-        cmodel.item("screen_spec_item", "screen_spec_items");
-        cmodel.item("link", "links");
         
         /*
          * data elements
@@ -162,8 +122,49 @@ public class ProjectInstall extends AbstractInstallObject {
         model.item(
                 "KEY", "MDKEY", modelkey);
         
-        cmodel = cmodelInstance("WB_MODELS");
-        cmodel.header("model_head");
-        cmodel.item("item", "model_item");
+        models = cmodelInstance("WB_MODELS");
+        models.header("model_head");
+        models.item("item", "model_item");
+        
+        /*
+         * project screens
+         */
+        model = tag("screen_head", modelInstance(
+                "WB_SCREEN_HEADER", "WBSCRHD"));
+        screen = model.key(
+                "NAME", "SCRNM", screenname);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        
+        /*
+         * project screen spec items
+         */
+        model = tag("screen_spec", modelInstance(
+                "WB_SCREEN_SPEC", "WBSCRSPEC"));
+        model.key(
+                "ITEM_ID", "ITMID", screenspecitemid);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.reference(
+                "SCREEN", "SCRID", screen);
+        model.item(
+                "PARENT", "SITPA", screenspecitemname);
+        model.item(
+                "NAME", "SITNM", screenspecitemname);
+        model.item(
+                "TYPE", "ITTYP", screenitemtype);
+        
+        screens = cmodelInstance("WB_SCREENS");
+        screens.header("screen_head");
+        screens.item("spec", "screen_spec");
+        
+        /*
+         * project document
+         */
+        cmodel = cmodelInstance("WB_PROJECT");
+        cmodel.header("header");
+        cmodel.item("screen", screens);
+        cmodel.item("link", "links");
+        cmodel.item("models", models);
     }
 }
