@@ -19,6 +19,10 @@ public abstract class AbstractConfigFile implements ConfigFile{
         documents = new Documents(context.function);
     }
     
+    public final void clear() {
+        root.clear();
+    }
+    
     @Override
     public final void save(Directory war) {
         DirectoryInstance file;

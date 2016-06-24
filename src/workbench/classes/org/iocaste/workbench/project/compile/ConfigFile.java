@@ -4,6 +4,8 @@ import org.iocaste.protocol.files.Directory;
 
 public interface ConfigFile {
 
+    public abstract void clear();
+    
     public abstract void run(CompileData data);
     
     public abstract void save(Directory war);

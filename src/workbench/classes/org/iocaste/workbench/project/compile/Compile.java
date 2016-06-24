@@ -13,11 +13,14 @@ import org.iocaste.workbench.AbstractCommand;
 
 public class Compile extends AbstractCommand {
     private CompileData data;
+    private List<ConfigFile> configs;
     
-    public Compile() {
-        optional("project");
+    public Compile(PageBuilderContext context) {
         data = new CompileData();
-        checkproject = false;
+        configs = new ArrayList<>();
+        configs.add(new WebConfigFile(context));
+        configs.add(new InstallConfigFile(context));
+        configs.add(new ViewConfigFile(context));
     }
     
     private final void deployApplication(CompileData data)
@@ -25,13 +28,9 @@ public class Compile extends AbstractCommand {
         Iocaste iocaste;
         Directory war;
         DirectoryInstance file;
-        List<ConfigFile> configs;
         
         data.entryclass =
                 "org.iocaste.workbench.common.engine.ApplicationEngine";
-        configs = new ArrayList<>();
-        configs.add(new WebConfigFile(data.context));
-        configs.add(new InstallConfigFile(data.context));
         
         war = new Directory(data.project.concat(".war"));
         war.addDir("META-INF");
@@ -39,6 +38,7 @@ public class Compile extends AbstractCommand {
         war.addDir("WEB-INF", "lib");
         
         for (ConfigFile config : configs) {
+            config.clear();
             config.run(data);
             config.save(war);
         }

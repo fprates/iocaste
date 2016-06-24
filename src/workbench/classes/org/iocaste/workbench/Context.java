@@ -34,7 +34,7 @@ public class Context extends AbstractExtendedContext {
         String name;
         output = new ArrayList<>();
         commands = new HashMap<>();
-        commands.put("compile", new Compile());
+        commands.put("compile", new Compile(context));
         commands.put("data-element-add", new DataElementAdd());
         commands.put("link-add", new LinkAdd());
         commands.put("link-remove", new LinkRemove());
