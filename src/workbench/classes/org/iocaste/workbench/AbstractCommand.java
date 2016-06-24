@@ -13,7 +13,7 @@ public abstract class AbstractCommand extends AbstractActionHandler {
     protected Map<String, String> parameters;
     protected Map<String, Byte> arguments;
     protected Map<String, Set<String>> values;
-    protected boolean checkproject, checkmodel;
+    protected boolean checkproject, checkmodel, checkview;
     
     public AbstractCommand() {
         arguments = new HashMap<>();
@@ -48,6 +48,8 @@ public abstract class AbstractCommand extends AbstractActionHandler {
             return "undefined.project";
         if (checkmodel && (extcontext.model == null))
             return "undefined.model";
+        if (checkview && (extcontext.view == null))
+            return "undefined.view";
         return null;
     }
     

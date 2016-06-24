@@ -21,11 +21,12 @@ import org.iocaste.workbench.project.tasks.LinkAdd;
 import org.iocaste.workbench.project.tasks.LinkRemove;
 import org.iocaste.workbench.project.view.ViewAdd;
 import org.iocaste.workbench.project.view.ViewSpecAdd;
+import org.iocaste.workbench.project.view.ViewUse;
 
 public class Context extends AbstractExtendedContext {
     public Map<String, AbstractCommand> commands;
     public List<String> output;
-    public ComplexDocument project, model;
+    public ComplexDocument project, model, view;
     
     public Context(PageBuilderContext context) {
         super(context);
@@ -44,6 +45,7 @@ public class Context extends AbstractExtendedContext {
         commands.put("project-list", new ProjectList());
         commands.put("project-use", new ProjectUse());
         commands.put("view-add", new ViewAdd());
+        commands.put("view-use", new ViewUse());
         
         for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {
             name = String.format("viewspec-%s", type.toString());
