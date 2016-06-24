@@ -46,7 +46,7 @@ public class ProjectList extends AbstractCommand {
             printddojects("WB_DATA_ELEMENTS", projectname);
             
             print("- Modelos");
-            for (ComplexDocument document : project.getDocuments("models"))
+            for (ComplexDocument document : project.getDocuments("model"))
                 print(document.getstKey());
         }
     }
