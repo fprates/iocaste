@@ -51,7 +51,16 @@ public class ComplexDocument implements Serializable,
     }
     
     public final void add(ComplexDocument document) {
-        add(document.getHeader());
+        String alias;
+        
+        if (document == null)
+            return;
+        
+        alias = cmodel.getModelItemName(document.getModel().getName());
+        if (alias == null)
+            throw new RuntimeException("Invalid object model.");
+        
+        items.get(alias).documents.add(document);
     }
     
     /**
