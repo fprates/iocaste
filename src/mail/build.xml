@@ -13,7 +13,6 @@
             <fileset dir="${builddir}/shell/lib"/>
         	<fileset dir="${builddir}/documents/lib"/>
             <fileset dir="${builddir}/packagetool/lib"/>
-        	<fileset dir="${builddir}/docmanager/lib"/>
         	<fileset dir="${builddir}/tasksel/lib"/>
             <fileset dir="${builddir}/${ant.project.name}/lib"/>
             <fileset dir="${basedir}/lib"/>
@@ -57,7 +56,6 @@
             <lib dir="${builddir}/shell/lib" includes="*.jar"/>
         	<lib dir="${builddir}/documents/lib" includes="*.jar"/>
             <lib dir="${builddir}/packagetool/lib" includes="*.jar"/>
-        	<lib dir="${builddir}/docmanager/lib" includes="*.jar"/>
         	<lib dir="${builddir}/tasksel/lib" includes="*.jar"/>
         	<lib dir="${basedir}/lib-mail" includes="*.jar"/>
             <classes dir="${builddir}/${ant.project.name}/classes"/>

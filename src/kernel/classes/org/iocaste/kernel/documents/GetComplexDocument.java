@@ -75,6 +75,7 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
         document = new ComplexDocument(cmodel);
         document.setHeader(object);
         models = cmodel.getItems();
+        _data = new CDocumentData();
         for (String name : models.keySet()) {
             cmodelitem = models.get(name);
             if (cmodelitem.model != null) {
@@ -91,7 +92,6 @@ public class GetComplexDocument extends AbstractDocumentsHandler {
             if (objects == null)
                 continue;
             for (ExtendedObject id : objects) {
-                _data = new CDocumentData();
                 _data.cdname = cmodelitem.cmodel.getName();
                 for (DocumentModelKey key : data.model.getKeys()) {
                     _data.id = id.get(key.getModelItemName());

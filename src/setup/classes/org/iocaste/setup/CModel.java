@@ -94,5 +94,24 @@ public class CModel {
         item.setTableFieldName("MDLTY");
         item.setDataElement(element);
         model.add(item);
+        
+        // formato de chave caracter
+        element = new DataElement("CMODEL_KEY_FORMAT");
+        element.setType(DataType.CHAR);
+        element.setLength(10);
+        element.setUpcase(false);
+        item = new DocumentModelItem("KEY_FORMAT");
+        item.setTableFieldName("KFRMT");
+        item.setDataElement(element);
+        model.add(item);
+        
+        // digitos de chave numérica
+        element = new DataElement("CMODEL_KEY_DIGITS");
+        element.setType(DataType.NUMC);
+        element.setLength(1);
+        item = new DocumentModelItem("KEY_DIGITS");
+        item.setTableFieldName("KDGTS");
+        item.setDataElement(element);
+        model.add(item);
     }
 }

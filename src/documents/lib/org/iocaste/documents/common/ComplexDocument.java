@@ -2,7 +2,6 @@ package org.iocaste.documents.common;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,16 +38,17 @@ public class ComplexDocument implements Serializable,
      * @param object extended object
      */
     public final void add(ExtendedObject object) {
-        String alias;
+        String alias, key;
+        DocumentModel model;
         
         if (object == null)
             return;
-        
-        alias = cmodel.getModelItemName(object.getModel().getName());
+        model = object.getModel();
+        alias = cmodel.getModelItemName(model.getName());
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
-        
-        items.get(alias).objects.add(object);
+        key = getItemKey(model);
+        items.get(alias).objects.put(object.get(key), object);
     }
     
     public final void add(ComplexDocument document) {
@@ -61,7 +61,7 @@ public class ComplexDocument implements Serializable,
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
         
-        items.get(alias).documents.add(document);
+        items.get(alias).documents.put(document.getKey(), document);
     }
     
     /**
@@ -126,15 +126,16 @@ public class ComplexDocument implements Serializable,
      * @return group of complexes documents
      */
     public final ComplexDocument[] getDocuments(String name) {
-        return items.get(name).documents.toArray(new ComplexDocument[0]);
+        Map<Object, ComplexDocument> cdocuments = items.get(name).documents;
+        ComplexDocument[] documents = new ComplexDocument[cdocuments.size()];
+        int i = 0;
+        for (Object key : cdocuments.keySet())
+            documents[i++] = cdocuments.get(key);
+        return documents;
     }
     
     public final Map<Object, ComplexDocument> getDocumentsMap(String name) {
-        Map<Object, ComplexDocument> documents;
-        documents = new LinkedHashMap<>();
-        for (ComplexDocument document : items.get(name).documents)
-            documents.put(document.getKey(), document);
-        return documents;
+        return items.get(name).documents;
     }
     
     /**
@@ -155,34 +156,36 @@ public class ComplexDocument implements Serializable,
         return 0;
     }
     
+    private final String getItemKey(DocumentModel model) {
+        for (DocumentModelKey modelkey : model.getKeys())
+            return modelkey.getModelItemName();
+        return null;
+    }
+    
     /**
      * Get group of items of a document.
      * @param name group name
      * @return group of items
      */
     public final ExtendedObject[] getItems(String name) {
-        return items.get(name).objects.toArray(new ExtendedObject[0]);
+        Map<Object, ExtendedObject> items = this.items.get(name).objects;
+        ExtendedObject[] objects = new ExtendedObject[items.size()];
+        int i = 0;
+        for (Object key : items.keySet())
+            objects[i++] = items.get(key);
+        return objects;
     }
     
     public final Map<Object, ExtendedObject> getItemsMap(String name) {
         DocumentModel model = cmodel.getItems().get(name).model;
-        String key = null;
-        
-        for (DocumentModelKey modelkey : model.getKeys()) {
-            key = modelkey.getModelItemName();
-            break;
-        }
+        String key = getItemKey(model);
         
         return getItemsMap(name, key);
     }
     
     public final Map<Object, ExtendedObject> getItemsMap(
             String name, String field) {
-        Map<Object, ExtendedObject> items = new LinkedHashMap<>();
-        
-        for (ExtendedObject object : this.items.get(name).objects)
-            items.put(object.get(field), object);
-        return items;
+        return items.get(name).objects;
     }
     
     /**
@@ -255,6 +258,29 @@ public class ComplexDocument implements Serializable,
     public final void remove() {
         for (ComplexDocumentItems items : items.values())
             items.clear();
+    }
+    
+    public final void remove(ExtendedObject object) {
+        String alias;
+        DocumentModel model;
+        if (object == null)
+            return;
+        model = object.getModel();
+        alias = cmodel.getModelItemName(model.getName());
+        if (alias == null)
+            throw new RuntimeException("Invalid object model.");
+        items.get(alias).documents.remove(object.get(getItemKey(model)));
+    }
+    
+    public final void remove(ComplexDocument document) {
+        String alias;
+        
+        if (document == null)
+            return;
+        alias = cmodel.getModelItemName(document.getModel().getName());
+        if (alias == null)
+            throw new RuntimeException("Invalid object model.");
+        items.get(alias).documents.remove(document.getKey());
     }
     
     /**

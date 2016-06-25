@@ -6,13 +6,15 @@ import org.iocaste.appbuilder.common.AbstractViewSpec;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.ComplexModelItem;
+import org.iocaste.documents.common.Documents;
 
 public class MaintenanceSpec extends AbstractViewSpec {
     
     @Override
     public void execute(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
-        ComplexModel model = getManager(extcontext.link.cmodel).getModel();
+        ComplexModel model = new Documents(context.function).
+                getComplexModel(extcontext.link.cmodel);
         
         dataform(parent, "head");
         tabbedpane(parent, "tabs");

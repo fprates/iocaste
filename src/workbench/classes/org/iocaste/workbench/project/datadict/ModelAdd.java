@@ -22,19 +22,19 @@ public class ModelAdd extends AbstractCommand {
         Context extcontext;
         
         name = parameters.get("name");
-        document = getManager("model").get(name);
+        document = getDocument("WB_MODELS", name);
         if (document != null) {
             message(Const.ERROR, "model %s already exists.", name);
             return;
         }
 
         extcontext = getExtendedContext();
-        document = getManager("model").instance();
+        document = extcontext.project.instance("model");
         object = document.getHeader();
         object.set("NAME", name);
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("TABLE", parameters.get("table"));
-        save("model", document);
+        save(document);
         extcontext.project.add(document);
         print("model %s updated.", name);
     }

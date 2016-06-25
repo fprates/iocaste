@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
 
 public class SelectConfig extends AbstractViewConfig {
     private String cmodel;
@@ -23,7 +24,8 @@ public class SelectConfig extends AbstractViewConfig {
         navcontrol.setTitle(context.view.getPageName());
         navcontrol.submit("validate");
         
-        head.model = getManager(cmodel).getModel().getHeader();
+        head.model = new Documents(context.function).getComplexModel(cmodel).
+                getHeader();
         for (DocumentModelItem mitem : head.model.getItens()) {
             item = head.itemInstance(mitem.getName());
             if (!head.model.isKey(mitem))

@@ -29,7 +29,7 @@ public class ProjectList extends AbstractCommand {
         }
         for (ExtendedObject object : objects) {
             projectname = object.getst("PROJECT_NAME");
-            project = getDocument("project", projectname);
+            project = getDocument("WB_PROJECT", projectname);
             print("- Nome: %s", object.getst("PROJECT_NAME"));
             
             print("- Perfil: %s", object.getst("PROFILE"));

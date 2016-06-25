@@ -58,7 +58,7 @@ public class ModelItemAdd extends AbstractCommand {
         object.set("FIELD", field);
         object.set("DATA_ELEMENT", dtel);
         object.set("KEY", getBooleanParameter("key"));
-        save("model", extcontext.model);
+        save(extcontext.model);
         print("model item %s updated.", name);
     }
 

@@ -3,7 +3,7 @@ package org.iocaste.appbuilder.common.cmodelviewer;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.GetFieldsProperties;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.docmanager.common.Manager;
+import org.iocaste.documents.common.Documents;
 
 public class MaintenanceConfig extends AbstractViewConfig {
     
@@ -11,11 +11,11 @@ public class MaintenanceConfig extends AbstractViewConfig {
     protected void execute(PageBuilderContext context) {
         ConfigData configdata;
         Context extcontext = getExtendedContext();
-        Manager manager = getManager(extcontext.link.cmodel);
         
         new CModelHandler(extcontext);
         configdata = new ConfigData();
-        configdata.cmodel = manager.getModel();
+        configdata.cmodel = new Documents(context.function).
+                getComplexModel(extcontext.link.cmodel);
         configdata.mode = ConfigData.UPDATE;
         configdata.context = context;
         configdata.mark = true;

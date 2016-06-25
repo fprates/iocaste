@@ -219,14 +219,15 @@ public class Documents extends AbstractServiceInterface {
         return call(message);
     }
     
-    /**
-     * 
-     * @param cmodelname
-     * @param key
-     */
     public final void deleteComplexDocument(String cmodelname, Object key) {
+        deleteComplexDocument(cmodelname, null, key);
+    }
+    
+    public final void deleteComplexDocument(
+            String cmodelname, Object ns, Object key) {
         Message message = new Message("delete_complex_document");
         message.add("cmodel_name", cmodelname);
+        message.add("ns", ns);
         message.add("id", key);
         call(message);
     }
@@ -313,6 +314,17 @@ public class Documents extends AbstractServiceInterface {
         return call(message);
     }
     
+    public static final DocumentModelItem getKey(DocumentModel model) {
+        String name;
+        
+        for (DocumentModelKey key : model.getKeys()) {
+            name = key.getModelItemName();
+            return model.getModelItem(name);
+        }
+        
+        return null;
+    }
+    
     /**
      * Obtem instância do modelo de documento informado.
      * @param nome do modelo
@@ -392,6 +404,19 @@ public class Documents extends AbstractServiceInterface {
         message.add("ns", ns);
         message.add("key", key);
         return call(message);
+    }
+    
+    public static final DocumentModelItem getReference(DocumentModel model,
+            DocumentModelItem key) {
+        DocumentModelItem reference;
+        
+        for (DocumentModelItem item : model.getItens()) {
+            reference = item.getReference();
+            if (reference == null || !key.equals(reference))
+                continue;
+            return item;
+        }
+        return null;
     }
     
     /**
@@ -664,10 +689,10 @@ public class Documents extends AbstractServiceInterface {
      * @return retorna código do documento, ou 
      * 0, se erro na criação do documento;
      */
-    public final void save(ComplexDocument document) {
+    public final ComplexDocument save(ComplexDocument document) {
         Message message = new Message("save_complex_document");
         message.add("document", document);
-        call(message);
+        return call(message);
     }
     
     /**

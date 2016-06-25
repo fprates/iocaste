@@ -18,21 +18,20 @@ public class ViewSpecRemove extends AbstractCommand {
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         String name;
+        ExtendedObject specitem;
         Context extcontext = getExtendedContext();
         Map<Object, ExtendedObject> specitems =
                 extcontext.view.getItemsMap("spec", "NAME");
         
         name = parameters.get("name");
-        if (!specitems.containsKey(name)) {
+        specitem = specitems.get(name);
+        if (specitem == null) {
             message(Const.ERROR, "invalid.specitem");
             return;
         }
         
-        extcontext.view.remove("spec");
-        for (Object key : specitems.keySet())
-            if (!name.equals(key))
-                extcontext.view.add(specitems.get(key));
-        save("view", extcontext.view);
+        extcontext.view.remove(specitem);
+        save(extcontext.view);
         print("component %s removed.", name);
     }
 }

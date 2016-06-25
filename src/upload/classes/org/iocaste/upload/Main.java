@@ -44,7 +44,6 @@ public class Main extends AbstractPageBuilder {
         panel = new StandardPanel(context);
         panel.instance("main", new MainPage(), extcontext);
         
-        context.addManager("layout", new LayoutManager(context.function));
         new Messages(context.messages);
     }
 

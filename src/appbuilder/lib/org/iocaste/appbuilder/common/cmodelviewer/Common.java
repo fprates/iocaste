@@ -8,10 +8,10 @@ import org.iocaste.appbuilder.common.ViewComponents;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolData;
 import org.iocaste.appbuilder.common.dataformtool.DataFormToolItem;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
-import org.iocaste.docmanager.common.AbstractManager;
 import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
 
 public class Common {
 
@@ -83,9 +83,9 @@ public class Common {
             tabletool.mark = griddata.mark;
             tabletool.vlines = 0;
             tabletool.hide = new String[] {
-                AbstractManager.getReference(cmodelitem.model, griddata.hkey).
+                Documents.getReference(cmodelitem.model, griddata.hkey).
                         getName(),
-                AbstractManager.getKey(cmodelitem.model).getName()
+                Documents.getKey(cmodelitem.model).getName()
             };
         }
     }

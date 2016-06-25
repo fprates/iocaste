@@ -6,11 +6,11 @@ import org.iocaste.appbuilder.common.DocumentExtractor;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewComponents;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
-import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.Const;
 
 public class Save extends AbstractActionHandler {
@@ -24,7 +24,8 @@ public class Save extends AbstractActionHandler {
         Context extcontext;
         
         extcontext = getExtendedContext();
-        cmodel = getManager(extcontext.link.cmodel).getModel();
+        cmodel = new Documents(context.function).
+                getComplexModel(extcontext.link.cmodel);
         conversion = new DataConversion();
         conversion.dfsource("base");
         for (DocumentModelKey key : cmodel.getHeader().getKeys()) {
@@ -44,8 +45,7 @@ public class Save extends AbstractActionHandler {
         extcontext.document = extractor.save();
         extcontext.id = extcontext.document.getKey();
         
-        managerMessage(extcontext.link.cmodel, Const.STATUS, Manager.SAVED,
-                extcontext.id);
+        message(Const.STATUS, "document.saved", extcontext.id);
     }
     
     protected void tabs(DocumentExtractor extractor,

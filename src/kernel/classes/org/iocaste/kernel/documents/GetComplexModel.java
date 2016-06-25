@@ -3,6 +3,7 @@ package org.iocaste.kernel.documents;
 import java.sql.Connection;
 
 import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
@@ -33,6 +34,7 @@ public class GetComplexModel extends AbstractDocumentsHandler {
         ExtendedObject[] objects;
         ComplexModel cmodel, _cmodel;
         Query query;
+        ComplexModelItem citem;
         
         getobject = documents.get("get_object");
         getmodel = documents.get("get_document_model");
@@ -62,7 +64,9 @@ public class GetComplexModel extends AbstractDocumentsHandler {
                     throw new IocasteException(new StringBuilder(name).
                             append(" complex model corrupted. Item model ").
                             append(modelname).append(" not found.").toString());
-                cmodel.put(item.getst("NAME"), model);
+                citem = cmodel.put(item.getst("NAME"), model);
+                citem.keydigits = item.geti("KEY_DIGITS");
+                citem.keyformat = item.getst("KEY_FORMAT");
                 break;
             case 1:
                 _cmodel = run(connection, documents, modelname);

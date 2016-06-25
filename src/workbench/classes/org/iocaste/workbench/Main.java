@@ -6,9 +6,6 @@ import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.workbench.install.ProjectInstall;
 import org.iocaste.workbench.install.TextsInstall;
-import org.iocaste.workbench.project.ProjectManager;
-import org.iocaste.workbench.project.datadict.ModelManager;
-import org.iocaste.workbench.project.view.ViewManager;
 
 public class Main extends AbstractPageBuilder {
     
@@ -17,9 +14,6 @@ public class Main extends AbstractPageBuilder {
         StandardPanel panel = new StandardPanel(context);
         
         new Messages(context.messages);
-        context.addManager("project", new ProjectManager(this));
-        context.addManager("model", new ModelManager(this));
-        context.addManager("view", new ViewManager(this));
         panel.instance("main", new MainPage(), new Context(context));
     }
 

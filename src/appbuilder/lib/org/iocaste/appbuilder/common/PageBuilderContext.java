@@ -4,30 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.AbstractContext;
 
 public class PageBuilderContext extends AbstractContext {
     private Map<String, ViewContext> viewcontexts;
-    private Map<String, Manager> managers;
     public DownloadData downloaddata;
     
     public PageBuilderContext() {
         viewcontexts = new HashMap<>();
-        managers = new HashMap<>();
-    }
-    
-    public final void addManager(String name, Manager manager) {
-        managers.put(name, manager);
-    }
-    
-    /**
-     * 
-     * @param view
-     * @return
-     */
-    public final Manager getManager(String name) {
-        return managers.get(name);
     }
     
     /**

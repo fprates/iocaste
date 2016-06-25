@@ -12,7 +12,6 @@ import org.iocaste.appbuilder.common.reporttool.ReportToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.appbuilder.common.tiles.TilesData;
-import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelKey;
@@ -129,10 +128,6 @@ public abstract class AbstractViewInput implements ViewInput {
     @SuppressWarnings("unchecked")
     protected final <T extends ExtendedContext> T getExtendedContext() {
         return (T)context.getView().getExtendedContext();
-    }
-    
-    protected final Manager getManager(String name) {
-        return context.getManager(name);
     }
     
     private final ViewComponents getViewComponents() {

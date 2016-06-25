@@ -28,7 +28,7 @@ public class ViewAdd extends AbstractCommand {
         view = extcontext.project.instance("screen");
         view.set("NAME", name);
         view.set("PROJECT", extcontext.project.getstKey());
-        save("view", view);
+        save(view);
         print("view %s created.", name);
     }
 }

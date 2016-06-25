@@ -7,7 +7,7 @@ import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.GetFieldsProperties;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ContextDataHandler;
-import org.iocaste.docmanager.common.Manager;
+import org.iocaste.documents.common.Documents;
 
 public class DisplayConfig extends AbstractViewConfig {
     
@@ -16,7 +16,6 @@ public class DisplayConfig extends AbstractViewConfig {
         ConfigData configdata;
         Map<String, ComponentEntry> entries;
         Context extcontext = getExtendedContext();
-        Manager manager = getManager(extcontext.link.cmodel);
         ContextDataHandler handler = new CModelHandler(extcontext);
         
         entries = context.getView().getComponents().entries;
@@ -30,7 +29,8 @@ public class DisplayConfig extends AbstractViewConfig {
             }
         
         configdata = new ConfigData();
-        configdata.cmodel = manager.getModel();
+        configdata.cmodel = new Documents(context.function).
+                getComplexModel(extcontext.link.cmodel);
         configdata.mode = ConfigData.DISPLAY;
         configdata.context = context;
         configdata.fieldproperties = GetFieldsProperties.

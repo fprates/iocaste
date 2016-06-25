@@ -9,8 +9,11 @@ import java.util.Set;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
-import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.ComplexModelItem;
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DocumentModelKey;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -38,9 +41,44 @@ public abstract class AbstractActionHandler {
     protected final void back() {
         context.function.back();
     }
+
+    protected final ComplexDocument clone(ComplexDocument document) {
+        Map<String, ComplexModelItem> models;
+        ComplexModel cmodel = document.getModel();
+        ComplexDocument clone = documentInstance(cmodel);
+        DocumentModel model = cmodel.getHeader();
+        ExtendedObject object = new ExtendedObject(model);
+        
+        /*
+         * clone cmodel header object and clear its key field.
+         * it's enough to triggers most of reindexing procedures.
+         */
+        clone.setHeader(object);
+        Documents.move(object, document.getHeader());
+        for (DocumentModelKey key : model.getKeys()) {
+            Documents.clear(object, key.getModelItemName());
+            break;
+        }
+        
+        /*
+         * clone cmodel items
+         */
+        models = cmodel.getItems();
+        for (String name : models.keySet())
+            if (models.get(name) != null)
+                for (ExtendedObject source : document.getItems(name))
+                    Documents.move(clone.instance(name), source);
+        
+        return clone;
+    }
     
     protected final void delete(ExtendedObject object) {
         documents.delete(object);
+    }
+    
+    protected final void delete(ComplexDocument document) {
+        documents.deleteComplexDocument(document.getModel().getName(),
+                document.getNS(), document.getKey());
     }
     
     private DataForm dfget(String name) {
@@ -53,9 +91,16 @@ public abstract class AbstractActionHandler {
         return entry.component.getElement();
     }
     
-    protected final DocumentExtractor documentExtractorInstance(String manager)
-    {
-        return new DocumentExtractor(context, manager);
+    protected final DocumentExtractor documentExtractorInstance(String cmodel) {
+        return new DocumentExtractor(context, cmodel);
+    }
+
+    protected final ComplexDocument documentInstance(String cmodel) {
+        return new ComplexDocument(documents.getComplexModel(cmodel));
+    }
+    
+    protected final ComplexDocument documentInstance(ComplexModel cmodel) {
+        return new ComplexDocument(cmodel);
     }
     
     protected final void execute(String action) throws Exception {
@@ -143,13 +188,13 @@ public abstract class AbstractActionHandler {
         return getdfinput(dataform, field).getst();
     }
     
-    protected final ComplexDocument getDocument(String manager, Object id) {
-        return context.getManager(manager).get(id);
+    protected final ComplexDocument getDocument(String cmodel, Object id) {
+        return getDocument(cmodel, null, id);
     }
     
     protected final ComplexDocument getDocument(
-            String manager, Object ns, Object id) {
-        return context.getManager(manager).get(ns, id);
+            String cmodel, Object ns, Object id) {
+        return documents.getComplexDocument(cmodel, ns, id);
     }
     
     protected Const getErrorType() {
@@ -178,10 +223,6 @@ public abstract class AbstractActionHandler {
         return ((InputComponent)context.view.getElement(name)).getst();
     }
     
-    protected final Manager getManager(String name) {
-        return context.getManager(name);
-    }
-    
     protected final long getNextNumber(String range) {
         return documents.getNextNumber(range);
     }
@@ -194,6 +235,45 @@ public abstract class AbstractActionHandler {
             String model, Object ns, Object key) {
         return documents.getObject(model, ns, key);
         
+    }
+    
+    protected final Map<Object, ExtendedObject> getRelated(
+            ComplexDocument document, String itemsname, String field) {
+        return getRelated(document, null, itemsname, field);
+    }
+
+    protected final Map<Object, ExtendedObject> getRelated(
+            ComplexDocument document, Object ns, String itemsname, String field)
+    {
+        DocumentModelItem item;
+        Query query;
+        ExtendedObject[] objects;
+        DocumentModelItem reference;
+        ComplexModelItem cmodelitem;
+        ComplexModel cmodel = document.getModel();
+        
+        cmodelitem = cmodel.getItems().get(itemsname);
+        if (cmodelitem.model == null)
+            throw new RuntimeException(new StringBuilder("items '").
+                    append(itemsname).
+                    append("' undefined for cmodel ").
+                    append(cmodel.getName()).toString());
+        
+        item = cmodelitem.model.getModelItem(field);
+        reference = item.getReference();
+        if (reference == null)
+            return null;
+        
+        objects = document.getItems(itemsname);
+        if (objects == null || objects.length == 0)
+            return null;
+        
+        query = new Query();
+        query.setModel(reference.getDocumentModel().getName());
+        query.forEntries(objects);
+        query.andEqualEntries(reference.getName(), field);
+        query.setNS(ns);
+        return documents.selectToMap(query);
     }
     
     protected final void home() {
@@ -220,16 +300,6 @@ public abstract class AbstractActionHandler {
     
     protected final ExtendedObject instance(String model) {
         return new ExtendedObject(documents.getModel(model));
-    }
-    
-    protected final boolean keyExists(String manager, Object id) {
-        return context.getManager(manager).exists(id);
-    }
-    
-    protected final void managerMessage(String manager, Const status, int msgid,
-            Object... args) {
-        context.function.message(
-                status, context.getManager(manager).getMessage(msgid), args);
     }
     
     protected final void message(Const type, String text, Object... args) {
@@ -357,9 +427,8 @@ public abstract class AbstractActionHandler {
             context.function.download();
     }
     
-    protected final ComplexDocument save(
-            String managername, ComplexDocument document) {
-        return context.getManager(managername).save(document);
+    protected final ComplexDocument save(ComplexDocument document) {
+        return documents.save(document);
     }
     
     protected final void save(ExtendedObject object) {

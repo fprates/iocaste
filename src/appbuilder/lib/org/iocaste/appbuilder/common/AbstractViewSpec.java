@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.iocaste.docmanager.common.Manager;
-
 public abstract class AbstractViewSpec implements ViewSpec {
     protected String parent;
     private Map<String, ViewSpecItem> items;
@@ -62,10 +60,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
     @Override
     public final Collection<ViewSpecItem> getItems() {
         return items.values();
-    }
-    
-    protected final Manager getManager(String name) {
-        return context.getManager(name);
     }
 
     @Override

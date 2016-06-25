@@ -10,8 +10,8 @@ import java.util.Set;
 
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
-import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
@@ -22,15 +22,15 @@ public class DocumentExtractor {
     private DataConversion hconversion;
     private List<DataConversion> conversions;
     private Documents documents;
-    private Manager manager;
     private boolean ignoreinitialhead;
     private Object ns;
+    private ComplexModel cmodel;
     
-    public DocumentExtractor(PageBuilderContext context, String manager) {
+    public DocumentExtractor(PageBuilderContext context, String cmodel) {
         this.context = context;
         conversions = new ArrayList<>();
         documents = new Documents(context.function);
-        this.manager = context.getManager(manager);
+        this.cmodel = documents.getComplexModel(cmodel);
     }
     
     public final void add(DataConversion conversion) {
@@ -235,7 +235,7 @@ public class DocumentExtractor {
             throw new RuntimeException("no conversion rule for header.");
 
         head = null;
-        document = manager.instance();
+        document = new ComplexDocument(cmodel);
         components = context.getView().getComponents();
 
         switch (hconversion.getSourceType()) {
@@ -259,7 +259,7 @@ public class DocumentExtractor {
         
         to = hconversion.getTo();
         if (to == null)
-            model = manager.getModel().getHeader();
+            model = cmodel.getHeader();
         else
             model = documents.getModel(to);
         
@@ -274,7 +274,7 @@ public class DocumentExtractor {
         
         document.setNS(ns);
         
-        return manager.save(document);
+        return documents.save(document);
     }
     
     public final void setHeader(DataConversion conversion) {

@@ -45,6 +45,8 @@ public class CreateCModel extends AbstractDocumentsHandler {
             if (cmodelitem.model != null) {
                 object.set("MODEL", cmodelitem.model.getName());
                 object.set("MODEL_TYPE", 0);
+                object.set("KEY_DIGITS", cmodelitem.keydigits);
+                object.set("KEY_FORMAT", cmodelitem.keyformat);
             } else {
                 object.set("MODEL", cmodelitem.cmodel.getName());
                 object.set("MODEL_TYPE", 1);

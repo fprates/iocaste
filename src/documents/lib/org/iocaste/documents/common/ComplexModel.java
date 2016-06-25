@@ -107,9 +107,11 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
      * @param name name of the group
      * @param item model of the group
      */
-    public final void put(String name, DocumentModel model) {
-        items.put(name, new ComplexModelItem(model));
+    public final ComplexModelItem put(String name, DocumentModel model) {
+        ComplexModelItem item = new ComplexModelItem(model);
+        items.put(name, item);
         reverseitems.put(model.getName(), name);
+        return item;
     }
     
     public final void put(String name, ComplexModel cmodel) {

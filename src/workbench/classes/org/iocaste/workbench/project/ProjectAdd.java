@@ -18,11 +18,11 @@ public class ProjectAdd extends AbstractCommand {
     protected void execute(PageBuilderContext context) throws Exception {
         ComplexDocument project;
         
-        project = getManager("project").instance();
+        project = documentInstance("WB_PROJECT");
         project.set("PROJECT_NAME", parameters.get("name"));
         project.set("PROFILE", parameters.get("profile"));
         project.set("TEXT", parameters.get("text"));
-        save("project", project);
+        save(project);
         message(Const.STATUS, "project.created");
     }
 

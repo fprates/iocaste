@@ -7,7 +7,6 @@ import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.reporttool.ReportTool;
 import org.iocaste.appbuilder.common.reporttool.ReportToolData;
-import org.iocaste.docmanager.common.Manager;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
@@ -59,7 +58,6 @@ public abstract class AbstractReportSelect extends AbstractActionHandler {
             ComplexDocument document, String itemsname, String keyfield,
             String textfield, String key) {
         Map<Object, ExtendedObject> objects;
-        Manager manager;
         Map<Object, ExtendedObject> texts;
         
         texts = cache.get(managername);
@@ -69,8 +67,7 @@ public abstract class AbstractReportSelect extends AbstractActionHandler {
         }
         
         if (!texts.containsKey(key)) {
-            manager = getManager(managername);
-            objects = manager.getRelated(
+            objects = getRelated(
                     document, document.getNS(), itemsname, keyfield);
             texts.putAll(objects);
         }

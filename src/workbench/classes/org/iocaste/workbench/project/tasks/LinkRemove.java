@@ -16,22 +16,17 @@ public class LinkRemove extends AbstractCommand {
     protected void execute(PageBuilderContext context) throws Exception {
         String name;
         ExtendedObject object;
-        ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
 
         name = parameters.get("name");
-        objects = extcontext.project.getItems("link");
-        object = readobjects(objects, "NAME", name);
+        object = extcontext.project.getItemsMap("link", "NAME").get(name);
         if (object == null) {
             message(Const.ERROR, "link %s doesn't exist.", name);
             return;
         }
         
-        extcontext.project.remove("link");
-        for (ExtendedObject link : objects)
-            if (!link.getst("NAME").equals(name))
-                extcontext.project.add(link);
-        save("project", extcontext.project);
+        extcontext.project.remove(object);
+        save(extcontext.project);
         print("link %s removed", name);
     }
 

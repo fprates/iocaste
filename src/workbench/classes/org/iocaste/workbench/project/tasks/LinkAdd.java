@@ -37,7 +37,7 @@ public class LinkAdd extends AbstractCommand {
         object.set("COMMAND", command);
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("GROUP", group);
-        save("project", extcontext.project);
+        save(extcontext.project);
         print("link %s updated.", name);
     }
 

@@ -6,9 +6,6 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.ViewSpec;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
-import org.iocaste.docmanager.common.AbstractManager;
-import org.iocaste.docmanager.common.Manager;
-import org.iocaste.protocol.Function;
 
 public abstract class AbstractModelViewer extends AbstractPageBuilder {
     public static final String CREATE = "create";
@@ -50,7 +47,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         StandardPanel panel;
         ViewSpec selspec;
         String entityaction;
-        Manager manager;
         
         if (extcontext == null)
             extcontext = new Context(context);
@@ -58,9 +54,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         extcontext.link = link;
         extcontext.redirect = (link.number == null)?
                 link.create1view : link.edit1view;
-        
-        manager = managerInstance(link.cmodel);
-        context.addManager(link.cmodel, manager);
         
         selspec = new SelectSpec();
         if (link.inputvalidate == null)
@@ -102,10 +95,6 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
         panel.instance(link.display1view, displaypage, extcontext);
     }
     
-    private final Manager managerInstance(String cmodel) {
-        return new RuntimeManager(cmodel, this);
-    }
-    
     /**
      * 
      * @param extcontext
@@ -113,18 +102,4 @@ public abstract class AbstractModelViewer extends AbstractPageBuilder {
     protected final void setExtendedContext(Context extcontext) {
         this.extcontext = extcontext;
     }
-}
-
-class RuntimeManager extends AbstractManager {
-
-    public RuntimeManager(String cmodelname, Function function) {
-        super(cmodelname, function);
-        String messages[] = new String[3];
-        
-        messages[EEXISTS] = "code.exists";
-        messages[EINVALID] = "invalid.code";
-        messages[SAVED] = "record.saved";
-        setMessages(messages);
-    }
-    
 }

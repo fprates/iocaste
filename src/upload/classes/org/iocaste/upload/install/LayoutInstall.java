@@ -68,7 +68,7 @@ public class LayoutInstall extends AbstractInstallObject {
         
         cmodel = cmodelInstance("UPL_LAYOUT");
         cmodel.header("head");
-        cmodel.item("columns", "columns");
+        cmodel.item("columns", "columns", 4);
         
         /*
          * translations

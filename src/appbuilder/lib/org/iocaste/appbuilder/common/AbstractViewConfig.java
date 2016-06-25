@@ -1,7 +1,6 @@
 package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
-import org.iocaste.docmanager.common.Manager;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.TabbedPane;
@@ -56,15 +55,6 @@ public abstract class AbstractViewConfig implements ViewConfig {
     protected final <T extends ExtendedContext> T getExtendedContext() {
         return (T)context.getView(context.view.getPageName()).
                 getExtendedContext();
-    }
-    
-    /**
-     * 
-     * @param name
-     * @return
-     */
-    protected final Manager getManager(String name) {
-        return context.getManager(name);
     }
     
     /**

@@ -34,8 +34,6 @@
 	<classpathentry kind="src" path="src/texteditor/classes"/>
 	<classpathentry kind="src" path="src/texteditor/lib"/>
 	<classpathentry kind="src" path="src/masterdata/classes"/>
-	<classpathentry kind="src" path="src/docmanager/classes"/>
-	<classpathentry kind="src" path="src/docmanager/lib"/>
 	<classpathentry kind="src" path="src/appbuilder/lib"/>
 	<classpathentry kind="src" path="src/appbuilder/classes"/>
 	<classpathentry kind="src" path="src/kernel/classes"/>
