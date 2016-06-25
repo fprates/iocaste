@@ -230,6 +230,7 @@ public class DocumentExtractor {
         DataForm form;
         ComplexDocument document;
         ViewComponents components;
+        DataConversionRule rule;
         
         if (hconversion == null)
             throw new RuntimeException("no conversion rule for header.");
@@ -263,8 +264,13 @@ public class DocumentExtractor {
         else
             model = documents.getModel(to);
         
+        rule = hconversion.getRule();
+        if (rule != null)
+            rule.beforeConversion(head);
         head = conversion(
                 ns, head, model, hconversion, documents, ignoreinitialhead);
+        if (rule != null)
+            rule.afterConversion(head);
         document.setHeader(head);
         document.remove();
         for (DataConversion conversion : conversions) {
