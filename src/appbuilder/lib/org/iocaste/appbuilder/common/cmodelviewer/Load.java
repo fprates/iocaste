@@ -20,7 +20,7 @@ public class Load extends AbstractActionHandler {
         extcontext.document = getDocument(
                 extcontext.link.cmodel, extcontext.ns, extcontext.id);
         if (extcontext.document == null) {
-            message(Const.ERROR, "invalid.document.id");
+            message(Const.ERROR, "invalid.code");
             return;
         }
         

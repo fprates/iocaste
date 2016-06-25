@@ -45,7 +45,7 @@ public class Save extends AbstractActionHandler {
         extcontext.document = extractor.save();
         extcontext.id = extcontext.document.getKey();
         
-        message(Const.STATUS, "document.saved", extcontext.id);
+        message(Const.STATUS, "record.saved", extcontext.id);
     }
     
     protected void tabs(DocumentExtractor extractor,
