@@ -109,11 +109,11 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
             }
         }
 
-        return save(document, message.getSessionid());
+        save(document, message.getSessionid());
+        return document;
     }
 
-    private final ComplexDocument save(
-            ComplexDocument document, String sessionid) throws Exception {
+    private final void save(ComplexDocument document, String sessionid) throws Exception {
         DeleteDocument delete;
         ModifyDocument modify;
         GetComplexDocument getcdoc;
@@ -148,7 +148,7 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
         }
         
         if (original == null)
-            return null;
+            return;
         
         delete = data.documents.get("delete_document");
         keys = null;
@@ -178,8 +178,6 @@ public class SaveComplexDocument extends AbstractDocumentsHandler {
                     delete.run(data.documents, data.connection, object);
             }
         }
-        
-        return null;
     }
 
 }
