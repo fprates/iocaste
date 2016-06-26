@@ -16,6 +16,7 @@ import org.iocaste.shell.common.Shell;
 import org.iocaste.shell.common.StandardContainer;
 import org.iocaste.shell.common.Text;
 import org.iocaste.shell.common.ViewTitle;
+import org.iocaste.shell.common.VirtualControl;
 
 public class StandardNavControlDesign implements NavControlDesign {
     protected StandardContainer buttonbar;
@@ -33,7 +34,7 @@ public class StandardNavControlDesign implements NavControlDesign {
     public final void build(Container container, PageBuilderContext context) {
         Text text;
         Link link;
-        String name;
+        String name, page;
         ViewTitle title;
         Iocaste iocaste;
         PageStackItem[] positions;
@@ -41,6 +42,7 @@ public class StandardNavControlDesign implements NavControlDesign {
         ViewContext viewctx;
         NodeList login;
         NodeListItem loginitem;
+        AbstractPageBuilder function;
         User user = null;
         
         container.setStyleClass("nc_container");
@@ -119,10 +121,15 @@ public class StandardNavControlDesign implements NavControlDesign {
             link = new Link(options, "logout", "logout");
             link.setCancellable(true);
             
+            new VirtualControl(trackbar, "back").setCancellable(true);
+            
+            page = context.view.getPageName();
             viewctx = context.getView();
             viewctx.put("logout", new Logout());
-            ((AbstractPageBuilder)context.function).register(
-                    context.view.getPageName(), "logout", viewctx);
+            viewctx.put("back", new Back());
+            function = (AbstractPageBuilder)context.function;
+            function.register(page, "logout", viewctx);
+            function.register(page, "back", viewctx);
         }
     }
     

@@ -47,6 +47,8 @@ public abstract class AbstractPage extends AbstractFunction {
      */
     public void back() {
         PageStackItem entry = new Shell(this).popPage();
+        if (entry == null)
+            return;
         redirect(entry.getApp(), entry.getPage(), false);
         dontPushPage();
     }

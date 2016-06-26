@@ -552,6 +552,19 @@ public abstract class AbstractRenderer extends HttpServlet implements Function {
     
     /**
      * 
+     * @param getSessionId()
+     * @param logid
+     * @return
+     */
+    public static final PageStackItem popPage(String sessionid) {
+        String[] complexid = sessionid.split(":");
+        int logid = Integer.parseInt(complexid[1]);
+        
+        return apps.get(complexid[0]).get(logid).popPage();
+    }
+    
+    /**
+     * 
      * @param req
      * @param pagectx
      * @param sessionid

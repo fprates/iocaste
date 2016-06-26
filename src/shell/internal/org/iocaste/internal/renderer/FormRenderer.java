@@ -53,6 +53,7 @@ public class FormRenderer extends Renderer {
         }
         
         formtag.addChild(content);
+        config.addOnload(setGlobalContext(config));
         return formtag;
     }
     
@@ -74,6 +75,15 @@ public class FormRenderer extends Renderer {
         pretag.addInner(lines);
         
         return pretag;
+    }
+    
+    private static final String setGlobalContext(Config config) {
+        StringBuilder sb;
+        
+        sb = new StringBuilder("setGlobalContext(\"").
+                append(config.getCurrentForm()).append("\", \"").
+                append(config.getCurrentAction()).append("\")");
+        return sb.toString();
     }
 
 }

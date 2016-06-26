@@ -1,3 +1,5 @@
+var global_form = "";
+var global_action = "";
 
 function closeCal() {
     var cal = document.getElementById('calstdcnt');
@@ -107,8 +109,14 @@ function setValue(name, value) {
 	param.value = value;
 }
 
+function setGlobalContext(form, action) {
+    global_form = form;
+    global_action = action;
+}
+
 window.onpopstate = function(event) {
    history.go(1)
+   formSubmit(global_form, global_action, "back");
 };
 
 history.pushState(null, null, "#");

@@ -314,19 +314,6 @@ public class PageRenderer extends AbstractRenderer {
         return tickets.has(ticket);
     }
     
-    /**
-     * 
-     * @param getSessionId()
-     * @param logid
-     * @return
-     */
-    public static final PageStackItem popPage(String sessionid) {
-        String[] complexid = sessionid.split(":");
-        int logid = Integer.parseInt(complexid[1]);
-        
-        return apps.get(complexid[0]).get(logid).popPage();
-    }
-    
     public static final void removeAppEntry(String sessionid) {
         String[] complexid = sessionid.split(":");
         apps.remove(complexid[0]);

@@ -68,9 +68,17 @@ public class ExecAction extends AbstractHandler {
             if (element == null) {
                 if (context.action.length() == 0)
                     return state;
-                throw new IocasteException(new StringBuilder(
-                        "no defined element for \"").append(context.action).
-                        append("\".").toString());
+                
+                try {
+                    method = page.getClass().getMethod(context.action);
+                } catch (Exception e) {
+                    throw new IocasteException(new StringBuilder(
+                            "no defined element for \"").append(context.action).
+                            append("\".").toString());
+                }
+                method.invoke(page);
+                state.messagetext = getMessage(state.messagetext);
+                return state;
             }
             
             if (element.isControlComponent()) {

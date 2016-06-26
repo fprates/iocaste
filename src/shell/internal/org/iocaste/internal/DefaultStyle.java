@@ -448,9 +448,8 @@ public class DefaultStyle {
         style.put("border-left-style", "none");
 
         style = stylesheet.newElement(".tp_outer");
-        style.put("border-top-width", "1px");
-        style.put("border-top-style", "solid");
-        style.put("border-top-color", FRAME_COLOR);
+        style.put("border-width", "0px");
+        style.put("border-style", "none");
         
         style = stylesheet.newElement(".warning_message");
         style.put("background-color", "#ffff00");

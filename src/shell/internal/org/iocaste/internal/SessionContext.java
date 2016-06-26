@@ -64,7 +64,7 @@ public class SessionContext {
      * @return
      */
     public final PageStackItem popPage() {
-        return pagestack.pop();
+        return (pagestack.size() > 1)? pagestack.pop() : null;
     }
     
     /**
