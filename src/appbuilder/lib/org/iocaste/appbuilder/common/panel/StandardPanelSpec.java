@@ -19,6 +19,7 @@ public class StandardPanelSpec extends AbstractViewSpec {
         navcontrol("main");
 
         standardcontainer("main", "outercontent");
+        standardcontainer("outercontent", "actionbar");
         standardcontainer("outercontent", "content");
         
         extspec = page.getSpec();

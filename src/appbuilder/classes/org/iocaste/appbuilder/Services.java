@@ -20,7 +20,6 @@ public class Services extends AbstractFunction {
 
 class GetStyleSheet extends AbstractHandler {
     private Map<String, String[]> resolutions;
-    private static final String HEADER_HEIGHT = "146px";
 
     public GetStyleSheet() {
         resolutions = new HashMap<>();
@@ -70,7 +69,7 @@ class GetStyleSheet extends AbstractHandler {
             style.put("max-width", width[1]);
             style.put("margin-left", "auto");
             style.put("margin-right", "auto");
-            style.put("margin-top", HEADER_HEIGHT);
+            style.put("margin-top", "60px");
             style.put("margin-bottom", "0px");
             style.put("padding", "0px");
             style.put("overflow", "auto");
@@ -82,15 +81,17 @@ class GetStyleSheet extends AbstractHandler {
             style = stylesheet.newElement(mediakey, ".nc_title");
             style.put("font-size", width[2]);
             style.put("font-weight", "300");
-            style.put("width", "100%");
-            style.put("height", "44px");
-            style.put("color", FONT_COLOR);
+            style.put("max-width", width[1]);
+            style.put("color", BACKGROUND_COLOR);
             style.put("font-family", FONT_FAMILY);
-            style.put("margin-left", "0px");
-            style.put("margin-right", "0px");
-            style.put("margin-top", "15px");
+            style.put("margin-left", "auto");
+            style.put("margin-right", "auto");
+            style.put("margin-top", "0px");
             style.put("margin-bottom", "0px");
-            style.put("padding", "0px");
+            style.put("padding-left", "0px");
+            style.put("padding-right", "0px");
+            style.put("padding-top", "5px");
+            style.put("padding-bottom", "5px");
         }
         
         style = stylesheet.newElement(".main_logo");
@@ -102,14 +103,13 @@ class GetStyleSheet extends AbstractHandler {
         style.put("height", "44px");
         style.put("position", "relative");
         style.put("right", "0px");
-        style.put("margin-top", "13px");
+        style.put("margin-top", "0px");
         
         style = stylesheet.newElement(".nc_container");
-        style.put("position", "fixed");
         style.put("width", "100%");
-        style.put("height", HEADER_HEIGHT);
         style.put("top", "0px");
-        style.put("background-color", BACKGROUND_COLOR);
+        style.put("background-color", CLICKABLE_COLOR);
+        style.put("position", "fixed");
         
         style = stylesheet.newElement(".nc_nav_buttonbar");
         style.put("width", "100%");
@@ -124,44 +124,18 @@ class GetStyleSheet extends AbstractHandler {
         style.put("padding-right", "0px");
         style.put("padding-left", "0px");
         style.put("height", "40px");
-        style.put("margin-top", "15px");
+        style.put("margin-top", "0px");
         style.put("margin-bottom", "0px");
         style.put("margin-left", "0px");
         style.put("margin-right", "0px");
-
-        style = stylesheet.newElement(".nc_nav_link:hover");
-        style.put("display", "inline");
-        style.put("text-decoration", "none");
-        style.put("padding", "3px");
-        style.put("vertical-align", "middle");
-        style.put("color", FONT_COLOR);
-        style.put("font-family", FONT_FAMILY);
-
-        stylesheet.clone(".nc_nav_link:active", ".nc_nav_link:hover");
-        stylesheet.clone(".nc_nav_link:visited", ".nc_nav_link:hover");
-        style = stylesheet.clone(".nc_nav_link:link", ".nc_nav_link:hover");
-        style.put("color", CLICKABLE_COLOR);
+        
+        style = stylesheet.newElement(".nc_hide");
+        style.put("display", "none");
         
         style = stylesheet.newElement(".nc_nav_separator");
         style.put("color", FONT_COLOR);
         style.put("font-size", "10pt");
         style.put("display", "inline");
-        
-        style = stylesheet.newElement(".nc_text");
-        style.put("display", "inline");
-        style.put("margin", "0px");
-        style.put("padding", "3px");
-        style.put("vertical-align", "middle");
-        style.put("color", FONT_COLOR);
-        style.put("font-family", FONT_FAMILY);
-        
-        style = stylesheet.newElement(".nc_trackbar");
-        style.put("margin-left", "0px");
-        style.put("margin-right", "0px");
-        style.put("margin-top", "5px");
-        style.put("margin-bottom", "0px");
-        style.put("border-style", "none");
-        style.put("height", "20px");
 
         style = stylesheet.newElement(".nc_login");
         style.put("float", "right");
