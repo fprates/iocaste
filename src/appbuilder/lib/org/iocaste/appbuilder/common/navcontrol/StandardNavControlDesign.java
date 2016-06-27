@@ -40,16 +40,18 @@ public class StandardNavControlDesign implements NavControlDesign {
         NodeList inner, login;
         NodeListItem loginitem;
         AbstractPageBuilder function;
-        User user = null;
+        User user;
+        
+        context.view.add(new HeaderLink(
+                "shortcut icon", "/iocaste-shell/images/favicon.ico"));
         
         container.setStyleClass("nc_container");
         inner = new NodeList(container, "nc_inner");
         inner.setStyleClass("nc_inner_container");
         
-        context.view.add(new HeaderLink(
-                "shortcut icon", "/iocaste-shell/images/favicon.ico"));
-//        logo = new StandardContainer(inner, "logo");
-//        logo.setStyleClass("main_logo");
+        logo = new StandardContainer(
+                new NodeListItem(inner, "nc_inner_logo"), "logo");
+        logo.setStyleClass("main_logo");
 
         title = context.view.getTitle();
         name = (title.text != null)? title.text : context.view.getAppName();
