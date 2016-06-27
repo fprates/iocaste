@@ -35,15 +35,15 @@ public class StandardNavControlDesign implements NavControlDesign {
         String name, page;
         ViewTitle title;
         Iocaste iocaste;
-        Container inner, logo, options;
+        Container logo, options;
         ViewContext viewctx;
-        NodeList login;
+        NodeList inner, login;
         NodeListItem loginitem;
         AbstractPageBuilder function;
         User user = null;
         
         container.setStyleClass("nc_container");
-        inner = new StandardContainer(container, "nc_inner");
+        inner = new NodeList(container, "nc_inner");
         inner.setStyleClass("nc_inner_container");
         
         context.view.add(new HeaderLink(
@@ -53,7 +53,8 @@ public class StandardNavControlDesign implements NavControlDesign {
 
         title = context.view.getTitle();
         name = (title.text != null)? title.text : context.view.getAppName();
-        text = new Text(inner, "this");
+        text = new Text(
+                new NodeListItem(inner, "nc_inner_title"), "this");
         text.setStyleClass("nc_title");
         text.setText(name, title.args);
         
@@ -65,7 +66,8 @@ public class StandardNavControlDesign implements NavControlDesign {
             return;
         
         user = iocaste.getUserData(iocaste.getUsername());
-        login = new NodeList(buttonbar, "login");
+        login = new NodeList(
+                new NodeListItem(inner, "nc_inner_login"), "login");
         login.setStyleClass("nc_login");
         
         loginitem = new NodeListItem(login, "login_user");

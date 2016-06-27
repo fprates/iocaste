@@ -20,6 +20,7 @@ public class MainConfig extends AbstractViewConfig {
         Context extcontext;
         Map<String, String> style;
         StyleSheet stylesheet;
+        String width;
         
         getNavControl().setTitle("authentic");
         Style.set(context);
@@ -30,7 +31,17 @@ public class MainConfig extends AbstractViewConfig {
             style.put("text-align", "center");
             style.put("margin-left", "auto");
             style.put("margin-right", "auto");
-            style.put("width", "600px");
+            style.put("margin-top", "0px");
+            style.put("margin-bottom", "0px");
+            style.put("width", "350px");
+            style.put("display", "block");
+            style.remove("margin");
+            
+            width = stylesheet.get(mediakey, ".nc_inner_container").
+                    get("width");
+            
+            style = stylesheet.get(mediakey, "#nc_inner_title");
+            style.put("width", width);
         }
         
         getElement("logincnt").setStyleClass("logincnt");
