@@ -119,4 +119,15 @@ window.onpopstate = function(event) {
    formSubmit(global_form, global_action, "back");
 };
 
+window.onclick = function(event) {
+  if (event.target.matches('.nc_login_menu') ||
+      event.target.matches('.ctxmenu') ||
+      event.target.matches('.button_ctxmenu_open'))
+     return;
+  setElementDisplayOfClass('.button_ctxmenu_close','none');
+  setElementDisplayOfClass('.button_ctxmenu_open','inline');
+  setElementDisplayOfClass('.ctxmenu', 'none');
+  setElementDisplay('login_options', 'none');
+}
+
 history.pushState(null, null, "#");
