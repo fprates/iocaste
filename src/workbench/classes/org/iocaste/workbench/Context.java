@@ -14,6 +14,7 @@ import org.iocaste.workbench.project.ProjectList;
 import org.iocaste.workbench.project.ProjectUse;
 import org.iocaste.workbench.project.compile.Compile;
 import org.iocaste.workbench.project.datadict.DataElementAdd;
+import org.iocaste.workbench.project.datadict.DataElementRemove;
 import org.iocaste.workbench.project.datadict.ModelAdd;
 import org.iocaste.workbench.project.datadict.ModelItemAdd;
 import org.iocaste.workbench.project.datadict.ModelItemRemove;
@@ -40,6 +41,7 @@ public class Context extends AbstractExtendedContext {
         commands = new HashMap<>();
         commands.put("compile", new Compile(context));
         commands.put("data-element-add", new DataElementAdd());
+        commands.put("data-element-remove", new DataElementRemove());
         commands.put("link-add", new LinkAdd());
         commands.put("link-remove", new LinkRemove());
         commands.put("model-add", new ModelAdd());
