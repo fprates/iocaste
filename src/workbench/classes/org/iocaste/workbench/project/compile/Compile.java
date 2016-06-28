@@ -66,7 +66,7 @@ public class Compile extends AbstractCommand {
         if (data.project == null)
             data.project = data.extcontext.project.getstKey();
         
-        document = getDocument("project", data.project);
+        document = getDocument("WB_PROJECT", data.project);
         if (document == null) {
             message(Const.ERROR, "invalid.project");
             return;
