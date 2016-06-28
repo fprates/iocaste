@@ -41,7 +41,6 @@ public class ComplexDocument implements Serializable,
         String alias;
         Object key;
         DocumentModel model;
-        ComplexModelItem citem;
         
         if (object == null)
             return;
@@ -49,9 +48,7 @@ public class ComplexDocument implements Serializable,
         alias = cmodel.getModelItemName(model.getName());
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
-        citem = cmodel.getItems().get(alias);
-        key = (citem.index == null)?
-                getItemKey(model) : object.get(citem.index);
+        key = getKey(cmodel, model, object, alias);
         items.get(alias).objects.put(key, object);
     }
     
@@ -62,7 +59,6 @@ public class ComplexDocument implements Serializable,
         
         if (document == null)
             return;
-        
         alias = cmodel.getModelItemName(document.getModel().getName());
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
@@ -164,9 +160,13 @@ public class ComplexDocument implements Serializable,
         return 0;
     }
     
-    private final String getItemKey(DocumentModel model) {
+    private final Object getKey(ComplexModel cmodel,
+            DocumentModel model, ExtendedObject object, String alias) {
+        ComplexModelItem citem = cmodel.getItems().get(alias);
+        if (citem.index != null)
+            return object.get(citem.index);
         for (DocumentModelKey modelkey : model.getKeys())
-            return modelkey.getModelItemName();
+            return object.get(modelkey.getModelItemName());
         return null;
     }
     
@@ -185,14 +185,6 @@ public class ComplexDocument implements Serializable,
     }
     
     public final Map<Object, ExtendedObject> getItemsMap(String name) {
-        DocumentModel model = cmodel.getItems().get(name).model;
-        String key = getItemKey(model);
-        
-        return getItemsMap(name, key);
-    }
-    
-    public final Map<Object, ExtendedObject> getItemsMap(
-            String name, String field) {
         return items.get(name).objects;
     }
     
@@ -277,12 +269,11 @@ public class ComplexDocument implements Serializable,
         alias = cmodel.getModelItemName(model.getName());
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
-        items.get(alias).documents.remove(object.get(getItemKey(model)));
+        items.get(alias).documents.remove(getKey(cmodel, model, object, alias));
     }
     
     public final void remove(ComplexDocument document) {
         String alias;
-        
         if (document == null)
             return;
         alias = cmodel.getModelItemName(document.getModel().getName());
