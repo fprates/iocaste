@@ -81,6 +81,11 @@ public abstract class AbstractExtendedContext implements ExtendedContext {
     }
     
     @Override
+    public final PageBuilderContext getContext() {
+        return context;
+    }
+    
+    @Override
     public final boolean isInstantializedTable(String ttname) {
         return isInstantializedTable(context.view.getPageName(), ttname);
     }

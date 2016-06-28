@@ -25,6 +25,8 @@ public interface ExtendedContext {
     
     public abstract ExtendedObject get(String page, String ttname, int line);
     
+    public abstract PageBuilderContext getContext();
+    
     public abstract boolean isInstantializedTable(String ttname);
     
     public abstract boolean isInstantializedTable(String page, String ttname);
