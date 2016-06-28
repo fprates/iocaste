@@ -13,12 +13,12 @@ public abstract class AbstractCommand extends AbstractActionHandler {
     protected Map<String, String> parameters;
     protected Map<String, Byte> arguments;
     protected Map<String, Set<String>> values;
-    protected boolean checkproject, checkmodel, checkview;
+    protected boolean checkproject, checkmodel, checkview, checkparameters;
     
     public AbstractCommand() {
         arguments = new HashMap<>();
         values = new HashMap<>();
-        checkproject = true;
+        checkproject = checkparameters = true;
     }
     
     public final String areParametersValid(Map<String, String> parameters) {
@@ -26,7 +26,8 @@ public abstract class AbstractCommand extends AbstractActionHandler {
             if ((arguments.get(key) == REQUIRED) &&
                     !parameters.containsKey(key))
                 return "parameter.required";
-        if (arguments.size() > 0)
+        
+        if (checkparameters && (arguments.size() > 0))
             for (String key : parameters.keySet()) {
                 if (!arguments.containsKey(key))
                     return "invalid.parameter";
