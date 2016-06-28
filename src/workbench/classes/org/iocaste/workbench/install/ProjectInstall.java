@@ -124,7 +124,7 @@ public class ProjectInstall extends AbstractInstallObject {
         
         models = cmodelInstance("WB_MODELS");
         models.header("model_head");
-        models.item("item", "model_item");
+        models.item("item", "model_item").index = "NAME";
         
         /*
          * project screens
@@ -156,15 +156,15 @@ public class ProjectInstall extends AbstractInstallObject {
         
         screens = cmodelInstance("WB_SCREENS");
         screens.header("screen_head");
-        screens.item("spec", "screen_spec");
+        screens.item("spec", "screen_spec").index = "NAME";
         
         /*
          * project document
          */
         cmodel = cmodelInstance("WB_PROJECT");
         cmodel.header("header");
-        cmodel.item("screen", screens).index = "NAME";
+        cmodel.item("screen", screens);
         cmodel.item("link", "links").index = "NAME";
-        cmodel.item("model", models).index = "NAME";
+        cmodel.item("model", models);
     }
 }
