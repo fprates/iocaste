@@ -20,8 +20,7 @@ public class ViewSpecRemove extends AbstractCommand {
         String name;
         ExtendedObject specitem;
         Context extcontext = getExtendedContext();
-        Map<Object, ExtendedObject> specitems =
-                extcontext.view.getItemsMap("spec", "NAME");
+        Map<Object, ExtendedObject> specitems = extcontext.view.getItemsMap("spec");
         
         name = parameters.get("name");
         specitem = specitems.get(name);

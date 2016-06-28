@@ -19,7 +19,7 @@ public class LinkRemove extends AbstractCommand {
         Context extcontext = getExtendedContext();
 
         name = parameters.get("name");
-        object = extcontext.project.getItemsMap("link", "NAME").get(name);
+        object = extcontext.project.getItemsMap("link").get(name);
         if (object == null) {
             message(Const.ERROR, "link %s doesn't exist.", name);
             return;
