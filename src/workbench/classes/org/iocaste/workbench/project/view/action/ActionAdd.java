@@ -1,4 +1,4 @@
-package org.iocaste.workbench.project.view.actioin;
+package org.iocaste.workbench.project.view.action;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;

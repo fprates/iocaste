@@ -48,6 +48,10 @@ public class ProjectList extends AbstractCommand {
             print("- Modelos");
             for (ComplexDocument document : project.getDocuments("model"))
                 print(document.getstKey());
+            
+            print("- Pacotes");
+            for (ComplexDocument document : project.getDocuments("class"))
+                print(document.getstKey());
         }
     }
     

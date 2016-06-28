@@ -20,11 +20,12 @@ public class ProjectInstall extends AbstractInstallObject {
         DataElement profile, dename, detype, desize, dedec, deupcase;
         DataElement screenconfigitemid, screenconfigname, screenconfigvalue;
         DataElement screenconfigtype, screenactionname, screenactionclass;
-        DataElement screenactionid;
+        DataElement screenactionid, packagename, classid, classname;
         ModelInstall model;
         ComplexModelItem cmodelitem;
-        ComplexModelInstall cmodel, models, screens;
+        ComplexModelInstall cmodel, models, screens, classes;
         DocumentModelItem project, screen, modelid, dataelementid, speckey;
+        DocumentModelItem packagekey;
 
         linkname = new DummyElement("TASKS.NAME");
         command = new DummyElement("TASKS.COMMAND");
@@ -58,6 +59,10 @@ public class ProjectInstall extends AbstractInstallObject {
         screenactionid = elementchar("WB_SCREEN_ACTION_ID", 19, false);
         screenactionname = elementchar("WB_SCREEN_ACTION_NAME", 40, false);
         screenactionclass = elementchar("WB_SCREEN_ACTION_CLASS", 255, false);
+        
+        packagename = elementchar("WB_JAVA_PACKAGE_NAME", 250, false);
+        classid = elementchar("WB_JAVA_CLASS_ID", 255, false);
+        classname = elementchar("WB_JAVA_CLASS_NAME", 255, false);
         
         /*
          * project header
@@ -214,6 +219,34 @@ public class ProjectInstall extends AbstractInstallObject {
         screens.item("action", "screen_action").keyformat = "%03d";
         
         /*
+         * java package
+         */
+        model = tag("packages", modelInstance(
+                "WB_JAVA_PACKAGE", "WBJVPKG"));
+        packagekey = model.key(
+                "PACKAGE", "PKGNM", packagename);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        
+        /*
+         * java class
+         */
+        model = tag("classes", modelInstance(
+                "WB_JAVA_CLASS", "WBJVCLSS"));
+        model.key(
+                "CLASS_ID", "CLSID", classid);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.reference(
+                "PACKAGE", "PKGNM", packagekey);
+        model.item(
+                "NAME", "CLSNM", classname);
+        
+        classes = cmodelInstance("WB_JAVA_PACKAGES");
+        classes.header("packages");
+        classes.item("class", "classes");
+        
+        /*
          * project document
          */
         cmodel = cmodelInstance("WB_PROJECT");
@@ -221,5 +254,6 @@ public class ProjectInstall extends AbstractInstallObject {
         cmodel.item("screen", screens);
         cmodel.item("link", "links").index = "NAME";
         cmodel.item("model", models);
+        cmodel.item("class", classes);
     }
 }
