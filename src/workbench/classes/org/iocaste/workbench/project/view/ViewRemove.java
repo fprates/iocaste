@@ -25,6 +25,8 @@ public class ViewRemove extends AbstractCommand {
             return;
         }
 
+        if (extcontext.view == view)
+            extcontext.view = null;
         extcontext.project.remove(view);
         delete(view);
         print("view %s removed.", name);
