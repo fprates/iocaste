@@ -269,7 +269,7 @@ public class ComplexDocument implements Serializable,
         alias = cmodel.getModelItemName(model.getName());
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
-        items.get(alias).documents.remove(getKey(cmodel, model, object, alias));
+        items.get(alias).objects.remove(getKey(cmodel, model, object, alias));
     }
     
     public final void remove(ComplexDocument document) {
