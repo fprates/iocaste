@@ -17,6 +17,7 @@ public class ApplicationEngine extends AbstractPageBuilder {
         StandardPanel panel;
         Iocaste iocaste;
         byte[] buffer;
+        ConversionResult result;
         ConversionRules mapping;
         Context extcontext;
         String viewname;
@@ -30,14 +31,17 @@ public class ApplicationEngine extends AbstractPageBuilder {
         mapping.add("views.view.spec", "item");
         mapping.add("views.view.config", "item");
         mapping.add("views.view.input", "item");
+        mapping.add("views.view.config", "item");
+        mapping.setType("views.view.config.item.type", int.class);
         
         extcontext = new Context(context);
-        extcontext.result = conversor.conversion(new String(buffer), mapping);
+        result = conversor.conversion(new String(buffer), mapping);
         
         panel = new StandardPanel(context);
-        for (ConversionResult view : extcontext.result.getList("views")) {
+        for (ConversionResult view : result.getList("views")) {
             viewname = view.getst("views.view.name");
-            panel.instance(viewname, new AutomatedPage(view), extcontext);
+            extcontext.views.put(viewname, view);
+            panel.instance(viewname, new AutomatedPage(), extcontext);
         }
     }
     
@@ -50,16 +54,11 @@ public class ApplicationEngine extends AbstractPageBuilder {
 }
 
 class AutomatedPage extends AbstractPanelPage {
-    private ConversionResult result;
-    
-    public AutomatedPage(ConversionResult result) {
-        this.result = result;
-    }
     
     @Override
     public void execute() {
-        set(new AutomatedSpec(result));
-        set(new AutomatedConfig(result));
+        set(new AutomatedSpec());
+        set(new AutomatedConfig());
     }
     
 }
