@@ -113,5 +113,12 @@ public class CModel {
         item.setTableFieldName("KDGTS");
         item.setDataElement(element);
         model.add(item);
+        
+        // índice do item para mapa
+        element = new DummyElement("MODELITEM.NAME");
+        item = new DocumentModelItem("INDEX");
+        item.setTableFieldName("ITIDX");
+        item.setDataElement(element);
+        model.add(item);
     }
 }

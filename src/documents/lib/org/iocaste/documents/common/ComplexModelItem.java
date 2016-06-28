@@ -6,7 +6,7 @@ public class ComplexModelItem implements Serializable {
     private static final long serialVersionUID = 5798058803469868188L;
     public DocumentModel model;
     public ComplexModel cmodel;
-    public String keyformat;
+    public String keyformat, index;
     public int keydigits;
     
     public ComplexModelItem(DocumentModel model) {

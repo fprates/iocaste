@@ -67,6 +67,7 @@ public class GetComplexModel extends AbstractDocumentsHandler {
                 citem = cmodel.put(item.getst("NAME"), model);
                 citem.keydigits = item.geti("KEY_DIGITS");
                 citem.keyformat = item.getst("KEY_FORMAT");
+                citem.index = item.getst("INDEX");
                 break;
             case 1:
                 _cmodel = run(connection, documents, modelname);
@@ -74,7 +75,8 @@ public class GetComplexModel extends AbstractDocumentsHandler {
                     throw new IocasteException(new StringBuilder(name).
                             append(" complex model corrupted. Item cmodel ").
                             append(modelname).append(" not found.").toString());
-                cmodel.put(item.getst("NAME"), _cmodel);
+                citem = cmodel.put(item.getst("NAME"), _cmodel);
+                citem.index = item.getst("INDEX");
                 break;
             default:
             }

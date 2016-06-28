@@ -17,23 +17,12 @@ public class ComplexModelInstall {
         cmodel.setHeader(context.getModel(modeltag).getModel());
     }
     
-    public final void item(String name, String modeltag) {
-        cmodel.put(name, context.getModel(modeltag).getModel());
+    public final ComplexModelItem item(String name, String modeltag) {
+        return cmodel.put(name, context.getModel(modeltag).getModel());
     }
     
-    public final void item(String name, String modeltag, int digits) {
-        ComplexModelItem item;
-        item = cmodel.put(name, context.getModel(modeltag).getModel());
-        item.keydigits = digits;
-    }
-    
-    public final void item(String name, String modeltag, String format) {
-        ComplexModelItem item;
-        item = cmodel.put(name, context.getModel(modeltag).getModel());
-        item.keyformat = format;
-    }
-    
-    public final void item(String name, ComplexModelInstall cmodelinst) {
-        cmodel.put(name, cmodelinst.cmodel);
+    public final ComplexModelItem item(
+            String name, ComplexModelInstall cmodelinst) {
+        return cmodel.put(name, cmodelinst.cmodel);
     }
 }

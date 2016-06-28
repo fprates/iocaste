@@ -42,6 +42,7 @@ public class CreateCModel extends AbstractDocumentsHandler {
                     append(name).toString());
             object.set("NAME", name);
             object.set("CMODEL", cmodelname);
+            object.set("INDEX", cmodelitem.index);
             if (cmodelitem.model != null) {
                 object.set("MODEL", cmodelitem.model.getName());
                 object.set("MODEL_TYPE", 0);

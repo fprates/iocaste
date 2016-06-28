@@ -114,9 +114,11 @@ public class ComplexModel implements Serializable, Comparable<ComplexModel> {
         return item;
     }
     
-    public final void put(String name, ComplexModel cmodel) {
-        items.put(name, new ComplexModelItem(cmodel));
+    public final ComplexModelItem put(String name, ComplexModel cmodel) {
+        ComplexModelItem item = new ComplexModelItem(cmodel);
+        items.put(name, item);
         reverseitems.put(cmodel.getName(), name);
+        return item;
     }
     
     /**

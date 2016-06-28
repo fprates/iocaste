@@ -38,8 +38,10 @@ public class ComplexDocument implements Serializable,
      * @param object extended object
      */
     public final void add(ExtendedObject object) {
-        String alias, key;
+        String alias;
+        Object key;
         DocumentModel model;
+        ComplexModelItem citem;
         
         if (object == null)
             return;
@@ -47,12 +49,16 @@ public class ComplexDocument implements Serializable,
         alias = cmodel.getModelItemName(model.getName());
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
-        key = getItemKey(model);
-        items.get(alias).objects.put(object.get(key), object);
+        citem = cmodel.getItems().get(alias);
+        key = (citem.index == null)?
+                getItemKey(model) : object.get(citem.index);
+        items.get(alias).objects.put(key, object);
     }
     
     public final void add(ComplexDocument document) {
         String alias;
+        Object key;
+        ComplexModelItem citem;
         
         if (document == null)
             return;
@@ -60,8 +66,10 @@ public class ComplexDocument implements Serializable,
         alias = cmodel.getModelItemName(document.getModel().getName());
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
-        
-        items.get(alias).documents.put(document.getKey(), document);
+        citem = cmodel.getItems().get(alias);
+        key = (citem.index == null)?
+                document.getKey() : document.getHeader().get(citem.index);
+        items.get(alias).documents.put(key, document);
     }
     
     /**
