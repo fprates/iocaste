@@ -17,9 +17,11 @@ public class ProjectInstall extends AbstractInstallObject {
         DataElement modelitemid, modelitemname, command, modeltable, modelkey;
         DataElement screenitemtype, linkid, linkname, groupid, tableitemname;
         DataElement profile, dename, detype, desize, dedec, deupcase;
+        DataElement screenconfigitemid, screenconfigname, screenconfigvalue;
+        DataElement screenconfigtype;
         ModelInstall model;
         ComplexModelInstall cmodel, models, screens;
-        DocumentModelItem project, screen, modelid, dataelementid;
+        DocumentModelItem project, screen, modelid, dataelementid, speckey;
 
         projectname = elementchar("WB_PROJECT_NAME", 32, true);
         text = elementchar("WB_TEXT", 32, false);
@@ -43,6 +45,11 @@ public class ProjectInstall extends AbstractInstallObject {
         desize = new DummyElement("DATAELEMENT.LENGTH");
         dedec = new DummyElement("DATAELEMENT.TYPE");
         deupcase = new DummyElement("DATAELEMENT.UPCASE");
+
+        screenconfigitemid = elementchar("WB_SCREEN_CFG_ID", 40, true);
+        screenconfigname = elementchar("WB_SCREEN_CFG_NAME", 24, false);
+        screenconfigvalue = elementchar("WB_SCREEN_CFG_VALUE", 255, false);
+        screenconfigtype = elementnumc("WB_SCREEN_CFG_TYPE", 1);
         
         /*
          * project header
@@ -141,7 +148,7 @@ public class ProjectInstall extends AbstractInstallObject {
          */
         model = tag("screen_spec", modelInstance(
                 "WB_SCREEN_SPEC", "WBSCRSPEC"));
-        model.key(
+        speckey = model.key(
                 "ITEM_ID", "ITMID", screenspecitemid);
         model.reference(
                 "PROJECT", "PRJNM", project);
@@ -154,9 +161,30 @@ public class ProjectInstall extends AbstractInstallObject {
         model.item(
                 "TYPE", "ITTYP", screenitemtype);
         
+        /*
+         * project screen config items
+         */
+        model = tag("screen_config", modelInstance(
+                "WB_SCREEN_CONFIG", "WBSCRCFG"));
+        model.key(
+                "CONFIG_ID", "CFGID", screenconfigitemid);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.reference(
+                "SCREEN", "SCRID", screen);
+        model.reference(
+                "SPEC", "ITMID", speckey);
+        model.item(
+                "NAME", "CFGNM", screenconfigname);
+        model.item(
+                "VALUE", "CFGVL", screenconfigvalue);
+        model.item(
+                "TYPE", "CFGTY", screenconfigtype);
+        
         screens = cmodelInstance("WB_SCREENS");
         screens.header("screen_head");
         screens.item("spec", "screen_spec").index = "NAME";
+        screens.item("config", "screen_config");
         
         /*
          * project document

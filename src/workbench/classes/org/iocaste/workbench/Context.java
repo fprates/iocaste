@@ -23,20 +23,25 @@ import org.iocaste.workbench.project.datadict.ModelUse;
 import org.iocaste.workbench.project.tasks.LinkAdd;
 import org.iocaste.workbench.project.tasks.LinkRemove;
 import org.iocaste.workbench.project.view.ViewAdd;
+import org.iocaste.workbench.project.view.ViewConfigEdit;
 import org.iocaste.workbench.project.view.ViewRemove;
 import org.iocaste.workbench.project.view.ViewSpecAdd;
 import org.iocaste.workbench.project.view.ViewSpecRemove;
 import org.iocaste.workbench.project.view.ViewUse;
+import org.iocaste.workbench.project.view.config.DataFormConfig;
+import org.iocaste.workbench.project.view.config.TableToolConfig;
+import org.iocaste.workbench.project.view.config.ViewConfigContext;
 
 public class Context extends AbstractExtendedContext {
     public Map<String, AbstractCommand> commands;
     public List<String> output;
     public ComplexDocument project, model, view;
+    public ViewConfigContext viewconfig;
     
     public Context(PageBuilderContext context) {
         super(context);
-
         String name;
+        
         output = new ArrayList<>();
         commands = new HashMap<>();
         commands.put("compile", new Compile(context));
@@ -55,12 +60,17 @@ public class Context extends AbstractExtendedContext {
         commands.put("view-add", new ViewAdd());
         commands.put("view-remove", new ViewRemove());
         commands.put("view-use", new ViewUse());
+        commands.put("viewconfig", new ViewConfigEdit());
         commands.put("viewspec-remove", new ViewSpecRemove());
         
         for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {
             name = String.format("viewspec-%s", type.toString());
             commands.put(name, new ViewSpecAdd(type));
         }
+        
+        viewconfig = new ViewConfigContext();
+        viewconfig.extcontext = this;
+        new DataFormConfig(viewconfig);
+        new TableToolConfig(viewconfig);
     }
-
 }
