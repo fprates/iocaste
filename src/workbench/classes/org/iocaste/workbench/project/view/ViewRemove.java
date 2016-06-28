@@ -25,6 +25,11 @@ public class ViewRemove extends AbstractCommand {
             return;
         }
 
+        if (view.getItemsMap("spec").size() > 0) {
+            message(Const.ERROR, "cant.delete.with.items");
+            return;
+        }
+        
         if (extcontext.view == view)
             extcontext.view = null;
         extcontext.project.remove(view);

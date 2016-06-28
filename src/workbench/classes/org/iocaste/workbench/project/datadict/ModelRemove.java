@@ -26,6 +26,11 @@ public class ModelRemove extends AbstractCommand {
             return;
         }
 
+        if (document.getDocumentsMap("item").size() > 0) {
+            message(Const.ERROR, "cant.delete.with.items");
+            return;
+        }
+        
         extcontext.project.remove(document);
         delete(document);
         if (extcontext.model == document)

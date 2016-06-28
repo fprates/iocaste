@@ -19,9 +19,10 @@ public class ViewSpecRemove extends AbstractCommand {
     protected void execute(PageBuilderContext context) throws Exception {
         String name;
         ExtendedObject specitem;
+        Map<Object, ExtendedObject> specitems;
         Context extcontext = getExtendedContext();
-        Map<Object, ExtendedObject> specitems = extcontext.view.getItemsMap("spec");
         
+        specitems = extcontext.view.getItemsMap("spec");
         name = parameters.get("name");
         specitem = specitems.get(name);
         if (specitem == null) {
