@@ -4,6 +4,7 @@ import org.iocaste.appbuilder.common.AbstractInstallObject;
 import org.iocaste.appbuilder.common.ComplexModelInstall;
 import org.iocaste.appbuilder.common.ModelInstall;
 import org.iocaste.appbuilder.common.StandardInstallContext;
+import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.DummyElement;
@@ -18,24 +19,13 @@ public class ProjectInstall extends AbstractInstallObject {
         DataElement screenitemtype, linkid, linkname, groupid, tableitemname;
         DataElement profile, dename, detype, desize, dedec, deupcase;
         DataElement screenconfigitemid, screenconfigname, screenconfigvalue;
-        DataElement screenconfigtype;
+        DataElement screenconfigtype, screenactionname, screenactionclass;
+        DataElement screenactionid;
         ModelInstall model;
+        ComplexModelItem cmodelitem;
         ComplexModelInstall cmodel, models, screens;
         DocumentModelItem project, screen, modelid, dataelementid, speckey;
 
-        projectname = elementchar("WB_PROJECT_NAME", 32, true);
-        text = elementchar("WB_TEXT", 32, false);
-        screenname = elementchar("WB_SCREEN_NAME", 16, true);
-        screenspecitemid = elementchar("WB_SCREEN_SPEC_ITEM", 38, true);
-        screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, true);
-        screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
-        modelname = new DummyElement("MODEL.NAME");
-        modeltable = new DummyElement("MODEL.TABLE");
-        modelitemid = elementchar("WB_MODEL_ITEM", 38, true);
-        modelitemname = elementchar("WB_MODEL_ITEM_NAME", 24, true);
-        modelkey = elementbool("WB_BOOLEAN");
-        tableitemname = new DummyElement("MODELITEM.FIELDNAME");
-        linkid = elementchar("WB_LINK_ID", 50, true);
         linkname = new DummyElement("TASKS.NAME");
         command = new DummyElement("TASKS.COMMAND");
         groupid = new DummyElement("TASKS_GROUPS.NAME");
@@ -46,10 +36,28 @@ public class ProjectInstall extends AbstractInstallObject {
         dedec = new DummyElement("DATAELEMENT.TYPE");
         deupcase = new DummyElement("DATAELEMENT.UPCASE");
 
-        screenconfigitemid = elementchar("WB_SCREEN_CFG_ID", 40, true);
+        modelname = new DummyElement("MODEL.NAME");
+        modeltable = new DummyElement("MODEL.TABLE");
+        tableitemname = new DummyElement("MODELITEM.FIELDNAME");
+        modelitemid = elementchar("WB_MODEL_ITEM", 38, true);
+        modelitemname = elementchar("WB_MODEL_ITEM_NAME", 24, true);
+        modelkey = elementbool("WB_BOOLEAN");
+        
+        projectname = elementchar("WB_PROJECT_NAME", 32, true);
+        text = elementchar("WB_TEXT", 32, false);
+        linkid = elementchar("WB_LINK_ID", 50, true);
+
+        screenname = elementchar("WB_SCREEN_NAME", 16, true);
+        screenspecitemid = elementchar("WB_SCREEN_SPEC_ITEM", 19, true);
+        screenspecitemname = elementchar("WB_SCREEN_SPEC_NAME", 32, true);
+        screenitemtype = elementchar("WB_SCREEN_ITEM_TYPE", 24, false);
+        screenconfigitemid = elementchar("WB_SCREEN_CFG_ID", 20, true);
         screenconfigname = elementchar("WB_SCREEN_CFG_NAME", 24, false);
         screenconfigvalue = elementchar("WB_SCREEN_CFG_VALUE", 255, false);
         screenconfigtype = elementnumc("WB_SCREEN_CFG_TYPE", 1);
+        screenactionid = elementchar("WB_SCREEN_ACTION_ID", 19, false);
+        screenactionname = elementchar("WB_SCREEN_ACTION_NAME", 40, false);
+        screenactionclass = elementchar("WB_SCREEN_ACTION_CLASS", 255, false);
         
         /*
          * project header
@@ -181,10 +189,29 @@ public class ProjectInstall extends AbstractInstallObject {
         model.item(
                 "TYPE", "CFGTY", screenconfigtype);
         
+        /*
+         * project screen actions
+         */
+        model = tag("screen_action", modelInstance(
+                "WB_SCREEN_ACTION", "WBSCRACT"));
+        model.key(
+                "ACTION_ID", "ACTID", screenactionid);
+        model.reference(
+                "PROJECT", "PRJNM", project);
+        model.reference(
+                "SCREEN", "SCRID", screen);
+        model.item(
+                "NAME", "ACTNM", screenactionname);
+        model.item(
+                "CLASS", "CLASS", screenactionclass);
+        
         screens = cmodelInstance("WB_SCREENS");
         screens.header("screen_head");
-        screens.item("spec", "screen_spec").index = "NAME";
-        screens.item("config", "screen_config");
+        cmodelitem = screens.item("spec", "screen_spec");
+        cmodelitem.index = "NAME";
+        cmodelitem.keyformat = "%03d";
+        screens.item("config", "screen_config").keyformat = "%04d";
+        screens.item("action", "screen_action").keyformat = "%03d";
         
         /*
          * project document

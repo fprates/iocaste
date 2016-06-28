@@ -28,6 +28,7 @@ import org.iocaste.workbench.project.view.ViewRemove;
 import org.iocaste.workbench.project.view.ViewSpecAdd;
 import org.iocaste.workbench.project.view.ViewSpecRemove;
 import org.iocaste.workbench.project.view.ViewUse;
+import org.iocaste.workbench.project.view.actioin.ActionAdd;
 import org.iocaste.workbench.project.view.config.DataFormConfig;
 import org.iocaste.workbench.project.view.config.TableToolConfig;
 import org.iocaste.workbench.project.view.config.ViewConfigContext;
@@ -44,6 +45,7 @@ public class Context extends AbstractExtendedContext {
         
         output = new ArrayList<>();
         commands = new HashMap<>();
+        commands.put("action-add", new ActionAdd());
         commands.put("compile", new Compile(context));
         commands.put("data-element-add", new DataElementAdd());
         commands.put("data-element-remove", new DataElementRemove());
