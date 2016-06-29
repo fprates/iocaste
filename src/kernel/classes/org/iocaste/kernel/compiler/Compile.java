@@ -36,16 +36,16 @@ public class Compile extends AbstractHandler {
         return FileServices.getPath(dir);
     }
     
-    private final String getClassPath(String classpath) {
+    private final String getClassPath() {
         String libs = FileServices.getSymbolPath("WORKBENCH_LIBS");
         File file = new File(libs);
         StringBuilder cp = null;
         for (String filename : file.list(new JarFilter())) {
             if (cp != null)
-                cp.append(":");
+                cp.append(File.pathSeparatorChar);
             else
                 cp = new StringBuilder();
-            cp.append(libs).append(filename);
+            cp.append(libs).append(File.separator).append(filename);
         }
         return cp.toString();
     }
@@ -95,7 +95,7 @@ public class Compile extends AbstractHandler {
         retrieveFiles(files, file);
         cunits = fmngr.getJavaFileObjects(files.toArray(new File[0]));
       
-        classpath = getClassPath(message.getst("classpath"));
+        classpath = getClassPath();
         javabin = createdir(service.files, "JAVA_BIN");
         options = new ArrayList<>();
         options.addAll(Arrays.asList("-cp", classpath));
