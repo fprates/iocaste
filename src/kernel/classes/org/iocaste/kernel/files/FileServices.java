@@ -61,6 +61,10 @@ public class FileServices extends AbstractFunction {
         case "WORKBENCH_LIBS":
             return composeFileName(getSymbolPath("WEBAPPS"),
                     "iocaste-workbench", "WEB-INF", "lib");
+        case "JAVA_SOURCE":
+            return composeFileName("kernel", "src");
+        case "JAVA_BIN":
+            return composeFileName("kernel", "bin");
         default:
             return null;
         }

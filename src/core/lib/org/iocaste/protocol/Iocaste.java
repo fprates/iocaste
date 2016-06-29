@@ -56,6 +56,12 @@ public final class Iocaste extends AbstractServiceInterface {
         call(new Message("commit"));
     }
     
+    public final String compile(Directory source) {
+        Message message = new Message("compile");
+        message.add("source", source);
+        return call(message);
+    }
+    
     /**
      * Criar usuário.
      * @param userdata nome do usuário

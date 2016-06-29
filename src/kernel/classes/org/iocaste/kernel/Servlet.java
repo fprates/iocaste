@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.iocaste.kernel.authorization.Auth;
+import org.iocaste.kernel.compiler.CompilerService;
 import org.iocaste.kernel.config.Config;
 import org.iocaste.kernel.database.Database;
 import org.iocaste.kernel.documents.Documents;
@@ -35,6 +36,7 @@ public class Servlet extends AbstractIocasteServlet {
         Documents documents = new Documents();
         ProcessServices process = new ProcessServices();
         FileServices files = new FileServices();
+        CompilerService compiler = new CompilerService();
         
         session = new Session();
         documents.config = config = new Config();
@@ -42,7 +44,8 @@ public class Servlet extends AbstractIocasteServlet {
         session.database = users.database = config.database = database; 
         auth.database = documents.database = database;
         users.session = database.session = auth.session = session;
-        process.files = files;
+        compiler.session = users.session;
+        process.files = compiler.files = files;
         session.users = users;
         
         register(database);
@@ -55,6 +58,7 @@ public class Servlet extends AbstractIocasteServlet {
         register(files);
         register(new Packages());
         register(process);
+        register(compiler);
         
         authorize("is_connected", null);
         authorize("login", null);
