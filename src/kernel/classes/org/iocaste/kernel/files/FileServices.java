@@ -17,7 +17,7 @@ public class FileServices extends AbstractFunction {
         entries = new HashMap<>();
         export("close", new FileClose());
         export("delete", new DeleteFile());
-        export("directory_write", new DirectoryWrite());
+        export("directory_write", new DirectoryWrite(this));
         export("entries_delete", new FileEntriesDelete());
         export("file", new FileOperations());
         export("file_exists", new FileExists());

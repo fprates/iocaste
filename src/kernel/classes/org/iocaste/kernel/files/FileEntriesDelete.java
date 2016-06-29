@@ -12,7 +12,7 @@ public class FileEntriesDelete extends AbstractHandler {
         DeleteFile delete = getFunction().get("delete");
         
         for (FileEntry entry : entries)
-            delete.run(entry.path, false);
+            delete.run(false, entry.path);
         return null;
     }
 

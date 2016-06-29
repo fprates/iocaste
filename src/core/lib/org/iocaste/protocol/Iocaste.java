@@ -16,6 +16,7 @@ public final class Iocaste extends AbstractServiceInterface {
     public static final int CREATE = 0;
     public static final int READ = 1;
     public static final int WRITE = 2;
+    public static final byte RAW = 0;
     public static final byte JAR = 1;
     public static final byte OUT_PRINT = 0;
     public static final byte ERR_PRINT = 1;

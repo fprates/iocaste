@@ -13,8 +13,13 @@ public class FileRead extends AbstractHandler {
         String id = message.getst("id");
         String sessionid = message.getSessionid();
         FileServices services = getFunction();
-        InternalFileEntry entry = services.entries.get(sessionid).get(id);
         
+        return run(services, sessionid, id);
+    }
+    
+    public byte[] run(FileServices services, String sessionid, String id)
+            throws Exception {
+        InternalFileEntry entry = services.entries.get(sessionid).get(id);
         return run(entry.fchannel);
     }
     

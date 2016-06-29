@@ -9,6 +9,8 @@ public interface DirectoryEngine {
     
     public abstract void file(DirectoryLeaf leaf) throws Exception;
     
+    public abstract void setSessionid(String sessionid);
+    
     public abstract void start(String path, Directory dir) throws Exception;
     
     public abstract void write() throws Exception;

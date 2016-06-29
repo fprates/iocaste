@@ -11,10 +11,10 @@ public class DeleteFile extends AbstractHandler {
     public Object run(Message message) throws Exception {
         String[] args = message.get("args");
         boolean all = message.getbl("all");
-        return run(args, all);
+        return run(all, args);
     }
     
-    public Object run(String[] files, boolean all) {
+    public Object run(boolean all, String... files) {
         String path = FileServices.getPath(files);
         File file = new File(path);
         

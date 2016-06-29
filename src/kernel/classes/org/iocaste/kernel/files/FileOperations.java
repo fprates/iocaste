@@ -47,7 +47,7 @@ public class FileOperations extends AbstractHandler {
         return entry.filename;
     }
     
-    private final String open(FileServices services, String sessionid,
+    public final String open(FileServices services, String sessionid,
             String mode, String... args) throws Exception {
         InternalFileEntry entry;
 

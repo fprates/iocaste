@@ -66,6 +66,9 @@ public class JarEngine implements DirectoryEngine {
     }
     
     @Override
+    public final void setSessionid(String sessionid) { }
+    
+    @Override
     public void start(String path, Directory dir) throws Exception {
         String target;
         OutputStream os;
