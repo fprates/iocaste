@@ -20,6 +20,7 @@ public class Documents extends AbstractFunction {
         cache = new Cache(this);
         lockcache = new HashMap<>();
         
+        export("complex_model_update", new ComplexModelUpdate());
         export("create_complex_model", new CreateCModel());
         protect("create_data_element", new CreateDataElement());
         export("create_model", new CreateModel());

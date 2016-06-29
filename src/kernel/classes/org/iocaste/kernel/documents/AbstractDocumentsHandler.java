@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.documents.common.ComplexModel;
+import org.iocaste.documents.common.ComplexModelItem;
 import org.iocaste.documents.common.DataElement;
 import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
@@ -127,6 +129,39 @@ public abstract class AbstractDocumentsHandler extends AbstractHandler {
                 tableref,
                 data.fieldname,
                 reference.getTableFieldName());
+    }
+    
+    protected final ExtendedObject cmodelHeaderInstance(Connection connection,
+            Documents documents, GetDocumentModel getmodel, ComplexModel cmodel)
+                    throws Exception {
+        DocumentModel model = getmodel.run(
+                connection, documents, "COMPLEX_MODEL");
+        ExtendedObject object = new ExtendedObject(model);
+        String cmodelname = cmodel.getName();
+        object.set("NAME", cmodelname);
+        object.set("MODEL", cmodel.getHeader().getName());
+        return object;
+    }
+    
+    protected final ExtendedObject cmodelItemInstance(DocumentModel model,
+            String cmodelname, ComplexModelItem cmodelitem, String name) {
+        ExtendedObject object = new ExtendedObject(model);
+        object.set("IDENT", new StringBuilder(cmodelname).
+                append("_").
+                append(name).toString());
+        object.set("NAME", name);
+        object.set("CMODEL", cmodelname);
+        object.set("INDEX", cmodelitem.index);
+        if (cmodelitem.model != null) {
+            object.set("MODEL", cmodelitem.model.getName());
+            object.set("MODEL_TYPE", 0);
+            object.set("KEY_DIGITS", cmodelitem.keydigits);
+            object.set("KEY_FORMAT", cmodelitem.keyformat);
+        } else {
+            object.set("MODEL", cmodelitem.cmodel.getName());
+            object.set("MODEL_TYPE", 1);
+        }
+        return object;
     }
     
     private final String getColumnReferenceName(

@@ -17,41 +17,24 @@ public class CreateCModel extends AbstractDocumentsHandler {
         ExtendedObject object;
         Map<String, ComplexModelItem> items;
         ComplexModelItem cmodelitem;
+        DocumentModel model;
+        String cmodelname;
         Documents documents = getFunction();
         String sessionid = message.getSessionid();
         GetDocumentModel getmodel = documents.get("get_document_model");
         Connection connection = documents.database.getDBConnection(sessionid);
-        DocumentModel model = getmodel.run(
-                connection, documents, "COMPLEX_MODEL");
         ComplexModel cmodel = message.get("cmodel");
-        String cmodelname = cmodel.getName();
         
-        object = new ExtendedObject(model);
-        object.set("NAME", cmodelname);
-        object.set("MODEL", cmodel.getHeader().getName());
+        object = cmodelHeaderInstance(connection, documents, getmodel, cmodel);
         save = documents.get("save_document");
         save.run(connection, object);
         
         model = getmodel.run(connection, documents, "COMPLEX_MODEL_ITEM");
         items = cmodel.getItems();
+        cmodelname = cmodel.getName();
         for (String name : items.keySet()) {
             cmodelitem = items.get(name);
-            object = new ExtendedObject(model);
-            object.set("IDENT", new StringBuilder(cmodelname).
-                    append("_").
-                    append(name).toString());
-            object.set("NAME", name);
-            object.set("CMODEL", cmodelname);
-            object.set("INDEX", cmodelitem.index);
-            if (cmodelitem.model != null) {
-                object.set("MODEL", cmodelitem.model.getName());
-                object.set("MODEL_TYPE", 0);
-                object.set("KEY_DIGITS", cmodelitem.keydigits);
-                object.set("KEY_FORMAT", cmodelitem.keyformat);
-            } else {
-                object.set("MODEL", cmodelitem.cmodel.getName());
-                object.set("MODEL_TYPE", 1);
-            }
+            object = cmodelItemInstance(model, cmodelname, cmodelitem, name);
             save.run(connection, object);
         }
         

@@ -809,6 +809,12 @@ public class Documents extends AbstractServiceInterface {
         return call(message);
     }
     
+    public final void update(ComplexModel cmodel) {
+        Message message = new Message("complex_model_update");
+        message.add("complex_model", cmodel);
+        call(message);
+    }
+    
     /**
      * Atualiza modelo de documento.
      * @param model dados do modelo de documento.
