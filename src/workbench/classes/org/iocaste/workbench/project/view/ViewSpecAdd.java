@@ -41,7 +41,7 @@ public class ViewSpecAdd extends AbstractCommand {
             return;
         }
         
-        object = extcontext.view.instance("spec");
+        object = extcontext.view.instance("spec", name);
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("SCREEN", extcontext.view.getstKey());
         object.set("NAME", name);

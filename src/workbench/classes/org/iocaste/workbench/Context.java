@@ -20,7 +20,9 @@ import org.iocaste.workbench.project.datadict.ModelItemAdd;
 import org.iocaste.workbench.project.datadict.ModelItemRemove;
 import org.iocaste.workbench.project.datadict.ModelRemove;
 import org.iocaste.workbench.project.datadict.ModelUse;
+import org.iocaste.workbench.project.java.ClassEditorCall;
 import org.iocaste.workbench.project.java.PackageAdd;
+import org.iocaste.workbench.project.java.editor.ClassEditorContext;
 import org.iocaste.workbench.project.tasks.LinkAdd;
 import org.iocaste.workbench.project.tasks.LinkRemove;
 import org.iocaste.workbench.project.view.ViewAdd;
@@ -39,6 +41,7 @@ public class Context extends AbstractExtendedContext {
     public List<String> output;
     public ComplexDocument project, model, view;
     public ViewConfigContext viewconfig;
+    public ClassEditorContext classeditor;
     
     public Context(PageBuilderContext context) {
         super(context);
@@ -47,6 +50,7 @@ public class Context extends AbstractExtendedContext {
         output = new ArrayList<>();
         commands = new HashMap<>();
         commands.put("action-add", new ActionAdd());
+        commands.put("class-add", new ClassEditorCall());
         commands.put("compile", new Compile(context));
         commands.put("data-element-add", new DataElementAdd());
         commands.put("data-element-remove", new DataElementRemove());
@@ -76,5 +80,7 @@ public class Context extends AbstractExtendedContext {
         viewconfig.extcontext = this;
         new DataFormConfig(viewconfig);
         new TableToolConfig(viewconfig);
+        
+        classeditor = new ClassEditorContext();
     }
 }

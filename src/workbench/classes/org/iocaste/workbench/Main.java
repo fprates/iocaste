@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
 import org.iocaste.workbench.install.ProjectInstall;
 import org.iocaste.workbench.install.TextsInstall;
+import org.iocaste.workbench.project.java.editor.ClassEditorPage;
 
 public class Main extends AbstractPageBuilder {
     
@@ -15,6 +16,7 @@ public class Main extends AbstractPageBuilder {
         
         new Messages(context.messages);
         panel.instance("main", new MainPage(), new Context(context));
+        panel.instance("class-editor", new ClassEditorPage());
     }
 
     @Override

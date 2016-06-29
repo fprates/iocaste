@@ -51,7 +51,7 @@ public class ModelItemAdd extends AbstractCommand {
             return;
         }
         
-        object = extcontext.model.instance("item");
+        object = extcontext.model.instance("item", name);
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("NAME", name);
         object.set("MODEL", model);

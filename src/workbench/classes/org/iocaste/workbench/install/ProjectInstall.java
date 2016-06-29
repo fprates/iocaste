@@ -14,7 +14,7 @@ public class ProjectInstall extends AbstractInstallObject {
     @Override
     protected void execute(StandardInstallContext context) throws Exception {
         DataElement projectname, text, screenname, modelname;
-        DataElement screenspecitemid, screenspecitemname;
+        DataElement screenspecitemid, screenspecitemname, classfullname;
         DataElement modelitemid, modelitemname, command, modeltable, modelkey;
         DataElement screenitemtype, linkid, linkname, groupid, tableitemname;
         DataElement profile, dename, detype, desize, dedec, deupcase;
@@ -60,9 +60,10 @@ public class ProjectInstall extends AbstractInstallObject {
         screenactionname = elementchar("WB_SCREEN_ACTION_NAME", 40, false);
         screenactionclass = elementchar("WB_SCREEN_ACTION_CLASS", 255, false);
         
-        packagename = elementchar("WB_JAVA_PACKAGE_NAME", 250, false);
-        classid = elementchar("WB_JAVA_CLASS_ID", 255, false);
-        classname = elementchar("WB_JAVA_CLASS_NAME", 255, false);
+        packagename = elementchar("WB_JAVA_PACKAGE_NAME", 120, false);
+        classid = elementchar("WB_JAVA_CLASS_ID", 125, false);
+        classname = elementchar("WB_JAVA_CLASS_NAME", 120, false);
+        classfullname = elementchar("WB_JAVA_CLASS_FULL", 250, false);
         
         /*
          * project header
@@ -241,10 +242,14 @@ public class ProjectInstall extends AbstractInstallObject {
                 "PACKAGE", "PKGNM", packagekey);
         model.item(
                 "NAME", "CLSNM", classname);
+        model.item(
+                "FULL_NAME", "FLLNM", classfullname);
         
         classes = cmodelInstance("WB_JAVA_PACKAGES");
         classes.header("packages");
-        classes.item("class", "classes");
+        cmodelitem = classes.item("class", "classes");
+        cmodelitem.keyformat = "%05d";
+        cmodelitem.index = "FULL_NAME";
         
         /*
          * project document

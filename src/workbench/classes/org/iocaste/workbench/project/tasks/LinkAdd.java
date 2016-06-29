@@ -32,7 +32,7 @@ public class LinkAdd extends AbstractCommand {
             return;
         }
         
-        object = extcontext.project.instance("link");
+        object = extcontext.project.instance("link", name);
         object.set("NAME", name);
         object.set("COMMAND", command);
         object.set("PROJECT", extcontext.project.getstKey());
