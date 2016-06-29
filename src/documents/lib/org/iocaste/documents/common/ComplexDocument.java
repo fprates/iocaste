@@ -41,6 +41,7 @@ public class ComplexDocument implements Serializable,
         String alias;
         Object key;
         DocumentModel model;
+        ComplexModelItem citem;
         
         if (object == null)
             return;
@@ -48,7 +49,9 @@ public class ComplexDocument implements Serializable,
         alias = cmodel.getModelItemName(model.getName());
         if (alias == null)
             throw new RuntimeException("Invalid object model.");
-        key = getKey(cmodel, model, object, alias);
+        citem = cmodel.getItems().get(alias);
+        key = (citem.index == null)?
+                getKey(cmodel, model, object, alias) : object.get(citem.index);
         items.get(alias).objects.put(key, object);
     }
     
@@ -234,15 +237,25 @@ public class ComplexDocument implements Serializable,
             return header.getst(key.getModelItemName());
         return null;
     }
+
+    public final <T> T instance(String item) {
+        return instance(item, null);
+    }
     
     @SuppressWarnings("unchecked")
-    public final <T> T instance(String item) {
+    public final <T> T instance(String item, Object index) {
         ExtendedObject object;
         ComplexDocument document;
         ComplexModelItem cmodelitem = cmodel.getItems().get(item);
         
         if (cmodelitem.model != null) {
             object = new ExtendedObject(cmodelitem.model);
+            if (cmodelitem.index != null) {
+                if (index == null)
+                    throw new RuntimeException(
+                            "indexed item can't have null key");
+                object.set(cmodelitem.index, index);
+            }
             add(object);
             return (T)object;
         }
