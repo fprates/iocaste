@@ -103,7 +103,7 @@ public class PackageInstall extends AbstractHandler {
             state.installed++;
             cmodels = state.data.getCModels();
             if (cmodels.length > 0)
-                InstallCModels.init(cmodels, state);
+                CModels.install(cmodels, state);
             
             state.installed++;
             /*

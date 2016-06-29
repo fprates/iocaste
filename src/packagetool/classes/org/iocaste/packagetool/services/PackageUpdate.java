@@ -46,6 +46,10 @@ public class PackageUpdate extends AbstractHandler {
         models = state.data.getModels();
         if (models.size() > 0)
             Models.updateAll(models, state);
+
+        cmodels = state.data.getCModels();
+        if (cmodels.length > 0)
+            CModels.update(cmodels, state);
         
         types = new HashSet<>();
         types.add("SH");
@@ -56,7 +60,6 @@ public class PackageUpdate extends AbstractHandler {
         types.add("TSKGROUP");
         types.add("TSKITEM");
         types.add("TASK");
-        types.add("CMODEL");
         
         services = getFunction();
         uninstall = services.get("uninstall");
@@ -70,7 +73,7 @@ public class PackageUpdate extends AbstractHandler {
         
         cmodels = state.data.getCModels();
         if (cmodels.length > 0)
-            InstallCModels.init(cmodels, state);
+            CModels.install(cmodels, state);
         
         state.messages = state.data.getMessages();
         if (state.messages.size() > 0)
