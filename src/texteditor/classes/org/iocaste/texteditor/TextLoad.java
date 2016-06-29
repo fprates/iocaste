@@ -14,22 +14,36 @@ public class TextLoad extends AbstractHandler {
     public Object run(Message message) throws Exception {
         Map<String, String> pages;
         FileEntry[] files;
-        String fd;
+        String content;
         String textname = message.get("textname");
         String id = message.getst("id");
         Iocaste iocaste = new Iocaste(getFunction());
         
-        files = iocaste.getFiles("texteditor", textname, id);
+        if (id != null) {
+            content = fileget(iocaste, textname, id);
+            if (content == null)
+                return null;
+            pages = new TreeMap<>();
+            pages.put(id, content);
+            return pages;
+        }
+        
+        files = iocaste.getFiles("texteditor", textname);
         if (files == null)
             return null;
-        
         pages = new TreeMap<>();
-        for (FileEntry file : files) {
-            fd = iocaste.file(Iocaste.READ, file.path);
-            pages.put(file.name, new String(iocaste.read(fd)));
-            iocaste.close(fd);
-        }
+        for (FileEntry file : files)
+            pages.put(file.name, fileget(iocaste, textname, file.name));
         return pages;
+    }
+    
+    private final String fileget(
+            Iocaste iocaste, String textname, String filename) {
+        String fd = iocaste.file(
+                Iocaste.READ, "texteditor", textname, filename);
+        String content = new String(iocaste.read(fd));
+        iocaste.close(fd);
+        return content;
     }
 
 }
