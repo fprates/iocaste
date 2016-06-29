@@ -4,18 +4,21 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.java.editor.handler.ClassHandler;
 
 public class ClassEditorCall extends AbstractCommand {
-
-    public ClassEditorCall() {
+    private byte op;
+    public ClassEditorCall(byte op) {
         required("package");
         required("class");
+        this.op = op;
     }
     
     @Override
     protected void execute(PageBuilderContext context) {
-        String packagename, classname, fullname;
+        String packagename, classname;
         Context extcontext;
+        ClassHandler handler;
         
         packagename = parameters.get("package");
         extcontext = getExtendedContext();
@@ -27,19 +30,14 @@ public class ClassEditorCall extends AbstractCommand {
         }
 
         classname = parameters.get("class");
-        fullname = new StringBuilder(packagename).append(".").
-                append(classname).toString();
-        
-        extcontext.classeditor.classobject =
-                extcontext.classeditor.document.instance("class", fullname);
-        extcontext.classeditor.classobject.set(
-                "PROJECT", extcontext.project.getstKey());
-        extcontext.classeditor.classobject.set(
-                "PACKAGE", packagename);
-        extcontext.classeditor.classobject.set(
-                "NAME", classname);
-        extcontext.classeditor.classobject.set(
-                "FULL_NAME", fullname);
+        handler = extcontext.classeditor.handlers.get(op);
+        handler.setPackage(packagename);
+        handler.setClassName(classname);
+        handler.execute();
+        if (extcontext.classeditor.classobject == null) {
+            message(Const.ERROR, "invalid.class");
+            return;
+        }
         
         init("class-editor", extcontext);
         redirect("class-editor");

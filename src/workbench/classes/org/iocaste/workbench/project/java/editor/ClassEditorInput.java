@@ -11,6 +11,7 @@ public class ClassEditorInput extends AbstractViewInput {
         Context extcontext = getExtendedContext();
         
         dfset("head", extcontext.classeditor.classobject);
+        texteditorset("source", extcontext.classeditor.source);
     }
 
     @Override

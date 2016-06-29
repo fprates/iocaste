@@ -14,17 +14,20 @@ public class ClassEditorSave extends AbstractActionHandler {
         String project, fullname;
         Context extcontext = getExtendedContext();
 
-        extcontext.classeditor.document = save(extcontext.classeditor.document);
-
         _class = extcontext.classeditor.classobject;
         project = _class.getst("PROJECT");
         fullname = _class.getst("FULL_NAME");
-        if (_class.getst("CLASS_ID") == null)
+        if (_class.getst("CLASS_ID") == null) {
             textcreate(project);
+            extcontext.classeditor.document =
+                    save(extcontext.classeditor.document);
+            _class = extcontext.classeditor.document.getItemsMap("class").
+                    get(fullname);
+        }
         
-        _class = extcontext.classeditor.document.getItemsMap("class").
-                get(fullname);
-        textsave(project, _class.getst("CLASS_ID"), textget("source"));
+        extcontext.classeditor.source = textget("source");
+        textsave(project, _class.getst("CLASS_ID"),
+                extcontext.classeditor.source);
         message(Const.STATUS, "java.class.saved");
     }
     

@@ -23,6 +23,7 @@ import org.iocaste.workbench.project.datadict.ModelUse;
 import org.iocaste.workbench.project.java.ClassEditorCall;
 import org.iocaste.workbench.project.java.PackageAdd;
 import org.iocaste.workbench.project.java.editor.ClassEditorContext;
+import org.iocaste.workbench.project.java.editor.handler.ClassHandler;
 import org.iocaste.workbench.project.tasks.LinkAdd;
 import org.iocaste.workbench.project.tasks.LinkRemove;
 import org.iocaste.workbench.project.view.ViewAdd;
@@ -50,7 +51,8 @@ public class Context extends AbstractExtendedContext {
         output = new ArrayList<>();
         commands = new HashMap<>();
         commands.put("action-add", new ActionAdd());
-        commands.put("class-add", new ClassEditorCall());
+        commands.put("class-add", new ClassEditorCall(ClassHandler.ADD));
+        commands.put("class-edit", new ClassEditorCall(ClassHandler.EDIT));
         commands.put("compile", new Compile(context));
         commands.put("data-element-add", new DataElementAdd());
         commands.put("data-element-remove", new DataElementRemove());
@@ -81,6 +83,6 @@ public class Context extends AbstractExtendedContext {
         new DataFormConfig(viewconfig);
         new TableToolConfig(viewconfig);
         
-        classeditor = new ClassEditorContext();
+        classeditor = new ClassEditorContext(context, this);
     }
 }
