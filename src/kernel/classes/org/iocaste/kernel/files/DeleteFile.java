@@ -18,29 +18,23 @@ public class DeleteFile extends AbstractHandler {
         String path = FileServices.getPath(files);
         File file = new File(path);
         
-        if (!all)
-            return file.delete();
-        
-        return recursive(file);
+        return (!all)? file.delete() : recursive(file);
     }
     
     private boolean recursive(File file) {
-        File child;
-        String[] files = file.list();
+        File[] files;
         
+        if (file.isFile())
+            return file.delete();
+        
+        files = file.listFiles();
         if (files == null)
             return file.delete();
         
-        for (String name : files) {
-            child = new File(name);
-            if (child.isDirectory() && !recursive(child))
-                return false;
-            
-            if (!child.delete())
-                return false;
-        }
+        for (File child : files)
+            recursive(child);
         
-        return true;
+        return file.delete();
     }
     
 }
