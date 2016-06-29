@@ -23,7 +23,10 @@ public class FileWrite extends AbstractHandler {
         InternalFileEntry entry = services.entries.get(sessionid).get(id);
         ByteBuffer buffer = ByteBuffer.wrap(data);
 
-        entry.channel.write(buffer);
+        if (entry.fchannel != null)
+            entry.fchannel.write(buffer);
+        else
+            entry.channel.write(buffer);
     }
     
 }
