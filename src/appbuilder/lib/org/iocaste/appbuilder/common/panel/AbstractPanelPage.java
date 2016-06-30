@@ -28,7 +28,7 @@ public abstract class AbstractPanelPage {
         put(action, handler);
     }
     
-    public abstract void execute();
+    public abstract void execute() throws Exception;
     
     public final Set<String> getActions() {
         return actions;

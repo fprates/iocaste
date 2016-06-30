@@ -26,7 +26,11 @@ public class StandardPanel {
         view.set(extcontext);
         
         page.setViewContext(view);
-        page.execute();
+        try {
+            page.execute();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         
         if (extcontext != null)
             extcontext.pageInstance(name);
