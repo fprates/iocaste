@@ -405,8 +405,23 @@ public abstract class AbstractActionHandler {
             context.function.download();
     }
     
-    protected final ComplexDocument save(ComplexDocument document) {
-        return documents.save(document);
+    protected final void save(ComplexDocument document) {
+        Map<Object, ComplexDocument> documents;
+        Map<Object, ExtendedObject> objects;
+        ComplexDocument newdoc = this.documents.save(document);
+        
+        document.remove();
+        for (String name : newdoc.getModel().getItems().keySet()) {
+            documents = newdoc.get(name).documents;
+            if (documents != null) {
+                for (Object key : documents.keySet())
+                    document.add(documents.get(key));
+            } else {
+                objects = newdoc.get(name).objects;
+                for (Object key : objects.keySet())
+                    document.add(objects.get(key));
+            }
+        }
     }
     
     protected final void save(ExtendedObject object) {
