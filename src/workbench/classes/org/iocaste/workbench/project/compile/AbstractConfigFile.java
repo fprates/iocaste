@@ -27,7 +27,7 @@ public abstract class AbstractConfigFile implements ConfigFile{
     public final void save(Directory war) {
         DirectoryInstance file;
         
-        file = war.file(directory, this.file);
+        file = war.file(war.addFile(directory, this.file));
         file.content(root.toString());
     }
     
