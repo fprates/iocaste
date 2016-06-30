@@ -48,6 +48,6 @@ public class ViewSpecAdd extends AbstractCommand {
         object.set("PARENT", parent);
         object.set("TYPE", type.toString());
         save(extcontext.view);
-        print("%s %s added.", type.name(), name);
+        print("%s %s added.", type.toString(), name);
     }
 }
