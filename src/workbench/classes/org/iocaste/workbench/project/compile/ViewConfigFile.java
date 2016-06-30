@@ -24,6 +24,12 @@ public class ViewConfigFile extends AbstractConfigFile {
             {"type", "TYPE"},
     };
     
+    private static final String[][] ACTION_ITEM = {
+            {"name", "NAME"},
+            {"class", "CLASS"},
+            {"type", "TYPE"},
+    };
+    
     public ViewConfigFile(PageBuilderContext context) {
         super(context, "views");
         directory = "META-INF";
@@ -34,7 +40,7 @@ public class ViewConfigFile extends AbstractConfigFile {
     public void run(CompileData data) {
         ExtendedObject viewhead;
         String value;
-        XMLElement view, viewattrib, spec, item, itemattrib, config;
+        XMLElement view, viewattrib, spec, item, itemattrib, config, action;
         ComplexDocument[] documents;
         Map<String, String> specitems;
         
@@ -56,6 +62,7 @@ public class ViewConfigFile extends AbstractConfigFile {
                 specitems.put(object.getst("ITEM_ID"), object.getst("NAME"));
                 item = new XMLElement("item");
                 spec.addChild(item);
+                
                 for (int i = 0; i < SPEC_ITEM.length; i++) {
                     value = object.getst(SPEC_ITEM[i][1]);
                     itemattrib = new XMLElement(SPEC_ITEM[i][0]);
@@ -72,11 +79,23 @@ public class ViewConfigFile extends AbstractConfigFile {
                 itemattrib = new XMLElement("element");
                 itemattrib.addInner(specitems.get(object.getst("SPEC")));
                 item.addChild(itemattrib);
-                
                 for (int i = 0; i < CONFIG_ITEM.length; i++) {
                     itemattrib = new XMLElement(CONFIG_ITEM[i][0]);
                     itemattrib.addInner(
                             object.get(CONFIG_ITEM[i][1]).toString());
+                    item.addChild(itemattrib);
+                }
+            }
+            
+            action = new XMLElement("action");
+            view.addChild(action);
+            for (ExtendedObject object : document.getItems("action")) {
+                item = new XMLElement("item");
+                action.addChild(item);
+                for (int i = 0; i < ACTION_ITEM.length; i++) {
+                    itemattrib = new XMLElement(ACTION_ITEM[i][0]);
+                    itemattrib.addInner(
+                            object.get(ACTION_ITEM[i][1]).toString());
                     item.addChild(itemattrib);
                 }
             }

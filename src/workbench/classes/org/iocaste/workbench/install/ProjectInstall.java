@@ -21,6 +21,7 @@ public class ProjectInstall extends AbstractInstallObject {
         DataElement screenconfigitemid, screenconfigname, screenconfigvalue;
         DataElement screenconfigtype, screenactionname, screenactionclass;
         DataElement screenactionid, packagename, classid, classname;
+        DataElement screenactiontype;
         ModelInstall model;
         ComplexModelItem cmodelitem;
         ComplexModelInstall cmodel, models, screens, classes;
@@ -59,6 +60,7 @@ public class ProjectInstall extends AbstractInstallObject {
         screenactionid = elementchar("WB_SCREEN_ACTION_ID", 19, false);
         screenactionname = elementchar("WB_SCREEN_ACTION_NAME", 40, false);
         screenactionclass = elementchar("WB_SCREEN_ACTION_CLASS", 255, false);
+        screenactiontype = elementnumc("WB_SCREEN_ACTION_TYPE", 1);
         
         packagename = elementchar("WB_JAVA_PACKAGE_NAME", 120, false);
         classid = elementchar("WB_JAVA_CLASS_ID", 125, false);
@@ -210,6 +212,8 @@ public class ProjectInstall extends AbstractInstallObject {
                 "NAME", "ACTNM", screenactionname);
         model.item(
                 "CLASS", "CLASS", screenactionclass);
+        model.item(
+                "TYPE", "ACTTY", screenactiontype);
         
         screens = cmodelInstance("WB_SCREENS");
         screens.header("screen_head");
