@@ -28,10 +28,15 @@ public class BuilderCustomView extends AbstractCustomView
     private void buildItem(PageBuilderContext context,
             ViewComponents components, ViewSpecItem item, String prefix) {
         SpecFactory factory;
+        SpecItemHandler handler;
         
         factory = getFactory(item);
-        if (factory != null)
-            factory.run(context, components, item, prefix);
+        if (factory == null)
+            return;
+        handler = factory.getHandler();
+        if (handler != null)
+            handler.execute(context, item.getName());
+        factory.run(context, components, item, prefix);
     }
     
     private final void download(PageBuilderContext context) throws Exception {

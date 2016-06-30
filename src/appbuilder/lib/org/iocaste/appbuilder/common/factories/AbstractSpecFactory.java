@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common.factories;
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.appbuilder.common.SpecItemHandler;
 import org.iocaste.appbuilder.common.ViewComponents;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.shell.common.Container;
@@ -11,7 +12,7 @@ import org.iocaste.shell.common.StandardContainer;
 public abstract class AbstractSpecFactory implements SpecFactory {
     protected PageBuilderContext context;
     protected ViewComponents components;
-    
+    private SpecItemHandler handler;
     
     protected AbstractComponentData dataInstance() {
         return null;
@@ -33,6 +34,11 @@ public abstract class AbstractSpecFactory implements SpecFactory {
     @Override
     public <T> T get() {
         return null;
+    }
+    
+    @Override
+    public final SpecItemHandler getHandler() {
+        return handler;
     }
     
     @Override
@@ -69,6 +75,10 @@ public abstract class AbstractSpecFactory implements SpecFactory {
         if (prefix == null)
             new StandardContainer(container, data.name);
         components.add(data);
+    }
+    
+    protected final void setHandler(SpecItemHandler handler) {
+        this.handler = handler;
     }
     
     @Override

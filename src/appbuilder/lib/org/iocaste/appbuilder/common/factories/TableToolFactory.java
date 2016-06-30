@@ -4,9 +4,14 @@ import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
+import org.iocaste.appbuilder.common.tabletool.TableToolSpecItemHandler;
 
 public class TableToolFactory extends AbstractSpecFactory {
 
+    public TableToolFactory() {
+        setHandler(new TableToolSpecItemHandler());
+    }
+    
     @Override
     protected AbstractComponentData dataInstance() {
         return new TableToolData();

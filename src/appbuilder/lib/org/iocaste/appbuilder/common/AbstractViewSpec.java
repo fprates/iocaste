@@ -9,7 +9,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
     private Map<String, ViewSpecItem> items;
     private PageBuilderContext context;
     private boolean initialized;
-    private ExtendedContext extcontext;
     
     public AbstractViewSpec() {
         items = new LinkedHashMap<>();
@@ -26,8 +25,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
     
     protected final void dataform(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.DATA_FORM, name);
-        if (extcontext != null)
-            extcontext.dataformInstance(name);
     }
     
     protected abstract void execute(PageBuilderContext context);
@@ -130,7 +127,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
             parent = item.getName();
             items.put(parent, item);
         }
-        extcontext = context.getView().getExtendedContext();
         execute(context);
     }
 
@@ -159,8 +155,6 @@ public abstract class AbstractViewSpec implements ViewSpec {
     
     protected final void tabletool(String parent, String name) {
         put(parent, ViewSpecItem.TYPES.TABLE_TOOL, name);
-        if (extcontext != null)
-            extcontext.tableInstance(name);
     }
     
     protected final void text(String parent, String name) {
