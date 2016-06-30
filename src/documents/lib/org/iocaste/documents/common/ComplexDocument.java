@@ -237,10 +237,6 @@ public class ComplexDocument implements Serializable,
             return header.getst(key.getModelItemName());
         return null;
     }
-
-    public final <T> T instance(String item) {
-        return instance(item, null);
-    }
     
     @SuppressWarnings("unchecked")
     public final <T> T instance(String item, Object index) {
@@ -261,6 +257,10 @@ public class ComplexDocument implements Serializable,
         }
         
         document = new ComplexDocument(cmodelitem.cmodel);
+        for (DocumentModelKey key : cmodelitem.cmodel.getHeader().getKeys()) {
+            document.getHeader().set(key.getModelItemName(), index);
+            break;
+        }
         add(document);
         return (T)document;
     }

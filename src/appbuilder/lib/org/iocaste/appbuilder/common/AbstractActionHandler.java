@@ -43,6 +43,8 @@ public abstract class AbstractActionHandler {
 
     protected final ComplexDocument clone(ComplexDocument document) {
         Map<String, ComplexModelItem> models;
+        Map<Object, ExtendedObject> items;
+        ExtendedObject source;
         ComplexModel cmodel = document.getModel();
         ComplexDocument clone = documentInstance(cmodel);
         DocumentModel model = cmodel.getHeader();
@@ -63,10 +65,15 @@ public abstract class AbstractActionHandler {
          * clone cmodel items
          */
         models = cmodel.getItems();
-        for (String name : models.keySet())
-            if (models.get(name) != null)
-                for (ExtendedObject source : document.getItems(name))
-                    Documents.move(clone.instance(name), source);
+        for (String name : models.keySet()) {
+            if (models.get(name) == null)
+                continue;
+            items = document.getItemsMap(name);
+            for (Object key : items.keySet()) {
+                source = items.get(key);
+                Documents.move(clone.instance(name, key), source);
+            }
+        }
         
         return clone;
     }
