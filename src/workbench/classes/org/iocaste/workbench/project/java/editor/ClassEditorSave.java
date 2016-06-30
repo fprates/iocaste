@@ -19,8 +19,7 @@ public class ClassEditorSave extends AbstractActionHandler {
         fullname = _class.getst("FULL_NAME");
         if (_class.getst("CLASS_ID") == null) {
             textcreate(project);
-            extcontext.classeditor.document =
-                    save(extcontext.classeditor.document);
+            save(extcontext.classeditor.document);
             _class = extcontext.classeditor.document.getItemsMap("class").
                     get(fullname);
         }

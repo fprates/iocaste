@@ -21,11 +21,15 @@ public abstract class AbstractViewElementAttribute
 
     @Override
     public ExtendedObject instance(ExtendedObject spec, String value) {
-        ExtendedObject object = extcontext.view.instance("config");
+        ExtendedObject object;
+        String specid = spec.getst("ITEM_ID");
+        String key = new StringBuilder(specid).append(".").
+                append(name).toString();
         
+        object = extcontext.view.instance("config", key);
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("SCREEN", extcontext.view.getstKey());
-        object.set("SPEC", spec.getst("ITEM_ID"));
+        object.set("SPEC", specid);
         object.set("NAME", name);
         object.set("VALUE", value);
         object.set("TYPE", type);
