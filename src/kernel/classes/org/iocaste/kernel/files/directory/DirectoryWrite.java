@@ -25,15 +25,15 @@ public class DirectoryWrite extends AbstractHandler {
         Directory root = message.get("directory");
         String sessionid = message.getSessionid();
         byte type = message.getb("type");
-        run(sessionid, symbol, root, type);
+        run(sessionid, FileServices.getSymbolPath(symbol), root, type);
         return null;
     }
 
-    public void run(String sessionid, String symbol, Directory root, byte type)
+    public void run(String sessionid, String path, Directory root, byte type)
             throws Exception {
         DirectoryEngine engine = engines.get(type);
         engine.setSessionid(sessionid);
-        engine.start(FileServices.getSymbolPath(symbol), root);
+        engine.start(path, root);
         write(root.get(), engine);
         engine.write();
     }
@@ -49,9 +49,8 @@ public class DirectoryWrite extends AbstractHandler {
         case DirectoryLeaf.DIR:
             engine.dir(leaf);
             children = leaf.getChildren();
-            for (String key : children.keySet()) {
+            for (String key : children.keySet())
                 write(children.get(key), engine);
-            }
             break;
         }
     }

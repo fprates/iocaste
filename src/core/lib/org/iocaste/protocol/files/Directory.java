@@ -11,17 +11,20 @@ public class Directory implements Serializable {
         name = dir;
         root = new DirectoryLeaf(null, dir, DirectoryLeaf.DIR);
     }
-    
-    public final void addDir(String... dirs) {
+
+    public final DirectoryLeaf addDir(String... dirs) {
         DirectoryLeaf leaf = root;
+        
         for (String dir : dirs) {
             if (!leaf.contains(dir))
                 leaf.add(dir, DirectoryLeaf.DIR);
             leaf = leaf.get(dir);
         }
+        
+        return leaf;
     }
-    
-    private final DirectoryLeaf addFile(String... path) {
+
+    public final DirectoryLeaf addFile(String... path) {
         DirectoryLeaf leaf = root;
         int i = 0;
         int t = path.length - 1;
@@ -47,16 +50,15 @@ public class Directory implements Serializable {
         return name;
     }
     
-    public DirectoryInstance copy(String... target) {
-        return instance(DirectoryInstance.COPY, target);
+    public DirectoryInstance copy(DirectoryLeaf leaf) {
+        return instance(DirectoryInstance.COPY, leaf);
     }
     
-    private DirectoryInstance instance(byte type, String[] target) {
-        DirectoryLeaf leaf = addFile(target);
+    private DirectoryInstance instance(byte type, DirectoryLeaf leaf) {
         return new DirectoryInstance(leaf, type);
     }
     
-    public DirectoryInstance file(String... target) {
-        return instance(DirectoryInstance.BUFFER, target);
+    public DirectoryInstance file(DirectoryLeaf leaf) {
+        return instance(DirectoryInstance.BUFFER, leaf);
     }
 }
