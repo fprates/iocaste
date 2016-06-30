@@ -56,8 +56,9 @@ public final class Iocaste extends AbstractServiceInterface {
         call(new Message("commit"));
     }
     
-    public final String compile(Directory source) {
+    public final String compile(String project, Directory source) {
         Message message = new Message("compile");
+        message.add("project", project);
         message.add("source", source);
         return call(message);
     }

@@ -65,6 +65,10 @@ public class FileServices extends AbstractFunction {
             return composeFileName("kernel", "src");
         case "JAVA_BIN":
             return composeFileName("kernel", "bin");
+        case "FULL_JAVA_SOURCE":
+            return getPath(getSymbolPath("JAVA_SOURCE"));
+        case "FULL_JAVA_BIN":
+            return getPath(getSymbolPath("JAVA_BIN"));
         default:
             return null;
         }

@@ -26,14 +26,15 @@ import org.iocaste.protocol.files.Directory;
 
 public class Compile extends AbstractHandler {
 
-    private final String createdir(FileServices services, String symbol) {
+    private final String createdir(FileServices services,
+            String symbol, String project) {
         String dir = FileServices.getSymbolPath(symbol);
         DeleteFile delete = services.get("delete");
         MakeDirectory mkdir = services.get("mkdir");
 
-        delete.run(true, dir);
-        mkdir.run(dir);
-        return FileServices.getPath(dir);
+        delete.run(true, dir, project);
+        mkdir.run(dir, project);
+        return FileServices.getPath(dir, project);
     }
     
     private final String getClassPath() {
@@ -73,7 +74,7 @@ public class Compile extends AbstractHandler {
         GetLocale localeget;
         DirectoryWrite directorywrite;
         CompilerService service;
-        String sessionid, output, classpath, javabin;
+        String sessionid, output, classpath, javabin, javasource, project;
         List<File> files = new ArrayList<>();
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
@@ -83,20 +84,22 @@ public class Compile extends AbstractHandler {
         service = getFunction();
         source = message.get("source");
         sessionid = message.getSessionid();
+        project = message.getst("project");
+        javasource = FileServices.getPath(
+                FileServices.getSymbolPath("JAVA_SOURCE"), project);
         directorywrite = service.files.get("directory_write");
-        directorywrite.run(sessionid, "JAVA_SOURCE", source, Iocaste.RAW);
+        directorywrite.run(sessionid, javasource, source, Iocaste.RAW);
         
         localeget = service.session.get("get_locale");
         fmngr = compiler.getStandardFileManager(
                 null, localeget.run(sessionid), null);
         
-        file = new File(FileServices.getPath(
-                FileServices.getSymbolPath("JAVA_SOURCE")));
+        file = new File(javasource);
         retrieveFiles(files, file);
         cunits = fmngr.getJavaFileObjects(files.toArray(new File[0]));
       
         classpath = getClassPath();
-        javabin = createdir(service.files, "JAVA_BIN");
+        javabin = createdir(service.files, "JAVA_BIN", project);
         options = new ArrayList<>();
         options.addAll(Arrays.asList("-cp", classpath));
         options.addAll(Arrays.asList("-d", javabin));
