@@ -29,7 +29,7 @@ public class ModelAdd extends AbstractCommand {
         }
 
         extcontext = getExtendedContext();
-        document = extcontext.project.instance("model");
+        document = extcontext.project.instance("model", name);
         object = document.getHeader();
         object.set("NAME", name);
         object.set("PROJECT", extcontext.project.getstKey());

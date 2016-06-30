@@ -73,7 +73,7 @@ public class ActionAdd extends AbstractCommand {
             type = 0;
         }
         
-        object = extcontext.view.instance("action");
+        object = extcontext.view.instance("action", name);
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("SCREEN", extcontext.view.getstKey());
         object.set("NAME", name);

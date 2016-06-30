@@ -28,7 +28,7 @@ public class PackageAdd extends AbstractCommand {
             return;
         }
         
-        _package = extcontext.project.instance("class");
+        _package = extcontext.project.instance("class", name);
         object = _package.getHeader();
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("PACKAGE", name);
