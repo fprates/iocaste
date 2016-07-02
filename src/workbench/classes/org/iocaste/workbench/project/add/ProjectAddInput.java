@@ -1,19 +1,20 @@
-package org.iocaste.workbench;
+package org.iocaste.workbench.project.add;
 
 import org.iocaste.appbuilder.common.AbstractViewInput;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 
-public class MainInput extends AbstractViewInput {
+public class ProjectAddInput extends AbstractViewInput {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        Context extcontext = getExtendedContext();
-        tilesset("projects", extcontext.projects);
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
     protected void init(PageBuilderContext context) {
-        execute(context);
+        // TODO Auto-generated method stub
+        
     }
-
+    
 }

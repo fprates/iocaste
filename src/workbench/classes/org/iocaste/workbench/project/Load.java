@@ -14,7 +14,7 @@ public class Load extends AbstractActionHandler {
         int i;
         Context extcontext = getExtendedContext();
         
-        projectlist = context.getView().getActionHandler("project-list");
+        projectlist = context.getView("main").getActionHandler("project-list");
         projects = (ComplexDocument[])projectlist.call(context);
         i = (projects == null)? 1 : projects.length + 1;
         extcontext.projects = new ProjectInfo[i];

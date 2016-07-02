@@ -43,8 +43,8 @@ class ProjectSelect extends AbstractActionHandler {
         String project = getinputst("item_PROJECT");
         
         if (project.equals("project_add")) {
-            init("project-add-gui", extcontext);
-            redirect("project-add-gui");
+            init("project_add", extcontext);
+            redirect("project_add");
             return;
         }
         
@@ -53,8 +53,8 @@ class ProjectSelect extends AbstractActionHandler {
         command = context.getView().getActionHandler("project-use");
         command.set(parameters);
         command.run(context);
-        init("project-view", extcontext);
-        redirect("project-view");
+        init("project_viewer", extcontext);
+        redirect("project_viewer");
     }
     
 }

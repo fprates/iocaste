@@ -14,6 +14,7 @@ public class ProjectAdd extends AbstractCommand {
         required("profile", "PROFILE");
         optional("text", "TEXT");
         checkproject = false;
+        getActionContext().mainrestart = true;
     }
     
     @Override
