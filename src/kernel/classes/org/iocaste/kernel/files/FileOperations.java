@@ -31,9 +31,13 @@ public class FileOperations extends AbstractHandler {
         
         return null;
     }
-    
     public final String create(FileServices services, String sessionid,
             String... args) throws Exception {
+        return createabsolute(services, sessionid, FileServices.getPath(args));
+    }
+    
+    public final String createabsolute(FileServices services, String sessionid,
+            String abspath) throws Exception {
         InternalFileEntry entry;
         Path path;
         OpenOption[] options = {
@@ -41,7 +45,7 @@ public class FileOperations extends AbstractHandler {
                 StandardOpenOption.APPEND
         };
         
-        entry = services.instance(sessionid, args);
+        entry = services.instance(sessionid, abspath);
         path = Paths.get(entry.filename);
         entry.channel = Files.newByteChannel(path, options);
         return entry.filename;
@@ -49,9 +53,15 @@ public class FileOperations extends AbstractHandler {
     
     public final String open(FileServices services, String sessionid,
             String mode, String... args) throws Exception {
+        return openabsolute(
+                services, sessionid, mode, FileServices.getPath(args));
+    }
+    
+    public final String openabsolute(FileServices services, String sessionid,
+            String mode, String path) throws Exception {
         InternalFileEntry entry;
 
-        entry = services.instance(sessionid, args);
+        entry = services.instance(sessionid, path);
         entry.file = new RandomAccessFile(entry.filename, mode);
         entry.fchannel = entry.file.getChannel();
         return entry.filename;

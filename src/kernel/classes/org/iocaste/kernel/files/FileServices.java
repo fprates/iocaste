@@ -53,7 +53,7 @@ public class FileServices extends AbstractFunction {
         return path;
     }
     
-    public static final String getSymbolPath(String symbol) {
+    public static final String getSymbolPath(String symbol, String... args) {
         switch (symbol) {
         case "WEBAPPS":
             return composeFileName(
@@ -62,19 +62,30 @@ public class FileServices extends AbstractFunction {
             return composeFileName(getSymbolPath("WEBAPPS"),
                     "iocaste-workbench", "WEB-INF", "lib");
         case "JAVA_SOURCE":
-            return composeFileName("kernel", "src");
+            return composeFileName(getJavaPath("src", args));
         case "JAVA_BIN":
-            return composeFileName("kernel", "bin");
+            return composeFileName(getJavaPath("bin", args));
         case "FULL_JAVA_SOURCE":
-            return getPath(getSymbolPath("JAVA_SOURCE"));
+            return getPath(getSymbolPath("JAVA_SOURCE", args));
         case "FULL_JAVA_BIN":
-            return getPath(getSymbolPath("JAVA_BIN"));
+            return getPath(getSymbolPath("JAVA_BIN", args));
         default:
             return null;
         }
     }
     
-    public final InternalFileEntry instance(String sessionid, String... args) {
+    private static final String[] getJavaPath(String prefix, String... args) {
+        String[] fullargs;
+        
+        fullargs = new String[args.length + 2];
+        fullargs[0] = "kernel";
+        for (int i = 0; i < args.length; i++)
+            fullargs[i+1] = args[i];
+        fullargs[fullargs.length - 1] = prefix;
+        return fullargs;
+    }
+    
+    public final InternalFileEntry instance(String sessionid, String path) {
         Map<String, InternalFileEntry> files;
         InternalFileEntry entry;
         
@@ -85,7 +96,7 @@ public class FileServices extends AbstractFunction {
         }
         
         entry = new InternalFileEntry();
-        entry.filename = getPath(args);
+        entry.filename = path;
         files.put(entry.filename, entry);
         
         return entry;

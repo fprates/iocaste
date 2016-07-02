@@ -33,7 +33,7 @@ public class RawEngine implements DirectoryEngine {
         
         if (leaf == root)
             return;
-        dirpath = FileServices.getPath(path, leaf.getPath());
+        dirpath = FileServices.composeFileName(path, leaf.getPath());
         if (!new File(dirpath).mkdir())
             throw new IocasteException(
                     String.format("error creating %s", dirpath));
@@ -53,7 +53,8 @@ public class RawEngine implements DirectoryEngine {
         }
         
         instance = leaf.getInstance();
-        fdo = fop.create(services, sessionid, path, leaf.getPath());
+        fdo = fop.createabsolute(services, sessionid,
+                FileServices.composeFileName(path, leaf.getPath()));
         switch (instance.getAction()) {
         case DirectoryInstance.BUFFER:
             fwrite.run(services, sessionid, fdo, instance.getContent());
@@ -81,8 +82,8 @@ public class RawEngine implements DirectoryEngine {
         this.path = path;
         this.root = dir.get();
         
-        delete.run(true, path);
-        mkdir.run(path);
+        delete.runabsolute(true, path);
+        mkdir.runabsolute(path);
     }
     
     @Override

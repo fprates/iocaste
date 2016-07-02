@@ -28,13 +28,13 @@ public class Compile extends AbstractHandler {
 
     private final String createdir(FileServices services,
             String symbol, String project) {
-        String dir = FileServices.getSymbolPath(symbol);
+        String dir = FileServices.getSymbolPath(symbol, project);
         DeleteFile delete = services.get("delete");
         MakeDirectory mkdir = services.get("mkdir");
 
-        delete.run(true, dir, project);
-        mkdir.run(dir, project);
-        return FileServices.getPath(dir, project);
+        delete.run(true, dir);
+        mkdir.run(dir);
+        return FileServices.getPath(dir);
     }
     
     private final String getClassPath() {
@@ -52,13 +52,17 @@ public class Compile extends AbstractHandler {
     }
     
     private final void retrieveFiles(List<File> files, File file) {
-
+        File[] children;
+        
         if (file.isFile()) {
             files.add(file);
             return;
         }
         
-        for (File child : file.listFiles())
+        children = file.listFiles();
+        if (children == null)
+            return;
+        for (File child : children)
             retrieveFiles(files, child);
     }
     
@@ -66,6 +70,7 @@ public class Compile extends AbstractHandler {
     public Object run(Message message) throws Exception {
         CompilationTask task;
         Writer writer;
+        List<File> files;
         List<String> options;
         StandardJavaFileManager fmngr;
         Iterable<? extends JavaFileObject> cunits;
@@ -75,7 +80,6 @@ public class Compile extends AbstractHandler {
         DirectoryWrite directorywrite;
         CompilerService service;
         String sessionid, output, classpath, javabin, javasource, project;
-        List<File> files = new ArrayList<>();
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
         if (compiler == null)
@@ -85,15 +89,16 @@ public class Compile extends AbstractHandler {
         source = message.get("source");
         sessionid = message.getSessionid();
         project = message.getst("project");
-        javasource = FileServices.getPath(
-                FileServices.getSymbolPath("JAVA_SOURCE"), project);
+        javasource = FileServices.getPath(FileServices.
+                getSymbolPath("JAVA_SOURCE", project));
         directorywrite = service.files.get("directory_write");
         directorywrite.run(sessionid, javasource, source, Iocaste.RAW);
         
         localeget = service.session.get("get_locale");
         fmngr = compiler.getStandardFileManager(
                 null, localeget.run(sessionid), null);
-        
+
+        files = new ArrayList<>();
         file = new File(javasource);
         retrieveFiles(files, file);
         cunits = fmngr.getJavaFileObjects(files.toArray(new File[0]));

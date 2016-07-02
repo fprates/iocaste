@@ -16,8 +16,11 @@ public class DeleteFile extends AbstractHandler {
     
     public Object run(boolean all, String... files) {
         String path = FileServices.getPath(files);
+        return runabsolute(all, path);
+    }
+    
+    public Object runabsolute(boolean all, String path) {
         File file = new File(path);
-        
         return (!all)? file.delete() : recursive(file);
     }
     

@@ -34,7 +34,9 @@ public class JarEngine implements DirectoryEngine {
         
         file = FileServices.composeFileName(instance.getSource());
         file = FileServices.composeFileName(
-                FileServices.getSymbolPath(instance.getSourceSymbol()),
+                FileServices.getSymbolPath(
+                        instance.getSourceSymbol(),
+                        instance.getSourceSymbolArgs()),
                 file);
         
         copyhandler = handlers.get(instance.getSourceType());

@@ -16,10 +16,12 @@ public class MakeDirectory extends AbstractHandler {
     }
     
     public final void run(String... args) {
-        File file;
         String path = FileServices.getPath(args);
-        
-        file = new File(path);
+        runabsolute(path);
+    }
+    
+    public final void runabsolute(String path) {
+        File file = new File(path);
         if (!file.exists())
             file.mkdirs();
     }
