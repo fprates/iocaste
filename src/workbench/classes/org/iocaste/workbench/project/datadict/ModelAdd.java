@@ -15,7 +15,7 @@ public class ModelAdd extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         String name;
         ComplexDocument document;
         ExtendedObject object;
@@ -25,7 +25,7 @@ public class ModelAdd extends AbstractCommand {
         document = getDocument("WB_MODELS", name);
         if (document != null) {
             message(Const.ERROR, "model %s already exists.", name);
-            return;
+            return null;
         }
 
         extcontext = getExtendedContext();
@@ -37,6 +37,7 @@ public class ModelAdd extends AbstractCommand {
         save(document);
         extcontext.project.add(document);
         print("model %s updated.", name);
+        return document;
     }
 
 }

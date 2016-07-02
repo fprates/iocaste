@@ -15,7 +15,7 @@ public class ProjectAdd extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         ComplexDocument project;
         
         project = documentInstance("WB_PROJECT");
@@ -24,6 +24,7 @@ public class ProjectAdd extends AbstractCommand {
         project.set("TEXT", parameters.get("text"));
         save(project);
         message(Const.STATUS, "project.created");
+        return project;
     }
 
 }

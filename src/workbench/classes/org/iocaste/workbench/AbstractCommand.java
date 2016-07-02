@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
+import org.iocaste.appbuilder.common.PageBuilderContext;
 
 public abstract class AbstractCommand extends AbstractActionHandler {
     private static final byte REQUIRED = 0;
@@ -37,6 +38,21 @@ public abstract class AbstractCommand extends AbstractActionHandler {
                     return "invalid.value";
             }
         return null;
+    }
+    
+    public final Object call(PageBuilderContext context) throws Exception {
+        Context extcontext = context.getView().getExtendedContext();
+        run(context);
+        return extcontext.callreturn;
+    }
+    
+    protected abstract Object entry(PageBuilderContext context)
+            throws Exception;
+    
+    @Override
+    protected final void execute(PageBuilderContext context) throws Exception {
+        Context extcontext = context.getView().getExtendedContext();
+        extcontext.callreturn = entry(context);
     }
     
     protected final boolean getBooleanParameter(String name) {

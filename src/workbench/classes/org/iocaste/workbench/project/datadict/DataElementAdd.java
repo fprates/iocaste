@@ -34,7 +34,7 @@ public class DataElementAdd extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected final Object entry(PageBuilderContext context) {
         String name;
         ExtendedObject object;
         Context extcontext = getExtendedContext();
@@ -43,7 +43,7 @@ public class DataElementAdd extends AbstractCommand {
         object = getObject("WB_DATA_ELEMENTS", name);
         if (object != null) {
             message(Const.ERROR, "data element %s already exists.", name);
-            return;
+            return null;
         }
         
         object = instance("WB_DATA_ELEMENTS");
@@ -55,6 +55,7 @@ public class DataElementAdd extends AbstractCommand {
         object.set("UPCASE", getBooleanParameter("upcase"));
         save(object);
         print("data element %s updated.", name);
+        return object;
     }
 
 }

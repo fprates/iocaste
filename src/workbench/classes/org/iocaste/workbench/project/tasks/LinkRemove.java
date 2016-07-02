@@ -13,7 +13,7 @@ public class LinkRemove extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         String name;
         ExtendedObject object;
         Context extcontext = getExtendedContext();
@@ -22,12 +22,13 @@ public class LinkRemove extends AbstractCommand {
         object = extcontext.project.getItemsMap("link").get(name);
         if (object == null) {
             message(Const.ERROR, "link %s doesn't exist.", name);
-            return;
+            return null;
         }
         
         extcontext.project.remove(object);
         save(extcontext.project);
         print("link %s removed", name);
+        return null;
     }
 
 }

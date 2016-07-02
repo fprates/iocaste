@@ -67,8 +67,7 @@ public class Compile extends AbstractCommand {
         return new Iocaste(data.context.function).compile(data.project, source);
     }
     
-    private final String deployApplication(CompileData data)
-            throws Exception {
+    private final String deployApplication(CompileData data) throws Exception {
         String[] javaargs;
         String error;
         Iocaste iocaste;
@@ -113,7 +112,7 @@ public class Compile extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) throws Exception {
         ComplexDocument document;
         String error;
         
@@ -121,7 +120,7 @@ public class Compile extends AbstractCommand {
         data.project = parameters.get("project");
         if ((data.project == null) && (data.extcontext.project == null)) {
             message(Const.ERROR, "undefined.project");
-            return;
+            return null;
         }
         
         if (data.project == null)
@@ -130,7 +129,7 @@ public class Compile extends AbstractCommand {
         document = getDocument("WB_PROJECT", data.project);
         if (document == null) {
             message(Const.ERROR, "invalid.project");
-            return;
+            return null;
         }
         
         data.extcontext = getExtendedContext();
@@ -139,9 +138,10 @@ public class Compile extends AbstractCommand {
         if (error != null) {
             print(error);
             message(Const.ERROR, "compiling.error");
-            return;
+            return null;
         }
         message(Const.STATUS, "project.compiled");
+        return null;
     }
     
     private String[] getPath(List<String> lpath, String path) {

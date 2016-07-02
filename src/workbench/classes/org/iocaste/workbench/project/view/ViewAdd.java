@@ -13,7 +13,7 @@ public class ViewAdd extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         ComplexDocument view;
         String name;
         Context extcontext = getExtendedContext();
@@ -22,7 +22,7 @@ public class ViewAdd extends AbstractCommand {
         view = extcontext.project.getDocumentsMap("screen").get(name);
         if (view != null) {
             message(Const.ERROR, "view.already.exists");
-            return;
+            return null;
         }
 
         view = extcontext.project.instance("screen", name);
@@ -30,5 +30,6 @@ public class ViewAdd extends AbstractCommand {
         view.set("PROJECT", extcontext.project.getstKey());
         save(view);
         print("view %s created.", name);
+        return view;
     }
 }

@@ -13,7 +13,7 @@ public class DataElementRemove extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         String name;
         ExtendedObject object;
         Query query;
@@ -22,7 +22,7 @@ public class DataElementRemove extends AbstractCommand {
         object = getObject("WB_DATA_ELEMENTS", name);
         if (object == null) {
             message(Const.ERROR, "undefined.data.element", name);
-            return;
+            return null;
         }
         
         query = new Query();
@@ -31,10 +31,11 @@ public class DataElementRemove extends AbstractCommand {
         query.andEqual("DATA_ELEMENT", name);
         if (select(query) != null) {
             message(Const.ERROR, "dataelement.still.assigned");
-            return;
+            return null;
         }
         delete(object);
         print("data element %s removed.", name);
+        return null;
     }
 
 }

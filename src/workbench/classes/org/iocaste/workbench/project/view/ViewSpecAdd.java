@@ -20,7 +20,7 @@ public class ViewSpecAdd extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         ExtendedObject object;
         String name, parent;
         Context extcontext = getExtendedContext();
@@ -31,14 +31,14 @@ public class ViewSpecAdd extends AbstractCommand {
         object = specitems.get(parent);
         if ((parent != null) && (object == null)) {
             message(Const.ERROR, "invalid.parent");
-            return;
+            return null;
         }
         
         name = parameters.get("name");
         object = specitems.get(name);
         if (object != null) {
             message(Const.ERROR, "specitem.already.exists");
-            return;
+            return null;
         }
         
         object = extcontext.view.instance("spec", name);
@@ -49,5 +49,6 @@ public class ViewSpecAdd extends AbstractCommand {
         object.set("TYPE", type.toString());
         save(extcontext.view);
         print("%s %s added.", type.toString(), name);
+        return object;
     }
 }

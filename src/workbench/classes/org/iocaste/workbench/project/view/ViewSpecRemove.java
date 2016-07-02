@@ -16,7 +16,7 @@ public class ViewSpecRemove extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         String name;
         ExtendedObject specitem;
         Map<Object, ExtendedObject> specitems;
@@ -27,11 +27,12 @@ public class ViewSpecRemove extends AbstractCommand {
         specitem = specitems.get(name);
         if (specitem == null) {
             message(Const.ERROR, "invalid.specitem");
-            return;
+            return null;
         }
         
         extcontext.view.remove(specitem);
         save(extcontext.view);
         print("component %s removed.", name);
+        return null;
     }
 }

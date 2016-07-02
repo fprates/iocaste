@@ -13,7 +13,7 @@ public class ModelRemove extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         String name;
         ComplexDocument document;
         Context extcontext;
@@ -23,12 +23,12 @@ public class ModelRemove extends AbstractCommand {
         document = extcontext.project.getDocumentsMap("model").get(name);
         if (document == null) {
             message(Const.ERROR, "invalid model %s.", name);
-            return;
+            return null;
         }
 
         if (document.getDocumentsMap("item").size() > 0) {
             message(Const.ERROR, "cant.delete.with.items");
-            return;
+            return null;
         }
         
         extcontext.project.remove(document);
@@ -36,6 +36,7 @@ public class ModelRemove extends AbstractCommand {
         if (extcontext.model == document)
             extcontext.model = null;
         print("model %s removed.", name);
+        return null;
     }
 
 }

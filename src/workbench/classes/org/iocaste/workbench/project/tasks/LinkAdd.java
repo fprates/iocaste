@@ -15,7 +15,7 @@ public class LinkAdd extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         String name, command, group;
         ExtendedObject object;
         ExtendedObject[] objects;
@@ -29,7 +29,7 @@ public class LinkAdd extends AbstractCommand {
         object = readobjects(objects, "NAME", name);
         if (object != null) {
             message(Const.ERROR, "link %s already exists.", name);
-            return;
+            return null;
         }
         
         object = extcontext.project.instance("link", name);
@@ -39,6 +39,7 @@ public class LinkAdd extends AbstractCommand {
         object.set("GROUP", group);
         save(extcontext.project);
         print("link %s updated.", name);
+        return object;
     }
 
 }

@@ -13,7 +13,7 @@ public class ViewRemove extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         ComplexDocument view;
         String name;
         Context extcontext = getExtendedContext();
@@ -22,12 +22,12 @@ public class ViewRemove extends AbstractCommand {
         view = extcontext.project.getDocumentsMap("screen").get(name);
         if (view == null) {
             message(Const.ERROR, "invalid.view");
-            return;
+            return null;
         }
 
         if (view.getItemsMap("spec").size() > 0) {
             message(Const.ERROR, "cant.delete.with.items");
-            return;
+            return null;
         }
         
         if (extcontext.view == view)
@@ -35,5 +35,6 @@ public class ViewRemove extends AbstractCommand {
         extcontext.project.remove(view);
         delete(view);
         print("view %s removed.", name);
+        return null;
     }
 }

@@ -13,7 +13,7 @@ public class ViewUse extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         ComplexDocument view;
         String name;
         Context extcontext = getExtendedContext();
@@ -22,10 +22,11 @@ public class ViewUse extends AbstractCommand {
         view = extcontext.project.getDocumentsMap("screen").get(name);
         if (view == null) {
             message(Const.ERROR, "invalid.view");
-            return;
+            return null;
         }
         
         extcontext.view = view;
         print("using view %s.", name);
+        return view;
     }
 }

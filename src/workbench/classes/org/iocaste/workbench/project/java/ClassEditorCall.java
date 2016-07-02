@@ -15,7 +15,7 @@ public class ClassEditorCall extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) {
+    protected Object entry(PageBuilderContext context) {
         String packagename, classname;
         Context extcontext;
         ClassHandler handler;
@@ -26,7 +26,7 @@ public class ClassEditorCall extends AbstractCommand {
                 getDocumentsMap("class").get(packagename);
         if (extcontext.classeditor.document == null) {
             message(Const.ERROR, "invalid.package");
-            return;
+            return null;
         }
 
         classname = parameters.get("class");
@@ -36,11 +36,12 @@ public class ClassEditorCall extends AbstractCommand {
         handler.execute();
         if (extcontext.classeditor.classobject == null) {
             message(Const.ERROR, "invalid.class");
-            return;
+            return null;
         }
         
         init("class-editor", extcontext);
         redirect("class-editor");
+        return null;
     }
 
 }

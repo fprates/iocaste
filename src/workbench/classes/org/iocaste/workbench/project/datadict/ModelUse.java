@@ -13,7 +13,7 @@ public class ModelUse extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         String name;
         ComplexDocument document;
         Context extcontext = getExtendedContext();
@@ -22,11 +22,12 @@ public class ModelUse extends AbstractCommand {
         document = extcontext.project.getDocumentsMap("model").get(name);
         if (document == null) {
             message(Const.ERROR, "model %s undefined.", name);
-            return;
+            return null;
         }
         
         extcontext.model = document;
         print("using model %s.", name);
+        return document;
     }
 
 }

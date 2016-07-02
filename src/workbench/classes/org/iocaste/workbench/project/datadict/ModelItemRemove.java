@@ -14,7 +14,7 @@ public class ModelItemRemove extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         String name;
         ExtendedObject object;
         Context extcontext = getExtendedContext();
@@ -23,12 +23,13 @@ public class ModelItemRemove extends AbstractCommand {
         object = extcontext.model.getItemsMap("item").get(name);
         if (object == null) {
             message(Const.ERROR, "model item %s doesn't exist.", name);
-            return;
+            return null;
         }
         
         extcontext.model.remove(object);
         save(extcontext.model);
         print("model item %s removed.", name);
+        return null;
     }
 
 }

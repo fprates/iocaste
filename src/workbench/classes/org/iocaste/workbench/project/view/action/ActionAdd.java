@@ -25,7 +25,7 @@ public class ActionAdd extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) {
+    protected Object entry(PageBuilderContext context) {
         ComplexDocument classes;
         String name, classname, typename;
         String[] tokens;
@@ -38,7 +38,7 @@ public class ActionAdd extends AbstractCommand {
         object = extcontext.view.getItemsMap("action").get(name);
         if (object != null) {
             message(Const.ERROR, "action.already.exists");
-            return;
+            return null;
         }
         
         classname = parameters.get("class");
@@ -54,19 +54,19 @@ public class ActionAdd extends AbstractCommand {
                 get(packagename.toString());
         if (classes == null) {
             message(Const.ERROR, "invalid.class");
-            return;
+            return null;
         }
         
         if (classes.getItemsMap("class").get(classname) == null) {
             message(Const.ERROR, "invalid.class");
-            return;
+            return null;
         }
         
         if (parameters.containsKey("type")) {
             typename = parameters.get("type");
             if (!types.containsKey(typename)) {
                 message(Const.ERROR, "invalid.type");
-                return;
+                return null;
             }
             type = types.get(typename);
         } else {
@@ -81,5 +81,6 @@ public class ActionAdd extends AbstractCommand {
         object.set("TYPE", type);
         save(extcontext.view);
         print("action %s added.", name);
+        return object;
     }
 }

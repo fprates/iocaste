@@ -14,7 +14,7 @@ public class PackageAdd extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) {
+    protected Object entry(PageBuilderContext context) {
         ExtendedObject object;
         String name;
         ComplexDocument _package;
@@ -25,7 +25,7 @@ public class PackageAdd extends AbstractCommand {
         _package = extcontext.project.getDocumentsMap("class").get(name);
         if (_package != null) {
             message(Const.ERROR, "package %s already exists.");
-            return;
+            return null;
         }
         
         _package = extcontext.project.instance("class", name);
@@ -34,6 +34,7 @@ public class PackageAdd extends AbstractCommand {
         object.set("PACKAGE", name);
         save(_package);
         print("package %s added.", name);
+        return _package;
     }
 
 }

@@ -14,22 +14,20 @@ public class ProjectList extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
-        Query query;
-        ExtendedObject[] objects;
-        ComplexDocument project;
+    protected Object entry(PageBuilderContext context) throws Exception {
         String projectname;
+        ExtendedObject object;
+        ComplexDocument[] projects;
         
-        query = new Query();
-        query.setModel("WB_PROJECT_HEAD");
-        objects = select(query);
-        if (objects == null) {
+        projects = getProjects(context);
+        if (projects == null) {
             message(Const.ERROR, "no.project.available");
-            return;
+            return null;
         }
-        for (ExtendedObject object : objects) {
-            projectname = object.getst("PROJECT_NAME");
-            project = getDocument("WB_PROJECT", projectname);
+        
+        for (ComplexDocument project : projects) {
+            object = project.getHeader();
+            projectname = project.getstKey();
             print("- Nome: %s", object.getst("PROJECT_NAME"));
             
             print("- Perfil: %s", object.getst("PROFILE"));
@@ -53,6 +51,28 @@ public class ProjectList extends AbstractCommand {
             for (ComplexDocument document : project.getDocuments("class"))
                 print(document.getstKey());
         }
+        
+        return projects;
+    }
+    
+    private final ComplexDocument[] getProjects(PageBuilderContext context) {
+        String projectname;
+        Query query;
+        ExtendedObject[] objects;
+        ComplexDocument[] projects;
+        
+        query = new Query();
+        query.setModel("WB_PROJECT_HEAD");
+        objects = select(query);
+        if (objects == null)
+            return null;
+        projects = new ComplexDocument[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            projectname = objects[i].getst("PROJECT_NAME");
+            projects[i] = getDocument("WB_PROJECT", null, projectname);
+        }
+        
+        return projects;
     }
     
     private void printddojects(String ddobject, String project) {

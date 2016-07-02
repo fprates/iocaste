@@ -18,7 +18,7 @@ public class ViewConfigEdit extends AbstractCommand {
     }
     
     @Override
-    protected void execute(PageBuilderContext context) throws Exception {
+    protected Object entry(PageBuilderContext context) {
         String element, type;
         ExtendedObject object, config;
         ViewElementAttribute attribute;
@@ -29,7 +29,7 @@ public class ViewConfigEdit extends AbstractCommand {
         object = extcontext.view.getItemsMap("spec").get(element);
         if (object == null) {
             message(Const.ERROR, "invalid.view.element");
-            return;
+            return null;
         }
         
         type = object.getst("TYPE");
@@ -40,12 +40,13 @@ public class ViewConfigEdit extends AbstractCommand {
             attribute = attributes.get(key);
             if (attribute == null) {
                 message(Const.ERROR, "invalid.view.element.attribute");
-                return;
+                return null;
             }
             config = attribute.instance(object, parameters.get(key));
             print(config.toString());
         }
         save(extcontext.view);
         print("viewconfig for spec item %s added.", element);
+        return null;
     }
 }
