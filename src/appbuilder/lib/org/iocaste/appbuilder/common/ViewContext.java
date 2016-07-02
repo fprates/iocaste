@@ -24,8 +24,10 @@ public class ViewContext {
      * @param action
      * @return
      */
-    public final AbstractActionHandler getActionHandler(String action) {
-        return actionhandlers.get(action);
+    @SuppressWarnings("unchecked")
+    public final <T extends AbstractActionHandler> T getActionHandler(
+            String action) {
+        return (T)actionhandlers.get(action);
     }
     
     /**
