@@ -3,7 +3,6 @@ package org.iocaste.packagetool;
 import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
-import org.iocaste.appbuilder.common.tabletool.TableToolColumn;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 
 public class MainConfig extends AbstractViewConfig {
@@ -22,7 +21,7 @@ public class MainConfig extends AbstractViewConfig {
             tabletool.model = "PACKAGE_GRID";
             tabletool.mark = true;
             tabletool.vlines = 0;
-            new TableToolColumn(tabletool, "EXCEPTION").length = 80;
+            tabletool.instance("EXCEPTION").length = 80;
         }
     }
 

@@ -29,8 +29,8 @@ public class DataFormTool extends AbstractComponentTool {
                     return element.getHtmlName();
             return null;
         }
-        for (String key : dfdata.items.keySet())
-            if (dfdata.items.get(key).ns)
+        for (String key : dfdata.get().keySet())
+            if (dfdata.get(key).ns)
                 return df.get(key).getHtmlName();
         return null;
     }
@@ -50,8 +50,8 @@ public class DataFormTool extends AbstractComponentTool {
         
         if (data.object == null) {
             form.clearInputs();
-            for (String name : data.items.keySet()) {
-                item = data.items.get(name);
+            for (String name : data.get().keySet()) {
+                item = data.get(name);
                 form.get(name).set(item.value);
             }
         } else {
@@ -109,8 +109,8 @@ public class DataFormTool extends AbstractComponentTool {
             dataform.setNSReference(nsentry.component.getNSField());
         }
         
-        for (String name : data.items.keySet()) {
-            item = data.items.get(name);
+        for (String name : data.get().keySet()) {
+            item = data.get(name);
             input = dataform.get(name);
             if ((data.custommodel == null) && (input == null)) {
                 input = new DataItem(dataform, (item.componenttype == null)?

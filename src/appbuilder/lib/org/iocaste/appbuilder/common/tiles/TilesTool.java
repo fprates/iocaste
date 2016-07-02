@@ -56,7 +56,6 @@ public class TilesTool extends AbstractComponentTool {
         Tile tile;
         BuilderCustomView builder;
         ViewSpecItem itemspec, tilesspec;
-        Object[] objects;
         ViewContext view;
         Link link;
         AbstractPageBuilder function;
@@ -76,8 +75,7 @@ public class TilesTool extends AbstractComponentTool {
             data.context.view.getElement(tilesspec.getName()).
                     setStyleClass(data.style);
         
-        objects = data.get();
-        if (objects == null)
+        if (data.objects == null)
             return;
         
         if (data.action) {
@@ -90,11 +88,11 @@ public class TilesTool extends AbstractComponentTool {
         }
         
         extcontext = view.getExtendedContext();
-        for (int i = 0; i < objects.length; i++) {
+        for (int i = 0; i < data.objects.length; i++) {
             if (data.input != null)
-                data.input.set(objects[i]);
+                data.input.set(data.objects[i]);
             tile = new Tile(data.name, i);
-            tile.set(objects[i]);
+            tile.set(data.objects[i]);
             if (data.action)
                 itemspec = tile.specItemInstance();
             if (extcontext != null)

@@ -54,7 +54,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
             hasfocus = false;
             for (String itemname : rtdata.input.items.keySet()) {
                 item = rtdata.input.items.get(itemname);
-                dfitem = dfdata.itemInstance(itemname);
+                dfitem = dfdata.instance(itemname);
                 dfitem.componenttype = item.type;
                 dfitem.values = item.values;
                 dfitem.sh = item.sh;
@@ -84,7 +84,7 @@ public class ReportToolFactory extends AbstractSpecFactory {
                 ttdata.refmodel = ReportTool.buildModel(rtdata);
                 for (String key : rtdata.output.items.keySet()) {
                     item = rtdata.output.items.get(key);
-                    ttcol = new TableToolColumn(ttdata, key);
+                    ttcol = ttdata.instance(key);
                     ttcol.label = item.label;
                     ttcol.length = item.element.getLength();
                     ttcol.vlength = item.vlength;

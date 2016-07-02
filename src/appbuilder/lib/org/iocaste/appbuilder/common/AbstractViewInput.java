@@ -55,7 +55,7 @@ public abstract class AbstractViewInput implements ViewInput {
             String form, String item, ExtendedObject[] objects, String field) {
         Object value;
         DataFormToolItem dfitem = ((DataFormToolData)getComponentData(form)).
-                itemInstance(item);
+                instance(item);
         
         if (dfitem.values == null)
             dfitem.values = new LinkedHashMap<>();
@@ -68,13 +68,11 @@ public abstract class AbstractViewInput implements ViewInput {
     
     protected final void dflistset(
             String form, String item, Map<String, Object> values) {
-        ((DataFormToolData)
-                getComponentData(form)).itemInstance(item).values = values;
+        getComponentData(form).instance(item).values = values;
     }
     
     protected final void dfset(String form, String item, Object value) {
-        ((DataFormToolData)
-                getComponentData(form)).itemInstance(item).value = value;
+        getComponentData(form).instance(item).value = value;
     }
     
     protected final void dfset(String form, ExtendedObject object) {
@@ -92,7 +90,7 @@ public abstract class AbstractViewInput implements ViewInput {
             model = new Documents(context.function).getModel(df.model);
         
         for (DocumentModelKey key : model.getKeys()) {
-            df.itemInstance(key.getModelItemName()).value = value;
+            df.instance(key.getModelItemName()).value = value;
             break;
         }
     }
@@ -306,7 +304,7 @@ public abstract class AbstractViewInput implements ViewInput {
     }
     
     protected final void tilesset(String name, Object[] objects) {
-        ((TilesData)getComponentData(name)).set(objects);
+        ((TilesData)getComponentData(name)).objects = objects;
     }
     
     protected final void tilesset(String name, Collection<?> objects) {

@@ -18,7 +18,7 @@ public class MainConfig extends AbstractViewConfig {
         form = getTool("model");
         form.custommodel = extcontext.modelmodel;
         form.show = new String[] {"NAME"};
-        item = form.itemInstance("NAME");
+        item = form.instance("NAME");
         item.required = item.focus = true;
         
         getNavControl().setTitle("dataview-selection");

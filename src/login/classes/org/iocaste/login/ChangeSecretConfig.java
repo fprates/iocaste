@@ -24,10 +24,10 @@ public class ChangeSecretConfig extends AbstractViewConfig {
         form = getTool("chgscrt");
         form.style = "loginform";
         form.custommodel = extcontext.chgscrtmodel;
-        item = form.itemInstance("SECRET");
+        item = form.instance("SECRET");
         item.secret = item.required = item.focus = true;
         
-        item = form.itemInstance("CONFIRM");
+        item = form.instance("CONFIRM");
         item.secret = item.required = true;
         
         button = getElement("changesecret");

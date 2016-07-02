@@ -36,7 +36,7 @@ public class EntryConfig extends AbstractViewConfig {
         keyset = focusset = false;
         for (DocumentModelItem mitem : model.getItens()) {
             name = mitem.getName();
-            item = dataform.itemInstance(name);
+            item = dataform.instance(name);
             if ((extcontext.number != null) && !keyset)
                 if (model.isKey(mitem))
                     item.disabled = keyset = true;

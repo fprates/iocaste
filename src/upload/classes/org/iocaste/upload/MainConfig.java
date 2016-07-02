@@ -20,12 +20,12 @@ public class MainConfig extends AbstractViewConfig {
         
         dataform = getTool("options");
         dataform.model = "UPL_OPTIONS";
-        input = dataform.itemInstance("FILE");
+        input = dataform.instance("FILE");
         input.required = true;
         input.vlength = 64;
         input.componenttype = Const.FILE_ENTRY;
         
-        dataform.itemInstance("LAYOUT").required = true;
-        dataform.itemInstance("TRUNCATE_CHAR").componenttype = Const.CHECKBOX;
+        dataform.instance("LAYOUT").required = true;
+        dataform.instance("TRUNCATE_CHAR").componenttype = Const.CHECKBOX;
     }
 }

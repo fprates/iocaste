@@ -36,7 +36,7 @@ public class ExternalMaintenanceConfig extends MaintenanceConfig {
         form = getTool("importobj");
         form.model = "XTRNL_IMPORT_OBJECT";
         form.style = "xtrnl_import_form";
-        form.itemInstance("NAME").label = "modelname";
+        form.instance("NAME").label = "modelname";
         
         node = getElement("import");
         node.setStyleClass("xtrnl_import");

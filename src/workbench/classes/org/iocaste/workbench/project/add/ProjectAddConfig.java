@@ -21,7 +21,7 @@ public class ProjectAddConfig extends AbstractViewConfig {
         dataform.model = "WB_PROJECT_HEAD";
         for (String name : actionctx.arguments.keySet()) {
             argument = actionctx.arguments.get(name);
-            dataform.itemInstance(argument.field).required =
+            dataform.instance(argument.field).required =
                     (argument.type == AbstractCommand.REQUIRED);
         }
     }

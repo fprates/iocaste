@@ -1,9 +1,7 @@
 package org.iocaste.appbuilder.common.dataformtool;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.iocaste.appbuilder.common.AbstractComponentData;
+import org.iocaste.appbuilder.common.AbstractComponentDataItem;
 import org.iocaste.appbuilder.common.ViewSpecItem.TYPES;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
@@ -13,29 +11,29 @@ public class DataFormToolData extends AbstractComponentData {
     public ExtendedObject object;
     public DocumentModel custommodel;
     public String sh;
-    public Map<String, DataFormToolItem> items;
     public String[] show;
     public boolean disabled, internallabel;
     public int columns;
     
     public DataFormToolData() {
         super(TYPES.DATA_FORM);
-        items = new HashMap<>();
     }
     
-    public final DataFormToolItem itemInstance(String name) {
+    @SuppressWarnings("unchecked")
+    public final <T extends AbstractComponentDataItem> T instance(String name) {
         DataFormToolItem item;
         
-        item = items.get(name);
+        item = get(name);
         if (item == null) {
-            item = new DataFormToolItem();
+            item = new DataFormToolItem(this, name);
             item.name = name;
-            items.put(name, item);
+            if (name != null)
+                put(name, item);
         }
-        return item;
+        return (T)item;
     }
     
     public final DataFormToolItem nsItemInstance() {
-        return (nsitem == null)? nsitem = new DataFormToolItem() : nsitem;
+        return (nsitem == null)? nsitem = instance(null) : nsitem;
     }
 }

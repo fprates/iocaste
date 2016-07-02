@@ -141,9 +141,9 @@ public class TableTool extends AbstractComponentTool {
         TableToolColumn ttcolumn;
         ExtendedObject object = new ExtendedObject(model);
         
-        for (String name : data.columns.keySet()) {
+        for (String name : data.get().keySet()) {
             element = item.get(name);
-            ttcolumn = data.columns.get(name);
+            ttcolumn = data.get(name);
             if (ttcolumn.tcolumn.isNamespace()) {
                 input = (InputComponent)element;
                 object.setNS(input.get());
@@ -197,8 +197,8 @@ public class TableTool extends AbstractComponentTool {
         TableToolColumn column;
         Table table = getTable();
         
-        for (String name : extcontext.data.columns.keySet()) {
-            column = extcontext.data.columns.get(name);
+        for (String name : extcontext.data.get().keySet()) {
+            column = extcontext.data.get(name);
             if (column.validator == null)
                 continue;
             

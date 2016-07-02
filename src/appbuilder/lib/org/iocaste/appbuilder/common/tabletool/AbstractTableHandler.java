@@ -3,6 +3,7 @@ package org.iocaste.appbuilder.common.tabletool;
 import java.util.List;
 import java.util.Map;
 
+import org.iocaste.appbuilder.common.AbstractComponentDataItem;
 import org.iocaste.appbuilder.common.ComponentEntry;
 import org.iocaste.appbuilder.common.ViewComponents;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
@@ -56,7 +57,7 @@ public abstract class AbstractTableHandler {
                 continue;
             
             name = tcolumn.getName();
-            column = context.data.columns.get(name);
+            column = context.data.get(name);
             delement = tcolumn.getModelItem().getDataElement();
             input = null;
             switch (delement.getType()) {
@@ -64,7 +65,7 @@ public abstract class AbstractTableHandler {
                 element = new CheckBox(item, name);
                 break;
             default:
-                switch (column.type) {
+                switch (column.componenttype) {
                 case TEXT:
                     element = new Text(item, name);
                     break;
@@ -188,6 +189,7 @@ public abstract class AbstractTableHandler {
     protected static final void setMode(TableTool tabletool, Context context) {
         Table table = tabletool.getElement();
         Map<String, TableContextItem> ctxitems;
+        Map<String, AbstractComponentDataItem> columns;
         
         ctxitems = table.getContextItems();
         switch (context.data.mode) {
@@ -204,17 +206,18 @@ public abstract class AbstractTableHandler {
             ctxitems.get("add").visible = false;
             ctxitems.get("remove").visible = false;
             table.setEnabled(false);
-            for (String column : context.data.columns.keySet())
-                context.data.columns.get(column).disabled = true;
+            columns = context.data.get();
+            for (String column : columns.keySet())
+                columns.get(column).disabled = true;
             if (context.data.enableonly == null)
                 break;
             
             for (String name : context.data.enableonly)
-                if (!context.data.columns.containsKey(name))
+                if (!columns.containsKey(name))
                     throw new RuntimeException(
                             name.concat(" isn't a valid column."));
                 else
-                    context.data.columns.get(name).disabled = false;
+                    columns.get(name).disabled = false;
             break;
         }
 

@@ -1,6 +1,7 @@
 package org.iocaste.appbuilder.common.reporttool;
 
 import org.iocaste.appbuilder.common.AbstractComponentData;
+import org.iocaste.appbuilder.common.AbstractComponentDataItem;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 
@@ -29,5 +30,10 @@ public class ReportToolData extends AbstractComponentData {
     
     public final boolean isInput() {
         return (stage == INPUT);
+    }
+
+    @Override
+    public <T extends AbstractComponentDataItem> T instance(String name) {
+        return null;
     }
 }

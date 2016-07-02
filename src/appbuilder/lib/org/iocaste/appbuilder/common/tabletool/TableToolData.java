@@ -2,11 +2,10 @@ package org.iocaste.appbuilder.common.tabletool;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractComponentData;
+import org.iocaste.appbuilder.common.AbstractComponentDataItem;
 import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.ExtendedObject;
@@ -20,7 +19,6 @@ public class TableToolData extends AbstractComponentData {
     public int vlines, step, last, increment, topline;
     public byte mode;
     public String[] hide, show, enableonly, ordering, actions;
-    public Map<String, TableToolColumn> columns;
     
     public TableToolData() {
         super(ViewSpecItem.TYPES.TABLE_TOOL);
@@ -28,7 +26,6 @@ public class TableToolData extends AbstractComponentData {
         step = 1;
         enabled = true;
         increment = 1;
-        columns = new HashMap<>();
         items = new ArrayList<>();
     }
     
@@ -64,6 +61,21 @@ public class TableToolData extends AbstractComponentData {
     
     public final List<TableToolItem> getItems() {
         return items;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends AbstractComponentDataItem> T instance(String name) {
+        TableToolColumn item;
+        
+        item = get(name);
+        if (item == null) {
+            item = new TableToolColumn(name);
+            item.name = name;
+            if (name != null)
+                put(name, item);
+        }
+        return (T)item;
     }
     
     public final void set(Collection<ExtendedObject> objects) {

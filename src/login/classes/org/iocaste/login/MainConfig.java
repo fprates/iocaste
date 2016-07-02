@@ -45,14 +45,14 @@ public class MainConfig extends AbstractViewConfig {
         form.custommodel = extcontext.loginmodel;
         form.internallabel = true;
         
-        item = form.itemInstance("USERNAME");
+        item = form.instance("USERNAME");
         item.focus = item.required = true;
         
-        item = form.itemInstance("LOCALE");
+        item = form.instance("LOCALE");
         item.componenttype = Const.LIST_BOX;
         item.required = true;
         
-        item = form.itemInstance("SECRET");
+        item = form.instance("SECRET");
         item.secret = item.required = true;
         
         button = getElement("connect");

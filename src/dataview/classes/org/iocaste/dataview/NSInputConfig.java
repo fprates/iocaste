@@ -15,7 +15,7 @@ public class NSInputConfig extends AbstractViewConfig {
         
         extcontext = getExtendedContext();
         form = getTool("ns");
-        item = form.itemInstance("NSKEY");
+        item = form.instance("NSKEY");
         item.element = extcontext.nsitem.getDataElement();
         item.focus = true;
         

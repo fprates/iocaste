@@ -37,7 +37,7 @@ public class Common {
                     key = model.isKey(mitem);
                     if (key)
                         formdata.hkey = mitem;
-                    item = form.itemInstance(mitem.getName());
+                    item = form.instance(mitem.getName());
                     item.invisible = !key;
                     if (formdata.fieldproperties != null)
                         inputConfig(formdata, item);
@@ -51,7 +51,7 @@ public class Common {
                 }
                 
                 for (DocumentModelItem mitem : items) {
-                    item = form.itemInstance(mitem.getName());
+                    item = form.instance(mitem.getName());
                     key = model.isKey(mitem);
                     item.disabled = key || (formdata.mode != ConfigData.UPDATE);
                     item.invisible = key;

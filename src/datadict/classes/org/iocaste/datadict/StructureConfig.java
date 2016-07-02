@@ -25,7 +25,7 @@ public class StructureConfig extends AbstractViewConfig {
         tabletool.mode = TableTool.DISPLAY;
         tabletool.vlines = 0;
         
-        column = new TableToolColumn(tabletool, "NAME");
+        column = tabletool.instance("NAME");
         column.length = 24;
     }
 

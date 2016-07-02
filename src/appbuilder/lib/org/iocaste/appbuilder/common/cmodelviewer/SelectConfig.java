@@ -27,7 +27,7 @@ public class SelectConfig extends AbstractViewConfig {
         head.custommodel = new Documents(context.function).
                 getComplexModel(cmodel).getHeader();
         for (DocumentModelItem mitem : head.custommodel.getItens()) {
-            item = head.itemInstance(mitem.getName());
+            item = head.instance(mitem.getName());
             if (!head.custommodel.isKey(mitem))
                 item.invisible = true;
             else

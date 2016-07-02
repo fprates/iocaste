@@ -58,7 +58,7 @@ public class DisplayConfig extends AbstractViewConfig {
         FieldProperty property;
         String name = item.getName();
         
-        ttcolumn = new TableToolColumn(ttdata, name);
+        ttcolumn = ttdata.instance(name);
         if (config.model.isKey(item) || (config.mode == TableTool.DISPLAY))
             ttcolumn.disabled = true;
         
@@ -69,7 +69,7 @@ public class DisplayConfig extends AbstractViewConfig {
         if (property == null)
             return;
         
-        ttcolumn.type = property.type;
+        ttcolumn.componenttype = property.type;
         ttcolumn.values = property.values;
     }
 }

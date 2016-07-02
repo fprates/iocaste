@@ -46,7 +46,7 @@ public class DetailConfig extends AbstractViewConfig {
         form = getTool("package.config");
         form.custommodel = model;
         for (DocumentModelItem mitem : model.getItens()) {
-            input = form.itemInstance(mitem.getName());
+            input = form.instance(mitem.getName());
             
             switch (mitem.getDataElement().getType()) {
             case DataType.BOOLEAN:

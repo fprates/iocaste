@@ -47,16 +47,16 @@ public class TableRender extends AbstractTableHandler {
             item = model.getNamespace();
             if (item != null) {
                 itemname = item.getName();
-                column = new TableToolColumn(context.data, itemname);
+                column = context.data.instance(itemname);
                 setTableToolColumn(tabletool, column, itemname, item);
                 column.tcolumn.setNamespace(true);
             }
         }
         
         for (String name : context.data.ordering) {
-            column = context.data.columns.get(name);
+            column = context.data.get(name);
             if (column == null)
-                column = new TableToolColumn(context.data, name);
+                column = context.data.instance(name);
             item = model.getModelItem(name);
             
             setTableToolColumn(tabletool, column, name, item);
