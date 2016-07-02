@@ -18,7 +18,7 @@ public class ProjectAddConfig extends AbstractViewConfig {
         Context extcontext = getExtendedContext();
         
         actionctx = extcontext.actions.get("project-add");
-        dataform.modelname = "WB_PROJECT_HEAD";
+        dataform.model = "WB_PROJECT_HEAD";
         for (String name : actionctx.arguments.keySet()) {
             argument = actionctx.arguments.get(name);
             dataform.itemInstance(argument.field).required =

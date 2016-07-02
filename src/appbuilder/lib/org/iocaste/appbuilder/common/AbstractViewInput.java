@@ -86,10 +86,10 @@ public abstract class AbstractViewInput implements ViewInput {
         DocumentModel model = null;
         DataFormToolData df = getComponentData(form);
         
+        if (df.custommodel != null)
+            model = df.custommodel;
         if (df.model != null)
-            model = df.model;
-        if (df.modelname != null)
-            model = new Documents(context.function).getModel(df.modelname);
+            model = new Documents(context.function).getModel(df.model);
         
         for (DocumentModelKey key : model.getKeys()) {
             df.itemInstance(key.getModelItemName()).value = value;

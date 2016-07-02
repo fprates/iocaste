@@ -11,8 +11,8 @@ import org.iocaste.documents.common.ExtendedObject;
 public class DataFormToolData extends AbstractComponentData {
     public DataFormToolItem nsitem;
     public ExtendedObject object;
-    public String style, modelname, sh;
-    public DocumentModel model;
+    public DocumentModel custommodel;
+    public String style, sh;
     public Map<String, DataFormToolItem> items;
     public String[] show;
     public boolean disabled, internallabel;

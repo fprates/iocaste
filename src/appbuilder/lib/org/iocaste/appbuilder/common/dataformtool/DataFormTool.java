@@ -74,11 +74,11 @@ public class DataFormTool extends AbstractComponentTool {
                 append("_").append(data.type.toString()).toString();
         dataform = new DataForm(container, htmlname);
         setHtmlName(dataform.getHtmlName());
-        if (data.model != null)
-            dataform.importModel(data.model);
-        if (data.modelname != null) {
-            dataform.importModel(data.modelname, data.context.function);
-            data.model = dataform.getModel();
+        if (data.custommodel != null)
+            dataform.importModel(data.custommodel);
+        if (data.model != null) {
+            dataform.importModel(data.model, data.context.function);
+            data.custommodel = dataform.getModel();
         }
         if (data.style != null)
             dataform.setStyleClass(data.style);
@@ -112,13 +112,13 @@ public class DataFormTool extends AbstractComponentTool {
         for (String name : data.items.keySet()) {
             item = data.items.get(name);
             input = dataform.get(name);
-            if ((data.model == null) && (input == null)) {
+            if ((data.custommodel == null) && (input == null)) {
                 input = new DataItem(dataform, (item.componenttype == null)?
                         Const.TEXT_FIELD : item.componenttype, name);
                 input.setDataElement(item.element);
             }
             if (item.sh != null)
-                data.model.getModelItem(name).setSearchHelp(item.sh);
+                data.custommodel.getModelItem(name).setSearchHelp(item.sh);
             setItem(data, input, item);
             if (item.ns)
                 dataform.setNSReference(input.getHtmlName());

@@ -21,7 +21,7 @@ public abstract class DetailConfig extends AbstractViewConfig {
         DataFormToolItem item;
         
         identity = getTool("identity");
-        identity.modelname = "LOGIN";
+        identity.model = "LOGIN";
         identity.itemInstance("ID").invisible = true;
         identity.itemInstance("INIT").componenttype = Const.CHECKBOX;
         identity.itemInstance("USERNAME").disabled = true;
@@ -30,7 +30,7 @@ public abstract class DetailConfig extends AbstractViewConfig {
         item.secret = item.focus = true;
         
         extras = getTool("extras");
-        extras.modelname = "LOGIN_EXTENSION";
+        extras.model = "LOGIN_EXTENSION";
         extras.itemInstance("USERNAME").invisible = true;
         
         tasks = getTool("tasks");

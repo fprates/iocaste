@@ -44,11 +44,11 @@ public class ReportToolFactory extends AbstractSpecFactory {
             rtdata.input.tooldata = dfdata;
             if (rtdata.input.items.size() > 0) {
                 model = ReportTool.buildModel(rtdata);
-                dfdata.model = model;
+                dfdata.custommodel = model;
             } else {
                 if (rtdata.input.model == null)
                     throw new RuntimeException("model not defined.");
-                dfdata.modelname = rtdata.input.model;
+                dfdata.model = rtdata.input.model;
             }
             
             hasfocus = false;

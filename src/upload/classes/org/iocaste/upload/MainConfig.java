@@ -19,7 +19,7 @@ public class MainConfig extends AbstractViewConfig {
         form.setEnctype("multipart/form-data");
         
         dataform = getTool("options");
-        dataform.modelname = "UPL_OPTIONS";
+        dataform.model = "UPL_OPTIONS";
         input = dataform.itemInstance("FILE");
         input.required = true;
         input.vlength = 64;

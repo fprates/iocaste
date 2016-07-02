@@ -24,11 +24,11 @@ public class SelectConfig extends AbstractViewConfig {
         navcontrol.setTitle(context.view.getPageName());
         navcontrol.submit("validate");
         
-        head.model = new Documents(context.function).getComplexModel(cmodel).
-                getHeader();
-        for (DocumentModelItem mitem : head.model.getItens()) {
+        head.custommodel = new Documents(context.function).
+                getComplexModel(cmodel).getHeader();
+        for (DocumentModelItem mitem : head.custommodel.getItens()) {
             item = head.itemInstance(mitem.getName());
-            if (!head.model.isKey(mitem))
+            if (!head.custommodel.isKey(mitem))
                 item.invisible = true;
             else
                 item.focus = item.required = true;

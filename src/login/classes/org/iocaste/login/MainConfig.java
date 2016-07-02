@@ -42,7 +42,7 @@ public class MainConfig extends AbstractViewConfig {
         extcontext = getExtendedContext();
         form = getTool("login");
         form.style = "loginform";
-        form.model = extcontext.loginmodel;
+        form.custommodel = extcontext.loginmodel;
         form.internallabel = true;
         
         item = form.itemInstance("USERNAME");

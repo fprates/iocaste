@@ -15,7 +15,7 @@ public class MainConfig extends AbstractViewConfig {
         getNavControl().setTitle("user-selection");
         
         form = getTool("selection");
-        form.modelname = "LOGIN";
+        form.model = "LOGIN";
         form.show = new String[] {"USERNAME"};
         item = form.itemInstance("USERNAME");
         item.focus = true;

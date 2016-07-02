@@ -15,7 +15,7 @@ public class SelectionConfig extends AbstractViewConfig {
         getNavControl().setTitle("dataeditor-selection");
         
         dataform = getTool("model");
-        dataform.modelname = "MODEL";
+        dataform.model = "MODEL";
         dataform.show = new String[] {"NAME"};
         item = dataform.itemInstance("NAME");
         item.required = item.focus = true;

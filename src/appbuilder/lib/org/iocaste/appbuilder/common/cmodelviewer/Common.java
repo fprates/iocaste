@@ -28,7 +28,7 @@ public class Common {
         items = model.getItens();
         for (String name : new String[] {"head", "base"}) {
             form = (DataFormToolData)entries.get(name).data;
-            form.model = model;
+            form.custommodel = model;
             
             switch(name) {
             case "head":

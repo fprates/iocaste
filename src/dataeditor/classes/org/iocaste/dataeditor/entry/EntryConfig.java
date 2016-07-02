@@ -29,7 +29,7 @@ public class EntryConfig extends AbstractViewConfig {
         model = new Documents(context.function).getModel(extcontext.model);
         
         dataform = getTool("detail");
-        dataform.model = model;
+        dataform.custommodel = model;
 
         extcontext.properties =
                 GetFieldsProperties.execute(context, extcontext.appname);

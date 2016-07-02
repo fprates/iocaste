@@ -13,13 +13,13 @@ public class InputConfig extends AbstractViewConfig {
         DataFormToolItem item;
         
         form = getTool("model");
-        form.modelname = "MODEL";
+        form.model = "MODEL";
         form.show = new String[] {"NAME", "NAMESPACE"};
         item = form.itemInstance("NAME");
         item.required = item.focus = true;
         
         form = getTool("port");
-        form.modelname = "XTRNL_PORT_HEAD";
+        form.model = "XTRNL_PORT_HEAD";
         form.show = new String[] {"PORT_NAME"};
         form.itemInstance("PORT_NAME").required = true;
     }

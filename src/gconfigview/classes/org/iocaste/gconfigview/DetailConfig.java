@@ -44,7 +44,7 @@ public class DetailConfig extends AbstractViewConfig {
         }
         
         form = getTool("package.config");
-        form.model = model;
+        form.custommodel = model;
         for (DocumentModelItem mitem : model.getItens()) {
             input = form.itemInstance(mitem.getName());
             

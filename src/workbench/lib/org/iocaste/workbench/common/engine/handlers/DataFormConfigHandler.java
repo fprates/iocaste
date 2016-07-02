@@ -16,7 +16,7 @@ public class DataFormConfigHandler extends AbstractConfigHandler {
         
         switch (name) {
         case "model":
-            dataform.modelname = (String)value;
+            dataform.model = (String)value;
             break;
         }
     }

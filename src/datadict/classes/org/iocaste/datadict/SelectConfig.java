@@ -16,8 +16,8 @@ public class SelectConfig extends AbstractViewConfig {
         
         extcontext = getExtendedContext();
         dataform = getTool("model");
-        dataform.model = extcontext.model;
-        for (DocumentModelItem mitem : dataform.model.getItens()) {
+        dataform.custommodel = extcontext.model;
+        for (DocumentModelItem mitem : dataform.custommodel.getItens()) {
             item = dataform.itemInstance(mitem.getName());
             if (item.name.equals("NAME")) {
                 item.invisible = false;
