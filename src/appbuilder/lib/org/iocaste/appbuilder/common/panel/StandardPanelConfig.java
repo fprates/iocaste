@@ -6,6 +6,7 @@ import org.iocaste.appbuilder.common.AbstractViewConfig;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
+import org.iocaste.appbuilder.common.style.ViewConfigStyle;
 import org.iocaste.shell.common.Media;
 import org.iocaste.shell.common.StyleSheet;
 
@@ -25,6 +26,7 @@ public class StandardPanelConfig extends AbstractViewConfig {
         NavControl navcontrol;
         Media media;
         String submit, mediakey;
+        ViewConfigStyle style;
         
         stylesheet = context.view.styleSheetInstance();
         for (int i = 0; i < context.appbuildersheet.length; i++) {
@@ -50,6 +52,12 @@ public class StandardPanelConfig extends AbstractViewConfig {
         extconfig = page.getConfig();
         if (extconfig == null)
             return;
+        
+        style = page.getConfigStyle();
+        if (style != null) {
+            style.setContext(context);
+            style.execute();
+        }
         
         config(extconfig);
         context.view.importStyle(stylesheet);

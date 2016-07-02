@@ -10,6 +10,7 @@ import org.iocaste.appbuilder.common.ViewConfig;
 import org.iocaste.appbuilder.common.ViewContext;
 import org.iocaste.appbuilder.common.ViewInput;
 import org.iocaste.appbuilder.common.ViewSpec;
+import org.iocaste.appbuilder.common.style.ViewConfigStyle;
 
 public abstract class AbstractPanelPage {
     private ViewContext view;
@@ -18,6 +19,7 @@ public abstract class AbstractPanelPage {
     private ViewInput input;
     private Set<String> actions;
     private String submit;
+    private ViewConfigStyle style;
     
     public AbstractPanelPage() {
         actions = new HashSet<>();
@@ -50,6 +52,10 @@ public abstract class AbstractPanelPage {
         return spec;
     }
     
+    public final ViewConfigStyle getConfigStyle() {
+        return style;
+    }
+    
     public final String getSubmit() {
         return submit;
     }
@@ -68,6 +74,10 @@ public abstract class AbstractPanelPage {
     
     protected final void set(ViewSpec spec) {
         this.spec = spec;
+    }
+    
+    protected final void set(ViewConfigStyle style) {
+        this.style = style;
     }
     
     public final void setViewContext(ViewContext view) {
