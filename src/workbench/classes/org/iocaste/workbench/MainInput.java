@@ -8,6 +8,8 @@ public class MainInput extends AbstractViewInput {
     @Override
     protected void execute(PageBuilderContext context) {
         Context extcontext = getExtendedContext();
+        
+        tilesset("projects", extcontext.projects);
         inputset("command", null);
         if (extcontext.output.size() == 0)
             return;

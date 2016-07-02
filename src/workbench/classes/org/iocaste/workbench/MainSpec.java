@@ -7,6 +7,7 @@ public class MainSpec extends AbstractViewSpec {
 
     @Override
     public void execute(PageBuilderContext context) {
+        tiles(parent, "projects");
         textfield(parent, "command");
         printarea(parent);
     }
