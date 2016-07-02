@@ -222,10 +222,6 @@ public abstract class AbstractTableHandler {
         }
 
         table.setMark(context.data.mark);
-        if (context.data.hide != null)
-            setVisibility(tabletool, context, false, context.data.hide);
-        if (context.data.show != null)
-            setVisibility(tabletool, context, true, context.data.show);
     }
 
     public static void setObject(TableTool tabletool, TableToolData data) {
@@ -261,30 +257,6 @@ public abstract class AbstractTableHandler {
         }
         
         additems(tabletool, context, items);
-    }
-    
-    /**
-     * 
-     * @param context
-     * @param visible
-     * @param columns
-     */
-    private static final void setVisibility(TableTool tabletool,
-            Context context, boolean visible, String... columns) {
-        TableColumn tcolumn;
-        Table table = tabletool.getElement();
-        
-        for (TableColumn column : table.getColumns())
-            if (!column.isMark())
-                column.setVisible(!visible);
-        
-        for (String column : columns) {
-            tcolumn = table.getColumn(column);
-            if (tcolumn == null)
-                throw new RuntimeException(
-                        column.concat(" is an invalid column."));
-            tcolumn.setVisible(visible);
-        }
     }
 
 }

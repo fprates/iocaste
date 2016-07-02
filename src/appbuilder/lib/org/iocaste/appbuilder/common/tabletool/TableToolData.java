@@ -18,7 +18,7 @@ public class TableToolData extends AbstractComponentData {
     public boolean mark, enabled, noheader;
     public int vlines, step, last, increment, topline;
     public byte mode;
-    public String[] hide, show, enableonly, ordering, actions;
+    public String[] enableonly, ordering, actions;
     
     public TableToolData() {
         super(ViewSpecItem.TYPES.TABLE_TOOL);

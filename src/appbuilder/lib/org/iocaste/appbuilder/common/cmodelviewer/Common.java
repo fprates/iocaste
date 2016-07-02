@@ -82,11 +82,12 @@ public class Common {
             tabletool.mode = griddata.mode;
             tabletool.mark = griddata.mark;
             tabletool.vlines = 0;
-            tabletool.hide = new String[] {
+            for (String hide : new String[] {
                 Documents.getReference(cmodelitem.model, griddata.hkey).
                         getName(),
                 Documents.getKey(cmodelitem.model).getName()
-            };
+            })
+                tabletool.instance(hide).invisible = true;
         }
     }
     

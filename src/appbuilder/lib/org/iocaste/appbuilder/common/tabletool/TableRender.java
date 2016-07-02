@@ -103,7 +103,7 @@ public class TableRender extends AbstractTableHandler {
         
         column.tcolumn = new TableColumn((Table)tabletool.getElement(), name);
         column.tcolumn.setMark(false);
-        column.tcolumn.setVisible(true);
+        column.tcolumn.setVisible(!column.invisible);
         column.tcolumn.setModelItem(item);
         column.tcolumn.setLength(item.getDataElement().getLength());
         column.tcolumn.setValueLocked(column.text != null);
