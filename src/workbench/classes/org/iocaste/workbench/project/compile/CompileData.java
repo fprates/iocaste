@@ -7,4 +7,5 @@ public class CompileData {
     public String project, serviceclass, entryclass;
     public Context extcontext;
     public PageBuilderContext context;
+    public boolean source;
 }
