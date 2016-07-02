@@ -1,0 +1,17 @@
+appbuilder:
+- Parametrizar AbstractActionHandler em função de ExtendedContext.
+- Para configurações de tela reduzida, implementar menu de ações.
+- Implementar definição remota de barra de navegação.
+- Desvincular chamada de renderizadores em Renderer.
+- Reimplementar dataform utilizando nodelist.
+- Implementar mecanismo padrão para customizar estilo.
+
+packagetool:
+- Remover modelo complexo antes de modificar documento complexo.
+
+kernel:
+- criar namespace global. possibilidade de associá-lo à usuários, perfis e
+autorizações.
+- implementar verificação de autorização para todas as funções privilegiadas.
+- unificar propriedades comuns de *ToolData (ex.name, context, extcontext,
+model).
