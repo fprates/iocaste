@@ -12,7 +12,7 @@ public class DataFormToolData extends AbstractComponentData {
     public DataFormToolItem nsitem;
     public ExtendedObject object;
     public DocumentModel custommodel;
-    public String style, sh;
+    public String sh;
     public Map<String, DataFormToolItem> items;
     public String[] show;
     public boolean disabled, internallabel;

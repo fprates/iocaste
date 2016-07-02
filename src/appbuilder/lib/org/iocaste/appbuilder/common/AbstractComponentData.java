@@ -1,7 +1,7 @@
 package org.iocaste.appbuilder.common;
 
 public abstract class AbstractComponentData {
-    public String name, model;
+    public String name, model, style;
     public PageBuilderContext context;
     public ViewSpecItem.TYPES type;
     public AbstractComponentData nsdata;
