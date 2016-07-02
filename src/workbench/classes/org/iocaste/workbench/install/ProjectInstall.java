@@ -45,7 +45,7 @@ public class ProjectInstall extends AbstractInstallObject {
         modelitemname = elementchar("WB_MODEL_ITEM_NAME", 24, true);
         modelkey = elementbool("WB_BOOLEAN");
         
-        projectname = elementchar("WB_PROJECT_NAME", 32, true);
+        projectname = elementchar("WB_PROJECT_NAME", 32, false);
         text = elementchar("WB_TEXT", 32, false);
         linkid = elementchar("WB_LINK_ID", 50, true);
 
