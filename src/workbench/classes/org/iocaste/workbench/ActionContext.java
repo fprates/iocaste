@@ -6,4 +6,5 @@ public class ActionContext {
     public Map<String, CommandArgument> arguments;
     public String name;
     public AbstractCommand handler;
+    public boolean mainrestart;
 }

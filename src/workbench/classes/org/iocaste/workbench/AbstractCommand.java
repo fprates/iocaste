@@ -17,9 +17,10 @@ public abstract class AbstractCommand extends AbstractActionHandler {
     protected Map<String, CommandArgument> arguments;
     protected Map<String, Set<String>> values;
     protected boolean checkproject, checkmodel, checkview, checkparameters;
+    private ActionContext actionctx;
     
     public AbstractCommand(String action, Context extcontext) {
-        ActionContext actionctx = new ActionContext();
+        actionctx = new ActionContext();
         extcontext.actions.put(action, actionctx);
         actionctx.name = action;
         actionctx.handler = this;
@@ -79,6 +80,10 @@ public abstract class AbstractCommand extends AbstractActionHandler {
     protected final void execute(PageBuilderContext context) throws Exception {
         Context extcontext = context.getView().getExtendedContext();
         extcontext.callreturn = entry(context);
+    }
+    
+    protected final ActionContext getActionContext() {
+        return actionctx;
     }
     
     protected final boolean getBooleanParameter(String name) {
