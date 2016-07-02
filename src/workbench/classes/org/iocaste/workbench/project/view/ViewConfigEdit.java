@@ -11,8 +11,9 @@ import org.iocaste.workbench.project.view.config.ViewElementAttribute;
 
 public class ViewConfigEdit extends AbstractCommand {
     
-    public ViewConfigEdit() {
-        required("element");
+    public ViewConfigEdit(Context extcontext) {
+        super("viewconfig", extcontext);
+        required("element", null);
         checkparameters = false;
         checkview = true;
     }

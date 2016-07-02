@@ -8,13 +8,13 @@ import org.iocaste.workbench.Context;
 
 public class ModelItemAdd extends AbstractCommand {
     
-    public ModelItemAdd() {
-        required("name");
-        optional("key", "true", "false");
-        optional("data-element");
-        optional("field");
-        optional("reference");
-        
+    public ModelItemAdd(Context extcontext) {
+        super("model-item-add", extcontext);
+        required("name", "NAME");
+        optionalbl("key", "KEY");
+        optional("data-element", "DATA_ELEMENT");
+        optional("field", "FIELD");
+//        optional("reference", null);
         checkmodel = true;
     }
     
@@ -53,11 +53,7 @@ public class ModelItemAdd extends AbstractCommand {
         
         object = extcontext.model.instance("item", name);
         object.set("PROJECT", extcontext.project.getstKey());
-        object.set("NAME", name);
-        object.set("MODEL", model);
-        object.set("FIELD", field);
-        object.set("DATA_ELEMENT", dtel);
-        object.set("KEY", getBooleanParameter("key"));
+        autoset(object);
         save(extcontext.model);
         print("model item %s updated.", name);
         return object;

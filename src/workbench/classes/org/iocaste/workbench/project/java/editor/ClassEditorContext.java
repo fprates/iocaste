@@ -15,7 +15,7 @@ public class ClassEditorContext {
     public ComplexDocument document;
     public ExtendedObject classobject;
     public String source;
-    public Map<Byte, ClassHandler> handlers;
+    public Map<String, ClassHandler> handlers;
     public Context extcontext;
     public PageBuilderContext context;
     

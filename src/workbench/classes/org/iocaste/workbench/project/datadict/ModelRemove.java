@@ -8,8 +8,9 @@ import org.iocaste.workbench.Context;
 
 public class ModelRemove extends AbstractCommand {
     
-    public ModelRemove() {
-        required("name");
+    public ModelRemove(Context extcontext) {
+        super("model-remove", extcontext);
+        required("name", null);
     }
     
     @Override

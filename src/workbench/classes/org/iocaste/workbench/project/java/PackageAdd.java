@@ -9,8 +9,9 @@ import org.iocaste.workbench.Context;
 
 public class PackageAdd extends AbstractCommand {
 
-    public PackageAdd() {
-        required("name");
+    public PackageAdd(Context extcontext) {
+        super("package-add", extcontext);
+        required("name", "PACKAGE");
     }
     
     @Override
@@ -31,7 +32,7 @@ public class PackageAdd extends AbstractCommand {
         _package = extcontext.project.instance("class", name);
         object = _package.getHeader();
         object.set("PROJECT", extcontext.project.getstKey());
-        object.set("PACKAGE", name);
+        autoset(object);
         save(_package);
         print("package %s added.", name);
         return _package;

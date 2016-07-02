@@ -12,12 +12,15 @@ import org.iocaste.protocol.files.Directory;
 import org.iocaste.protocol.files.DirectoryInstance;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.Context;
 
 public class Compile extends AbstractCommand {
     private CompileData data;
     private List<ConfigFile> configs;
     
-    public Compile(PageBuilderContext context) {
+    public Compile(Context extcontext) {
+        super("compile", extcontext);
+        PageBuilderContext context = extcontext.getContext();
         data = new CompileData();
         configs = new ArrayList<>();
         configs.add(new WebConfigFile(context));

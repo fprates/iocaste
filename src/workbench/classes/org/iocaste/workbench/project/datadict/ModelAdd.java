@@ -9,9 +9,10 @@ import org.iocaste.workbench.Context;
 
 public class ModelAdd extends AbstractCommand {
     
-    public ModelAdd() {
-        required("name");
-        optional("table");
+    public ModelAdd(Context extcontext) {
+        super("model-add", extcontext);
+        required("name", "NAME");
+        optional("table", "TABLE");
     }
     
     @Override
@@ -31,9 +32,8 @@ public class ModelAdd extends AbstractCommand {
         extcontext = getExtendedContext();
         document = extcontext.project.instance("model", name);
         object = document.getHeader();
-        object.set("NAME", name);
         object.set("PROJECT", extcontext.project.getstKey());
-        object.set("TABLE", parameters.get("table"));
+        autoset(object);
         save(document);
         extcontext.project.add(document);
         print("model %s updated.", name);

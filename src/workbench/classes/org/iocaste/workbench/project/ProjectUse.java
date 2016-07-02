@@ -8,8 +8,9 @@ import org.iocaste.workbench.Context;
 
 public class ProjectUse extends AbstractCommand {
 
-    public ProjectUse() {
-        required("name");
+    public ProjectUse(Context extcontext) {
+        super("project-use", extcontext);
+        required("name", null);
         checkproject = false;
     }
     

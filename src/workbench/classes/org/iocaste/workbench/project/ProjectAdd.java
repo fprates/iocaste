@@ -4,13 +4,15 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.Context;
 
 public class ProjectAdd extends AbstractCommand {
 
-    public ProjectAdd() {
-        required("name");
-        required("profile");
-        optional("text");
+    public ProjectAdd(Context extcontext) {
+        super("project-add", extcontext);
+        required("name", "PROJECT_NAME");
+        required("profile", "PROFILE");
+        optional("text", "TEXT");
         checkproject = false;
     }
     
@@ -19,9 +21,7 @@ public class ProjectAdd extends AbstractCommand {
         ComplexDocument project;
         
         project = documentInstance("WB_PROJECT");
-        project.set("PROJECT_NAME", parameters.get("name"));
-        project.set("PROFILE", parameters.get("profile"));
-        project.set("TEXT", parameters.get("text"));
+        autoset(project);
         save(project);
         message(Const.STATUS, "project.created");
         return project;

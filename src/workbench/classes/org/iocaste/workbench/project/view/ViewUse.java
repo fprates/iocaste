@@ -8,8 +8,9 @@ import org.iocaste.workbench.Context;
 
 public class ViewUse extends AbstractCommand {
 
-    public ViewUse() {
-        required("name");
+    public ViewUse(Context extcontext) {
+        super("view-use", extcontext);
+        required("name", null);
     }
     
     @Override

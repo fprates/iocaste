@@ -8,8 +8,9 @@ import org.iocaste.workbench.Context;
 
 public class ViewRemove extends AbstractCommand {
 
-    public ViewRemove() {
-        required("name");
+    public ViewRemove(Context extcontext) {
+        super("view-remove", extcontext);
+        required("name", null);
     }
     
     @Override

@@ -5,11 +5,13 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.Context;
 
 public class DataElementRemove extends AbstractCommand {
     
-    public DataElementRemove() {
-        required("name");
+    public DataElementRemove(Context extcontext) {
+        super("data-element-remove", extcontext);
+        required("name", "DATA_ELEMENT");
     }
     
     @Override

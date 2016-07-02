@@ -13,10 +13,11 @@ import org.iocaste.workbench.Context;
 public class ActionAdd extends AbstractCommand {
     private Map<String, Integer> types;
     
-    public ActionAdd() {
-        required("name");
-        required("class");
-        optional("type");
+    public ActionAdd(Context extcontext) {
+        super("action-add", extcontext);
+        required("name", "NAME");
+        required("class", "CLASS");
+        optional("type", "TYPE");
         checkview = true;
         types = new HashMap<>();
         types.put("action", 0);
@@ -76,8 +77,7 @@ public class ActionAdd extends AbstractCommand {
         object = extcontext.view.instance("action", name);
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("SCREEN", extcontext.view.getstKey());
-        object.set("NAME", name);
-        object.set("CLASS", classname);
+        autoset(object);
         object.set("TYPE", type);
         save(extcontext.view);
         print("action %s added.", name);

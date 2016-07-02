@@ -8,23 +8,21 @@ import org.iocaste.workbench.Context;
 
 public class LinkAdd extends AbstractCommand {
 
-    public LinkAdd() {
-        required("name");
-        required("command");
-        optional("group");
+    public LinkAdd(Context extcontext) {
+        super("link-add", extcontext);
+        required("name", "NAME");
+        required("command", "COMMAND");
+        optional("group", "GROUP");
     }
     
     @Override
     protected Object entry(PageBuilderContext context) {
-        String name, command, group;
+        String name;
         ExtendedObject object;
         ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
 
         name = parameters.get("name");
-        command = parameters.get("command");
-        group = parameters.get("group");
-        
         objects = extcontext.project.getItems("link");
         object = readobjects(objects, "NAME", name);
         if (object != null) {
@@ -33,10 +31,8 @@ public class LinkAdd extends AbstractCommand {
         }
         
         object = extcontext.project.instance("link", name);
-        object.set("NAME", name);
-        object.set("COMMAND", command);
         object.set("PROJECT", extcontext.project.getstKey());
-        object.set("GROUP", group);
+        autoset(object);
         save(extcontext.project);
         print("link %s updated.", name);
         return object;

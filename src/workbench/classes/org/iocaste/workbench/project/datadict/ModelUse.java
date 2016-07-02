@@ -8,8 +8,9 @@ import org.iocaste.workbench.Context;
 
 public class ModelUse extends AbstractCommand {
     
-    public ModelUse() {
-        required("name");
+    public ModelUse(Context extcontext) {
+        super("model-use", extcontext);
+        required("name", null);
     }
     
     @Override

@@ -13,12 +13,13 @@ import org.iocaste.workbench.Context;
 public class DataElementAdd extends AbstractCommand {
     private Map<String, Integer> types;
     
-    public DataElementAdd() {
-        required("name");
-        required("type");
-        optional("size");
-        optional("decimals");
-        optional("upcase", "true", "false");
+    public DataElementAdd(Context extcontext) {
+        super("data-element-add", extcontext);
+        required("name", "NAME");
+        required("type", "TYPE");
+        optional("size", "SIZE");
+        optional("decimals", "DECIMALS");
+        optionalbl("upcase", "UPCASE");
         
         types = new HashMap<>();
         types.put("char", DataType.CHAR);
@@ -48,11 +49,7 @@ public class DataElementAdd extends AbstractCommand {
         
         object = instance("WB_DATA_ELEMENTS");
         object.set("PROJECT", extcontext.project.getstKey());
-        object.set("NAME", name);
-        object.set("TYPE", types.get(parameters.get("type")));
-        object.set("SIZE", parameters.get("size"));
-        object.set("DECIMALS", parameters.get("decimals"));
-        object.set("UPCASE", getBooleanParameter("upcase"));
+        autoset(object);
         save(object);
         print("data element %s updated.", name);
         return object;

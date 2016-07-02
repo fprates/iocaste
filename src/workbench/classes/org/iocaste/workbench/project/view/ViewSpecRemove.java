@@ -10,8 +10,9 @@ import org.iocaste.workbench.Context;
 
 public class ViewSpecRemove extends AbstractCommand {
     
-    public ViewSpecRemove() {
-        required("name");
+    public ViewSpecRemove(Context extcontext) {
+        super("viewspec-remove", extcontext);
+        required("name", null);
         checkview = true;
     }
     

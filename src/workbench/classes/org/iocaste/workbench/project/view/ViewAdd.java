@@ -8,8 +8,9 @@ import org.iocaste.workbench.Context;
 
 public class ViewAdd extends AbstractCommand {
 
-    public ViewAdd() {
-        required("name");
+    public ViewAdd(Context extcontext) {
+        super("view-add", extcontext);
+        required("name", "NAME");
     }
     
     @Override
@@ -26,8 +27,8 @@ public class ViewAdd extends AbstractCommand {
         }
 
         view = extcontext.project.instance("screen", name);
-        view.set("NAME", name);
         view.set("PROJECT", extcontext.project.getstKey());
+        autoset(view);
         save(view);
         print("view %s created.", name);
         return view;

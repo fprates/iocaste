@@ -24,7 +24,6 @@ import org.iocaste.workbench.project.datadict.ModelUse;
 import org.iocaste.workbench.project.java.ClassEditorCall;
 import org.iocaste.workbench.project.java.PackageAdd;
 import org.iocaste.workbench.project.java.editor.ClassEditorContext;
-import org.iocaste.workbench.project.java.editor.handler.ClassHandler;
 import org.iocaste.workbench.project.tasks.LinkAdd;
 import org.iocaste.workbench.project.tasks.LinkRemove;
 import org.iocaste.workbench.project.view.ViewAdd;
@@ -46,6 +45,7 @@ public class Context extends AbstractExtendedContext {
     public ClassEditorContext classeditor;
     public ProjectInfo[] projects;
     public Object callreturn;
+    public Map<String, ActionContext> actions;
     
     public Context(PageBuilderContext context) {
         super(context);
@@ -53,39 +53,40 @@ public class Context extends AbstractExtendedContext {
         
         output = new ArrayList<>();
         commands = new HashMap<>();
-        commands.put("action-add", new ActionAdd());
-        commands.put("class-add", new ClassEditorCall(ClassHandler.ADD));
-        commands.put("class-edit", new ClassEditorCall(ClassHandler.EDIT));
-        commands.put("compile", new Compile(context));
-        commands.put("data-element-add", new DataElementAdd());
-        commands.put("data-element-remove", new DataElementRemove());
-        commands.put("link-add", new LinkAdd());
-        commands.put("link-remove", new LinkRemove());
-        commands.put("model-add", new ModelAdd());
-        commands.put("model-item-add", new ModelItemAdd());
-        commands.put("model-item-remove", new ModelItemRemove());
-        commands.put("model-use", new ModelUse());
-        commands.put("model-remove", new ModelRemove());
-        commands.put("package-add", new PackageAdd());
-        commands.put("project-add", new ProjectAdd());
-        commands.put("project-list", new ProjectList());
-        commands.put("project-use", new ProjectUse());
-        commands.put("view-add", new ViewAdd());
-        commands.put("view-remove", new ViewRemove());
-        commands.put("view-use", new ViewUse());
-        commands.put("viewconfig", new ViewConfigEdit());
-        commands.put("viewspec-remove", new ViewSpecRemove());
+        classeditor = new ClassEditorContext(context, this);
+        actions = new HashMap<>();
+        
+        new ActionAdd(this);
+        new ClassEditorCall("class-add", this);
+        new ClassEditorCall("class-edit", this);
+        new Compile(this);
+        new DataElementAdd(this);
+        new DataElementRemove(this);
+        new LinkAdd(this);
+        new LinkRemove(this);
+        new ModelAdd(this);
+        new ModelItemAdd(this);
+        new ModelItemRemove(this);
+        new ModelUse(this);
+        new ModelRemove(this);
+        new PackageAdd(this);
+        new ProjectAdd(this);
+        new ProjectList(this);
+        new ProjectUse(this);
+        new ViewAdd(this);
+        new ViewRemove(this);
+        new ViewUse(this);
+        new ViewConfigEdit(this);
+        new ViewSpecRemove(this);
         
         for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {
             name = String.format("viewspec-%s", type.toString());
-            commands.put(name, new ViewSpecAdd(type));
+            commands.put(name, new ViewSpecAdd(name, this, type));
         }
         
         viewconfig = new ViewConfigContext();
         viewconfig.extcontext = this;
         new DataFormConfig(viewconfig);
         new TableToolConfig(viewconfig);
-        
-        classeditor = new ClassEditorContext(context, this);
     }
 }

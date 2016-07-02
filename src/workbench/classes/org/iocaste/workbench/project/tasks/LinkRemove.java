@@ -8,8 +8,9 @@ import org.iocaste.workbench.Context;
 
 public class LinkRemove extends AbstractCommand {
 
-    public LinkRemove() {
-        required("name");
+    public LinkRemove(Context extcontext) {
+        super("link-remove", extcontext);
+        required("name", null);
     }
     
     @Override

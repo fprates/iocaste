@@ -7,10 +7,11 @@ import org.iocaste.workbench.Context;
 import org.iocaste.workbench.project.java.editor.handler.ClassHandler;
 
 public class ClassEditorCall extends AbstractCommand {
-    private byte op;
-    public ClassEditorCall(byte op) {
-        required("package");
-        required("class");
+    private String op;
+    public ClassEditorCall(String op, Context extcontext) {
+        super(op, extcontext);
+        required("package", null);
+        required("class", null);
         this.op = op;
     }
     

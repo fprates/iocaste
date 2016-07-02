@@ -7,24 +7,31 @@ import java.util.Set;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.ComplexDocument;
+import org.iocaste.documents.common.ExtendedObject;
 
 public abstract class AbstractCommand extends AbstractActionHandler {
-    private static final byte REQUIRED = 0;
-    private static final byte OPTIONAL = 1;
+    public static final byte REQUIRED = 0;
+    public static final byte OPTIONAL = 1;
     protected Map<String, String> parameters;
-    protected Map<String, Byte> arguments;
+    protected Map<String, CommandArgument> arguments;
     protected Map<String, Set<String>> values;
     protected boolean checkproject, checkmodel, checkview, checkparameters;
     
-    public AbstractCommand() {
-        arguments = new HashMap<>();
+    public AbstractCommand(String action, Context extcontext) {
+        ActionContext actionctx = new ActionContext();
+        extcontext.actions.put(action, actionctx);
+        actionctx.name = action;
+        actionctx.handler = this;
+        arguments = actionctx.arguments = new HashMap<>();
+        extcontext.commands.put(action, this);
         values = new HashMap<>();
         checkproject = checkparameters = true;
     }
     
     public final String areParametersValid(Map<String, String> parameters) {
         for (String key : arguments.keySet())
-            if ((arguments.get(key) == REQUIRED) &&
+            if ((arguments.get(key).type == REQUIRED) &&
                     !parameters.containsKey(key))
                 return "parameter.required";
         
@@ -38,6 +45,25 @@ public abstract class AbstractCommand extends AbstractActionHandler {
                     return "invalid.value";
             }
         return null;
+    }
+    
+    protected final void autoset(ComplexDocument document) {
+        CommandArgument argument;
+        for (String name : parameters.keySet()) {
+            argument = arguments.get(name);
+            document.set(argument.field, parameters.get(name));
+        }
+    }
+    
+    protected final void autoset(ExtendedObject object) {
+        CommandArgument argument;
+        for (String name : parameters.keySet()) {
+            argument = arguments.get(name);
+            if (argument.bool)
+                object.set(argument.field, getBooleanParameter(name));
+            else
+                object.set(argument.field, parameters.get(name));
+        }
     }
     
     public final Object call(PageBuilderContext context) throws Exception {
@@ -70,16 +96,23 @@ public abstract class AbstractCommand extends AbstractActionHandler {
         return null;
     }
     
-    protected final void optional(String name, String... options) {
+    protected final void optional(String name, String field, String... options)
+    {
         Set<String> test;
         
-        arguments.put(name, OPTIONAL);
+        arguments.put(name, new CommandArgument(OPTIONAL, field));
         if ((options == null) || (options.length == 0))
             return;
+        
         test = new HashSet<>();
         values.put(name, test);
         for (String option : options)
             test.add(option);
+    }
+    
+    protected final void optionalbl(String name, String field) {
+        optional(name, field, "true", "false");
+        arguments.get(name).bool = true;
     }
     
     protected final void print(String text, Object... args) {
@@ -90,8 +123,8 @@ public abstract class AbstractCommand extends AbstractActionHandler {
             extcontext.output.add(String.format(text, args));
     }
     
-    protected final void required(String name) {
-        arguments.put(name, REQUIRED);
+    protected final void required(String name, String field) {
+        arguments.put(name, new CommandArgument(REQUIRED, field));
     }
     
     public final void set(Map<String, String> parameters) {

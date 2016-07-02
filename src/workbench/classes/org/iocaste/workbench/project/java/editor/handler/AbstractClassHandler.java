@@ -10,9 +10,9 @@ public abstract class AbstractClassHandler implements ClassHandler {
     protected String packagename;
     protected String classname;
     
-    public AbstractClassHandler(ClassEditorContext context, byte op) {
+    public AbstractClassHandler(String action, ClassEditorContext context) {
         this.context = context;
-        context.handlers.put(op, this);
+        context.handlers.put(action, this);
     }
     
     protected final String getFullName() {

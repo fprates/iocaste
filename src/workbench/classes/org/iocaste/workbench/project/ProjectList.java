@@ -6,10 +6,12 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.Context;
 
 public class ProjectList extends AbstractCommand {
 
-    public ProjectList() {
+    public ProjectList(Context extcontext) {
+        super("project-list", extcontext);
         checkproject = false;
     }
     

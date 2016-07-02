@@ -5,7 +5,7 @@ import org.iocaste.workbench.project.java.editor.ClassEditorContext;
 public class ClassAddHandler extends AbstractClassHandler {
     
     public ClassAddHandler(ClassEditorContext context) {
-        super(context, ClassHandler.ADD);
+        super("class-add", context);
     }
     
     @Override
