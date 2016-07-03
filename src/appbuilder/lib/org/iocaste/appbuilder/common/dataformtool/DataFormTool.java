@@ -117,7 +117,7 @@ public class DataFormTool extends AbstractComponentTool {
             DataItem input, DataFormToolItem item) {
         input.setSecret(item.secret);
         input.setObligatory(item.required);
-        input.setEnabled(!data.disabled & !item.disabled);
+        input.setEnabled(!item.disabled);
         input.setVisible(!item.invisible);
         if (item.componenttype != null)
             input.setComponentType(item.componenttype);
