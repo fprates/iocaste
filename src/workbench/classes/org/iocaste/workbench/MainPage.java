@@ -1,9 +1,5 @@
 package org.iocaste.workbench;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.workbench.project.Load;
@@ -27,34 +23,4 @@ public class MainPage extends AbstractPanelPage {
         
         context.getView().run("load", context);
     }
-}
-
-class ProjectSelect extends AbstractActionHandler {
-    private Map<String, String> parameters;
-    
-    public ProjectSelect() {
-        parameters = new HashMap<>();
-    }
-    
-    @Override
-    protected void execute(PageBuilderContext context) throws Exception {
-        AbstractCommand command;
-        Context extcontext = getExtendedContext();
-        String project = getinputst("item_PROJECT");
-        
-        if (project.equals("project_add")) {
-            init("project_add", extcontext);
-            redirect("project_add");
-            return;
-        }
-        
-        parameters.clear();
-        parameters.put("name", project);
-        command = context.getView().getActionHandler("project-use");
-        command.set(parameters);
-        command.run(context);
-        init("project_viewer", extcontext);
-        redirect("project_viewer");
-    }
-    
 }

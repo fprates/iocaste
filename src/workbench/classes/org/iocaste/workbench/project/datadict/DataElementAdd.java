@@ -8,6 +8,7 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
 
 public class DataElementAdd extends AbstractCommand {
@@ -15,6 +16,8 @@ public class DataElementAdd extends AbstractCommand {
     
     public DataElementAdd(Context extcontext) {
         super("data-element-add", extcontext);
+        ActionContext actionctx;
+        
         required("name", "NAME");
         required("type", "TYPE");
         optional("size", "SIZE");
@@ -32,6 +35,9 @@ public class DataElementAdd extends AbstractCommand {
         types.put("int", DataType.INT);
         types.put("long", DataType.LONG);
         types.put("short", DataType.SHORT);
+        
+        actionctx = getActionContext();
+        actionctx.updateviewer = new DataElementUpdate();
     }
     
     @Override
@@ -43,7 +49,7 @@ public class DataElementAdd extends AbstractCommand {
         name = parameters.get("name");
         object = getObject("WB_DATA_ELEMENTS", name);
         if (object != null) {
-            message(Const.ERROR, "data element %s already exists.", name);
+            message(Const.ERROR, "data.element.exists");
             return null;
         }
         
@@ -51,8 +57,7 @@ public class DataElementAdd extends AbstractCommand {
         object.set("PROJECT", extcontext.project.getstKey());
         autoset(object);
         save(object);
-        print("data element %s updated.", name);
+        message(Const.STATUS, "dataelement.updated");
         return object;
     }
-
 }

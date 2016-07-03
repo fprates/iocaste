@@ -8,6 +8,7 @@ import org.iocaste.workbench.install.ProjectInstall;
 import org.iocaste.workbench.install.TextsInstall;
 import org.iocaste.workbench.project.add.ProjectAddPage;
 import org.iocaste.workbench.project.java.editor.ClassEditorPage;
+import org.iocaste.workbench.project.viewer.ProjectViewer;
 
 public class Main extends AbstractPageBuilder {
     
@@ -19,6 +20,7 @@ public class Main extends AbstractPageBuilder {
         new Messages(context.messages);
         panel.instance("main", new MainPage(), extcontext);
         panel.instance("project_add", new ProjectAddPage(), extcontext);
+        panel.instance("project_viewer", new ProjectViewer(), extcontext);
         panel.instance("class-editor", new ClassEditorPage(), extcontext);
     }
 
