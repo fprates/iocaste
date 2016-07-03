@@ -31,6 +31,7 @@ public class TableItemRenderer extends Renderer {
      */
     public static final XMLElement render(Table table, TableItem item,
             Config config) {
+        boolean mark, savemark;
         Component component;
         TableColumn column;
         String text, style;
@@ -39,14 +40,15 @@ public class TableItemRenderer extends Renderer {
         XMLElement tdtag, trtag = new XMLElement("tr");
         List<XMLElement> tags = new ArrayList<>();
         
+        savemark = true;
         hidden = new ArrayList<>();
         style = item.getStyleClass();
         trtag.add("class", style);
         
         for (Element element : item.getElements()) {
             column = columns[i++];
-            
-            if (column.isMark() && !table.hasMark())
+            mark = column.isMark();
+            if (mark && !table.hasMark())
                 continue;
             
             if (!column.isVisible() || !item.isVisible()) {
@@ -69,7 +71,18 @@ public class TableItemRenderer extends Renderer {
                         tdtag.addInner(text);
                     }
                 } else {
+                    /*
+                     * se existir mark, deve vir habilitada de qualquer jeito.
+                     * (a menos que o componente esteja explicitamente
+                     * desabilitado.
+                     */
+                    if (mark) {
+                        savemark = table.isEnabled();
+                        table.setEnabled(true);
+                    }
                     renderElement(tags, element, config);
+                    if (mark)
+                        table.setEnabled(savemark);
                     tdtag.addChildren(tags);
                 }
             }
