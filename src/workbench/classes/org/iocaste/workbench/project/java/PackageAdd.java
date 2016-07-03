@@ -25,7 +25,7 @@ public class PackageAdd extends AbstractCommand {
         extcontext = getExtendedContext();
         _package = extcontext.project.getDocumentsMap("class").get(name);
         if (_package != null) {
-            message(Const.ERROR, "package %s already exists.");
+            message(Const.ERROR, "package.exists");
             return null;
         }
         
@@ -34,7 +34,7 @@ public class PackageAdd extends AbstractCommand {
         object.set("PROJECT", extcontext.project.getstKey());
         autoset(object);
         save(_package);
-        print("package %s added.", name);
+        message(Const.STATUS, "added.package");
         return _package;
     }
 

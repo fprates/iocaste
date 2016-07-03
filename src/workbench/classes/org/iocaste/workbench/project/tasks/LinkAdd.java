@@ -26,7 +26,7 @@ public class LinkAdd extends AbstractCommand {
         objects = extcontext.project.getItems("link");
         object = readobjects(objects, "NAME", name);
         if (object != null) {
-            message(Const.ERROR, "link %s already exists.", name);
+            message(Const.ERROR, "link.exists");
             return null;
         }
         
@@ -34,7 +34,7 @@ public class LinkAdd extends AbstractCommand {
         object.set("PROJECT", extcontext.project.getstKey());
         autoset(object);
         save(extcontext.project);
-        print("link %s updated.", name);
+        message(Const.STATUS, "link.updated");
         return object;
     }
 

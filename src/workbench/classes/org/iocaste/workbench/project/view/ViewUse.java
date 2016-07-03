@@ -27,7 +27,6 @@ public class ViewUse extends AbstractCommand {
         }
         
         extcontext.view = view;
-        print("using view %s.", name);
         return view;
     }
 }

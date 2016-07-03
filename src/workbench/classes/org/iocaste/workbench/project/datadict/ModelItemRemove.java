@@ -23,13 +23,13 @@ public class ModelItemRemove extends AbstractCommand {
         name = parameters.get("name");
         object = extcontext.model.getItemsMap("item").get(name);
         if (object == null) {
-            message(Const.ERROR, "model item %s doesn't exist.", name);
+            message(Const.ERROR, "invalid.model.item");
             return null;
         }
         
         extcontext.model.remove(object);
         save(extcontext.model);
-        print("model item %s removed.", name);
+        message(Const.STATUS, "model.item.removed.");
         return null;
     }
 

@@ -22,13 +22,13 @@ public class LinkRemove extends AbstractCommand {
         name = parameters.get("name");
         object = extcontext.project.getItemsMap("link").get(name);
         if (object == null) {
-            message(Const.ERROR, "link %s doesn't exist.", name);
+            message(Const.ERROR, "invalid.link");
             return null;
         }
         
         extcontext.project.remove(object);
         save(extcontext.project);
-        print("link %s removed", name);
+        message(Const.STATUS, "link.removed");
         return null;
     }
 

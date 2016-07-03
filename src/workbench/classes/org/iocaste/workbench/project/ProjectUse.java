@@ -27,7 +27,6 @@ public class ProjectUse extends AbstractCommand {
         
         extcontext.project = project;
         extcontext.model = null;
-        extcontext.output.add(String.format("using %s", project.getstKey()));
         return project;
     }
 

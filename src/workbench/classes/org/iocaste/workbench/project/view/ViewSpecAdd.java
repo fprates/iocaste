@@ -39,7 +39,7 @@ public class ViewSpecAdd extends AbstractCommand {
         name = parameters.get("name");
         object = specitems.get(name);
         if (object != null) {
-            message(Const.ERROR, "specitem.already.exists");
+            message(Const.ERROR, "view.element.exists");
             return null;
         }
         
@@ -49,7 +49,7 @@ public class ViewSpecAdd extends AbstractCommand {
         object.set("TYPE", type.toString());
         autoset(object);
         save(extcontext.view);
-        print("%s %s added.", type.toString(), name);
+        message(Const.STATUS, "view.element.added", type.toString());
         return object;
     }
 }

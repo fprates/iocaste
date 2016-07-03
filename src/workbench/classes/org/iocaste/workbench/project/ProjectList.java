@@ -27,32 +27,32 @@ public class ProjectList extends AbstractCommand {
             return null;
         }
         
-        for (ComplexDocument project : projects) {
-            object = project.getHeader();
-            projectname = project.getstKey();
-            print("- Nome: %s", object.getst("PROJECT_NAME"));
-            
-            print("- Perfil: %s", object.getst("PROFILE"));
-            
-            print("- Telas");
-            for (ComplexDocument screen : project.getDocuments("screen"))
-                print(screen.getstKey());
-            
-            print("- Links");
-            for (ExtendedObject link : project.getItems("link"))
-                print(link.getst("NAME"));
-            
-            print("- Elementos de dados");
-            printddojects("WB_DATA_ELEMENTS", projectname);
-            
-            print("- Modelos");
-            for (ComplexDocument document : project.getDocuments("model"))
-                print(document.getstKey());
-            
-            print("- Pacotes");
-            for (ComplexDocument document : project.getDocuments("class"))
-                print(document.getstKey());
-        }
+//        for (ComplexDocument project : projects) {
+//            object = project.getHeader();
+//            projectname = project.getstKey();
+//            print("- Nome: %s", object.getst("PROJECT_NAME"));
+//            
+//            print("- Perfil: %s", object.getst("PROFILE"));
+//            
+//            print("- Telas");
+//            for (ComplexDocument screen : project.getDocuments("screen"))
+//                print(screen.getstKey());
+//            
+//            print("- Links");
+//            for (ExtendedObject link : project.getItems("link"))
+//                print(link.getst("NAME"));
+//            
+//            print("- Elementos de dados");
+//            printddojects("WB_DATA_ELEMENTS", projectname);
+//            
+//            print("- Modelos");
+//            for (ComplexDocument document : project.getDocuments("model"))
+//                print(document.getstKey());
+//            
+//            print("- Pacotes");
+//            for (ComplexDocument document : project.getDocuments("class"))
+//                print(document.getstKey());
+//        }
         
         return projects;
     }
@@ -77,16 +77,16 @@ public class ProjectList extends AbstractCommand {
         return projects;
     }
     
-    private void printddojects(String ddobject, String project) {
-        Query query;
-        ExtendedObject[] objects;
-        
-        query = new Query();
-        query.setModel(ddobject);
-        query.andEqual("PROJECT", project);
-        objects = select(query);
-        if (objects != null)
-            for (ExtendedObject dtel : objects)
-                print(dtel.getst("NAME"));
-    }
+//    private void printddojects(String ddobject, String project) {
+//        Query query;
+//        ExtendedObject[] objects;
+//        
+//        query = new Query();
+//        query.setModel(ddobject);
+//        query.andEqual("PROJECT", project);
+//        objects = select(query);
+//        if (objects != null)
+//            for (ExtendedObject dtel : objects)
+//                print(dtel.getst("NAME"));
+//    }
 }

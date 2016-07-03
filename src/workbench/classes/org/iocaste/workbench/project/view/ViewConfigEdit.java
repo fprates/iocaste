@@ -21,7 +21,7 @@ public class ViewConfigEdit extends AbstractCommand {
     @Override
     protected Object entry(PageBuilderContext context) {
         String element, type;
-        ExtendedObject object, config;
+        ExtendedObject object;
         ViewElementAttribute attribute;
         Map<String, ViewElementAttribute> attributes;
         Context extcontext = getExtendedContext();
@@ -43,11 +43,10 @@ public class ViewConfigEdit extends AbstractCommand {
                 message(Const.ERROR, "invalid.view.element.attribute");
                 return null;
             }
-            config = attribute.instance(object, parameters.get(key));
-            print(config.toString());
+            attribute.instance(object, parameters.get(key));
         }
         save(extcontext.view);
-        print("viewconfig for spec item %s added.", element);
+        message(Const.STATUS, "viewconfig.added");
         return null;
     }
 }

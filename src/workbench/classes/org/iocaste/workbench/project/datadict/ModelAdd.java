@@ -25,7 +25,7 @@ public class ModelAdd extends AbstractCommand {
         name = parameters.get("name");
         document = getDocument("WB_MODELS", name);
         if (document != null) {
-            message(Const.ERROR, "model %s already exists.", name);
+            message(Const.ERROR, "model.exists");
             return null;
         }
 
@@ -36,7 +36,7 @@ public class ModelAdd extends AbstractCommand {
         autoset(object);
         save(document);
         extcontext.project.add(document);
-        print("model %s updated.", name);
+        message(Const.STATUS, "model.updated");
         return document;
     }
 

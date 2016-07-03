@@ -36,7 +36,7 @@ public class DataElementRemove extends AbstractCommand {
             return null;
         }
         delete(object);
-        print("data element %s removed.", name);
+        message(Const.STATUS, "dataelement.removed.");
         return null;
     }
 

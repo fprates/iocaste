@@ -22,12 +22,11 @@ public class ModelUse extends AbstractCommand {
         name = parameters.get("name");
         document = extcontext.project.getDocumentsMap("model").get(name);
         if (document == null) {
-            message(Const.ERROR, "model %s undefined.", name);
+            message(Const.ERROR, "undefined.model");
             return null;
         }
         
         extcontext.model = document;
-        print("using model %s.", name);
         return document;
     }
 

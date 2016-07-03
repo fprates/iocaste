@@ -23,12 +23,12 @@ public class ModelRemove extends AbstractCommand {
         extcontext = getExtendedContext();
         document = extcontext.project.getDocumentsMap("model").get(name);
         if (document == null) {
-            message(Const.ERROR, "invalid model %s.", name);
+            message(Const.ERROR, "invalid.model");
             return null;
         }
 
         if (document.getDocumentsMap("item").size() > 0) {
-            message(Const.ERROR, "cant.delete.with.items");
+            message(Const.ERROR, "model.not.empty");
             return null;
         }
         
@@ -36,7 +36,7 @@ public class ModelRemove extends AbstractCommand {
         delete(document);
         if (extcontext.model == document)
             extcontext.model = null;
-        print("model %s removed.", name);
+        message(Const.STATUS, "model.removed", name);
         return null;
     }
 

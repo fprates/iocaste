@@ -20,18 +20,16 @@ public class ModelItemAdd extends AbstractCommand {
     
     @Override
     protected Object entry(PageBuilderContext context) {
-        String name, model, dtel, table, field;
+        String name, dtel, table, field;
         ExtendedObject object;
         ExtendedObject[] objects;
         Context extcontext = getExtendedContext();
         
         name = parameters.get("name");
-        model = extcontext.model.getstKey();
         objects = extcontext.model.getItems("item");
         object = readobjects(objects, "NAME", name);
         if (object != null) {
-            message(Const.ERROR, "item %s for model %s already exists.",
-                    name, model);
+            message(Const.ERROR, "model.item.exists.");
             return null;
         }
         
@@ -39,7 +37,7 @@ public class ModelItemAdd extends AbstractCommand {
         if (dtel != null) {
             object = getObject("WB_DATA_ELEMENTS", dtel);
             if (object == null) {
-                message(Const.ERROR, "data element %s invalid.", dtel);
+                message(Const.ERROR, "invalid.dataelement", dtel);
                 return null;
             }
         }
@@ -55,7 +53,7 @@ public class ModelItemAdd extends AbstractCommand {
         object.set("PROJECT", extcontext.project.getstKey());
         autoset(object);
         save(extcontext.model);
-        print("model item %s updated.", name);
+        message(Const.STATUS, "model.item.updated");
         return object;
     }
 

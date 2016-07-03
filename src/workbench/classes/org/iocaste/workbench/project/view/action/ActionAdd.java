@@ -80,7 +80,7 @@ public class ActionAdd extends AbstractCommand {
         autoset(object);
         object.set("TYPE", type);
         save(extcontext.view);
-        print("action %s added.", name);
+        message(Const.STATUS, "action.added.");
         return object;
     }
 }

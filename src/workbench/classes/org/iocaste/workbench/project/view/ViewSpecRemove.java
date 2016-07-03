@@ -27,13 +27,13 @@ public class ViewSpecRemove extends AbstractCommand {
         name = parameters.get("name");
         specitem = specitems.get(name);
         if (specitem == null) {
-            message(Const.ERROR, "invalid.specitem");
+            message(Const.ERROR, "invalid.view.element");
             return null;
         }
         
         extcontext.view.remove(specitem);
         save(extcontext.view);
-        print("component %s removed.", name);
+        message(Const.STATUS, "view.element.removed.");
         return null;
     }
 }

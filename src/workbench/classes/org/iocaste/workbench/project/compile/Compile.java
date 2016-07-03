@@ -118,7 +118,7 @@ public class Compile extends AbstractCommand {
     protected Object entry(PageBuilderContext context) throws Exception {
         ComplexDocument document;
         String error;
-        
+
         data.extcontext = getExtendedContext();
         data.project = parameters.get("project");
         if ((data.project == null) && (data.extcontext.project == null)) {
@@ -139,9 +139,8 @@ public class Compile extends AbstractCommand {
         data.context = context;
         error = deployApplication(data);
         if (error != null) {
-            print(error);
             message(Const.ERROR, "compiling.error");
-            return null;
+            return error;
         }
         message(Const.STATUS, "project.compiled");
         return null;

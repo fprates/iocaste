@@ -22,7 +22,7 @@ public class ViewAdd extends AbstractCommand {
         name = parameters.get("name");
         view = extcontext.project.getDocumentsMap("screen").get(name);
         if (view != null) {
-            message(Const.ERROR, "view.already.exists");
+            message(Const.ERROR, "view.exists");
             return null;
         }
 
@@ -30,7 +30,7 @@ public class ViewAdd extends AbstractCommand {
         view.set("PROJECT", extcontext.project.getstKey());
         autoset(view);
         save(view);
-        print("view %s created.", name);
+        message(Const.ERROR, "view.created.");
         return view;
     }
 }
