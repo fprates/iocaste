@@ -10,6 +10,7 @@ import org.iocaste.packagetool.common.InstallData;
 
 public class StandardInstallContext {
     private Map<String, ModelInstall> models;
+    private Map<String, ComplexModelInstall> cmodels;
     private Map<String, DocumentModelItem> items;
     private Map<String, DataElement> elements;
     private Map<String, AbstractInstallObject> objects;
@@ -21,6 +22,11 @@ public class StandardInstallContext {
         data = new InstallData();
         items = new HashMap<>();
         models = new HashMap<>();
+        cmodels = new HashMap<>();
+    }
+    
+    public final ComplexModelInstall getCModel(String name) {
+        return cmodels.get(name);
     }
     
     public final Map<String, DataElement> getElements() {
@@ -53,6 +59,10 @@ public class StandardInstallContext {
                     append(name).
                     append(" has already defined.").toString());
         elements.put(name, element);
+    }
+    
+    public final void set(String name, ComplexModelInstall cmodel) {
+        cmodels.put(name, cmodel);
     }
     
     public final void setItem(String name, DocumentModelItem item) {

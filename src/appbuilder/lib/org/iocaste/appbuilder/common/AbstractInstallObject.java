@@ -138,6 +138,12 @@ public abstract class AbstractInstallObject {
         return item;
     }
     
+    public final ComplexModelInstall tag(
+            String name, ComplexModelInstall cmodel) {
+        context.set(name, cmodel);
+        return cmodel;
+    }
+    
     public final ModelInstall tag(String tag, ModelInstall model) {
         context.setModel(tag, model);
         return model;
