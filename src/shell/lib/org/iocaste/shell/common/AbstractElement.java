@@ -209,7 +209,7 @@ public abstract class AbstractElement implements Element {
      * @see org.iocaste.shell.common.Element#isEnabled()
      */
     @Override
-    public final boolean isEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
     

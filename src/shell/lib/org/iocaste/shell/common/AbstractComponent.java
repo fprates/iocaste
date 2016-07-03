@@ -86,6 +86,14 @@ public abstract class AbstractComponent extends AbstractElement
         return false;
     }
     
+    @Override
+    public final boolean isEnabled() {
+        Container container = getContainer();
+        if (container == null)
+            return super.isEnabled();
+        return (super.isEnabled() && container.isEnabled());
+    }
+    
     /*
      * (não-Javadoc)
      * @see org.iocaste.shell.common.AbstractElement#setHtmlName(

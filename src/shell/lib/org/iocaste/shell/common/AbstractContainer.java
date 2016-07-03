@@ -159,6 +159,14 @@ public abstract class AbstractContainer
         return false;
     }
     
+    @Override
+    public final boolean isEnabled() {
+        Container container = getContainer();
+        if (container == null)
+            return super.isEnabled();
+        return (super.isEnabled() && container.isEnabled());
+    }
+    
     /*
      * (non-Javadoc)
      * @see org.iocaste.shell.common.Container#isMultiLine()
