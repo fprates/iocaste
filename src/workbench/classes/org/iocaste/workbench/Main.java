@@ -4,8 +4,14 @@ import org.iocaste.appbuilder.common.AbstractPageBuilder;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.PageBuilderDefaultInstall;
 import org.iocaste.appbuilder.common.panel.StandardPanel;
+import org.iocaste.workbench.install.ClassesPackageInstall;
+import org.iocaste.workbench.install.DataElementsInstall;
+import org.iocaste.workbench.install.LinkInstall;
+import org.iocaste.workbench.install.ModelsInstall;
+import org.iocaste.workbench.install.ProjectHeadInstall;
 import org.iocaste.workbench.install.ProjectInstall;
 import org.iocaste.workbench.install.TextsInstall;
+import org.iocaste.workbench.install.ViewInstall;
 import org.iocaste.workbench.project.add.ProjectAddPage;
 import org.iocaste.workbench.project.java.editor.ClassEditorPage;
 import org.iocaste.workbench.project.viewer.ProjectViewer;
@@ -33,6 +39,12 @@ public class Main extends AbstractPageBuilder {
         defaultinstall.addToTaskGroup("DEVELOP", "WBDSPTCHR");
         
         installObject("messages", new TextsInstall());
+        installObject("projecthd", new ProjectHeadInstall());
+        installObject("data_elements", new DataElementsInstall());
+        installObject("models", new ModelsInstall());
+        installObject("views", new ViewInstall());
+        installObject("links", new LinkInstall());
+        installObject("classes", new ClassesPackageInstall());
         installObject("project", new ProjectInstall());
     }
 
