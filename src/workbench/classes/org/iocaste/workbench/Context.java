@@ -1,8 +1,6 @@
 package org.iocaste.workbench;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractExtendedContext;
@@ -39,7 +37,6 @@ import org.iocaste.workbench.project.view.config.ViewConfigContext;
 
 public class Context extends AbstractExtendedContext {
     public Map<String, AbstractCommand> commands;
-    public List<String> output;
     public ComplexDocument project, model, view;
     public ViewConfigContext viewconfig;
     public ClassEditorContext classeditor;
@@ -51,7 +48,6 @@ public class Context extends AbstractExtendedContext {
         super(context);
         String name;
         
-        output = new ArrayList<>();
         commands = new HashMap<>();
         classeditor = new ClassEditorContext(context, this);
         actions = new HashMap<>();

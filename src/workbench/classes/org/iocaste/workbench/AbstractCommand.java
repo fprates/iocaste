@@ -87,8 +87,12 @@ public abstract class AbstractCommand extends AbstractActionHandler {
     }
     
     protected final boolean getBooleanParameter(String name) {
-        String value = parameters.get(name);
-        return (value == null)? false : Boolean.parseBoolean(value);
+        Object value = parameters.get(name);
+        if (value == null)
+            return false;
+        if (value instanceof String)
+            return Boolean.parseBoolean((String)value);
+        return (boolean)value;
     }
     
     public final String isValidContext(Context extcontext) {
@@ -118,14 +122,6 @@ public abstract class AbstractCommand extends AbstractActionHandler {
     protected final void optionalbl(String name, String field) {
         optional(name, field, "true", "false");
         arguments.get(name).bool = true;
-    }
-    
-    protected final void print(String text, Object... args) {
-        Context extcontext = getExtendedContext();
-        if (args == null)
-            extcontext.output.add(text);
-        else
-            extcontext.output.add(String.format(text, args));
     }
     
     protected final void required(String name, String field) {
