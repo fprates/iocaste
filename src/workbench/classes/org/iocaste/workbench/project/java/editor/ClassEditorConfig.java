@@ -16,7 +16,8 @@ public class ClassEditorConfig extends AbstractViewConfig {
         
         dataform = getTool("head");
         dataform.model = "WB_JAVA_CLASS";
-        dataform.show = new String[] {"PACKAGE", "NAME"};
+        show(dataform, "PACKAGE", "NAME");
+        
         item = dataform.instance("PACKAGE");
         item.vlength = 80;
         item.disabled = true;

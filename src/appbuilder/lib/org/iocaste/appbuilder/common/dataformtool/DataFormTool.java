@@ -1,8 +1,5 @@
 package org.iocaste.appbuilder.common.dataformtool;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
@@ -68,7 +65,6 @@ public class DataFormTool extends AbstractComponentTool {
         ComponentEntry nsentry;
         DataFormToolData data = getComponentData();
         Container container = getElement(data.name);
-        List<String> columns = null;
         
         htmlname = new StringBuilder(data.name).
                 append("_").append(data.type.toString()).toString();
@@ -82,19 +78,6 @@ public class DataFormTool extends AbstractComponentTool {
         }
         if (data.style != null)
             dataform.setStyleClass(data.style);
-        if (data.show != null) {
-            if (data.columns > 0) {
-                dataform.setColumns(data.columns);
-                columns = new ArrayList<>();
-                for (String column : data.show)
-                    if (column != null)
-                        columns.add(column);
-                dataform.show(columns.toArray(new String[0]));
-                columns.clear();
-            } else {
-                dataform.show(data.show);
-            }
-        }
         
         dataform.setEnabled(!data.disabled);
         if (data.nsitem != null)
@@ -120,6 +103,7 @@ public class DataFormTool extends AbstractComponentTool {
             if (item.sh != null)
                 data.custommodel.getModelItem(name).setSearchHelp(item.sh);
             setItem(data, input, item);
+            input.setVisible(!item.invisible);
             if (item.ns)
                 dataform.setNSReference(input.getHtmlName());
         }
@@ -127,17 +111,6 @@ public class DataFormTool extends AbstractComponentTool {
         if (data.internallabel)
             for (Element element : dataform.getElements())
                 ((DataItem)element).setPlaceHolder(true);
-        
-        if (columns == null)
-            return;
-        
-        for (String name : data.show) {
-            columns.add(name);
-            if (columns.size() != data.columns)
-                continue;
-            dataform.addLine(columns.toArray(new String[0]));
-            columns.clear();
-        }
     }
     
     private void setItem(DataFormToolData data,

@@ -1,6 +1,9 @@
 package org.iocaste.appbuilder.common;
 
 import org.iocaste.appbuilder.common.navcontrol.NavControl;
+import org.iocaste.documents.common.DocumentModel;
+import org.iocaste.documents.common.DocumentModelItem;
+import org.iocaste.documents.common.Documents;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.StyleSheet;
 import org.iocaste.shell.common.TabbedPane;
@@ -120,5 +123,14 @@ public abstract class AbstractViewConfig implements ViewConfig {
     @Override
     public final void setNavControl(NavControl navcontrol) {
         this.navcontrol = navcontrol;
+    }
+    
+    protected final void show(AbstractComponentData data, String... fields) {
+        DocumentModel model = new Documents(context.function).
+                getModel(data.model);
+        for (DocumentModelItem item : model.getItens())
+            data.instance(item.getName()).invisible = true;
+        for (String name : fields)
+            data.get(name).invisible = false;
     }
 }

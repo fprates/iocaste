@@ -16,7 +16,8 @@ public class SelectionConfig extends AbstractViewConfig {
         
         dataform = getTool("model");
         dataform.model = "MODEL";
-        dataform.show = new String[] {"NAME"};
+        show(dataform, "NAME");
+        
         item = dataform.instance("NAME");
         item.required = item.focus = true;
 

@@ -19,7 +19,8 @@ public class StructureConfig extends AbstractViewConfig {
         dataform = getTool("head");
         dataform.custommodel = extcontext.model;
         dataform.disabled = true;
-        dataform.show = new String[] {"NAME", "TABLE"};
+        show(dataform, "NAME", "TABLE");
+        
         tabletool = getTool("items");
         tabletool.model = "DD_MODEL_ITEM";
         tabletool.mode = TableTool.DISPLAY;

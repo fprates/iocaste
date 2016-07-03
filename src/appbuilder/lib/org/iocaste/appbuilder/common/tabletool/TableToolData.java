@@ -15,7 +15,7 @@ public class TableToolData extends AbstractComponentData {
     public String borderstyle, highlightstyle;
     public String itemcolumn, nsfield;
     public DocumentModel refmodel;
-    public boolean mark, enabled, noheader;
+    public boolean mark, noheader;
     public int vlines, step, last, increment, topline;
     public byte mode;
     public String[] enableonly, ordering, actions;
@@ -24,7 +24,6 @@ public class TableToolData extends AbstractComponentData {
         super(ViewSpecItem.TYPES.TABLE_TOOL);
         vlines = 15;
         step = 1;
-        enabled = true;
         increment = 1;
         items = new ArrayList<>();
     }

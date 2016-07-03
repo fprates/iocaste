@@ -16,7 +16,8 @@ public class MainConfig extends AbstractViewConfig {
         
         form = getTool("selection");
         form.model = "LOGIN";
-        form.show = new String[] {"USERNAME"};
+        show(form, "USERNAME");
+        
         item = form.instance("USERNAME");
         item.focus = true;
         item.sh = "SH_USER";

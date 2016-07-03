@@ -9,15 +9,14 @@ public class MainConfig extends AbstractViewConfig {
 
     @Override
     protected void execute(PageBuilderContext context) {
-        Context extcontext;
         DataFormToolData form;
         DataFormToolItem item;
-        
-        extcontext = getExtendedContext();
+        Context extcontext = getExtendedContext();
         
         form = getTool("model");
         form.custommodel = extcontext.modelmodel;
-        form.show = new String[] {"NAME"};
+        show(form, "NAME");
+        
         item = form.instance("NAME");
         item.required = item.focus = true;
         

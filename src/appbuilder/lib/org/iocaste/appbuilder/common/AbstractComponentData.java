@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractComponentData {
+    public boolean disabled;
     public String name, model, style;
     public PageBuilderContext context;
     public ViewSpecItem.TYPES type;
