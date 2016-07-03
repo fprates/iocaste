@@ -91,6 +91,15 @@ public abstract class AbstractViewConfig implements ViewConfig {
         return context.getView().getComponents();
     }
     
+    protected final void hide(AbstractComponentData data, String... fields) {
+        DocumentModel model = new Documents(context.function).
+                getModel(data.model);
+        for (DocumentModelItem item : model.getItens())
+            data.instance(item.getName()).invisible = false;
+        for (String name : fields)
+            data.get(name).invisible = true;
+    }
+    
     /*
      * (não-Javadoc)
      * @see org.iocaste.appbuilder.common.ViewConfig#run(

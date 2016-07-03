@@ -6,7 +6,7 @@ import org.iocaste.shell.common.Const;
 
 public class AbstractComponentDataItem {
     public boolean ns, invisible, required, disabled;
-    public String name, sh, label;
+    public String name, sh, validator, label;
     public int length, vlength;
     public Map<String, Object> values;
     public Object value;

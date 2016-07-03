@@ -126,8 +126,8 @@ public class DataFormTool extends AbstractComponentTool {
         if (item.values != null)
             for (String key : item.values.keySet())
                 input.add(key, item.values.get(key));
-        if (item.validate != null)
-            data.context.function.validate(input, item.validate);
+        if (item.validator != null)
+            data.context.function.validate(input, item.validator);
         if (item.length > 0)
             input.setLength(item.length);
         if (item.vlength > 0)
