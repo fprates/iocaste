@@ -4,18 +4,25 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.viewer.ViewerItemUpdate;
 
 public class ModelItemAdd extends AbstractCommand {
     
     public ModelItemAdd(Context extcontext) {
         super("model-item-add", extcontext);
+        ActionContext actionctx;
+        
         required("name", "NAME");
         optionalbl("key", "KEY");
         optional("data-element", "DATA_ELEMENT");
         optional("field", "FIELD");
 //        optional("reference", null);
         checkmodel = true;
+        
+        actionctx = getActionContext();
+        actionctx.updateviewer = new ViewerItemUpdate("model_item_items");
     }
     
     @Override

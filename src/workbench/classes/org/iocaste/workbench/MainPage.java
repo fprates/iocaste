@@ -3,6 +3,7 @@ package org.iocaste.workbench;
 import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.appbuilder.common.panel.AbstractPanelPage;
 import org.iocaste.workbench.project.Load;
+import org.iocaste.workbench.project.ProjectSelect;
 
 public class MainPage extends AbstractPanelPage {
 

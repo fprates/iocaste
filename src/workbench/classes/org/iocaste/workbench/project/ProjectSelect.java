@@ -1,4 +1,4 @@
-package org.iocaste.workbench;
+package org.iocaste.workbench.project;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,8 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
+import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.Context;
 
 public class ProjectSelect extends AbstractActionHandler {
     private Map<String, String> parameters;
