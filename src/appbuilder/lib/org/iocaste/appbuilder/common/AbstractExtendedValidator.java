@@ -11,7 +11,6 @@ import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.AbstractContext;
 import org.iocaste.shell.common.AbstractValidator;
 import org.iocaste.shell.common.Container;
-import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.Element;
 import org.iocaste.shell.common.InputComponent;
 import org.iocaste.shell.common.TableItem;
@@ -29,7 +28,7 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
     protected final ExtendedObject dfget(String name) {
         DataFormTool dftool = context.getView().getComponents().
                 getComponent(name);
-        return ((DataForm)dftool.getElement()).getObject();
+        return dftool.getObject();
     }
     
     /**
@@ -40,7 +39,7 @@ public abstract class AbstractExtendedValidator extends AbstractValidator {
     protected final void dfset(String name, ExtendedObject object) {
         DataFormTool dftool = context.getView().getComponents().
                 getComponent(name);
-        ((DataForm)dftool.getElement()).setObject(object);
+        dftool.setObject(object);
     }
     
     /**

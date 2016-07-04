@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.appbuilder.common.dataformtool.DataFormTool;
 import org.iocaste.appbuilder.common.tabletool.TableTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
@@ -137,7 +138,8 @@ public abstract class AbstractActionHandler {
     }
     
     protected ExtendedObject getdf(String name) {
-        return dfget(name).getObject();
+        DataFormTool dftool = components.getComponent(name);
+        return dftool.getObject();
     }
     
     protected <T> T getdf(String dataform, String field) {

@@ -29,7 +29,6 @@ import org.iocaste.documents.common.DataType;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.DocumentModelItem;
 import org.iocaste.documents.common.Documents;
-import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.protocol.Function;
 
 /**
@@ -158,34 +157,6 @@ public class DataForm extends AbstractContainer {
         return model;
     }
     
-    /**
-     * Retorna objeto extendido equivalente.
-     * @return objeto extendido
-     */
-    public final ExtendedObject getObject() {
-        String name;
-    	InputComponent input;
-    	ExtendedObject object = new ExtendedObject(model);
-    	
-    	if (nsreference != null) {
-    	    input = getView().getElement(nsreference);
-            object.setNS(input.get());
-    	}
-        for (Element element: getElements()) {
-        	if (!element.isDataStorable())
-                continue;
-        	
-        	input = (InputComponent)element;
-        	name = input.getName();
-            if (model.getModelItem(name) == null)
-                continue;
-            
-        	object.set(name, input.get());
-        }
-    	
-    	return object;
-    }
-    
     public final void importModel(String name, Function function) {
         DocumentModel model = new Documents(function).getModel(name);
         importModel(model);
@@ -271,46 +242,6 @@ public class DataForm extends AbstractContainer {
                 continue;
             item = (DataItem)element;
             item.setNSReference(nsreference);
-        }
-    }
-    
-    /**
-     * Lê a partir de objeto extendido.
-     * @param object object extendido.
-     */
-    public final void setObject(ExtendedObject object) {
-        DataItem item;
-        String name;
-        
-        for (Element element : getElements()) {
-            if (!element.isDataStorable())
-                continue;
-            
-            item = (DataItem)element;
-            name = item.getName();
-            item.set(object.getNS(), object.get(name));
-        }
-        
-        if (nsreference != null)
-            setNS(object.getNS());
-    }
-    
-    /**
-     * 
-     * @param fields
-     */
-    public final void show(String... fields) {
-        InputComponent input;
-        
-        for (Element element : getElements())
-            element.setVisible(false);
-        
-        for (String field : fields) {
-            input = get(field);
-            if (input == null)
-                throw new RuntimeException(
-                        field.concat(" is an invalid dataform item."));
-            input.setVisible(true);
         }
     }
 }

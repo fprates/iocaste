@@ -3,11 +3,13 @@ package org.iocaste.appbuilder.common.dataformtool;
 import org.iocaste.appbuilder.common.AbstractComponentData;
 import org.iocaste.appbuilder.common.AbstractComponentTool;
 import org.iocaste.appbuilder.common.ComponentEntry;
+import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.shell.common.Container;
 import org.iocaste.shell.common.DataForm;
 import org.iocaste.shell.common.DataItem;
 import org.iocaste.shell.common.Element;
+import org.iocaste.shell.common.InputComponent;
 
 public class DataFormTool extends AbstractComponentTool {
     
@@ -32,18 +34,48 @@ public class DataFormTool extends AbstractComponentTool {
         return null;
     }
     
+    /**
+     * Retorna objeto extendido equivalente.
+     * @return objeto extendido
+     */
+    public final ExtendedObject getObject() {
+        String name;
+        InputComponent input;
+        ExtendedObject object;
+        DataForm df;
+        DataFormToolData dfdata = (DataFormToolData)entry.data;
+        
+        if (dfdata.custommodel == null)
+            return null;
+        
+        object = new ExtendedObject(dfdata.custommodel);
+        df = getElement();
+        for (Element element: df.getElements()) {
+            if (!element.isDataStorable())
+                continue;
+
+            input = (InputComponent)element;
+            name = input.getName();
+            if (dfdata.custommodel.getModelItem(name) == null)
+                continue;
+            
+            object.set(name, input.get());
+        }
+        
+        return object;
+    }
+    
     @Override
     public final void load(AbstractComponentData data) {
-        DataForm dataform = getElement();
-        if (dataform.getModel() != null)
-            ((DataFormToolData)data).object = dataform.getObject();
+        if (getElement() != null)
+            ((DataFormToolData)data).object = getObject();
     }
     
     @Override
     public void refresh() {
         DataFormToolItem item;
         DataFormToolData data = (DataFormToolData)entry.data;
-        DataForm form = getElement(getHtmlName());
+        DataForm form = getElement();
         
         if (data.object == null) {
             form.clearInputs();
@@ -52,7 +84,7 @@ public class DataFormTool extends AbstractComponentTool {
                 form.get(name).set(item.value);
             }
         } else {
-            form.setObject(data.object);
+            setObject(data.object);
         }
     }
 
@@ -134,5 +166,26 @@ public class DataFormTool extends AbstractComponentTool {
             input.setVisibleLength(item.vlength);
         if (item.label != null)
             input.setLabel(item.label);
+    }
+    
+    /**
+     * Lê a partir de objeto extendido.
+     * @param object object extendido.
+     */
+    public final void setObject(ExtendedObject object) {
+        DataItem item;
+        String name;
+        DataForm form = getElement();
+        
+        for (Element element : form.getElements()) {
+            if (!element.isDataStorable())
+                continue;
+            
+            item = (DataItem)element;
+            name = item.getName();
+            item.set(object.getNS(), object.get(name));
+        }
+        
+        form.setNS(object.getNS());
     }
 }

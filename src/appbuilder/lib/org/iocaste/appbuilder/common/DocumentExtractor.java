@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.iocaste.appbuilder.common.dataformtool.DataFormTool;
 import org.iocaste.appbuilder.common.tabletool.TableToolData;
 import org.iocaste.appbuilder.common.tabletool.TableToolItem;
 import org.iocaste.documents.common.ComplexDocument;
@@ -15,7 +16,6 @@ import org.iocaste.documents.common.ComplexModel;
 import org.iocaste.documents.common.DocumentModel;
 import org.iocaste.documents.common.Documents;
 import org.iocaste.documents.common.ExtendedObject;
-import org.iocaste.shell.common.DataForm;
 
 public class DocumentExtractor {
     private PageBuilderContext context;
@@ -227,7 +227,7 @@ public class DocumentExtractor {
         String to, source;
         ExtendedObject head;
         ExtendedObject[] objects;
-        DataForm form;
+        DataFormTool dftool;
         ComplexDocument document;
         ViewComponents components;
         DataConversionRule rule;
@@ -245,8 +245,8 @@ public class DocumentExtractor {
             if (source == null)
                 break;
             
-            form = components.entries.get(source).component.getElement();
-            head = form.getObject();
+            dftool = components.getComponent(source);
+            head = dftool.getObject();
             break;
         case DataConversion.OBJECT:
             head = (ExtendedObject)hconversion.getSource();
