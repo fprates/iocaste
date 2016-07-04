@@ -191,19 +191,6 @@ public abstract class AbstractContainer
     
     /*
      * (não-Javadoc)
-     * @see org.iocaste.shell.common.AbstractElement#setEnabled(boolean)
-     */
-    @Override
-    public void setEnabled(boolean enabled) {
-        View view = getView();
-        
-        super.setEnabled(enabled);
-        for (String name : elements.values())
-            view.getElement(name).setEnabled(enabled);
-    }
-    
-    /*
-     * (não-Javadoc)
      * @see org.iocaste.shell.common.Container#size()
      */
     @Override

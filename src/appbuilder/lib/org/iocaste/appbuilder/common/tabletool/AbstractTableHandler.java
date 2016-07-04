@@ -113,9 +113,7 @@ public abstract class AbstractTableHandler {
                 }
             }
             
-            if (column.disabled)
-                element.setEnabled(false);
-
+            element.setEnabled(!column.disabled);
             if (tcolumn.isNamespace())
                 nsinput = element.getHtmlName();
             
