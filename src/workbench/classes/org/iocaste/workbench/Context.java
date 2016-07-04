@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractExtendedContext;
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.workbench.project.ProjectAdd;
 import org.iocaste.workbench.project.ProjectInfo;
@@ -46,7 +45,6 @@ public class Context extends AbstractExtendedContext {
     
     public Context(PageBuilderContext context) {
         super(context);
-        String name;
         
         commands = new HashMap<>();
         classeditor = new ClassEditorContext(context, this);
@@ -74,11 +72,7 @@ public class Context extends AbstractExtendedContext {
         new ViewUse(this);
         new ViewConfigEdit(this);
         new ViewSpecRemove(this);
-        
-        for (ViewSpecItem.TYPES type : ViewSpecItem.TYPES.values()) {
-            name = String.format("viewspec-%s", type.toString());
-            commands.put(name, new ViewSpecAdd(name, this, type));
-        }
+        new ViewSpecAdd(this);
         
         viewconfig = new ViewConfigContext();
         viewconfig.extcontext = this;

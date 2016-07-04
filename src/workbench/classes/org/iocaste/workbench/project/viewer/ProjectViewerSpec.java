@@ -34,16 +34,16 @@ public class ProjectViewerSpec extends AbstractViewSpec {
         String buttonbar, parent;
         
         if (view == null) {
-            buttonbar = name.concat("_btbar");
             tabbedpaneitem("objects", name);
-            standardcontainer(name, buttonbar);
-            button(buttonbar, name.concat("_add"));
-            button(buttonbar, name.concat("_remove"));
             parent = name;
         } else {
             parent = this.parent;
         }
-        
+
+        buttonbar = name.concat("_btbar");
+        standardcontainer(parent, buttonbar);
+        button(buttonbar, name.concat("_add"));
+        button(buttonbar, name.concat("_remove"));
         tabletool(parent, name.concat("_items"));
         if (detail)
             dataform(parent, name.concat("_detail"));

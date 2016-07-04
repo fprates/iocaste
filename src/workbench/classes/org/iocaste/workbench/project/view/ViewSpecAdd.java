@@ -3,22 +3,26 @@ package org.iocaste.workbench.project.view;
 import java.util.Map;
 
 import org.iocaste.appbuilder.common.PageBuilderContext;
-import org.iocaste.appbuilder.common.ViewSpecItem;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.viewer.ViewerItemUpdate;
 
 public class ViewSpecAdd extends AbstractCommand {
-    private ViewSpecItem.TYPES type;
     
-    public ViewSpecAdd(String name, Context extcontext, ViewSpecItem.TYPES type)
-    {
-        super(name, extcontext);
-        this.type = type;
+    public ViewSpecAdd(Context extcontext) {
+        super("viewspec-add", extcontext);
+        ActionContext actionctx;
+        
         required("name", "NAME");
+        required("type", "TYPE");
         optional("parent", "PARENT");
         checkview = true;
+        
+        actionctx = getActionContext();
+        actionctx.updateviewer = new ViewerItemUpdate("view_item_items");
     }
     
     @Override
@@ -46,10 +50,9 @@ public class ViewSpecAdd extends AbstractCommand {
         object = extcontext.view.instance("spec", name);
         object.set("PROJECT", extcontext.project.getstKey());
         object.set("SCREEN", extcontext.view.getstKey());
-        object.set("TYPE", type.toString());
         autoset(object);
         save(extcontext.view);
-        message(Const.STATUS, "view.element.added", type.toString());
+        message(Const.STATUS, "view.element.added", object.getst("TYPE"));
         return object;
     }
 }

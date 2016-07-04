@@ -30,7 +30,7 @@ public class ViewAdd extends AbstractCommand {
         view.set("PROJECT", extcontext.project.getstKey());
         autoset(view);
         save(view);
-        message(Const.ERROR, "view.created.");
+        message(Const.STATUS, "view.created.");
         return view;
     }
 }

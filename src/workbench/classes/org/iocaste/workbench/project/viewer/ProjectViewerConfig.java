@@ -104,6 +104,28 @@ public class ProjectViewerConfig extends AbstractViewConfig {
                         {"MODEL", true, null, null, 0, true}
                     }
                 });
+        config.put("view_item_items", new Object[] {
+                "tt", "WB_SCREEN_SPEC",
+                new Object[][] {
+                        {"ITEM_ID", true, null, null, 0, true},
+                        {"PROJECT", true, null, null, 0, true},
+                        {"SCREEN", true, null, null, 0, true},
+                        {"PARENT", false, null, null, 0, true},
+                        {"NAME", false, null, null, 0, true},
+                        {"TYPE", false, null, null, 0, true}
+                    }
+                });
+        config.put("view_item_detail", new Object[] {
+                "dt", "WB_SCREEN_SPEC",
+                new Object[][] {
+                        {"ITEM_ID", true, null, null, 0, true},
+                        {"PROJECT", true, null, null, 0, true},
+                        {"SCREEN", true, null, null, 0, true},
+                        {"PARENT", false, null, null, 0, false},
+                        {"NAME", false, null, null, 0, false},
+                        {"TYPE", false, null, null, 0, false}
+                    }
+                });
     }
     
     private final void itemconfig(String name, Object[] dataconfig) {

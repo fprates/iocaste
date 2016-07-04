@@ -26,7 +26,7 @@ public class ProjectItemEditor extends AbstractPanelPage {
         set(new ProjectViewerSpec(view));
         set(new ProjectViewerConfig());
         set(new StandardViewInput());
-        action(view.concat("_add"), new ParameterTransport(
+        put(view.concat("_add"), new ParameterTransport(
                 commands.get(view), view.concat("_detail")));
     }
     
