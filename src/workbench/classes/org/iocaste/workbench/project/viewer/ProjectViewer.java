@@ -40,6 +40,8 @@ public class ProjectViewer extends AbstractPanelPage {
                 "model-add", "models_detail"));
         put("views_add", new ParameterTransport(
                 "view-add", "views_detail"));
+        put("links_add", new ParameterTransport(
+                "link-add", "links_detail"));
         for (String action : pickdata.keySet())
             put(action, new ViewerItemPick(pickdata.get(action)));
     }

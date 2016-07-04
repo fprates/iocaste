@@ -4,15 +4,22 @@ import org.iocaste.appbuilder.common.PageBuilderContext;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.viewer.ViewerItemUpdate;
 
 public class LinkAdd extends AbstractCommand {
 
     public LinkAdd(Context extcontext) {
         super("link-add", extcontext);
+        ActionContext actionctx;
+        
         required("name", "NAME");
         required("command", "COMMAND");
         optional("group", "GROUP");
+        
+        actionctx = getActionContext();
+        actionctx.updateviewer = new ViewerItemUpdate("links_items");
     }
     
     @Override

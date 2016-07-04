@@ -70,7 +70,7 @@ public class ProjectViewerConfig extends AbstractViewConfig {
                         {"PROJECT", true, null, null, 0, true},
                         {"LINK_ID", true, null, null, 0, true},
                         {"NAME", false, null, null, 0, true},
-                        {"COMMAND", false, null, null, 0, true},
+                        {"COMMAND", false, null, null, 40, true},
                         {"GROUP", false, null, null, 0, true},
                     }
                 });

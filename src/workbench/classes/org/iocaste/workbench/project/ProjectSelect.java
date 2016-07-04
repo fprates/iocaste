@@ -50,43 +50,51 @@ public class ProjectSelect extends AbstractActionHandler {
         dataelementsLoad(extcontext, project);
         modelsLoad(extcontext);
         viewsLoad(extcontext);
+        linksLoad(extcontext);
         
         init("project_viewer", extcontext);
         redirect("project_viewer");
     }
     
-    private final void modelsLoad(Context extcontext) {
-        Map<Object, ComplexDocument> models;
-        ExtendedObject[] objects;
-        int size;
-        
-        models = extcontext.project.getDocumentsMap("model");
-        if ((models == null) || ((size = models.size()) == 0))
+    private final void linksLoad(Context extcontext) {
+        Map<Object, ExtendedObject> items;
+
+        extcontext.tableInstance(
+                "project_viewer", "links_items").items.clear();
+        items = extcontext.project.getItemsMap("link");
+        if ((items == null) || (items.size() == 0))
             return;
         
-        objects = new ExtendedObject[size];
-        size = 0;
+        for (Object key : items.keySet())
+            extcontext.add("project_viewer", "links_items", items.get(key));
+    }
+    
+    private final void modelsLoad(Context extcontext) {
+        Map<Object, ComplexDocument> models;
+
+        extcontext.tableInstance(
+                "project_viewer", "models_items").items.clear();
+        models = extcontext.project.getDocumentsMap("model");
+        if ((models == null) || (models.size() == 0))
+            return;
+        
         for (Object key : models.keySet())
-            objects[size++] = models.get(key).getHeader();
-        extcontext.tableInstance("project_viewer", "models_items");
-        extcontext.set("project_viewer", "models_items", objects);
+            extcontext.add("project_viewer",
+                    "models_items", models.get(key).getHeader());
     }
     
     private final void viewsLoad(Context extcontext) {
-        Map<Object, ComplexDocument> models;
-        ExtendedObject[] objects;
-        int size;
-        
-        models = extcontext.project.getDocumentsMap("screen");
-        if ((models == null) || ((size = models.size()) == 0))
+        Map<Object, ComplexDocument> views;
+
+        extcontext.tableInstance(
+                "project_viewer", "views_items").items.clear();
+        views = extcontext.project.getDocumentsMap("screen");
+        if ((views == null) || (views.size() == 0))
             return;
-        
-        objects = new ExtendedObject[size];
-        size = 0;
-        for (Object key : models.keySet())
-            objects[size++] = models.get(key).getHeader();
-        extcontext.tableInstance("project_viewer", "views_items");
-        extcontext.set("project_viewer", "views_items", objects);
+
+        for (Object key : views.keySet())
+            extcontext.add("project_viewer",
+                    "views_items", views.get(key).getHeader());
     }
     
 }
