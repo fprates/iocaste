@@ -10,9 +10,8 @@ public class ProjectViewerSpec extends AbstractViewSpec {
         tabbedpane(parent, "objects");
         
         module("data_elements", true);
-        module("models", false);
-        module("views", false);
-        module("views", false);
+        module("models", true);
+        module("views", true);
         module("links", true);
         module("source", false);
     }

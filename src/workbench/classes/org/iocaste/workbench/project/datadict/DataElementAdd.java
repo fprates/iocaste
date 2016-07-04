@@ -10,6 +10,7 @@ import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
 import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.viewer.ViewerItemUpdate;
 
 public class DataElementAdd extends AbstractCommand {
     private Map<String, Integer> types;
@@ -37,7 +38,7 @@ public class DataElementAdd extends AbstractCommand {
         types.put("short", DataType.SHORT);
         
         actionctx = getActionContext();
-        actionctx.updateviewer = new DataElementUpdate();
+        actionctx.updateviewer = new ViewerItemUpdate("data_elements_items");
     }
     
     @Override

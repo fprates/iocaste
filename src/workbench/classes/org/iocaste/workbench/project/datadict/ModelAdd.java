@@ -5,14 +5,21 @@ import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.shell.common.Const;
 import org.iocaste.workbench.AbstractCommand;
+import org.iocaste.workbench.ActionContext;
 import org.iocaste.workbench.Context;
+import org.iocaste.workbench.project.viewer.ViewerItemUpdate;
 
 public class ModelAdd extends AbstractCommand {
     
     public ModelAdd(Context extcontext) {
         super("model-add", extcontext);
+        ActionContext actionctx;
+        
         required("name", "NAME");
         optional("table", "TABLE");
+        
+        actionctx = getActionContext();
+        actionctx.updateviewer = new ViewerItemUpdate("models_items");
     }
     
     @Override
@@ -37,7 +44,7 @@ public class ModelAdd extends AbstractCommand {
         save(document);
         extcontext.project.add(document);
         message(Const.STATUS, "model.updated");
-        return document;
+        return document.getHeader();
     }
 
 }

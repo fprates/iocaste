@@ -14,6 +14,8 @@ public class ProjectViewer extends AbstractPanelPage {
         set(new ProjectViewerStyle());
         put("data_elements_add", new ParameterTransport(
                 "data-element-add", "data_elements_detail"));
+        put("models_add", new ParameterTransport(
+                "model-add", "models_detail"));
     }
     
 }

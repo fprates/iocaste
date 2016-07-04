@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.iocaste.appbuilder.common.AbstractActionHandler;
 import org.iocaste.appbuilder.common.PageBuilderContext;
+import org.iocaste.documents.common.ComplexDocument;
 import org.iocaste.documents.common.ExtendedObject;
 import org.iocaste.documents.common.Query;
 
@@ -26,6 +27,23 @@ public class ProjectSelect extends AbstractActionHandler {
         extcontext.set("project_viewer", "data_elements_items", objects);
     }
     
+    private final void modelsLoad(Context extcontext) {
+        Map<Object, ComplexDocument> models;
+        ExtendedObject[] objects;
+        int size;
+        
+        models = extcontext.project.getDocumentsMap("model");
+        if ((models == null) || ((size = models.size()) == 0))
+            return;
+        
+        objects = new ExtendedObject[size];
+        size = 0;
+        for (Object key : models.keySet())
+            objects[size++] = models.get(key).getHeader();
+        extcontext.tableInstance("project_viewer", "models_items");
+        extcontext.set("project_viewer", "models_items", objects);
+    }
+    
     @Override
     protected void execute(PageBuilderContext context) throws Exception {
         AbstractCommand command;
@@ -38,13 +56,15 @@ public class ProjectSelect extends AbstractActionHandler {
             return;
         }
         
-        dataelementsLoad(extcontext, project);
-        
         parameters.clear();
         parameters.put("name", project);
         command = context.getView().getActionHandler("project-use");
         command.set(parameters);
-        command.run(context);
+        command.call(context);
+        
+        dataelementsLoad(extcontext, project);
+        modelsLoad(extcontext);
+        
         init("project_viewer", extcontext);
         redirect("project_viewer");
     }
